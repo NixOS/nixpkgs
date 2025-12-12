@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3WOtf7cgYxAMlNPSBmTzaQF1HN9mU61giLp2woBAidY=";
+    hash = "sha256-IvzvlToSyA20FWU0x+wgE3rT0dYbuY6xyaGgz1D1f6Q=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${yt-dlp}/bin" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mpv-based video player for studying Japanese";
     homepage = "https://ripose-jp.github.io/Memento/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.linux;
     mainProgram = "memento";
   };
 })

@@ -13,15 +13,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zfUvPHAPrYhzgeiirGuqZaWnLBH0PHsqOUy2e972bWM=";
   };
 
-  cargoHash = "sha256-FP4qCJyzCOGaPDijp18m5K1YO+Ki9oDwblP2Vh8GsO0=";
+  cargoHash = "sha256-NW/puo/Xoum7DjSQjBgilQcKbY3mAfVgXxUK6+1H1JI=";
   cargoDepsName = pname;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to read and write nvram variables on ARM Macs";
     homepage = "https://crates.io/crates/asahi-nvram";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lukaslihotzki ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-nvram";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

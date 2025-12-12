@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.yoctoproject.org/libfakekey";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QNJlxZ9uNwNgFWm9qRJdPfusx7dXHZajjFH7wDhpgcs=";
   };
 
-  preConfigure = "./autogen.sh";
+  configureScript = "./autogen.sh";
 
   nativeBuildInputs = [
     automake
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lX11";
 
-  meta = with lib; {
+  meta = {
     description = "X virtual keyboard library";
     homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

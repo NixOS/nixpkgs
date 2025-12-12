@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "User level public file sharing for the MATE desktop";
     mainProgram = "mate-file-share-properties";
     homepage = "https://github.com/mate-desktop/mate-user-share";
-    license = with licenses; [ gpl2Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = with lib.licenses; [ gpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

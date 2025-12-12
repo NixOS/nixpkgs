@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
-    repo = pname;
+    repo = "flask-paranoid";
     rev = "v${version}";
     hash = "sha256-tikD8efc3Q3xIQnaC3SSBaCRQxMI1HzXxeupvYeNnE4=";
   };
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_paranoid" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/miguelgrinberg/flask-paranoid/";
     description = "Simple user session protection";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

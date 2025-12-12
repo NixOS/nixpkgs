@@ -1,5 +1,6 @@
 {
   lib,
+  argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
   pudb,
@@ -9,17 +10,19 @@
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2024.7.1";
-  format = "pyproject";
+  version = "2025.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
+    tag = "v${version}";
+    sha256 = "sha256-xEH6fEq84nD3X6bPj1Yw36mjwHKlFKsVaMh4Iogzl18=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ argcomplete ];
 
   nativeCheckInputs = [
     pudb
@@ -28,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "recline" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library helps you quickly implement an interactive command-based application";
     homepage = "https://github.com/NetApp/recline";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -6,7 +6,9 @@
   autoPatchelfHook,
   copyDesktopItems,
   dbus-glib,
-  ffmpeg,
+  # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
+  # https://repo.palemoon.org/MoonchildProductions/UXP/issues/2523
+  ffmpeg_6,
   gtk2-x11,
   withGTK3 ? true,
   gtk3,
@@ -21,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.5.0";
+  version = "33.9.1";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -35,20 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      dbus-glib
-      gtk2-x11
-      libXt
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ lib.optionals withGTK3 [
-      gtk3
-    ];
+  buildInputs = [
+    alsa-lib
+    dbus-glib
+    gtk2-x11
+    libXt
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "palemoon-bin";
       desktopName = "Pale Moon Web Browser";
       comment = "Browse the World Wide Web";
@@ -145,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          ffmpeg
+          ffmpeg_6
           libglvnd
           libpulseaudio
         ]
@@ -172,11 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         gtk3 = fetchzip {
           urls = urlRegionVariants "gtk3";
-          hash = "sha256-TlmDsZKHolTS+y+1BymyY49+AvqUv8zmUXCGNHCRPL0=";
+          hash = "sha256-muFqS3NpYX0Walhd+RFIZh7pUKQ5ZbPMZJasm9+rqTE=";
         };
         gtk2 = fetchzip {
           urls = urlRegionVariants "gtk2";
-          hash = "sha256-f6vLHbpmvVfkjZr7x0DiCFoGGvfxHfFZ3KTagq2Mwp4=";
+          hash = "sha256-lRFXpv+dp3ALVSiEDwE4kiaVjBX5XuVZeugEr+St53I=";
         };
       };
 
@@ -203,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.palemoon.org/";
     description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
@@ -219,15 +220,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
-      licenses.mpl20
+      lib.licenses.mpl20
       {
         fullName = "Pale Moon Redistribution License";
         url = "https://www.palemoon.org/redist.shtml";
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];

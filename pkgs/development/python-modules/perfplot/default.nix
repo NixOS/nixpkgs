@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "perfplot";
+    tag = "v${version}";
     hash = "sha256-bu6eYQukhLE8sLkS3PbqTgXOqJFXJYXTcXAhmjaq48g=";
   };
 
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "perfplot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
     changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

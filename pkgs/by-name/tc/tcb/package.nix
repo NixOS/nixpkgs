@@ -7,13 +7,13 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tcb";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "openwall";
-    repo = pname;
+    repo = "tcb";
     rev = "070cf4aa784de13c52788ac22ff611d7cbca0854";
     sha256 = "sha256-Sp5u7iTEZZnAqKQXoPO8eWpSkZeBzQqZI82wRQmgU9A=";
   };
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
       by user management tools on Owl due to our shadow suite patches.
     '';
     homepage = "https://www.openwall.com/tcb/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = systems.inspect.patterns.isGnu;
-    maintainers = with maintainers; [ izorkin ];
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

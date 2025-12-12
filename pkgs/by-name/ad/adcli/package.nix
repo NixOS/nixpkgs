@@ -14,21 +14,22 @@
   xmlto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adcli";
-  version = "0.9.2";
+  version = "0.9.3a";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = "adcli";
-    rev = version;
-    hash = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
+    tag = finalAttrs.version;
+    hash = "sha256-IKZ6LW9+aUhNNNp6SL9jllkk7HI/7Ekv7EQo3jQ2VG4=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    libxslt # xsltproc
     pkg-config
     util-linux
     xmlto
@@ -37,11 +38,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cyrus_sasl
     libkrb5
-    libxslt
     openldap
   ];
 
-  configureFlags = [ "--disable-debug" ];
+  strictDeps = true;
+
+  configureFlags = [
+    "--disable-debug"
+    "ac_cv_path_KRB5_CONFIG=${lib.getExe' (lib.getDev libkrb5) "krb5-config"}"
+  ];
 
   postPatch = ''
     substituteInPlace tools/Makefile.am \
@@ -61,15 +66,15 @@ stdenv.mkDerivation rec {
     patch_docbook doc/adcli-docs.xml
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/realmd/adcli/adcli.html";
     description = "Helper library and tools for Active Directory client operations";
     mainProgram = "adcli";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
       SohamG
       anthonyroussel
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

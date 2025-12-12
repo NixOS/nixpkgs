@@ -1,20 +1,20 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   nixosTests,
   stateDir ? "/var/lib/dolibarr",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
-  version = "20.0.2";
+  version = "22.0.3";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
-    tag = version;
-    hash = "sha256-5OEZpBxTYXhO27ea/GBmJI9uDLRDgMNc9ehQ7mvvSrY=";
+    tag = finalAttrs.version;
+    hash = "sha256-3dcui1A8EzcFogQfUkf9+8A1C1CcFxHPFjOybDLKaCY=";
   };
 
   dontBuild = true;
@@ -36,13 +36,15 @@ stdenv.mkDerivation rec {
     cp -r * $out
   '';
 
-  passthru.tests = { inherit (nixosTests) dolibarr; };
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) dolibarr;
+  };
 
   meta = {
     description = "Enterprise resource planning (ERP) and customer relationship manager (CRM) server";
-    changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${src.tag}";
+    changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${finalAttrs.version}";
     homepage = "https://dolibarr.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

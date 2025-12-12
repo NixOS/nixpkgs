@@ -6,9 +6,9 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "unzrip";
-  version = "unstable-2023-04-16";
+  version = "0-unstable-2023-04-16";
 
   src = fetchFromGitHub {
     owner = "quininer";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QYu4PXWQGagj7r8lLs0IngIXzt6B8uq2qonycaGDg6g=";
   };
 
-  cargoHash = "sha256-9CjKSdd+E2frI8VvdOawYQ3u+KF22xw9kBpnAufRUG0=";
+  cargoHash = "sha256-3EbZv4mguNT3FtqcDBJriqRGGzz/093AMHqH6c2xYvQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unzip implementation, support for parallel decompression, automatic detection encoding";
     homepage = "https://github.com/quininer/unzrip";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "unzrip";
   };
 }

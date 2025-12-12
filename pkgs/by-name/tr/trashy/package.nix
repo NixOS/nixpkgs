@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1xHyhAV8hpgMngQdamRzEliyG60t+I3KfsDJi0+180o=";
   };
 
-  cargoHash = "sha256-ZWqWtWzb+CLH1ravBb/oV+aPxplEyiC1wEFhvchcLqg=";
+  cargoHash = "sha256-tlz8WeFOxNPJxCqwqH98S/JkU7MZSDj/OaPvNkf6iwg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,19 +24,21 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/trash completions bash) \
       --fish <($out/bin/trash completions fish) \
       --zsh <($out/bin/trash completions zsh) \
+
+    installManPage --name trashy.1 <($out/bin/trash manpage)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ oberblastmeister ];
+    maintainers = with lib.maintainers; [ oberblastmeister ];
     mainProgram = "trash";
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

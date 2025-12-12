@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   libICE,
   libXext,
   libXi,
@@ -22,6 +23,22 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "freeglut-fix-cmake-4.patch";
+      url = "https://github.com/freeglut/freeglut/commit/2294389397912c9a6505a88221abb7dca0a4fb79.patch";
+      hash = "sha256-buNhlVUbDekklnar6KFWN/GUKE+jMEqTGrY3LY0LwVs=";
+    })
+
+    # Fix build with gcc15
+    # https://github.com/freeglut/freeglut/pull/187
+    (fetchpatch {
+      name = "freeglut-fix-fgPlatformDestroyContext-prototype-for-C23.patch";
+      url = "https://github.com/freeglut/freeglut/commit/800772e993a3ceffa01ccf3fca449d3279cde338.patch";
+      hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
+    })
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -38,16 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
-    "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
-    "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+    "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGLX}/include"
+    "-DOPENGL_gl_LIBRARY:FILEPATH=${lib.getLib libGLX}/lib/libGL.dylib"
     "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
-    "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
@@ -58,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
       differences.
     '';
     homepage = "https://freeglut.sourceforge.net/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules = [ "glut" ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })

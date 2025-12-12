@@ -7,24 +7,24 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykulersky";
-  version = "0.5.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = pname;
+    repo = "pykulersky";
     rev = version;
-    hash = "sha256-coO+WBnv5HT14ym719qr3Plm1JuiaNdAvD1QVPj65oU=";
+    hash = "sha256-YHGEDAsbQN3sYu7mdVUbb3xX7FMnR0xAhXkvf7Ok7qs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bleak
     click
   ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykulersky" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
     mainProgram = "pykulersky";
     homepage = "https://github.com/emlove/pykulersky";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

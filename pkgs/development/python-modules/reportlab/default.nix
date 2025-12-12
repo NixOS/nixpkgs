@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  chardet,
+  charset-normalizer,
   fetchPypi,
   freetype,
   pillow,
   setuptools,
-  glibcLocales,
   python,
   isPyPy,
 }:
@@ -18,7 +17,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.2.4";
+  version = "4.4.5";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oAtXKS4VanvahO3zHWDCVXgVMHbI+5YzHQxZ7d2gUsg=";
+    hash = "sha256-BFfWQqp233s2sCNTSZBMWNj5xgaockVu0EQ2qvrcFRA=";
   };
 
   postPatch = ''
@@ -40,29 +39,28 @@ buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ ft ];
 
-  propagatedBuildInputs = [
-    chardet
+  dependencies = [
+    charset-normalizer
     pillow
   ];
-
-  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck
     pushd tests
-    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
+    ${python.interpreter} runAll.py
     popd
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

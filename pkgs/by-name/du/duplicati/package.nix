@@ -2,53 +2,81 @@
   lib,
   stdenv,
   fetchzip,
-  mono,
-  sqlite,
-  makeWrapper,
+  autoPatchelfHook,
+  gcc-unwrapped,
+  zlib,
+  lttng-ust_2_12,
+  icu,
+  openssl,
+  makeBinaryWrapper,
 }:
 
-stdenv.mkDerivation rec {
+let
+  _supportedPlatforms = {
+    "armv7l-linux" = "linux-arm7";
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+  };
+  _platform = _supportedPlatforms."${stdenv.hostPlatform.system}";
+  # nix --extra-experimental-features nix-command hash convert --to sri "sha256:`nix-prefetch-url --unpack https://updates.duplicati.com/stable/duplicati-2.1.0.5_stable_2025-03-04-linux-arm64-cli.zip`"
+  _fileHashForSystem = {
+    "armv7l-linux" = "sha256-FQQ07M0rwvxNkHPW6iK5WBTKgFrZ4LOP4vgINfmtq4k=";
+    "x86_64-linux" = "sha256-1QspF/A3hOtqd8bVbSqClJIHUN9gBrd18J5qvZJLkQE=";
+    "aarch64-linux" = "sha256-mSNInaCkNf1MBZK2M42SjJnYRtB5SyGMvSGSn5oH1Cs=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  # TODO build duplicati from source https://github.com/duplicati/duplicati/blob/master/.github/workflows/build-packages.yml
   pname = "duplicati";
-  version = "2.0.8.1";
-  channel = "beta";
-  build_date = "2024-05-07";
+  version = "2.1.0.5";
+  channel = "stable";
+  buildDate = "2025-03-04";
 
   src = fetchzip {
-    url = "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
-    hash = "sha256-LmW6yGutxP33ghFqyOLKrGDNCQdr8DDFn/IHigsLpzA=";
-    stripRoot = false;
+    url =
+      with finalAttrs;
+      "https://updates.duplicati.com/stable/duplicati-${version}_${channel}_${buildDate}-${_platform}-cli.zip";
+    hash = _fileHashForSystem."${stdenv.hostPlatform.system}";
+    stripRoot = true;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    gcc-unwrapped
+    zlib
+    lttng-ust_2_12
+  ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}
-    makeWrapper "${mono}/bin/mono" $out/bin/duplicati-cli \
-      --add-flags "$out/share/${pname}-${version}/Duplicati.CommandLine.exe" \
+    runHook preInstall
+
+    mkdir -p $out/{bin,share}
+    cp -r * "$out/share/"
+    for file in $out/share/duplicati-*; do
+      makeBinaryWrapper "$file" "$out/bin/$(basename $file)" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          sqlite
+          icu
+          openssl
         ]
       }
-    makeWrapper "${mono}/bin/mono" $out/bin/duplicati-server \
-      --add-flags "$out/share/${pname}-${version}/Duplicati.Server.exe" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          sqlite
-        ]
-      }
+    done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
     homepage = "https://www.duplicati.com/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
       nyanloutre
       bot-wxt1221
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = builtins.attrNames _supportedPlatforms;
   };
-}
+})

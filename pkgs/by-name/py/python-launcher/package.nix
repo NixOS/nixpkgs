@@ -11,23 +11,23 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "brettcannon";
-    repo = pname;
+    repo = "python-launcher";
     rev = "v${version}";
     sha256 = "sha256-wRKTBvLLo0Vvvh1GtF9hOnUHNpOeX950y1U+8JYBGoE=";
   };
 
-  cargoHash = "sha256-+FtfL5jAGJrpnZaJDnDMvWC0D3Af0L466v9nqJkb+uA=";
+  cargoHash = "sha256-rWawf1YYeTWKPaZwua/f4BNo56z3mkCBU4jyZIFNqP4=";
 
   nativeCheckInputs = [ python3 ];
 
   useNextest = true;
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the `py` command for Unix-based platforms";
     homepage = "https://github.com/brettcannon/python-launcher";
     changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "py";
   };
 }

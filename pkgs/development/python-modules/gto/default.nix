@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   entrypoints,
-  fastentrypoints,
   fetchFromGitHub,
   freezegun,
   funcy,
-  git,
+  gitMinimal,
   pydantic,
+  pydantic-settings,
   pytest-cov-stub,
   pytest-mock,
   pytest-test-utils,
@@ -25,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.7.2";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8ht22RqiGWqDoBrZnX5p3KKOLVPRm1a54962qKlTK4Q=";
+    tag = version;
+    hash = "sha256-LXYpOnk9W/ellG70qZLihmvk4kvVcwZfE5buPNU2qzQ=";
   };
 
   build-system = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     entrypoints
     funcy
     pydantic
+    pydantic-settings
     rich
     ruamel-yaml
     scmrepo
@@ -56,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     pytest-cov-stub
     pytest-mock
     pytest-test-utils
@@ -68,6 +70,9 @@ buildPythonPackage rec {
 
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
+
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   disabledTests = [
@@ -75,16 +80,21 @@ buildPythonPackage rec {
     "remote_repo"
     "remote_git_repo"
     "test_action_doesnt_push_even_if_repo_has_remotes_set"
+    # ValueError: stderr not separately captured
+    "test_register"
+    "test_assign"
+    "test_stderr_gto_exception"
+    "test_stderr_exception"
   ];
 
   pythonImportsCheck = [ "gto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Git Tag Operations";
     homepage = "https://github.com/iterative/gto";
-    changelog = "https://github.com/iterative/gto/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/gto/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gto";
   };
 }

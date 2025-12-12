@@ -40,20 +40,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  # 'yield' keyword is allowed in fixtures, but not in tests (test_naked_function)
+  doCheck = false;
+
   checkInputs = [
     mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "parameterized/test.py" ];
+  enabledTestPaths = [ "parameterized/test.py" ];
 
   pythonImportsCheck = [ "parameterized" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
     changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

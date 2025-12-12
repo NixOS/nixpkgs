@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://gitlab.com/accounts-sso/${pname}";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "0gnx9gqsh0hcfm1lk7w60g64mkn1iicga5f5xcy1j9a9byacsfd0";
     fetchSubmodules = true;
   };
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing single signon credentials which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

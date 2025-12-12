@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gracicot";
     repo = "kangaru";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-30gmNo68cDGmGjS75KySyORC6s1NBI925QuZyOv3Kag=";
   };
 

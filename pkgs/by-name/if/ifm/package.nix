@@ -10,7 +10,7 @@
   tk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ifm";
   version = "2015-11-08";
 
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bitbucket.org/zondo/ifm";
     description = "Interactive fiction mapper";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

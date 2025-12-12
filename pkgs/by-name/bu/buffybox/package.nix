@@ -10,20 +10,21 @@
   pkg-config,
   scdoc,
   stdenv,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2024-12-09";
+  version = "3.4.2-unstable-2025-10-25";
+  # 3.4.2 would be preferred but there are 3 commits past 3.4.2 that are really nice to have
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "32f4837e836fbb0b820d68c74c3278c925369b04";
-    hash = "sha256-d9fa/Zqbm/+WMRmO0hBW83PCTDgaVOAxyRuSTItr9Xs=";
+    rev = "437ff2cbd7fd35ba6ca2d46624e7fcf8c5f3f954";
+    hash = "sha256-1GRsntNc3byHmZKLG/ZRXvbo96DjmLrA0bVYtMAlKsQ=";
   };
 
   depsBuildBuild = [
@@ -48,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "A suite of graphical applications for the terminal";
+  meta = {
+    description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

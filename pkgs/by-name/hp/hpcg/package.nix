@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HPC conjugate gradient benchmark";
     homepage = "https://www.hpcg-benchmark.org";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "xhpcg";
   };
 }

@@ -9,25 +9,25 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "waycrate";
-    repo = pname;
+    repo = "wayshot";
     rev = version;
     hash = "sha256-nUpIN4WTePtFZTmKAjv0tgj4VTdZeXjoQX6am9+M3ig=";
   };
 
-  cargoHash = "sha256-1Y9ymodZHtxHzhudjGbkP2ohMaBMOD9K+GpUoNmzHQs=";
+  cargoHash = "sha256-uKETDGi1n6VcdGCrjrnEM1sQ0vVjd/vCXMUn9Hby2m8=";
 
   # tests are off as they are broken and pr for integration testing is still WIP
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Native, blazing-fast screenshot tool for wlroots based compositors such as sway and river";
     homepage = "https://github.com/waycrate/wayshot";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       dit7ya
       id3v1669
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "wayshot";
   };
 }

@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.32.1"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.39.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "16"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "18";
 
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-/72omsDZ2+nuPHkZXtR3MSsxWicxC0YnFmKcHF22C+0=";
+    hash = "sha256-qGqJ2Gb0BYcY7yxunAFDguc8IgzDIP9680+tKrKFvsY=";
   };
 
   # tarball contains multiple files/directories
@@ -32,7 +32,7 @@ buildGoModule rec {
   subPackages = [ "cmd/ipfs" ];
 
   passthru.tests = {
-    inherit (nixosTests) kubo;
+    inherit (nixosTests) kubo ipget;
     repoVersion = callPackage ./test-repoVersion.nix { };
   };
 
@@ -61,16 +61,15 @@ buildGoModule rec {
     install --mode=444 -D 'misc/systemd/ipfs-hardened.service' "$systemd_unit_hardened/etc/systemd/system/ipfs.service"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IPFS implementation in Go";
     homepage = "https://ipfs.io/";
     changelog = "https://github.com/ipfs/kubo/releases/tag/${rev}";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "ipfs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Luflosi
-      fpletz
     ];
   };
 }

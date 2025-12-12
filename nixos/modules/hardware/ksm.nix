@@ -24,13 +24,12 @@ in
     systemd.services.enable-ksm = {
       description = "Enable Kernel Same-Page Merging";
       wantedBy = [ "multi-user.target" ];
-      script =
-        ''
-          echo 1 > /sys/kernel/mm/ksm/run
-        ''
-        + lib.optionalString (cfg.sleep != null) ''
-          echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
-        '';
+      script = ''
+        echo 1 > /sys/kernel/mm/ksm/run
+      ''
+      + lib.optionalString (cfg.sleep != null) ''
+        echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
+      '';
     };
   };
 }

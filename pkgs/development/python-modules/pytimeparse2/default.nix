@@ -12,8 +12,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "onegreyonewhite";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pytimeparse2";
+    tag = version;
     hash = "sha256-zWRbSohTvbVd3GcRRoxH/UReVGYHC0YmbNgbt8N0X48=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytimeparse2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytimeparse based project with the aim of optimizing functionality and providing stable support";
     homepage = "https://github.com/onegreyonewhite/pytimeparse2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

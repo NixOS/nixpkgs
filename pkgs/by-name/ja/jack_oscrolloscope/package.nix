@@ -6,6 +6,7 @@
   libjack2,
   libGLU,
   libGL,
+  libX11,
   pkg-config,
 }:
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
     libjack2
     libGLU
     libGL
+    libX11
   ];
 
   installPhase = ''
@@ -31,11 +33,11 @@ stdenv.mkDerivation rec {
     mv jack_oscrolloscope $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple waveform viewer for JACK";
     mainProgram = "jack_oscrolloscope";
     homepage = "http://das.nasophon.de/jack_oscrolloscope";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

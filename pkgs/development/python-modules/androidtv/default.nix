@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2WFfGGEZkM3fWyTo5P6H3ha04Qyx2OiYetlGWv0jXac=";
   };
 
@@ -39,13 +39,12 @@ buildPythonPackage rec {
     inherit (adb-shell.optional-dependencies) usb;
   };
 
-  nativeCheckInputs =
-    [
-      mock
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.async
-    ++ optional-dependencies.usb;
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.async
+  ++ optional-dependencies.usb;
 
   disabledTests = [
     # Requires git but fails anyway
@@ -54,10 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "androidtv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Communicate with an Android TV or Fire TV device via ADB over a network";
     homepage = "https://github.com/JeffLIrion/python-androidtv/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

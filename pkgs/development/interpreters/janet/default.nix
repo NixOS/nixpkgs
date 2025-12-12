@@ -10,25 +10,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.37.1";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KwuBJY3SG5Ao/sFgjrp0pzEasdI7AAWrG49uHjVA1Rs=";
+    hash = "sha256-BV5hVg85QgN8DXiMF2kA3IQNuvWjcsyciiuQP5+c+7c=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace janet.1 \
-        --replace /usr/local/ $out/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # error: Socket is not connected
-      substituteInPlace meson.build \
-        --replace "'test/suite-ev.janet'," ""
-    '';
+  postPatch = ''
+    substituteInPlace janet.1 \
+      --replace /usr/local/ $out/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # error: Socket is not connected
+    substituteInPlace meson.build \
+      --replace "'test/suite-ev.janet'," ""
+  '';
 
   nativeBuildInputs = [
     meson
@@ -64,15 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Janet programming language";
     mainProgram = "janet";
     homepage = "https://janet-lang.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      andrewchambers
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

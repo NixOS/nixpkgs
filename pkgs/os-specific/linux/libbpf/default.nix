@@ -1,33 +1,46 @@
-{ fetchFromGitHub
-, elfutils
-, pkg-config
-, stdenv
-, zlib
-, lib
+{
+  fetchFromGitHub,
+  elfutils,
+  pkg-config,
+  stdenv,
+  zlib,
+  lib,
 
-# for passthru.tests
-, knot-dns
-, nixosTests
-, systemd
-, tracee
+  # for passthru.tests
+  knot-dns,
+  nixosTests,
+  systemd,
+  tracee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.4.7";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-iknPdJ1vJ5y1ncsHx+nAc6gmvJWbo1Wg6mFTfa2KDBM=";
+    hash = "sha256-igjjwirg3O5mC3DzGCAO9OgrH2drnE/gV6NH7ZLNnFE=";
   };
 
+  patches = [
+    # Fix redefinition when using linux/netlink.h from libbpf with musl
+    # https://github.com/libbpf/libbpf/pull/919
+    ./sync-uapi-move-constants-from-linux-kernel-h-to-linux-const-h.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ elfutils zlib ];
+  buildInputs = [
+    elfutils
+    zlib
+  ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "-C src"
+  ];
 
   passthru.tests = {
     inherit knot-dns tracee;
@@ -46,11 +59,19 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      vcunat
+      saschagrunert
+      martinetd
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-duospace";
-  version = "unstable-2018-07-21";
+  version = "0-unstable-2018-07-21";
 
   src = fetchFromGitHub {
     owner = "iaolo";
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "iA Writer Duospace Typeface";
     homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

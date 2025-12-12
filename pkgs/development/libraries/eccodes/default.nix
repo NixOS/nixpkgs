@@ -9,6 +9,7 @@
   libpng,
   gfortran,
   perl,
+  ctestCheckHook,
   enablePython ? false,
   pythonPackages,
   enablePosixThreads ? false,
@@ -17,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.39.0";
+  version = "2.44.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    hash = "sha256-DE10ZwCsxJr5yHiSXxsmvdQkQ/98LXxnbesrq7aEevs=";
+    hash = "sha256-x1+x+Rt2W2uLR3RjKopvvOyWk02wFftjwq0lYK7dRDs=";
   };
 
   postPatch = ''
@@ -65,17 +66,18 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "-R"
+    # Only do tests that don't require downloading 120MB of testdata
+    "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)"
+  ];
 
-  # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = ''
-    ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };
 }

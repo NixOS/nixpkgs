@@ -7,14 +7,16 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "zsh-history-to-fish";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-expPuffZttyXNRreplPC5Ee/jfWAyOnmjTIMXONtrnw=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     click
   ];
 
@@ -25,11 +27,18 @@ python3.pkgs.buildPythonApplication rec {
     "zsh_history_to_fish"
   ];
 
-  meta = with lib; {
+  patches = [
+    # Patch from currently-unmerged PR, fixing runtime error.
+    # Should be removed when PR is merged or error is otherwise fixed.
+    # Check https://github.com/rsalmei/zsh-history-to-fish/pull/15 if you're in the future
+    ./fix-runtime-error.patch
+  ];
+
+  meta = {
     description = "Bring your ZSH history to Fish shell";
     homepage = "https://github.com/rsalmei/zsh-history-to-fish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alanpearce ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alanpearce ];
     mainProgram = "zsh-history-to-fish";
   };
 }

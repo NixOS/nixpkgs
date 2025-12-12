@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "SethMMorton";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "fastnumbers";
+    tag = version;
     hash = "sha256-TC9+xOvskABpChlrSJcHy6O7D7EnIKL6Ekt/vaLBX2E=";
   };
 
@@ -39,15 +39,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--hypothesis-profile=standard" ];
+  pytestFlags = [ "--hypothesis-profile=standard" ];
 
   pythonImportsCheck = [ "fastnumbers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
     changelog = "https://github.com/SethMMorton/fastnumbers/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

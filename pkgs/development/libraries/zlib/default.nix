@@ -4,7 +4,7 @@
   fetchurl,
   shared ? !stdenv.hostPlatform.isStatic,
   static ? true,
-  # If true, a separate .static ouput is created and the .a is moved there.
+  # If true, a separate .static output is created and the .a is moved there.
   # In this case `pkg-config` auto detection does not currently work if the
   # .static output is given as `buildInputs` to another package (#66461), because
   # the `.pc` file lists only the main output's lib dir.
@@ -43,22 +43,28 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
     };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure \
-      --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
-      --replace 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
-      --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace configure \
+        --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
+        --replace 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
+        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isCygwin ''
+      substituteInPlace win32/zlib.def \
+        --replace-fail 'gzopen_w' ""
+    '';
 
   strictDeps = true;
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional splitStaticOutput "static";
+  ]
+  ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  dontConfigure = stdenv.hostPlatform.isMinGW;
+  dontConfigure = (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin);
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     export CHOST=${stdenv.hostPlatform.config}
@@ -111,10 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # As zlib takes part in the stdenv building, we don't want references
       # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-      NIX_CFLAGS_COMPILE = "-static-libgcc";
+      NIX_CFLAGS_COMPILE = toString (
+        [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
+      );
     }
     // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
-      # lld 16 enables --no-undefined-version by defualt
+      # lld 16 enables --no-undefined-version by default
       # This makes configure think it can't build dynamic libraries
       # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
       NIX_LDFLAGS = "--undefined-version";
@@ -125,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [ ];
 
-  installFlags = lib.optionals stdenv.hostPlatform.isMinGW [
+  installFlags = lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -134,19 +142,22 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  makeFlags =
-    [
-      "PREFIX=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      "-f"
-      "win32/Makefile.gcc"
-    ]
-    ++ lib.optionals shared [
-      # Note that as of writing (zlib 1.2.11), this flag only has an effect
-      # for Windows as it is specific to `win32/Makefile.gcc`.
-      "SHARED_MODE=1"
-    ];
+  makeFlags = [
+    "PREFIX=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
+    "-f"
+    "win32/Makefile.gcc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isCygwin [
+    "SHAREDLIB=cygz.dll"
+    "IMPLIB=libz.dll.a"
+  ]
+  ++ lib.optionals shared [
+    # Note that as of writing (zlib 1.2.11), this flag only has an effect
+    # for Windows as it is specific to `win32/Makefile.gcc`.
+    "SHARED_MODE=1"
+  ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -154,11 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit minizip;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
-    license = licenses.zlib;
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "zlib" ];
   };
 })

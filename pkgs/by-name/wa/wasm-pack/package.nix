@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   cmake,
   pkg-config,
   zstd,
@@ -16,33 +14,31 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
   };
 
-  cargoHash = "sha256-RdBnW8HKSgjVnyafycGFTSTc5j1A9WRDvUuZu8upRWY=";
+  cargoHash = "sha256-nYWvk2v+4IAk/y7fg+Z/nMH+Ml+J5k5ER8uudCQOMB8=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security ++ [
-    zstd
-  ];
+  buildInputs = [ zstd ];
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
     homepage = "https://github.com/rustwasm/wasm-pack";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ maintainers.dhkl ];
+    maintainers = [ lib.maintainers.dhkl ];
   };
 }

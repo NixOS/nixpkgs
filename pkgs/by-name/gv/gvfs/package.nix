@@ -5,13 +5,13 @@
   meson,
   ninja,
   pkg-config,
-  substituteAll,
+  replaceVars,
   gettext,
   dbus,
   glib,
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
-  udisks2,
+  udisks,
   libgcrypt,
   libcap,
   polkit,
@@ -43,20 +43,21 @@
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
+  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
+assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.56.1";
+  version = "1.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hnMczsZ5ZI+HNOI3sd4ZDr3ubkyMD1b0VMMViOUJqhA=";
+    hash = "sha256-3ZvjaHPQ/LMJ64mo0nR3DOV2KHYoos8RG9OH4cNPGC8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-ssh-path.patch;
+    (replaceVars ./hardcode-ssh-path.patch {
       ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];
@@ -77,72 +78,74 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
   ];
 
-  buildInputs =
-    [
-      glib
-      libgcrypt
-      dbus
-      libgphoto2
-      avahi
-      libarchive
-      libimobiledevice
-      libbluray
-      libnfs
-      libxml2
-      gsettings-desktop-schemas
-      libsoup_3
-    ]
-    ++ lib.optionals udevSupport [
-      libgudev
-      udisks2
-      fuse3
-      libcdio
-      samba
-      libmtp
-      libcap
-      polkit
-      libcdio-paranoia
-    ]
-    ++ lib.optionals gnomeSupport [
-      gcr_4
-      glib-networking # TLS support
-      gnome-online-accounts
-      libsecret
-      libgdata
-      libmsgraph
-    ];
+  buildInputs = [
+    glib
+    libgcrypt
+    dbus
+    libgphoto2
+    avahi
+    libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    libxml2
+    gsettings-desktop-schemas
+    libsoup_3
+  ]
+  ++ lib.optionals udevSupport [
+    libgudev
+    udisks
+    fuse3
+    libcdio
+    samba
+    libmtp
+    libcap
+    polkit
+    libcdio-paranoia
+  ]
+  ++ lib.optionals gnomeSupport [
+    gcr_4
+    glib-networking # TLS support
+    gnome-online-accounts
+    libsecret
+    libmsgraph
+  ]
+  ++ lib.optionals googleSupport [
+    libgdata
+  ];
 
-  mesonFlags =
-    [
-      "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-      "-Dtmpfilesdir=no"
-    ]
-    ++ lib.optionals (!udevSupport) [
-      "-Dgudev=false"
-      "-Dudisks2=false"
-      "-Dfuse=false"
-      "-Dcdda=false"
-      "-Dsmb=false"
-      "-Dmtp=false"
-      "-Dadmin=false"
-      "-Dgphoto2=false"
-      "-Dlibusb=false"
-      "-Dlogind=false"
-    ]
-    ++ lib.optionals (!gnomeSupport) [
-      "-Dgcr=false"
-      "-Dgoa=false"
-      "-Dkeyring=false"
-      "-Dgoogle=false"
-      "-Donedrive=false"
-    ]
-    ++ lib.optionals (avahi == null) [
-      "-Ddnssd=false"
-    ]
-    ++ lib.optionals (samba == null) [
-      # Xfce don't want samba
-      "-Dsmb=false"
-    ];
+  mesonFlags = [
+    "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    "-Dtmpfilesdir=no"
+  ]
+  ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
+  ]
+  ++ lib.optionals (!gnomeSupport) [
+    "-Dgcr=false"
+    "-Dgoa=false"
+    "-Dkeyring=false"
+    "-Donedrive=false"
+  ]
+  ++ lib.optionals (!googleSupport) [
+    "-Dgoogle=false"
+  ]
+  ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
+  ]
+  ++ lib.optionals (samba == null) [
+    # Xfce don't want samba
+    "-Dsmb=false"
+  ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = finalAttrs.finalPackage.doCheck;
@@ -159,8 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description =
       "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 })

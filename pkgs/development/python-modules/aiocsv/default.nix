@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiocsv";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MKuranowski";
     repo = "aiocsv";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NnRLBXvQj25dSHc8ZnUaPT8Oiy2EyHLIb8IJPQliyPg=";
+    tag = "v${version}";
+    hash = "sha256-cNoUrD0UP8F2W2HiSm7dQL3nhiL/h0Hr6TDsAKWb24M=";
   };
 
   build-system = [
@@ -49,10 +49,10 @@ buildPythonPackage rec {
     "tests/test_parser.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for for asynchronous CSV reading/writing";
     homepage = "https://github.com/MKuranowski/aiocsv";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

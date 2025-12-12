@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1ka+5B90UAt7D5kkT9dOExGLJjtLM8dqLeBdFRoeuWg=";
   };
 
-  cargoHash = "sha256-Wo87OjHVKS2w0LeBvYEoV9eoKm8giqV/P9/mh6DueJ0=";
+  cargoHash = "sha256-0Hblz7Ri7QxWXDz9z235cNUYb0W/2IPA7E4AreisY9c=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,12 +39,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/namaka.{bash,fish} --zsh artifacts/_namaka
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snapshot testing tool for Nix based on haumea";
     mainProgram = "namaka";
     homepage = "https://github.com/nix-community/namaka";
     changelog = "https://github.com/nix-community/namaka/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

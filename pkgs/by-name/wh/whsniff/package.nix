@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "homewsn";
-    repo = pname;
+    repo = "whsniff";
     rev = "v${version}";
     sha256 = "000l5vk9c0332m35lndk8892ivdr445lgg25hmq1lajn24cash5w";
   };
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/homewsn/whsniff";
     description = "Packet sniffer for 802.15.4 wireless networks";
     mainProgram = "whsniff";
-    maintainers = with maintainers; [ snicket2100 ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ snicket2100 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

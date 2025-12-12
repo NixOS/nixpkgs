@@ -1,42 +1,44 @@
 {
   mkDerivation,
+  HsOpenSSL,
+  QuickCheck,
+  aeson,
   async,
   base,
   bytestring,
-  connection,
   containers,
+  crypton-connection,
   directory,
   hpack,
   hspec,
   hspec-discover,
   hspec-expectations,
   http-client,
+  http-client-openssl,
   http-conduit,
-  lens,
-  lens-aeson,
+  lib,
   megaparsec,
-  mtl,
+  network-uri,
   optparse-applicative,
   parser-combinators,
-  retry,
-  lib,
   quickcheck-instances,
+  retry,
   text,
   unix,
   unordered-containers,
   utf8-string,
-  fetchFromGitHub,
   dotenv,
+  fetchFromGitHub,
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    sha256 = "sha256-EPu4unzXIg8naFUEZwbJ2VJXD/TeCiKzPHCXnRkdyBE=";
+    hash = "sha256-x3c9TKrCF3tsEFofYAXfK6DWdirEUxWWTttNqU/sJSc=";
   };
 
   buildTools = [ hpack ];
@@ -44,22 +46,27 @@ mkDerivation rec {
   prePatch = ''
     substituteInPlace package.yaml \
         --replace -Werror ""
+    hpack
   '';
 
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
+    HsOpenSSL
+    aeson
     async
     base
     bytestring
-    connection
     containers
+    crypton-connection
+    directory
+    dotenv
     http-client
+    http-client-openssl
     http-conduit
-    lens
-    lens-aeson
     megaparsec
-    mtl
+    network-uri
+    optparse-applicative
     optparse-applicative
     parser-combinators
     retry
@@ -67,34 +74,15 @@ mkDerivation rec {
     unix
     unordered-containers
     utf8-string
-    dotenv
   ];
-  testHaskellDepends = [
-    async
-    base
-    bytestring
-    connection
-    containers
+  testHaskellDepends = executableHaskellDepends ++ [
+    QuickCheck
     directory
     hspec
     hspec-discover
     hspec-expectations
-    http-client
-    http-conduit
-    lens
-    lens-aeson
-    megaparsec
-    mtl
-    optparse-applicative
-    parser-combinators
-    retry
     quickcheck-instances
-    text
-    unix
-    unordered-containers
-    utf8-string
   ];
-  preConfigure = "hpack";
   homepage = "https://github.com/channable/vaultenv#readme";
   description = "Runs processes with secrets from HashiCorp Vault";
   license = lib.licenses.bsd3;

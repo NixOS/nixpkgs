@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -27,16 +27,15 @@
   plymouth,
   coreutils,
   xorgserver,
-  xwayland,
   dbus,
   nixos-icons,
   runCommand,
+  udevCheckHook,
 }:
 
 let
 
-  override = substituteAll {
-    src = ./org.gnome.login-screen.gschema.override;
+  override = replaceVars ./org.gnome.login-screen.gschema.override {
     icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
@@ -44,7 +43,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "47.0";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -53,18 +52,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xYWDJr+8yKzlgTUuK+RGItwOnlwoAchpD9Lu1QJgf4Q=";
+    hash = "sha256-mBNjH59fD4YOoUpDeGbmDvx77TAjt8O3Zcxd4d5ZegY=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
+    "-Dinitial-vt=1"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "run-dir" "/run/gdm")
   ];
 
   nativeBuildInputs = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -105,19 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Change hardcoded paths to nix store paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit
         coreutils
         plymouth
         xorgserver
-        xwayland
         dbus
         ;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
-    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
+    # the gdm configuration module (gdm.nix).
 
     ./gdm-x-session_extra_args.patch
 
@@ -144,7 +143,13 @@ stdenv.mkDerivation (finalAttrs: {
     # installed (mostly just because .passthru.tests can make use of it).
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
+
+    # Disable userdb dynamic users for now
+    substituteInPlace meson.build \
+      --replace-fail 'have_userdb = libsystemd_dep' 'have_userdb = false #'
   '';
+
+  doInstallCheck = true;
 
   preInstall = ''
     install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"
@@ -183,9 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript { packageName = "gdm"; };
 
-    # Used in GDM NixOS module
-    # Don't remove.
-    initialVT = "7";
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 
@@ -200,12 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program that manages graphical display servers and handles graphical user logins";
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "async-stagger";
-  version = "0.4.0.post1";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisteroidambassador";
     repo = "async_stagger";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uJohc3EsAKevqT0J+N0Cqop3xy0PCM5jsP6YYtx+HuQ=";
+    tag = "v${version}";
+    hash = "sha256-qLeTP5FWHho/CbXth3OQNW15Y8uibOh35KqskoIUTHQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_stagger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Happy Eyeballs connection algorithm and underlying scheduling logic in asyncio";
     homepage = "https://github.com/twisteroidambassador/async_stagger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

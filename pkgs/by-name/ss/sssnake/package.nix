@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.3.2";
   src = fetchFromGitHub {
     owner = "angeljumbo";
-    repo = pname;
+    repo = "sssnake";
     rev = "v${version}";
     hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
   };
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
   ];
-  meta = with lib; {
+  meta = {
     description = "Cli snake game that plays itself";
     mainProgram = "sssnake";
     homepage = "https://github.com/angeljumbo/sssnake";
-    license = with licenses; [ mit ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ quantenzitrone ];
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ quantenzitrone ];
   };
 }

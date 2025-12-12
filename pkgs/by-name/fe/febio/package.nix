@@ -4,9 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   replaceVars,
-  apple-sdk_11,
   cmake,
-  darwinMinVersionHook,
   ninja,
   zlib,
   mklSupport ? true,
@@ -48,16 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.15")
-    ];
+  buildInputs = [ zlib ] ++ lib.optionals mklSupport [ mkl ];
 
   meta = {
-    description = "FEBio Suite Solver";
+    description = "Software tool for nonlinear finite element analysis in biomechanics and biophysics";
     license = with lib.licenses; [ mit ];
     homepage = "https://febio.org/";
     platforms = lib.platforms.unix;

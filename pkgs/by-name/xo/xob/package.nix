@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "florentc";
-    repo = pname;
+    repo = "xob";
     rev = "v${version}";
     sha256 = "1x4aafiyd9k4y8cmvn7rgfif3g5s5hhlbj5nz71qsyqg21nn7hrw";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       is also support for overflows (when the value exceeds the maximum).
     '';
     inherit (src.meta) homepage;
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ florentc ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ florentc ];
     mainProgram = "xob";
   };
 }

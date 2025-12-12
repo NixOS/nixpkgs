@@ -22,15 +22,14 @@ let
         sha256 = "0cmscxcmcxhlshh4jd0lzw5ffzns12x3bj7h27smbc8waxkwffhl";
       };
 in
-
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+stdenv.mkDerivation {
+  pname = "ocaml${ocaml.version}-${pname}";
   inherit (param) version;
 
   src = fetchFromGitHub {
-    owner = "whitequark";
+    owner = "ocaml-community";
     repo = pname;
-    rev = "v${version}";
+    rev = "v${param.version}";
     inherit (param) sha256;
   };
 
@@ -52,10 +51,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://opam.ocaml.org/packages/ulex/";
     description = "Lexer generator for Unicode and OCaml";
     license = lib.licenses.mit;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.roconnor ];
+    broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }

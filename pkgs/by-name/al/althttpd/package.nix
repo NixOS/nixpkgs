@@ -5,9 +5,9 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "althttpd";
-  version = "unstable-2023-08-12";
+  version = "0-unstable-2023-08-12";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin althttpd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Althttpd webserver";
     homepage = "https://sqlite.org/althttpd/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.all;
     mainProgram = "althttpd";
   };
 }

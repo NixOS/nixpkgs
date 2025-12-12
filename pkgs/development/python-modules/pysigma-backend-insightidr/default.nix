@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-insightidr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dc25zDYQeU9W9qwrRz7zsM2wOl8kMapDvwFhB6VOwhY=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
     "sigma.pipelines.insight_idr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support the Rapid7 InsightIDR backend for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-insightidr";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   guile,
   pkg-config,
   texinfo,
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
       --replace 'SITECCACHEDIR="$libdir/guile-lib/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"' 'SITECCACHEDIR="$libdir/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"'
   '';
 
+  # error: possibly undefined macro: AC_LIB_LINKFLAGS_FROM_LIBS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/lib-{ld,link,prefix}.m4 m4
+  '';
+
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
     "$(dirname $(echo ${lib.getLib stdenv.cc.cc}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/guile-lib/";
     description = "Collection of useful Guile Scheme modules";
     longDescription = ''
@@ -53,9 +59,8 @@ stdenv.mkDerivation rec {
       modules into a coherent library.  Think "a down-scaled, limited-scope CPAN
       for Guile".
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      vyp
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       foo-dogsquared
     ];
     platforms = guile.meta.platforms;

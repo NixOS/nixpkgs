@@ -24,9 +24,12 @@ in
         description = "Whether to enable the PyKMS service.";
       };
 
+      package = lib.mkPackageOption pkgs "pykms" { };
+
       listenAddress = lib.mkOption {
         type = lib.types.str;
         default = "0.0.0.0";
+        example = "::";
         description = "The IP address on which to listen.";
       };
 
@@ -78,13 +81,13 @@ in
       wantedBy = [ "multi-user.target" ];
       # python programs with DynamicUser = true require HOME to be set
       environment.HOME = libDir;
-      serviceConfig = with pkgs; {
+      serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf libDir;
-        ExecStartPre = "${lib.getBin pykms}/libexec/create_pykms_db.sh ${libDir}/clients.db";
+        ExecStartPre = "${lib.getBin cfg.package}/libexec/create_pykms_db.sh ${libDir}/clients.db";
         ExecStart = lib.concatStringsSep " " (
           [
-            "${lib.getBin pykms}/bin/server"
+            "${lib.getBin cfg.package}/bin/server"
             "--logfile=STDOUT"
             "--loglevel=${cfg.logLevel}"
             "--sqlite=${libDir}/clients.db"

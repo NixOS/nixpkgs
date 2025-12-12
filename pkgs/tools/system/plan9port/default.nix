@@ -11,23 +11,18 @@
   perl, # For building web manuals
   which,
   ed,
-  Carbon,
-  Cocoa,
-  IOKit,
-  Metal,
-  QuartzCore,
   DarwinTools, # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2024-10-22";
+  version = "2025-01-29";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "61e362add9e1485bec1ab8261d729016850ec270";
-    hash = "sha256-Hpz9yuBktgJEOQ4ZD03c37pO9wgbvtYjIreYusr0Dzw=";
+    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
+    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
   };
 
   postPatch = ''
@@ -49,31 +44,25 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs =
-    [
-      perl
-      which
-    ]
-    ++ (
-      if !stdenv.hostPlatform.isDarwin then
-        [
-          fontconfig
-          freetype # fontsrv uses these
-          libX11
-          libXext
-          libXt
-          xorgproto
-        ]
-      else
-        [
-          Carbon
-          Cocoa
-          IOKit
-          Metal
-          QuartzCore
-          DarwinTools
-        ]
-    );
+  buildInputs = [
+    perl
+    which
+  ]
+  ++ (
+    if !stdenv.hostPlatform.isDarwin then
+      [
+        fontconfig
+        freetype # fontsrv uses these
+        libX11
+        libXext
+        libXt
+        xorgproto
+      ]
+    else
+      [
+        DarwinTools
+      ]
+  );
 
   configurePhase = ''
     runHook preConfigure
@@ -136,24 +125,23 @@ stdenv.mkDerivation rec {
     ./test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bbarker
-      ehmry
       ftrvxmtrx
       kovirobi
       matthewdargan
       ylh
     ];
     mainProgram = "9";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

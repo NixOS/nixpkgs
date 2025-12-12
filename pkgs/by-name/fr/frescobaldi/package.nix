@@ -2,22 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python311Packages,
+  python3Packages,
   lilypond,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
   };
 
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     qpageview
     lilypond
     pygame
@@ -28,7 +29,7 @@ python311Packages.buildPythonApplication rec {
     pyqtwebengine
   ];
 
-  nativeBuildInputs = [ python311Packages.pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ python3Packages.pyqtwebengine.wrapQtAppsHook ];
 
   # Needed because source is fetched from git
   preBuild = ''
@@ -44,7 +45,7 @@ python311Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frescobaldi.org/";
     description = "LilyPond sheet music text editor";
     longDescription = ''
@@ -59,9 +60,9 @@ python311Packages.buildPythonApplication rec {
       MusicXML import, Modern user iterface with configurable colors,
       fonts and keyboard shortcuts
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sepi ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
     mainProgram = "frescobaldi";
   };

@@ -28,7 +28,7 @@ buildDunePackage {
     src
     ;
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.14";
 
   buildInputs = [ ppx_sexp_conv ];
 

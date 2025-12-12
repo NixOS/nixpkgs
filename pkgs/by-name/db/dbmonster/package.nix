@@ -9,9 +9,9 @@
   wirelesstools,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "dbmonster";
-  version = "unstable-2022-09-17";
+  version = "0-unstable-2022-09-17";
   format = "other";
 
   src = fetchFromGitHub {
@@ -21,17 +21,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9RP3LmZF7P2c0+Jt/kMSVPb4cBtyH6P3FZ5UrQpBP0I=";
   };
 
-  propagatedBuildInputs =
-    [
-      aircrack-ng
-      iproute2
-      networkmanager
-      tshark
-      wirelesstools
-    ]
-    ++ (with python3.pkgs; [
-      matplotlib
-    ]);
+  propagatedBuildInputs = [
+    aircrack-ng
+    iproute2
+    networkmanager
+    tshark
+    wirelesstools
+  ]
+  ++ (with python3.pkgs; [
+    matplotlib
+  ]);
 
   dontBuild = true;
 
@@ -50,10 +49,10 @@ python3.pkgs.buildPythonApplication rec {
   # Only script available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to track WiFi devices by signal strength";
     homepage = "https://github.com/90N45-d3v/dBmonster";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

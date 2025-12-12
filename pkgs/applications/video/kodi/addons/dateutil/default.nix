@@ -28,13 +28,13 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dateutil.readthedocs.io/en/stable/";
     description = "Extensions to the standard Python datetime module";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    maintainers = teams.kodi.members;
+    teams = [ lib.teams.kodi ];
   };
 }

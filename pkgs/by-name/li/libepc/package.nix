@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy Publish and Consume Library";
     homepage = "https://gitlab.gnome.org/Archive/libepc";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.bot-wxt1221 ];
+    platforms = lib.platforms.linux;
   };
 })

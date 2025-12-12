@@ -18,12 +18,13 @@ let
 
   interfaceRoutes = i: i.ipv4.routes ++ optionals cfg.enableIPv6 i.ipv6.routes;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
+  dhcpStr = useDHCP: boolToYesNo (useDHCP == true || useDHCP == null);
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (ipip: ipip.dev) (attrValues cfg.ipips)
     ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
@@ -46,6 +47,9 @@ let
               // optionalAttrs (gateway.metric != null) {
                 Metric = gateway.metric;
               }
+              // optionalAttrs (gateway.source != null) {
+                PreferredSource = gateway.source;
+              }
             )
           ];
         };
@@ -53,32 +57,36 @@ let
     )
   );
 
-  genericDhcpNetworks =
-    initrd:
-    mkIf cfg.useDHCP {
-      networks."99-ethernet-default-dhcp" = {
-        matchConfig = {
-          Type = "ether";
-          Kind = "!*"; # physical interfaces have no kind
-        };
-        DHCP = "yes";
-        networkConfig.IPv6PrivacyExtensions = "kernel";
+  genericDhcpNetworks = mkIf cfg.useDHCP {
+    networks."99-ethernet-default-dhcp" = {
+      matchConfig = {
+        Type = "ether";
+        Kind = "!*"; # physical interfaces have no kind
       };
-      networks."99-wireless-client-dhcp" = {
-        matchConfig.WLANInterfaceType = "station";
-        DHCP = "yes";
-        networkConfig.IPv6PrivacyExtensions = "kernel";
-        # We also set the route metric to one more than the default
-        # of 1024, so that Ethernet is preferred if both are
-        # available.
-        dhcpV4Config.RouteMetric = 1025;
-        ipv6AcceptRAConfig.RouteMetric = 1025;
-      };
+      DHCP = "yes";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
     };
+    networks."99-wireless-client-dhcp" = {
+      matchConfig.WLANInterfaceType = "station";
+      DHCP = "yes";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+      # We also set the route metric to one more than the default
+      # of 1024, so that Ethernet is preferred if both are
+      # available.
+      dhcpV4Config.RouteMetric = 1025;
+      ipv6AcceptRAConfig.RouteMetric = 1025;
+    };
+  };
 
   interfaceNetworks = mkMerge (
     forEach interfaces (i: {
-      netdevs = mkIf i.virtual ({
+      links = mkIf i.wakeOnLan.enable {
+        "40-${i.name}" = {
+          matchConfig.name = i.name;
+          linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+        };
+      };
+      netdevs = mkIf i.virtual {
         "40-${i.name}" = {
           netdevConfig = {
             Name = i.name;
@@ -88,7 +96,7 @@ let
             User = i.virtualOwner;
           };
         };
-      });
+      };
       networks."40-${i.name}" = {
         name = mkDefault i.name;
         DHCP = mkForce (
@@ -166,6 +174,9 @@ let
           // optionalAttrs (i.mtu != null) {
             MTUBytes = toString i.mtu;
           };
+        bridgeConfig = optionalAttrs i.proxyARP {
+          ProxyARP = i.proxyARP;
+        };
       };
     })
   );
@@ -220,49 +231,47 @@ in
       # former, the user retains full control over the configuration.
       boot.initrd.systemd.network = mkMerge [
         defaultGateways
-        (genericDhcpNetworks true)
+        genericDhcpNetworks
         interfaceNetworks
         bridgeNetworks
         vlanNetworks
       ];
       boot.initrd.availableKernelModules =
-        optional (cfg.bridges != { }) "bridge"
-        ++ optional (cfg.vlans != { }) "8021q";
+        optional (cfg.bridges != { }) "bridge" ++ optional (cfg.vlans != { }) "8021q";
     })
 
     (mkIf cfg.useNetworkd {
 
-      assertions =
-        [
-          {
-            assertion = cfg.defaultGatewayWindowSize == null;
-            message = "networking.defaultGatewayWindowSize is not supported by networkd.";
-          }
-          {
-            assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
-            message = "networking.defaultGateway.interface is not optional when using networkd.";
-          }
-          {
-            assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
-            message = "networking.defaultGateway6.interface is not optional when using networkd.";
-          }
-        ]
-        ++ flip mapAttrsToList cfg.bridges (
-          n:
-          { rstp, ... }:
-          {
-            assertion = !rstp;
-            message = "networking.bridges.${n}.rstp is not supported by networkd.";
-          }
-        )
-        ++ flip mapAttrsToList cfg.fooOverUDP (
-          n:
-          { local, ... }:
-          {
-            assertion = local == null;
-            message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
-          }
-        );
+      assertions = [
+        {
+          assertion = cfg.defaultGatewayWindowSize == null;
+          message = "networking.defaultGatewayWindowSize is not supported by networkd.";
+        }
+        {
+          assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
+          message = "networking.defaultGateway.interface is not optional when using networkd.";
+        }
+        {
+          assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
+          message = "networking.defaultGateway6.interface is not optional when using networkd.";
+        }
+      ]
+      ++ flip mapAttrsToList cfg.bridges (
+        n:
+        { rstp, ... }:
+        {
+          assertion = !rstp;
+          message = "networking.bridges.${n}.rstp is not supported by networkd.";
+        }
+      )
+      ++ flip mapAttrsToList cfg.fooOverUDP (
+        n:
+        { local, ... }:
+        {
+          assertion = local == null;
+          message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
+        }
+      );
 
       networking.dhcpcd.enable = mkDefault false;
 
@@ -271,7 +280,7 @@ in
           enable = true;
         }
         defaultGateways
-        (genericDhcpNetworks false)
+        genericDhcpNetworks
         interfaceNetworks
         bridgeNetworks
         (mkMerge (
@@ -338,7 +347,7 @@ in
                         driverOpt:
                         assertTrace (elem driverOpt (knownOptions ++ unknownOptions))
                           "The bond.driverOption `${driverOpt}` cannot be mapped to the list of known networkd bond options. Please add it to the mapping above the assert or to `unknownOptions` should it not exist in networkd."
-                      ) (mapAttrsToList (k: _: k) do);
+                      ) (attrNames do);
                       "";
                     # get those driverOptions that have been set
                     filterSystemdOptions = filterAttrs (sysDOpt: kOpts: any (kOpt: do ? ${kOpt}) kOpts.optNames);
@@ -398,14 +407,13 @@ in
                 # unfortunately networkd cannot encode dependencies of netdevs on addresses/routes,
                 # so we cannot specify Local=, Peer=, PeerPort=. this looks like a missing feature
                 # in networkd.
-                fooOverUDPConfig =
-                  {
-                    Port = fou.port;
-                    Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
-                  }
-                  // (optionalAttrs (fou.protocol != null) {
-                    Protocol = fou.protocol;
-                  });
+                fooOverUDPConfig = {
+                  Port = fou.port;
+                  Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
+                }
+                // (optionalAttrs (fou.protocol != null) {
+                  Protocol = fou.protocol;
+                });
               };
             }
           )
@@ -428,7 +436,7 @@ in
                   // (optionalAttrs (sit.ttl != null) {
                     TTL = sit.ttl;
                   })
-                  // (optionalAttrs (sit.encapsulation != null) (
+                  // (optionalAttrs (sit.encapsulation.type != "6in4") (
                     {
                       FooOverUDP = true;
                       Encapsulation = if sit.encapsulation.type == "fou" then "FooOverUDP" else "GenericUDPEncapsulation";
@@ -441,6 +449,38 @@ in
               };
               networks = mkIf (sit.dev != null) {
                 "40-${sit.dev}" = {
+                  tunnel = [ name ];
+                };
+              };
+            }
+          )
+        ))
+        (mkMerge (
+          flip mapAttrsToList cfg.ipips (
+            name: ipip: {
+              netdevs."40-${name}" = {
+                netdevConfig = {
+                  Name = name;
+                  Kind = if ipip.encapsulation.type == "ipip" then "ipip" else "ip6tnl";
+                };
+                tunnelConfig =
+                  (optionalAttrs (ipip.remote != null) {
+                    Remote = ipip.remote;
+                  })
+                  // (optionalAttrs (ipip.local != null) {
+                    Local = ipip.local;
+                  })
+                  // (optionalAttrs (ipip.ttl != null) {
+                    TTL = ipip.ttl;
+                  })
+                  // (optionalAttrs (ipip.encapsulation.type != "ipip") {
+                    # IPv6 tunnel options
+                    Mode = if ipip.encapsulation.type == "4in6" then "ipip6" else "ip6ip6";
+                    EncapsulationLimit = ipip.encapsulation.type;
+                  });
+              };
+              networks = mkIf (ipip.dev != null) {
+                "40-${ipip.dev}" = {
                   tunnel = [ name ];
                 };
               };
@@ -511,7 +551,8 @@ in
                 after = [
                   "network-pre.target"
                   "ovs-vswitchd.service"
-                ] ++ deps;
+                ]
+                ++ deps;
                 wants = deps; # if one or more interface fails, the switch should continue to run
                 serviceConfig.Type = "oneshot";
                 serviceConfig.RemainAfterExit = true;

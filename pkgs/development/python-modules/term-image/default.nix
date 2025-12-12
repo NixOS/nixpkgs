@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AnonymouX47";
     repo = "term-image";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uA04KHKLXW0lx1y5brpCDARLac4/C8VmVinVMkEtTdM=";
   };
 
@@ -38,7 +38,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.urwid;
+  ]
+  ++ optional-dependencies.urwid;
 
   disabledTestPaths = [
     # test_url needs online access

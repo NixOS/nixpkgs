@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flitter";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
-    rev = "v${version}";
-    sha256 = "sha256-8e13kSQEjzzf+j4uTrocVioZjJ6lAz+80dLfWwjPb9o=";
+    tag = version;
+    hash = "sha256-aXTQeUKhwa2uVipKIs8n0XBiWa5o7U6UMlAUlnzXyzE=";
   };
 
-  cargoHash = "sha256-NpUSWoOUhSgbzeCkXEgn4P387bada6fv/M8aZYe8CoU=";
+  cargoHash = "sha256-SOmq1txYMJGUVkkrE3kWmioaJzBX9raZ+ExFlPYGDM8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/alexozer/flitter";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "flitter";
     broken = stdenv.hostPlatform.isDarwin;
   };

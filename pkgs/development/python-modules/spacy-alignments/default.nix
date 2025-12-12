@@ -23,10 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-jcNYghWR9Xbu97/hAYe8ewa5oMQ4ofNGFwY4cY7/EmM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-I5uI+qFyb4/ArpUZi4yS/E/bmwoW7+CalMq02Gnm9S8=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-0U1ELUMh4YV6M+zrrZGuzvY8SdgyN66F7bJ6sMhOdXs=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_alignments" ];
 
-  meta = with lib; {
+  meta = {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

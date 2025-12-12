@@ -2,73 +2,119 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  bash,
   cmake,
-  runCommandLocal,
+  ninja,
+  git,
   bison,
   flex,
+  zlib,
   intel-compute-runtime,
-  llvmPackages_14,
-  opencl-clang,
   python3,
   spirv-tools,
   spirv-headers,
-  spirv-llvm-translator,
-
-  buildWithPatches ? true,
 }:
 
 let
-  vc_intrinsics_src = fetchFromGitHub {
-    owner = "intel";
-    repo = "vc-intrinsics";
-    rev = "v0.19.0";
-    hash = "sha256-vOK7xfOR+aDpdGd8oOFLJc1Ct1S5BCJmLN6Ubn5wlkQ=";
-  };
-
-  inherit (llvmPackages_14) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_14) clang libclang;
-  spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
+  llvmVersion = "16.0.6";
 in
-
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.17384.11";
+  version = "2.22.2";
 
-  src = fetchFromGitHub {
-    owner = "intel";
-    repo = "intel-graphics-compiler";
-    rev = "igc-${version}";
-    hash = "sha256-O4uMaPauRv2aMgM2B7XdzCcjI5JghsjX5XbkeloLyck=";
-  };
+  # See the repository for expected versions:
+  # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
+  srcs = [
+    (fetchFromGitHub {
+      name = "igc";
+      owner = "intel";
+      repo = "intel-graphics-compiler";
+      tag = "v${version}";
+      hash = "sha256-4Tp9kY+Sbirf4kN/C5Q1ClcoUI/fhfUJpqL+/eO8a/o=";
+    })
+    (fetchFromGitHub {
+      name = "llvm-project";
+      owner = "llvm";
+      repo = "llvm-project";
+      tag = "llvmorg-${llvmVersion}";
+      hash = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
+    })
+    (fetchFromGitHub {
+      name = "vc-intrinsics";
+      owner = "intel";
+      repo = "vc-intrinsics";
+      tag = "v0.23.4";
+      hash = "sha256-zorhOhBTcymnAlShJxJecXD+HIfScGouhSea/A3tBXE=";
+    })
+    (fetchFromGitHub {
+      name = "opencl-clang";
+      owner = "intel";
+      repo = "opencl-clang";
+      tag = "v16.0.5";
+      hash = "sha256-JfynEsCXltVdVY/LqWvZwzWfzEFUz6nI9Zub+bze1zE=";
+    })
+    (fetchFromGitHub {
+      name = "llvm-spirv";
+      owner = "KhronosGroup";
+      repo = "SPIRV-LLVM-Translator";
+      tag = "v16.0.18";
+      hash = "sha256-JwFwjHUv1tBC7KDWAhkse557R6QCaVjOekhndQlVetM=";
+    })
+  ];
+
+  patches = [
+    # Raise minimum CMake version to 3.5
+    # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
+    # https://github.com/intel/intel-graphics-compiler/pull/364
+    ./bump-cmake.patch
+  ];
+
+  sourceRoot = ".";
+
+  cmakeDir = "../igc";
+
+  postUnpack = ''
+    chmod -R +w .
+    mv opencl-clang llvm-spirv llvm-project/llvm/projects/
+  '';
 
   postPatch = ''
-    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
+    substituteInPlace igc/IGC/AdaptorOCL/igc-opencl.pc.in \
       --replace-fail '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
       --replace-fail '/@CMAKE_INSTALL_LIBDIR@' "/lib"
 
-    chmod +x IGC/Scripts/igc_create_linker_script.sh
-    patchShebangs --build IGC/Scripts/igc_create_linker_script.sh
+    chmod +x igc/IGC/Scripts/igc_create_linker_script.sh
+    patchShebangs --build igc/IGC/Scripts/igc_create_linker_script.sh
+
+    # The build system only applies patches when the sources are in a
+    # Git repository.
+    git -C llvm-project init
+    git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
+    substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
+                     'COMMAND patch -p1 --ignore-whitespace -i '
+
+    # match default LLVM version with our provided version to apply correct patches
+    substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
+      --replace-fail "16.0.6" "${llvmVersion}"
   '';
 
   nativeBuildInputs = [
-    bash
     bison
     cmake
     flex
+    git
+    ninja
     (python3.withPackages (
       ps: with ps; [
         mako
         pyyaml
       ]
     ))
+    zlib
   ];
 
   buildInputs = [
-    lld
-    llvm
     spirv-headers
-    spirv-llvm-translator'
     spirv-tools
   ];
 
@@ -77,22 +123,11 @@ stdenv.mkDerivation rec {
   # testing is done via intel-compute-runtime
   doCheck = false;
 
-  # Handholding the braindead build script
-  # cmake requires an absolute path
-  prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
-    mkdir $out
-    ln -s ${clang}/bin/clang $out/
-    ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
-  '';
-
   cmakeFlags = [
-    "-DVC_INTRINSICS_SRC=${vc_intrinsics_src}"
-    "-DCCLANG_BUILD_PREBUILDS=ON"
-    "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
-    "-DIGC_OPTION__VC_INTRINSICS_MODE=Source"
+    "-DIGC_OPTION__USE_PREINSTALLED_SPIRV_HEADERS=ON"
+    "-DSPIRV-Headers_INCLUDE_DIR=${spirv-headers}/include"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
     "-Wno-dev"
   ];
 
@@ -100,12 +135,12 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
-  meta = with lib; {
+  meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

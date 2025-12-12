@@ -14,29 +14,29 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
-  tbb_2021_11,
-  yaml-cpp,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libloot";
-  version = "0.24.5";
+  version = "0.25.5";
   # Note: don't forget to also update the package versions in the passthru section
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocs [ "doc" ];
+  ]
+  ++ lib.optionals withDocs [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "loot";
     repo = "libloot";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-SAnbp34DlGsq4nfaRHfCTGRSGQtv/rRgngvwma2tc7Q=";
+    hash = "sha256-l8AdqJ0lZH4rBcf4WV3ju+sIHYam6USXCXTqyRPzgeo=";
   };
 
   patches = [
@@ -52,27 +52,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      python3Packages.sphinx
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    python3Packages.sphinx
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+  ];
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
-    tbb_2021_11
+    spdlog
+    onetbb
 
-    finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder
     finalAttrs.passthru.esplugin
     finalAttrs.passthru.loot-condition-interpreter
@@ -83,11 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBLOADORDER_LIBRARIES" "loadorder_ffi")
     (lib.cmakeFeature "LCI_LIBRARIES" "loot_condition_interpreter_ffi")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS" "../testing-plugins")
-    (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${finalAttrs.passthru.yaml-cpp-src}")
+    (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "LIBLOOT_INSTALL_DOCS" withDocs)
   ];
 
-  postConfigure = lib.optionalString finalAttrs.doCheck ''
+  postConfigure = lib.optionalString finalAttrs.finalPackage.doCheck ''
     cp -r --no-preserve=all ${finalAttrs.passthru.testing-plugins} ../testing-plugins
   '';
 
@@ -98,14 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.GTEST_FILTER =
     let
       disabledTests = [
-        # Some locale releated tests fail because they need the LOCALE_ARCHIVE env var to be set to "${glibcLocales}/lib/locale/locale-archive"
+        # Some locale related tests fail because they need the LOCALE_ARCHIVE env var to be set to "${glibcLocales}/lib/locale/locale-archive"
         # Due to storage size concerns of `glibcLocales`, we skip this
         "CompareFilenames.shouldBeCaseInsensitiveAndLocaleInvariant"
         "NormalizeFilename.shouldCaseFoldStringsAndBeLocaleInvariant"
-
-        # Some filesystem related test fail because they assume `std::filesystem::equivalent` works with non-existent paths
-        "Filesystem.equivalentShouldNotRequireThatBothPathsExist"
-        "Filesystem.equivalentShouldBeCaseSensitive"
       ];
     in
     "-${builtins.concatStringsSep ":" disabledTests}";
@@ -116,8 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
     testing-plugins = fetchFromGitHub {
       owner = "Ortham";
       repo = "testing-plugins";
-      rev = "refs/tags/1.6.2";
+      tag = "1.6.2";
       hash = "sha256-3Aa98EwqpuGA3YlsRF8luWzXVEFO/rs6JXisXdLyIK4=";
+    };
+
+    yaml-cpp-src = fetchFromGitHub {
+      owner = "loot";
+      repo = "yaml-cpp";
+      tag = "0.8.0+merge-key-support.2";
+      hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
     };
 
     buildRustFFIPackage =
@@ -141,16 +143,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     libloadorder = finalAttrs.passthru.buildRustFFIPackage rec {
       pname = "libloadorder";
-      version = "18.1.3";
+      version = "18.3.0";
 
       src = fetchFromGitHub {
         owner = "Ortham";
         repo = "libloadorder";
-        rev = "refs/tags/${version}";
-        hash = "sha256-qJ7gC4BkrXJiVcyA1BqlJSRzgc/7VmNBHtDq0ouJoTU=";
+        tag = version;
+        hash = "sha256-/8WOEt9dxKFTTZbhf5nt81jo/yHuALPxh/IwAOehi9w=";
       };
 
-      cargoHash = "sha256-x4LFO6dD3bBKv6gTrNUAo7Rdw5cP67gn44QP6Iwbv0I=";
+      cargoHash = "sha256-re/cKqf/CAD7feNIEuou4ZP8BNkArd5CvREx1610jig=";
 
       lang = "c++";
       header = "libloadorder.hpp";
@@ -163,11 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
       src = fetchFromGitHub {
         owner = "Ortham";
         repo = "esplugin";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-ygjSyixg+9HFFNV/G+w+TxGFTrjlWxlDt8phpCE8xyQ=";
       };
 
-      cargoHash = "sha256-39iod83yVU5PyIjwv7pLLuMeNw9fHiM0tXDauyGrbx8=";
+      cargoHash = "sha256-6sY2M7kjSYB3+6+zoMxPwdl+g7ARLHm9RdSODHQR8bE=";
 
       lang = "c++";
       header = "esplugin.hpp";
@@ -175,29 +177,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     loot-condition-interpreter = finalAttrs.passthru.buildRustFFIPackage rec {
       pname = "loot-condition-interpreter";
-      version = "4.0.2";
+      version = "5.3.0";
 
       src = fetchFromGitHub {
         owner = "loot";
         repo = "loot-condition-interpreter";
-        rev = "refs/tags/${version}";
-        hash = "sha256-yXbe7ByYHvFpokRpV2pz2SX0986dpk5IpehwDUhoZKg=";
+        tag = version;
+        hash = "sha256-MvadQ4cWpzNgF/lUW5Jb758DvfRPGZ7s1W4MbO7nbIw=";
       };
 
-      cargoHash = "sha256-p+raWZkW16MrvfZhJigSPth8pZZ68twU1+0GL/Mo1Xw=";
+      cargoHash = "sha256-m/vRnAJyMQOosxnjSUgHIY1RCkdB5+HFVqqzYVEpgOI=";
 
       lang = "c";
       header = "loot_condition_interpreter.h";
-    };
-
-    yaml-cpp = yaml-cpp.overrideAttrs rec {
-      version = "0.8.0+merge-key-support.2";
-      src = fetchFromGitHub {
-        owner = "loot";
-        repo = "yaml-cpp";
-        rev = "refs/tags/${version}";
-        hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
-      };
     };
   };
 

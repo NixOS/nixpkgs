@@ -10,6 +10,7 @@
   # propagates
   distutils,
   pyyaml,
+  standard-pipes,
 
   # optionals
   boto3,
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "mrjob";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pyyaml
+    standard-pipes
   ];
 
   optional-dependencies = {
@@ -69,15 +71,16 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   unittestFlagsArray = [ "-v" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

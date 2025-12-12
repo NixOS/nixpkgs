@@ -5,10 +5,13 @@
   gsettings-desktop-schemas,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  gobject-introspection,
   gdk-pixbuf,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 let
-  version = "2.61.3";
+  version = "2.65.1";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -18,9 +21,20 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pyfa-org";
     repo = "Pyfa";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-i8NcRTn817gqwQP6j0RPUJkq09eTI4nfe3EVqYnWRpo=";
+    tag = "v${version}";
+    hash = "sha256-s53EkXPySdijmkb32VZs44Fuy+lckBu9RxMfPVe0mag=";
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "${pname} %U";
+      icon = "pyfa";
+      desktopName = pname;
+      genericName = "Python fitting assistant for Eve Online";
+      categories = [ "Game" ];
+    })
+  ];
 
   build-system = [ python3Packages.setuptools ];
   dependencies = with python3Packages; [
@@ -38,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     python-jose
     requests-cache
+    pygobject3
   ];
 
   buildInputs = [
@@ -49,7 +64,9 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
+    gobject-introspection
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   #
@@ -90,12 +107,18 @@ python3Packages.buildPythonApplication rec {
   # exposing the innards of pyfa to the rest of the env.
   #
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
     cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
+    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/${pname}.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
+
+    runHook postInstall
   '';
 
   fixupPhase = ''

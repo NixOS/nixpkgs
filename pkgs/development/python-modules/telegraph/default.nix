@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
 
@@ -30,17 +30,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [ "test_get_page" ];
 
   pythonImportsCheck = [ "telegraph" ];
 
-  meta = with lib; {
+  meta = {
     description = "Telegraph API wrapper";
     homepage = "https://github.com/python273/telegraph";
     changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gp2112 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gp2112 ];
   };
 }

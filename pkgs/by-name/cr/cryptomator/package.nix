@@ -3,36 +3,32 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  jdk23,
+  zulu25,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
   maven,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 let
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.14.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
-    rev = version;
-    hash = "sha256-TSE83QYFry8O6MKAoggJBjqonYiGax5GG/a7sm7aHf8=";
+    tag = version;
+    hash = "sha256-UWe9iBgb6eBasHnqfBtOFnZlLF1XCIF0y+ebphYQkQw=";
   };
-
-  patches = [
-    # https://github.com/cryptomator/cryptomator/pull/3621
-    ./string-template-removal-and-jdk23.patch
-  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-LFD150cGW6OdwkK28GYI9j44GtVE0pwFMaQ8dQqArLo=";
+  mvnHash = "sha256-dOpvojr6gVtDFE52eghOVZWGspRLQrTDotOMkVGaG9k=";
 
   preBuild = ''
     VERSION=${version}
@@ -48,7 +44,7 @@ maven.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
       --add-flags "--enable-preview" \
       --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
@@ -114,9 +110,12 @@ maven.buildMavenPackage rec {
     libayatana-appindicator
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
+    changelog = "https://github.com/cryptomator/cryptomator/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cryptomator";
     maintainers = with lib.maintainers; [

@@ -12,22 +12,19 @@
   SDL2,
   SDL2_mixer,
   timidity,
-  # Darwin dependencies
-  libiconv,
-  apple-sdk_11,
   # Update
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.68.0";
+  version = "0.69.1";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D8ks+fiFJxwClqW1aNtGGa5UxAFvuH2f2guwPxOEQwI=";
+    hash = "sha256-Jrf3PhgnJUBGy+ZcSPjU5tQFyuTmnn5+8P6LujsoSAg=";
   };
 
   patches = [
@@ -60,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2
       SDL2_mixer
       timidity
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   cmakeFlags = [ "-Wno-dev" ];
 
@@ -81,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       hughobrien
       matteopacini
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

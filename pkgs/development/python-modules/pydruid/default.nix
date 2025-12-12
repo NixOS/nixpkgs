@@ -17,21 +17,21 @@
 
 buildPythonPackage rec {
   pname = "pydruid";
-  version = "0.6.5";
+  version = "0.6.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "pydruid";
     owner = "druid-io";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
+    tag = version;
+    hash = "sha256-em4UuNnGdfT6KC9XiWSkCmm4DxdvDS+DGY9kw25iepo=";
   };
 
   # patch out the CLI because it doesn't work with newer versions of pygments
   postPatch = ''
-    substituteInPlace setup.py --replace '"console_scripts": ["pydruid = pydruid.console:main"],' ""
+    substituteInPlace setup.py --replace-fail '"console_scripts": ["pydruid = pydruid.console:main"],' ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -41,7 +41,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pydruid" ];
 
@@ -52,10 +53,10 @@ buildPythonPackage rec {
     # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple API to create, execute, and analyze Druid queries";
     homepage = "https://github.com/druid-io/pydruid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

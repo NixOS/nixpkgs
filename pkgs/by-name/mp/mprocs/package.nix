@@ -2,27 +2,31 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  mprocs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mprocs";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "pvolok";
     repo = "mprocs";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-gK2kgc0Y0s1xys+pUadi8BhGeYxtyKRhNycCoqftmDI=";
+    tag = "v${version}";
+    hash = "sha256-/FuvejcZoaHzlYh4zYDVS1WimzNMNbRZyM39OBi02VA=";
   };
 
-  cargoHash = "sha256-lcs+x2devOEZg5YwAzlZKJl6VpCJXzVqNUr6N5pCei8=";
+  cargoHash = "sha256-i9oQT2vpA5nAgQgVpxxfRPvCIb4w1emt1YsjMS6UPIk=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mprocs; };
   };
 
   meta = {

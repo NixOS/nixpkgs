@@ -7,6 +7,7 @@
   automake,
   bison,
   cmake,
+  pkg-config,
   libtool,
   civetweb,
   coreutils,
@@ -29,17 +30,20 @@
   prometheus-cpp,
   zlib,
   texinfo,
+  postgresql_16,
+  icu,
+  libevent,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.6.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
-    rev = finalAttrs.version;
-    hash = "sha256-vFPTBSp5DPNRuhtSD34ah2074almS+jiYxBE1L9Pz6g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kbfuUulEDPx/5tpp7uOkIXQuyaFYzos3crCvkWHSmHg=";
   };
 
   patches = [
@@ -53,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libtool
     perl
+    pkg-config
     python3
     texinfo # for makeinfo
   ];
@@ -62,8 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     flex
     gnutls
+    icu
+    libevent
     libgcrypt
     libuuid
+    openssl
     zlib
   ];
 
@@ -141,10 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
                 p = libmicrohttpd;
               }
               {
-                f = "libssl";
-                p = openssl;
-              }
-              {
                 f = "lz4";
                 p = lz4;
               }
@@ -154,7 +158,22 @@ stdenv.mkDerivation (finalAttrs: {
               }
               {
                 f = "prometheus-cpp";
-                p = prometheus-cpp;
+                p = prometheus-cpp.overrideAttrs (
+                  finalAttrs: _: {
+                    version = "1.1.0";
+
+                    src = fetchFromGitHub {
+                      owner = "jupp0r";
+                      repo = "prometheus-cpp";
+                      tag = "v${finalAttrs.version}";
+                      hash = "sha256-qx6oBxd0YrUyFq+7ArnKBqOwrl5X8RS9nErhRDUJ7+8=";
+                    };
+                  }
+                );
+              }
+              {
+                f = "postgresql";
+                p = postgresql_16;
               }
             ]
         )
@@ -173,8 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
       pushd prometheus-cpp/prometheus-cpp/3rdparty
       replace_dep . "${civetweb.src}" civetweb
       popd
-
-      sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config
 
       pushd libmicrohttpd/libmicrohttpd
       autoreconf
@@ -204,13 +221,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance MySQL proxy";
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
-    license = with licenses; [ gpl3Only ];
-    maintainers = teams.helsinki-systems.members;
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl3Only ];
+    teams = [ lib.teams.helsinki-systems ];
+    platforms = lib.platforms.unix;
   };
 })

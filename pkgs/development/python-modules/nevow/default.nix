@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "nevow";
   version = "0.14.5";
+  format = "setuptools";
   disabled = isPy3k;
 
   src = fetchPypi {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     trial formless nevow
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nevow, a web application construction kit for Python";
     longDescription = ''
       Nevow - Pronounced as the French "nouveau", or "noo-voh", Nevow
@@ -45,6 +46,6 @@ buildPythonPackage rec {
       successfully, the method will be called with the coerced values.
     '';
     homepage = "https://github.com/twisted/nevow";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

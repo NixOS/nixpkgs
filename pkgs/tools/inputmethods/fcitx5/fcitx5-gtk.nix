@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.1.3";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-qckaD2VDlXyaXe52PTjYfKIJbsIBRgD5s3b9Oc6l/64=";
+    hash = "sha256-MlBLhgqpF+A9hotnhX83349wIpCQfzsqpyZb0xME2XQ=";
   };
 
   outputs = [
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-  ] ++ lib.optional (!withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
+  ]
+  ++ lib.optional (!withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
     glib
@@ -65,7 +66,8 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
-  ] ++ lib.optional withGTK2 gtk2;
+  ]
+  ++ lib.optional withGTK2 gtk2;
 
   nativeBuildInputs = [
     cmake
@@ -73,11 +75,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 gtk im module and glib based dbus client library";
     homepage = "https://github.com/fcitx/fcitx5-gtk";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

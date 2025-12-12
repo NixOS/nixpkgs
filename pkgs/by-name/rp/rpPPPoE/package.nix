@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-plugin=${ppp}/include"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "rpppoe_cv_pack_bitfields=rev" ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "rpppoe_cv_pack_bitfields=rev" ];
 
   postConfigure = ''
     sed -i Makefile -e 's@DESTDIR)/etc/ppp@out)/etc/ppp@'
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR:=$(AR)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Roaring Penguin Point-to-Point over Ethernet tool";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/dfskoll/rp-pppoe";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ DictXiong ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ DictXiong ];
   };
 }

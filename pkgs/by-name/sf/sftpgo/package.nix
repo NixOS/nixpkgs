@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.6.4";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4TGbOoF6cpaqZ3Jh6cAI+Jyk5R35om6NnuMoNRS/LY4=";
+    tag = "v${version}";
+    hash = "sha256-9WdgBipMb+7/XtNxLzaU36RNiMprlk44Ix/RcC/+VsA=";
   };
 
-  vendorHash = "sha256-DYyRcV/QxWFgo+85iG4HW0Fp2+JM86nDQj6GpO3Z9eA=";
+  vendorHash = "sha256-pbYmkIu5b3odCR+rnGQy3+xsMy1Lru37sbxRoIlv77E=";
 
   ldflags = [
     "-s"
@@ -48,7 +48,7 @@ buildGoModule rec {
 
   passthru.tests = nixosTests.sftpgo;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/drakkan/sftpgo";
     changelog = "https://github.com/drakkan/sftpgo/releases/tag/v${version}";
     description = "Fully featured and highly configurable SFTP server";
@@ -59,11 +59,14 @@ buildGoModule rec {
       local filesystem, encrypted local filesystem, S3 (compatible) Object Storage,
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       unfreeRedistributable
     ]; # Software is AGPLv3, web UI is unfree
-    maintainers = with maintainers; [ thenonameguy ];
+    maintainers = with lib.maintainers; [
+      thenonameguy
+      ryan4yin
+    ];
     mainProgram = "sftpgo";
   };
 }

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.test";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jbnU6PFVUd/eD9CWHyJvaTFkcZaIIwztkN9UbQZH1RU=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.test" ];
 
-  meta = with lib; {
+  meta = {
     description = "Testing support by jaraco";
     homepage = "https://github.com/jaraco/jaraco.test";
     changelog = "https://github.com/jaraco/jaraco.test/blob/${src.rev}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

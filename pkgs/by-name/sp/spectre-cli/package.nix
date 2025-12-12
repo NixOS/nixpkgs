@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DBUILD_SPECTRE_TESTS=ON"
   ];
 
@@ -63,12 +64,12 @@ stdenv.mkDerivation rec {
     mv spectre $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stateless cryptographic identity algorithm";
     homepage = "https://spectre.app";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emmabastas ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ emmabastas ];
     mainProgram = "spectre";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

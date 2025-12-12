@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # Maintenance repo for libtar (Arch Linux uses this)
   src = fetchgit {
     url = "git://repo.or.cz/libtar.git";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1pjsqnqjaqgkzf1j8m6y5h76bwprffsjjj6gk8rh2fjsha14rqn9";
   };
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "C library for manipulating POSIX tar files";
     mainProgram = "libtar";
     homepage = "https://repo.or.cz/libtar";
-    license = licenses.bsd3;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

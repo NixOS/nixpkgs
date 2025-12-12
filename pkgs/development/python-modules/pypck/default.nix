@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.8.2";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "alengwenus";
     repo = "pypck";
     tag = version;
-    hash = "sha256-u3vk8yLP35ZQFajp3ngadNM3KY40zShPMYm9iN5U86Y=";
+    hash = "sha256-mtlA4UT8bYZa6hFbO/AHRFfHQ+6SpMN97cfc3q4dDJ4=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypck" ];
 
-  meta = with lib; {
+  meta = {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
-    changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/alengwenus/pypck/releases/tag/${src.tag}";
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

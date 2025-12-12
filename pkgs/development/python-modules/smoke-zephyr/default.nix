@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeroSteiner";
     repo = "smoke-zephyr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XZj8sxEWYv5z1x7LKb0T3L7MWSZbWr7lAIyjWekN+WY=";
   };
 

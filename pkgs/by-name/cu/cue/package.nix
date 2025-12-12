@@ -5,22 +5,21 @@
   stdenv,
   installShellFiles,
   testers,
-  cue,
   callPackage,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cue";
-  version = "0.11.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
-    rev = "v${version}";
-    hash = "sha256-CLWPRVrfFQUwoLbZttetuq1T/Gb7vVEcrD7dxMzfgjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0DxJK5S1uWR5MbI8VzUxQv+YTwIIm1yK77Td+Qf278I=";
   };
 
-  vendorHash = "sha256-jl8TR1kxame30l7DkfOEioWA9wK/ACTNofiTi++vjuI=";
+  vendorHash = "sha256-ivFw62+pg503EEpRsdGSQrFNah87RTUrRXUSPZMFLG4=";
 
   subPackages = [ "cmd/*" ];
 
@@ -29,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X cuelang.org/go/cmd/cue/cmd.version=v${version}"
+    "-X cuelang.org/go/cmd/cue/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -44,9 +43,9 @@ buildGoModule rec {
     tests = {
       test-001-all-good = callPackage ./tests/001-all-good.nix { };
       version = testers.testVersion {
-        package = cue;
+        package = finalAttrs.finalPackage;
         command = "cue version";
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
       };
     };
   };
@@ -58,4 +57,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "cue";
   };
-}
+})

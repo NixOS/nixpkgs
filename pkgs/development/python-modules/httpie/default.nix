@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
 
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     requests-toolbelt
     setuptools
     rich
-  ] ++ requests.optional-dependencies.socks;
+  ]
+  ++ requests.optional-dependencies.socks;
 
   __darwinAllowLocalNetworking = true;
 
@@ -80,7 +81,7 @@ buildPythonPackage rec {
     installManPage docs/http.1
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "httpie"
     "tests"
   ];
@@ -92,32 +93,33 @@ buildPythonPackage rec {
     "tests/test_plugins_cli.py"
   ];
 
-  disabledTests =
-    [
-      # argparse output changed
-      "test_naked_invocation"
-      # Test is flaky
-      "test_stdin_read_warning"
-      # httpbin compatibility issues
-      "test_compress_form"
-      "test_binary_suppresses_when_terminal"
-      "test_binary_suppresses_when_not_terminal_but_pretty"
-      "test_binary_included_and_correct_when_suitable"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Test is flaky
-      "test_daemon_runner"
-    ];
+  disabledTests = [
+    # argparse output changed
+    "test_naked_invocation"
+    # Test is flaky
+    "test_stdin_read_warning"
+    # httpbin compatibility issues
+    "test_binary_suppresses_when_terminal"
+    "test_binary_suppresses_when_not_terminal_but_pretty"
+    "test_binary_included_and_correct_when_suitable"
+    # charset-normalizer compat issue
+    # https://github.com/httpie/cli/issues/1628
+    "test_terminal_output_response_charset_detection"
+    "test_terminal_output_request_charset_detection"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test is flaky
+    "test_daemon_runner"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       antono
       relrod
-      schneefux
     ];
   };
 }

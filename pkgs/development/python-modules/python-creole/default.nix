@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jedie";
     repo = "python-creole";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8pXOnLNjhIv0d+BqjW8wlb6BT6CmFHSsxn5wLOv3LBQ=";
   };
 
@@ -79,22 +79,19 @@ buildPythonPackage rec {
     # rendering differencenes, likely docutils version mismatch
     "creole/tests/test_cross_compare_rest.py"
     "creole/tests/test_rest2html.py"
-  ];
-
-  pytestFlagsArray = [
     # fixture mismatch after docutils update
-    "--deselect=creole/rest_tools/clean_writer.py::creole.rest_tools.clean_writer.rest2html"
-    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link"
-    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_at_sign"
-    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_unknown_protocol"
-    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
+    "creole/rest_tools/clean_writer.py::creole.rest_tools.clean_writer.rest2html"
+    "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link"
+    "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_at_sign"
+    "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_unknown_protocol"
+    "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creole markup tools written in Python";
     homepage = "https://github.com/jedie/python-creole";
     changelog = "https://github.com/jedie/python-creole/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

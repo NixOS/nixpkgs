@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
+  quilt,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,21 +15,22 @@ stdenv.mkDerivation rec {
     sha256 = "171yl9kfm8w7l17dfxild99mbf877a9k5zg8yysgb1j8nz51a1ja";
   };
 
-  # Plain upstream tarball doesn't build, get patches from Debian
   patches = [
-    (fetchurl {
-      url = "http://ftp.de.debian.org/debian/pool/main/u/ucspi-tcp/ucspi-tcp_0.88-3.diff.gz";
-      sha256 = "0mzmhz8hjkrs0khmkzs5i0s1kgmgaqz07h493bd5jj5fm5njxln6";
-    })
     ./remove-setuid.patch
   ];
 
-  # Apply Debian patches
+  debian = fetchzip {
+    url = "http://ftp.de.debian.org/debian/pool/main/u/ucspi-tcp/ucspi-tcp_0.88-11.debian.tar.xz";
+    sha256 = "0x8h46wkm62dvyj1acsffcl4s06k5zh6139qxib3zzhk716hv5xg";
+  };
+
+  nativeBuildInputs = [
+    quilt
+  ];
+
+  # Plain upstream tarball doesn't build, apply patches from Debian
   postPatch = ''
-    for fname in debian/diff/*.diff; do
-        echo "Applying patch $fname"
-        patch < "$fname"
-    done
+    QUILT_PATCHES=$debian/patches quilt push -a
   '';
 
   # The build system is weird; 'make install' doesn't install anything, instead
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     echo "$out" > conf-home
 
-    echo "main() { return 0; }" > chkshsgr.c
+    echo "int main() { return 0; }" > chkshsgr.c
   '';
 
   installPhase = ''
@@ -51,10 +54,10 @@ stdenv.mkDerivation rec {
     ./install
 
     # Install Debian man pages (upstream has none)
-    cp debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
+    cp $debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tools for building TCP client-server applications";
     longDescription = ''
       tcpserver waits for incoming connections and, for each connection, runs a
@@ -84,8 +87,8 @@ stdenv.mkDerivation rec {
       different networks.
     '';
     homepage = "http://cr.yp.to/ucspi-tcp.html";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

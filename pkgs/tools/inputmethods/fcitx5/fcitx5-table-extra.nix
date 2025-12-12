@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-table-extra";
-  version = "5.1.6";
+  version = "5.1.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-no8TDbK88SnuLAz72QK2q2XM5bLdkGd8lkWFwreajO8=";
+    hash = "sha256-ISfpS48J9gfnYTKCgfV0XQ30J/yYoX+HbyNQDIEHVdw=";
   };
 
   nativeBuildInputs = [
@@ -26,15 +26,18 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     gettext
     libime
-    boost
     fcitx5
   ];
 
-  meta = with lib; {
+  buildInputs = [
+    boost
+  ];
+
+  meta = {
     description = "Extra table for Fcitx, including Boshiamy, Zhengma, Cangjie, and Quick";
     homepage = "https://github.com/fcitx/fcitx5-table-extra";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

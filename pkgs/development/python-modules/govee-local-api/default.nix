@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "1.5.3";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,9 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+    tag = "v${version}";
+    hash = "sha256-DjerH/51ta0Q3by47+Xo0Fp3nk4igum00mSZeoswYxM=";
   };
+
+  postPatch = ''
+    # dont depend on poetry at runtime
+    # https://github.com/Galorhallen/govee-local-api/pull/75/files#r1943826599
+    sed -i '/poetry = "^1.8.5"/d' pyproject.toml
+  '';
 
   build-system = [ poetry-core ];
 
@@ -27,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "govee_local_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with Govee local API";
     homepage = "https://github.com/Galorhallen/govee-local-api";
-    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "consonance";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BhgxLxjKZ4dSL7DqkaoS+wBPCd1SYZomRKrtDLdGmYQ=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test_handshakes_offline.py" ];
+  enabledTestPaths = [ "tests/test_handshakes_offline.py" ];
 
   pythonImportsCheck = [ "consonance" ];
 

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   nixosTests,
 
   docbook_xml_dtd_45,
@@ -34,7 +34,6 @@
   gnutar,
   json-glib,
   libcap,
-  libsoup_2_4,
   libyaml,
   ostree,
   patch,
@@ -65,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./respect-xml-catalog-files-var.patch
 
     # Hardcode paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
@@ -81,8 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
 
-    (substituteAll {
-      src = ./fix-test-paths.patch;
+    (replaceVars ./fix-test-paths.patch {
       inherit glibcLocales;
     })
     ./fix-test-prefix.patch
@@ -111,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json-glib
     libcap
-    libsoup_2_4
     libxml2
     libyaml
     ostree
@@ -153,12 +149,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to build flatpaks from source";
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ arthsmn ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ arthsmn ];
+    platforms = lib.platforms.linux;
   };
 })

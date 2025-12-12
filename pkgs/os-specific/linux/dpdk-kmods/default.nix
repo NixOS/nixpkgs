@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
   KSRC = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Kernel modules for DPDK";
     homepage = "https://git.dpdk.org/dpdk-kmods/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.mic92 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.mic92 ];
+    platforms = lib.platforms.linux;
   };
 }

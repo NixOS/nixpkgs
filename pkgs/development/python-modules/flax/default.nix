@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  jaxlib,
+  setuptools,
   setuptools-scm,
 
   # dependencies
@@ -18,19 +18,19 @@
   tensorstore,
   typing-extensions,
 
-  # checks
+  # optional-dependencies
+  matplotlib,
+
+  # tests
   cloudpickle,
+  keras,
   einops,
   flaxlib,
-  keras,
   pytestCheckHook,
   pytest-xdist,
   sphinx,
   tensorflow,
   treescope,
-
-  # optional-dependencies
-  matplotlib,
 
   writeScript,
   tomlq,
@@ -38,22 +38,23 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.10.1";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
+    tag = "v${version}";
+    hash = "sha256-AUgNU1ww1Ic+lfdHtdP4fdFuvIatAXqs7AX615aVPKM=";
   };
 
   build-system = [
-    jaxlib
+    setuptools
     setuptools-scm
   ];
 
   dependencies = [
+    flaxlib
     jax
     msgpack
     numpy
@@ -62,6 +63,7 @@ buildPythonPackage rec {
     pyyaml
     rich
     tensorstore
+    treescope
     typing-extensions
   ];
 
@@ -73,24 +75,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cloudpickle
-    einops
-    flaxlib
     keras
+    einops
     pytestCheckHook
     pytest-xdist
     sphinx
     tensorflow
-    treescope
-  ];
-
-  pytestFlagsArray = [
-    "-W ignore::FutureWarning"
-    "-W ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"
+
     # The tests in `examples` are not designed to be executed from a single test
     # session and thus either have the modules that conflict with each other or
     # wrong import paths, depending on how they're invoked. Many tests also have
@@ -98,21 +94,14 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
-    "flax/nnx/examples/*"
-    # See https://github.com/google/flax/issues/3232.
-    "tests/jax_utils_test.py"
-    # Too old version of tensorflow:
-    # ModuleNotFoundError: No module named 'keras.api._v2'
-    "tests/tensorboard_test.py"
   ];
 
   disabledTests = [
-    # ValueError: Checkpoint path should be absolute
-    "test_overwrite_checkpoints0"
-    # Fixed in more recent versions of jax: https://github.com/google/flax/issues/4211
-    # TODO: Re-enable when jax>0.4.28 will be available in nixpkgs
-    "test_vmap_and_cond_passthrough" # ValueError: vmap has mapped output but out_axes is None
-    "test_vmap_and_cond_passthrough_error" # AssertionError: "at vmap.*'broadcast'.*got axis spec ...
+    # AssertionError: [Chex] Function 'add' is traced > 1 times!
+    "PadShardUnpadTest"
+
+    # AssertionError: nnx_model.kernel.value.sharding = NamedSharding(...
+    "test_linen_to_nnx_metadata"
   ];
 
   passthru = {

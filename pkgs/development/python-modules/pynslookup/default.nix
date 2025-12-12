@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wesinator";
     repo = "pynslookup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cb8oyI8D8SzBP+tm1jGPPshJYhPegYOH0RwIH03/K/A=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nslookup" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to do DNS lookups";
     homepage = "https://github.com/wesinator/pynslookup";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

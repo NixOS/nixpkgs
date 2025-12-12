@@ -1,13 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   # Build and Runtime
   pbr,
   cliff,
   debtcollector,
-  iso8601,
   netaddr,
   openstacksdk,
   osc-lib,
@@ -25,7 +24,6 @@
   oslotest,
   osprofiler,
   python-openstackclient,
-  subunit,
   requests-mock,
   stestr,
   testtools,
@@ -35,19 +33,17 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.3.1";
+  version = "11.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U82ZI/Q6OwdypA41YfdGVa3IA4+QJhqz3gW2IR0S7cs=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-neutronclient";
+    tag = version;
+    hash = "sha256-nz7KiFe8IWJypGCjFgrEgGTEsC0xlW3YG/QRNJUzcpc=";
   };
 
-  patches = [
-    # fix wheel metadata to support python 3.12
-    # based on https://github.com/openstack/python-neutronclient/commit/f882f1ddb60bcd77096eb8a74e9e86d10723e8be
-    ./python-3.12.diff
-  ];
+  env.PBR_VERSION = version;
 
   build-system = [
     setuptools
@@ -57,7 +53,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     debtcollector
-    iso8601
     netaddr
     openstacksdk
     osc-lib
@@ -77,7 +72,6 @@ buildPythonPackage rec {
     oslotest
     osprofiler
     python-openstackclient
-    subunit
     requests-mock
     stestr
     testtools
@@ -95,10 +89,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neutronclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

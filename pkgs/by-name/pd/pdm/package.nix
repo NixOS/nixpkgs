@@ -8,31 +8,51 @@
   pdm,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = _: super: {
+      resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
+        version = "1.1.0";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
+        };
+      });
+      # pdm requires ...... -> ghostscript-with-X which is AGPL only
+      matplotlib = super.matplotlib.override { enableTk = false; };
+      # pdm requires ...... -> jbig2dec which is AGPL only
+      moto = super.moto.overridePythonAttrs (old: {
+        doCheck = false;
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.19.3";
+  version = "2.26.2";
   pyproject = true;
 
-  disabled = python3.pkgs.pythonOlder "3.8";
+  disabled = python.pkgs.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xgwIPHlTtmgCNN4R6/BJsqmI9hbA0wFAiq4YCa+r/UM=";
+    tag = version;
+    hash = "sha256-l5ALdpRSN7gzN+KPfFcfMno7gxs0E7VhtKip/LasyEo=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python.pkgs; [
     pdm-backend
     pdm-build-locked
   ];
 
   dependencies =
-    with python3.pkgs;
+    with python.pkgs;
     [
       blinker
       dep-logic
@@ -53,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
       tomlkit
       truststore
       unearth
+      id
       virtualenv
     ]
     ++ httpx.optional-dependencies.socks;
@@ -74,7 +95,7 @@ python3.pkgs.buildPythonApplication rec {
     unset PDM_LOG_DIR
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     first
     pytestCheckHook
     pytest-mock
@@ -82,12 +103,12 @@ python3.pkgs.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   preCheck = ''
     export HOME=$TMPDIR
     substituteInPlace tests/cli/test_run.py \
-      --replace-warn "/bin/bash" "${runtimeShell}"
+      --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [
@@ -103,20 +124,28 @@ python3.pkgs.buildPythonApplication rec {
     "test_lock_all_with_excluded_groups"
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
     "test_build_distributions"
+    "test_init_project_respect"
+    "test_use_python_write_file_multiple_versions"
+    "test_repository_get_token_from_oidc"
+    "test_repository_get_token_misconfigured_github"
+
+    # https://github.com/pdm-project/pdm/issues/3590
+    "test_install_from_lock_with_higher_version"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion { package = pdm; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       natsukium
+      misilelab
     ];
     mainProgram = "pdm";
   };

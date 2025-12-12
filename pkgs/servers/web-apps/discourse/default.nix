@@ -8,16 +8,17 @@
   fetchFromGitHub,
   bundlerEnv,
   callPackage,
+  nixosTests,
 
-  ruby_3_2,
-  replace,
+  defaultGemConfig,
+  ruby_3_3,
   gzip,
   gnutar,
   git,
   cacert,
   util-linux,
   gawk,
-  nettools,
+  net-tools,
   imagemagick,
   optipng,
   pngquant,
@@ -34,30 +35,32 @@
   procps,
   rsync,
   icu,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodePackages,
-  nodejs_18,
+  rustPlatform,
+  buildRubyGem,
+  rustc,
+  cargo,
+  pnpm_9,
+  svgo,
+  nodejs,
   jq,
   moreutils,
   terser,
   uglify-js,
 
   plugins ? [ ],
-}@args:
+}:
 
 let
-  version = "3.3.2";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
+    sha256 = "sha256-8Uzb0cjC3PUrh6Nlu6OJ09GKD+8KZq/IUba2NXLm1JI=";
   };
 
-  ruby = ruby_3_2;
+  ruby = ruby_3_3;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -67,14 +70,14 @@ let
     gnutar
     git
     brotli
-    nodejs_18
+    nodejs
 
     # Misc required system utils
     which
     procps # For ps and kill
     util-linux # For renice
     gawk
-    nettools # For hostname
+    net-tools # For hostname
 
     # Image optimization
     imagemagick
@@ -84,7 +87,7 @@ let
     libjpeg
     jpegoptim
     gifsicle
-    nodePackages.svgo
+    svgo
     jhead
   ];
 
@@ -119,35 +122,37 @@ let
       );
     in
     stdenv.mkDerivation (
-      builtins.removeAttrs args [ "bundlerEnvArgs" ]
-      // {
+      # Allow overriding the plugin name
+      {
         pluginName = if name != null then name else "${pname}-${version}";
+      }
+      // removeAttrs args [ "bundlerEnvArgs" ]
+      // {
         dontConfigure = true;
         dontBuild = true;
-        installPhase =
-          ''
-            runHook preInstall
-            mkdir -p $out
-            cp -r * $out/
-          ''
-          + lib.optionalString (bundlerEnvArgs != { }) (
-            if preserveGemsDir then
-              ''
-                cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
-              ''
-            else
-              ''
-                if [[ -e $out/gems ]]; then
-                  echo "Warning: The repo contains a 'gems' directory which will be removed!"
-                  echo "         If you need to preserve it, set 'preserveGemsDir = true'."
-                  rm -r $out/gems
-                fi
-                ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-              ''
-              + ''
-                runHook postInstall
-              ''
-          );
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r * $out/
+        ''
+        + lib.optionalString (bundlerEnvArgs != { }) (
+          if preserveGemsDir then
+            ''
+              cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+            ''
+          else
+            ''
+              if [[ -e $out/gems ]]; then
+                echo "Warning: The repo contains a 'gems' directory which will be removed!"
+                echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+                rm -r $out/gems
+              fi
+              ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+            ''
+            + ''
+              runHook postInstall
+            ''
+        );
       }
     );
 
@@ -171,54 +176,116 @@ let
     name = "discourse-ruby-env-${version}";
     inherit version ruby;
     gemdir = ./rubyEnv;
-    gemset =
-      let
-        gems = import ./rubyEnv/gemset.nix;
-      in
-      gems
-      // {
-        mini_racer = gems.mini_racer // {
-          buildInputs = [ icu ];
+    gemset = import ./rubyEnv/gemset.nix;
+    gemConfig = defaultGemConfig // {
+      mini_racer = attrs: {
+        buildInputs = [ icu ];
+        dontBuild = false;
+        NIX_LDFLAGS = "-licui18n";
+      };
+      libv8-node =
+        attrs:
+        let
+          noopScript = writeShellScript "noop" "exit 0";
+          linkFiles = writeShellScript "link-files" ''
+            cd ../..
+
+            mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
+            ln -s "${nodejs.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+
+            ln -s ${nodejs.libv8}/include vendor/v8/include
+
+            mkdir -p ext/libv8-node
+            echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
+          '';
+        in
+        {
           dontBuild = false;
-          NIX_LDFLAGS = "-licui18n";
-        };
-        libv8-node =
-          let
-            noopScript = writeShellScript "noop" "exit 0";
-            linkFiles = writeShellScript "link-files" ''
-              cd ../..
-
-              mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-              ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
-
-              ln -s ${nodejs_18.libv8}/include vendor/v8/include
-
-              mkdir -p ext/libv8-node
-              echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
-            '';
-          in
-          gems.libv8-node
-          // {
-            dontBuild = false;
-            postPatch = ''
-              cp ${noopScript} libexec/build-libv8
-              cp ${noopScript} libexec/build-monolith
-              cp ${noopScript} libexec/download-node
-              cp ${noopScript} libexec/extract-node
-              cp ${linkFiles} libexec/inject-libv8
-            '';
-          };
-        mini_suffix = gems.mini_suffix // {
-          propagatedBuildInputs = [ libpsl ];
-          dontBuild = false;
-          # Use our libpsl instead of the vendored one, which isn't
-          # available for aarch64. It has to be called
-          # libpsl.x86_64.so or it isn't found.
           postPatch = ''
-            cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+            cp ${noopScript} libexec/build-libv8
+            cp ${noopScript} libexec/build-monolith
+            cp ${noopScript} libexec/download-node
+            cp ${noopScript} libexec/extract-node
+            cp ${linkFiles} libexec/inject-libv8
           '';
         };
+      mini_suffix = attrs: {
+        propagatedBuildInputs = [ libpsl ];
+        dontBuild = false;
+        # Use our libpsl instead of the vendored one, which isn't
+        # available for aarch64. It has to be called
+        # libpsl.x86_64.so or it isn't found.
+        postPatch = ''
+          cp $(readlink -f ${lib.getLib libpsl}/lib/libpsl.so) vendor/libpsl.x86_64.so
+        '';
       };
+      tokenizers = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-ydSXo3wp13/mPgJv1HbavNurkd2KxuKzuJNHliPpn2I=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+      tiktoken_ruby = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-IABOxUymtFkF9sl1kRWAS5hM6GNJI6Y4VFICXdX7zF0=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+
+        postInstall = ''
+          #ls $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib
+          #mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
 
     groups = [
       "default"
@@ -232,26 +299,31 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/yarn.lock";
-      hash = "sha256-cSQofaULCmPuWGxS+hK4KlRq9lSkCPiYvhax9X6Dor8=";
+    pnpmDeps = pnpm_9.fetchDeps {
+      pname = "discourse-assets";
+      inherit version src;
+      fetcherVersion = 1;
+      hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
-      postgresql
+      (postgresql.withPackages (ps: [
+        ps.pgvector
+      ]))
       redis
       uglify-js
       terser
-      yarn
       jq
       moreutils
-      fixup-yarn-lock
+      nodejs
+      pnpm_9.configHook
     ];
 
     outputs = [
       "out"
       "javascripts"
       "node_modules"
+      "generated"
     ];
 
     patches = [
@@ -275,37 +347,23 @@ let
     ];
 
     env.RAILS_ENV = "production";
+    env.DISCOURSE_DOWNLOAD_PRE_BUILT_ASSETS = "0";
+    # Allow to use different bundler version than the lockfile has
+    env.BUNDLER_VERSION = pkgs.bundler.version;
+
+    # requires full git and repository, even a src `leaveDotGit` is not enough. So patch this function to return the version
+    postPatch = ''
+      substituteInPlace script/assemble_ember_build.rb --replace-fail "def core_tree_hash" "def core_tree_hash; return \"v${version}\""
+    '';
 
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
-      # Yarn wants a real home directory to write cache, config, etc to
-      export HOME=$NIX_BUILD_TOP/fake_home
-
-      yarn_install() {
-        local offlineCache=$1 yarnLock=$2
-
-        # Make yarn install packages from our offline cache, not the registry
-        yarn config --offline set yarn-offline-mirror $offlineCache
-
-        # Fixup "resolved"-entries in yarn.lock to match our offline cache
-        fixup-yarn-lock $yarnLock
-
-        # Install while ignoring hook scripts
-        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
-      }
-
-      # Install runtime and devDependencies.
-      # The dev deps are necessary for generating the theme-transpiler executed as dependent task
-      # assets:precompile:theme_transpiler before db:migrate and unfortunately also in the runtime
-      yarn_install $yarnOfflineCache yarn.lock
-
       # Patch before running postinstall hook script
       patchShebangs node_modules/
       patchShebangs --build app/assets/javascripts
-      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
@@ -323,6 +381,7 @@ let
       psql -d postgres -tAc 'CREATE DATABASE "discourse" OWNER "discourse"'
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
+      psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS vector"
 
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
 
@@ -333,6 +392,7 @@ let
     buildPhase = ''
       runHook preBuild
 
+      patchShebangs script/
       bundle exec rake assets:precompile
 
       runHook postBuild
@@ -345,12 +405,17 @@ let
 
       mv node_modules $node_modules
 
-      rm -r app/assets/javascripts/plugins
+      rm -rf app/assets/javascripts/plugins
       mv app/assets/javascripts $javascripts
       ln -sf /run/discourse/assets/javascripts/plugins $javascripts/plugins
+      mv app/assets/generated $generated
 
       runHook postInstall
     '';
+
+    # The node_modules output by design has broken symlinks, as it refers to the source code.
+    # They are resolved in the primary discourse derivation.
+    dontCheckForBrokenSymlinks = true;
   };
 
   discourse = stdenv.mkDerivation {
@@ -393,6 +458,10 @@ let
       # theme-transpiler over and over again. Which at the same time allows the removal
       # of javascript devDependencies from the runtime environment.
       ./prebuild-theme-transpiler.patch
+
+      # Our app/assets/generated folder is a symlink, but the ruby File.mkdir_p doesn't allow
+      # a symlink in the way to the last directory. This patch explicitly resolves the symlink.
+      ./resolve_generated_assets_symlink.patch
     ];
 
     postPatch = ''
@@ -425,26 +494,18 @@ let
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
-      # This needs to be copied because of symlinks in node_modules
-      # Also this needs to be full node_modules (including dev deps) because without loader.js it just throws 500
-      cp -r ${assets.node_modules} $out/share/discourse/node_modules
+      ln -sf /run/discourse/assets-generated $out/share/discourse/app/assets/generated
+      ln -sf ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       rm -r $out/share/discourse/app/assets/javascripts
-      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
+      # This needs to be copied because it contains symlinks to node_modules
+      cp -r ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
 
       runHook postInstall
     '';
-
-    meta = with lib; {
-      homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
-    };
 
     passthru = {
       inherit
@@ -461,11 +522,19 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix {
-        inherit (stdenv) system;
-        inherit pkgs;
-        package = pkgs.discourse.override args;
+      tests = {
+        inherit (nixosTests)
+          discourse
+          discourseAllPlugins
+          ;
       };
+    };
+    meta = {
+      homepage = "https://www.discourse.org/";
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ talyz ];
+      license = lib.licenses.gpl2Plus;
+      description = "Open source discussion platform";
     };
   };
 in

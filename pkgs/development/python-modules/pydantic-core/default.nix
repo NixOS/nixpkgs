@@ -13,27 +13,25 @@
   pytest-timeout,
   pytest-mock,
   dirty-equals,
+  pydantic,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.27.1";
+    version = "2.33.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-ikdQAT1y0g+V2gPU0Ohn+UktJrEObnixCW56/J1UsSk=";
+      tag = "v${version}";
+      hash = "sha256-2jUkd/Y92Iuq/A31cevqjZK4bCOp+AEC/MAnHSt2HLY=";
     };
 
-    patches = [ ./01-remove-benchmark-flags.patch ];
-
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${pname}-${version}";
-      hash = "sha256-kY+XSiwfh1ao0vvqz1M23CONeh/T8uN8YpHf/GOphTk=";
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit pname version src;
+      hash = "sha256-MY6Gxoz5Q7nCptR+zvdABh2agfbpqOtfTtor4pmkb9c=";
     };
 
     nativeBuildInputs = [
@@ -75,12 +73,12 @@ let
       "tests/benchmarks"
     ];
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/pydantic/pydantic-core/releases/tag/v${version}";
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
-      license = licenses.mit;
-      maintainers = with maintainers; [ blaggacao ];
+      license = lib.licenses.mit;
+      maintainers = pydantic.meta.maintainers;
     };
   };
 in

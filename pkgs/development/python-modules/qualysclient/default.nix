@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "qualysclient";
+    tag = "v${version}";
     hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
 
@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qualysclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
     changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

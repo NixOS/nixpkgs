@@ -9,18 +9,18 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dead10ck";
-    repo = pname;
+    repo = "urlencode";
     rev = "v${version}";
     sha256 = "sha256-LvLUbtMPVbYZMUb9vWhTscYfZPtEM5GrZme3azvVlPE=";
   };
 
-  cargoHash = "sha256-UPw+/wVOEM+kciOr70P+gdMCxtCKQ/SXsNAWA44v4v8=";
+  cargoHash = "sha256-rHoqBrDFQ31jIHFZbHwjKHPDgMzM7gUCIhew03OYN6M=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility for URL-encoding or -decoding strings";
     homepage = "https://github.com/dead10ck/urlencode";
-    license = licenses.mit;
-    maintainers = with maintainers; [ l0b0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ l0b0 ];
     mainProgram = "urlencode";
   };
 }

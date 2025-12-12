@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "august";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "yoav-lavi";
@@ -15,20 +15,20 @@ rustPlatform.buildRustPackage {
     hash = "sha256-58DZMoRH9PBbM4sok/XbUcwSXBeqUAmFZpffdMKQ+dE=";
   };
 
-  cargoHash = "sha256-/GvBbsSL0dZ0xTystIpb8sk1nNg5hmP4yceCHlh7EQE=";
+  cargoHash = "sha256-E1M/Soaz4+Gyxizc4VReZlfJB5gxrSz2ue3WI9fcNJA=";
 
   postInstall = ''
     mv $out/bin/{august-cli,ag}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emmet-like language that produces JSON, TOML, or YAML";
     homepage = "https://github.com/yoav-lavi/august";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "ag";
   };
 }

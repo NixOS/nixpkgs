@@ -4,16 +4,15 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  fixup-yarn-lock,
   yarn,
   nodejs,
-  fetchYarnDeps,
   jq,
-  electron_33,
+  electron_38,
   element-web,
   sqlcipher,
   callPackage,
   desktopToDarwinBundle,
+  typescript,
   useKeytar ? true,
   # command line arguments which are always set
   commandLineArgs ? "",
@@ -23,13 +22,15 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  keytar = callPackage ./keytar { };
+  electron = electron_38;
+  keytar = callPackage ./keytar {
+    inherit electron;
+  };
   seshat = callPackage ./seshat { };
-  electron = electron_33;
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
@@ -40,47 +41,58 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = desktopYarnHash;
+    # TODO: fetchYarnDeps currently does not deal properly with a dependency
+    # declared as a pin to a commit in a specific git repository.
+    # While it does download everything correctly, `yarn install --offline`
+    # always wants to `git ls-remote` to the repository, ignoring the local
+    # cached tarball.
+    offlineCache = callPackage ./yarn.nix {
+      inherit (finalAttrs) version src;
+      hash = desktopYarnHash;
     };
 
     nativeBuildInputs = [
-      yarn
-      fixup-yarn-lock
       nodejs
       makeWrapper
       jq
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+      yarn
+      typescript
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
-
-    configurePhase = ''
-      runHook preConfigure
-
-      export HOME=$(mktemp -d)
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules/
-
-      runHook postConfigure
-    '';
 
     # Only affects unused scripts in $out/share/element/electron/scripts. Also
     # breaks because there are some `node`-scripts with a `npx`-shebang and
     # this shouldn't be in the closure just for unused scripts.
     dontPatchShebangs = true;
 
+    configurePhase = ''
+      runHook preConfigure
+
+      mkdir -p node_modules/
+      cp -r $offlineCache/node_modules/* node_modules/
+      substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
+
+      runHook postConfigure
+    '';
+
+    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
+    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TMPDIR="$(mktemp -d)"
+    '';
+
     buildPhase = ''
       runHook preBuild
 
       yarn --offline run build:ts
-      yarn --offline run i18n
+      node node_modules/matrix-web-i18n/scripts/gen-i18n.js
+      yarn --offline run i18n:sort
       yarn --offline run build:res
 
-      rm -rf node_modules/matrix-seshat node_modules/keytar
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
+      chmod -R a+w node_modules/keytar-forked
+      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
+      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
       ln -s $seshat node_modules/matrix-seshat
 
       runHook postBuild
@@ -93,17 +105,15 @@ stdenv.mkDerivation (
       mkdir -p "$out/share/element"
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
-      cp -r './res/img' "$out/share/element"
+      chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
       ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
-      # icons
-      for icon in $out/share/element/electron/build/icons/*.png; do
-        mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
-        ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
-      done
+      # icon
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # desktop item
       mkdir -p "$out/share"
@@ -135,7 +145,10 @@ stdenv.mkDerivation (
         "Chat"
       ];
       startupWMClass = "Element";
-      mimeTypes = [ "x-scheme-handler/element" ];
+      mimeTypes = [
+        "x-scheme-handler/element"
+        "x-scheme-handler/io.element.desktop"
+      ];
     };
 
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -158,13 +171,13 @@ stdenv.mkDerivation (
       inherit keytar;
     };
 
-    meta = with lib; {
-      description = "A feature-rich client for Matrix.org";
+    meta = {
+      description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = licenses.asl20;
-      maintainers = teams.matrix.members;
-      inherit (electron.meta) platforms;
+      license = lib.licenses.asl20;
+      teams = [ lib.teams.matrix ];
+      platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };
   }

@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  patches = [ ./implicit-int.patch ];
+
   # Processing file orbit-interface.idl
   # sh: gcc: not found
   # output does not contain binaries for build
@@ -37,6 +39,15 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) [
+      # the ./configure script is not compatible with gcc-14, not easy to
+      # regenerate without porting: https://github.com/NixOS/nixpkgs/issues/367694
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ]
+  );
 
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-idl-compiler=${lib.getExe' buildPackages.gnome2.ORBit2 "orbit-idl-2"}"
@@ -71,11 +82,11 @@ stdenv.mkDerivation rec {
   # Makefile.in let's just disable parallel build.
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "CORBA 2.4-compliant Object Request Broker";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
 
     longDescription = ''
       ORBit2 is a CORBA 2.4-compliant Object Request Broker (ORB) featuring

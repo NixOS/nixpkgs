@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-qnWVQEG1Ri0z4RYmmG/fxYrlIFFf/6PnP5Dnv0cZb5I=";
   };
 
@@ -41,9 +41,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library to the MediaWiki API";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mwclient/mwclient";
     maintainers = [ ];
   };

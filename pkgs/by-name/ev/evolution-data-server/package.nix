@@ -24,7 +24,6 @@
   wrapGAppsHook3,
   glib-networking,
   gsettings-desktop-schemas,
-  pcre,
   vala,
   cmake,
   ninja,
@@ -49,9 +48,9 @@
   makeHardcodeGsettingsPatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-data-server";
-  version = "3.54.2";
+  version = "3.58.2";
 
   outputs = [
     "out"
@@ -59,8 +58,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
-    hash = "sha256-EfAlMInIq/RWz/2j/mWKNaDeK4rpPY8lfWsCCueWPSA=";
+    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor finalAttrs.version}/evolution-data-server-${finalAttrs.version}.tar.xz";
+    hash = "sha256-aULs/Dnrs2sLQ2Ot/wB3HBwt+jT1ToDsksO6o/6wIPs=";
   };
 
   patches = [
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${version}"} \
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${finalAttrs.version}"} \
       --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
@@ -88,41 +87,39 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs =
-    [
-      glib
-      libsecret
-      libsoup_3
-      gnome-online-accounts
-      p11-kit
-      libgweather
-      icu
-      sqlite
-      libkrb5
-      openldap
-      glib-networking
-      libcanberra-gtk3
-      pcre
-      libphonenumber
-      libuuid
-      boost
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals withGtk3 [
-      gtk3
-    ]
-    ++ lib.optionals (withGtk3 && enableOAuth2) [
-      webkitgtk_4_1
-    ]
-    ++ lib.optionals withGtk4 [
-      gtk4
-    ]
-    ++ lib.optionals (withGtk4 && enableOAuth2) [
-      webkitgtk_6_0
-    ];
+  buildInputs = [
+    glib
+    libsecret
+    libsoup_3
+    gnome-online-accounts
+    p11-kit
+    libgweather
+    icu
+    sqlite
+    libkrb5
+    openldap
+    glib-networking
+    libcanberra-gtk3
+    libphonenumber
+    libuuid
+    boost
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals withGtk3 [
+    gtk3
+  ]
+  ++ lib.optionals (withGtk3 && enableOAuth2) [
+    webkitgtk_4_1
+  ]
+  ++ lib.optionals withGtk4 [
+    gtk4
+  ]
+  ++ lib.optionals (withGtk4 && enableOAuth2) [
+    webkitgtk_6_0
+  ];
 
   propagatedBuildInputs = [
     db
@@ -134,22 +131,21 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_VALA_BINDINGS=ON"
-      "-DENABLE_INTROSPECTION=ON"
-      "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
-      "-DWITH_PHONENUMBER=ON"
-      "-DENABLE_GTK=${lib.boolToString withGtk3}"
-      "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
-      "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
-      "-DENABLE_GTK4=${lib.boolToString withGtk4}"
-      "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
-      "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-    ];
+  cmakeFlags = [
+    "-DENABLE_VALA_BINDINGS=ON"
+    "-DENABLE_INTROSPECTION=ON"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+    "-DWITH_PHONENUMBER=ON"
+    "-DENABLE_GTK=${lib.boolToString withGtk3}"
+    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
+    "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
+    "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+  ];
 
   strictDeps = true;
 
@@ -183,7 +179,7 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution-data-server" = "EDS";
         "org.gnome.desktop.interface" = "GDS";
       };
-      inherit src patches;
+      inherit (finalAttrs) src patches;
     };
     updateScript =
       let
@@ -199,12 +195,12 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
-    changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux; # requires libuuid
+    changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = lib.licenses.lgpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux; # requires libuuid
   };
-}
+})

@@ -1,26 +1,40 @@
 {
   lib,
+  pymodbus,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  async-timeout,
+  aiohttp,
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "tesharp";
+  owner = "AN3Orik";
   domain = "systemair";
-  version = "0.2.0";
+  version = "1.0.17";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lzFnKPkBOt2fkVGWCj1M/skSr8V39GgDHS+0HD4ACAw=";
+    tag = "v${version}";
+    hash = "sha256-R5Q6BbvcAqFNldOqfG1TDoM1gbsYrS3OClHlAdfQG6o=";
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/tesharp/systemair/releases/tag/v${version}";
-    description = "Home Assistant component for Systemair SAVE Connect 2";
-    homepage = "https://github.com/tesharp/systemair";
-    maintainers = with maintainers; [ uvnikita ];
-    license = licenses.mit;
+  postPatch = ''
+    substituteInPlace custom_components/systemair/manifest.json \
+      --replace-fail "pymodbus==" "pymodbus>=" \
+  '';
+
+  dependencies = [
+    pymodbus
+    async-timeout
+    aiohttp
+  ];
+
+  meta = {
+    changelog = "https://github.com/AN3Orik/systemair/releases/tag/v${version}";
+    description = "Home Assistant component for Systemair SAVE ventilation units";
+    homepage = "https://github.com/AN3Orik/systemair";
+    maintainers = with lib.maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
   };
 }

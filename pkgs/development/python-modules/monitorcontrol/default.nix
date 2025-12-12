@@ -3,15 +3,14 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  setuptools,
   pyudev,
   pytestCheckHook,
-  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "monitorcontrol";
-  version = "3.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,28 +18,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "monitorcontrol";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fu0Lm7Tcw7TCCBDXTTY20JBAM7oeesyeHQFFILeZxX0=";
+    tag = version;
+    hash = "sha256-4A7Cj2PWANZOmMSB9rH++TAf6SgyQd0OFULKa4JRu0s=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pyudev ];
+  dependencies = [ pyudev ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    voluptuous
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ pname ];
 
-  meta = with lib; {
+  meta = {
     description = "Python monitor controls using DDC-CI";
     mainProgram = "monitorcontrol";
     homepage = "https://github.com/newAM/monitorcontrol";
-    changelog = "https://github.com/newAM/monitorcontrol/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ newam ];
+    changelog = "https://github.com/newAM/monitorcontrol/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

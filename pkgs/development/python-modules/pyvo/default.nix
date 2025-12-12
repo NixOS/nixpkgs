@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.6";
+  version = "1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2270I+YAjrocpoRZ5+KpHbw0y+G9ovKfZLpX2N9XDKo=";
+    hash = "sha256-ZvSIn9jjnd30b+SYYV02FW1JT2or7FOIa68cLFQyKGE=";
   };
 
   build-system = [
@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astropy affiliated package for accessing Virtual Observatory data and services";
     homepage = "https://github.com/astropy/pyvo";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

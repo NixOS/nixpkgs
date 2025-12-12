@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-/MkLWAbEr14CYdqSwJP1vNYxK7pAmMLdhiV61UQEbME=";
+  cargoHash = "sha256-Sv+bwqb9FmcBk3XUu0QLJr6hyV6JUnVzL7RXh0pbe2s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/ea.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Makes file paths from CLI output actionable";
     homepage = "https://github.com/dduan/ea";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ deejayem ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ deejayem ];
   };
 }

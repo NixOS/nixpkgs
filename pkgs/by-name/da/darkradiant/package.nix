@@ -21,7 +21,6 @@
   python3,
   asciidoctor,
   libgit2,
-  apple-sdk_11,
   wrapGAppsHook3,
   installShellFiles,
   buildPlugins ? true,
@@ -33,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codereader";
     repo = "DarkRadiant";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-y0VzTnHobW36/25/nTV49OKnUMpnsjImioMdNKoTyYA=";
   };
 
@@ -46,28 +45,24 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      zlib
-      libjpeg
-      wxGTK32
-      libxml2
-      libsigcxx
-      libpng
-      openal
-      libvorbis
-      eigen
-      ftgl
-      freetype
-      glew
-      glib
-      libgit2
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    zlib
+    libjpeg
+    wxGTK32
+    libxml2
+    libsigcxx
+    libpng
+    openal
+    libvorbis
+    eigen
+    ftgl
+    freetype
+    glew
+    glib
+    libgit2
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   doCheck = true;
 

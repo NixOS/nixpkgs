@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.1.0";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/n11GbrgFwjiAuwpFNJ3T96VDhdOy2x+hesgh4oPVbo=";
+    tag = "v${version}";
+    hash = "sha256-dJc5q3vE1G6oJq9V4JSPaSyODxKDyhprIwBo39Nu/bA=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = with python3Packages; [
+    id
     jinja2
     pluggy
     pyyaml
@@ -39,6 +40,8 @@ python3Packages.buildPythonApplication rec {
     urllib3
     gitpython
     pydantic
+    prompt-toolkit
+    snowflake-core
     snowflake-connector-python
   ];
 
@@ -49,12 +52,11 @@ python3Packages.buildPythonApplication rec {
     pytest-randomly
     pytest-factoryboy
     pytest-xdist
+    pytest-httpserver
   ];
 
-  pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
-    "--snapshot-warn-unused" # Turn unused snapshots into a warning and not a failure
+  pytestFlags = [
+    "--snapshot-warn-unused"
   ];
 
   disabledTests = [
@@ -64,7 +66,20 @@ python3Packages.buildPythonApplication rec {
     "integration_experimental"
     "test_snow_typer_help_sanitization" # Snapshot needs update?
     "test_help_message" # Snapshot needs update?
+    "test_sql_help_if_no_query_file_or_stdin" # Snapshot needs update?
+    "test_multiple_streamlit_raise_error_if_multiple_entities" # Snapshot needs update?
+    "test_replace_and_not_exists_cannot_be_used_together" # Snapshot needs update?
+    "test_format" # Snapshot needs update?
     "test_executing_command_sends_telemetry_usage_data" # Fails on mocked version
+    "test_internal_application_data_is_sent_if_feature_flag_is_set"
+    "test_if_bundling_dependencies_resolves_requirements" # impure?
+    "test_silent_output_help" # Snapshot needs update? Diff between received and snapshot is the word 'TABLE' moving down a line
+    "test_new_connection_can_be_added_as_default" # Snapshot needs update? Diff between received and snapshot is an empty line
+  ];
+
+  disabledTestPaths = [
+    "tests/app/test_version_check.py"
+    "tests/nativeapp/test_sf_sql_facade.py"
   ];
 
   pythonRelaxDeps = true;

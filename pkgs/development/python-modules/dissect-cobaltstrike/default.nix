@@ -13,22 +13,19 @@
   pyshark,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cobaltstrike";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GMpMTsI4mepaOGhw7/cSymkcxzn4mlNS1ZKYGYut+LM=";
+    tag = "v${version}";
+    hash = "sha256-0Wi0H9jL7suF/d92Sg2LuE6M2EzbIWsEC7Jjd1eJGTw=";
   };
 
   build-system = [
@@ -68,15 +65,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Don't run tests with a beacon
+    "test_c2profile_beacon_gate"
+    "test_beacon_dump_guardrails"
+  ];
+
+  meta = {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
     homepage = "https://github.com/fox-it/dissect.cobaltstrike";
-    changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

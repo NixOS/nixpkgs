@@ -38,8 +38,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.1.0";
-  mysqlServerVersion = "9.1.0";
+  mysqlShellVersion = "9.4.0";
+  mysqlServerVersion = "9.4.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-UsNnUjm/2dPIMiT/IAKqbihvq5e/WytcoahcnDR3Zvw=";
+      hash = "sha256-a7UJxU5YtUq776SeKW5yIPXnz+RGkUujYV9ZSWfPqSE=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-YHlM/heqV8vQnIGxwEESXx+wRVr++TFjSb00tPwBb2s=";
+      hash = "sha256-BpiDGA3Lxf/MrKqtPSA+apFNZx9N805PYYVa+2vQxPE=";
     })
   ];
 
@@ -75,53 +75,56 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      git
-      bison
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+    bison
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.DarwinTools
+  ];
 
-  buildInputs =
-    [
-      curl
-      libedit
-      libssh
-      lz4
-      openssl
-      protobuf
-      readline
-      zlib
-      zstd
-      libevent
-      icu
-      re2
-      ncurses
-      libfido2
-      cyrus_sasl
-      openldap
-      python3
-      antlr.runtime.cpp
-    ]
-    ++ pythonDeps
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  buildInputs = [
+    curl
+    libedit
+    libssh
+    lz4
+    openssl
+    protobuf
+    readline
+    zlib
+    zstd
+    libevent
+    icu
+    re2
+    ncurses
+    libfido2
+    cyrus_sasl
+    openldap
+    python3
+    antlr.runtime.cpp
+  ]
+  ++ pythonDeps
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+
+  env = {
+    ${if stdenv.cc.isGNU then "NIX_CFLAGS_COMPILE" else null} = "-Wno-error=maybe-uninitialized";
+  };
 
   preConfigure = ''
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_FIDO=system -DWITH_ROUTER=ON -DWITH_UNIT_TESTS=OFF \
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
-    cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
+    cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} \
+      --target mysqlclient mysqlxclient mysqlbinlog mysql_binlog_event_standalone mysqlrouter_all
 
     cmakeFlagsArray+=(
       "-DMYSQL_SOURCE_DIR=''${NIX_BUILD_TOP}/mysql"
@@ -144,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "New command line scriptable shell for MySQL";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ aaronjheng ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mysqlsh";
   };
 })

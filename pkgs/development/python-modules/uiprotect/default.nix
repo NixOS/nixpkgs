@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -20,6 +19,7 @@
   platformdirs,
   propcache,
   pydantic,
+  pydantic-extra-types,
   pyjwt,
   rich,
   typer,
@@ -39,16 +39,14 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.6.5";
+  version = "7.33.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "uiprotect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZohQTXOLc2E0vfD21IUh6ECTfbAd2SZOg/73lk/UMO0=";
+    tag = "v${version}";
+    hash = "sha256-zGw77uP9Na+NnSzpxJ0Nf10L+nfbGuodVQNfomtaHhA=";
   };
 
   build-system = [ poetry-core ];
@@ -71,6 +69,7 @@ buildPythonPackage rec {
     platformdirs
     propcache
     pydantic
+    pydantic-extra-types
     pyjwt
     rich
     typer
@@ -89,26 +88,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
-
-  disabledTests = [
-    # https://127.0.0.1 vs https://127.0.0.1:0
-    "test_base_url"
-    "test_bootstrap"
-  ];
-
-  disabledTestPaths = [
-    # hangs the test suite
-    "tests/test_api_ws.py"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "uiprotect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

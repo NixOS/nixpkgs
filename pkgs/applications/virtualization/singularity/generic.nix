@@ -12,15 +12,6 @@
   extraDescription ? "",
   extraMeta ? { },
 }:
-
-let
-  # Backward compatibility layer for the obsolete workaround of
-  # the "vendor-related attributes not overridable" issue (#86349),
-  # whose solution is merged and released.
-  _defaultGoVendorArgs = {
-    inherit vendorHash deleteVendor proxyVendor;
-  };
-in
 {
   lib,
   buildGoModule,
@@ -46,6 +37,7 @@ in
   libseccomp,
   libuuid,
   mount,
+  versionCheckHook,
   # This is for nvidia-container-cli
   nvidia-docker,
   openssl,
@@ -64,7 +56,7 @@ in
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
   enableSeccomp ? true,
   # Whether the configure script treat SUID support as default
-  # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
+  # When equal to enableSuid, it suppress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
   defaultToSuid ? true,
@@ -95,12 +87,7 @@ in
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
   sourceFilesWithDefaultPaths ? { },
-  # Workaround #86349
-  # should be removed when the issue is resolved
-  vendorHash ? _defaultGoVendorArgs.vendorHash,
-  deleteVendor ? _defaultGoVendorArgs.deleteVendor,
-  proxyVendor ? _defaultGoVendorArgs.proxyVendor,
-}@args:
+}:
 
 let
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
@@ -148,36 +135,34 @@ in
   # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
   # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
 
-  buildInputs =
-    [
-      bash # To patch /bin/sh shebangs.
-      conmon
-      cryptsetup
-      gpgme
-      libuuid
-      openssl
-      squashfsTools # Required at build time by SingularityCE
-    ]
-    # Optional dependencies.
-    # Formatting: Optional dependencies are likely to increase.
-    # Don't squash them into the same line.
-    ++ lib.optional enableNvidiaContainerCli nvidia-docker
-    ++ lib.optional enableSeccomp libseccomp;
+  buildInputs = [
+    bash # To patch /bin/sh shebangs.
+    conmon
+    cryptsetup
+    gpgme
+    libuuid
+    openssl
+    squashfsTools # Required at build time by SingularityCE
+  ]
+  # Optional dependencies.
+  # Formatting: Optional dependencies are likely to increase.
+  # Don't squash them into the same line.
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker
+  ++ lib.optional enableSeccomp libseccomp;
 
   configureScript = "./mconfig";
 
-  configureFlags =
-    [
-      "--localstatedir=${
-        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
-      }"
-      "--runstatedir=/var/run"
-    ]
-    ++ lib.optional (!enableSeccomp) "--without-seccomp"
-    ++ lib.optional (enableSuid != defaultToSuid) (
-      if enableSuid then "--with-suid" else "--without-suid"
-    )
-    ++ extraConfigureFlags;
+  configureFlags = [
+    "--localstatedir=${
+      if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+    }"
+    "--runstatedir=/var/run"
+  ]
+  ++ lib.optional (!enableSeccomp) "--without-seccomp"
+  ++ lib.optional (enableSuid != defaultToSuid) (
+    if enableSuid then "--with-suid" else "--without-suid"
+  )
+  ++ extraConfigureFlags;
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -195,7 +180,8 @@ in
     mount # mount
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
-  ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
+  ]
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker;
 
   postPatch = ''
     if [[ ! -e .git || ! -e VERSION ]]; then
@@ -217,11 +203,6 @@ in
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
-
-    substituteInPlace internal/pkg/util/gpu/nvidia.go \
-      --replace \
-        'return fmt.Errorf("/usr/bin not writable in the container")' \
-        ""
   '';
 
   postConfigure = ''
@@ -250,20 +231,22 @@ in
 
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
-      --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+      --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+
     # Respect PATH from the environment/the user.
     # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
       --suffix PATH : "$systemDefaultPath" \
       --suffix PATH : "$inputsDefaultPath"
+
     # Make changes in the config file
     ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+        --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
     ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+        --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
@@ -290,6 +273,13 @@ in
     ''}
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   meta = {
     description = "Application containers for linux" + extraDescription;
     longDescription = ''
@@ -306,7 +296,8 @@ in
       ShamrockLee
     ];
     mainProgram = projectName;
-  } // extraMeta;
+  }
+  // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {

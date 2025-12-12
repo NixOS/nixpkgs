@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "absent1706";
     repo = "sqlalchemy-mixins";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0uB3x7RQSNEq3DyTSiOIGajwPQQEBjXK8HOyuXCNa/E=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_mixins" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python mixins for SQLAlchemy ORM";
     homepage = "https://github.com/absent1706/sqlalchemy-mixins";
     changelog = "https://github.com/absent1706/sqlalchemy-mixins/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

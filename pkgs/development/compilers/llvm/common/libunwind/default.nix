@@ -1,76 +1,78 @@
-{ lib
-, stdenv
-, release_version
-, patches ? []
-, src ? null
-, llvm_meta
-, version
-, monorepoSrc ? null
-, runCommand
-, cmake
-, ninja
-, python3
-, libcxx
-, enableShared ? !stdenv.hostPlatform.isStatic
-, devExtraCmakeFlags ? []
+{
+  lib,
+  stdenv,
+  release_version,
+  src ? null,
+  llvm_meta,
+  version,
+  monorepoSrc ? null,
+  runCommand,
+  cmake,
+  ninja,
+  python3,
+  libcxx,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  doFakeLibgcc ? stdenv.hostPlatform.useLLVM && !stdenv.hostPlatform.isStatic,
+  devExtraCmakeFlags ? [ ],
+  getVersionFile,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
-  src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
-      mkdir -p "$out"
-    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '' + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
-      mkdir -p "$out/libcxx"
-      cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
-      cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
-      mkdir -p "$out/llvm"
-      cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-    '' + lib.optionalString (lib.versionAtLeast release_version "15") ''
-      cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-      cp -r ${monorepoSrc}/runtimes "$out"
-    '') else src;
 
-  hasPatches = builtins.length patches > 0;
+  inherit version;
 
-  prePatch = lib.optionalString (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18")) ''
-    cd ../${pname}
-    chmod -R u+w .
-  '';
+  src =
+    if monorepoSrc != null then
+      runCommand "libunwind-src-${version}" { inherit (monorepoSrc) passthru; } ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/libunwind "$out"
+        mkdir -p "$out/libcxx"
+        cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+        cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+        mkdir -p "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+        cp -r ${monorepoSrc}/runtimes "$out"
+      ''
+    else
+      src;
 
-  postPatch = lib.optionalString (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18")) ''
-    cd ../runtimes
-  '';
+  sourceRoot = "${finalAttrs.src.name}/runtimes";
 
-  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
-    # libcxxabi wants to link to libunwind_shared.so (?).
-    ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
-  '';
-in
-stdenv.mkDerivation (rec {
-  inherit pname version patches;
-
-  src = src';
-
-  sourceRoot =
-    if lib.versionAtLeast release_version "15"
-    then "${src.name}/runtimes"
-    else "${src.name}/${pname}";
-
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ cmake ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
-    ninja python3
+  outputs = [
+    "out"
+    "dev"
   ];
 
-  cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
-    ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
-    ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
-      "-DCMAKE_CXX_COMPILER_WORKS=ON"
-    ]
-    ++ devExtraCmakeFlags;
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared)
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
+  ]
+  ++ devExtraCmakeFlags;
+
+  postInstall =
+    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows)
+      ''
+        # libcxxabi wants to link to libunwind_shared.so (?).
+        ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+      ''
+    + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
+      ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
+    ''
+    + lib.optionalString (doFakeLibgcc && !stdenv.hostPlatform.isWindows) ''
+      ln -s $out/lib/libunwind.so $out/lib/libgcc_s.so
+      ln -s $out/lib/libunwind.so $out/lib/libgcc_s.so.1
+    ''
+    + lib.optionalString (doFakeLibgcc && stdenv.hostPlatform.isWindows) ''
+      ln -s $out/lib/libunwind.dll.a $out/lib/libgcc_s.dll.a
+    '';
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst
@@ -83,6 +85,4 @@ stdenv.mkDerivation (rec {
       dependency of other runtimes.
     '';
   };
-} // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
-  // (if prePatch != "" then { inherit prePatch; } else {})
-  // (if postPatch != "" then { inherit postPatch; } else {}))
+})

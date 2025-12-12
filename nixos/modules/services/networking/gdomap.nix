@@ -24,8 +24,8 @@
       description = "gdomap server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.gnustep.base ];
-      serviceConfig.ExecStart = "${pkgs.gnustep.base}/bin/gdomap -f";
+      path = [ pkgs.gnustep-base ];
+      serviceConfig.ExecStart = "${pkgs.gnustep-base}/bin/gdomap -f";
     };
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "9.6.0";
+  version = "10.1.2";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-DhILArArPOZvvywU9vyDmKfvPf49dbfNcBW3OjDdyP4=";
+    sha256 = "sha256-wu/Ouozi89y1abFgDk16uqBHoYDQDIzoqPgwA0BofLo=";
   };
 
-  vendorHash = "sha256-wrdKhDLTebYWWpYE/zLPvjtpXXrrA3LWJHlEvuW4BwM=";
+  vendorHash = "sha256-ihA9RJDFHePox1G47Jr4Q1NSVJ9k5KDXgm8KTe2wYBQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +28,7 @@ buildGoModule rec {
     "-X main.Commit=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd polaris \
       --bash <($out/bin/polaris completion bash) \
       --fish <($out/bin/polaris completion fish) \
@@ -44,11 +45,11 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
     mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ longer ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ longer ];
   };
 }

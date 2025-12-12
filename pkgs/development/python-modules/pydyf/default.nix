@@ -1,9 +1,9 @@
 {
+  pkgs,
   lib,
   buildPythonPackage,
   fetchPypi,
   flit-core,
-  ghostscript,
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     pillow
     pytestCheckHook
     pytest-cov-stub
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydyf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
     changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprecenth ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprecenth ];
   };
 }

@@ -11,6 +11,7 @@
   numpy,
   pymanopt,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   scikit-learn,
   scipy,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
+    tag = version;
+    hash = "sha256-sEK3uhZtjVJGEN1Gs8N0AMtiEOo9Kpn/zOSWUfGc/qE=";
   };
 
   build-system = [
@@ -79,11 +80,13 @@ buildPythonPackage rec {
       );
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
 
@@ -134,10 +137,10 @@ buildPythonPackage rec {
     "ot.lp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

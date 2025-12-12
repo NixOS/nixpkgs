@@ -34,11 +34,11 @@ buildGoModule rec {
 
   doCheck = false; # tests want to actually download from github
 
-  meta = with lib; {
-    description = "Backup your GitHub repositories with a simple command-line application written in Go.";
+  meta = {
+    description = "Backup your GitHub repositories with a simple command-line application written in Go";
     homepage = "https://github.com/qvl/ghbackup";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ghbackup";
-    maintainers = with maintainers; [ lenny ];
+    maintainers = with lib.maintainers; [ lenny ];
   };
 }

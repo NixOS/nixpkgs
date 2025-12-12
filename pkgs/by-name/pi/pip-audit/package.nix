@@ -2,19 +2,22 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.7.3";
-  format = "pyproject";
+  version = "2.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MRFfF5OygUCIdUnPvxhYk4IcLSWGgmlw2qgzPoZDniw=";
+    tag = "v${version}";
+    hash = "sha256-fnIwtXFswKcfz/8VssL4UVukwkq6CC63NCyqqbqziO8=";
   };
+
+  pythonRelaxDeps = [ "cyclonedx-python-lib" ];
 
   build-system = with python3.pkgs; [ flit-core ];
 
@@ -27,21 +30,20 @@ python3.pkgs.buildPythonApplication rec {
       packaging
       pip-api
       pip-requirements-parser
+      platformdirs
       rich
-      toml
+      tomli
+      tomli-w
     ]
     ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pip_audit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTestPaths = [
     # Tests require network access
@@ -51,19 +53,20 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests requrire network access
+    # Tests require network access
+    "test_esms"
     "test_get_pip_cache"
-    "test_virtual_env"
-    "test_pyproject_source"
     "test_pyproject_source_duplicate_deps"
+    "test_pyproject_source"
+    "test_virtual_env"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
-    changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pypa/pip-audit/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pip-audit";
   };
 }

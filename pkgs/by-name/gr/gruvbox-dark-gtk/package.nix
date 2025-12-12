@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jmattheis";
-    repo = pname;
+    repo = "gruvbox-dark-gtk";
     rev = "v${version}";
     sha256 = "sha256-C681o89MTGNp1l3DLQsRpH9HQdmdCXZzk0F0rNhcyL4=";
   };
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp -r * $out/share/themes/gruvbox-dark
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gruvbox theme for GTK based desktop environments";
     homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.nomisiv ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nomisiv ];
   };
 }

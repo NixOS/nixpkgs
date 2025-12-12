@@ -5,23 +5,20 @@
   setuptools,
   httpx,
   pyjwt,
-  pythonOlder,
   websockets,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elmax-api";
-  version = "0.0.6.3";
+  version = "0.0.6.4rc0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "albertogeniola";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jnm1AFnPxZIgD815ZFxV/i9ar4cZfsYJ0+xDpM3hKmg=";
+    repo = "elmax-api";
+    tag = "v${version}";
+    hash = "sha256-BYVfP8B+p4J4gW+64xh9bT9sDcu/lk0R+MvLsYLwRfQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elmax_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the Elmax cloud";
     homepage = "https://github.com/albertogeniola/elmax-api";
     changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

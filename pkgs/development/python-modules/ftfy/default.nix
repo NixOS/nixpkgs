@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "python-ftfy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 
@@ -44,12 +44,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aborsu ];
   };
 }

@@ -11,19 +11,19 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rusty-ferris-club";
     repo = "shellclear";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/0pqegVxrqqxaQ2JiUfkkFK9hp+Vuq7eTap052HEcJs=";
   };
 
-  cargoHash = "sha256-vPd1cFfoSkOnXH3zKQUB0zWDzEtao50AUrUzhpZIkgI=";
+  cargoHash = "sha256-Q6F7cqs+d1LqYaZkcpCBTOB9Z0qxuGz9zRDK2Yg10CU=";
 
   buildAndTestSubdir = "shellclear";
 
-  meta = with lib; {
+  meta = {
     description = "Secure shell history commands by finding sensitive data";
     homepage = "https://github.com/rusty-ferris-club/shellclear";
     changelog = "https://github.com/rusty-ferris-club/shellclear/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

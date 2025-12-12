@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tile38";
-  version = "1.34.0";
+  version = "1.36.5";
 
   src = fetchFromGitHub {
     owner = "tidwall";
-    repo = pname;
-    rev = version;
-    hash = "sha256-C8vVmmIDHc5aaiS0kK6LbB0DAZADAH79LXtMsQ019Xk=";
+    repo = "tile38";
+    tag = version;
+    hash = "sha256-+Kon202vDefi4kq7IB1WQU5FfvVJ7CxX1LT7W0HYGeI=";
   };
 
-  vendorHash = "sha256-nnamNwowRPWQBKUMg800bFgijv8iHbdh/wUwTfX0NcY=";
+  vendorHash = "sha256-YiivAh7aXeVuvI9V1ayvqjJ658Hu8/1icvRbqq2QeI0=";
 
   subPackages = [
     "cmd/tile38-cli"
@@ -28,14 +28,14 @@ buildGoModule rec {
     "-X github.com/tidwall/tile38/core.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Real-time Geospatial and Geofencing";
     longDescription = ''
       Tile38 is an in-memory geolocation data store, spatial index, and realtime geofence.
       It supports a variety of object types including lat/lon points, bounding boxes, XYZ tiles, Geohashes, and GeoJSON.
     '';
     homepage = "https://tile38.com/";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -18,7 +18,7 @@ let
       overlays
       ;
     # Remove config.replaceStdenv to ensure termination.
-    config = builtins.removeAttrs config [ "replaceStdenv" ];
+    config = removeAttrs config [ "replaceStdenv" ];
   };
 
 in

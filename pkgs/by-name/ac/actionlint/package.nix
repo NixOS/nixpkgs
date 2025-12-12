@@ -9,23 +9,20 @@
   shellcheck,
 }:
 
-let
-  version = "1.7.4";
-in
-buildGoModule {
+buildGoModule rec {
   pname = "actionlint";
-  inherit version;
+  version = "1.7.9";
 
   subPackages = [ "cmd/actionlint" ];
 
   src = fetchFromGitHub {
     owner = "rhysd";
     repo = "actionlint";
-    rev = "v${version}";
-    hash = "sha256-NPlDD74vrVXsVgdoMHD0F3SYebH1p/RH9h1qVgLQMRw=";
+    tag = "v${version}";
+    hash = "sha256-QZVZ4pF69rtdXmFIMXooTpAjzPM4TTzUKVVMWYqmUvQ=";
   };
 
-  vendorHash = "sha256-pKmN5duaSp5EuQ8L2SWduh3g1gbQq2jrUaKsQuEuy98=";
+  vendorHash = "sha256-oejeEImMgNXnbDIFg7MslcisVJj4Pl150ZMJ0YqGdLM=";
 
   nativeBuildInputs = [
     makeWrapper

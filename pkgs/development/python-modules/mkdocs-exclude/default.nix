@@ -5,7 +5,7 @@
   mkdocs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-exclude";
   version = "1.0.2";
   format = "setuptools";
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # though. This package has no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Mkdocs plugin to exclude files from input using globs or regexes";
     homepage = "https://github.com/apenwarr/mkdocs-exclude";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

@@ -4,9 +4,9 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "sqlboiler-crbd";
-  version = "unstable-2022-06-12";
+  version = "0-unstable-2022-06-12";
 
   src = fetchFromGitHub {
     owner = "glerchundi";
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false; # requires a running testdb
 
-  meta = with lib; {
+  meta = {
     description = "CockroachDB generator for usage with SQLBoiler";
     mainProgram = "sqlboiler-crdb";
     homepage = "https://github.com/glerchundi/sqlboiler-crdb/";
-    maintainers = with maintainers; [ dgollings ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ dgollings ];
+    platforms = lib.platforms.unix;
   };
 }

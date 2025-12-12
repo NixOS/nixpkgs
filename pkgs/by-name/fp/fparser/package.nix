@@ -5,24 +5,24 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fparser";
-  version = "unstable-2015-09-25";
+  version = "0-unstable-2025-06-23";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "fparser";
-    rev = "a59e1f51e32096bfe2a0a2640d5dffc7ae6ba37b";
-    sha256 = "0wayml1mlyi922gp6am3fsidhzsilziksdn5kbnpcln01h8555ad";
+    rev = "ee15c675514e53b37304179b4a91319d44ba9a85";
+    hash = "sha256-YlkaJlZ60EAsaejdyaV7OK3zF7pnkhyr+PssuToFplA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ Library for Evaluating Mathematical Functions";
     homepage = "https://github.com/thliebig/fparser";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ matthuszagh ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ matthuszagh ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deactivated";
     repo = "python-iso3166";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iso3166" ];
 
-  meta = with lib; {
+  meta = {
     description = "Self-contained ISO 3166-1 country definitions";
     homepage = "https://github.com/deactivated/python-iso3166";
     changelog = "https://github.com/deactivated/python-iso3166/blob/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

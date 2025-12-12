@@ -131,8 +131,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/limitland/comixcursors";
     changelog = "https://gitlab.com/limitland/comixcursors/-/blob/HEAD/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.DerickEddington ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.DerickEddington ];
+    platforms = lib.platforms.all;
   };
 }

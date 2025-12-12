@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pololu-tic";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "pololu-tic-software";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-C/v5oaC5zZwm+j9CbFaDW+ebzHxPVb8kZLg9c0HyPbc=";
+    tag = finalAttrs.version;
+    hash = "sha256-NqYaWWBEcq0nw4pHKpZWwbkTwnlVLB1VsC/M9zjxkHg=";
   };
 
   outputs = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pololu/pololu-tic-software";
     description = "Pololu Tic stepper motor controller software";
-    platforms = platforms.all;
-    license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ bzizou ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [ bzizou ];
   };
 })

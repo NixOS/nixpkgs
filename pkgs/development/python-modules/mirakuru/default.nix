@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  pytest-rerunfailures,
   setuptools,
   psutil,
   netcat,
@@ -14,33 +15,30 @@
 
 buildPythonPackage rec {
   pname = "mirakuru";
-  version = "2.5.3";
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
+    tag = "v${version}";
+    hash = "sha256-R5prLIub2kVhsKRGWbZMf/v0U7oOBieoLiHwMRDEs0I=";
   };
 
-  patches = [
-    # https://github.com/ClearcodeHQ/mirakuru/pull/810
-    ./tmpdir.patch
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ psutil ];
+  dependencies = [ psutil ];
 
   nativeCheckInputs = [
     netcat.nc
     ps
     python-daemon
+    pytest-rerunfailures
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "mirakuru" ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
@@ -51,17 +49,19 @@ buildPythonPackage rec {
   # > ps: vsz: requires entitlement
   # > ps: rss: requires entitlement
   # > ps: time: requires entitlement
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
     "test_forgotten_stop"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_mirakuru_cleanup"
     "test_daemons_killing"
   ];
 
-  meta = with lib; {
-    homepage = "https://pypi.org/project/mirakuru";
+  meta = {
+    homepage = "https://github.com/dbfixtures/mirakuru";
     description = "Process orchestration tool designed for functional and integration tests";
     changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -23,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "colbert-ai";
-  version = "0.2.21";
+  version = "0.2.22";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "colbert_ai";
-    hash = "sha256-qNb9tOInLysI7Tf45QlgchYNhBXR5AWFdRiYt35iW6s=";
+    hash = "sha256-AK/P711xXw06cGvpDStbdKK7fEAgc4B861UVwAJqiIY=";
   };
-
-  pythonRemoveDeps = [ "git-python" ];
 
   build-system = [
     setuptools

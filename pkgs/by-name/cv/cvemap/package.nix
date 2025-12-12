@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cvemap";
-  version = "0.0.7";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "cvemap";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ste08J3KIJmugKZegU82wq6N+B5DaHc8Z0UtqKsUYE8=";
+    tag = "v${version}";
+    hash = "sha256-pzCLzSsAaoiRrTBENnmyqaSyDnHQdDAcTNyaxpc7mt4=";
   };
 
-  vendorHash = "sha256-+gYJkKJLUsCbh0JhVNOdr8U5pgWYjD56KZ0VePoYecU=";
+  vendorHash = "sha256-4GW1mgwOXbdiDmQoN1yxVOJC8mXpqkKliabWZzvOff4=";
 
   subPackages = [
     "cmd/cvemap/"
@@ -26,12 +26,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to work with CVEs";
     homepage = "https://github.com/projectdiscovery/cvemap";
     changelog = "https://github.com/projectdiscovery/cvemap/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cvemap";
   };
 }

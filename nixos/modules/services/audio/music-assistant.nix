@@ -26,6 +26,9 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
+
+  # YouTube Music needs deno with JIT to solve yt-dlp challenges
+  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -69,12 +72,31 @@ in
       description = "Music Assistant";
       documentation = [ "https://music-assistant.io" ];
 
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
       wantedBy = [ "multi-user.target" ];
 
       environment = {
         HOME = "/var/lib/music-assistant";
         PYTHONPATH = finalPackage.pythonPath;
       };
+
+      path =
+        with pkgs;
+        [
+          lsof
+        ]
+        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
+          librespot-ma
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          snapcast
+        ]
+        ++ lib.optionals useYTMusic [
+          deno
+          ffmpeg
+        ];
 
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
@@ -89,7 +111,7 @@ in
         CapabilityBoundingSet = [ "" ];
         DevicePolicy = "closed";
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = !useYTMusic;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -110,6 +132,9 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
+        ]
+        ++ lib.optionals useYTMusic [
+          "@pkey"
         ];
         RestrictSUIDSGID = true;
         UMask = "0077";

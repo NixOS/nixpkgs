@@ -15,7 +15,7 @@ let
   # This is not allowed generally, but we're in the tests here, so we'll allow ourselves.
   storeDirPath = /. + builtins.storeDir;
 
-  cases = lib.runTests {
+  failures = lib.runTests {
     # Test examples from the lib.path.append documentation
     testAppendExample1 = {
       expr = append /foo "bar/baz";
@@ -110,6 +110,12 @@ let
       expected = false;
     };
 
+    # Root path (empty path components list)
+    testHasStorePathPrefixRoot = {
+      expr = hasStorePathPrefix /.;
+      expected = false;
+    };
+
     testHasStorePathPrefixExample1 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz");
       expected = true;
@@ -134,6 +140,16 @@ let
     };
     testHasStorePathPrefixExample6 = {
       expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
+      expected = true;
+    };
+
+    # Test paths for content‐addressed derivations
+    testHasStorePathPrefixExample7 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab");
+      expected = true;
+    };
+    testHasStorePathPrefixExample8 = {
+      expr = hasStorePathPrefix (/. + "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab/foo/bar");
       expected = true;
     };
 
@@ -310,7 +326,6 @@ let
     };
   };
 in
-if cases == [ ] then
-  "Unit tests successful"
-else
-  throw "Path unit tests failed: ${lib.generators.toPretty { } cases}"
+lib.debug.throwTestFailures {
+  inherit failures;
+}

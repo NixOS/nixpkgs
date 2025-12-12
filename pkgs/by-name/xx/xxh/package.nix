@@ -5,22 +5,24 @@
   openssh,
   nixosTests,
 }:
-
 python3.pkgs.buildPythonApplication rec {
   pname = "xxh";
-  version = "0.8.12";
-  format = "setuptools";
-
+  version = "0.8.14";
+  pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-3/AU2o72X7FE11NSXC6m9fFhmjzEDZ+OpTXg8yvv62A=";
+    owner = "xxh";
+    repo = "xxh";
+    tag = version;
+    hash = "sha256-Y1yTn0lZemQgWsW9wlW+aNndyTXGo46PCbCl0TGYspQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    python3.pkgs.setuptools
+  ];
+
+  dependencies = [
     python3.pkgs.pexpect
     python3.pkgs.pyyaml
     openssh
@@ -30,10 +32,10 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) xxh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bring your favorite shell wherever you go through SSH";
     homepage = "https://github.com/xxh/xxh";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ pasqui23 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ pasqui23 ];
   };
 }

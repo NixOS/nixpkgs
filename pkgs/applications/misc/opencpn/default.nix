@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  AppKit,
   DarwinTools,
   alsa-utils,
   at-spi2-core,
@@ -12,7 +11,7 @@
   fetchFromGitHub,
   flac,
   gitMinimal,
-  gtk3,
+  wrapGAppsHook3,
   glew,
   gtest,
   jasper,
@@ -36,108 +35,107 @@
   lz4,
   libmpg123,
   makeWrapper,
-  pcre,
-  pcre2,
   pkg-config,
   portaudio,
   rapidjson,
+  shapelib,
   sqlite,
   tinyxml,
   util-linux,
   wxGTK32,
   xorg,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.10.2";
+  version = "5.12.4";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-VuMClQ5k1mTMF5yWstTi9YTF4tEN68acH5OPhjdzIwM=";
+    hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
+
+  patches = [
+    # https://github.com/OpenCPN/OpenCPN/pull/4900
+    ./fix-clang20.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gtest
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      curl
-      dbus
-      flac
-      gitMinimal
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      AppKit
-    ]
-    ++ [
-      gtk3
-      glew
-      jasper
-      libGLU
-      libarchive
-      libdatrie
-      libepoxy
-      libexif
-      libogg
-      libopus
-      libsndfile
-      libthai
-      libunarr
-      libusb1
-      libvorbis
-      libxkbcommon
-      lz4
-      libmpg123
-      pcre
-      pcre2
-      portaudio
-      rapidjson
-      sqlite
-      tinyxml
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-utils
-      libselinux
-      libsepol
-      util-linux
-      xorg.libXdmcp
-      xorg.libXtst
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lame
-    ];
+  buildInputs = [
+    at-spi2-core
+    curl
+    dbus
+    flac
+    gitMinimal
+    shapelib
+  ]
+  ++ [
+    glew
+    jasper
+    libGLU
+    libarchive
+    libdatrie
+    libepoxy
+    libexif
+    libogg
+    libopus
+    libsndfile
+    libthai
+    libunarr
+    libusb1
+    libvorbis
+    libxkbcommon
+    lz4
+    libmpg123
+    portaudio
+    rapidjson
+    sqlite
+    tinyxml
+    wxGTK32
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-utils
+    libselinux
+    libsepol
+    util-linux
+    xorg.libXdmcp
+    xorg.libXtst
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lame
+  ];
 
-  cmakeFlags =
-    [
-      "-DOCPN_BUNDLE_DOCS=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Override OpenCPN platform detection.
-      "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
-    ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals (!stdenv.hostPlatform.isx86) [
@@ -153,14 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Concise ChartPlotter/Navigator";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kragniz
       lovesegfault
     ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://opencpn.org/";
   };
 })

@@ -10,6 +10,7 @@
   SDL2,
   stdenv,
   zlib,
+  libGL,
 
   sm64baserom,
   enableCoopNet ? true,
@@ -36,14 +37,16 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.0.4";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-v50C87/NN75owxtLL4vm8TLZha7U8FkefPhpO6iXYGU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ct7X6LCitk1QID00guvYOMfIwnZccMeXqXwUB3ioKh8=";
   };
+
+  patches = [ ./no-update-check.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -54,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     SDL2
     zlib
+    libGL
   ];
 
   enableParallelBuilding = true;
@@ -114,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.shelvacu ];
     mainProgram = "sm64coopdx";
     homepage = "https://sm64coopdx.com/";
-    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/v1.3";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       # The lua engine, discord sdk, and coopnet library are vendored pre-built. See https://github.com/coop-deluxe/sm64coopdx/tree/v1.0.3/lib

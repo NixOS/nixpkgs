@@ -40,15 +40,14 @@ stdenv.mkDerivation {
     ++ lib.optionals hostPlatform.isDarwin [
       fixDarwinDylibNames
     ];
-  propagatedBuildInputs =
-    [
-      curl
-      tzdata
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      glibc
-      stdenv.cc.cc.libgcc
-    ];
+  propagatedBuildInputs = [
+    curl
+    tzdata
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    glibc
+    stdenv.cc.cc.libgcc
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -80,11 +79,11 @@ stdenv.mkDerivation {
   #       __D2rt6config16rt_envvarsOptionFNbNiAyaMDFNbNiQkZQnZQq in libphobos2.a(config_99a_6c3.o)
   dontStrip = hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Digital Mars D Compiler Package";
     # As of 2.075 all sources and binaries use the boost license
-    license = licenses.boost;
-    maintainers = [ maintainers.lionello ];
+    license = lib.licenses.boost;
+    maintainers = [ lib.maintainers.lionello ];
     homepage = "https://dlang.org/";
     platforms = [
       "x86_64-darwin"

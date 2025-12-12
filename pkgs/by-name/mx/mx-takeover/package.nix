@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -11,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "musana";
     repo = "mx-takeover";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yDQd2FEVFFsUu3wKxp26VDhGjnuXmAtxpWoKjV6ZrHA=";
   };
 
@@ -22,12 +23,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to work with DNS MX records";
-    mainProgram = "mx-takeover";
     homepage = "https://github.com/musana/mx-takeover";
-    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "mx-takeover";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

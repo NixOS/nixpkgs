@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   options.hardware.wooting.enable = lib.mkEnableOption "support for Wooting keyboards";
 

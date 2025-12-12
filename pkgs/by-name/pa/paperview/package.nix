@@ -6,9 +6,9 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "paperview";
-  version = "unstable-2020-09-22";
+  version = "0-unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "glouw";
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance X11 animated wallpaper setter";
     homepage = "https://github.com/glouw/paperview";
-    platforms = platforms.linux;
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "paperview";
   };
 }

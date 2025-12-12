@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipmiutil";
-  version = "3.1.6";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ipmiutil/pmiutil-${version}.tar.gz";
-    sha256 = "0jlfb4firph3hc0854n7cw7yjwlax3wdxn37r2jl0l94dj684548";
+    url = "mirror://sourceforge/project/ipmiutil/ipmiutil-${version}.tar.gz";
+    sha256 = "sha256-BIEbLmV/+YzTHkS5GnAMnzPEyd2To2yPyYfeH0fCQCQ=";
   };
 
   buildInputs = [ openssl ];
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use IPMI server management utility";
     homepage = "https://ipmiutil.sourceforge.net/";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     downloadPage = "https://sourceforge.net/projects/ipmiutil/files/ipmiutil/";
   };
 }

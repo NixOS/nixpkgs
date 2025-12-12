@@ -11,21 +11,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-ai-generativelanguage";
-  version = "0.6.14";
+  version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_ai_generativelanguage";
     inherit version;
-    hash = "sha256-tUTXbekTmoMgvOI1JJUNZsF6D7MMfoO7QZ5f/PB0LyE=";
+    hash = "sha256-JSR0j0E5F0Rv68jgh53A1PAmoGT4nxfEK4G+p3q3bIQ=";
   };
 
   build-system = [ setuptools ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
     "google.ai.generativelanguage_v1beta2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Ai Generativelanguage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-ai-generativelanguage";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-ai-generativelanguage-v${version}/packages/google-ai-generativelanguage/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

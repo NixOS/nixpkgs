@@ -1,28 +1,40 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ares-rs";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "bee-san";
     repo = "ares";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-F+uBGRL1G8kiNZUCsiPbISBfId5BPwShenusqkcsHug=";
+    tag = version;
+    hash = "sha256-IsIastLIrPknaJcH8sb0plPme+VGvo9DeDIisTD4sRM=";
   };
 
-  cargoHash = "sha256-c50HCwWwW4Fyg6hC1JqBfKtwq6kgReSOIBYXvwm04yA=";
+  cargoHash = "sha256-3L1LpmH96rYFB947sEhZcDK5g97zUgr2runjc1EYzZk=";
 
-  meta = with lib; {
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
+
+  meta = {
     description = "Automated decoding of encrypted text without knowing the key or ciphers used";
     homepage = "https://github.com/bee-san/ares";
-    changelog = "https://github.com/bee-san/Ares/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bee-san/Ares/releases/tag/v${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ares";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

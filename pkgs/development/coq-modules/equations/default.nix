@@ -10,69 +10,31 @@
   pname = "equations";
   owner = "mattam82";
   repo = "Coq-Equations";
+  opam-name = "rocq-equations";
   inherit version;
-  defaultVersion = lib.switch coq.coq-version [
-    {
-      case = "8.20";
-      out = "1.3.1+8.20";
-    }
-    {
-      case = "8.19";
-      out = "1.3+8.19";
-    }
-    {
-      case = "8.18";
-      out = "1.3+8.18";
-    }
-    {
-      case = "8.17";
-      out = "1.3+8.17";
-    }
-    {
-      case = "8.16";
-      out = "1.3+8.16";
-    }
-    {
-      case = "8.15";
-      out = "1.3+8.15";
-    }
-    {
-      case = "8.14";
-      out = "1.3+8.14";
-    }
-    {
-      case = "8.13";
-      out = "1.3+8.13";
-    }
-    {
-      case = "8.12";
-      out = "1.2.4+coq8.12";
-    }
-    {
-      case = "8.11";
-      out = "1.2.4+coq8.11";
-    }
-    {
-      case = "8.10";
-      out = "1.2.1+coq8.10-2";
-    }
-    {
-      case = "8.9";
-      out = "1.2.1+coq8.9";
-    }
-    {
-      case = "8.8";
-      out = "1.2+coq8.8";
-    }
-    {
-      case = "8.7";
-      out = "1.0+coq8.7";
-    }
-    {
-      case = "8.6";
-      out = "1.0+coq8.6";
-    }
-  ] null;
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    lib.switch coq.coq-version [
+      (case "9.1" "1.3.1+9.1")
+      (case "9.0" "1.3.1+9.0")
+      (case "8.20" "1.3.1+8.20")
+      (case "8.19" "1.3+8.19")
+      (case "8.18" "1.3+8.18")
+      (case "8.17" "1.3+8.17")
+      (case "8.16" "1.3+8.16")
+      (case "8.15" "1.3+8.15")
+      (case "8.14" "1.3+8.14")
+      (case "8.13" "1.3+8.13")
+      (case "8.12" "1.2.4+coq8.12")
+      (case "8.11" "1.2.4+coq8.11")
+      (case "8.10" "1.2.1+coq8.10-2")
+      (case "8.9" "1.2.1+coq8.9")
+      (case "8.8" "1.2+coq8.8")
+      (case "8.7" "1.0+coq8.7")
+      (case "8.6" "1.0+coq8.6")
+    ] null;
 
   release."1.0+coq8.6".version = "1.0";
   release."1.0+coq8.6".rev = "v1.0";
@@ -117,19 +79,33 @@
   release."1.3+8.19".sha256 = "sha256-roBCWfAHDww2Z2JbV5yMI3+EOfIsv3WvxEcUbBiZBsk=";
   release."1.3.1+8.20".rev = "v1.3.1-8.20";
   release."1.3.1+8.20".sha256 = "sha256-u8LB1KiACM5zVaoL7dSdHYvZgX7pf30VuqtjLLGuTzc=";
+  release."1.3.1+9.0".rev = "v1.3.1-9.0";
+  release."1.3.1+9.0".sha256 = "sha256-186Z0/wCuGAjIvG1LoYBMPooaC6HmnKWowYXuR0y6bA=";
+  release."1.3.1+9.1".rev = "v1.3.1-9.1";
+  release."1.3.1+9.1".sha256 = "sha256-LtYbAR3jt+JbYcqP+m1n3AZhAWSMIeOZtmdSJwg7L1A=";
 
   mlPlugin = true;
 
+  useDuneifVersion = v: v != null && (v == "dev" || lib.versionAtLeast v "1.3.1+9.0");
+
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "Plugin for Coq to add dependent pattern-matching";
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }).overrideAttrs
-  (o: {
-    preBuild = "coq_makefile -f _CoqProject -o Makefile${
-      lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"
-    }";
-  })
+  (
+    o:
+    if o.version != null && o.version != "dev" && !(lib.versionAtLeast o.version "1.3.1+9.0") then
+      {
+        preBuild = "coq_makefile -f _CoqProject -o Makefile${
+          lib.optionalString (lib.versionAtLeast o.version "1.2.1" || o.version == "dev") ".coq"
+        }";
+      }
+    else
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
+      }
+  )

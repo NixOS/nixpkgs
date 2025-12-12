@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";
-  version = "0.5.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
-    repo = pname;
+    repo = "notmuch-mailmover";
     rev = "v${version}";
-    hash = "sha256-ionqR60mI/oHnqVqtdIeIU1HeCbXfLGIHqaHDYEZONk=";
+    hash = "sha256-fJljqNSPLM1JiyeGMNvub/4wk5L9+lVTqtgCdoe7S88=";
   };
 
-  cargoHash = "sha256-tUhdfmYAdDlDMez03+ObX9PEU0CML12c5D8N95xiErI=";
+  cargoHash = "sha256-PeSlErwGBCZECYoWqmJrlRY7peNNY7c/wxd6R09uUz4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,15 +45,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Application to assign notmuch tagged mails to IMAP folders";
     mainProgram = "notmuch-mailmover";
     homepage = "https://github.com/michaeladler/notmuch-mailmover/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       michaeladler
       archer-65
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

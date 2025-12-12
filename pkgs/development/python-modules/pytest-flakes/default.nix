@@ -32,9 +32,9 @@ buildPythonPackage rec {
     py.test test_flakes.py -k 'not test_syntax_error'
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-flakes";
-    description = "pytest plugin to check source code with pyflakes";
+    description = "Pytest plugin to check source code with pyflakes";
   };
 }

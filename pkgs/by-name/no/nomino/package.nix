@@ -6,26 +6,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nomino";
-  version = "1.3.7";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "yaa110";
-    repo = pname;
+    repo = "nomino";
     rev = version;
-    hash = "sha256-rePNcO8vssCR7YfdDCV+YT1hqGKBeMCwWpGmBnKtl9w=";
+    hash = "sha256-By7zVHtbrQU0+cSbxNNxCcmTCoFABsjOLk8TCX8iFWA=";
   };
 
-  cargoHash = "sha256-C+fcN3byvPFtgX/DYexNZryoirOAhSx0hhOYR2gdW3s=";
+  cargoHash = "sha256-daHhCr55RzIHooGXBK831SYD1b8NPEDD6mtDut6nuaQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Batch rename utility for developers";
     homepage = "https://github.com/yaa110/nomino";
     changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "nomino";
   };
 }

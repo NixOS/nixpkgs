@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "helm-ls";
-  version = "0.1.0";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
-    hash = "sha256-EuZbbeRssacrctIbxBbd2GOh8zgFi2OBRregfC88se0=";
+    hash = "sha256-4M2o/M8mnO+9QwsjsGahY3i/pwtsNdCMCn5oCFGm0aI=";
   };
 
-  vendorHash = "sha256-AWKCE2BZGVYcr6Pe8URQo11Xnr3sfgWWkm9v7vvILOo=";
+  vendorHash = "sha256-4zQy7PFC41iBVKvDRaW2zUnUzCSQmjAmyKsdnLDUHJ8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mv $out/bin/helm-ls $out/bin/helm_ls
     installShellCompletion --cmd helm_ls \
       --bash <($out/bin/helm_ls completion bash) \
@@ -41,12 +42,12 @@ buildGoModule rec {
     command = "helm_ls version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Language server for Helm";
     changelog = "https://github.com/mrjosh/helm-ls/releases/tag/v${version}";
     homepage = "https://github.com/mrjosh/helm-ls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stehessel ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "helm_ls";
   };
 }

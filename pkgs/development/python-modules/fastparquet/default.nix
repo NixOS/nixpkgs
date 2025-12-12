@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.5.0";
+  version = "2024.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
+    tag = version;
+    hash = "sha256-GJ6dr36hGjpfEKcA96RpEqY8I1vXooLDGwc0A57yFTY=";
   };
 
   build-system = [
@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastparquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

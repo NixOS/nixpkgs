@@ -12,8 +12,12 @@
   gtest,
   sentry-native,
   protonmail-bridge,
+  fetchpatch2,
 }:
 
+let
+  guiSourcePath = "internal/frontend/bridge-gui";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonmail-bridge-gui";
 
@@ -22,6 +26,18 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Use `gtest` from Nixpkgs to allow an offline build
     ./use-nix-googletest.patch
+    # fix: qt6_generate_deploy_app_script deprecated keyword
+    (fetchpatch2 {
+      url = "https://github.com/daniel-fahey/proton-bridge/commit/9b282369523ce2aabcf95369a2ed3867efb5a4ac.patch?full_index=1";
+      relative = guiSourcePath;
+      hash = "sha256-CGBelsplAqLI+6GtDR+VELfVsLoHPN0324gfZ3obKpI=";
+    })
+    # fix: make libQt6WaylandEglClientHwIntegration conditional for Qt 6.10
+    (fetchpatch2 {
+      url = "https://github.com/daniel-fahey/proton-bridge/commit/7823fe4904186253798fc633724988d43dd642e0.patch?full_index=1";
+      relative = guiSourcePath;
+      hash = "sha256-2heMfZdXLL8/uyM0jZ860Jw76c+gHtc0G6pWmIRCONY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -44,14 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     sentry-native
   ];
 
-  sourceRoot = "${finalAttrs.src.name}/internal/frontend/bridge-gui";
+  sourceRoot = "${finalAttrs.src.name}/${guiSourcePath}";
 
   postPatch = ''
     # Bypass `vcpkg` by deleting lines that `include` BridgeSetup.cmake
     find . -type f -name "CMakeLists.txt" -exec sed -i "/BridgeSetup\\.cmake/d" {} \;
 
     # Use the available ICU version
-    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.56/libicu\1.so/g" bridge-gui/DeployLinux.cmake
+    sed -i "s/libicu\(i18n\|uc\|data\)\.so\.[0-9][0-9]/libicu\1.so/g" bridge-gui/DeployLinux.cmake
 
     # Create a Desktop Entry that uses a `protonmail-bridge-gui` binary without upstream's launcher
     sed "s/^\(Icon\|Exec\)=.*$/\1=protonmail-bridge-gui/" ../../../dist/proton-bridge.desktop > proton-bridge-gui.desktop

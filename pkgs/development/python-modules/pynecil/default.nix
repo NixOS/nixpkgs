@@ -1,5 +1,7 @@
 {
+  aiohttp,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   hatch-regex-commit,
@@ -12,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pynecil";
-  version = "2.0.2";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JvLHzWFhvttix1BzFM6enrboGLQhgXK82ld55I/iA/s=";
+    tag = "v${version}";
+    hash = "sha256-nZaWiaEAIsubvSSsJZLQVfpaElWx7WKeRlYK80tUohg=";
   };
 
   build-system = [
@@ -27,7 +29,11 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ bleak ];
+  dependencies = [
+    aiohttp
+    bleak
+    bleak-retry-connector
+  ];
 
   pythonImportsCheck = [ "pynecil" ];
 
@@ -37,8 +43,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # requires access to system D-Bus
+    "test_get_settings_communication_error"
+  ];
+
   meta = {
-    changelog = "https://github.com/tr4nt0r/pynecil/releases/tag/v${version}";
+    changelog = "https://github.com/tr4nt0r/pynecil/releases/tag/${src.tag}";
     description = "Python library to communicate with Pinecil V2 soldering irons via Bluetooth";
     homepage = "https://github.com/tr4nt0r/pynecil";
     license = lib.licenses.mit;

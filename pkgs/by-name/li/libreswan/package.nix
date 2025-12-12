@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.1";
+  version = "5.3";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    hash = "sha256-HO6dQSyJeZ64v3EUUA1cFOAUPpVGBWFj7r45YOf0Y3w=";
+    hash = "sha256-wdNQw/Mpb9IbnbB5TiPT8xmykviAv4F4uC71xjkcYMA=";
   };
 
   strictDeps = true;
@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
     # needed to patch shebangs
     python3
     bash
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
 
   prePatch = ''
     # Replace wget with curl to save a dependency
@@ -103,6 +104,9 @@ stdenv.mkDerivation rec {
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
     "LINUX_VARIANT=nixos"
     "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
+    # Fix invalid XML files with libxml 2.14
+    "XMLTO_FLAGS=--searchpath=$(abs_srcdir)/d.ipsec.conf:$(abs_srcdir)"
+    "XMLTO_FLAGS+=--skip-validation"
   ];
 
   # Hack to make install work
@@ -124,16 +128,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libreswan.org";
     description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.freebsd;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    license = with lib.licenses; [
       gpl2Plus
       mpl20
     ];
-    maintainers = with maintainers; [
-      afranchuk
+    maintainers = with lib.maintainers; [
       rnhmjoj
     ];
     mainProgram = "ipsec";

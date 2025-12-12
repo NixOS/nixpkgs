@@ -11,17 +11,18 @@
   swig,
   pkg-config,
   zlib,
+  openfst,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfst";
-  version = "3.16.0";
+  version = "3.16.2";
 
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2ST0s08Pcp+hTn7rUTgPE1QkH6PPWtiuFezXV3QW0kU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vp9rSQYNK991fCoEcW7tpVxCOemW2RFt0LujLGHFGVQ=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     icu
     zlib
+    openfst
   ];
 
   configureFlags = [
@@ -44,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-foma-upstream=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FST language processing library";
     homepage = "https://github.com/hfst/hfst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lurkki ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lurkki ];
+    platforms = lib.platforms.unix;
   };
 })

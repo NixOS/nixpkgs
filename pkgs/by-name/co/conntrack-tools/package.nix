@@ -25,19 +25,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-BnZ39MX2VkgZ547TqdSomAk16pJz86uyKkIOowq13tY=";
   };
 
-  buildInputs =
-    [
-      libmnl
-      libnfnetlink
-      libnetfilter_conntrack
-      libnetfilter_queue
-      libnetfilter_cttimeout
-      libnetfilter_cthelper
-      libtirpc
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ];
+  buildInputs = [
+    libmnl
+    libnfnetlink
+    libnetfilter_conntrack
+    libnetfilter_queue
+    libnetfilter_cttimeout
+    libnetfilter_cthelper
+    libtirpc
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ];
   nativeBuildInputs = [
     flex
     bison
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
     (lib.enableFeature systemdSupport "systemd")
   ];
 
-  meta = with lib; {
-    homepage = "http://conntrack-tools.netfilter.org/";
+  meta = {
+    homepage = "https://conntrack-tools.netfilter.org/";
     description = "Connection tracking userspace tools";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rspeer";
     repo = "wordfreq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ANOBbQWLB35Vz6oil6QZDpsNpKHeKUJnDKA5Q9JRVdE=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
     "test_korean"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for looking up the frequencies of words in many languages, based on many sources of data";
     homepage = "https://github.com/rspeer/wordfreq/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

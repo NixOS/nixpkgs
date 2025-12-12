@@ -11,13 +11,13 @@
   xrandr,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   pname = "mons";
   version = "unstable-2020-03-20";
 
   src = fetchFromGitHub {
     owner = "Ventto";
-    repo = pname;
+    repo = "mons";
     rev = "375bbba3aa700c8b3b33645a7fb70605c8b0ff0c";
     sha256 = "19r5y721yrxhd9jp99s29jjvm0p87vl6xfjlcj38bljq903f21cl";
     fetchSubmodules = true;
@@ -89,12 +89,12 @@ resholve.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.unix;
     mainProgram = "mons";
   };
 }

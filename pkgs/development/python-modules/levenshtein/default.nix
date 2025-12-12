@@ -1,31 +1,32 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   cmake,
   cython,
-  fetchFromGitHub,
   ninja,
-  pytestCheckHook,
-  pythonOlder,
-  rapidfuzz,
-  rapidfuzz-cpp,
   scikit-build-core,
+  rapidfuzz-cpp,
+  rapidfuzz,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.26.0";
+  version = "0.27.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "maxbachmann";
+    owner = "rapidfuzz";
     repo = "Levenshtein";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uLOOAmJ8Y0z+tuIIOSnI8qZoZ+IA2+tNBX1lDCvc8+A=";
-    fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
+    tag = "v${version}";
+    hash = "sha256-iKWS7gm0t3yPgeX5N09cTa3N1C6GXvIALueO8DlfLfE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.1.6,<3.2.0" Cython
+  '';
 
   build-system = [
     cmake
@@ -44,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Levenshtein" ];
 
-  meta = with lib; {
+  meta = {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
-    homepage = "https://github.com/maxbachmann/Levenshtein";
-    changelog = "https://github.com/maxbachmann/Levenshtein/blob/${src.rev}/HISTORY.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/rapidfuzz/Levenshtein";
+    changelog = "https://github.com/rapidfuzz/Levenshtein/blob/v${version}/HISTORY.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "chart-testing";
-  version = "3.11.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "helm";
-    repo = pname;
+    repo = "chart-testing";
     rev = "v${version}";
-    hash = "sha256-eiU8omDEGDJVmumHwZkNix7qMVkoR6Irg0x9dTBzadA=";
+    hash = "sha256-wdUUo19bFf3ov+Rd+JV6CtbH9TWGC73lWRrNLOfNGR8=";
   };
 
-  vendorHash = "sha256-o9oZnQPztrK6HvclPt33Y05GQFWDsnUYti5x8R7aWS8=";
+  vendorHash = "sha256-29rGyStJsnhJiO01DIFf/ROaYsXGg3YRJatdzC6A7JU=";
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
@@ -64,11 +64,11 @@ buildGoModule rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing Helm charts";
     homepage = "https://github.com/helm/chart-testing";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ atkinschang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ atkinschang ];
     mainProgram = "ct";
   };
 }

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.5.1";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-S2EmfYgCmZFZUcbNEghW4Qc0TO6KEb6DJyXCH5vcX1k=";
+    hash = "sha256-MrkDcUCNgHzHnTM3DJenPXOP7HLTTthD/YBtupNprhM=";
   };
 
   propagatedBuildInputs = [
@@ -59,7 +59,8 @@ buildPythonPackage rec {
     pyjwt
     pyyaml
     sqlalchemy-utils
-  ] ++ apispec.optional-dependencies.yaml;
+  ]
+  ++ apispec.optional-dependencies.yaml;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -75,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_appbuilder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
     broken = true;

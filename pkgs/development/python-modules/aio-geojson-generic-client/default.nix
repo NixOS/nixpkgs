@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-generic-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/I/n/XXRvm7G16WqVmU+KkyP5DeadqhEpy2EAtDFlCk=";
   };
 
@@ -51,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aio_geojson_generic_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-generic-client";
     changelog = "https://github.com/exxamalte/python-aio-geojson-generic-client/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

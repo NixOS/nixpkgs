@@ -5,7 +5,6 @@
   libpng,
   libjpeg,
   libwebp,
-  erlang,
   openssl,
   expat,
   libyaml,
@@ -18,10 +17,8 @@
   gd,
   autoreconfHook,
   gawk,
-  rebar3WithPlugins,
   fetchFromGitHub,
   fetchgit,
-  fetchHex,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -41,6 +38,8 @@
 }:
 
 let
+  inherit (beamPackages) buildRebar3 fetchHex rebar3WithPlugins;
+
   ctlpath = lib.makeBinPath [
     bash
     gnused
@@ -51,30 +50,30 @@ let
     procps
   ];
 
-  provider_asn1 = beamPackages.buildRebar3 {
+  provider_asn1 = buildRebar3 {
     name = "provider_asn1";
-    version = "0.3.0";
+    version = "0.4.1";
     src = fetchHex {
       pkg = "provider_asn1";
-      version = "0.3.0";
-      sha256 = "sha256-MuelWYZi01rBut8jM6a5alMZizPGZoBE/LveSRu/+wU=";
+      version = "0.4.1";
+      sha256 = "sha256-HqR6IyJyJinvbPJJlhJE14yEiBbNmTGOmR0hqonrOR0=";
     };
     beamDeps = [ ];
   };
-  rebar3_hex = beamPackages.buildRebar3 {
+  rebar3_hex = buildRebar3 {
     name = "rebar3_hex";
-    version = "7.0.7";
+    version = "7.0.8";
     src = fetchHex {
       pkg = "rebar3_hex";
-      version = "7.0.7";
-      sha256 = "sha256-1S2igSwiInATUgULZ1E6e2dK6YI5gvRffHRfF1Gg5Ok=";
+      version = "7.0.8";
+      sha256 = "sha256-aEY0EEZwRHp6AAuE1pSfm5RjBjU+PaaJuKp7fvXRiBc=";
     };
     beamDeps = [ ];
   };
 
   allBeamDeps = import ./rebar-deps.nix {
     inherit fetchHex fetchgit fetchFromGitHub;
-    builder = lib.makeOverridable beamPackages.buildRebar3;
+    builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
       jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
@@ -127,7 +126,7 @@ let
     };
   };
 
-  beamDeps = builtins.removeAttrs allBeamDeps [
+  beamDeps = removeAttrs allBeamDeps [
     "sqlite3"
     "p1_pgsql"
     "p1_mysql"
@@ -141,7 +140,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "24.10";
+  version = "25.10";
 
   nativeBuildInputs = [
     makeWrapper
@@ -154,23 +153,24 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs =
-    [ erlang ]
-    ++ builtins.attrValues beamDeps
-    ++ lib.optional withMysql allBeamDeps.p1_mysql
-    ++ lib.optional withPgsql allBeamDeps.p1_pgsql
-    ++ lib.optional withSqlite allBeamDeps.sqlite3
-    ++ lib.optional withPam allBeamDeps.epam
-    ++ lib.optional withZlib allBeamDeps.ezlib
-    ++ lib.optional withSip allBeamDeps.esip
-    ++ lib.optional withLua allBeamDeps.luerl
-    ++ lib.optional withRedis allBeamDeps.eredis;
+  buildInputs = [
+    beamPackages.erlang
+  ]
+  ++ builtins.attrValues beamDeps
+  ++ lib.optional withMysql allBeamDeps.p1_mysql
+  ++ lib.optional withPgsql allBeamDeps.p1_pgsql
+  ++ lib.optional withSqlite allBeamDeps.sqlite3
+  ++ lib.optional withPam allBeamDeps.epam
+  ++ lib.optional withZlib allBeamDeps.ezlib
+  ++ lib.optional withSip allBeamDeps.esip
+  ++ lib.optional withLua allBeamDeps.luerl
+  ++ lib.optional withRedis allBeamDeps.eredis;
 
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-WQCFwhyaTVAX1bQURJkiCupgr3zc5yKrhQBiGyYsWZk=";
+    tag = finalAttrs.version;
+    hash = "sha256-dTu3feSOakSHdk+hMDvYQwog64O3e/z5NOsGM3Rq7WY=";
   };
 
   passthru.tests = {
@@ -187,7 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
-  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  ]
+  ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
@@ -215,13 +216,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source XMPP application server written in Erlang";
     mainProgram = "ejabberdctl";
+    changelog = "https://github.com/processone/ejabberd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      sander
-      abbradar
       chuangzhu
+      toastal
     ];
   };
 })

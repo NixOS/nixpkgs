@@ -2,32 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
-  intltool,
+  fetchpatch,
+  meson,
+  ninja,
   pkg-config,
+  python3,
   gtk3,
   connman,
   openconnect,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "connman-gtk";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2018-06-26";
 
   src = fetchFromGitHub {
     owner = "jgke";
     repo = "connman-gtk";
-    rev = "v${version}";
-    hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
+    rev = "b72c6ab3bb19c07325c8e659902b046daa23c506";
+    hash = "sha256-6lX6FYERDgLj9G6nwnP35kF5x8dpRJqfJB/quZFtFzM=";
   };
 
+  postPatch = ''
+    patchShebangs --build data/meson_post_install.py
+  '';
+
   nativeBuildInputs = [
-    autoconf
-    automake
-    intltool
+    meson
+    ninja
     pkg-config
+    python3
     wrapGAppsHook3
   ];
 
@@ -37,19 +42,21 @@ stdenv.mkDerivation rec {
     connman
   ];
 
-  preConfigure = ''
-    # m4/intltool.m4 is an invalid symbolic link
-    rm m4/intltool.m4
-    ln -s ${intltool}/share/aclocal/intltool.m4 m4/
-    ./autogen.sh
-  '';
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/nickm/connman-gtk/-/raw/ef01b52fa02c5cca199b2e47c0cf360691266fd8/debian/patches/incompatible-pointer-type";
+      hash = "sha256-T+N9FfDyROBA4/HLK+l/fpnju2imDU4y6nGSbF+JDiA=";
+    })
+  ];
 
-  meta = with lib; {
+  env.MESON_INSTALL_PREFIX = placeholder "out";
+
+  meta = {
     description = "GTK GUI for Connman";
     mainProgram = "connman-gtk";
     homepage = "https://github.com/jgke/connman-gtk";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

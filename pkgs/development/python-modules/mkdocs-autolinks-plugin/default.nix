@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zachhannum";
     repo = "mkdocs-autolinks-plugin";
     # The commit messages mention version 0.7.1, but the tag is v_071.
-    rev = "refs/tags/v_${version}";
+    tag = "v_${version}";
     hash = "sha256-mEbuB9VwK7po1TqtJfBSkItOVlI3/W3nD2LYRHgPpTA=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_autolinks_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin that simplifies relative linking between documents";
     homepage = "https://github.com/zachhannum/mkdocs-autolinks-plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucas-deangelis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucas-deangelis ];
   };
 }

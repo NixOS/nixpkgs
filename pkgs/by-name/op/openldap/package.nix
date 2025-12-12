@@ -12,6 +12,10 @@
   systemdMinimal,
   libxcrypt,
 
+  # options
+  withModules ? !stdenv.hostPlatform.isStatic,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+
   # passthru
   nixosTests,
 }:
@@ -24,6 +28,14 @@ stdenv.mkDerivation rec {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
     hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "test069-sleep.patch";
+      url = "https://bugs.openldap.org/attachment.cgi?id=1051";
+      hash = "sha256-9LcFTswMQojrwHD+PRvlnSrwrISCFcboHypBwoDIZc0=";
+    })
+  ];
 
   # TODO: separate "out" and "bin"
   outputs = [
@@ -41,36 +53,38 @@ stdenv.mkDerivation rec {
     groff
   ];
 
-  buildInputs =
-    [
-      (cyrus_sasl.override {
-        inherit openssl;
-      })
-      libsodium
-      libtool
-      openssl
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      libxcrypt # causes linking issues on *-darwin
-      systemdMinimal
-    ];
+  buildInputs = [
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
+    libtool
+    openssl
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
+  ]
+  ++ lib.optionals withModules [
+    libsodium
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
+  ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  configureFlags =
-    [
-      "--enable-argon2"
-      "--enable-crypt"
-      "--enable-modules"
-      "--enable-overlays"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--with-yielding_select=yes"
-      "ac_cv_func_memcmp_working=yes"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  configureFlags = [
+    "--enable-crypt"
+    "--enable-overlays"
+    (lib.enableFeature withModules "argon2")
+    (lib.enableFeature withModules "modules")
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 
@@ -104,6 +118,9 @@ stdenv.mkDerivation rec {
       --replace "/bin/rm" "rm"
 
     # skip flaky tests
+    # https://bugs.openldap.org/show_bug.cgi?id=8623
+    rm -f tests/scripts/test022-ppolicy
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
@@ -126,7 +143,7 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString withModules ''
     for module in $extraContribModules; do
       make $installFlags install -C contrib/slapd-modules/$module
     done
@@ -138,11 +155,12 @@ stdenv.mkDerivation rec {
     kerberosWithLdap = nixosTests.kerberos.ldap;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openldap.org/";
     description = "Open source implementation of the Lightweight Directory Access Protocol";
-    license = licenses.openldap;
-    maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
-    platforms = platforms.unix;
+    license = lib.licenses.openldap;
+    maintainers = with lib.maintainers; [ hexa ];
+    teams = [ lib.teams.helsinki-systems ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -50,7 +50,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Layout-Parser";
     repo = "layout-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qBzcIUmgnGy/Xn/B+7UrLrRhCvCkapL+ymqGS2sMVgA=";
   };
 
@@ -93,11 +93,11 @@ buildPythonPackage {
 
   optional-dependencies = optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     description = "Unified toolkit for Deep Learning Based Document Image Analysis";
     homepage = "https://github.com/Layout-Parser/layout-parser";
     changelog = "https://github.com/Layout-Parser/layout-parser/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

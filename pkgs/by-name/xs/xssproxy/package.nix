@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xssproxy";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "vincentbernat";
     repo = "xssproxy";
     rev = "v${version}";
-    sha256 = "sha256-BE/v1CJAwKwxlK3Xg3ezD+IXyT7ZFGz3bQzGxFQfEnU=";
+    sha256 = "sha256-6M82gQZcgjqZBGw4YszAF0DmS+JXgFp6hl2gOF1RWAs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

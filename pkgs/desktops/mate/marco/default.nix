@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+    libxml2 # xmllint
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    libxml2
     libcanberra-gtk3
     libgtop
     libXdamage
@@ -53,20 +53,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/core/util.c \
-      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${zenity}/bin/zenity"'
+      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${lib.getExe zenity}"'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.ZENITY = lib.getExe zenity;
 
   enableParallelBuilding = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ licenses.gpl2Plus ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = [ lib.licenses.gpl2Plus ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

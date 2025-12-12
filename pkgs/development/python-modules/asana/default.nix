@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "5.0.10";
+  version = "5.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nuBvRqrs00OIY3UzN7bF5dB15TZqeE43o1BIpBaJZcQ=";
+    tag = "v${version}";
+    hash = "sha256-5GgBFZuiQDQXvZECIqY+kXTrUzkuoD8pJGKIg4TD1fw=";
   };
 
   build-system = [ setuptools ];
@@ -45,11 +45,11 @@ buildPythonPackage rec {
     "build_tests/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
-    changelog = "https://github.com/Asana/python-asana/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/Asana/python-asana/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

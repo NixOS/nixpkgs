@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "django-cms";
-  version = "4.1.4";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,24 +29,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2vA1teV6IkjtDo44uwEts1OGsBZ4dXRFGrasAHmgnRA=";
+    tag = version;
+    hash = "sha256-s7sgENs1A5weAiZ2zQYIbAKFOWR3Jmhbsli3vLyqi/4=";
   };
-
-  patches = [
-    # Removed django-app-manage dependency by updating ./manage.py
-    # https://github.com/django-cms/django-cms/pull/8061
-    (fetchpatch {
-      url = "https://github.com/django-cms/django-cms/commit/3270edb72f6a736b5cb448864ce2eaf68f061740.patch";
-      hash = "sha256-DkgAfE/QGAXwKMNvgcYxtO0yAc7oAaAAui2My8ml1Vk=";
-      name = "remove_django_app_manage_dependency.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/django-cms/django-cms/pull/8061/commits/04005ff693e775db645c62fefbb62367822e66f9.patch";
-      hash = "sha256-4M/VKEv7pnqCk6fDyA6FurSCCu/k9tNnz16wT4Tr0Rw=";
-      name = "manage_py_update_dj_database_url.patch";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -94,7 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lean enterprise content management powered by Django";
     homepage = "https://django-cms.org";
-    changelog = "https://github.com/django-cms/django-cms/releases/tag/${version}";
+    changelog = "https://github.com/django-cms/django-cms/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.onny ];
   };

@@ -1,34 +1,100 @@
 {
-  appimageTools,
   lib,
-  fetchurl,
+  cargo-tauri,
+  fetchFromGitHub,
+  glib-networking,
+  libayatana-appindicator,
+  libsoup_3,
+  nix-update-script,
+  nodejs,
+  openssl,
+  pkg-config,
+  pnpm_9,
+  protobuf,
+  rustPlatform,
+  stdenv,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
 }:
-let
+rustPlatform.buildRustPackage rec {
   pname = "rquickshare";
-  version = "0.11.2";
-  src = fetchurl {
-    url = "https://github.com/Martichou/rquickshare/releases/download/v${version}/r-quick-share-main_v${version}_glibc-2.39_amd64.AppImage";
-    hash = "sha256-7w1zybCPRg4RK5bKHoHLDUDXVDQL23ox/6wh8H9vTPg=";
+  version = "0.11.5";
+
+  src = fetchFromGitHub {
+    owner = "Martichou";
+    repo = "rquickshare";
+    tag = "v${version}";
+    hash = "sha256-DZdzk0wqKhVa51PgQf8UsAY6EbGKvRIGru71Z8rvrwA=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-  extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/rquickshare.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/rquickshare.desktop \
-      --replace-fail 'Exec=rquickshare' 'Exec=rquickshare %u'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+
+  patches = [
+    ./fix-pnpm-outdated-lockfile.patch
+    ./fix-pnpm-lock-file-tauri-minor-verison-mismatch.patch
+  ];
+
+  # from https://github.com/NixOS/nixpkgs/blob/04e40bca2a68d7ca85f1c47f00598abb062a8b12/pkgs/by-name/ca/cargo-tauri/test-app.nix#L23-L26
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
+  pnpmRoot = "app/main";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
+    postPatch = "cd ${pnpmRoot}";
+    fetcherVersion = 1;
+    hash = "sha256-VbdMaIEL1e+0U+ny4qbk1Mmkuc3cahKakKKYowCBK5Q=";
+  };
+
+  cargoRoot = "app/main/src-tauri";
+  buildAndTestSubdir = cargoRoot;
+  cargoPatches = [
+    ./remove-duplicate-versions-of-sys-metrics.patch
+    ./remove-code-signing-darwin.patch
+  ];
+  cargoHash = "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=";
+
+  nativeBuildInputs = [
+    cargo-tauri.hook
+
+    # Setup pnpm
+    nodejs
+    pnpm_9.configHook
+
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook4
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libayatana-appindicator
+    libsoup_3
+    openssl
+    webkitgtk_4_1
+  ];
+
+  env.OPENSSL_NO_VENDOR = 1;
+
+  passthru.updateScript = nix-update-script;
+
   meta = {
-    description = "Rust implementation of NearbyShare/QuickShare from Android for Linux";
+    description = "Rust implementation of NearbyShare/QuickShare from Android for Linux and macOS";
     homepage = "https://github.com/Martichou/rquickshare";
     changelog = "https://github.com/Martichou/rquickshare/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "rquickshare";
+    maintainers = with lib.maintainers; [
+      PerchunPak
+      luftmensch-luftmensch
+      sarunint
+    ];
   };
 }

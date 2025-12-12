@@ -9,25 +9,28 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
   granite7,
   gtk4,
   bluez,
+  elementary-bluetooth-daemon,
   switchboard,
   wingpanel-indicator-bluetooth,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-bluetooth";
     rev = version;
-    sha256 = "sha256-NefWnkI7K6I1JY3UG9wUbB/yF3R8tUdPb4tAafiTR3o=";
+    hash = "sha256-D2kigdGdmDtFWt/hldzHm+QqlGl6RBExhcdurLtCM1Q=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -36,6 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez
+    elementary-bluetooth-daemon # settings schema
     granite7
     gtk4
     libadwaita
@@ -48,12 +52,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Bluetooth Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-bluetooth";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-bluetooth";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 
 }

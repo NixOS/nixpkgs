@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LZ6NsoyEPUvgcVdbG7U2Vzuz/TLLraScvW97PocUNpU=";
   };
 
-  cargoHash = "sha256-sQKZJVnRs4IcBKmmaQDoJYBQtnuZW4aEICr6Xa8Flnk=";
+  cargoHash = "sha256-BIUzuV7q/5GSAmjRfdL71dWC7TjBVaSL8UyWpTF2AxM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to take all source code in a folder and render them to one image";
     homepage = "https://github.com/sloganking/codevis";
     changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "codevis";
   };
 }

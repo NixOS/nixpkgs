@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.2.1";
 in
 buildPecl rec {
   inherit version;
@@ -15,7 +15,7 @@ buildPecl rec {
     owner = "open-telemetry";
     repo = "opentelemetry-php-instrumentation";
     rev = version;
-    hash = "sha256-X3rGzKDI16W21O9BaCuvVCreuce6is+URFSa1FNcznM=";
+    hash = "sha256-zUrcikGB3O44ihcw2zOAhInfgF+sXT+Xl2lF7XJphzY=";
   };
 
   sourceRoot = "${src.name}/ext";
@@ -24,11 +24,11 @@ buildPecl rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/open-telemetry/opentelemetry-php-instrumentation/releases/tag/${version}";
     description = "OpenTelemetry PHP auto-instrumentation extension";
     homepage = "https://opentelemetry.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
   };
 }

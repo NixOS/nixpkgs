@@ -23,13 +23,13 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-php";
   extensionName = "tideways";
-  version = "5.16.2";
+  version = "5.20.0";
 
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported platform for tideways-php: ${stdenvNoCC.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.isLinux [
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -43,15 +43,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-x86_64.tar.gz";
-        hash = "sha256-bSLBk4VWRvErmSqXOEFE0N0K06+NRLmsJ76HegFYah8=";
+        hash = "sha256-uAmsmz+4tsCGw4jlzyZbUNjuzBU/HcIDWrHCC+0t4Xw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-arm64.tar.gz";
-        hash = "sha256-nXTk0DlGSEq0bp4+Hls3+epV6JY4H50D6IO/M3evFpE=";
+        hash = "sha256-gPhr32G6h/U1uR/aaeIWpOaDV9HF8EbQF7p1kJ5SDis=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-macos-arm.tar.gz";
-        hash = "sha256-IqQ0gtLAx8lVBccaDsum81FmkYXHKQ5zf27F2Y+H45g=";
+        hash = "sha256-VfgX1SNYKoFR290gRoRXfD5CoLhDPkK+3+4o13P1kiM=";
       };
     };
 
@@ -79,12 +79,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-probe";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tideways PHP Probe";
     homepage = "https://tideways.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

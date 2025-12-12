@@ -21,9 +21,15 @@ buildPythonPackage rec {
     # 0.9.4 only release on github
     owner = "microsoft";
     repo = "picologging";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-t75D7aNKAifzeCPwtyKp8LoiXtbbXspRFYnsI0gx+V4=";
   };
+
+  patches = [
+    # For python 313
+    # https://github.com/microsoft/picologging/pull/212
+    ./pr-212.patch
+  ];
 
   build-system = [
     setuptools
@@ -37,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   dontUseCmakeConfigure = true;
+  __darwinAllowLocalNetworking = true;
 
   dependencies = [
     flaky
@@ -50,7 +57,7 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     changelog = "https://github.com/microsoft/picologging/releases/tag/${version}";
-    description = "optimized logging library for Python";
+    description = "Optimized logging library for Python";
     license = lib.licenses.mit;
   };
 }

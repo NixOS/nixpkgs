@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-voNR8hIYGbMXL87c5csYJvoSyH2ht+2Y8mnT6AKgVVU=";
   };
 
+  postPatch = ''
+    substituteInPlace fs_wget.c \
+      --replace-fail '#include <curl/multi.h>' '#include <curl/curl.h>'
+  '';
+
   nativeBuildInputs = [ SDL ];
 
   buildInputs = [
@@ -63,7 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd2
     ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

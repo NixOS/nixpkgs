@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-md-report";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pytest_md_report";
     inherit version;
-    hash = "sha256-XpbGVevJtcPHt4v3xTgsH2gFbpaQRDAlJ5D4c33lzpk=";
+    hash = "sha256-O4Mur2YLRwtXQuWNnJpeMSsHEqcBLSUcwE6QioHOPJY=";
   };
 
   build-system = [
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_md_report" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to make a test results report with Markdown table format";
     homepage = "https://github.com/thombashi/pytest-md-report";
     changelog = "https://github.com/thombashi/pytest-md-report/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rrbutani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rrbutani ];
   };
 }

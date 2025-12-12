@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "arxiv";
-  version = "2.1.3";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Niu3N0QTVxucboQx1FQq1757Hjj1VVWeDZn7O7YtjWY=";
+    tag = version;
+    hash = "sha256-7TGepKZ6Y/WTgJK70oOGR2TlXRwK0YgzslXAnklRSCA=";
   };
 
   build-system = [ setuptools ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the arXiv API";
     homepage = "https://github.com/lukasschwab/arxiv.py";
-    changelog = "https://github.com/lukasschwab/arxiv.py/releases/tag/${version}";
+    changelog = "https://github.com/lukasschwab/arxiv.py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.octvs ];
   };

@@ -9,71 +9,94 @@ let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
 
-  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
-    lib.makeBinPath (
-      with pkgs;
-      [
-        cfg.package
+  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
 
-        acl
-        attr
-        bash
-        btrfs-progs
-        cdrkit
-        coreutils
-        criu
-        dnsmasq
-        e2fsprogs
-        findutils
-        getent
-        gnugrep
-        gnused
-        gnutar
-        gptfdisk
-        gzip
-        iproute2
-        iptables
-        iw
-        kmod
-        libnvidia-container
-        libxfs
-        lvm2
-        minio
-        minio-client
-        nftables
-        qemu-utils
-        qemu_kvm
-        rsync
-        squashfs-tools-ng
-        squashfsTools
-        sshfs
-        swtpm
-        systemd
-        thin-provisioning-tools
-        util-linux
-        virtiofsd
-        xdelta
-        xz
-      ]
-      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
-        skopeo
-        umoci
-      ]
-      ++ lib.optionals config.security.apparmor.enable [
-        apparmor-bin-utils
+  path =
+    with pkgs;
+    [
+      cfg.package
+      "/run/wrappers"
 
-        (writeShellScriptBin "apparmor_parser" ''
-          exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-        '')
-      ]
-      ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
-      ++ lib.optionals config.boot.zfs.enabled [
-        config.boot.zfs.package
-        "${config.boot.zfs.package}/lib/udev"
-      ]
-    )
-  }'';
+      # some qemu helpers not in bin
+      (linkFarm "incus-qemu-libexec" [
+        {
+          name = "bin";
+          path = "${qemu_kvm}/libexec";
+        }
+      ])
+
+      acl
+      attr
+      bash
+      btrfs-progs
+      bzip2
+      cdrkit
+      coreutils
+      criu
+      dnsmasq
+      e2fsprogs
+      findutils
+      getent
+      gawk
+      gnugrep
+      gnused
+      gnutar
+      gptfdisk
+      gzip
+      iproute2
+      iptables
+      iw
+      kmod
+      libxfs
+      lvm2
+      lz4
+      lxcfs
+      minio
+      minio-client
+      nftables
+      qemu-utils
+      qemu_kvm
+      rsync
+      squashfs-tools-ng
+      squashfsTools
+      sshfs
+      swtpm
+      systemd
+      thin-provisioning-tools
+      util-linux
+      virtiofsd
+      xdelta
+      xz
+      zstd
+    ]
+    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
+      skopeo
+      umoci
+    ]
+    ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
+      lego
+    ]
+    ++ lib.optionals config.security.apparmor.enable [
+      apparmor-bin-utils
+
+      (writeShellScriptBin "apparmor_parser" ''
+        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+      '')
+    ]
+    ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
+    ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
+    ++ lib.optionals config.boot.zfs.enabled [
+      config.boot.zfs.package
+      (linkFarm "incus-zfs-udev" [
+        {
+          name = "bin";
+          path = "${config.boot.zfs.package}/lib/udev";
+        }
+      ])
+    ]
+    ++ lib.optionals nvidiaEnabled [
+      libnvidia-container
+    ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
   OVMF2MB = pkgs.OVMF.override {
@@ -120,10 +143,12 @@ let
 
   environment = lib.mkMerge [
     {
+      INCUS_DOCUMENTATION = "${cfg.package.doc}/html";
       INCUS_EDK2_PATH = ovmf;
+      INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
-      PATH = lib.mkForce serverBinPath;
+      INCUS_AGENT_PATH = "${cfg.package}/share/agent";
     }
     (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
   ];
@@ -246,10 +271,10 @@ in
         };
       };
 
-      socketActivation = lib.mkEnableOption (''
+      socketActivation = lib.mkEnableOption ''
         socket-activation for starting incus.service. Enabling this option
         will stop incus.service from starting automatically on boot.
-      '');
+      '';
 
       startTimeout = lib.mkOption {
         type = lib.types.ints.unsigned;
@@ -263,12 +288,9 @@ in
       };
 
       ui = {
-        enable = lib.mkEnableOption "(experimental) Incus UI";
+        enable = lib.mkEnableOption "Incus Web UI";
 
-        package = lib.mkPackageOption pkgs [
-          "incus"
-          "ui"
-        ] { };
+        package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
     };
   };
@@ -279,7 +301,7 @@ in
         assertion =
           !(
             config.networking.firewall.enable
-            && !config.networking.nftables.enable
+            && !(config.networking.nftables.enable || config.networking.firewall.backend == "nftables")
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
@@ -302,12 +324,14 @@ in
     };
 
     boot.kernelModules = [
+      "br_netfilter"
       "veth"
       "xt_comment"
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ]
+    ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
     environment.systemPackages = [
       cfg.clientPackage
@@ -330,25 +354,61 @@ in
         "lxc-containers".profile = ''
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
+        "incusd".profile = ''
+          # This profile allows everything and only exists to give the
+          # application a name instead of having the label "unconfined"
+
+          abi <abi/4.0>,
+          include <tunables/global>
+
+          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
+            userns,
+
+            include "/var/lib/incus/security/apparmor/cache"
+
+            # Site-specific additions and overrides. See local/README for details.
+            include if exists <local/incusd>
+          }
+
+          include "/var/lib/incus/security/apparmor/profiles"
+        '';
       };
+      includes."abstractions/base" = ''
+        # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+        # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+        mr /nix/store/*/lib/*.so*,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+        r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+
+        # Support use of VM instance
+        mrix ${pkgs.qemu_kvm}/bin/*,
+        k ${OVMF2MB.fd}/FV/*.fd,
+        k ${pkgs.OVMFFull.fd}/FV/*.fd,
+      ''
+      + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+        k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
+      '';
     };
 
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
-      inherit environment;
+      inherit environment path;
 
       wantedBy = lib.mkIf (!cfg.socketActivation) [ "multi-user.target" ];
       after = [
         "network-online.target"
         "lxcfs.service"
         "incus.socket"
-      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
       requires = [
         "lxcfs.service"
         "incus.socket"
-      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+      ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
       wants = [ "network-online.target" ];
 
@@ -373,7 +433,7 @@ in
     systemd.services.incus-user = {
       description = "Incus Container and Virtual Machine Management User Daemon";
 
-      inherit environment;
+      inherit environment path;
 
       after = [
         "incus.service"
@@ -394,13 +454,17 @@ in
     systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
       description = "Incus Instances Startup/Shutdown";
 
-      inherit environment;
+      inherit environment path;
 
       after = [
         "incus.service"
         "incus.socket"
       ];
       requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
+
+      # restarting this service will affect instances
+      restartIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";

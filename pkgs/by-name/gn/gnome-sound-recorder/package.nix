@@ -39,20 +39,19 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      gjs
-      glib
-      gtk4
-      gdk-pixbuf
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad # for gstreamer-player-1.0
-    ]);
+  buildInputs = [
+    gjs
+    glib
+    gtk4
+    gdk-pixbuf
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad # for gstreamer-player-1.0
+  ]);
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
@@ -65,13 +64,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-sound-recorder"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple and modern sound recorder";
     mainProgram = "gnome-sound-recorder";
     homepage = "https://gitlab.gnome.org/World/vocalis";
     changelog = "https://gitlab.gnome.org/World/vocalis/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

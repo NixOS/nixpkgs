@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
+    repo = "azure-dcap-client";
     rev = version;
     hash = "sha256-zTDaICsSPXctgFRCZBiZwXV9dLk2pFL9kp5a8FkiTZA=";
   };
@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/microsoft/azure-dcap-client";
     maintainers = with lib.maintainers; [
       phlip9
-      trundle
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];

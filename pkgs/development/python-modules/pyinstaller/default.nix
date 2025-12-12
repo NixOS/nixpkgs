@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.11.0";
+  version = "6.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y01DOj2zDZ0Xz18s97tN+Ap4jUk8HWfdgi3FeR2YZK8=";
+    hash = "sha256-pI/EZE7kqiqio157UfSW+PvX7s9qIVBka78WE60HvC0=";
   };
 
   build-system = [ setuptools ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A tool to bundle a python application with dependencies into a single package";
+    description = "Tool to bundle a python application with dependencies into a single package";
     homepage = "https://pyinstaller.org/";
     changelog = "https://pyinstaller.org/en/v${version}/CHANGES.html";
     downloadPage = "https://pypi.org/project/pyinstaller/";

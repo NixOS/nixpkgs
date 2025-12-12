@@ -1,4 +1,9 @@
-{ version, hash }:
+{
+  version,
+  hash,
+  filename,
+  versionRegex,
+}:
 {
   lib,
   stdenv,
@@ -19,6 +24,7 @@
   enableFIPS ? false,
   nixosTests,
   nss_latest,
+  nix-update-script,
 }:
 
 let
@@ -37,17 +43,16 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs =
-    [
-      perl
-      ninja
-      (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    perl
+    ninja
+    (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     zlib
@@ -62,20 +67,19 @@ stdenv.mkDerivation rec {
     ./fix-cross-compilation.patch
   ];
 
-  postPatch =
-    ''
-      patchShebangs .
+  postPatch = ''
+    patchShebangs .
 
-      for f in coreconf/config.gypi build.sh; do
-        substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
-      done
+    for f in coreconf/config.gypi build.sh; do
+      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
+    done
 
-      substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-      substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
-    '';
+    substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+  '';
 
   outputs = [
     "out"
@@ -102,24 +106,36 @@ stdenv.mkDerivation rec {
           platform.parsed.cpu.name;
       # yes, this is correct. nixpkgs uses "host" for the platform the binary will run on whereas nss uses "host" for the platform that the build is running on
       target = getArch stdenv.hostPlatform;
+      target_system = stdenv.hostPlatform.uname.system;
       host = getArch stdenv.buildPlatform;
+
+      buildFlags = [
+        "-v"
+        "--opt"
+        "--with-nspr=${nspr.dev}/include:${nspr.out}/lib"
+        "--system-sqlite"
+        "--enable-legacy-db"
+        "--target ${target}"
+        "-Dhost_arch=${host}"
+        "-Duse_system_zlib=1"
+        "--enable-libpkix"
+        "-j"
+        "$NIX_BUILD_CORES"
+      ]
+      ++ lib.optional enableFIPS "--enable-fips"
+      ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
+      ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
+        "-DOS=${target_system}"
+      ]
+      ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+        "--disable-tests"
+      ];
     in
     ''
       runHook preBuild
 
       sed -i 's|nss_dist_dir="$dist_dir"|nss_dist_dir="'$out'"|;s|nss_dist_obj_dir="$obj_dir"|nss_dist_obj_dir="'$out'"|' build.sh
-      ./build.sh -v --opt \
-        --with-nspr=${nspr.dev}/include:${nspr.out}/lib \
-        --system-sqlite \
-        --enable-legacy-db \
-        --target ${target} \
-        -Dhost_arch=${host} \
-        -Duse_system_zlib=1 \
-        --enable-libpkix \
-        -j $NIX_BUILD_CORES \
-        ${lib.optionalString enableFIPS "--enable-fips"} \
-        ${lib.optionalString stdenv.hostPlatform.isDarwin "--clang"} \
-        ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
+      ./build.sh ${lib.concatStringsSep " " buildFlags}
 
       runHook postBuild
     '';
@@ -134,6 +150,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isILP32 [
       "-DNS_PTR_LE_32=1" # See RNG_RandomUpdate() in drdbg.c
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "-D_XOPEN_SOURCE=700"
+      "-D__BSD_VISIBLE"
+      # uses compiler intrinsics gated behind runtime checks for cpu feature flags
+      "-mavx2"
+      "-maes"
+      "-mpclmul"
     ]
   );
 
@@ -175,7 +199,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString useP11kit ''
     # Replace built-in trust with p11-kit connection
-    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
+    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libnssckbi${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   postFixup =
@@ -211,7 +235,14 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--override-filename"
+      "pkgs/development/libraries/nss/${filename}"
+      "--version-regex"
+      versionRegex
+    ];
+  };
 
   passthru.tests =
     lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
@@ -221,15 +252,15 @@ stdenv.mkDerivation rec {
       inherit (nixosTests) firefox;
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
     changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
       ajs124
     ];
-    license = licenses.mpl20;
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
   };
 }

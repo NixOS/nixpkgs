@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.94";
+  version = "1.0.95";
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = pname;
+    repo = "tgt";
     rev = "v${version}";
-    hash = "sha256-4zPTAdAXO8Km8a50ST3mdHW3RlKD1pmLACeFOY48lv0=";
+    hash = "sha256-e7rI8/WQl1L78l2Nk9ajomRucPwsSqZ7fLSHSw11jeY=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "iSCSI Target daemon with RDMA support";
     homepage = "https://github.com/fujita/tgt";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ johnazoidberg ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 }

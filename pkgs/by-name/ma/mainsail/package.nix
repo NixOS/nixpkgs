@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mainsail";
-  version = "2.13.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
-    hash = "sha256-Ugxy6bbLD0XJwKLW3YOM32GWrK9q8JsrcKGipZNZOsE=";
+    hash = "sha256-JmN5VPj4h83gLx/UsT69mXFxyvCHir0tl7zN2Q7eMOc=";
   };
 
-  npmDepsHash = "sha256-mlF8p9s5aGjZz1nfBOOECsW/BhaP2ToQ4f6gUU9sgSI=";
+  npmDepsHash = "sha256-8rUhDo1l0oLENWwy56UzwlSGIBJtTPsH6w5OX8tnp6U=";
 
   # Prevent Cypress binary download.
   CYPRESS_INSTALL_BINARY = 0;
@@ -34,13 +34,13 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web interface for managing and controlling 3D printers with Klipper";
     homepage = "https://docs.mainsail.xyz";
     changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       shhht
       lovesegfault
       wulfsta

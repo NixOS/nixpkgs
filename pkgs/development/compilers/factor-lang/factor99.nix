@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, cairo
-, curl
-, fetchurl
-, freealut
-, gdk-pixbuf
-, git
-, glib
-, gnome2
-, graphviz
-, gtk2-x11
-, interpreter
-, libGL
-, libGLU
-, libogg
-, librsvg
-, libvorbis
-, makeWrapper
-, ncurses
-, openal
-, openssl
-, pango
-, pcre
-, runCommand
-, runtimeShell
-, tzdata
-, udis86
-, unzip
-, writeScriptBin
-, zlib
+{
+  lib,
+  stdenv,
+  cairo,
+  curl,
+  fetchurl,
+  freealut,
+  gdk-pixbuf,
+  git,
+  glib,
+  gnome2,
+  graphviz,
+  gtk2-x11,
+  interpreter,
+  libGL,
+  libGLU,
+  libogg,
+  librsvg,
+  libvorbis,
+  makeWrapper,
+  ncurses,
+  openal,
+  openssl,
+  pango,
+  pcre,
+  runCommand,
+  runtimeShell,
+  tzdata,
+  udis86,
+  unzip,
+  writeScriptBin,
+  zlib,
 }:
 let
   runtimeLibs = [
@@ -51,20 +52,27 @@ let
     zlib
   ];
 
-  wrapFactorScript = { from, to ? false, runtimeLibs }: ''
-    # Set Gdk pixbuf loaders file to the one from the build dependencies here
-    unset GDK_PIXBUF_MODULE_FILE
-    # Defined in gdk-pixbuf setup hook
-    findGdkPixbufLoaders "${librsvg}"
+  wrapFactorScript =
+    {
+      from,
+      to ? false,
+      runtimeLibs,
+    }:
+    ''
+      # Set Gdk pixbuf loaders file to the one from the build dependencies here
+      unset GDK_PIXBUF_MODULE_FILE
+      # Defined in gdk-pixbuf setup hook
+      findGdkPixbufLoaders "${librsvg}"
 
-    ${if (builtins.isString to) then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --argv0 factor \
-      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
-      --prefix PATH : ${lib.makeBinPath [ graphviz ]}
-  '';
+      ${if (builtins.isString to) then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
+        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+        --argv0 factor \
+        --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
+        --prefix PATH : ${lib.makeBinPath [ graphviz ]}
+    '';
 
-  wrapFactor = runtimeLibs:
+  wrapFactor =
+    runtimeLibs:
     runCommand (lib.appendToName "with-libs" interpreter).name
       {
         nativeBuildInputs = [ makeWrapper ];
@@ -80,7 +88,10 @@ let
   # Development helper for use in nix shell
   wrapLocalFactor = writeScriptBin "wrapFactor" ''
     #!${runtimeShell}
-    ${wrapFactorScript { from = "./factor"; inherit runtimeLibs; }}
+    ${wrapFactorScript {
+      from = "./factor";
+      inherit runtimeLibs;
+    }}
     ln -sf factor.image .factor-wrapped.image
   '';
   rev = "e10b64dbc53a8583098e73580a1eb9ff4ce0c709";
@@ -102,7 +113,13 @@ stdenv.mkDerivation {
     ./adjust-paths-in-unit-tests.patch
   ];
 
-  nativeBuildInputs = [ git makeWrapper curl unzip wrapLocalFactor ];
+  nativeBuildInputs = [
+    git
+    makeWrapper
+    curl
+    unzip
+    wrapLocalFactor
+  ];
   buildInputs = runtimeLibs;
 
   postPatch = ''
@@ -161,7 +178,7 @@ stdenv.mkDerivation {
 
   # For now, the check phase runs, but should always return 0. This way the logs
   # contain the test failures until all unit tests are fixed. Then, it should
-  # return 1 if any test failures have occured.
+  # return 1 if any test failures have occurred.
   doCheck = false;
   checkPhase = ''
     runHook preCheck
@@ -182,7 +199,10 @@ stdenv.mkDerivation {
     cp -r factor factor.image LICENSE.txt README.md basis core extra misc $out/lib/factor
 
     # Create a wrapper in bin/ and lib/factor/
-    ${wrapFactorScript { from = "$out/lib/factor/factor"; inherit runtimeLibs; }}
+    ${wrapFactorScript {
+      from = "$out/lib/factor/factor";
+      inherit runtimeLibs;
+    }}
     mv $out/lib/factor/factor.image $out/lib/factor/.factor-wrapped.image
     cp $out/lib/factor/factor $out/bin/
 
@@ -200,7 +220,7 @@ stdenv.mkDerivation {
     withLibs = wrapFactor;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://factorcode.org/";
     description = "Concatenative, stack-based programming language";
     longDescription = ''
@@ -216,9 +236,9 @@ stdenv.mkDerivation {
       on all platforms. Full source code for the Factor project is available
       under a BSD license.
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ spacefrogg ];
-    platforms = lib.intersectLists platforms.x86_64 platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ spacefrogg ];
+    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     mainProgram = "factor";
   };
 }

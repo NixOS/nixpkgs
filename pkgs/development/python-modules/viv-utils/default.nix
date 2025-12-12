@@ -8,7 +8,6 @@
   pytest-sugar,
   pytestCheckHook,
   python-flirt,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
   vivisect,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.7.11";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zYamhG5oeoYYVLEvv1EdZ1buFDByZatuCxbl0uRhk6Y=";
+    tag = "v${version}";
+    hash = "sha256-YyD6CFA8lhc1XU7pckKv3th422ssYZkRJ/JfQD5e65c=";
   };
 
   build-system = [ setuptools-scm ];
@@ -51,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "viv_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
-    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

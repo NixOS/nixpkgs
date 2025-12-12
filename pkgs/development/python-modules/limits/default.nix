@@ -6,7 +6,6 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
-  fetchpatch2,
   flaky,
   hiro,
   importlib-resources,
@@ -16,48 +15,40 @@
   pymongo,
   pytest-asyncio,
   pytest-benchmark,
-  pytest-lazy-fixture,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
   setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.13.0";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
+    hash = "sha256-EHLqkd5Muazr52/oYaLklFVvF+AzJWGbFaaIG+T0ulE=";
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-y5iMx+AC52ZgGvAvThRaeKFqCGkwmukyZsJ+nzR2AFM=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "fix-incompatibility-with-latest-pytest-asyncio.patch";
-      url = "https://github.com/alisaifee/limits/commit/f6dcdb253cd44ca8dc7380c481da1afd8b57af6b.patch";
-      excludes = [ "requirements/test.txt" ];
-      hash = "sha256-NwtN8WHNrwsRcIq18pRjzzGmm7XCzn6O5y+jo9Qr6iQ=";
-    })
-    ./remove-fixed-start-from-async-tests.patch
     ./only-test-in-memory.patch
   ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -88,6 +79,7 @@ buildPythonPackage rec {
     # ];
     async-mongodb = [ motor ];
     async-etcd = [ aetcd ];
+    valkey = [ valkey ];
   };
 
   env = {
@@ -96,26 +88,32 @@ buildPythonPackage rec {
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
-
   nativeCheckInputs = [
     flaky
     hiro
     pytest-asyncio
     pytest-benchmark
-    pytest-lazy-fixture
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests = [ "test_moving_window_memcached" ];
+  pytestFlags = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    "test_moving_window_memcached"
+    # Flaky: compares time to magic value
+    "test_sliding_window_counter_previous_window"
+  ];
 
   pythonImportsCheck = [ "limits" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

@@ -1,21 +1,29 @@
 {
   lib,
-  flutter324,
+  flutter335,
   fetchFromGitHub,
+  alsa-lib,
   mpv-unwrapped,
   libass,
+  libnotify,
   pulseaudio,
+  musicpod,
+  runCommand,
+  _experimental-update-script-combinators,
+  yq,
+  nix-update-script,
+  dart,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "1.12.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gsreA8ZTLcSvIAtODZ2gopZ78iyoN18gsSi9/IoY5/0=";
+    tag = "v${version}";
+    hash = "sha256-AUggxf6qveyLiEhXeA9orVzy03bl6eBHHEh15zZQ0wE=";
   };
 
   postPatch = ''
@@ -25,16 +33,13 @@ flutter324.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
-    media_kit_native_event_loop = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
-    media_kit_video = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
-    phoenix_theme = "sha256-5kgPAnK61vFi/sJ1jr3c5D2UZbxItW8YOk/IJEtHkZo=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   buildInputs = [
+    alsa-lib
     mpv-unwrapped
     libass
+    libnotify
   ];
 
   runtimeDependencies = [ pulseaudio ];
@@ -43,6 +48,37 @@ flutter324.buildFlutterApplication rec {
     install -Dm644 snap/gui/musicpod.desktop -t $out/share/applications
     install -Dm644 snap/gui/musicpod.png -t $out/share/pixmaps
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (musicpod) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "Music, radio, television and podcast player";

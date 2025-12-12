@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  makeWrapper,
   zlib,
   bzip2,
   libpng,
+  libX11,
   lua5_1,
   toluapp,
   SDL2,
@@ -41,16 +41,17 @@ stdenv.mkDerivation rec {
     SDL2_image
     SDL2_mixer
     libGL
+    libX11
   ];
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"
   ];
 
-  meta = with lib; {
-    description = "strategy game engine";
+  meta = {
+    description = "Strategy game engine";
     homepage = "https://wargus.github.io/stratagus.html";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.astro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.astro ];
+    platforms = lib.platforms.linux;
   };
 }

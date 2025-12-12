@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pydocstyle";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MjRrnWu18f75OjsYIlOLJK437X3eXnlW8WkkX7vdS6k=";
   };
 
@@ -50,12 +50,12 @@ buildPythonPackage rec {
     "src/tests/test_integration.py" # runs pip install
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python docstring style checker";
     mainProgram = "pydocstyle";
     homepage = "https://github.com/PyCQA/pydocstyle";
     changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dzabraev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dzabraev ];
   };
 }

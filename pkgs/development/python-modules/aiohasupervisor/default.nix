@@ -3,7 +3,7 @@
   aiohttp,
   aioresponses,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   mashumaro,
   orjson,
   pytest-aiohttp,
@@ -17,20 +17,22 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.2.1";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oSQhZf0lV5bJYdrfu4j8Hw1F+EQfivEPQomatHixy9k=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = "python-supervisor-client";
+    tag = version;
+    hash = "sha256-v6w+g1M3VR/an3a5MfWf8fDCHNzRC4+05L7GW45PzWU=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=68.0.0" "setuptools>=68.0.0" \
-      --replace-fail "wheel~=0.40.0" "wheel>=0.40.0"
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "setuptools>=68.0,<80.10" "setuptools"
   '';
 
   build-system = [ setuptools ];
@@ -50,14 +52,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Import issue, check with next release
-  doCheck = false;
-
   pythonImportsCheck = [ "aiohasupervisor" ];
 
   meta = {
     description = "Client for Home Assistant Supervisor";
     homepage = "https://github.com/home-assistant-libs/python-supervisor-client";
+    changelog = "https://github.com/home-assistant-libs/python-supervisor-client/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

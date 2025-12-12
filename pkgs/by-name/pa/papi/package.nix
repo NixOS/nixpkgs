@@ -4,15 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  version = "7.0.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "7.2.0";
   pname = "papi";
 
   src = fetchurl {
-    url = "https://bitbucket.org/icl/papi/get/papi-${
-      lib.replaceStrings [ "." ] [ "-" ] version
-    }-t.tar.gz";
-    sha256 = "sha256-VajhmPW8sEJksfhLjBVlpBH7+AZr4fwKZPAtZxRF1Bk=";
+    url = "http://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-qb/4nM85kV1yngiuCgxqcc4Ou+mEEemi6zyDyNsK85w=";
   };
 
   setSourceRoot = ''
@@ -22,14 +20,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://icl.utk.edu/papi/";
     description = "Library providing access to various hardware performance counters";
-    license = licenses.bsdOriginal;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       costrouc
       zhaofengli
     ];
   };
-}
+})

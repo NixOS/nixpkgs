@@ -1,35 +1,54 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
-  chardet,
+  fetchFromGitLab,
+  setuptools,
+  setuptools-scm,
+  charset-normalizer,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.49";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jPZ3ow28tL56mVNsF+ETCKgnpNIgKNxZpn9sbdPw9Yw=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "python-debian-team";
+    repo = "python-debian";
+    tag = version;
+    hash = "sha256-lSKtlBqAa8cJZZHMVb90eYIGem4DwVZLldaYSAJBNek=";
   };
 
-  propagatedBuildInputs = [ chardet ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  dependencies = [
+    charset-normalizer
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "tests/test_debfile.py"
+  ];
 
   pythonImportsCheck = [ "debian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Debian package related modules";
     homepage = "https://salsa.debian.org/python-debian-team/python-debian";
     changelog = "https://salsa.debian.org/python-debian-team/python-debian/-/blob/master/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

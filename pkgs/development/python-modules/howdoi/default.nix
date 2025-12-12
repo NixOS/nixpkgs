@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gleitz";
     repo = "howdoi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u0k+h7Sp2t/JUnfPqRzDpEA+vNXB7CpyZ/SRvk+B9t0=";
   };
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_colorize"
-    # Tests are flaky, OSError: [Errno 24] Too many open files happpens
+    # Tests are flaky, OSError: [Errno 24] Too many open files happens
     "test_answer_links_using_l_option"
     "test_answers_bing"
     "test_answers"
@@ -78,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "howdoi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     changelog = "https://github.com/gleitz/howdoi/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

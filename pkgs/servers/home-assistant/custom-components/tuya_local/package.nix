@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "make-all";
   domain = "tuya_local";
-  version = "2024.11.4";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "tuya-local";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Mmcq0GBWiE6IWUVL6q9lw29wKEymAQn439/pOSqWgdQ=";
+    tag = version;
+    hash = "sha256-6M8qTJ/PL/9wHgY/u3VeYjOIG103s5lwqzN+1v/U+as=";
   };
 
   dependencies = [
@@ -25,11 +25,11 @@ buildHomeAssistantComponent rec {
     tuya-device-sharing-sdk
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Local support for Tuya devices in Home Assistant";
     homepage = "https://github.com/make-all/tuya-local";
     changelog = "https://github.com/make-all/tuya-local/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pathob ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pathob ];
   };
 }

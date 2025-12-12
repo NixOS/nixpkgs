@@ -1,53 +1,64 @@
 {
-  lib,
   stdenv,
-  gettext,
+  lib,
   fetchurl,
-  webkitgtk_4_1,
-  pkg-config,
-  gtk3,
-  libhandy,
-  glib,
-  gnome,
-  adwaita-icon-theme,
-  sqlite,
+  desktop-file-utils,
+  gettext,
   itstool,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  bzip2,
+  glib,
+  gtk4,
+  libadwaita,
   libxml2,
   libxslt,
-  gst_all_1,
-  wrapGAppsHook3,
+  sqlite,
+  webkitgtk_6_0,
+  xz,
   yelp-xsl,
+  gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yelp";
-  version = "42.2";
+  version = "49.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp/${lib.versions.major version}/yelp-${version}.tar.xz";
-    hash = "sha256-osX9B4epCJxyLMZr0Phc33CI2HDntsyFeZ+OW/+erEs=";
+    url = "mirror://gnome/sources/yelp/${lib.versions.major finalAttrs.version}/yelp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5mFOCx9Lpf57jRSb3UJnPwMGVvvc1zaumGBxkZfGNFc=";
   };
 
   nativeBuildInputs = [
-    pkg-config
+    desktop-file-utils
     gettext
     itstool
-    wrapGAppsHook3
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    bzip2
     glib
-    webkitgtk_4_1
-    sqlite
+    gtk4
+    libadwaita
     libxml2
     libxslt
+    sqlite
+    webkitgtk_6_0
+    xz
     yelp-xsl
-    adwaita-icon-theme
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
   ];
+
+  postPatch = ''
+    chmod +x src/link-gnome-help.sh data/domains/gen_yelp_xml.sh
+    patchShebangs src/link-gnome-help.sh
+    patchShebangs data/domains/gen_yelp_xml.sh
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -55,11 +66,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Yelp/";
-    description = "Help viewer in Gnome";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    description = "Help viewer for GNOME";
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -8,28 +8,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viu";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "atanunq";
     repo = "viu";
-    rev = "v${version}";
-    sha256 = "sha256-sx8BH01vTFsAEnMKTcVZTDMHiVi230BVVGRexoBNxeo=";
+    tag = "v${version}";
+    hash = "sha256-dI/o8gcl9s+p/8ECtgo136DMR5FkLddpdUj6uurLj04=";
   };
 
   # tests need an interactive terminal
   doCheck = false;
 
-  cargoHash = "sha256-OyG4DAMoWdLBO0IOcbpD2Fmac0XIP7hdaeDdKiQ4PQA=";
+  cargoHash = "sha256-JAQTW/7qhQCEqleKLOP4Gi9GKX+nVqQkAwlEZxVP9ps=";
 
   buildFeatures = lib.optional withSixel "sixel";
   buildInputs = lib.optional withSixel libsixel;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line application to view images from the terminal written in Rust";
     homepage = "https://github.com/atanunq/viu";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       chuangzhu
       sigmanificient
     ];

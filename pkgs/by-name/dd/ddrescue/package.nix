@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddrescue";
-  version = "1.28";
+  version = "1.29.1";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/ddrescue-${version}.tar.lz";
-    sha256 = "sha256-ZibAenyhzB0DytCVhSLFJ5sVYiLTLDQugRF8/vrrEME=";
+    sha256 = "sha256-3dfUXfAmgHg1ouxqucNl3y7xno3hpQ/+aIbNOR4E3XU=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
   configureFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
-  meta = with lib; {
+  meta = {
     description = "GNU ddrescue, a data recovery tool";
 
     longDescription = ''
@@ -47,11 +47,10 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/ddrescue/ddrescue.html";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      domenkozar
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
     ];
   };

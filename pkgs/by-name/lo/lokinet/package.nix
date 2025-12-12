@@ -10,30 +10,22 @@
   nlohmann_json,
   pkg-config,
   spdlog,
-  fmt_9,
   sqlite,
   systemd,
   unbound,
   zeromq,
 }:
-let
-  # Upstream has received reports of incompatibilities with fmt, and other
-  # dependencies, see: https://github.com/oxen-io/lokinet/issues/2200.
-  spdlog' = spdlog.override {
-    fmt = fmt_9;
-  };
 
-in
 stdenv.mkDerivation rec {
   pname = "lokinet";
-  version = "0.9.11";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
+    hash = "sha256-6TVMuT4O8zJj97873BTsR1PJU8NaBgYr/nBkc/EfQuQ=";
   };
 
   patches = [
@@ -55,7 +47,7 @@ stdenv.mkDerivation rec {
     libuv
     libsodium
     nlohmann_json
-    spdlog'
+    spdlog
     sqlite
     systemd
     unbound
@@ -68,11 +60,15 @@ stdenv.mkDerivation rec {
     "-DWITH_SETCAP=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
+    # Upstream has received reports of incompatibilities with fmt, and other
+    # dependencies, see: https://github.com/oxen-io/lokinet/issues/2200.
+    # But our version of spdlog doesn't support fmt_9
+    broken = true;
     description = "Anonymous, decentralized and IP based overlay network for the internet";
     homepage = "https://lokinet.org/";
     changelog = "https://github.com/oxen-io/lokinet/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wyndon ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wyndon ];
   };
 }

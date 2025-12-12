@@ -5,7 +5,7 @@
   ninja,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ninja";
   inherit (ninja) version;
   format = "pyproject";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "ninja.ninja_syntax"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small build system with a focus on speed";
     mainProgram = "ninja";
     longDescription = ''
@@ -42,10 +42,9 @@ buildPythonPackage rec {
       provided by nixpkgs instead of downloading ninja from the web.
     '';
     homepage = "https://github.com/scikit-build/ninja-python-distributions";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       _999eagle
-      tjni
     ];
   };
 }

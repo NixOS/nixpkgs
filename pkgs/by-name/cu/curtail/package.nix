@@ -17,18 +17,19 @@
   optipng,
   pngquant,
   oxipng,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.11.1";
+  version = "1.13.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-IpN1NMIT13icYnflkcZW+aSzw0Nau8UIOP38Kzji3bg=";
+    tag = version;
+    sha256 = "sha256-JfioWtd0jGTyaD5uELAqH6J+h04MOrfEqdR7GWgXyMw=";
   };
 
   nativeBuildInputs = [
@@ -76,11 +77,15 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Simple & useful image compressor";
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
-    license = licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.gnome-circle ];
   };
 }

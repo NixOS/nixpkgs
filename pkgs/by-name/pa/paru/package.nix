@@ -8,25 +8,20 @@
   libarchive,
   openssl,
   pacman,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "paru";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
-    rev = "v${version}";
-    hash = "sha256-VFIeDsIuPbWGf+vio5i8qGUBB+spP/7SwYwmQkMjtL8=";
+    tag = "v${version}";
+    hash = "sha256-i99f2ngYhfVCKpImJ8L7u2T2FgOt7Chp8DHDbrNh1kw=";
   };
 
-  cargoPatches = [
-    ./cargo-lock.patch
-  ];
-
-  cargoHash = "sha256-z8hYZu/3RV99hOTpnv4ExgXymhzuITDcGjJhcHLWcH8=";
+  cargoHash = "sha256-USIceRh24WGV0TIrpuyHs4thjaghpxqZmk2uVKBxlm4=";
 
   nativeBuildInputs = [
     gettext
@@ -41,20 +36,15 @@ rustPlatform.buildRustPackage rec {
     pacman
   ];
 
-  # https://github.com/Morganamilo/paru/issues/1154#issuecomment-2002357898
-  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "generate"
-  ];
-
   postBuild = ''
     sh ./scripts/mkmo locale/
   '';
 
   postInstall = ''
     installManPage man/paru.8 man/paru.conf.5
-    installShellCompletion --bash completions/bash
-    installShellCompletion --fish completions/fish
-    installShellCompletion --zsh completions/zsh
+    installShellCompletion --name paru.bash --bash completions/bash
+    installShellCompletion --name paru.fish --fish completions/fish
+    installShellCompletion --name _paru --zsh completions/zsh
     cp -r locale "$out/share/"
   '';
 

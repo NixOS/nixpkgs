@@ -12,7 +12,6 @@
   numpy,
   packaging,
   pyyaml,
-  tensorboardx,
   torch,
   torchmetrics,
   tqdm,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.5.0.post0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = version;
-    hash = "sha256-TkwDncyfv1VoV/IErUgF4p0Or5PJbwKoABqo1xXGLVg=";
+    hash = "sha256-zmFA9/tz0C06LmQ37wHeoR1kBHKdoz/D1cKWMoeWHzs=";
   };
 
   preConfigure = ''
@@ -47,12 +46,12 @@ buildPythonPackage rec {
     numpy
     packaging
     pyyaml
-    tensorboardx
     torch
     torchmetrics
     tqdm
     traitlets
-  ] ++ fsspec.optional-dependencies.http;
+  ]
+  ++ fsspec.optional-dependencies.http;
 
   nativeCheckInputs = [
     psutil

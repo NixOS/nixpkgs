@@ -13,8 +13,10 @@
   asyncpg,
   django,
   peewee,
+  pg8000,
   postgresql,
   postgresqlTestHook,
+  psycopg-pool,
   psycopg,
   psycopg2,
   pytest-asyncio,
@@ -26,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.3.6";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ho0UgamZxsN+pv7QkpsDnN7f+I+SrexA2gVtmJF8/3Q=";
+    tag = "v${version}";
+    hash = "sha256-jzUZK3zQxqajVqGbaQzLPzvK/k3Wck9jX95kkBH2IlY=";
   };
 
   build-system = [ setuptools ];
@@ -44,8 +46,11 @@ buildPythonPackage rec {
     asyncpg
     django
     peewee
+    pg8000
     psycopg
+    psycopg.pool
     psycopg2
+    psycopg-pool
     (postgresql.withPackages (p: with p; [ pgvector ]))
     postgresqlTestHook
     pytest-asyncio
@@ -59,7 +64,14 @@ buildPythonPackage rec {
     PGDATABASE = "pgvector_python_test";
     postgresqlEnableTCP = 1;
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
+    USER = "test_user";
   };
+
+  disabledTestPaths = [
+    # DB error
+    "tests/test_pg8000.py"
+    "tests/test_sqlalchemy.py"
+  ];
 
   pythonImportsCheck = [ "pgvector" ];
 

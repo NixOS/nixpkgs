@@ -19,6 +19,7 @@
   srcOverride ? callPackage ./source.nix { inherit patches; },
   gemset ? ./. + "/gemset.nix",
   yarnHash ? srcOverride.yarnHash,
+  yarnMissingHashes ? srcOverride.yarnMissingHashes,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,18 +33,21 @@ stdenv.mkDerivation rec {
     gemdir = src;
   };
 
-  mastodonModules = stdenv.mkDerivation {
+  mastodonModules = stdenv.mkDerivation (finalAttrs: {
     pname = "${pname}-modules";
     inherit src version;
 
-    yarnOfflineCache = callPackage ./yarn.nix {
-      inherit version src;
+    missingHashes = yarnMissingHashes;
+    yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src;
       hash = yarnHash;
+      missingHashes = yarnMissingHashes;
     };
 
     nativeBuildInputs = [
       nodejs-slim
       yarn-berry
+      yarn-berry.yarnBerryConfigHook
       mastodonGems
       mastodonGems.wrappedRuby
       brotli
@@ -56,34 +60,29 @@ stdenv.mkDerivation rec {
     buildPhase = ''
       runHook preBuild
 
-      export HOME=$PWD
-      export YARN_ENABLE_TELEMETRY=0
-      export npm_config_nodedir=${nodejs-slim}
       export SECRET_KEY_BASE_DUMMY=1
 
-      mkdir -p ~/.yarn/berry
-      ln -s $yarnOfflineCache ~/.yarn/berry/cache
-
-      yarn install --immutable --immutable-cache
-
-      patchShebangs ~/bin
-      patchShebangs ~/node_modules
+      patchShebangs bin
 
       bundle exec rails assets:precompile
 
-      yarn cache clean --all
-      rm -rf ~/node_modules/.cache
+      rm -rf node_modules/.cache
+
+      # Remove workspace "package" as it contains broken symlinks
+      # See https://github.com/NixOS/nixpkgs/issues/380366
+      rm -rf node_modules/@mastodon
 
       # Remove execute permissions
-      find ~/public/assets -type f ! -perm 0555 \
+      find public/assets -type f ! -perm 0555 \
         -exec chmod 0444 {} ';'
 
       # Create missing static gzip and brotli files
-      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
+      find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
         -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
-      gzip --best --keep ~/public/packs/report.html
-      brotli --best --keep ~/public/packs/report.html
+      find public/packs -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg)' \
+        -exec brotli --best --keep {} ';'
+      gzip --best --keep public/packs/sw.js
 
       runHook postBuild
     '';
@@ -98,7 +97,7 @@ stdenv.mkDerivation rec {
 
       runHook postInstall
     '';
-  };
+  });
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
@@ -125,6 +124,8 @@ stdenv.mkDerivation rec {
     # Remove execute permissions
     find public/emoji -type f ! -perm 0555 \
       -exec chmod 0444 {} ';'
+    find public -maxdepth 1 -type f ! -perm 0555 \
+      -exec chmod 0444 {} ';'
 
     # Create missing static gzip and brotli files
     find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(js|txt)' \
@@ -137,8 +138,6 @@ stdenv.mkDerivation rec {
     ln -s assets/500.html.br public/500.html.br
     ln -s packs/sw.js.gz public/sw.js.gz
     ln -s packs/sw.js.br public/sw.js.br
-    ln -s packs/sw.js.map.gz public/sw.js.map.gz
-    ln -s packs/sw.js.map.br public/sw.js.map.br
 
     rm -rf log
     ln -s /var/log/mastodon log
@@ -171,16 +170,16 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       happy-river
       erictapen
       izorkin

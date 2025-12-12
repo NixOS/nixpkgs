@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.3.3";
+  version = "4.3.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1vb8a0ntp5ikWrJ3aI4KsGlraXRoFa7o+sP2sJpFbVc=";
+    tag = version;
+    hash = "sha256-dY6utdWlzoQiODjFn7alJBBnDxq+1G9fdGvwu/2Ynfs=";
   };
 
   pythonRelaxDeps = [ "tablib" ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     chardet
     psycopg2
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   checkPhase = ''
     runHook preCheck
@@ -58,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "import_export" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django application and library for importing and exporting data with admin integration";
     homepage = "https://github.com/django-import-export/django-import-export";
-    changelog = "https://github.com/django-import-export/django-import-export/blob/${version}/docs/changelog.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sephi ];
+    changelog = "https://github.com/django-import-export/django-import-export/blob/${src.tag}/docs/changelog.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

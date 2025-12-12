@@ -16,64 +16,76 @@
   nixosTests,
   systemdLibs,
   which,
+  python3Packages,
   withSystemd ? true,
   withJanus ? true,
+  withPython ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "6.18";
+  version = "6.40";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
-    rev = "v${version}";
-    hash = "sha256-VzhTfr0Swrv3jZUvBYYy5l0+iSokIztpeyA1CuG/roY=";
+    tag = "v${version}";
+    hash = "sha256-jKltFQsx8Q9+TMTOg1p6nljII72CLEg6VYe60/KojUY=";
   };
 
-  buildInputs =
+  buildInputs = [
+    libbsd
+    libevent
+    libjpeg
+    libdrm
+  ]
+  ++ lib.optionals withPython (
+    with python3Packages;
     [
-      libbsd
-      libevent
-      libjpeg
-      libdrm
+      python
+      setuptools
+      build
+      pip
     ]
-    ++ lib.optionals withSystemd [
-      systemdLibs
-    ]
-    ++ lib.optionals withJanus [
-      janus-gateway
-      glib
-      alsa-lib
-      jansson
-      speex
-      libopus
-    ];
+  )
+  ++ lib.optionals withSystemd [
+    systemdLibs
+  ]
+  ++ lib.optionals withJanus [
+    janus-gateway
+    glib
+    alsa-lib
+    jansson
+    speex
+    libopus
+  ];
 
   nativeBuildInputs = [
     pkg-config
     which
   ];
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-      "WITH_V4P=1"
-    ]
-    ++ lib.optionals withSystemd [
-      "WITH_SYSTEMD=1"
-    ]
-    ++ lib.optionals withJanus [
-      "WITH_JANUS=1"
-      # Workaround issues with Janus C Headers
-      # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
-      "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
-    ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "WITH_V4P=1"
+  ]
+  ++ lib.optionals withPython [
+    "WITH_PYTHON=1"
+  ]
+  ++ lib.optionals withSystemd [
+    "WITH_SYSTEMD=1"
+  ]
+  ++ lib.optionals withJanus [
+    "WITH_JANUS=1"
+    # Workaround issues with Janus C Headers
+    # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
+    "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
+  ];
 
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) ustreamer; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pikvm/ustreamer";
     description = "Lightweight and fast MJPG-HTTP streamer";
     longDescription = ''
@@ -83,12 +95,12 @@ stdenv.mkDerivation rec {
       µStreamer is a part of the Pi-KVM project designed to stream VGA and HDMI
       screencast hardware data with the highest resolution and FPS possible.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tfc
       matthewcroughan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ustreamer";
   };
 }

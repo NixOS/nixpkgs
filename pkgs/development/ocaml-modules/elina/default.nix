@@ -43,13 +43,14 @@ stdenv.mkDerivation rec {
     "--use-opam"
     "--apron-prefix"
     apron
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--absolute-dylibs";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--absolute-dylibs";
 
   createFindlibDestdir = true;
 
   meta = {
     description = "ETH LIbrary for Numerical Analysis";
-    homepage = "http://elina.ethz.ch/";
+    homepage = "https://elina.ethz.ch/";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
     platforms = lib.intersectLists ocaml.meta.platforms lib.platforms.x86;

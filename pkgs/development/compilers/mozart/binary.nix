@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://www.mozart-oz.org/";
+    homepage = "https://www.mozart-oz.org/";
     description = "Multiplatform implementation of the Oz programming language";
     longDescription = ''
       The Mozart Programming System combines ongoing research in
@@ -81,8 +81,8 @@ stdenv.mkDerivation {
       interfaces. Mozart implements the Oz language and provides both
       expressive power and advanced functionality.
     '';
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
     platforms = attrNames binaries;
     hydraPlatforms = [ ];
   };

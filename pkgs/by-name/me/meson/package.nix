@@ -4,37 +4,26 @@
   fetchFromGitHub,
   installShellFiles,
   coreutils,
-  darwin,
   libblocksruntime,
   llvmPackages,
-  libxcrypt,
-  openldap,
   ninja,
   pkg-config,
   python3,
-  substituteAll,
+  replaceVars,
+  writeShellScriptBin,
   zlib,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    AppKit
-    Cocoa
-    Foundation
-    LDAP
-    OpenAL
-    OpenGL
-    ;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.6.0";
+  version = "1.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    rev = "refs/tags/${version}";
-    hash = "sha256-st0dbb+GfF0KEyF+Qn/PIE2462ZrrXy8YcnrulHTI8M=";
+    tag = version;
+    hash = "sha256-t4a/Zp8rC+DMjskdwVvYIfYDAT57zGVfVu7IApwRNGA=";
   };
 
   patches = [
@@ -46,8 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     # are not as predictable, therefore we need to keep them in the RPATH.
     # At the moment we are keeping the paths starting with /nix/store.
     # https://github.com/NixOS/nixpkgs/issues/31222#issuecomment-365811634
-    (substituteAll {
-      src = ./001-fix-rpath.patch;
+    (replaceVars ./001-fix-rpath.patch {
       inherit (builtins) storeDir;
     })
 
@@ -76,43 +64,47 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./005-boost-Do-not-add-system-paths-on-nix.patch
 
-    # Nixpkgs cctools does not have bitcode support.
-    ./006-disable-bitcode.patch
-
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
   ];
 
-  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
-    libxcrypt
-  ];
+  postPatch =
+    if python3.isPyPy then
+      ''
+        substituteInPlace mesonbuild/modules/python.py \
+          --replace-fail "PythonExternalProgram('python3', mesonlib.python_command)" \
+                         "PythonExternalProgram('${python3.meta.mainProgram}', mesonlib.python_command)"
+        substituteInPlace mesonbuild/modules/python3.py \
+          --replace-fail "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, 'python3')" \
+                         "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, '${python3.meta.mainProgram}')"
+        substituteInPlace "test cases"/*/*/*.py "test cases"/*/*/*/*.py \
+          --replace-quiet '#!/usr/bin/env python3' '#!/usr/bin/env pypy3' \
+          --replace-quiet '#! /usr/bin/env python3' '#!/usr/bin/env pypy3'
+        chmod +x "test cases"/*/*/*.py "test cases"/*/*/*/*.py
+      ''
+    else
+      null;
 
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     ninja
     pkg-config
+  ]
+  ++ lib.optionals python3.isPyPy [
+    # Several tests hardcode python3.
+    (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
   ];
 
-  checkInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Foundation
-      LDAP
-      OpenAL
-      OpenGL
-      openldap
-    ]
-    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
-      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-      llvmPackages.openmp
-      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
-      libblocksruntime
-    ];
+  checkInputs = [
+    zlib
+  ]
+  ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
+  ];
 
   checkPhase = lib.concatStringsSep "\n" (
     [
@@ -126,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
       ''
     ]
     # Remove problematic tests
-    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+    ++ (map (f: ''rm -vr "${f}";'') (
       [
         # requires git, creating cyclic dependency
         ''test cases/common/66 vcstag''
@@ -146,9 +138,15 @@ python3.pkgs.buildPythonApplication rec {
         # pch doesn't work quite right on FreeBSD, I think
         ''test cases/common/13 pch''
       ]
+      ++ lib.optionals python3.isPyPy [
+        # fails for unknown reason
+        ''test cases/python/4 custom target depends extmodule''
+      ]
     ))
     ++ [
-      ''HOME="$TMPDIR" python ./run_project_tests.py''
+      ''HOME="$TMPDIR" ${
+        if python3.isPyPy then python3.interpreter else "python"
+      } ./run_project_tests.py''
       "runHook postCheck"
     ]
   );
@@ -174,6 +172,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   setupHook = ./setup-hook.sh;
+  env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
     homepage = "https://mesonbuild.com";

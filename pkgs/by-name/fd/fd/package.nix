@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "10.2.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
+    hash = "sha256-rUoR8LHtzwGQBwJGEsWpMYKG6HcGKcktcyF7TxTDJs8=";
   };
 
-  cargoHash = "sha256-H8xkm1cGJUaSgLUfN/vlxsWg5UMClvFhp9pjM0byQPs=";
+  cargoHash = "sha256-yiR23t48I0USD21tnFZzmTmO0D8kWNzP9Ff3QM9GitU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,22 +34,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_invalid_utf8"
   ];
 
-  postInstall =
-    ''
-      installManPage doc/fd.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd fd \
-        --bash <($out/bin/fd --gen-completions bash) \
-        --fish <($out/bin/fd --gen-completions fish)
-      installShellCompletion --zsh contrib/completion/_fd
-    '';
+  postInstall = ''
+    installManPage doc/fd.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
+    installShellCompletion --zsh contrib/completion/_fd
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = fd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -59,16 +58,15 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
-      figsoda
-      globin
       ma27
       zowoq
+      matthiasbeyer
     ];
     mainProgram = "fd";
   };

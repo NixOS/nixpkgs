@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   libiconv,
@@ -11,36 +10,26 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
-  version = "1.4.0";
+  version = "2.26.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
     tag = "v${version}";
-    hash = "sha256-uvgzfMMW/7oiy/SON+Hp4NItiGeKAAM+bMpQ7FPtfqY=";
+    hash = "sha256-X1vr2WAWkv9puO5CCM6TrFg/5H5buemcplvIeYtk6Qo=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-oIVtlVkW46UeNw2MCwECQON09fRzTKot3pDgWoC35D0=";
+  cargoHash = "sha256-eyQQ7bdbu/o5UQ7edjgs3ZLiya/q5c+jgLSWQfAs5ck=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-      ]
-    );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libiconv
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -51,11 +40,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=parse::tests::test_parse_sql_query_json"
   ];
 
+  cargoBuildFlags = [
+    "-p squawk"
+  ];
+
   meta = {
     description = "Linter for PostgreSQL, focused on migrations";
     homepage = "https://squawkhq.com";
     changelog = "https://github.com/sbdchd/squawk/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ andrewsmith ];
+    maintainers = [ ];
   };
 }

@@ -3,15 +3,22 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   bison,
   flex,
   python3,
+  cctools,
 }:
 
 let
   system = stdenv.hostPlatform.system;
+  registry = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-central-registry";
+    rev = "3f863a3f35f31b61982d813835d8637b3d93d87a";
+    hash = "sha256-BsxP3GrS98ubIAkFx/c4pB1i97ZZL2TijS+2ORnooww=";
+  };
 in
 buildBazelPackage rec {
   pname = "verible";
@@ -19,8 +26,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2024-10-16";
-  GIT_VERSION = "v0.0-3836-g86ee9bab";
+  GIT_DATE = "2025-08-29";
+  GIT_VERSION = "v0.0-4023-gc1271a00";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -30,17 +37,25 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "${GIT_VERSION}";
-    hash = "sha256-hV02x0b/taBqa6kyy3gvm3lomJrXBeelAbxrkC0s6EU=";
+    tag = GIT_VERSION;
+    hash = "sha256-N+yjRcVxFI56kP3zq+qFHNXZLTtVnQaVnseZS13YN0s=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
+    "--registry"
+    "file://${registry}"
   ];
 
   fetchAttrs = {
-    hash = "sha256-bKASgc5KftCWtMvJkGA4nweBAtgdnyC9uXIJxPjKYS0=";
+    hash =
+      {
+        aarch64-linux = "sha256-SUURIZF3mlFRFKpxdHrgYAbJQ4rkkzCeqcC/1vxmreo=";
+        x86_64-linux = "sha256-p7h2L1aLzmMeWWxXC//Qau8/F4HbnUFY6aV8u7zfjRk=";
+        aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
+      }
+      .${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
@@ -49,17 +64,19 @@ buildBazelPackage rec {
     flex # .. to compile with newer glibc
     python3
   ];
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
-    patchShebangs\
+    patchShebangs \
+      .github/bin/simple-install.sh \
       bazel/build-version.py \
       bazel/sh_test_with_runfiles_lib.sh \
-      common/lsp/dummy-ls_test.sh \
-      common/tools/patch_tool_test.sh \
-      common/tools/verible-transform-interactive.sh \
-      common/tools/verible-transform-interactive-test.sh \
+      verible/common/lsp/dummy-ls_test.sh \
+      verible/common/tools/patch_tool_test.sh \
+      verible/common/tools/verible-transform-interactive.sh \
+      verible/common/tools/verible-transform-interactive-test.sh \
       kythe-browse.sh \
-      verilog/tools
+      verible/verilog/tools
   '';
 
   removeRulesCC = false;
@@ -73,31 +90,17 @@ buildBazelPackage rec {
   buildAttrs = {
     installPhase = ''
       mkdir -p "$out/bin"
-
-      install bazel-bin/common/tools/verible-patch-tool "$out/bin"
-
-      V_TOOLS_DIR=bazel-bin/verilog/tools
-      install $V_TOOLS_DIR/diff/verible-verilog-diff "$out/bin"
-      install $V_TOOLS_DIR/formatter/verible-verilog-format "$out/bin"
-      install $V_TOOLS_DIR/kythe/verible-verilog-kythe-extractor "$out/bin"
-      install $V_TOOLS_DIR/lint/verible-verilog-lint "$out/bin"
-      install $V_TOOLS_DIR/ls/verible-verilog-ls "$out/bin"
-      install $V_TOOLS_DIR/obfuscator/verible-verilog-obfuscate "$out/bin"
-      install $V_TOOLS_DIR/preprocessor/verible-verilog-preprocessor "$out/bin"
-      install $V_TOOLS_DIR/project/verible-verilog-project "$out/bin"
-      install $V_TOOLS_DIR/syntax/verible-verilog-syntax "$out/bin"
+      .github/bin/simple-install.sh "$out/bin"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hzeller
       newam
     ];
-    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
-    platforms = platforms.linux;
   };
 }

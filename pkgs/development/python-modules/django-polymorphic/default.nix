@@ -2,49 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  python,
+  setuptools,
   django,
   dj-database-url,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
-  version = "3.1";
-  format = "setuptools";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
-    rev = "v${version}";
-    hash = "sha256-JJY+FoMPSnWuSsNIas2JedGJpdm6RfPE3E1VIjGuXIc=";
+    tag = "v${version}";
+    hash = "sha256-QcJUKGhWPUHhVVsEZhhjN411Pz4Wn7OL2fhotPOGVm4=";
   };
 
-  patches = [
-    # Spelling of assertQuerySetEqual changed in Django >= 4.2
-    (fetchpatch {
-      url = "https://github.com/jazzband/django-polymorphic/commit/63d291f8771847e716a37652f239e3966a3360e1.patch";
-      hash = "sha256-rvvD9zfjm8bgH1460BA5K44Oobzv1FRAYq9Rgg291B8=";
-    })
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
+
+  nativeCheckInputs = [
+    dj-database-url
+    pytest-django
+    pytestCheckHook
   ];
-
-  propagatedBuildInputs = [ django ];
-
-  nativeCheckInputs = [ dj-database-url ];
-
-  # Tests fail for Django >= 5.1.0
-  doCheck = lib.versionOlder django.version "5.1.0";
-
-  checkPhase = ''
-    ${python.interpreter} runtests.py
-  '';
 
   pythonImportsCheck = [ "polymorphic" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/jazzband/django-polymorphic/releases/tag/${src.tag}";
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

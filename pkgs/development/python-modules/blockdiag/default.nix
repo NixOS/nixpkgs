@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     funcparserlib
     pillow
     reportlab
+    setuptools
     webcolors
   ];
 
@@ -66,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "src/blockdiag/tests/" ];
+  enabledTestPaths = [ "src/blockdiag/tests/" ];
 
   disabledTests = [
     # Test require network access
@@ -79,13 +80,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "blockdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

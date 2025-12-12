@@ -2,27 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   buildGoModule,
   coreutils,
   pcsclite,
   pkg-config,
   hsmSupport ? true,
   nixosTests,
-  darwin,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.28.1";
+  version = "0.28.4";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SFiGRmi8Bd0WEitvDvybfGMEw36gAVjtLrYbBpBAItU=";
+    tag = "v${version}";
+    # Source uses git export-subst and isn't reproducible when fetching as git archive,
+    # see https://github.com/smallstep/certificates/blob/6a1250131284dce4aa66c0e0e3f7a3202dd56ad0/.gitattributes.
+    # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
+    # see https://github.com/NixOS/nixpkgs/issues/84312#issuecomment-2475948960.
+    forceFetchGit = true;
+    hash = "sha256-ZIpsSNdQVkelo5b3H03N8qToHU7z+lalAE7Ur6m2YwY=";
   };
 
-  vendorHash = "sha256-t42TAjRuMo1AXq3IKbN2L7G50vJzi/2LmhPKrn5K1Io=";
+  patches = [
+    # fix broken test TestHandler_RevokeCert
+    # https://github.com/smallstep/certificates/pull/2370
+    # TODO: remove at next release
+    (fetchpatch2 {
+      url = "https://github.com/smallstep/certificates/commit/b7e59c97f3b8a95a24153aeb85959118953f2bb4.patch?full_index=1";
+      hash = "sha256-GKGKUj4hpS4jo6sMvUhnD3BeE+f5vnxY5tK0a2pwpNM=";
+    })
+  ];
+
+  vendorHash = "sha256-gGPrrl5J8UrjUpof2DaSs1fAQsMSsyAMlC67h5V75+k=";
 
   ldflags = [
     "-w"
@@ -31,9 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
-  buildInputs =
-    lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ]
-    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.PCSC ];
+  buildInputs = lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ];
   postPatch = ''
     substituteInPlace authority/http_client_test.go --replace-fail 't.Run("SystemCertPool", func(t *testing.T) {' 't.Skip("SystemCertPool", func(t *testing.T) {'
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
@@ -61,12 +74,13 @@ buildGoModule rec {
 
   passthru.tests.step-ca = nixosTests.step-ca;
 
-  meta = with lib; {
+  meta = {
     description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    mainProgram = "step-ca";
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       techknowlogick
     ];

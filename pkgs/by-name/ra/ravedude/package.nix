@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ravedude";
-  version = "0.1.8";
+  version = "0.2.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-AvnojcWQ4dQKk6B1Tjhkb4jfL6BJDsbeEo4tlgbOp84=";
+    hash = "sha256-Ar2oQx7dKKfzkM3FMcJXiPHxNa0KcMRht38q+NgowfU=";
   };
 
-  cargoHash = "sha256-HeFmQsgr6uHrWi6s5sMQ6n63a44Msarb5p0+wUzKFkE=";
+  cargoHash = "sha256-ME9egPOMTv/nEsmuxI+gJ6Tqa1Vqc/enlPttHXfTdBg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,15 +41,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to easily flash code onto an AVR microcontroller with avrdude";
     homepage = "https://crates.io/crates/ravedude";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       rvarago
       liff
     ];

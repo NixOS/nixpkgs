@@ -1,27 +1,26 @@
 {
   callPackage,
-  lib,
+  nix-gitignore,
   python3Packages,
 }:
 let
-  inherit (lib) fileset;
   helpers = callPackage ./helpers.nix { };
   pythonPackages = python3Packages;
+
 in
 pythonPackages.buildPythonApplication {
   version = "0.1.0";
+  format = "pyproject";
   pname = "flatten-references-graph";
 
-  src = fileset.toSource {
-    root = ./src;
-    fileset = fileset.unions [
-      ./src/.flake8
-      ./src/flatten_references_graph
-      ./src/setup.py
-    ];
-  };
+  # Note: this uses only ./src/.gitignore
+  src = nix-gitignore.gitignoreSource [ ] ./src;
 
-  propagatedBuildInputs = with pythonPackages; [
+  build-system = with pythonPackages; [
+    setuptools
+  ];
+
+  dependencies = with pythonPackages; [
     igraph
     toolz
   ];

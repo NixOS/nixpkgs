@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     "out"
     "lib"
     "dev"
-  ] ++ lib.optional enableManpages "man";
+  ]
+  ++ lib.optional enableManpages "man";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${version}.tar.gz";
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
-  ] ++ lib.optional enableShared "USE_SHARED_LIB=1";
+  ]
+  ++ lib.optional enableShared "USE_SHARED_LIB=1";
 
   doCheck = true;
 
@@ -47,13 +49,13 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib/lib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.kernel.org/doc/html/latest/filesystems/fsverity.html#userspace-utility";
     changelog = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/tree/NEWS.md";
     description = "Set of userspace utilities for fs-verity";
     mainProgram = "fsverity";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jk ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jk ];
+    platforms = lib.platforms.linux;
   };
 }

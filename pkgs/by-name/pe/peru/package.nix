@@ -6,7 +6,8 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "peru";
-  version = "1.2.0";
+  version = "1.3.4";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.5";
 
@@ -14,10 +15,12 @@ python3Packages.buildPythonApplication rec {
     owner = "buildinspace";
     repo = "peru";
     rev = version;
-    sha256 = "0p4j51m89glx12cd65lcnbwpvin0v49wkhrx06755skr7v37pm2a";
+    sha256 = "sha256-ubkDB/McG2Tp3s0K5PbL6QpHbpqRLAUSHa7v+u/n6hI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pyyaml
     docopt
   ];
@@ -25,11 +28,13 @@ python3Packages.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "peru" ];
+
+  meta = {
     homepage = "https://github.com/buildinspace/peru";
     description = "Tool for including other people's code in your projects";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "peru";
   };
 

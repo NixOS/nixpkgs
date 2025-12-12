@@ -1,9 +1,13 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pytest-cov-stub,
+  objgraph,
+  psutil,
   pytestCheckHook,
+  pytest-codspeed,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   typing-extensions,
@@ -11,17 +15,14 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.1.0";
-
-  disabled = pythonOlder "3.8";
-
+  version = "6.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rvL1XzMNBVBlElE5wznecL3Ku9h4tG9VeqGRd04iPXw=";
+    tag = "v${version}";
+    hash = "sha256-NEiUXHwY7bas7+Ddf9hdR6m/N+wbRG/NguoMROIWjeU=";
   };
 
   postPatch = ''
@@ -36,9 +37,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
+
   nativeCheckInputs = [
-    pytest-cov-stub
+    objgraph
+    psutil
     pytestCheckHook
+    pytest-codspeed
+    pytest-cov-stub
   ];
 
   preCheck = ''
@@ -48,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multidict" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/aio-libs/multidict/blob/v${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/aio-libs/multidict/blob/${src.tag}/CHANGES.rst";
     description = "Multidict implementation";
     homepage = "https://github.com/aio-libs/multidict/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "enricobacis";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "lyricwikia";
+    tag = version;
     hash = "sha256-P88DrRAa2zptt8JLy0/PLi0oZ/BghF/XGSP0kOObi7E=";
   };
 
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LyricWikia API for song lyrics";
     mainProgram = "lyrics";
     homepage = "https://github.com/enricobacis/lyricwikia";
     changelog = "https://github.com/enricobacis/lyricwikia/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

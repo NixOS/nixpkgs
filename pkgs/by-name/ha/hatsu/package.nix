@@ -1,26 +1,28 @@
 {
-  fetchFromGitHub,
-  gitUpdater,
   lib,
   rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hatsu";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-K+8X/bNPdjxBSJdlFIXUUOXlTq7Cgol3fFToj5KzbeE=";
+    tag = "v${version}";
+    hash = "sha256-mqs26srbEkGeQzeF4OdqI7o18Ajs+mmAXGLlVfS52sk=";
   };
 
-  cargoHash = "sha256-+fNFy3WnQKtDjpNU3veoR2JrBNHj6/Wz2MQP38SR23I=";
+  cargoHash = "sha256-5c6boVdq0XXbtVHqmIGoxJGQRh8lvn2jbmALPuOSMs4=";
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    ignoredVersions = "beta";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Self-hosted and fully-automated ActivityPub bridge for static sites";

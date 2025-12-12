@@ -14,16 +14,17 @@
 
 buildPythonPackage rec {
   pname = "pyerfa";
-  version = "2.0.1.4";
+  version = "2.0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
+    hash = "sha256-F9ayT+SEbGXV59jDYtywgZncY7MKI2rt1zh1zIPh9sA=";
   };
 
   build-system = [
     jinja2
+    numpy
     packaging
     setuptools
     setuptools-scm
@@ -50,7 +51,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "erfa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for ERFA routines";
     longDescription = ''
       PyERFA is the Python wrapper for the ERFA library (Essential Routines
@@ -61,7 +62,7 @@ buildPythonPackage rec {
       array inputs.
     '';
     homepage = "https://github.com/liberfa/pyerfa";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.rmcgibbo ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.rmcgibbo ];
   };
 }

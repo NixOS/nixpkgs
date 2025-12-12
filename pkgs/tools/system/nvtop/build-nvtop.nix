@@ -9,7 +9,6 @@
   ncurses,
   testers,
   udev,
-  apple-sdk_12,
   addDriverRunpath,
   amd ? false,
   intel ? false,
@@ -19,6 +18,8 @@
   panfrost ? false,
   panthor ? false,
   ascend ? false,
+  v3d ? false,
+  tpu ? false,
 }:
 
 let
@@ -34,17 +35,19 @@ let
       }" \
       $out/bin/nvtop
   '';
-  needDrm = (amd || msm || panfrost || panthor);
+  needDrm = (amd || msm || panfrost || panthor || intel);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.1.0";
+  version = "3.2.0";
 
+  # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = finalAttrs.version;
-    hash = "sha256-MkkBY2PR6FZnmRMqv9MWqwPWRgixfkUQW5TWJtHEzwA=";
+    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
   };
 
   cmakeFlags = with lib.strings; [
@@ -58,18 +61,23 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANFROST_SUPPORT" panfrost)
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
+    (cmakeBool "V3D_SUPPORT" v3d)
+    (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
   ];
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals finalAttrs.doCheck [
     gtest
-  ] ++ lib.optional nvidia addDriverRunpath;
+  ]
+  ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.isLinux udev
-    ++ lib.optional stdenv.isDarwin apple-sdk_12
-    ++ lib.optional nvidia cudatoolkit
-    ++ lib.optional needDrm libdrm;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optional nvidia cudatoolkit
+  ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
@@ -79,7 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionalString needDrm drm-postFixup)
     + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
 
-  doCheck = true;
+  # https://github.com/Syllo/nvtop/commit/33ec008e26a00227a666ccb11321e9971a50daf8
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     tests.version = testers.testVersion {
@@ -89,18 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "(h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
+  meta = {
+    description = "htop-like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
       It can handle multiple GPUs and print information about them in a htop familiar way.
     '';
     homepage = "https://github.com/Syllo/nvtop";
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    platforms = if apple then platforms.darwin else platforms.linux;
-    maintainers = with maintainers; [
-      willibutz
+    license = lib.licenses.gpl3Only;
+    platforms = if apple then lib.platforms.darwin else lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       gbtb
       anthonyroussel
       moni

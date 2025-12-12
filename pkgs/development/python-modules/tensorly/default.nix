@@ -17,9 +17,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "tensorly";
+    repo = "tensorly";
+    tag = version;
     hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "tensorly.contrib"
   ];
 
-  pytestFlagsArray = [ "tensorly" ];
+  enabledTestPaths = [ "tensorly" ];
 
   disabledTests = [
     # this can fail on hydra and other peoples machines, check with others before re-enabling
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "test_svd_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

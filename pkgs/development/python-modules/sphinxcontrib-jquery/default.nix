@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "jquery";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZQGQcVmhWREFa2KyaOKdTz5W2AS2ur7pFp8qZ2IkxSE=";
   };
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension to include jQuery on newer Sphinx releases";
     longDescription = ''
       A sphinx extension that ensures that jQuery is installed for use
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/sphinx-contrib/jquery";
     changelog = "https://github.com/sphinx-contrib/jquery/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

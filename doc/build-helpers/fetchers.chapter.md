@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 To this end, we use functions that we call _fetchers_, which obtain remote sources via various protocols and services.
 
-Nix provides built-in fetchers such as [`builtins.fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
+Nix provides built-in fetchers such as [`fetchTarball`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball).
 Nixpkgs provides its own fetchers, which work differently:
 
 - A built-in fetcher will download and cache files at evaluation time and produce a [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path).
@@ -120,6 +120,8 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `cvs`
    - `bzr`
    - `svn`
+   - `darcs`
+   - `pijul`
 
    The hash is printed to stdout.
 
@@ -162,6 +164,8 @@ Here are security considerations for this scenario:
 Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automatically inherit proxy-related environment variables (`http_proxy`, `https_proxy`, etc) via [impureEnvVars](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-impureEnvVars).
 
 The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
+
+To use a temporary Tor instance as a proxy for fetching from `.onion` addresses, add `nativeBuildInputs = [ tor.proxyHook ];` to the fetcher parameters.
 
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
@@ -414,7 +418,7 @@ fetchurl {
 }
 ```
 
-After building the package, the file will be downloaded and place into the Nix store:
+After building the package, the file will be downloaded and placed into the Nix store:
 
 ```shell
 $ nix-build
@@ -491,7 +495,11 @@ It might be useful to manipulate the content downloaded by `fetchurl` directly i
 In this example, we'll adapt [](#ex-fetchers-fetchurl-nixpkgs-version) to append the result of running the `hello` package to the contents we download, purely to illustrate how to manipulate the content.
 
 ```nix
-{ fetchurl, hello, lib }:
+{
+  fetchurl,
+  hello,
+  lib,
+}:
 fetchurl {
   url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
 
@@ -499,8 +507,8 @@ fetchurl {
 
   downloadToTemp = true;
   postFetch = ''
-    ${lib.getExe hello} >> $downloadedFile
-    mv $downloadedFile $out
+    hello >> "$downloadedFile"
+    mv "$downloadedFile" "$out"
   '';
 
   hash = "sha256-ceooQQYmDx5+0nfg40uU3NNI2yKrixP7HZ/xLZUNv+w=";
@@ -693,6 +701,9 @@ MSCREATE.DIR  PINBALL.DOC  PINBALL.MID	Sounds	     WAVEMIX.INF
 - `extraPrefix`: Prefix pathnames by this string.
 - `excludes`: Exclude files matching these patterns (applies after the above arguments).
 - `includes`: Include only files matching these patterns (applies after the above arguments).
+- `hunks`: Choose the specified hunks from each file (applies after the above arguments).
+  Note that you can specify a list of numbers or ranges of numbers
+  (for example, `[ 1 2 3 4 ]`, `[ "1-4" ]`, `[ "-4" ]`, or `[ "1-" ]` would all be the same effective range in a patch applying 4 hunks to a single file).
 - `revert`: Revert the patch.
 
 Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.
@@ -714,9 +725,10 @@ A wrapper around `fetchpatch`, which takes:
 Here is an example of `fetchDebianPatch` in action:
 
 ```nix
-{ lib
-, fetchDebianPatch
-, buildPythonPackage
+{
+  lib,
+  fetchDebianPatch,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -728,7 +740,7 @@ buildPythonPackage rec {
     (fetchDebianPatch {
       inherit pname version;
       debianRevision = "5";
-      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
+      patch = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
       hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
     })
   ];
@@ -753,7 +765,7 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
 
 If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
 This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
@@ -768,9 +780,14 @@ Additionally, the following optional arguments can be given:
 
 : Whether to fetch LFS objects.
 
+*`preFetch`* (String)
+
+: Shell code to be executed before the repository has been fetched, to allow
+  changing the environment the fetcher runs in.
+
 *`postFetch`* (String)
 
-: Shell code executed after the file has been fetched successfully.
+: Shell code executed after the repository has been fetched successfully.
   This can do things like check or transform the file.
 
 *`leaveDotGit`* (Boolean)
@@ -784,6 +801,10 @@ Additionally, the following optional arguments can be given:
 
 : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
+
+*`fetchTags`* (Boolean)
+
+: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
 
 *`sparseCheckout`* (List of String)
 
@@ -813,6 +834,10 @@ Additionally, the following optional arguments can be given:
 
   See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
 
+*`rootDir`* (String)
+
+: When not empty, copy only contents of the subdirectory of the repository to the result. Automatically sets `sparseCheckout` and `nonConeMode` to avoid checking out any extra pieces. Incompatible with `leaveDotGit`.
+
 Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
 Future parameters additions might also happen without immediately being documented here.
 
@@ -826,7 +851,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
@@ -840,7 +865,14 @@ A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are m
 
 To use a different GitHub instance, use `githubBase` (defaults to `"github.com"`).
 
-`fetchFromGitHub` uses `fetchzip` to download the source archive generated by GitHub for the specified revision. If `leaveDotGit`, `deepClone` or `fetchSubmodules` are set to `true`, `fetchFromGitHub` will use `fetchgit` instead. Refer to its section for documentation of these options.
+By default, `fetchFromGitHub` uses `fetchzip` to download GitHub's source archive for the specified revision.
+However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any of these cases:
+
+- `forceFetchGit`, `leaveDotGit`, `deepClone`, `fetchLFS`, or `fetchSubmodules` are set to `true`
+- `sparseCheckout` contains any entries (is a non-empty list)
+- `rootDir` is set to a non-empty string
+
+When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
@@ -855,7 +887,17 @@ This is used with Gitiles repositories. The arguments expected are similar to `f
 
 ## `fetchFromBitbucket` {#fetchfrombitbucket}
 
-This is used with BitBucket repositories. The arguments expected are very similar to `fetchFromGitHub` above.
+Used for repositories hosted on Bitbucket (`"bitbucket.org"`) owned by the Australian-based Atlassian Corporation. It requires an `owner` and `repo` argument which are both strings that reference the workspace ID and repository name hosted on Bitbucket cloud as well as either a `tag` or `rev` argument.
+
+By default, `fetchFromBitbucket` will attempt to download a commit snapshot tarball at the specified `tag` or `rev` at `https://bitbucket.org/<owner>/<repo>/get/<tag-or-rev>.tar.gz`
+
+However, `fetchFromBitbucket` will automatically switch to using `fetchgit` and fetch from `https://bitbucket.org/<owner>/<repo>.git` in any of these cases:
+
+- `forceFetchGit`, `leaveDotGit`, `deepClone`, `fetchLFS`, or `fetchSubmodules` are set to `true`
+- `sparseCheckout` contains any entries (is a non-empty list)
+- `rootDir` is set to a non-empty string
+
+When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
 
 ## `fetchFromSavannah` {#fetchfromsavannah}
 
@@ -875,6 +917,39 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `fetchFromRadicle` {#fetchfromradicle}
+
+This is used with Radicle repositories. The arguments expected are similar to `fetchgit`.
+
+Requires a `seed` argument (e.g. `seed.radicle.xyz` or `rosa.radicle.xyz`) and a `repo` argument
+(the repository id *without* the `rad:` prefix). Also accepts an optional `node` argument which
+contains the id of the node from which to fetch the specified ref. If `node` is `null` (the
+default), a canonical ref is fetched instead.
+
+```nix
+fetchFromRadicle {
+  seed = "seed.radicle.xyz";
+  repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5"; # heartwood
+  tag = "releases/1.3.0";
+  hash = "sha256-4o88BWKGGOjCIQy7anvzbA/kPOO+ZsLMzXJhE61odjw=";
+}
+```
+
+## `fetchRadiclePatch` {#fetchradiclepatch}
+
+`fetchRadiclePatch` works very similarly to `fetchFromRadicle` with almost the same arguments
+expected. However, instead of a `rev` or `tag` argument, a `revision` argument is expected, which
+contains the full revision id of the Radicle patch to fetch.
+
+```nix
+fetchRadiclePatch {
+  seed = "rosa.radicle.xyz";
+  repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5"; # radicle-explorer
+  revision = "d97d872386c70607beda2fb3fc2e60449e0f4ce4"; # patch: d77e064
+  hash = "sha256-ttnNqj0lhlSP6BGzEhhUOejKkkPruM9yMwA5p9Di4bk=";
+}
+```
 
 ## `requireFile` {#requirefile}
 
@@ -914,7 +989,9 @@ It produces packages that cannot be built automatically.
 { fetchtorrent }:
 
 fetchtorrent {
-  config = { peer-limit-global = 100; };
+  config = {
+    peer-limit-global = 100;
+  };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
   hash = "";
 }
@@ -928,4 +1005,3 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
-

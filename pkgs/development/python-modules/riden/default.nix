@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geeksville";
     repo = "riden";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uR1CsVsGn/QC4krHaxl6GqRnTPbFdRaqyMEl2RVMHPU=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riden" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Riden RD power supplies";
     homepage = "https://github.com/geeksville/riden";
     changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

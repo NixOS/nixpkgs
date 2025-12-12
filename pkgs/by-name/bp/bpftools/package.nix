@@ -2,6 +2,7 @@
   lib,
   stdenv,
   linuxHeaders,
+  buildPackages,
   libopcodes,
   libopcodes_2_38,
   libbfd,
@@ -22,10 +23,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   patches = [
-    # fix unknown type name '__vector128' on ppc64le
-    ./include-asm-types-for-ppc64le.patch
+    # fix unknown type name '__vector128' on powerpc64*
+    # https://www.spinics.net/lists/bpf/msg28613.html
+    ./include-asm-types-for-powerpc64.patch
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     python3
     bison
@@ -66,20 +69,23 @@ stdenv.mkDerivation rec {
     "bpf_dbg"
   ];
 
+  # needed for cross to riscv64
+  makeFlags = [ "ARCH=${stdenv.hostPlatform.linuxArch}" ];
+
   installPhase = ''
     make -C bpftool install
     install -Dm755 -t $out/bin bpf_asm
     install -Dm755 -t $out/bin bpf_dbg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libbpf/bpftool";
     description = "Debugging/program analysis tools for the eBPF subsystem";
     license = [
-      licenses.gpl2Only
-      licenses.bsd2
+      lib.licenses.gpl2Only
+      lib.licenses.bsd2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

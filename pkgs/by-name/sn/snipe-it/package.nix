@@ -1,23 +1,27 @@
-{ lib
-, dataDir ? "/var/lib/snipe-it"
-, fetchFromGitHub
-, mariadb
-, nixosTests
-, php
+{
+  lib,
+  dataDir ? "/var/lib/snipe-it",
+  fetchFromGitHub,
+  mariadb,
+  nixosTests,
+  php84,
 }:
 
+let
+  php = php84;
+in
 php.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
-  version = "7.1.15";
+  version = "8.3.6";
 
   src = fetchFromGitHub {
-    owner = "snipe";
+    owner = "grokability";
     repo = "snipe-it";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-+MMu42HsaIqNKcIJAyBI40AqQIpOPK0ZMtAAd/EflT4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hqJUhjL4k6fC5ed8pFOb3Ym0CmelfVZYWqmMuTjHN/U=";
   };
 
-  vendorHash = "sha256-9qnEsI5R28aqMNE7KbvOp9Kev+JNXvIsDIbPyAa41Go=";
+  vendorHash = "sha256-DXkRKijjkT4GI0sMj3T8fD90weCLwe681yBqKs4/cVI=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
@@ -44,7 +48,7 @@ php.buildComposerProject2 (finalAttrs: {
     phpPackage = php;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
@@ -54,8 +58,8 @@ php.buildComposerProject2 (finalAttrs: {
     '';
     homepage = "https://snipeitapp.com/";
     changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ yayayayaka ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ yayayayaka ];
+    platforms = lib.platforms.linux;
   };
 })

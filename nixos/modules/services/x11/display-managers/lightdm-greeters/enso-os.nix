@@ -38,15 +38,7 @@ in
       };
 
       theme = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome-themes-extra";
-          description = ''
-            The package path that contains the theme given in the name option.
-          '';
-        };
-
+        package = mkPackageOption pkgs "gnome-themes-extra" { };
         name = mkOption {
           type = types.str;
           default = "Adwaita";
@@ -57,15 +49,7 @@ in
       };
 
       iconTheme = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.papirus-icon-theme;
-          defaultText = literalExpression "pkgs.papirus-icon-theme";
-          description = ''
-            The package path that contains the icon theme given in the name option.
-          '';
-        };
-
+        package = mkPackageOption pkgs "papirus-icon-theme" { };
         name = mkOption {
           type = types.str;
           default = "ePapirus";
@@ -76,15 +60,7 @@ in
       };
 
       cursorTheme = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.capitaine-cursors;
-          defaultText = literalExpression "pkgs.capitaine-cursors";
-          description = ''
-            The package path that contains the cursor theme given in the name option.
-          '';
-        };
-
+        package = mkPackageOption pkgs "capitaine-cursors" { };
         name = mkOption {
           type = types.str;
           default = "capitane-cursors";

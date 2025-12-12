@@ -285,6 +285,19 @@ in
           description = "Filename to be used for the dump. If `null` a default name is chosen by forgejo.";
           example = "forgejo-dump";
         };
+
+        age = mkOption {
+          type = types.str;
+          default = "4w";
+          example = "5d";
+          description = ''
+            Age of backup used to decide what files to delete when cleaning.
+            If a file or directory is older than the current time minus the age field, it is deleted.
+
+            The format is described in
+            {manpage}`tmpfiles.d(5)`.
+          '';
+        };
       };
 
       lfs = {
@@ -327,7 +340,7 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
+              PROTOCOL = "sendmail";
               FROM = "do-not-reply@example.org";
               SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
@@ -595,35 +608,34 @@ in
       ];
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} ${cfg.dump.age} -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
 
-        # If we have a folder or symlink with Forgejo locales, remove it
-        # And symlink the current Forgejo locales in place
-        "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+      # If we have a folder or symlink with Forgejo locales, remove it
+      # And symlink the current Forgejo locales in place
+      "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
 
-      ]
-      ++ optionals cfg.lfs.enable [
-        "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-        "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      ];
+    ]
+    ++ optionals cfg.lfs.enable [
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.forgejo-secrets = mkIf (!cfg.useWizard) {
       description = "Forgejo secret bootstrap helper";
@@ -658,22 +670,21 @@ in
 
     systemd.services.forgejo = {
       description = "Forgejo (Beyond coding. We forge.)";
-      after =
-        [
-          "network.target"
-        ]
-        ++ optionals usePostgresql [
-          "postgresql.service"
-        ]
-        ++ optionals useMysql [
-          "mysql.service"
-        ]
-        ++ optionals (!cfg.useWizard) [
-          "forgejo-secrets.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ optionals usePostgresql [
+        "postgresql.target"
+      ]
+      ++ optionals useMysql [
+        "mysql.service"
+      ]
+      ++ optionals (!cfg.useWizard) [
+        "forgejo-secrets.service"
+      ];
       requires =
         optionals (cfg.database.createDatabase && usePostgresql) [
-          "postgresql.service"
+          "postgresql.target"
         ]
         ++ optionals (cfg.database.createDatabase && useMysql) [
           "mysql.service"
@@ -722,7 +733,7 @@ in
       '';
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
@@ -786,7 +797,8 @@ in
         HOME = cfg.stateDir;
         FORGEJO_WORK_DIR = cfg.stateDir;
         FORGEJO_CUSTOM = cfg.customDir;
-      } // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
+      }
+      // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
     services.openssh.settings.AcceptEnv = mkIf (

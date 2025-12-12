@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pbxproj";
-  version = "4.2.1";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kronenthaler";
     repo = "mod-pbxproj";
-    rev = "refs/tags/${version}";
-    hash = "sha256-srtS6ggVnpffEa57LL2OzfC2mVd9uLxUL6LzxqPVLdo=";
+    tag = version;
+    hash = "sha256-Kwt/ellGOZBenYBCCW13pSMsPVdJyiEklIPMtw/UDvI=";
   };
 
   build-system = [ setuptools ];

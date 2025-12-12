@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minisign";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
+    sha256 = "sha256-qhAzhht9p4bsa2ntJwhcNurm8QgYYiKi3dA3ifpT8aw=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libsodium ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for signing files and verifying signatures";
     longDescription = ''
       minisign uses public key cryptography to help facilitate secure (but not
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       is similar to and compatible with OpenBSD's signify.
     '';
     homepage = "https://jedisct1.github.io/minisign/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.unix;
     mainProgram = "minisign";
   };
 }

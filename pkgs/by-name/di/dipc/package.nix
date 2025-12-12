@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dipc";
   version = "1.0.0";
 
@@ -15,16 +15,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RXEC8bwdnUOaDmYIb7ci/JD+vi16tBn55FRsUmwaRzk=";
   };
 
-  cargoHash = "sha256-XQ85T64K1NLdSOtAFr0XluvFNTaHzoWKxoQtBQ+uSKQ=";
+  cargoHash = "sha256-1vjVuAawuquPqem1as6xIv/ZJCzjgC4k0uyPSlrvpeg=";
 
-  meta = with lib; {
+  meta = {
     description = "Convert your favorite images and wallpapers with your favorite color palettes/themes";
     homepage = "https://github.com/doprz/dipc";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ ByteSudoer ];
+    maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "dipc";
   };
 }

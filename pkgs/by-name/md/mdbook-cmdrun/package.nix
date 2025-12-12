@@ -8,13 +8,13 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-cmdrun";
   version = "0.6.0-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "FauconFan";
-    repo = pname;
+    repo = "mdbook-cmdrun";
     rev = "d1fef67f100563c2a433b1f5dd5a71810db6b90d";
     hash = "sha256-Q2h64XCyDxLmmCNC3wTw81pBotaMEUjY5y0Oq6q20cQ=";
   };
@@ -26,14 +26,14 @@ rustPlatform.buildRustPackage rec {
     util-linux # used by tests/regression/shell/input.md
   ];
 
-  cargoHash = "sha256-gT3DyQRJWn1HuR6fXeqk8aUPb+jmC+V1McdDN2JGXuI=";
+  cargoHash = "sha256-C3Rg+WXHBA7KyUDFdhBz4mOm8CFH/f7UVA8KOLs9ClE=";
 
-  meta = with lib; {
+  meta = {
     description = "mdbook preprocessor to run arbitrary commands";
     mainProgram = "mdbook-cmdrun";
     homepage = "https://github.com/FauconFan/mdbook-cmdrun";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pinpox
       matthiasbeyer
     ];

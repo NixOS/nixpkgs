@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "joewalnes";
-    repo = pname;
+    repo = "websocketd";
     rev = "v${version}";
     sha256 = "sha256-cp4iBSQ6Cd0+NPZ2i79Mulg1z17u//OCm3yoArbZEHs=";
   };
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
     homepage = "http://websocketd.com/";
-    maintainers = [ maintainers.bjornfor ];
-    license = licenses.bsd2;
+    maintainers = [ lib.maintainers.bjornfor ];
+    license = lib.licenses.bsd2;
     mainProgram = "websocketd";
   };
 }

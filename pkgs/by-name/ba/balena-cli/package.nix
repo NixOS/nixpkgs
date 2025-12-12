@@ -3,61 +3,62 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  balena-cli,
+  nodejs_latest,
+  versionCheckHook,
   node-gyp,
   python3,
   udev,
-  cctools,
-  apple-sdk_12,
-  darwinMinVersionHook,
+  xcbuild,
 }:
 
-buildNpmPackage rec {
+let
+  buildNpmPackage' = buildNpmPackage.override {
+    nodejs = nodejs_latest;
+  };
+  node-gyp' = node-gyp.override {
+    nodejs = nodejs_latest;
+  };
+in
+buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "20.1.2";
+  version = "23.2.8";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-E27EHOxi54ZyNCoJuV/P6wjlJ29/JAQc/YqikP5SgZ8=";
+    hash = "sha256-qczkG1+6sn/n+Ew/HD5Ki8epZW3UEpREc3fjS2VS1go=";
   };
 
-  npmDepsHash = "sha256-dXvqgv+0jwDyyZrTN5/t/QnrLRJl8rBNdCq4+iex9eI=";
+  npmDepsHash = "sha256-b5LNCOai6DyJx5VDaNHWFq9rvj5g9kwXqnUoS7fb8z4=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      node-gyp
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    node-gyp'
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
-  passthru.tests.version = testers.testVersion {
-    package = balena-cli;
-    command = ''
-      # Override default cache directory so Balena CLI's unavoidable update check does not fail due to write permissions
-      BALENARC_DATA_DIRECTORY=./ balena --version
-    '';
-    inherit version;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # Disabled on Darwin due to:
+  #
+  # https://github.com/NixOS/nix/issues/5748
+  #
+  # No matter whether $TMP and $HOME point to real writable directories, the
+  # Darwin sandbox tries to use /var/empty and fails.
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  versionCheckProgram = "${placeholder "out"}/bin/balena";
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for balenaCloud or openBalena";
     longDescription = ''
       The balena CLI is a Command Line Interface for balenaCloud or openBalena. It is a software
@@ -67,10 +68,10 @@ buildNpmPackage rec {
     '';
     homepage = "https://github.com/balena-io/balena-cli";
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.kalebpace
-      maintainers.doronbehar
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      kalebpace
+      doronbehar
     ];
     mainProgram = "balena";
   };

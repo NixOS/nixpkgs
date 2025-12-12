@@ -5,27 +5,28 @@
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wslu";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = "wslu";
-    rev = "v${version}";
-    hash = "sha256-lyJk8nOADq+s7GkZXsd1T4ilrDzMRsoALOesG8NxYK8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ssiwYkQg2rOirC/ZZVq2bJm4Ggc364uRkoS2y365Eb0=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
 
   patches = [
     ./fallback-conf-nix-store.diff
-    ./fix-desktop-item.patch
   ];
 
   postPatch = ''
     substituteInPlace src/wslu-header \
       --subst-var out
+    substituteInPlace src/etc/wslview.desktop \
+      --replace-fail /usr/bin/wslview wslview
   '';
 
   makeFlags = [
@@ -33,14 +34,12 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  desktopItems = [ "src/etc/wslview.desktop" ];
-
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities for Windows Subsystem for Linux";
     homepage = "https://github.com/wslutilities/wslu";
-    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jamiemagee ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/wslutilities/wslu/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    platforms = lib.platforms.linux;
   };
-}
+})

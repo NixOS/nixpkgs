@@ -11,20 +11,19 @@
   iverilog,
   ghdl,
   stdenv,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.9.2";
+  version = "2.0.1";
   format = "setuptools";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7KCo7g2I1rfm8QDHRm3ZKloHwjDIICnJCF8KhaFdvqY=";
+    tag = "v${version}";
+    hash = "sha256-LXQNqFlvP+WBaDGWPs5+BXBtW2dhDu+v+7lR/AMG21M=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -63,7 +62,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH=$out/bin:$PATH
-    mv cocotb cocotb.hidden
   '';
 
   pythonImportsCheck = [ "cocotb" ];

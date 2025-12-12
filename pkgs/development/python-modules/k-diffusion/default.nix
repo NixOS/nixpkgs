@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crowsonkb";
     repo = "k-diffusion";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x/UHzobQv5ov0luUHqC8OA5YbtF+aWL39/SQtzTm0RM=";
   };
 
@@ -63,10 +63,10 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Karras et al. (2022) diffusion models for PyTorch";
     homepage = "https://github.com/crowsonkb/k-diffusion";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

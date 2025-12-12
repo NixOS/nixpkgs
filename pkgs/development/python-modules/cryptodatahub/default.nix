@@ -5,43 +5,38 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitLab,
-  pathlib2,
   pyfakefs,
   python-dateutil,
   pythonOlder,
   setuptools,
-  six,
+  setuptools-scm,
   unittestCheckHook,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "0.12.5";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jYMzvh4tgfLS7Za0MYHbWbczptAvENfzfTEV9Drlfto=";
+    hash = "sha256-taYpSYkfucc9GQpVDiAZgCt/D3Akld20LkFEhsdKH0Q=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asn1crypto
     attrs
-    pathlib2
     python-dateutil
-    six
     urllib3
   ];
 
@@ -61,11 +56,11 @@ buildPythonPackage rec {
     rm test/common/test_utils.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Repository of cryptography-related data";
     homepage = "https://gitlab.com/coroner/cryptodatahub";
     changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${version}/CHANGELOG.rst";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

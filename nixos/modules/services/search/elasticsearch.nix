@@ -72,7 +72,7 @@ in
     tcp_port = mkOption {
       description = "Elasticsearch port for the node to node communication.";
       default = 9300;
-      type = types.int;
+      type = types.port;
     };
 
     cluster_name = mkOption {

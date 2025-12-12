@@ -2,30 +2,33 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mutants";
-  version = "24.11.2";
+  version = "25.3.1";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "cargo-mutants";
-    rev = "v${version}";
-    hash = "sha256-tUPOBTNS3cGUSmOpMGJrCqZBnnvYH/s1gvP2kpFddEg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T+BMLjp74IO71u/ftNfz67FPSt1LYCgsRP65gL0wScg=";
   };
 
-  cargoHash = "sha256-3CndHAWoMvTc2cxAz+b7UEBxxrWmroOPzqMX6DhxhPQ=";
+  cargoHash = "sha256-Q9+p1MbjF2pyw254X+K6GQSLKNbqjmFXDyZjCI31b7s=";
 
   # too many tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Mutation testing tool for Rust";
     mainProgram = "cargo-mutants";
     homepage = "https://github.com/sourcefrog/cargo-mutants";
-    changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/sourcefrog/cargo-mutants/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

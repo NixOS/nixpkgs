@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cryptography,
+  fido2,
   setuptools,
   jinja2,
   proton-core,
@@ -12,6 +13,7 @@
   pytest-asyncio,
   requests,
   sentry-sdk,
+  pyxdg,
   distro,
   pytestCheckHook,
   pytest-cov-stub,
@@ -19,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.38.2";
+  version = "4.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-ldIslr2qiwClQW6rWNbEAAkUbdJfCzvUIkCuoajP2M4=";
+    hash = "sha256-oFTlN/mi4TACmqbebKirYdqDEYzUejK4SKbKgFWONDo=";
   };
 
   build-system = [
@@ -36,10 +38,12 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     distro
+    fido2
     jinja2
     pynacl
     proton-core
     sentry-sdk
+    pyxdg
   ];
 
   pythonImportsCheck = [
@@ -59,9 +63,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   disabledTests = [
@@ -81,6 +87,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

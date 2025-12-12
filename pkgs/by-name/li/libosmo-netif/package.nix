@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmo-netif";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
     rev = version;
-    hash = "sha256-C8lIURQmu15RQij7c09+F/c8XSzTcgHt4MkgdkqTa3Q=";
+    hash = "sha256-0INgJV5fS6VdMsJqjlVc3lGMBdLP7cI+Ghc4WEh6AuU=";
   };
 
   postPatch = ''
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Osmocom network / socket interface library";
     homepage = "https://osmocom.org/projects/libosmo-netif/wiki";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       markuskowa
     ];
   };

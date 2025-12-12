@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  automake,
-  autoconf,
+  autoreconfHook,
   intltool,
   pkg-config,
   gtk3,
@@ -18,15 +17,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxterminal";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxterminal";
-    rev = version;
-    sha256 = "sha256-bCF/V6yFe4vKqVMOtNlwYyw/ickj1LFuFn4IyypwIg0=";
+    tag = finalAttrs.version;
+    hash = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
   };
 
   configureFlags = [
@@ -35,8 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    automake
-    autoconf
+    autoreconfHook
     intltool
     pkg-config
     wrapGAppsHook3
@@ -57,10 +55,6 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   doCheck = true;
 
   passthru.tests.test = nixosTests.terminal-emulators.lxterminal;
@@ -72,10 +66,10 @@ stdenv.mkDerivation rec {
       desktop-independent VTE-based terminal emulator for LXDE without any
       unnecessary dependencies.
     '';
-    homepage = "https://wiki.lxde.org/en/LXTerminal";
-    license = lib.licenses.gpl2;
+    homepage = "https://www.lxde.org/";
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.linux;
     mainProgram = "lxterminal";
   };
-}
+})

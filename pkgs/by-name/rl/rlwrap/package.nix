@@ -7,21 +7,16 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rlwrap";
-  version = "0.46.1";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "hanslub42";
     repo = "rlwrap";
-    rev = version;
-    sha256 = "sha256-yKJXfdxfaCsmPtI0KmTzfFKY+evUuytomVrLsSCYDGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-05q24Y097GCcipXEPTbel/YIAtQl4jDyA9JFjDDM41Y=";
   };
-
-  postPatch = ''
-    substituteInPlace src/readline.c \
-      --replace "if(*p >= 0 && *p < ' ')" "if(*p >= 0 && (*p >= 0) && (*p < ' '))"
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,12 +27,13 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jlesquembre ];
+    changelog = "https://github.com/hanslub42/rlwrap/raw/refs/tags/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
     mainProgram = "rlwrap";
   };
-}
+})

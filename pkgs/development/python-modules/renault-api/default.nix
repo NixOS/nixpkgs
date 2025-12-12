@@ -10,25 +10,23 @@
   marshmallow-dataclass,
   poetry-core,
   pyjwt,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
   tabulate,
   typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.2.8";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-j9KF2vqDZqQ35mDW/Qx6uy8H9hwuwBYfdcDXD1Cs7rQ=";
+    tag = "v${version}";
+    hash = "sha256-FH6x+hknNGgrSHaOt7RTYeuVLqb/DNy7X3065VvcFwA=";
   };
 
   build-system = [ poetry-core ];
@@ -52,17 +50,19 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
     typeguard
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "renault_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with the Renault API";
     homepage = "https://github.com/hacf-fr/renault-api";
     changelog = "https://github.com/hacf-fr/renault-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "renault-api";
   };
 }

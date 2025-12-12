@@ -1,13 +1,39 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  version = "1.10.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
     health = 10054;
     metrics = 10055;
   };
-in {
+in
+{
+  imports = [
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2605;
+      from = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "coredns"
+      ];
+      to = [
+        "services"
+        "kubernetes"
+        "addons"
+        "dns"
+        "corednsImage"
+      ];
+    })
+  ];
+
   options.services.kubernetes.addons.dns = {
     enable = lib.mkEnableOption "kubernetes dns addon";
 
@@ -15,11 +41,11 @@ in {
       description = "Dns addon clusterIP";
 
       # this default is also what kubernetes users
-      default = (
-        lib.concatStringsSep "." (
-          lib.take 3 (lib.splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange
+      default =
+        (lib.concatStringsSep "." (
+          lib.take 3 (lib.splitString "." config.services.kubernetes.apiserver.serviceClusterIpRange)
         ))
-      ) + ".254";
+        + ".254";
       defaultText = lib.literalMD ''
         The `x.y.z.254` IP of
         `config.${options.services.kubernetes.apiserver.serviceClusterIpRange}`.
@@ -48,17 +74,18 @@ in {
         See: <https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/addon-manager/README.md>.
       '';
       default = "Reconcile";
-      type = lib.types.enum [ "Reconcile" "EnsureExists" ];
+      type = lib.types.enum [
+        "Reconcile"
+        "EnsureExists"
+      ];
     };
 
-    coredns = lib.mkOption {
+    corednsImage = lib.mkOption {
       description = "Docker image to seed for the CoreDNS container.";
-      type = lib.types.attrs;
-      default = {
-        imageName = "coredns/coredns";
-        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
-        finalImageTag = version;
-        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
+      type = lib.types.package;
+      default = pkgs.dockerTools.buildImage {
+        name = "coredns";
+        config.Entrypoint = [ "${pkgs.coredns}/bin/coredns" ];
       };
     };
 
@@ -106,8 +133,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages =
-      lib.singleton (pkgs.dockerTools.pullImage cfg.coredns);
+    services.kubernetes.kubelet.seedDockerImages = lib.singleton (cfg.corednsImage);
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
@@ -125,8 +151,16 @@ in {
         rules = [
           {
             apiGroups = [ "" ];
-            resources = [ "endpoints" "services" "pods" "namespaces" ];
-            verbs = [ "list" "watch" ];
+            resources = [
+              "endpoints"
+              "services"
+              "pods"
+              "namespaces"
+            ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
           {
             apiGroups = [ "" ];
@@ -136,7 +170,10 @@ in {
           {
             apiGroups = [ "discovery.k8s.io" ];
             resources = [ "endpointslices" ];
-            verbs = [ "list" "watch" ];
+            verbs = [
+              "list"
+              "watch"
+            ];
           }
         ];
       };
@@ -219,10 +256,14 @@ in {
         spec = {
           replicas = cfg.replicas;
           selector = {
-            matchLabels = { k8s-app = "kube-dns"; };
+            matchLabels = {
+              k8s-app = "kube-dns";
+            };
           };
           strategy = {
-            rollingUpdate = { maxUnavailable = 1; };
+            rollingUpdate = {
+              maxUnavailable = 1;
+            };
             type = "RollingUpdate";
           };
           template = {
@@ -234,8 +275,11 @@ in {
             spec = {
               containers = [
                 {
-                  args = [ "-conf" "/etc/coredns/Corefile" ];
-                  image = with cfg.coredns; "${imageName}:${finalImageTag}";
+                  args = [
+                    "-conf"
+                    "/etc/coredns/Corefile"
+                  ];
+                  image = with cfg.corednsImage; "${imageName}:${imageTag}";
                   imagePullPolicy = "Never";
                   livenessProbe = {
                     failureThreshold = 5;
@@ -278,6 +322,7 @@ in {
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+                      add = [ "NET_BIND_SERVICE" ];
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;
@@ -358,7 +403,9 @@ in {
               protocol = "TCP";
             }
           ];
-          selector = { k8s-app = "kube-dns"; };
+          selector = {
+            k8s-app = "kube-dns";
+          };
         };
       };
     };

@@ -11,19 +11,17 @@
   openimageio,
   imath,
   python,
-  darwinMinVersionHook,
-  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.38.10";
+  version = "1.39.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
     rev = "v${version}";
-    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
+    hash = "sha256-XNfXOC76zM5Ns2DyyE3mKCJ1iJaszs1M0rBdVLRDo8E=";
   };
 
   format = "other";
@@ -33,23 +31,20 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs =
-    [
-      openimageio
-      imath
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-      (darwinMinVersionHook "10.15")
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXt
-      libGL
-    ];
+  buildInputs = [
+    openimageio
+    imath
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXt
+    libGL
+  ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
+    (lib.cmakeBool "MATERIALX_BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
       stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin

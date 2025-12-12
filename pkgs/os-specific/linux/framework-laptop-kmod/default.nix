@@ -2,6 +2,7 @@
   lib,
   stdenv,
   kernel,
+  kernelModuleMakeFlags,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -31,12 +32,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module that exposes the Framework Laptop (13, 16)'s battery charge limit and LEDs to userspace";
     homepage = "https://github.com/DHowett/framework-laptop-kmod";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ gaykitty ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ gaykitty ];
+    platforms = lib.platforms.linux;
     broken = lib.versionOlder kernel.version "6.1";
   };
 }

@@ -1,136 +1,168 @@
 {
+  lib,
+  stdenv,
+  blueprint-compiler,
   bzip2,
   callPackage,
-  expat,
   fetchFromGitHub,
   fontconfig,
   freetype,
   glib,
   glslang,
+  gtk4-layer-shell,
   harfbuzz,
-  lib,
-  libadwaita,
   libGL,
-  libpng,
   libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libadwaita,
   ncurses,
   nixosTests,
   oniguruma,
   pandoc,
   pkg-config,
   removeReferencesTo,
-  stdenv,
   versionCheckHook,
   wrapGAppsHook4,
-  zig_0_13,
-  zlib,
+  zig_0_14,
+
+  # Usually you would override `zig.hook` with this, but we do that internally
+  # since upstream recommends a non-default level
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
+  optimizeLevel ? "ReleaseFast",
 }:
 let
-  # Ghostty needs to be built with --release=fast, --release=debug and
-  # --release=safe enable too many runtime safety checks.
-  zig_hook = zig_0_13.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseFast --color off";
+  zig = zig_0_14;
+
+  zig_hook = zig.hook.overrideAttrs {
+    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.0.0";
+  version = "1.2.3";
+
+  outputs = [
+    "out"
+    "man"
+    "shell_integration"
+    "terminfo"
+    "vim"
+  ];
 
   src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHI1Z4mfgXkNwQA8xYq4tS0/BARbHL7gQUT41vCxQTM=";
+    hash = "sha256-0tmLOJCrrEnVc/ZCp/e646DTddXjv249QcSwkaukL30=";
   };
-
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    glib # Required for `glib-compile-schemas`
-    ncurses
-    pandoc
-    pkg-config
-    removeReferencesTo
-    wrapGAppsHook4
-    zig_hook
-  ];
-
-  buildInputs = [
-    bzip2
-    expat
-    fontconfig
-    freetype
-    glslang
-    harfbuzz
-    libadwaita
-    libGL
-    libpng
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    oniguruma
-    zlib
-  ];
-
-  dontConfigure = true;
-  # doCheck is set to false because unit tests currently fail inside the Nix sandbox.
-  doCheck = false;
-  doInstallCheck = true;
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
   };
 
-  zigBuildFlags =
-    [
-      "--system"
-      "${finalAttrs.deps}"
-      "-Dversion-string=${finalAttrs.version}"
-    ]
-    ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
-      inherit glslang;
-    };
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ncurses
+    pandoc
+    pkg-config
+    removeReferencesTo
+    zig_hook
+
+    # GTK frontend
+    glib # Required for `glib-compile-schemas`
+    wrapGAppsHook4
+    blueprint-compiler
+  ];
+
+  buildInputs = [
+    oniguruma
+
+    # GTK frontend
+    libadwaita
+    libX11
+    gtk4-layer-shell
+
+    # OpenGL renderer
+    glslang
+    libGL
+
+    # Font backend
+    bzip2
+    fontconfig
+    freetype
+    harfbuzz
+  ];
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+    "-Dversion-string=${finalAttrs.version}"
+  ]
+  ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
+    inherit glslang;
+  };
 
   zigCheckFlags = finalAttrs.zigBuildFlags;
 
-  outputs = [
-    "out"
-    "terminfo"
-    "shell_integration"
-    "vim"
-  ];
+  doCheck = true;
 
-  postInstall = ''
-    mkdir -p "$terminfo/share"
-    mv "$out/share/terminfo" "$terminfo/share/terminfo"
-    ln -sf "$terminfo/share/terminfo" "$out/share/terminfo"
+  /**
+    Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
 
-    mkdir -p "$shell_integration"
-    mv "$out/share/ghostty/shell-integration" "$shell_integration/shell-integration"
-    ln -sf "$shell_integration/shell-integration" "$out/share/ghostty/shell-integration"
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/os/resourcesdir.zig#L11-L52
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L745-L750
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L818-L834
 
-    mv "$out/share/vim/vimfiles" "$vim"
-    ln -sf "$vim" "$out/share/vim/vimfiles"
+    terminfo and shell integration should also be installable on remote machines
+
+    ```nix
+    { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.ghostty.terminfo ];
+
+      programs.bash = {
+        interactiveShellInit = ''
+          if [[ "$TERM" == "xterm-ghostty" ]]; then
+            builtin source ${pkgs.ghostty.shell_integration}/bash/ghostty.bash
+          fi
+        '';
+      };
+    }
+    ```
+  */
+  postFixup = ''
+    ln -s $man/share/man $out/share/man
+
+    moveToOutput share/terminfo $terminfo
+    ln -s $terminfo/share/terminfo $out/share/terminfo
+
+    mv $out/share/ghostty/shell-integration $shell_integration
+    ln -s $shell_integration $out/share/ghostty/shell-integration
+
+    mv $out/share/vim/vimfiles $vim
+    rmdir $out/share/vim
+    ln -s $vim $out/share/vim-plugins
+
+
+    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
-
-  preFixup = ''
-    remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
-  '';
-
-  NIX_LDFLAGS = [ "-lX11" ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) allTerminfo;
+      nixos = nixosTests.terminal-emulators.ghostty;
+    };
+    updateScript = ./update.nu;
+  };
 
   meta = {
-    homepage = "https://ghostty.org/";
     description = "Fast, native, feature-rich terminal emulator pushing modern features";
     longDescription = ''
       Ghostty is a terminal emulator that differentiates itself by being
@@ -138,16 +170,21 @@ stdenv.mkDerivation (finalAttrs: {
       emulators available, they all force you to choose between speed,
       features, or native UIs. Ghostty provides all three.
     '';
+    homepage = "https://ghostty.org/";
     downloadPage = "https://ghostty.org/download";
-
+    changelog = "https://ghostty.org/docs/install/release-notes/${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
     mainProgram = "ghostty";
-    outputsToInstall = finalAttrs.outputs;
     maintainers = with lib.maintainers; [
       jcollie
       pluiedev
       getchoo
     ];
+    outputsToInstall = [
+      "out"
+    ];
+    platforms = lib.platforms.linux;
   };
 })

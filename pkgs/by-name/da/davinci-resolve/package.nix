@@ -5,13 +5,12 @@
   curl,
   runCommandLocal,
   unzip,
-  appimage-run,
+  appimageTools,
   addDriverRunpath,
   dbus,
   libGLU,
   xorg,
   buildFHSEnv,
-  buildFHSEnvChroot,
   bash,
   writeText,
   ocl-icd,
@@ -35,10 +34,10 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "19.1.1";
+      version = "20.2.3";
 
       nativeBuildInputs = [
-        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
+        appimageTools.appimage-exec
         addDriverRunpath
         copyDesktopItems
         unzip
@@ -57,9 +56,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-yDkw7L9iTzE5g2XAw910nqtTyXcgcb6u+kP2sKtNcJ8="
+                "sha256-5wt5bPJez3FiRzJrC8pzbfqa6BrYMsJJptXBC+ZwzlE="
               else
-                "sha256-8oq5Nj8GrdHAmbM6Z5q98a0Lazjymk3dOCITkKiTJvQ=";
+                "sha256-puw87PuynP2P5VfoJ+7aQATal07orQICPwx2oNgj1eQ=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -148,9 +147,9 @@ let
 
           mkdir -p $out
           test -e ${lib.escapeShellArg appimageName}
-          appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
+          appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
-          mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
           runHook postInstall
         '';
 
@@ -186,6 +185,7 @@ let
             "Video"
             "Graphics"
           ];
+          startupWMClass = "resolve";
         })
       ];
     }
@@ -248,10 +248,12 @@ buildFHSEnv {
 
   extraPreBwrapCmds = lib.optionalString studioVariant ''
     mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+    mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
   '';
 
   extraBwrapArgs = lib.optionals studioVariant [
-    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
+    ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
+    ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
   ];
 
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
@@ -269,6 +271,8 @@ buildFHSEnv {
 
   passthru = {
     inherit davinci;
+  }
+  // lib.optionalAttrs (!studioVariant) {
     updateScript = lib.getExe (writeShellApplication {
       name = "update-davinci-resolve";
       runtimeInputs = [
@@ -294,17 +298,16 @@ buildFHSEnv {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       amarshall
-      jshcmpbll
-      orivej
+      XBagon
     ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

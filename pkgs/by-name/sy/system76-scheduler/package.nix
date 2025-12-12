@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
     rev = version;
     hash = "sha256-5GiHmu++YRCewDHm/qxKmQwDIAZwlW5Eya/fDriVSdA=";
   };
-  cargoHash = "sha256-HxNqGe+KrmOoLgaKY9pniPWFF/hehSi1dgZn4LPE7OA=";
+
+  cargoHash = "sha256-o2Ma9WNmBz+18SSMBPXYK4BXzHFLQwa3JWhq4S7jSBg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,16 +43,16 @@ rustPlatform.buildRustPackage {
     install -D -m 0644 data/*.kdl $out/data/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System76 Scheduler";
     mainProgram = "system76-scheduler";
     homepage = "https://github.com/pop-os/system76-scheduler";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     platforms = [
       "x86_64-linux"
       "x86-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.cmm ];
+    maintainers = [ lib.maintainers.cmm ];
   };
 }

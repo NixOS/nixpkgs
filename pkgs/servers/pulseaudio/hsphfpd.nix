@@ -46,11 +46,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bluetooth HSP/HFP daemon";
     homepage = "https://github.com/pali/hsphfpd-prototype";
-    license = licenses.artistic1;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    license = lib.licenses.artistic1;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

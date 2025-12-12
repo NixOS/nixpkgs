@@ -8,7 +8,7 @@
   zstd,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -16,16 +16,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.22.0";
+  version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
-    repo = pname;
+    repo = "onefetch";
     rev = version;
-    hash = "sha256-Gk1hoC6qsLYm7DbbaRSur6GdC9yXQe+mYLUJklXIwZ4=";
+    hash = "sha256-ZaaSuHWkhJx0q1CBAiRhwoLeeyyoAj6/vP3AJwybjAo=";
   };
 
-  cargoHash = "sha256-4YB10uj4ULhvhn+Yv0dRZO8fRxwm3lEAZ5v+MYHO7lI=";
+  cargoHash = "sha256-56Net4nNRndePhdsQPbmqiPHpOUGMmnQt6BuplQpvSU=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -38,14 +38,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ zstd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libresolv
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libresolv
+  ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''
@@ -63,14 +64,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/onefetch --generate zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
     changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      Br1ght0ne
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kloenk
     ];
     mainProgram = "onefetch";

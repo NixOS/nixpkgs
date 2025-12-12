@@ -41,7 +41,7 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
-        ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
+        ExecStart = "${lib.getExe' pkgs.lm_sensors "fancontrol"} ${configFile}";
       };
     };
 
@@ -52,6 +52,4 @@ in
     '';
 
   };
-
-  meta.maintainers = [ lib.maintainers.evils ];
 }

@@ -3,24 +3,23 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  zig_0_13,
-  apple-sdk_11,
+  zig_0_14,
   callPackage,
 }:
 
 let
-  zig = zig_0_13;
+  zig = zig_0_14;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linuxwave";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mPBtffqd0+B7J8FxolzOarCyJIZBWkWPBbqZlhX0VSY=";
+    hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };
 
   postPatch = ''
@@ -32,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     zig.hook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
-
   postInstall = ''
     installManPage man/linuxwave.1
   '';
@@ -41,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/orhun/linuxwave";
     description = "Generate music from the entropy of Linux";
-    changelog = "https://github.com/orhun/linuxwave/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/linuxwave/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ puiyq ];
     inherit (zig.meta) platforms;
     mainProgram = "linuxwave";
   };

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.9.5";
+  version = "0.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
+    repo = "ttp";
+    tag = version;
+    hash = "sha256-W1y84zHRhB8UGUfO5jV2k9epd9kaXUPqzT71URjm4TQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -97,14 +97,14 @@ buildPythonPackage rec {
     "test_ttp_templates_dir_env_variable"
   ];
 
-  pytestFlagsArray = [ "test/pytest" ];
+  enabledTestPaths = [ "test/pytest" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
     description = "Template Text Parser";
     mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

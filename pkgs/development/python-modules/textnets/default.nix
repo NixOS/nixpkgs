@@ -1,53 +1,60 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  cairocffi,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchPypi,
+  pdm-backend,
+  setuptools,
+
+  # dependencies
   igraph,
   leidenalg,
+  matplotlib,
   pandas,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+  pyarrow,
   scipy,
-  setuptools,
   spacy,
   spacy-lookups-data,
-  en_core_web_sm,
   toolz,
   tqdm,
   wasabi,
+
+  # tests
+  en_core_web_sm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.4";
-  format = "pyproject";
+  version = "0.10.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4154ytzo1QpwhKA1BkVMss9fNIkysnClW/yfSVlX33M=";
+  src = fetchFromGitHub {
+    owner = "jboynyc";
+    repo = "textnets";
+    tag = "v${version}";
+    hash = "sha256-GbJH+6EqfP+miqpYitnBwNDO6uQQq3h9Fy58nVaF1vw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    poetry-core
+    pdm-backend
     setuptools
   ];
 
   pythonRelaxDeps = [
-    "igraph"
-    "leidenalg"
+    "toolz"
   ];
 
-  propagatedBuildInputs = [
-    cairocffi
+  dependencies = [
     igraph
     leidenalg
+    matplotlib
     pandas
+    pyarrow
     scipy
     spacy
     spacy-lookups-data
@@ -57,27 +64,29 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     en_core_web_sm
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/jboynyc/textnets/issues/66
+    "test_textnet_save_and_load"
   ];
 
   pythonImportsCheck = [ "textnets" ];
 
-  # Enables the package to find the cythonized .so files during testing. See #255262
+  # Enable the package to find the cythonized .so files during testing. See #255262
+  # Set MPLBACKEND=agg for headless matplotlib on darwin. See #350784
   preCheck = ''
     rm -r textnets
+    export MPLBACKEND=agg
   '';
 
-  disabledTests = [
-    # Test fails: Throws a UserWarning asking the user to install `textnets[fca]`.
-    "test_context"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Text analysis with networks";
     homepage = "https://textnets.readthedocs.io";
     changelog = "https://github.com/jboynyc/textnets/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }

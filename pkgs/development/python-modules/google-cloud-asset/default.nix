@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   google-cloud-access-context-manager,
   google-cloud-org-policy,
@@ -14,22 +15,22 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.28.0";
+  version = "3.31.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_asset";
-    inherit version;
-    hash = "sha256-nzRadnCw08rgj9IPqe6qMq5JKDtKsG3zyNc9joI2tOQ=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-build-v${version}";
+    sha256 = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
+
+  sourceRoot = "${src.name}/packages/google-cloud-asset";
 
   build-system = [ setuptools ];
 
@@ -42,7 +43,8 @@ buildPythonPackage rec {
     libcst
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];
@@ -64,11 +66,19 @@ buildPythonPackage rec {
     "google.cloud.asset_v1p5beta1"
   ];
 
-  meta = with lib; {
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "google-cloud-asset-v";
+    };
+  };
+
+  meta = {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-${src.tag}/packages/google-cloud-asset/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

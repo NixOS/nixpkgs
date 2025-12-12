@@ -2,13 +2,11 @@
   lib,
   aiodns,
   aiohttp,
+  aiosqlite,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  flake8,
-  flask-sockets,
   moto,
-  psutil,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -19,24 +17,19 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.34.0";
+  version = "3.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aL8XOlvnAxT9cgPf8EvJT80FmlgL2Vhu7JxDRHkUoSM=";
+    tag = "v${version}";
+    hash = "sha256-c9MPcamxXPxWnj5OpJNME/PTHssOxOJP6zjSLu5cW7Y=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "pytest-runner"' ""
-  '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  optional-dependencies.optional = [
     aiodns
     aiohttp
     boto3
@@ -48,23 +41,28 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_sdk" ];
 
   nativeCheckInputs = [
-    flake8
-    flask-sockets
+    aiosqlite
     moto
-    psutil
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  ]
+  ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    # Requires network access: [Errno 111] Connection refused
     "test_send_message_while_disconnection"
+    "TestWebClient_HttpRetry"
+    "test_issue_690_oauth_access"
+    "test_issue_690_oauth_v2_access"
+    "test_error_response"
+    "test_issue_1441_mixing_user_and_bot_installations"
+  ];
+
+  disabledTestPaths = [
+    # Event loop issues
+    "tests/slack_sdk/oauth/installation_store/test_file.py"
+    "tests/slack_sdk/oauth/state_store/test_file.py"
   ];
 
   __darwinAllowLocalNetworking = true;

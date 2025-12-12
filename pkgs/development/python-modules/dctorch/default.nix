@@ -18,9 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-TmfLAkiofrQNWYBhIlY4zafbZPgFftISCGloO/rlEG4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     numpy
     scipy
     torch
@@ -30,10 +32,10 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Fast discrete cosine transforms for pytorch";
     homepage = "https://pypi.org/project/dctorch/";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

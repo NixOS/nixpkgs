@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mobile-shell";
-    repo = pname;
+    repo = "mosh";
     rev = "mosh-${version}";
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     openssl
     bash-completion
     perl
-  ] ++ lib.optional withUtempter libutempter;
+  ]
+  ++ lib.optional withUtempter libutempter;
 
   strictDeps = true;
 
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
@@ -84,8 +85,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ skeuchel ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

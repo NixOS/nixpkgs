@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wuub";
-    repo = pname;
+    repo = "rxv";
     rev = "v${version}";
     sha256 = "0jldnlzbfg5jm1nbgv91mlvcqkswd9f2n3qj9aqlbmj1cxq19yz8";
   };
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rxv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicate with Yamaha RX-Vxxx receivers";
     homepage = "https://github.com/wuub/rxv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

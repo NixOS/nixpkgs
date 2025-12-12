@@ -23,16 +23,25 @@
   iptables,
   nixosTests,
   gitUpdater,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.1.5";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
+    hash = "sha256-Ha8Q8yLhT9kKAXU4qvLANNfMHrHMQY3tR0RdcU6haNQ=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://lore.kernel.org/netfilter-devel/20241219231001.1166085-2-hi@alyssa.is/raw";
+      hash = "sha256-7vMBIoDWcI/JBInYP5yYWp8BnYbATRfMTxqyZr2L9Sk=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,32 +53,32 @@ stdenv.mkDerivation rec {
     docbook_xsl
     findXMLCatalogs
     libxslt
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic ncurses;
 
-  buildInputs =
-    [
-      libmnl
-      libnftnl
-      libpcap
-      gmp
-      jansson
-    ]
-    ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables;
+  buildInputs = [
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+  ]
+  ++ lib.optional withCli libedit
+  ++ lib.optional withXtables iptables;
 
-  configureFlags =
-    [
-      "--with-json"
-      (lib.withFeatureAs withCli "cli" "editline")
-    ]
-    ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional withXtables "--with-xtables";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-lncursesw";
+
+  configureFlags = [
+    "--with-json"
+    (lib.withFeatureAs withCli "cli" "editline")
+  ]
+  ++ lib.optional (!withDebugSymbols) "--disable-debug"
+  ++ lib.optional withXtables "--with-xtables";
 
   enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
-    lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
   };
 
@@ -78,12 +87,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "nft";
   };
 }

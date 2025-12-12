@@ -1,22 +1,28 @@
 {
   lib,
   fetchFromGitHub,
+  gpgme,
   nix-update-script,
+  pkg-config,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "passepartui";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "kardwen";
     repo = "passepartui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/rYdOurPlpGKCMAXTAhoWRn4NU3usPpJmef3f8V8EQA=";
+    tag = "v${version}";
+    hash = "sha256-LV/2+oSGVBRrWaHP/u1PcCb1T6Nduna/lusakCZW+PM=";
   };
 
-  cargoHash = "sha256-8TmrsRbFC1TyoiUNVVTEdvDLj0BIJmqM00OoPLpaoFQ=";
+  cargoHash = "sha256-JR5zOhYogBa+6xYYyc36n/x7f5JW1mnNi2cK5i9QMSM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gpgme ];
 
   passthru = {
     updateScript = nix-update-script { };

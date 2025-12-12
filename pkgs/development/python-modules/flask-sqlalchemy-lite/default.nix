@@ -11,25 +11,24 @@
 
 buildPythonPackage rec {
   pname = "flask-sqlalchemy-lite";
-  version = "0.1.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-sqlalchemy-lite";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LpdPp5Gp74DSJqD1DJqwNeaMKdN5pEAUkxnKGYZcVis=";
+    tag = version;
+    hash = "sha256-KX4kpqgvNlcAe4NSWaSkcgtPQINmeQOx46/4uFM8q8A=";
   };
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      flask
-      sqlalchemy
-    ]
-    ++ flask.optional-dependencies.async
-    ++ sqlalchemy.optional-dependencies.asyncio;
+  dependencies = [
+    flask
+    sqlalchemy
+  ]
+  ++ flask.optional-dependencies.async
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   pythonImportsCheck = [ "flask_sqlalchemy_lite" ];
 
@@ -39,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pallets-eco/flask-sqlalchemy-lite/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy-lite/blob/${src.tag}/CHANGES.md";
     description = "Integrate SQLAlchemy with Flask";
     homepage = "https://github.com/pallets-eco/flask-sqlalchemy-lite";
     license = lib.licenses.mit;

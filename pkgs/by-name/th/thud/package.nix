@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BmrJaZ1IKXjx4/QkBDZyXvTTaalfEOKsBp9ZCW8px7I=";
   };
 
-  cargoHash = "sha256-rmVVdes7GuGV+ClqJGxNIrs7oSwe8/ZHFD6OfP/UW7A=";
+  cargoHash = "sha256-J7YioL8AIhoaPsYPzOXbwz76sMmBbDI/eql1HgDFgCU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Generate directory thumbnails for GTK-based file browsers from images inside them";
     homepage = "https://github.com/donovanglover/thud";
-    license = licenses.mit;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "thud";
   };
 }

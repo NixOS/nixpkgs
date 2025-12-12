@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "vergoh";
-    repo = pname;
+    repo = "vnstat";
     rev = "v${version}";
-    sha256 = "sha256-JwVYhmCscEdbwNGa+aKdOt8cIclpvjl4tmWFU3zhcwc=";
+    sha256 = "sha256-Xd3s4Wrtfwis0dxRijeWhfloHcXPUNAj0P91uWi1C3M=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Console-based network statistics utility for Linux";
     longDescription = ''
       vnStat is a console-based network traffic monitor for Linux and BSD that
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       ensures light use of system resources.
     '';
     homepage = "https://humdi.net/vnstat/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ evils ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

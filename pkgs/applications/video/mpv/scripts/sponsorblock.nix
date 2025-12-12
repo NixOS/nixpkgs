@@ -39,14 +39,14 @@ buildLua {
       --replace-fail 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 
-  extraScripts = [ "sponsorblock_shared" ];
+  extraScriptsToCopy = [ "sponsorblock_shared" ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

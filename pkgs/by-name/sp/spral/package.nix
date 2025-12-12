@@ -1,53 +1,69 @@
 {
-  blas,
-  fetchFromGitHub,
-  gfortran,
-  lapack,
+  config,
   lib,
-  llvmPackages,
-  meson,
-  metis,
-  ninja,
+
+  fetchFromGitHub,
   stdenv,
+
+  nix-update-script,
+
+  enableCuda ? config.cudaSupport,
+
+  # nativeBuildInputs
+  cudaPackages,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+
+  # buildInputs
+  blas,
+  hwloc,
+  lapack,
+  llvmPackages,
+  metis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spral";
-  version = "2024.05.08";
+  version = "2025.09.18";
 
   src = fetchFromGitHub {
     owner = "ralna";
     repo = "spral";
-    rev = "v${version}";
-    hash = "sha256-1CdRwQ0LQrYcXvoGtGxR9Ug3Q2N4skXq8z+LdNpv8p4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ftyA6zP+VX0fb7e9YKjPCAWYblNyjX/eVeni1tRQIxY=";
   };
 
-  postPatch =
-    ''
-      # Skipped test: ssidst
-      # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
-      substituteInPlace tests/meson.build --replace-fail \
-        "subdir('ssids')" \
-        ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Skipped test: lsmrt, segfault
-      substituteInPlace tests/meson.build --replace-fail \
-        "['lsmrt', files('lsmr.f90')]," \
-        ""
-    '';
+  # Ignore a failing test on darwin
+  # ref. https://github.com/ralna/spral/issues/258
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace tests/ssids/meson.build --replace-fail \
+      "spral_tests += [['ssids', 'ssidst', files('ssids.f90')]]" ""
+  '';
 
   nativeBuildInputs = [
     gfortran
     meson
     ninja
+    pkg-config
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
+
+  propagatedBuildInputs = lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
   ];
 
   buildInputs = [
     blas
+    (hwloc.override { inherit enableCuda; })
     lapack
     metis
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 
@@ -55,11 +71,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Sparse Parallel Robust Algorithms Library";
     homepage = "https://github.com/ralna/spral";
-    changelog = "https://github.com/ralna/spral/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/ralna/spral/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

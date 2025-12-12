@@ -9,7 +9,7 @@
   nix,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
   pyproject = true;
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nix-kernel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

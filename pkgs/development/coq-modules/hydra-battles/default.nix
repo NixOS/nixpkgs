@@ -19,21 +19,18 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.13" "8.16";
-        out = "0.9";
-      }
-      {
-        case = range "8.11" "8.12";
-        out = "0.4";
-      }
+      (case (range "8.13" "8.16") "0.9")
+      (case (range "8.11" "8.12") "0.4")
     ] null;
 
   useDune = true;
 
-  meta = with lib; {
+  meta = {
     description = "Exploration of some properties of Kirby and Paris' hydra battles, with the help of Coq";
     longDescription = ''
       An exploration of some properties of Kirby and Paris' hydra
@@ -42,12 +39,12 @@
       ordinal numbers, and a part of the so-called Ketonen and Solovay
       machinery (combinatorial properties of epsilon0).
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       siraben
       Zimmi48
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }).overrideAttrs
   (
@@ -58,6 +55,7 @@
     {
       propagatedBuildInputs = [
         equations
-      ] ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
+      ]
+      ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
     }
   )

@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   kmod,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fanout";
   version = "unstable-2022-10-17-${kernel.version}";
 
@@ -33,17 +34,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   passthru.tests = { inherit (nixosTests) fanout; };
 
-  meta = with lib; {
+  meta = {
     description = "Kernel-based publish-subscribe system";
     homepage = "https://github.com/bob-linuxtoys/fanout";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ therishidesai ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ therishidesai ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "linear-operator";
-  version = "0.5.3";
+  version = "0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "linear_operator";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fKDVaHyaneV6MafJd/RT2InZO5cuYoC36YgzQhfIH8g=";
+    tag = "v${version}";
+    hash = "sha256-qBC7wrpcZ8ViFqIOSd2F8heeBRQxrac/l33srHhNaIM=";
   };
 
   build-system = [
@@ -51,10 +51,10 @@ buildPythonPackage rec {
     "test_svd"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LinearOperator implementation to wrap the numerical nuts and bolts of GPyTorch";
     homepage = "https://github.com/cornellius-gp/linear_operator/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

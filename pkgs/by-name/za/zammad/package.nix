@@ -5,24 +5,22 @@
   fetchFromGitHub,
   applyPatches,
   bundlerEnv,
-  defaultGemConfig,
   callPackage,
   procps,
   ruby,
   postgresql,
-  imlib2,
   jq,
   moreutils,
   nodejs,
-  pnpm,
+  pnpm_9,
   cacert,
-  redis,
+  valkey,
   dataDir ? "/var/lib/zammad",
 }:
 
 let
   pname = "zammad";
-  version = "6.4.0";
+  version = "6.5.2";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -39,7 +37,7 @@ let
   };
 
   rubyEnv = bundlerEnv {
-    name = "${pname}-gems-${version}";
+    name = "zammad-gems-${version}";
     inherit version;
 
     # Which ruby version to select:
@@ -57,28 +55,6 @@ let
       "development"
       "postgres" # database
     ];
-    gemConfig = defaultGemConfig // {
-      pg = attrs: {
-        buildFlags = [ "--with-pg-config=${lib.getDev postgresql}/bin/pg_config" ];
-      };
-      rszr = attrs: {
-        buildInputs = [
-          imlib2
-          imlib2.dev
-        ];
-        buildFlags = [ "--without-imlib2-config" ];
-      };
-      mini_racer = attrs: {
-        buildFlags = [
-          "--with-v8-dir=\"${nodejs.libv8}\""
-        ];
-        dontBuild = false;
-        postPatch = ''
-          substituteInPlace ext/mini_racer_extension/extconf.rb \
-            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
-        '';
-      };
-    };
   };
 
 in
@@ -92,9 +68,9 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    redis
+    valkey
     postgresql
-    pnpm.configHook
+    pnpm_9.configHook
     nodejs
     procps
     cacert
@@ -102,10 +78,11 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    fetcherVersion = 1;
+    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
   buildPhase = ''
@@ -131,11 +108,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {
@@ -150,15 +128,15 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+  meta = {
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
     ];

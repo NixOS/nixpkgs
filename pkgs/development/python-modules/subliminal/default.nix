@@ -4,14 +4,21 @@
   fetchFromGitHub,
   pythonOlder,
 
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
   babelfish,
   beautifulsoup4,
   chardet,
   click,
   click-option-group,
+  defusedxml,
   dogpile-cache,
   enzyme,
   guessit,
+  knowit,
   srt,
   pysubs2,
   rarfile,
@@ -19,7 +26,11 @@
   platformdirs,
   stevedore,
   tomli,
+  tomlkit,
 
+  # nativeCheckInputs
+  colorama,
+  pypandoc,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -30,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.2.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,9 +49,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
+    tag = version;
+    hash = "sha256-QRxaLJAtI7Xe+3Llp3fJP12KblDJ8+MGNsmKT4t2O0k=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     babelfish
@@ -48,9 +64,11 @@ buildPythonPackage rec {
     chardet
     click
     click-option-group
+    defusedxml
     dogpile-cache
     enzyme
     guessit
+    knowit
     srt
     pysubs2
     rarfile
@@ -58,9 +76,12 @@ buildPythonPackage rec {
     platformdirs
     stevedore
     tomli
+    tomlkit
   ];
 
   nativeCheckInputs = [
+    colorama
+    pypandoc
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
@@ -73,6 +94,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "integration"
+    "test_cli_cache"
+    "test_cli_download"
+    "test_is_supported_archive"
     "test_refine"
     "test_scan"
     "test_hash"
@@ -80,8 +105,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to search and download subtitles";
+    mainProgram = "subliminal";
     homepage = "https://github.com/Diaoul/subliminal";
-    changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/Diaoul/subliminal/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

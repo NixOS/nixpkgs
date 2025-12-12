@@ -1,76 +1,84 @@
-{ lib
-, stdenv
-, cmake
-, libGLU
-, libGL
-, zlib
-, wxGTK
-, gtk3
-, libX11
-, gettext
-, glew
-, glm
-, cairo
-, curl
-, openssl
-, boost
-, pkg-config
-, doxygen
-, graphviz
-, pcre
-, libpthreadstubs
-, libXdmcp
-, unixODBC
-, libgit2
-, libsecret
-, libgcrypt
-, libgpg-error
+{
+  lib,
+  stdenv,
+  cmake,
+  libGLU,
+  libGL,
+  zlib,
+  wxGTK,
+  gtk3,
+  libX11,
+  gettext,
+  glew,
+  glm,
+  cairo,
+  curl,
+  openssl,
+  boost,
+  pkg-config,
+  doxygen,
+  graphviz,
+  libpthreadstubs,
+  libXdmcp,
+  unixODBC,
+  libgit2,
+  libsecret,
+  libgcrypt,
+  libgpg-error,
+  ninja,
+  writableTmpDirAsHomeHook,
 
-, util-linux
-, libselinux
-, libsepol
-, libthai
-, libdatrie
-, libxkbcommon
-, libepoxy
-, dbus
-, at-spi2-core
-, libXtst
-, pcre2
-, libdeflate
+  util-linuxMinimal,
+  libselinux,
+  libsepol,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  dbus,
+  at-spi2-core,
+  libXtst,
+  pcre2,
+  libdeflate,
 
-, swig
-, python
-, wxPython
-, opencascade-occt_7_6
-, libngspice
-, valgrind
+  swig,
+  python,
+  wxPython,
+  opencascade-occt_7_6,
+  libngspice,
+  valgrind,
+  protobuf_29,
+  nng,
 
-, stable
-, testing
-, baseName
-, kicadSrc
-, kicadVersion
-, withNgspice
-, withScripting
-, withI18n
-, debug
-, sanitizeAddress
-, sanitizeThreads
+  stable,
+  testing,
+  kicadSrc,
+  kicadVersion,
+  withNgspice,
+  withScripting,
+  withI18n,
+  debug,
+  sanitizeAddress,
+  sanitizeThreads,
 }:
 
-assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
-  "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
-assert testing -> !stable
-  -> throw "testing implies stable and cannot be used with stable = false";
+assert lib.assertMsg (
+  !(sanitizeAddress && sanitizeThreads)
+) "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+assert testing -> !stable -> throw "testing implies stable and cannot be used with stable = false";
 
 let
   opencascade-occt = opencascade-occt_7_6;
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    cmakeBool
+    cmakeFeature
+    optionals
+    optionalString
+    ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kicad-base";
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.rev;
+  version = if stable then kicadVersion else builtins.substring 0 10 finalAttrs.src.rev;
 
   src = kicadSrc;
 
@@ -86,47 +94,41 @@ stdenv.mkDerivation rec {
   # nix removes .git, so its approximated here
   postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+      --replace-fail "unknown" "${builtins.substring 0 10 finalAttrs.src.rev}"
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
-      --replace "0000000000000000000000000000000000000000" "${src.rev}"
+      --replace-fail "0000000000000000000000000000000000000000" "${finalAttrs.src.rev}"
   '';
 
-  makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
+  preConfigure = optionalString debug ''
+    export CFLAGS="''${CFLAGS:-} -Og -ggdb"
+    export CXXFLAGS="''${CXXFLAGS:-} -Og -ggdb"
+  '';
 
   cmakeFlags = [
-    "-DKICAD_USE_EGL=ON"
-    "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
+    (cmakeBool "KICAD_USE_EGL" true)
+    (cmakeFeature "OCC_INCLUDE_DIR" "${opencascade-occt}/include/opencascade")
     # https://gitlab.com/kicad/code/kicad/-/issues/17133
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
+    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;qa_spice")
+    (cmakeBool "KICAD_USE_CMAKE_FINDPROTOBUF" false)
+    (cmakeBool "KICAD_SCRIPTING_WXPYTHON" withScripting)
+    (cmakeBool "KICAD_BUILD_I18N" withI18n)
+    (cmakeBool "KICAD_BUILD_QA_TESTS" (!finalAttrs.doInstallCheck))
+    (cmakeBool "KICAD_STDLIB_DEBUG" debug)
+    (cmakeBool "KICAD_USE_VALGRIND" debug)
+    (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
+    (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
+    (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
   ]
-  ++ optional (stdenv.hostPlatform.system == "aarch64-linux")
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'qa_spice|qa_cli'"
-  ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
-  ++ optionals (!withScripting) [
-    "-DKICAD_SCRIPTING_WXPYTHON=OFF"
-  ]
-  ++ optionals (withI18n) [
-    "-DKICAD_BUILD_I18N=ON"
-  ]
-  ++ optionals (!doInstallCheck) [
-    "-DKICAD_BUILD_QA_TESTS=OFF"
-  ]
-  ++ optionals (debug) [
-    "-DKICAD_STDLIB_DEBUG=ON"
-    "-DKICAD_USE_VALGRIND=ON"
-  ]
-  ++ optionals (sanitizeAddress) [
-    "-DKICAD_SANITIZE_ADDRESS=ON"
-  ]
-  ++ optionals (sanitizeThreads) [
-    "-DKICAD_SANITIZE_THREADS=ON"
+  ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
   ];
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake
+    ninja
     doxygen
     graphviz
     pkg-config
@@ -138,7 +140,7 @@ stdenv.mkDerivation rec {
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
   ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linux
+    util-linuxMinimal
     libselinux
     libsepol
     libthai
@@ -158,7 +160,6 @@ stdenv.mkDerivation rec {
     libX11
     wxGTK
     gtk3
-    pcre
     libXdmcp
     gettext
     glew
@@ -173,28 +174,29 @@ stdenv.mkDerivation rec {
     unixODBC
     libdeflate
     opencascade-occt
-  ]
-  ++ optional (withScripting) wxPython
-  ++ optional (withNgspice) libngspice
-  ++ optional (debug) valgrind;
+    protobuf_29
 
-  # some ngspice tests attempt to write to $HOME/.cache/
-  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
-  # but failing tests still attempt to create $HOME
-  # and the newer CLI tests seem to also use $HOME...
-  HOME = "$TMP";
+    # This would otherwise cause a linking requirement for mbedtls.
+    (nng.override { mbedtlsSupport = false; })
+  ]
+  ++ optionals withScripting [ wxPython ]
+  ++ optionals withNgspice [ libngspice ]
+  ++ optionals debug [ valgrind ];
 
   # debug builds fail all but the python test
-  doInstallCheck = !(debug);
+  doInstallCheck = !debug;
   installCheckTarget = "test";
 
   nativeInstallCheckInputs = [
-    (python.withPackages(ps: with ps; [
-      numpy
-      pytest
-      cairosvg
-      pytest-image-diff
-    ]))
+    (python.withPackages (
+      ps: with ps; [
+        numpy
+        pytest
+        cairosvg
+        pytest-image-diff
+      ]
+    ))
+    writableTmpDirAsHomeHook
   ];
 
   dontStrip = debug;
@@ -207,5 +209,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kicad.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

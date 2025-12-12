@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "uni";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LSmQtndWBc7wCYBnyaeDb4Le4PQPcSO8lTp+CSC2jbc=";
   };
 
@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arp242/uni";
     description = "Query the Unicode database from the commandline, with good support for emojis";
     changelog = "https://github.com/arp242/uni/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chvp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chvp ];
     mainProgram = "uni";
   };
 }

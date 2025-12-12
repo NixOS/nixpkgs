@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = pname;
+    repo = "zram-generator";
     rev = "v${version}";
     hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };
@@ -52,6 +52,9 @@ rustPlatform.buildRustPackage rec {
     export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
   '';
 
+  # error[E0432]: unresolved import `self::consts`
+  doCheck = !stdenv.hostPlatform.isLoongArch64;
+
   dontCargoInstall = true;
 
   installFlags = [
@@ -68,10 +71,10 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/systemd/zram-generator";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Systemd unit generator for zram devices";
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

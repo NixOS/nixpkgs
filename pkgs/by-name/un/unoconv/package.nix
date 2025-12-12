@@ -29,22 +29,21 @@ stdenv.mkDerivation rec {
     makeFlags=prefix="$out"
   '';
 
-  postInstall =
-    ''
-      sed -i "s|/usr/bin/env python.*|${libreoffice-unwrapped.python.interpreter}|" "$out/bin/unoconv"
-      wrapProgram "$out/bin/unoconv" \
-          --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
-    ''
-    + lib.optionalString installSymlinks ''
-      make install-links prefix="$out"
-    '';
+  postInstall = ''
+    sed -i "s|/usr/bin/env python.*|${libreoffice-unwrapped.python.interpreter}|" "$out/bin/unoconv"
+    wrapProgram "$out/bin/unoconv" \
+        --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
+  ''
+  + lib.optionalString installSymlinks ''
+    make install-links prefix="$out"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
     homepage = "http://dag.wieers.com/home-made/unoconv/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "unoconv";
   };
 }

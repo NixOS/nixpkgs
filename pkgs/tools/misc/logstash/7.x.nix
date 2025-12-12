@@ -17,15 +17,15 @@ let
   hashes =
     if enableUnfree then
       {
-        x86_64-linux = "sha512-ze0hJxUHCN52bOxUs5upDj64tIE58P2BTow2kaCo6HreRiF9rfTTzNkNr/hCmEgE+/oFbgSEuOQLz+6G373RDQ==";
-        x86_64-darwin = "sha512-FOFd8d+4UddSGorjuUWW/JbQ5fQH4LU1f1HJLmdbfnb8Q5L4GEveb2LmWNILU8/a85V4HGmD6lL8mCJqH9CULQ==";
-        aarch64-linux = "sha512-giYqW88/6iT3haXzJVn/+b7uxjYhHq4GERmiq3tMIvjxDyu7B6g+X7JneaTYxhpNdn6gOD/hfXgNv+hFRq6lgg==";
+        x86_64-linux = "sha512-9JzopnY43Osoy4/0G9gxJYlbCl1a9Qy2pL4GL1uyjJ3uSNoOskEBhhsqLp9BhtJXOaquuRDgbJnXhbBrlE0rKg==";
+        x86_64-darwin = "sha512-ZcdKWFrIQUmGtxoWbLc2F7g85quXfRqy62DyVPR/9zBtMTgFH0eG4Cj40ELpW7nYXZqglmAUTF/0mZZYUg2Ciw==";
+        aarch64-linux = "sha512-V2Nt/lup4ofgoMqpAH3OHF8Fp0PvC1M8nl6sCKmTf+ZXQYHNjAJkJwGJwHeQQ0L/348JHyCkeWL43dS7Jr6ZJQ==";
       }
     else
       {
-        x86_64-linux = "sha512-OC9gx76k+RMdjqcDkrJCNbPYSQameyddaYMxUIB0foVxCmo6UvbdcwZGXRLPPn95in8rYOCjvPoBkmupiQw9xQ==";
-        x86_64-darwin = "sha512-1OEfEED/jjlT3Fd095Y5VYiWKnovytI3UYCCy1Rs3tEvkZPHYwqIQHfMQYeAvGgUci37ADwEDu8xrSQULHToLw==";
-        aarch64-linux = "sha512-QWW0AXOMNIXThxpUiRomvINm+917MvGrSDndrEw11IYYuvi0d0dckJiRytfnBbBNoOKpVhB68uOmfjIcZBNpWQ==";
+        x86_64-linux = "sha512-L11ZUdXC8VDiSEVDBMous2OaMlAFgvkQ+eDbmbA9r/sDIXY8W7dx3jgPNXoorDtatTemwy8aXw1XJGaVmj4T3Q==";
+        x86_64-darwin = "sha512-az5ujFtwcuNNGuITDeGRu1FB2bb8/hIUmGMvm0Xcfvs0GZPnCZVY6ScsiHZYjT8X+qBYkn/httT3MYozrPOy4Q==";
+        aarch64-linux = "sha512-iVft0kZYhvFJ1NKCfdePhRxDljPTwV+3G7wV94iykYISgLTVoehzDTMdxUyfK/mmQhu3hmmHbVpw1jXjTrS7ng==";
       };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
@@ -65,17 +65,17 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
       homepage = "https://www.elastic.co/products/logstash";
-      sourceProvenance = with sourceTypes; [
+      sourceProvenance = with lib.sourceTypes; [
         fromSource
         binaryBytecode # source bundles dependencies as jars
         binaryNativeCode # bundled jruby includes native code
       ];
-      license = if enableUnfree then licenses.elastic20 else licenses.asl20;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      license = if enableUnfree then lib.licenses.elastic20 else lib.licenses.asl20;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         offline
         basvandijk
       ];

@@ -5,9 +5,10 @@
   docopt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "spoof-mac";
   version = "unstable-2018-01-27";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "feross";
@@ -23,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spoofmac" ];
 
-  meta = with lib; {
+  meta = {
     description = "Change your MAC address for debugging purposes";
     homepage = "https://github.com/feross/SpoofMAC";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

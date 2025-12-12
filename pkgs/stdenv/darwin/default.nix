@@ -126,25 +126,21 @@ let
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-              ''
-              + lib.optionalString (isFromBootstrapFiles prevStage.llvmPackages.clang-unwrapped) ''
-                # Work around the `-nostdlibinc` patch in the bootstrap tools.
-                # TODO: Remove after the bootstrap tools have been updated.
-                substituteAll ${builtins.toFile "add-flags-extra.sh" ''
-                  if [ "@darwinMinVersion@" ]; then
-                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
-                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
-                  fi
-                ''} add-flags-extra.sh
-                cat add-flags-extra.sh >> $out/nix-support/add-flags.sh
               '';
 
             cc = prevStage.llvmPackages.clang-unwrapped;
             bintools = prevStage.darwin.binutils;
 
             isClang = true;
-            libc = prevStage.darwin.libSystem;
-            inherit (prevStage.llvmPackages) libcxx;
+            inherit (prevStage) libc;
+            # TODO: replace with `darwin.libcxx` once the bootstrap tools no longer have libc++.
+            libcxx =
+              if
+                prevStage.darwin.libcxx == null || name == "bootstrap-stage1" || name == "bootstrap-stage-xclang"
+              then
+                prevStage.llvmPackages.libcxx
+              else
+                prevStage.darwin.libcxx;
 
             inherit lib;
             inherit (prevStage) coreutils gnugrep;
@@ -153,7 +149,7 @@ let
             runtimeShell = prevStage.ccWrapperStdenv.shell;
           };
 
-      bash = prevStage.bash or bootstrapTools;
+      bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
       thisStdenv = import ../generic {
         name = "${name}-stdenv-darwin";
@@ -168,7 +164,7 @@ let
         inherit extraNativeBuildInputs;
 
         preHook =
-          lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
+          lib.optionalString (!isBuiltByNixpkgsCompiler bashNonInteractive) ''
             # Don't patch #!/interpreter because it leads to retained
             # dependencies on the bootstrapTools in the final stdenv.
             dontPatchShebangs=1
@@ -181,9 +177,9 @@ let
             export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
           '';
 
-        shell = bash + "/bin/bash";
+        shell = bashNonInteractive + "/bin/bash";
         initialPath = [
-          bash
+          bashNonInteractive
           prevStage.file
           bootstrapTools
         ];
@@ -192,6 +188,7 @@ let
           inherit lib;
           stdenvNoCC = prevStage.ccWrapperStdenv or thisStdenv;
           curl = bootstrapTools;
+          inherit (config) hashedMirrors rewriteURL;
         };
 
         inherit cc;
@@ -220,7 +217,7 @@ let
     };
 
   # Dependencies - these are packages that are rebuilt together in groups. Defining them here ensures they are
-  # asserted and overlayed together. It also removes a lot of clutter from the stage definitions.
+  # asserted and overlaid together. It also removes a lot of clutter from the stage definitions.
   #
   # When multiple dependency sets share a dependency, it should be put in the one that will be (re)built first.
   # That makes sure everything else will share the same dependency in the final stdenv.
@@ -260,7 +257,6 @@ let
       m4
       meson
       ninja
-      openldap
       openssh
       patchutils
       pbzx
@@ -287,7 +283,6 @@ let
       coreutils
       gmp
       gnugrep
-      libtapi
       openssl
       pcre2
       xar
@@ -310,6 +305,7 @@ let
 
   # LLVM tools packages are staged separately (xclang, stage3) from LLVM libs (xclang).
   llvmLibrariesPackages = prevStage: { inherit (prevStage.llvmPackages) compiler-rt libcxx; };
+  llvmLibrariesDarwinDepsNoCC = prevStage: { inherit (prevStage.darwin) libcxx; };
   llvmLibrariesDeps = _: { };
 
   llvmToolsPackages = prevStage: {
@@ -328,12 +324,11 @@ let
   # SDK packages include propagated packages and source release packages built during the bootstrap.
   sdkPackages = prevStage: {
     inherit (prevStage)
-      bash
+      bashNonInteractive
       libpng
       libxml2
       libxo
       ncurses
-      openbsm
       openpam
       xcbuild
       zlib
@@ -378,6 +373,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       darwin = {
         binutils = null;
         binutils-unwrapped = null;
+        libcxx = null;
         libSystem = null;
         sigtool = null;
       };
@@ -408,7 +404,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # stage should only access the stage that came before it.
         ccWrapperStdenv = self.stdenv;
 
-        bash = bootstrapTools // {
+        bashNonInteractive = bootstrapTools // {
           shellPath = "/bin/bash";
         };
 
@@ -418,7 +414,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gnugrep = bootstrapTools;
         pbzx = bootstrapTools;
 
-        jq = null;
+        jq = bootstrapTools;
 
         cctools = bootstrapTools // {
           libtool = bootstrapTools;
@@ -447,34 +443,13 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               runtimeShell = self.stdenvNoCC.shell;
 
               bintools = selfDarwin.binutils-unwrapped;
-
-              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly,
-              # and additional linker flags to work around a since‐removed patch.
-              # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
-              extraBuildCommands = ''
-                printf %s ${lib.escapeShellArg ''
-                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
-                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
-                ''} >> $out/nix-support/add-local-ldflags-before.sh
-
-                echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-                export signingUtils=${selfDarwin.signingUtils}
-
-                wrap \
-                  install_name_tool ${../../build-support/bintools-wrapper/darwin-install_name_tool-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/install_name_tool"
-
-                wrap \
-                  strip ${../../build-support/bintools-wrapper/darwin-strip-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/strip"
-              '';
             };
 
             binutils-unwrapped =
               (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
                 (old: {
                   version = "boot";
+                  __intentionallyOverridingVersion = true; # to avoid a warning suggesting to provide src
                   passthru = (old.passthru or { }) // {
                     isFromBootstrapFiles = true;
                   };
@@ -492,95 +467,90 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         );
 
         llvmPackages =
-          super.llvmPackages
-          // (
-            let
-              tools = super.llvmPackages.tools.extend (
-                selfTools: _: {
-                  libclang = self.stdenv.mkDerivation {
-                    name = "bootstrap-stage0-clang";
-                    version = "boot";
-                    outputs = [
-                      "out"
-                      "lib"
-                    ];
-                    buildCommand = ''
-                      mkdir -p $out/lib
-                      ln -s $out $lib
-                      ln -s ${bootstrapTools}/bin       $out/bin
-                      ln -s ${bootstrapTools}/lib/clang $out/lib
-                      ln -s ${bootstrapTools}/include   $out
-                    '';
-                    passthru = {
-                      isFromBootstrapFiles = true;
-                      hardeningUnsupportedFlags = [
-                        "fortify3"
-                        "shadowstack"
-                        "stackclashprotection"
-                        "zerocallusedregs"
-                      ];
-                    };
-                  };
-                  libllvm = self.stdenv.mkDerivation {
-                    name = "bootstrap-stage0-llvm";
-                    outputs = [
-                      "out"
-                      "lib"
-                    ];
-                    buildCommand = ''
-                      mkdir -p $out/bin $out/lib
-                      ln -s $out $lib
-                      for tool in ${toString super.darwin.binutils-unwrapped.llvm_cmds}; do
-                        cctoolsTool=''${tool//-/_}
-                        toolsrc="${bootstrapTools}/bin/$cctoolsTool"
-                        if [ -e "$toolsrc" ]; then
-                          ln -s "$toolsrc" $out/bin/llvm-$tool
-                        fi
-                      done
-                      ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
-                      ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
-                    '';
-                    passthru.isFromBootstrapFiles = true;
-                  };
-                  llvm-manpages = self.llvmPackages.libllvm;
-                  lld = self.stdenv.mkDerivation {
-                    name = "bootstrap-stage0-lld";
-                    buildCommand = "";
-                    passthru = {
-                      isLLVM = true;
-                      isFromBootstrapFiles = true;
-                    };
-                  };
-                }
-              );
-              libraries = super.llvmPackages.libraries.extend (
-                _: _: {
-                  compiler-rt = self.stdenv.mkDerivation {
-                    name = "bootstrap-stage0-compiler-rt";
-                    buildCommand = ''
-                      mkdir -p $out/lib $out/share
-                      ln -s ${bootstrapTools}/lib/libclang_rt* $out/lib
-                      ln -s ${bootstrapTools}/lib/darwin       $out/lib
-                    '';
-                    passthru.isFromBootstrapFiles = true;
-                  };
-                  libcxx = self.stdenv.mkDerivation {
-                    name = "bootstrap-stage0-libcxx";
-                    buildCommand = ''
-                      mkdir -p $out/lib $out/include
-                      ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib
-                      ln -s ${bootstrapTools}/include/c++      $out/include
-                    '';
-                    passthru = {
-                      isLLVM = true;
-                      isFromBootstrapFiles = true;
-                    };
-                  };
-                }
-              );
-            in
-            { inherit tools libraries; } // tools // libraries
-          );
+          (super.llvmPackages.overrideScope (
+            selfLlvmPackages: _: {
+              libclang = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-clang";
+                version = "boot";
+                outputs = [
+                  "out"
+                  "lib"
+                ];
+                buildCommand = ''
+                  mkdir -p $out/lib
+                  ln -s $out $lib
+                  ln -s ${bootstrapTools}/bin       $out/bin
+                  ln -s ${bootstrapTools}/lib/clang $out/lib
+                  ln -s ${bootstrapTools}/include   $out
+                '';
+                passthru = {
+                  isFromBootstrapFiles = true;
+                  hardeningUnsupportedFlags = [
+                    "fortify3"
+                    "pacret"
+                    "shadowstack"
+                    "stackclashprotection"
+                    "zerocallusedregs"
+                  ];
+                };
+              };
+              libllvm = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-llvm";
+                outputs = [
+                  "out"
+                  "lib"
+                ];
+                buildCommand = ''
+                  mkdir -p $out/bin $out/lib
+                  ln -s $out $lib
+                  for tool in ${toString super.darwin.binutils-unwrapped.llvm_cmds}; do
+                    cctoolsTool=''${tool//-/_}
+                    toolsrc="${bootstrapTools}/bin/$cctoolsTool"
+                    if [ -e "$toolsrc" ]; then
+                      ln -s "$toolsrc" $out/bin/llvm-$tool
+                    fi
+                  done
+                  ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
+                  ln -s ${bootstrapTools}/bin/llvm-readtapi $out/bin/llvm-readtapi
+                  ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
+                '';
+                passthru.isFromBootstrapFiles = true;
+              };
+              llvm-manpages = self.llvmPackages.libllvm;
+              lld = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-lld";
+                buildCommand = "";
+                passthru = {
+                  isLLVM = true;
+                  isFromBootstrapFiles = true;
+                };
+              };
+              compiler-rt = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-compiler-rt";
+                buildCommand = ''
+                  mkdir -p $out/lib $out/share
+                  ln -s ${bootstrapTools}/lib/libclang_rt* $out/lib
+                  ln -s ${bootstrapTools}/lib/darwin       $out/lib
+                '';
+                passthru.isFromBootstrapFiles = true;
+              };
+              libcxx = self.stdenv.mkDerivation {
+                name = "bootstrap-stage0-libcxx";
+                buildCommand = ''
+                  mkdir -p $out/lib $out/include
+                  ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib
+                  ln -s ${bootstrapTools}/include/c++      $out/include
+                '';
+                passthru = {
+                  isLLVM = true;
+                  isFromBootstrapFiles = true;
+                };
+              };
+            }
+          ))
+          // {
+            inherit (super.llvmPackages) override;
+          };
       };
 
       extraPreHook = ''
@@ -600,7 +570,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       (llvmLibrariesPackages prevStage)
       {
         inherit (prevStage)
-          bash
+          bashNonInteractive
           cctools
           coreutils
           cpio
@@ -614,7 +584,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isFromNixpkgs [
       (sdkPackagesNoCC prevStage)
-      { inherit (prevStage.darwin) binutils libSystem; }
+      {
+        inherit (prevStage.darwin) binutils libSystem;
+        inherit (prevStage) libc;
+      }
     ];
 
     stageFun prevStage {
@@ -623,8 +596,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       overrides = self: super: {
         inherit (prevStage) ccWrapperStdenv cctools ld64;
 
-        binutils-unwrapped = builtins.throw "nothing in the Darwin bootstrap should depend on GNU binutils";
-        curl = builtins.throw "nothing in the Darwin bootstrap can depend on curl";
+        binutils-unwrapped = throw "nothing in the Darwin bootstrap should depend on GNU binutils";
+        curl = throw "nothing in the Darwin bootstrap can depend on curl";
 
         # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
         cmake = self.cmakeMinimal;
@@ -632,14 +605,20 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # Use libiconvReal with gettext to break an infinite recursion.
         gettext = super.gettext.override { libiconv = super.libiconvReal; };
 
+        # Disable grep’s tests for now due to impure locale updates in
+        # macOS 15.4 breaking them in the bootstrap.
+        gnugrep = super.gnugrep.overrideAttrs { doCheck = false; };
+
         # Disable tests because they use dejagnu, which fails to run.
         libffi = super.libffi.override { doCheck = false; };
 
         # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
         libxml2 = super.libxml2.override { pythonSupport = false; };
 
-        # Avoid pulling in openldap just to run Meson’s tests.
+        # TODO: The Meson tests fail when using pkgconf, as we do in
+        # the bootstrap. Remove this once that’s fixed.
         meson = super.meson.overrideAttrs { doInstallCheck = false; };
+
         ninja = super.ninja.override { buildDocs = false; };
 
         # pkg-config builds glib, which checks for `arpa/nameser.h` and fails to build if it can’t find it.
@@ -681,34 +660,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           selfDarwin: superDarwin: {
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
-            postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
-
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
               inherit (self) coreutils;
               bintools = selfDarwin.binutils-unwrapped;
               libc = selfDarwin.libSystem;
-
-              # Bootstrap tools cctools needs the hook and wrappers to make sure things are signed properly.
-              # This can be dropped once the bootstrap tools cctools has been updated to 1010.6.
-              extraBuildCommands = ''
-                printf %s ${lib.escapeShellArg ''
-                  extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
-                  extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
-                ''} >> $out/nix-support/add-local-ldflags-before.sh
-
-                echo 'source ${selfDarwin.postLinkSignHook}' >> $out/nix-support/post-link-hook
-
-                export signingUtils=${selfDarwin.signingUtils}
-
-                wrap \
-                  install_name_tool ${../../build-support/bintools-wrapper/darwin-install_name_tool-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/install_name_tool"
-
-                wrap \
-                  strip ${../../build-support/bintools-wrapper/darwin-strip-wrapper.sh} \
-                  "${selfDarwin.binutils-unwrapped}/bin/strip"
-              '';
             };
 
             # Avoid building unnecessary Python dependencies due to building LLVM manpages.
@@ -720,11 +676,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         );
 
         llvmPackages =
-          let
-            tools = super.llvmPackages.tools.extend (_: _: llvmToolsPackages prevStage);
-            libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
-          in
-          super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+          (super.llvmPackages.overrideScope (
+            _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
+          ))
+          // {
+            inherit (super.llvmPackages) override;
+          };
       };
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
@@ -774,7 +731,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (disallowedPackages prevStage)
           # Only cctools and ld64 are rebuilt from `bintoolsPackages` to avoid rebuilding their dependencies
           # again in this stage after building them in stage 1.
-          (lib.filterAttrs (name: _: name != "ld64" && name != "cctools") (bintoolsPackages prevStage))
+          (lib.removeAttrs (bintoolsPackages prevStage) [
+            "ld64"
+            "cctools"
+          ])
           (llvmToolsDeps prevStage)
           (sdkPackages prevStage)
           (sdkPackagesNoCC prevStage)
@@ -847,14 +807,14 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             inherit (prevStage) ccWrapperStdenv;
 
             # Avoid an infinite recursion due to the SDK’s including ncurses, which depends on bash in its `dev` output.
-            bash = super.bash.override { stdenv = self.darwin.bootstrapStdenv; };
+            bashNonInteractive = super.bashNonInteractive.override { stdenv = self.darwin.bootstrapStdenv; };
 
             # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
             libxml2 = super.libxml2.override { pythonSupport = false; };
 
             # Use Bash from this stage to avoid propagating Bash from a previous stage to the final stdenv.
             ncurses = super.ncurses.override {
-              stdenv = self.darwin.bootstrapStdenv.override { shell = lib.getExe self.bash; };
+              stdenv = self.darwin.bootstrapStdenv.override { shell = lib.getExe self.bashNonInteractive; };
             };
 
             darwin = super.darwin.overrideScope (
@@ -871,13 +831,17 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             );
 
             llvmPackages =
-              let
-                tools = super.llvmPackages.tools.extend (
-                  _: _: llvmToolsPackages prevStage // { inherit (prevStage.llvmPackages) clangNoCompilerRtWithLibc; }
-                );
-                libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
-              in
-              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+              (super.llvmPackages.overrideScope (
+                _: _:
+                llvmToolsPackages prevStage
+                // llvmLibrariesPackages prevStage
+                // {
+                  inherit (prevStage.llvmPackages) clangNoCompilerRtWithLibc;
+                }
+              ))
+              // {
+                inherit (super.llvmPackages) override;
+              };
           }
         ];
 
@@ -942,35 +906,19 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
                 inherit (prevStage.darwin) libSystem;
+
+                # Disable building the documentation due to the dependency on llvm-manpages,
+                # which brings in a bunch of Python dependencies.
+                binutils-unwrapped = superDarwin.binutils-unwrapped.override {
+                  inherit (self) cctools ld64;
+                  enableManpages = false;
+                };
               }
             );
 
-            llvmPackages =
-              let
-                tools = super.llvmPackages.tools.extend (
-                  _: superTools: {
-                    # darwin.binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
-                    # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
-                    # inputs. The following set of overrides allow the LLVM documentation to be built without
-                    # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
-                    #
-                    # However, even without darwin.binutils-unwrapped, this has to be overriden in the LLVM package set
-                    # because otherwise llvmPackages.llvm-manpages on its own is broken.
-                    llvm-manpages = superTools.llvm-manpages.override {
-                      python3Packages = self.python3.pkgs.overrideScope (
-                        _: superPython: {
-                          hatch-vcs = superPython.hatch-vcs.overrideAttrs { doInstallCheck = false; };
-                          markdown-it-py = superPython.markdown-it-py.overrideAttrs { doInstallCheck = false; };
-                          mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs { doInstallCheck = false; };
-                          myst-parser = superPython.myst-parser.overrideAttrs { doInstallCheck = false; };
-                        }
-                      );
-                    };
-                  }
-                );
-                libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
-              in
-              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+            llvmPackages = (super.llvmPackages.overrideScope (_: _: llvmLibrariesPackages prevStage)) // {
+              inherit (super.llvmPackages) override;
+            };
           }
         ];
 
@@ -1041,48 +989,48 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             );
 
             llvmPackages =
-              let
-                tools = super.llvmPackages.tools.extend (
-                  _: _:
-                  llvmToolsPackages prevStage
-                  // {
-                    libcxxClang = super.wrapCCWith rec {
-                      nativeTools = false;
-                      nativeLibc = false;
+              (super.llvmPackages.overrideScope (
+                _: _:
+                llvmToolsPackages prevStage
+                // llvmLibrariesPackages prevStage
+                // {
+                  systemLibcxxClang = super.wrapCCWith rec {
+                    nativeTools = false;
+                    nativeLibc = false;
 
-                      inherit (prevStage) expand-response-params;
+                    inherit (prevStage) expand-response-params;
 
-                      extraPackages = [ self.llvmPackages.compiler-rt ];
+                    extraPackages = [ self.llvmPackages.compiler-rt ];
 
-                      extraBuildCommands = ''
-                        rsrc="$out/resource-root"
-                        mkdir "$rsrc"
-                        ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
-                        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-                        ln -s "${prevStage.llvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
-                        ln -s "${prevStage.llvmPackages.compiler-rt.out}/share" "$rsrc/share"
-                      '';
+                    extraBuildCommands = ''
+                      rsrc="$out/resource-root"
+                      mkdir "$rsrc"
+                      ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major (lib.getVersion cc)}/include" "$rsrc"
+                      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+                      ln -s "${prevStage.llvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
+                      ln -s "${prevStage.llvmPackages.compiler-rt.out}/share" "$rsrc/share"
+                    '';
 
-                      cc = self.llvmPackages.clang-unwrapped;
-                      bintools = self.darwin.binutils;
+                    cc = self.llvmPackages.clang-unwrapped;
+                    bintools = self.darwin.binutils;
 
-                      isClang = true;
-                      libc = self.darwin.libSystem;
-                      inherit (self.llvmPackages) libcxx;
+                    isClang = true;
+                    libc = self.darwin.libSystem;
+                    inherit (self.darwin) libcxx;
 
-                      inherit lib;
-                      inherit (self)
-                        stdenvNoCC
-                        coreutils
-                        gnugrep
-                        runtimeShell
-                        ;
-                    };
-                  }
-                );
-                libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
-              in
-              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+                    inherit lib;
+                    inherit (self)
+                      stdenvNoCC
+                      coreutils
+                      gnugrep
+                      runtimeShell
+                      ;
+                  };
+                }
+              ))
+              // {
+                inherit (super.llvmPackages) override;
+              };
           }
         ];
 
@@ -1162,7 +1110,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         extraAttrs = {
           inherit bootstrapTools;
           libc = prevStage.darwin.libSystem;
-          shellPackage = prevStage.bash;
+          shellPackage = prevStage.bashNonInteractive;
         };
 
         disallowedRequisites = [ bootstrapTools.out ];
@@ -1172,7 +1120,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             with prevStage;
             [
               apple-sdk
-              bash
+              apple-sdk.cups-headers
+              bashNonInteractive
               bzip2.bin
               bzip2.out
               cc.expand-response-params
@@ -1197,13 +1146,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ld64.lib
               ld64.out
               libffi.out
-              libtapi.out
-              libunistring.out
               libxml2.out
               ncurses.dev
               ncurses.man
               ncurses.out
-              openbsm
               openpam
               openssl.out
               patch
@@ -1223,6 +1169,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ]
           ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
+            libcxx
             libiconv.out
             libresolv.out
             libsbuf.out
@@ -1235,8 +1182,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             (lib.getLib clang-unwrapped)
             compiler-rt
             compiler-rt.dev
-            libcxx
-            libcxx.dev
             lld
             llvm
             llvm.lib
@@ -1267,8 +1212,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 patch
                 ;
 
-              # TODO: Simplify when dropping support for macOS < 11.
-              "apple-sdk_${builtins.replaceStrings [ "." ] [ "_" ] sdkMajorVersion}" = self.apple-sdk;
+              "apple-sdk_${sdkMajorVersion}" = self.apple-sdk;
 
               darwin = super.darwin.overrideScope (
                 _: _:
@@ -1296,16 +1240,19 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               "llvmPackages_${lib.versions.major prevStage.llvmPackages.release_version}" =
                 let
                   llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
-                  tools = super."llvmPackages_${llvmVersion}".tools.extend (_: _: llvmToolsPackages prevStage);
-                  libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
-                    _: _:
-                    llvmLibrariesPackages prevStage
-                    // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
-                      inherit (prevStage.llvmPackages) clang;
-                    }
-                  );
                 in
-                super."llvmPackages_${llvmVersion}" // { inherit tools libraries; } // tools // libraries;
+                (super."llvmPackages_${llvmVersion}".overrideScope (
+                  _: _:
+                  llvmToolsPackages prevStage
+                  // llvmLibrariesPackages prevStage
+                  // {
+                    inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                  }
+                ))
+                // {
+                  inherit (super."llvmPackages_${llvmVersion}") override;
+                  recurseForDerivations = true;
+                };
             }
           ];
       };
@@ -1321,11 +1268,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.darwin.sigtool;
 
     assert isFromNixpkgs prevStage.darwin.libSystem;
+    assert isFromNixpkgs prevStage.libc;
     assert isFromNixpkgs prevStage.darwin.binutils-unwrapped;
 
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libllvm;
-    assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxx;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.compiler-rt;
 
     # Make sure these evaluate since they were disabled explicitly in the bootstrap.
@@ -1337,7 +1284,24 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert prevStage.libiconv == prevStage.darwin.libiconv;
 
     {
-      inherit (prevStage) config overlays stdenv;
+      inherit (prevStage) config overlays;
+      # This should be done in the `overrideScope` above, but it causes rebuilds.
+      # TODO: Move it there once https://github.com/NixOS/nixpkgs/pull/445668 is merged.
+      stdenv = prevStage.stdenv // {
+        overrides =
+          self: super:
+          (prevStage.stdenv.overrides self super)
+          // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (
+            let
+              llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
+            in
+            {
+              "llvmPackages_${llvmVersion}" = prevStage."llvmPackages_${llvmVersion}" // {
+                inherit (prevStage) clang;
+              };
+            }
+          );
+      };
     }
   )
 ]

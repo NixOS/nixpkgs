@@ -75,6 +75,7 @@ in
 
         "usbtouchscreen"
         "evdev"
+        "psmouse"
       ]
       ++ lib.optionals cfg.allowVendorDrivers [
         "intel_lpss_pci"
@@ -86,6 +87,7 @@ in
       contents."/etc/unl0kr.conf".source = settingsFormat.generate "unl0kr.conf" cfg.settings;
       storePaths = with pkgs; [
         libinput
+        libinput.out
         xkeyboard_config
         (lib.getExe' cfg.package "unl0kr")
         "${cfg.package}/libexec/unl0kr-agent"

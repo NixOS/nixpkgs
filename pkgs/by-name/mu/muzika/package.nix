@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muzika";
-  version = "unstable-2023-11-07";
+  version = "0-unstable-2023-11-07";
 
   src = fetchFromGitHub {
     owner = "vixalien";
@@ -85,10 +85,10 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/com.vixalien.muzika $out/bin/muzika
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Elegant music streaming app";
     homepage = "https://github.com/vixalien/muzika";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

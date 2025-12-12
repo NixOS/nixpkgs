@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommand,
+  config,
   pkg-config,
   libtool,
   curl,
@@ -20,7 +22,7 @@
   numactl,
   readline,
   freeipmi,
-  xorg,
+  xauth,
   lz4,
   rdma-core,
   nixosTests,
@@ -31,13 +33,13 @@
   http-parser,
   # enable internal X11 support via libssh2
   enableX11 ? true,
-  enableGtk2 ? false,
-  gtk2,
+  enableNVML ? config.cudaSupport,
+  cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "24.11.0.1";
+  version = "25.05.3.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -45,8 +47,8 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-waUCyzLCK3NRp8DfkvzWjGjzlB1MIZ7N9X+nfjrdAFY=";
+    rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-W/q9eN4Ov3pxp2qyr3b7G4ayDaNtFUPQeAcOHCB23Q8=";
   };
 
   outputs = [
@@ -54,28 +56,21 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  patches = [
-    # increase string length to allow for full
-    # path of 'echo' in nix store
-    ./common-env-echo.patch
-  ];
+  prePatch = ''
+    substituteInPlace src/common/env.c \
+        --replace "/bin/echo" "${lib.getExe' coreutils "echo"}"
 
-  prePatch =
-    ''
-      substituteInPlace src/common/env.c \
-          --replace "/bin/echo" "${coreutils}/bin/echo"
+    # Autoconf does not support split packages for pmix (libs and headers).
+    # Fix the path to the pmix libraries, so dlopen can find it.
+    substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
+        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
 
-      # Autoconf does not support split packages for pmix (libs and headers).
-      # Fix the path to the pmix libraries, so dlopen can find it.
-      substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
-          --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
-                    'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
-
-    ''
-    + (lib.optionalString enableX11 ''
-      substituteInPlace src/common/x11_util.c \
-          --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
-    '');
+  ''
+  + (lib.optionalString enableX11 ''
+    substituteInPlace src/common/x11_util.c \
+        --replace '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
+  '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
@@ -88,51 +83,55 @@ stdenv.mkDerivation rec {
     python3
     perl
   ];
-  buildInputs =
-    [
-      curl
-      python3
-      munge
-      pam
-      libmysqlclient
-      ncurses
-      lz4
-      rdma-core
-      lua
-      hwloc
-      numactl
-      readline
-      freeipmi
-      shadow.su
-      pmix
-      json_c
-      libjwt
-      libyaml
-      dbus
-      libbpf
-      http-parser
-    ]
-    ++ lib.optionals enableX11 [ xorg.xauth ]
-    ++ lib.optionals enableGtk2 [ gtk2 ];
+  buildInputs = [
+    curl
+    python3
+    munge
+    pam
+    libmysqlclient
+    ncurses
+    lz4
+    rdma-core
+    lua
+    hwloc
+    numactl
+    readline
+    freeipmi
+    shadow.su
+    pmix
+    json_c
+    libjwt
+    libyaml
+    dbus
+    libbpf
+    http-parser
+  ]
+  ++ lib.optionals enableX11 [ xauth ]
+  ++ lib.optionals enableNVML [
+    (runCommand "collect-nvml" { } ''
+      mkdir $out
+      ln -s ${lib.getOutput "include" cudaPackages.cuda_nvml_dev}/include $out/include
+      ln -s ${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs $out/lib
+    '')
+  ];
 
-  configureFlags =
-    [
-      "--with-freeipmi=${freeipmi}"
-      "--with-http-parser=${http-parser}"
-      "--with-hwloc=${lib.getDev hwloc}"
-      "--with-json=${lib.getDev json_c}"
-      "--with-jwt=${libjwt}"
-      "--with-lz4=${lib.getDev lz4}"
-      "--with-munge=${munge}"
-      "--with-yaml=${lib.getDev libyaml}"
-      "--with-ofed=${lib.getDev rdma-core}"
-      "--sysconfdir=/etc/slurm"
-      "--with-pmix=${lib.getDev pmix}"
-      "--with-bpf=${libbpf}"
-      "--without-rpath" # Required for configure to pick up the right dlopen path
-    ]
-    ++ (lib.optional enableGtk2 "--disable-gtktest")
-    ++ (lib.optional (!enableX11) "--disable-x11");
+  configureFlags = [
+    "--with-freeipmi=${freeipmi}"
+    "--with-http-parser=${http-parser}"
+    "--with-hwloc=${lib.getDev hwloc}"
+    "--with-json=${lib.getDev json_c}"
+    "--with-jwt=${libjwt}"
+    "--with-lz4=${lib.getDev lz4}"
+    "--with-munge=${munge}"
+    "--with-yaml=${lib.getDev libyaml}"
+    "--with-ofed=${lib.getDev rdma-core}"
+    "--sysconfdir=/etc/slurm"
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-bpf=${libbpf}"
+    "--without-rpath" # Required for configure to pick up the right dlopen path
+  ]
+  ++ (lib.optional (!enableX11) "--disable-x11")
+  ++ (lib.optional enableNVML "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
@@ -147,14 +146,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
-      jagajaga
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       markuskowa
     ];
   };
-}
+})

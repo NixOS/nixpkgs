@@ -12,10 +12,16 @@ This chapter will be organized in three parts. First, it will describe the basic
 
 Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools.
 
-In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
+In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like this:
 
 ```nix
-{ stdenv, fooDep, barDep, ... }: {
+{
+  stdenv,
+  fooDep,
+  barDep,
+  ...
+}:
+{
   # ...stdenv.buildPlatform...
 }
 ```
@@ -46,7 +52,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 `config`
 
-: This is a 3- or 4- component shorthand for the platform. Examples of this would be `x86_64-unknown-linux-gnu` and `aarch64-apple-darwin14`. This is a standard format called the "LLVM target triple", as they are pioneered by LLVM. In the 4-part form, this corresponds to `[cpu]-[vendor]-[os]-[abi]`. This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed. This needs a better name than `config`!
+: This is a 3- or 4- component shorthand for the platform. Examples of this would be `x86_64-unknown-linux-gnu` and `aarch64-apple-darwin14`. This is a standard format called the "LLVM target triple", as it was pioneered by LLVM. In the 4-part form, this corresponds to `[cpu]-[vendor]-[os]-[abi]`. This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed. This needs a better name than `config`!
 
 `parsed`
 
@@ -80,7 +86,7 @@ If both the dependency and depending packages aren't compilers or other machine-
 
 Finally, if the depending package is a compiler or other machine-code-producing tool, it might need dependencies that run at "emit time". This is for compilers that (regrettably) insist on being built together with their source languages' standard libraries. Assuming build != host != target, a run-time dependency of the standard library cannot be run at the compiler's build time or run time, but only at the run time of code emitted by the compiler.
 
-Putting this all together, that means that we have dependency types of the form "X→ E", which means that the dependency executes on X and emits code for E; each of X and E can be `build`, `host`, or `target`, and E can be `*` to indicate that the dependency is not a compiler-like package.
+Putting this all together, that means that we have dependency types of the form `X → E`, which means that the dependency executes on `X` and emits code for `E`; each of `X` and `E` can be `build`, `host`, or `target`, and `E` can be `*` to indicate that the dependency is not a compiler-like package.
 
 Dependency types describe the relationships that a package has with each of its transitive dependencies.  You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of *their* formal parameters, and so on.   Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
 
@@ -88,17 +94,17 @@ Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
-| Dependency type | Dependency’s host platform | Dependency’s target platform |
-|-----------------|----------------------------|------------------------------|
-| build → *       | build                      | (none)                       |
-| build → build   | build                      | build                        |
-| build → host    | build                      | host                         |
-| build → target  | build                      | target                       |
-| host → *        | host                       | (none)                       |
-| host → host     | host                       | host                         |
-| host → target   | host                       | target                       |
-| target → *      | target                     | (none)                       |
-| target → target | target                     | target                       |
+| Dependency type   | Dependency’s host platform | Dependency’s target platform |
+|-------------------|----------------------------|------------------------------|
+| `build → *`       | `build`                    | (none)                       |
+| `build → build`   | `build`                    | `build`                      |
+| `build → host`    | `build`                    | `host`                       |
+| `build → target`  | `build`                    | `target`                     |
+| `host → *`        | `host`                     | (none)                       |
+| `host → host`     | `host`                     | `host`                       |
+| `host → target`   | `host`                     | `target`                     |
+| `target → *`      | `target`                   | (none)                       |
+| `target → target` | `target`                   | `target`                     |
 
 Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
@@ -129,13 +135,11 @@ Some frequently encountered problems when packaging for cross-compilation should
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
 ```nix
-{
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-}
+{ makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ]; }
 ```
 
 #### How do I avoid compiling a GCC cross-compiler from source? {#cross-qa-avoid-compiling-gcc-cross-compiler}
-On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86\_64-darwin", "x86\_64-linux", and "aarch64-linux".  See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages.  For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
+On less powerful machines, it can be inconvenient to cross-compile a package only to find out that GCC has to be compiled from source, which could take up to several hours. Nixpkgs maintains a limited [cross-related jobset on Hydra](https://hydra.nixos.org/jobset/nixpkgs/cross-trunk), which tests cross-compilation to various platforms from build platforms "x86\_64-linux", "aarch64-linux", and "aarch64-darwin".  See `pkgs/top-level/release-cross.nix` for the full list of target platforms and packages.  For instance, the following invocation fetches the pre-built cross-compiled GCC for `armv6l-unknown-linux-gnueabihf` and builds GNU Hello from source.
 
 ```ShellSession
 $ nix-build '<nixpkgs>' -A pkgsCross.raspberryPi.hello
@@ -146,9 +150,7 @@ $ nix-build '<nixpkgs>' -A pkgsCross.raspberryPi.hello
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-{
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-}
+{ depsBuildBuild = [ buildPackages.stdenv.cc ]; }
 ```
 
 #### My package’s testsuite needs to run host platform code. {#cross-testsuite-runs-host-code}
@@ -156,9 +158,7 @@ Add the following to your `mkDerivation` invocation.
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-{
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-}
+{ doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform; }
 ```
 
 #### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
@@ -171,9 +171,8 @@ e.g.
 {
   nativeBuildInputs = [
     meson
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 }
 ```
 
@@ -201,7 +200,7 @@ Examples of errors which this fixes.
 `cannot find -lc: No such file or directory`
 
 ::: {.note}
-At the time of writing it is assumed the issue only happens on `glibc` because it splits the static libraries in to a different output.
+At the time of writing, it is assumed the issue only happens on `glibc` because it splits the static libraries into a different output.
 
 ::: {.note}
 You may want to look in to using `stdenvAdapters.makeStatic` or `pkgsStatic` or a `isStatic = true` platform.
@@ -236,7 +235,7 @@ One would think that `localSystem` and `crossSystem` overlap horribly with the t
 
 ### Implementation of dependencies {#ssec-cross-dependency-implementation}
 
-The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for "host → target" is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
+The categories of dependencies developed in [](#ssec-cross-dependency-categorization) are specified as lists of derivations given to `mkDerivation`, as documented in [](#ssec-stdenv-dependencies). In short, each list of dependencies for `host → target` is called `deps<host><target>` (where `host`, and `target` values are either `build`, `host`, or `target`), with exceptions for backwards compatibility that `depsBuildHost` is instead called `nativeBuildInputs` and `depsHostTarget` is instead called `buildInputs`. Nixpkgs is now structured so that each `deps<host><target>` is automatically taken from `pkgs<host><target>`. (These `pkgs<host><target>`s are quite new, so there is no special case for `nativeBuildInputs` and `buildInputs`.) For example, `pkgsBuildHost.gcc` should be used at build-time, while `pkgsHostTarget.gcc` should be used at run-time.
 
 Now, for most of Nixpkgs's history, there were no `pkgs<host><target>` attributes, and most packages have not been refactored to use it explicitly. Prior to those, there were just `buildPackages`, `pkgs`, and `targetPackages`. Those are now redefined as aliases to `pkgsBuildHost`, `pkgsHostTarget`, and `pkgsTargetTarget`. It is acceptable, even recommended, to use them for libraries to show that the host platform is irrelevant.
 

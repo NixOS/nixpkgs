@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "k6";
-  version = "0.55.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
-    repo = pname;
+    repo = "k6";
     rev = "v${version}";
-    hash = "sha256-29lb8vCMe6BcGeSlfMQm3w+UsD9n3FCljRiT51QNiLU=";
+    hash = "sha256-393Ld7V7KBW9ZnItqW9U/8XkDapwNh7T2ABeh2CikGc=";
   };
 
   subPackages = [ "./" ];
@@ -35,15 +35,14 @@ buildGoModule rec {
       --zsh <($out/bin/k6 completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern load testing tool, using Go and JavaScript";
     mainProgram = "k6";
     homepage = "https://k6.io/";
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       offline
-      bryanasdev000
       kashw2
     ];
   };

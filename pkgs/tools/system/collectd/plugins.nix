@@ -19,6 +19,7 @@
   gdk-pixbuf,
   liboping,
   libpcap,
+  libpq,
   libsigrok,
   libvirt,
   libxml2,
@@ -31,7 +32,6 @@
   openldap,
   openipmi,
   perl,
-  postgresql,
   protobufc,
   python3,
   rabbitmq-c,
@@ -42,7 +42,6 @@
   varnish,
   xen,
   yajl,
-  IOKit,
   # Defaults to `null` for all supported plugins (except xen, which is marked as
   # insecure), otherwise a list of plugin names for a custom build
   enabledPlugins ? null,
@@ -55,14 +54,12 @@ let
   plugins = {
     amqp.buildInputs = [
       yajl
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rabbitmq-c ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rabbitmq-c ];
     apache.buildInputs = [ curl ];
     ascent.buildInputs = [
       curl
       libxml2
-    ];
-    battery.buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
     ];
     bind.buildInputs = [
       curl
@@ -79,23 +76,18 @@ let
       libxml2
     ];
     dbi.buildInputs = [ libdbi ];
-    disk.buildInputs =
-      lib.optionals stdenv.hostPlatform.isLinux [
-        udev
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        IOKit
-      ];
+    disk.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
-    iptables.buildInputs =
-      [
-        libpcap
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        iptables
-        libmnl
-      ];
+    iptables.buildInputs = [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      iptables
+      libmnl
+    ];
     java.buildInputs = [
       jdk
       libgcrypt
@@ -112,13 +104,12 @@ let
     mysql.buildInputs = lib.optionals (libmysqlclient != null) [
       libmysqlclient
     ];
-    netlink.buildInputs =
-      [
-        libpcap
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libmnl
-      ];
+    netlink.buildInputs = [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libmnl
+    ];
     network.buildInputs = [ libgcrypt ];
     nginx.buildInputs = [ curl ];
     notify_desktop.buildInputs = [
@@ -132,7 +123,7 @@ let
     perl.buildInputs = [ perl ];
     pinba.buildInputs = [ protobufc ];
     ping.buildInputs = [ liboping ];
-    postgresql.buildInputs = [ postgresql ];
+    postgresql.buildInputs = [ libpq ];
     python.buildInputs = [ python3 ];
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [
@@ -158,16 +149,15 @@ let
       curl
       varnish
     ];
-    virt.buildInputs =
-      [
-        libvirt
-        libxml2
-        yajl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        lvm2
-        udev
-      ];
+    virt.buildInputs = [
+      libvirt
+      libxml2
+      yajl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      lvm2
+      udev
+    ];
     write_http.buildInputs = [
       curl
       yajl
@@ -202,9 +192,7 @@ let
 
   buildInputs =
     if enabledPlugins == null then
-      builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
-      )
+      builtins.concatMap pluginBuildInputs (builtins.attrNames (removeAttrs plugins [ "xencpu" ]))
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
 in

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   urwid,
 }:
@@ -12,26 +11,26 @@ buildPythonPackage rec {
   version = "0.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "AnonymouX47";
     repo = "urwidgets";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RgY7m0smcdUspGkCdzepxruEMDq/mAsVFNjHMLoWAyc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ urwid ];
+  dependencies = [ urwid ];
+
+  pythonRelaxDeps = [ "urwid" ];
 
   pythonImportsCheck = [ "urwidgets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of widgets for urwid";
     homepage = "https://github.com/AnonymouX47/urwidgets";
-    changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ huyngo ];
+    changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

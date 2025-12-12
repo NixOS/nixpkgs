@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -17,12 +18,20 @@ buildPythonPackage rec {
     sha256 = "074anvhyjgsv2iby2ql1ixfvjgmhnvcwjbdz8gk70xzkzcm1fx5q";
   };
 
+  patches = [
+    # https://github.com/fancycode/pylzma/pull/82/
+    (fetchpatch {
+      url = "https://github.com/fancycode/pylzma/commit/2fe0a4ed0588fd572931da4be10ad955636afde4.patch";
+      hash = "sha256-sWdMAmOPVTDnxNTjzPlqQYxqnjmRpK+OqwWF6jpXvIw=";
+    })
+  ];
+
   pythonImportsCheck = [ "pylzma" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.joachim-bauch.de/projects/pylzma/";
     description = "Platform independent python bindings for the LZMA compression library";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

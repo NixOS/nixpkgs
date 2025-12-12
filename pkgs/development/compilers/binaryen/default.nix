@@ -14,19 +14,19 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
-    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+    rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
+    hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "120_b";
+  version = "125";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-gdqjsAQp4NTHROAf6i44GjkbtNyLPQZ153k3veK7eYs=";
+    hash = "sha256-QG8ZhvjcTbhIfYkVfrjxd97v9KaG/A8jO69rPg99/ME=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,11 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
-      sed -i '/googletest/d' third_party/CMakeLists.txt
+      sed -i '/gtest/d' third_party/CMakeLists.txt
       rmdir test/spec/testsuite
       ln -s ${testsuite} test/spec/testsuite
     else
@@ -45,11 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [
-    gtest
     lit
     nodejs
     filecheck
   ];
+  checkInputs = [ gtest ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
@@ -66,26 +68,27 @@ stdenv.mkDerivation rec {
     "spec"
     "lld"
     "wasm2js"
-    "validator"
-    "example"
-    "unit"
+    # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
     # "binaryenjs" "binaryenjs_wasm" # not building this
-    "lit"
+    # "lit" # fails on d8/fuzz_shell*
     "gtest"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "example"
+    "validator"
   ];
-  doCheck = stdenv.isLinux;
 
-  meta = with lib; {
+  doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
+
+  meta = {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       asppsa
       willcohen
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-  passthru.tests = {
-    inherit emscripten;
-  };
+  passthru.tests = { inherit emscripten; };
 }

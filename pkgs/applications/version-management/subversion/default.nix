@@ -16,8 +16,6 @@
   openssl,
   lz4,
   utf8proc,
-  CoreServices,
-  Security,
   autoconf,
   libtool,
   apacheHttpd ? null,
@@ -29,6 +27,7 @@
   perl ? null,
   sasl ? null,
   serf ? null,
+  nixosTests,
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -37,10 +36,6 @@ assert pythonBindings -> swig != null && python3 != null && py3c != null;
 assert javahlBindings -> jdk != null && perl != null;
 
 let
-  # Update libtool for macOS 11 support
-  needsAutogen =
-    stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11";
-
   common =
     {
       version,
@@ -64,69 +59,61 @@ let
           "man"
         ];
 
-        nativeBuildInputs = lib.optionals needsAutogen [
+        nativeBuildInputs = [
           autoconf
           libtool
           python3
         ];
 
-        buildInputs =
-          [
-            zlib
-            apr
-            aprutil
-            sqlite
-            openssl
-            lz4
-            utf8proc
-          ]
-          ++ lib.optional httpSupport serf
-          ++ lib.optionals pythonBindings [
-            python3
-            py3c
-          ]
-          ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            CoreServices
-            Security
-          ];
+        buildInputs = [
+          zlib
+          apr
+          aprutil
+          sqlite
+          openssl
+          lz4
+          utf8proc
+        ]
+        ++ lib.optional httpSupport serf
+        ++ lib.optionals pythonBindings [
+          python3
+          py3c
+        ]
+        ++ lib.optional perlBindings perl
+        ++ lib.optional saslSupport sasl;
 
         patches = [ ./apr-1.patch ] ++ extraPatches;
+
+        # remove vendored swig-3 files as these will shadow the swig provided
+        # ones and result in compile errors
+        postPatch = ''
+          rm subversion/bindings/swig/proxy/{perlrun.swg,pyrun.swg,python.swg,rubydef.swg,rubyhead.swg,rubytracking.swg,runtime.swg,swigrun.swg}
+        '';
 
         # We are hitting the following issue even with APR 1.6.x
         # -> https://issues.apache.org/jira/browse/SVN-4813
         # "-P" CPPFLAG is needed to build Python bindings and subversionClient
         CPPFLAGS = [ "-P" ];
 
-        env = lib.optionalAttrs stdenv.cc.isClang {
-          NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-            "-Wno-error=implicit-function-declaration"
-            "-Wno-error=implicit-int"
-            "-Wno-int-conversion"
-          ];
-        };
-
-        preConfigure = lib.optionalString needsAutogen ''
+        preConfigure = ''
           ./autogen.sh
         '';
 
-        configureFlags =
-          [
-            (lib.withFeature bdbSupport "berkeley-db")
-            (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-            (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-            (lib.withFeatureAs saslSupport "sasl" sasl)
-            (lib.withFeatureAs httpSupport "serf" serf)
-            "--with-zlib=${zlib.dev}"
-            "--with-sqlite=${sqlite.dev}"
-            "--with-apr=${apr.dev}"
-            "--with-apr-util=${aprutil.dev}"
-          ]
-          ++ lib.optionals javahlBindings [
-            "--enable-javahl"
-            "--with-jdk=${jdk}"
-          ];
+        configureFlags = [
+          (lib.withFeature bdbSupport "berkeley-db")
+          (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+          (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+          (lib.withFeatureAs saslSupport "sasl" sasl)
+          (lib.withFeatureAs httpSupport "serf" serf)
+          "--with-zlib=${zlib.dev}"
+          "--with-sqlite=${sqlite.dev}"
+          "--with-apr=${apr.dev}"
+          "--with-apr-util=${aprutil.dev}"
+        ]
+        ++ lib.optionals javahlBindings [
+          "--enable-javahl"
+          "--with-jdk=${jdk}"
+        ];
 
         preBuild = ''
           makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
@@ -170,13 +157,15 @@ let
         nativeCheckInputs = [ python3 ];
         doCheck = false; # fails 10 out of ~2300 tests
 
-        meta = with lib; {
+        passthru.tests = { inherit (nixosTests) svnserve; };
+
+        meta = {
           description = "Version control system intended to be a compelling replacement for CVS in the open source community";
-          license = licenses.asl20;
+          license = lib.licenses.asl20;
           homepage = "https://subversion.apache.org/";
           mainProgram = "svn";
-          maintainers = with maintainers; [ lovek323 ];
-          platforms = platforms.linux ++ platforms.darwin;
+          maintainers = with lib.maintainers; [ lovek323 ];
+          platforms = lib.platforms.linux ++ lib.platforms.darwin;
         };
 
       }

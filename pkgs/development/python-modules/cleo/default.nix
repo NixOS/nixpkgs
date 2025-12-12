@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "2.1.0";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-reo/7aPFU5uvZ1YPRTJDRmcMSMFru8e5ss5YmjSe3QU=";
+    repo = "cleo";
+    tag = version;
+    hash = "sha256-+OvE09hbF6McdXpXdv5UBdZ0LiSOTL8xyE/+bBNIFNk=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-poetry/cleo";
     changelog = "https://github.com/python-poetry/cleo/blob/${src.rev}/CHANGELOG.md";
     description = "Allows you to create beautiful and testable command-line interfaces";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

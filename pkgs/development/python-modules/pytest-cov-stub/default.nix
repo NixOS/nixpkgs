@@ -4,7 +4,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-cov-stub";
   # please use pythonRemoveDeps rather than change this version
   version = (lib.importTOML ./src/pyproject.toml).project.version;
@@ -14,9 +14,9 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  meta = with lib; {
+  meta = {
     description = "Nixpkgs checkPhase stub for pytest-cov";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

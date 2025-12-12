@@ -16,17 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "3.1.1-unstable-2024-08-02";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
-    # commit "chore: update to build with rust 1.80 (leanprover/elan#134)"
-    rev = "97ce78e0e6aecdf3e8d35dbf42b0614302efb250";
-    hash = "sha256-7cwpHMyhpTxYXjZM4xbDK+epvA2kBf7jelvMaPGP1kU=";
+    rev = "v${version}";
+    hash = "sha256-1pEa3uFO1lncCjOHEDM84A0p6xoOfZnU+OCS2j8cCK8=";
   };
 
-  cargoHash = "sha256-ON5d7ryMKEhkx6dV760msr+y/+4hIwssXUE5Ocaq2W0=";
+  cargoHash = "sha256-CLeFXpCfaTTgbr6jmUmewArKfkOquNhjlIlwtoaJfZw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +37,8 @@ rustPlatform.buildRustPackage rec {
     curl
     zlib
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   buildFeatures = [ "no-self-update" ];
 
@@ -81,15 +81,15 @@ rustPlatform.buildRustPackage rec {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
     changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ gebner ];
+    maintainers = [ ];
     mainProgram = "elan";
   };
 }

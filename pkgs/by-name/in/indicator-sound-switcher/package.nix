@@ -18,11 +18,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
   version = "2.3.10.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yktoo";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "indicator-sound-switcher";
+    tag = "v${version}";
     sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };
 
@@ -54,12 +55,12 @@ python3Packages.buildPythonApplication rec {
     keybinder3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sound input/output selector indicator for Linux";
     mainProgram = "indicator-sound-switcher";
     homepage = "https://yktoo.com/en/software/sound-switcher-indicator/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alexnortung ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ alexnortung ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,36 +1,38 @@
-{ lib
-, php
-, fetchFromGitHub
-, makeBinaryWrapper
+{
+  lib,
+  php,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.6.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T1aN/I06OdQnMxjutSsk3nNyXQ0Z+GWY6fADvJc7Iks=";
   };
 
-  vendorHash = "sha256-5EArmUc3a4+k0YncsPEfeJRR2uDgNKdIDONwQ8cAeVE=";
-
-  # Needed because of the unbound version constraint on phpdocumentor/json-path
-  composerStrictValidation = false;
+  vendorHash = "sha256-bTzDCHJHp31oruOHMxzfkJooPHGn4DUeGG0NzGLSZLs=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     wrapProgram "$out/bin/phpdoc" \
       --set-default APP_CACHE_DIR /tmp \
       --set-default APP_LOG_DIR /tmp/log
-
-    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/phpDocumentor/phpDocumentor/releases/tag/v${finalAttrs.version}";
@@ -38,6 +40,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpdoc.org";
     license = lib.licenses.mit;
     mainProgram = "phpdoc";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ lib.maintainers.patka ];
   };
 })

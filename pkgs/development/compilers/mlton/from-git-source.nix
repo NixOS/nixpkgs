@@ -1,4 +1,5 @@
 {
+  lib,
   fetchgit,
   gmp,
   mltonBootstrap,
@@ -45,5 +46,5 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

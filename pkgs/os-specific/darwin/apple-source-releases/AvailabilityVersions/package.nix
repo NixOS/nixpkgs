@@ -4,6 +4,7 @@
   buildPackages,
   mkAppleDerivation,
   unifdef,
+  bashNonInteractive,
 }:
 
 let
@@ -19,8 +20,7 @@ mkAppleDerivation (finalAttrs: {
     ./patches/0001-Support-setting-an-upper-bound-on-versions.patch
   ];
 
-  noCC = true;
-
+  buildInputs = [ bashNonInteractive ];
   nativeBuildInputs = [ unifdef ];
 
   buildPhase = ''
@@ -65,6 +65,7 @@ mkAppleDerivation (finalAttrs: {
       Availability.h
       AvailabilityInternal.h
       AvailabilityInternalLegacy.h
+      AvailabilityInternalPrivate.h
       AvailabilityMacros.h
       AvailabilityVersions.h
       os/availability.h

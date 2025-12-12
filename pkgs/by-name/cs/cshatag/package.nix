@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rfjakob";
-    repo = pname;
+    repo = "cshatag";
     rev = "v${version}";
     sha256 = "sha256-RqQPbqfliKg7XPA/C9D7Aq1SsN+tAW44tAFHt9p8Py0=";
   };
@@ -27,11 +27,11 @@ buildGoModule rec {
     install -D -m755 -t $out/share/man/man1/ cshatag.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect silent data corruption";
     mainProgram = "cshatag";
     homepage = "https://github.com/rfjakob/cshatag";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
   makeWrapper,
   typst,
 }:
@@ -17,14 +15,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bR4Rhhs6rAC6C1nfPFj/3rCtfEziuTGn5m33CR0qZkU=";
   };
 
-  cargoHash = "sha256-jUtlJ5LPEy/4BX2G5z/UbOYM5nPNH/hTC7MiMrqYWRI=";
+  cargoHash = "sha256-C85hV7uCsuRsxH2/8arjz9Pqs5j23s5b9RHmFsRtZSw=";
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   postInstall = ''
@@ -32,11 +26,11 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ typst ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "typst-live";
   };
 }

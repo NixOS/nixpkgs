@@ -5,8 +5,8 @@
   fontconfig,
   lib,
   libGL,
-  libuuid,
   libX11,
+  libxcb,
   libXext,
   libXrandr,
   libxkbcommon,
@@ -21,32 +21,35 @@
   shaderc,
   stdenv,
   testers,
-  vulkan-loader,
   wayland,
   wlx-overlay-s,
+  # openvr support is broken on aarch64-linux
+  withOpenVr ? !stdenv.hostPlatform.isAarch64,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.6";
+  version = "25.4.2";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-Gk/3m4eWFZqeQBphBUTGAUqe8SspXqut8n4JM8tTe6o=";
+    hash = "sha256-lWUfhiHRxu72p9ZG2f2fZH6WZECm/fOKcK05MLZV+MI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-ja7OW/YSmfzaQoBhu6tec9v8fyNDknLekE2eY7McLPE=";
-      "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
-      "ovr_overlay-0.0.0" = "sha256-5IMEI0IPTacbA/1gibYU7OT6r+Bj+hlQjDZ3Kg0L2gw=";
-      "vulkano-0.34.0" = "sha256-0ZIxU2oItT35IFnS0YTVNmM775x21gXOvaahg/B9sj8=";
-      "wlx-capture-0.3.12" = "sha256-32WnAnNUSfsAA8WB9da3Wqb4acVlXh6HWsY9tPzCHEE=";
-    };
-  };
+  cargoHash = "sha256-em5sWSty2/pZp2jTwBnLUIBgPOcoMpwELwj984XYf+k=";
+
+  # explicitly only add openvr if withOpenVr is set to true.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "openxr"
+    "osc"
+    "x11"
+    "wayland"
+    "wayvr"
+  ]
+  ++ lib.optional withOpenVr "openvr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -58,32 +61,31 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     dbus
     fontconfig
-    libxkbcommon
-    openvr
-    openxr-loader
-    pipewire
+    libGL
     libX11
+    libxcb
     libXext
     libXrandr
-  ];
+    libxkbcommon
+    openxr-loader
+    pipewire
+    wayland
+  ]
+  ++ lib.optional withOpenVr openvr;
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   postPatch = ''
     substituteAllInPlace src/res/watch.yaml \
       --replace '"pactl"' '"${lib.getExe' pulseaudio "pactl"}"'
+    substituteInPlace wlx-overlay-s.desktop \
+      --replace 'Categories=Utility;' 'Categories=Utility;X-WiVRn-VR;'
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
   '';
-
   postInstall = ''
-    patchelf $out/bin/wlx-overlay-s \
-      --add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
-      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0 \
-      --add-needed ${lib.getLib libGL}/lib/libEGL.so.1 \
-      --add-needed ${lib.getLib libGL}/lib/libGL.so.1 \
-      --add-needed ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 \
-      --add-needed ${lib.getLib libuuid}/lib/libuuid.so.1
+    install -Dm644 wlx-overlay-s.desktop $out/share/applications/wlx-overlay-s.desktop
+    install -Dm644 wlx-overlay-s.svg $out/share/icons/hicolor/scalable/apps/wlx-overlay-s.svg
   '';
 
   passthru = {
@@ -98,7 +100,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64 && withOpenVr;
     mainProgram = "wlx-overlay-s";
   };
 }

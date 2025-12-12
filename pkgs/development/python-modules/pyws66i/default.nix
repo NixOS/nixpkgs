@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
@@ -15,19 +17,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ssaenger";
-    repo = pname;
+    repo = "pyws66i";
     rev = "v${version}";
     hash = "sha256-NTL2+xLqSNsz4YdUTwr0nFjhm1NNgB8qDnWSoE2sizY=";
   };
+
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyws66i" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with WS66i 6-zone amplifier";
     homepage = "https://github.com/bigmoby/pyialarmxr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

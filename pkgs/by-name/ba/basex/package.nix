@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "11.6";
+  version = "12.0";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${version}/BaseX${
       builtins.replaceStrings [ "." ] [ "" ] version
     }.zip";
-    hash = "sha256-JGf+eBBlzbg0UYQqpx/IjGhjOKWCvl5rfnYpYE+JWM4=";
+    hash = "sha256-/9TeaAp2jckG77F8+J3aSpkoXWyTFXvXxnxXgpn58Zc=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XML database and XPath/XQuery processor";
     longDescription = ''
       BaseX is a very fast and light-weight, yet powerful XML database and
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
       modes, BaseX offers a client/server architecture.
     '';
     homepage = "https://basex.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

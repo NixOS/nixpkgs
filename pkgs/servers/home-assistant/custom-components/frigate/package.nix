@@ -2,30 +2,62 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  pytz,
+
+  # dependencies
+  hass-web-proxy-lib,
+
+  # tests
+  homeassistant,
+  pytest-aiohttp,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.4.0";
+  version = "5.11.0";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
-    rev = "v${version}";
-    hash = "sha256-V2Y+xUAA/Lu7u82WUlUI5CFi9SGWe6ocVQtlXeVg2ZA=";
+    tag = "v${version}";
+    hash = "sha256-cXjf5e4gbkvRS43xnpmL1lSaSvhts4eMetEqTP/RCOo=";
   };
 
-  dependencies = [ pytz ];
+  dependencies = [ hass-web-proxy-lib ];
 
-  dontBuild = true;
+  nativeCheckInputs = [
+    homeassistant
+    pytest-aiohttp
+    pytest-cov-stub
+    pytest-homeassistant-custom-component
+    pytest-timeout
+    pytestCheckHook
+  ]
+  ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
+  ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
 
-  meta = with lib; {
+  disabledTests = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/922
+    "test_frigate_camera_setup"
+    "test_frigate_camera_setup_birdseye"
+    "test_frigate_camera_setup_webrtc"
+    "test_frigate_camera_setup_birdseye_webrtc"
+  ];
+
+  disabledTestPaths = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/907
+    "tests/test_media_source.py"
+  ];
+
+  meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
     changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
-    maintainers = with maintainers; [ presto8 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ presto8 ];
+    license = lib.licenses.mit;
   };
 }

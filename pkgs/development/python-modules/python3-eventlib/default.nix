@@ -28,15 +28,13 @@ buildPythonPackage rec {
     greenlet
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "eventlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Networking library written in Python";
     homepage = "https://github.com/AGProjects/python3-eventlib";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ chanley ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ chanley ];
     longDescription = ''
       Eventlib is a networking library written in Python. It achieves high
       scalability by using non-blocking I/O while at the same time retaining

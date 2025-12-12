@@ -10,6 +10,7 @@
   gtk4,
   gtksourceview5,
   libadwaita,
+  libportal,
   libspelling,
   meson,
   ninja,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commit";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Commit";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L8CI8SAGWhhJyTc8aMPV0s+UevEJGE7n1l7fFnTjdPw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ACgt1xZTiHYiCTUvfQ+KP5TYm8tMimGizK1dn9UXzao=";
     fetchSubmodules = true;
   };
 
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
     gtksourceview5
     libadwaita
+    libportal
     libspelling
   ];
 
@@ -75,10 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Commit message editor";
+    description = "Git commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "re.sonny.Commit";
     platforms = lib.platforms.linux;
   };

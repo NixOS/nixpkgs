@@ -59,18 +59,17 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      PURS="$out/bin/purs"
+  installPhase = ''
+    mkdir -p $out/bin
+    PURS="$out/bin/purs"
 
-      install -D -m555 -T purs $PURS
-      ${patchelf libPath}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      mkdir -p $out/share/bash-completion/completions
-      $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
-    '';
+    install -D -m555 -T purs $PURS
+    ${patchelf libPath}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p $out/share/bash-completion/completions
+    $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -79,12 +78,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       justinwoo
       mbbx6spp
       cdepillabout

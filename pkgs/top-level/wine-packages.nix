@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   config,
   callPackage,
@@ -32,6 +33,7 @@ rec {
     usbSupport = true;
     waylandSupport = stdenv.hostPlatform.isLinux;
     x11Support = stdenv.hostPlatform.isLinux;
+    ffmpegSupport = true;
   };
 
   full = base.override {
@@ -58,11 +60,15 @@ rec {
   stagingFull = full.override { wineRelease = "staging"; };
 
   wayland = base.override {
-    wineRelease = "wayland";
-    waylandSupport = true;
+    x11Support = false;
   };
   waylandFull = full.override {
-    wineRelease = "wayland";
-    waylandSupport = true;
+    x11Support = false;
   };
+
+  yabridge =
+    let
+      yabridge = base.override { wineRelease = "yabridge"; };
+    in
+    if wineBuild == "wineWow" then yabridge else lib.dontDistribute yabridge;
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,17 +8,18 @@
   testers,
   git-town,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "git-town";
-  version = "17.0.0";
+  version = "22.2.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    rev = "v${version}";
-    hash = "sha256-fuA3LJBFROdClDzKntCz42lh4x9ZIStxav7FMLEvaM4=";
+    tag = "v${version}";
+    hash = "sha256-JY0zWWMln4r2ga1jwxK+RTp8izATyovRHBf4A29pXW4=";
   };
 
   vendorHash = null;
@@ -40,11 +42,12 @@ buildGoModule rec {
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    HOME=$(mktemp -d)
-
     # this runs tests requiring local operations
     rm main_test.go
   '';
@@ -55,20 +58,23 @@ buildGoModule rec {
       skippedTests = [
         "TestGodog"
         "TestMockingRunner/MockCommand"
+        "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall = ''
-    installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completions bash) \
-      --fish <($out/bin/git-town completions fish) \
-      --zsh <($out/bin/git-town completions zsh)
-
-    wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd git-town \
+        --bash <($out/bin/git-town completions bash) \
+        --fish <($out/bin/git-town completions fish) \
+        --zsh <($out/bin/git-town completions zsh)
+    ''
+    + ''
+      wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
@@ -76,13 +82,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       allonsy
-      blaggacao
       gabyx
     ];
     mainProgram = "git-town";

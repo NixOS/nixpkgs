@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "eclint";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     owner = "greut";
-    repo = pname;
+    repo = "eclint";
     rev = "v${version}";
-    hash = "sha256-x0dBiRHaDxKrTCR2RfP2/bpBo6xewu8FX7Bv4ugaUAY=";
+    hash = "sha256-XY+D0bRIgWTm2VH+uDVodYeyGeu+8Xyyq4xDvTDLii4=";
   };
 
-  vendorHash = "sha256-aNQuALDe37lsmTGpClIBOQJlL0NFSAZCgcmTjx0kP+U=";
+  vendorHash = "sha256-4bka3GRl75aUYpZrWuCIvKNwPY8ykp25e+kn+G6JQ/I=";
 
   ldflags = [ "-X main.version=${version}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/greut/eclint";
     description = "EditorConfig linter written in Go";
     mainProgram = "eclint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

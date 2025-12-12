@@ -16,7 +16,7 @@ let
     {
       "--servers" = lib.concatStringsSep "," fe.servers;
       "--domain" = fe.domain;
-      "--listen" = fe.listenAddress;
+      "--listen" = stringOrConcat "," fe.listenAddresses;
       "--proxy-port" = fe.proxyPort;
       "--whois" = fe.whois;
       "--dns-interface" = fe.dnsInterface;
@@ -37,7 +37,7 @@ let
     {
       "--allowed" = lib.concatStringsSep "," px.allowedIPs;
       "--bird" = px.birdSocket;
-      "--listen" = px.listenAddress;
+      "--listen" = stringOrConcat "," px.listenAddresses;
       "--traceroute_bin" = px.traceroute.binary;
       "--traceroute_flags" = lib.concatStringsSep " " px.traceroute.flags;
       "--traceroute_raw" = px.traceroute.rawOutput;
@@ -58,6 +58,17 @@ let
     args: lib.mapAttrsToList (name: value: "${name} " + mkArgValue value) (filterNull args);
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "bird-lg" "frontend" "listenAddress" ]
+      [ "services" "bird-lg" "frontend" "listenAddresses" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "bird-lg" "proxy" "listenAddress" ]
+      [ "services" "bird-lg" "proxy" "listenAddresses" ]
+    )
+  ];
+
   options = {
     services.bird-lg = {
       package = lib.mkPackageOption pkgs "bird-lg" { };
@@ -77,8 +88,8 @@ in
       frontend = {
         enable = lib.mkEnableOption "Bird Looking Glass Frontend Webserver";
 
-        listenAddress = lib.mkOption {
-          type = lib.types.str;
+        listenAddresses = lib.mkOption {
+          type = with lib.types; either str (listOf str);
           default = "127.0.0.1:5000";
           description = "Address to listen on.";
         };
@@ -187,7 +198,7 @@ in
         };
 
         extraArgs = lib.mkOption {
-          type = with lib.types; either lines (listOf str);
+          type = with lib.types; listOf str;
           default = [ ];
           description = ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#frontend).
@@ -202,8 +213,8 @@ in
       proxy = {
         enable = lib.mkEnableOption "Bird Looking Glass Proxy";
 
-        listenAddress = lib.mkOption {
-          type = lib.types.str;
+        listenAddresses = lib.mkOption {
+          type = with lib.types; either str (listOf str);
           default = "127.0.0.1:8000";
           description = "Address to listen on.";
         };
@@ -247,14 +258,10 @@ in
         };
 
         extraArgs = lib.mkOption {
-          type = with lib.types; either lines (listOf str);
+          type = with lib.types; listOf str;
           default = [ ];
           description = ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#proxy).
-
-            :::{.note}
-            Passing lines (plain strings) is deprecated in favour of passing lists of strings.
-            :::
           '';
         };
       };
@@ -264,15 +271,6 @@ in
   ###### implementation
 
   config = {
-
-    warnings =
-      lib.optional (cfg.frontend.enable && builtins.isString cfg.frontend.extraArgs) ''
-        Passing strings to `services.bird-lg.frontend.extraOptions' is deprecated. Please pass a list of strings instead.
-      ''
-      ++ lib.optional (cfg.proxy.enable && builtins.isString cfg.proxy.extraArgs) ''
-        Passing strings to `services.bird-lg.proxy.extraOptions' is deprecated. Please pass a list of strings instead.
-      '';
-
     systemd.services = {
       bird-lg-frontend = lib.mkIf cfg.frontend.enable {
         enable = true;
@@ -320,7 +318,7 @@ in
       groups."bird-lg" = lib.mkIf (cfg.group == "bird-lg") { };
       users."bird-lg" = lib.mkIf (cfg.user == "bird-lg") {
         description = "Bird Looking Glass user";
-        extraGroups = lib.optionals (config.services.bird2.enable) [ "bird2" ];
+        extraGroups = lib.optionals (config.services.bird.enable) [ "bird" ];
         group = cfg.group;
         isSystemUser = true;
       };

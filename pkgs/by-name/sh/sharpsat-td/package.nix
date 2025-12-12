@@ -24,13 +24,13 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sharpsat-td";
-  version = "unstable-2021-09-05";
+  version = "0-unstable-2021-09-05";
 
   src = fetchFromGitHub {
     owner = "Laakeri";
-    repo = pname;
+    repo = "sharpsat-td";
     rev = "b9bb015305ea5d4e1ac7141691d0fe55ca983d31";
     sha256 = "sha256-FE+DUd58eRr5w9RFw0fMHfjIiNDWIcG7XbyWJ/pI28U=";
   };
@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
     # replace bundled version of mpreal/mpfrc++
     rm -r src/mpfr
     cp -r ${mpreal} src/mpfr
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];

@@ -1,107 +1,80 @@
 {
   lib,
-  cosmic-icons,
+  stdenv,
+  rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  just,
+  libcosmicAppHook,
   fontconfig,
   freetype,
-  just,
-  libglvnd,
   libinput,
-  libxkbcommon,
-  makeBinaryWrapper,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  vulkan-loader,
-  wayland,
-  xorg,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
-    rev = "epoch-${version}";
-    hash = "sha256-4++wCyRVIodWdlrvK2vMcHGoY4BctnrkopWC6dZvhMk=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-FPg/dXk2uZFPWZ7JgZo5zRSoBlXCfxGI7uRmq9o5LL8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0KXo1wtbbnK3Kk+EGZo7eEecM4PChLpwawWWI0Bp/Yw=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-09-24";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-ImWHjEKgu9FQR52A3GjnAkxlPduKuzSUAOANYr0DzMA=";
 
   nativeBuildInputs = [
     just
     pkg-config
-    makeBinaryWrapper
+    libcosmicAppHook
   ];
 
   buildInputs = [
     fontconfig
     freetype
-    libglvnd
     libinput
-    libxkbcommon
-    vulkan-loader
-    wayland
-    xorg.libX11
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-term" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libxkbcommon
-          vulkan-loader
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-        ]
-      }
-  '';
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      ahoneybun
-      nyabinary
-    ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
     mainProgram = "cosmic-term";
   };
-}
+})

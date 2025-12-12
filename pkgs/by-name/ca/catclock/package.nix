@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "catclock";
-  version = "unstable-2021-11-15";
+  version = "0-unstable-2021-11-15";
 
   src = fetchFromGitHub {
     owner = "BarkyTheDog";
@@ -26,26 +26,29 @@ stdenv.mkDerivation {
     cp xclock.man $out/share/man/man1/xclock.1
   '';
 
-  makeFlags = [ "DESTINATION=$(out)/bin/" ] ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
+  makeFlags = [
+    "DESTINATION=$(out)/bin/"
+    "CFLAGS=-Wno-incompatible-pointer-types"
+  ]
+  ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
 
-  buildInputs =
-    [
-      motif
-      xorg.libX11
-      xorg.libXext
-      xorg.libXt
-    ]
-    ++ lib.optionals withAudioTracking [
-      libpulseaudio
-      aubio
-    ];
+  buildInputs = [
+    motif
+    xorg.libX11
+    xorg.libXext
+    xorg.libXt
+  ]
+  ++ lib.optionals withAudioTracking [
+    libpulseaudio
+    aubio
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://codefromabove.com/2014/05/catclock/";
     description = "Analog / Digital / Cat clock for X";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ ramkromberg ];
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ ramkromberg ];
     mainProgram = "xclock";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

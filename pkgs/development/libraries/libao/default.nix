@@ -8,9 +8,6 @@
   libpulseaudio,
   alsa-lib,
   libcap,
-  CoreAudio,
-  CoreServices,
-  AudioUnit,
   usePulseAudio,
 }:
 
@@ -53,11 +50,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libcap
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      CoreServices
-      AudioUnit
     ];
 
   nativeBuildInputs = [
@@ -65,15 +57,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
     homepage = "https://xiph.org/ao/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

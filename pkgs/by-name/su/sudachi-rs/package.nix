@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudachi-rs";
-  version = "0.6.9";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-G+lJzOYxrR/Le2lgfZMXbbjCqPYmCKMy1pIomTP5NIg=";
+    tag = "v${version}";
+    hash = "sha256-2sJ9diE/EjrQmFcCc4VluE4Gu4RebTYitd7zzfgj3g4=";
   };
 
   postPatch = ''
@@ -24,7 +24,12 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoHash = "sha256-iECIk5+QvTP1xiH9AcEJGKt1YHG8KASYmsuIq0vHD20=";
+  cargoPatches = [
+    # https://github.com/WorksApplications/sudachi.rs/issues/299
+    ./update-outdated-lockfile.patch
+  ];
+
+  cargoHash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''
@@ -50,12 +55,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Japanese morphological analyzer";
     homepage = "https://github.com/WorksApplications/sudachi.rs";
     changelog = "https://github.com/WorksApplications/sudachi.rs/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "sudachi";
   };
 }

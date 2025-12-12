@@ -26,12 +26,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Text-to-speech engine";
     homepage = "https://android.googlesource.com/platform/external/svox";
-    platforms = platforms.linux;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "pico2wave";
   };
 }

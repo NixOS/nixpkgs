@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
     espeak-ng = espeak-ng';
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for converting text to phonemes for Piper";
     homepage = "https://github.com/rhasspy/piper-phonemize";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

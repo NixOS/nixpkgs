@@ -4,15 +4,20 @@
   coq,
   bignums,
   math-classes,
+  coq-elpi,
   version ? null,
 }:
 
-mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "corn";
   inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.coq-version [
+      {
+        case = (range "8.18" "8.20");
+        out = "8.20.0";
+      }
       {
         case = (range "8.17" "8.20");
         out = "8.19.0";
@@ -41,20 +46,28 @@ mkCoqDerivation rec {
     "8.16.0".sha256 = "sha256-ZE/EEIndxHfo/9Me5NX4ZfcH0ZAQ4sRfZY7LRZfLXBQ=";
     "8.18.0".sha256 = "sha256-ow3mfarZ1PvBGf5WLnI8LdF3E+8A6fN7cOcXHrZJLo0=";
     "8.19.0".sha256 = "sha256-h5MlfRuv2hTbxGmpLUEGQO1YqQTwUNEHZzCfvdOU1TA=";
+    "8.20.0".sha256 = "sha256-tl68REU6xTbSOzhPucQPd9A3YnnaMNbSY8gl4Seyp10=";
   };
 
   configureScript = "./configure.sh";
   dontAddPrefix = true;
+
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [
     bignums
     math-classes
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://c-corn.github.io/";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     description = "Coq library for constructive analysis";
-    maintainers = [ maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
-}
+}).overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versions.isGt "8.19.0" o.version || o.version == "dev") coq-elpi;
+  })

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-remotes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/bcYrpZfO/sXc0Tcpr67GBqCu4ZSAVmUj9kzupIHHnM=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of useful tools for aiohttp.web server";
     homepage = "https://github.com/wikibusiness/aiohttp-remotes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

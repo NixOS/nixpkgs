@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
-    repo = pname;
+    repo = "thumbdrives";
     rev = version;
     hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
@@ -53,14 +53,14 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "USB mass storage emulator for Linux handhelds";
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       chuangzhu
       Luflosi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

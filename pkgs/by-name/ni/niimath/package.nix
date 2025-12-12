@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "niimath";
-  version = "1.0.20240905";
+  version = "1.0.20250804";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "niimath";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-3XgB4q0HXLo9rEQBzC+2dxN81r9n8kkj2OC5d+WFmEs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lCs3yagFHQ9livH1ffwNhh7XCn4nEY48or6512yAl0k=";
   };
 
   postPatch = ''

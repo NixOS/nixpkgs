@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UWaet7hVtgfuWTiNY4VcsMWTfS6L9r5w1fb/0dWz8SI=";
+    hash = "sha256-H1s+pLpHTmoDssdudtAq6Ru0jwZZ55/qamEVgtHTGfk=";
   };
 
   outputs = [
@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libexif
     libwebp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h

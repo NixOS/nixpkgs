@@ -3,28 +3,33 @@
   ansible-core,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  hatch-vcs,
   paramiko,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   pywinrm,
   salt,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testinfra";
-  version = "10.1.1";
+  version = "10.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qHbxRToBtY2U2dk23VA0TCwBrHiAorQdFb3yM67Zzx8=";
+    pname = "pytest_testinfra";
+    inherit version;
+    hash = "sha256-U3/V64jaYYwfRhJIqiBZTPjURRLoUZsjmDfoOHXh6c0=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   nativeCheckInputs = [
     ansible-core
@@ -35,14 +40,8 @@ buildPythonPackage rec {
     salt
   ];
 
-  # Markers don't get added when docker is not available (leads to warnings):
-  # https://github.com/pytest-dev/pytest-testinfra/blob/9.0.0/test/conftest.py#L223
   preCheck = ''
     export HOME=$(mktemp -d)
-    sed -i '54imarkers = \
-    \ttestinfra_hosts(host_selector): mark test to run on selected hosts \
-    \tdestructive: mark test as destructive \
-    \tskip_wsl: skip test on WSL, no systemd support' setup.cfg
   '';
 
   disabledTests = [
@@ -60,11 +59,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "test/test_modules.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing your infrastructure";
     homepage = "https://github.com/pytest-dev/pytest-testinfra";
     changelog = "https://github.com/pytest-dev/pytest-testinfra/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hulr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hulr ];
   };
 }

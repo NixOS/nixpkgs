@@ -5,45 +5,23 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
+  common-updater-scripts,
+  gitMinimal,
   jq,
   nix-update,
-  gitMinimal,
   pup,
+  nixosTests,
 }:
 
-let
-  version = "8.0.4";
-
-  srcs = version: {
-    "x86_64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-N5rwtPrrjVJj7UAk/weBAhV4+7wHRLNowkX6gEWCQVU=";
-    };
-    "aarch64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-uBa7/jxfZBNmB0l2jspJW2QQ8VY0GtWxc/tPlkV6UBk=";
-    };
-    "x86_64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-Ya+HIlRPWXPp9aX1AlRgkh/pfKRgxhqNep/6uuARmCo=";
-    };
-    "aarch64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-IZ47PXsxwEn/e890cNOO/3BOVt8qwY1N94Ql4phcz1g=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  inherit version;
+  version = "8.0.15";
 
-  src = fetchurl (
-    (srcs version).${stdenv.hostPlatform.system}
-      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
-  );
+  src =
+    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported platform for mongodb-ce: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   dontStrip = true;
@@ -57,60 +35,84 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm 755 bin/mongod $out/bin/mongod
-    install -Dm 755 bin/mongos $out/bin/mongos
+    install -Dm 755 bin/mongod -t $out/bin
+    install -Dm 755 bin/mongos -t $out/bin
 
     runHook postInstall
   '';
 
-  passthru = {
+  # Only enable the version install check on darwin.
+  # On Linux, this would fail as mongod relies on tcmalloc, which
+  # requires access to `/sys/devices/system/cpu/possible`.
+  # See https://github.com/NixOS/nixpkgs/issues/377016
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = "--version";
 
+  passthru = {
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-hHlTsXbzDBhesK6hrGV27zXBBd7uEFlt/5QDJFn5aFA=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-th67W8GA62AcKlASxafYBZLM2j+kZGuk4N706nXQKQ0=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
+        hash = "sha256-MBNmctpSZjHZyYkUyt6q/uGmSGRdRD+7GHrh/Aj+bmA=";
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
+        hash = "sha256-3yXoOMD6S90XErUWCctCMV5aulljrvXsVGEUBvHmk5w=";
+      };
+    };
     updateScript =
       let
         script = writeShellApplication {
           name = "${finalAttrs.pname}-updateScript";
 
           runtimeInputs = [
+            common-updater-scripts
             curl
+            gitMinimal
             jq
             nix-update
-            gitMinimal
             pup
           ];
 
-          text =
-            ''
-              # Get latest version string from Github
-              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
+          text = ''
+            # Get latest version string from Github
+            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
 
-              # Check if the new version is available for download, if not, exit
-              curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
+            # Check if the new version is available for download, if not, exit
+            curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
 
-              if [[ "${version}" = "$NEW_VERSION" ]]; then
-                  echo "The new version same as the old version."
-                  exit 0
-              fi
-            ''
-            + lib.concatStrings (
-              map (system: ''
-                nix-update --system ${system} --version "$NEW_VERSION" ${finalAttrs.pname}
-              '') finalAttrs.meta.platforms
-            );
+            if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+                echo "The new version same as the old version."
+                exit 0
+            fi
+
+            for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+              update-source-version "mongodb-ce" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+            done
+          '';
         };
       in
       {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
     };
   };
 
   meta = {
     changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
-    description = "MongoDB is a general purpose, document-based, distributed database.";
+    description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];
     longDescription = ''
@@ -119,8 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
       This pre-compiled binary distribution package provides the MongoDB daemon (mongod) and the MongoDB Shard utility
       (mongos).
     '';
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.attrNames (srcs version);
+    maintainers = [ ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

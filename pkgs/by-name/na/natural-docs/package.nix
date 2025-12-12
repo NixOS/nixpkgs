@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "natural-docs";
-  version = "2.3";
+  version = "2.3.1";
 
   src = fetchzip {
     url = "https://naturaldocs.org/download/natural_docs/${version}/Natural_Docs_${version}.zip";
-    sha256 = "sha256-yk9PxrZ6+ocqGLB+xCBGiQKnHLMdp2r+NuoMhWsr0GM=";
+    sha256 = "sha256-gjAhS2hdFA8G+E5bJD18BQdb7PrBeRnpBBSlnVJ5hgY=";
   };
 
   dontPatch = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${mono}/bin/mono $out/bin/NaturalDocs --add-flags "$out/NaturalDocs.exe"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Documentation generator for multiple programming languages";
     longDescription = ''
       Natural Docs is an open source documentation generator for multiple
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       high-quality HTML documentation from it.
     '';
     homepage = "https://naturaldocs.org";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.nkpvk ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.nkpvk ];
     mainProgram = "NaturalDocs";
   };
 }

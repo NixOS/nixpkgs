@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "5.3.0";
+  version = "5.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7cifxNSBHbX7QZ52Sy1hm5xzZYcLZOkloT6q9P7TO6A=";
+    tag = version;
+    hash = "sha256-5ZPs2099G9oBbDpComNDP3c4B0NjWirBMZY4orO9YfA=";
   };
 
   postPatch = ''
@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "test_set_telephony_credits"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
-    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

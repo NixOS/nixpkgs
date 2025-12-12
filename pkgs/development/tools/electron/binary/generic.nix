@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
-  libXScrnSaver,
   makeWrapper,
   fetchurl,
+  fetchzip,
   wrapGAppsHook3,
   glib,
   gtk3,
+  gtk4,
   unzip,
   at-spi2-atk,
   libdrm,
@@ -27,6 +28,11 @@
   pango,
   systemd,
   pciutils,
+  libnotify,
+  pipewire,
+  libsecret,
+  libpulseaudio,
+  speechd-minimal,
 }:
 
 version: hashes:
@@ -36,24 +42,19 @@ let
   meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
-      yayayayaka
-      teutat3s
+    teams = [ lib.teams.electron ];
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+      "armv7l-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
     ];
-    platforms =
-      [
-        "x86_64-darwin"
-        "x86_64-linux"
-        "armv7l-linux"
-        "aarch64-linux"
-      ]
-      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
-      ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "31.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -65,24 +66,19 @@ let
 
   headersFetcher =
     vers: hash:
-    fetchurl {
+    fetchzip {
+      name = "electron-${vers}-headers";
       url = "https://artifacts.electronjs.org/headers/dist/v${vers}/node-v${vers}-headers.tar.gz";
       sha256 = hash;
     };
 
-  tags =
-    {
-      x86_64-linux = "linux-x64";
-      armv7l-linux = "linux-armv7l";
-      aarch64-linux = "linux-arm64";
-      x86_64-darwin = "darwin-x64";
-    }
-    // lib.optionalAttrs (lib.versionAtLeast version "11.0.0") {
-      aarch64-darwin = "darwin-arm64";
-    }
-    // lib.optionalAttrs (lib.versionOlder version "19.0.0") {
-      i686-linux = "linux-ia32";
-    };
+  tags = {
+    x86_64-linux = "linux-x64";
+    armv7l-linux = "linux-armv7l";
+    aarch64-linux = "linux-arm64";
+    x86_64-darwin = "darwin-x64";
+    aarch64-darwin = "darwin-arm64";
+  };
 
   get = as: platform: as.${platform.system} or (throw "Unsupported system: ${platform.system}");
 
@@ -92,49 +88,49 @@ let
     passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = lib.makeLibraryPath (
-    [
-      alsa-lib
-      at-spi2-atk
-      cairo
-      cups
-      dbus
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      nss
-      nspr
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxkbfile
-      pango
-      pciutils
-      stdenv.cc.cc
-      systemd
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "9.0.0") [
-      libdrm
-      libgbm
-    ]
-    ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
-    ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
-    ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [
-      libGL
-      vulkan-loader
-    ]
-  );
+  electronLibPath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    gtk4
+    nss
+    nspr
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libxkbfile
+    pango
+    pciutils
+    stdenv.cc.cc
+    systemd
+    libnotify
+    pipewire
+    libsecret
+    libpulseaudio
+    speechd-minimal
+    libdrm
+    libgbm
+    libxkbcommon
+    libxshmfence
+    libGL
+    vulkan-loader
+  ];
 
   linux = finalAttrs: {
     buildInputs = [
       glib
       gtk3
+      gtk4
     ];
 
     nativeBuildInputs = [
@@ -147,18 +143,25 @@ let
     dontBuild = true;
 
     installPhase = ''
-      mkdir -p $out/libexec/electron $out/bin
+      mkdir -p $out/libexec/electron
       unzip -d $out/libexec/electron $src
-      ln -s $out/libexec/electron/electron $out/bin
       chmod u-x $out/libexec/electron/*.so*
+    '';
+
+    # We don't want to wrap the contents of $out/libexec automatically
+    dontWrapGApps = true;
+
+    preFixup = ''
+      makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
+        "''${gappsWrapperArgs[@]}"
     '';
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
-        $out/libexec/electron/.electron-wrapped \
-        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped"}
+        $out/libexec/electron/electron \
+        $out/libexec/electron/chrome_crashpad_handler
 
       # patch libANGLE
       patchelf \

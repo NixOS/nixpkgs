@@ -1,7 +1,7 @@
 {
   coq,
   mkCoqDerivation,
-  mathcomp,
+  mathcomp-boot,
   lib,
   version ? null,
 }:
@@ -16,83 +16,36 @@ mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with lib.versions;
     lib.switch
-      [ coq.version mathcomp.version ]
+      [ coq.coq-version mathcomp-boot.version ]
       [
-        {
-          cases = [
-            (range "8.16" "8.20")
-            (isGe "2.0")
-          ];
-          out = "2.1.0";
-        }
-        {
-          cases = [
-            (range "8.16" "8.18")
-            (range "2.0" "2.1")
-          ];
-          out = "2.0.0";
-        }
-        {
-          cases = [
-            (range "8.13" "8.20")
-            (range "1.12" "1.19")
-          ];
-          out = "1.5.2";
-        }
-        {
-          cases = [
-            (isGe "8.10")
-            (range "1.11" "1.17")
-          ];
-          out = "1.5.1";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11")
-            "1.11.0"
-          ];
-          out = "1.5.0";
-        }
-        {
-          cases = [
-            (isEq "8.11")
-            (range "1.8" "1.10")
-          ];
-          out = "1.4.0+coq-8.11";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11.0")
-            (range "1.8" "1.10")
-          ];
-          out = "1.4.0";
-        }
-        {
-          cases = [
-            (range "8.7" "8.11.0")
-            (range "1.8" "1.10")
-          ];
-          out = "1.3.4";
-        }
-        {
-          cases = [
-            (range "8.7" "8.9")
-            "1.7.0"
-          ];
-          out = "1.1.0";
-        }
-        {
-          cases = [
-            (range "8.6" "8.7")
-            (range "1.6.1" "1.7")
-          ];
-          out = "1.0.0";
-        }
+        (case (range "8.20" "9.1") (range "2.3" "2.5") "2.2.2")
+        (case (range "8.20" "9.1") (range "2.3" "2.4") "2.2.0")
+        (case (range "8.16" "9.0") (range "2.0" "2.3") "2.1.0")
+        (case (range "8.16" "8.18") (range "2.0" "2.1") "2.0.0")
+        (case (range "8.13" "8.20") (range "1.12" "1.19") "1.5.2")
+        (case (isGe "8.10") (range "1.11" "1.17") "1.5.1")
+        (case (range "8.7" "8.11") "1.11.0" "1.5.0")
+        (case (isEq "8.11") (range "1.8" "1.10") "1.4.0+coq-8.11")
+        (case (range "8.7" "8.11.0") (range "1.8" "1.10") "1.4.0")
+        (case (range "8.7" "8.11.0") (range "1.8" "1.10") "1.3.4")
+        (case (range "8.7" "8.9") "1.7.0" "1.1.0")
+        (case (range "8.6" "8.7") (range "1.6.1" "1.7") "1.0.0")
       ]
       null;
   release = {
+    "2.2.2".sha256 = "sha256-G5fSdx4MhOXtQ2H8lpyK5FuIbWAZNc7vRL3hcYmGA2o=";
+    "2.2.0".sha256 = "sha256-oDQEZOutrJxmN8FvzovUIhqw0mwc8Ej7thrieJrW8BY=";
     "2.1.0".sha256 = "sha256-gh0cnhdVDyo+D5zdtxLc10kGKQLQ3ITzHnMC45mCtpY=";
     "2.0.0".sha256 = "sha256-0Wr1ZUYVuZH74vawO4EZlZ+K3kq+s1xEz/BfzyKj+wk=";
     "1.5.2".sha256 = "sha256-0KmmSjc2AlUo6BKr9RZ4FjL9wlGISlTGU0X1Eu7l4sw=";
@@ -107,7 +60,7 @@ mkCoqDerivation {
     "1.0.0".sha256 = "0sah7k9qm8sw17cgd02f0x84hki8vj8kdz7h15i7rmz08rj0whpa";
   };
 
-  propagatedBuildInputs = [ mathcomp.ssreflect ];
+  propagatedBuildInputs = [ mathcomp-boot ];
 
   meta = {
     description = "Finset and finmap library";

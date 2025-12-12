@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/mate-desktop-legacy-archive/${pname}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

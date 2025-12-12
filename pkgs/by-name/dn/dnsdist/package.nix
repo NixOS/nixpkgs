@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.9.7";
+  version = "1.9.10";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    hash = "sha256-KFERwrff9ryKJAcQalHDZcxb9eYof+RZops5bHRiAzI=";
+    hash = "sha256-An3b3uaVxaWXKAV7/EHFsaaR+hx6XokniwnzVTJfvtY=";
   };
 
   patches = [
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     "--disable-dependency-tracking"
     "--enable-unit-tests"
     "--enable-systemd"
+    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;
@@ -72,11 +73,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnsdist;
   };
 
-  meta = with lib; {
+  meta = {
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

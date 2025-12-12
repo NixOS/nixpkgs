@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.21.1";
+  version = "1.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/awIgfKbDFKM2WFlfpo5f/Px/N1aMXkV9eSTXts0aGo=";
+    tag = "v${version}";
+    hash = "sha256-21XFH1fIt8vLd0blZJn6ZRmLJaof/E30zHrBVLjXOaA=";
   };
 
   buildInputs = [ pyqt-builder ];
@@ -81,10 +81,10 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://glueviz.org";
     description = "Linked Data Visualizations Across Multiple Files";
-    license = licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

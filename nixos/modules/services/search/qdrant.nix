@@ -4,8 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
 
   cfg = config.services.qdrant;
@@ -17,9 +15,13 @@ in
 
   options = {
     services.qdrant = {
-      enable = mkEnableOption "Vector Search Engine for the next generation of AI applications";
+      enable = lib.mkEnableOption "Vector Search Engine for the next generation of AI applications";
 
-      settings = mkOption {
+      package = lib.mkPackageOption pkgs "qdrant" { };
+
+      webUIPackage = lib.mkPackageOption pkgs "qdrant-web-ui" { };
+
+      settings = lib.mkOption {
         description = ''
           Configuration for Qdrant
           Refer to <https://github.com/qdrant/qdrant/blob/master/config/config.yaml> for details on supported values.
@@ -43,7 +45,7 @@ in
           telemetry_disabled = true;
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             storage = {
               storage_path = "/var/lib/qdrant/storage";
@@ -64,41 +66,41 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.qdrant.settings = {
-      service.static_content_dir = mkDefault pkgs.qdrant-web-ui;
-      storage.storage_path = mkDefault "/var/lib/qdrant/storage";
-      storage.snapshots_path = mkDefault "/var/lib/qdrant/snapshots";
+      service.static_content_dir = lib.mkDefault cfg.webUIPackage;
+      storage.storage_path = lib.mkDefault "/var/lib/qdrant/storage";
+      storage.snapshots_path = lib.mkDefault "/var/lib/qdrant/snapshots";
       # The following default values are the same as in the default config,
       # they are just written here for convenience.
-      storage.on_disk_payload = mkDefault true;
-      storage.wal.wal_capacity_mb = mkDefault 32;
-      storage.wal.wal_segments_ahead = mkDefault 0;
-      storage.performance.max_search_threads = mkDefault 0;
-      storage.performance.max_optimization_threads = mkDefault 1;
-      storage.optimizers.deleted_threshold = mkDefault 0.2;
-      storage.optimizers.vacuum_min_vector_number = mkDefault 1000;
-      storage.optimizers.default_segment_number = mkDefault 0;
-      storage.optimizers.max_segment_size_kb = mkDefault null;
-      storage.optimizers.memmap_threshold_kb = mkDefault null;
-      storage.optimizers.indexing_threshold_kb = mkDefault 20000;
-      storage.optimizers.flush_interval_sec = mkDefault 5;
-      storage.optimizers.max_optimization_threads = mkDefault 1;
-      storage.hnsw_index.m = mkDefault 16;
-      storage.hnsw_index.ef_construct = mkDefault 100;
-      storage.hnsw_index.full_scan_threshold_kb = mkDefault 10000;
-      storage.hnsw_index.max_indexing_threads = mkDefault 0;
-      storage.hnsw_index.on_disk = mkDefault false;
-      storage.hnsw_index.payload_m = mkDefault null;
-      service.max_request_size_mb = mkDefault 32;
-      service.max_workers = mkDefault 0;
-      service.http_port = mkDefault 6333;
-      service.grpc_port = mkDefault 6334;
-      service.enable_cors = mkDefault true;
-      cluster.enabled = mkDefault false;
+      storage.on_disk_payload = lib.mkDefault true;
+      storage.wal.wal_capacity_mb = lib.mkDefault 32;
+      storage.wal.wal_segments_ahead = lib.mkDefault 0;
+      storage.performance.max_search_threads = lib.mkDefault 0;
+      storage.performance.max_optimization_threads = lib.mkDefault 1;
+      storage.optimizers.deleted_threshold = lib.mkDefault 0.2;
+      storage.optimizers.vacuum_min_vector_number = lib.mkDefault 1000;
+      storage.optimizers.default_segment_number = lib.mkDefault 0;
+      storage.optimizers.max_segment_size_kb = lib.mkDefault null;
+      storage.optimizers.memmap_threshold_kb = lib.mkDefault null;
+      storage.optimizers.indexing_threshold_kb = lib.mkDefault 20000;
+      storage.optimizers.flush_interval_sec = lib.mkDefault 5;
+      storage.optimizers.max_optimization_threads = lib.mkDefault 1;
+      storage.hnsw_index.m = lib.mkDefault 16;
+      storage.hnsw_index.ef_construct = lib.mkDefault 100;
+      storage.hnsw_index.full_scan_threshold_kb = lib.mkDefault 10000;
+      storage.hnsw_index.max_indexing_threads = lib.mkDefault 0;
+      storage.hnsw_index.on_disk = lib.mkDefault false;
+      storage.hnsw_index.payload_m = lib.mkDefault null;
+      service.max_request_size_mb = lib.mkDefault 32;
+      service.max_workers = lib.mkDefault 0;
+      service.http_port = lib.mkDefault 6333;
+      service.grpc_port = lib.mkDefault 6334;
+      service.enable_cors = lib.mkDefault true;
+      cluster.enabled = lib.mkDefault false;
       # the following have been altered for security
-      service.host = mkDefault "127.0.0.1";
-      telemetry_disabled = mkDefault true;
+      service.host = lib.mkDefault "127.0.0.1";
+      telemetry_disabled = lib.mkDefault true;
     };
 
     systemd.services.qdrant = {
@@ -108,7 +110,7 @@ in
 
       serviceConfig = {
         LimitNOFILE = 65536;
-        ExecStart = "${pkgs.qdrant}/bin/qdrant --config-path ${configFile}";
+        ExecStart = "${cfg.package}/bin/qdrant --config-path ${configFile}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "qdrant";

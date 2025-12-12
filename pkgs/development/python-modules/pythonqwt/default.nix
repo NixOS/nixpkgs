@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pythonqwt";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PythonQwt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-apvUilKx6Xl2PluvmQVW5Lkoub2He/75EdYv10jMR+k=";
+    tag = "v${version}";
+    hash = "sha256-S67k5kfGqB6Ezr2XMlW3x/ya6MW6df2cFrGEqlsLOhk=";
   };
 
   build-system = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Qt plotting widgets for Python (pure Python reimplementation of Qwt C++ library)";
     homepage = "https://github.com/PlotPyStack/PythonQwt";
-    changelog = "https://github.com/PlotPyStack/PythonQwt/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/PlotPyStack/PythonQwt/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

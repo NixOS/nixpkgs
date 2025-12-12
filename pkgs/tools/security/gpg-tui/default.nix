@@ -7,10 +7,7 @@
   libgpg-error,
   pkg-config,
   python3,
-  AppKit,
-  Foundation,
   libiconv,
-  libobjc,
   libresolv,
   x11Support ? true,
   libxcb,
@@ -19,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    hash = "sha256-aHmLcWiDy5GMbcKi285tfBggNmGkpVAoZMm4dt8LKak=";
+    hash = "sha256-qGm0eHpVFGn8tNdEnmQ4oIfjCxyixMFYdxih7pHvGH0=";
   };
 
-  cargoHash = "sha256-rtBvo2nX4A6K/TBl6xhW8huLXdR6xDUhzMB3KRXRYMs=";
+  cargoHash = "sha256-XdT/6N7CJJ8LY0KmkO6PuRdnq1FZvbZrGhky1hmyr2Y=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
@@ -37,29 +34,25 @@ rustPlatform.buildRustPackage rec {
     python3
   ];
 
-  buildInputs =
-    [
-      gpgme
-      libgpg-error
-    ]
-    ++ lib.optionals x11Support [
-      libxcb
-      libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
-      libiconv
-      libobjc
-      libresolv
-    ];
+  buildInputs = [
+    gpgme
+    libgpg-error
+  ]
+  ++ lib.optionals x11Support [
+    libxcb
+    libxkbcommon
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    libresolv
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for GnuPG";
     homepage = "https://github.com/orhun/gpg-tui";
     changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
       matthiasbeyer
     ];

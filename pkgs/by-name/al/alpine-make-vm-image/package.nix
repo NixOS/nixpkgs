@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alpine-make-vm-image";
-  version = "0.13.0";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-vm-image";
-    rev = "v${version}";
-    sha256 = "sha256-ilXoee19Wp/tB4f/0c7vWki+dnEPYp4f/IKzkGwxdbU=";
+    tag = "v${version}";
+    hash = "sha256-AIwT2JAGnMeMXUXZ0FRJthf22FvFfTTw/2LtZKPSj6g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpinelinux/alpine-make-vm-image";
     description = "Make customized Alpine Linux disk image for virtual machines";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
     mainProgram = "alpine-make-vm-image";
   };
 }

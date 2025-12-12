@@ -28,7 +28,7 @@
   perl,
   perlPackages,
   pkg-config,
-  poppler_utils,
+  poppler-utils,
   python3Packages,
   qtbase,
   qttools,
@@ -57,7 +57,7 @@ let
     groff = groff;
     gunzip = gzip;
     iconv = libiconv;
-    pdftotext = poppler_utils;
+    pdftotext = poppler-utils;
     ps2ascii = ghostscript;
     sed = gnused;
     tar = gnutar;
@@ -75,86 +75,80 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.39.1";
+  version = "1.43.5";
 
   src = fetchurl {
     url = "https://www.recoll.org/${pname}-${version}.tar.gz";
-    hash = "sha256-Eeadj/AnuztCb7VIYEy4hKbduH3CzK53tADvI9+PWmQ=";
+    hash = "sha256-Px3uK7I/MkrJbAOmV2ipVct/+p05SST6TLTYoDaLNdQ=";
   };
 
-  mesonFlags =
-    [
-      "-Drecollq=true"
-      "-Dwebkit=false"
-      "-Dsystemd=false"
+  mesonFlags = [
+    "-Drecollq=true"
+    "-Dwebkit=false"
+    "-Dsystemd=false"
 
-      # this leaks into the final `librecoll-*.so` binary, so we need
-      # to be sure it is taken from `pkgs.file` rather than `stdenv`,
-      # especially when cross-compiling
-      "-Dfile-command=${file}/bin/file"
+    # this leaks into the final `librecoll-*.so` binary, so we need
+    # to be sure it is taken from `pkgs.file` rather than `stdenv`,
+    # especially when cross-compiling
+    "-Dfile-command=${file}/bin/file"
 
-    ]
-    ++ lib.optionals (!withPython) [
-      "-Dpython-module=false"
-      "-Dpython-chm=false"
-    ]
-    ++ lib.optionals (!withGui) [
-      "-Dqtgui=false"
-      "-Dx11mon=false"
-    ]
-    ++ [
-      "-Dinotify=${useInotify}"
-    ];
+  ]
+  ++ lib.optionals (!withPython) [
+    "-Dpython-module=false"
+    "-Dpython-chm=false"
+  ]
+  ++ lib.optionals (!withGui) [
+    "-Dqtgui=false"
+    "-Dx11mon=false"
+  ]
+  ++ [
+    "-Dinotify=${useInotify}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-DNIXPKGS"
     "-fpermissive" # libxml2-2.12 changed const qualifiers
   ];
 
   patches = [
-    # fix "No/bad main configuration file" error
-    ./fix-datadir.patch
     # use the same configure based build for darwin as linux
     ./0001-no-qtgui-darwin-bundle.patch
   ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      meson
-      ninja
-      pkg-config
-      which
-    ]
-    ++ lib.optionals withGui [
-      qtbase
-      qttools
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.setuptools
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+    which
+  ]
+  ++ lib.optionals withGui [
+    qtbase
+    qttools
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.setuptools
+  ];
 
-  buildInputs =
-    [
-      aspell
-      bison
-      chmlib
-    ]
-    ++ lib.optionals withPython [
-      python3Packages.python
-      python3Packages.mutagen
-    ]
-    ++ [
-      xapian
-      zlib
-      file
-    ]
-    ++ lib.optionals withGui [
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    aspell
+    bison
+    chmlib
+  ]
+  ++ lib.optionals withPython [
+    python3Packages.python
+    python3Packages.mutagen
+  ]
+  ++ [
+    xapian
+    zlib
+    file
+  ]
+  ++ lib.optionals withGui [
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   qtWrapperArgs = [
     "--prefix PATH : ${filterPath}"
@@ -163,39 +157,38 @@ mkDerivation rec {
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
   # the absolute path to the filtering command.
-  postInstall =
-    ''
-      substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace /usr/share/recoll $out/share/recoll
-      substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
-      for f in $out/share/recoll/filters/* ; do
-        if [[ ! "$f" =~ \.zip$ ]]; then
-    ''
-    + lib.concatStrings (
-      lib.mapAttrsToList (k: v: (''
-        substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-      '')) filters
-    )
-    + ''
-          substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
-          substituteInPlace $f --replace /usr/bin/perl   ${
-            lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))
-          }/bin/perl
-        fi
-      done
-      wrapProgram $out/share/recoll/filters/rclaudio.py \
-        --prefix PYTHONPATH : $PYTHONPATH
-      wrapProgram $out/share/recoll/filters/rcljoplin.py \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
-      wrapProgram $out/share/recoll/filters/rclimg \
-        --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
-      mkdir $out/Applications
-      mv $out/bin/recoll.app $out/Applications
-    '';
+  postInstall = ''
+    substituteInPlace $out/lib/*/site-packages/recoll/rclconfig.py --replace /usr/share/recoll $out/share/recoll
+    substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
+    for f in $out/share/recoll/filters/* ; do
+      if [[ ! "$f" =~ \.zip$ ]]; then
+  ''
+  + lib.concatStrings (
+    lib.mapAttrsToList (k: v: ''
+      substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
+    '') filters
+  )
+  + ''
+        substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
+        substituteInPlace $f --replace /usr/bin/perl   ${
+          lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))
+        }/bin/perl
+      fi
+    done
+    wrapProgram $out/share/recoll/filters/rclaudio.py \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rcljoplin.py \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+    wrapProgram $out/share/recoll/filters/rclimg \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
+    mkdir $out/Applications
+    mv $out/bin/recoll.app $out/Applications
+  '';
 
   # create symlink after fixup to prevent double wrapping of recoll
   postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
@@ -212,11 +205,10 @@ mkDerivation rec {
     '';
     homepage = "https://www.recoll.org";
     changelog = "https://www.recoll.org/pages/release-history.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       jcumming
-      ehmry
     ];
 
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time

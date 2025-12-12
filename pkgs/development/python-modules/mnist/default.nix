@@ -24,8 +24,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  dontUseSetuptoolsCheck = true;
-
   # disable tests which fail due to socket related errors
   disabledTests = [
     "test_test_images_has_right_size"
@@ -34,10 +32,10 @@ buildPythonPackage rec {
     "test_train_labels_has_right_size"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utilities to download and parse the MNIST dataset";
     homepage = "https://github.com/datapythonista/mnist";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dmrauh ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

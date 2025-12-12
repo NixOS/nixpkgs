@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bash_unit";
-  version = "2.3.1";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
-    owner = "pgrange";
-    repo = pname;
+    owner = "bash-unit";
+    repo = "bash_unit";
     rev = "v${version}";
-    sha256 = "sha256-kd5h12yjzvR/RBE/IjVXNSyjcf+rz6B2eoO8w2jiaps=";
+    hash = "sha256-uRUqa6sXaXXDes9JjyTsMlA+nYdTGdioM0/y2XDIiEw=";
   };
 
   patchPhase = ''
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     cp bash_unit $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bash unit testing enterprise edition framework for professionals";
-    maintainers = with maintainers; [ pamplemousse ];
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pamplemousse ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "bash_unit";
   };
 }

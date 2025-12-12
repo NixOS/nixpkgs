@@ -13,12 +13,12 @@
 
 let
   pname = "pythonnet";
-  version = "3.0.4";
+  version = "3.0.5";
   src = fetchFromGitHub {
     owner = "pythonnet";
     repo = "pythonnet";
-    rev = "v${version}";
-    hash = "sha256-QdgcBFQDFxmFxuXsDlHcu+L/VWw2aKfyWDqPrawyhOs=";
+    tag = "v${version}";
+    hash = "sha256-3LBrV/cQrXFKMFE1rCalDsPZ3rOY7RczqXoryMoVi14=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -53,9 +53,9 @@ buildPythonPackage {
     clr-loader
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Run tests using .NET Core, Mono is unsupported for now due to find_library problem in clr-loader
-    "--runtime coreclr"
+    "--runtime=coreclr"
   ];
 
   nativeCheckInputs = [
@@ -66,14 +66,14 @@ buildPythonPackage {
   # Rerun this when updating to refresh Nuget dependencies
   passthru.fetch-deps = dotnet-build.fetch-deps;
 
-  meta = with lib; {
+  meta = {
     description = ".NET integration for Python";
     homepage = "https://pythonnet.github.io";
-    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jraygauthier
       mdarocha
     ];

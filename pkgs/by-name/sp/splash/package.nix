@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "splash";
-  version = "3.11.1";
+  version = "3.11.6";
 
   src = fetchFromGitHub {
     owner = "danieljprice";
     repo = "splash";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zENMQpLsm6GlqrXsFDjEnMbtODcqwhB3jGfGHLuGcYw=";
+    hash = "sha256-cnvsxHaTuz0xKOlGfWtjZDd/RDxNuurTNk03pTGYs78=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "An interactive visualisation and plotting tool using kernel interpolation, mainly used for Smoothed Particle Hydrodynamics simulations";
+    description = "Interactive visualisation and plotting tool using kernel interpolation, mainly used for Smoothed Particle Hydrodynamics simulations";
     inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ doronbehar ];

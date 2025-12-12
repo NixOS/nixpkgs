@@ -9,26 +9,25 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "argon";
-  version = "2.0.21";
+  version = "2.0.26";
 
   src = fetchFromGitHub {
     owner = "argon-rbx";
     repo = "argon";
-    rev = "refs/tags/${version}";
-    hash = "sha256-msKrPLB+38PU7LEw92xEqFy6JxwMjttBaobIOhU7eWw=";
+    tag = version;
+    hash = "sha256-3IftPWrBETU7zJLaB9uTrc08c37XGmFPPArzrlIFG3Q=";
   };
 
-  cargoHash = "sha256-yXhEgZYtYhrSpwPbL+yi9gaLVVV8sBlF8m3ADUC4kLk=";
+  cargoHash = "sha256-60BQ7PsKATq5jX5DqCGdOx3xvRzwm5TAM1RtKuPy49M=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

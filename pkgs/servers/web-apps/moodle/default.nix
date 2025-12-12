@@ -1,13 +1,29 @@
-{ lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  plugins ? [ ],
+  nixosTests,
+}:
 
 let
-  version = "4.4.5";
+  version = "5.0.2";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
-  stableVersion = lib.removePrefix "0" (lib.concatMapStrings
-    (p: if (lib.toInt p) < 10 then (lib.concatStrings ["0" p]) else p)
-    versionParts);
+  stableVersion = lib.removePrefix "0" (
+    lib.concatMapStrings (
+      p:
+      if (lib.toInt p) < 10 then
+        (lib.concatStrings [
+          "0"
+          p
+        ])
+      else
+        p
+    ) versionParts
+  );
 
   # Reference: https://docs.moodle.org/dev/Plugin_types
   pluginDirs = {
@@ -72,13 +88,14 @@ let
     qbank = "question/bank";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "moodle";
   inherit version;
 
   src = fetchurl {
     url = "https://download.moodle.org/download.php/direct/stable${stableVersion}/${pname}-${version}.tgz";
-    hash = "sha256-CronmobN0OFZHhMCmruPae34j1FNrvMLO02q1VlQfgY=";
+    hash = "sha256-p9kXrUnsFNHJ3k5EwSYO/iXNlN1AanOGln1TQSFiCUI=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -94,17 +111,23 @@ in stdenv.mkDerivation rec {
     cp -r . $out/share/moodle
     cp ${phpConfig} $out/share/moodle/config.php
 
-    ${lib.concatStringsSep "\n" (map (p:
-      let
-        dir = if (lib.hasAttr p.pluginType pluginDirs) then
-          pluginDirs.${p.pluginType}
-        else
-          throw "unknown moodle plugin type";
-        # we have to copy it, because the plugins have refrences to .. inside
-      in ''
-        mkdir -p $out/share/moodle/${dir}/${p.name}
-        cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
-      '') plugins)}
+    ${lib.concatStringsSep "\n" (
+      map (
+        p:
+        let
+          dir =
+            if (lib.hasAttr p.pluginType pluginDirs) then
+              pluginDirs.${p.pluginType}
+            else
+              throw "unknown moodle plugin type";
+          # we have to copy it, because the plugins have refrences to .. inside
+        in
+        ''
+          mkdir -p $out/share/moodle/${dir}/${p.name}
+          cp -r ${p}/* $out/share/moodle/${dir}/${p.name}/
+        ''
+      ) plugins
+    )}
 
     runHook postInstall
   '';
@@ -113,12 +136,11 @@ in stdenv.mkDerivation rec {
     inherit (nixosTests) moodle;
   };
 
-  meta = with lib; {
-    description =
-      "Free and open-source learning management system (LMS) written in PHP";
-    license = licenses.gpl3Plus;
+  meta = {
+    description = "Free and open-source learning management system (LMS) written in PHP";
+    license = lib.licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

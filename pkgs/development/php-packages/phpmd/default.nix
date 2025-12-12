@@ -2,23 +2,28 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpmd";
   version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "phpmd";
     repo = "phpmd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-nTuJGzOZnkqrfE9R9Vujz/zGJRLlj8+yRZmmnxWrieQ=";
   };
 
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/phpmd/phpmd/issues/1056
   composerLock = ./composer.lock;
-  vendorHash = "sha256-vr0wQkfhXHLEz8Q5nEq5Bocu1U1nDhXUlaHBsysvuRQ=";
+  vendorHash = "sha256-tiL8PL6Muc/i4Il1rCeEKenCmIEVn3rHFZInbUGQW9o=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/phpmd/phpmd/releases/tag/${finalAttrs.version}";
@@ -26,6 +31,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpmd.org/";
     license = lib.licenses.bsd3;
     mainProgram = "phpmd";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

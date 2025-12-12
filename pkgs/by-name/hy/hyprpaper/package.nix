@@ -1,9 +1,10 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   cairo,
+  bash,
   expat,
   file,
   fribidi,
@@ -30,16 +31,25 @@
   hyprgraphics,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.3";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IRZ5NrKFwBVueYrZYUQfpTwp2rZHgAkPwgvdnfVBF8E=";
+    hash = "sha256-l/OxM4q/nLVv47OuS4bG2J7k0m+G7/3AMtvrV64XLb0=";
   };
+
+  prePatch = ''
+    substituteInPlace src/main.cpp \
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+  '';
+  postPatch = ''
+    substituteInPlace src/helpers/MiscFunctions.cpp \
+      --replace-fail '/bin/bash' '${bash}/bin/bash'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +60,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    bash
     expat
     file
     fribidi
@@ -73,22 +84,13 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     hyprgraphics
   ];
 
-  prePatch = ''
-    substituteInPlace src/main.cpp \
-      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
-  '';
-
-  meta = with lib; {
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      fufexan
-      khaneliman
-      wozeparrot
-    ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = gcc14Stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

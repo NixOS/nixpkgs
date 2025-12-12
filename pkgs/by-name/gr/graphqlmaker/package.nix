@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "graphqlmaker";
   version = "0-unstable-2024-05-18";
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find graphql queries in Javascript files";
     homepage = "https://github.com/xssdoctor/graphqlMaker";
     # https://github.com/xssdoctor/graphqlMaker/issues/1
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "graphqlMaker";
   };
 }

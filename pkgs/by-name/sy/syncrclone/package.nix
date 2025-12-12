@@ -6,8 +6,8 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "syncrclone";
-  version = "unstable-2023-03-23";
-  format = "setuptools";
+  version = "0-unstable-2023-03-23";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwink3101";
@@ -16,17 +16,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-v81hPeu5qnMG6Sb95D88jy5x/GO781bf7efCYjbOaxs=";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   pythonImportsCheck = [
     "syncrclone"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bidirectional sync tool for rclone";
     homepage = "https://github.com/Jwink3101/syncrclone";
     changelog = "https://github.com/Jwink3101/syncrclone/blob/${src.rev}/docs/changelog.md";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ prominentretail ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prominentretail ];
     mainProgram = "syncrclone";
   };
 }

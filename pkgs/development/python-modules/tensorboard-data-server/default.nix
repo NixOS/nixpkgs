@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tensorboard_data_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast data loading for TensorBoard";
     homepage = "https://github.com/tensorflow/tensorboard/tree/master/tensorboard/data/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

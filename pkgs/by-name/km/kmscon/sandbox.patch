@@ -1,0 +1,25 @@
+From d51e35a7ab936983b2a544992adae66093c6028f Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Thu, 20 Feb 2025 11:05:56 +0100
+Subject: [PATCH] Patch for nixpkgs
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 964b44b..4415084 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,7 +39,7 @@ mandir = get_option('mandir')
+ moduledir = get_option('libdir') / meson.project_name()
+ 
+ systemd_deps = dependency('systemd', required: false)
+-systemdsystemunitdir = systemd_deps.get_variable('systemdsystemunitdir', default_value: get_option('libdir') / 'systemd/system')
++systemdsystemunitdir = get_option('libdir') / 'systemd'
+ 
+ #
+ # Required dependencies
+-- 
+2.47.2
+

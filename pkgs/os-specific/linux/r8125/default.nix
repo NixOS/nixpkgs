@@ -1,24 +1,21 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitLab,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "r8125";
-  # On update please verify (using `diff -r`) that the source matches the
-  # realtek version.
-  version = "9.014.01";
+  version = "9.016.01";
 
-  # This is a mirror. The original website[1] doesn't allow non-interactive
-  # downloads, instead emailing you a download link.
-  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
-  src = fetchFromGitHub {
-    owner = "louistakepillz";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
     repo = "r8125";
-    rev = version;
-    sha256 = "sha256-vYgAOmKFQZDKrZsS3ynXB0DrT3wU0JWzNTYO6FyMG9M=";
+    tag = "upstream/${finalAttrs.version}";
+    hash = "sha256-Sg+f27nujBFtk0UxhVlc3c07MZVGVkEFAP5BH/NE0C4=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -26,27 +23,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "BASEDIR :=" "BASEDIR ?="
-    substituteInPlace src/Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace src/Makefile --replace-fail "BASEDIR :=" "BASEDIR ?="
+    substituteInPlace src/Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
   '';
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "BASEDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
   ];
 
   buildFlags = [ "modules" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/louistakepillz/r8125";
-    downloadPage = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software";
-    description = "Realtek r8125 driver";
-    longDescription = ''
-      A kernel module for Realtek 8125 2.5G network cards.
-    '';
-    # r8125 has been integrated into the kernel as of v5.9.1
-    broken = lib.versionAtLeast kernel.version "5.9.1";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ peelz ];
+  installPhase = ''
+    mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek
+    cp src/r8125.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/realtek/
+  '';
+
+  meta = {
+    homepage = "https://salsa.debian.org/debian/r8125";
+    description = "Realtek r8125 2.5G Ethernet driver";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peelz ];
   };
-}
+})

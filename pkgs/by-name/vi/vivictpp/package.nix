@@ -10,23 +10,28 @@
   git,
   SDL2,
   SDL2_ttf,
+  libX11,
   freetype,
   harfbuzz,
   ffmpeg,
   cacert,
   zlib,
+  writeShellScript,
+  nix-update,
 }:
 
 let
-  version = "1.1.0";
+  version = "1.3.1";
   withSubprojects = stdenv.mkDerivation {
-    name = "sources-with-subprojects";
+    pname = "sources-with-subprojects";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "vivictorg";
       repo = "vivictpp";
-      rev = "v${version}";
-      hash = "sha256-ScuCOmcK714YXEHncizwj6EWdiNIJA1xRMn5gfmg4K4=";
+      tag = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-g/M3blW48uwL6v60IU4sRObYvR7Gjjn/X0lYSS86x+0=";
     };
 
     nativeBuildInputs = [
@@ -44,7 +49,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-/6nuTKjQEXfJlHkTkeX/A4PeGb8SOk6Q801gjx1SB6M=";
+    outputHash = "sha256-UbULDurC6qbcjP+fZJgd0nSVsimAyw3sYC08xeXcI14=";
   };
 in
 stdenv.mkDerivation {
@@ -65,6 +70,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     SDL2
+    libX11
     SDL2_ttf
     freetype
     harfbuzz
@@ -76,12 +82,17 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  passthru.updateScript = writeShellScript "update-vivictpp" ''
+    ${lib.getExe nix-update} vivictpp.src
+    ${lib.getExe nix-update} vivictpp --version skip
+  '';
+
+  meta = {
     description = "Easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
     homepage = "https://github.com/vivictorg/vivictpp";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tilpner ];
     mainProgram = "vivictpp";
   };
 }

@@ -12,8 +12,6 @@
   gtk4,
   libadwaita,
   pango,
-  stdenv,
-  darwin,
   cargo-make,
 }:
 
@@ -35,24 +33,17 @@ rustPlatform.buildRustPackage rec {
     cargo-make
   ];
 
-  buildInputs =
-    [
-      cairo
-      dbus
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreBluetooth
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    pango
+  ];
 
-  cargoHash = "sha256-YBJd43xOCumQbrvzfV/+F63McYzHg1bGI3icgGzGZrQ=";
+  cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";
 
   INSTALL_PREFIX = placeholder "out";
 
@@ -67,12 +58,12 @@ rustPlatform.buildRustPackage rec {
     cargo make --profile release install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform application for controlling settings of Soundcore headphones";
     homepage = "https://github.com/Oppzippy/OpenSCQ30";
     changelog = "https://github.com/Oppzippy/OpenSCQ30/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "open-scq30";
   };
 }

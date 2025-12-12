@@ -8,7 +8,6 @@
   pandas,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
   typer,
@@ -16,26 +15,28 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VMZLEirE01Q9eyQIhV18PepGWmBcxLIwNeuVf7EuSWE=";
+    tag = version;
+    hash = "sha256-AUQhdJc2nSuggV6zNOMihVJIbHAQX6EXsnhn97Tp35A=";
   };
 
-  pythonRelaxDeps = [ "pandas" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "pandas"
+    "typer"
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     loguru
     niapy
     numpy
@@ -54,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niaaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python automated machine learning framework";
     homepage = "https://github.com/firefly-cpp/NiaAML";
-    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

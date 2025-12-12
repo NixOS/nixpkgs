@@ -30,11 +30,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://valentjn.github.io/ltex/";
     description = "LSP language server for LanguageTool";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mpl20;
+    mainProgram = "ltex-ls";
+    maintainers = with lib.maintainers; [ vinnymeller ];
     platforms = jre_headless.meta.platforms;
   };
 }

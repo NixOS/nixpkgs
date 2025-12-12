@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  versioneer,
 
   # dependencies
   click,
@@ -28,27 +27,20 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.12.1";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = version;
-    hash = "sha256-R8DTiatme99afA6enTpC3AFN0KRmDbd+VGpXRNqvE8w=";
+    hash = "sha256-b6kVrRPGbPyss0Wl56qQFjZOznLH9Y3HQlEHo9d6X9I=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
-    versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ];
 
   pythonRelaxDeps = [ "dask" ];
 
@@ -78,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    changelog = "https://github.com/dask/distributed/releases/tag/${version}";
+    changelog = "https://github.com/dask/distributed/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };

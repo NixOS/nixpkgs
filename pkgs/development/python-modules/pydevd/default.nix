@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cython,
   setuptools,
   numpy,
   psutil,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "3.0.3";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,67 +26,63 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-aylmLN7lVUza2lt2K48rJsx3XatXPgPjcmPZ05raLX0=";
+    hash = "sha256-V5pM0xnMFnpR1oK0purHFCV3wu+4fOmd72kmy7pVeyk=";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' pytest.ini
+  '';
 
   __darwinAllowLocalNetworking = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [
     numpy
     psutil
-    pytest-xdist
+    #pytest-xdist
     pytestCheckHook
     trio
     untangle
   ];
 
-  disabledTests =
-    [
-      # Require network connection
-      "test_completion_sockets_and_messages"
-      "test_path_translation"
-      "test_attach_to_pid_no_threads"
-      "test_attach_to_pid_halted"
-      "test_remote_debugger_threads"
-      "test_path_translation_and_source_reference"
-      "test_attach_to_pid"
-      "test_terminate"
-      "test_gui_event_loop_custom"
-      # AssertionError: assert '/usr/bin/' == '/usr/bin'
-      # https://github.com/fabioz/PyDev.Debugger/issues/227
-      "test_to_server_and_to_client"
-      # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
-      "test_step_next_step_in_multi_threads"
-      "test_tracing_basic"
-      "test_tracing_other_threads"
-      # subprocess.CalledProcessError
-      "test_find_main_thread_id"
-      # numpy 2 compat
-      "test_evaluate_numpy"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      "test_case_handled_and_unhandled_exception_generator"
-      "test_case_stop_async_iteration_exception"
-      "test_case_unhandled_exception_generator"
-      "test_function_breakpoints_async"
-      # raise segmentation fault
-      # https://github.com/fabioz/PyDev.Debugger/issues/269
-      "test_evaluate_expression"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_multiprocessing_simple"
-      "test_evaluate_exception_trace"
-    ];
+  disabledTests = [
+    # Require network connection
+    "test_completion_sockets_and_messages"
+    "test_path_translation"
+    "test_attach_to_pid_no_threads"
+    "test_attach_to_pid_halted"
+    "test_remote_debugger_threads"
+    "test_path_translation_and_source_reference"
+    "test_attach_to_pid"
+    "test_terminate"
+    "test_gui_event_loop_custom"
+    # AssertionError: assert '/usr/bin/' == '/usr/bin'
+    # https://github.com/fabioz/PyDev.Debugger/issues/227
+    "test_to_server_and_to_client"
+    # Times out
+    "test_case_sys_exit_multiple_exception_attach"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # raise segmentation fault
+    # https://github.com/fabioz/PyDev.Debugger/issues/269
+    "test_evaluate_expression"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_multiprocessing_simple"
+    "test_evaluate_exception_trace"
+  ];
 
   pythonImportsCheck = [ "pydevd" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ onny ];
     mainProgram = "pydevd";
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "libctl";
     rev = "v${version}";
     sha256 = "uOydBWYPXSBUi+4MM6FNx6B5l2to7Ny9Uc1MMTV9bGA=";
   };
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with lib; {
+  meta = {
     description = "Guile-based library for supporting flexible control files in scientific simulations";
     mainProgram = "gen-ctl-io";
     homepage = "https://github.com/NanoComp/libctl";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ carpinchomug ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

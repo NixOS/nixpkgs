@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "prometheus-klipper-exporter";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "scross01";
     repo = "prometheus-klipper-exporter";
     rev = "v${version}";
-    sha256 = "sha256-OlNUBdCizMOSb7WEtu00LaHYSXLSPlISVJD/0rHujnY=";
+    sha256 = "sha256-zNRjD2YO7OfcNXF5pukXChxhC5LB88C1EKfiMreMzTs=";
   };
 
   vendorHash = "sha256-0nbLHZ2WMLMK0zKZuUYz355K01Xspn9svmlFCtQjed0=";
@@ -28,11 +28,11 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = " Prometheus Exporter for Klipper ";
+  meta = {
+    description = "Prometheus Exporter for Klipper";
     homepage = "https://github.com/scross01/prometheus-klipper-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wulfsta ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wulfsta ];
+    platforms = lib.platforms.linux;
   };
 }

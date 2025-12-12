@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "amarna";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tyvHWBhanR7YH87MDWdXUsDEzZG6MgnbshezAbxWO+I=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amarna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static-analyzer and linter for the Cairo programming language";
     mainProgram = "amarna";
     homepage = "https://github.com/crytic/amarna";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

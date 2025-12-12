@@ -4,34 +4,31 @@
   fetchFromGitHub,
   cairocffi,
   cffi,
-  strenum,
   psutil,
   xcffib,
-  pdm-backend,
+  uv-build,
   pyside6,
   pyvirtualdisplay,
   pytestCheckHook,
   qtile,
 }:
-
 buildPythonPackage rec {
   pname = "qtile-bonsai";
-  version = "0.4.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aravinda0";
     repo = "qtile-bonsai";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IWy/YEVdZc+UgIKl75ZpOkOIvpS5hCX0ihQenUOuJHo=";
+    tag = "v${version}";
+    hash = "sha256-JCElI4Ymr99p9dj++N9lyTFNmikntBwwImYREXFsUo0=";
   };
 
   build-system = [
-    pdm-backend
+    uv-build
   ];
 
   dependencies = [
-    strenum
     psutil
   ];
 
@@ -44,6 +41,11 @@ buildPythonPackage rec {
     qtile
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'uv_build>=0.8.13,<0.9.0' 'uv_build'
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)

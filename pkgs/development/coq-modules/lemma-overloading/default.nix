@@ -6,7 +6,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "lemma-overloading";
   inherit version;
 
@@ -64,9 +64,9 @@ mkCoqDerivation rec {
 
   propagatedBuildInputs = [ mathcomp-ssreflect ];
 
-  meta = with lib; {
+  meta = {
     description = "Libraries demonstrating design patterns for programming and proving with canonical structures in Coq";
     maintainers = with lib.maintainers; [ cohencyril ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

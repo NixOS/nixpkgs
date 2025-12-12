@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BLAKE2";
     repo = "libb2";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0qj8aaqvfcavj1vj5asm4pqm03ap7q8x4c2fy83cqggvky0frgya";
   };
 
@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "BLAKE2 family of cryptographic hash functions";
     homepage = "https://blake2.net/";
     pkgConfigModules = [ "libb2" ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       dfoxfranke
       dotlambda
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 })

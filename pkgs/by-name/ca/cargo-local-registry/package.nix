@@ -7,54 +7,53 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-local-registry";
-  version = "0.2.7";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
-    rev = "v${version}";
-    hash = "sha256-hG6OSi0I7Y6KZacGR9MCC+e7YcDcvaVfR3LSOjqz23A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DzBD7N7GQZ9nhF22DnxRse0P8MUGReOcXHQ56KOqW6I=";
   };
 
-  cargoHash = "sha256-lTtxCRK4J3dQ6fwjOwYvKa0ykr28guAwVN/J8pfLn9s=";
+  cargoHash = "sha256-9DW6DkWXoGvdHjxIwgXaQP9a5Kc90SdNDRNRq6G6pLg=";
 
   nativeBuildInputs = [
     curl
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ];
+  buildInputs = [
+    curl
+    libgit2
+    openssl
+    zlib
+  ];
 
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cargo subcommand to manage local registries";
     mainProgram = "cargo-local-registry";
     homepage = "https://github.com/dhovart/cargo-local-registry";
-    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

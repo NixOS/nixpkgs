@@ -2,87 +2,105 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   poetry-core,
 
-  setuptools,
+  anthropic,
   astor,
-  inquirer,
-  pyyaml,
-  rich,
-  six,
-  tokentrim,
-  wget,
-  psutil,
+  fastapi,
+  google-generativeai,
   html2image,
-  send2trash,
+  html2text,
+  inquirer,
   ipykernel,
   jupyter-client,
-  matplotlib,
-  toml,
-  tiktoken,
-  platformdirs,
-  pydantic,
-  google-generativeai,
-  pynput,
-  pyperclip,
-  yaspin,
-  shortuuid,
   litellm,
+  matplotlib,
+  platformdirs,
+  psutil,
+  pyautogui,
+  pydantic,
+  pyperclip,
+  pyyaml,
+  rich,
+  selenium,
+  send2trash,
+  setuptools,
+  shortuuid,
+  six,
+  starlette,
+  tiktoken,
+  tokentrim,
+  toml,
+  typer,
+  uvicorn,
+  webdriver-manager,
+  wget,
+  yaspin,
 
   nltk,
 }:
 
 buildPythonPackage rec {
   pname = "open-interpreter";
-  version = "0.3.6";
+  version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
     repo = "open-interpreter";
-    rev = "v${version}";
-    hash = "sha256-TeBiRylrq5CrAG9XS47Z9GlruAv7V7Nsl4QbSV55isM=";
+    tag = "v${version}";
+    hash = "sha256-fogCcWAhcrCrrcV0q4oKttkf/GeJaJSZnbgiFxvySs8=";
   };
 
   pythonRemoveDeps = [ "git-python" ];
 
   pythonRelaxDeps = [
+    "anthropic"
     "google-generativeai"
+    "html2text"
     "psutil"
-    "pynput"
+    "rich"
+    "starlette"
+    "tiktoken"
+    "typer"
     "yaspin"
   ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    setuptools
+    anthropic
     astor
-    inquirer
-    pyyaml
-    rich
-    six
-    tokentrim
-    wget
-    psutil
+    fastapi
+    google-generativeai
     html2image
-    send2trash
+    html2text
+    inquirer
     ipykernel
     jupyter-client
-    matplotlib
-    toml
-    tiktoken
-    platformdirs
-    pydantic
-    google-generativeai
-    pynput
-    pyperclip
-    yaspin
-    shortuuid
     litellm
+    matplotlib
+    platformdirs
+    psutil
+    pyautogui
+    pydantic
+    pyperclip
+    pyyaml
+    rich
+    selenium
+    send2trash
+    setuptools
+    shortuuid
+    six
+    starlette
+    tiktoken
+    tokentrim
+    toml
+    typer
+    uvicorn
+    webdriver-manager
+    wget
+    yaspin
 
     # marked optional in pyproject.toml but still required?
     nltk
@@ -93,12 +111,12 @@ buildPythonPackage rec {
   # Most tests required network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "OpenAI's Code Interpreter in your terminal, running locally";
     homepage = "https://github.com/KillianLucas/open-interpreter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/KillianLucas/open-interpreter/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "interpreter";
   };
 }

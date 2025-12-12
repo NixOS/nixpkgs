@@ -11,6 +11,7 @@
   pip,
   setuptools,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "'pytest-runner'" ""
+      --replace-fail "setup_requires=['pytest-runner']," ""
     substituteInPlace pyproject.toml \
       --replace-fail "numpy==" "numpy>="
   '';
@@ -57,16 +58,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/mrsqm"
   ];
 
   pythonImportsCheck = [ "mrsqm" ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v\\.(.*)"
+    ];
+  };
+
   meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
     homepage = "https://pypi.org/project/mrsqm";
-    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${version}";
+    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mbalatsko ];
   };

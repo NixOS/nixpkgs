@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HAYsmsW5GKLmfq9FVVsME+tE7Qg0jx9YIWw1UQWwV2c=";
+    tag = "v${version}";
+    hash = "sha256-ERFRLNHD3OhbMEGBEnDLkRYGv4f+bYg9MStS5IarcPA=";
   };
 
   build-system = [ hatchling ];
@@ -65,7 +65,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "securesystemslib" ];
 
@@ -76,11 +77,11 @@ buildPythonPackage rec {
     "securesystemslib/_vendor/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
-    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

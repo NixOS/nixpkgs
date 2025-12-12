@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "bztsrc";
-    repo = pname;
+    repo = "usbimager";
     rev = version;
     hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
@@ -52,19 +52,20 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optional withLibui "USE_LIBUI=yes"
-    ++ lib.optional withUdisks "USE_UDISKS2=yes";
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optional withLibui "USE_LIBUI=yes"
+  ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
-  meta = with lib; {
+  meta = {
     description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vdot0x23 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vdot0x23 ];
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";

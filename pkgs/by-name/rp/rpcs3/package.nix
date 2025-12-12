@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   pkg-config,
   git,
@@ -12,7 +14,7 @@
   vulkan-loader,
   libpng,
   libSM,
-  ffmpeg,
+  ffmpeg_7,
   libevdev,
   libusb1,
   zlib,
@@ -21,24 +23,27 @@
   python3,
   pugixml,
   flatbuffers,
-  llvm_16,
+  llvm_18,
   cubeb,
+  opencv,
   enableDiscordRpc ? false,
   faudioSupport ? true,
   faudio,
   SDL2,
+  sdl3,
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
+  miniupnpc,
+  rtmidi,
+  asmjit,
+  glslang,
+  zstd,
+  hidapi,
+  vulkan-memory-allocator,
 }:
 
 let
-  # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17206-9d4ff13c2";
-  rpcs3Version = "0.0.34-17206-9d4ff13c2";
-  rpcs3Revision = "9d4ff13c2bbcb85d8fa63b479d0f4c28f9472147";
-  rpcs3Hash = "sha256-FZItMeClPxwzwLVH5YPLV7NQZ5kFn6SjdduMI9P2kWQ=";
-
   inherit (qt6Packages)
     qtbase
     qtmultimedia
@@ -46,23 +51,23 @@ let
     qtwayland
     ;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = rpcs3Version;
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = rpcs3Revision;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
     fetchSubmodules = true;
-    hash = rpcs3Hash;
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   preConfigure = ''
     cat > ./rpcs3/git-version.h <<EOF
-    #define RPCS3_GIT_VERSION "${rpcs3GitVersion}"
+    #define RPCS3_GIT_VERSION "nixpkgs"
     #define RPCS3_GIT_FULL_BRANCH "RPCS3/rpcs3/master"
     #define RPCS3_GIT_BRANCH "HEAD"
     #define RPCS3_GIT_VERSION_NO_UPDATE 1
@@ -77,9 +82,18 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_CURL" true)
     (lib.cmakeBool "USE_SYSTEM_WOLFSSL" true)
     (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
+    (lib.cmakeBool "USE_SYSTEM_OPENAL" true)
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
+    (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIUPNPC" true)
+    (lib.cmakeBool "USE_SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "USE_SYSTEM_GLSLANG" true)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "USE_SYSTEM_HIDAPI" true)
+    (lib.cmakeBool "USE_SYSTEM_VULKAN_MEMORY_ALLOCATOR" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -98,34 +112,52 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
-      openal
-      glew
-      vulkan-headers
-      vulkan-loader
-      libpng
-      ffmpeg
-      libevdev
-      zlib
-      libusb1
-      curl
-      wolfssl
-      python3
-      pugixml
-      SDL2
-      flatbuffers
-      llvm_16
-      libSM
-    ]
-    ++ cubeb.passthru.backendLibs
-    ++ lib.optional faudioSupport faudio
-    ++ lib.optionals waylandSupport [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg_7
+    libevdev
+    zlib
+    libusb1
+    curl
+    wolfssl
+    python3
+    pugixml
+    SDL2 # Still needed by FAudio's CMake
+    sdl3
+    flatbuffers
+    llvm_18
+    libSM
+    opencv.cxxdev
+    cubeb
+    miniupnpc
+    rtmidi
+    asmjit
+    glslang
+    zstd
+    hidapi
+    vulkan-memory-allocator
+  ]
+  ++ lib.optional faudioSupport faudio
+  ++ lib.optionals waylandSupport [
+    wayland
+    qtwayland
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-qt-6.10.patch";
+      url = "https://github.com/RPCS3/rpcs3/commit/038ee090b731bf63917371a3586c2f7d7cf4e585.patch";
+      hash = "sha256-jTIxsheG9b9zp0JEeWQ73BunAXmEIg5tj4SrWBfdHy8=";
+    })
+  ];
+
+  doInstallCheck = true;
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -138,20 +170,17 @@ stdenv.mkDerivation {
     install -D ${./99-dualsense-controllers.rules} $out/etc/udev/rules.d/99-dualsense-controllers.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [
-      abbradar
-      neonfuz
+    maintainers = with lib.maintainers; [
       ilian
-      zane
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
     mainProgram = "rpcs3";
   };
-}
+})

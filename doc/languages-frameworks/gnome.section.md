@@ -48,9 +48,7 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
 
 ```nix
 {
-  buildInputs = [
-    pantheon.elementary-icon-theme
-  ];
+  buildInputs = [ pantheon.elementary-icon-theme ];
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.
@@ -96,7 +94,12 @@ Given the requirements above, the package expression would become messy quickly:
         --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
         --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
         --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
-        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ pango json-glib ]}"
+        --prefix GI_TYPELIB_PATH : "${
+          lib.makeSearchPath "lib/girepository-1.0" [
+            pango
+            json-glib
+          ]
+        }"
     done
   '';
 }
@@ -108,7 +111,7 @@ Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that a
 - [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4} for GTK 4 apps. Same as `wrapGAppsHook3` but replaces `gtk3` with `gtk4`.
 - [`wrapGAppsNoGuiHook`]{#ssec-gnome-hooks-wrapgappsnoguihook} for programs without a graphical interface. Same as the above but does not bring `gtk3` and `librsvg` into the closure.
 
-The hooks do the the following:
+The hooks do the following:
 
 - `wrapGApps*` hook itself will add the package’s `share` directory to `XDG_DATA_DIRS`.
 
@@ -209,7 +212,7 @@ stdenv.mkDerivation {
 
 You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
 
-- []{#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext} [Replacing a `GI_TYPELIB_PATH` in GNOME Shell extension](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24) – we are using `substituteAll` to include the path to a typelib into a patch.
+- []{#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext} [Replacing a `GI_TYPELIB_PATH` in GNOME Shell extension](https://github.com/NixOS/nixpkgs/blob/e981466fbb08e6231a1377539ff17fbba3270fda/pkgs/by-name/gn/gnome-shell-extensions/package.nix#L25-L32) – we are using `replaceVars` to include the path to a typelib into a patch.
 
 - []{#ssec-gnome-common-issues-unwrappable-package-gsettings} The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions
 
@@ -217,7 +220,7 @@ You can rely on applications depending on the library setting the necessary envi
 
   * `glib.makeSchemaPath` Takes a package output like `$out` and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
 
-  []{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} [Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86) – here, `substituteAll` cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a [Nix bug](https://github.com/NixOS/nix/issues/1846).
+  []{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} [Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86) – here, `replaceVars` cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a [Nix bug](https://github.com/NixOS/nix/issues/1846).
 
   []{#ssec-gnome-common-issues-unwrappable-package-gsettings-c} [Hard-coding GSettings schema path in C library](https://github.com/NixOS/nixpkgs/blob/29c120c065d03b000224872251bed93932d42412/pkgs/development/libraries/glib-networking/default.nix#L31-L34) – nothing special other than using [Coccinelle patch](https://github.com/NixOS/nixpkgs/pull/67957#issuecomment-527717467) to generate the patch itself.
 

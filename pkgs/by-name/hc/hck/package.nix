@@ -7,29 +7,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hck";
-  version = "0.11.0";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "sstadick";
-    repo = pname;
+    repo = "hck";
     rev = "v${version}";
-    hash = "sha256-ZzmInCx75IjNQBQmattc7JZwtD6zGYCQ4eTgDFz2L00=";
+    hash = "sha256-cycM40fm0bc6SCgGsMTKFVPUtjcXGpoMo3KhDDo74ZQ=";
   };
 
-  cargoHash = "sha256-BPLhdbC5XFsRfvObaEa4nmYWCN1FxbJzmgZK1JpBcLQ=";
+  cargoHash = "sha256-1Kaob5OZiM9WZ6lwuRvuDMtHVolRPjApQtQ52TQhs8A=";
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";
     homepage = "https://github.com/sstadick/hck";
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       unlicense
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       gepbird
     ];
     mainProgram = "hck";

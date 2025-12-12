@@ -6,23 +6,23 @@
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "24.11.0";
+  version = "25.12.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    hash = "sha256-8BMFL3WktkkB8m6asbNeb9swnLWi3jHo012fBXGa8ls=";
+    hash = "sha256-DN2QUxCVVjYn7b4xt/7+k5g1/7dfZ+cp5Yi0nJWh1mM=";
   };
 
   postInstall = ''
     cp -r bin $out/share/fish/vendor_conf.d/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility tool powered by fzf for using git interactively";
     homepage = "https://github.com/wfxr/forgit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

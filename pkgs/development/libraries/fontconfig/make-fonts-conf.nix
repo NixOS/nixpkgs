@@ -14,28 +14,27 @@ in
   fontconfig ? fontconfig_,
   # an array of fonts, e.g. `[ pkgs.dejavu_fonts.minimal ]`
   fontDirectories,
-  impureFontDirectories ?
-    [
-      # nix user profile
-      "~/.nix-profile/lib/X11/fonts"
-      "~/.nix-profile/share/fonts"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "~/Library/Fonts"
-    ++ [
-      # FHS paths for non-NixOS platforms
-      "/usr/share/fonts"
-      "/usr/local/share/fonts"
-    ]
-    # darwin paths
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "/Library/Fonts"
-      "/System/Library/Fonts"
-    ]
-    # nix default profile
-    ++ [
-      "/nix/var/nix/profiles/default/lib/X11/fonts"
-      "/nix/var/nix/profiles/default/share/fonts"
-    ],
+  impureFontDirectories ? [
+    # nix user profile
+    "~/.nix-profile/lib/X11/fonts"
+    "~/.nix-profile/share/fonts"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "~/Library/Fonts"
+  ++ [
+    # FHS paths for non-NixOS platforms
+    "/usr/share/fonts"
+    "/usr/local/share/fonts"
+  ]
+  # darwin paths
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "/Library/Fonts"
+    "/System/Library/Fonts"
+  ]
+  # nix default profile
+  ++ [
+    "/nix/var/nix/profiles/default/lib/X11/fonts"
+    "/nix/var/nix/profiles/default/share/fonts"
+  ],
 
   # to include custom config
   includes ? [ "/etc/fonts/conf.d" ],

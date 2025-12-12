@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "icholy";
-    repo = pname;
+    repo = "ttygif";
     rev = version;
     sha256 = "sha256-GsMeVR2wNivQguZ6B/0v39Td9VGHg+m3RtAG9DYkNmU=";
   };
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/icholy/ttygif";
     description = "Convert terminal recordings to animated gifs";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ moaxcp ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moaxcp ];
     mainProgram = "ttygif";
   };
 }

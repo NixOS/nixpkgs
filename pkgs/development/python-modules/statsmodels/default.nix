@@ -7,7 +7,6 @@
   packaging,
   pandas,
   patsy,
-  pythonOlder,
   scipy,
   setuptools,
   setuptools-scm,
@@ -16,15 +15,18 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.3";
+  version = "0.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7PNQJkP6k6q+XwvfI477WWCVF8TWCoEWMtMfzc6GwtI=";
+    hash = "sha256-3iYOWMzP0s7d+DW1WjVyM9bKhToapPkPdVOlLMccbd8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools_scm[toml]>=8,<9' 'setuptools_scm[toml]'
+  '';
 
   build-system = [
     cython
@@ -54,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "statsmodels" ];
 
-  meta = with lib; {
+  meta = {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, flex
-, pkg-config
-, boost
-, icu
-, libstemmer
-, mariadb-connector-c
-, re2
-, nlohmann_json
-, testers
-, manticoresearch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  boost,
+  icu,
+  libstemmer,
+  mariadb-connector-c,
+  re2,
+  nlohmann_json,
+  testers,
+  manticoresearch,
 }:
 
 let
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
   };
 
@@ -115,13 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     command = "searchd --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
     changelog = "https://github.com/manticoresoftware/manticoresearch/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "searchd";
-    maintainers = [ maintainers.jdelStrother ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.jdelStrother ];
+    platforms = lib.platforms.all;
   };
 })

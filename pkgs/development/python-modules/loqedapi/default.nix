@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpolhout";
     repo = "loqedAPI";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IYzrGqql6mmm+FmasxFJvKgHvg7n81WOu+GGAEQ1+Os=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "loqedAPI" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Loqed Smart Door Lock API";
     homepage = "https://github.com/cpolhout/loqedAPI";
     changelog = "https://github.com/cpolhout/loqedAPI/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

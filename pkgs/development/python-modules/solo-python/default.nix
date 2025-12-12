@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "solokeys";
-    repo = pname;
+    repo = "solo-python";
     rev = version;
     hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool and library for SoloKeys Solo 1";
     homepage = "https://github.com/solokeys/solo1-cli";
-    maintainers = with maintainers; [ wucke13 ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ wucke13 ];
+    license = with lib.licenses; [
       asl20
       mit
     ];

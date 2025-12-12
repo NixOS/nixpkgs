@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncobj";
-  version = "0.3.13";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bakwc";
     repo = "PySyncObj";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZWzvvv13g/iypm+MIl5q0Y8ekqzZEY5upSTPk3MFTPI=";
+    tag = "v${version}";
+    hash = "sha256-a1fECsLIEFu9Wwai0viR/lkqWVWBKs+OdxHey3Pltmo=";
   };
 
   build-system = [ setuptools ];
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysyncobj" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for replicating your class";
     homepage = "https://github.com/bakwc/PySyncObj";
     changelog = "https://github.com/bakwc/PySyncObj/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "syncobj_admin";
   };
 }

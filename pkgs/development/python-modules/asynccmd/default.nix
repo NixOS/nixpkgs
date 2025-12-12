@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "valentinmk";
     repo = "asynccmd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0AjOKAEiwHi3AkzMGRvE/czTCfShXQAm8mDz98EESgs=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asynccmd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio implementation of Cmd Python library";
     homepage = "https://github.com/valentinmk/asynccmd";
     changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

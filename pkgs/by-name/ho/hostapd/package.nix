@@ -40,68 +40,68 @@ stdenv.mkDerivation rec {
   ];
 
   # Based on hostapd's defconfig. Only differences are tracked.
-  extraConfig =
-    ''
-      # Use epoll(7) instead of select(2) on linux
-      CONFIG_ELOOP_EPOLL=y
+  extraConfig = ''
+    # Use epoll(7) instead of select(2) on linux
+    CONFIG_ELOOP_EPOLL=y
 
-      # Drivers
-      CONFIG_DRIVER_WIRED=y
-      CONFIG_DRIVER_NONE=y
+    # Drivers
+    CONFIG_DRIVER_WIRED=y
+    CONFIG_DRIVER_NONE=y
 
-      # Integrated EAP server
-      CONFIG_EAP_SIM=y
-      CONFIG_EAP_AKA=y
-      CONFIG_EAP_AKA_PRIME=y
-      CONFIG_EAP_PAX=y
-      CONFIG_EAP_PSK=y
-      CONFIG_EAP_PWD=y
-      CONFIG_EAP_SAKE=y
-      CONFIG_EAP_GPSK=y
-      CONFIG_EAP_GPSK_SHA256=y
-      CONFIG_EAP_FAST=y
-      CONFIG_EAP_IKEV2=y
-      CONFIG_EAP_TNC=y
-      CONFIG_EAP_EKE=y
+    # Integrated EAP server
+    CONFIG_EAP_SIM=y
+    CONFIG_EAP_AKA=y
+    CONFIG_EAP_AKA_PRIME=y
+    CONFIG_EAP_PAX=y
+    CONFIG_EAP_PSK=y
+    CONFIG_EAP_PWD=y
+    CONFIG_EAP_SAKE=y
+    CONFIG_EAP_GPSK=y
+    CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_EAP_FAST=y
+    CONFIG_EAP_IKEV2=y
+    CONFIG_EAP_TNC=y
+    CONFIG_EAP_EKE=y
 
-      CONFIG_TLS=openssl
-      CONFIG_TLSV11=y
-      CONFIG_TLSV12=y
+    CONFIG_TLS=openssl
+    CONFIG_TLSV11=y
+    CONFIG_TLSV12=y
 
-      CONFIG_SAE=y
-      CONFIG_SAE_PK=y
+    CONFIG_SAE=y
+    CONFIG_SAE_PK=y
 
-      CONFIG_OWE=y
-      CONFIG_OCV=y
+    CONFIG_OWE=y
+    CONFIG_OCV=y
 
-      # TKIP is considered insecure and upstream support will be removed in the future
-      CONFIG_NO_TKIP=y
+    # TKIP is considered insecure and upstream support will be removed in the future
+    CONFIG_NO_TKIP=y
 
-      # Misc
-      CONFIG_RADIUS_SERVER=y
-      CONFIG_MACSEC=y
-      CONFIG_DRIVER_MACSEC_LINUX=y
-      CONFIG_FULL_DYNAMIC_VLAN=y
-      CONFIG_VLAN_NETLINK=y
-      CONFIG_GETRANDOM=y
-      CONFIG_INTERWORKING=y
-      CONFIG_HS20=y
-      CONFIG_FST=y
-      CONFIG_FST_TEST=y
-      CONFIG_ACS=y
-      CONFIG_WNM=y
-      CONFIG_MBO=y
+    # Misc
+    CONFIG_RADIUS_SERVER=y
+    CONFIG_MACSEC=y
+    CONFIG_DRIVER_MACSEC_LINUX=y
+    CONFIG_FULL_DYNAMIC_VLAN=y
+    CONFIG_VLAN_NETLINK=y
+    CONFIG_GETRANDOM=y
+    CONFIG_INTERWORKING=y
+    CONFIG_HS20=y
+    CONFIG_FST=y
+    CONFIG_FST_TEST=y
+    CONFIG_ACS=y
+    CONFIG_WNM=y
+    CONFIG_MBO=y
+    CONFIG_WPA_CLI_EDIT=y
 
-      CONFIG_IEEE80211R=y
-      CONFIG_IEEE80211W=y
-      CONFIG_IEEE80211N=y
-      CONFIG_IEEE80211AC=y
-      CONFIG_IEEE80211AX=y
-      CONFIG_IEEE80211BE=y
-    ''
-    + lib.optionalString (sqlite != null) ''
-      CONFIG_SQLITE=y
-    '';
+    CONFIG_IEEE80211R=y
+    CONFIG_IEEE80211W=y
+    CONFIG_IEEE80211N=y
+    CONFIG_IEEE80211AC=y
+    CONFIG_IEEE80211AX=y
+    CONFIG_IEEE80211BE=y
+  ''
+  + lib.optionalString (sqlite != null) ''
+    CONFIG_SQLITE=y
+  '';
 
   passAsFile = [ "extraConfig" ];
 
@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) wpa_supplicant;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://w1.fi/hostapd/";
     description = "User space daemon for access point and authentication servers";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oddlama ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oddlama ];
+    platforms = lib.platforms.linux;
   };
 }

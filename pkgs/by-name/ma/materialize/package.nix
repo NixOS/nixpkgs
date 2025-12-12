@@ -15,8 +15,6 @@
   # buildInputs
   openssl,
   rdkafka,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   versionCheckHook,
   nix-update-script,
@@ -122,32 +120,24 @@ rustPlatform.buildRustPackage rec {
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      perl
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    # Provides the mig command used by the krb5-src build script
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    rustPlatform.bindgenHook
+  ]
+  # Provides the mig command used by the krb5-src build script
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs =
-    [
-      openssl
-      rdkafka
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
-    ];
+  buildInputs = [
+    openssl
+    rdkafka
+  ];
 
   # the check phase requires linking with rocksdb which can be a problem since
   # the rust rocksdb crate is not updated very often.
@@ -178,7 +168,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/environmentd";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

@@ -1,123 +1,82 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  pybind11,
-  setuptools,
-
-  # buildInputs
-  abseil-cpp,
-  protobuf,
-  gtest,
+  onnx, # pkgs.onnx
 
   # dependencies
+  ml-dtypes,
   numpy,
+  protobuf,
+  typing-extensions,
 
-  google-re2,
-  nbval,
+  # tests
   parameterized,
   pillow,
   pytestCheckHook,
-  tabulate,
+  writableTmpDirAsHomeHook,
 }:
+buildPythonPackage {
+  inherit (onnx)
+    pname
+    src # Needed for testing.
+    version
+    ;
 
-let
-  gtestStatic = gtest.override { static = true; };
-in
-buildPythonPackage rec {
-  pname = "onnx";
-  version = "1.17.0";
-  pyproject = true;
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "onnx";
-    repo = "onnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
-  };
+  dontUseWheelUnpack = true;
 
-  build-system = [
-    cmake
-    protobuf
-    setuptools
-  ];
+  postUnpack = ''
+    cp -rv "${onnx.dist}" "$sourceRoot/dist"
+    chmod +w "$sourceRoot/dist"
+  '';
 
   buildInputs = [
-    abseil-cpp
-    gtestStatic
-    pybind11
+    # onnx must be included to avoid shrinking during fixupPhase removing the RUNPATH entry on
+    # onnx_cpp2py_export.cpython-*.so.
+    onnx
   ];
 
   dependencies = [
-    protobuf
+    ml-dtypes
     numpy
+    protobuf
+    typing-extensions
   ];
 
   nativeCheckInputs = [
-    google-re2
-    nbval
     parameterized
     pillow
     pytestCheckHook
-    tabulate
+    writableTmpDirAsHomeHook
   ];
-
-  postPatch = ''
-    rm -r third_party
-
-    chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.sh.in
-  '';
-
-  preConfigure = ''
-    # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
-    # to lib64 and cmake incorrectly looks for the protobuf library in lib64
-    export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
-    export ONNX_BUILD_TESTS=1
-  '';
-
-  preBuild = ''
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
 
   # The executables are just utility scripts that aren't too important
   postInstall = ''
-    rm -r $out/bin
+    rm -rv $out/bin
   '';
 
-  # The setup.py does all the configuration
-  dontUseCmakeConfigure = true;
-
+  # detecting source dir as a python package confuses pytest
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # detecting source dir as a python package confuses pytest
-    mv onnx/__init__.py onnx/__init__.py.hidden
+    rm onnx/__init__.py
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "onnx/test"
     "examples"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  postCheck = ''
-    # run "cpp" tests
-    .setuptools-cmake-build/onnx_gtests
-  '';
-
   pythonImportsCheck = [ "onnx" ];
 
   meta = {
-    description = "Open Neural Network Exchange";
-    homepage = "https://onnx.ai";
-    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ acairncross ];
+    # Explicitly inherit from ONNX's meta to avoid pulling in attributes added by stdenv.mkDerivation.
+    inherit (onnx.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      ;
   };
 }

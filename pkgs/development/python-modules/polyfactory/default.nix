@@ -14,19 +14,18 @@
   pydantic,
   pytestCheckHook,
   email-validator,
-  pytest-lazy-fixtures,
 }:
 
 buildPythonPackage rec {
   pname = "polyfactory";
-  version = "2.18.1-unstable-2024-12-22";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "polyfactory";
-    rev = "d6a886a4f3b33c77774e14ec190531128ce504c2";
-    hash = "sha256-w13pgxVAUY/THSpwktqVgfQiGeSar9iGpzXeWv6I/vA=";
+    tag = "v${version}";
+    hash = "sha256-WlWz9aZEOiHosZ6rYhnUwyyCf2uXHqPiU1kVk30DOBU=";
   };
 
   build-system = [ hatchling ];
@@ -48,13 +47,24 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImporeCheck = [ "polyfactory" ];
+  disabledTestPaths = [
+    "tests/test_beanie_factory.py"
+  ];
+
+  disabledTests = [
+    # Unsupported type: LiteralAlias
+    "test_type_alias"
+    # Unsupported type: 'JsonValue' on field '' from class RecursiveTypeModelFactory.
+    "test_recursive_type_annotation"
+  ];
+
+  pythonImportsCheck = [ "polyfactory" ];
 
   meta = {
     homepage = "https://polyfactory.litestar.dev/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/v${version}";
+    changelog = "https://github.com/litestar-org/polyfactory/releases/tag/${src.tag}";
     description = "Simple and powerful factories for mock data generation";
     license = lib.licenses.mit;
   };

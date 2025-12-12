@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   name = "virtio_vmmci";
@@ -11,26 +17,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-h8yu4+vTgpAD+sKa1KnVD+qubiIlkYtG2nmQnXOi/sk=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   extraConfig = ''
     CONFIG_RTC_HCTOSYS yes
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "DEPMOD=echo"
     "INSTALL_MOD_PATH=$(out)"
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenBSD VMM Control Interface (vmmci) for Linux";
     homepage = "https://github.com/voutilad/virtio_vmmci";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qbit ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qbit ];
+    platforms = lib.platforms.linux;
   };
 
   enableParallelBuilding = true;

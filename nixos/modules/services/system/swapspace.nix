@@ -9,11 +9,27 @@ let
   cfg = config.services.swapspace;
   inherit (lib)
     types
+    mkIf
     mkOption
     mkPackageOption
     mkEnableOption
     ;
-  configFile = pkgs.writeText "swapspace.conf" (lib.generators.toKeyValue { } cfg.settings);
+  inherit (pkgs)
+    makeWrapper
+    runCommand
+    writeText
+    ;
+  configFile = writeText "swapspace.conf" (lib.generators.toKeyValue { } cfg.settings);
+  userWrapper =
+    runCommand "swapspace"
+      {
+        buildInputs = [ makeWrapper ];
+      }
+      ''
+        mkdir -p "$out/bin"
+        makeWrapper '${lib.getExe cfg.package}' "$out/bin/swapspace" \
+          --add-flags "-c '${configFile}'"
+      '';
 in
 {
   options.services.swapspace = {
@@ -27,6 +43,13 @@ in
         "-v"
       ];
       description = "Any extra arguments to pass to swapspace";
+    };
+    installWrapper = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        This will add swapspace wrapped with the generated config, to environment.systemPackages
+      '';
     };
     settings = mkOption {
       type = types.submodule {
@@ -92,8 +115,8 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ (if cfg.installWrapper then userWrapper else cfg.package) ];
     systemd.packages = [ cfg.package ];
     systemd.services.swapspace = {
       wantedBy = [ "multi-user.target" ];

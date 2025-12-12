@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graspologic-org";
     repo = "graspologic-native";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fgiBUzYBerYX59uj+I0Yret94vA+FpQK+MckskCBqj4=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
     cd packages/pyo3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of rust components to add additional capability to graspologic a python library for intelligently building networks and network embeddings, and for analyzing connected data";
     homepage = "https://github.com/graspologic-org/graspologic-native";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

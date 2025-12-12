@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -10,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "configparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6B1I/kS60opMDpCzy2tnlnV65Qo500G0zPHP1I5TDWA=";
+    tag = "v${version}";
+    hash = "sha256-ZPoHnmD0YjY3+dUW1NKDJjNOVrUFNOjQyMqamOsS2RQ=";
   };
 
   nativeBuildInputs = [
@@ -27,14 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preConfigure = ''
-    export LC_ALL=${if stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Updated configparser from Python 3.7 for Python 2.6+";
     homepage = "https://github.com/jaraco/configparser";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -7,10 +7,11 @@
   systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "journaldriver";
   version = "5656.0.0";
-  cargoHash = "sha256-uNzgH9UM2DuC+dBn5N9tC1/AosUP6C+RkGLOh6c+u0s=";
+
+  cargoHash = "sha256-ycnmLHKWRwKbdY1LZJ+BSwGfXfYJCWbbbFcqfBj3y/Y=";
 
   src = fetchgit {
     url = "https://code.tvl.fyi/depot.git:/ops/journaldriver.git";
@@ -27,12 +28,12 @@ rustPlatform.buildRustPackage rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Log forwarder from journald to Stackdriver Logging";
     homepage = "https://code.tvl.fyi/about/ops/journaldriver";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.tazjin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.tazjin ];
+    platforms = lib.platforms.linux;
     mainProgram = "journaldriver";
   };
 }

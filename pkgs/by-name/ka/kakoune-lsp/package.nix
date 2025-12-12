@@ -4,32 +4,22 @@
   fetchFromGitHub,
   replaceVars,
   perl,
-  stdenv,
-  CoreServices,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kakoune-lsp";
-  version = "18.1.1";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "kakoune-lsp";
     repo = "kakoune-lsp";
     rev = "v${version}";
-    hash = "sha256-7ULohcCpIKOb7CtsF2dIkiRt94uBIrGD5pQ2AEfrNrY=";
+    hash = "sha256-N1J8HBhOLZmR51y1Z85rl0oxA1UrjBfbPb5hiZ1Q0aY=";
   };
 
   patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  cargoHash = "sha256-eG9VPsZkdNTieUc4ghngLqE2ps6wJFR7W8qcmfMu0fs=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    Security
-    SystemConfiguration
-  ];
+  cargoHash = "sha256-AaqA+MvpmvPUOLI0usuf9rxr7TcoMSO9mOsg3OCHljw=";
 
   meta = {
     description = "Kakoune Language Server Protocol Client";

@@ -18,12 +18,12 @@
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;
 
-  version = "unstable-2023-04-20";
-  rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
+  version = "unstable-2024-07-07";
+  rev = "ea3900f6d5e71776c5cfabcabee317652e3a19ee";
 
   tarball = fetchurl {
     url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
-    sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
+    sha256 = "sha256-16JBGJATAWP+lPylOi3+lojpdv0SR5pqyxOV2PiVx0A=";
   };
   src =
     (kaem.runCommand "tinycc-bootstrappable-${version}-source" { } ''
@@ -39,11 +39,11 @@ let
     '')
     + "/tinycc-${rev}";
 
-  meta = with lib; {
+  meta = {
     description = "Tiny C Compiler's bootstrappable fork";
     homepage = "https://gitlab.com/janneke/tinycc";
-    license = licenses.lgpl21Only;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.lgpl21Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     platforms = [ "i686-linux" ];
   };
 
@@ -67,6 +67,7 @@ let
             -o tcc.s \
             -I . \
             -D BOOTSTRAP=1 \
+            -D HAVE_LONG_LONG=0 \
             -I ${src} \
             -D TCC_TARGET_I386=1 \
             -D inline= \

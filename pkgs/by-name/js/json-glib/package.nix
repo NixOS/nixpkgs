@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   docutils,
   glib,
   meson,
@@ -24,29 +23,23 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.10.0";
+  version = "1.10.8";
 
   outputs = [
     "out"
     "dev"
     "installedTests"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "G8qNZtlhBuzBR98xM7laW7eE8fpvFdBt18Go+0oQr3s=";
+    hash = "sha256-VcXBQaVkJFuPj752mGY8h6RaczPCosVvBvgRq3OyEt0=";
   };
 
   patches = [
     # Add option for changing installation path of installed tests.
     ./meson-add-installed-tests-prefix-option.patch
-
-    # Restore single quote string extension
-    # https://gitlab.gnome.org/GNOME/json-glib/-/issues/76
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/json-glib/-/commit/2a26bd3dedc3b27471e6df210d76333d3d41159c.patch";
-      hash = "sha256-U/jWB4wneN4MwZO3vAfI9Z7UT/SLMNEx/X8NMsCO8I4=";
-    })
   ];
 
   strictDeps = true;
@@ -55,26 +48,25 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      docutils # for rst2man, rst2html5
-      meson
-      ninja
-      pkg-config
-      gettext
-      glib
-      libxslt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+    libxslt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -110,11 +102,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library providing (de)serialization support for the JavaScript Object Notation (JSON) format";
     homepage = "https://gitlab.gnome.org/GNOME/json-glib";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = with lib.platforms; unix;
   };
 }

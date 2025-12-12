@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightspark";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
     rev = version;
-    hash = "sha256-qX/ft9slWTbvuSyi2jB6YC7D7QTtCybL/dTo1dJp3pQ=";
+    hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
   };
 
   postPatch = ''
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     glibmm
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jchw ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jchw ];
+    platforms = lib.platforms.linux;
     mainProgram = "lightspark";
   };
 }

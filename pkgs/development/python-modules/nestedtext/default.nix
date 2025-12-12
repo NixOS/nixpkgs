@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
   };
 
@@ -43,12 +43,9 @@ buildPythonPackage rec {
   # enabled when building passthru.tests.
   doCheck = false;
 
-  pytestFlagsArray = [
-    # Avoids an ImportMismatchError.
-    "--ignore=build"
-  ];
-
   disabledTestPaths = [
+    # Avoids an ImportMismatchError.
+    "build"
     # Examples are prefixed with test_
     "examples/"
   ];
@@ -61,7 +58,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nestedtext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Human friendly data format";
     longDescription = ''
       NestedText is a file format for holding data that is to be entered,
@@ -76,7 +73,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://nestedtext.org";
     changelog = "https://github.com/KenKundert/nestedtext/blob/v${version}/doc/releases.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 }

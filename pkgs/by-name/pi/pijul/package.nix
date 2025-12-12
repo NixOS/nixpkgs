@@ -8,7 +8,6 @@
   libsodium,
   openssl,
   xxHash,
-  darwin,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
@@ -22,28 +21,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
   };
 
-  cargoHash = "sha256-iXGvb4qmZK7Sjbf/Jkyzj+nhpZFV3ngjtJfz6x/8z2s=";
+  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
 
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-      libsodium
-      xxHash
-    ]
-    ++ (lib.optionals gitImportSupport [ libgit2 ])
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        Security
-        SystemConfiguration
-      ]
-    ));
+  buildInputs = [
+    openssl
+    libsodium
+    xxHash
+  ]
+  ++ (lib.optionals gitImportSupport [ libgit2 ]);
 
   buildFeatures = lib.optional gitImportSupport "git";
 
@@ -54,11 +44,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pijul completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       gal_bolle
       dywedir
       fabianhjr

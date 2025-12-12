@@ -10,8 +10,10 @@
   rustc,
   pkg-config,
   glib,
+  grass-sass,
   gtk4,
   gtksourceview5,
+  lcms2,
   libadwaita,
   gst_all_1,
   desktop-file-utils,
@@ -20,42 +22,47 @@
   pipewire,
   libshumate,
   wrapGAppsHook4,
+  blueprint-compiler,
+  bubblewrap,
   sqlite,
   xdg-desktop-portal,
   libseccomp,
   glycin-loaders,
+  libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "9";
+  version = "13";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
-    rev = "refs/tags/${version}";
-    hash = "sha256-3UI727LUYw7wUKbGRCtgpkF9NNw4XuZ3tl3KV3Ku9r4=";
+    tag = finalAttrs.version;
+    hash = "sha256-zIB04OIhMSm6OWHalnLO9Ng87dsvsmYurrro3hKwoYU=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "matrix-sdk-0.7.1" = "sha256-AmODDuNLpI6gXuu+oPl3MqcOnywqR8lqJ0bVOIiz02E=";
-      "ruma-0.10.1" = "sha256-6U2LKMYyY7SLOh2jJcVuDBsfcidNoia1XU+JsmhMHGY=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-5wI74sKytewbRs0T/IQZFEaRTgJcF6HyDEK0mpjy0LU=";
   };
 
-  # Dirty approach to add patches after cargoSetupPostUnpackHook
-  # We should eventually use a cargo vendor patch hook instead
-  preConfigure = ''
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
+  patches = [
+    # Disable debug symbols in release builds
+    # The debug symbols are stripped afterwards anyways, and building with them requires extra memory
+    ./disable-debug.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "target_dir / rust_target / meson.project_name()" \
+      "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   nativeBuildInputs = [
     glib
+    grass-sass
     gtk4
     meson
     ninja
@@ -67,45 +74,51 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     appstream-glib
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gtksourceview5
-      libadwaita
-      openssl
-      pipewire
-      libshumate
-      sqlite
-      xdg-desktop-portal
-      libseccomp
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    openssl
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+    libwebp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
     )
   '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix group messaging app";
-    homepage = "https://gitlab.gnome.org/GNOME/fractal";
-    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    homepage = "https://gitlab.gnome.org/World/fractal";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "fractal";
   };
-}
+})

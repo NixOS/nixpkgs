@@ -14,28 +14,28 @@
   gdk-pixbuf,
   glib,
   gtk4,
+  openssl,
   libadwaita,
   pango,
   gettext,
-  darwin,
   blueprint-compiler,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.1";
+  version = "2.9.3";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
-    rev = version;
-    hash = "sha256-SLZJiCkHUS2p7cNk3i3yO2c3tWR4T4ch+zJ1iYEkS6E=";
+    tag = version;
+    hash = "sha256-Bs+qn6QZnY37Kk7Xl4QE9k41T2W8gIvtcP4I5qLERNI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${src}";
-    inherit src;
-    hash = "sha256-XYlRm8yqQr9ZNV7jQeuR8kvqFNudUjJlzE6h9X0zq0Y=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-ijbVyVC0Vq5Olo3odzRv078CosAiIZ6KJNx0Gv5YunI=";
   };
 
   nativeBuildInputs = [
@@ -50,23 +50,15 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      cairo
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Foundation
-        Security
-      ]
-    );
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    openssl
+    pango
+  ];
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.
@@ -76,18 +68,21 @@ stdenv.mkDerivation rec {
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.tag}/CHANGELOG.md";
     description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";
-    maintainers =
-      with lib.maintainers;
-      [
-        dotlambda
-        lilacious
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      lilacious
+      cholli
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

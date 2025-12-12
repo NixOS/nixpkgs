@@ -30,10 +30,7 @@ stdenv.mkDerivation (
     patchFlags = [ "-p0" ];
 
     patches = [
-      (fetchurl {
-        url = "ftp://ftp.suse.com/pub/people/sbrabec/bzip2/for_downstream/bzip2-1.0.6.2-autoconfiscated.patch";
-        sha256 = "sha256-QMufl6ffJVVVVZespvkCbFpB6++R1lnq1687jEsUjr0=";
-      })
+      ./patches/bzip2-1.0.6.2-autoconfiscated.patch
     ];
     # Fix up hardcoded version from the above patch, e.g. seen in bzip2.pc or libbz2.so.1.0.N
     postPatch = ''
@@ -74,14 +71,14 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       description = "High-quality data compression program";
       homepage = "https://www.sourceware.org/bzip2";
       changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
-      license = licenses.bsdOriginal;
+      license = lib.licenses.bsdOriginal;
       pkgConfigModules = [ "bzip2" ];
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mic92 ];
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ mic92 ];
     };
   }
 )

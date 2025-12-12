@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
 
   # extras: babel
@@ -13,7 +12,7 @@
   argon2-cffi,
   bcrypt,
   bleach,
-  flask-mailman,
+  flask-mail,
 
   # extras: fsqla
   flask-sqlalchemy,
@@ -32,6 +31,7 @@
   flask-login,
   flask-principal,
   flask-wtf,
+  libpass,
   markupsafe,
   passlib,
   importlib-resources,
@@ -44,7 +44,6 @@
   mongoengine,
   mongomock,
   peewee,
-  pony,
   pytestCheckHook,
   requests,
   zxcvbn,
@@ -52,27 +51,17 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.5.2";
+  version = "5.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
+    tag = version;
+    hash = "sha256-XxlSkD9mWNcaHi9WvNtOayvFCOZMOznnLzdXvjxfKP8=";
   };
 
-  patches = [
-    # https://github.com/pallets-eco/flask-security/pull/1040
-    ./fix_test_basic.patch
-  ];
-
   build-system = [ flit-core ];
-
-  # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
-  pythonRelaxDeps = [ "flask-login" ];
 
   dependencies = [
     email-validator
@@ -81,8 +70,7 @@ buildPythonPackage rec {
     flask-principal
     flask-wtf
     markupsafe
-    passlib
-    importlib-resources
+    libpass
     wtforms
   ];
 
@@ -95,12 +83,11 @@ buildPythonPackage rec {
       argon2-cffi
       bcrypt
       bleach
-      flask-mailman
+      flask-mail
     ];
     fsqla = [
       flask-sqlalchemy
       sqlalchemy
-      sqlalchemy-utils
     ];
     mfa = [
       cryptography
@@ -110,23 +97,21 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      authlib
-      flask-sqlalchemy-lite
-      freezegun
-      mongoengine
-      mongomock
-      peewee
-      pony
-      pytestCheckHook
-      requests
-      zxcvbn
-    ]
-    ++ optional-dependencies.babel
-    ++ optional-dependencies.common
-    ++ optional-dependencies.fsqla
-    ++ optional-dependencies.mfa;
+  nativeCheckInputs = [
+    authlib
+    flask-sqlalchemy-lite
+    freezegun
+    mongoengine
+    mongomock
+    peewee
+    pytestCheckHook
+    requests
+    zxcvbn
+  ]
+  ++ optional-dependencies.babel
+  ++ optional-dependencies.common
+  ++ optional-dependencies.fsqla
+  ++ optional-dependencies.mfa;
 
   preCheck = ''
     pybabel compile --domain flask_security -d flask_security/translations
@@ -139,11 +124,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_security" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/pallets-eco/flask-security/blob/${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/pallets-eco/flask-security/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/pallets-eco/flask-security";
     description = "Quickly add security features to your Flask application";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

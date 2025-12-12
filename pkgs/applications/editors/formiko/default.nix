@@ -1,20 +1,22 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, wrapGAppsHook3
-, gobject-introspection
-, gtk3
-, docutils
-, gtksourceview
-, gtkspell3
-, librsvg
-, pygobject3
-, webkitgtk_4_0
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk3,
+  docutils,
+  gtksourceview,
+  gtkspell3,
+  librsvg,
+  pygobject3,
+  webkitgtk_4_1,
 }:
 
 buildPythonApplication rec {
   pname = "formiko";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ondratu";
@@ -36,17 +38,17 @@ buildPythonApplication rec {
     gtkspell3
     librsvg
     pygobject3
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   # Needs a display
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "reStructuredText editor and live previewer";
     homepage = "https://github.com/ondratu/formiko";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   jinja2,
   ply,
-  poetry-core,
   pysmi,
   pysnmp,
   pytestCheckHook,
@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.9";
+  version = "1.6.2";
   pname = "pysmi";
   pyproject = true;
 
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cAeLoDwAf56aWWKKUjOB0fpy7C3gBJchJJtQ6986thc=";
+    tag = "v${version}";
+    hash = "sha256-GyG3J6qntEIszXrm1t623+x1cYbhJLbTEQl6N2h2LA0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     ply
@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   passthru.tests.pytest = pysmi.overridePythonAttrs { doCheck = true; };
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
     changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

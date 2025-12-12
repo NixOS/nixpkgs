@@ -1,84 +1,92 @@
 {
   lib,
-  asteroid-filterbanks,
+  stdenv,
   buildPythonPackage,
-  einops,
   fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  asteroid-filterbanks,
+  einops,
   huggingface-hub,
-  hydra-core,
-  numpy,
-  omegaconf,
+  lightning,
+  matplotlib,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   pyannote-core,
   pyannote-database,
   pyannote-metrics,
   pyannote-pipeline,
-  pyscaffold,
-  pythonOlder,
-  pytorch-lightning,
+  pyannoteai-sdk,
   pytorch-metric-learning,
-  rich,
-  semver,
-  setuptools,
+  safetensors,
   soundfile,
   speechbrain,
   tensorboardx,
-  torch-audiomentations,
   torch,
+  torch-audiomentations,
   torchaudio,
+  torchcodec,
   torchmetrics,
+
+  # optional-dependencies
+  hydra-core,
   typer,
+
+  # tests
+  papermill,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyannote-audio";
-  version = "3.3.1";
+  version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-85whRoc3JoDSE4DqivY/3hfvLHcvgsubR/DLCPtLEP0=";
+    tag = version;
     fetchSubmodules = true;
+    hash = "sha256-hYrwpph+Powt+AuQjKo0kkBW+5jJGfzGTILzL9j22YI=";
   };
 
-  pythonRelaxDeps = [ "torchaudio" ];
-
   build-system = [
-    pyscaffold
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "pyscaffold>=3.2a0,<3.3a0" "pyscaffold"
-    substituteInPlace requirements.txt \
-      --replace-fail "lightning" "pytorch-lightning"
-  '';
-
+  pythonRelaxDeps = [
+    "torchaudio"
+  ];
   dependencies = [
     asteroid-filterbanks
     einops
     huggingface-hub
-    omegaconf
+    lightning
+    matplotlib
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     pyannote-core
     pyannote-database
     pyannote-metrics
     pyannote-pipeline
+    pyannoteai-sdk
     pytorch-metric-learning
-    rich
-    semver
+    safetensors
     soundfile
     speechbrain
     tensorboardx
     torch
     torch-audiomentations
     torchaudio
+    torchcodec
     torchmetrics
-    numpy
-    pytorch-lightning
   ];
 
   optional-dependencies = {
@@ -90,11 +98,44 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyannote.audio" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    papermill
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    $out/bin/pyannote-audio --help
+  '';
+
+  disabledTests = [
+    # Require internet access
+    "test_hf_download_inference"
+    "test_hf_download_model"
+    "test_import_speechbrain_encoder_classifier"
+    "test_skip_aggregation"
+    "test_unknown_specifications_error_raised_on_non_setup_model_task"
+
+    # AttributeError: module 'torchaudio' has no attribute 'info'
+    # Removed in torchaudio v2.9.0
+    # See https://github.com/pytorch/audio/issues/3902 for context
+    "test_audio_resample"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Crashes the interpreter
+    # - On aarch64-darwin: Trace/BPT trap: 5
+    # - On x86_64-darwin: Fatal Python error: Illegal instruction
+    "tests/inference_test.py"
+    "tests/test_train.py"
+  ];
+
+  meta = {
     description = "Neural building blocks for speaker diarization: speech activity detection, speaker change detection, overlapped speech detection, speaker embedding";
     homepage = "https://github.com/pyannote/pyannote-audio";
-    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 }

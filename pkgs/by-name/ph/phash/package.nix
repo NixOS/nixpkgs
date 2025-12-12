@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   cimg,
   imagemagick,
@@ -42,11 +41,11 @@ stdenv.mkDerivation rec {
     ./0001-proper-pthread-return-value.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Compute the perceptual hash of an image";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.imalsogreg ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.imalsogreg ];
+    platforms = lib.platforms.all;
     homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
   };

@@ -10,23 +10,21 @@
   pkg-config,
   libGL,
   libGLU,
-  opencascade-occt_7_6,
-  libsForQt5,
-  tbb,
-  vtkWithQt5,
+  opencascade-occt,
+  qt6Packages,
+  onetbb,
+  vtkWithQt6,
+  llvmPackages,
 }:
-let
-  opencascade-occt = opencascade-occt_7_6;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elmerfem";
-  version = "unstable-2023-09-18";
+  version = "9.0-unstable-2025-05-25";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
-    repo = pname;
-    rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
-    hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
+    repo = "elmerfem";
+    rev = "2f7360ddf491c34f19fea9a723f340cca0fbe1d4";
+    hash = "sha256-2vzIFGh8+YrMxb5px6+aQyTerOAJmHOh2I7eterY6zI=";
   };
 
   hardeningDisable = [ "format" ];
@@ -35,51 +33,55 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     mpi
     blas
     liblapack
-    libsForQt5.qtbase
-    libsForQt5.qtscript
-    libsForQt5.qwt
+    qt6Packages.qtbase
+    qt6Packages.qwt
     libGL
     libGLU
     opencascade-occt
-    tbb
-    vtkWithQt5
-  ];
+    onetbb
+    vtkWithQt6
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   preConfigure = ''
     patchShebangs ./
   '';
 
-  storepath = placeholder "out";
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   cmakeFlags = [
-    "-DELMER_INSTALL_LIB_DIR=${storepath}/lib"
-    "-DWITH_OpenMP:BOOLEAN=TRUE"
-    "-DWITH_MPI:BOOLEAN=TRUE"
-    "-DWITH_QT5:BOOLEAN=TRUE"
-    "-DWITH_OCC:BOOLEAN=TRUE"
-    "-DWITH_VTK:BOOLEAN=TRUE"
-    "-DWITH_ELMERGUI:BOOLEAN=TRUE"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
+    (lib.cmakeFeature "ELMER_INSTALL_LIB_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeBool "WITH_OpenMP" true)
+    (lib.cmakeBool "WITH_MPI" true)
+    (lib.cmakeBool "WITH_QT6" true)
+    (lib.cmakeBool "WITH_OCC" true)
+    (lib.cmakeBool "WITH_VTK" true)
+    (lib.cmakeBool "WITH_ELMERGUI" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_OpenGL_GL_PREFERENCE" "GLVND")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "USE_MACOS_PACKAGE_MANAGER" false)
+    (lib.cmakeFeature "QWT_INCLUDE_DIR" "${qt6Packages.qwt}/lib/qwt.framework/Headers")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://elmerfem.org";
     description = "Finite element software for multiphysical problems";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       wulfsta
       broke
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
 }

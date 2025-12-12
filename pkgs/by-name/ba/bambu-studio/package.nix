@@ -4,11 +4,12 @@
   binutils,
   fetchFromGitHub,
   cmake,
+  ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost180,
+  boost183,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -26,7 +27,6 @@
   hicolor-icon-theme,
   ilmbase,
   libpng,
-  mesa,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
@@ -34,8 +34,8 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021_11,
-  webkitgtk_4_0,
+  onetbb,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -54,28 +54,29 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "01.10.01.50";
+  version = "02.03.01.51";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    rev = "v${version}";
-    hash = "sha256-7mkrPl2CQSfc1lRjl1ilwxdYcK5iRU//QGKmdCicK30=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SnWOTFymTVHzYqraMzohOrpM0UuLW+PRfZBqkFASEWs=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs = [
     binutils
-    boost180
+    boost183
     cereal
-    cgal
+    cgal_5
     curl
     dbus
     eigen
@@ -95,24 +96,31 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     ilmbase
     libpng
-    mesa.osmesa
     mpfr
     nlopt
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2021_11
-    webkitgtk_4_0
+    onetbb
+    webkitgtk_4_1
     wxGTK'
     xorg.libX11
     opencv
-  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix an issue with
     ./patches/dont-link-opencv-world-bambu.patch
+    # Don't link osmesa
+    ./patches/no-osmesa.patch
+    # Don't link cereal
+    ./patches/no-cereal.patch
+    # Cmake 4 support
+    ./patches/cmake.patch
   ];
 
   doCheck = true;
@@ -126,16 +134,17 @@ stdenv.mkDerivation rec {
   # additionally need to set the path via the NLOPT environment variable.
   NLOPT = nlopt;
 
-  # Disable compiler warnings that clutter the build log.
-  # It seems to be a known issue for Eigen:
-  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
   NIX_CFLAGS_COMPILE = toString [
+    "-DBOOST_TIMER_ENABLE_DEPRECATED"
+    # Disable compiler warnings that clutter the build log.
+    # It seems to be a known issue for Eigen:
+    # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
-    "-I${opencv.out}/include/opencv4"
+    "-I${opencv}/include/opencv4"
   ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
 
   # TODO: macOS
   prePatch = ''
@@ -177,16 +186,16 @@ stdenv.mkDerivation rec {
     mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
     ];
     mainProgram = "bambu-studio";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

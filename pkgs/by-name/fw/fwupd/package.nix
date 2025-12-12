@@ -1,58 +1,87 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
 {
-  pkgsBuildBuild,
-  stdenv,
   lib,
-  fetchFromGitHub,
-  gi-docgen,
-  pkg-config,
-  gobject-introspection,
-  gettext,
-  libgudev,
-  libdrm,
-  polkit,
-  libxmlb,
-  gusb,
-  sqlite,
-  libarchive,
-  libredirect,
-  curl,
-  libjcat,
-  elfutils,
-  valgrind,
-  meson,
-  mesonEmulatorHook,
-  libuuid,
-  ninja,
-  gnutls,
-  protobufc,
+  stdenv,
+  fetchpatch,
+
+  # runPythonCommand
+  runCommand,
   python3,
-  wrapGAppsNoGuiHook,
-  ensureNewerSourcesForZipFilesHook,
+
+  # test-firmware
+  fetchFromGitHub,
+  unstableGitUpdater,
+
+  # fwupd
+  pkg-config,
+  pkgsBuildBuild,
+
+  # propagatedBuildInputs
   json-glib,
-  bash-completion,
+
+  # nativeBuildInputs
+  ensureNewerSourcesForZipFilesHook,
+  gettext,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  protobuf,
+  protobufc,
   shared-mime-info,
   vala,
+  wrapGAppsNoGuiHook,
+  writableTmpDirAsHomeHook,
+  mesonEmulatorHook,
+
+  # buildInputs
+  bash-completion,
+  curl,
+  elfutils,
+  fwupd-efi,
+  gnutls,
+  gusb,
+  libarchive,
+  libcbor,
+  libdrm,
+  libgudev,
+  libjcat,
+  libmbim,
+  libmnl,
+  libqmi,
+  libuuid,
+  libxmlb,
+  libxml2,
+  modemmanager,
+  pango,
+  polkit,
+  readline,
+  sqlite,
+  tpm2-tss,
+  valgrind,
+  xz, # for liblzma
+  flashrom,
+
+  # mesonFlags
+  hwdata,
+
+  # env
   makeFontsConf,
   freefont_ttf,
-  pango,
-  tpm2-tss,
+
+  # preCheck
+  libredirect,
+
+  # preFixup
   bubblewrap,
   efibootmgr,
-  flashrom,
   tpm2-tools,
-  fwupd-efi,
+
+  # passthru
   nixosTests,
-  runCommand,
-  unstableGitUpdater,
-  modemmanager,
-  libqmi,
-  libmbim,
-  libcbor,
-  xz,
-  hwdata,
   nix-update-script,
+
   enableFlashrom ? false,
   enablePassim ? false,
 }:
@@ -60,17 +89,6 @@
 let
   isx86 = stdenv.hostPlatform.isx86;
 
-  # Dell isn't supported on Aarch64
-  haveDell = isx86;
-
-  # only redfish for x86_64
-  haveRedfish = stdenv.hostPlatform.isx86_64;
-
-  # only use msr if x86 (requires cpuid)
-  haveMSR = isx86;
-
-  # # Currently broken on Aarch64
-  # haveFlashrom = isx86;
   # Experimental
   haveFlashrom = isx86 && enableFlashrom;
 
@@ -117,7 +135,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.3";
+  version = "2.0.18";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,28 +153,42 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-M0FZ5fyufm6h+/IyhajxpcjrGANKkyFzWKmn4EzLxKY=";
+    hash = "sha256-hF0fSn8lh0E0UQ+7HgMvqjltFajjx11s7THZYpt/hlE=";
   };
 
   patches = [
     # Install plug-ins and libfwupdplugin to $out output,
     # they are not really part of the library.
-    ./install-fwupdplugin-to-out.patch
+    ./0001-Install-fwupdplugin-to-out.patch
 
     # Installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-    ./installed-tests-path.patch
+    ./0002-Add-output-for-installed-tests.patch
 
     # Since /etc is the domain of NixOS, not Nix,
     # we cannot install files there.
     # Let’s install the files to $prefix/etc
     # while still reading them from /etc.
     # NixOS module for fwupd will take take care of copying the files appropriately.
-    ./add-option-for-installation-sysconfdir.patch
+    ./0003-Add-option-for-installation-sysconfdir.patch
 
     # EFI capsule is located in fwupd-efi now.
-    ./efi-app-path.patch
+    ./0004-Get-the-efi-app-from-fwupd-efi.patch
   ];
+
+  postPatch = ''
+    patchShebangs \
+      generate-build/generate-version-script.py \
+      generate-build/generate-man.py \
+      po/test-deps \
+      plugins/uefi-capsule/tests/grub2-mkconfig \
+      plugins/uefi-capsule/tests/grub2-reboot
+  ''
+  # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+  + ''
+    substituteInPlace plugins/redfish/meson.build \
+      --replace-fail "get_option('tests')" "false"
+  '';
 
   strictDeps = true;
 
@@ -169,90 +201,84 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
   ];
 
-  nativeBuildInputs =
-    [
-      ensureNewerSourcesForZipFilesHook # required for firmware zipping
-      meson
-      ninja
-      pkg-config
-      gettext
-      shared-mime-info
-      protobufc # for protoc
-      wrapGAppsNoGuiHook
-      vala
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    ensureNewerSourcesForZipFilesHook # required for firmware zipping
+    gettext
+    gi-docgen
+    gobject-introspection
+    libxml2
+    meson
+    ninja
+    pkg-config
+    protobuf # for protoc
+    protobufc # for protoc-gen-c
+    shared-mime-info
+    vala
+    wrapGAppsNoGuiHook
 
-  buildInputs =
-    [
-      gnutls
-      polkit
-      libxmlb
-      gusb
-      sqlite
-      libarchive
-      libdrm
-      curl
-      elfutils
-      libgudev
-      libjcat
-      libuuid
-      bash-completion
-      pango
-      tpm2-tss
-      fwupd-efi
-      protobufc
-      modemmanager
-      libmbim
-      libcbor
-      libqmi
-      xz # for liblzma
-      valgrind
-    ]
-    ++ lib.optionals haveFlashrom [
-      flashrom
-    ];
+    # jcat-tool at buildtime requires a home directory
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  mesonFlags =
-    [
-      "-Ddocs=enabled"
-      # We are building the official releases.
-      "-Dsupported_build=enabled"
-      "-Dlaunchd=disabled"
-      "-Dsystemd_root_prefix=${placeholder "out"}"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "-Dsysconfdir_install=${placeholder "out"}/etc"
-      "-Defi_os_dir=nixos"
-      "-Dplugin_modem_manager=enabled"
-      "-Dvendor_metadata=true"
-      "-Dplugin_uefi_capsule_splash=false"
-      # TODO: what should this be?
-      "-Dvendor_ids_dir=${hwdata}/share/hwdata"
-      "-Dumockdev_tests=disabled"
-      # We do not want to place the daemon into lib (cyclic reference)
-      "--libexecdir=${placeholder "out"}/libexec"
-    ]
-    ++ lib.optionals (!enablePassim) [
-      "-Dpassim=disabled"
-    ]
-    ++ lib.optionals (!haveDell) [
-      "-Dplugin_synaptics_mst=disabled"
-    ]
-    ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=disabled"
-    ]
-    ++ lib.optionals (!haveFlashrom) [
-      "-Dplugin_flashrom=disabled"
-    ]
-    ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=disabled"
-    ];
+  buildInputs = [
+    bash-completion
+    curl
+    elfutils
+    fwupd-efi
+    gnutls
+    gusb
+    libarchive
+    libcbor
+    libdrm
+    libgudev
+    libjcat
+    libmbim
+    libmnl
+    libqmi
+    libuuid
+    libxmlb
+    modemmanager
+    pango
+    polkit
+    protobufc
+    readline
+    sqlite
+    tpm2-tss
+    valgrind
+    xz # for liblzma
+  ]
+  ++ lib.optionals haveFlashrom [
+    flashrom
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "docs" true)
+    # We are building the official releases.
+    (lib.mesonEnable "supported_build" true)
+    (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+    (lib.mesonOption "efi_os_dir" "nixos")
+    (lib.mesonEnable "plugin_modem_manager" true)
+    (lib.mesonBool "vendor_metadata" true)
+    (lib.mesonBool "plugin_uefi_capsule_splash" false)
+    # TODO: what should this be?
+    (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
+    (lib.mesonEnable "umockdev_tests" false)
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+  ]
+  ++ lib.optionals (!enablePassim) [
+    (lib.mesonEnable "passim" false)
+  ]
+  ++ lib.optionals (!haveFlashrom) [
+    (lib.mesonEnable "plugin_flashrom" false)
+  ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
@@ -275,29 +301,16 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
   };
 
-  # Phase hooks
-
-  postPatch = ''
-    patchShebangs \
-      contrib/generate-version-script.py \
-      contrib/generate-man.py \
-      po/test-deps
-
-    # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
-    sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
-  '';
-
-  preBuild = ''
-    # jcat-tool at buildtime requires a home directory
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [
+    polkit
+    libredirect.hook
+  ];
 
   preCheck = ''
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
-    LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
 
   postInstall = ''
@@ -308,8 +321,8 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       binPath = [
-        efibootmgr
         bubblewrap
+        efibootmgr
         tpm2-tools
       ];
     in
@@ -348,9 +361,11 @@ stdenv.mkDerivation (finalAttrs: {
       "fwupd/remotes.d/vendor-directory.conf"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd/LVFS-CA-2025PQ.pem"
       "pki/fwupd/LVFS-CA.pem"
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
+      "pki/fwupd-metadata/LVFS-CA-2025PQ.pem"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
     ];
@@ -388,7 +403,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://fwupd.org/";
     changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ rvdp ];
+    maintainers = with lib.maintainers; [
+      rvdp
+      johnazoidberg
+    ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };

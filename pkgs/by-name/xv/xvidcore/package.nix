@@ -17,21 +17,25 @@ stdenv.mkDerivation rec {
     sha256 = "1xyg3amgg27zf7188kss7y248s0xhh1vv8rrk0j9bcsd5nasxsmf";
   };
 
-  preConfigure =
-    ''
-      # Configure script is not in the root of the source directory
-      cd build/generic
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Undocumented darwin hack
-      substituteInPlace configure --replace "-no-cpp-precomp" ""
-    '';
+  preConfigure = ''
+    # Configure script is not in the root of the source directory
+    cd build/generic
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Undocumented darwin hack
+    substituteInPlace configure --replace "-no-cpp-precomp" ""
+  '';
 
   configureFlags =
     [ ]
     # Undocumented darwin hack (assembly is probably disabled due to an
     # issue with nasm, however yasm is now used)
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-macosx_module --disable-assembly";
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--enable-macosx_module"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
+      "--disable-assembly"
+    ];
 
   nativeBuildInputs = [ ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) yasm;
 
@@ -50,20 +54,20 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  # Dependants of xvidcore don't know to look in bin for dependecies. Link them
+  # Dependants of xvidcore don't know to look in bin for dependencies. Link them
   # in lib so other depedants of xvidcore can find the dlls.
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
     ln -s $out/bin/*.dll $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPEG-4 video codec for PC";
     homepage = "https://www.xvid.com/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       codyopel
       lovek323
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

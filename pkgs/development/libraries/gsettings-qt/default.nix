@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     group = "ubports";
     owner = "core";
-    repo = pname;
+    repo = "gsettings-qt";
     rev = "v${version}";
     sha256 = "14l8xphw4jd9ckqba13cyxq0i362x8lfsd0zlfawwi2z1q1vqm92";
   };
@@ -67,11 +67,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to access GSettings from Qt";
     homepage = "https://gitlab.com/ubports/core/gsettings-qt";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

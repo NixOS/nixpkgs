@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "durus";
-  version = "4.2";
+  version = "4.3";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Durus";
-    inherit version;
-    hash = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
+    inherit pname version;
+    hash = "sha256-aQM0I26juo2WbjrszgJUd5CdayQNCzID0zJ/YkNyYAc=";
   };
+
+  build-system = [ setuptools ];
 
   # Checks disabled due to missing python unittest framework 'sancho' in nixpkgs
   doCheck = false;
@@ -24,11 +27,11 @@ buildPythonPackage rec {
     "durus.sqlite_storage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Object persistence layer";
     mainProgram = "durus";
     homepage = "https://github.com/nascheme/durus";
-    license = licenses.mit;
-    maintainers = with maintainers; [ grindhold ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ grindhold ];
   };
 }

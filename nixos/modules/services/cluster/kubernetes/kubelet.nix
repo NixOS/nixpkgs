@@ -108,9 +108,7 @@ let
       };
     };
 
-  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (
-    mapAttrsToList (n: v: v) cfg.taints
-  );
+  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (attrValues cfg.taints);
 in
 {
   imports = [
@@ -205,9 +203,14 @@ in
     };
 
     extraConfig = mkOption {
-      description = "Kubernetes kubelet extra configuration file entries.";
+      description = ''
+        Kubernetes kubelet extra configuration file entries.
+
+        See also [Set Kubelet Parameters Via A Configuration File](https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/)
+        and [Kubelet Configuration](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/).
+      '';
       default = { };
-      type = attrsOf attrs;
+      type = attrsOf ((pkgs.formats.json { }).type);
     };
 
     featureGates = mkOption {
@@ -331,7 +334,7 @@ in
           [
             gitMinimal
             openssh
-            util-linux
+            util-linuxMinimal
             iproute2
             ethtool
             thin-provisioning-tools
@@ -359,7 +362,6 @@ in
         '';
         serviceConfig = {
           Slice = "kubernetes.slice";
-          CPUAccounting = true;
           MemoryAccounting = true;
           Restart = "on-failure";
           RestartSec = "1000ms";

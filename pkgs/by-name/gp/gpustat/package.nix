@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 
-  cargoHash = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
+  cargoHash = "sha256-8uD4zc33CeImvMW0mOTqws4S2xXQ3Ff9nPxocof0Xm4=";
 
   nativeBuildInputs = [
     cmake
@@ -61,12 +61,12 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}:/run/opengl-driver/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple utility for viewing GPU utilization";
     homepage = "https://github.com/arduano/gpustat";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arduano ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arduano ];
     mainProgram = "gpustat";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

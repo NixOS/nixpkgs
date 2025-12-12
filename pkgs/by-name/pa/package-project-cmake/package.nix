@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "package-project-cmake";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "TheLartians";
     repo = "PackageProject.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TMf9nA0V1qTXpzEJ0A6b3mIVN0MIogn5WlZeVY+Q2bg=";
+    hash = "sha256-RbqywBm+C1Bo1KeFL2MdsE2PMKWbc3x2iWswKGXtO9o=";
   };
 
   dontConfigure = true;
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TheLartians/PackageProject.cmake";
     description = "CMake script for packaging C/C++ projects";
     longDescription = ''
@@ -39,8 +39,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       to get things working. This small script should simplify the CMake
       packaging process into a single, easy-to-use command.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

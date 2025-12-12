@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gitUpdater,
   bison,
   cmake,
@@ -22,7 +23,6 @@
   libfido2,
   numactl,
   cctools,
-  CoreServices,
   developer_cmds,
   libtirpc,
   rpcsvc-proto,
@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.39-30";
+  version = "8.0.44-35";
 
   src = fetchurl {
-    url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ag+9tzmWpdF5vxWOFUsn65oJXIkb0HmoMbif7HcSoP8=";
+    url = "https://downloads.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4eiNKzXzc5TAhsdIKQvyhQknsOiVSSkbZXDFY+qInYE=";
   };
 
   nativeBuildInputs = [
@@ -59,10 +59,19 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     gnugrep
     procps
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
+    # fixes using -DWITH_SSL=system with CMAKE_PREFIX_PATH on darwin
+    # https://github.com/Homebrew/homebrew-core/pull/204799
+    (fetchpatch {
+      name = "fix-system-ssl-darwin.patch";
+      url = "https://github.com/percona/percona-server/pull/5537/commits/a693e5d67abf6f27f5284c86361604babec529c6.patch";
+      hash = "sha256-fFBy3AYTMLvHvbsh0g0UvuPkmVMKZzxPsxeBKbsN8Ho=";
+    })
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+    ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
   ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
@@ -76,36 +85,34 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
   '';
 
-  buildInputs =
-    [
-      boost
-      (curl.override { inherit openssl; })
-      icu
-      libedit
-      libevent
-      lz4
-      ncurses
-      openssl
-      protobuf
-      re2
-      readline
-      zlib
-      zstd
-      libfido2
-      openldap
-      perl
-      cyrus_sasl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      CoreServices
-      developer_cmds
-      DarwinTools
-    ];
+  buildInputs = [
+    boost
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+    openldap
+    perl
+    cyrus_sasl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    developer_cmds
+    DarwinTools
+  ];
 
   outputs = [
     "out"
@@ -141,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "lib/*.a" $static
     so=${stdenv.hostPlatform.extensions.sharedLibrary}
-    ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+    ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
     wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
       lib.makeBinPath [
@@ -192,15 +199,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.percona.com/software/mysql-database/percona-server";
     description = ''
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
       Long-term support release.
     '';
-    license = licenses.gpl2Only;
-    maintainers = teams.flyingcircus.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.flyingcircus ];
+    platforms = lib.platforms.unix;
   };
 })

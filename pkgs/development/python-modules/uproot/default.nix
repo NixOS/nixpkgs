@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,30 +10,31 @@
   # dependencies
   awkward,
   cramjam,
-  numpy,
   fsspec,
+  numpy,
   packaging,
 
-  # checks
+  # tests
   awkward-pandas,
   pandas,
-  pytestCheckHook,
   pytest-timeout,
+  pytestCheckHook,
   rangehttpserver,
   scikit-hep-testdata,
+  writableTmpDirAsHomeHook,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.5.1";
+  version = "5.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-a5gCsv8iBUUASHCJIpxFbgBXTSm/KJOTt6fvSvP/Lio=";
+    tag = "v${version}";
+    hash = "sha256-Kk8Paa6vx364BBfzfxh8f3muevwNg0I7n5CszjiWUo0=";
   };
 
   build-system = [
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   dependencies = [
     awkward
     cramjam
-    numpy
     fsspec
+    numpy
     packaging
     xxhash
   ];
@@ -54,50 +54,41 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     awkward-pandas
     pandas
-    pytestCheckHook
     pytest-timeout
+    pytestCheckHook
     rangehttpserver
     scikit-hep-testdata
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  disabledTests = [
+    # Tests that try to download files
+    "test_descend_into_path_classname_of"
+    "test_fallback"
+    "test_fsspec_cache_http"
+    "test_fsspec_cache_http_directory"
+    "test_fsspec_chunks"
+    "test_fsspec_globbing_http"
+    "test_http"
+    "test_http_fallback_workers"
+    "test_http_multipart"
+    "test_http_port"
+    "test_http_size"
+    "test_http_size_port"
+    "test_http_workers"
+    "test_issue176"
+    "test_issue176_again"
+    "test_issue_1054_filename_colons"
+    "test_no_multipart"
+    "test_open_fsspec_github"
+    "test_open_fsspec_http"
+    "test_pickle_roundtrip_http"
 
-  disabledTests =
-    [
-      # Tests that try to download files
-      "test_descend_into_path_classname_of"
-      "test_fallback"
-      "test_fsspec_cache_http"
-      "test_fsspec_cache_http_directory"
-      "test_fsspec_chunks"
-      "test_fsspec_globbing_http"
-      "test_http"
-      "test_http_fallback_workers"
-      "test_http_multipart"
-      "test_http_port"
-      "test_http_size"
-      "test_http_size_port"
-      "test_http_workers"
-      "test_issue176"
-      "test_issue176_again"
-      "test_issue_1054_filename_colons"
-      "test_no_multipart"
-      "test_open_fsspec_github"
-      "test_open_fsspec_http"
-      "test_pickle_roundtrip_http"
-
-      # Cyclic dependency with dask-awkward
-      "test_dask_duplicated_keys"
-      "test_decompression_executor_for_dask"
-      "test_decompression_threadpool_executor_for_dask"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Tries to connect to localhost:22
-      # PermissionError: [Errno 1] Operation not permitted
-      "test_open_fsspec_ssh"
-    ];
+    # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
+    "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
+  ];
 
   disabledTestPaths = [
     # Tests that try to download files

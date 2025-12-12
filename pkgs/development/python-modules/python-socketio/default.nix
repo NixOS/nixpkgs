@@ -21,19 +21,22 @@
   pytestCheckHook,
   simple-websocket,
   uvicorn,
+  redis,
+  valkey,
+  pytest-asyncio,
 
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.11.4";
+  version = "5.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iWe9IwUR+nq9SAmHzFZYUJpVOOEbc1ZdiMAjaBjQrVs=";
+    tag = "v${version}";
+    hash = "sha256-7SX55TXU7HzxoatYor4mUiZoi/2O7nqaAIniyl4lGoc=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +59,11 @@ buildPythonPackage rec {
     pytestCheckHook
     uvicorn
     simple-websocket
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    redis
+    valkey
+    pytest-asyncio
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "socketio" ];
 
@@ -75,7 +82,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
-    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/${src.tag}/CHANGES.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ mic92 ];
   };

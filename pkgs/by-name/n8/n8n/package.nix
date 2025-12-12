@@ -4,47 +4,50 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_10,
   python3,
   node-gyp,
-  cacert,
+  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
   makeWrapper,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.72.1";
+  version = "1.122.5";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
-    rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-GIA2y81nuKWe1zuZQ99oczQtQWStyT1Qh3bZ1oe8me4=";
+    tag = "n8n@${finalAttrs.version}";
+    hash = "sha256-39/f3ueXey6M9pxoChcUZhLxvmE6t/u113oU5wju+5Y=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-riuN7o+uUXS5G7fMgE7cZhGWHZtGwSHm4CP7G46R5Cw=";
+    fetcherVersion = 2;
+    hash = "sha256-LoVJgtADHOI58qZ5T9WNvyn5O8UX5iQ148gZ3KUyYHE=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpm_10.configHook
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
-    cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
   ];
 
   buildPhase = ''
@@ -61,13 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    echo "Removing non-deterministic files"
+    echo "Removing non-deterministic and unnecessary files"
 
-    rm -r $(find -type d -name .turbo)
+    find -type d -name .turbo -exec rm -rf {} +
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    echo "Removed non-deterministic files"
+    CI=true pnpm --ignore-scripts prune --prod
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    rm -rf node_modules/.pnpm/{typescript*,prettier*}
+    shopt -s globstar
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules packages/**/node_modules -xtype l -delete
+
+    echo "Removed non-deterministic and unnecessary files"
   '';
 
   installPhase = ''
@@ -84,10 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = nixosTests.n8n;
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
+  # this package has ~80000 files, these take too long and seem to be unnecessary
   dontStrip = true;
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
 
   meta = {
     description = "Free and source-available fair-code licensed workflow automation tool";
@@ -96,9 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
       Easily automate tasks across different services.
     '';
     homepage = "https://n8n.io";
-    changelog = "https://github.com/n8n-io/n8n/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

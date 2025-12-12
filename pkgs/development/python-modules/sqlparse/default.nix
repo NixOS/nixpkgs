@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.5.1";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u2tN9GVlXvMyVI4k8I4gWvyBuauGyxxFZXp/8XOjoA4=";
+    hash = "sha256-CfZ3h/VqCxbs294b/H9dnDNxymg8/qqOb/YLSAfsknI=";
   };
 
   build-system = [ hatchling ];
@@ -45,14 +45,14 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Non-validating SQL parser for Python";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
     homepage = "https://github.com/andialbrecht/sqlparse";
     changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "sqlformat";
   };
 }

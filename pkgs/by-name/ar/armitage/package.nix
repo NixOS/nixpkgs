@@ -75,16 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      jdk11
-      gradle
-      makeWrapper
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      writeDarwinBundle
-    ];
+  nativeBuildInputs = [
+    jdk11
+    gradle
+    makeWrapper
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    writeDarwinBundle
+  ];
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -132,12 +131,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical cyber attack management tool for Metasploit";
     homepage = "https://github.com/r00t0v3rr1d3/armitage";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
     mainProgram = "armitage";
   };
 })

@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.6.1";
+  version = "6.8.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9cqkfO51/gO5xQtVlASLTAUu7KLCEuDawS27YXXZplk=";
+    hash = "sha256-/Q7RSvcaKUnZrrlrcs4VF8tKSKXFVmfNBIO37TMVaio=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     marshmallow = [ marshmallow ];
@@ -35,21 +35,23 @@ buildPythonPackage rec {
     validation = [
       openapi-spec-validator
       prance
-    ] ++ prance.optional-dependencies.osv;
+    ]
+    ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apispec" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";
     description = "Pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

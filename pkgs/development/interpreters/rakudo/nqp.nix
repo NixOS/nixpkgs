@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2024.06";
+  version = "2025.06.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "raku";
     repo = "nqp";
     rev = version;
-    hash = "sha256-FqZPUtzlS+ZSlyuCFMWHofLXPuXCWAT6Oak0g3o8cgM=";
+    hash = "sha256-zM3JilRBbx2r8s+dj9Yn8m2SQfQFnn1bxOUiz3Q7FT8=";
     fetchSubmodules = true;
   };
 
@@ -39,14 +39,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";
+  meta = {
+    description = "Lightweight Raku-like environment for virtual machines";
     homepage = "https://github.com/Raku/nqp";
-    license = licenses.artistic2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       sgo
+      prince213
     ];
   };
 }

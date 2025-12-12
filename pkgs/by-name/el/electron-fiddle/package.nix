@@ -1,92 +1,79 @@
 {
   buildFHSEnv,
-  electron_24,
+  electron_36,
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchurl,
-  fixup-yarn-lock,
   git,
   lib,
   makeDesktopItem,
-  nodejs_18,
+  nodejs,
   stdenvNoCC,
   util-linux,
-  yarn,
+  yarnBuildHook,
+  yarnConfigHook,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.32.6";
-  electron = electron_24;
-  nodejs = nodejs_18;
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
-    rev = "v${version}";
-    hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
+    tag = "v${version}";
+    hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
   };
 
-  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
-  # from the network and has no stable hash.  Grab an old version from
-  # the repository.
-  releasesJson = fetchurl {
-    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
-    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
-  };
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
-  };
-
-  electronDummyMirror = "https://electron.invalid/";
-  electronDummyDir = "nix";
-  electronDummyFilename = builtins.baseNameOf (builtins.head (electron.src.urls));
-  electronDummyHash = builtins.hashString "sha256" "${electronDummyMirror}${electronDummyDir}";
+  electron = electron_36;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version src;
 
+    patches = [ ./dont-use-initial-releases-json.patch ];
+
+    offlineCache = fetchYarnDeps {
+      inherit src;
+      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
+    };
+
     nativeBuildInputs = [
-      fixup-yarn-lock
       git
       nodejs
       util-linux
-      yarn
+      yarnBuildHook
+      yarnConfigHook
       zip
     ];
 
-    configurePhase = ''
-      export HOME=$TMPDIR
-      fixup-yarn-lock yarn.lock
-      yarn config --offline set yarn-offline-mirror ${offlineCache}
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules
+    preBuild = ''
+      # electron files need to be writable on Darwin
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
 
-      mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron.dist}' "$TMPDIR/electron"
-      chmod -R u+w "$TMPDIR/electron"
-      (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
+      pushd electron-dist
+      zip -0Xqr ../electron.zip .
+      popd
 
-      ln -s ${releasesJson} static/releases.json
+      rm -r electron-dist
+
+      # force @electron/packager to use our electron instead of downloading it, even if it is a different version
+      substituteInPlace node_modules/@electron/packager/dist/packager.js \
+        --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
 
-    buildPhase = ''
-      ELECTRON_CUSTOM_VERSION='${electron.version}' \
-        ELECTRON_MIRROR='${electronDummyMirror}' \
-        ELECTRON_CUSTOM_DIR='${electronDummyDir}' \
-        ELECTRON_CUSTOM_FILENAME='${electronDummyFilename}' \
-        yarn --offline run package
-    '';
+    yarnBuildScript = "package";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/lib/electron-fiddle/resources"
       cp "out/Electron Fiddle-"*/resources/app.asar "$out/lib/electron-fiddle/resources/"
       mkdir -p "$out/share/icons/hicolor/scalable/apps"
       cp assets/icons/fiddle.svg "$out/share/icons/hicolor/scalable/apps/electron-fiddle.svg"
+
+      runHook postInstall
     '';
   };
 
@@ -109,7 +96,7 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -135,6 +122,7 @@ buildFHSEnv {
       glib
       gtk3
       libdrm
+      libglvnd
       libnotify
       libxkbcommon
       libgbm
@@ -177,11 +165,15 @@ buildFHSEnv {
       # https://github.com/electron/electron/issues/13972
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.mit;
+    mainProgram = "electron-fiddle";
+    maintainers = with lib.maintainers; [
+      andersk
+      tomasajt
+    ];
     platforms = electron.meta.platforms;
   };
 }

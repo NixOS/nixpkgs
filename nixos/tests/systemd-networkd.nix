@@ -1,4 +1,17 @@
-let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, nodeId, ...}: {
+let
+  generateNodeConf =
+    {
+      lib,
+      pkgs,
+      config,
+      privk,
+      pubk,
+      systemdCreds,
+      peerId,
+      nodeId,
+      ...
+    }:
+    {
       imports = [ common/user-account.nix ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking.useNetworkd = true;
@@ -14,7 +27,10 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, n
         };
         netdevs = {
           "90-wg0" = {
-            netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
+            netdevConfig = {
+              Kind = "wireguard";
+              Name = "wg0";
+            };
             wireguardConfig = {
               # Test storing wireguard private key using systemd credentials.
               PrivateKey = lib.mkIf systemdCreds "@network.wireguard.private";
@@ -27,13 +43,15 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, n
               ListenPort = 51820;
               FirewallMark = 42;
             };
-            wireguardPeers = [ {
-              Endpoint = "192.168.1.${peerId}:51820";
-              PublicKey = pubk;
-              PresharedKeyFile = pkgs.writeText "psk.key" "yTL3sCOL33Wzi6yCnf9uZQl/Z8laSE+zwpqOHC4HhFU=";
-              AllowedIPs = [ "10.0.0.${peerId}/32" ];
-              PersistentKeepalive = 15;
-            } ];
+            wireguardPeers = [
+              {
+                Endpoint = "192.168.1.${peerId}:51820";
+                PublicKey = pubk;
+                PresharedKeyFile = pkgs.writeText "psk.key" "yTL3sCOL33Wzi6yCnf9uZQl/Z8laSE+zwpqOHC4HhFU=";
+                AllowedIPs = [ "10.0.0.${peerId}/32" ];
+                PersistentKeepalive = 15;
+              }
+            ];
           };
         };
         networks = {
@@ -42,64 +60,112 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, n
             linkConfig.Unmanaged = true;
           };
           "90-wg0" = {
-            matchConfig = { Name = "wg0"; };
+            matchConfig = {
+              Name = "wg0";
+            };
             address = [ "10.0.0.${nodeId}/32" ];
             routes = [
-              { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }
-              { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }
+              {
+                Gateway = "10.0.0.${nodeId}";
+                Destination = "10.0.0.0/24";
+              }
+              {
+                Gateway = "10.0.0.${nodeId}";
+                Destination = "10.0.0.0/24";
+                Table = "custom";
+              }
             ];
           };
           "30-eth1" = {
-            matchConfig = { Name = "eth1"; };
+            matchConfig = {
+              Name = "eth1";
+            };
             address = [
               "192.168.1.${nodeId}/24"
               "fe80::${nodeId}/64"
             ];
             routingPolicyRules = [
-              { Table = 10; IncomingInterface = "eth1"; Family = "both"; }
-              { Table = 20; OutgoingInterface = "eth1"; }
-              { Table = 30; From = "192.168.1.1"; To = "192.168.1.2"; SourcePort = 666 ; DestinationPort = 667; }
-              { Table = 40; IPProtocol = "tcp"; InvertRule = true; }
-              { Table = 50; IncomingInterface = "eth1"; Family = "ipv4"; }
-              { Table = 60; FirewallMark = 4; }
-              { Table = 70; FirewallMark = "16/0x1f"; }
+              {
+                Table = 10;
+                IncomingInterface = "eth1";
+                Family = "both";
+              }
+              {
+                Table = 20;
+                OutgoingInterface = "eth1";
+              }
+              {
+                Table = 30;
+                From = "192.168.1.1";
+                To = "192.168.1.2";
+                SourcePort = 666;
+                DestinationPort = 667;
+              }
+              {
+                Table = 40;
+                IPProtocol = "tcp";
+                InvertRule = true;
+              }
+              {
+                Table = 50;
+                IncomingInterface = "eth1";
+                Family = "ipv4";
+              }
+              {
+                Table = 60;
+                FirewallMark = 4;
+              }
+              {
+                Table = 70;
+                FirewallMark = "16/0x1f";
+              }
             ];
           };
         };
       };
     };
-in import ./make-test-python.nix ({pkgs, ... }: {
+in
+{ pkgs, ... }:
+{
   name = "networkd";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ picnoir ];
   };
   nodes = {
-    node1 = { pkgs, ... }@attrs:
-    let localConf = {
-        privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
-        pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
-        systemdCreds = false;
-        nodeId = "1";
-        peerId = "2";
-    };
-    in generateNodeConf (attrs // localConf);
+    node1 =
+      { pkgs, ... }@attrs:
+      let
+        localConf = {
+          privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
+          pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
+          systemdCreds = false;
+          nodeId = "1";
+          peerId = "2";
+        };
+      in
+      generateNodeConf (attrs // localConf);
 
-    node2 = { pkgs, ... }@attrs:
-    let localConf = {
-        privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
-        pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
-        systemdCreds = true;
-        nodeId = "2";
-        peerId = "1";
-    };
-    in generateNodeConf (attrs // localConf);
+    node2 =
+      { pkgs, ... }@attrs:
+      let
+        localConf = {
+          privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
+          pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+          systemdCreds = true;
+          nodeId = "2";
+          peerId = "1";
+        };
+      in
+      generateNodeConf (attrs // localConf);
   };
-testScript = ''
+  testScript = ''
     start_all()
-    node1.succeed("systemctl start systemd-networkd-wait-online@eth1.service")
+    node1.systemctl("start systemd-networkd-wait-online@eth1.service")
+    node1.systemctl("start systemd-networkd-wait-online.service")
     node1.wait_for_unit("systemd-networkd-wait-online@eth1.service")
     node1.wait_for_unit("systemd-networkd-wait-online.service")
-    node2.succeed("systemctl start systemd-networkd-wait-online@eth1.service")
+    node2.systemctl("start systemd-networkd-wait-online@eth1.service")
+    node2.systemctl("start systemd-networkd-wait-online.service")
     node2.wait_for_unit("systemd-networkd-wait-online@eth1.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
 
@@ -135,5 +201,5 @@ testScript = ''
     node1.succeed("sudo ip rule | grep 'from all fwmark 0x4 lookup 60'")
     # FirewallMark with a mask
     node1.succeed("sudo ip rule | grep 'from all fwmark 0x10/0x1f lookup 70'")
-'';
-})
+  '';
+}

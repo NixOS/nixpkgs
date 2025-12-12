@@ -16,17 +16,18 @@
   gtk4,
   libadwaita,
   libgee,
+  pantheon-wayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "8.0.2";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-tLqLGkcryXGe1wsupgwtnNtFj5aXXUPrwkpxUQmyJFM=";
+    sha256 = "sha256-d/8kVAvEUKNlpXRsKQrA0LCJetut2MlQlLq7MgIKlhk=";
   };
 
   nativeBuildInputs = [
@@ -46,18 +47,19 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libgee
+    pantheon-wayland
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Onboarding app for new users designed for elementary OS";
     homepage = "https://github.com/elementary/onboarding";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.onboarding";
   };
 }

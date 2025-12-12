@@ -15,6 +15,7 @@
   configurationNix ? import ./configuration-nix.nix,
   configurationArm ? import ./configuration-arm.nix,
   configurationDarwin ? import ./configuration-darwin.nix,
+  configurationWindows ? import ./configuration-windows.nix,
   configurationJS ? import ./configuration-ghcjs-9.x.nix,
 }:
 
@@ -31,12 +32,8 @@ let
       ghc
       extensible-self
       all-cabal-hashes
+      buildHaskellPackages
       ;
-
-    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
-    buildHaskellPackages = buildHaskellPackages // {
-      __attrsFailEvaluation = true;
-    };
   };
 
   platformConfigurations =
@@ -45,6 +42,9 @@ let
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (configurationDarwin { inherit pkgs haskellLib; })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      (configurationWindows { inherit pkgs haskellLib; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isGhcjs [
       (configurationJS { inherit pkgs haskellLib; })

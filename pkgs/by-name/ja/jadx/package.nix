@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     makeBinaryWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -90,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
     homepage = "https://github.com/skylot/jadx";
@@ -98,13 +99,13 @@ stdenv.mkDerivation (finalAttrs: {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 })

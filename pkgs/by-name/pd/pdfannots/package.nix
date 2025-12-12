@@ -28,10 +28,10 @@ python3.pkgs.buildPythonApplication rec {
     "pdfannots"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extracts and formats text annotations from a PDF file";
     homepage = "https://github.com/0xabu/pdfannots";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pdfannots";
   };

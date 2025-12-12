@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.18.1";
+  version = "0.18.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VCxqhTr0vHJ14tm/0zw/v9bCOQ2q4rzHv40NVYwI254=";
+    tag = "v${version}";
+    hash = "sha256-UjJz9ysejz5DBewMwoVof1+JU8tbGbBa3z1quuN1TWg=";
   };
 
   propagatedBuildInputs = [
@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radish" ];
 
-  meta = with lib; {
+  meta = {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
-    changelog = "https://github.com/radish-bdd/radish/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       l33tname
     ];

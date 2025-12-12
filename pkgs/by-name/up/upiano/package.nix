@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eliasdorneles";
     repo = "upiano";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5WhflvUCjzW4ZJ+PLUTMbKcUnQa3ChkDjl0R5YvjBWk=";
     forceFetchGit = true;
     fetchLFS = true;
@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
     "upiano"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Piano in your terminal";
     homepage = "https://github.com/eliasdorneles/upiano";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "upiano";
   };
 }

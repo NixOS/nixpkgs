@@ -1,22 +1,30 @@
-{ stdenv
-, fetchurl
-, lib
-, autoPatchelfHook
-, wrapQtAppsHook
-, gnustep
-, libbsd
-, libffi_3_3
-, ncurses6
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  gnustep-libobjc,
+  libbsd,
+  libffi_3_3,
+  libxml2,
+  ncurses6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hopper";
-  version = "5.5.3";
+  version = "5.19.4";
   rev = "v4";
 
   src = fetchurl {
-    url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux-demo.pkg.tar.xz";
-    hash = "sha256-xq9ZVg1leHm/tq6LYyQLa8p5dDwBd64Jt92uMoE0z58=";
+    url = "https://www.hopperapp.com/downloader/public/Hopper-${finalAttrs.rev}-${finalAttrs.version}-Linux-demo.pkg.tar.xz";
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+      "--referer"
+      "https://www.hopperapp.com"
+    ];
+    hash = "sha256-NYnMJK9F3YxspjriyiLM+vV1HpEunGvznOesQ/FpTl4=";
   };
 
   sourceRoot = ".";
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnustep.libobjc
+    gnustep-libobjc
     libbsd
     libffi_3_3
     ncurses6
@@ -36,39 +44,35 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    mkdir -p $out/share
-
-    cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
-    cp \
-      --archive \
-      $sourceRoot/opt/hopper-${rev}/lib/libBlocksRuntime.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libdispatch.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libgnustep-base.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libHopperCore.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libkqueue.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libobjcxx.so* \
-      $sourceRoot/opt/hopper-${rev}/lib/libpthread_workqueue.so* \
+    mkdir -p $out/bin $out/lib
+    install -Dm755 opt/hopper-${finalAttrs.rev}/bin/Hopper $out/bin/hopper
+    cp --archive \
+      opt/hopper-${finalAttrs.rev}/lib/libBlocksRuntime.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libdispatch.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libgnustep-base.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libHopperCore.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libkqueue.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libobjcxx.so* \
+      opt/hopper-${finalAttrs.rev}/lib/libpthread_workqueue.so* \
       $out/lib
-
-    cp -r $sourceRoot/usr/share $out
+    cp -r usr/share $out/share
+    substituteInPlace $out/share/applications/hopper-${finalAttrs.rev}.desktop \
+      --replace-fail "Exec=/opt/hopper-${finalAttrs.rev}/bin/Hopper" "Exec=hopper"
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    substituteInPlace "$out/share/applications/hopper-${rev}.desktop" \
-      --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
+  preFixup = ''
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.hopperapp.com/index.html";
     description = "MacOS and Linux Disassembler";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
-      Enteee
-    ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ Enteee ];
+    platforms = lib.platforms.linux;
   };
-}
+})

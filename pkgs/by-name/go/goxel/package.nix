@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goxel";
-  version = "0.15.1";
+  version = "0.15.1-unstable-2024-12-27";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mNSkQisWL3wXb+IsClWFTMbpeiRC4xteePXNP+GkUnU=";
+    rev = "60ec064a144295b17dfece85bb778dad19eaa8dc";
+    hash = "sha256-H5ErFfYsGmU2KsWJyUoozlrpf/JhgFimMxyFHt+czdg=";
   };
 
   nativeBuildInputs = [
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "release" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source 3D voxel editor";
     mainProgram = "goxel";
     homepage = "https://guillaumechereau.github.io/goxel/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       tilpner
       fgaz
     ];

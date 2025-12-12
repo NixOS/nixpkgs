@@ -166,6 +166,13 @@ in
             type = lib.types.str;
             description = "S3 access key.";
           };
+          accelerateUrl = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = ''
+              URL for AWS S3 [transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html).
+            '';
+          };
           secretKeyFile = lib.mkOption {
             type = lib.types.path;
             description = "File path that contains the S3 secret key.";
@@ -212,7 +219,7 @@ in
     slackAuthentication = lib.mkOption {
       description = ''
         To configure Slack auth, you'll need to create an Application at
-        https://api.slack.com/apps
+        <https://api.slack.com/apps>
 
         When configuring the Client ID, add a redirect URL under "OAuth & Permissions"
         to `https://[publicUrl]/auth/slack.callback`.
@@ -237,7 +244,7 @@ in
     googleAuthentication = lib.mkOption {
       description = ''
         To configure Google auth, you'll need to create an OAuth Client ID at
-        https://console.cloud.google.com/apis/credentials
+        <https://console.cloud.google.com/apis/credentials>
 
         When configuring the Client ID, add an Authorized redirect URI to
         `https://[publicUrl]/auth/google.callback`.
@@ -281,6 +288,45 @@ in
             resourceAppId = lib.mkOption {
               type = lib.types.str;
               description = "Authentication application resource ID.";
+            };
+          };
+        }
+      );
+    };
+
+    discordAuthentication = lib.mkOption {
+      description = ''
+        To configure Discord auth, you'll need to create an application at
+        <https://discord.com/developers/applications/>
+
+        See <https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6>
+        for details on setting up your Discord app.
+      '';
+      default = null;
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            clientId = lib.mkOption {
+              type = lib.types.str;
+              description = "Authentication client identifier.";
+            };
+            clientSecretFile = lib.mkOption {
+              type = lib.types.str;
+              description = "File path containing the authentication secret.";
+            };
+            serverId = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                Restrict logins to a specific server (optional, but recommended).
+                You can find a Discord server's ID by right-clicking the server icon,
+                and select “Copy Server ID”.
+              '';
+            };
+            serverRoles = lib.mkOption {
+              type = lib.types.commas;
+              default = "";
+              description = "Optionally restrict logins to a comma-separated list of role IDs";
             };
           };
         }
@@ -428,7 +474,7 @@ in
       description = ''
         For a complete Slack integration with search and posting to channels
         this configuration is also needed. See here for details:
-        https://wiki.generaloutline.com/share/be25efd1-b3ef-4450-b8e5-c4a4fc11e02a
+        <https://wiki.generaloutline.com/share/be25efd1-b3ef-4450-b8e5-c4a4fc11e02a>
       '';
       default = null;
       type = lib.types.nullOr (
@@ -632,12 +678,13 @@ in
       {
         description = "Outline wiki and knowledge base";
         wantedBy = [ "multi-user.target" ];
-        after =
-          [ "networking.target" ]
-          ++ lib.optional (cfg.databaseUrl == "local") "postgresql.service"
-          ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
+        after = [
+          "network.target"
+        ]
+        ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
+        ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
         requires =
-          lib.optional (cfg.databaseUrl == "local") "postgresql.service"
+          lib.optional (cfg.databaseUrl == "local") "postgresql.target"
           ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
         path = [
           pkgs.openssl # Required by the preStart script
@@ -655,7 +702,6 @@ in
             FORCE_HTTPS = builtins.toString cfg.forceHttps;
             ENABLE_UPDATES = builtins.toString cfg.enableUpdateCheck;
             WEB_CONCURRENCY = builtins.toString cfg.concurrency;
-            MAXIMUM_IMPORT_SIZE = builtins.toString cfg.maximumImportSize;
             DEBUG = cfg.debugOutput;
             GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
             SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
@@ -668,6 +714,7 @@ in
             RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
 
             FILE_STORAGE = cfg.storage.storageType;
+            FILE_STORAGE_IMPORT_MAX_SIZE = builtins.toString cfg.maximumImportSize;
             FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
             FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
           }
@@ -679,6 +726,10 @@ in
             AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
             AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
             AWS_S3_ACL = cfg.storage.acl;
+          })
+
+          (lib.mkIf (cfg.storage.storageType == "s3" && cfg.storage.accelerateUrl != null) {
+            AWS_S3_ACCELERATE_URL = cfg.storage.accelerateUrl;
           })
 
           (lib.mkIf (cfg.slackAuthentication != null) {
@@ -709,6 +760,12 @@ in
             SLACK_MESSAGE_ACTIONS = builtins.toString cfg.slackIntegration.messageActions;
           })
 
+          (lib.mkIf (cfg.discordAuthentication != null) {
+            DISCORD_CLIENT_ID = cfg.discordAuthentication.clientId;
+            DISCORD_SERVER_ID = cfg.discordAuthentication.serverId;
+            DISCORD_SERVER_ROLES = cfg.discordAuthentication.serverRoles;
+          })
+
           (lib.mkIf (cfg.smtp != null) {
             SMTP_HOST = cfg.smtp.host;
             SMTP_PORT = builtins.toString cfg.smtp.port;
@@ -731,45 +788,62 @@ in
         '';
 
         script = ''
-          export SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
-          export UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
+          export SECRET_KEY
+          UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          export UTILS_SECRET
           ${lib.optionalString (cfg.storage.storageType == "s3") ''
-            export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+            AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+            export AWS_SECRET_ACCESS_KEY
           ''}
           ${lib.optionalString (cfg.slackAuthentication != null) ''
-            export SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
+            SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
+            export SLACK_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.googleAuthentication != null) ''
-            export GOOGLE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.googleAuthentication.clientSecretFile})"
+            GOOGLE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.googleAuthentication.clientSecretFile})"
+            export GOOGLE_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.azureAuthentication != null) ''
-            export AZURE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.azureAuthentication.clientSecretFile})"
+            AZURE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.azureAuthentication.clientSecretFile})"
+            export AZURE_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.oidcAuthentication != null) ''
-            export OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+            OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+            export OIDC_CLIENT_SECRET
+          ''}
+          ${lib.optionalString (cfg.discordAuthentication != null) ''
+            DISCORD_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.discordAuthentication.clientSecretFile})"
+            export DISCORD_CLIENT_SECRET
           ''}
           ${lib.optionalString (cfg.sslKeyFile != null) ''
-            export SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"
+            SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"
+            export SSL_KEY
           ''}
           ${lib.optionalString (cfg.sslCertFile != null) ''
-            export SSL_CERT="$(head -n1 ${lib.escapeShellArg cfg.sslCertFile})"
+            SSL_CERT="$(head -n1 ${lib.escapeShellArg cfg.sslCertFile})"
+            export SSL_CERT
           ''}
           ${lib.optionalString (cfg.slackIntegration != null) ''
-            export SLACK_VERIFICATION_TOKEN="$(head -n1 ${lib.escapeShellArg cfg.slackIntegration.verificationTokenFile})"
+            SLACK_VERIFICATION_TOKEN="$(head -n1 ${lib.escapeShellArg cfg.slackIntegration.verificationTokenFile})"
+            export SLACK_VERIFICATION_TOKEN
           ''}
           ${lib.optionalString (cfg.smtp != null) ''
-            export SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
+            SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
+            export SMTP_PASSWORD
           ''}
 
           ${
             if (cfg.databaseUrl == "local") then
               ''
-                export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                export DATABASE_URL
                 export PGSSLMODE=disable
               ''
             else
               ''
-                export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                export DATABASE_URL
               ''
           }
 
@@ -781,7 +855,6 @@ in
           Group = cfg.group;
           Restart = "always";
           ProtectSystem = "strict";
-          PrivateHome = true;
           PrivateTmp = true;
           UMask = "0007";
 

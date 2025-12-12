@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "base64io";
-  version = "1.0.3-unstable-2024-06-24";
+  version = "1.0.3-unstable-2025-01-09";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "base64io-python";
-    rev = "f3dd88bf0db6eb412c55ff579f0aa9f39d970c41";
-    hash = "sha256-znQlPlS+jzPiHNBvnDnZ8l1pZP6iuYqExDlPii4dJwM=";
+    rev = "1bd47f7f8cfeeff654ea0edda3fbb69f840ccd05";
+    hash = "sha256-1MUWjFFitJ3nqvVwAQYcAVVPhPs6NEgq7t/mI71u2Bk=";
   };
 
   build-system = [ setuptools ];
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://base64io-python.readthedocs.io/";
     changelog = "https://github.com/aws/base64io-python/blob/${version}/CHANGELOG.rst";
     description = "Python stream implementation for base64 encoding/decoding";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

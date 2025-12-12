@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
-
+{
+  lib,
+  stdenv,
+  bashNonInteractive,
+  fetchurl,
+  installShellFiles,
+  jdk,
+  rlwrap,
+  makeWrapper,
+  writeScript,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.0.1488";
+  version = "1.12.3.1577";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vBm+ABC+8EIcJv077HvDvKCMGSgo1ZoVGEVCLcRCB0I=";
+    hash = "sha256-u/hROuiLmHPpeBroaty1YLgSCcZv6Uy+ckKK85seusw=";
   };
 
   nativeBuildInputs = [
@@ -15,10 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
+
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
-      binPath = lib.makeBinPath [ rlwrap jdk ];
+      binPath = lib.makeBinPath [
+        rlwrap
+        jdk
+      ];
     in
     ''
       runHook preInstall
@@ -74,11 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.jdk = jdk;
 
-  meta = with lib; {
+  meta = {
     description = "Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,
@@ -98,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
+    platforms = lib.platforms.unix;
   };
 })

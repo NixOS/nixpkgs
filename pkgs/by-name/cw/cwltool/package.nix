@@ -1,55 +1,46 @@
 {
   lib,
   fetchFromGitHub,
-  git,
   nodejs,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20241024121129";
+  version = "3.1.20251031082601";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MocgfELgis9b+byeDU7mDQcXnLhaWBtvGbqm7MtRdf8=";
+    tag = version;
+    hash = "sha256-avRNOdL4Ig2cYQWh8SqX/KWfgXyVg0TVfVFrlqzUCLA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml" \
-      --replace-fail "prov == 1.5.1" "prov" \
-      --replace-fail '"schema-salad >= 8.7, < 9",' '"schema-salad",' \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
-      --replace-fail "mypy==1.13.0" "mypy"
+      --replace-fail "mypy==1.18.2" "mypy"
   '';
 
-  nativeBuildInputs =
-    [
-      git
-    ]
-    ++ (with python3.pkgs; [
-      setuptools
-      setuptools-scm
-    ]);
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     argcomplete
     bagit
     coloredlogs
     cwl-utils
-    mypy
     mypy-extensions
     prov
     psutil
     pydot
     rdflib
     requests
+    rich-argparse
     ruamel-yaml
     schema-salad
     shellescape
@@ -60,13 +51,18 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     nodejs
     pytest-mock
     pytest-httpserver
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "prov"
+    "rdflib"
   ];
 
   disabledTests = [
@@ -85,12 +81,12 @@ python3.pkgs.buildPythonApplication rec {
     "cwltool"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
     changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
 }

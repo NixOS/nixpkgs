@@ -8,7 +8,7 @@
   libjpeg_original,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jpegrescan";
   version = "unstable-2019-03-27";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kud";
-    repo = pname;
+    repo = "jpegrescan";
     rev = "3a7de06feabeb3c3235c3decbe2557893c1abe51";
     sha256 = "0cnl46z28lkqc5x27b8rpghvagahivrqcfvhzcsv9w1qs8qbd6dm";
   };
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Losslessly shrink any JPEG file";
     homepage = "https://github.com/kud/jpegrescan";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ ramkromberg ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = lib.platforms.all;
     mainProgram = "jpegrescan";
   };
 }

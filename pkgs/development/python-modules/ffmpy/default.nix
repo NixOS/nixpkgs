@@ -3,8 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
-  poetry-core,
+  uv-build,
   pytestCheckHook,
   go,
   ffmpeg-headless,
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -20,26 +21,28 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "ffmpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-spbyz1EyMJRXJTm7TqN9XoqR9ztBKsNZx3NURwV7N2w=";
+    tag = version;
+    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
   };
 
-  postPatch = ''
-    # default to store ffmpeg
-    substituteInPlace ffmpy/ffmpy.py \
-      --replace-fail \
-        'executable: str = "ffmpeg",' \
-        'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
-
-    #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
-    for fname in tests/*.py; do
-      echo 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])' >>"$fname"
-    done
-  '';
+  postPatch =
+    # Default to store ffmpeg.
+    ''
+      substituteInPlace ffmpy/ffmpy.py \
+        --replace-fail \
+          'executable: str = "ffmpeg",' \
+          'executable: str = "${lib.getExe ffmpeg-headless}",'
+    ''
+    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+    + ''
+      for fname in tests/*.py; do
+        echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
+      done
+    '';
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,10 +61,10 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) go build -o tests/ffmpeg/ffmpeg tests/ffmpeg/ffmpeg.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

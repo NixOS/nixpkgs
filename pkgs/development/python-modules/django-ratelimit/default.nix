@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsocol";
     repo = "django-ratelimit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZMtZSKOIIRSqH6eyC7bBeua7YLKyWW6NOXN/MDv9fy4=";
   };
 
@@ -46,11 +46,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cache-based rate-limiting for Django";
     homepage = "https://github.com/jsocol/django-ratelimit";
     changelog = "https://github.com/jsocol/django-ratelimit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

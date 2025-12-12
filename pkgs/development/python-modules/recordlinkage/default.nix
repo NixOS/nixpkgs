@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "recordlinkage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to link records in or between data sources";
     homepage = "https://recordlinkage.readthedocs.io/";
     changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

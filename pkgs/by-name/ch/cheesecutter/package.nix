@@ -7,7 +7,7 @@
   patchelf,
   SDL,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cheesecutter";
   version = "unstable-2021-02-27";
 
@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:0q4a791nayya6n01l0f4kk497rdq6kiq0n72fqdpwqy138pfwydn";
   };
 
-  patches =
-    [
-      ./0001-Drop-baked-in-build-date-for-r13y.patch
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
+  patches = [
+    ./0001-Drop-baked-in-build-date-for-r13y.patch
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
 
   nativeBuildInputs = [
     acme
     ldc
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) patchelf;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) patchelf;
 
   buildInputs = [ SDL ];
 
@@ -61,15 +61,15 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath "$rpath:${rpathSDL}" $out/bin/ccutter
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Tracker program for composing music for the SID chip";
     homepage = "https://github.com/theyamo/CheeseCutter/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 }

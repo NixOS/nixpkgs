@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LunarVim";
     repo = "LunarVim";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-uuXaDvZ9VaRJlZrdu28gawSOJFVSo5XX+JG53IB+Ijw=";
   };
 
@@ -104,47 +104,46 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out
-      cp -r bin share $out
+    mkdir -p $out
+    cp -r bin share $out
 
-      for iconDir in utils/desktop/*/; do
-        install -Dm444 $iconDir/lvim.svg -t $out/share/icons/hicolor/$(basename $iconDir)/apps
-      done
+    for iconDir in utils/desktop/*/; do
+      install -Dm444 $iconDir/lvim.svg -t $out/share/icons/hicolor/$(basename $iconDir)/apps
+    done
 
-      install -Dm444 utils/desktop/lvim.desktop -t $out/share/applications
+    install -Dm444 utils/desktop/lvim.desktop -t $out/share/applications
 
-      wrapProgram $out/bin/lvim --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
-        --prefix LD_LIBRARY_PATH : ${lib.getLib stdenv.cc.cc} \
-        --prefix CC : ${stdenv.cc.targetPrefix}cc
-    ''
-    + lib.optionalString finalAttrs.nvimAlias ''
-      ln -s $out/bin/lvim $out/bin/nvim
-    ''
-    + lib.optionalString finalAttrs.viAlias ''
-      ln -s $out/bin/lvim $out/bin/vi
-    ''
-    + lib.optionalString finalAttrs.vimAlias ''
-      ln -s $out/bin/lvim $out/bin/vim
-    ''
-    + ''
-      runHook postInstall
-    '';
+    wrapProgram $out/bin/lvim --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
+      --prefix LD_LIBRARY_PATH : ${lib.getLib stdenv.cc.cc} \
+      --prefix CC : ${stdenv.cc.targetPrefix}cc
+  ''
+  + lib.optionalString finalAttrs.nvimAlias ''
+    ln -s $out/bin/lvim $out/bin/nvim
+  ''
+  + lib.optionalString finalAttrs.viAlias ''
+    ln -s $out/bin/lvim $out/bin/vi
+  ''
+  + lib.optionalString finalAttrs.vimAlias ''
+    ln -s $out/bin/lvim $out/bin/vim
+  ''
+  + ''
+    runHook postInstall
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "IDE layer for Neovim";
     homepage = "https://www.lunarvim.org/";
     changelog = "https://github.com/LunarVim/LunarVim/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       prominentretail
       lebensterben
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "lvim";
   };
 })

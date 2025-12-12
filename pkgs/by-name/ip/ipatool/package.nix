@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "ipatool";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${version}";
-    hash = "sha256-e+gkr8i6dVfxyBM5Vi2YpW4eQ4LE2vhgQadLAFeHK4Q=";
+    hash = "sha256-z6f5PNxAH+8mS2kWjhST0LFhwTR01m7rR5O95ee+p2E=";
   };
 
-  vendorHash = "sha256-aVMWXlHMGdbApKLhuZZpaAYY5QpMMgXc/6f9r79/dTw=";
+  vendorHash = "sha256-f6mXTePiM5kZUdrYqvbN5pyNp1OGNMeJZMUJ3pvaRrc=";
 
   ldflags = [
     "-s"
@@ -42,12 +42,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that allows searching and downloading app packages (known as ipa files) from the iOS App Store";
     homepage = "https://github.com/majd/ipatool";
     changelog = "https://github.com/majd/ipatool/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "ipatool";
   };
 }

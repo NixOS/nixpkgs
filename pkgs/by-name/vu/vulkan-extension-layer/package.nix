@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.296.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-pBpHYxJq36FrHsvpaMJvX0IKTvAh0R86qR7/vn6EBCw=";
+    hash = "sha256-J9l20abn7meSF0WnCh3cepYKQh10ezb0mAKzc0HAo1w=";
   };
 
   nativeBuildInputs = [
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Layers providing Vulkan features when native support is unavailable";
     homepage = "https://github.com/KhronosGroup/Vulkan-ExtensionLayer/";
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

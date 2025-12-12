@@ -4,14 +4,14 @@
   fetchPypi,
   llama-index-core,
   llama-index-readers-file,
-  poetry-core,
+  hatchling,
   pythonOlder,
   s3fs,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-s3";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_s3";
     inherit version;
-    hash = "sha256-oCXpLZyIrZKNNDg8hkEh5xxXEqz7B1hLjE5OUwEIozg=";
+    hash = "sha256-Ye+B4lcwdeaAisaIZH98X2n7FA7n9/gkVVNRN1uihys=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.readers.s3" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for S3";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-s3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

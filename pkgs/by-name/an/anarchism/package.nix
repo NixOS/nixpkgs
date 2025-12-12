@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
-    repo = pname;
+    repo = "anarchism";
     rev = "debian/${version}";
     sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
   };
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     cp debian/anarchism.desktop $out/share/applications
   '';
 
-  meta = with lib; {
-    homepage = "http://www.anarchistfaq.org/";
+  meta = {
+    homepage = "https://www.anarchistfaq.org/";
     changelog = "http://anarchism.pageabode.com/afaq/new.html";
     description = "Exhaustive exploration of Anarchist theory and practice";
     longDescription = ''
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       from the basics of Anarchism to very specific discussions of politics,
       social organization, and economics.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ davidak ];
-    platforms = with platforms; all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = with lib.platforms; all;
   };
 }

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9gWUu2qbscKlbWZlRbOn+rrmizegkHxPnwnAmpaV1Ww=";
   };
 
-  cargoHash = "sha256-dXlSBb3ey3dAiifrQ9Bbhscnm1QmcChiQbX1ic069V4=";
+  cargoHash = "sha256-05wx0lqgMIVTe6OQTCUQXmaPeGPw43wuEuuGUsGV4VM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,14 +27,14 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/cauwugo --bpaf-complete-style-zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Alternative cargo frontend that implements dynamic shell completion for usual cargo commands";
     mainProgram = "cauwugo";
     homepage = "https://github.com/pacak/bpaf/tree/master/bpaf_cauwugo";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

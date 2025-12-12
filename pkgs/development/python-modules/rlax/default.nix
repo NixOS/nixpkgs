@@ -3,6 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   absl-py,
   chex,
   distrax,
@@ -11,6 +16,8 @@
   jaxlib,
   numpy,
   tensorflow-probability,
+
+  # tests
   dm-haiku,
   optax,
   pytest-xdist,
@@ -19,26 +26,21 @@
 
 buildPythonPackage rec {
   pname = "rlax";
-  version = "0.1.6";
-  format = "setuptools";
+  version = "0.1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
+    tag = "v${version}";
+    hash = "sha256-E/zYFd5bfx58FfA3uR7hzRAIs844QzJA8TZTwmwDByk=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
-      name = "replace-deprecated-chex-assertions";
-      url = "https://github.com/google-deepmind/rlax/commit/30e7913a1102667137654d6e652a6c4b9e9ba1f4.patch";
-      hash = "sha256-OPnuTKEtwZ28hzR1660v3DcktxTYjhR1xYvFbQvOhgs=";
-    })
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     chex
     distrax
@@ -46,7 +48,6 @@ buildPythonPackage rec {
     jax
     jaxlib
     numpy
-    tensorflow-probability
   ];
 
   nativeCheckInputs = [
@@ -59,7 +60,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rlax" ];
 
   disabledTests = [
-    # RuntimeErrors
+    # AssertionError: Array(2, dtype=int32) != 0
+    "test_categorical_sample__with_device"
+    "test_categorical_sample__with_jit"
+    "test_categorical_sample__without_device"
+    "test_categorical_sample__without_jit"
+
+    # RuntimeError: Attempted to set 4 devices, but 1 CPUs already available:
+    # ensure that `set_n_cpu_devices` is executed before any JAX operation.
     "test_cross_replica_scatter_add0"
     "test_cross_replica_scatter_add1"
     "test_cross_replica_scatter_add2"
@@ -73,10 +81,11 @@ buildPythonPackage rec {
     "test_unnormalize_linear"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

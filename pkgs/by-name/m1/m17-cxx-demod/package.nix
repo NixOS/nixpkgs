@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mobilinkd";
-    repo = pname;
+    repo = "m17-cxx-demod";
     rev = "v${version}";
     hash = "sha256-mvppkFBmmPVqvlqIqrbwGrOBih5zS5sZrV/usEhHiws=";
   };
@@ -39,12 +39,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     description = "M17 Demodulator in C++";
     homepage = "https://github.com/mobilinkd/m17-cxx-demod";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

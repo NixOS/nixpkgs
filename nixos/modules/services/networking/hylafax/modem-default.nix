@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 # see man:hylafax-config(5)
 
@@ -16,7 +16,7 @@
   SessionTracing = "0x78701";
   UUCPLockDir = "/var/lock";
 
-  SendPageCmd = "${pkgs.coreutils}/bin/false"; # prevent pager transmit
-  SendUUCPCmd = "${pkgs.coreutils}/bin/false"; # prevent UUCP transmit
+  SendPageCmd = lib.getExe' pkgs.coreutils "false"; # prevent pager transmit
+  SendUUCPCmd = lib.getExe' pkgs.coreutils "false"; # prevent UUCP transmit
 
 }

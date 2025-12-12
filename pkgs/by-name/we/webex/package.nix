@@ -50,18 +50,18 @@
   xcbutilrenderutil,
   xcbutilwm,
   p7zip,
-  tbb,
+  onetbb,
   wayland,
   libXScrnSaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "44.8.0.30404";
+  version = "45.10.0.33234";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20240806164911/Webex_ubuntu.7z";
-    sha256 = "770067b495fcc3b376d77de65371f4196d0f1a0d718b84928d24aa6ea752d29b";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20251014140645/Webex_ubuntu.7z";
+    sha256 = "126ac38dbf659d26c213a9ccd5930f6a88d1aa90fd9de90cba74b2f2bfbe7793";
   };
 
   nativeBuildInputs = [
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    tbb
+    onetbb
     wayland
   ];
 
@@ -169,14 +169,14 @@ stdenv.mkDerivation rec {
     version=$(jq -r '.version' <<< "$manifest")
     hash=$(jq -r '.checksum' <<< "$manifest")
 
-    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/applications/networking/instant-messengers/webex/default.nix
+    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/by-name/we/webex/package.nix
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one app to call, meet, message, and get work done";
     homepage = "https://webex.com/";
     downloadPage = "https://www.webex.com/downloads.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ uvnikita ];
     platforms = [ "x86_64-linux" ];
   };

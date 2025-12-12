@@ -157,7 +157,6 @@ in
           locations."~ \\.(js|css|ttf|woff2?|png|jpe?g|svg)$".extraConfig = ''
             add_header Cache-Control "public, max-age=15778463";
             add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Robots-Tag none;
             add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;

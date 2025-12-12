@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visualize the layout of a mounted btrfs";
     mainProgram = "btrfs-heatmap";
     homepage = "https://github.com/knorrie/btrfs-heatmap";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.evils ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

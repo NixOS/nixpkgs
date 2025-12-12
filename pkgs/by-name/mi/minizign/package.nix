@@ -2,35 +2,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_13,
-  apple-sdk_11,
+  zig_0_15,
 }:
 
 let
-  zig = zig_0_13;
+  zig = zig_0_15;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizign";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "zig-minisign";
-    rev = finalAttrs.version;
-    hash = "sha256-Su66UohRc9C4INIp+7NHiW28sUq5YBfrI0EoEbGojG0=";
+    tag = finalAttrs.version;
+    hash = "sha256-W1rfIZqEGaBkLE2Goug4ANBWj6mc4hurVhsJ0NWH4nY=";
   };
 
   nativeBuildInputs = [
     zig.hook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
-
   meta = {
     description = "Minisign reimplemented in Zig";
     homepage = "https://github.com/jedisct1/zig-minisign";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "minizign";
     inherit (zig.meta) platforms;
   };

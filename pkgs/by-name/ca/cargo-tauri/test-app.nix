@@ -16,6 +16,7 @@
 let
   pnpm = pnpm_9;
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "test-app";
   inherit (cargo-tauri) version src;
@@ -34,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
 
-    hash = "sha256-kTr61DFPIIYceB8tZrKFaMG65CZ//djGEOQBLRNPotk=";
+    fetcherVersion = 1;
+    hash = "sha256-gHniZv847JFrmKnTUZcgyWhFl/ovJ5IfKbbM5I21tZc=";
   };
 
   nativeBuildInputs = [
@@ -48,13 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libayatana-appindicator
+    webkitgtk_4_1
+  ];
 
   buildAndTestSubdir = "examples/api/src-tauri";
 

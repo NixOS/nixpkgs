@@ -2,11 +2,9 @@
   lib,
   stdenv,
   alsa-lib,
-  apple-sdk_11,
   autoPatchelfHook,
   cairo,
   cups,
-  darwinMinVersionHook,
   fontconfig,
   glib,
   glibc,
@@ -25,13 +23,11 @@
   ...
 }@args:
 
-assert useMusl -> stdenv.hostPlatform.isLinux;
 let
-  extraArgs = builtins.removeAttrs args [
+  extraArgs = removeAttrs args [
     "lib"
     "stdenv"
     "alsa-lib"
-    "apple-sdk_11"
     "autoPatchelfHook"
     "cairo"
     "cups"
@@ -120,57 +116,55 @@ let
       nativeBuildInputs = [
         unzip
         makeWrapper
-      ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
       propagatedBuildInputs = [
         setJavaClassPath
         zlib
       ];
 
-      buildInputs =
-        lib.optionals stdenv.hostPlatform.isLinux [
-          alsa-lib # libasound.so wanted by lib/libjsound.so
-          fontconfig
-          (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-          xorg.libX11
-          xorg.libXext
-          xorg.libXi
-          xorg.libXrender
-          xorg.libXtst
-        ]
-        ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-          apple-sdk_11
-          (darwinMinVersionHook "11.0")
-        ]);
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib # libasound.so wanted by lib/libjsound.so
+        fontconfig
+        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+        xorg.libX11
+        xorg.libXext
+        xorg.libXi
+        xorg.libXrender
+        xorg.libXtst
+      ];
 
       postInstall =
         let
-          cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
-          preservedNixVariables =
-            [
-              "-ENIX_BINTOOLS"
-              "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-              "-ENIX_BUILD_CORES"
-              "-ENIX_BUILD_TOP"
-              "-ENIX_CC"
-              "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-              "-ENIX_CFLAGS_COMPILE"
-              "-ENIX_HARDENING_ENABLE"
-              "-ENIX_LDFLAGS"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isLinux [
-              "-ELOCALE_ARCHIVE"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isDarwin [
-              "-EDEVELOPER_DIR"
-              "-EDEVELOPER_DIR_FOR_BUILD"
-              "-EDEVELOPER_DIR_FOR_TARGET"
-              "-EMACOSX_DEPLOYMENT_TARGET"
-              "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
-              "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
-              "-ENIX_APPLE_SDK_VERSION"
-            ];
-          preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
+          cLibsFlags = (map (l: "-H:CLibraryPath=${l}/lib") cLibs);
+          preservedNixVarFlags = [
+            "-ENIX_BINTOOLS"
+            "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+            "-ENIX_BUILD_CORES"
+            "-ENIX_BUILD_TOP"
+            "-ENIX_CC"
+            "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+            "-ENIX_CFLAGS_COMPILE"
+            "-ENIX_HARDENING_ENABLE"
+            "-ENIX_LDFLAGS"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "-ELOCALE_ARCHIVE"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "-EDEVELOPER_DIR"
+            "-EDEVELOPER_DIR_FOR_BUILD"
+            "-EDEVELOPER_DIR_FOR_TARGET"
+            "-EMACOSX_DEPLOYMENT_TARGET"
+            "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
+            "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
+            "-ENIX_APPLE_SDK_VERSION"
+          ];
+          checkToolchainFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+            "-H:+UnlockExperimentalVMOptions"
+            "-H:-CheckToolchain"
+          ];
         in
         ''
           # jni.h expects jni_md.h to be in the header search path.
@@ -191,7 +185,7 @@ let
 
           wrapProgram $out/bin/native-image \
             --prefix PATH : ${binPath} \
-            ${toString (cLibsAsFlags ++ preservedNixVariablesAsFlags)}
+            --add-flags "${toString (cLibsFlags ++ preservedNixVarFlags ++ checkToolchainFlags)}"
         '';
 
       preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
@@ -226,23 +220,23 @@ let
         $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
         echo "Ahead-Of-Time compilation"
-        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
+        $out/bin/native-image -H:+ReportExceptionStackTraces -march=compatibility HelloWorld
         ./helloworld | fgrep 'Hello World'
 
         ${
           # -H:+StaticExecutableWithDynamicLibC is only available in Linux
           lib.optionalString (stdenv.hostPlatform.isLinux && !useMusl) ''
             echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
+            $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
 
         ${
-          # --static is only available in Linux
-          lib.optionalString (stdenv.hostPlatform.isLinux && useMusl) ''
+          # --static is only available in x86_64 Linux
+          lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && useMusl) ''
             echo "Ahead-Of-Time compilation with --static and --libc=musl"
-            $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
+            $out/bin/native-image -march=compatibility --libc=musl --static HelloWorld
             ./helloworld | fgrep 'Hello World'
           ''
         }
@@ -256,22 +250,24 @@ let
           ./update.sh
           "graalvm-ce"
         ];
-      } // (args.passhtru or { });
+      }
+      // (args.passhtru or { });
 
       meta =
-        with lib;
+
         (
           {
             homepage = "https://www.graalvm.org/";
             description = "High-Performance Polyglot VM";
-            license = with licenses; [
+            license = with lib.licenses; [
               upl
-              gpl2Classpath
+              gpl2
+              classpathException20
               bsd3
             ];
-            sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+            sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
+            teams = [ lib.teams.graalvm-ce ];
           }
           // (args.meta or { })
         );

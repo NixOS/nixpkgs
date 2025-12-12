@@ -2,51 +2,61 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  at-spi2-atk,
-  pkg-config,
-  glib,
-  gtk3,
-  gtk-layer-shell,
-  installShellFiles,
-  scdoc,
-}:
+  nix-update-script,
 
+  # Deps
+  installShellFiles,
+  pkg-config,
+  scdoc,
+  wrapGAppsHook4,
+  at-spi2-atk,
+  glib,
+  gtk4,
+  gtk4-layer-shell,
+  libadwaita,
+  librsvg,
+  libxml2,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
-  version = "0.4.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
     rev = version;
-    hash = "sha256-PkEj0RlSxhxG9qOJkuMTVj6r0lxsm7V8b1AIaCVaXCQ=";
+    hash = "sha256-+0EKnaxRaHRxRvhASuvfpUijEZJFimR4zSzOyC3FOkQ=";
   };
 
-  cargoHash = "sha256-ivKPGA5UADKT47CL5jSOB4ZEfKh9uJkXgv9vfvEnBzw=";
+  cargoHash = "sha256-MRVWiQNzETFbWeKwYeoXSUY9gncRCsYdPEZhpOKcTvA=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
     scdoc
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     at-spi2-atk
-    gtk3
-    gtk-layer-shell
     glib
+    gtk4
+    gtk4-layer-shell
+    libadwaita
+    librsvg
+    libxml2
   ];
 
   postPatch = ''
-    substituteInPlace style.css \
-      --replace-fail "/usr/share/wleave" "$out/share/${pname}"
-
-    substituteInPlace src/main.rs \
+    substituteInPlace src/config.rs \
       --replace-fail "/etc/wleave" "$out/etc/${pname}"
+
+    substituteInPlace layout.json \
+      --replace-fail "/usr/share/wleave" "$out/share/${pname}"
   '';
 
   postInstall = ''
-    install -Dm644 -t "$out/etc/wleave" {"style.css","layout"}
+    install -Dm644 -t "$out/etc/wleave" {"style.css","layout.json"}
     install -Dm644 -t "$out/share/wleave/icons" icons/*
 
     for f in man/*.scd; do
@@ -61,12 +71,14 @@ rustPlatform.buildRustPackage rec {
       --zsh <(cat completions/_wleave)
   '';
 
-  meta = with lib; {
-    description = "Wayland-native logout script written in GTK3";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Wayland-native logout script written in GTK4";
     homepage = "https://github.com/AMNatty/wleave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wleave";
-    maintainers = with maintainers; [ ludovicopiero ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -9,17 +9,18 @@
   libcap,
   libnl,
   nixosTests,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2024-10-25";
+  version = "0-unstable-2025-03-20";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "6a50f5ff619caeea6f04d889e3a60de6c12feb76";
-    hash = "sha256-yol6VFelqQiPKLg1UUeP+r/+XO4fjYeDbIeI29gZ7j4=";
+    rev = "8c6a3ffc09265bd44ed89b75c400ef97959d1aff";
+    hash = "sha256-TQ8WaGvMcvyeZC4B9gSjJ2k5NOxpTaV4n7Qi36aA78Q=";
   };
 
   postPatch = ''
@@ -59,17 +60,20 @@ stdenv.mkDerivation rec {
     "zerocallusedregs"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) bpftune;
+  passthru = {
+    tests = {
+      inherit (nixosTests) bpftune;
+    };
+    updateScript = unstableGitUpdater { };
   };
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "BPF-based auto-tuning of Linux system parameters";
     mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

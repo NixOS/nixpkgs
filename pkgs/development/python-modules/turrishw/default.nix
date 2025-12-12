@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "turrishw";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,20 +18,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "turris-cz";
     repo = "turrishw";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-elu2f54asdzdn7wQT2CKo8kVYnc1KTakRyr8Nxu+XNw=";
+    tag = "v${version}";
+    hash = "sha256-LQ1ebcVQo7jixAKOPg/oNBnRU8AZebHANfDU4lamB8g=";
   };
 
   build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Tests don't work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   pythonImportsCheck = [ "turrishw" ];
 
   meta = {
     description = "Python library and program for Turris hardware listing";
     homepage = "https://github.com/turris-cz/turrishw";
-    changelog = "https://github.com/turris-cz/turrishw/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/turris-cz/turrishw/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

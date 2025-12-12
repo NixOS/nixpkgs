@@ -19,23 +19,33 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  python3,
-  testers,
+  versionCheckHook,
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.13.0";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-beIZtDc38p5P/S4xS3qDIvLoYbqDbExwqHac2OvgmBY=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-tZ6YfDycssQPdwz+Db5p+CQz5AblgLzKPVr4z/EDhEg=";
+  };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -51,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     libaio
     keyutils
     lz4
-
     libsodium
     liburcu
     libuuid
@@ -59,18 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     attr
     udev
-  ] ++ lib.optional fuseSupport fuse3;
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = finalAttrs.src;
-    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
-  };
+  ]
+  ++ lib.optional fuseSupport fuse3;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
-  ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+    "DKMSDIR=${placeholder "dkms"}"
+
+    # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
+    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
+    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  ]
+  ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+
+  enableParallelBuilding = true;
+
+  installFlags = [
+    "install"
+    "install_dkms"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -80,41 +98,35 @@ stdenv.mkDerivation (finalAttrs: {
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
-  '';
-
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
-  # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
-  installFlags = [
-    "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
-    "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    udevCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bcachefs \
+      --bash <($out/sbin/bcachefs completions bash) \
+      --zsh  <($out/sbin/bcachefs completions zsh) \
+      --fish <($out/sbin/bcachefs completions fish)
+  '';
+
+  outputs = [
+    "out"
+    "dkms"
   ];
 
-  postInstall =
-    ''
-      substituteInPlace $out/libexec/bcachefsck_all \
-        --replace-fail "/usr/bin/python3" "${python3.interpreter}"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd bcachefs \
-        --bash <($out/sbin/bcachefs completions bash) \
-        --zsh  <($out/sbin/bcachefs completions zsh) \
-        --fish <($out/sbin/bcachefs completions fish)
-    '';
-
   passthru = {
+    # See NOTE in linux-kernels.nix
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "${finalAttrs.meta.mainProgram} version";
-        version = "${finalAttrs.version}";
-      };
       smoke-test = nixosTests.bcachefs;
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
@@ -122,17 +134,17 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
+    downloadPage = "https://github.com/koverstreet/bcachefs-tools";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
-      Madouura
+      johnrtitor
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
+    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

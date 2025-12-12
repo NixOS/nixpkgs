@@ -13,7 +13,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mictray";
   version = "0.2.5";
 
@@ -41,15 +41,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Junker/mictray";
     description = "System tray application for microphone";
     longDescription = ''
       MicTray is a Lightweight system tray application which lets you control the microphone state and volume.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.anpryl ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.anpryl ];
     mainProgram = "mictray";
   };
 }

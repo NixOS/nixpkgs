@@ -15,14 +15,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smile";
-  version = "2.9.5";
+  version = "2.10.2";
   pyproject = false; # Builds with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "smile";
-    rev = version;
-    hash = "sha256-WwkwJXRnIvBS0cdcmJhErZLe0wwvarUdE7rpx7qcd2E=";
+    tag = version;
+    hash = "sha256-J+cCYt5ATR5xm/NsjYGkfQmHpTS5LDugj0XCphHanDc=";
   };
 
   nativeBuildInputs = [

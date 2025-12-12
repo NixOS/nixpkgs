@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs";
-  version = "2024-01-13";
+  version = "2025-09-13-2";
 
   src = fetchurl {
     url = "https://bellard.org/quickjs/quickjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PEv4+JW/pUvrSGyNEhgRJ3Hs/FrDvhA2hR70FWghLgM=";
+    hash = "sha256-mWxrUBj8lVrU0GQm0OnLcTaFoAyCWqXAQYvVP334sLQ=";
   };
 
   outputs = [
@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "PREFIX=$(out)"
+  ];
 
   doInstallCheck = true;
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
+    make doc/version.texi
     pushd doc
     makeinfo *texi
     popd
@@ -61,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       set +o pipefail
       qjs     --help 2>&1 | grep "QuickJS version"
-      qjscalc --help 2>&1 | grep "QuickJS version"
       set -o pipefail
     ''
 
@@ -93,10 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       ES2023 specification including modules, asynchronous generators, proxies
       and BigInt.
 
-      It optionally supports mathematical extensions such as big decimal
-      floating point numbers (BigDecimal), big binary floating point numbers
-      (BigFloat) and operator overloading.
-
       Main Features:
 
       - Small and easily embeddable: just a few C files, no external
@@ -112,8 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       - Can compile Javascript sources to executables with no external dependency.
       - Garbage collection using reference counting (to reduce memory usage and
         have deterministic behavior) with cycle removal.
-      - Mathematical extensions: BigDecimal, BigFloat, operator overloading,
-        bigint mode, math mode.
       - Command line interpreter with contextual colorization implemented in
         Javascript.
       - Small built-in standard library with C library wrappers.
@@ -122,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       stesie
-      AndersonTorres
     ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;

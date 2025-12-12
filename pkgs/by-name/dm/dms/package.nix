@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "dms";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "anacrolix";
     repo = "dms";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dObY2MNrrQqn5i/y2LDlKvd9S04EArmsalIsfXsrth0=";
+    tag = "v${version}";
+    hash = "sha256-C1XcaPQp+T0scrCBsvqjJrmUR0N7mJOQC9Z2TxvtYc8=";
   };
 
   vendorHash = "sha256-f6Jl78ZPLD7Oq4Bq8MBQpHEKnBvpyTWZ9qHa1fGOlgA=";

@@ -8,7 +8,7 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
 
   pname = "gower";
   version = "0.1.2";
@@ -38,10 +38,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gower's distance calculation in Python";
     homepage = "https://github.com/wwwjk366/gower";
-    license = licenses.mit;
-    maintainers = with maintainers; [ b-rodrigues ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ b-rodrigues ];
   };
 }

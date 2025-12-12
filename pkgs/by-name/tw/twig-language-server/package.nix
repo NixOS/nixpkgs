@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kaermorchen";
     repo = "twig-language-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Jwi1+s2+TC656rXOukjLS4w1Y9VxwEdAe0y5Q3Iz0LA=";
   };
 

@@ -3,7 +3,7 @@
   lib,
   meson,
   ninja,
-  fetchurl,
+  fetchFromGitHub,
   cairo,
   girara,
   gtk-mac-integration,
@@ -18,17 +18,20 @@
   leptonica,
   mujs,
   desktop-file-utils,
+  appstream,
   appstream-glib,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.4.4";
+  version = "0.4.6";
   pname = "zathura-pdf-mupdf";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/zathura-pdf-mupdf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ASViSQHKvjov5jMVpG59lmoyPAKP9TiQ3694Vq2x9Pw=";
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura-pdf-mupdf";
+    tag = finalAttrs.version;
+    hash = "sha256-vg/ac62MPTWRbTPjbh+rKcFjVb5237wBEIVvTef6K5Q=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     desktop-file-utils
+    appstream
     appstream-glib
   ];
 
@@ -51,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     tesseract
     leptonica
     mujs
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
@@ -59,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/^mupdfthird =/d' -e 's/, mupdfthird//g' meson.build
   '';
 
-  passthru.updateScript = gitUpdater { url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git"; };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

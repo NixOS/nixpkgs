@@ -27,15 +27,17 @@ stdenv.mkDerivation {
       --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-int" ];
+
   preInstall = ''
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OPTical ARchiver - it's a codec for encoding data on paper";
     homepage = "http://ronja.twibright.com/optar/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux; # possibly others, but only tested on Linux
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = with lib.platforms; linux; # possibly others, but only tested on Linux
   };
 }

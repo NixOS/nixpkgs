@@ -11,7 +11,7 @@
   gettext,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "kvirc";
   version = "2022-06-29";
 
@@ -35,11 +35,11 @@ mkDerivation rec {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced IRC Client";
     homepage = "https://www.kvirc.net/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.suhr ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.suhr ];
+    platforms = lib.platforms.linux;
   };
 }

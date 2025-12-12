@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "games-team";
-    repo = pname;
+    repo = "xteddy";
     rev = "debian/${version}";
     sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xteddy --chdir "$out/share/images/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cuddly teddy bear for your X desktop";
     homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.xaverdh ];
+    platforms = lib.platforms.linux;
   };
 }

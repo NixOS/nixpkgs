@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -15,6 +14,7 @@
   glog,
   graphviz,
   gtest,
+  libapparmor,
   lomiri-api,
   pkg-config,
   python3,
@@ -28,63 +28,51 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.1.3";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
-    rev = finalAttrs.version;
-    hash = "sha256-LhhO/zZ4wNiRd235NB2b08SQcCZt1awN/flcsLs2m8U=";
+    tag = finalAttrs.version;
+    hash = "sha256-/rb1Fx0TbBuff2dWAgxpd72opTnLe0itcGwLJ53Wu9U=";
   };
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [ "doc" ];
-
-  patches = [
-    # This change seems incomplete, potentially breaks things on systems that don't use AppArmor mediation
-    # https://gitlab.com/ubports/development/core/lomiri-download-manager/-/merge_requests/24#note_1746801673
-    (fetchpatch {
-      name = "0001-lomiri-download-manager-Revert-Drop-GetConnectionAppArmorSecurityContext.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/2367f3dff852b69457b1a65a487cb032c210569f.patch";
-      revert = true;
-      hash = "sha256-xS0Wz6d+bZWj/kDGK2WhOduzyP4Rgz3n9n2XY1Zu5hE=";
-    })
-  ];
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   postPatch = ''
     # Substitute systemd's prefix in pkg-config call
     substituteInPlace CMakeLists.txt \
       --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-    # For our automatic pkg-config output patcher to work, prefix must be used here
-    substituteInPlace src/{common/public,downloads/client,downloads/common,uploads/common}/*.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}'
-    substituteInPlace src/downloads/client/lomiri-download-manager-client.pc.in \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+    # Upstream code is to work around a bug, but it only seems to cause config issues for us
+    substituteInPlace tests/common/CMakeLists.txt \
+      --replace-fail 'add_dependencies(''${TARGET} GMock)' '# add_dependencies(''${TARGET} GMock)'
   '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      validatePkgConfig
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      graphviz
-      qttools # qdoc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    validatePkgConfig
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
+    qttools # qdoc
+  ];
 
   buildInputs = [
     boost
     cmake-extras
     glog
+    libapparmor
     lomiri-api
     qtbase
     qtdeclarative
@@ -100,10 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
     (lib.cmakeBool "ENABLE_DOC" withDocumentation)
-    # Deprecation warnings on Qt 5.15
-    # https://gitlab.com/ubports/development/core/lomiri-download-manager/-/issues/1
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   makeTargets = [ "all" ] ++ lib.optionals withDocumentation [ "doc" ];
@@ -126,9 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Performs uploads and downloads from a centralized location";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-download-manager";
-    changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.lgpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "ldm-common"

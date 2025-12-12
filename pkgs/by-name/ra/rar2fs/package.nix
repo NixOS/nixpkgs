@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "hasse69";
-    repo = pname;
+    repo = "rar2fs";
     rev = "v${version}";
     sha256 = "sha256-iYlmNtaJZrnsNNNlaoV1Vu6PHrHIr/glhgs3784JCm4=";
   };
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     "--disable-static-unrar"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FUSE file system for reading RAR archives";
     homepage = "https://hasse69.github.io/rar2fs/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kraem
       wegank
     ];
-    platforms = with platforms; linux ++ freebsd;
+    platforms = with lib.platforms; linux ++ freebsd;
   };
 }

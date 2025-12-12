@@ -146,7 +146,7 @@ in
               };
 
               repos = lib.mkOption {
-                description = "cgit repository settings, see cgitrc(5)";
+                description = "cgit repository settings, see {manpage}`cgitrc(5)`";
                 type = with lib.types; attrsOf (attrsOf settingType);
                 default = { };
                 example = {
@@ -165,7 +165,7 @@ in
               };
 
               settings = lib.mkOption {
-                description = "cgit configuration, see cgitrc(5)";
+                description = "cgit configuration, see {manpage}`cgitrc(5)`";
                 type = lib.types.attrsOf repeatedSettingType;
                 default = { };
                 example = lib.literalExpression ''
@@ -256,9 +256,7 @@ in
             (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                extraConfig = ''
-                  alias ${cfg.package}/cgit/${fileName};
-                '';
+                alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
               }
             ))
             // {

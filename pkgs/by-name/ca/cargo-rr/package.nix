@@ -13,12 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
-    repo = pname;
+    repo = "cargo-rr";
     rev = "v${version}";
     sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
   };
 
-  cargoHash = "sha256-P4r4XRolORdSGAsNg5RutZ2VVRR8rAfiBZNm+vIH3aM=";
+  cargoHash = "sha256-s3KZFntAb/q4oreJLDQ2Pnz+Oj8Ik36vYR2InY0BIBw=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [ rr ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     mainProgram = "cargo-rr";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];

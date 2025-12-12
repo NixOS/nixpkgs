@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libp11";
-  version = "0.4.12";
+  version = "0.4.13";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
     rev = "${pname}-${version}";
-    sha256 = "sha256-Xqjl12xT30ZXWYzPWNN3jWY9pxojhd7Kq0OC7rABt4M=";
+    sha256 = "sha256-xH5Ic8HpWB5O2MWXf2A9FUiV10VZajDdPqEVF0Hs6u0=";
   };
 
   configureFlags = [
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openssl; };
 
-  meta = with lib; {
+  meta = {
     description = "Small layer on top of PKCS#11 API to make PKCS#11 implementations easier";
     homepage = "https://github.com/OpenSC/libp11";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
-  version = "5.8.2";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
+    sha256 = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     openssh
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \
                            "--with-mpi" \
@@ -41,11 +43,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Global Arrays Programming Models";
     homepage = "http://hpc.pnl.gov/globalarrays/";
-    maintainers = [ maintainers.markuskowa ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

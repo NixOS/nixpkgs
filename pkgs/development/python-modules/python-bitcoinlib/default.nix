@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petertodd";
     repo = "python-bitcoinlib";
-    rev = "refs/tags/python-bitcoinlib-v${version}";
+    tag = "python-bitcoinlib-v${version}";
     hash = "sha256-jfd2Buy6GSCH0ZeccRREC1NmlS6Mq1qtNv/NLNJOsX0=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
     "bitcoin.core.key"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
     changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ jb55 ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ jb55 ];
   };
 }

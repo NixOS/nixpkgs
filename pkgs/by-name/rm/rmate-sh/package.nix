@@ -4,6 +4,7 @@
   fetchFromGitHub,
   patsh,
   hostname,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +13,15 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "aurora";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "rmate";
+    tag = "v${version}";
     hash = "sha256-fmK6h9bqZ0zO3HWfZvPdYuZ6i/0HZ1CA3FUnkS+E9ns=";
   };
 
   nativeBuildInputs = [ patsh ];
+
+  # needed for cross
+  buildInputs = [ coreutils ];
 
   buildPhase = ''
     runHook preBuild
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
       --replace-fail \
         'echo "hostname"' \
         'echo "${hostname}/bin/hostname"'
-    patsh -f rmate -s ${builtins.storeDir}
+    patsh -f rmate -s ${builtins.storeDir} --path "$HOST_PATH"
 
     runHook postBuild
   '';
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Remote TextMate 2 implemented as shell script";
     longDescription = ''
       TextMate 2 has a nice feature where it is possible to edit
@@ -48,9 +52,9 @@ stdenv.mkDerivation rec {
       This is a rmate implementation in shell!
     '';
     homepage = "https://github.com/aurora/rmate";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pbsds ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "rmate";
   };
 }

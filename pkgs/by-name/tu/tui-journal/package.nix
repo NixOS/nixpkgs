@@ -1,26 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  zlib,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tui-journal";
-  version = "0.13.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
-    rev = "v${version}";
-    hash = "sha256-KPh+ree1XSOdURb+pM0sjJeq3NnNvPOQ+spK4g3RxGM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-crrh7lV5ZMKaxsrFmhXsUgBMbN5nmbf8wQ6croTqUKI=";
   };
 
-  cargoHash = "sha256-YiD2MtRMGdzPeKR082n9Kx3OBMFvtcqZOd+HRg7zA5o=";
+  cargoHash = "sha256-PmQDLGOXvI0OJ+gMsYa/XLc0WgSH6++23X/b1+iU3JQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,19 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-    openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
     description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
-    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${finalAttrs.src.rev}/CHANGELOG.ron";
+    license = lib.licenses.mit;
     mainProgram = "tjournal";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
-}
+})

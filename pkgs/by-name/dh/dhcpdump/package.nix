@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bbonev";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "dhcpdump";
+    tag = "v${version}";
     hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
   };
 
@@ -30,21 +30,21 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
 
     install -Dm555 dhcpdump "$out/bin/dhcpdump"
     installManPage dhcpdump.8
 
-    runHook postBuild
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
     homepage = "https://github.com/bbonev/dhcpdump";
     changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${version}";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
+    license = lib.licenses.bsd2;
     mainProgram = "dhcpdump";
   };
 }

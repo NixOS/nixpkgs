@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.60";
+  version = "3.63";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l7qlw3imOXY1nsNiFRB28Z6+uw+YGJGOO4GM7ryr1Q4=";
+    hash = "sha256-k9zkbkgw+rD/0JxQyxT5xdEgdDmY/y7zCw6wGo+2Xhg=";
   };
 
   nativeBuildInputs = [
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Extensible i3status wrapper";
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

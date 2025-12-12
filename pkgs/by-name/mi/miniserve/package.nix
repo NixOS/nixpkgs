@@ -2,36 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   installShellFiles,
+  openssl,
+  cacert,
   stdenv,
-  darwin,
   curl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.28.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
-    rev = "v${version}";
-    hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9x2LGJwPf6QEvHvGD8i9Bz3tV8DNAtd9Wp9tXsbI2qo=";
   };
 
-  cargoHash = "sha256-/BBue4YfpFk/tId2GV9sstEdgNuy3QnieINGnx45ydU=";
+  cargoHash = "sha256-JVzWmo+28K1kG4QaiAkGgBr8kkdfqoylJBWi+Fo9L6c=";
 
   nativeBuildInputs = [
+    pkg-config
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs = [ openssl ];
 
   nativeCheckInputs = [
     curl
+    cacert
   ];
 
   checkFlags = [
@@ -54,12 +57,20 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
-    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
+      defelo
+    ];
     mainProgram = "miniserve";
   };
-}
+})

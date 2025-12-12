@@ -5,10 +5,10 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
-  postgresql,
+  libpq,
   setuptools,
 
   # propagates
@@ -29,24 +29,25 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
+  postgresql,
   postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.2.3";
+  version = "3.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
+    repo = "psycopg";
+    tag = version;
+    hash = "sha256-ynzXQkTnCCkJK3EZrGHSpzgMeeX92U6+08m8QtNfAc4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
-      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./ctypes.patch {
+      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -60,8 +61,7 @@ let
 
   psycopg-c = buildPythonPackage {
     pname = "${pname}-c";
-    inherit version src;
-    format = "pyproject";
+    inherit version pyproject src;
 
     # apply patches to base repo
     inherit patches;
@@ -69,18 +69,25 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools ==" "setuptools >="
     '';
 
-    nativeBuildInputs = [
+    build-system = [
       cython
-      # needed to find pg_config with strictDeps
-      postgresql
       setuptools
+    ]
+    ++ lib.optional (pythonOlder "3.11") [
       tomli
     ];
 
+    nativeBuildInputs = [
+      libpq.pg_config
+    ];
+
     buildInputs = [
-      postgresql
+      libpq
     ];
 
     # tested in psycopg
@@ -93,8 +100,7 @@ let
 
   psycopg-pool = buildPythonPackage {
     pname = "${pname}-pool";
-    inherit version src;
-    format = "setuptools";
+    inherit version pyproject src;
 
     # apply patches to base repo
     inherit patches;
@@ -104,7 +110,9 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = [ typing-extensions ];
+    build-system = [ setuptools ];
+
+    dependencies = [ typing-extensions ];
 
     # tested in psycopg
     doCheck = false;
@@ -116,13 +124,17 @@ let
 in
 
 buildPythonPackage rec {
-  inherit pname version src;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  inherit
+    pname
+    version
+    pyproject
+    src
+    ;
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     "doc"
   ];
 
@@ -141,12 +153,15 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs = [
+  build-system = [ setuptools ];
+
+  # building the docs fails with the following error when cross compiling
+  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     furo
-    setuptools
-    shapely
     sphinx-autodoc-typehints
     sphinxHook
+    shapely
   ];
 
   propagatedBuildInputs = [
@@ -165,17 +180,16 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs =
-    [
-      anyio
-      pproxy
-      pytest-randomly
-      pytestCheckHook
-      postgresql
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
-    ++ optional-dependencies.c
-    ++ optional-dependencies.pool;
+  nativeCheckInputs = [
+    anyio
+    pproxy
+    pytest-randomly
+    pytestCheckHook
+    postgresql
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
+  ++ optional-dependencies.c
+  ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -183,18 +197,23 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck =
-    ''
-      cd ..
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-    '';
+  preCheck = ''
+    cd ..
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+  '';
 
   disabledTests = [
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
+    # expects timeout, but we have no route in the sandbox
+    "test_connect_error_multi_hosts_each_message_preserved"
+    # Flaky, fails intermittently
+    "test_break_attempts"
+    # ConnectionResetError: [Errno 104] Connection reset by peer
+    "test_wait_r"
   ];
 
   disabledTestPaths = [
@@ -204,22 +223,20 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
-    # https://github.com/psycopg/psycopg/pull/915
-    "tests/test_notify.py"
-    "tests/test_notify_async.py"
   ];
 
-  pytestFlagsArray = [
-    "-o cache_dir=.cache"
-    "-m"
-    "'not refcount and not timing and not flakey'"
-    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
-    "-W"
-    "ignore::pytest.PytestRemovedIn9Warning"
+  pytestFlags = [
+    "-ocache_dir=.cache"
+  ];
+
+  disabledTestMarks = [
+    "refcount"
+    "timing"
+    "flakey"
   ];
 
   postCheck = ''
-    cd ${pname}
+    cd psycopg
   '';
 
   passthru = {

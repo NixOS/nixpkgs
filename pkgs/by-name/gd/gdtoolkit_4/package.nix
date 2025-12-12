@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -10,12 +12,12 @@ let
     packageOverrides = self: super: {
       lark = super.lark.overridePythonAttrs (old: rec {
         # gdtoolkit needs exactly this lark version
-        version = "1.1.9";
+        version = "1.2.2";
         src = fetchFromGitHub {
           owner = "lark-parser";
           repo = "lark";
           rev = version;
-          hash = "sha256-vDu+VPAXONY8J+A6oS7EiMeOMgzGms0nWpE+DKI1MVU=";
+          hash = "sha256-Dc7wbMBY8CSeP4JE3hBk5m1lwzmCnNTkVoLdIukRw1Q=";
           fetchSubmodules = true;
         };
         patches = [ ];
@@ -25,13 +27,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.3.1";
+  version = "4.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
-    hash = "sha256-XK6s/WnbTzjCAtV8dbRPLe5olpKUglPLQdttRRMvX70=";
+    tag = version;
+    hash = "sha256-Jam7Txm+Fq5zEkJZMmbWW5Ok4ThsPyi6NIeawQot0RE=";
   };
 
   disabled = python.pythonOlder "3.7";
@@ -40,41 +43,41 @@ python.pkgs.buildPythonApplication rec {
     docopt
     lark
     pyyaml
+    radon
     setuptools
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-    # The tests want to run the installed executables
-    export PATH=$out/bin:$PATH
-
-    # gdtoolkit tries to write cache variables to $HOME/.cache
-    export HOME=$TMP
-  '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   # The tests are not working on NixOS
   disabledTestPaths = [
     "tests/generated/test_expression_parsing.py"
-    "tests/gdradon/test_executable.py"
   ];
 
   pythonImportsCheck = [
     "gdtoolkit"
     "gdtoolkit.formatter"
+    "gdtoolkit.gd2py"
+    "gdtoolkit.gdradon"
     "gdtoolkit.linter"
     "gdtoolkit.parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ squarepear ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ squarepear ];
   };
 }

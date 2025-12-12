@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, replaceVars
-, vpnc
-, pkg-config
-, networkmanager
-, libsecret
-, gtk3
-, gtk4
-, withGnome ? true
-, gnome
-, glib
-, kmod
-, file
-, libnma
-, libnma-gtk4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  vpnc,
+  pkg-config,
+  networkmanager,
+  libsecret,
+  gtk3,
+  gtk4,
+  withGnome ? true,
+  gnome,
+  glib,
+  kmod,
+  file,
+  libnma,
+  libnma-gtk4,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,13 +36,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     file
+    glib
   ];
 
   buildInputs = [
     vpnc
     networkmanager
-    glib
-  ] ++ lib.optionals withGnome [
+  ]
+  ++ lib.optionals withGnome [
     gtk3
     gtk4
     libsecret
@@ -50,10 +52,12 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--enable-absolute-paths"
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -64,9 +68,9 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's VPNC plugin";
-    inherit (networkmanager.meta) maintainers platforms;
-    license = licenses.gpl2Plus;
+    inherit (networkmanager.meta) maintainers teams platforms;
+    license = lib.licenses.gpl2Plus;
   };
 }

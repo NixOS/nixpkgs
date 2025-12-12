@@ -7,50 +7,59 @@
 }:
 let
   pname = "immersed";
-  version = "10.5.0";
+  version = "10.9.0";
 
-  sources = rec {
+  sources = lib.mapAttrs (_: fetchurl) rec {
     x86_64-linux = {
-      url = "https://web.archive.org/web/20240909144905if_/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
-      hash = "sha256-/fc/URYJZftZPyVicmZjyvcGPLaHrnlsrERlQFN5E98=";
+      url = "https://web.archive.org/web/20250725134919if_/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
+      hash = "sha256-plGcvZRpV+nhQ4FoYiIuLmyOg/SHJ8ZjT4Fh6UyH9W0=";
+    };
+    aarch64-linux = {
+      url = "https://web.archive.org/web/20250725135029if_/https://static.immersed.com/dl/Immersed-aarch64.AppImage";
+      hash = "sha256-3BokV30y6QRjE94K7JQ6iIuQw1t+h3BKZY+nEFGTVHI=";
     };
     x86_64-darwin = {
-      url = "https://web.archive.org/web/20240910022037if_/https://static.immersed.com/dl/Immersed.dmg";
-      hash = "sha256-UkfB151bX0D5k0IBZczh36TWOOYJbBe5e6LIErON214=";
+      url = "https://web.archive.org/web/20250725135025if_/https://static.immersed.com/dl/Immersed.dmg";
+      hash = "sha256-lmSkatB75Bztm19aCC50qrd/NV+HQX9nBMOTxIguaqI=";
     };
     aarch64-darwin = x86_64-darwin;
   };
 
-  src = fetchurl (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"));
+  src = sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = with lib; {
+  meta = {
     description = "VR coworking platform";
     homepage = "https://immersed.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
-      haruki7049
-      pandapip1
-    ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ pandapip1 ];
     platforms = builtins.attrNames sources;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
 in
-if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-  }
-else
-  callPackage ./linux.nix {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-  }
+
+(
+  if stdenv.hostPlatform.isDarwin then
+    callPackage ./darwin.nix {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+    }
+  else
+    callPackage ./linux.nix {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+    }
+)
+// {
+  passthru = {
+    inherit sources;
+  };
+}

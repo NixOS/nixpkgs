@@ -3,8 +3,8 @@
 callPackage ./generic.nix (
   args
   // {
-    version = "8.0.35-31";
-    hash = "sha256-KHfgSi9bQlqsi5aDRBlSpdZgMfOrAwHK51k8KhQ9Udg=";
+    version = "8.0.35-34";
+    hash = "sha256-DqjDBLSQqlWazWJjdb+n7RwqSe/OMlZI2ca/JNTX2W8=";
 
     # includes https://github.com/Percona-Lab/libkmip.git
     fetchSubmodules = true;
@@ -12,9 +12,5 @@ callPackage ./generic.nix (
     extraPatches = [
       ./abi-check.patch
     ];
-
-    extraPostInstall = ''
-      rm -r "$out"/docs
-    '';
   }
 )

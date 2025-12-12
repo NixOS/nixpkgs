@@ -23,13 +23,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_loggers" ];
 
-  # skipping the checks, becaus it requires a cycle dependency to spacy as well.
+  # skipping the checks, because it requires a cycle dependency to spacy as well.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Logging utilities for spaCy";
     homepage = "https://github.com/explosion/spacy-loggers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ stunkymonkey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ stunkymonkey ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   autoreconfHook,
   pkg-config,
   fetchurl,
@@ -34,9 +34,10 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   patches = [
-    (substituteAll {
-      src = ./fix-cli-paths.patch;
+    (replaceVars ./fix-cli-paths.patch {
       inherit dropboxd;
+      # patch context
+      DESKTOP_FILE_DIR = null;
     })
   ];
 
@@ -74,7 +75,7 @@ stdenv.mkDerivation {
     description = "Command line client for the dropbox daemon";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dropbox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = lib.platforms.linux;
   };

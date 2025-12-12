@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromSourcehut {
     owner = "~onemoresuza";
     repo = "aba";
-    rev = version;
+    tag = version;
     hash = "sha256-2zVQNchL4DFh2v2/kwupJTBSmXiKqlxzUMrP9TbfCMs=";
   };
 
-  cargoHash = "sha256-YhSzbfcEIJjKWlyYq1lK70qt4f/Z71n7hgaaZ/D/U80=";
+  cargoHash = "sha256-U1f68DY+yV6Uxwk1Re0eSNCFWYrYKCN08hJAYcp4ksE=";
 
   nativeBuildInputs = [
     just
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
 
   preBuild = ''
     justFlagsArray+=(
-      PREFIX=${builtins.placeholder "out"}
+      PREFIX=${placeholder "out"}
       MANIFEST_OPTS="--frozen --locked --profile=release"
       INSTALL_OPTS="--no-track"
     )

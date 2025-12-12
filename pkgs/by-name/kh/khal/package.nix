@@ -2,46 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   glibcLocales,
   installShellFiles,
-  python3,
+  python3Packages,
+  sphinxHook,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      # https://github.com/pimutils/khal/issues/1361
-      icalendar = super.icalendar.overridePythonAttrs (old: rec {
-        version = "5.0.13";
-        src = fetchFromGitHub {
-          owner = "collective";
-          repo = "icalendar";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
-        };
-        patches = [ ];
-        build-system = with self; [ setuptools ];
-        dependencies = with self; [
-          python-dateutil
-          pytz
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.3";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
+    tag = "v${version}";
+    hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
   };
 
-  build-system = with python.pkgs; [
+  patches = [
+    # https://github.com/pimutils/khal/pull/1418/
+    (fetchpatch {
+      name = "fix_calendar_popup";
+      url = "https://github.com/pimutils/khal/commit/3fadf020bb65c9c95bba46b5d3695c2565cceacd.patch";
+      hash = "sha256-KhqP0RLLOXm1d/4rCVAb5f7v0q7N0/U2iM23+TcnJhY=";
+    })
+  ];
+
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
@@ -49,10 +38,12 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
+    sphinxHook
+    python3Packages.sphinx-rtd-theme
+    python3Packages.sphinxcontrib-newsfeed
   ];
 
-  dependencies = with python.pkgs; [
-    atomicwrites
+  dependencies = with python3Packages; [
     click
     click-log
     configobj
@@ -69,12 +60,22 @@ python.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     hypothesis
     packaging
     pytestCheckHook
     vdirsyncer
+  ];
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+  sphinxBuilders = [
+    "html"
+    "man"
   ];
 
   postInstall = ''
@@ -83,18 +84,6 @@ python.pkgs.buildPythonApplication rec {
       --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
       --zsh <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
-
-    # man page
-    PATH="${
-      python3.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinxcontrib-newsfeed
-        ]
-      )
-    }/bin:$PATH" \
-      make -C doc man
-    installManPage doc/build/man/khal.1
 
     # .desktop file
     install -Dm755 misc/khal.desktop -t $out/share/applications
@@ -111,11 +100,11 @@ python.pkgs.buildPythonApplication rec {
     "test_event_no_dst"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI calendar application";
-    homepage = "http://lostpackets.de/khal/";
+    homepage = "https://lostpackets.de/khal/";
     changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ antonmosich ];
   };
 }

@@ -12,6 +12,7 @@
   release,
   version,
   src,
+  extraPatch ? "",
   ...
 }:
 
@@ -33,7 +34,8 @@ let
         --replace "/usr/share/lib/zoneinfo" "" \
         --replace "/usr/lib/zoneinfo" "" \
         --replace "/usr/local/etc/zoneinfo" ""
-    '';
+    ''
+    + extraPatch;
 
     nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       # Only used to detect the presence of zlib. Could be replaced with a stub.
@@ -62,6 +64,10 @@ let
         # Don't install tzdata because NixOS already has a more up-to-date copy.
         "--with-tzdata=no"
       ]
+      ++ lib.optionals (lib.versionOlder version "8.6") [
+        # configure check broke due to GCC 14
+        "ac_cv_header_stdc=yes"
+      ]
       ++ lib.optionals (lib.versionAtLeast version "9.0") [
         # By default, tcl libraries get zipped and embedded into libtcl*.so,
         # which gets `zipfs mount`ed at runtime. This is fragile (for example
@@ -73,7 +79,14 @@ let
         "--disable-zipfs"
       ]
       ++ [
+        # During cross compilation, the tcl build system assumes that libc
+        # functions are broken if it cannot test if they are broken or not and
+        # then causes a link error on static platforms due to symbol conflict.
+        # These functions are *checks notes* strtoul and strstr. These are
+        # never broken on modern platforms!
         "tcl_cv_strtod_unbroken=ok"
+        "tcl_cv_strtoul_unbroken=ok"
+        "tcl_cv_strstr_unbroken=ok"
       ]
       ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
@@ -82,19 +95,25 @@ let
     postInstall =
       let
         dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+        staticExtension = stdenv.hostPlatform.extensions.staticLibrary;
       in
       ''
         make install-private-headers
         ln -s $out/bin/tclsh${release} $out/bin/tclsh
-        ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
+          ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
+        fi
+        ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+          ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        ''}
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Tcl scripting language";
       homepage = "https://www.tcl.tk/";
-      license = licenses.tcltk;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ agbrooks ];
+      license = lib.licenses.tcltk;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ agbrooks ];
     };
 
     passthru = rec {

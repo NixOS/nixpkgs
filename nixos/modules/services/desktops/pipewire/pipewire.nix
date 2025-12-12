@@ -58,15 +58,12 @@ let
 
   configPackages = cfg.configPackages;
 
-  extraConfigPkg =
-    extraConfigPkgFromFiles [ "pipewire" "client" "client-rt" "jack" "pipewire-pulse" ]
-      (
-        mapToFiles "pipewire" cfg.extraConfig.pipewire
-        // mapToFiles "client" cfg.extraConfig.client
-        // mapToFiles "client-rt" cfg.extraConfig.client-rt
-        // mapToFiles "jack" cfg.extraConfig.jack
-        // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
-      );
+  extraConfigPkg = extraConfigPkgFromFiles [ "pipewire" "client" "jack" "pipewire-pulse" ] (
+    mapToFiles "pipewire" cfg.extraConfig.pipewire
+    // mapToFiles "client" cfg.extraConfig.client
+    // mapToFiles "jack" cfg.extraConfig.jack
+    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
+  );
 
   configs = pkgs.buildEnv {
     name = "pipewire-configs";
@@ -205,27 +202,6 @@ in
             [wiki]: https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Config-client
           '';
         };
-        client-rt = mkOption {
-          type = attrsOf json.type;
-          default = { };
-          example = {
-            "10-alsa-linear-volume" = {
-              "alsa.properties" = {
-                "alsa.volume-method" = "linear";
-              };
-            };
-          };
-          description = ''
-            Additional configuration for the PipeWire client library, used by real-time applications and legacy ALSA clients.
-
-            Every item in this attrset becomes a separate drop-in file in `/etc/pipewire/client-rt.conf.d`.
-
-            See the [PipeWire wiki][wiki] for examples of general configuration, and [PipeWire wiki - ALSA][wiki-alsa] for ALSA clients.
-
-            [wiki]: https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Config-client
-            [wiki-alsa]: https://gitlab.freedesktop.org/pipewire/pipewire/-/wikis/Config-ALSA
-          '';
-        };
         jack = mkOption {
           type = attrsOf json.type;
           default = { };
@@ -341,14 +317,18 @@ in
       pipewire-media-session is no longer supported upstream and has been removed.
       Please switch to `services.pipewire.wireplumber` instead.
     '')
+    (mkRemovedOptionModule [ "services" "pipewire" "extraConfig" "client-rt" ] ''
+      `services.pipewire.extraConfig.client-rt` is no longer applicable, as `client-rt.conf` has been
+      removed upstream. Please move your customizations to `services.pipewire.extraConfig.client`.
+    '')
   ];
 
   ###### implementation
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.audio.enable -> !config.hardware.pulseaudio.enable;
-        message = "Using PipeWire as the sound server conflicts with PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
+        assertion = cfg.audio.enable -> !config.services.pulseaudio.enable;
+        message = "Using PipeWire as the sound server conflicts with PulseAudio. This option requires `services.pulseaudio.enable` to be set to false";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
@@ -379,8 +359,7 @@ in
     systemd.services.pipewire.bindsTo = [ "dbus.service" ];
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
 
-    # Enable either system or user units.  Note that for pipewire-pulse there
-    # are only user units, which work in both cases.
+    # Enable either system or user units.
     systemd.sockets.pipewire.enable = cfg.systemWide;
     systemd.services.pipewire.enable = cfg.systemWide;
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
@@ -390,12 +369,18 @@ in
     systemd.user.services.pipewire.environment.LV2_PATH = mkIf (
       !cfg.systemWide
     ) "${lv2Plugins}/lib/lv2";
+    systemd.user.services.filter-chain.environment.LV2_PATH = mkIf (
+      !cfg.systemWide
+    ) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
-    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
-    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable;
+    systemd.services.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;
+    systemd.sockets.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;
+    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable && !cfg.systemWide;
+    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable && !cfg.systemWide;
 
     systemd.sockets.pipewire.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
+    systemd.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = mkIf cfg.socketActivation [ "sockets.target" ];
 
@@ -462,7 +447,8 @@ in
         extraGroups = [
           "audio"
           "video"
-        ] ++ optional config.security.rtkit.enable "rtkit";
+        ]
+        ++ optional config.security.rtkit.enable "rtkit";
         description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";

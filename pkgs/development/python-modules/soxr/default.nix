@@ -1,11 +1,8 @@
 {
   lib,
-  apple-sdk_11,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
   pythonOlder,
-  stdenv,
 
   # build-system
   cmake,
@@ -28,15 +25,14 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.5.0.post1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
-    rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
+    tag = "v${version}";
+    hash = "sha256-8NVQD1LamIRe77bKEs8YqHXeXifdMJpQUedmeiBRHSI=";
   };
 
   patches = [ ./cmake-nanobind.patch ];
@@ -48,28 +44,21 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  pypaBuildFlags = [
-    "--config=cmake.define.USE_SYSTEM_LIBSOXR=ON"
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_LIBSOXR" true)
   ];
 
-  build-system =
-    [
-      scikit-build-core
-      nanobind
-      setuptools
-      setuptools-scm
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      typing-extensions
-    ];
+  build-system = [
+    scikit-build-core
+    nanobind
+    setuptools
+    setuptools-scm
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
-  buildInputs =
-    [ libsoxr ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
-      (darwinMinVersionHook "10.13")
-      apple-sdk_11
-    ];
+  buildInputs = [ libsoxr ];
 
   dependencies = [ numpy ];
 
@@ -77,10 +66,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

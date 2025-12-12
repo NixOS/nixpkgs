@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "termbench-pro";
-  version = "unstable-2024-10-05";
+  version = "unstable-2025-01-01";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "termbench-pro";
-    rev = "22a0c42f78dc2e522eb1089bf9976a9ff0ecdcad";
-    hash = "sha256-Yyvlu/yx/yGc9Ci9Pn098YfTdywLZEaowQZeLM4WGjQ";
+    rev = "3a39a4ad592047dee3038d8bfcce84215ac55032";
+    hash = "sha256-EvTHBPWLGm2FxEVOwMIXH4UW/15rbXPnxEnjMtSg4YM=";
   };
 
   # don't fetch glaze from CMakeLists.txt
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     fmt
-    glaze
+    (glaze.override { enableSSL = false; })
   ];
 
   installPhase = ''
@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Benchmarking as CLI and library";
     mainProgram = "tb";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

@@ -6,13 +6,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "beluga";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "Beluga-lang";
     repo = "Beluga";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QUZ3mmd0gBQ+hnAeo/TbvFsETnThAdAoQyfpz2F//4g=";
+    tag = "v${version}";
+    hash = "sha256-bMaLjHq/3ZrST5E9lBSIX0T2cAhDin+lv1XwgUF4/7w=";
   };
 
   duneVersion = "3";
@@ -36,12 +36,12 @@ ocamlPackages.buildDunePackage rec {
     cp -r tools/beluga-mode.el $out/share/emacs/site-lisp/beluga
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Functional language for reasoning about formal systems";
     homepage = "https://complogic.cs.mcgill.ca/beluga";
     changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bcdarwin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    platforms = lib.platforms.unix;
   };
 }

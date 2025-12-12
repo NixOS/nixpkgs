@@ -11,7 +11,6 @@
   udev,
   xorg,
   libgbm,
-  darwin,
   coreutils,
 }:
 
@@ -43,57 +42,50 @@ stdenv.mkDerivation {
 
   unpackCmd = "cp -r $curSrc \${curSrc##*-}";
 
-  postPatch =
-    ''
-      substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
-        --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
-    ''
-    # prevent looking for native libraries in /usr/lib
-    + ''
-      substituteInPlace jogl/make/build-*.xml \
-        --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
-    ''
-    # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
-    # if arm/aarch64 support will be added, this block might be commented out on those platforms
-    # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
-    + ''
-      xmlstarlet ed --inplace \
-        --delete '//*[@if="setup.addNativeBroadcom"]' \
-        jogl/make/build-newt.xml
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
-      rm -r jogl/oculusvr-sdk
-    '';
+  postPatch = ''
+    substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
+      --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
+  ''
+  # prevent looking for native libraries in /usr/lib
+  + ''
+    substituteInPlace jogl/make/build-*.xml \
+      --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
+  ''
+  # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+  # if arm/aarch64 support will be added, this block might be commented out on those platforms
+  # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
+  + ''
+    xmlstarlet ed --inplace \
+      --delete '//*[@if="setup.addNativeBroadcom"]' \
+      jogl/make/build-newt.xml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
+    rm -r jogl/oculusvr-sdk
+  '';
 
-  nativeBuildInputs =
-    [
-      ant
-      jdk11
-      git
-      xmlstarlet
-      stripJavaArchivesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    ant
+    jdk11
+    git
+    xmlstarlet
+    stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXt
-      xorg.libXxf86vm
-      xorg.libXrender
-      libgbm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.AppKit
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXt
+    xorg.libXxf86vm
+    xorg.libXrender
+    libgbm
+  ];
 
   env = {
     SOURCE_LEVEL = "1.8";
@@ -126,11 +118,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java libraries for 3D Graphics, Multimedia and Processing";
     homepage = "https://jogamp.org/";
     changelog = "https://jogamp.org/deployment/jogamp-current/archive/ChangeLogs/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

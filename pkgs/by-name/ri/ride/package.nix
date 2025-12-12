@@ -12,34 +12,29 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
   pname = "ride";
-  version = "4.5.4097";
+  version = "4.6.4265";
 
   src = fetchFromGitHub {
     owner = "Dyalog";
     repo = "ride";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
+    tag = "v${version}";
+    hash = "sha256-11wlKK0z3/KRKMKNrDvZLvK7vV0UzrMTaG0ei9n6VEk=";
   };
 
-  npmDepsHash = "sha256-h+48/9h7/cD8woyA0UCLtzKuE9jCrfpDk6IeoDWnYik=";
+  npmDepsHash = "sha256-1+RjSr5FSaQFqkL/yzlAQhm56NVG2kjzZC/DsEi3HJE=";
 
   patches = [
-    # Adds support for electron versions >=28
-    (fetchpatch {
-      name = "bump-electron-version.patch";
-      url = "https://github.com/Dyalog/ride/commit/de42ebbd5036cfe0c7e6604296e87cc57ac9d365.patch";
-      hash = "sha256-5iKSNcxOOo2fKNvy3Rv+AlH3psYhLWLWUY0l8M6mAD4=";
-    })
-
     # Fix info in the "about" page, enable asar, add option to build for the detected system
     (replaceVars ./mk.patch {
       inherit version;
     })
+
+    # would not build with nodejs_22 and above without this
+    ./update-nan.patch
   ];
 
   postPatch = ''
@@ -68,9 +63,8 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     zip
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -89,7 +83,7 @@ buildNpmPackage rec {
     rm -r electron-dist
 
     # force electron-packager to use our electron instead of downloading it, even if it is a different version
-    substituteInPlace node_modules/electron-packager/src/index.js \
+    substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
   '';
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JulienPalard";
     repo = "Pipe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/xMhh70g2KPOOivTjpAuyfu+Z44tBE5zAwpSIEKhK6M=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
     "test_netcat"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to use infix notation";
     homepage = "https://github.com/JulienPalard/Pipe";
     changelog = "https://github.com/JulienPalard/Pipe/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

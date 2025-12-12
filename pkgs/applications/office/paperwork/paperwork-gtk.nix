@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   python3Packages,
   gtk3,
   cairo,
@@ -9,7 +10,6 @@
   dbus,
   libnotify,
   wrapGAppsHook3,
-  fetchFromGitLab,
   which,
   gettext,
   gobject-introspection,
@@ -32,7 +32,7 @@ let
     imagemagick
     perlPackages.Po4a
   ];
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
+  inherit (callPackage ./src.nix { }) version src sample_documents;
 in
 
 python3Packages.buildPythonApplication rec {
@@ -92,7 +92,8 @@ python3Packages.buildPythonApplication rec {
     (lib.getBin gettext)
     which
     gdk-pixbuf # for the setup hook
-  ] ++ documentation_deps;
+  ]
+  ++ documentation_deps;
 
   buildInputs = [
     adwaita-icon-theme

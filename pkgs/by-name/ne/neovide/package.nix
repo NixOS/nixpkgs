@@ -13,7 +13,6 @@
   pkg-config,
   python3,
   removeReferencesTo,
-  apple-sdk_11,
   cctools,
   SDL2,
   fontconfig,
@@ -25,18 +24,18 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.13.3";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
-    rev = version;
-    hash = "sha256-u10JxMvXC/FIobeolWJElBZuCiJ3xIUg4F0vLom7/S0=";
+    tag = finalAttrs.version;
+    hash = "sha256-NJ4BuJLABIuB7We11QGoKZ3fgjDBdZDyZuBKq6LIWA8=";
   };
 
-  cargoHash = "sha256-j8++watC7RBc1zn8m7Jg0Zl/iKXSrld+q62GiaLxGCo=";
+  cargoHash = "sha256-DD2c63JHMdzwD1OmC7c9dMB59qjvdAYZ9drQf3f8xCs=";
 
   SKIA_SOURCE_DIR =
     let
@@ -44,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m126-0.74.2";
-        hash = "sha256-4l6ekAJy+pG27hBGT6A6LLRwbsyKinJf6PP6mMHwaAs=";
+        tag = "m140-0.87.4";
+        hash = "sha256-pHxqTrqguZcPmuZgv0ASbJ3dgn8JAyHI7+PdBX5gAZQ=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (
@@ -64,16 +63,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -81,7 +79,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ];
 
   postFixup =
     let
@@ -89,6 +87,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         [
           libglvnd
           libxkbcommon
+          xorg.libX11
           xorg.libXcursor
           xorg.libXext
           xorg.libXrandr
@@ -121,15 +120,17 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
 
-  meta = with lib; {
-    description = "This is a simple graphical user interface for Neovim";
+  meta = {
+    description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
-    homepage = "https://github.com/neovide/neovide";
-    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.unix;
+    homepage = "https://neovide.dev/";
+    changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ck3d
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

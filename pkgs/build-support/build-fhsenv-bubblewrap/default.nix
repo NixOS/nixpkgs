@@ -12,9 +12,13 @@
 }:
 
 {
+  pname ? throw "You must provide either `name` or `pname`",
+  version ? throw "You must provide either `name` or `version`",
+  name ? "${pname}-${version}",
   runScript ? "bash",
   nativeBuildInputs ? [ ],
   extraInstallCommands ? "",
+  executableName ? args.pname or name,
   meta ? { },
   passthru ? { },
   extraPreBwrapCmds ? "",
@@ -26,11 +30,17 @@
   unshareUts ? false,
   unshareCgroup ? false,
   privateTmp ? false,
+  chdirToPwd ? true,
   dieWithParent ? true,
   ...
 }@args:
 
-assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
+# NOTE:
+# `pname` and `version` will throw if they were not provided.
+# Use `name` instead of directly evaluating `pname` or `version`.
+#
+# If you need `pname` or `version` specifically, use `args` instead:
+# e.g. `args.pname or ...`.
 
 let
   inherit (lib)
@@ -48,8 +58,6 @@ let
   # explicit about which package set it's coming from.
   inherit (pkgsHostTarget) pkgsi686Linux;
 
-  name = args.name or "${args.pname}-${args.version}";
-  executableName = args.pname or args.name;
   # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
   nameAttrs = lib.filterAttrs (
     key: value:
@@ -86,7 +94,7 @@ let
       files = [
         # NixOS Compatibility
         "static"
-        "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+        "nix" # mainly for nixVersions.git users, but also for access to nix/netrc
         # Shells
         "shells"
         "bashrc"
@@ -124,6 +132,8 @@ let
         "ssl/certs"
         "ca-certificates"
         "pki"
+        # Custom dconf profiles
+        "dconf"
       ];
     in
     map (path: "/etc/${path}") files;
@@ -270,7 +280,7 @@ let
         ${bubblewrap}/bin/bwrap
         --dev-bind /dev /dev
         --proc /proc
-        --chdir "$(pwd)"
+        ${optionalString chdirToPwd ''--chdir "$(pwd)"''}
         ${optionalString unshareUser "--unshare-user"}
         ${optionalString unshareIpc "--unshare-ipc"}
         ${optionalString unsharePid "--unshare-pid"}
@@ -278,7 +288,7 @@ let
         ${optionalString unshareUts "--unshare-uts"}
         ${optionalString unshareCgroup "--unshare-cgroup"}
         ${optionalString dieWithParent "--die-with-parent"}
-        --ro-bind /nix /nix
+        --bind /nix /nix
         ${optionalString privateTmp "--tmpfs /tmp"}
         # Our glibc will look for the cache in its own path in `/nix/store`.
         # As such, we need a cache to exist there, because pressure-vessel
@@ -340,7 +350,8 @@ runCommandLocal name
 
       meta = {
         mainProgram = executableName;
-      } // meta;
+      }
+      // meta;
     }
   )
   ''

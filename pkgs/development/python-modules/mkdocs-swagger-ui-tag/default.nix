@@ -1,35 +1,37 @@
 {
-  lib,
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  lib,
   mkdocs,
-  pathspec,
+  playwright,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.6.11";
-  format = "setuptools";
+  version = "0.7.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-swagger-ui-tag";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hxf7onjH26QsdB19r71NSC/67u+pEYdJo3e4OvWGgtI=";
+    tag = "v${version}";
+    hash = "sha256-5bQJMmPrweIAR42bjfWHUqnSy4IFoTpFoBaV+Gj/OGI=";
   };
 
   propagatedBuildInputs = [
-    mkdocs
     beautifulsoup4
+    hatchling
+    mkdocs
   ];
 
   nativeCheckInputs = [
-    pathspec
+    playwright
     pytestCheckHook
   ];
 
@@ -40,13 +42,15 @@ buildPythonPackage rec {
     "test_material"
     "test_material_dark_scheme_name"
     "test_template"
+    "test_mkdocs_screenshot"
+    "test_no_console_errors"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin supports for add Swagger UI in page";
     homepage = "https://github.com/Blueswen/mkdocs-swagger-ui-tag";
-    changelog = "https://github.com/blueswen/mkdocs-swagger-ui-tag/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snpschaaf ];
+    changelog = "https://github.com/blueswen/mkdocs-swagger-ui-tag/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ snpschaaf ];
   };
 }

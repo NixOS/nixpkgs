@@ -5,17 +5,19 @@
   eio_main,
   logs,
   mdx,
-  mirage-crypto-rng-eio,
+  mirage-crypto-rng,
   ptime,
   tls,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "tls-eio";
 
   inherit (tls) src meta version;
 
   minimalOCamlVersion = "5.0";
+
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
   nativeCheckInputs = [
@@ -30,7 +32,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ptime
     eio
-    mirage-crypto-rng-eio
+    mirage-crypto-rng
     tls
   ];
 }

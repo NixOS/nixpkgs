@@ -19,7 +19,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "icecc";
-    repo = pname;
+    repo = "icemon";
     rev = "v${version}";
     sha256 = "09jnipr67dhawbxfn69yh7mmjrkylgiqmd0gmc2limd3z15d7pgc";
   };
@@ -38,12 +38,12 @@ mkDerivation rec {
     libarchive
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Icecream GUI Monitor";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "icemon";
   };
 }

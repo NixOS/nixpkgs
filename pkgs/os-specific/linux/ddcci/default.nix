@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   kernel,
+  kernelModuleMakeFlags,
   fetchpatch,
 }:
 
@@ -39,19 +40,19 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.modDirVersion}"
     "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
     "INCLUDEDIR=$(out)/include"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kiike ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kiike ];
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Dougal-s";
     repo = "aether";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xhih4smjxn87s0f4gaab51d8594qlp0lyypzxl5lm37j1i9zigs";
     fetchSubmodules = true;
   };
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     cp -r aether.lv2 $out/lib/lv2
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dougal-s.github.io/Aether/";
     description = "Algorithmic reverb LV2 based on Cloudseed";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

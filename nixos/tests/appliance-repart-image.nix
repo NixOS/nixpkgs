@@ -65,12 +65,20 @@ in
             repartConfig = {
               Type = "esp";
               Format = "vfat";
-              # Minimize = "guess" seems to not work very vell for vfat
-              # partitons. It's better to set a sensible default instead. The
+              # Minimize = "guess" seems to not work very well for vfat
+              # partitions. It's better to set a sensible default instead. The
               # aarch64 kernel seems to generally be a little bigger than the
               # x86_64 kernel. To stay on the safe side, leave some more slack
               # for every platform other than x86_64.
               SizeMinBytes = if config.nixpkgs.hostPlatform.isx86_64 then "64M" else "96M";
+            };
+          };
+          "swap" = {
+            repartConfig = {
+              Type = "swap";
+              Format = "swap";
+              SizeMinBytes = "10M";
+              SizeMaxBytes = "10M";
             };
           };
           "root" = {
@@ -110,11 +118,14 @@ in
       # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
       os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
-      os_release = machine.succeed("cat /etc/os-release")
-      assert 'IMAGE_ID="${imageId}"' in os_release
-      assert 'IMAGE_VERSION="${imageVersion}"' in os_release
+      with subtest("/etc/os-release contains the right fileds"):
+        os_release = machine.succeed("cat /etc/os-release")
+        t.assertIn('IMAGE_ID="${imageId}"', os_release)
+        t.assertIn('IMAGE_VERSION="${imageVersion}"', os_release)
 
-      bootctl_status = machine.succeed("bootctl status")
-      assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
+      with subtest("Bootctl reports the right boot loader type"):
+        bootctl_status = machine.succeed("bootctl status")
+        print(bootctl_status)
+        t.assertIn("Boot Loader Specification Type #2", bootctl_status)
     '';
 }

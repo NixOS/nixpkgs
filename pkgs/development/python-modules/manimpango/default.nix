@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pkg-config,
   setuptools,
   pango,
   cython,
-  AppKit,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -15,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,13 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manimpango";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nN+XOnki8fG7URMy2Fhs2X+yNi8Y7wDo53d61xaRa3w=";
+    tag = "v${version}";
+    hash = "sha256-8eQmhVsW440/zxOwjngnPTGT7iFbdSvBV7tnI332piE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.2,<3.1" Cython
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = [ pango ];
 
   build-system = [
     setuptools
@@ -47,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manimpango" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binding for Pango";
     homepage = "https://github.com/ManimCommunity/ManimPango";
     changelog = "https://github.com/ManimCommunity/ManimPango/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

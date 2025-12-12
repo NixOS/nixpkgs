@@ -74,17 +74,53 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
+  awesome-wm-widgets = callPackage (
+    {
+      stdenv,
+      fetchFromGitHub,
+      lua,
+      lib,
+    }:
+
+    stdenv.mkDerivation {
+      pname = "awesome-wm-widgets";
+      version = "0-unstable-2024-02-15";
+
+      src = fetchFromGitHub {
+        owner = "streetturtle";
+        repo = "awesome-wm-widgets";
+        rev = "2a27e625056c50b40b1519eed623da253d36cc27";
+        hash = "sha256-qz/kUIpuhWwTLbwbaES32wGKe4D2hfz90dnq+mrHrj0=";
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        target=$out/lib/lua/${lua.luaversion}/awesome-wm-widgets
+        mkdir -p $target
+        cp -r $src/* $target
+
+        runHook postInstall
+      '';
+
+      meta = {
+        description = "Widgets for Awesome window manager";
+        homepage = "https://github.com/streetturtle/awesome-wm-widgets";
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ averdow ];
+      };
+    }
+  ) { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
       linux-pam,
       openpam,
     }:
-    buildLuaPackage rec {
+    buildLuaPackage {
       pname = "lua-pam";
       version = "unstable-2015-07-03";
-      # Needed for `disabled`, overridden in buildLuaPackage
-      name = "${pname}-${version}";
 
       src = fetchFromGitHub {
         owner = "devurandom";
@@ -109,14 +145,13 @@ rec {
         runHook postInstall
       '';
 
-      # The package does not build with lua 5.4 or luaJIT
-      disabled = luaAtLeast "5.4" || isLuaJIT;
-
-      meta = with lib; {
+      meta = {
+        # The package does not build with lua 5.4 or luaJIT
+        broken = luaAtLeast "5.4" || isLuaJIT;
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
-        license = licenses.mit;
-        maintainers = with maintainers; [ traxys ];
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ traxys ];
       };
     }
   ) { };
@@ -125,21 +160,21 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.28";
+      version = "0.1.32";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
+        sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
 
-      meta = with lib; {
+      meta = {
         description = "New FFI-based API for lua-nginx-module";
         homepage = "https://github.com/openresty/lua-resty-core";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
@@ -149,23 +184,26 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-lrucache";
-      version = "0.13";
+      version = "0.15";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-lrucache";
         rev = "v${version}";
-        sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
+        sha256 = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
       };
 
-      meta = with lib; {
+      meta = {
         description = "Lua-land LRU Cache based on LuaJIT FFI";
         homepage = "https://github.com/openresty/lua-resty-lrucache";
-        license = licenses.bsd3;
+        license = lib.licenses.bsd3;
         maintainers = [ ];
       };
     }
   ) { };
+
+  luv = callPackage ../development/lua-modules/luv { };
+  libluv = callPackage ../development/lua-modules/luv/lib.nix { };
 
   luxio = callPackage (
     {
@@ -200,20 +238,19 @@ rec {
         );
       '';
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "Lightweight UNIX I/O and POSIX binding for Lua";
         homepage = "https://www.gitano.org.uk/luxio/";
-        license = licenses.mit;
-        maintainers = with maintainers; [ richardipsum ];
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ richardipsum ];
+        platforms = lib.platforms.unix;
       };
     }
   ) { };
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
-    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
   vicious = callPackage (
@@ -237,17 +274,17 @@ rec {
         printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Modular widget library for the awesome window manager";
         homepage = "https://vicious.rtfd.io";
         changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
           makefu
           mic92
           McSinyx
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
       };
     }
   ) { };

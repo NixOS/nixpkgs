@@ -81,7 +81,7 @@ stdenv.mkDerivation (
   }
 
   # Then, the caller-supplied attributes.
-  // (builtins.removeAttrs args [ "lib" ])
+  // (removeAttrs args [ "lib" ])
   //
 
     # And finally, our own stuff.

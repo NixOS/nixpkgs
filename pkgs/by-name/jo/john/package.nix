@@ -19,11 +19,11 @@
   ocl-icd,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
-  substituteAll,
+  replaceVars,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "john";
   version = "rolling-2404";
 
@@ -31,12 +31,11 @@ stdenv.mkDerivation rec {
     owner = "openwall";
     repo = "john";
     rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    hash = "sha256-XMT5Sbp2XrAnfTHxXyJdw0kA/ZtfOiYrX/flCFLHJ6s=";
   };
 
   patches = lib.optionals withOpenCL [
-    (substituteAll {
-      src = ./opencl.patch;
+    (replaceVars ./opencl.patch {
       ocl_icd = ocl-icd;
     })
   ];
@@ -52,37 +51,36 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
-  preConfigure =
-    ''
-      cd src
-      # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-      # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-      export AS=$CC
-      export LD=$CC
-    ''
-    + lib.optionalString withOpenCL ''
-      python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
-    '';
+  preConfigure = ''
+    cd src
+    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+    export AS=$CC
+    export LD=$CC
+  ''
+  + lib.optionalString withOpenCL ''
+    python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+  '';
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
-  ] ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
+  ]
+  ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
-  buildInputs =
-    [
-      openssl
-      nss
-      nspr
-      libkrb5
-      gmp
-      zlib
-      libpcap
-      re2
-    ]
-    ++ lib.optionals withOpenCL [
-      opencl-headers
-      ocl-icd
-    ];
+  buildInputs = [
+    openssl
+    nss
+    nspr
+    libkrb5
+    gmp
+    zlib
+    libpcap
+    re2
+  ]
+  ++ lib.optionals withOpenCL [
+    opencl-headers
+    ocl-icd
+  ];
   nativeBuildInputs = [
     gcc
     python3Packages.wrapPython
@@ -113,13 +111,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   postInstall = ''
-    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/${perlPackages.perl.libPrefix}"
+    mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
     find -L ../run -mindepth 1 -maxdepth 1 -type f -executable \
       -exec cp -d {} "$out/bin" \;
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
-    cp -vrt "$out/share/doc/john" ../doc/*
+    cp -vt "$out/share/john/opencl" ../run/opencl/*.cl ../run/opencl/*.h
+    cp -vLrt "$out/share/doc/john" ../doc/*
     cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
   '';
 
@@ -131,15 +130,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "John the Ripper password cracker";
-    license = [ licenses.gpl2Plus ] ++ lib.optionals enableUnfree [ licenses.unfreeRedistributable ];
+    license = [
+      lib.licenses.gpl2Plus
+    ]
+    ++ lib.optionals enableUnfree [ lib.licenses.unfreeRedistributable ];
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
-      matthewbauer
       cherrykitten
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

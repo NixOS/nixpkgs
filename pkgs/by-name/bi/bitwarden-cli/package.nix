@@ -2,37 +2,41 @@
   lib,
   stdenv,
   buildNpmPackage,
-  nodejs_20,
   fetchFromGitHub,
-  cctools,
-  nix-update-script,
-  nixosTests,
+  nodejs_22,
   perl,
   xcbuild,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nixosTests,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2024.12.0";
+  version = "2025.11.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "cli-v${version}";
-    hash = "sha256-3aN2t8/qhN0sjACvtip45efHQJl8nEMNre0+oBL1/go=";
+    tag = "cli-v${finalAttrs.version}";
+    hash = "sha256-wG0JKQKjNAEoQt/8BFIzISNNUrBqKQHPZ8DRJ69eA5s=";
   };
+
+  patches = [
+    ./fix-lockfile.patch
+  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
+  npmDepsHash = "sha256-/57+ch1d1VMGIMO0Kzu6o3tUX/3adgLkONNRgtyARtQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
     perl
     xcbuild.xcrun
   ];
@@ -50,11 +54,18 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
+  npmRebuildFlags = [
+    # we'll run npm rebuild manually later
+    "--ignore-scripts"
+  ];
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
     rm -r node_modules/**/prebuilds
     shopt -u globstar
+
+    npm rebuild --verbose
   '';
 
   postBuild = ''
@@ -64,25 +75,45 @@ buildNpmPackage rec {
     shopt -u globstar
   '';
 
+  postInstall = ''
+    # The @bitwarden modules are actually npm workspaces inside the source tree, which
+    # leave dangling symlinks behind. They can be safely removed, because their source is
+    # bundled via webpack and thus not needed at run-time.
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^cli-v(.*)$"
       ];
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      dotlambda
+    ];
   };
-}
+})

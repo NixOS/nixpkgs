@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
   expat,
   curl,
   fftw,
@@ -17,10 +18,21 @@ stdenv.mkDerivation rec {
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 
-  patches = fetchurl {
+  debian_patches = fetchzip {
     url = "mirror://debian/pool/main/libo/libofa/libofa_${version}-${deb_patch}.debian.tar.gz";
-    sha256 = "1rfkyz13cm8izm90c1xflp4rvsa24aqs6qpbbbqqcbmvzsj6j9yn";
+    hash = "sha256-tENhXSRcUP1PKm35IJyLUEEROze8UzxJzRx3VNAqo40=";
   };
+
+  patches = [
+    "${debian_patches}/patches/01_gcc41.diff"
+    "${debian_patches}/patches/02_example-open.diff"
+    "${debian_patches}/patches/03_example-size_type.diff"
+    "${debian_patches}/patches/04_libofa.pc-deps.diff"
+    "${debian_patches}/patches/05_gcc43.diff"
+    "${debian_patches}/patches/06_gcc44.diff"
+    "${debian_patches}/patches/fix_ftbfs.diff"
+    "${debian_patches}/patches/fix-ftbfs-gcc4.7.diff"
+  ];
 
   outputs = [
     "out"
@@ -39,13 +51,13 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio
       fingerprint created and provided by MusicIP'';
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

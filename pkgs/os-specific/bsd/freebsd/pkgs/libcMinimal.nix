@@ -6,6 +6,10 @@
   byacc,
   gencat,
   csu,
+  i18n,
+  libsys,
+  llvmPackages,
+  extraSrc ? [ ],
 }:
 
 mkDerivation {
@@ -16,6 +20,7 @@ mkDerivation {
     "lib/msun"
     "lib/libmd"
     "lib/libutil"
+    "lib/libsys"
     "libexec/rtld-elf"
     "include/rpcsvc"
     "contrib/libc-pwcache"
@@ -31,7 +36,10 @@ mkDerivation {
     "etc/group"
     "etc/master.passwd"
     "etc/shells"
-  ];
+    "include/paths.h"
+    "include/gssapi"
+  ]
+  ++ extraSrc;
 
   outputs = [
     "out"
@@ -43,6 +51,7 @@ mkDerivation {
 
   buildInputs = [
     include
+    libsys
   ];
 
   extraNativeBuildInputs = [
@@ -53,12 +62,19 @@ mkDerivation {
   ];
 
   # this target is only used in the rtld-elf derivation. build it there instead.
+  #
+  # WE SHOULD REALLY BE REPLACING /usr/lib/i18n WITH THE libiconvModules DERIVATION
+  # but this causes some awful dependency loops which basically collapse the entire libc derivation
+  # instead, set the PATH_I18NMODULE environment variable whenever possible
   postPatch = ''
     sed -E -i -e '/BUILD_NOSSP_PIC_ARCHIVE=/d' $BSDSRCDIR/lib/libc/Makefile
+    substituteInPlace $BSDSRCDIR/include/paths.h --replace '/usr/share/i18n' '${i18n}/share/i18n'
   '';
 
+  # -fno-blocks is a mystery to me--clang recognizes it and is like yeah we have blocks
+  # but compiler-rt is seemingly not providing Block.h. not sure why.
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I../libsys -B${csu}/lib -fno-blocks"
   '';
 
   postBuild = ''

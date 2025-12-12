@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pasteorg";
     repo = "paste";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NY/h6hbpluEu1XAv3o4mqoG+l0LXfM1dw7+G0Rm1E4o=";
   };
 
@@ -40,13 +40,18 @@ buildPythonPackage rec {
     touch tests/urlparser_data/secured.txt
   '';
 
+  disabledTests = [
+    # pkg_resources deprecation warning
+    "test_form"
+  ];
+
   pythonNamespaces = [ "paste" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
     changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

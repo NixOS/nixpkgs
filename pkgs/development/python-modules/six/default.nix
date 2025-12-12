@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benjaminp";
     repo = "six";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tz99C+dz5xJhunoC45bl0NdSdV9NXWya9ti48Z/KaHY=";
   };
 
@@ -23,14 +23,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray =
-    if isPyPy then
-      [
-        # uses ctypes to find native library
-        "--deselect=test_six.py::test_move_items"
-      ]
-    else
-      null;
+  disabledTestPaths = lib.optionals isPyPy [
+    # uses ctypes to find native library
+    "test_six.py::test_move_items"
+  ];
 
   pythonImportsCheck = [ "six" ];
 

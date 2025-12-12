@@ -10,7 +10,6 @@
   readline,
   sqlite,
   darwin,
-  Security ? darwin.Security,
 }:
 
 let
@@ -85,12 +84,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.0";
+  version = "2.2.4";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zphChJyXYOSH7N0c2t98DyhEyvrmBUAcfHKuJXZEiTw=";
+    hash = "sha256-+CtBl1D8zlYfP4l6BIaxgBhoRddvtdmfJIzhZhCBicc=";
   };
 
   buildInputs = [
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     readline
     sqlite
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  ];
 
   patches = [
     ./NIM_CONFIG_DIR.patch
@@ -135,14 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postConfigure
     '';
 
-  kochArgs =
-    [
-      "--cpu:${nimHost.cpu}"
-      "--os:${nimHost.os}"
-      "-d:release"
-      "-d:useGnuReadline"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
+  kochArgs = [
+    "--cpu:${nimHost.cpu}"
+    "--os:${nimHost.os}"
+    "-d:release"
+    "-d:useGnuReadline"
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace makefile \
@@ -173,15 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit nimHost nimTarget;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Statically typed, imperative programming language";
     homepage = "https://nim-lang.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nim";
-    maintainers = with maintainers; [
-      ehmry
-      eveeifyeve
-    ];
+    teams = [ lib.teams.nim ];
   };
 
 })

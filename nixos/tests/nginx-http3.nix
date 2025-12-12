@@ -1,23 +1,15 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-
+{ pkgs, runTest, ... }:
 let
   hosts = ''
     192.168.2.101 acme.test
   '';
 
 in
-
 builtins.listToAttrs (
   builtins.map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
-      value = makeTest {
+      value = runTest {
         name = "nginx-http3-${pkgs.lib.getName nginxPackage}";
         meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
@@ -74,7 +66,7 @@ builtins.listToAttrs (
           client =
             { pkgs, ... }:
             {
-              environment.systemPackages = [ pkgs.curlHTTP3 ];
+              environment.systemPackages = [ pkgs.curl ];
               networking = {
                 interfaces.eth1 = {
                   ipv4.addresses = [
@@ -121,7 +113,7 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angieQuic
-      pkgs.nginxQuic
+      pkgs.angie
+      pkgs.nginx
     ]
 )

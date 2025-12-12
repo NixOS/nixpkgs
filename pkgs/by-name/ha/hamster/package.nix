@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "projecthamster";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "hamster";
+    tag = "v${version}";
     sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
   };
 
@@ -65,12 +65,12 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/libexec "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking application";
     mainProgram = "hamster";
     homepage = "http://projecthamster.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.fabianhauser ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.fabianhauser ];
   };
 }

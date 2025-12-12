@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "foo86";
-    repo = pname;
+    repo = "dcadec";
     rev = "v" + version;
     sha256 = "07nd0ajizrp1w02bsyfcv18431r8m8rq8gjfmz9wmckpg7cxj2hs";
   };
@@ -19,12 +19,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "ERROR: Run 'git submodule update --init test/samples' first."
 
-  meta = with lib; {
+  meta = {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
     mainProgram = "dcadec";
-    maintainers = with maintainers; [ edwtjo ];
     homepage = "https://github.com/foo86/dcadec";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 }

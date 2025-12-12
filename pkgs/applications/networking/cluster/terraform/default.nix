@@ -21,7 +21,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "version"
         "hash"
         "vendorHash"
@@ -45,6 +45,16 @@ let
           "-X 'github.com/hashicorp/terraform/version.dev=no'"
         ];
 
+        postPatch = ''
+          # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
+          # similar one was added.
+          # https://github.com/golang/go/issues/72111
+          # The setting is configured upstream due to the following timeouts caused by
+          # the TLS handshake using post-quantum crypto with servers that don't support it
+          # https://tldr.fail/
+          substituteInPlace go.mod \
+            --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
+        '';
         postConfigure = ''
           # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
           substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
@@ -65,12 +75,12 @@ let
 
         subPackages = [ "." ];
 
-        meta = with lib; {
+        meta = {
           description = "Tool for building, changing, and versioning infrastructure";
           homepage = "https://www.terraform.io/";
           changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-          license = licenses.bsl11;
-          maintainers = with maintainers; [
+          license = lib.licenses.bsl11;
+          maintainers = with lib.maintainers; [
             Chili-Man
             kalbasit
             timstott
@@ -184,9 +194,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.10.3";
-    hash = "sha256-KY18YFTKWj366CPTh1MJ9DLamiFUVql3BhuMUzN7zf8=";
-    vendorHash = "sha256-AajBuUwOhK0OniRRfCqR89+mA9LnQBkbG3Xge9c0qSQ=";
+    version = "1.14.2";
+    hash = "sha256-gYJW31cDsfs/SLBE9InZP1ghG6gbat2pkrmHLIAZVDY=";
+    vendorHash = "sha256-NDtBLa8vokrSRDCNX10lQyfMDzTrodoEj5zbDanL4bk=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;
@@ -203,7 +213,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox

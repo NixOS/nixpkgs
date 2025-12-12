@@ -3,21 +3,31 @@
   stdenvNoCC,
   fetchurl,
   writeShellApplication,
+  cacert,
   curl,
   jq,
-  common-updater-scripts,
+  openssl,
   undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.88.3";
+  version = "1.103.7";
 
-  src = fetchurl {
-    name = "Raycast.dmg";
-    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
-    hash = "sha256-MOJlEUQHLDw8YeQC9sG5QLSO8qhgcWG8HtyRZCPHb+M=";
-  };
+  src =
+    {
+      aarch64-darwin = fetchurl {
+        name = "Raycast.dmg";
+        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
+        hash = "sha256-wsFjjBYF8yQE7y/WyTPX2OM5euqYK2PBcxbUFLB3XY0=";
+      };
+      x86_64-darwin = fetchurl {
+        name = "Raycast.dmg";
+        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=x86_64";
+        hash = "sha256-+btAHctDvsOLUG/v7c3PGxJTWAxj28laQu72Wq2pl/M=";
+      };
+    }
+    .${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
 
   dontPatch = true;
   dontConfigure = true;
@@ -40,14 +50,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "raycast-update-script";
     runtimeInputs = [
+      cacert
       curl
       jq
-      common-updater-scripts
+      openssl
     ];
     text = ''
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
       version=$(echo "$url" | jq -r '.version')
-      update-source-version raycast "$version" --file=./pkgs/by-name/ra/raycast/package.nix
+
+      arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
+      x86_url="https://releases.raycast.com/releases/$version/download?build=x86_64"
+
+      arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
+      x86_hash="sha256-$(curl -sL "$x86_url" | openssl dgst -sha256 -binary | openssl base64)"
+
+      sed -i -E \
+        -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
+        -e '/aarch64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
+        -e '/x86_64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$x86_hash"'";|' \
+        ./pkgs/by-name/ra/raycast/package.nix
     '';
   });
 
@@ -58,7 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lovesegfault
       stepbrobd
-      donteatoreo
+      FlameFlag
       jakecleary
     ];
     platforms = [

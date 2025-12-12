@@ -18,7 +18,7 @@
 
 let
   /*
-    dsniff's build system unconditionnaly wants static libraries and does not
+    dsniff's build system unconditionally wants static libraries and does not
     support multi output derivations. We do some overriding to give it
     satisfaction.
   */
@@ -34,16 +34,32 @@ let
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ (libpcap.overrideAttrs { dontDisableStatic = true; }) ];
+    paths =
+      let
+        staticlibpcap = libpcap.overrideAttrs { dontDisableStatic = true; };
+      in
+      [
+        (lib.getInclude staticlibpcap)
+        (lib.getLib staticlibpcap)
+      ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
-      # prevent references to libpcap
-      rm $out/lib/*.so*
+      # check the presence of the files that ./configure expects
+      for i in $out/lib/libpcap.a $out/include/pcap.h $out/include/net/bpf.h; do
+        if ! test -f $i; then
+          echo $i is missing from output
+          exit 1
+        fi
+      done
     '';
   };
+  libnet' = libnet.overrideAttrs { dontDisableStatic = true; };
   net = symlinkJoin {
-    inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
+    inherit (libnet') name;
+    paths = [
+      (lib.getLib libnet')
+      (lib.getDev libnet')
+    ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
@@ -71,8 +87,8 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian/${version}+debian-30";
-    sha256 = "1fk2k0sfdp5g27i11g0sbzm7al52raz5yr1aibzssnysv7l9xgzh";
+    tag = "debian/${version}+debian-35";
+    hash = "sha256-RVv9USAHTVYnGgKygIPgfXpfjCYigJvScuzc2+1Uzfw=";
     name = "dsniff.tar.gz";
   };
 
@@ -102,15 +118,15 @@ stdenv.mkDerivation rec {
     "--with-openssl=${ssl}"
   ];
 
-  meta = with lib; {
-    description = "collection of tools for network auditing and penetration testing";
+  meta = {
+    description = "Collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';
     homepage = "https://www.monkey.org/~dugsong/dsniff/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.symphorien ];
     # bsd and solaris should work as well
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

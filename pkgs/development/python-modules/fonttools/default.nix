@@ -7,7 +7,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  fs,
   lxml,
   brotli,
   brotlicffi,
@@ -22,21 +21,19 @@
   xattr,
   skia-pathops,
   uharfbuzz,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.54.1";
+  version = "4.60.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iYd3EiziaLR7zS0UQAje0QfShNfnhHPdH2+noCQ2yto=";
+    tag = version;
+    hash = "sha256-h/JRItD5IHlhNSamxRxk/dvyAKUFayzxHvlW7v4N1s8=";
   };
 
   build-system = [
@@ -47,13 +44,13 @@ buildPythonPackage rec {
   optional-dependencies =
     let
       extras = {
-        ufo = [ fs ];
+        ufo = [ ];
         lxml = [ lxml ];
         woff = [
           (if isPyPy then brotlicffi else brotli)
           zopfli
         ];
-        unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+        unicode = lib.optional (pythonOlder "3.13") unicodedata2;
         graphite = [ lz4 ];
         interpolatable = [
           pycairo
@@ -62,31 +59,28 @@ buildPythonPackage rec {
         plot = [ matplotlib ];
         symfont = [ sympy ];
         type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
-        pathops = [ skia-pathops ];
+        pathops = lib.optional (lib.meta.availableOn stdenv.hostPlatform skia-pathops) skia-pathops;
         repacker = [ uharfbuzz ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
-  nativeCheckInputs =
-    [
-      # test suite fails with pytest>=8.0.1
-      # https://github.com/fonttools/fonttools/issues/3458
-      pytest7CheckHook
-    ]
-    ++ lib.concatLists (
-      lib.attrVals (
-        [
-          "woff"
-          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-          "ufo"
-        ]
-        ++ lib.optionals (!skia-pathops.meta.broken) [
-          "pathops" # broken
-        ]
-        ++ [ "repacker" ]
-      ) optional-dependencies
-    );
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatLists (
+    lib.attrVals (
+      [
+        "woff"
+        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+        "ufo"
+      ]
+      ++ lib.optionals (!skia-pathops.meta.broken) [
+        "pathops" # broken
+      ]
+      ++ [ "repacker" ]
+    ) optional-dependencies
+  );
 
   pythonImportsCheck = [ "fontTools" ];
 
@@ -103,24 +97,11 @@ buildPythonPackage rec {
     "test_ttcompile_timestamp_calcs"
   ];
 
-  disabledTestPaths = [
-    # avoid test which depend on fs and matplotlib
-    # fs and matplotlib were removed to prevent strong cyclic dependencies
-    "Tests/misc/plistlib_test.py"
-    "Tests/pens"
-    "Tests/ufoLib"
-
-    # test suite fails with pytest>=8.0.1
-    # https://github.com/fonttools/fonttools/issues/3458
-    "Tests/ttLib/woff2_test.py"
-    "Tests/ttx/ttx_test.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

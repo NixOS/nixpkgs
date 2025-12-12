@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.sks;
   sksPkg = cfg.package;
@@ -16,7 +13,7 @@ let
 
 in
 {
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     calbrecht
     jcumming
   ];
@@ -25,15 +22,15 @@ in
 
     services.sks = {
 
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         SKS (synchronizing key server for OpenPGP) and start the database
         server. You need to create "''${dataDir}/dump/*.gpg" for the initial
         import'';
 
-      package = mkPackageOption pkgs "sks" { };
+      package = lib.mkPackageOption pkgs "sks" { };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/db/sks";
         example = "/var/lib/sks";
         # TODO: The default might change to "/var/lib/sks" as this is more
@@ -46,8 +43,8 @@ in
         '';
       };
 
-      extraDbConfig = mkOption {
-        type = types.str;
+      extraDbConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Set contents of the files "KDB/DB_CONFIG" and "PTree/DB_CONFIG" within
@@ -60,28 +57,28 @@ in
         '';
       };
 
-      hkpAddress = mkOption {
+      hkpAddress = lib.mkOption {
         default = [
           "127.0.0.1"
           "::1"
         ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           Domain names, IPv4 and/or IPv6 addresses to listen on for HKP
           requests.
         '';
       };
 
-      hkpPort = mkOption {
+      hkpPort = lib.mkOption {
         default = 11371;
-        type = types.ints.u16;
+        type = lib.types.ints.u16;
         description = "HKP port to listen on.";
       };
 
-      webroot = mkOption {
-        type = types.nullOr types.path;
+      webroot = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "${sksPkg.webSamples}/OpenPKG";
-        defaultText = literalExpression ''"''${package.webSamples}/OpenPKG"'';
+        defaultText = lib.literalExpression ''"''${package.webSamples}/OpenPKG"'';
         description = ''
           Source directory (will be symlinked, if not null) for the files the
           built-in webserver should serve. SKS (''${pkgs.sks.webSamples})
@@ -96,7 +93,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users = {
       users.sks = {
@@ -122,6 +119,7 @@ in
       {
         sks-db = {
           description = "SKS database server";
+          documentation = [ "man:sks(8)" ];
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''

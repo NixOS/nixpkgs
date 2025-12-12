@@ -1,51 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  poetry-core,
+  loguru,
+  platformdirs,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
-  toml,
+  setuptools,
+  typer,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "maison";
-  version = "1.4.3";
+  version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbatten5";
     repo = "maison";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2hUmk91wr5o2cV3un2nMoXDG+3GT7SaIOKY+QaZY3nw=";
+    tag = "v${version}";
+    hash = "sha256-F0mxOeLFDCiPhhKaaUy4qV//Pb2JXCtOLNB1uW2KWZY=";
   };
 
-  pythonRelaxDeps = [ "pydantic" ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    poetry-core
+  dependencies = [
+    loguru
+    platformdirs
+    typer
+    typing-extensions
   ];
 
-  propagatedBuildInputs = [
-    click
+  checkInputs = [
     pydantic
-    toml
+    pytestCheckHook
   ];
-
-  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "maison" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read settings from config files";
-    mainProgram = "maison";
     homepage = "https://github.com/dbatten5/maison";
-    changelog = "https://github.com/dbatten5/maison/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/dbatten5/maison/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "maison";
   };
 }

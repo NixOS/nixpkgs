@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devenzo-com";
     repo = "epion_python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9tE/SqR+GHZXeE+bOtXkLu+4jy1vO8WoiLjb6MJazxQ=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "epion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access Epion sensor data";
     homepage = "https://github.com/devenzo-com/epion_python";
     changelog = "https://github.com/devenzo-com/epion_python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

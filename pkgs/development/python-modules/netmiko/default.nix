@@ -6,40 +6,33 @@
   paramiko,
   poetry-core,
   pyserial,
-  pythonOlder,
   pyyaml,
+  rich,
+  ruamel-yaml,
   scp,
-  setuptools,
   textfsm,
 }:
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.4.0";
+  version = "4.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jf8SN5dqo/8srPBJSTFGOMiZIgoWdb0CnjGwfOIM47Y=";
+    hash = "sha256-lwG7LBoV6y6AdMsuKMoAfGm5+lKWG4O5jHV+rWuA3u8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry>=1.6.1" "poetry-core" \
-      --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     ntc-templates
     paramiko
     pyserial
     pyyaml
+    rich
+    ruamel-yaml
     scp
-    setuptools
     textfsm
   ];
 
@@ -48,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netmiko" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
     homepage = "https://github.com/ktbyers/netmiko/";
     changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

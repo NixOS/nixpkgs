@@ -1,48 +1,62 @@
 {
-  stdenv,
-  nodejs,
-  pnpm,
-  fetchFromGitHub,
-  buildGoModule,
   lib,
-  wails,
-  webkitgtk_4_0,
-  pkg-config,
-  libsoup_3,
-  wrapGAppsHook3,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
   autoPatchelfHook,
-  makeDesktopItem,
   copyDesktopItems,
+  nodejs,
+  pkg-config,
+  pnpm_10,
+  wails,
+  webkitgtk_4_1,
+  makeDesktopItem,
+  nix-update-script,
 }:
+
 let
   pname = "gui-for-clash";
-  version = "1.8.9";
+  version = "1.11.0";
+
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
-    rev = "v${version}";
-    hash = "sha256-jNYMv3gPbZV2JlTV0v0NQ06HkXDzgHXuEdJrBgQ+p2g=";
+    tag = "v${version}";
+    hash = "sha256-kk6ZjG58gMIPd8f3Ib+1z7bie9X5kJvBq/CwioksbcU=";
   };
+
+  metaCommon = {
+    homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
+    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = [ ];
+  };
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_10.configHook
     ];
 
-    pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-RQtU61H1YklCgJrlyHALxUZp8OvVs2MgFThWBsYk2cs=";
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 2;
+      hash = "sha256-MvGLIB68itkCGsBIgAI6ak5xa5rFAJfoAwNuISPRw30=";
     };
-
-    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     buildPhase = ''
       runHook preBuild
 
-      pnpm run build
+      pnpm run build-only
 
       runHook postBuild
     '';
@@ -50,91 +64,87 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir $out/
-      cp -r ./dist/* $out/
+      cp -r dist $out
 
       runHook postInstall
     '';
 
-    meta = {
+    meta = metaCommon // {
       description = "GUI program developed by vue3";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.all;
     };
   });
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-rDbJOj8t/qu04Rd8J0LnXiBoIDmdzBQ9avAhImK7dFg=";
+  patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  nativeBuildInputs = [
-    wails
-    pkg-config
-    wrapGAppsHook3
-    autoPatchelfHook
-    copyDesktopItems
-  ];
-
-  buildInputs = [
-    webkitgtk_4_0
-    libsoup_3
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "GUI.for.Clash";
-      exec = "GUI.for.Clash";
-      icon = "GUI.for.Clash";
-      genericName = "GUI.for.Clash";
-      desktopName = "GUI.for.Clash";
-      categories = [
-        "Network"
-      ];
-      keywords = [
-        "Proxy"
-      ];
-    })
-  ];
-
-  postUnpack = ''
-    cp -r ${frontend} $sourceRoot/frontend/dist
+  # As we need the $out reference, we can't use `replaceVars` here.
+  postPatch = ''
+    substituteInPlace bridge/bridge.go \
+      --subst-var out
   '';
 
-  postPatch = ''
-    sed -i '/exePath, err := os.Executable()/,+3d' bridge/bridge.go
-    substituteInPlace bridge/bridge.go \
-      --replace-fail "Env.BasePath = filepath.Dir(exePath)" "" \
-      --replace-fail "Env.AppName = filepath.Base(exePath)" "Env.AppName = \"GUI.for.Clash\"
-        Env.BasePath = filepath.Join(os.Getenv(\"HOME\"), \".config\", Env.AppName)" \
-      --replace-fail 'exePath := Env.BasePath' 'exePath := "${placeholder "out"}/bin"'
+  vendorHash = "sha256-6T9cFVzfRJnwnWjc61oSihifgnP81n3K+jlLHXGmA4I=";
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+    pkg-config
+    wails
+  ];
+
+  buildInputs = [ webkitgtk_4_1 ];
+
+  preBuild = ''
+    cp -r ${frontend} frontend/dist
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.Clash
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_41 -o GUI.for.Clash
 
     runHook postBuild
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gui-for-clash";
+      exec = "GUI.for.Clash";
+      icon = "gui-for-clash";
+      genericName = "GUI.for.Clash";
+      desktopName = "GUI.for.Clash";
+      categories = [ "Network" ];
+      keywords = [ "Proxy" ];
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/pixmaps
-    cp -r ./build/bin $out/bin
-    cp build/appicon.png $out/share/pixmaps/GUI.for.Clash.png
+    install -Dm 0755 build/bin/GUI.for.Clash $out/bin/GUI.for.Clash
+    install -Dm 0644 build/appicon.png $out/share/icons/hicolor/256x256/apps/gui-for-clash.png
 
     runHook postInstall
   '';
 
-  meta = {
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v([0-9.]+)$"
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
+
+  meta = metaCommon // {
     description = "Clash GUI program developed by vue3 + wails";
-    homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     mainProgram = "GUI.for.Clash";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
     platforms = lib.platforms.linux;
   };
 }

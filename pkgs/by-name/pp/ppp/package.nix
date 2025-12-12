@@ -1,30 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, libxcrypt
-, pkg-config
-, autoreconfHook
-, openssl
-, bash
-, nixosTests
+{
+  autoreconfHook,
+  bash,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  libpcap,
+  libxcrypt,
+  linux-pam,
+  nixosTests,
+  openssl,
+  pkg-config,
+  stdenv,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.1";
+  version = "2.5.2";
   pname = "ppp";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = "ppp";
-    rev = "ppp-${version}";
-    hash = "sha256-sjaBFP/A63+ycuZm3bxOxAAxMrVHZZFED2Uq8rBapdo=";
+    tag = "v${version}";
+    hash = "sha256-NV8U0F8IhHXn0YuVbfFr992ATQZaXA16bb5hBIwm9Gs=";
   };
+
+  patches = [
+    # Fix build with gcc15
+    # https://github.com/ppp-project/ppp/pull/548
+    (fetchpatch {
+      url = "https://github.com/ppp-project/ppp/commit/05361692ee7d6260ce5c04c9fa0e5a1aa7565323.patch";
+      hash = "sha256-ybuWyA1t9IJ1Sg06a0b0tin4qssr0qzmenfGoA1X0BE=";
+    })
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-openssl=${openssl.dev}"
+    (lib.enableFeature withSystemd "systemd")
   ];
 
   nativeBuildInputs = [
@@ -33,10 +48,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    bash
     libpcap
     libxcrypt
+    linux-pam
     openssl
-    bash
+  ]
+  ++ lib.optionals withSystemd [
+    systemdMinimal
   ];
 
   postPatch = ''
@@ -72,16 +91,16 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pppd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ppp.samba.org";
     description = "Point-to-point implementation to provide Internet connections over serial lines";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsdOriginal
       publicDomain
       gpl2Only
       lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ stv0g ];
   };
 }

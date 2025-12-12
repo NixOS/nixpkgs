@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SciLifeLab";
     repo = "TIDDIT";
-    rev = "refs/tags/TIDDIT-${version}";
+    tag = "TIDDIT-${version}";
     hash = "sha256-OeqVQJDw0fmSDWIGab2qtTJCzZxqLY2XzRqaTRuPIdI=";
   };
 
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
         ropebwt2
       ]
     }"
+    "--set PYTHONPATH $PYTHONPATH"
   ];
 
   meta = {

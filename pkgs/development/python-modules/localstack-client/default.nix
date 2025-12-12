@@ -1,25 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   boto3,
   pytestCheckHook,
 
-  # downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-client";
-  version = "1.39";
+  version = "2.10";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "localstack";
-    repo = "localstack-python-client";
-    # Request for proper tags: https://github.com/localstack/localstack-python-client/issues/38
-    rev = "f1e538ad23700e5b1afe98720404f4801475e470";
-    hash = "sha256-MBXTiTzCwkduJPPRN7OKaWy2q9J8xCX/GGu09tyac3A=";
+  src = fetchPypi {
+    pname = "localstack_client";
+    inherit version;
+    hash = "sha256-cyoH4j//1qWBrycUu+AGrW+ISsT4rJVSEaimMyHNxAk=";
   };
 
   propagatedBuildInputs = [ boto3 ];
@@ -39,13 +37,13 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python client for LocalStack";
     homepage = "https://github.com/localstack/localstack-python-client";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

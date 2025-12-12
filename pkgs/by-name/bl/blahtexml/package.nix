@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
         --replace "\$(CXX)" "\$(CXX) -std=c++98"
     ''
     +
-      # fix the doc build on TeX Live 2023
-      ''
-        substituteInPlace Documentation/manual.tex \
-          --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
-      '';
+    # fix the doc build on TeX Live 2023
+    ''
+      substituteInPlace Documentation/manual.tex \
+        --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+    '';
 
   outputs = [
     "out"
@@ -38,28 +38,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  buildFlags =
-    [ "doc" ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          "blahtex-mac"
-          "blahtexml-mac"
-        ]
-      else
-        [
-          "blahtex-linux"
-          "blahtexml-linux"
-        ]
-    );
+  buildFlags = [
+    "doc"
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        "blahtex-mac"
+        "blahtexml-mac"
+      ]
+    else
+      [
+        "blahtex-linux"
+        "blahtexml-linux"
+      ]
+  );
 
   installPhase = ''
     install -D -t "$out/bin" blahtex blahtexml
     install -m644 -D -t "$doc/share/doc/blahtexml" Documentation/manual.pdf
   '';
 
-  meta = with lib; {
-    homepage = "http://gva.noekeon.org/blahtexml/";
+  meta = {
+    homepage = "https://gva.noekeon.org/blahtexml/";
     description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
       document. Instead of converting only one formula at a time, blahtexml can
       convert all the formulas of the given XML file into MathML.
     '';
-    license = licenses.bsd3;
-    maintainers = [ maintainers.xworld21 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.xworld21 ];
+    platforms = lib.platforms.all;
   };
 }

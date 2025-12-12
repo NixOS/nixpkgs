@@ -2,10 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  gcc,
   click,
+  cython,
+  distutils,
+  fetchFromGitHub,
+  gcc,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "primer3";
-  version = "2.0.3";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,14 +22,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-O8BFjkjG9SfknSrK34s9EJnqTrtCf4zW9A+N+/MHl2w=";
+    tag = "v${version}";
+    hash = "sha256-GrVYYjS/+LZScZETfk7YcSy2yrWc3SPumXvyQeEpFUg=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
+    distutils
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
+  ];
+
+  nativeBuildInputs = [ cython ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   nativeCheckInputs = [
     click
@@ -45,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "primer3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oligo analysis and primer design";
     homepage = "https://github.com/libnano/primer3-py";
-    changelog = "https://github.com/libnano/primer3-py/blob/v${version}/CHANGES";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/libnano/primer3-py/blob/${src.tag}/CHANGES";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

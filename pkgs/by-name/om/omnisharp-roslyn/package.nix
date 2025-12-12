@@ -1,8 +1,8 @@
 {
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
   lib,
+  dotnetCorePackages,
+  buildDotnetModule,
+  fetchFromGitHub,
   runCommand,
   expect,
 }:
@@ -13,13 +13,13 @@ in
 let
   finalPackage = buildDotnetModule rec {
     pname = "omnisharp-roslyn";
-    version = "1.39.12";
+    version = "1.39.14";
 
     src = fetchFromGitHub {
       owner = "OmniSharp";
       repo = "omnisharp-roslyn";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-WQIBNqUqvVA0UhSoPdf179X+GYKp4LhPvYeEAet6TnY=";
+      tag = "v${version}";
+      hash = "sha256-yWrb+Ov1syKjeer7CxmGzkf9qUJxQ0IoIRfyIiO8eI8=";
     };
 
     projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -60,49 +60,52 @@ let
     useDotnetFromEnv = true;
     executables = [ "OmniSharp" ];
 
-    passthru.tests =
-      let
-        with-sdk =
-          sdk:
-          runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
-            {
-              nativeBuildInputs = [
-                finalPackage
-                sdk
-                expect
-              ];
-              meta.timeout = 60;
-            }
-            ''
-              HOME=$TMPDIR
-              expect <<"EOF"
-                spawn OmniSharp
-                expect_before timeout {
-                  send_error "timeout!\n"
-                  exit 1
-                }
-                expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_8_0.version}"
-                expect "{\"Event\":\"started\","
-                send \x03
-                expect eof
-                catch wait result
-                exit [lindex $result 3]
-              EOF
-              touch $out
-            '';
-      in
-      {
-        # Make sure we can run OmniSharp with any supported SDK version, as well as without
-        with-net8-sdk = with-sdk sdk_8_0;
-        with-net9-sdk = with-sdk sdk_9_0;
-        no-sdk = with-sdk null;
-      };
+    passthru = {
+      tests =
+        let
+          with-sdk =
+            sdk:
+            runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+              {
+                nativeBuildInputs = [
+                  finalPackage
+                  sdk
+                  expect
+                ];
+                meta.timeout = 60;
+              }
+              ''
+                HOME=$TMPDIR
+                expect <<"EOF"
+                  spawn OmniSharp
+                  expect_before timeout {
+                    send_error "timeout!\n"
+                    exit 1
+                  }
+                  expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_8_0.version}"
+                  expect "{\"Event\":\"started\","
+                  send \x03
+                  expect eof
+                  catch wait result
+                  exit [lindex $result 3]
+                EOF
+                touch $out
+              '';
+        in
+        {
+          # Make sure we can run OmniSharp with any supported SDK version, as well as without
+          with-net8-sdk = with-sdk sdk_8_0;
+          with-net9-sdk = with-sdk sdk_9_0;
+          no-sdk = with-sdk null;
+        };
 
-    passthru.updateScript = ./update.sh;
+      updateScript = ./update.sh;
+    };
 
     meta = {
       description = "OmniSharp based on roslyn workspaces";
       homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
+      changelog = "https://github.com/OmniSharp/omnisharp-roslyn/blob/v${version}/CHANGELOG.md";
       sourceProvenance = with lib.sourceTypes; [
         fromSource
         binaryNativeCode # dependencies

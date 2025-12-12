@@ -8,6 +8,7 @@
   glew,
   gsl,
   lcms2,
+  libjpeg,
   libpng,
   libtiff,
   libGLU,
@@ -19,7 +20,7 @@
   texliveSmall,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "enblend-enfuse";
   version = "unstable-2022-03-06";
 
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     glew
     gsl
     lcms2
+    libjpeg
     libpng
     libtiff
     libGLU
@@ -54,10 +56,10 @@ stdenv.mkDerivation rec {
     patchShebangs src/embrace
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://enblend.sourceforge.net/";
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
   };
 }

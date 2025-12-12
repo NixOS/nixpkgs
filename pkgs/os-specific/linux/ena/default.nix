@@ -4,10 +4,11 @@
   fetchFromGitHub,
   gitUpdater,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
   rev-prefix = "ena_linux_";
-  version = "2.13.1";
+  version = "2.16.0";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -17,13 +18,13 @@ stdenv.mkDerivation {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "${rev-prefix}${version}";
-    hash = "sha256-oFeTaulcnp9U7Zxhf08yNxpEtyxjI5QJmfITHVHDES0=";
+    hash = "sha256-7gPo3wPMpKPOkmZJzzpt0GdCdX/1N/Xqty1Hg+fQQlU=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -48,14 +49,14 @@ stdenv.mkDerivation {
     inherit rev-prefix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       sielicki
       arianvp
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

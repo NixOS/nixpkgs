@@ -8,7 +8,7 @@
   cmake,
   libpcap,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "packetdrill";
   version = "unstable-2020-08-22";
 

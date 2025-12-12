@@ -2,7 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
   cairo,
   cinnamon-desktop,
   dbus,
@@ -15,6 +16,7 @@
   json-glib,
   libcanberra,
   libdrm,
+  libgbm,
   libgnomekbd,
   libgudev,
   libinput,
@@ -24,7 +26,7 @@
   libXdamage,
   libxkbcommon,
   libXtst,
-  mesa,
+  mesa-gl-headers,
   meson,
   ninja,
   pipewire,
@@ -52,15 +54,21 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "muffin";
     rev = version;
     hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
+    })
+
+    # Fix Qt apps crashing on wayland
+    # https://github.com/linuxmint/muffin/pull/739
+    (fetchpatch {
+      url = "https://github.com/linuxmint/muffin/commit/760e2a3046e13610c4fda1291a9a28e589d2bd93.patch";
+      hash = "sha256-D0u8UxW5USzMW9KlP3Y4XCWxrQ1ySufDv+eCbrAP71c=";
     })
   ];
 
@@ -85,6 +93,7 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra
     libdrm
+    libgbm
     libgnomekbd
     libgudev
     libinput
@@ -105,7 +114,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
-    mesa # actually uses eglmesaext
+    mesa-gl-headers
   ];
 
   mesonFlags = [
@@ -119,12 +128,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

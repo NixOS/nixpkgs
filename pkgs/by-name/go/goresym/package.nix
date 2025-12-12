@@ -3,17 +3,18 @@
   fetchFromGitHub,
   buildGoModule,
   unzip,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "goresym";
-  version = "2.7.4";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "mandiant";
-    repo = pname;
+    repo = "goresym";
     rev = "v${version}";
-    sha256 = "sha256-qFDacInIiV1thuYMjyzTG7ru5bkd2Af1iao7Oes1mRg=";
+    hash = "sha256-BgnT0qYPH8kMI837hnUK5zGhboGgRU7VeU5dKNcrj8g=";
   };
 
   subPackages = [ "." ];
@@ -30,12 +31,14 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Go symbol recovery tool";
     mainProgram = "GoReSym";
     homepage = "https://github.com/mandiant/GoReSym";
     changelog = "https://github.com/mandiant/GoReSym/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pyrox0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }

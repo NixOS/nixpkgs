@@ -12,6 +12,7 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
+  nix-update-script,
 }:
 
 let
@@ -25,14 +26,15 @@ let
 in
 buildPythonApplication rec {
   pname = "devede";
-  version = "4.17.0";
+  version = "4.21.0";
+  format = "setuptools";
   namePrefix = "";
 
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
     rev = version;
-    hash = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
+    hash = "sha256-sLJkIKw0ciX6spugbdO0eZ1dIkoHfuu5e/f2XwA70a0=";
   };
 
   nativeBuildInputs = [
@@ -66,10 +68,15 @@ buildPythonApplication rec {
       --replace "/usr/local/share" "$out/share"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "DVD Creator for Linux";
-    homepage = "http://www.rastersoft.com/programas/devede.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.bdimcheff ];
+    homepage = "https://www.rastersoft.com/programas/devede.html";
+    license = lib.licenses.gpl3;
+    maintainers = [
+      lib.maintainers.bdimcheff
+      lib.maintainers.baksa
+    ];
   };
 }

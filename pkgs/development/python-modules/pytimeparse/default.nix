@@ -22,15 +22,15 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "pytimeparse/tests/testtimeparse.py" ];
+  enabledTestPaths = [ "pytimeparse/tests/testtimeparse.py" ];
 
   pythonImportsCheck = [ "pytimeparse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse various kinds of time expressions";
     homepage = "https://github.com/wroberts/pytimeparse";
     changelog = "https://github.com/wroberts/pytimeparse/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

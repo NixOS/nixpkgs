@@ -7,6 +7,7 @@
   poetry-core,
   mashumaro,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,15 +24,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EQdOPAYh7D9jHtuOuDtokxXnFKKtC0HybSwX77jj6+c=";
+    tag = "v${version}";
+    hash = "sha256-UdMcY7Va8LAW3x4CR6hIrIdwrXiHh1Hs3tK+SWBrJFE=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace "0.0.0" "${version}"
   '';
 
   build-system = [ poetry-core ];
@@ -45,17 +45,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
   pythonImportsCheck = [ "pvo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
-    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

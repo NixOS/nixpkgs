@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "pytest-test-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-19oNAFff++7ntMdlnMXYc2w5I+EzGwWJh+rB1IjNZGk=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_test_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest utilities for tests";
     homepage = "https://github.com/iterative/pytest-test-utils";
     changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

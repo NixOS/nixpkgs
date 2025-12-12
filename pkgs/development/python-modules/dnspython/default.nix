@@ -1,11 +1,8 @@
 {
-  stdenv,
   lib,
   aioquic,
   buildPythonPackage,
-  cacert,
   cryptography,
-  curio,
   fetchPypi,
   h2,
   httpcore,
@@ -13,66 +10,53 @@
   idna,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  sniffio,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.7.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "2.8.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zpxDLtoNyRz2GKXO3xpOFCZRGWu80sgOie1akH5c+vE=";
+    hash = "sha256-GB08aZZFLLEYnEBGxhWZuEpahuCZVi/9530mmE/ybQ8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
-    DOH = [
+    doh = [
       httpx
       h2
-      requests
-      requests-toolbelt
       httpcore
     ];
-    IDNA = [ idna ];
-    DNSSEC = [ cryptography ];
+    idna = [ idna ];
+    dnssec = [ cryptography ];
     trio = [ trio ];
-    curio = [
-      curio
-      sniffio
-    ];
-    DOQ = [ aioquic ];
+    doq = [ aioquic ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
-
-  # don't run live tests
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NO_INTERNET = 1;
-  };
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
   ];
 
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
+
   pythonImportsCheck = [ "dns" ];
 
-  meta = with lib; {
+  meta = {
     description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
     changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

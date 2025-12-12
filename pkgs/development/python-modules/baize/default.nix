@@ -3,7 +3,7 @@
   fetchFromGitHub,
   httpx,
   lib,
-  pdm-pep517,
+  pdm-backend,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "baize";
-  version = "0.22.2";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abersheeran";
     repo = "baize";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vsYt1q8QEDmEXjd8dlzHr85Fz3YAjPowS+oBWYGbG1o=";
+    tag = "v${version}";
+    hash = "sha256-TclyTLqJ+r9Spg6VgmsqhhVj/Mp/HqFrkXjZy5f2BR0=";
   };
 
   build-system = [
-    pdm-pep517
+    pdm-backend
     setuptools
   ];
 
@@ -34,13 +34,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     starlette
-  ];
-
-  disabledTests = [
-    # test relies on last modified date, which is set to 1970-01-01 in the sandbox
-    "test_files"
-    # starlette.testclient.WebSocketDenialResponse
-    "test_request_response"
   ];
 
   meta = {

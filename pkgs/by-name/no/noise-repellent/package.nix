@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lucianodato";
-    repo = pname;
+    repo = "noise-repellent";
     rev = "v${version}";
     sha256 = "sha256-d8csYC3z3vXdmN/G6mAK+H8ia0vOCsoUpoA3W8/OADc=";
   };
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LV2 plugin for broadband noise reduction";
     homepage = "https://github.com/lucianodato/noise-repellent";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

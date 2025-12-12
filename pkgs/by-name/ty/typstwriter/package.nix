@@ -6,23 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "typstwriter";
-  version = "0.2";
+  version = "0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bzero";
     repo = "typstwriter";
-    rev = "V${version}";
-    hash = "sha256-LhK1e6q7nmk13ZW55/1uEKhg7stQLIs+2bdFJDc24bg=";
+    tag = "V${version}";
+    hash = "sha256-0tCl/dMSWmUWZEVystb6BIYTwW7b6PH4LyERK4mi/LQ=";
   };
 
   build-system = [ python3.pkgs.flit-core ];
 
   dependencies = with python3.pkgs; [
+    platformdirs
     pygments
     pyside6
     qtpy
-    send2trash
     superqt
   ];
 
@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Bzero/typstwriter";
     license = lib.licenses.mit;
     mainProgram = "typstwriter";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

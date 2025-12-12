@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tomclegg";
-    repo = pname;
+    repo = "mp3cat";
     rev = version;
     sha256 = "0n6hjg2wgd06m561zc3ib5w2m3pwpf74njv2b2w4sqqh5md2ymfr";
   };
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "install_bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line program which concatenates MP3 files";
     longDescription = ''
       A command line program which concatenates MP3 files, mp3cat
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
       in its input stream
     '';
     homepage = "https://github.com/tomclegg/mp3cat";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.omnipotententity ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.omnipotententity ];
+    platforms = lib.platforms.all;
     mainProgram = "mp3cat";
   };
 }

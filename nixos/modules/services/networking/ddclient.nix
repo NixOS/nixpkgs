@@ -1,7 +1,11 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.ddclient;
-  boolToStr = bool: if bool then "yes" else "no";
   dataDir = "/var/lib/ddclient";
   StateDirectory = builtins.baseNameOf dataDir;
   RuntimeDirectory = StateDirectory;
@@ -13,16 +17,25 @@ let
     ${lib.optionalString (cfg.use != "") "use=${cfg.use}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev4 != "") "usev4=${cfg.usev4}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev6 != "") "usev6=${cfg.usev6}"}
-    login=${cfg.username}
-    password=${if cfg.protocol == "nsupdate" then "/run/${RuntimeDirectory}/ddclient.key" else "@password_placeholder@"}
+    ${lib.optionalString (cfg.username != "") "login=${cfg.username}"}
+    ${
+      if cfg.protocol == "nsupdate" then
+        "password=/run/${RuntimeDirectory}/ddclient.key"
+      else if (cfg.passwordFile != null) then
+        "password=@password_placeholder@"
+      else if (cfg.secretsFile != null) then
+        "password=@secrets_placeholder@"
+      else
+        ""
+    }
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
-    ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
-    ssl=${boolToStr cfg.ssl}
+    ${lib.optionalString (cfg.zone != "") "zone=${cfg.zone}"}
+    ssl=${lib.boolToYesNo cfg.ssl}
     wildcard=YES
-    quiet=${boolToStr cfg.quiet}
-    verbose=${boolToStr cfg.verbose}
+    quiet=${lib.boolToYesNo cfg.quiet}
+    verbose=${lib.boolToYesNo cfg.verbose}
     ${cfg.extraConfig}
     ${lib.concatStringsSep "," cfg.domains}
   '';
@@ -30,24 +43,42 @@ let
 
   preStart = ''
     install --mode=600 --owner=$USER ${configFile} /run/${RuntimeDirectory}/ddclient.conf
-    ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
-    '' else if (cfg.passwordFile != null) then ''
-      "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
-    '' else ''
-      sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
-    '')}
+    ${lib.optionalString (cfg.configFile == null) (
+      if (cfg.protocol == "nsupdate") then
+        ''
+          install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+        ''
+      else if (cfg.passwordFile != null) then
+        ''
+          "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
+        ''
+      else if (cfg.secretsFile != null) then
+        ''
+          "${pkgs.replace-secret}/bin/replace-secret" "@secrets_placeholder@" "${cfg.secretsFile}" "/run/${RuntimeDirectory}/ddclient.conf"
+        ''
+      else
+        ''
+          sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
+        ''
+    )}
   '';
 in
 {
 
   imports = [
-    (lib.mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
-      (config:
-        let value = lib.getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in lib.optional (value != "") value))
+    (lib.mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ] (
+      config:
+      let
+        value = lib.getAttrFromPath [ "services" "ddclient" "domain" ] config;
+      in
+      lib.optional (value != "") value
+    ))
     (lib.mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
-    (lib.mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ddclient"
+      "password"
+    ] "Use services.ddclient.passwordFile instead.")
     (lib.mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")
   ];
 
@@ -84,7 +115,9 @@ in
 
       username = lib.mkOption {
         # For `nsupdate` username contains the path to the nsupdate executable
-        default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
+        default = lib.optionalString (
+          config.services.ddclient.protocol == "nsupdate"
+        ) "${pkgs.bind.dnsutils}/bin/nsupdate";
         defaultText = "";
         type = str;
         description = ''
@@ -97,6 +130,16 @@ in
         type = nullOr str;
         description = ''
           A file containing the password or a TSIG key in named format when using the nsupdate protocol.
+        '';
+      };
+
+      secretsFile = lib.mkOption {
+        default = null;
+        type = nullOr str;
+        description = ''
+          A file containing the secrets for the dynamic DNS provider.
+          This file should contain lines of valid secrets in the format specified by the ddclient documentation.
+          If this option is set, it overrides the `passwordFile` option.
         '';
       };
 
@@ -123,7 +166,7 @@ in
         default = "dyndns2";
         type = str;
         description = ''
-          Protocol to use with dynamic DNS provider (see https://ddclient.net/protocols.html ).
+          Protocol to use with dynamic DNS provider (see <https://ddclient.net/protocols.html> ).
         '';
       };
 
@@ -211,18 +254,32 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.ddclient.enable {
-    warnings = lib.optional (cfg.use != "") "Setting `use` is deprecated, ddclient now supports `usev4` and `usev6` for separate IPv4/IPv6 configuration.";
+    warnings =
+      lib.optional (cfg.use != "")
+        "Setting `use` is deprecated, ddclient now supports `usev4` and `usev6` for separate IPv4/IPv6 configuration.";
+
+    assertions = [
+      {
+        assertion = !((cfg.passwordFile != null) && (cfg.secretsFile != null));
+        message = "You cannot use both services.ddclient.passwordFile and services.ddclient.secretsFile at the same time.";
+      }
+      {
+        assertion = (cfg.protocol != "nsupdate") || (cfg.secretsFile == null);
+        message = "You cannot use services.ddclient.secretsFile when services.ddclient.protocol is \"nsupdate\". Use services.ddclient.passwordFile instead.";
+      }
+    ];
 
     systemd.services.ddclient = {
       description = "Dynamic DNS Client";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = lib.optional (cfg.configFile != null) cfg.configFile;
-      path = lib.optional (lib.hasPrefix "if," cfg.use || lib.hasPrefix "ifv4," cfg.usev4 || lib.hasPrefix "ifv6," cfg.usev6) pkgs.iproute2;
+      path = lib.optional (
+        lib.hasPrefix "if," cfg.use || lib.hasPrefix "ifv4," cfg.usev4 || lib.hasPrefix "ifv6," cfg.usev6
+      ) pkgs.iproute2;
 
       serviceConfig = {
         DynamicUser = true;

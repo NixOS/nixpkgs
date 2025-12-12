@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     description = "Utility to generate Nix expressions for Zammad's dependencies";
     platforms = lib.platforms.unix;
   };

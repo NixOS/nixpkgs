@@ -18,47 +18,45 @@
 
 buildPythonPackage rec {
   pname = "sphinx-prompt";
-  version = "1.7.0"; # read before updating past 1.7.0 https://github.com/sbrunner/sphinx-prompt/issues/398
-  format = "pyproject";
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/XxUSsW8Bowks7P+d6iTlklyMIfTb2otXva/VtRVAkM=";
+    tag = version;
+    hash = "sha256-JKCTn2YkdyGLvchMT9C61PxjYxuQFzt3SjCE9JvgtVc=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"poetry-plugin-tweak-dependencies-version", ' ""
+    substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "docutils"
-    "pygments"
-    "Sphinx"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     pygments
     sphinx
   ];
 
+  # upstream pins these unnecessarily in their requirements.txt
+  pythonRelaxDeps = [
+    "certifi"
+    "requests"
+    "urllib3"
+    "zipp"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # versions >=1.8.0 cannot be build from source
-  passthru.skipBulkUpdate = true;
-
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

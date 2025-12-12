@@ -62,24 +62,24 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
     yelp-tools
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      curl
-      gdk-pixbuf
-      gtk3
-      json-glib
-      libxml2
-    ]
-    ++ lib.optional withGeoClue geoclue2
-    ++ lib.optional withGeoTag gexiv2
-    ++ lib.optional withMagic file
-    ++ lib.optional withMapnik mapnik
-    ++ lib.optional withMBTiles sqlite
-    ++ lib.optional withMd5Hash nettle
-    ++ lib.optional withOAuth liboauth
-    ++ lib.optional withRealtimeGPSTracking gpsd;
+  buildInputs = [
+    curl
+    gdk-pixbuf
+    gtk3
+    json-glib
+    libxml2
+  ]
+  ++ lib.optional withGeoClue geoclue2
+  ++ lib.optional withGeoTag gexiv2
+  ++ lib.optional withMagic file
+  ++ lib.optional withMapnik mapnik
+  ++ lib.optional withMBTiles sqlite
+  ++ lib.optional withMd5Hash nettle
+  ++ lib.optional withOAuth liboauth
+  ++ lib.optional withRealtimeGPSTracking gpsd;
 
   configureFlags = [
     (lib.enableFeature withGeoClue "geoclue")
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS data editor and analyzer";
     mainProgram = "viking";
     longDescription = ''
@@ -113,11 +113,11 @@ stdenv.mkDerivation rec {
       position, etc.
     '';
     homepage = "https://sourceforge.net/projects/viking/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
       sikmir
     ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

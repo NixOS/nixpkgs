@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pyasn1";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W74aWMqGlat+aZfhbP1cTKRz7SomHdGwfK5yJwxgyqI=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/pysnmp/pyasn1";
     changelog = "https://github.com/pysnmp/pyasn1/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

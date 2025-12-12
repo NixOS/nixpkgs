@@ -15,23 +15,25 @@
   writers,
   python3Packages,
   nix-update,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromBitbucket {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
+    owner = "ecwolf";
+    repo = "ecwolf";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-T5K6B2fWMKMLB/662p/YLEv0Od9n0vUakznyoOnr0kI=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
   buildInputs = [
     zlib
     bzip2
@@ -46,15 +48,11 @@ stdenv.mkDerivation rec {
 
   # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
   # directories to the PATH.
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv "$out/games" "$out/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      cp -R ecwolf.app $out/Applications
-      makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R ecwolf.app $out/Applications
+    makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
+  '';
 
   passthru.updateScript =
     let
@@ -94,15 +92,14 @@ stdenv.mkDerivation rec {
       (lib.getExe nix-update)
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     mainProgram = "ecwolf";
     homepage = "https://maniacsvault.net/ecwolf/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       jayman2000
-      sander
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

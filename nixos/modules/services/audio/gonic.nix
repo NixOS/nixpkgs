@@ -1,9 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.gonic;
   settingsFormat = pkgs.formats.keyValue {
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
+  };
+  assertKey = key: {
+    assertion = cfg.settings ? ${key};
+    message = "Please set services.gonic.settings.${key}. See https://github.com/sentriz/gonic#configuration-options for supported values.";
   };
 in
 {
@@ -11,6 +20,8 @@ in
     services.gonic = {
 
       enable = lib.mkEnableOption "Gonic music server";
+
+      package = lib.mkPackageOption pkgs "gonic" { };
 
       settings = lib.mkOption rec {
         type = settingsFormat.type;
@@ -24,6 +35,7 @@ in
         example = {
           music-path = [ "/mnt/music" ];
           podcast-path = "/mnt/podcasts";
+          playlists-path = "/mnt/playlists";
         };
         description = ''
           Configuration for Gonic, see <https://github.com/sentriz/gonic#configuration-options> for supported values.
@@ -34,6 +46,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      (assertKey "music-path")
+      (assertKey "podcast-path")
+      (assertKey "playlists-path")
+    ];
+
     systemd.services.gonic = {
       description = "Gonic Media Server";
       after = [ "network.target" ];
@@ -42,10 +60,11 @@ in
         ExecStart =
           let
             # these values are null by default but should not appear in the final config
-            filteredSettings = lib.filterAttrs (n: v: !((n == "tls-cert" || n == "tls-key") && v == null)) cfg.settings;
+            filteredSettings = lib.filterAttrs (
+              n: v: !((n == "tls-cert" || n == "tls-key") && v == null)
+            ) cfg.settings;
           in
-          "${pkgs.gonic}/bin/gonic -config-path ${settingsFormat.generate "gonic" filteredSettings}";
-        DynamicUser = true;
+          "${lib.getExe cfg.package} -config-path ${settingsFormat.generate "gonic" filteredSettings}";
         StateDirectory = "gonic";
         CacheDirectory = "gonic";
         WorkingDirectory = "/var/lib/gonic";
@@ -54,18 +73,24 @@ in
         ReadWritePaths = "";
         BindPaths = [
           cfg.settings.playlists-path
+          cfg.settings.podcast-path
+          cfg.settings.cache-path
         ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
           "-/etc/resolv.conf"
-          "-/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
-          cfg.settings.podcast-path
-        ] ++ cfg.settings.music-path
+        ]
+        ++ cfg.settings.music-path
         ++ lib.optional (cfg.settings.tls-cert != null) cfg.settings.tls-cert
         ++ lib.optional (cfg.settings.tls-key != null) cfg.settings.tls-key;
         CapabilityBoundingSet = "";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         PrivateDevices = true;
         PrivateUsers = true;
@@ -76,10 +101,12 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         RestrictRealtime = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         UMask = "0066";
         ProtectHostname = true;
       };

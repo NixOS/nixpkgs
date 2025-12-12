@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
-  version = "1.0.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
     owner = "github";
     repo = "mona-sans";
-    sha256 = "sha256-XvqLFzlgIqx9aZH2SEAtwMiuWgUiDi/gHGSpfreUHuk=";
+    sha256 = "sha256-pFc6EUzf4FlA0LVdDEnFNr7m5V1FLc4jTAvtZdOslTg=";
   };
 
   installPhase = ''
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       by all major browsers, allowing for performance benefits and granular
       design control of the typeface's weight, width, and slant.
     '';
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-bson";
     repo = "bson";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mirRpo27RoOBlwxVOKnHaDIzJOErp7c2VxCOunUm/u4=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bson" ];
 
-  meta = with lib; {
+  meta = {
     description = "BSON codec for Python";
     homepage = "https://github.com/py-bson/bson";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

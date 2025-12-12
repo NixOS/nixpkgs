@@ -22,18 +22,18 @@
   vulkan-loader,
   vulkan-utility-libraries,
   writeText,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  version = "1.3.296.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-RaL7sqy5Rc8syPoM3SedZ6UilV9JUAA96JZh5/gIfPU=";
+    hash = "sha256-kywAcpBYLSlhEbgssXGwMoXQC03QUEz4dwsvI0I8Nh4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     jq
     which
     pkg-config
-    libsForQt5.qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     wayland
     xcbutilkeysyms
     xcbutilwm
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtwayland
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   cmakeFlags = [
@@ -70,13 +70,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/*
-    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
   preFixup = ''
-    for f in "$out"/etc/vulkan/explicit_layer.d/*.json "$out"/etc/vulkan/implicit_layer.d/*.json; do
+    for f in "$out"/share/vulkan/explicit_layer.d/*.json "$out"/share/vulkan/implicit_layer.d/*.json; do
       jq <"$f" >tmp.json ".layer.library_path = \"$out/lib/\" + .layer.library_path"
       mv tmp.json "$f"
     done
@@ -87,15 +86,15 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LunarG Vulkan Tools and Utilities";
     longDescription = ''
       Tools to aid in Vulkan development including useful layers, trace and
       replay, and tests.
     '';
     homepage = "https://github.com/LunarG/VulkanTools";
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

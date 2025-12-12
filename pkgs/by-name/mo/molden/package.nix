@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_register_file_types.patch ];
 
+  # fix build with GCC 14
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int -Wno-return-mismatch";
+
   postPatch = ''
     substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \
                                  --replace '-I/usr/X11R6/include' "" \
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "Display and manipulate molecular structures";
     homepage = "http://www3.cmbi.umcn.nl/molden/";
     license = {
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
       url = "http://www3.cmbi.umcn.nl/molden/CopyRight.html";
       free = false;
     };
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

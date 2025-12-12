@@ -20,11 +20,14 @@ let
         args
         // {
           outputs = args.outputs or [ "out" ] ++ [ "man" ];
-          postFixup =
-            args.postFixup or ""
-            + ''
-              ln -s ${vmr.man} $man
-            '';
+          postFixup = args.postFixup or "" + ''
+            ln -s ${vmr.man} $man
+          '';
+          propagatedSandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+            (allow file-read* (subpath "/private/var/db/mds/system"))
+            (allow mach-lookup (global-name "com.apple.SecurityServer")
+                              (global-name "com.apple.system.opendirectoryd.membership"))
+          '';
         }
       )
     );
@@ -51,7 +54,7 @@ let
 
         mkdir -p "$out"
 
-        pushd "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}
+        pushd "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}
         pushd ${pname}.${version}.nupkg
 
         xmlstarlet \
@@ -66,8 +69,12 @@ let
           version=''${version,,}
           mkdir -p "$out"/share/nuget/packages/"$id"
           cp -r . "$out"/share/nuget/packages/"$id"/"$version"
-          chmod +w "$out"/share/nuget/packages/"$id"/"$version"
-          echo {} > "$out"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
+          cd "$out"/share/nuget/packages/"$id"/"$version"
+          chmod +w .
+          for dir in tools runtimes/*/native; do
+            [[ ! -d "$dir" ]] || chmod -R +x "$dir"
+          done
+          echo {} > .nupkg.metadata
         )
 
         popd
@@ -77,36 +84,34 @@ let
       '';
     };
 
-  packages =
-    [
-      (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
-      (mkPackage "Microsoft.NETCore.DotNetAppHost" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
-      (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
-      (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
-      (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
-    ]
-    ++ lib.optionals (lib.versionOlder runtime.version "9") [
-      (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
-      (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-      (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
-    ]
-    ++ targetPackages.${targetRid};
+  packages = [
+    (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
+    (mkPackage "Microsoft.NETCore.DotNetAppHost" runtime.version)
+    (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
+    (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
+    (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
+    (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
+    (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
+  ]
+  ++ lib.optionals (lib.versionOlder runtime.version "9") [
+    (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
+    (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+    (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
+  ]
+  ++ targetPackages.${targetRid};
 
   targetPackages = fallbackTargetPackages // {
-    ${targetRid} =
-      [
-        (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
-        (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
-        (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
-      ]
-      ++ lib.optionals (lib.versionOlder runtime.version "9") [
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
-      ];
+    ${targetRid} = [
+      (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
+      (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionOlder runtime.version "9") [
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ];
   };
 
   sdk = mkCommon "sdk" rec {
@@ -131,13 +136,13 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src"/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
+      cp -r "$src"/lib/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       mkdir -p "$artifacts"
-      cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
+      cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
       chmod +w -R "$artifacts"
 
       local package
@@ -152,6 +157,14 @@ let
 
       runHook postInstall
     '';
+
+    ${
+      if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null
+    } =
+      ''
+        mkdir -p "$out"/nix-support
+        cp "$src"/nix-support/manual-sdk-deps "$out"/nix-support/manual-sdk-deps
+      '';
 
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
@@ -180,13 +193,17 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit (vmr) icu;
+    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";
@@ -204,16 +221,20 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet/shared
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -Tr "$src/lib/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit (vmr) icu;
+    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";
@@ -228,4 +249,8 @@ in
     aspnetcore
     ;
 
+  packages = lib.recurseIntoAttrs (
+    # recursion can't handle . in the attribute names
+    lib.genAttrs' packages (p: lib.nameValuePair (lib.replaceString "." "-" p.pname) p)
+  );
 }

@@ -1,0 +1,62 @@
+From 1aecd86536aef53e92a4903794259300815a9e62 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 1 Jul 2025 12:53:14 +0900
+Subject: [PATCH 23/30] musl: avoid multiple evaluations in CPU_ISSET_S() macro
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+musl's CPU_ISSET_S() macro does not avoid multiple evaluations, and it
+only accepts simple variable or constant.
+
+Fixes the following error.
+```
+../src/shared/cpu-set-util.c: In function ‘cpu_set_to_mask_string’:
+../src/shared/cpu-set-util.c:101:41: warning: operation on ‘i’ may be undefined [-Werror=sequence-point]
+  101 |                         if (CPU_ISSET_S(--i, c->allocated, c->set))
+      |                                         ^
+```
+---
+ src/include/musl/sched.h | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 src/include/musl/sched.h
+
+diff --git a/src/include/musl/sched.h b/src/include/musl/sched.h
+new file mode 100644
+index 0000000000..d6e7100ee4
+--- /dev/null
++++ b/src/include/musl/sched.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <sched.h>
++
++/* This is for avoiding multiple evaluations in musl's __CPU_op_S() macro. */
++
++#undef __CPU_op_S
++#undef CPU_SET_S
++#undef CPU_CLR_S
++#undef CPU_ISSET_S
++#undef CPU_SET
++#undef CPU_CLR
++#undef CPU_ISSET
++
++#define __CPU_op_S(i, size, set, op) \
++        ({                           \
++                typeof(i) _i = (i);                                     \
++                                                                        \
++                _i / 8U >= (size) ? 0 :                                 \
++                        (((unsigned long*) (set))[_i / 8 / sizeof(long)] op (1UL << (_i % (8 * sizeof(long))))); \
++        })
++
++#define CPU_SET_S(i, size, set) __CPU_op_S(i, size, set, |=)
++#define CPU_CLR_S(i, size, set) __CPU_op_S(i, size, set, &=~)
++#define CPU_ISSET_S(i, size, set) __CPU_op_S(i, size, set, &)
++
++#define CPU_SET(i, set) CPU_SET_S(i, sizeof(cpu_set_t), set)
++#define CPU_CLR(i, set) CPU_CLR_S(i, sizeof(cpu_set_t), set)
++#define CPU_ISSET(i, set) CPU_ISSET_S(i, sizeof(cpu_set_t), set)
+-- 
+2.51.0
+

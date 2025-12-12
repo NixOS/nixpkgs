@@ -1,15 +1,22 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
   ogre_13,
   cegui,
-  boost,
-  sfml,
-  openal,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  pkg-config,
+
+  # buildInputs
+  boost183,
   ois,
+  openal,
+  sfml_2,
+
+  # passthru
+  unstableGitUpdater,
 }:
 
 let
@@ -24,13 +31,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "opendungeons";
-  version = "unstable-2023-03-18";
+  version = "0-unstable-2024-07-27";
 
   src = fetchFromGitHub {
     owner = "paroj";
     repo = "OpenDungeons";
-    rev = "974378d75591214dccbe0fb26e6ec8a40c2156e0";
-    hash = "sha256-vz9cT+rNcyKT3W9I9VRKcFol2SH1FhOhOALALjgKfIE=";
+    rev = "2574db9fbe99aeb6a058b7a27bc191da37978c95";
+    hash = "sha256-EeyLwZmaVzzbxPA4PIooVbw12wYb131x+rnIB8n4fgg=";
   };
 
   patches = [
@@ -39,9 +46,14 @@ stdenv.mkDerivation {
   ];
 
   # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    cp source/utils/StackTrace{Stub,Unix}.cpp
-  '';
+  postPatch =
+    lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      cp source/utils/StackTrace{Stub,Unix}.cpp
+    ''
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    '';
 
   strictDeps = true;
 
@@ -51,23 +63,27 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ogre'
+    boost183
     cegui'
-    boost
-    sfml
-    openal
+    ogre'
     ois
+    openal
+    sfml_2
   ];
 
   cmakeFlags = [
-    "-DOD_TREAT_WARNINGS_AS_ERRORS=FALSE"
+    (lib.cmakeBool "OD_TREAT_WARNINGS_AS_ERRORS" false)
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
+
+  meta = {
     description = "Open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
     mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       zlib
       mit
@@ -76,6 +92,6 @@ stdenv.mkDerivation {
       ofl
       cc-by-30
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

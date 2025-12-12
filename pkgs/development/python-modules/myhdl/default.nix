@@ -8,7 +8,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "myhdl";
   # The stable version is from 2019 and it doesn't pass tests
   version = "unstable-2022-04-26";
@@ -42,10 +42,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source package for using Python as a hardware description and verification language";
     homepage = "https://www.myhdl.org/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

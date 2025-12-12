@@ -11,24 +11,18 @@
   xorg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coppwr";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
-    rev = version;
-    hash = "sha256-5TgK/0UN05P3WENch4sBo/Sy9FaMmyH/gZ+6qUyM1z0=";
+    tag = finalAttrs.version;
+    hash = "sha256-L0MpMh3HuWX0zxG50OGZDa+wX5E55/dU6jt6Iei99Ho=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-OajIef0tSuZ5bFauAeHtN/LQlo+k7k9g0azHDk3HOQc=";
-      "libspa-0.8.0" = "sha256-X8mwLtuPuMxZY71GNPAgiJGJ9JNMj7AbCliXiBxJ4vQ=";
-    };
-  };
+  cargoHash = "sha256-tcGyoPVoJFhbXZFe23d00Z7FUwIo5J02EfPTBzCGE64=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,10 +49,14 @@ rustPlatform.buildRustPackage rec {
     install -m 444 \
         -D $src/assets/io.github.dimtpap.coppwr.metainfo.xml \
         -t $out/share/metainfo
-    cp $src/assets/icon/scalable.svg $out/share/icons/hicolor/scalable/apps/io.github.dimtpap.coppwr.svg
+    install -m 444 \
+        -D $src/assets/icon/scalable.svg \
+        -t $out/share/icons/hicolor/scalable/apps/io.github.dimtpap.coppwr.svg
     for size in 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      cp $src/assets/icon/"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/io.github.dimtpap.coppwr.png
+      install -m 444 \
+          -D $src/assets/icon/"$size".png \
+          -t $out/share/icons/hicolor/"$size"x"$size"/apps/io.github.dimtpap.coppwr.png
     done
   '';
 
@@ -81,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "coppwr";
     platforms = lib.platforms.linux;
   };
-}
+})

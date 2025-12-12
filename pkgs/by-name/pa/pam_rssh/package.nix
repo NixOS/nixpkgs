@@ -7,21 +7,22 @@
   openssl,
   pam,
   openssh,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
-  version = "1.2.0-rc2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    rev = "v${version}";
-    hash = "sha256-sXTSICVYSmwr12kRWuhVcag8kY6VAFdCqbe6LtYs4hU=";
+    tag = "v${version}";
+    hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-QZ1Cs3TZab9wf8l4Fe95LFZhHB6q1uq7JRzEVUMKQSI=";
+  cargoHash = "sha256-4DoMRtyT2t4degi8oOyVTStb0AU0P/7XeYk15JLRrqg=";
 
   postPatch = ''
     substituteInPlace src/auth_keys.rs \
@@ -39,9 +40,11 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Fails because it tries finding authorized_keys in /home/$USER.
     "--skip=tests::parse_user_authorized_keys"
+    # Skip unsupported DSA keys since OpenSSH v10.
+    "--skip=sign_verify::test_dsa_sign_verify"
   ];
 
-  nativeCheckInputs = [ (openssh.override { dsaKeysSupport = true; }) ];
+  nativeCheckInputs = [ openssh ];
 
   env.USER = "nixbld";
 
@@ -54,7 +57,6 @@ rustPlatform.buildRustPackage rec {
     ssh-keygen -q -N "" -t ecdsa -b 256 -f $HOME/.ssh/id_ecdsa256
     ssh-keygen -q -N "" -t ed25519 -f $HOME/.ssh/id_ed25519
     ssh-keygen -q -N "" -t rsa -f $HOME/.ssh/id_rsa
-    ssh-keygen -q -N "" -t dsa -f $HOME/.ssh/id_dsa
     export SSH_AUTH_SOCK=$HOME/ssh-agent.sock
     eval $(ssh-agent -a $SSH_AUTH_SOCK)
     ssh-add $HOME/.ssh/id_ecdsa521
@@ -62,14 +64,18 @@ rustPlatform.buildRustPackage rec {
     ssh-add $HOME/.ssh/id_ecdsa256
     ssh-add $HOME/.ssh/id_ed25519
     ssh-add $HOME/.ssh/id_rsa
-    ssh-add $HOME/.ssh/id_dsa
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
     homepage = "https://github.com/z4yx/pam_rssh";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      kranzes
+      xyenon
+    ];
   };
 }

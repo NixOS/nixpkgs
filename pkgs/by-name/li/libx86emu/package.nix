@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libx86emu";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "wfeldt";
     repo = "libx86emu";
     rev = version;
-    sha256 = "sha256-dKT/Ey+vardXu/+coaC69TTUXjJLsLBKgCx9VY8f0oY=";
+    sha256 = "sha256-ilAmGlkMeuG0FlygMdE3NreFPJJF6g/26C8C5grvjrk=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "shared"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   enableParallelBuilding = true;
 
   installFlags = [
@@ -36,11 +39,11 @@ stdenv.mkDerivation rec {
     "LIBDIR=/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "x86 emulation library";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/wfeldt/libx86emu";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
   };
 }

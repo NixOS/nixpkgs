@@ -12,6 +12,7 @@
   proton-vpn-local-agent,
   pycairo,
   pygobject3,
+  pyxdg,
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.10.1";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zS/H7efEJlvDlcoxil6pd6lFLdLRAV7Bmr/ngtZ8Nuc";
+    tag = "v${version}";
+    hash = "sha256-VMaj85oFxLkloR6hdeRHwVTBl44Mx5WEjOl9FnLf8+w=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     proton-vpn-local-agent
     pycairo
     pygobject3
+    pyxdg
   ];
 
   postPatch = ''
@@ -67,9 +69,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   meta = {
@@ -77,6 +81,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

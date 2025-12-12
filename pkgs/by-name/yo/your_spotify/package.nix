@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-BytHkvm0gfMnsKe2gDTARWYIHBpfAfIisf2p4bmrpMA=";
+    tag = finalAttrs.version;
+    hash = "sha256-i/R5tvt+9DD/ZUPLBq6EOJjuyHSv5zljTWuLwo+JBYA=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-D7rL3hxidLaChCwn5umQAnWr4cTVQ1iwDs5+gIDgBGI=";
+    hash = "sha256-2Z5bOiPenlDTzOAMrIt73k4pi0v3SAN7HXXJDoOo8Qc=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/your_spotify
     cp -r node_modules $out/share/your_spotify/node_modules
+    rm $out/share/your_spotify/node_modules/@your_spotify/{client,dev,server}
     cp -r ./apps/server/{lib,package.json} $out
     mkdir -p $out/bin
     makeWrapper ${lib.escapeShellArg (lib.getExe nodejs)} "$out/bin/your_spotify_migrate" \

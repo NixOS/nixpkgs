@@ -1,7 +1,9 @@
 {
+  lib,
   stdenv,
   fetchurl,
   mecab-nodic,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,5 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-charset=utf8"
     "--with-dicdir=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "--with-mecab-config=${lib.getExe' buildPackages.mecab "mecab-config"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "--with-mecab-config=${lib.getExe' (lib.getDev mecab-nodic) "mecab-config"}"
   ];
 })

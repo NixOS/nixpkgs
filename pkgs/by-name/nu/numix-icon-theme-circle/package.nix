@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme-circle";
-  version = "24.12.12";
+  version = "25.11.15";
 
   src = fetchFromGitHub {
     owner = "numixproject";
-    repo = pname;
+    repo = "numix-icon-theme-circle";
     rev = version;
-    sha256 = "sha256-jN1WjZP+k9/kj8/ZsWocy0OYgUW5M6MqTF3A7u550tk=";
+    sha256 = "sha256-+JV+2PEcXjIUxKTHV+jIejem/oANiMwytzwUPMa2zkc=";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Numix icon theme (circle version)";
     homepage = "https://numixproject.github.io";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

@@ -1,22 +1,6 @@
 import ./make-test-python.nix (
-  { lib, ... }@args:
+  { lib, pkgs, ... }@args:
   let
-    pkgs = args.pkgs.extend (
-      self: super: {
-        stdenv = super.stdenv.override {
-          config = super.config // {
-            allowUnfreePredicate =
-              pkg:
-              builtins.elem (lib.getName pkg) [
-                "vscode"
-                "vscode-with-extensions"
-                "vscode-extension-ms-vscode-remote-remote-ssh"
-              ];
-          };
-        };
-      }
-    );
-
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
     inherit (pkgs.vscode.passthru) rev vscodeServer;
@@ -27,6 +11,8 @@ import ./make-test-python.nix (
     meta = {
       maintainers = [ ];
       timeout = 600;
+      # https://hydra.nixos.org/build/309924543/nixlog/1
+      broken = true;
     };
 
     nodes =

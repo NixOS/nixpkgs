@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sbc";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-jxI2jh279V4UU2UgRzz7M4yEs5KTnMm2Qpg2D9SgeZI=";
+    sha256 = "sha256-QmYzyr18eYI2RDUW36gzW0fgBLDvN/8Qfgx+rTKZ/MI=";
   };
 
   outputs = [
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
-  meta = with lib; {
+  meta = {
     description = "SubBand Codec Library";
-    homepage = "http://www.bluez.org/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    homepage = "https://www.bluez.org/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

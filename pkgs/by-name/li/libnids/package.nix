@@ -14,6 +14,12 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/libnids/libnids-1.24.tar.gz";
     sha256 = "1cblklfdfxcmy0an6xyyzx4l877xdawhjd28daqfsvrh81mb07k1";
   };
+
+  postPatch = ''
+    substituteInPlace src/Makefile.in \
+      --replace-fail ar '${stdenv.cc.targetPrefix}ar'
+  '';
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpcap
@@ -32,12 +38,12 @@ stdenv.mkDerivation {
   */
   env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
 
-  meta = with lib; {
+  meta = {
     description = "E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";
     homepage = "https://libnids.sourceforge.net/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.symphorien ];
     # probably also bsd and solaris
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

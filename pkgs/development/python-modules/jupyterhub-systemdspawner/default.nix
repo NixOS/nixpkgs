@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "systemdspawner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-obM8HGCHsisRV1+kHMWdA7d6eb6awwPMBuDUAf3k0uI=";
   };
 
@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "systemdspawner" ];
 
-  meta = with lib; {
+  meta = {
     description = "JupyterHub Spawner using systemd for resource isolation";
     mainProgram = "check-kernel.bash";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -35,16 +35,16 @@ in
 
 buildGoModule rec {
   pname = "berglas";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "berglas";
     rev = "v${version}";
-    sha256 = "sha256-aTUMEn/QkPzvAyUvMxyqLl6KWFHs+dQK0VDqYv36AGM=";
+    sha256 = "sha256-gBZY/xj/T7UYQ5mnN6udpBKViE/RYz9tmbmYN+JqsBk=";
   };
 
-  vendorHash = "sha256-n/NOAmOOoZMFZGreUGNgrZ3XGbhmI52KtgakcJ/SJIc=";
+  vendorHash = "sha256-NR4YoaJ5ztc7eokRexNzDBtAH7JM4vZH13K550KWFNM=";
 
   ldflags = [
     "-s"
@@ -60,10 +60,10 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing secrets on Google Cloud";
     homepage = "https://github.com/GoogleCloudPlatform/berglas";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "berglas";
   };
 }

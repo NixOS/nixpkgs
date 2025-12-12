@@ -8,11 +8,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
   version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-aETSDXCVteTruRKV/8Aw3R/bprB6txOsXrFvoZOxIus=";
   };
 
@@ -23,13 +24,17 @@ python3.pkgs.buildPythonApplication rec {
     echo "include ripe/atlas/tools/user-agent" >> MANIFEST.in
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    sphinx-rtd-theme
-    sphinxHook
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    sphinx-rtd-theme
+    sphinxHook
+  ];
+
+  dependencies = with python3.pkgs; [
     ipy
     pyopenssl
     python-dateutil
@@ -59,6 +64,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
+    # Disable this test because on Python >= 3.12 it fails due to argparse changes https://github.com/python/cpython/pull/124578
+    "test_add_arguments"
     # Network tests: https://github.com/RIPE-NCC/ripe-atlas-tools/issues/234
     "test_arg_from_file"
     "test_arg_from_stdin"
@@ -88,11 +95,11 @@ python3.pkgs.buildPythonApplication rec {
     echo "__version__ = \"${version}\"" > ripe/atlas/tools/version.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RIPE ATLAS project tools";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
     changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

@@ -2,39 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "growattserver";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "indykoning";
     repo = "PyPi_GrowattServer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-P7HZPmDUQM3DuaGSkAHc0jQBGeurS+KgtdwT7ZJ/8q8=";
+    tag = version;
+    hash = "sha256-rob2+uXuBD5Gf05rNFFEW210JxrTbWN7knk9Tnz7wOE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "growattServer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to retrieve information from Growatt units";
     homepage = "https://github.com/indykoning/PyPi_GrowattServer";
-    changelog = "https://github.com/indykoning/PyPi_GrowattServer/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/indykoning/PyPi_GrowattServer/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

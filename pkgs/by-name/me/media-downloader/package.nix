@@ -1,7 +1,6 @@
 {
   aria2,
   cmake,
-  # https://github.com/mhogomchungu/media-downloader?tab=readme-ov-file#extensions
   extraPackages ? [
     aria2
     ffmpeg
@@ -10,28 +9,31 @@
   fetchFromGitHub,
   ffmpeg,
   lib,
-  libsForQt5,
   python3,
+  qt6,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "5.2.0";
+  version = "5.4.6";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-DytzYnvO8LEDYWzySzoWCAwXw0VKzjlCrjvcCjm0ilE=";
+    hash = "sha256-2VcxNoC/9dVYItDJdWxuXFtl31p8kKCnbmAWfYFBGwQ=";
   };
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [ libsForQt5.qtbase ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPackages}" ];
 

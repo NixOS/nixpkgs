@@ -9,11 +9,11 @@
 buildKodiAddon rec {
   pname = "urllib3";
   namespace = "script.module.urllib3";
-  version = "2.1.0";
+  version = "2.2.3";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-UCvkeguxytPoP1gIIt8N79TVs98ATzsfrRSabtbgnGc=";
+    sha256 = "sha256-xapFA51ENjkB3IldUey5WqXAjMij66dNqILQjKD/VkA=";
   };
 
   passthru = {
@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://urllib3.readthedocs.io/en/latest/";
     description = "HTTP library with thread-safe connection pooling, file post, and more";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

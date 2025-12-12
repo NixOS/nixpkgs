@@ -105,13 +105,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "11.1";
+  version = "11.2";
 
   src = fetchFromGitHub {
     owner = "gluster";
-    repo = pname;
+    repo = "glusterfs";
     rev = "v${version}";
-    sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
+    sha256 = "sha256-MGTntR9SVmejgpAkZnhJOaIkZeCMNBGaQSorLOStdjo=";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -259,11 +259,11 @@ stdenv.mkDerivation rec {
     glusterfs = nixosTests.glusterfs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
-    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
-    maintainers = [ maintainers.raskin ];
-    platforms = with platforms; linux ++ freebsd;
+    license = lib.licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
   };
 }

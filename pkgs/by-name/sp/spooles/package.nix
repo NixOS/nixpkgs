@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.netlib.org/linalg/spooles/";
     description = "Library for solving sparse real and complex linear systems of equations";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-maintenance-mode";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rZo0yru+y5TkdULBQDMGAVb494PSLtbnNX/7cuphKNk=";
+    tag = version;
+    hash = "sha256-Gd6Bmir0bHsD7Xaq1N9S8bSMGQWbVCBIA8Cftzu6QB0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maintenance_mode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
-    changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mrmebelman ];
+    changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

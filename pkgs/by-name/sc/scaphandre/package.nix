@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scaphandre";
-  version = "0.5.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "hubblo-org";
-    repo = pname;
+    repo = "scaphandre";
     rev = "v${version}";
-    hash = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
+    hash = "sha256-I+cECdpLoIj4yuWXfirwHlcn0Hkm9NxPqo/EqFiBObw=";
   };
 
-  cargoHash = "sha256-Vdkq9ShbHWepvIgHPjhKY+LmhjS+Pl84QelgEpen7Qs=";
+  cargoHash = "sha256-OIoQ2r/T0ZglF1pe25ND8xe/BEWgP9JbWytJp4k7yyg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     runHook preCheck
 
     # Work around to pass test due to non existing path
-    # https://github.com/hubblo-org/scaphandre/blob/v0.5.0/src/sensors/powercap_rapl.rs#L29
+    # https://github.com/hubblo-org/scaphandre/blob/v1.0.2/src/sensors/powercap_rapl.rs#L29
     export SCAPHANDRE_POWERCAP_PATH="$(mktemp -d)/scaphandre"
 
     mkdir -p "$SCAPHANDRE_POWERCAP_PATH"
@@ -65,12 +65,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Electrical power consumption metrology agent";
     homepage = "https://github.com/hubblo-org/scaphandre";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "scaphandre";
+    # Upstream needs to decide what to do about a broken dependency
+    # https://github.com/hubblo-org/scaphandre/issues/403
+    broken = true;
   };
 }

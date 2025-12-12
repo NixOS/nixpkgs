@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite_orm";
-  version = "1.9";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "fnc12";
     repo = "sqlite_orm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jgRCYOtCyXj2E5J3iYBffX2AyBwvhune+i4Pb2eCBrA=";
+    hash = "sha256-tlmUYHH0V4qsKSTdrg/OrS9eOEseIDAIU/HN8YK36go=";
   };
 
   nativeBuildInputs = [
@@ -26,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Light header only SQLite ORM";
     homepage = "https://sqliteorm.com/";
-    license = licenses.agpl3Only; # MIT license is commercial
-    maintainers = with maintainers; [ ambroisie ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Only; # MIT license is commercial
+    maintainers = with lib.maintainers; [ ambroisie ];
+    platforms = lib.platforms.all;
   };
 })

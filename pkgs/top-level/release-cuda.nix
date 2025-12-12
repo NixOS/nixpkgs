@@ -2,10 +2,7 @@
     Test CUDA packages.
 
     This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
-
-    Cf. https://github.com/nix-community/infra/pull/1335
+    because it requires unfree software.
 
     Test for example like this:
 
@@ -14,19 +11,7 @@
 
 let
   lib = import ../../lib;
-  ensureList = x: if builtins.isList x then x else [ x ];
-  allowUnfreePredicate =
-    p:
-    builtins.all (
-      license:
-      license.free
-      || builtins.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (ensureList p.meta.license);
+  cudaLib = (import ../development/cuda-modules/_cuda).lib;
 in
 
 {
@@ -39,10 +24,15 @@ in
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
-      inherit allowUnfreePredicate;
+      allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
       "${variant}Support" = true;
       inHydra = true;
+
+      # Don't evaluate duplicate and/or deprecated attributes
+      allowAliases = false;
     };
+
+    __allowFileset = false;
   },
   ...
 }@args:
@@ -67,11 +57,16 @@ let
     ;
 
   # Package sets to evaluate whole
-  packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
+  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
+  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
 
-  jobs =
-    mapTestOn {
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
+  explicitPackagePlatforms =
+    # This comment prevents nixfmt from changing the indentation level, lol
+    {
       blas = linux;
       blender = linux;
       faiss = linux;
@@ -87,17 +82,29 @@ let
       cholmod-extra = linux;
       colmap = linux;
       ctranslate2 = linux;
-      deepin.image-editor = linux;
       ffmpeg-full = linux;
+      firefox = linux;
+      firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
+      firefox-devedition = linux;
+      firefox-devedition-unwrapped = linux;
+      freecad = linux;
       gimp = linux;
+      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
+      kdePackages.kdenlive = linux;
+      krita = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
+      mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -109,6 +116,9 @@ let
       rtabmap = linux;
       saga = linux;
       suitesparse = linux;
+      sunshine = linux;
+      thunderbird = linux;
+      thunderbird-unwrapped = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
@@ -116,19 +126,17 @@ let
       xgboost = linux;
 
       python3Packages = {
-        boxx = linux;
-        bpycv = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
+        flashinfer = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;
         jaxlib = linux;
         jax = linux;
-        Keras = linux;
+        keras = linux;
         kornia = linux;
         mmcv = linux;
         mxnet = linux;
@@ -137,20 +145,19 @@ let
         triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
+        opencv4Full = linux;
         opensfm = linux;
         pycuda = linux;
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        pytorch = linux;
-        scikitimage = linux;
+        scikit-image = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
         spacy-transformers = linux;
         tensorflow = linux;
         tensorflow-probability = linux;
         tesserocr = linux;
-        Theano = linux;
         tiny-cuda-nn = linux;
         torchaudio = linux;
         torch = linux;
@@ -158,8 +165,13 @@ let
         transformers = linux;
         ttstokenizer = linux;
         vidstab = linux;
+        vllm = linux;
       };
-    }
-    // (lib.genAttrs packageSets evalPackageSet);
+    };
+
+  # Explicitly specified platforms take precedence over the platforms
+  # automatically inferred in autoPackagePlatforms
+  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
+  jobs = mapTestOn allPackagePlatforms;
 in
 jobs

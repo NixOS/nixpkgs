@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/glehmann/tree-sitter-earthfile",
-  "rev": "059fb087247bef8789e938629388c3e7af32c986",
-  "date": "2024-11-09T21:50:50+01:00",
-  "path": "/nix/store/907d7p3lzbc22yvx1lw8qjinyviw87ja-tree-sitter-earthfile",
-  "sha256": "1yx4vxhyqwskfidbxbz3m7x9l18jnavrnp5f2xxwaaq75cbccyav",
-  "hash": "sha256-W3nGFisHK8V7F65cm7eyEgWa+qnjr75adFNz7GHfpPs=",
+  "rev": "a37c5ee95ce401ca311c0ae1369d9cfb953e151d",
+  "date": "2025-05-13T08:33:41+02:00",
+  "path": "/nix/store/dhmdlbq30jfmsl719k8pawcffs8xpin0-tree-sitter-earthfile",
+  "sha256": "1gld2wrxa9bfhka70pnyapq7agwxh2mgwa7qj5mq8ga73gfi52lm",
+  "hash": "sha256-lYoS3RtHPYRrkfgo/qqAnT918FXeXnDUhG4l1TMXjb4=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

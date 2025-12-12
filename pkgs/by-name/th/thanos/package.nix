@@ -7,22 +7,29 @@
   nixosTests,
   testers,
   thanos,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "thanos";
-  version = "0.37.2";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IbQsUanLCDZ1Ku2Xu6ValR4iGM+cxxyEGxDFjJzsEcg=";
+    tag = "v${version}";
+    hash = "sha256-g0xvtBwPoX906xHdyOEUfudio/9MZhkzdBp5FcATRsM=";
   };
 
-  vendorHash = "sha256-+YjzHDVEVVwx4qApfNppuTYQJcwpQxRTxAkrkdBt/iY=";
+  vendorHash = "sha256-ukKoiA7UhqDdMvAWYL5BGf6+FSPSkcRR/Scj5o/MMKc=";
 
   subPackages = "cmd/thanos";
+
+  # Verify in sync with https://github.com/thanos-io/thanos/blob/main/.promu.yml
+  tags = [
+    "netgo"
+    "slicelabels"
+  ];
 
   ldflags =
     let
@@ -39,6 +46,12 @@ buildGoModule rec {
 
   doCheck = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
     tests = {
@@ -50,13 +63,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "thanos";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       basvandijk
       anthonyroussel
     ];

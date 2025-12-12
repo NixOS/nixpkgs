@@ -1,6 +1,5 @@
 /*
   Declares what makes the nix-daemon work on systemd.
-
   See also
    - nixos/modules/config/nix.nix: the nix.conf
    - nixos/modules/config/nix-remote-build.nix: the nix.conf
@@ -11,16 +10,15 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = versionAtLeast (getVersion nixPackage);
+  # nixVersion is an attribute which defines the implementation version.
+  # This is useful for Nix implementations which don't follow Nix's versioning.
+  isNixAtLeast = lib.versionAtLeast (nixPackage.nixVersion or (lib.getVersion nixPackage));
 
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";
@@ -39,13 +37,13 @@ let
     };
   };
 
-  nixbldUsers = listToAttrs (map makeNixBuildUser (range 1 cfg.nrBuildUsers));
+  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
 
 in
 
 {
   imports = [
-    (mkRenamedOptionModuleWith {
+    (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2205;
       from = [
         "nix"
@@ -56,7 +54,7 @@ in
         "daemonIOSchedPriority"
       ];
     })
-    (mkRenamedOptionModuleWith {
+    (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2211;
       from = [
         "nix"
@@ -67,7 +65,7 @@ in
         "readOnlyNixStore"
       ];
     })
-    (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
+    (lib.mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ];
 
   ###### interface
@@ -76,8 +74,8 @@ in
 
     nix = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable Nix.
@@ -85,17 +83,17 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = pkgs.nix;
-        defaultText = literalExpression "pkgs.nix";
+        defaultText = lib.literalExpression "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
       };
 
-      daemonCPUSchedPolicy = mkOption {
-        type = types.enum [
+      daemonCPUSchedPolicy = lib.mkOption {
+        type = lib.types.enum [
           "other"
           "batch"
           "idle"
@@ -128,8 +126,8 @@ in
         '';
       };
 
-      daemonIOSchedClass = mkOption {
-        type = types.enum [
+      daemonIOSchedClass = lib.mkOption {
+        type = lib.types.enum [
           "best-effort"
           "idle"
         ];
@@ -154,8 +152,8 @@ in
         '';
       };
 
-      daemonIOSchedPriority = mkOption {
-        type = types.int;
+      daemonIOSchedPriority = lib.mkOption {
+        type = lib.types.int;
         default = 4;
         example = 1;
         description = ''
@@ -168,15 +166,15 @@ in
       };
 
       # Environment variables for running Nix.
-      envVars = mkOption {
-        type = types.attrs;
+      envVars = lib.mkOption {
+        type = lib.types.attrs;
         internal = true;
         default = { };
         description = "Environment variables used by Nix.";
       };
 
-      nrBuildUsers = mkOption {
-        type = types.int;
+      nrBuildUsers = lib.mkOption {
+        type = lib.types.int;
         description = ''
           Number of `nixbld` user accounts created to
           perform secure concurrent builds.  If you receive an error
@@ -189,19 +187,20 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       nixPackage
       pkgs.nix-info
-    ] ++ optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
+    ]
+    ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
-    systemd.tmpfiles = mkMerge [
-      (mkIf (isNixAtLeast "2.8") {
+    systemd.tmpfiles = lib.mkMerge [
+      (lib.mkIf (isNixAtLeast "2.8") {
         packages = [ nixPackage ];
       })
-      (mkIf (!isNixAtLeast "2.8") {
+      (lib.mkIf (!isNixAtLeast "2.8") {
         rules = [
           "d /nix/var/nix/daemon-socket 0755 root root - -"
         ];
@@ -215,12 +214,13 @@ in
         nixPackage
         pkgs.util-linux
         config.programs.ssh.package
-      ] ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
+      ]
+      ++ lib.optionals cfg.distributedBuilds [ pkgs.gzip ];
 
       environment =
         cfg.envVars
         // {
-          CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
+          CURL_CA_BUNDLE = config.security.pki.caBundle;
         }
         // config.networking.proxy.envVars;
 
@@ -232,6 +232,7 @@ in
         IOSchedulingPriority = cfg.daemonIOSchedPriority;
         LimitNOFILE = 1048576;
         Delegate = "yes";
+        DelegateSubgroup = "supervisor";
       };
 
       restartTriggers = [ config.environment.etc."nix/nix.conf".source ];
@@ -274,20 +275,20 @@ in
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars;
 
-    nix.nrBuildUsers = mkDefault (
+    nix.nrBuildUsers = lib.mkDefault (
       if cfg.settings.auto-allocate-uids or false then
         0
       else
-        max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+        lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
     );
 
     users.users = nixbldUsers;
 
-    services.displayManager.hiddenUsers = attrNames nixbldUsers;
+    services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
 
     # Legacy configuration conversion.
-    nix.settings = mkMerge [
-      (mkIf (isNixAtLeast "2.3pre") { sandbox-fallback = false; })
+    nix.settings = lib.mkMerge [
+      (lib.mkIf (isNixAtLeast "2.3pre") { sandbox-fallback = false; })
     ];
 
   };

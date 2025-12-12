@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CleitonDeLima";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "django-login-required-middleware";
+    tag = version;
     hash = "sha256-WFQ/JvKh6gkUxPV27QBd2TzwFS8hfQGmcTInTnmh6iA=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings tests.settings
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Requires login to all requests through middleware in Django";
     homepage = "https://github.com/CleitonDeLima/django-login-required-middleware";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

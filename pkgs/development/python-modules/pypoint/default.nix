@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9z9VcY42uHIksIvDU1Vz+kvXNmrCu08fGB/waQahmyg=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypoint" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for communicating with Minut Point";
     homepage = "https://github.com/fredrike/pypoint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

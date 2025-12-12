@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "24.2.4";
+  version = "25.1.5";
 
   src =
     let
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://www.dbvis.com/product_download/dbvis-${finalAttrs.version}/media/dbvis_linux_${underscoreVersion}.tar.gz";
-      hash = "sha256-vZm8rLkNpnWbKFrH/Q7yMhVhq+zfb0I00hJNT6JaPrw=";
+      hash = "sha256-PLYolzwQa9xj6z+r/8jS9tbiR8zVTQKOhtJJBN8dNhI=";
     };
 
   strictDeps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The universal database tool";
+    description = "Universal database tool";
     homepage = "https://www.dbvis.com/";
     maintainers = with lib.maintainers; [ boldikoller ];
     license = lib.licenses.unfree;

@@ -1,6 +1,218 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
+  "chap-release-notes": [
+    "release-notes.html#chap-release-notes"
+  ],
+  "chap-toolchains": [
+    "index.html#chap-toolchains"
+  ],
+  "cmake-ctest": [
+    "index.html#cmake-ctest"
+  ],
+  "cmake-ctest-disabled-tests": [
+    "index.html#cmake-ctest-disabled-tests"
+  ],
+  "cmake-ctest-flags": [
+    "index.html#cmake-ctest-flags"
+  ],
+  "cmake-ctest-variables": [
+    "index.html#cmake-ctest-variables"
+  ],
+  "cuda": [
+    "index.html#cuda"
+  ],
+  "cuda-configuring-nixpkgs-for-cuda": [
+    "index.html#cuda-configuring-nixpkgs-for-cuda"
+  ],
+  "cuda-contributing": [
+    "index.html#cuda-contributing"
+  ],
+  "cuda-docker-podman": [
+    "index.html#cuda-docker-podman"
+  ],
+  "cuda-extending-cuda-package-sets": [
+    "index.html#cuda-extending-cuda-package-sets"
+  ],
+  "cuda-modifying-cuda-package-sets": [
+    "index.html#cuda-modifying-cuda-package-sets",
+    "index.html#cuda-configuring-cuda-package-sets"
+  ],
+  "cuda-nixpkgs-cuda-variants": [
+    "index.html#cuda-nixpkgs-cuda-variants"
+  ],
+  "cuda-package-set-maintenance": [
+    "index.html#cuda-package-set-maintenance",
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "cuda-passthru-testers": [
+    "index.html#cuda-passthru-testers"
+  ],
+  "cuda-passthru-tests": [
+    "index.html#cuda-passthru-tests"
+  ],
+  "cuda-specifying-what-devices-to-expose-to-the-container": [
+    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
+    "index.html#specifying-what-devices-to-expose-to-the-container"
+  ],
+  "cuda-updating-redistributables": [
+    "index.html#cuda-updating-redistributables",
+    "index.html#updating-cuda-redistributables",
+    "index.html#updating-the-cuda-toolkit",
+    "index.html#cuda-updating-cutensor",
+    "index.html#updating-cutensor"
+  ],
+  "cuda-updating-supported-compilers-and-gpus": [
+    "index.html#cuda-updating-supported-compilers-and-gpus",
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "cuda-updating-the-cuda-package-set": [
+    "index.html#cuda-updating-the-cuda-package-set",
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-user-guide": [
+    "index.html#cuda-user-guide"
+  ],
+  "cuda-using-cudapackages": [
+    "index.html#cuda-using-cudapackages"
+  ],
+  "cuda-using-cudapackages-pkgs": [
+    "index.html#cuda-using-cudapackages-pkgs"
+  ],
+  "cuda-using-docker-compose": [
+    "index.html#cuda-using-docker-compose",
+    "index.html#using-docker-compose"
+  ],
+  "cuda-using-pkgscuda": [
+    "index.html#cuda-using-pkgscuda"
+  ],
+  "cuda-using-pkgsforcudaarch": [
+    "index.html#cuda-using-pkgsforcudaarch"
+  ],
+  "cuda-writing-tests": [
+    "index.html#cuda-writing-tests"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-pkgs-replace-vars": [
+    "index.html#ex-pkgs-replace-vars",
+    "index.html#ex-pkgs-substituteAll",
+    "index.html#ex-pkgs-substitute-all-files"
+  ],
+  "ex-pkgs-replace-vars-with": [
+    "index.html#ex-pkgs-replace-vars-with"
+  ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
+  "ghc-deprecation-policy": [
+    "index.html#ghc-deprecation-policy"
+  ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
+  "julec-hook": [
+    "index.html#julec-hook"
+  ],
+  "julec-hook-example-code-snippet": [
+    "index.html#julec-hook-example-code-snippet"
+  ],
+  "julec-hook-variable-dontusejulecbuild": [
+    "index.html#julec-hook-variable-dontusejulecbuild"
+  ],
+  "julec-hook-variable-dontusejuleccheck": [
+    "index.html#julec-hook-variable-dontusejuleccheck"
+  ],
+  "julec-hook-variable-dontusejulecinstall": [
+    "index.html#julec-hook-variable-dontusejulecinstall"
+  ],
+  "julec-hook-variable-jule-out-dir": [
+    "index.html#julec-hook-variable-jule-out-dir"
+  ],
+  "julec-hook-variable-jule-out-name": [
+    "index.html#julec-hook-variable-jule-out-name"
+  ],
+  "julec-hook-variable-jule-src-dir": [
+    "index.html#julec-hook-variable-jule-src-dir"
+  ],
+  "julec-hook-variable-jule-test-dir": [
+    "index.html#julec-hook-variable-jule-test-dir"
+  ],
+  "julec-hook-variable-jule-test-out-dir": [
+    "index.html#julec-hook-variable-jule-test-out-dir"
+  ],
+  "julec-hook-variable-jule-test-out-name": [
+    "index.html#julec-hook-variable-jule-test-out-name"
+  ],
+  "julec-hook-variables": [
+    "index.html#julec-hook-variables"
+  ],
+  "major-ghc-deprecation": [
+    "index.html#major-ghc-deprecation"
+  ],
+  "minor-ghc-deprecation": [
+    "index.html#minor-ghc-deprecation"
+  ],
+  "modules": [
+    "index.html#modules"
+  ],
+  "modules-generic": [
+    "index.html#modules-generic"
+  ],
+  "modules-generic-meta-maintainers": [
+    "index.html#modules-generic-meta-maintainers"
+  ],
+  "neovim": [
+    "index.html#neovim"
+  ],
+  "neovim-custom-configuration": [
+    "index.html#neovim-custom-configuration"
+  ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
+  ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
+  "pkgs-replacevars": [
+    "index.html#pkgs-replacevars",
+    "index.html#pkgs-substituteall",
+    "index.html#pkgs-substituteallfiles"
+  ],
+  "pkgs-replacevarswith": [
+    "index.html#pkgs-replacevarswith"
+  ],
+  "part-toolchains": [
+    "index.html#part-toolchains"
+  ],
+  "pkgs.treefmt.buildConfig": [
+    "index.html#pkgs.treefmt.buildConfig"
+  ],
+  "pkgs.treefmt.evalConfig": [
+    "index.html#pkgs.treefmt.evalConfig"
+  ],
+  "pkgs.treefmt.withConfig": [
+    "index.html#pkgs.treefmt.withConfig"
   ],
   "preface": [
     "index.html#preface"
@@ -17,6 +229,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-tree-sitter": [
+    "index.html#python-tree-sitter"
+  ],
   "sec-allow-broken": [
     "index.html#sec-allow-broken"
   ],
@@ -28,6 +243,39 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
+  ],
+  "sec-building-packages-with-llvm": [
+    "index.html#sec-building-packages-with-llvm"
+  ],
+  "sec-building-packages-with-llvm-using-clang-stdenv": [
+    "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
+  ],
+  "sec-darwin-availability-checks": [
+    "index.html#sec-darwin-availability-checks"
+  ],
+  "sec-darwin-libcxx-deployment-targets": [
+    "index.html#sec-darwin-libcxx-deployment-targets"
+  ],
+  "sec-darwin-libcxx-versions": [
+    "index.html#sec-darwin-libcxx-versions"
+  ],
+  "sec-functions-library-treefmt": [
+    "index.html#sec-functions-library-treefmt"
+  ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
+  ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
+  ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -49,6 +297,97 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
+  ],
+  "sec-nixpkgs-release-25.11": [
+    "release-notes.html#sec-nixpkgs-release-25.11"
+  ],
+  "sec-nixpkgs-release-25.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.11-highlights"
+  ],
+  "sec-nixpkgs-release-25.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities",
+    "index.html#enocache-errors-from-buildbowercomponents",
+    "index.html#ex-bowerGulpFile",
+    "index.html#ex-bowerJson",
+    "index.html#ex-buildBowerComponents",
+    "index.html#ex-buildBowerComponentsDefaultNix",
+    "index.html#sec-bower",
+    "index.html#ssec-bower2nix-troubleshooting",
+    "index.html#ssec-bower2nix-usage",
+    "index.html#ssec-build-bower-components"
+  ],
+  "sec-nixpkgs-release-25.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib"
+  ],
+  "sec-nixpkgs-release-25.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.11-notable-changes"
+  ],
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
+  ],
+  "sec-nrfutil": [
+    "index.html#sec-nrfutil"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -82,6 +421,24 @@
   ],
   "sec-pkg-overrideDerivation": [
     "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-platform-breakdown": [
+    "index.html#sec-platform-breakdown"
+  ],
+  "sec-platform-tier1": [
+    "index.html#sec-platform-tier1"
+  ],
+  "sec-platform-tier2": [
+    "index.html#sec-platform-tier2"
+  ],
+  "sec-platform-tier3": [
+    "index.html#sec-platform-tier3"
+  ],
+  "sec-platform-tier4-7": [
+    "index.html#sec-platform-tier4-7"
+  ],
+  "sec-platform-tiers": [
+    "index.html#sec-platform-tiers"
   ],
   "sec-lib-makeOverridable": [
     "index.html#sec-lib-makeOverridable"
@@ -154,6 +511,9 @@
   ],
   "sec-functions-library-cli": [
     "index.html#sec-functions-library-cli"
+  ],
+  "sec-functions-library-fetchers": [
+    "index.html#sec-functions-library-fetchers"
   ],
   "sec-functions-library-generators": [
     "index.html#sec-functions-library-generators"
@@ -242,11 +602,17 @@
   "module-system-lib-evalModules-return-value-_configurationClass": [
     "index.html#module-system-lib-evalModules-return-value-_configurationClass"
   ],
+  "module-system-lib-evalModules-return-value-graph": [
+    "index.html#module-system-lib-evalModules-return-value-graph"
+  ],
   "part-stdenv": [
     "index.html#part-stdenv"
   ],
   "chap-stdenv": [
     "index.html#chap-stdenv"
+  ],
+  "sec-using-llvm": [
+    "index.html#sec-using-llvm"
   ],
   "sec-using-stdenv": [
     "index.html#sec-using-stdenv"
@@ -256,6 +622,33 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "sec-treefmt-options-reference": [
+    "index.html#sec-treefmt-options-reference"
+  ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
@@ -280,6 +673,81 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "strictflexarrays1": [
+    "index.html#strictflexarrays1"
+  ],
+  "strictflexarrays3": [
+    "index.html#strictflexarrays3"
+  ],
+  "glibcxxassertions": [
+    "index.html#glibcxxassertions"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
+  ],
+  "treefmt": [
+    "index.html#treefmt"
+  ],
+  "typst": [
+    "index.html#typst",
+    "doc/languages-frameworks/typst.section.md#typst"
+  ],
+  "typst-custom-environment": [
+    "index.html#typst-custom-environment",
+    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+  ],
+  "typst-custom-packages": [
+    "index.html#typst-custom-packages",
+    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+  ],
+  "typst-handling-outdated-package-hashes": [
+    "index.html#typst-handling-outdated-package-hashes"
+  ],
+  "typst-package-scope-and-usage": [
+    "index.html#typst-package-scope-and-usage"
+  ],
+  "var-go-buildTestBinaries": [
+    "index.html#var-go-buildTestBinaries"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-possibleCPEs": [
+    "index.html#var-meta-identifiers-possibleCPEs"
+  ],
+  "var-meta-teams": [
+    "index.html#var-meta-teams"
+  ],
+  "var-go-goSum": [
+    "index.html#var-go-goSum"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -782,6 +1250,12 @@
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
   ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
+  ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
   ],
@@ -801,7 +1275,8 @@
     "index.html#sec-purity-in-nixpkgs"
   ],
   "sec-hardening-in-nixpkgs": [
-    "index.html#sec-hardening-in-nixpkgs"
+    "index.html#sec-hardening-in-nixpkgs",
+    "index.html#pie"
   ],
   "sec-hardening-flags-enabled-by-default": [
     "index.html#sec-hardening-flags-enabled-by-default"
@@ -835,9 +1310,6 @@
   ],
   "sec-hardening-flags-disabled-by-default": [
     "index.html#sec-hardening-flags-disabled-by-default"
-  ],
-  "pie": [
-    "index.html#pie"
   ],
   "shadowstack": [
     "index.html#shadowstack"
@@ -922,6 +1394,9 @@
   ],
   "var-meta-broken": [
     "index.html#var-meta-broken"
+  ],
+  "var-meta-knownVulnerabilities": [
+    "index.html#var-meta-knownVulnerabilities"
   ],
   "sec-meta-license": [
     "index.html#sec-meta-license"
@@ -1310,6 +1785,12 @@
   "fetchfromsourcehut": [
     "index.html#fetchfromsourcehut"
   ],
+  "fetchfromradicle": [
+    "index.html#fetchfromradicle"
+  ],
+  "fetchradiclepatch": [
+    "index.html#fetchradiclepatch"
+  ],
   "requirefile": [
     "index.html#requirefile"
   ],
@@ -1443,6 +1924,12 @@
   "ex-haspkgconfigmodules-explicitmodules": [
     "index.html#ex-haspkgconfigmodules-explicitmodules"
   ],
+  "tester-hasCmakeConfigModules": [
+    "index.html#tester-hasCmakeConfigModules"
+  ],
+  "ex-hascmakeconfigmodules": [
+    "index.html#ex-hascmakeconfigmodules"
+  ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
   ],
@@ -1463,9 +1950,6 @@
   ],
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
-  ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
   ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
@@ -1914,6 +2398,9 @@
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
   ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
+  ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
   ],
@@ -1928,6 +2415,9 @@
   ],
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
+  ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
   ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
@@ -1958,6 +2448,9 @@
   ],
   "cmake-build-dir": [
     "index.html#cmake-build-dir"
+  ],
+  "cmake-build-type": [
+    "index.html#cmake-build-type"
   ],
   "dont-use-cmake-configure": [
     "index.html#dont-use-cmake-configure"
@@ -2175,6 +2668,9 @@
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
   ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
+  ],
   "unzip": [
     "index.html#unzip"
   ],
@@ -2298,6 +2794,12 @@
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
   ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
+  ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"
   ],
@@ -2400,33 +2902,6 @@
   "elixir---phoenix-project": [
     "index.html#elixir---phoenix-project"
   ],
-  "sec-bower": [
-    "index.html#sec-bower"
-  ],
-  "ssec-bower2nix-usage": [
-    "index.html#ssec-bower2nix-usage"
-  ],
-  "ex-bowerJson": [
-    "index.html#ex-bowerJson"
-  ],
-  "ssec-build-bower-components": [
-    "index.html#ssec-build-bower-components"
-  ],
-  "ex-buildBowerComponents": [
-    "index.html#ex-buildBowerComponents"
-  ],
-  "ex-bowerGulpFile": [
-    "index.html#ex-bowerGulpFile"
-  ],
-  "ex-buildBowerComponentsDefaultNix": [
-    "index.html#ex-buildBowerComponentsDefaultNix"
-  ],
-  "ssec-bower2nix-troubleshooting": [
-    "index.html#ssec-bower2nix-troubleshooting"
-  ],
-  "enocache-errors-from-buildbowercomponents": [
-    "index.html#enocache-errors-from-buildbowercomponents"
-  ],
   "sec-chicken": [
     "index.html#sec-chicken"
   ],
@@ -2468,36 +2943,6 @@
   ],
   "building-a-crystal-package": [
     "index.html#building-a-crystal-package"
-  ],
-  "cuda": [
-    "index.html#cuda"
-  ],
-  "adding-a-new-cuda-release": [
-    "index.html#adding-a-new-cuda-release"
-  ],
-  "updating-cuda-redistributables": [
-    "index.html#updating-cuda-redistributables"
-  ],
-  "updating-cutensor": [
-    "index.html#updating-cutensor"
-  ],
-  "updating-supported-compilers-and-gpus": [
-    "index.html#updating-supported-compilers-and-gpus"
-  ],
-  "updating-the-cuda-toolkit": [
-    "index.html#updating-the-cuda-toolkit"
-  ],
-  "updating-the-cuda-package-set": [
-    "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-docker-podman": [
-    "index.html#cuda-docker-podman"
-  ],
-  "specifying-what-devices-to-expose-to-the-container": [
-    "index.html#specifying-what-devices-to-expose-to-the-container"
-  ],
-  "using-docker-compose": [
-    "index.html#using-docker-compose"
   ],
   "cuelang": [
     "index.html#cuelang"
@@ -2613,6 +3058,24 @@
   "declarative-debugging": [
     "index.html#declarative-debugging"
   ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
+  ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"
   ],
@@ -2724,6 +3187,9 @@
   ],
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
+  ],
+  "ssec-go-toolchain-versions": [
+    "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
     "index.html#buildGoModule-goModules-override"
@@ -2959,15 +3425,6 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
-  ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],
@@ -3022,8 +3479,20 @@
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
   ],
+  "javascript-pnpm-fetcherVersion": [
+    "index.html#javascript-pnpm-fetcherVersion"
+  ],
+  "javascript-pnpm-fetcherVersion-versionHistory": [
+    "index.html#javascript-pnpm-fetcherVersion-versionHistory"
+  ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
+  ],
+  "javascript-yarn-v1": [
+    "index.html#javascript-yarn-v1"
+  ],
+  "javascript-yarn-v3-v4": [
+    "index.html#javascript-yarn-v3-v4"
   ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
@@ -3051,6 +3520,18 @@
   ],
   "javascript-yarn2nix-pitfalls": [
     "index.html#javascript-yarn2nix-pitfalls"
+  ],
+  "javascript-yarnBerry-missing-hashes": [
+    "index.html#javascript-yarnBerry-missing-hashes"
+  ],
+  "javascript-yarnBerryConfigHook": [
+    "index.html#javascript-yarnBerryConfigHook"
+  ],
+  "javascript-yarnBerry-patching": [
+    "index.html#javascript-yarnBerry-patching"
+  ],
+  "javascript-fetchYarnBerryDeps": [
+    "index.html#javascript-fetchYarnBerryDeps"
   ],
   "javascript-outside-nixpkgs": [
     "index.html#javascript-outside-nixpkgs"
@@ -3360,6 +3841,9 @@
   ],
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
+  ],
+  "overriding-python-build-helpers": [
+    "index.html#overriding-python-build-helpers"
   ],
   "overriding-python-packages": [
     "index.html#overriding-python-packages"
@@ -3733,19 +4217,11 @@
   "sec-language-texlive-lualatex-font-cache": [
     "index.html#sec-language-texlive-lualatex-font-cache"
   ],
-  "titanium": [
-    "index.html#titanium"
-  ],
-  "building-a-titanium-app": [
-    "index.html#building-a-titanium-app"
-  ],
-  "emulating-or-simulating-the-app": [
-    "index.html#emulating-or-simulating-the-app"
-  ],
   "vim": [
     "index.html#vim"
   ],
-  "custom-configuration": [
+  "vim-custom-configuration": [
+    "index.html#vim-custom-configuration",
     "index.html#custom-configuration"
   ],
   "managing-plugins-with-vim-packages": [
@@ -3754,10 +4230,12 @@
   "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
     "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
   ],
-  "vim-plugin-specificities": [
-    "index.html#vim-plugin-specificities"
+  "neovim-plugin-specificities": [
+    "index.html#neovim-plugin-specificities",
+    "neovim-plugin-specificities#vim-plugin-specificities"
   ],
-  "vim-plugin-treesitter": [
+  "neovim-plugin-treesitter": [
+    "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
   "managing-plugins-with-vim-plug": [
@@ -3772,7 +4250,8 @@
   "testing-neovim-plugins-neovim-require-check": [
     "index.html#testing-neovim-plugins-neovim-require-check"
   ],
-  "vim-plugin-required-snippet": [
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [
@@ -3895,6 +4374,15 @@
   "sec-linux-kernel": [
     "index.html#sec-linux-kernel"
   ],
+  "sec-linux-kernel-maintainer-information": [
+    "index.html#sec-linux-kernel-maintainer-information"
+  ],
+  "sec-linux-updates": [
+    "index.html#sec-linux-updates"
+  ],
+  "sec-linux-add-new-kernel-version": [
+    "index.html#sec-linux-add-new-kernel-version"
+  ],
   "ex-overriding-kernel-derivation": [
     "index.html#ex-overriding-kernel-derivation"
   ],
@@ -4011,18 +4499,6 @@
   ],
   "ex-pkgs-substitute": [
     "index.html#ex-pkgs-substitute"
-  ],
-  "pkgs-substituteall": [
-    "index.html#pkgs-substituteall"
-  ],
-  "ex-pkgs-substituteAll": [
-    "index.html#ex-pkgs-substituteAll"
-  ],
-  "pkgs-substituteallfiles": [
-    "index.html#pkgs-substituteallfiles"
-  ],
-  "ex-pkgs-substitute-all-files": [
-    "index.html#ex-pkgs-substitute-all-files"
   ],
   "part-development": [
     "index.html#part-development"
@@ -4209,5 +4685,26 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "sec-uv": [
+    "index.html#sec-uv"
+  ],
+  "module-system-module-argument-_prefix": [
+    "index.html#module-system-module-argument-_prefix"
+  ],
+  "module-system-module-argument-lib": [
+    "index.html#module-system-module-argument-lib"
+  ],
+  "module-system-module-argument-config": [
+    "index.html#module-system-module-argument-config"
+  ],
+  "module-system-module-arguments": [
+    "index.html#module-system-module-arguments"
+  ],
+  "module-system-module-argument-_class": [
+    "index.html#module-system-module-argument-_class"
+  ],
+  "module-system-module-argument-options": [
+    "index.html#module-system-module-argument-options"
   ]
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchzip,
   pkg-config,
   dbus,
   lndir,
@@ -19,27 +19,31 @@
   # Not currently part of PyQt6
   #, withConnectivity ? true
   withPrintSupport ? true,
+  withSerialPort ? false,
   cups,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "PyQt6";
-    inherit version;
-    hash = "sha256-bYYo3kwqBQ8LdEYuTJy5f4Ob9v+rvKkXEXIv+ygVcNk=";
+  # It looks like a stable release, but is it? Who knows.
+  # It's not on PyPI proper yet, at least, and the current
+  # actually-released version does not build with Qt 6.9,
+  # so we kinda have to use it.
+  # "ffs smdh fam" - K900
+  src = fetchzip {
+    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
+    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
   };
 
   patches = [
     # Fix some wrong assumptions by ./project.py
     # TODO: figure out how to send this upstream
-    # FIXME: make a version for PyQt6?
-    # ./pyqt5-fix-dbus-mainloop-support.patch
+    ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
   ];
@@ -100,7 +104,8 @@ buildPythonPackage rec {
     # ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation;
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport;
 
   buildInputs =
     with qt6Packages;
@@ -113,8 +118,10 @@ buildPythonPackage rec {
       qtquicktimeline
     ]
     # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation;
+    ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport;
 
   propagatedBuildInputs =
     # ld: library not found for -lcups
@@ -124,33 +131,34 @@ buildPythonPackage rec {
     inherit sip pyqt6-sip;
     multimediaEnabled = withMultimedia;
     WebSocketsEnabled = withWebSockets;
+    serialPortEnabled = withSerialPort;
   };
 
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
 
-  pythonImportsCheck =
-    [
-      "PyQt6"
-      "PyQt6.QtCore"
-      "PyQt6.QtQml"
-      "PyQt6.QtWidgets"
-      "PyQt6.QtGui"
-      "PyQt6.QtQuick"
-    ]
-    ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-    ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-    # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-    ++ lib.optional withLocation "PyQt6.QtPositioning";
+  pythonImportsCheck = [
+    "PyQt6"
+    "PyQt6.QtCore"
+    "PyQt6.QtQml"
+    "PyQt6.QtWidgets"
+    "PyQt6.QtGui"
+    "PyQt6.QtQuick"
+  ]
+  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+  ++ lib.optional withLocation "PyQt6.QtPositioning"
+  ++ lib.optional withSerialPort "PyQt6.QtSerialPort";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ LunNova ];
+    maintainers = with lib.maintainers; [ LunNova ];
   };
 }

@@ -31,7 +31,7 @@
   isocodes,
   gtksourceview,
   gtksourceviewmm,
-  postgresql_15,
+  postgresql,
   gobject-introspection,
   yelp-tools,
   wrapGAppsHook3,
@@ -69,12 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   python_boost = python311.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 
   sphinx-build = python311.pkgs.sphinx.overrideAttrs (super: {
-    postFixup =
-      super.postFixup or ""
-      + ''
-        # Do not propagate Python
-        rm $out/nix-support/propagated-build-inputs
-      '';
+    postFixup = super.postFixup or "" + ''
+      # Do not propagate Python
+      rm $out/nix-support/propagated-build-inputs
+    '';
   });
 
   boost_python = boost.override {
@@ -119,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     gtksourceview
     gtksourceviewmm
-    postgresql_15 # for postgresql utils
+    postgresql # for postgresql utils
   ];
 
   enableParallelBuilding = true;
@@ -128,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-boost-python=boost_python${lib.versions.major python311.version}${lib.versions.minor python311.version}"
-    "--with-postgres-utils=${lib.getBin postgresql_15}/bin"
+    "--with-postgres-utils=${lib.getBin postgresql}/bin"
   ];
 
   makeFlags = [
@@ -155,11 +153,9 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2
     ];
     homepage = "https://gitlab.gnome.org/Archive/glom";
-    maintainers =
-      lib.teams.gnome.members
-      ++ (with lib.maintainers; [
-        bot-wxt1221
-      ]);
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+    ];
     platforms = lib.platforms.linux;
   };
 })

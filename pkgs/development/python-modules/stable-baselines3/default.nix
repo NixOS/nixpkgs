@@ -22,17 +22,28 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  version = "2.4.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OFmjAkUS0wrns5CkWjqR7zTjKLVPI/NrpVIKJhLAwYM=";
+    tag = "v${version}";
+    hash = "sha256-ucfdXyOYgevrKQ+RQbuoLjhGEvlzwH80yognMNbJlgQ=";
   };
 
+  postPatch =
+    # Environment version v0 for `CliffWalking` is deprecated
+    ''
+      substituteInPlace "tests/test_vec_normalize.py" \
+        --replace-fail "CliffWalking-v0" "CliffWalking-v1"
+    '';
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
 
   dependencies = [
     cloudpickle
@@ -61,6 +72,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Flaky: Can fail if it takes too long, which happens when the system is under heavy load
+    "test_fps_logger"
+
     # Tests that attempt to access the filesystem
     "test_make_atari_env"
     "test_vec_env_monitor_kwargs"

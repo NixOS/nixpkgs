@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.20.0";
+  version = "1.2.0"; # test with `nix-build pkgs/pkgs-lib/format`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "remarshal";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Fy+K0fM+vjZp8u7C0ElFa1xQM/CIMqFALe42gZRBNOs=";
+    tag = "v${version}";
+    hash = "sha256-y/odWWFJ7KDehYzUKSM/cprcCd+UaArEZFoYbtyW0Ok=";
   };
 
   build-system = [ poetry-core ];
@@ -47,11 +47,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
     description = "Convert between TOML, YAML and JSON";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
+    mainProgram = "remarshal";
   };
 }

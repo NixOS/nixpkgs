@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hashcat-utils";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "hashcat";
-    repo = pname;
+    repo = "hashcat-utils";
     rev = "v${version}";
-    sha256 = "0wgc6wv7i6cs95rgzzx3zqm14xxbjyajvcqylz8w97d8kk4x4wjr";
+    sha256 = "sha256-S2aRNTJMQO/YXdCHexKQ+gZnZp2vGvsvhD5O7t3tfhw=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -24,11 +24,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small utilities that are useful in advanced password cracking";
     homepage = "https://github.com/hashcat/hashcat-utils";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fadenb ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

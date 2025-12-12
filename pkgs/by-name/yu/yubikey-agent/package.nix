@@ -6,7 +6,6 @@
   libnotify,
   pcsclite,
   pkg-config,
-  darwin,
 }:
 
 buildGoModule rec {
@@ -20,9 +19,7 @@ buildGoModule rec {
     sha256 = "sha256-Knk1ipBOzjmjrS2OFUMuxi1TkyDcSYlVKezDWT//ERY=";
   };
 
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isLinux (lib.getDev pcsclite)
-    ++ lib.optional stdenv.hostPlatform.isDarwin (darwin.apple_sdk.frameworks.PCSC);
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux (lib.getDev pcsclite);
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
@@ -48,15 +45,15 @@ buildGoModule rec {
       --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Seamless ssh-agent for YubiKeys";
     mainProgram = "yubikey-agent";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
     maintainers = with lib.maintainers; [
       philandstuff
       rawkode
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexferl";
     repo = "flask-simpleldap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WcedTtEwaSc3BYFE3L0FZrtKKdbwk7r3qSPP8evtYlc=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_simpleldap" ];
 
-  meta = with lib; {
+  meta = {
     description = "LDAP authentication extension for Flask";
     homepage = "https://github.com/alexferl/flask-simpleldap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kip93 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

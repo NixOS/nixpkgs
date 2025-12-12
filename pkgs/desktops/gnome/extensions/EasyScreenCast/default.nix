@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   glib,
   gnome-shell,
   gettext,
@@ -12,18 +12,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
     rev = finalAttrs.version;
-    hash = "sha256-5PJB+lm4NKeNpS2vg9xaVl5aUR0Rofmt6sEKXfuGG6c=";
+    hash = "sha256-+DVuUClLhPEVN2VIBkJJI51V9TTS5Q9y6wflEGyt6AY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-gi-path.patch;
+    (replaceVars ./fix-gi-path.patch {
       gnomeShell = gnome-shell;
     })
   ];
@@ -39,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
 
-  meta = with lib; {
+  meta = {
     description = "Simplifies the use of the video recording function integrated in gnome shell";
     homepage = "https://github.com/EasyScreenCast/EasyScreenCast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 })

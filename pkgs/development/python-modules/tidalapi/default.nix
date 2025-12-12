@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   python-dateutil,
   poetry-core,
   requests,
@@ -9,37 +9,49 @@
   ratelimit,
   typing-extensions,
   mpegdash,
+  pyaes,
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.6";
+  version = "0.8.9";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X6U34T1sM4P+JFpOfcI7CmULcGZ4SCXwP2fFHKi1cWE=";
+  src = fetchFromGitHub {
+    owner = "EbbLabs";
+    repo = "python-tidal";
+    tag = "v${version}";
+    hash = "sha256-ZYpG3cZielq5Kh3jANOrkUV1K6jwd9LzQfwTjqd4LLw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     python-dateutil
     mpegdash
     isodate
     ratelimit
     typing-extensions
+    pyaes
   ];
 
   doCheck = false; # tests require internet access
 
-  pythonImportsCheck = [ "tidalapi" ];
+  pythonImportsCheck = [
+    "tidalapi"
+  ];
 
   meta = {
-    changelog = "https://github.com/tamland/python-tidal/releases/tag/v${version}";
+    changelog = "https://github.com/tamland/python-tidal/blob/v${version}/HISTORY.rst";
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ drawbu ];
+    maintainers = with lib.maintainers; [
+      drafolin
+      drawbu
+      ryand56
+    ];
   };
 }

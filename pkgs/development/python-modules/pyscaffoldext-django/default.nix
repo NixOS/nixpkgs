@@ -10,7 +10,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.django" ];
 
-  meta = with lib; {
+  meta = {
     description = "Integration of django builtin scaffold cli (django-admin) into PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-django/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

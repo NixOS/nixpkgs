@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arping";
-  version = "2.25";
+  version = "2.26";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";
-    repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-SAdbgPmApmFToYrAm8acUapZMEMQr5MO7bQOTO2hd2c=";
+    repo = "arping";
+    rev = "arping-${version}";
+    hash = "sha256-uZsUo12ez6sz95fmOg5cmVBJNRH3eEhio8V2efQ29BU=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Broadcasts a who-has ARP packet on the network and prints answers";
     homepage = "https://github.com/ThomasHabets/arping";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ michalrus ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ michalrus ];
+    platforms = lib.platforms.unix;
     mainProgram = "arping";
   };
 }

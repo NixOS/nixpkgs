@@ -5,20 +5,20 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
   buildNpmPackage,
   nodejs_20,
+  nix-update-script,
 }:
 let
   pname = "rqbit";
 
-  version = "7.0.1";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-Lt3HxK8fB1Xn2422wGkJ90muJjZ7r9ZHngGD/2tkaMM=";
+    hash = "sha256-5ErcI3hwC2EgxsjgEVlbHP1MzBf/LndpgTfynQGc29s=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -30,7 +30,7 @@ let
 
     sourceRoot = "${src.name}/crates/librqbit/webui";
 
-    npmDepsHash = "sha256-VYPZXZx9rKLKZm5+d2wSVkoPLCQCffaeZVSi7mKRH/M=";
+    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
 
     installPhase = ''
       runHook preInstall
@@ -45,15 +45,11 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-esDUzzVm5J8fKftBfk5StJzN1YzLa1p0t7BsoxzrowI=";
+  cargoHash = "sha256-gYasOjrG0oeT/6Ben57MKAvBtgpoSmZ93RZQqSXAxIc=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
@@ -68,12 +64,21 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  passthru.webui = rqbit-webui;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
+
+  meta = {
     description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cafkafk
       toasteruwu
     ];

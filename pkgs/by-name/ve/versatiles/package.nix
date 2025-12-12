@@ -6,16 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "versatiles";
-  version = "0.14.5"; # When updating: Replace with current version
+  version = "2.0.1"; # When updating: Replace with current version
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
-    rev = "refs/tags/v${version}"; # When updating: Replace with long commit hash of new version
-    hash = "sha256-ejMqTMGLbVr/Aaqw8U0ojV43N6t0GeWdYIcP0guAsO0="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
+    tag = "v${version}"; # When updating: Replace with long commit hash of new version
+    hash = "sha256-qFVqikq1T6LQnOWgM66uKzFhWQbVjEuUK3N5vNvaDq4="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 
-  cargoHash = "sha256-2C/oPB48CTX7i4xoF1iegrpNvaSMkIbVeEyy/WteKqM="; # When updating: Same as above
+  cargoHash = "sha256-kkYdQEBydxPwxxSjTiwk4huCDK3xJ9FoyrcHL88ytfk="; # When updating: Same as above
+
+  __darwinAllowLocalNetworking = true;
 
   # Testing only necessary for the `bins` and `lib` features
   cargoTestFlags = [
@@ -25,13 +27,15 @@ rustPlatform.buildRustPackage rec {
 
   # Skip tests that require network access
   checkFlags = [
-    "--skip tools::convert::tests::test_remote1"
-    "--skip tools::convert::tests::test_remote2"
-    "--skip tools::probe::tests::test_remote"
-    "--skip tools::serve::tests::test_remote"
-    "--skip utils::io::data_reader_http"
-    "--skip utils::io::data_reader_http::tests::read_range_git"
-    "--skip utils::io::data_reader_http::tests::read_range_googleapis"
+    "--skip=tools::convert::tests::test_remote1"
+    "--skip=tools::convert::tests::test_remote2"
+    "--skip=tools::probe::tests::test_remote"
+    "--skip=tools::serve::tests::test_remote"
+    "--skip=utils::io::data_reader_http"
+    "--skip=utils::io::data_reader_http::tests::read_range_git"
+    "--skip=utils::io::data_reader_http::tests::read_range_googleapis"
+    "--skip=io::data_reader_http::tests::read_range_git"
+    "--skip=io::data_reader_http::tests::read_range_googleapis"
   ];
 
   meta = {

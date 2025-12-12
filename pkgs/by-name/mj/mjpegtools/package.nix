@@ -40,23 +40,29 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libdv
-      libjpeg
-      libpng
-    ]
-    ++ lib.optionals (!withMinimal) [
-      gtk2
-      libX11
-      SDL
-      SDL_gfx
-    ];
+  buildInputs = [
+    libdv
+    libjpeg
+    libpng
+  ]
+  ++ lib.optionals (!withMinimal) [
+    gtk2
+    libX11
+    SDL
+    SDL_gfx
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
+  ''
+  # Only ppc64le baseline guarantees AltiVec, no configure option to disable it so just make checks never signal success.
+  # AltiVec code also fails without disabling new compiler warnings:
+  # quant_non_intra.c:72:42: error: initialization of '__vector unsigned short *' {aka '__vector(8) short unsigned int *'} from incompatible pointer type 'uint16_t *' {aka 'short unsigned int *'} [-Wincompatible-pointer-types]
+  + lib.optionalString (!(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)) ''
+    substituteInPlace configure \
+      --replace-fail 'have_altivec=true' 'have_altivec=false'
   '';
 
   enableParallelBuilding = true;
@@ -66,11 +72,11 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

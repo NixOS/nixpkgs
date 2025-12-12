@@ -13,24 +13,23 @@
 
   # tests
   pygments,
+  pytest-cov-stub,
+  pytest-rerunfailures,
+  pytest-timeout,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "portalocker";
-  version = "2.10.1";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7xv4ROh4qwiu5+QBhBVuEVHyKPEDqlxr0HJMwzCWD48=";
+    hash = "sha256-HzAClWpUqMNzBYbFx3vxj65BSeB+rxwp/D+vTVo/iaw=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -41,16 +40,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pygments
+    pytest-cov-stub
+    pytest-rerunfailures
+    pytest-timeout
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "portalocker" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";
     description = "Library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     maintainers = [ ];
   };
 }

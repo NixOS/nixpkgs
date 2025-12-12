@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-z0IxGdveMtCXmCKD4jp/BEA6mtTl4CitIrVhM6BtHzA=";
   };
 
-  cargoHash = "sha256-kyduUQcc3w5JyQICwTu9GdNRJF6H5353Ow05oKg6Ozg=";
+  cargoHash = "sha256-XgtBcEVfeR0yYKJkpFfA8pXk1S1fg+2QS8o7n9G1CXU=";
 
   passthru.tests.version = testers.testVersion {
     package = ttags;
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     version = version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate tags using tree-sitter";
     mainProgram = "ttags";
     longDescription = ''
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage {
       - Swift
     '';
     homepage = "https://github.com/npezza93/ttags";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mrcjkb ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    platforms = lib.platforms.all;
   };
 }

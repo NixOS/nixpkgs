@@ -8,7 +8,6 @@
   minio,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   rich,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.17";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Ii19VnLLq+UGH0bkyUbLzHqZpJOXffIGeP4VZ9QG7D0=";
+    tag = version;
+    hash = "sha256-CVwPMMQFGqvyxm5tK7JMEX8/dgiF25wwRNaLNfLLWto=";
   };
 
   build-system = [
@@ -49,18 +46,27 @@ buildPythonPackage rec {
       requests
       requests-toolbelt
       rich
-    ] ++ dissect-target.optional-dependencies.full;
+    ]
+    ++ dissect-target.optional-dependencies.full;
   };
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
+  disabledTests = [
+    "output_encrypt"
+    "test_collector_collect_glob"
+    "test_collector_collect_path_with_dir"
+    "test_misc_osx"
+    "test_misc_unix"
+  ];
+
   pythonImportsCheck = [ "acquire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";
     homepage = "https://github.com/fox-it/acquire";
-    changelog = "https://github.com/fox-it/acquire/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/acquire/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

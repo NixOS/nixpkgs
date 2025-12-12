@@ -14,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "krr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Bc1Ql3z/UmOXE2RJYC5/sE4a3MFdE06I3HwKY+SdSlk=";
   };
 
@@ -56,7 +56,7 @@ python3.pkgs.buildPythonPackage rec {
     command = "krr version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus-based Kubernetes resource recommendations";
     longDescription = ''
       Robusta KRR (Kubernetes Resource Recommender) is a CLI tool for optimizing
@@ -66,8 +66,8 @@ python3.pkgs.buildPythonPackage rec {
     '';
     homepage = "https://github.com/robusta-dev/krr";
     changelog = "https://github.com/robusta-dev/krr/releases/tag/v${src.rev}";
-    license = licenses.mit;
-    maintainers = with lib.maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "krr";
   };
 }

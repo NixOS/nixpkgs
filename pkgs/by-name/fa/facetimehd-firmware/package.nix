@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   dontInstall = true;
 
-  buildInputs = [
+  nativeBuildInputs = [
     cpio
     xz
   ];
@@ -63,11 +63,11 @@ stdenvNoCC.mkDerivation {
     gunzip -c ${firmwareOut}.gz > $out/lib/firmware/facetimehd/${firmwareOut}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "facetimehd firmware";
     homepage = "https://support.apple.com/kb/DL1877";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       womfoo
       grahamc
     ];

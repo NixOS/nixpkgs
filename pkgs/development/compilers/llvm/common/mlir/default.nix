@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, llvm_meta
-, release_version
-, buildLlvmTools
-, monorepoSrc
-, runCommand
-, cmake
-, ninja
-, libxml2
-, libllvm
-, version
-, doCheck ? (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
-, devExtraCmakeFlags ? []
+{
+  lib,
+  stdenv,
+  llvm_meta,
+  release_version,
+  buildLlvmPackages,
+  monorepoSrc,
+  runCommand,
+  cmake,
+  ninja,
+  libxml2,
+  libllvm,
+  version,
+  devExtraCmakeFlags ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlir";
-  inherit version doCheck;
+  inherit version;
+
+  doCheck =
+    (
+      !stdenv.hostPlatform.isx86_32 # TODO: why
+    )
+    && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } ''
     mkdir -p "$out"
-  '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
     cp -r ${monorepoSrc}/cmake "$out"
-  '' + ''
     cp -r ${monorepoSrc}/mlir "$out"
     cp -r ${monorepoSrc}/third-party "$out/third-party"
 
     mkdir -p "$out/llvm"
-  '');
+  '';
 
-  sourceRoot = "${src.name}/mlir";
+  sourceRoot = "${finalAttrs.src.name}/mlir";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -47,30 +51,36 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DLLVM_BUILD_TOOLS=ON"
+    (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
     # Install headers as well
-    "-DLLVM_INSTALL_TOOLCHAIN_ONLY=OFF"
-    "-DMLIR_TOOLS_INSTALL_DIR=${placeholder "out"}/bin/"
-    "-DLLVM_ENABLE_IDE=OFF"
-    "-DMLIR_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/mlir"
-    "-DMLIR_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/mlir"
-    "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
-    "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_ENABLE_DUMP=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    (lib.cmakeBool "LLVM_INSTALL_TOOLCHAIN_ONLY" false)
+    (lib.cmakeFeature "MLIR_TOOLS_INSTALL_DIR" "${placeholder "out"}/bin/")
+    (lib.cmakeBool "LLVM_ENABLE_IDE" false)
+    (lib.cmakeFeature "MLIR_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeFeature "MLIR_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/mlir")
+    (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "LLVM_ENABLE_FFI" true)
+    (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
+    (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
-    "-DLLVM_ENABLE_PIC=OFF"
-    "-DLLVM_BUILD_STATIC=ON"
-    "-DLLVM_LINK_LLVM_DYLIB=OFF"
-  ] ++ lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-    "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.mlir}/bin/mlir-tblgen"
-  ] ++ devExtraCmakeFlags;
+    (lib.cmakeBool "LLVM_ENABLE_PIC" false)
+    (lib.cmakeBool "LLVM_BUILD_STATIC" true)
+    (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" false)
+  ]
+  ++ devExtraCmakeFlags;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
     homepage = "https://mlir.llvm.org/";
     description = "Multi-Level IR Compiler Framework";
@@ -82,4 +92,4 @@ stdenv.mkDerivation rec {
       existing compilers together.
     '';
   };
-}
+})

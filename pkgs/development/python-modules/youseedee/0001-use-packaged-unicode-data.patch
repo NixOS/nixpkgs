@@ -1,33 +1,26 @@
 diff --git a/lib/youseedee/__init__.py b/lib/youseedee/__init__.py
-index 8db9c5f..9ad6618 100644
+index 5e73ef8..2cdbdd0 100644
 --- a/lib/youseedee/__init__.py
 +++ b/lib/youseedee/__init__.py
-@@ -38,12 +38,7 @@ UCD_URL = "https://unicode.org/Public/UCD/latest/ucd/UCD.zip"
+@@ -38,19 +38,12 @@ UCD_URL = "https://unicode.org/Public/UCD/latest/ucd/UCD.zip"
  
  def ucd_dir():
      """Return the directory where Unicode data is stored"""
--    ucddir = expanduser("~/.youseedee")
--    try:
--        os.mkdir(ucddir)
--    except FileExistsError:
--        pass
--    return ucddir
-+    return "@ucd_dir@"
+-    return Path(platformdirs.user_cache_dir("youseedee", ensure_exists=True))
++    return Path("@ucd_dir@")
  
- 
- def up_to_date():
-@@ -65,14 +60,6 @@ def up_to_date():
  
  def ensure_files():
      """Ensure the Unicode data files are downloaded and up to date, and download them if not"""
--    if not os.path.isfile(os.path.join(ucd_dir(), "UnicodeData.txt")):
--        download_files()
--    if not up_to_date():
--        # Remove the zip if it exists
--        zip_path = os.path.join(ucd_dir(), "UCD.zip")
--        if os.path.isfile(zip_path):
--            os.unlink(zip_path)
--        download_files()
-     return
+-    file_lock = FileLock(ucd_dir() / ".youseedee_ensure_files.lock")
+-    with file_lock:
+-        if not (ucd_dir() / "UnicodeData.txt").is_file():
+-            _download_files()
+-        if not _up_to_date():
+-            # Remove the zip if it exists
+-            (ucd_dir() / "UCD.zip").unlink(missing_ok=True)
+-            _download_files()
++    return
  
  
+ def _up_to_date():

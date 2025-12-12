@@ -6,7 +6,7 @@
   gnome-shell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-tilingnome";
   version = "unstable-2019-09-19";
 
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "tilingnome";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiling window management for GNOME Shell";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ benley ];
     homepage = "https://github.com/rliang/gnome-shell-extension-tilingnome";
     platforms = gnome-shell.meta.platforms;
   };

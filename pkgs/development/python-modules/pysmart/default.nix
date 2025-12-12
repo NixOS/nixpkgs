@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.3.0";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1k+5XnIT/AfZmzKUxkyU/uc0eW05CvugpY6OdJCoALc=";
+    tag = "v${version}";
+    hash = "sha256-h9FBAoNYLs5XvLxSajyktCCcNgiT7mIp472C+fbqZFA=";
   };
 
   postPatch = ''
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pySMART" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for smartctl (smartmontools)";
     homepage = "https://github.com/truenas/py-SMART";
-    changelog = "https://github.com/truenas/py-SMART/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ nyanloutre ];
+    changelog = "https://github.com/truenas/py-SMART/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

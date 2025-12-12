@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gassist-text";
-  version = "0.0.11";
+  version = "0.0.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "gassist_text";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XFHyI48TuPBJjHA4dLSpYv62Y5zK0knrIqNKBoWnEeU=";
+    tag = version;
+    hash = "sha256-Nk2GwqColX/d1nUL+YvolLH/1g1FTDZbExhBGot/EV0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gassist_text" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Google Assistant API via text";
     homepage = "https://github.com/tronikos/gassist_text";
     changelog = "https://github.com/tronikos/gassist_text/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -13,17 +13,17 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-shine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-x/ubqPXT89GWYV9KIyzny0rJDB3TBurLX71i0DlvHLU=";
   };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ shine ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-shine";
     description = "Bindings to the fixed-point mp3 encoding library shine";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

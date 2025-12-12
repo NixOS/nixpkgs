@@ -9,7 +9,7 @@
   microsoft-kiota-abstractions,
   microsoft-kiota-authentication-azure,
   microsoft-kiota-http,
-  requests,
+  microsoft-kiota-serialization-json,
   azure-identity,
   pytestCheckHook,
   responses,
@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "msgraph-core";
-  version = "1.1.7";
+  version = "1.3.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ADeUlxaDoekKMCE+CJL8biuhijdDqQn0s52yvGi3XCE=";
+    tag = "v${version}";
+    hash = "sha256-6M1C2Y0jYec/yKjigtbaaZiEL23csQAFtuUVMTlaiXk=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +36,12 @@ buildPythonPackage rec {
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
     microsoft-kiota-http
-    requests
-  ];
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     azure-identity
+    microsoft-kiota-serialization-json
     pytestCheckHook
     python-dotenv
     responses
@@ -56,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python-core";
-    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/v${version}";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

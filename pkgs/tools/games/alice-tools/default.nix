@@ -47,47 +47,44 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dcpp_std=c++17"
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      bison
-      flex
-    ]
-    ++ lib.optionals withGUI [
-      wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    bison
+    flex
+  ]
+  ++ lib.optionals withGUI [
+    wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      libiconv
-      libpng
-      libjpeg
-      libwebp
-      zlib
-    ]
-    ++ lib.optionals withGUI [
-      qtbase
-    ];
+  buildInputs = [
+    libiconv
+    libpng
+    libjpeg
+    libwebp
+    zlib
+  ]
+  ++ lib.optionals withGUI [
+    qtbase
+  ];
 
   dontWrapQtApps = true;
 
   # Default install step only installs a static library of a build dependency
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      install -Dm755 src/alice $out/bin/alice
-    ''
-    + lib.optionalString withGUI ''
-      install -Dm755 src/galice $out/bin/galice
-      wrapQtApp $out/bin/galice
-    ''
-    + ''
+    install -Dm755 src/alice $out/bin/alice
+  ''
+  + lib.optionalString withGUI ''
+    install -Dm755 src/galice $out/bin/galice
+    wrapQtApp $out/bin/galice
+  ''
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = gitUpdater { };
@@ -99,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for extracting/editing files from AliceSoft games";
     homepage = "https://github.com/nunuhara/alice-tools";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = if withGUI then "galice" else "alice";
   };
 })

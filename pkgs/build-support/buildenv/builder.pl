@@ -1,6 +1,5 @@
-#! @perl@ -w
-
 use strict;
+use feature 'signatures';
 use Cwd 'abs_path';
 use IO::Handle;
 use File::Path;
@@ -10,16 +9,15 @@ use JSON::PP;
 
 STDOUT->autoflush(1);
 
-$SIG{__WARN__} = sub { warn "warning: ", @_ };
-$SIG{__DIE__}  = sub { die "error: ", @_ };
+$SIG{__WARN__} = sub { warn "pkgs.buildEnv warning: ", @_ };
+$SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 
 my $out = $ENV{"out"};
 my $extraPrefix = $ENV{"extraPrefix"};
 
-my @pathsToLink = split ' ', $ENV{"pathsToLink"};
+my @pathsToLink = @{decode_json $ENV{"pathsToLinkJSON"}};
 
-sub isInPathsToLink {
-    my $path = shift;
+sub isInPathsToLink($path) {
     $path = "/" if $path eq "";
     foreach my $elem (@pathsToLink) {
         return 1 if
@@ -32,8 +30,7 @@ sub isInPathsToLink {
 
 # Returns whether a path in one of the linked packages may contain
 # files in one of the elements of pathsToLink.
-sub hasPathsToLink {
-    my $path = shift;
+sub hasPathsToLink($path) {
     foreach my $elem (@pathsToLink) {
         return 1 if
             $path eq "" ||
@@ -44,8 +41,7 @@ sub hasPathsToLink {
 }
 
 # Similar to `lib.isStorePath`
-sub isStorePath {
-    my $path = shift;
+sub isStorePath($path) {
     my $storePath = "@storeDir@";
 
     return substr($path, 0, 1) eq "/" && dirname($path) eq $storePath;
@@ -76,22 +72,18 @@ for my $p (@pathsToLink) {
 
 sub findFiles;
 
-sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
-
+sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
     closedir DIR;
 
     foreach my $name (@names) {
         next if $name eq "." || $name eq "..";
-        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
     }
 }
 
-sub checkCollision {
-    my ($path1, $path2) = @_;
-
+sub checkCollision($path1, $path2) {
     if (! -e $path1 || ! -e $path2) {
         return 0;
     }
@@ -109,18 +101,15 @@ sub checkCollision {
     return compare($path1, $path2) == 0;
 }
 
-sub prependDangling {
-    my $path = shift;
+sub prependDangling($path) {
     return (-l $path && ! -e $path ? "dangling symlink " : "") . "`$path'";
 }
 
-sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
-
+sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
         if ($ignoreSingleFileOutputs) {
-            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv";
+            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv, ignoring it";
             return;
         } else {
             die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
@@ -184,17 +173,17 @@ sub findFiles {
         my $oldTargetRef = prependDangling($oldTarget);
 
         if ($ignoreCollisions) {
-            warn "collision between $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
+            warn "colliding subpath (ignored): $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
             return;
         } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
         } else {
-            die "collision between $targetRef and $oldTargetRef\n";
+            die "two given paths contain a conflicting subpath:\n  $targetRef and\n  $oldTargetRef\nhint: this may be caused by two different versions of the same package in buildEnv's `paths` parameter\nhint: `pkgs.nix-diff` can be used to compare derivations\n";
         }
     }
 
-    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";
-    findFilesInDir($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $checkCollisionContents, $oldPriority, $ignoreSingleFileOutputs) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
 
     $symlinks{$relName} = ["", $priority]; # denotes directory
 }
@@ -203,13 +192,11 @@ sub findFiles {
 my %done;
 my %postponed;
 
-sub addPkg {
-    my ($pkgDir, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority)  = @_;
-
+sub addPkg($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-    findFiles("", $pkgDir, "", $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+    findFiles("", $pkgDir, "", $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -240,9 +227,9 @@ for my $pkg (@{decode_json $pkgs}) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
                $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
-               $pkg->{priority})
+               $pkg->{priority},
+               $ENV{"ignoreSingleFileOutputs"} eq "1")
            if -e $path;
     }
 }
@@ -257,7 +244,7 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"ignoreSingleFileOutputs"} eq "1", $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
+        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++, $ENV{"ignoreSingleFileOutputs"} eq "1");
     }
 }
 
@@ -269,9 +256,9 @@ if ($extraPathsFilePath) {
         chomp $line;
         addPkg($line,
                $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
-               1000)
+               1000,
+               $ENV{"ignoreSingleFileOutputs"} eq "1")
             if -d $line;
     }
 

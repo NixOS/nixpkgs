@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "pyDuotecno";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-I/ZA2ooa6nunUr/4K+FWAGMOdcJDfGzE99jJ8zTe2Po=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duotecno" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Duotecno IP interfaces";
     homepage = "https://github.com/Cereal2nd/pyDuotecno";
     changelog = "https://github.com/Cereal2nd/pyDuotecno/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.14";
+  version = "1.2.18";
   pyproject = true;
 
   outputs = [
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tantale";
     repo = "deprecated";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
+    tag = "v${version}";
+    hash = "sha256-gx5D1KAPELKfb2U93lvuztv3Ea3V+PshcfshIS6uwCo=";
   };
 
   build-system = [ setuptools ];
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deprecated" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tilpner ];
   };
 }

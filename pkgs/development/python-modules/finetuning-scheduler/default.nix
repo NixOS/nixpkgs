@@ -1,25 +1,30 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  pythonOlder,
-  pytestCheckHook,
-  torch,
+
+  # dependencies
   pytorch-lightning,
+  torch,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.5.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
-    hash = "sha256-neeSATQwAaYN1QGBUXphqqJp9lP3HG2OH4aLdt1cOho=";
+    hash = "sha256-6v7KhY2dOc/Sbw85UO9KVDSS0+4DJ+VWrQ5Tg5E8Ddc=";
   };
 
   build-system = [ setuptools ];
@@ -37,31 +42,25 @@ buildPythonPackage rec {
   env.PACKAGE_NAME = "pytorch";
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests" ];
-  disabledTests =
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-    lib.optionals (pythonOlder "3.12") [
-      "test_fts_dynamo_enforce_p0"
-      "test_fts_dynamo_resume"
-      "test_fts_dynamo_intrafit"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      # slightly exceeds numerical tolerance on aarch64-linux:
-      "test_fts_frozen_bn_track_running_stats"
-    ];
+  enabledTestPaths = [ "tests" ];
+  disabledTests = [
+    # AssertionError: assert 'lightning @ git+' in 'lightning>=2.5.0,<2.5.6'
+    "test_get_lightning_requirement"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # slightly exceeds numerical tolerance on aarch64-linux:
+    "test_fts_frozen_bn_track_running_stats"
+  ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";
-    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    badPlatforms = [
-      # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

@@ -1,31 +1,44 @@
 {
   lib,
   stdenv,
+  catch2,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "immer";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "arximboldi";
     repo = "immer";
-    rev = "v${version}";
-    hash = "sha256-R0C6hN50eyFSv10L/Q0tRdnUrRvze+eRXPrlAQsddYY=";
+    tag = "v${version}";
+    hash = "sha256-Tyj2mNyLhrcFNQEn4xHC8Gz7/jtA4Dnkjtk8AAXJEw8=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    catch2
+  ];
+
+  strictDeps = true;
+
   dontBuild = true;
   dontUseCmakeBuildDir = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Postmodern immutable and persistent data structures for C++ — value semantics at scale";
     homepage = "https://sinusoid.es/immer";
     changelog = "https://github.com/arximboldi/immer/releases/tag/v${version}";
-    license = licenses.boost;
-    maintainers = with maintainers; [ sifmelcara ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ sifmelcara ];
+    platforms = lib.platforms.all;
   };
 }

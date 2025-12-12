@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netioproducts";
     repo = "PyNetio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
   };
 
@@ -38,12 +38,12 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with NETIO devices";
     mainProgram = "Netio";
     homepage = "https://github.com/netioproducts/PyNetio";
     changelog = "https://github.com/netioproducts/PyNetio/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

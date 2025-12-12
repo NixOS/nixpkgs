@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "faf0";
     repo = "sct";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-L93Gk7/jcRoUWogWhrOiBvWCCj+EbyGKxBR5oOVjPPU=";
   };
 
@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Set color temperature of screen";
     mainProgram = "xsct";
     homepage = "https://github.com/faf0/sct";
     changelog = "https://github.com/faf0/sct/blob/${finalAttrs.version}/CHANGELOG";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = with platforms; linux ++ freebsd ++ openbsd;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
   };
 })

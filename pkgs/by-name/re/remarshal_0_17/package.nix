@@ -3,22 +3,31 @@
   python3Packages,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
 }:
 
 let
-  python = python3Packages.python.override {
-    self = python3Packages.python;
-    packageOverrides = self: super: {
-      tomlkit = super.tomlkit.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.5";
-        src = fetchPypi {
-          pname = "tomlkit";
-          inherit version;
-          hash = "sha256-7vNPujmDTU1rc8m6fz5NHEF6Tlb4mn6W4JDdDSS4+zw=";
-        };
-      });
-    };
+  packageOverrides = self: super: {
+    tomlkit = super.tomlkit.overridePythonAttrs (oldAttrs: rec {
+      version = "0.12.5";
+      src = fetchPypi {
+        pname = "tomlkit";
+        inherit version;
+        hash = "sha256-7vNPujmDTU1rc8m6fz5NHEF6Tlb4mn6W4JDdDSS4+zw=";
+      };
+      patches = [
+        (fetchpatch {
+          url = "https://github.com/python-poetry/tomlkit/commit/05d9be1c2b2a95a4eb3a53d999f1483dd7abae5a.patch";
+          hash = "sha256-9pLGxcGHs+XoKrqlh7Q0dyc07XrK7J6u2T7Kvfd0ICc=";
+          excludes = [ ".github/workflows/tests.yml" ];
+        })
+      ];
+    });
   };
+  python = python3Packages.python.override (oa: {
+    self = python3Packages.python;
+    packageOverrides = lib.composeExtensions (oa.packageOverrides or (_: _: { })) packageOverrides;
+  });
   pythonPackages = python.pkgs;
 in
 pythonPackages.buildPythonApplication rec {
@@ -29,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "remarshal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
   };
 
@@ -52,11 +61,12 @@ pythonPackages.buildPythonApplication rec {
 
   # nixpkgs-update: no auto update
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
     description = "Convert between TOML, YAML and JSON";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "remarshal";
   };
 }

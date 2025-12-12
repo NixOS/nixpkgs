@@ -4,18 +4,17 @@
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
-  fetchpatch,
+  nixosTests,
 }:
-
 buildGoModule rec {
   pname = "beszel";
-  version = "0.9.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VB3ICoJrBIwP27jZJASQin4xzQ04089VqwFp7hfqZaQ=";
+    tag = "v${version}";
+    hash = "sha256-fPVjJfMaTSPolB6l2t1b2CjSaX3Gc4/0Nruy4OY9RAc=";
   };
 
   webui = buildNpmPackage {
@@ -47,18 +46,16 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/beszel/site";
+    sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-ObLulUnCCcKetDW6XKdC8u0NuKBLVUl37jebCGloGoE=";
+    npmDepsHash = "sha256-YVYHNAf0JdTpqUYq5JosuzWLOsZkbX2okNPj5JQTOto=";
   };
 
-  sourceRoot = "${src.name}/beszel";
-
-  vendorHash = "sha256-yvHsmA4FtENIxKNMS8Bm9bC4dbE64XCX5KP9JYkTtKc=";
+  vendorHash = "sha256-fXiCddu7DE6NLNJkYupQsAK0xMBoL0K5T7Ig0IuIbD4=";
 
   preBuild = ''
-    mkdir -p site/dist
-    cp -r ${webui}/* site/dist
+    mkdir -p internal/site/dist
+    cp -r ${webui}/* internal/site/dist
   '';
 
   postInstall = ''
@@ -66,13 +63,25 @@ buildGoModule rec {
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.nixos = nixosTests.beszel;
+  };
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
     changelog = "https://github.com/henrygd/beszel/releases/tag/v${version}";
     description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      arunoruto
+      BonusPlay
+    ];
     license = lib.licenses.mit;
   };
 }

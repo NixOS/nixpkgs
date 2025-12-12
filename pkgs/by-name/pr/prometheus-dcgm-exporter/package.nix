@@ -10,13 +10,13 @@ buildGoModule rec {
 
   # The first portion of this version string corresponds to a compatible DCGM
   # version.
-  version = "3.3.9-3.6.1"; # N.B: If you change this, update dcgm as well to the matching version.
+  version = "4.3.1-4.4.0"; # N.B: If you change this, update dcgm as well to the matching version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-BAMN2yuIW5FcHY3o9MUIMgPnTEFFRCbqhoAkcaZDxcM=";
+    repo = "dcgm-exporter";
+    tag = version;
+    hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
   };
 
   CGO_LDFLAGS = "-ldcgm";
@@ -29,7 +29,7 @@ buildGoModule rec {
   # symbols are available on startup.
   hardeningDisable = [ "bindnow" ];
 
-  vendorHash = "sha256-b7GyPsmSGHx7hK0pDa88FKA+ZKJES2cdAGjT2aAfX/A=";
+  vendorHash = "sha256-BfHC49Dzb4ArXK87JKD+aYEHR5HUS5NL0fEHa0jOCYM=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
@@ -42,12 +42,12 @@ buildGoModule rec {
     patchelf --add-needed libnvidia-ml.so "$out/bin/dcgm-exporter"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NVIDIA GPU metrics exporter for Prometheus leveraging DCGM";
     homepage = "https://github.com/NVIDIA/dcgm-exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.deshaw ];
     mainProgram = "dcgm-exporter";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

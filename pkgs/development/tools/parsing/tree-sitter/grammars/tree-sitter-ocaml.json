@@ -1,12 +1,14 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-ocaml",
-  "rev": "26bc61c206e7820f9f804b206f7765ffc55cd039",
-  "date": "2024-11-10T23:21:59-05:00",
-  "path": "/nix/store/dlkj7hw4sy5zywabkr67hgajpnsaw48c-tree-sitter-ocaml",
-  "sha256": "1rcvy51swpz6wpdk45z3m8xkrc03xl0hypwgbrnivsi9zizf14zj",
-  "hash": "sha256-8pPgfvwp6h1tXo9fDwHtA7A8O6rjFzLb5eZfrkPxm+U=",
+  "rev": "0cc270ff90ca09c29d0f2f9dec69ddfef55a3eff",
+  "date": "2025-05-29T16:15:06+02:00",
+  "path": "/nix/store/796cycklipmf50nxh0431jfdlard661i-tree-sitter-ocaml",
+  "sha256": "1mrqpdzwrj3hkrv0xib3h3fvj9z3iai5gjwry9dilhdjl2n2akvv",
+  "hash": "sha256-e08lrKCyQRpb8pnLV6KK4ye53YBjxQ52nnDIzH+7ONc=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

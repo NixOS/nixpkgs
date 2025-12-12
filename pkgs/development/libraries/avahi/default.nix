@@ -11,6 +11,7 @@
   expat,
   gettext,
   glib,
+  autoreconfHook,
   libiconv,
   libevent,
   nixosTests,
@@ -127,6 +128,18 @@ stdenv.mkDerivation rec {
         "fuzz/fuzz-packet.c"
       ];
     })
+    # https://github.com/avahi/avahi/pull/659 merged Nov 19
+    (fetchpatch {
+      name = "CVE-2024-52616.patch";
+      url = "https://github.com/avahi/avahi/commit/f8710bdc8b29ee1176fe3bfaeabebbda1b7a79f7.patch";
+      hash = "sha256-BUQOQ4evKLBzV5UV8xW8XL38qk1rg6MJ/vcT5NBckfA=";
+    })
+    # https://github.com/avahi/avahi/pull/265 merged Mar 3, 2020
+    (fetchpatch {
+      name = "fix-requires-in-pc-file.patch";
+      url = "https://github.com/avahi/avahi/commit/366e3798bdbd6b7bf24e59379f4a9a51af575ce9.patch";
+      hash = "sha256-9AdhtzrimmcpMmeyiFcjmDfG5nqr/S8cxWTaM1mzCWA=";
+    })
   ];
 
   depsBuildBuild = [
@@ -137,26 +150,26 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
+    autoreconfHook
   ];
 
-  buildInputs =
-    [
-      libdaemon
-      dbus
-      glib
-      expat
-      libiconv
-      libevent
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      libpcap
-    ]
-    ++ lib.optionals gtk3Support [
-      gtk3
-    ]
-    ++ lib.optionals qt5Support [
-      qt5
-    ];
+  buildInputs = [
+    libdaemon
+    dbus
+    glib
+    expat
+    libiconv
+    libevent
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    libpcap
+  ]
+  ++ lib.optionals gtk3Support [
+    gtk3
+  ]
+  ++ lib.optionals qt5Support [
+    qt5
+  ];
 
   propagatedBuildInputs = lib.optionals withPython (
     with python.pkgs;
@@ -167,29 +180,28 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  configureFlags =
-    [
-      "--disable-gdbm"
-      "--disable-mono"
-      # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
-      "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-      (lib.enableFeature gtk3Support "gtk3")
-      (lib.enableFeature qt5Support "qt5")
-      (lib.enableFeature withPython "python")
-      "--localstatedir=/var"
-      "--runstatedir=/run"
-      "--sysconfdir=/etc"
-      "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
-      # A systemd unit is provided by the avahi-daemon NixOS module
-      "--with-systemdsystemunitdir=no"
-    ]
-    ++ lib.optionals withLibdnssdCompat [
-      "--enable-compat-libdns_sd"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # autoipd won't build on darwin
-      "--disable-autoipd"
-    ];
+  configureFlags = [
+    "--disable-gdbm"
+    "--disable-mono"
+    # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
+    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+    (lib.enableFeature gtk3Support "gtk3")
+    (lib.enableFeature qt5Support "qt5")
+    (lib.enableFeature withPython "python")
+    "--localstatedir=/var"
+    "--runstatedir=/run"
+    "--sysconfdir=/etc"
+    "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
+    # A systemd unit is provided by the avahi-daemon NixOS module
+    "--with-systemdsystemunitdir=no"
+  ]
+  ++ lib.optionals withLibdnssdCompat [
+    "--enable-compat-libdns_sd"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # autoipd won't build on darwin
+    "--disable-autoipd"
+  ];
 
   installFlags = [
     # Override directories to install into the package.
@@ -215,14 +227,13 @@ stdenv.mkDerivation rec {
     smoke-test-resolved = nixosTests.avahi-with-resolved;
   };
 
-  meta = with lib; {
+  meta = {
     description = "mDNS/DNS-SD implementation";
     homepage = "http://avahi.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lovek323
-      globin
     ];
 
     longDescription = ''

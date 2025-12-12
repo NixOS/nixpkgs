@@ -13,9 +13,9 @@
   libplist,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rpiplay";
-  version = "unstable-2021-06-14";
+  version = "0-unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "FD-";
@@ -52,13 +52,18 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace {lib/playfair/,lib/llhttp/,lib/,renderers/,./}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/FD-/RPiPlay";
     description = "Open-source implementation of an AirPlay mirroring server";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "rpiplay";
   };
 }

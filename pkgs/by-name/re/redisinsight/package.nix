@@ -1,108 +1,108 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  fixup-yarn-lock,
-  yarn,
-  nodejs_18,
-  python3,
   fetchYarnDeps,
-  electron,
-  nest-cli,
-  libsass,
-  buildPackages,
+  makeDesktopItem,
+
+  copyDesktopItems,
+  dart-sass,
+  makeWrapper,
+  nodejs_20,
   pkg-config,
+  yarnConfigHook,
+
+  electron,
+  libsecret,
   sqlite,
-  xdg-utils,
 }:
 
 let
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.48.0";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-ek0Fp8v6j+mZPK2cEuFNrBgInXdYIKBBUg0UD1I51Sg=";
+    hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-ohtU1h6wrg7asXDxTt1Jlzx9GaS3zDrGQD9P9tgzCOE=";
+  patches = [
+    # the `file:` specifier doesn't seem to be supported with fetchYarnDeps
+    # upstream uses it to point the cpu-features dependency to a stub package
+    # so it's safe to remove
+    ./remove-cpu-features.patch
+  ];
+
+  baseOfflineCache = fetchYarnDeps {
+    name = "redisinsight-${finalAttrs.version}-base-offline-cache";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-m3relh3DZGReEi4dVOJcIXU9QVClisXw+f7K5i25x24=";
   };
 
-  feOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/redisinsight/yarn.lock";
-    hash = "sha256-9xbIdDeLUEk4eNeK7RTwidqDGinA8SPfcumqml66kTw=";
+  innerOfflineCache = fetchYarnDeps {
+    name = "redisinsight-${finalAttrs.version}-inner-offline-cache";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd redisinsight";
+    hash = "sha256-rqmrETlc2XoZDM4GP1+qI4eK4oGmtpmc6TVvAam2+W8=";
   };
 
   apiOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/redisinsight/api/yarn.lock";
-    hash = "sha256-4zbffuneTceMEyKb8atTXTFhTv0DhrsRMdepZWgoxMQ=";
+    name = "redisinsight-${finalAttrs.version}-api-offline-cache";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd redisinsight/api";
+    hash = "sha256-KFtmq3iYAnsAi5ysvGCzBk9RHV7EE7SIPbzPza7vBdA=";
   };
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
-    nodejs
-    makeWrapper
-    (python3.withPackages (ps: [ ps.setuptools ]))
-    nest-cli
-    libsass
-    pkg-config
     copyDesktopItems
+    makeWrapper
+    nodejs
+    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+    pkg-config
+    yarnConfigHook
   ];
 
   buildInputs = [
-    sqlite
-    xdg-utils
+    sqlite # for `sqlite3` node module
+    libsecret # for `keytar` node module
   ];
+
+  postPatch = ''
+    substituteInPlace redisinsight/api/config/default.ts \
+      --replace-fail "process['resourcesPath']" "\"$out/share/redisinsight\""
+
+    # has irrelevant files
+    rm -r resources/app
+  '';
+
+  # will run yarnConfigHook manually later
+  dontYarnInstallDeps = true;
 
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    yarnOfflineCache="$baseOfflineCache" yarnConfigHook
+    cd redisinsight
+    yarnOfflineCache="$innerOfflineCache" yarnConfigHook
+    cd api
+    yarnOfflineCache="$apiOfflineCache" yarnConfigHook
+    cd ../..
 
-    yarn config --offline set yarn-offline-mirror ${finalAttrs.feOfflineCache}
-    fixup-yarn-lock redisinsight/yarn.lock
-    yarn --offline --cwd redisinsight/ --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-
-    yarn config --offline set yarn-offline-mirror ${finalAttrs.apiOfflineCache}
-    fixup-yarn-lock redisinsight/api/yarn.lock
-    yarn --offline --cwd redisinsight/api/ --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-
-    patchShebangs node_modules/
-    patchShebangs redisinsight/node_modules/
-    patchShebangs redisinsight/api/node_modules/
-
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    # Build the sqlite3 package.
-    pushd redisinsight
-    npm_config_node_gyp="${buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" npm rebuild --verbose --sqlite=${sqlite.dev} sqlite3
-    popd
-
-    # Build node-sass
-    LIBSASS_EXT=auto npm rebuild --verbose node-sass
-
-    substituteInPlace redisinsight/api/config/default.ts \
-      --replace-fail "process['resourcesPath']" "\"$out/share/redisinsight\"" \
-
-    # has irrelevant files
-    rm -r resources/app
+    export npm_config_nodedir=${electron.headers}
+    export npm_config_sqlite=${lib.getDev sqlite}
+    export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+    npm rebuild --verbose --no-progress
+    cd redisinsight
+    npm rebuild --verbose --no-progress
+    cd api
+    npm rebuild --verbose --no-progress
+    cd ../..
 
     runHook postConfigure
   '';
@@ -110,14 +110,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
+    # force the sass npm dependency to use our own sass binary instead of the bundled one
+    substituteInPlace node_modules/sass/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     yarn --offline build:prod
+
+    # TODO: Generate defaults. Currently broken because it requires network access.
+    # yarn --offline --cwd=redisinsight/api build:defaults
 
     yarn --offline electron-builder \
       --dir \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false # we've already rebuilt the native libs using the electron headers
 
     runHook postBuild
   '';
@@ -159,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "RedisInsight Redis client powered by Electron";
+    description = "Developer GUI for Redis";
     homepage = "https://github.com/RedisInsight/RedisInsight";
     license = lib.licenses.sspl;
     maintainers = with lib.maintainers; [

@@ -13,34 +13,32 @@
   freetype,
   alsa-lib,
   libjack2,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dexed";
-  version = "0.9.8";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
+    hash = "sha256-9EbaME3kw2ptCWpaV9CnM0j5HOof264s5iFoOTcjwNg=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
 
-      substituteInPlace Source/CMakeLists.txt \
-        --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
-    ''
-    # LTO needs special setup on Linux
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace Source/CMakeLists.txt \
-        --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-    '';
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
+  ''
+  # LTO needs special setup on Linux
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
+  '';
 
   strictDeps = true;
 
@@ -49,18 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXext
-      libXcursor
-      libXinerama
-      libXrandr
-      freetype
-      alsa-lib
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXext
+    libXcursor
+    libXinerama
+    libXrandr
+    freetype
+    alsa-lib
+    libjack2
+  ];
 
   # JUCE insists on only dlopen'ing these
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [

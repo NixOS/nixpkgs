@@ -62,14 +62,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "olvid";
-  version = "2.2.0";
+  version = "2.5.1";
 
   dontUnpack = true;
   dontWrapGApps = true;
 
   src = fetchurl {
     url = "https://static.olvid.io/linux/${repo}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TK0aeKwZFItw3GaOwet48d8zPBRtTsdqEz5MUNWLwSU=";
+    hash = "sha256-6QEr9mB9UI+rgrG4QxxBs5hOT26Yxcmjwode+pRwYfU=";
   };
 
   nativeBuildInputs = [
@@ -106,12 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure french messenger";
     homepage = "https://www.olvid.io";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "olvid";
-    maintainers = with maintainers; [ rookeur ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rookeur ];
+    platforms = lib.platforms.linux;
   };
 })

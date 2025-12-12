@@ -2,11 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  hyperscan,
   pkg-config,
   protobuf,
   protoc-gen-go,
   protoc-gen-go-grpc,
+  vectorscan,
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "deepfence";
     repo = "SecretScanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-lTUZLuEiC9xpHYWn3uv4ZtbvHX6ETsjxacjd/O0kU8I=";
   };
@@ -35,7 +35,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    hyperscan
+    vectorscan
   ];
 
   preBuild = ''
@@ -47,13 +47,16 @@ buildGoModule rec {
     mv $out/bin/SecretScanner $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to find secrets and passwords in container images and file systems";
     mainProgram = "secretscanner";
     homepage = "https://github.com/deepfence/SecretScanner";
     changelog = "https://github.com/deepfence/SecretScanner/releases/tag/v${version}";
-    platforms = [ "x86_64-linux" ];
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

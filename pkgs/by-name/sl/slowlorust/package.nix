@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -14,11 +12,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "MJVL";
     repo = "slowlorust";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
   };
 
-  cargoHash = "sha256-Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
+  cargoHash = "sha256-L0N7SVUzdTzDXPaS/da4kCKNG2lwS8Mqk1HET2LqSvY=";
 
   postPatch = ''
     # https://github.com/MJVL/slowlorust/issues/2
@@ -26,20 +24,18 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'version = "1.0"' 'version = "${version}"'
   '';
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
     changelog = "https://github.com/MJVL/slowlorust/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "slowlorust";
   };
 }

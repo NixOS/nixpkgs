@@ -22,25 +22,24 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
   ];
 
-  prePatch =
-    ''
-      sed -e s,/bin/ln,ln,g -i src/Makefile
-      sed -e 's,^CXXFLAGS=-O2,CXXFLAGS=-O2 -D PATH_ESPEAK_DATA=\\\"$(DATADIR)\\\",' -i src/Makefile
-    ''
-    + (lib.optionalString (portaudio.api_version == 19) ''
-      cp src/portaudio19.h src/portaudio.h
-    '');
+  prePatch = ''
+    sed -e s,/bin/ln,ln,g -i src/Makefile
+    sed -e 's,^CXXFLAGS=-O2,CXXFLAGS=-O2 -D PATH_ESPEAK_DATA=\\\"$(DATADIR)\\\",' -i src/Makefile
+  ''
+  + (lib.optionalString (portaudio.api_version == 19) ''
+    cp src/portaudio19.h src/portaudio.h
+  '');
 
   configurePhase = ''
     cd src
     makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compact open source software speech synthesizer";
     mainProgram = "espeak";
     homepage = "https://espeak.sourceforge.net/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -3,35 +3,35 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  qdldl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osqp";
-  version = "0.6.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oxfordcontrol";
     repo = "osqp";
-    rev = "v${version}";
-    hash = "sha256-enkK5EFyAeLaUnHNYS3oq43HsHY5IuSLgsYP0k/GW8c=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BOAytzJzHcggncQzeDrXwJOq8B3doWERJ6CKIVg1yJY=";
   };
 
-  # ref https://github.com/osqp/osqp/pull/481
-  # but this patch does not apply directly on v0.6.3
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "$<INSTALL_PREFIX>/\''${CMAKE_INSTALL_INCLUDEDIR}" \
-      "\''${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+    substituteInPlace algebra/_common/lin_sys/qdldl/qdldl.cmake --replace-fail \
+      "GIT_REPOSITORY https://github.com/osqp/qdldl.git" \
+      "URL ${qdldl.src}"
   '';
 
   nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ qdldl ];
+  cmakeFlags = [ (lib.cmakeFeature "OSQP_VERSION" finalAttrs.version) ];
 
-  meta = with lib; {
+  meta = {
     description = "Quadratic programming solver using operator splitting";
     homepage = "https://osqp.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ taktoa ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ taktoa ];
+    platforms = lib.platforms.all;
   };
-}
+})

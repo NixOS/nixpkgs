@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  env.PREFIX = builtins.placeholder "out";
+  env.PREFIX = placeholder "out";
 
   dontConfigure = true;
 

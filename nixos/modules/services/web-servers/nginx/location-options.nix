@@ -11,7 +11,7 @@ with lib;
   options = {
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -53,6 +53,16 @@ with lib;
       '';
     };
 
+    uwsgiPass = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "unix:/run/example/example.sock";
+      description = ''
+        Adds uwsgi_pass directive and sets recommended proxy headers if
+        recommendedUwsgiSettings is enabled.
+      '';
+    };
+
     index = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -90,7 +100,12 @@ with lib;
     };
 
     return = mkOption {
-      type = with types; nullOr (oneOf [ str int ]);
+      type =
+        with types;
+        nullOr (oneOf [
+          str
+          int
+        ]);
       default = null;
       example = "301 http://example.com$request_uri";
       description = ''
@@ -100,7 +115,7 @@ with lib;
 
     fastcgiParams = mkOption {
       type = types.attrsOf (types.either types.str types.path);
-      default = {};
+      default = { };
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx
         configuration file, overriding only some default parameters
@@ -132,6 +147,15 @@ with lib;
       defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
       description = ''
         Enable recommended proxy settings.
+      '';
+    };
+
+    recommendedUwsgiSettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedUwsgiSettings;
+      defaultText = literalExpression "config.services.nginx.recommendedUwsgiSettings";
+      description = ''
+        Enable recommended uwsgi settings.
       '';
     };
   };

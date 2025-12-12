@@ -7,39 +7,39 @@
 
 stdenv.mkDerivation rec {
   pname = "NuSMV";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src =
     with stdenv;
     fetchurl (
       if isx86_64 && isLinux then
         {
-          url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux64.tar.gz";
-          sha256 = "1370x2vwjndv9ham5q399nn84hvhm1gj1k7pq576qmh4pi12xc8i";
+          url = "https://nusmv.fbk.eu/distrib/${version}/NuSMV-${version}-linux64.tar.xz";
+          sha256 = "019d1pa5aw58n11is1024hs8d520b3pp2iyix78vp04yv7wd42l8";
         }
-      else if isx86_32 && isLinux then
+      else if isx86_64 && isDarwin then
         {
-          url = "https://nusmv.fbk.eu/distrib/NuSMV-${version}-linux32.tar.gz";
-          sha256 = "1qf41czwbqxlrmv0rv2daxgz2hljza5xks85sx3dhwpjy2iav9jb";
+          url = "https://nusmv.fbk.eu/distrib/${version}/NuSMV-${version}-macos-universal.tar.xz";
+          sha256 = "098wllv4yx284qv9nsi8kd5pgh10cr1hig01a1p2rxgfmrki52wm";
         }
       else
-        throw "only linux x86_64 and x86_32 are currently supported"
+        throw "only linux and mac x86_64 are currently supported"
     );
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     install -m755 -D bin/NuSMV $out/bin/NuSMV
     install -m755 -D bin/ltl2smv $out/bin/ltl2smv
     cp -r include $out/include
-    cp -r share $out/share
+    cp -r lib $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "New symbolic model checker for the analysis of synchronous finite-state and infinite-state systems";
     homepage = "https://nusmv.fbk.eu/";
-    maintainers = with maintainers; [ mgttlinger ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mgttlinger ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

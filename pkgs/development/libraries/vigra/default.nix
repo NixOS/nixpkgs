@@ -7,29 +7,29 @@
   fftw,
   fftwSinglePrec,
   hdf5,
-  ilmbase,
   libjpeg,
   libpng,
   libtiff,
   openexr,
   python3,
+  writeShellScript,
+  jq,
+  nix-update,
 }:
 
 let
   python = python3.withPackages (py: with py; [ numpy ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
-  version = "unstable-2022-01-11";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
-    rev = "093d57d15c8c237adf1704d96daa6393158ce299";
-    sha256 = "sha256-pFANoT00Wkh1/Dyd2x75IVTfyaoVA7S86tafUSr29Og=";
+    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-E+O5NbDX1ycDJTht6kW8JzYnhEL6Wd1xp0rcLpdm2HQ=";
   };
-
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     hdf5
-    ilmbase
     libjpeg
     libpng
     libtiff
@@ -45,22 +44,43 @@ stdenv.mkDerivation rec {
     python
   ];
 
-  cmakeFlags =
-    [
-      "-DWITH_OPENEXR=1"
-      "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-      "-DCMAKE_CXX_FLAGS=-fPIC"
-      "-DCMAKE_C_FLAGS=-fPIC"
-    ];
+  postPatch = ''
+    chmod +x config/run_test.sh.in
+    patchShebangs --build config/run_test.sh.in
+  '';
 
-  meta = with lib; {
+  cmakeFlags = [
+    "-DWITH_OPENEXR=1"
+    "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+    "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DCMAKE_C_FLAGS=-fPIC"
+  ];
+
+  enableParallelBuilding = true;
+
+  passthru = {
+    tests = {
+      check = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      });
+    };
+    updateScript = writeShellScript "update-vigra" ''
+      latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ukoethe/vigra/releases/latest | ${lib.getExe jq} --raw-output .tag_name | sed -E 's/Version-([0-9]+)-([0-9]+)-([0-9]+)/\1.\2.\3/')
+      ${lib.getExe nix-update} vigra --version $latestVersion
+    '';
+  };
+
+  meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
-    license = licenses.mit;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ShamrockLee
+      kyehn
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

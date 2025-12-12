@@ -17,7 +17,7 @@ mkCoqDerivation rec {
   inherit (coq) src;
   release."${coq.version}" = { };
 
-  defaultVersion = if lib.versions.isGe "8.14" coq.version then coq.version else null;
+  defaultVersion = if lib.versions.range "8.14" "8.20" coq.version then coq.version else null;
 
   preConfigure = ''
     patchShebangs dev/tools/
@@ -62,11 +62,11 @@ mkCoqDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://coq.inria.fr";
     description = "CoqIDE user interface for the Coq proof assistant";
     mainProgram = "coqide";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.Zimmi48 ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.Zimmi48 ];
   };
 }

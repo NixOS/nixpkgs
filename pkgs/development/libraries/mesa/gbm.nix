@@ -15,9 +15,20 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mesa-libgbm";
-  inherit (common) version src meta;
+
+  # We don't use the versions from common.nix, because libgbm is a world rebuild,
+  # so the updates need to happen separately on staging.
+  version = "25.1.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mesa";
+    repo = "mesa";
+    rev = "mesa-${version}";
+    hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
+  };
 
   mesonAutoFeatures = "disabled";
 
@@ -52,4 +63,6 @@ stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.pyyaml
   ];
+
+  inherit (common) meta;
 }

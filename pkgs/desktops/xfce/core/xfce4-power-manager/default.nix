@@ -1,16 +1,17 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, gtk3
-, libnotify
-, libxfce4ui
-, libxfce4util
-, polkit
-, upower
-, wayland-protocols
-, wlr-protocols
-, xfconf
-, xfce4-panel
+{
+  lib,
+  mkXfceDerivation,
+  wayland-scanner,
+  gtk3,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  polkit,
+  upower,
+  wayland-protocols,
+  wlr-protocols,
+  xfconf,
+  xfce4-panel,
 }:
 
 mkXfceDerivation {
@@ -45,8 +46,8 @@ mkXfceDerivation {
     substituteInPlace src/xfpm-suspend.c --replace-fail "SBINDIR" "\"/run/current-system/sw/bin\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Power manager for the Xfce Desktop Environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ lib.teams.xfce ];
   };
 }

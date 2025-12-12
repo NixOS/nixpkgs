@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-d2Br4RAlKO7Bpse8sFbIDCIYd2fYvby0ar9oIbQS2jc=";
   };
 
-  cargoHash = "sha256-hAWMm3YjwTB8ajn3QeXEOJYmPzbbitdwyO4k/IyhlOI=";
+  cargoHash = "sha256-wJDWJFutOvAVou4IpAunrHnUgYmodDliqrmPUai8pVo=";
 
   nativeCheckInputs = [ custom ];
 
@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for patching shell scripts inspired by resholve";
     mainProgram = "patsh";
     homepage = "https://github.com/nix-community/patsh";
     changelog = "https://github.com/nix-community/patsh/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

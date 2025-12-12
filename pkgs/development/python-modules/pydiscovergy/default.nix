@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpx,
   poetry-core,
   pytestCheckHook,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,12 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "pydiscovergy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
+    tag = "v${version}";
+    hash = "sha256-OrMuMGN1zB4q6t4fWyZeQ9WRmNZHFyq+wIRq1kG2N30=";
   };
 
   postPatch = ''
-    sed -i '/addopts =/d' pyproject.toml
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpx
     pytestCheckHook
     respx
@@ -52,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydiscovergy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
     changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

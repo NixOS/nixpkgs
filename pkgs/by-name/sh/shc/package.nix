@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0bfn404plsssa14q89k9l3s5lxq3df0sny5lis4j2w75qrkqx694";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://neurobin.org/projects/softwares/unix/shc/";
     description = "Shell Script Compiler";
     mainProgram = "shc";
     platforms = lib.platforms.all;
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

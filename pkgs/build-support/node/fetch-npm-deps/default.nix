@@ -1,4 +1,19 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  makeWrapper,
+  pkg-config,
+  curl,
+  gnutar,
+  gzip,
+  testers,
+  fetchurl,
+  cacert,
+  prefetch-npm-deps,
+  fetchNpmDeps,
+  config,
+}:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -7,40 +22,66 @@
 
     src = lib.cleanSourceWith {
       src = ./.;
-      filter = name: type:
+      filter =
+        name: type:
         let
-          name' = builtins.baseNameOf name;
+          name' = baseNameOf name;
         in
         name' != "default.nix" && name' != "target";
     };
 
     cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ makeWrapper pkg-config ];
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
     buildInputs = [ curl ];
 
     postInstall = ''
-      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
+      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${
+        lib.makeBinPath [
+          gnutar
+          gzip
+        ]
+      }
     '';
 
     passthru.tests =
       let
-        makeTestSrc = { name, src }: stdenvNoCC.mkDerivation {
-          name = "${name}-src";
+        makeTestSrc =
+          { name, src }:
+          stdenvNoCC.mkDerivation {
+            name = "${name}-src";
 
-          inherit src;
+            inherit src;
 
-          buildCommand = ''
-            mkdir -p $out
-            cp $src $out/package-lock.json
-          '';
-        };
+            buildCommand = ''
+              mkdir -p $out
+              cp $src $out/package-lock.json
+            '';
+          };
 
-        makeTest = { name, src, hash, forceGitDeps ? false, forceEmptyCache ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash forceGitDeps forceEmptyCache;
+        makeTest =
+          {
+            name,
+            src,
+            hash,
+            forceGitDeps ? false,
+            forceEmptyCache ? false,
+            npmRegistryOverridesString ? "{}",
+          }:
+          testers.invalidateFetcherByDrvHash fetchNpmDeps {
+            inherit
+              name
+              hash
+              forceGitDeps
+              forceEmptyCache
+              npmRegistryOverridesString
+              ;
 
-          src = makeTestSrc { inherit name src; };
-        };
+            src = makeTestSrc { inherit name src; };
+          };
       in
       {
         lockfileV1 = makeTest {
@@ -126,7 +167,7 @@
           forceGitDeps = true;
         };
 
-        # This package has a lockfile v1 git dependency with no `dependencies` attribute, since it sementically has no dependencies.
+        # This package has a lockfile v1 git dependency with no `dependencies` attribute, since it semantically has no dependencies.
         jitsiMeet9111 = makeTest {
           name = "jitsi-meet-9111";
 
@@ -137,71 +178,117 @@
 
           hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
         };
+
+        # Test that npmRegistryOverrides work
+        npmRegistryOverrides = makeTest {
+          name = "npm-registry-overrides";
+
+          src = fetchurl {
+            url = "https://cyberchaos.dev/yuka/trainsearch/-/raw/e3cba6427e8ecfd843d0f697251ddaf5e53c2327/package-lock.json";
+            postFetch = "sed -i 's/registry.npmjs.org/broken.link/' $out";
+            hash = "sha256-Qo24ei1d9Ql4zCLjQJ04zVgS4qhBUpew9NZrhrsBds4=";
+          };
+
+          npmRegistryOverridesString = builtins.toJSON {
+            "broken.link" = "https://registry.npmjs.org";
+          };
+
+          hash = "sha256-QGObVDd9qVtf/U78+ayP6RHVWsU+HXhg70BFblQ1PZs=";
+        };
       };
 
-    meta = with lib; {
+    meta = {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
       mainProgram = "prefetch-npm-deps";
-      maintainers = with maintainers; [ winter ];
-      license = licenses.mit;
+      maintainers = with lib.maintainers; [ winter ];
+      license = lib.licenses.mit;
     };
   };
 
   fetchNpmDeps =
-    { name ? "npm-deps"
-    , hash ? ""
-    , forceGitDeps ? false
-    , forceEmptyCache ? false
-    , ...
-    } @ args:
+    {
+      name ? "npm-deps",
+      hash ? "",
+      forceGitDeps ? false,
+      forceEmptyCache ? false,
+      nativeBuildInputs ? [ ],
+      # A string with a JSON attrset specifying registry mirrors, for example
+      #   {"registry.example.org": "my-mirror.local/registry.example.org"}
+      npmRegistryOverridesString ? config.npmRegistryOverridesString,
+      ...
+    }@args:
     let
       hash_ =
-        if hash != "" then {
-          outputHash = hash;
-        } else {
-          outputHash = "";
-          outputHashAlgo = "sha256";
-        };
+        if hash != "" then
+          {
+            outputHash = hash;
+          }
+        else
+          {
+            outputHash = "";
+            outputHashAlgo = "sha256";
+          };
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
     in
-    stdenvNoCC.mkDerivation (args // {
-      inherit name;
+    stdenvNoCC.mkDerivation (
+      args
+      // {
+        inherit name;
 
-      nativeBuildInputs = [ prefetch-npm-deps ];
+        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps ];
 
-      buildPhase = ''
-        runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-        if [[ ! -e package-lock.json ]]; then
-          echo
-          echo "ERROR: The package-lock.json file does not exist!"
-          echo
-          echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
-          echo "when packages are updated on npm."
-          echo
-          echo "Hint: You can copy a vendored package-lock.json file via postPatch."
-          echo
+          if [[ -f npm-shrinkwrap.json ]]; then
+            local -r srcLockfile="npm-shrinkwrap.json"
+          elif [[ -f package-lock.json ]]; then
+            local -r srcLockfile="package-lock.json"
+          else
+            echo
+            echo "ERROR: No lock file!"
+            echo
+            echo "package-lock.json or npm-shrinkwrap.json is required to make sure"
+            echo "that npmDepsHash doesn't change when packages are updated on npm."
+            echo
+            echo "Hint: You can copy a vendored package-lock.json file via postPatch."
+            echo
 
-          exit 1
-        fi
+            exit 1
+          fi
 
-        prefetch-npm-deps package-lock.json $out
+          prefetch-npm-deps $srcLockfile $out
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
 
-      dontInstall = true;
+        dontInstall = true;
 
-      # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
-      # `{ "registry.example.com": "example-registry-bearer-token", ... }`
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+        # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
+        # `{ "registry.example.com": "example-registry-bearer-token", ... }`
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
-      SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
-        then "${cacert}/etc/ssl/certs/ca-bundle.crt"
-        else "/no-cert-file.crt";
+        NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
 
-      outputHashMode = "recursive";
-    } // hash_ // forceGitDeps_ // forceEmptyCache_);
+        SSL_CERT_FILE =
+          if
+            (
+              hash_.outputHash == ""
+              || hash_.outputHash == lib.fakeSha256
+              || hash_.outputHash == lib.fakeSha512
+              || hash_.outputHash == lib.fakeHash
+            )
+          then
+            "${cacert}/etc/ssl/certs/ca-bundle.crt"
+          else
+            "/no-cert-file.crt";
+
+        outputHashMode = "recursive";
+      }
+      // hash_
+      // forceGitDeps_
+      // forceEmptyCache_
+    );
 }

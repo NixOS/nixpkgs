@@ -4,7 +4,7 @@
   lib,
   fetchurl,
   perl,
-  postgresql,
+  libpq,
   nixosTests,
   withPostgres ? true,
   ...
@@ -13,11 +13,11 @@
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
   nginxVersion = "1.27.1";
-  version = "${nginxVersion}.1";
+  version = "${nginxVersion}.2";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-ebBx4nvcFD1fQB0Nv1BN5EIAcNhnU4xe3CVG0DUf1cA=";
+    sha256 = "sha256-dPB29+NksqmabF+btTHCdhDHiYWr6Va0QrGSoilfdUg=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.
@@ -26,7 +26,7 @@ callPackage ../nginx/generic.nix args rec {
   fixPatch =
     patch:
     let
-      name = patch.name or (builtins.baseNameOf patch);
+      name = patch.name or (baseNameOf patch);
     in
     runCommand "openresty-${name}" { src = patch; } ''
       substitute $src $out \
@@ -34,11 +34,18 @@ callPackage ../nginx/generic.nix args rec {
         --replace "b/" "b/bundle/nginx-${nginxVersion}/"
     '';
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    libpq.pg_config
+    perl
+  ];
 
-  buildInputs = [ postgresql ];
+  buildInputs = [ libpq ];
 
   postPatch = ''
+    substituteInPlace bundle/nginx-${nginxVersion}/src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+
     patchShebangs configure bundle/
   '';
 

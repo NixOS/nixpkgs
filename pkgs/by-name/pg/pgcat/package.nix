@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   nix-update-script,
   testers,
   pgcat,
@@ -20,11 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 
-  cargoHash = "sha256-QqwUEbWKSUuxzYjWpVpQuKZDiNib1gM2eZJ4y7XIzXY=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-6x/IPFncfOPxautW7gVUh5LG0hK4h6T4QL7B82Moi6o=";
 
   checkFlags = [
     # requires network access
@@ -36,13 +30,13 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = pgcat; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/postgresml/pgcat";
     description = "PostgreSQL pooler with sharding, load balancing and failover support";
     changelog = "https://github.com/postgresml/pgcat/releases";
-    license = with licenses; [ mit ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cathalmullan ];
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ cathalmullan ];
     mainProgram = "pgcat";
   };
 }

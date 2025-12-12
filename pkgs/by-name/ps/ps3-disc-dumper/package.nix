@@ -5,38 +5,33 @@
   zlib,
   openssl,
   dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "ps3-disc-dumper";
-  version = "4.2.5";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ax2Q1VodzktXSdZBvO1fys+xigk/jzbMWHxqoLIKE7w=";
+    tag = "v${version}";
+    hash = "sha256-urIeR6iVL5DDqzOUfI291WYArrEpLzNg7pnvjACUuk8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
-  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.sdk_10_0;
+  dotnetRestoreFlags = [ "-p:Configuration=${buildType}" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
   nugetDeps = ./deps.json;
-
-  preConfigureNuGet = ''
-    # This should really be in the upstream nuget.config
-    dotnet nuget add source https://api.nuget.org/v3/index.json \
-      -n nuget.org --configfile nuget.config
-  '';
 
   runtimeDeps = [
     zlib
     openssl
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Handy utility to make decrypted PS3 disc dumps";

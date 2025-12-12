@@ -31,12 +31,19 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "MANPATH=$(out)/share/man"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-function-declaration"
+    "-Wno-endif-labels"
+    "-Wno-implicit-int"
+  ];
+
   installTargets = [
     "install"
     "install.man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates a cute cat chasing around your mouse cursor";
     longDescription = ''
       Oneko changes your mouse cursor into a mouse
@@ -45,12 +52,12 @@ stdenv.mkDerivation rec {
       When the cat is done catching the mouse, it starts sleeping.
     '';
     homepage = "https://github.com/IreneKnapp/oneko";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [
       xaverdh
       irenes
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "oneko";
   };
 }

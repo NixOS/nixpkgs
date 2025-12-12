@@ -25,7 +25,7 @@ let
 in
 {
   options.services.loki = {
-    enable = mkEnableOption "loki";
+    enable = mkEnableOption "Grafana Loki";
 
     user = mkOption {
       type = types.str;
@@ -49,7 +49,7 @@ in
       type = types.path;
       default = "/var/lib/loki";
       description = ''
-        Specify the directory for Loki.
+        Specify the data directory for Loki.
       '';
     };
 
@@ -58,6 +58,10 @@ in
       default = { };
       description = ''
         Specify the configuration for Loki in Nix.
+
+        See [documentation of Grafana Loki](https://grafana.com/docs/loki/latest/configure/) for all available options.
+
+        Cannot be specified together with {option}`services.loki.configFile`.
       '';
     };
 
@@ -66,6 +70,8 @@ in
       default = null;
       description = ''
         Specify a configuration file that Loki should use.
+
+        Cannot be specified together with {option}`services.loki.configuration`.
       '';
     };
 

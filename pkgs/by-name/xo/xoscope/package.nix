@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a5ycfc1qdmibvagc82r2mhv2i99m6pndy5i6ixas3j2297g6pgq";
   };
 
+  patches = [ ./fix-gcc14.patch ];
+
   nativeBuildInputs = [
     pkg-config
     gnum4

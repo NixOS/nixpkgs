@@ -1,31 +1,35 @@
 {
   cmake,
+  docutils,
   fetchurl,
   lib,
   libbsd,
   ncurses,
-  postgresql,
+  libpq,
   stdenv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchurl {
     url = "https://pg_top.gitlab.io/source/pg_top-${version}.tar.xz";
-    sha256 = "sha256-85LObBS9aAt7Ck5yiK0g2CAKxiYtnWp5XnTAUB5ui/k=";
+    sha256 = "sha256-4El3GmfP5UDJOsDxyU5z/s3JKw0jlMb8EB/hvtywwVs=";
   };
 
   buildInputs = [
     libbsd
+    libpq
     ncurses
-    postgresql
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    docutils
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "'top' like tool for PostgreSQL";
     longDescription = ''
       pg_top allows you to:
@@ -38,8 +42,8 @@ stdenv.mkDerivation rec {
 
     homepage = "https://pg_top.gitlab.io";
     changelog = "https://gitlab.com/pg_top/pg_top/-/blob/main/HISTORY.rst";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "pg_top";
   };
 }

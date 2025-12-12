@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pavdmyt";
     repo = "yaspin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4IWaAPqzGri7V8X2gL607F5GlWfIFDlBBpDwSe4sz9I=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaspin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Terminal Spinner";
     homepage = "https://github.com/pavdmyt/yaspin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

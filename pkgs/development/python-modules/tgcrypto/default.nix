@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyrogram";
     repo = "tgcrypto";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u+mXzkmM79NBi4oHnb32RbN9WPnba/cm1q2Ko0uNEZg=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tgcrypto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and Portable Telegram Crypto Library for Python";
     homepage = "https://github.com/pyrogram/tgcrypto";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

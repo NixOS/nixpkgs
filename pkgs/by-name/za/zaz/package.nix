@@ -6,6 +6,7 @@
   SDL,
   SDL_image,
   libgbm,
+  libGL,
   libtheora,
   libvorbis,
   libogg,
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getDev SDL)
     SDL_image
     libgbm
+    libGL
     libtheora
     libvorbis.dev
     libogg
@@ -49,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ZAZ_LIBS+=-lvorbisfile"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "https://zaz.sourceforge.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "zaz";
   };
 })

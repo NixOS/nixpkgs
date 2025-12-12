@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.25.0";
+  version = "3.27.0";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    hash = "sha256-0UmeSwIWEYWyGkoVqh6cKv6lx+7fjBpDanr6yo3DN0s=";
+    hash = "sha256-TRrsxk+gtxI9KqJvFzD0Cfy1h5cZAJ2kT9KUARjlXcY=";
   };
 
   # List of file formats to package.
@@ -50,14 +50,14 @@ stdenvNoCC.mkDerivation rec {
 
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Various data formats for the SPDX License List";
     homepage = "https://github.com/spdx/license-list-data";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       oxzi
       c0bw3b
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

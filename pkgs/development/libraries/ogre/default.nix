@@ -26,8 +26,6 @@
   libXt,
   libXxf86vm,
   xorgproto,
-  # darwin
-  darwin,
   # optional
   withNvidiaCg ? false,
   nvidia_cg_toolkit,
@@ -73,46 +71,41 @@ let
         unzip
       ];
 
-      buildInputs =
-        [
-          SDL2
-          boost
-          freetype
-          libpng
-          ois
-          pugixml
-          zziplib
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          libglut
-          libGL
-          libGLU
-          libICE
-          libSM
-          libX11
-          libXaw
-          libXmu
-          libXrandr
-          libXrender
-          libXt
-          libXxf86vm
-          xorgproto
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          darwin.apple_sdk.frameworks.Cocoa
-        ]
-        ++ lib.optionals withNvidiaCg [
-          nvidia_cg_toolkit
-        ];
+      buildInputs = [
+        SDL2
+        boost
+        freetype
+        libpng
+        ois
+        pugixml
+        zziplib
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libglut
+        libGL
+        libGLU
+        libICE
+        libSM
+        libX11
+        libXaw
+        libXmu
+        libXrandr
+        libXrender
+        libXt
+        libXxf86vm
+        xorgproto
+      ]
+      ++ lib.optionals withNvidiaCg [
+        nvidia_cg_toolkit
+      ];
 
-      cmakeFlags =
-        [
-          (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
-          (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
-        ];
+      cmakeFlags = [
+        (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
+        (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
+      ];
 
       meta = {
         description = "3D Object-Oriented Graphics Rendering Engine";
@@ -128,11 +121,11 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.3.2";
-    hash = "sha256-MOTEI0OyGVCH1CVK/pH51r9QkrGspLC3sBIROYHklyk=";
-    # https://github.com/OGRECave/ogre/blob/v14.3.2/Components/Overlay/CMakeLists.txt
-    imguiVersion = "1.91.2";
-    imguiHash = "sha256-B7XXQNuEPcT1ID5nMYbAV+aNCG9gIrC9J7BLnYB8yjI=";
+    version = "14.4.1";
+    hash = "sha256-G7Pf4vYoZhTmsG2AJhIR+xxtj0SHbN0dCkhtieBWm8Q=";
+    # https://github.com/OGRECave/ogre/blob/v14.4.1/Components/Overlay/CMakeLists.txt
+    imguiVersion = "1.91.9b";
+    imguiHash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
   };
 
   ogre_13 = common {

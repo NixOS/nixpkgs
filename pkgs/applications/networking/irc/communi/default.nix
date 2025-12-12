@@ -8,7 +8,7 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "communi";
   version = "3.6.0";
 
@@ -74,12 +74,11 @@ stdenv.mkDerivation rec {
     rm -rf lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and elegant cross-platform IRC client";
     mainProgram = "communi";
     homepage = "https://github.com/communi/communi-desktop";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

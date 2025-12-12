@@ -6,6 +6,7 @@
   fetchFromGitHub,
   grapheme,
   pytestCheckHook,
+  python,
   pythonOlder,
   setuptools,
 }:
@@ -20,9 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rsalmei";
     repo = "alive-progress";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yJhl0QrMHET9ISDc/D5AEQ7dTJkmcV2SWqy/xmG18uY=";
   };
+
+  postInstall = ''
+    mkdir -p $out/share/doc/python${python.pythonVersion}-$pname-$version/
+    mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -31,6 +37,8 @@ buildPythonPackage rec {
     grapheme
   ];
 
+  pythonRelaxDeps = [ "about_time" ];
+
   nativeCheckInputs = [
     click
     pytestCheckHook
@@ -38,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "alive_progress" ];
 
-  meta = with lib; {
+  meta = {
     description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
     homepage = "https://github.com/rsalmei/alive-progress";
     changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
   };
 }

@@ -1,30 +1,39 @@
 {
   lib,
   stdenv,
-  fetchurl,
   fetchFromGitHub,
-
   cmake,
   doxygen,
   zlib,
   python3Packages,
+  nix-update-script,
+  fetchpatch2,
 }:
 
 let
+  exploragram = fetchFromGitHub {
+    owner = "BrunoLevy";
+    repo = "exploragram";
+    rev = "3190f685653f8aa75b7c4604d008c59a999f1bb6";
+    hash = "sha256-9ePCOyQWSxu12PtHFSxfoDcvTtxvYR3T68sU3cAfZiE=";
+  };
   testdata = fetchFromGitHub {
     owner = "BrunoLevy";
     repo = "geogram.data";
-    rev = "43dd49054a78d9b3fb8ef729f48ab47a272c718c";
-    hash = "sha256-F2Lyt4nEOczVYLz6WLny+YrsxNwREBGPkProN8NHFN4=";
+    rev = "ceab6179189d23713b902b6f26ea2ff36aea1515";
+    hash = "sha256-zUmYI6+0IdDkglLzzWHS8ZKmc5O6aJ2X4IwRBouRIxI=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "geogram";
-  version = "1.8.6";
+  version = "1.9.2";
 
-  src = fetchurl {
-    url = "https://github.com/BrunoLevy/geogram/releases/download/v${version}/geogram_${version}.tar.gz";
-    hash = "sha256-Xqha5HVqD2Ao0z++RKcQdMZUmtMb5eZ1DMJEVrfNUzE=";
+  src = fetchFromGitHub {
+    owner = "BrunoLevy";
+    repo = "geogram";
+    tag = "v${version}";
+    hash = "sha256-v7ChuE9F/z1MD5OUMiGXZWiGqjMauIka4sNXVDe/yYU=";
+    fetchSubmodules = true;
   };
 
   outputs = [
@@ -65,11 +74,22 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # exploragram library is not listed as submodule and must be copied manually
+  prePatch = ''
+    cp -r ${exploragram} ./src/lib/exploragram/ && chmod 755 ./src/lib/exploragram/
+  '';
+
   patches = [
     # This patch replaces the bundled (outdated) zlib with our zlib
     # Should be harmless, but if there are issues this patch can also be removed
     # Also check https://github.com/BrunoLevy/geogram/issues/49 for progress
     ./replace-bundled-zlib.patch
+
+    # fixes https://github.com/BrunoLevy/geogram/issues/203, remove when 1.9.3 is released
+    (fetchpatch2 {
+      url = "https://github.com/BrunoLevy/geogram/commit/2e1b6fba499ddc55b2150a1f610cf9f8d4934c39.patch";
+      hash = "sha256-t6Pocf3VT8HpKOSh1UKKa0QHpsZyFqlAng6ltiAfKA8=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -90,16 +110,12 @@ stdenv.mkDerivation rec {
   checkPhase =
     let
       skippedTests = [
-        # Failing tests as of version 1.8.3
-        "FileConvert"
-        "Reconstruct"
-        "Remesh"
-
         # Skip slow RVD test
         "RVD"
 
-        # Flaky as of 1.8.5 (SIGSEGV, possibly a use-after-free)
-        "Delaunay"
+        # Needs unfree library geogramplus with extended precision
+        # see https://github.com/BrunoLevy/geogram/wiki/GeogramPlus
+        "CSGplus"
       ];
     in
     ''
@@ -115,7 +131,9 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Programming Library with Geometric Algorithms";
     longDescription = ''
       Geogram contains the main results in Geometry Processing from the former ALICE Inria project,
@@ -123,11 +141,7 @@ stdenv.mkDerivation rec {
       Symposium on Geometry Processing and Eurographics.
     '';
     homepage = "https://github.com/BrunoLevy/geogram";
-    license = licenses.bsd3;
-
-    # Broken on aarch64-linux as of version 1.8.3
-    # See https://github.com/BrunoLevy/geogram/issues/74
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    license = lib.licenses.bsd3;
 
     platforms = [
       "x86_64-linux"
@@ -135,6 +149,6 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ tmarkus ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

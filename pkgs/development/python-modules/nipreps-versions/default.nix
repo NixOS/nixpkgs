@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "version-schemes";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-B2wtLurzgk59kTooH51a2dewK7aEyA0dAm64Wp+tqhM=";
   };
 
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "nipreps_versions" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools_scm plugin for nipreps version schemes";
     homepage = "https://github.com/nipreps/version-schemes";
     changelog = "https://github.com/nipreps/version-schemes/blob/${src.rev}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

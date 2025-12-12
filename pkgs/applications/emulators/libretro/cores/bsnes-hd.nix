@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "bsnes-hd-beta";
-  version = "0-unstable-2023-04-26";
+  version = "0-unstable-2025-12-05";
 
   src = fetchFromGitHub {
     owner = "DerKoun";
     repo = "bsnes-hd";
-    rev = "f46b6d6368ea93943a30b5d4e79e8ed51c2da5e8";
-    hash = "sha256-Y3FhGtcz7BzwUSBy1SGMuylJdZti/JB8qQnabIkG/dI=";
+    rev = "fc26b25ea236f0f877f0265d2a2c37dfd93dfde9";
+    hash = "sha256-Bim8N3rkGNnHQhaA+wVALSM3ZBBTk0Zt9xct5qVnXzM=";
   };
 
   extraBuildInputs = [

@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line, offline, access to HTTP status code, common header, and port references";
     mainProgram = "httpref";
     homepage = "https://github.com/dnnrly/httpref";
     changelog = "https://github.com/dnnrly/httpref/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -24,20 +24,19 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "gnome-pomodoro";
+    repo = "gnome-pomodoro";
     rev = version;
-    hash = "sha256-icyS/K6H90/DWYvqJ7f7XXTTuIwLea3k+vDDEBYil6o=";
+    hash = "sha256-cVuBJ1Rwh/mjlFKKRJkKmdtDHdWNc6uiEE3ywCesirU=";
   };
 
   patches = [
     # Our glib setup hooks moves GSettings schemas to a subdirectory to prevent conflicts.
     # We need to patch the build script so that the extension can find them.
-    (substituteAll {
-      src = ./fix-schema-path.patch;
+    (replaceVars ./fix-schema-path.patch {
       inherit pname version;
     })
   ];
@@ -75,7 +74,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     mainProgram = "gnome-pomodoro";
@@ -83,11 +82,11 @@ stdenv.mkDerivation rec {
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aleksana
       herschenglime
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

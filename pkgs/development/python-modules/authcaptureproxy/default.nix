@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H5Dl1incS5+lmZaLZXMCOqEIGTcTr4A5J3r3ngpDGtY=";
   };
 
@@ -51,17 +51,19 @@ buildPythonPackage rec {
     # test fails with frequency 1/200
     # https://github.com/alandtse/auth_capture_proxy/issues/25
     "test_return_timer_countdown_refresh_html"
+    # AttributeError: 'NoneType' object has no attribute 'get'
+    "test_replace_empty_action_urls"
   ];
 
   pythonImportsCheck = [ "authcaptureproxy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
     description = "Proxy to capture authentication information from a webpage";
     mainProgram = "auth_capture_proxy";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       graham33
       hexa
     ];

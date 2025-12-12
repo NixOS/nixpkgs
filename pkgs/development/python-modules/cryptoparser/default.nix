@@ -8,27 +8,31 @@
   python-dateutil,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.5";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t8vK7T6nz1iH81fTMEYkQv7E7EjmkTx3u4zUIybEm5E=";
+    hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
-  '';
+  patches = [
+    # https://gitlab.com/coroner/cryptoparser/-/merge_requests/2
+    ./fix-dirs-exclude.patch
+  ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asn1crypto
@@ -38,13 +42,21 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   pythonImportsCheck = [ "cryptoparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security protocol parser and generator";
     homepage = "https://gitlab.com/coroner/cryptoparser";
     changelog = "https://gitlab.com/coroner/cryptoparser/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

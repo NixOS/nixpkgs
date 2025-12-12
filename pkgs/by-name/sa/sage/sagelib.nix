@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   sage-src,
   env-locations,
   python,
@@ -11,7 +13,6 @@
   gd,
   iml,
   libpng,
-  readline,
   blas,
   boost,
   brial,
@@ -19,9 +20,8 @@
   eclib,
   ecm,
   fflas-ffpack,
-  flint3,
+  flint,
   gap,
-  giac,
   givaro,
   glpk,
   gsl,
@@ -42,7 +42,6 @@
   planarity,
   ppl,
   rankwidth,
-  ratpoints,
   singular,
   sqlite,
   symmetrica,
@@ -58,7 +57,6 @@
   ipykernel,
   ipython,
   ipywidgets,
-  jinja2,
   jupyter-client,
   jupyter-core,
   lrcalc-python,
@@ -115,8 +113,14 @@ buildPythonPackage rec {
     gd
     iml
     libpng
-    readline
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # code tries to assign a unsigned long to an int in an initialized list
+    # leading to this error.
+    # https://github.com/sagemath/sage/pull/39249
+    NIX_CFLAGS_COMPILE = "-Wno-error=c++11-narrowing-const-reference";
+  };
 
   propagatedBuildInputs = [
     # native dependencies (TODO: determine which ones need to be propagated)
@@ -127,9 +131,8 @@ buildPythonPackage rec {
     eclib
     ecm
     fflas-ffpack
-    flint3
+    flint
     gap
-    giac
     givaro
     glpk
     gsl
@@ -150,7 +153,6 @@ buildPythonPackage rec {
     planarity
     ppl
     rankwidth
-    ratpoints
     singular
     sqlite
     symmetrica
@@ -168,7 +170,6 @@ buildPythonPackage rec {
     ipykernel
     ipython
     ipywidgets
-    jinja2
     jupyter-client
     jupyter-core
     lrcalc-python

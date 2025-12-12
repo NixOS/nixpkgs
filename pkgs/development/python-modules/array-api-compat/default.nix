@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   numpy,
   jaxlib,
   jax,
@@ -18,17 +19,20 @@
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.9.1";
+  version = "1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
-    rev = "refs/tags/${version}";
-    hash = "sha256-X6y6hX/HdkiLZkj9AOEYsZOlYhR7wUt9kQjHfMfWqIc=";
+    tag = version;
+    hash = "sha256-Hb0bFjVMl4CBI3gN3abTO2QUPAOvUaFE0GdPjdops5E=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,19 +43,19 @@ buildPythonPackage rec {
     dask
     sparse
     array-api-strict
-  ] ++ lib.optionals cudaSupport [ cupy ];
+  ]
+  ++ lib.optionals cudaSupport [ cupy ];
 
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  pytestFlagsArray = [
-    "-k"
-    "'not cupy'"
+  disabledTests = [
+    "cupy"
   ];
 
   meta = {
     homepage = "https://data-apis.org/array-api-compat";
-    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${version}";
+    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${src.tag}";
     description = "Compatibility layer for NumPy to support the Python array API";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ berquist ];

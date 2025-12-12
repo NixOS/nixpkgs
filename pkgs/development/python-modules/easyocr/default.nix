@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JaidedAI";
     repo = "EasyOCR";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9mrAxt2lphYtLW81lGO5SYHsnMnSA/VpHiY2NffD/Js=";
   };
 
@@ -76,12 +76,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "easyocr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
     mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

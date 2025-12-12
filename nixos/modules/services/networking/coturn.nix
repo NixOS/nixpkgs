@@ -36,8 +36,6 @@ let
     ${lib.optionalString (cfg.cert != null) "cert=${cfg.cert}"}
     ${lib.optionalString (cfg.pkey != null) "pkey=${cfg.pkey}"}
     ${lib.optionalString (cfg.dh-file != null) "dh-file=${cfg.dh-file}"}
-    no-stdout-log
-    syslog
     pidfile=${pidfile}
     ${lib.optionalString cfg.secure-stun "secure-stun"}
     ${lib.optionalString cfg.no-cli "no-cli"}
@@ -52,7 +50,7 @@ in
     services.coturn = {
       enable = lib.mkEnableOption "coturn TURN server";
       listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 3478;
         description = ''
           TURN listener port for UDP and TCP.
@@ -61,7 +59,7 @@ in
         '';
       };
       tls-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5349;
         description = ''
           TURN listener port for TLS.
@@ -76,7 +74,7 @@ in
         '';
       };
       alt-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = cfg.listening-port + 1;
         defaultText = lib.literalExpression "listening-port + 1";
         description = ''
@@ -91,7 +89,7 @@ in
         '';
       };
       alt-tls-listening-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = cfg.tls-listening-port + 1;
         defaultText = lib.literalExpression "tls-listening-port + 1";
         description = ''
@@ -132,14 +130,14 @@ in
         '';
       };
       min-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 49152;
         description = ''
           Lower bound of UDP relay endpoints
         '';
       };
       max-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 65535;
         description = ''
           Upper bound of UDP relay endpoints
@@ -173,7 +171,7 @@ in
           This feature can be used with the long-term authentication mechanism, only.
           This feature purpose is to support "TURN Server REST API", see
           "TURN REST API" link in the project's page
-          https://github.com/coturn/coturn/
+          <https://github.com/coturn/coturn/>
 
           This option is used with timestamp:
 
@@ -265,7 +263,7 @@ in
         '';
       };
       cli-port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5766;
         description = ''
           CLI server port.
@@ -365,7 +363,7 @@ in
               chmod 640 ${runConfig}
             '';
             serviceConfig = rec {
-              Type = "simple";
+              Type = "notify";
               ExecStart = utils.escapeSystemdExecArgs [
                 (lib.getExe' pkgs.coturn "turnserver")
                 "-c"
@@ -411,15 +409,15 @@ in
               ProtectProc = "invisible";
               ProtectSystem = "strict";
               RemoveIPC = true;
-              RestrictAddressFamilies =
-                [
-                  "AF_INET"
-                  "AF_INET6"
-                ]
-                ++ lib.optionals (cfg.listening-ips == [ ]) [
-                  # only used for interface discovery when no listening ips are configured
-                  "AF_NETLINK"
-                ];
+              RestrictAddressFamilies = [
+                "AF_INET"
+                "AF_INET6"
+                "AF_UNIX"
+              ]
+              ++ lib.optionals (cfg.listening-ips == [ ]) [
+                # only used for interface discovery when no listening ips are configured
+                "AF_NETLINK"
+              ];
               RestrictNamespaces = true;
               RestrictRealtime = true;
               RestrictSUIDSGID = true;

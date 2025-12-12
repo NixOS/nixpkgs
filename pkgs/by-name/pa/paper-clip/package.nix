@@ -8,6 +8,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   poppler,
   stdenv,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paper-clip";
-  version = "5.5.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "Diego-Ivan";
     repo = "Paper-Clip";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Jdsx5ZhujP0SgEtr4NMbXsTkMYrkQj7Vs+SSYziWpiw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zJqN66WYYHLZCb6jnREnvhVonbQSucD7VG+JvpbmNMU=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     changelog = "https://github.com/Diego-Ivan/Paper-Clip/releases/tag/v${finalAttrs.version}";
     description = "Edit PDF document metadata";
     homepage = "https://github.com/Diego-Ivan/Paper-Clip";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pdf-metadata-editor";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

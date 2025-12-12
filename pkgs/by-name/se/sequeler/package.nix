@@ -15,7 +15,7 @@
   gtk3,
   glib,
   libgee,
-  libgda,
+  libgda5,
   gtksourceview,
   libxml2,
   libsecret,
@@ -23,7 +23,7 @@
 }:
 
 let
-  sqlGda = libgda.override {
+  sqlGda = libgda5.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
-    repo = pname;
+    repo = "sequeler";
     rev = "v${version}";
     sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Friendly SQL Client";
     longDescription = ''
       Sequeler is a native Linux SQL client built in Vala and Gtk. It allows you
@@ -81,9 +81,9 @@ stdenv.mkDerivation rec {
       Gtk.Grid Widget.
     '';
     homepage = "https://github.com/Alecaddd/sequeler";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.alecaddd.sequeler";
   };
 }

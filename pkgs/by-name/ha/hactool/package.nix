@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
-    install -D hactool $out/bin/hactool
+    install -D hactool${stdenv.hostPlatform.extensions.executable} $out/bin/hactool${stdenv.hostPlatform.extensions.executable}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SciresM/hactool";
     description = "Tool to manipulate common file formats for the Nintendo Switch";
     longDescription = "A tool to view information about, decrypt, and extract common file formats for the Nintendo Switch, especially Nintendo Content Archives";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.all;
     mainProgram = "hactool";
   };
 }

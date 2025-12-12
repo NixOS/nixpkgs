@@ -2,14 +2,13 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   testers,
   snyk,
   nodejs_20,
 }:
 
 let
-  version = "1.1294.0";
+  version = "1.1299.1";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -18,15 +17,20 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AO36b3VWdklfMjSEE3JMZUVS1KmBSra2xX6hqlf3OUM=";
+    tag = "v${version}";
+    hash = "sha256-DANNao3xNcoYWgyi5Dn5UTdeUNPMtkSC5f9VMIShqpQ=";
   };
 
-  npmDepsHash = "sha256-xGRmZyDXZVuFdpT1LcSLBh9bY86rOjGvVjyCt9PSigg=";
+  npmDepsHash = "sha256-WKVFg4rtm9UCWRbj1QCrDdQFpk0QZm3KKRUfOQfEJtg=";
 
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
+  '';
+
+  postInstall = ''
+    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
+    find -L $out -type l -print -delete
   '';
 
   nodejs = nodejs_20;

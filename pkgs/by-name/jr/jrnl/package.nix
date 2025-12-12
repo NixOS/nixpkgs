@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = "jrnl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x0JoYJzD6RnuHbRsQMgrhHsNW6nVEVeoDjtPop2eg+w=";
   };
 
@@ -41,6 +41,8 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
+  pythonRelaxDeps = [ "rich" ];
+
   nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
@@ -59,13 +61,12 @@ python3.pkgs.buildPythonApplication rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      bryanasdev000
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       zalakain
     ];
     mainProgram = "jrnl";

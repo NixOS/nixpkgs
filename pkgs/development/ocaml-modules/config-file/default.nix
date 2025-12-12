@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     platforms = ocaml.meta.platforms or [ ];
     description = "OCaml library used to manage the configuration file(s) of an application";
     license = lib.licenses.lgpl2Plus;
+    broken = lib.versionAtLeast ocaml.version "5.0";
     maintainers = with lib.maintainers; [ vbgl ];
   };
 }

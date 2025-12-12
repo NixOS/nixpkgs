@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ssut";
     repo = "payload-dumper-go";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TFnBWylOoyleuBx3yYfHl1kWO6jVBiqsi8AMYLMuuk0=";
   };
 
@@ -20,12 +20,12 @@ buildGoModule rec {
 
   buildInputs = [ xz ];
 
-  meta = with lib; {
+  meta = {
     description = "Android OTA payload dumper written in Go";
     homepage = "https://github.com/ssut/payload-dumper-go";
     changelog = "https://github.com/ssut/payload-dumper-go/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "payload-dumper-go";
   };
 }

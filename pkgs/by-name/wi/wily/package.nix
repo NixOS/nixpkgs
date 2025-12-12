@@ -20,24 +20,18 @@ stdenv.mkDerivation rec {
     libXt
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=implicit-int"
-      "-Wno-error=implicit-function-declaration"
-      "-Wno-error=incompatible-function-pointer-types"
-    ]
-  );
+  patches = [ ./fix-gcc14-build.patch ];
 
   preInstall = ''
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulation of ACME";
     homepage = "http://wily.sourceforge.net";
-    license = licenses.artistic1;
+    license = lib.licenses.artistic1;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "wily";
   };
 }

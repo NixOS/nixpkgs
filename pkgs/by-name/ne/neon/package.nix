@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchurl, libxml2, pkg-config
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, static ? stdenv.hostPlatform.isStatic
-, shared ? !stdenv.hostPlatform.isStatic
-, bash
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  pkg-config,
+  compressionSupport ? true,
+  zlib ? null,
+  sslSupport ? true,
+  openssl ? null,
+  static ? stdenv.hostPlatform.isStatic,
+  shared ? !stdenv.hostPlatform.isStatic,
+  bash,
 }:
 
 assert compressionSupport -> zlib != null;
@@ -11,23 +18,27 @@ assert sslSupport -> openssl != null;
 assert static || shared;
 
 let
-   inherit (lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
-  version = "0.32.5";
+  version = "0.35.0";
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
+    sha256 = "sha256-FGevtz814/XQ6f1wYowUy6Jmpl4qH7bj+UXuM4XIWVs=";
   };
 
   patches = optionals stdenv.hostPlatform.isDarwin [ ./darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libxml2 openssl bash]
-    ++ lib.optional compressionSupport zlib;
+  buildInputs = [
+    libxml2
+    openssl
+    bash
+  ]
+  ++ lib.optional compressionSupport zlib;
 
   strictDeps = true;
 
@@ -42,14 +53,14 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
-  passthru = {inherit compressionSupport sslSupport;};
+  passthru = { inherit compressionSupport sslSupport; };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP and WebDAV client library";
     mainProgram = "neon-config";
     homepage = "https://notroj.github.io/neon/";
     changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
 }

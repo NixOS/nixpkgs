@@ -35,14 +35,14 @@ The first steps to all these are the same:
 
     ```ShellSession
     $ nix-channel --list
-    nixpkgs https://nixos.org/channels/nixpkgs-unstable
+    nixpkgs https://channels.nixos.org/nixpkgs-unstable
     ```
 
     As that channel gets released without running the NixOS tests, it
     will be safer to use the `nixos-*` channels instead:
 
     ```ShellSession
-    $ nix-channel --add https://nixos.org/channels/nixos-<version> nixpkgs
+    $ nix-channel --add https://channels.nixos.org/nixos-<version> nixpkgs
     ```
 
     Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
@@ -180,9 +180,7 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    {
-      users.users.root.initialHashedPassword = "";
-    }
+    { users.users.root.initialHashedPassword = ""; }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:

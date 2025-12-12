@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fishtape,
 }:
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "humantime-fish";
   version = "1.0.0-unstable-2022-04-08";
 
@@ -20,10 +20,10 @@ buildFishPlugin rec {
     fishtape tests/humantime.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Turn milliseconds into a human-readable string in Fish";
     homepage = "https://github.com/jorgebucaran/humantime.fish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

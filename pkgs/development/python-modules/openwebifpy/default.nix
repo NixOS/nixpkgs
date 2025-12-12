@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fsGHTmi+dWP0SBPvF51RdL2zBMHtjry/XTGjyU5jKpI=";
+    hash = "sha256-FaynJT+bR63nIwLEwXjTjwPXZ3Q5/X+zpx0gTA3Pqo8=";
   };
 
   build-system = [ hatchling ];
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "test_get_picon_name"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a python interface to interact with a device running OpenWebIf";
     downloadPage = "https://github.com/autinerd/openwebifpy";
     homepage = "https://openwebifpy.readthedocs.io/";
     changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

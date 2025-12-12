@@ -1,43 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  isPy3k,
   fetchFromGitHub,
-  attrs,
+  poetry-core,
   click,
   colorama,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
-  version = "0.2.2";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  version = "0.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "python-${pname}";
-    rev = "v${version}";
-    hash = "sha256-b9tBXN9dBdAeGg3xf5ZBdd6kPpFzseJl6wRTTfNZEwo=";
+    tag = "v${version}";
+    hash = "sha256-KjZbxA92h25ghbItdmPvkSPvDZUSRWkl4vnJDBMN71s=";
   };
 
+  build-system = [ poetry-core ];
+
   propagatedBuildInputs = [
-    attrs
     click
     colorama
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "shamir_mnemonic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of SLIP-0039";
     mainProgram = "shamir";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

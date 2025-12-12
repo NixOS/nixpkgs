@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  flit-core,
 
   # dependencies
   pyasn1,
@@ -14,23 +14,22 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "6.2.6";
+  version = "7.1.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+    tag = "v${version}";
+    hash = "sha256-uEOhOVXaz4g1Ciun8x2AT8pRBkKR6uEfu4KJ1XSwouY=";
   };
 
-  pythonRemoveDeps = [ "pytest-cov" ];
-
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pyasn1
@@ -41,6 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -54,21 +54,38 @@ buildPythonPackage rec {
     "test_v1_get"
     "test_v1_next"
     "test_v1_set"
+    #  pysnmp.error.PySnmpError: Bad IPv4/UDP transport address demo.pysnmp.com@161: [Errno -3] Temporary failure in name resolution
     "test_v2c_bulk"
+    "test_v2c_get_table_bulk"
+    "test_v2c_get_table_bulk_0_7"
+    "test_v2c_get_table_bulk_0_8"
+    "test_v2c_get_table_bulk_0_31"
+    "test_v2c_get_table_bulk_0_60"
+    "test_v2c_get_table_bulk_0_5_subtree"
+    "test_v2c_get_table_bulk_0_6_subtree"
     # pysnmp.smi.error.MibNotFoundError
     "test_send_v3_trap_notification"
     "test_addAsn1MibSource"
     "test_v1_walk"
     "test_v2_walk"
+    "test_syntax_integer"
+    "test_syntax_unsigned"
+    "test_add_asn1_mib_source"
+    "test_syntax_fixed_length_octet_string"
+  ];
+
+  disabledTestPaths = [
+    # MIB file "CISCO-ENHANCED-IPSEC-FLOW-MIB.py[co]" not found in search path
+    "tests/smi/manager/test_mib-tree-inspection.py"
   ];
 
   pythonImportsCheck = [ "pysnmp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
     changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

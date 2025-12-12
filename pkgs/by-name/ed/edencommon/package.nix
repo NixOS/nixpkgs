@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   glog,
   gflags,
@@ -15,15 +14,13 @@
   wangle,
   fbthrift,
   gtest,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2024.11.18.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "out"
@@ -33,11 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-pVPkH80vowdpwWv/h6ovEk335OeI6/0k0cAFhhFqSDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yR0J1tfzdAFopApKsiv9yUXlU0W0Q6n6ZlmKlcVbi0E=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  patches = [
+    ./glog-0.7.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
     ./increase-test-discovery-timeout.patch
   ];
@@ -45,23 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      glog
-      gflags
-      folly
-      fb303
-      wangle
-      fbthrift
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    glog
+    gflags
+    folly
+    fb303
+    wangle
+    fbthrift
+    gtest
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -75,6 +69,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  checkPhase = ''
+    runHook preCheck
+
+    # Skip flaky test
+    ctest -j $NIX_BUILD_CORES --output-on-failure ${
+      lib.escapeShellArgs [
+        "--exclude-regex"
+        (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
+          "ProcessInfoCache.addFromMultipleThreads"
+        ])
+      ]
+    }
+
+    runHook postCheck
+  '';
+
   postPatch = ''
     # The CMake build requires the FBThrift Python support even though
     # it’s not used, presumably because of the relevant code having
@@ -83,18 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2 py)' \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2)'
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

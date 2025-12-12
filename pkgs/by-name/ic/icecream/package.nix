@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "icecc";
-    repo = pname;
+    repo = "icecream";
     rev = version;
     sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed compiler with a central scheduler to share build load";
     inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

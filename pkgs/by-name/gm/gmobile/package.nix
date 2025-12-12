@@ -10,19 +10,22 @@
   json-glib,
   libuev,
   gobject-introspection,
+  udevCheckHook,
+  vala,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "gmobile";
-  version = "0.2.1";
+  pname = "gmobile";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "gmobile";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-5OQ2JT7YeEYzKXafwgg0xJk2AvtFw2dtcH3mt+cm1bI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VBtZU3AM+Off8bHYyW50y3+PY9u7D+xzChlnBlae+ns=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
+    vala
   ];
 
   buildInputs = [
@@ -39,11 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
     libuev
   ];
 
+  doInstallCheck = true;
+  strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Functions useful in mobile related, glib based projects";
     homepage = "https://gitlab.gnome.org/World/Phosh/gmobile";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      armelclo
+    ];
     platforms = lib.platforms.linux;
   };
 })

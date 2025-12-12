@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c6EC5uuMna07xVHDRFq0UDwuSeopZTmZGZ9ZD5zaq8Y=";
   };
 
@@ -38,7 +38,18 @@ stdenv.mkDerivation rec {
     cppcodec
   ];
 
-  meta = with lib; {
+  # CMake 3.1 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)" \
+      "cmake_minimum_required(VERSION 3.10  FATAL_ERROR)" \
+    --replace-fail \
+      "cmake_policy(SET CMP0043 OLD)" \
+      "cmake_policy(SET CMP0043 NEW)"
+  '';
+
+  meta = {
     description = "Provides extra functionality for the Nitrokey Pro and Storage";
     mainProgram = "nitrokey-app";
     longDescription = ''
@@ -48,8 +59,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Nitrokey/nitrokey-app";
     changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kaiha
       panicgh
     ];

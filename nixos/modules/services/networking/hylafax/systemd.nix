@@ -7,11 +7,32 @@
 
 let
 
-  inherit (lib) mkIf mkMerge;
-  inherit (lib) concatStringsSep optionalString;
+  inherit (lib)
+    concatLines
+    escapeShellArgs
+    mkIf
+    mkMerge
+    optional
+    ;
+  inherit (lib.cli) toCommandLine;
+
+  optionFormat = optionName: {
+    option = "-${optionName}";
+    sep = null;
+    explicitBool = false;
+  };
 
   cfg = config.services.hylafax;
   mapModems = lib.forEach (lib.attrValues cfg.modems);
+
+  mkSpoolCmd =
+    prefix: program: posArg: options:
+    let
+      start = "${prefix}${cfg.package}/spool/bin/${program}";
+      optionsList = toCommandLine optionFormat ({ q = cfg.spoolAreaPath; } // options);
+      posArgList = optional (posArg != null) posArg;
+    in
+    "${start} ${escapeShellArgs (optionsList ++ posArgList)}";
 
   mkConfigFile =
     name: conf:
@@ -25,7 +46,7 @@ let
       include = mkLines { Include = conf.Include or [ ]; };
       other = mkLines (conf // { Include = [ ]; });
     in
-    pkgs.writeText "hylafax-config${name}" (concatStringsSep "\n" (include ++ other));
+    pkgs.writeText "hylafax-config${name}" (concatLines (include ++ other));
 
   globalConfigPath = mkConfigFile "" cfg.faxqConfig;
 
@@ -37,7 +58,7 @@ let
         { name, type, ... }@modem:
         ''
           # check if modem config file exists:
-          test -f "${pkgs.hylafaxplus}/spool/config/${type}"
+          test -f "${cfg.package}/spool/config/${type}"
           ln \
             --symbolic \
             --no-target-directory \
@@ -47,29 +68,33 @@ let
     in
     pkgs.runCommand "hylafax-config-modems" {
       preferLocalBuild = true;
-    } ''mkdir --parents "$out/" ${concatStringsSep "\n" (mapModems mkLine)}'';
+    } ''mkdir --parents "$out/" ${concatLines (mapModems mkLine)}'';
 
-  setupSpoolScript = pkgs.substituteAll {
+  setupSpoolScript = pkgs.replaceVarsWith {
     name = "hylafax-setup-spool.sh";
     src = ./spool.sh;
     isExecutable = true;
-    faxuser = "uucp";
-    faxgroup = "uucp";
-    lockPath = "/var/lock";
-    inherit globalConfigPath modemConfigPath;
-    inherit (cfg) sendmailPath spoolAreaPath userAccessFile;
-    inherit (pkgs) hylafaxplus runtimeShell;
+    replacements = {
+      faxuser = "uucp";
+      faxgroup = "uucp";
+      lockPath = "/var/lock";
+      inherit globalConfigPath modemConfigPath;
+      inherit (cfg) package spoolAreaPath userAccessFile;
+      inherit (pkgs) runtimeShell;
+    };
   };
 
-  waitFaxqScript = pkgs.substituteAll {
+  waitFaxqScript = pkgs.replaceVarsWith {
     # This script checks the modems status files
     # and waits until all modems report readiness.
     name = "hylafax-faxq-wait-start.sh";
     src = ./faxq-wait.sh;
     isExecutable = true;
-    timeoutSec = toString 10;
-    inherit (cfg) spoolAreaPath;
-    inherit (pkgs) runtimeShell;
+    replacements = {
+      timeoutSec = toString 10;
+      inherit (cfg) spoolAreaPath;
+      inherit (pkgs) runtimeShell;
+    };
   };
 
   sockets.hylafax-hfaxd = {
@@ -151,7 +176,7 @@ let
     wants = mapModems ({ name, ... }: "hylafax-faxgetty@${name}.service");
     wantedBy = mkIf cfg.autostart [ "multi-user.target" ];
     serviceConfig.Type = "forking";
-    serviceConfig.ExecStart = ''${pkgs.hylafaxplus}/spool/bin/faxq -q "${cfg.spoolAreaPath}"'';
+    serviceConfig.ExecStart = mkSpoolCmd "" "faxq" null { };
     # This delays the "readiness" of this service until
     # all modems are initialized (or a timeout is reached).
     # Otherwise, sending a fax with the fax service
@@ -161,7 +186,7 @@ let
     serviceConfig.ExecStartPost = [ "${waitFaxqScript}" ];
     # faxquit fails if the pipe is already gone
     # (e.g. the service is already stopping)
-    serviceConfig.ExecStop = ''-${pkgs.hylafaxplus}/spool/bin/faxquit -q "${cfg.spoolAreaPath}"'';
+    serviceConfig.ExecStop = mkSpoolCmd "-" "faxquit" null { };
     # disable some systemd hardening settings
     serviceConfig.PrivateDevices = null;
     serviceConfig.RestrictRealtime = null;
@@ -174,7 +199,10 @@ let
     requires = [ "hylafax-faxq.service" ];
     serviceConfig.StandardInput = "socket";
     serviceConfig.StandardOutput = "socket";
-    serviceConfig.ExecStart = ''${pkgs.hylafaxplus}/spool/bin/hfaxd -q "${cfg.spoolAreaPath}" -d -I'';
+    serviceConfig.ExecStart = mkSpoolCmd "" "hfaxd" null {
+      d = true;
+      I = true;
+    };
     unitConfig.RequiresMountsFor = [ cfg.userAccessFile ];
     # disable some systemd hardening settings
     serviceConfig.PrivateDevices = null;
@@ -188,13 +216,11 @@ let
     requires = [ "hylafax-spool.service" ];
     wantedBy = mkIf cfg.faxcron.enable.spoolInit requires;
     startAt = mkIf (cfg.faxcron.enable.frequency != null) cfg.faxcron.enable.frequency;
-    serviceConfig.ExecStart = concatStringsSep " " [
-      "${pkgs.hylafaxplus}/spool/bin/faxcron"
-      ''-q "${cfg.spoolAreaPath}"''
-      ''-info ${toString cfg.faxcron.infoDays}''
-      ''-log  ${toString cfg.faxcron.logDays}''
-      ''-rcv  ${toString cfg.faxcron.rcvDays}''
-    ];
+    serviceConfig.ExecStart = mkSpoolCmd "" "faxcron" null {
+      info = cfg.faxcron.infoDays;
+      log = cfg.faxcron.logDays;
+      rcv = cfg.faxcron.rcvDays;
+    };
   };
 
   services.hylafax-faxqclean = rec {
@@ -204,15 +230,13 @@ let
     requires = [ "hylafax-spool.service" ];
     wantedBy = mkIf cfg.faxqclean.enable.spoolInit requires;
     startAt = mkIf (cfg.faxqclean.enable.frequency != null) cfg.faxqclean.enable.frequency;
-    serviceConfig.ExecStart = concatStringsSep " " [
-      "${pkgs.hylafaxplus}/spool/bin/faxqclean"
-      ''-q "${cfg.spoolAreaPath}"''
-      "-v"
-      (optionalString (cfg.faxqclean.archiving != "never") "-a")
-      (optionalString (cfg.faxqclean.archiving == "always") "-A")
-      ''-j ${toString (cfg.faxqclean.doneqMinutes * 60)}''
-      ''-d ${toString (cfg.faxqclean.docqMinutes * 60)}''
-    ];
+    serviceConfig.ExecStart = mkSpoolCmd "" "faxqclean" null {
+      v = true;
+      a = cfg.faxqclean.archiving != "never";
+      A = cfg.faxqclean.archiving == "always";
+      j = 60 * cfg.faxqclean.doneqMinutes;
+      d = 60 * cfg.faxqclean.docqMinutes;
+    };
   };
 
   mkFaxgettyService =
@@ -234,10 +258,10 @@ let
       serviceConfig.Restart = "always";
       serviceConfig.KillMode = "process";
       serviceConfig.IgnoreSIGPIPE = false;
-      serviceConfig.ExecStart = ''-${pkgs.hylafaxplus}/spool/bin/faxgetty -q "${cfg.spoolAreaPath}" /dev/%I'';
+      serviceConfig.ExecStart = mkSpoolCmd "-" "faxgetty" "/dev/%I" { };
       # faxquit fails if the pipe is already gone
       # (e.g. the service is already stopping)
-      serviceConfig.ExecStop = ''-${pkgs.hylafaxplus}/spool/bin/faxquit -q "${cfg.spoolAreaPath}" %I'';
+      serviceConfig.ExecStop = mkSpoolCmd "-" "faxquit" "%I" { };
       # disable some systemd hardening settings
       serviceConfig.PrivateDevices = null;
       serviceConfig.RestrictRealtime = null;

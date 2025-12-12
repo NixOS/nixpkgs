@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
 
@@ -106,11 +106,11 @@ buildPythonPackage rec {
     "test_write_get_object_response"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alibaba Cloud OSS SDK for Python";
     homepage = "https://github.com/aliyun/aliyun-oss-python-sdk";
     changelog = "https://github.com/aliyun/aliyun-oss-python-sdk/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

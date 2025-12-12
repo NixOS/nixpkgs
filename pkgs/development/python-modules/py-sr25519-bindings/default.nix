@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   rustPlatform,
   stdenv,
@@ -12,10 +11,8 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "unstable-2023-03-15";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "0.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polkascan";
@@ -24,10 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-mxNmiFvMbV9WQhGNIQXxTkOcJHYs0vyOPM6Nd5367RE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-7fDlEYWOiRVpG3q0n3ZSS1dfNCOh0/4pX/PbcDBvoMI=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-OSnPGRZwuAzcvu80GgTXdc740SfhDIsXrQZq9a/BCdE=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -42,15 +38,15 @@ buildPythonPackage rec {
     py-bip39-bindings
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "sr25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       onny
       stargate01
     ];

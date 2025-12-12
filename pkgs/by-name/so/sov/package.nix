@@ -61,9 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Workspace overview app for sway";
     license = lib.licenses.gpl3Only;
     mainProgram = "sov";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
     # sys/timerfd.h header inexistent
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "eventlog";
   version = "0.2.13";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Syslog event logger library";
     longDescription = ''
       The EventLog library aims to be a replacement of the simple syslog() API
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       combination of description and tag/value pairs.
     '';
     homepage = "https://www.balabit.com/support/community/products/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

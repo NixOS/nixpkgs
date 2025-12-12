@@ -5,17 +5,16 @@
   distutils,
   fetchPypi,
   setuptools,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "6.1.0";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eIGD44Lj0ddwfbCJeCOZZei55OXtQmab9HWBhnNNXyQ=";
+    hash = "sha256-PsvLEdK4VRWI7IFrN1ax60OUGGw7aJsX4EhQ38IPflc=";
   };
 
   build-system = [ setuptools ];
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   dependencies = [
     distutils # for distutils.command in pbr/packaging.py
     setuptools # for pkg_resources
-    six
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures
@@ -35,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pbr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Build Reasonableness";
     mainProgram = "pbr";
     homepage = "https://github.com/openstack/pbr";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

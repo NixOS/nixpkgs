@@ -4,6 +4,7 @@
   bison,
   fetchFromGitLab,
   flex,
+  perlPackages,
   pkg-config,
   spirv-headers,
   stdenv,
@@ -14,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkd3d";
-  version = "1.14";
+  version = "1.18";
 
   src = fetchFromGitLab {
     domain = "gitlab.winehq.org";
     owner = "wine";
     repo = "vkd3d";
-    rev = "vkd3d-${finalAttrs.version}";
-    hash = "sha256-puYsDKFNkml2JCEhwpx9rlMsFJuz0LGCNlnpyEv/W4g=";
+    tag = "vkd3d-${finalAttrs.version}";
+    hash = "sha256-KMnWKzWFagOnxU0oS11lpAj03bGUpAS4f/8ZHb0nOwA=";
   };
 
   outputs = [
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     bison
     flex
+    perlPackages.perl
+    perlPackages.JSON
     pkg-config
     wine
   ];
@@ -61,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ lgpl21Plus ];
     mainProgram = "vkd3d-compiler";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ liberodark ];
     inherit (wine.meta) platforms;
   };
 })

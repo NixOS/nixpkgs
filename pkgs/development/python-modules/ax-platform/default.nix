@@ -1,38 +1,42 @@
 {
   lib,
-  botorch,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  hypothesis,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  botorch,
   ipywidgets,
   jinja2,
-  jupyter,
-  mercurial,
+  markdown,
   pandas,
   plotly,
-  pyfakefs,
   pyre-extensions,
+  scikit-learn,
+  scipy,
+  sympy,
+
+  # tests
+  pyfakefs,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
   sqlalchemy,
-  typeguard,
-  yappi,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.4.3";
+  version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jmBjrtxqg4Iu3Qr0HRqjVfwURXzbJaGm+DBFNHYk/vA=";
+    tag = version;
+    hash = "sha256-WjJhBSj5lKt1ygrJ2QdxUxEvCrfnanLY8yWs7qy/GIY=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -46,41 +50,48 @@ buildPythonPackage rec {
     botorch
     ipywidgets
     jinja2
+    markdown
     pandas
     plotly
-    typeguard
     pyre-extensions
-  ];
-
-  optional-dependencies = {
-    mysql = [ sqlalchemy ];
-    notebook = [ jupyter ];
-  };
+    scikit-learn
+    scipy
+    sympy
+  ]
+  ++ botorch.optional-dependencies.pymoo;
 
   nativeCheckInputs = [
-    hypothesis
-    mercurial
     pyfakefs
     pytestCheckHook
-    yappi
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    sqlalchemy
+    tabulate
+  ];
 
   disabledTestPaths = [
     "ax/benchmark"
     "ax/runners/tests/test_torchx.py"
-    # requires pyre_extensions
-    "ax/telemetry/tests"
-    "ax/core/tests/test_utils.py"
-    "ax/early_stopping/tests/test_strategies.py"
+
     # broken with sqlalchemy 2
     "ax/core/tests/test_experiment.py"
     "ax/service/tests/test_ax_client.py"
-    "ax/service/tests/test_scheduler.py"
+    "ax/service/tests/test_orchestrator.py"
     "ax/service/tests/test_with_db_settings_base.py"
-    "ax/storage"
+
+    # Hangs forever
+    "ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
   ];
 
   disabledTests = [
+    # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
+    "SQAStoreUtilsTest"
+    "SQAStoreTest"
+
+    # ValueError: Expected dim to be an integer greater than or equal to 2. Found dim=1.
+    "test_get_model"
+
+    # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+    "test_get_next_trials_with_db"
+
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
     # AssertionError: 5 != 2
@@ -89,6 +100,12 @@ buildPythonPackage rec {
     "test_validate_kwarg_typing"
     # uses torch.equal
     "test_convert_observations"
+    # broken with sqlalchemy 2
+    "test_sql_storage"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky on x86
+    "test_gen_with_expanded_parameter_space"
   ];
 
   pythonImportsCheck = [ "ax" ];

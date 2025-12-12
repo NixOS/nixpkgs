@@ -7,13 +7,13 @@
 let
   pname = "nyacc";
   # NYACC is a tightly coupled dependency of mes. This version is known to work
-  # with mes 0.25.
-  # https://git.savannah.gnu.org/cgit/mes.git/tree/INSTALL?h=v0.25#n31
-  version = "1.00.2";
+  # with mes 0.27.1.
+  # https://git.savannah.gnu.org/cgit/mes.git/tree/INSTALL?h=v0.27.1#n31
+  version = "2.02.2";
 
   src = fetchurl {
     url = "mirror://savannah/nyacc/nyacc-${version}.tar.gz";
-    sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
+    hash = "sha256-aRpTcKU6c6Lc+onZL4EbPlZIOmf5IZnNAGGUTQRLAgU=";
   };
 in
 kaem.runCommand "${pname}-${version}"
@@ -22,16 +22,16 @@ kaem.runCommand "${pname}-${version}"
 
     passthru.guilePath = "${nyacc}/share/${pname}-${version}/module";
 
-    meta = with lib; {
+    meta = {
       description = "Modules for generating parsers and lexical analyzers";
       longDescription = ''
         Not Yet Another Compiler Compiler is a set of guile modules for
         generating computer language parsers and lexical analyzers.
       '';
       homepage = "https://savannah.nongnu.org/projects/nyacc";
-      license = licenses.lgpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.all;
+      license = lib.licenses.lgpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.all;
     };
   }
   ''

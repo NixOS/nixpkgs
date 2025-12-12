@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xkcd-font";
-  version = "unstable-2017-08-24";
+  version = "0-unstable-2017-08-24";
 
   src = fetchFromGitHub {
     owner = "ipython";
-    repo = pname;
+    repo = "xkcd-font";
     rev = "5632fde618845dba5c22f14adc7b52bf6c52d46d";
     hash = "sha256-1DgSx2L+OpXuPVSXbbl/hcZUyBK9ikPyGWuk6wNzlwc=";
   };
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xkcd font";
     homepage = "https://github.com/ipython/xkcd-font";
-    license = licenses.cc-by-nc-30;
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-nc-30;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

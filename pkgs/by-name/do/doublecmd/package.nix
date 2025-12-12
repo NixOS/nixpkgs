@@ -8,33 +8,34 @@
   glib,
   lazarus,
   libX11,
-  libqtpas,
-  wrapQtAppsHook,
+  libsForQt5,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.21";
+  version = "1.1.30";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NsjsjCSPbo7zwejmOjFRuQpcMyGZEY67hyStjtMrIGk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QEjwZ4jYkmgym4ap7GGD02O2yvEHFOw0jp6f65dfO+w=";
   };
 
   nativeBuildInputs = [
     fpc
     getopt
     lazarus
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     dbus
     glib
     libX11
-    libqtpas
+    libsForQt5.libqtpas
   ];
 
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
@@ -42,15 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh install/linux/install.sh
     substituteInPlace build.sh \
-      --replace '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
+      --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
     substituteInPlace install/linux/install.sh \
-      --replace '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
+      --replace-warn '$DC_INSTALL_PREFIX/usr' '$DC_INSTALL_PREFIX'
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$(mktemp -d)
     ./build.sh release qt5
 
     runHook postBuild
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Two-panel graphical file manager written in Pascal";
     license = lib.licenses.gpl2Plus;
     mainProgram = "doublecmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
   };
 
-  cargoHash = "sha256-yTbEaw+BbjVks3j7/b75kGoUjVftLaVYvYIdI/bbfdk=";
+  cargoHash = "sha256-zO2RYJpTyFFEQ+xZH4HU0CPaeiy6G3uq/qOwPawYSkk=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -30,14 +30,14 @@ rustPlatform.buildRustPackage rec {
     $out/bin/fst --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Represent large sets and maps compactly with finite state transducers";
     mainProgram = "fst";
     homepage = "https://github.com/BurntSushi/fst";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with lib.maintainers; [ rmcgibbo ];
   };
 }

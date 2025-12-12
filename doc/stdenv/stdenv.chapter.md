@@ -20,14 +20,14 @@ stdenv.mkDerivation {
 **Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfoo";
   version = "1.2.3";
   src = fetchurl {
-    url = "http://example.org/libfoo-source-${version}.tar.bz2";
+    url = "http://example.org/libfoo-source-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tWxU/LANbQE32my+9AXyt3nCT7NBVfJ45CX757EMT3Q=";
   };
-}
+})
 ```
 
 Many packages have dependencies that are not provided in the standard environment. It’s usually sufficient to specify those dependencies in the `buildInputs` attribute:
@@ -37,7 +37,11 @@ stdenv.mkDerivation {
   pname = "libfoo";
   version = "1.2.3";
   # ...
-  buildInputs = [libbar perl ncurses];
+  buildInputs = [
+    libbar
+    perl
+    ncurses
+  ];
 }
 ```
 
@@ -49,13 +53,24 @@ Often it is necessary to override or modify some aspect of the build. To make th
 stdenv.mkDerivation {
   pname = "fnord";
   version = "4.5";
+
   # ...
+
   buildPhase = ''
+    runHook preBuild
+
     gcc foo.c -o foo
+
+    runHook postBuild
   '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp foo $out/bin
+
+    runHook postInstall
   '';
 }
 ```
@@ -75,17 +90,9 @@ stdenv.mkDerivation {
 }
 ```
 
-where the builder can do anything it wants, but typically starts with
+where `stdenv` sets up the environment automatically (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can use `stdenv`’s generic builder:
 
 ```bash
-source $stdenv/setup
-```
-
-to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can still use `stdenv`’s generic builder:
-
-```bash
-source $stdenv/setup
-
 buildPhase() {
   echo "... this is my custom build phase ..."
   gcc foo.c -o foo
@@ -159,7 +166,7 @@ The following is a non-exhaustive list of such differences:
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
 If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
-The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
@@ -216,16 +223,20 @@ These dependencies are only injected when [`doCheck`](#var-stdenv-doCheck) is se
 
 Consider for example this simplified derivation for `solo5`, a sandboxing tool:
 ```nix
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solo5";
   version = "0.7.5";
 
   src = fetchurl {
-    url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
+    url = "https://github.com/Solo5/solo5/releases/download/v${finalAttrs.version}/solo5-v${finalAttrs.version}.tar.gz";
     hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
   buildInputs = [ libseccomp ];
 
   postInstall = ''
@@ -235,13 +246,23 @@ stdenv.mkDerivation rec {
       --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
-      --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          dosfstools
+          mtools
+          parted
+          syslinux
+        ]
+      }
   '';
 
   doCheck = true;
-  nativeCheckInputs = [ util-linux qemu ];
-  checkPhase = '' [elided] '';
-}
+  nativeCheckInputs = [
+    util-linux
+    qemu
+  ];
+  # `checkPhase` elided
+})
 ```
 
 - `makeWrapper` is a setup hook, i.e., a shell script sourced by the generic builder of `stdenv`.
@@ -280,7 +301,7 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 # A propagated dependency
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 let
   bar = stdenv.mkDerivation {
     name = "bar";
@@ -306,18 +327,54 @@ Dependency propagation takes cross compilation into account, meaning that depend
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| `host → target`     | attribute name      | offset   |
-| ------------------- | ------------------- | -------- |
-| `build --> build`   | `depsBuildBuild`    | `-1, -1` |
-| `build --> host`    | `nativeBuildInputs` | `-1, 0`  |
-| `build --> target`  | `depsBuildTarget`   | `-1, 1`  |
-| `host --> host`     | `depsHostHost`      | `0, 0`   |
-| `host --> target`   | `buildInputs`       | `0, 1`   |
-| `target --> target` | `depsTargetTarget`  | `1, 1`   |
+| Dependency type   | attribute name      | offset   | typical purpose                               |
+| ----------------- | ------------------- | -------- | --------------------------------------------- |
+| `build → build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
+| `build → host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
+| `build → target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
+| `host → host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
+| `host → target`   | `buildInputs`       | `0, 1`   | libraries                                     |
+| `target → target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
-Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
-We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules below. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+
+**Definitions:**
+
+`dep(h_offset, t_offset, X, Y)`
+:    Package X has a direct dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `nativeBuildInputs = [ Y ]` means `dep(-1, 0, X, Y)`.
+
+`propagated-dep(h_offset, t_offset, X, Y)`
+:    Package X has a propagated dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `depsBuildTargetPropagated = [ Y ]` means `propagated-dep(-1, 1, X, Y)`.
+
+`mapOffset(h, t, i) = offs`
+:    In a package X with a dependency on Y in a position with host offset `h` and target offset `t`, Y's transitive dependency Z in a position with offset `i` is mapped to offset `offs` in X.
+
+
+::: {.example}
+# Truth table of `mapOffset(h, t, i)`
+
+`x` means that the dependency was discarded because `h + i ∉ {-1, 0, 1}`.
+
+<!-- This is written as an ascii art table because the CSS was introducing so much space it was unreadable and doesn't support double lines -->
+
+```
+  h |   t  || i=-1 |  i=0 |  i=1
+----|------||------|------|-----
+ -1 |  -1  ||   x  |  -1  |  -1
+ -1 |   0  ||   x  |  -1  |   0
+ -1 |   1  ||   x  |  -1  |   1
+  0 |   0  ||  -1  |   0  |   0
+  0 |   1  ||  -1  |   0  |   1
+  1 |   1  ||   0  |   1  |   x
+```
+
+:::
 
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -338,7 +395,7 @@ let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 dep(h0, t0, A, B)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
-h0 + t1 in {-1, 0, -1}
+h0 + t1 in {-1, 0, 1}
 ----------------------------- Take immediate dependencies' propagated dependencies
 propagated-dep(mapOffset(h0, t0, h1),
                mapOffset(h0, t0, t1),
@@ -351,7 +408,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the target offset: `t = h + 1`. That means that:
+Some explanation of this monstrosity is in order. In the common case of `nativeBuildInputs` or `buildInputs`, the target offset of a dependency is one greater than the host offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -362,7 +419,11 @@ let f(h, h + 1, i) = i + h
 
 This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
 
-Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
+Because of the bounds checks, the uncommon cases are `h = t` (`depsBuildBuild`, etc) and `h + 2 = t` (`depsBuildTarget`).
+
+In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package.
+
+In the other case, `h + 1` (0) is skipped over between the host (-1) and target (1) offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependency’s offset is 0.
 
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
@@ -376,7 +437,7 @@ Since these packages are able to be run at build-time, they are always added to 
 
 ##### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost`, but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -408,7 +469,7 @@ The propagated equivalent of `depsBuildBuild`. This perhaps never ought to be us
 
 ##### `propagatedNativeBuildInputs` {#var-stdenv-propagatedNativeBuildInputs}
 
-The propagated equivalent of `nativeBuildInputs`. This would be called `depsBuildHostPropagated` but for historical continuity. For example, if package `Y` has `propagatedNativeBuildInputs = [X]`, and package `Z` has `buildInputs = [Y]`, then package `Z` will be built as if it included package `X` in its `nativeBuildInputs`. If instead, package `Z` has `nativeBuildInputs = [Y]`, then `Z` will be built as if it included `X` in the `depsBuildBuild` of package `Z`, because of the sum of the two `-1` host offsets.
+The propagated equivalent of `nativeBuildInputs`. This would be called `depsBuildHostPropagated` but for historical continuity. For example, if package `Y` has `propagatedNativeBuildInputs = [X]`, and package `Z` has `buildInputs = [Y]`, then package `Z` will be built as if it included package `X` in its `nativeBuildInputs`. Note that if instead, package `Z` has `nativeBuildInputs = [Y]`, then `X` will not be included at all.
 
 ##### `depsBuildTargetPropagated` {#var-stdenv-depsBuildTargetPropagated}
 
@@ -450,8 +511,7 @@ If you pass a function to `mkDerivation`, it will receive as its argument the fi
 mkDerivation (finalAttrs: {
   pname = "hello";
   withFeature = true;
-  configureFlags =
-    lib.optionals finalAttrs.withFeature ["--with-feature"];
+  configureFlags = lib.optionals finalAttrs.withFeature [ "--with-feature" ];
 })
 ```
 
@@ -468,28 +528,28 @@ various bindings:
 
 ```nix
 # `pkg` is the _original_ definition (for illustration purposes)
-let pkg =
-  mkDerivation (finalAttrs: {
+let
+  pkg = mkDerivation (finalAttrs: {
     # ...
 
     # An example attribute
-    packages = [];
+    packages = [ ];
 
     # `passthru.tests` is a commonly defined attribute.
     passthru.tests.simple = f finalAttrs.finalPackage;
 
     # An example of an attribute containing a function
-    passthru.appendPackages = packages':
-      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
-        packages = super.packages ++ packages';
-      });
+    passthru.appendPackages =
+      packages':
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: { packages = super.packages ++ packages'; });
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
     passthru.finalAttrs = finalAttrs;
     passthru.original = pkg;
   });
-in pkg
+in
+pkg
 ```
 
 Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
@@ -574,6 +634,8 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 ##### `srcs` / `src` {#var-stdenv-src}
 
 The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
+
+These should ideally actually be sources and licensed under a FLOSS license.  If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
@@ -672,7 +734,7 @@ The key to use when specifying the installation [`prefix`](#var-stdenv-prefix). 
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
-By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+By default, when building statically, `stdenv` will try to add build system appropriate configure flags to try to enable static builds.
 
 If this is undesirable, set this variable to true.
 
@@ -721,9 +783,7 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-{
-  makeFlags = [ "PREFIX=$(out)" ];
-}
+{ makeFlags = [ "PREFIX=$(out)" ]; }
 ```
 
 ::: {.note}
@@ -773,9 +833,7 @@ It is highly recommended, for packages' sources that are not distributed with an
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -828,9 +886,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-{
-  installTargets = "install-bin install-doc";
-}
+{ installTargets = "install-bin install-doc"; }
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
@@ -961,47 +1017,41 @@ If set to `true`, the standard environment will enable debug information in C/C+
 To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
 
 ```nix
-let
-  pkgs = import ./. {
-    config = {};
+{
+  pkgs ? import <nixpkgs> {
+    config = { };
     overlays = [
       (final: prev: {
         ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
         readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
       })
     ];
-  };
+  },
+}:
+pkgs.mkShell {
+  NIX_DEBUG_INFO_DIRS = pkgs.lib.makeSearchPathOutput "debug" "lib/debug" [
+    pkgs.glibc
+    pkgs.ncurses
+    pkgs.openssl
+    pkgs.readline
+  ];
 
-  myDebugInfoDirs = pkgs.symlinkJoin {
-    name = "myDebugInfoDirs";
-    paths = with pkgs; [
-      glibc.debug
-      ncurses.debug
-      openssl.debug
-      readline.debug
-    ];
-  };
-in
-  pkgs.mkShell {
+  packages = [
+    pkgs.gdb
+    pkgs.socat
+  ];
 
-    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
-
-    packages = [
-      pkgs.gdb
-      pkgs.socat
-    ];
-
-    shellHook = ''
-      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
-    '';
-  }
+  shellHook = ''
+    gdb socat
+  '';
+}
 ```
 
 This setup works as follows:
 - Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
-- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
-- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
-- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use this variable for looking up debug symbols.
+  [`lib.makeSearchPathOutput`](#function-library-lib.strings.makeSearchPathOutput) constructs a colon-separated search path, pointing to the directories containing the debug symbols of the listed packages.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell).
 
 :::
 
@@ -1019,9 +1069,7 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-{
-  doInstallCheck = true;
-}
+{ doInstallCheck = true; }
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -1117,11 +1165,14 @@ They cannot be overridden without rebuilding the package.
 
 If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
 
-There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
+There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/by-name/ma/makeBinaryWrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 
 `wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
 
 Using the `makeBinaryWrapper` implementation is usually preferred, as it creates a tiny _compiled_ wrapper executable, that can be used as a shebang interpreter. This is needed mostly on Darwin, where shebangs cannot point to scripts, [due to a limitation with the `execve`-syscall](https://stackoverflow.com/questions/67100831/macos-shebang-with-absolute-path-not-working). Compiled wrappers generated by `makeBinaryWrapper` can be inspected with `less <path-to-wrapper>` - by scrolling past the binary data you should be able to see the shell command that generated the executable and there see the environment variables that were injected into the wrapper.
+
+However, `makeWrapper` is more flexible and implements more arguments.
+Use `makeWrapper` if you need the wrapper to use shell features (e.g. look up environment variables) at runtime.
 
 ### `remove-references-to -t` \<storepath\> [ `-t` \<storepath\> ... ] \<file\> ... {#fun-remove-references-to}
 
@@ -1276,7 +1327,7 @@ addEnvHooks "$hostOffset" myBashFunction
 
 The *existence* of setups hooks has long been documented and packages inside Nixpkgs are free to use this mechanism. Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions. Because of the existing issues with this system, there’s little benefit from mandating it be stable for any period of time.
 
-First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
+First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation`, even with custom builders. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 ### `move-docs.sh` {#move-docs.sh}
 
@@ -1379,9 +1430,47 @@ This setup hook moves any systemd user units installed in the `lib/` subdirector
 
 This hook only runs when compiling for Linux.
 
+### `no-broken-symlinks.sh` {#no-broken-symlinks.sh}
+
+This setup hook checks for, reports, and (by default) fails builds when "broken" symlinks are found. A symlink is considered "broken" if it's dangling (the target doesn't exist) or reflexive (it refers to itself).
+
+This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
+
+::: {.note}
+The hook only considers symlinks with targets inside the Nix store or $TMPDIR directory (typically /nix/store and /build in the builder environment, the later being where build is executed).
+:::
+
+::: {.note}
+The check for reflexivity is direct and does not account for transitivity, so this hook will not prevent cycles in symlinks.
+:::
+
 ### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
+
+### `add-bin-to-path.sh` {#add-bin-to-path.sh}
+
+This setup hook checks if the `bin/` directory exists in the `$out` output path
+and, if so, adds it to the `PATH` environment variable. This ensures that
+executables located in `$out/bin` are accessible.
+
+This hook is particularly useful during testing, as it allows packages to locate their executables without requiring manual modifications to the `PATH`.
+
+**Note**: This hook is specifically designed for the `$out/bin` directory only
+and does not handle and support other paths like `$sourceRoot/bin`. It may not
+work as intended in cases with multiple outputs or when binaries are located in
+directories like `sbin/`. These caveats should be considered when using this
+hook, as they might introduce unexpected behavior in some specific cases.
+
+### `writable-tmpdir-as-home.sh` {#writable-tmpdir-as-home.sh}
+
+This setup hook ensures that the directory specified by the `HOME` environment
+variable is writable. If it is not, the hook assigns `HOME` to a writable
+directory (in `.home` in `$NIX_BUILD_TOP`). This adjustment is necessary for
+certain packages that require write access to a home directory.
+
+By setting `HOME` to a writable directory, this setup hook prevents failures in
+packages that attempt to write to the home directory.
 
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
@@ -1411,6 +1500,7 @@ these in the [Hooks Reference](#chap-hooks).
 ### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
 
 If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/ld-wrapper-hook` exists, it will be run at the end of the linker wrapper, before the linker runs.
 If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
 These hooks allow a user to inject code into the wrappers.
 As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.
@@ -1433,7 +1523,7 @@ Note that support for some hardening flags varies by compiler, CPU architecture,
 
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
-The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
+The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to be packaged is incompatible.
 
 #### `format` {#format}
 
@@ -1529,22 +1619,33 @@ intel_drv.so: undefined symbol: vgaHWFreeHWRec
 
 Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
 
+#### `stackclashprotection` {#stackclashprotection}
+
+This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+
 ### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
-#### `pie` {#pie}
+#### `nostrictaliasing` {#nostrictaliasing}
 
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
 
-  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
+#### `strictflexarrays1` {#strictflexarrays1}
 
-  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
+This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the cases the compiler treats as "flexible arrays" to those declared with length `[1]`, `[0]` or (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
 
-Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
+Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
 
-Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
-If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
+Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+#### `strictflexarrays3` {#strictflexarrays3}
+
+This flag adds the `-fstrict-flex-arrays=3` compiler option, which reduces the cases the compiler treats as "flexible arrays" to only those declared with length as (the correct) `[]`. This increases the coverage of fortify checks, because such arrays declared as the trailing element of a structure can normally not have their intended length determined by the compiler.
+
+Enabling this flag on packages that still use non-empty length declarations for flexible arrays may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Many projects still use such non-empty length declarations for flexible arrays.
+
+Enabling this flag implies enablement of `strictflexarrays1`. Disabling this flag does not imply disablement of `strictflexarrays1`.
 
 #### `shadowstack` {#shadowstack}
 
@@ -1558,7 +1659,7 @@ This breaks some code that does advanced stack management or exception handling.
 
 #### `trivialautovarinit` {#trivialautovarinit}
 
-Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
+Adds the `-ftrivial-auto-var-init=pattern` compiler option. Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables. This flag causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed).
 
 Use of this flag is controversial as it can prevent tools that detect uninitialized variable use (such as valgrind) from operating correctly.
 
@@ -1568,9 +1669,23 @@ This should be turned off or fixed for build errors such as:
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
 
-#### `stackclashprotection` {#stackclashprotection}
+#### `glibcxxassertions` {#glibcxxassertions}
 
-This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
+
+These checks may have an impact on performance in some cases.
+
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
+
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
+
+#### `libcxxhardeningextensive` {#libcxxhardeningextensive}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "extensive" mode adds checks for undefined behavior that incur relatively little overhead but aren’t security-critical. The additional rigour impacts performance more than fast mode: benchmarking is recommended to determine if it is acceptable for a particular application.
+
+Enabling this flag implies enablement of checks from `libcxxhardeningfast`. Disabling this flag does not imply disablement of checks from `libcxxhardeningfast`.
 
 #### `pacret` {#pacret}
 

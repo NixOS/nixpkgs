@@ -43,7 +43,7 @@ let
   inherit (builtins) unsafeDiscardStringContext appendContext;
   inherit (lib)
     listToAttrs
-    isStorePath
+    isStringLike
     readFile
     attrValues
     mapAttrs
@@ -52,6 +52,16 @@ let
     mapAttrsToList
     ;
   inherit (lib.attrsets) mergeAttrsList;
+
+  isNonCaStorePath =
+    x:
+    if isStringLike x then
+      let
+        str = toString x;
+      in
+      builtins.substring 0 1 str == "/" && (dirOf str == builtins.storeDir)
+    else
+      false;
 
   toContextlessString = x: unsafeDiscardStringContext (toString x);
   warn = if verbose then lib.warn else (x: y: y);
@@ -90,7 +100,7 @@ let
 
   realisation =
     drv:
-    if isStorePath drv then
+    if isNonCaStorePath drv then
       # Input-addressed and fixed-output derivations have their realisation as outPath.
       toContextlessString drv
     else

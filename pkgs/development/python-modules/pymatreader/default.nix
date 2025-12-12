@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  setuptools,
+  hatchling,
   h5py,
   numpy,
   scipy,
@@ -12,17 +12,23 @@
 
 buildPythonPackage rec {
   pname = "pymatreader";
-  version = "0.0.31";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "obob";
     repo = "pymatreader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pYObmvqA49sHjpZcwXkN828R/N5CSpmr0OyyxzDiodQ=";
+    tag = "v${version}";
+    hash = "sha256-cDEGEvBSj3gmjA+8aXULwuBVk09BLQbA91CNAxgtiLA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'source = "regex_commit"' "" \
+      --replace-fail '"hatch-regex-commit"' ""
+  '';
+
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     h5py
@@ -35,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymatreader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to read all kinds and all versions of Matlab mat files";
     homepage = "https://gitlab.com/obob/pymatreader/";
     changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

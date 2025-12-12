@@ -7,7 +7,7 @@
   doxygen,
   graphviz,
   boost,
-  cgal_5,
+  cgal,
   gdal,
   glew,
   gmp,
@@ -32,7 +32,7 @@ let
     enablePython = true;
     inherit python;
   };
-  cgal = cgal_5.override {
+  cgal' = cgal.override {
     boost = boost';
   };
 in
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost'
-    cgal
+    cgal'
     gdal
     glew
     gmp
@@ -78,12 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     qwt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
     mainProgram = "gplates";
     homepage = "https://www.gplates.org";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
   };
 })

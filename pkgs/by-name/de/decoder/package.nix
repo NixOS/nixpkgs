@@ -6,7 +6,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "decoder";
   version = "unstable-2021-11-20";
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PeterPawn/decoder";
     description = ''"secrets" decoding for FRITZ!OS devices'';
     mainProgram = "decoder";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ] ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "USB viewer for Linux";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       shamilton
       h7x4
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "usbview";
   };
 }

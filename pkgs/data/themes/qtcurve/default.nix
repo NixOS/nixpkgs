@@ -39,6 +39,11 @@ mkDerivation rec {
   };
 
   patches = [
+    # Fix build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/KDE/qtcurve/commit/d2c84577505641e647fbb64bce825b3e0a4129f5.patch";
+      sha256 = "sha256-WBmzlVDxRNXZmi6c03cR1MuIr+hBaeFXgNLzhsv0bZo=";
+    })
     # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {
       url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
@@ -76,7 +81,8 @@ mkDerivation rec {
     libXdmcp
     libX11
     libXau
-  ] ++ lib.optional gtk2Support gtk2;
+  ]
+  ++ lib.optional gtk2Support gtk2;
 
   preConfigure = ''
     for i in qt5/CMakeLists.txt qt5/config/CMakeLists.txt
@@ -96,11 +102,11 @@ mkDerivation rec {
     "-DENABLE_QT4=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/QtCurve/qtcurve";
     description = "Widget styles for Qt5/Plasma 5 and gtk2";
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

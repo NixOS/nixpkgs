@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "ddcui";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rockowitz";
     repo = "ddcui";
     rev = "v${version}";
-    sha256 = "sha256-/20gPMUTRhC58YFlblahOEdDHLVhbzwpU3n55NtLAcM=";
+    sha256 = "sha256-KcivAoPV/4TihVkwYgq3bWWhG5E8enVSD3bhObl++I0=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ mkDerivation rec {
     ddcutil
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface for ddcutil - control monitor settings";
     mainProgram = "ddcui";
     homepage = "https://www.ddcutil.com/ddcui_main/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nh2 ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ nh2 ];
+    platforms = with lib.platforms; linux;
   };
 }

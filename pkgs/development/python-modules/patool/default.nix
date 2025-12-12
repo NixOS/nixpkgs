@@ -3,6 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  installShellFiles,
+  argcomplete,
   pytestCheckHook,
   p7zip,
   cabextract,
@@ -38,21 +41,30 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "2.4.0";
+  version = "4.0.1";
   format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-dWyC8uTVUb06liNcJaG4oK9wqIDmwAl6i6cg4XRRRdQ=";
+    repo = "patool";
+    tag = version;
+    hash = "sha256-KAOJi8vUP9kPa++dLEXf3mwrv1kmV7uDZmtvngPxQ90=";
   };
 
   postPatch = ''
     substituteInPlace patoolib/util.py \
-      --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
+      --replace-fail 'path = os.environ.get("PATH", os.defpath)' 'path = os.environ.get("PATH", os.defpath) + ":${lib.makeBinPath compression-utilities}"'
   '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd patool \
+      --bash <(${argcomplete}/bin/register-python-argcomplete -s bash $out/bin/patool) \
+      --fish <(${argcomplete}/bin/register-python-argcomplete -s fish $out/bin/patool) \
+      --zsh <(${argcomplete}/bin/register-python-argcomplete -s zsh $out/bin/patool)
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
@@ -61,13 +73,18 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
+    "test_7z"
+    "test_7z_file"
+    "test_7za_file"
+    "test_p7azip"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
-  meta = with lib; {
-    description = "portable archive file manager";
+  meta = {
+    description = "Portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

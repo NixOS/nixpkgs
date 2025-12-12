@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "gitlike-commands";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z0l8nCKov1iMJvI3YTHvg0ey+oPju3rgaKtmk6OX44g=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitlike_commands" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy python module for creating git-style subcommand handling";
     homepage = "https://github.com/unixorn/gitlike-commands";
     changelog = "https://github.com/unixorn/gitlike-commands/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

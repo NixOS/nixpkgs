@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sf-refugees";
-    repo = pname;
+    repo = "ninvaders";
     rev = "v${version}";
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     description = "Space Invaders clone based on ncurses";
     mainProgram = "ninvaders";
     homepage = "https://ninvaders.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.all;
   };
 }

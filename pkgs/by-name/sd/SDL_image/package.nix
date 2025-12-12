@@ -1,8 +1,7 @@
 {
   lib,
   SDL,
-  fetchpatch,
-  fetchurl,
+  fetchFromGitHub,
   giflib,
   libXpm,
   libjpeg,
@@ -11,28 +10,19 @@
   libwebp,
   pkg-config,
   stdenv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12";
+  version = "1.2.12-unstable-2025-11-06";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_image/release/SDL_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C5ByKYRWEATehIR3RNVmgJ27na9zKp5QO5GhtahOVpk=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL_image";
+    rev = "7c6ea40bb75262740cd07f7658bc543f13c65b3c";
+    hash = "sha256-V8d9En6fJArslFLIaeCdfVD5YoHPbKjOpR79Va8w8js=";
   };
-
-  patches = [
-    # Fixed security vulnerability in XCF image loader
-    (fetchpatch {
-      name = "CVE-2017-2887";
-      url = "https://github.com/libsdl-org/SDL_image/commit/e7723676825cd2b2ffef3316ec1879d7726618f2.patch";
-      includes = [ "IMG_xcf.c" ];
-      hash = "sha256-Z0nyEtE1LNGsGsN9SFG8ZyPDdunmvg81tUnEkrJQk5w=";
-    })
-    # Fixes incompatible function pointer type errors with clang 16
-    ./clang16-webp-errors.patch
-  ];
 
   configureFlags = [
     # Disable dynamic loading or else dlopen will fail because of no proper
@@ -59,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   outputs = [
     "out"
     "dev"
@@ -70,11 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "release-1.*";
+    tagPrefix = "release-";
+    branch = "SDL-1.2";
+  };
+
   meta = {
     homepage = "http://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
   };
 })

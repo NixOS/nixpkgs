@@ -19,10 +19,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Libp2p-backed daemon wrapping the functionalities of go-libp2p for use in other languages";
     homepage = "https://github.com/libp2p/go-libp2p-daemon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fare ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fare ];
   };
 }

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "yowsup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "1pz0r1gif15lhzdsam8gg3jm6zsskiv2yiwlhaif5rl7lv3p0v7q";
   };
 
@@ -49,7 +49,8 @@ buildPythonPackage rec {
     protobuf
     python-axolotl
     six
-  ] ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
 
   meta = {
     homepage = "https://github.com/tgalal/yowsup";

@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "1.31.0";
+  version = "1.35.0";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = "kubelogin";
-    rev = "v${version}";
-    hash = "sha256-IEKP5mHxJyGzlxNL4h0MR/Ge7g1kKidIjinYr+bL6as=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-POJY3r+8Fx9RUurShNADsin/LHZGvpB/4H6I9eG+4pQ=";
   };
 
   subPackages = [ "." ];
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-3hNc16zpazm9YqDx2M/RafCBLev2S8TzJzClGRkKydg=";
+  vendorHash = "sha256-Bjge514SLWjRuoOhnI0OxSJm5utvfDB0hx77uYnGsgY=";
 
   # test all packages
   preCheck = ''
@@ -38,11 +38,11 @@ buildGoModule rec {
   meta = {
     description = "Kubernetes credential plugin implementing OpenID Connect (OIDC) authentication";
     mainProgram = "kubectl-oidc_login";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       benley
       nevivurn
     ];
   };
-}
+})

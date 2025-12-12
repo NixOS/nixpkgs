@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "taxi";
-  version = "6.3.1";
+  version = "6.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sephii";
     repo = "taxi";
     rev = version;
-    hash = "sha256-QB88RpgzrQy7DGeRdMHC2SV5Esp/r5LZtlaY5C8vJxw=";
+    hash = "sha256-zhBjULAPd1rGvTMdy7TJ3XoDDMGnoL6fyZFTVIHDvDI=";
   };
 
   build-system = [ flit-core ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "taxi" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sephii/taxi/";
     description = "Timesheeting made easy";
     mainProgram = "taxi";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ jocelynthode ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ jocelynthode ];
   };
 }

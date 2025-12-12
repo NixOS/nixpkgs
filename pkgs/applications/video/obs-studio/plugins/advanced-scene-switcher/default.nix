@@ -20,10 +20,9 @@
   libXScrnSaver,
   libusb1,
   pkg-config,
-  fetchpatch,
 # #FIXME: Could not get cmake to pick up on these dependencies
-# Prevents cmake from building the OCR video capabilities
-# Everything else should work just missing this on plugin
+# Ommiting them prevents cmake from building the OCR video capabilities
+# Everything else should work it's just missing this one plugin
 # tesseract,
 # leptonica,
 }:
@@ -37,27 +36,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.28.1";
+  version = "1.32.4";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-1U5quhfdhEBcCbEzW0uEpimYgvdbsIwaL2EdQ4cLF/M=";
+    hash = "sha256-OgvR37w7ol/8zCP6MLNYGYP4fq0upzbhfXYnOPCaE34=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-  ];
-
-  patches = [
-    # https://github.com/WarmUpTill/SceneSwitcher/pull/1244
-    (fetchpatch {
-      url = "https://github.com/WarmUpTill/SceneSwitcher/commit/e0c650574f9f7f6cae5626afa9abf8a838dc0858.diff";
-      hash = "sha256-eXO8LdGYf60sd/kyxWVDSEpwyzp4Uu9TpPADg5ED4yU=";
-    })
   ];
 
   buildInputs = [
@@ -86,14 +77,18 @@ stdenv.mkDerivation rec {
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
+  # PipeWire support currently disabled in libremidi dependency.
+  # see https://github.com/NixOS/nixpkgs/pull/374469
+  cmakeFlags = [ (lib.cmakeBool "LIBREMIDI_NO_PIPEWIRE" true) ];
+
   env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-overflow -Wno-error=deprecated-declarations";
 
   passthru.updateScript = nix-update-script { };
-  meta = with lib; {
+  meta = {
     description = "Automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ patrickdag ];
   };
 }

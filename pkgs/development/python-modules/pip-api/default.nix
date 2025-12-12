@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "di";
     repo = "pip-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nmCP4hp+BsD80OBjerOu+QTBBExGHvn/v19od4V3ncI=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
     "test_isolation"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Importable pip API";
     homepage = "https://github.com/di/pip-api";
     changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

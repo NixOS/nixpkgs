@@ -1,17 +1,32 @@
-{ stdenvNoCC
-, lib
-, alsa-lib
-, autoPatchelfHook
-, copyDesktopItems
-, dbus
-, dpkg
-, expat
-, fontconfig
-, glib
-, makeDesktopItem
-, makeWrapper
-, qt5
-, requireFile
+{
+  lib,
+  stdenvNoCC,
+  requireFile,
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  alsa-lib,
+  dbus,
+  expat,
+  fontconfig,
+  glib,
+  libdrm,
+  libglvnd,
+  libpulseaudio,
+  libudev0-shim,
+  libxkbcommon,
+  libxml2_13,
+  libxslt,
+  nspr,
+  nss,
+  wayland,
+  xorg,
+  buildFHSEnv,
+  copyDesktopItems,
+  makeDesktopItem,
+  libsForQt5,
+  version ? "8.2.2",
+  packetTracerSource ? null,
 }:
 
 let
@@ -25,62 +40,112 @@ let
     "8.2.1" = "CiscoPacketTracer_821_Ubuntu_64bit.deb";
     "8.2.2" = "CiscoPacketTracer822_amd64_signed.deb";
   };
-in
 
-stdenvNoCC.mkDerivation (args: {
-  pname = "ciscoPacketTracer8";
+  unwrapped = stdenvNoCC.mkDerivation {
+    name = "ciscoPacketTracer8-unwrapped";
+    inherit version;
 
-  version = "8.2.2";
+    src =
+      if (packetTracerSource != null) then
+        packetTracerSource
+      else
+        requireFile {
+          name = names.${version};
+          hash = hashes.${version};
+          url = "https://www.netacad.com";
+        };
 
-  src = requireFile {
-    name = names.${args.version};
-    hash = hashes.${args.version};
-    url = "https://www.netacad.com";
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+      makeWrapper
+    ];
+
+    buildInputs = [
+      alsa-lib
+      dbus
+      expat
+      fontconfig
+      glib
+      libdrm
+      libglvnd
+      libpulseaudio
+      libudev0-shim
+      libxkbcommon
+      libxml2_13
+      libxslt
+      nspr
+      nss
+      wayland
+    ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libX11
+      libXScrnSaver
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libxcb
+      xcbutilimage
+      xcbutilkeysyms
+      xcbutilrenderutil
+      xcbutilwm
+    ]);
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg-deb -x $src $out
+      chmod 755 "$out"
+
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
+        --set QT_QPA_PLATFORM xcb \
+        --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
+
+      runHook postInstall
+    '';
   };
 
-  unpackPhase = ''
-    runHook preUnpack
+  fhs-env = buildFHSEnv {
+    name = "ciscoPacketTracer8-fhs-env";
+    runScript = lib.getExe' unwrapped "packettracer8";
+    targetPkgs = _: [ libudev0-shim ];
+  };
+in
 
-    dpkg-deb -x $src $out
-    chmod 755 "$out"
+stdenvNoCC.mkDerivation {
+  pname = "ciscoPacketTracer8";
+  inherit version;
 
-    runHook postUnpack
-  '';
+  dontUnpack = true;
 
   nativeBuildInputs = [
-    autoPatchelfHook
     copyDesktopItems
-    dpkg
-    makeWrapper
-    qt5.wrapQtAppsHook
-  ];
-
-  buildInputs = [
-    alsa-lib
-    dbus
-    expat
-    fontconfig
-    glib
-    qt5.qtbase
-    qt5.qtmultimedia
-    qt5.qtnetworkauth
-    qt5.qtscript
-    qt5.qtspeech
-    qt5.qtwebengine
-    qt5.qtwebsockets
   ];
 
   installPhase = ''
     runHook preInstall
 
-    makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
-      "''${qtWrapperArgs[@]}" \
-      --set QT_QPA_PLATFORMTHEME "" \
-      --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
+    mkdir -p $out/bin
+    ln -s ${fhs-env}/bin/${fhs-env.name} $out/bin/packettracer8
 
-    install -D $out/opt/pt/art/app.png $out/share/icons/hicolor/128x128/apps/ciscoPacketTracer8.png
-
-    rm $out/opt/pt/bin/libQt5* -f
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    ln -s ${unwrapped}/opt/pt/art/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer-8.png
+    ln -s ${unwrapped}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/mimetypes
+    ln -s ${unwrapped}/usr/share/mime $out/share/mime
 
     runHook postInstall
   '';
@@ -89,25 +154,34 @@ stdenvNoCC.mkDerivation (args: {
     (makeDesktopItem {
       name = "cisco-pt8.desktop";
       desktopName = "Cisco Packet Tracer 8";
-      icon = "ciscoPacketTracer8";
+      icon = "cisco-packet-tracer-8";
       exec = "packettracer8 %f";
-      mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
+      mimeTypes = [
+        "application/x-pkt"
+        "application/x-pka"
+        "application/x-pkz"
+        "application/x-pksz"
+        "application/x-pks"
+      ];
     })
   ];
 
-  dontWrapQtApps = true;
-
-  passthru = {
-    inherit hashes;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.unfree;
     mainProgram = "packettracer8";
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      ''
+        Cisco Packet Tracer 8 ships with qt5 qtwebengine.
+
+        ${lib.head libsForQt5.qtwebengine.meta.knownVulnerabilities}
+      ''
+    ];
   };
-})
+}

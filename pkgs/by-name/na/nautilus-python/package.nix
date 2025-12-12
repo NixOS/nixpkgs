@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   fetchurl,
   meson,
   ninja,
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-python";
-  version = "4.0.1";
+  version = "4.1.0";
 
   outputs = [
     "out"
@@ -27,13 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor finalAttrs.version}/nautilus-python-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/EnBBPsyoK0ZWmawE2eEzRnRDYs+jVnV7n9z6PlOko8=";
+    hash = "sha256-/EpEi8yxoJtohlQJueKu0XHSii1ayA975E9fzKhO4ME=";
   };
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
@@ -47,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [
@@ -61,11 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Nautilus Extension API";
     homepage = "https://gitlab.gnome.org/GNOME/nautilus-python";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

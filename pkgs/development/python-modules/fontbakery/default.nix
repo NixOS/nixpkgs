@@ -16,7 +16,7 @@
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
+  gitMinimal,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -29,7 +29,6 @@
   protobuf,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -41,26 +40,26 @@
   toml,
   ufo2ft,
   ufolint,
+  ufomerge,
   unicodedata2,
   vharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "fontbakery";
-  version = "0.12.10";
+  version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+9O7cAE6CUATvybG22qULNNHi94zSGqU9UjhvrF9R8k=";
+    hash = "sha256-cLQNjrpk8m3Rm1VBC4FNGB7e/E+hjIqcStFSDqfVIk4=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   pythonRelaxDeps = [
     "collidoscope"
+    "freetype-py"
     "protobuf"
     "vharfbuzz"
   ];
@@ -105,12 +104,13 @@ buildPythonPackage rec {
     toml
     ufo2ft
     ufolint
+    ufomerge
     unicodedata2
     vharfbuzz
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock
@@ -130,6 +130,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These require network access
+    "test_check_axes_match"
     "test_check_description_broken_links"
     "test_check_description_family_update"
     "test_check_metadata_designer_profiles"
@@ -140,8 +141,17 @@ buildPythonPackage rec {
     "test_check_cjk_vertical_metrics"
     "test_check_cjk_vertical_metrics_regressions"
     "test_check_fontbakery_version_live_apis"
+    "test_command_check_googlefonts"
     # AssertionError
     "test_check_shape_languages"
+    "test_command_config_file"
+    "test_config_override"
+  ];
+
+  disabledTestPaths = [
+    # ValueError: Check 'googlefonts/glyphsets/shape_languages' not found
+    "tests/test_checks_filesize.py"
+    "tests/test_checks_googlefonts_overrides.py"
   ];
 
   postInstall = ''
@@ -151,11 +161,12 @@ buildPythonPackage rec {
 
   passthru.tests.simple = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
     changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    mainProgram = "fontbakery";
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

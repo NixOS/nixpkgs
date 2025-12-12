@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wdEwIVN9dkLVj8oe+2eh5n258pZRfKgLgzVCmwafCis=";
   };
 
@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/jelmer/xandikos/blob/v${version}/NEWS";
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "xandikos";
   };
 }

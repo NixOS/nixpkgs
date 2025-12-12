@@ -125,7 +125,8 @@ in
         wantedBy = [ "multi-user.target" ];
 
         preStart = ''
-          mkdir -m 710 -p /var/cron
+          (umask 022 && mkdir -p /var)
+          (umask 067 && mkdir -p /var/cron)
 
           # By default, allow all users to create a crontab.  This
           # is denoted by the existence of an empty cron.deny file.

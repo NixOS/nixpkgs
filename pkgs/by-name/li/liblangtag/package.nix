@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   autoconf-archive,
   gtk-doc,
@@ -43,7 +42,10 @@ stdenv.mkDerivation rec {
     cp "${language_subtag_registry}" data/language-subtag-registry
   '';
 
-  configureFlags = lib.optional (
+  configureFlags = [
+    "ac_cv_va_copy=1"
+  ]
+  ++ lib.optional (
     stdenv.hostPlatform.libc == "glibc"
   ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
@@ -63,11 +65,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface library to access tags for identifying languages";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
   };

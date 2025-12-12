@@ -7,6 +7,7 @@
   openpyxl,
   pandas,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   pyyaml,
   setuptools-scm,
@@ -18,20 +19,15 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.6.1";
+  version = "3.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BAaF/eEekjdnX0Pphe25S2MlCl6SNvidVhzm+xRluDk=";
+    hash = "sha256-lNi83GWnFaACSm1bcBpfMeRb0VkmnmLHNzHeefBI2ys=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
-  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -61,6 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
+    pytest-cov-stub
     unicodecsv
   ];
 
@@ -71,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tablib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

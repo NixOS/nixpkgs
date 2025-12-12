@@ -2,26 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  paho-mqtt_2,
+  paho-mqtt,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   weconnect,
 }:
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.49.2";
+  version = "0.49.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jTScDPTj7aIQcGuL2g8MvuYln6iaj6abEyCfd8vvT2I=";
+    tag = "v${version}";
+    hash = "sha256-69p7lAO7W+odrm1kLhvB8v4kNKx6IWBUSOQKgrxVCCY=";
   };
 
   postPatch = ''
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace-fail "weconnect[Images]~=" "weconnect>="
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=weconnect_mqtt --cov-config=.coveragerc --cov-report html" "" \
-      --replace-fail "pytest-cov" ""
+      --replace-fail "required_plugins = pytest-cov" ""
   '';
 
   pythonRelaxDeps = [ "python-dateutil" ];
@@ -39,20 +36,24 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    paho-mqtt_2
+    paho-mqtt
     python-dateutil
     weconnect
-  ] ++ weconnect.optional-dependencies.Images;
+  ]
+  ++ weconnect.optional-dependencies.Images;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "weconnect_mqtt" ];
 
   meta = {
     description = "Python client that publishes data from Volkswagen WeConnect";
     homepage = "https://github.com/tillsteinbach/WeConnect-mqtt";
-    changelog = "https://github.com/tillsteinbach/WeConnect-mqtt/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/tillsteinbach/WeConnect-mqtt/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "weconnect-mqtt";
   };

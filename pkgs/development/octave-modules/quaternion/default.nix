@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "quaternion";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "040ncksf0xz32qmi4484xs3q01nappxrsvwwa60g04yjy7c4sbac";
+    sha256 = "sha256-kY5mU7dJuUjprub+LTc1BH6YGdEnP9ydX0lRU0fmOYE=";
   };
 
   # Octave replaced many of the is_thing_type check function with isthing.
@@ -21,10 +21,10 @@ buildOctavePackage rec {
     sed -i s/is_bool_type/islogical/g src/*.cc
   '';
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/quaternion/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/quaternion/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Quaternion package for GNU Octave, includes a quaternion class with overloaded operators";
   };
 }

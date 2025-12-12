@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "5.15.173-rt82"; # updated by ./update-rt.sh
+  version = "5.15.195-rt90"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -29,7 +29,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
-      sha256 = "1a3x3ld6g7ny0hdfqfvj5j2i5sx5l5p236pdnsr0icn9ri3jljwa";
+      hash = "sha256-I9CA3DL5nTk5w9G9ZaaO2FuPk0+SzBhBpj+Jjc25pEE=";
     };
 
     kernelPatches =
@@ -38,7 +38,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "1xykbqkj4pqd7rdqnjk91mbdia3lxlng3c2nz7lnhhjnbva6b3vw";
+            hash = "sha256-RdymUTnItL0Vi8Vt5j1lAlX/hxp6+Ka+oPBgD9agwZY=";
           };
         };
       in
@@ -56,6 +56,8 @@ buildLinux (
         RT_GROUP_SCHED = lib.mkForce (option no); # Removed by sched-disable-rt-group-sched-on-rt.patch.
       }
       // structuredExtraConfig;
+
+    isLTS = true;
 
     extraMeta = extraMeta // {
       inherit branch;

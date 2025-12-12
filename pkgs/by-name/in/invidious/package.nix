@@ -1,9 +1,8 @@
 {
   lib,
   callPackage,
-  crystal,
+  crystal_1_16,
   fetchFromGitHub,
-  fetchpatch,
   librsvg,
   pkg-config,
   libxml2,
@@ -21,11 +20,14 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
+  # Broken versions:
+  #   * 20250517 (`Missing hash key: "videoDetails" (KeyError)`)
   versions ? lib.importJSON ./versions.json,
 }:
 let
   # normally video.js is downloaded at build time
   videojs = callPackage ./videojs.nix { inherit versions; };
+  crystal = crystal_1_16;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
@@ -87,15 +89,6 @@ crystal.buildCrystalPackage rec {
     sqlite
   ];
 
-  patches = [
-    # Fix proxied video streaming: https://github.com/iv-org/invidious/pull/4992
-    (fetchpatch {
-      name = "invidious-fix-video-proxy.patch";
-      url = "https://github.com/iv-org/invidious/compare/aa33d9b7ec5a41867c256542653ad8465fe22e7f~1...3ac8978e96069e58a02e91fc29bf52b8fc651d5c.patch";
-      hash = "sha256-xENsVRfEE9ACLiniOgGMDfdC0ZtJge1e1Lak2orLJro=";
-    })
-  ];
-
   format = "crystal";
   shardsFile = ./shards.nix;
   crystalBinaries.invidious = {
@@ -147,7 +140,6 @@ crystal.buildCrystalPackage rec {
       _999eagle
       GaetanLepage
       sbruder
-      pbsds
     ];
   };
 }

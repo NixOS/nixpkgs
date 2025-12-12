@@ -43,17 +43,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
-  configureFlags =
-    lib.optional guileEnabled "--with-guile"
-
-    # Make uses this test to decide whether it should keep track of
-    # subseconds. Apple made this possible with APFS and macOS 10.13.
-    # However, we still support macOS 10.11 and 10.12. Binaries built
-    # in Nixpkgs will be unable to use futimens to set mtime less than
-    # a second. So, tell Make to ignore nanoseconds in mtime here by
-    # overriding the autoconf test for the struct.
-    # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ lib.optional stdenv.hostPlatform.isDarwin "ac_cv_struct_st_mtim_nsec=no";
+  configureFlags = lib.optional guileEnabled "--with-guile";
 
   outputs = [
     "out"
@@ -67,7 +57,7 @@ stdenv.mkDerivation rec {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -81,9 +71,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/make/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

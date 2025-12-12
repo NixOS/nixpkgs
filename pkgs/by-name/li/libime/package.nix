@@ -17,26 +17,26 @@ let
     url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.zst";
     hash = "sha256-Pp2HsEo5PxMXI0csjqqGDdI8N4o9T2qQBVE7KpWzYUs=";
   };
-  arpaVer = "20241001";
+  arpaVer = "20250113";
   arpa = fetchurl {
     url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.zst";
-    hash = "sha256-VJNOc5Zus46k/o6unGHf5IavN9octTFqBrGcfSieMGM=";
+    hash = "sha256-7oPs8g1S6LzNukz2zVcYPVPCV3E6Xrd+46Y9UPw3lt0=";
   };
-  dictVer = "20241001";
+  dictVer = "20250327";
   dict = fetchurl {
     url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
-    hash = "sha256-0zE7iKaGIKI7yNX5VkzxtniEjcevVBxPXwIZjlo2hr8=";
+    hash = "sha256-fKa+R1TA1MJ7p3AsDc5lFlm9LKH6pcvyhI2BoAU8jBM=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.9";
+  version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
-    rev = version;
-    hash = "sha256-Ky4ERYQRUiPn+EYrgfmfHxdVp31a1oD4nevDniPOT20=";
+    tag = version;
+    hash = "sha256-LqbwXpmqUCbaKHaaE9pOrHb1Qdp20/S3QEf9F4/3oiE=";
     fetchSubmodules = true;
   };
 
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     fcitx5
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support generic input method implementation";
     homepage = "https://github.com/fcitx/libime";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

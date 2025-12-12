@@ -5,7 +5,7 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   flac,
   freetype,
   gamemode,
@@ -22,19 +22,21 @@
   libxml2,
   libXxf86vm,
   makeBinaryWrapper,
-  mbedtls_2,
+  mbedtls,
   libgbm,
   nixosTests,
   nvidia_cg_toolkit,
+  pipewire,
   pkg-config,
   python3,
-  qt5,
+  qt6,
   SDL2,
   spirv-tools,
   udev,
   vulkan-loader,
   wayland,
   wayland-scanner,
+  wrapGAppsHook3,
   zlib,
   # wrapper deps
   libretro,
@@ -53,81 +55,80 @@
 
 let
   runtimeLibs =
-    lib.optional withVulkan vulkan-loader
-    ++ lib.optional withGamemode (lib.getLib gamemode);
+    lib.optional withVulkan vulkan-loader ++ lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.19.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-NVe5dhH3w7RL1C7Z736L5fdi/+aO+Ah9Dpa4u4kn0JY=";
+    hash = "sha256-+3jgoh6OVbPzW5/nCvpB1CRgkMTBxLkYMm6UV16/cfU=";
     rev = "v${version}";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optional withWayland wayland
-    ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
+  nativeBuildInputs = [
+    pkg-config
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ]
+  ++ lib.optional withWayland wayland
+  ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
-  buildInputs =
-    [
-      ffmpeg
-      flac
-      freetype
-      libGL
-      libGLU
-      libxml2
-      mbedtls_2
-      python3
-      qt5.qtbase
-      SDL2
-      spirv-tools
-      zlib
-    ]
-    ++ lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit
-    ++ lib.optional withVulkan vulkan-loader
-    ++ lib.optionals withWayland [
-      wayland
-      wayland-scanner
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      dbus
-      libX11
-      libXdmcp
-      libXext
-      libXxf86vm
-      libdrm
-      libpulseaudio
-      libv4l
-      libxkbcommon
-      libgbm
-      udev
-    ];
+  buildInputs = [
+    ffmpeg_7
+    flac
+    freetype
+    libGL
+    libGLU
+    libxml2
+    mbedtls
+    python3
+    qt6.qtbase
+    SDL2
+    spirv-tools
+    zlib
+  ]
+  ++ lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit
+  ++ lib.optional withVulkan vulkan-loader
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    dbus
+    libX11
+    libXdmcp
+    libXext
+    libXxf86vm
+    libdrm
+    libpulseaudio
+    libv4l
+    libxkbcommon
+    libgbm
+    pipewire
+    udev
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--disable-update_cores"
-      "--disable-builtinmbedtls"
-      "--enable-systemmbedtls"
-      "--disable-builtinzlib"
-      "--disable-builtinflac"
-      "--disable-update_assets"
-      "--disable-update_core_info"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--enable-dbus"
-      "--enable-egl"
-      "--enable-kms"
-    ];
+  configureFlags = [
+    "--disable-update_cores"
+    "--disable-builtinmbedtls"
+    "--enable-systemmbedtls"
+    "--disable-builtinzlib"
+    # https://github.com/libretro/RetroArch/issues/18370
+    # "--disable-builtinflac"
+    "--disable-update_assets"
+    "--disable-update_core_info"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--enable-dbus"
+    "--enable-egl"
+    "--enable-kms"
+  ];
 
   postInstall =
     lib.optionalString (runtimeLibs != [ ]) ''
@@ -168,7 +169,8 @@ stdenv.mkDerivation rec {
           assets_directory = "${retroarch-assets}/share/retroarch/assets";
           joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
           libretro_info_path = "${libretro-core-info}/share/retroarch/cores";
-        } // settings;
+        }
+        // settings;
       };
   };
 
@@ -178,13 +180,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers =
-      with lib.maintainers;
-      [
-        matthewbauer
-        kolbycrouch
-      ]
-      ++ lib.teams.libretro.members;
+    maintainers = with lib.maintainers; [
+      kolbycrouch
+    ];
+    teams = [ lib.teams.libretro ];
     mainProgram = "retroarch";
     # If you want to (re)-add support for macOS, see:
     # https://docs.libretro.com/development/retroarch/compilation/osx/

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Powerful open source image editor, especially suitable for creating icons, cursors, animations and icon libraries";
-    homepage = "http://greenfishsoftware.org/gfie.php";
+    homepage = "https://greenfishsoftware.org/gfie.php";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = [ "x86_64-linux" ];

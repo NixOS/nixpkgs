@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "duckinator";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "bork";
+    tag = "v${version}";
     hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
   };
 
@@ -34,19 +34,20 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "build"
     "packaging"
+    "urllib3"
   ];
 
-  dependencies =
-    [
-      build
-      coloredlogs
-      packaging
-      pip
-      urllib3
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ toml ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    build
+    coloredlogs
+    packaging
+    pip
+    urllib3
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ toml ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [
     "bork"
@@ -56,7 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # tries to call python -m bork
@@ -65,11 +66,11 @@ buildPythonPackage rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Python build and release management tool";
     mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicoo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nicoo ];
   };
 }

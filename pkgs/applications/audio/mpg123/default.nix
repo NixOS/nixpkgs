@@ -10,8 +10,6 @@
   withPulse ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  AudioUnit,
-  AudioToolbox,
   withJack ? stdenv.hostPlatform.isUnix,
   jack,
   withConplay ? !stdenv.hostPlatform.isWindows,
@@ -23,18 +21,19 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.32.9";
+  version = "1.33.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    hash = "sha256-A7YeQATpYLrPKs2toD7ZTTduaqsnpgFEe9SQjYQHspE=";
+    hash = "sha256-agxkct0VbiE8IGj0ARXru3OXjC2HPma64qJQ4tIZjSY=";
   };
 
   outputs = [
     "out"
     "dev"
     "man"
-  ] ++ lib.optional withConplay "conplay";
+  ]
+  ++ lib.optional withConplay "conplay";
 
   nativeBuildInputs = lib.optionals (!libOnly) (
     lib.optionals withConplay [ makeWrapper ] ++ lib.optionals (withPulse || withJack) [ pkg-config ]
@@ -45,8 +44,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withAlsa [ alsa-lib ]
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [
-      AudioUnit
-      AudioToolbox
     ]
     ++ lib.optionals withJack [ jack ]
   );
@@ -95,11 +92,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ftrvxmtrx ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    platforms = lib.platforms.all;
   };
 }

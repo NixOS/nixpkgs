@@ -6,27 +6,26 @@
   pandocfilters,
   poetry-core,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   texliveSmall,
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.13";
+  version = "1.16.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9fpits8O/50maM/e1lVVqBoTwUmcI+/IAYhVX1Pt6ZE=";
+    repo = "pypandoc";
+    tag = "v${version}";
+    hash = "sha256-h0Ur5kWyKz1NCEMdnE0eNCYMAEqjx3g/tnfXs1h9zCs=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./static-pandoc-path.patch;
+    (replaceVars ./static-pandoc-path.patch {
       pandoc = "${lib.getBin pandoc}/bin/pandoc";
       pandocVersion = pandoc.version;
     })
@@ -42,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypandoc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/JessicaTegner/pypandoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       sternenseemann
       bennofs
     ];

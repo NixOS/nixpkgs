@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.74";
+  version = "5.76";
 
   outputs = [
     "out"
@@ -22,23 +22,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
-    hash = "sha256-m+8jWrXSSiqN/2SF39eC7SNfRAfpvIcW3rOD/IDNYjA=";
+    hash = "sha256-zaN+tND7HhKXGO0nrXe1c16Jk5TOBAuyvii7uTf9eeE=";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
 
   enableParallelBuilding = true;
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals mimallocSupport [
-      mimalloc
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals mimallocSupport [
+    mimalloc
+  ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"

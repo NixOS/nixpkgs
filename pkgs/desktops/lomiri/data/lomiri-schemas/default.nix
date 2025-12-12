@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitLab,
   gitUpdater,
@@ -12,15 +12,15 @@
   validatePkgConfig,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.5";
+  version = "0.1.9";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
-    rev = finalAttrs.version;
-    hash = "sha256-OjSMt9XKqGoStF5O2zJTh3drHWe7Vk2cM94OYMSQmoU=";
+    tag = finalAttrs.version;
+    hash = "sha256-qdkKQpKIad7bEMaN6q79byVTipuvUFSdCZQKdMtOERo=";
   };
 
   strictDeps = true;
@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GSettings / AccountsService schema files for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-schemas";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-schemas/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-schemas"
     ];

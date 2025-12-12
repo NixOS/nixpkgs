@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ianw";
-    repo = pname;
+    repo = "libiptcdata";
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-ZjokepDAHiSEwXrkvM9qUAPcpIiRQoOsv7REle7roPU=";
   };
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     libintl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading and writing the IPTC metadata in images and other files";
     mainProgram = "iptc";
     homepage = "https://github.com/ianw/libiptcdata";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
+  clang_20,
   buildNpmPackage,
   bruno,
   pkg-config,
   pango,
-  apple-sdk_11,
   testers,
   bruno-cli,
 }:
@@ -26,16 +26,17 @@ buildNpmPackage {
 
   nativeBuildInputs = [
     pkg-config
+  ]
+  ++ lib.optional stdenv.isDarwin clang_20; # clang_21 breaks gyp builds
+
+  buildInputs = [
+    pango
   ];
 
-  buildInputs =
-    [
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-      apple-sdk_11
-    ];
+  postConfigure = ''
+    # sh: line 1: /build/source/packages/bruno-converters/node_modules/.bin/rimraf: cannot execute: required file not found
+    patchShebangs packages/*/node_modules
+  '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -44,7 +45,10 @@ buildNpmPackage {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
+    npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
 
@@ -58,12 +62,21 @@ buildNpmPackage {
 
     echo "Removing unnecessary files"
     pushd $out/lib/node_modules/usebruno
-    rm -rfv packages/bruno-{app,electron,tests,toml,schema,docs}
-    rm -rfv packages/*/node_modules/typescript
-    rm -rfv node_modules/{next,@next,@tabler,pdfjs-dist,*redux*,*babel*,prettier,@types*,*react*,*graphiql*}
+
+    # packages used by the GUI app, unused by CLI
+    rm -r packages/bruno-{app,electron,tests,toml,schema,docs}
+    rm node_modules/bruno
+    rm node_modules/@usebruno/{app,tests,toml,schema}
+
+    # heavy dependencies that seem to be unused
+    rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,prettier,@types*,*react*,*graphiql*}
+    rm -r node_modules/.bin
+
+    # unused file types
     for pattern in '*.map' '*.map.js' '*.ts'; do
-      find . -type f -name "$pattern" -exec rm -v {} +
+      find . -type f -name "$pattern" -exec rm {} +
     done
+
     popd
     echo "Removed unnecessary files"
   '';

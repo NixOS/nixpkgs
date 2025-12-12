@@ -9,12 +9,13 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  typing-extensions,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,16 +23,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-otbr-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RMj4NdEbMIxh2PDzbhUWgmcdzRXY8RxcQNN/bbGOW5Q=";
+    tag = version;
+    hash = "sha256-irQ4QvpGIAYYKq0UqLuo7Nrnde905+GJFd4HkxsCDmQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     bitstruct
     cryptography
+    typing-extensions
     voluptuous
   ];
 
@@ -42,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_otbr_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the Open Thread Border Router";
     homepage = "https://github.com/home-assistant-libs/python-otbr-api";
     changelog = "https://github.com/home-assistant-libs/python-otbr-api/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

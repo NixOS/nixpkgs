@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   cilium-cli,
   fetchFromGitHub,
@@ -9,13 +10,13 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.16.22";
+  version = "0.18.8";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-P4S+4N9f/m28lNwx7xzYcq99nvXelSvzX01QXDhfGM4=";
+    tag = "v${version}";
+    hash = "sha256-6/ECHhPV9rJHcHFVAvkwtlZi96rjhEe2PjEvXtv8OMY=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -34,7 +35,7 @@ buildGoModule rec {
   # 2022/06/25 10:36:22 Unable to start gops: mkdir /homeless-shelter: permission denied
   HOME = "$TMPDIR";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cilium \
       --bash <($out/bin/cilium completion bash) \
       --fish <($out/bin/cilium completion fish) \
@@ -53,9 +54,9 @@ buildGoModule rec {
     changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       humancalico
       qjoly
+      ryan4yin
     ];
     mainProgram = "cilium";
   };

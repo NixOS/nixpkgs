@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nayaverdier";
     repo = "halohome";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JOQ2q5lbdVTerXPt6QHBiTG9PzN9LiuLcN+XnOoyYjA=";
   };
 
@@ -31,16 +31,18 @@ buildPythonPackage rec {
     csrmesh
   ];
 
+  pythonRelaxDeps = [ "bleak" ];
+
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "halohome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control Eaton HALO Home Smart Lights";
     homepage = "https://github.com/nayaverdier/halohome";
     changelog = "https://github.com/nayaverdier/halohome/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

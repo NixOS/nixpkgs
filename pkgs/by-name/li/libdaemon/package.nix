@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-includes.patch ];
 
-  configureFlags =
-    [ "--disable-lynx" ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # Can't run this test while cross-compiling
-      "ac_cv_func_setpgrp_void=yes"
-    ];
+  configureFlags = [
+    "--disable-lynx"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Can't run this test while cross-compiling
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
+  ];
 
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";

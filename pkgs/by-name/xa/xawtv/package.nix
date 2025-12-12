@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     ./0001-Fix-build-for-glibc-2.32.patch
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   buildInputs = [
     ncurses
     libjpeg
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "TV application for Linux with apps and tools such as a teletext browser";
     license = lib.licenses.gpl2;
     homepage = "https://www.kraxel.org/blog/linux/xawtv/";
-    maintainers = with lib.maintainers; [ domenkozar ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

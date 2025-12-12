@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   validatePkgConfig,
@@ -11,23 +10,20 @@
   urdfdom-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urdfdom";
-  version = "4.0.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "ros";
-    repo = pname;
-    rev = version;
-    hash = "sha256-t1ff5aRHE7LuQdCXuooWPDUgPWjyYyQmQUB1RJmte1w=";
+    repo = "urdfdom";
+    tag = finalAttrs.version;
+    hash = "sha256-WZA3rzulPO1Si/kFqGF+8si2kRC8xOhlparoO8CvN0g=";
   };
 
   patches = [
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom/pull/142)
-    (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/61a7e35cd5abece97259e76aed8504052b2f5b53.patch";
-      hash = "sha256-b3bEbbaSUDkwTEHJ8gVPEb+AR/zuWwLqiAW5g1T1dPU=";
-    })
+    ./cmake-install-absolute.patch
   ];
 
   nativeBuildInputs = [
@@ -41,11 +37,11 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ urdfdom-headers ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";
     homepage = "https://github.com/ros/urdfdom";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
   };
-}
+})

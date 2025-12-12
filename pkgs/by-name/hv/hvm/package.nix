@@ -6,20 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "2.0.19";
+  version = "2.0.22";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-+Cx+2v4JrQflDBaNZ9Fu8734Zr4rrgtnojUS4dkx7Ck=";
+    hash = "sha256-AD8mv47m4E6H8BVkxTExyhrR7VEnuB/KxnRl2puPnX4=";
   };
 
-  cargoHash = "sha256-crVEtMzjg9T0oiS13URevPuRYqod4d2Ylb1IWRPVpa8=";
+  # Insert empty line in expected output of rust panic in a test
+  postPatch = ''
+    sed -i '6G' tests/snapshots/run__file@empty.hvm.snap
+  '';
 
-  meta = with lib; {
+  cargoHash = "sha256-nLcT+o6xrxPmQqK7FQpCqTlxOOUA1FzqRGQIypcq4fo=";
+
+  meta = {
     description = "Massively parallel, optimal functional runtime in Rust";
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

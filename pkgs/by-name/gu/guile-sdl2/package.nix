@@ -43,14 +43,13 @@ stdenv.mkDerivation rec {
     "GUILE_AUTO_COMPILE=0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dthompson.us/projects/guile-sdl2.html";
     description = "Bindings to SDL2 for GNU Guile";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       seppeljordan
-      vyp
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -15,7 +15,7 @@ let
     "writer" = "jabcodeWriter";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jabcode-${subproject}";
   version = "unstable-2022-06-17";
   src = fetchFromGitHub {
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     zlib
     libpng
     libtiff
-  ] ++ lib.optionals (subproject != "library") [ jabcode ];
+  ]
+  ++ lib.optionals (subproject != "library") [ jabcode ];
 
   preConfigure = "cd src/${subdir}";
 
@@ -45,13 +46,13 @@ stdenv.mkDerivation rec {
         cp -RT bin $out/bin
       '';
 
-  meta = with lib; {
+  meta = {
     description = "High-capacity 2D color bar code (${subproject})";
     longDescription = "JAB Code (Just Another Bar Code) is a high-capacity 2D color bar code, which can encode more data than traditional black/white (QR) codes. This is the ${subproject} part.";
     homepage = "https://jabcode.org/";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.xaverdh ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

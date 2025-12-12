@@ -6,25 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "commit-formatter";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Eliot00";
-    repo = pname;
+    repo = "commit-formatter";
     rev = "v${version}";
-    sha256 = "EYzhb9jJ4MzHxIbaTb1MxeXUgoxTwcnq5JdxAv2uNcA=";
+    sha256 = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
   };
 
-  cargoHash = "sha256-AeHQCoP1HOftlOt/Yala3AXocMlwwIXIO2i1AsFSvGQ=";
+  cargoHash = "sha256-rqIBDzZghz+fj96im+SNwnLV9jCRjRmh3Wd48z07XH0=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to help you write git commit";
     homepage = "https://github.com/Eliot00/commit-formatter";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with lib.maintainers; [ elliot ];
     mainProgram = "git-cf";
   };
 }

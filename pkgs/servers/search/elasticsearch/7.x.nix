@@ -17,10 +17,10 @@ let
   arch = lib.elemAt info 0;
   plat = lib.elemAt info 1;
   hashes = {
-    x86_64-linux = "sha512-OiWGRxaCdRxXuxE/W04v87ytzOeUEcHRjF5nyRkdqSbZSnLXUyKOYQ4fKmk4til0VBOaKZYId20XyPiu/XTXNw==";
-    x86_64-darwin = "sha512-V/vKYL96+M1lp7ZJlvuneRBePWZmucUANfUrFPMuq+fnUP4nN69RStLWcgwgt65EspFMBwKVyQbak4swV8rWxw==";
-    aarch64-linux = "sha512-fNgVRaIIGx01reNHOnGKhMOG1aYU7gC8HLpIESSbM3+9xO1q9IHIaL/ObI/w2RYj/lD22d7PAdX5N6Hd1pVSAA==";
-    aarch64-darwin = "sha512-DgexeyoxZ1YTPw9HjSUAM6eC8XtzIw7MY1WUVsIa8zl5j3RpCp25s3oI12BWefjYYCTjdtFDMsnoFSqZBabLig==";
+    x86_64-linux = "sha512-xlbdx/fFQxilECdDiN80U+s+huBowo9Qf5tDIYwZ1z9gUCriNL0rMNDkvzUDL73BEI3WMFMqHdbi3cn7b5l9gA==";
+    x86_64-darwin = "sha512-hiTSp7lO/x6tBYiUgKglce39k/oxT4hUlTAoC50pYFiqANALAN+2E0HtZdvsMmrOn4aGLxh+SKVglMHfrGxr+g==";
+    aarch64-linux = "sha512-MPrDfBMcwNCgWW8dpOeAtlz9Odfk/0z8i+Rn08hTp35kU849KdPQLTmexlvnf/jVwqfwzN2xWJtNF0sQO26pUA==";
+    aarch64-darwin = "sha512-uq5VVwvbOX4Rv32iLFw+RalFPBxQqA+1hBjFw3svzOaD1caOOrGHD4lJVHFxsFw0xl//AZuSG7S3r7Eh9AmWvQ==";
   };
 in
 stdenv.mkDerivation rec {
@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
   buildInputs = [
     jre_headless
@@ -82,15 +83,15 @@ stdenv.mkDerivation rec {
     enableUnfree = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.elastic20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.elastic20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       apeschar
       basvandijk
     ];

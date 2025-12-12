@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   writeText,
-  substituteAll,
+  replaceVars,
   meson,
   pkg-config,
   ninja,
@@ -44,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
     # fix FHS hardcoded paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       fcmatch = "${fontconfig}/bin/fc-match";
     })
   ];
@@ -112,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -r "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${builtins.dirOf builtins.storeDir}" "$DESTDIR"
+    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${dirOf builtins.storeDir}" "$DESTDIR"
   '';
 
   # HACK: We want to install configuration files to $out/etc
@@ -123,11 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
   # location using DESTDIR and then move it to proper one in postInstall.
   env.DESTDIR = "${placeholder "out"}/dest";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

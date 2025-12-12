@@ -1,17 +1,17 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "legitify";
   version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "Legit-Labs";
     repo = "legitify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ijW0vvamuqcN6coV5pAtmjAUjzNXxiqr2S9EwrNlrJc=";
   };
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     rm e2e/e2e_test.go # tests requires network
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect and remediate misconfigurations and security risks of GitHub assets";
     homepage = "https://github.com/Legit-Labs/legitify";
-    changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Legit-Labs/legitify/releases/tag/v${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "legitify";
   };
 }

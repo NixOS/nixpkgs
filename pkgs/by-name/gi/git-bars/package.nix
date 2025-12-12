@@ -7,7 +7,8 @@
 
 python3Packages.buildPythonApplication {
   pname = "git-bars";
-  version = "unstable-2023-08-08";
+  version = "0-unstable-2023-08-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "knadh";
@@ -21,11 +22,11 @@ python3Packages.buildPythonApplication {
     python3Packages.setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/knadh/git-bars";
     description = "Utility for visualising git commit activity as bars on the terminal";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-bars";
   };
 }

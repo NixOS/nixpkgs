@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  hatchling,
   fetchPypi,
-  setuptools,
   jedi,
   packaging,
   pygments,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2024.1.2";
+  version = "2025.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rcmwAEK6g2cRffCmwNxi+pYJq9IcO/jltz1iCQfFtD4=";
+    hash = "sha256-dAacEMmdINNsKQb+hV4A1QtmAgE8SIHbN0FuMnh66gY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     jedi
@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pudb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-screen, console-based Python debugger";
     mainProgram = "pudb";
     homepage = "https://github.com/inducer/pudb";
     changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

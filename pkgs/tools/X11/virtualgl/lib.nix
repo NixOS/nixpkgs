@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVGL_SYSTEMFLTK=1"
     "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -62,11 +63,14 @@ stdenv.mkDerivation rec {
       --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
   '';
 
-  meta = with lib; {
-    homepage = "http://www.virtualgl.org/";
+  meta = {
+    homepage = "https://www.virtualgl.org/";
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
-    license = licenses.wxWindows;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

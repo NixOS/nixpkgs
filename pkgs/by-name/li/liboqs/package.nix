@@ -6,17 +6,18 @@
   openssl,
   fetchpatch,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liboqs";
-  version = "0.11.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = "liboqs";
-    rev = finalAttrs.version;
-    hash = "sha256-+Gx1JPrJoeMix9DIF0rJQTivxN1lgaCIYFvJ1pnYZzM=";
+    tag = finalAttrs.version;
+    hash = "sha256-ATnI1QFFljTmMib6oOCiieDQMTwnEe+xIvcAzrz3bbI=";
   };
 
   patches = [
@@ -39,18 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOQS_BUILD_ONLY_LIB=ON"
   ];
 
-  dontFixCmake = true; # fix CMake file will give an error
-
   outputs = [
     "out"
     "dev"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";
     homepage = "https://openquantumsafe.org";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.sigmanificient ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sigmanificient ];
   };
 })

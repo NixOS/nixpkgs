@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbernhard";
     repo = "pysignalclirestapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LGP/Oo4FCvOq3LuUZRYFkK2JV1kEu3MeCDgnYo+91o4=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysignalclirestapi" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/bbernhard/pysignalclirestapi/releases/tag/${version}";
     description = "Small python library for the Signal Cli REST API";
     homepage = "https://github.com/bbernhard/pysignalclirestapi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

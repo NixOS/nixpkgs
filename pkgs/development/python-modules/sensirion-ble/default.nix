@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akx";
     repo = "sensirion-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VeUfrQ/1Hqs9yueUKcv/ZpCDEEy84VDcZpuTT4fXSGw=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensirion_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for Sensirion BLE devices";
     homepage = "https://github.com/akx/sensirion-ble";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

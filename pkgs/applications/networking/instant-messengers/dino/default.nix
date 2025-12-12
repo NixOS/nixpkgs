@@ -1,49 +1,59 @@
-{ lib, stdenv, fetchFromGitHub
-, buildPackages
-, vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
-, gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
-, libadwaita
-, libnotify, libsoup_2_4, libgee
-, libsignal-protocol-c
-, libgcrypt
-, sqlite
-, gpgme
-, pcre2
-, qrencode
-, icu
-, gspell
-, srtp
-, libnice
-, gnutls
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, gst-plugins-bad
-, gst-vaapi
-, webrtc-audio-processing
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  vala,
+  ninja,
+  wrapGAppsHook4,
+  pkg-config,
+  gettext,
+  gobject-introspection,
+  glib,
+  gdk-pixbuf,
+  gtk4,
+  glib-networking,
+  libadwaita,
+  libcanberra,
+  libnotify,
+  libsoup_3,
+  libgee,
+  libomemo-c,
+  libgcrypt,
+  meson,
+  sqlite,
+  gpgme,
+  qrencode,
+  icu,
+  srtp,
+  libnice,
+  gnutls,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-plugins-bad,
+  gst-vaapi,
+  webrtc-audio-processing,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
-  version = "0.4.4";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I0ASeEjdXyxhz52QisU0q8mIBTKMfjaspJbxRIyOhD4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TgXPJP+Xm8LrO2d8yMu6aCCypuBRKNtYuZAb0dYfhng=";
   };
 
   postPatch = ''
-    # don't overwrite manually set version information
-    substituteInPlace CMakeLists.txt \
-      --replace "include(ComputeVersion)" ""
+    echo ${finalAttrs.version} > VERSION
   '';
 
   nativeBuildInputs = [
     vala
-    cmake
-    ninja # https://github.com/dino/dino/issues/230
+    meson
+    ninja
     pkg-config
     wrapGAppsHook4
     gettext
@@ -62,11 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     gpgme
     libgcrypt
-    libsoup_2_4
-    pcre2
+    libsoup_3
     icu
-    libsignal-protocol-c
-    gspell
+    libcanberra
+    libomemo-c
     srtp
     libnice
     gnutls
@@ -78,31 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
     webrtc-audio-processing
   ];
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=true"
-    "-DRTP_ENABLE_H264=true"
-    "-DRTP_ENABLE_MSDK=true"
-    "-DRTP_ENABLE_VAAPI=true"
-    "-DRTP_ENABLE_VP9=true"
-    "-DVERSION_FOUND=true"
-    "-DVERSION_IS_RELEASE=true"
-    "-DVERSION_FULL=${finalAttrs.version}"
-    "-DXGETTEXT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/xgettext"
-    "-DMSGFMT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/msgfmt"
-    "-DGLIB_COMPILE_RESOURCES_EXECUTABLE=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "-DSOUP_VERSION=${lib.versions.major libsoup_2_4.version}"
+  doCheck = true;
+
+  mesonFlags = [
+    "-Dplugin-notification-sound=enabled"
+    "-Dplugin-rtp-h264=enabled"
+    "-Dplugin-rtp-msdk=enabled"
+    "-Dplugin-rtp-vaapi=enabled"
+    "-Dplugin-rtp-vp9=enabled"
   ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
-
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ./xmpp-vala-test
-    ./signal-protocol-vala-test
-    runHook postCheck
-  '';
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
@@ -119,12 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     mainProgram = "dino";
     homepage = "https://github.com/dino/dino";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss tomfitzhenry ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 })

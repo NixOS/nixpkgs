@@ -6,6 +6,7 @@
   ninja,
   glib,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "gdbuspp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LwEUNBQ7BUyoTm8tBgE4hwL7AbimCY/grQus8lWSI/M=";
   };
 
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ glib ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GDBus++ - a glib2 D-Bus wrapper for C++";

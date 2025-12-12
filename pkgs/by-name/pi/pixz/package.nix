@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = pname;
+    repo = "pixz";
     rev = "v${version}";
     sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel compressor/decompressor for xz format";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
     mainProgram = "pixz";
   };
 }

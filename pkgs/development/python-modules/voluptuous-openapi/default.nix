@@ -10,34 +10,38 @@
   voluptuous,
 
   # tests
+  openapi-schema-validator,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous-openapi";
-  version = "0.0.5";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voluptuous-openapi";
-    rev = "v${version}";
-    hash = "sha256-QZi2uxFrYMSJVKIHTRBlGAM1sCD6oIzsZNQH7zkXL8w=";
+    tag = version;
+    hash = "sha256-uIW+WyfSNdGxD7tA6ERf3nTp1tFhWd+lxFUNQM0O3nU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ voluptuous ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    openapi-schema-validator
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "voluptuous_openapi" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/home-assistant-libs/voluptuous-openapi/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/home-assistant-libs/voluptuous-openapi/releases/tag/${src.tag}";
     description = "Convert voluptuous schemas to OpenAPI Schema object";
     homepage = "https://github.com/home-assistant-libs/voluptuous-openapi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

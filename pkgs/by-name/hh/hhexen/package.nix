@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libGL,
+  libGLU,
   SDL,
   SDL_mixer,
   autoreconfHook,
@@ -10,21 +12,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hhexen";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "sezero";
     repo = "hhexen";
     rev = "hhexen-${finalAttrs.version}";
-    hash = "sha256-y3jKfU4e8R2pJQN/FN7W6KQ7D/P+7pmQkdmZug15ApI=";
+    hash = "sha256-D1gIdIqb6RN7TA7ezbBhy2Z82TH1quN8kgAMNRHMfhw=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    SDL.dev
+    (lib.getDev SDL)
   ];
 
   buildInputs = [
+    libGL
+    libGLU
     SDL
     SDL_mixer
   ];

@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "miniscript";
-  version = "unstable-2023-03-16";
+  version = "0-unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "sipa";
-    repo = pname;
+    repo = "miniscript";
     rev = "6806dfb15a1fafabf7dd28aae3c9d2bc49db01f1";
     sha256 = "sha256-qkYDzsl2Y4WEDDXs9cE/jIXm01jclkYUQbDGe1S0wYs=";
   };
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compiler and inspector for the miniscript Bitcoin policy language";
     longDescription = "Miniscript is a language for writing (a subset of) Bitcoin Scripts in a structured way, enabling analysis, composition, generic signing and more.";
     homepage = "https://bitcoin.sipa.be/miniscript/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       RaghavSood
       jb55
     ];

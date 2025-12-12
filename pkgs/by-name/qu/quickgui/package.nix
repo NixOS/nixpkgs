@@ -3,10 +3,10 @@
   makeDesktopItem,
   copyDesktopItems,
   lib,
-  flutter,
+  flutter332,
   quickemu,
 }:
-flutter.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "quickgui";
   version = "1.2.10";
   src = fetchFromGitHub {
@@ -31,9 +31,10 @@ flutter.buildFlutterApplication rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postFixup = ''
-    for SIZE in 16 32 48 64 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/$SIZEx$SIZE/apps/
-      cp -av assets/resources/quickgui_$SIZE.png $out/share/icons/hicolor/$SIZEx$SIZE/apps/quickgui.png
+    for n in 16 32 48 64 128 256 512; do
+      size=$n"x"$n
+      mkdir -p $out/share/icons/hicolor/$size/apps/
+      cp -av assets/resources/quickgui_$n.png $out/share/icons/hicolor/$size/apps/quickgui.png
     done
   '';
 
@@ -51,12 +52,12 @@ flutter.buildFlutterApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Elegant virtual machine manager for the desktop";
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       flexiondotorg
       heyimnova
     ];

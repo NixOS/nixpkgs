@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "simple-websocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dwL6GUyygNGBXqkkTnsHwFFpa1JAaeWc9ycQNRgTN4I=";
   };
 
@@ -35,11 +35,11 @@ buildPythonPackage rec {
     "SimpleWebSocketClientTestCase"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple WebSocket server and client for Python";
     homepage = "https://github.com/miguelgrinberg/simple-websocket";
     changelog = "https://github.com/miguelgrinberg/simple-websocket/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

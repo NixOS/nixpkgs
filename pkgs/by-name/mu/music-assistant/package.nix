@@ -2,9 +2,9 @@
   lib,
   python3,
   fetchFromGitHub,
-  ffmpeg-headless,
+  ffmpeg_7-headless,
   nixosTests,
-  substituteAll,
+  replaceVars,
   providers ? [ ],
 }:
 
@@ -13,6 +13,22 @@ let
     self = python;
     packageOverrides = self: super: {
       music-assistant-frontend = self.callPackage ./frontend.nix { };
+
+      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.47";
+
+        src = fetchFromGitHub {
+          owner = "music-assistant";
+          repo = "models";
+          tag = version;
+          hash = "sha256-NNKF61CRBe+N9kY+JUa77ClHSJ9RhpsiheMg7Ytyq2M=";
+        };
+
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail "0.0.0" "${version}"
+        '';
+      });
     };
   };
 
@@ -25,42 +41,73 @@ let
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
+assert
+  (lib.elem "airplay" providers)
+  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
+
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.3.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q71LczFsJAvZaWCQg4Lgzg2XX4XDFvA3x255Re00D9Q=";
+    tag = version;
+    hash = "sha256-vvhynBor5tj5n53Dm3K4ZOkFZ5LM7bFevOCdZjJsbbM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg.patch;
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
-      ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
+    (replaceVars ./ffmpeg.patch {
+      ffmpeg = "${lib.getBin ffmpeg_7-headless}/bin/ffmpeg";
+      ffprobe = "${lib.getBin ffmpeg_7-headless}/bin/ffprobe";
     })
+
+    # Look up librespot from PATH at runtime
+    ./librespot.patch
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
+
+    # Fix running the built-in snapcast server
+    ./builtin-snapcast-server.patch
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
+
+    rm -rv music_assistant/providers/spotify/bin
   '';
 
   build-system = with python.pkgs; [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "aiohttp"
+    "aiosqlite"
+    "certifi"
+    "colorlog"
+    "cryptography"
+    "mashumaro"
+    "orjson"
+    "pillow"
+    "podcastparser"
+    "xmltodict"
+    "zeroconf"
+  ];
+
+  pythonRemoveDeps = [
+    # no runtime dependency resolution
+    "uv"
+  ];
+
   dependencies =
     with python.pkgs;
     [
       aiohttp
+      chardet
       mashumaro
       orjson
     ]
@@ -84,8 +131,11 @@ python.pkgs.buildPythonApplication rec {
       mashumaro
       memory-tempfile
       music-assistant-frontend
+      music-assistant-models
+      mutagen
       orjson
       pillow
+      podcastparser
       python-slugify
       shortuuid
       unidecode
@@ -97,21 +147,32 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python.pkgs;
     [
-      aiojellyfin
       pytest-aiohttp
       pytest-cov-stub
+      pytest-timeout
       pytestCheckHook
       syrupy
       pytest-timeout
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies
+    ++ (providerPackages.jellyfin python.pkgs)
+    ++ (providerPackages.opensubsonic python.pkgs);
 
-  pytestFlagsArray = [
-    # blocks in setup
-    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+  disabledTestPaths = [
+    # blocks in poll()
+    "tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "tests/core/test_server_base.py::test_start_and_stop_server"
+    "tests/core/test_server_base.py::test_events"
+    # not compatible with the required py-subsonic version
+    "tests/providers/opensubsonic/test_parsers.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
+
+  postFixup = ''
+    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
+    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
+  '';
 
   passthru = {
     inherit
@@ -123,7 +184,7 @@ python.pkgs.buildPythonApplication rec {
     tests = nixosTests.music-assistant;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
@@ -132,8 +193,11 @@ python.pkgs.buildPythonApplication rec {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      hexa
+      emilylange
+    ];
     mainProgram = "mass";
   };
 }

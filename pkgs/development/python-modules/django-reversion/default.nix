@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_reversion";
     inherit version;
-    hash = "sha256-MwmCHltvzu3M5raXXxqcf6tq58fQ4SdqkONFlG+g3Lg=";
+    hash = "sha256-yrD9kGQLLOs316iXgjynKiG5YK0dajuctONR+rvSfZw=";
   };
 
   build-system = [ setuptools ];
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reversion" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension to the Django web framework that provides comprehensive version control facilities";
     homepage = "https://github.com/etianen/django-reversion";
     changelog = "https://github.com/etianen/django-reversion/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

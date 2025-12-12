@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.7.0";
+  version = "5.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,9 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "tempora";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-M6nWKYvgn4tk2diiTDAYb1uQdP8H1M8yqhsFLJ9H7HU=";
+    tag = "v${version}";
+    hash = "sha256-1Zeo8bUCHKPZ6I0HGT7bIh7IgbRL4j9Cv3t9FFiZ72s=";
   };
+
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
 
   build-system = [ setuptools-scm ];
 
@@ -43,12 +47,12 @@ buildPythonPackage rec {
     "tempora.utc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Objects and routines pertaining to date and time";
     mainProgram = "calc-prorate";
     homepage = "https://github.com/jaraco/tempora";
-    changelog = "https://github.com/jaraco/tempora/blob/v${version}/NEWS.rst";
-    license = licenses.mit;
+    changelog = "https://github.com/jaraco/tempora/blob/${src.tag}/NEWS.rst";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

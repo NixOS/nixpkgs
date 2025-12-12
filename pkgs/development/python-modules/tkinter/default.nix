@@ -2,33 +2,113 @@
   lib,
   stdenv,
   buildPythonPackage,
+  replaceVars,
+  setuptools,
   python,
-  py,
-  isPyPy,
+  pythonOlder,
+  tcl,
+  tclPackages,
+  tk,
+  xvfb-run,
 }:
 
 buildPythonPackage {
   pname = "tkinter";
   version = python.version;
-  src = py;
-  format = "other";
+  pyproject = true;
 
-  disabled = isPyPy;
+  src = python.src;
 
-  installPhase =
+  prePatch = ''
+    mkdir $NIX_BUILD_TOP/tkinter
+
+    # copy the module bits and pieces from the python source
+    cp -v  Modules/{_tkinter.c,tkinter.h} ../tkinter/
+    cp -rv Modules/clinic ../tkinter/
+    cp -rv Lib/tkinter ../tkinter/
+
+    # install our custom pyproject.toml
+    cp ${
+      replaceVars ./pyproject.toml {
+        python_version = python.version;
+        python_internal_dir = "${python}/include/${python.libPrefix}/internal";
+      }
+    } $NIX_BUILD_TOP/tkinter/pyproject.toml
+
+  ''
+  + lib.optionalString (pythonOlder "3.13") ''
+    substituteInPlace "$NIX_BUILD_TOP/tkinter/tkinter/tix.py" --replace-fail \
+      "os.environ.get('TIX_LIBRARY')" \
+      "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
+  '';
+
+  # Adapted from https://github.com/python/cpython/pull/124542
+  patches = lib.optional (pythonOlder "3.12") ./fix-ttk-notebook-test.patch;
+
+  preConfigure = ''
+    pushd $NIX_BUILD_TOP/tkinter
+  '';
+
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    tcl
+    tk
+  ];
+
+  env = {
+    TCLTK_LIBS = toString [
+      "-L${lib.getLib tcl}/lib"
+      "-L${lib.getLib tk}/lib"
+      "-l${tcl.libPrefix}"
+      "-l${tk.libPrefix}"
+    ];
+    TCLTK_CFLAGS = toString [
+      "-I${lib.getDev tcl}/include"
+      "-I${lib.getDev tk}/include"
+    ];
+  };
+
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
+
+  preCheck = ''
+    cd $NIX_BUILD_TOP/Python-*/Lib
+    export HOME=$TMPDIR
+  '';
+
+  checkPhase =
+    let
+      testsNoGui = [
+        "test.test_tcl"
+        "test.test_ttk_textonly"
+      ];
+      testsGui =
+        if pythonOlder "3.12" then
+          [
+            "test.test_tk"
+            "test.test_ttk_guionly"
+          ]
+        else
+          [
+            "test.test_tkinter"
+            "test.test_ttk"
+          ];
+    in
     ''
-      # Move the tkinter module
-      mkdir -p $out/${py.sitePackages}
-      mv lib/${py.libPrefix}/lib-dynload/_tkinter* $out/${py.sitePackages}/
+      runHook preCheck
+      ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsNoGui}
     ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # Update the rpath to point to python without x11Support
-      old_rpath=$(patchelf --print-rpath $out/${py.sitePackages}/_tkinter*)
-      new_rpath=$(sed "s#${py}#${python}#g" <<< "$old_rpath" )
-      patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+        ${python.interpreter} -m unittest ${lib.concatStringsSep " " testsGui}
+    ''
+    + ''
+      runHook postCheck
     '';
 
-  meta = py.meta // {
+  pythonImportsCheck = [ "tkinter" ];
+
+  meta = {
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
     description = "Standard Python interface to the Tcl/Tk GUI toolkit";
     longDescription = ''
@@ -52,5 +132,10 @@ buildPythonPackage {
       these additions and changes, and refer to the official Tcl/Tk
       documentation for details that are unchanged.
     '';
+    homepage = "https://docs.python.org/3/library/tkinter.html";
+    inherit (python.meta)
+      license
+      maintainers
+      ;
   };
 }

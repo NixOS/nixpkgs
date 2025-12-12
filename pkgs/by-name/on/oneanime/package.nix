@@ -1,31 +1,34 @@
 {
   lib,
-  fetchFromGitHub,
-  flutter327,
-  autoPatchelfHook,
-  makeDesktopItem,
-  pkg-config,
-  copyDesktopItems,
-  alsa-lib,
-  libepoxy,
-  libpulseaudio,
-  libdrm,
-  libgbm,
-  buildGoModule,
   stdenv,
+  buildGoModule,
+  flutter335,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  desktop-file-utils,
+  alsa-lib,
+  libdrm,
+  libepoxy,
+  libgbm,
+  libpulseaudio,
   mpv-unwrapped,
-  mpv,
   mimalloc,
+  runCommand,
+  yq-go,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  dart,
 }:
+
 let
-  libopencc = buildGoModule rec {
+  libopencc = buildGoModule (finalAttrs: {
     pname = "libopencc";
     version = "1.0.0";
 
     src = fetchFromGitHub {
       owner = "Predidit";
       repo = "open_chinese_convert_bridge";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-kC5+rIBOcwn9POvQlKEzuYKKcbhuqVs+pFd4JSFgINQ=";
     };
 
@@ -34,7 +37,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      go build -buildmode=c-shared -o ./libopencc.so
+      go build -buildmode=c-shared -o libopencc.so
 
       runHook postBuild
     '';
@@ -42,42 +45,38 @@ let
     installPhase = ''
       runHook preInstall
 
-      install -Dm0755 ./libopencc.so $out/lib/libopencc.so
+      install -D --mode=0644 libopencc.so --target-directory $out/lib
 
       runHook postInstall
     '';
 
     meta = {
       homepage = "https://github.com/Predidit/open_chinese_convert_bridge";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
+      license = lib.licenses.gpl3Plus;
     };
-  };
-in
-flutter327.buildFlutterApplication rec {
-  pname = "oneanime";
-  version = "1.3.7";
+  });
+
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-lRO5JYzzopy69lJ0/4pLf4u93NlYLaghhG4Fuf04f6A=";
+    hash = "sha256-dDXDBem2G/CSGOiHTAtMZ9PrTj8b1zIiqabh/dNiSkQ=";
   };
+in
+flutter335.buildFlutterApplication {
+  pname = "oneanime";
+  inherit version src;
+
+  postPatch = ''
+    substituteInPlace lib/pages/init_page.dart \
+      --replace-fail "lib/opencc.so" "${libopencc}/lib/libopencc.so"
+  '';
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    flutter_open_chinese_convert = "sha256-uRPBBB5RUd8fiFaM8dg9Th2tvQYwnbsQrsiDSPMm5kk=";
-    media_kit = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_android_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_ios_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_linux = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_macos_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_windows_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -110,10 +109,11 @@ flutter327.buildFlutterApplication rec {
         inherit (src) passthru;
 
         postPatch = ''
-          sed -i '/set(LIBMPV_ZIP_URL/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{//!d; /set(LIBMPV_ZIP_URL/d}' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_PATH "${mpv}/lib")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_UNZIP_DIR "${mpv}/lib")' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i \
+            set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_PATH "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
         '';
 
         installPhase = ''
@@ -126,45 +126,65 @@ flutter327.buildFlutterApplication rec {
       };
   };
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "oneanime";
-      exec = "oneanime";
-      icon = "oneanime";
-      desktopName = "oneAnime";
-    })
-  ];
-
   nativeBuildInputs = [
-    pkg-config
     autoPatchelfHook
-    copyDesktopItems
+    desktop-file-utils
   ];
 
   buildInputs = [
     alsa-lib
-    libepoxy
-    libpulseaudio
     libdrm
+    libepoxy
     libgbm
-    mpv
+    libpulseaudio
+    mpv-unwrapped
   ];
 
-  postPatch = ''
-    substituteInPlace lib/pages/init_page.dart \
-      --replace-fail "lib/opencc.so" "${libopencc}/lib/libopencc.so"
+  postInstall = ''
+    ln --symbolic --no-dereference --force ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/oneanime/lib/libmpv.so.2
+    install -D --mode=0644 assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
+    desktop-file-edit oneAnime.desktop \
+      --set-key="Icon" --set-value="oneanime"
+    install -D --mode=0644 oneAnime.desktop --target-directory $out/share/applications
   '';
 
-  postInstall = ''
-    install -Dm0644 ./assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
-  '';
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "oneanime.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "Anime1 third-party client with bullet screen";
     homepage = "https://github.com/Predidit/oneAnime";
     mainProgram = "oneanime";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

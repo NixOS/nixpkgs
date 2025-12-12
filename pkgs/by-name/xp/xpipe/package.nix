@@ -39,7 +39,7 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-6h6Rtmo9XV9fk6G+ff5A1apwmJ7L5s+pTJDS759OOgk=";
+      x86_64-linux = "sha256-osr7GeDZ3uIJq9k1aP8JKiyKeslYpZ8yOHSeaew47yQ=";
     }
     .${system} or throwSystem;
 
@@ -48,7 +48,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "13.4.4";
+  version = "19.5";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -90,7 +90,7 @@ stdenvNoCC.mkDerivation rec {
     categories = [ "Network" ];
     comment = "Your entire server infrastructure at your fingertips";
     desktopName = displayname;
-    exec = "/opt/${pname}/cli/bin/xpipe open %U";
+    exec = "/opt/${pname}/bin/xpipe open %U";
     genericName = "Shell connection hub";
     icon = "/opt/${pname}/logo.png";
     name = displayname;
@@ -104,22 +104,19 @@ stdenvNoCC.mkDerivation rec {
     cp -r ./ $out/opt/$pkg
 
     mkdir -p "$out/bin"
-    ln -s "$out/opt/$pkg/cli/bin/xpipe" "$out/bin/$pkg"
+    ln -s "$out/opt/$pkg/bin/xpipe" "$out/bin/$pkg"
 
     mkdir -p "$out/share/applications"
     cp -r "${desktopItem}/share/applications/" "$out/share/"
 
-    mkdir -p "$out/etc/bash_completion.d"
-    ln -s "$out/opt/$pkg/cli/xpipe_completion" "$out/etc/bash_completion.d/$pkg"
-
     substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Exec=" "Exec=$out"
     substituteInPlace "$out/share/applications/${displayname}.desktop" --replace "Icon=" "Icon=$out"
 
-    mv "$out/opt/$pkg/app/bin/xpiped" "$out/opt/$pkg/app/bin/xpiped_raw"
-    mv "$out/opt/$pkg/app/lib/app/xpiped.cfg" "$out/opt/$pkg/app/lib/app/xpiped_raw.cfg"
-    mv "$out/opt/$pkg/app/scripts/xpiped_debug.sh" "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh"
+    mv "$out/opt/$pkg/bin/xpiped" "$out/opt/$pkg/bin/xpiped_raw"
+    mv "$out/opt/$pkg/lib/app/xpiped.cfg" "$out/opt/$pkg/lib/app/xpiped_raw.cfg"
+    mv "$out/opt/$pkg/scripts/xpiped_debug.sh" "$out/opt/$pkg/scripts/xpiped_debug_raw.sh"
 
-    makeShellWrapper "$out/opt/$pkg/app/bin/xpiped_raw" "$out/opt/$pkg/app/bin/xpiped" \
+    makeShellWrapper "$out/opt/$pkg/bin/xpiped_raw" "$out/opt/$pkg/bin/xpiped" \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           fontconfig
@@ -129,7 +126,8 @@ stdenvNoCC.mkDerivation rec {
           socat
         ]
       }"
-    makeShellWrapper "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh" "$out/opt/$pkg/app/scripts/xpiped_debug.sh" \
+
+    makeShellWrapper "$out/opt/$pkg/scripts/xpiped_debug_raw.sh" "$out/opt/$pkg/scripts/xpiped_debug.sh" \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           fontconfig
@@ -143,18 +141,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://github.com/xpipe-io/${pname}/releases/tag/${version}";
     license = [
-      licenses.asl20
-      licenses.unfree
+      lib.licenses.asl20
+      lib.licenses.unfree
     ];
-    maintainers = with maintainers; [ crschnick ];
+    maintainers = with lib.maintainers; [ crschnick ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = pname;
+    mainProgram = "xpipe";
   };
 }

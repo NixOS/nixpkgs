@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "24.0.5";
+  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-JqkfkazR4VWUKt3Fi0ZINGHP5rIFV8zVBB46zjl3YbM=";
+    sha256 = "sha256-8Lh/urzHGIepXQCXawNvJVe8IOzYs4huDOgw2m/oYiM=";
   };
 
-  vendorHash = "sha256-pX5jRVh4cSuPK3cpDVyvt/gTHcFgG9hE3H96TuMYxKk=";
+  vendorHash = "sha256-eArYiLfb8rsFGnPFAoRPQzONifNjds3lahIDRwqz/h0=";
 
   doCheck = false;
 
@@ -48,12 +48,15 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with maintainers; [ sigma ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      sigma
+    ];
     # Apache 2.0 because we use only build "oss"
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "dgraph";
   };
 }

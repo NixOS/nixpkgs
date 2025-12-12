@@ -1,13 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
-  # build
+  # build-system
+  setuptools,
+
+  # dependencies
   pytest,
 
   # tests
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
 let
@@ -16,22 +19,27 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-describe";
+    tag = version;
+    hash = "sha256-ih0XkYOtB+gwUsgo1oSti2460P3gq3tR+UsyRlzMjLE=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # test_fixture breaks with pytest 8.4
+  nativeCheckInputs = [ pytest7CheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Describe-style plugin for the pytest framework";
     homepage = "https://github.com/pytest-dev/pytest-describe";
     changelog = "https://github.com/pytest-dev/pytest-describe/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -1,7 +1,9 @@
-{ lib
-, clangStdenv
-, fetchurl
-, gnustep
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep-back,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation rec {
@@ -16,14 +18,11 @@ clangStdenv.mkDerivation rec {
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
 
   nativeBuildInputs = [
-    gnustep.make
-    gnustep.wrapGNUstepAppsHook
+    wrapGNUstepAppsHook
   ];
 
   buildInputs = [
-    gnustep.base
-    gnustep.gui
-    gnustep.back
+    gnustep-back
   ];
 
   # Fix the Exec and Icon paths in the .desktop file, and save the file in the
@@ -37,13 +36,13 @@ clangStdenv.mkDerivation rec {
       PikoPixel.app/Resources/PikoPixel.desktop > $out/share/applications/PikoPixel.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Application for drawing and editing pixel-art images";
     mainProgram = "PikoPixel";
     homepage = "https://twilightedge.com/mac/pikopixel/";
     downloadPage = "https://twilightedge.com/mac/pikopixel/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 }

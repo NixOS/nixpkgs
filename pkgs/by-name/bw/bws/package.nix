@@ -7,7 +7,6 @@
   oniguruma,
   openssl,
   stdenv,
-  darwin,
   python3,
   perl,
 }:
@@ -23,32 +22,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "passkey-0.2.0" = "sha256-dCQUu4lWqdQ6EiNLPRVHL1dLVty4r8//ZQzV8XCBhmY=";
-    };
-  };
+  cargoHash = "sha256-SJn00C7vkNoghdVPUszep40RSL8fD+/ELUeuf9GBD7c=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      perl
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    perl
+  ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   env = {
     PYO3_PYTHON = "${python3}/bin/python3";

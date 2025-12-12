@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "ignite-cli";
-  version = "28.6.1";
+  version = "28.11.0";
 
   src = fetchFromGitHub {
     repo = "cli";
     owner = "ignite";
     rev = "v${version}";
-    hash = "sha256-Ps4OxOPyBYdiW0y1L6z0ymc2/0dIQgsNinuhlRLpGDk=";
+    hash = "sha256-guhUvTyUy4YXn0+vtTpIehS731B0Htv9jai6yQ6gRP0=";
   };
 
-  vendorHash = "sha256-ks9wZUIwN0dOcXxxRk1Amxd0TPJBbLfKC9lzV4IMdjk=";
+  vendorHash = "sha256-qbHmF+aE/rF0cm4QARVWOUBogBvfdlCUNaCdFRywt1I=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,12 +38,12 @@ buildGoModule rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ignite.com/";
     changelog = "https://github.com/ignite/cli/releases/tag/v${version}";
     description = "All-in-one platform to build, launch, and maintain any crypto application on a sovereign and secured blockchain";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "ignite";
   };
 }

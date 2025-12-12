@@ -11,7 +11,6 @@
   pyasn1-modules,
   pycryptodomex,
   pyopenssl,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   six,
@@ -19,14 +18,12 @@
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iVh9G4NqUiDXSEjJNHV5YrOCiG3KixtKDETWk/JgBkM=";
+    hash = "sha256-0JpSvvxU24IDM2BWfetwxIoIGBPQiiIhstGiWc1+Tjo=";
   };
 
   pythonRelaxDeps = [ "pyopenssl" ];
@@ -64,7 +61,7 @@ buildPythonPackage rec {
       "https://github.com/fortra/impacket/releases/tag/impacket_"
       + replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
-    license = licenses.free;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

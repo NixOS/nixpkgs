@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchurl,
-  patchelf,
+  fetchzip,
   wrapGAppsHook3,
   cairo,
+  copyDesktopItems,
   dbus,
   fontconfig,
   freetype,
@@ -17,28 +17,36 @@
   libXi,
   libXrandr,
   libXrender,
+  libxkbcommon,
   libgit2,
   libglvnd,
   libuuid,
   libxcb,
+  makeDesktopItem,
   harfbuzz,
   libsoup_3,
   webkitgtk_4_1,
   zenity,
 }:
-
+let
+  gkIcon = fetchurl {
+    url = "https://gist.githubusercontent.com/qbit/cb52e6cd193c410e0b0aee8a216f6574/raw/2b042bde1dc4cbd30457f14c9d18c889444bf3d0/glamoroustoolkit.svg";
+    sha256 = "sha256-Trfo8P01anLq9yTFzwqIfsyidLGyuZDg48YQPrGBkgs=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.8";
+  version = "1.1.47";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-r7q8apszeiON3MPMSY7GHHTh+hSXlAl35pUTxFV78kk=";
+    hash = "sha256-iMMl99qrcAxSX0ReonSjtY6oDTmDwug8TDXngUTngfQ=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   sourceRoot = ".";
@@ -48,10 +56,21 @@ stdenv.mkDerivation (finalAttrs: {
   dontPatchELF = true;
   dontStrip = true;
 
+  desktopItems = with finalAttrs; [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "GlamorousToolkit";
+      exec = "GlamorousToolkit";
+      icon = "GlamorousToolkit";
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin $out/lib
+    install -d $out/bin $out/lib $out/share/icons/hicolor/scalable/apps
+
+    cp ${gkIcon} $out/share/icons/hicolor/scalable/apps/GlamorousToolkit.svg
     cp -r $src/bin $src/lib $out/
     cp ${./GlamorousToolkit-GetImage} $out/bin/GlamorousToolkit-GetImage
 
@@ -73,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
         libXi
         libXrandr
         libXrender
+        libxkbcommon
         libglvnd
         libuuid
         libxcb
@@ -105,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set-rpath "${libPath}:$out/lib" \
         $out/lib/libPharoVMCore.so \
         $out/lib/libWinit.so \
+        $out/lib/libWinit30.so \
         $out/lib/libPixels.so
       patchelf --set-rpath $out/lib $out/lib/libssl.so
 

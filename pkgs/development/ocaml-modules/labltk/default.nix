@@ -1,9 +1,9 @@
 {
   stdenv,
+  gcc13Stdenv,
   lib,
   makeWrapper,
   fetchzip,
-  Cocoa,
   ocaml,
   findlib,
   tcl,
@@ -11,6 +11,7 @@
 }:
 
 let
+  defaultStdenv = stdenv;
   params =
     let
       mkNewParam =
@@ -18,9 +19,10 @@ let
           version,
           sha256,
           rev ? version,
+          stdenv ? defaultStdenv,
         }:
         {
-          inherit version;
+          inherit stdenv version;
           src = fetchzip {
             url = "https://github.com/garrigue/labltk/archive/${rev}.tar.gz";
             inherit sha256;
@@ -32,15 +34,18 @@ let
         version = "8.06.4";
         rev = "labltk-8.06.4";
         sha256 = "03xwnnnahb2rf4siymzqyqy8zgrx3h26qxjgbp5dh1wdl7n02c7g";
+        stdenv = gcc13Stdenv;
       };
       "4.07" = mkNewParam {
         version = "8.06.5";
         rev = "1b71e2c6f3ae6847d3d5e79bf099deb7330fb419";
         sha256 = "02vchmrm3izrk7daldd22harhgrjhmbw6i1pqw6hmfmrmrypypg2";
+        stdenv = gcc13Stdenv;
       };
       _8_06_7 = mkNewParam {
         version = "8.06.7";
         sha256 = "1cqnxjv2dvw9csiz4iqqyx6rck04jgylpglk8f69kgybf7k7xk2h";
+        stdenv = gcc13Stdenv;
       };
       "4.08" = _8_06_7;
       "4.09" = _8_06_7;
@@ -72,13 +77,17 @@ let
         version = "8.06.14";
         sha256 = "sha256-eVSQetk+i3KObjHfsvnD615cIsq3aZ7IxycX42cuPIU=";
       };
+      "5.3" = mkNewParam {
+        version = "8.06.15";
+        sha256 = "sha256-I/y5qr5sasCtlrwxL/Lex79rg0o4tzDMBmQY7MdpU2w=";
+      };
     };
   param =
     params.${lib.versions.majorMinor ocaml.version}
     or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
-stdenv.mkDerivation rec {
+param.stdenv.mkDerivation {
   inherit (param) version src;
   pname = "ocaml${ocaml.version}-labltk";
 
@@ -92,7 +101,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tcl
     tk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   configureFlags = [
     "--use-findlib"
@@ -125,5 +134,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = !(params ? ${lib.versions.majorMinor ocaml.version});
   };
 }

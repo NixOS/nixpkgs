@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "symfpu";
-  version = "unstable-2019-05-17";
+  version = "0-unstable-2019-05-17";
 
   src = fetchFromGitHub {
     owner = "martin-cs";
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A (concrete or symbolic) implementation of IEEE-754 / SMT-LIB floating-point";
+  meta = {
+    description = "Implementation of SMT-LIB / IEEE-754 operations in terms of bit-vector operations";
     homepage = "https://github.com/martin-cs/symfpu";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ shadaj ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ shadaj ];
   };
 }

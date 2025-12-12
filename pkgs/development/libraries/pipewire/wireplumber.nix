@@ -25,46 +25,46 @@
 
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.5.7";
+  version = "0.5.12";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional enableDocs "doc";
+  ]
+  ++ lib.optional enableDocs "doc";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    hash = "sha256-KZ4ECpDZhTBQKylJwP3OcsyjZ1ktqwWUZFg9j9KvNsM=";
+    hash = "sha256-3LdERBiPXal+OF7tgguJcVXrqycBSmD3psFzn4z5krY=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-    ]
-    ++ lib.optionals enableDocs [
-      graphviz
-    ]
-    ++ lib.optionals enableGI [
-      gobject-introspection
-    ]
-    ++ lib.optionals (enableDocs || enableGI) [
-      doxygen
-      (python3.pythonOnBuildForHost.withPackages (
-        ps:
-        with ps;
-        lib.optionals enableDocs [
-          sphinx
-          sphinx-rtd-theme
-          breathe
-        ]
-        ++ lib.optionals enableGI [ lxml ]
-      ))
-    ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ]
+  ++ lib.optionals enableDocs [
+    graphviz
+  ]
+  ++ lib.optionals enableGI [
+    gobject-introspection
+  ]
+  ++ lib.optionals (enableDocs || enableGI) [
+    doxygen
+    (python3.pythonOnBuildForHost.withPackages (
+      ps:
+      with ps;
+      lib.optionals enableDocs [
+        sphinx
+        sphinx-rtd-theme
+        breathe
+      ]
+      ++ lib.optionals enableGI [ lxml ]
+    ))
+  ];
 
   buildInputs = [
     glib
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Modular session / policy manager for PipeWire";
     homepage = "https://pipewire.org";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ k900 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ k900 ];
   };
 }

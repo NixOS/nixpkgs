@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,23 +15,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0yLEpNkl7KjBEGxNONtfMjVlWMSKGZ6TbYJMsCeQ3ms=";
   };
 
-  cargoHash = "sha256-noMfKx6BsmWhAVI4r8LlC961Uwogv1JGMYSrNGlLGPQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  cargoHash = "sha256-v4lgHx+sR58CshZJCUYrtaW4EDFBUKFPJJ6V+eyf5Bc=";
 
   cargoBuildFlags = [
     "--bin"
     "ezno"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
     mainProgram = "ezno";
     homepage = "https://github.com/kaleidawave/ezno";
     changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

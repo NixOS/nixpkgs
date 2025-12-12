@@ -1,0 +1,27 @@
+diff --git a/build.py b/build.py
+index 06905a11..56d54a17 100644
+--- a/build.py
++++ b/build.py
+@@ -10,7 +10,7 @@ from optparse import OptionParser
+ import shutil
+ from multiprocessing import Pool
+ 
+-from setuptools import sandbox
++import subprocess
+ from hscommon import sphinxgen
+ from hscommon.build import (
+     add_to_pythonpath,
+@@ -118,7 +118,12 @@ def build_normpo():
+ def build_pe_modules():
+     print("Building PE Modules")
+     # Leverage setup.py to build modules
+-    sandbox.run_setup("setup.py", ["build_ext", "--inplace"])
++    result = subprocess.run(
++        [sys.executable, "setup.py", "build_ext", "--inplace"],
++        check=True,
++    )
++    if result.returncode != 0:
++        sys.exit("Error building PE modules. Please check the output above.")
+ 
+ 
+ def build_normal():

@@ -5,9 +5,9 @@ callPackage ./generic.nix (
   // rec {
     brand = "Midas";
     type = "M32";
-    version = "4.1";
-    url = "https://mediadl.musictribe.com/download/software/midas_${type}/${type}-Edit_LINUX_${version}.tar.gz";
-    sha256 = "0aqhdrxqa49liyvbbw5x32kwk0h1spzvmizmdxklrfs64vvr9bvh";
-    homepage = "https://midasconsoles.com/midas/product?modelCode=P0B3I";
+    version = "4.4.1";
+    url = "https://cdn.mediavalet.com/aunsw/musictribe/Yd1JkAyxqUeqIxoRM0lWWw/uwBe453FiEKSpqZzdjvYpQ/Original/${type}-Edit_LINUX_${version}.tar.gz";
+    hash = "sha256-cEva2Brxo7zm3qppO+BtYIlUqV9t69j+8f6g94C4i3c=";
+    homepage = "https://www.midasconsoles.com/series.html?category=R-MIDAS-M32SERIES";
   }
 )

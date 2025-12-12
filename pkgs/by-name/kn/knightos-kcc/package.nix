@@ -30,12 +30,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ];
 
-  meta = with lib; {
-    homepage = "https://knightos.org/";
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
+    homepage = "https://github.com/KnightOS/kcc";
     description = "KnightOS C compiler";
     mainProgram = "kcc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

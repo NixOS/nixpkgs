@@ -5,7 +5,6 @@
   gitUpdater,
   testers,
   accountsservice,
-  ayatana-indicator-datetime,
   biometryd,
   cmake,
   cmake-extras,
@@ -17,18 +16,20 @@
   gnome-desktop,
   gsettings-qt,
   gtk3,
-  icu,
+  icu75,
   intltool,
   json-glib,
   libqofono,
   libqtdbustest,
   libqtdbusmock,
   lomiri-content-hub,
+  lomiri-indicator-datetime,
   lomiri-indicator-network,
   lomiri-schemas,
   lomiri-settings-components,
   lomiri-ui-toolkit,
   maliit-keyboard,
+  mesa,
   pkg-config,
   polkit,
   python3,
@@ -47,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
-    rev = finalAttrs.version;
-    hash = "sha256-dWaXPr9Z5jz5SbwLSd3jVqjK0E5BdcKVeF15p8j47uM=";
+    tag = finalAttrs.version;
+    hash = "sha256-bVBxJgOy1eXqwzcgBRUTlFoJxxw9I1Qc+Wn92U0QzA4=";
   };
 
   outputs = [
@@ -61,15 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [ ./2000-Support-wrapping-for-Nixpkgs.patch ];
+  patches = [
+    ./2000-Support-wrapping-for-Nixpkgs.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
 
     # Port from lomiri-keyboard to maliit-keyboard
-    substituteInPlace plugins/language/CMakeLists.txt \
-      --replace-fail 'LOMIRI_KEYBOARD_PLUGIN_PATH=\"''${CMAKE_INSTALL_FULL_LIBDIR}/lomiri-keyboard/plugins\"' 'LOMIRI_KEYBOARD_PLUGIN_PATH=\"${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages\"'
     substituteInPlace plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml plugins/language/onscreenkeyboard-plugin.cpp plugins/sound/PageComponent.qml \
       --replace-fail 'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
 
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gsettings-qt
     gtk3
-    icu
+    icu75
     json-glib
     polkit
     qtbase
@@ -120,10 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # QML components and schemas the wrapper needs
   propagatedBuildInputs = [
-    ayatana-indicator-datetime
     biometryd
     libqofono
     lomiri-content-hub
+    lomiri-indicator-datetime
     lomiri-indicator-network
     lomiri-schemas
     lomiri-settings-components
@@ -136,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     xvfb-run
   ];
@@ -151,19 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
-            "^testmouse"
-            "^tst_notifications"
-          ]
-        })")
-      ]
-    ))
+    (lib.cmakeFeature "LOMIRI_KEYBOARD_PLUGIN_PATH" "${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages")
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
@@ -204,14 +194,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System Settings application for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-system-settings";
-    changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [ "LomiriSystemSettings" ];
   };
 })

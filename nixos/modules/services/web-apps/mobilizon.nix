@@ -5,9 +5,17 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkDefault
+    mkIf
+    types
+    literalExpression
+    ;
+
   cfg = config.services.mobilizon;
 
   user = "mobilizon";
@@ -20,34 +28,29 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation rec {
-    pname = "${cfg.package.pname}-launchers";
-    inherit (cfg.package) version;
+  launchers =
+    pkgs.runCommand "${cfg.package.pname}-launchers-${cfg.package.version}"
+      {
+        src = cfg.package;
+        nativeBuildInputs = with pkgs; [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
 
-    src = cfg.package;
+        makeWrapper \
+          $src/bin/mobilizon \
+          $out/bin/mobilizon \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
 
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
-
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/bin
-
-      makeWrapper \
-        $src/bin/mobilizon \
-        $out/bin/mobilizon \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-
-      makeWrapper \
-        $src/bin/mobilizon_ctl \
-        $out/bin/mobilizon_ctl \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-    '';
-  };
+        makeWrapper \
+          $src/bin/mobilizon_ctl \
+          $out/bin/mobilizon_ctl \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
+      '';
 
   repoSettings = cfg.settings.":mobilizon"."Mobilizon.Storage.Repo";
   instanceSettings = cfg.settings.":mobilizon".":instance";
@@ -363,7 +366,7 @@ in
     systemd.services.mobilizon-postgresql = mkIf isLocalPostgres {
       description = "Mobilizon PostgreSQL setup";
 
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [
         "mobilizon.service"
         "mobilizon-setup-secrets.service"
@@ -390,10 +393,12 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
+        Restart = "on-failure";
       };
     };
 
     systemd.tmpfiles.rules = [
+      "d /var/lib/mobilizon/sitemap 700 mobilizon mobilizon - -"
       "d /var/lib/mobilizon/uploads/exports/csv 700 mobilizon mobilizon - -"
       "Z /var/lib/mobilizon 700 mobilizon mobilizon - -"
     ];
@@ -424,32 +429,32 @@ in
         virtualHosts."${hostname}" = {
           enableACME = lib.mkDefault true;
           forceSSL = lib.mkDefault true;
-          extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-          '';
           locations."/" = {
             inherit proxyPass;
+            proxyWebsockets = true;
+            recommendedProxySettings = lib.mkDefault true;
+            extraConfig = ''
+              expires off;
+              add_header Cache-Control "public, max-age=0, s-maxage=0, must-revalidate" always;
+            '';
           };
-          locations."~ ^/(js|css|img)" = {
+          locations."~ ^/(assets|img)" = {
             root = "${cfg.package}/lib/mobilizon-${cfg.package.version}/priv/static";
             extraConfig = ''
-              etag off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
           locations."~ ^/(media|proxy)" = {
             inherit proxyPass;
+            recommendedProxySettings = lib.mkDefault true;
+            # Combination of HTTP/1.1 and disabled request buffering is
+            # needed to directly forward chunked responses
             extraConfig = ''
-              etag off;
+              proxy_http_version 1.1;
+              proxy_request_buffering off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
         };

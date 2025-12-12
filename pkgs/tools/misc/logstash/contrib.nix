@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Community-maintained logstash plugins";
     homepage = "https://github.com/elasticsearch/logstash-contrib";
     license = lib.licenses.asl20;

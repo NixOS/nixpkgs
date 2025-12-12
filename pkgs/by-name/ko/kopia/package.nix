@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  stdenv,
+  testers,
+  kopia,
+}:
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.18.2";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7gQlBLmHvqsXXmSYllfsDJRx9VjW0AH7bXf6cG6lGOI=";
+    owner = "kopia";
+    repo = "kopia";
+    tag = "v${version}";
+    hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
   };
 
-  vendorHash = "sha256-lCUEL7rtnv8/86ZTHM4HsYplDnWj1xsFh83JKW6qRrk=";
+  vendorHash = "sha256-szlCiZOLU0KVWb2YX3Wmicrumn+fNm2AWdPxaJZZT90=";
 
   subPackages = [ "." ];
 
@@ -22,6 +31,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  postPatch = ''
+    substituteInPlace internal/mount/mount_posix_webdav_helper_linux.go \
+      --replace-fail "/usr/bin/mount" "mount" \
+      --replace-fail "/usr/bin/umount" "umount"
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kopia \
       --bash <($out/bin/kopia --completion-script-bash) \
@@ -29,7 +44,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script { };
     tests = {
       kopia-version = testers.testVersion {
         package = kopia;
@@ -37,11 +52,16 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kopia.io";
+    changelog = "https://github.com/kopia/kopia/releases/tag/v${version}";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
     mainProgram = "kopia";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      bbigras
+      blenderfreaky
+      nadir-ishiguro
+    ];
   };
 }

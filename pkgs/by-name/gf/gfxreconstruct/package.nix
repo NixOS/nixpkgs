@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
     fetchSubmodules = true;
   };
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphics API Capture and Replay Tools";
     homepage = "https://github.com/LunarG/gfxreconstruct/";
     changelog = "https://github.com/LunarG/gfxreconstruct/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -18,11 +18,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Common files for development of MATE packages";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

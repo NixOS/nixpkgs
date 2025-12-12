@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "et-book";
-  version = "unstable-2015-10-05";
+  version = "0-unstable-2015-10-05";
 
   src = fetchFromGitHub {
     owner = "edwardtufte";
-    repo = pname;
+    repo = "et-book";
     rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";
     hash = "sha256-B6ryC9ibNop08TJC/w9LSHHwqV/81EezXsTUJFq8xpo=";
   };
@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Typeface used in Edward Tufte’s books";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jethro ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jethro ];
   };
 }

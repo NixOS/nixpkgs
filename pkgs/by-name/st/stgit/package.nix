@@ -19,15 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.4.13";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    hash = "sha256-Qb4pn/8SK36lUdbURY67592YWrmG7c5PJi19Ly+u2X4=";
+    hash = "sha256-zl3xy4t15QwdHeo0cjtorOcmD6oerprUswoMubpVLGU=";
   };
-  cargoHash = "sha256-7loyQj/mtgzt80XN6ckjojxeddXYRCmdl6U7Y9t95aY=";
+
+  cargoHash = "sha256-HPwKKh2QAG690u5pVIIp6Mu6ejaXmIuSuzMLt2tvwhw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,15 +42,14 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ curl ];
 
-  nativeCheckInputs =
-    [
-      git
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.system_cmds
-      libiconv
-    ];
+  nativeCheckInputs = [
+    git
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.system_cmds
+    libiconv
+  ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -93,12 +93,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completion/stgit.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jshholland ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "stg";
   };
 }

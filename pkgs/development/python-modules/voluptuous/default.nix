@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = "voluptuous";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TGTdYme3ZRM51YFNX/ESFc6+3QpeO/gAXYW6MT73/Ss=";
   };
 
@@ -27,14 +27,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "voluptuous" ];
 
-  pytestFlagsArray = [ "voluptuous/tests/" ];
+  enabledTestPaths = [ "voluptuous/tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python data validation library";
     downloadPage = "https://github.com/alecthomas/voluptuous";
     homepage = "http://alecthomas.github.io/voluptuous/";
     changelog = "https://github.com/alecthomas/voluptuous/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

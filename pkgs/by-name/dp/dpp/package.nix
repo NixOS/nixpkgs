@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";
-  version = "10.0.35";
+  version = "10.1.3";
 
   src = fetchFromGitHub {
     owner = "brainboxdotcc";
     repo = "DPP";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gdHcYBIQzVfQsUyC2hxeMkmm5lMDjaY7isBidSxhc80=";
+    hash = "sha256-G2v0xMYj89AK5PklQl7i0/YuVTtpBYSM3EaMJrmYdME=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/brainboxdotcc/DPP/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xbz ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

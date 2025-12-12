@@ -3,20 +3,20 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule {
   pname = "caeml";
-  version = "unstable-2023-05-24";
+  version = "0-unstable-2023-05-24";
 
   src = fetchFromGitHub {
     owner = "ferdinandyb";
-    repo = pname;
+    repo = "caeml";
     rev = "25dbe10e99aac9b0ce3b80787c162628104f5cd2";
     sha256 = "UIQCNkUyrtMF0IiAfkDvE8siqxNvfFc9TZdlZiTxCVc=";
   };
 
   vendorHash = "sha256-SDJsRLIGlLv/6NUctCrn6z1IDEmum1Wn5I8RFuwcOe8=";
 
-  meta = with lib; {
+  meta = {
     description = "cat eml files";
     mainProgram = "caeml";
     longDescription = ''
@@ -26,7 +26,7 @@ buildGoModule rec {
       kept and these are decoded and of all the parts only text/plain is returned.
     '';
     homepage = "https://github.com/ferdinandyb/caeml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

@@ -15,9 +15,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 ```nix
 {
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta.pkgConfigModules = [ "libfoo" ];
 }
@@ -40,6 +38,26 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 :::
 
+## `hasCmakeConfigModules` {#tester-hasCmakeConfigModules}
+
+Checks whether a package exposes a given list of `*config.cmake` modules.
+Note the moduleNames used in cmake find_package are case sensitive.
+
+:::{.example #ex-hascmakeconfigmodules}
+
+# Check that `*config.cmake` modules are exposed using explicit module names
+
+```nix
+{
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    package = finalAttrs.finalPackage;
+    moduleNames = [ "Foo" ];
+  };
+}
+```
+
+:::
+
 ## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
@@ -54,9 +72,7 @@ If you have a static site that can be built with Nix, you can use `lycheeLinkChe
 # Check hyperlinks in the `nix` documentation
 
 ```nix
-testers.lycheeLinkCheck {
-  site = nix.doc + "/share/doc/nix/manual";
-}
+testers.lycheeLinkCheck { site = nix.doc + "/share/doc/nix/manual"; }
 ```
 
 :::
@@ -82,7 +98,7 @@ It has two modes:
 
 : The path to the files to check.
 
-`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+`remap` (attribute set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
   The values should be strings, derivations, or path values.
@@ -98,7 +114,8 @@ It has two modes:
   ```nix
   {
     "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
-    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+    "https://nixos\\.org/manual/nix/(un)?stable" =
+      "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
   }
   ```
 
@@ -118,7 +135,7 @@ It has two modes:
 
 ## `shellcheck` {#tester-shellcheck}
 
-Runs files through `shellcheck`, a static analysis tool for shell scripts.
+Run files through `shellcheck`, a static analysis tool for shell scripts, failing if there are any issues.
 
 :::{.example #ex-shellcheck}
 # Run `testers.shellcheck`
@@ -127,7 +144,7 @@ A single script
 
 ```nix
 testers.shellcheck {
-  name = "shellcheck";
+  name = "script";
   src = ./script.sh;
 }
 ```
@@ -139,7 +156,7 @@ let
   inherit (lib) fileset;
 in
 testers.shellcheck {
-  name = "shellcheck";
+  name = "nixbsd-activate";
   src = fileset.toSource {
     root = ./.;
     fileset = fileset.unions [
@@ -154,22 +171,85 @@ testers.shellcheck {
 
 ### Inputs {#tester-shellcheck-inputs}
 
-[`src` (path or string)]{#tester-shellcheck-param-src}
+`name` (string, optional)
+: The name of the test.
+  `name` will be required at a future point because it massively improves traceability of test failures, but is kept optional for now to avoid breaking existing usages.
+  Defaults to `run-shellcheck`.
+  The name of the derivation produced by the tester is `shellcheck-${name}` when `name` is supplied.
 
+`src` (path-like)
 : The path to the shell script(s) to check.
   This can be a single file or a directory containing shell files.
   All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
 
 ### Return value {#tester-shellcheck-return}
 
-A derivation that runs `shellcheck` on the given script(s).
+A derivation that runs `shellcheck` on the given script(s), producing an empty output if no issues are found.
 The build will fail if `shellcheck` finds any issues.
+
+## `shfmt` {#tester-shfmt}
+
+Run files through `shfmt`, a shell script formatter, failing if any files are reformatted.
+
+:::{.example #ex-shfmt}
+# Run `testers.shfmt`
+
+A single script
+
+```nix
+testers.shfmt {
+  name = "script";
+  src = ./script.sh;
+}
+```
+
+Multiple files
+
+```nix
+let
+  inherit (lib) fileset;
+in
+testers.shfmt {
+  name = "nixbsd";
+  src = fileset.toSource {
+    root = ./.;
+    fileset = fileset.unions [
+      ./lib.sh
+      ./nixbsd-activate
+    ];
+  };
+}
+```
+
+:::
+
+### Inputs {#tester-shfmt-inputs}
+
+`name` (string)
+: The name of the test.
+  `name` is required because it massively improves traceability of test failures.
+  The name of the derivation produced by the tester is `shfmt-${name}`.
+
+`src` (path-like)
+: The path to the shell script(s) to check.
+  This can be a single file or a directory containing shell files.
+  All files in `src` will be checked, so you may want to provide `fileset`-based source instead of a whole directory.
+
+`indent` (integer, optional)
+: The number of spaces to use for indentation.
+  Defaults to `2`.
+  A value of `0` indents with tabs.
+
+### Return value {#tester-shfmt-return}
+
+A derivation that runs `shfmt` on the given script(s), producing an empty output upon success.
+The build will fail if `shfmt` reformats anything.
 
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+NOTE: This is a check you add to `passthru.tests` which is mainly run by OfBorg, but not in Hydra. If you want a version check failure to block the build altogether, then [`versionCheckHook`](#versioncheckhook) is the tool you're looking for (and recommended for quick builds). The motivation for adding either of these checks would be:
 
 - Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
 - Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
@@ -185,9 +265,7 @@ The default argument to the command is `--version`, and the version to be checke
 This example will run the command `hello --version`, and then check that the version of the `hello` package is in the output of the command.
 
 ```nix
-{
-  passthru.tests.version = testers.testVersion { package = hello; };
-}
+{ passthru.tests.version = testers.testVersion { package = hello; }; }
 ```
 
 :::
@@ -239,25 +317,114 @@ While `testBuildFailure` is designed to keep changes to the original builder's e
 # Check that a build fails, and verify the changes made during build
 
 ```nix
-runCommand "example" {
-  failed = testers.testBuildFailure (runCommand "fail" {} ''
-    echo ok-ish >$out
-    echo failing though
-    exit 3
-  '');
-} ''
-  grep -F 'ok-ish' $failed/result
-  grep -F 'failing though' $failed/testBuildFailure.log
-  [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
-  touch $out
-''
+runCommand "example"
+  {
+    failed = testers.testBuildFailure (
+      runCommand "fail" { } ''
+        echo ok-ish >$out
+        echo failing though
+        exit 3
+      ''
+    );
+  }
+  ''
+    grep -F 'ok-ish' $failed/result
+    grep -F 'failing though' $failed/testBuildFailure.log
+    [[ 3 = $(cat $failed/testBuildFailure.exit) ]]
+    touch $out
+  ''
 ```
 
 :::
 
+## `testBuildFailure'` {#tester-testBuildFailurePrime}
+
+This tester wraps the functionality provided by [`testers.testBuildFailure`](#tester-testBuildFailure) to make writing checks easier by simplifying checking the exit code of the builder and asserting the existence of entries in the builder's log.
+Additionally, users may specify a script containing additional checks, accessing the result of applying `testers.testBuildFailure` through the variable `failed`.
+
+NOTE: This tester will produce an empty output and exit with success if none of the checks fail; there is no need to `touch "$out"` in `script`.
+
+:::{.example #ex-testBuildFailurePrime-doc-example}
+
+# Check that a build fails, and verify the changes made during build
+
+Re-using the example from [`testers.testBuildFailure`](#ex-testBuildFailure-showingenvironmentchanges), we can see how common checks are made easier and remove the need for `runCommand`:
+
+```nix
+testers.testBuildFailure' {
+  drv = runCommand "doc-example" { } ''
+    echo ok-ish >"$out"
+    echo failing though
+    exit 3
+  '';
+  expectedBuilderExitCode = 3;
+  expectedBuilderLogEntries = [ "failing though" ];
+  script = ''
+    grep --silent -F 'ok-ish' "$failed/result"
+  '';
+}
+```
+
+:::
+
+### Inputs {#tester-testBuildFailurePrime-inputs}
+
+`drv` (derivation)
+
+: The failing derivation to wrap with `testBuildFailure`.
+
+`name` (string, optional)
+
+: The name of the test.
+  When not provided, this value defaults to `testBuildFailure-${(testers.testBuildFailure drv).name}`.
+
+`expectedBuilderExitCode` (integer, optional)
+
+: The expected exit code of the builder of `drv`.
+  When not provided, this value defaults to `1`.
+
+`expectedBuilderLogEntries` (array of string-like values, optional)
+
+: A list of string-like values which must be found in the builder's log by exact match.
+  When not provided, this value defaults to `[ ]`.
+
+  NOTE: Patterns and regular expressions are not supported.
+
+`script` (string, optional)
+
+: A string containing additional checks to run.
+  When not provided, this value defaults to `""`.
+  The result of `testers.testBuildFailure drv` is available through the variable `failed`.
+  As an example, the builder's log is at `"$failed/testBuildFailure.log"`.
+
+### Return value {#tester-testBuildFailurePrime-return}
+
+The tester produces an empty output and only succeeds when the checks using `expectedBuilderExitCode`, `expectedBuilderLogEntries`, and `script` succeed.
+
 ## `testEqualContents` {#tester-testEqualContents}
 
 Check that two paths have the same contents.
+
+`assertion` (string)
+
+: A message that is printed before the comparison, after `Checking:`.
+
+`expected` (path or value coercible to store path)
+
+: The path to the expected [file system object] content
+
+`actual` (value coercible to store path) <!-- path value is possible, but wrong in practice, but let's not bother readers with our predictions -->
+
+: The path to the actual file system object content to check
+
+`postFailureMessage` (string)
+
+: A message that is printed last if the file system object contents at the two paths don't match exactly.
+
+`checkMetadata` (boolean)
+
+: Whether to fail on metadata differences, such as permissions or ownership.
+  Defaults to `true`.
 
 :::{.example #ex-testEqualContents-toyexample}
 
@@ -269,19 +436,118 @@ testers.testEqualContents {
   expected = writeText "expected" ''
     foo baz baz
   '';
-  actual = runCommand "actual" {
-    # not really necessary for a package that's in stdenv
-    nativeBuildInputs = [ gnused ];
-    base = writeText "base" ''
-      foo bar baz
-    '';
-  } ''
-    sed -e 's/bar/baz/g' $base >$out
+  actual =
+    runCommand "actual"
+      {
+        # not really necessary for a package that's in stdenv
+        nativeBuildInputs = [ gnused ];
+        base = writeText "base" ''
+          foo bar baz
+        '';
+      }
+      ''
+        sed -e 's/bar/baz/g' $base >$out
+      '';
+  # if applicable
+  postFailureMessage = ''
+    The bar-baz replacer produced an unexpected result.
+    If the new behavior is acceptable and validated against the bar-baz specification, run ./adopt-new-bar-baz-result.sh to adjust this test and require the new behavior.
   '';
 }
 ```
 
 :::
+
+## `testEqualArrayOrMap` {#tester-testEqualArrayOrMap}
+
+Check that bash arrays (including associative arrays, referred to as "maps") are populated correctly.
+
+This can be used to ensure setup hooks are registered in a certain order, or to write unit tests for shell functions which transform arrays.
+
+:::{.example #ex-testEqualArrayOrMap-test-function-add-cowbell}
+
+# Test a function which appends a value to an array
+
+```nix
+testers.testEqualArrayOrMap {
+  name = "test-function-add-cowbell";
+  valuesArray = [
+    "cowbell"
+    "cowbell"
+  ];
+  expectedArray = [
+    "cowbell"
+    "cowbell"
+    "cowbell"
+  ];
+  script = ''
+    addCowbell() {
+      local -rn arrayNameRef="$1"
+      arrayNameRef+=( "cowbell" )
+    }
+
+    nixLog "appending all values in valuesArray to actualArray"
+    for value in "''${valuesArray[@]}"; do
+      actualArray+=( "$value" )
+    done
+
+    nixLog "applying addCowbell"
+    addCowbell actualArray
+  '';
+}
+```
+
+:::
+
+### Inputs {#tester-testEqualArrayOrMap-inputs}
+
+NOTE: Internally, this tester uses `__structuredAttrs` to handle marshalling between Nix expressions and shell variables.
+This imposes the restriction that arrays and "maps" have values which are string-like.
+
+NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
+
+`name` (string)
+
+: The name of the test.
+
+`script` (string)
+
+: The singular task of `script` is to populate `actualArray` or `actualMap` (it may populate both).
+  To do this, `script` may access the following shell variables:
+
+  - `valuesArray` (available when `valuesArray` is provided to the tester)
+  - `valuesMap` (available when `valuesMap` is provided to the tester)
+  - `actualArray` (available when `expectedArray` is provided to the tester)
+  - `actualMap` (available when `expectedMap` is provided to the tester)
+
+  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they *must not* be accessed or modified from within `script`.
+
+`valuesArray` (array of string-like values, optional)
+
+: An array of string-like values.
+  This array may be used within `script`.
+
+`valuesMap` (attribute set of string-like values, optional)
+
+: An attribute set of string-like values.
+  This attribute set may be used within `script`.
+
+`expectedArray` (array of string-like values, optional)
+
+: An array of string-like values.
+  This array *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualArray`.
+
+`expectedMap` (attribute set of string-like values, optional)
+
+: An attribute set of string-like values.
+  This attribute set *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualMap`.
+
+### Return value {#tester-testEqualArrayOrMap-return}
+
+The tester produces an empty output and only succeeds when `expectedArray` and `expectedMap` match `actualArray` and `actualMap`, respectively, when non-null.
+The build log will contain differences encountered.
 
 ## `testEqualDerivation` {#tester-testEqualDerivation}
 
@@ -297,10 +563,11 @@ Otherwise, the build log explains the difference via `nix-diff`.
 # Check that two packages produce the same derivation
 
 ```nix
-testers.testEqualDerivation
-  "The hello package must stay the same when enabling checks."
-  hello
-  (hello.overrideAttrs(o: { doCheck = true; }))
+testers.testEqualDerivation "The hello package must stay the same when enabling checks." hello (
+  hello.overrideAttrs (o: {
+    doCheck = true;
+  })
+)
 ```
 
 :::
@@ -345,7 +612,7 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 This is a wrapper around `pkgs.runCommandWith`, which
 - produces a fixed-output derivation, enabling the command(s) to access the network ;
-- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs change.
 
 It accepts the following attributes:
 - the derivation's `name` ;
@@ -368,7 +635,10 @@ testers.runCommand {
     curl -o /dev/null https://example.com
     touch $out
   '';
-  nativeBuildInputs = with pkgs; [ cacert curl ];
+  nativeBuildInputs = with pkgs; [
+    cacert
+    curl
+  ];
 }
 ```
 
@@ -385,15 +655,20 @@ If your test is part of the Nixpkgs repository, or if you need a more general en
 # Run a NixOS test using `runNixOSTest`
 
 ```nix
-pkgs.testers.runNixOSTest ({ lib, ... }: {
-  name = "hello";
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.hello ];
-  };
-  testScript = ''
-    machine.succeed("hello")
-  '';
-})
+pkgs.testers.runNixOSTest (
+  { lib, ... }:
+  {
+    name = "hello";
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+      };
+    testScript = ''
+      machine.succeed("hello")
+    '';
+  }
+)
 ```
 
 :::
@@ -416,10 +691,17 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 {
   name = "my-test";
   nodes = {
-    machine1 = { lib, pkgs, nodes, ... }: {
-      environment.systemPackages = [ pkgs.hello ];
-      services.foo.enable = true;
-    };
+    machine1 =
+      {
+        lib,
+        pkgs,
+        nodes,
+        ...
+      }:
+      {
+        environment.systemPackages = [ pkgs.hello ];
+        services.foo.enable = true;
+      };
     # machine2 = ...;
   };
   testScript = ''
@@ -439,3 +721,5 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+
+[file system object]: https://nix.dev/manual/nix/latest/store/file-system-object

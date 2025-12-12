@@ -6,46 +6,40 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fw";
-  version = "2.19.1";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
     rev = "v${version}";
-    hash = "sha256-fG1N/3Er7BvXOJTMGooaIMa5I9iNwnH+1om2jcWkI68=";
+    hash = "sha256-tqtiAw4+bnCJMF37SluAE9NM55MAjBGkJTvGLcmYFnA=";
   };
 
-  cargoHash = "sha256-1d2uX/A1HZAmAI3d0iet1NkG0IFuJpVnhWxpY0jVVUI=";
+  cargoHash = "sha256-B32GegI3rvame0Ds+8+oBVUbcNhr2kwm3oVVxng8BZY=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.wtfpl;
+    maintainers = [ ];
     mainProgram = "fw";
   };
 }

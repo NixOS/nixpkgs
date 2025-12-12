@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
     # Build with enchant 2
     # https://github.com/archlinux/svntogit-packages/tree/packages/gtkspell/trunk
     (fetchpatch {
@@ -34,6 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    gtk2 # GLIB_GNU_GETTEXT
     gtk-doc
     intltool
     pkg-config
@@ -45,10 +48,10 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Word-processor-style highlighting and replacement of misspelled words";
     homepage = "https://gtkspell.sourceforge.net";
-    platforms = platforms.unix;
-    license = licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

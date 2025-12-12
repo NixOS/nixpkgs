@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "1.34.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,10 +50,10 @@ buildPythonPackage rec {
                     and not test_rsyncignore"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

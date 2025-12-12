@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plfit";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "ntamas";
     repo = "plfit";
     rev = finalAttrs.version;
-    hash = "sha256-ur+ai0in7PaoDZcPzuUzQTrZ3nB0H5FDSfPBpl1e9ug=";
+    hash = "sha256-0JrPAq/4yzr7XbxvcnFj8CKmMyZT05PkSdGprNdAsJA=";
   };
 
   postPatch = lib.optionalString (python != null) ''
@@ -25,22 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ' ''${Python3_SITELIB}' ' ${placeholder "out"}/${python.sitePackages}'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals (python != null) [
-      python
-      swig
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals (python != null) [
+    python
+    swig
+  ];
 
-  cmakeFlags =
-    [
-      "-DPLFIT_USE_OPENMP=ON"
-    ]
-    ++ lib.optionals (python != null) [
-      "-DPLFIT_COMPILE_PYTHON_MODULE=ON"
-    ];
+  cmakeFlags = [
+    "-DPLFIT_USE_OPENMP=ON"
+  ]
+  ++ lib.optionals (python != null) [
+    "-DPLFIT_COMPILE_PYTHON_MODULE=ON"
+  ];
 
   buildInputs = lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp

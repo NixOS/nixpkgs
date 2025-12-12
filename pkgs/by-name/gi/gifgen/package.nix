@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple high quality GIF encoding";
     homepage = "https://github.com/lukechilds/gifgen";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snowflake ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "gifgen";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

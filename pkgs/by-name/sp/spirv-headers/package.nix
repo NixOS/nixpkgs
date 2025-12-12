@@ -5,23 +5,23 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-headers";
-  version = "1.3.296.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-o1yRTvP7a+XVwendTKBJKNnelVGWLD0gH258GGeUDhQ=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-gewCQvcVRw+qdWPWRlYUMTt/aXrZ7Lea058WyqL5c08=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine-readable components of the Khronos SPIR-V Registry";
     homepage = "https://github.com/KhronosGroup/SPIRV-Headers";
-    license = licenses.mit;
-    maintainers = [ maintainers.ralith ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

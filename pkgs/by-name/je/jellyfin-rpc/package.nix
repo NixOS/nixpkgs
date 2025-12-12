@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jellyfin-rpc";
-  version = "1.3.0";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "Radiicall";
     repo = "jellyfin-rpc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sr82lTOr6RUvYD0CVZMyyRAFjai1oLnRWIszuu7/jE0=";
+    tag = version;
+    hash = "sha256-g4Vd++Q6rJS6nU1kR+7aItnhHc0jeFSU460iF6P1EEk=";
   };
 
-  cargoHash = "sha256-KHbYM7aWgch+DWF46DpFCCt7JoKR0sasuFO3xPOytWA=";
+  cargoHash = "sha256-ltEm3hFiHBM4NtYg1qrFH26jMDgWa+al06P6O/Su1XA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

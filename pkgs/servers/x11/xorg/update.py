@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure --keep NIX_PATH -i python3 -p nix git "python3.withPackages (ps: [ ps. packaging ps.beautifulsoup4 ps.requests ])"
+#!nix-shell --pure --keep NIX_PATH -i python3 -p nix git nixfmt "python3.withPackages (ps: [ ps. packaging ps.beautifulsoup4 ps.requests ])"
 
 # Usage: Run ./update.py from the directory containing tarballs.list. The script checks for the
 # latest versions of all packages, updates the expressions if any update is found, and commits
@@ -48,23 +48,6 @@ for component in [
         entry[0].append(version.parse(ver))
         entry[1][ver] = f"{mirror}{component}/{href}"
 
-# luit
-lurl = "https://invisible-mirror.net/archives/luit/"
-r = requests.get(lurl)
-soup = BeautifulSoup(r.text, "html.parser")
-for a in soup.find_all("a"):
-    href = a["href"]
-
-    if not href.endswith(".tgz"):
-        continue
-
-    pname, rem = href.rsplit("-", 1)
-    ver, _ = rem.rsplit(".", 1)
-
-    entry = allversions.setdefault(f"{lurl}{pname}", ([], {}))
-    entry[0].append(version.parse(ver))
-    entry[1][ver] = f"{lurl}{href}"
-
 print("Finding updated versions...")
 
 with open("./tarballs.list") as f:
@@ -76,7 +59,7 @@ changes_text = []
 for line in lines_tarballs:
     line = line.rstrip("\n")
 
-    if any(line.startswith(frag) for frag in [mirror, lurl]):
+    if line.startswith(mirror):
         pname, rem = line.rsplit("-", 1)
         if line.startswith(mirror):
             ver, _, _ = rem.rsplit(".", 2)
@@ -109,6 +92,10 @@ with open("./tarballs.list", "w") as f:
 print("Generating updated expr (slow)...")
 
 subprocess.run(["./generate-expr-from-tarballs.pl", "tarballs.list"], check=True)
+
+print("Formatting generated expr...")
+
+subprocess.run(["nixfmt", "default.nix"], check=True)
 
 print("Committing...")
 

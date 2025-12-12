@@ -64,7 +64,7 @@ in
       "d '${cfg.stateDir}' - nobody nogroup - -"
     ];
 
-    systemd.services.heartbeat = with pkgs; {
+    systemd.services.heartbeat = {
       description = "heartbeat log shipper";
       wantedBy = [ "multi-user.target" ];
       preStart = ''

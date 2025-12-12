@@ -44,13 +44,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.3.2";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RMPsZIUZNWnnezxdZhW9oA0Cprb89NQhpwX9THHYN4M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+RUspDEAQPL6M0/f4lb/SuTD1wdmwE9+8GXQKUClgdE=";
     fetchSubmodules = true;
   };
 
@@ -151,7 +151,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ossia.io/score/about.html";
     description = "Sequencer for audio-visual artists";
     longDescription = ''
@@ -159,9 +159,9 @@ clangStdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       jcelerier
       minijackson
     ];

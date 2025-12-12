@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "supercronic";
-  version = "0.2.33";
+  version = "0.2.40";
 
   src = fetchFromGitHub {
     owner = "aptible";
-    repo = pname;
+    repo = "supercronic";
     rev = "v${version}";
-    hash = "sha256-tvDjjG8ym1wdQzQSO7T5BkbYbqD1M+EnPSPumbFKRhE=";
+    hash = "sha256-20L2GriC+f6bUiJOiUsnvpTEG1J3hp60ry3fSrJt87A=";
   };
 
-  vendorHash = "sha256-SmmuHVf9nuqdT4jqhQDLl5gAHq/3qLKNpgwuwBBNfW4=";
+  vendorHash = "sha256-a1W/Ah3zPMLvYfQj6uWsHvwjxpLs2vb8E2YYH/RRQvs=";
 
   excludedPackages = [ "cronexpr/cronexpr" ];
 
@@ -36,11 +36,11 @@ buildGoModule rec {
 
   ldflags = [ "-X main.Version=${version}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cron tool designed for use in containers";
     homepage = "https://github.com/aptible/supercronic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nasageek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nasageek ];
     mainProgram = "supercronic";
   };
 }

@@ -3,26 +3,20 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  apple-sdk_11,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rewatch";
-  version = "1.0.9";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rewatch";
     tag = "v${version}";
-    hash = "sha256-y+0tBwGa7Fjrnd3O7CwZjapgXJojfgXBZyqAW3cz1Zk=";
+    hash = "sha256-UoUL3zeyrs3FdQVyAo0FsuNiPtiITbuNDdEXxWg3yiY=";
   };
 
-  cargoHash = "sha256-cZTA50gm7o+vBaRNjpZI0LQkXaHIukVTBXoYMUubZgw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
+  cargoHash = "sha256-scm2Uv68jN249RH2Fr8ofFjLTOv04wtDKZ5prDl4REU=";
 
   doCheck = true;
 

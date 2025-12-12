@@ -14,22 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vipsdisp";
-  version = "2.6.3";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "jcupitt";
     repo = "vipsdisp";
-    rev = "v${version}";
-    hash = "sha256-a8wqDTVZnhqk0zHAuGvwjtJTM0irN2tkRIjx6sIteV0=";
+    tag = "v${version}";
+    hash = "sha256-9L8l/afD6phq8T3ReYqQQgD1CztW5gw0MME23Ut/lEE=";
   };
-
-  patches = [
-    # Fixes build with clang
-    (fetchpatch2 {
-      url = "https://github.com/jcupitt/vipsdisp/commit/e95888153838d6e58d5b9fd7c08e3d03db38e8b1.patch?full_index=1";
-      hash = "sha256-MtQ9AMvl2MkHSLyOuwFVbmNiCEoPPnrK3EoUdvqEtOo=";
-    })
-  ];
 
   postPatch = ''
     chmod +x ./meson_post_install.py
@@ -52,12 +44,12 @@ stdenv.mkDerivation rec {
   # No tests implemented.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jcupitt/vipsdisp";
     description = "Tiny image viewer with libvips";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "vipsdisp";
-    maintainers = with maintainers; [ foo-dogsquared ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,0 +1,36 @@
+diff --git a/src/ngscopeclient/CMakeLists.txt b/src/ngscopeclient/CMakeLists.txt
+index fb6d19fa..25611981 100644
+--- a/src/ngscopeclient/CMakeLists.txt
++++ b/src/ngscopeclient/CMakeLists.txt
+@@ -249,31 +249,6 @@ if(LINUX)
+ 		DESTINATION share/mime/packages)
+ endif()
+ 
+-if(APPLE)
+-	set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/ngscopeclient")
+-	set(DIRS "\${CMAKE_INSTALL_PREFIX}/lib")
+-	set(FRAMEWORKS "\${CMAKE_INSTALL_PREFIX}/Frameworks")
+-	execute_process(
+-		COMMAND brew --prefix molten-vk
+-		RESULT_VARIABLE MOLTEN_VK_RESULT
+-		OUTPUT_VARIABLE MOLTEN_VK_OUTPUT
+-		ERROR_QUIET
+-		OUTPUT_STRIP_TRAILING_WHITESPACE
+-	)
+-	if(NOT MOLTEN_VK_RESULT EQUAL 0)
+-		message(FATAL_ERROR "failed to find Homebrew prefix for molten-vk")
+-	endif()
+-	# https://vulkan.lunarg.com/doc/view/1.3.275.0/mac/getting_started.html#application-bundle-structure-on-macos
+-	install(FILES "${CMAKE_SOURCE_DIR}/src/ngscopeclient/macos/MoltenVK_icd.json"
+-		DESTINATION bin/vulkan/icd.d/)
+-	install(FILES "${MOLTEN_VK_OUTPUT}/lib/libMoltenVK.dylib" DESTINATION lib)
+-	install(CODE "
+-		include(BundleUtilities)
+-		fixup_bundle(\"${APPS}\" \"lib/libMoltenVK.dylib\" \"${DIRS}\")
+-		include(\"${CMAKE_SOURCE_DIR}/src/ngscopeclient/macos/signing.cmake\")
+-		")
+-endif()
+-
+ # ngscopeclient Windows portable zip/MSI installer build
+ if(WIXPATH AND WIN32)
+ 	# Run the command to get /mingw64/bin full path using where gcc

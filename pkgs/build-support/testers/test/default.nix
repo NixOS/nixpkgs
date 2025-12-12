@@ -6,6 +6,7 @@
   runCommand,
   emptyFile,
   emptyDirectory,
+  stdenvNoCC,
   ...
 }:
 let
@@ -21,13 +22,44 @@ let
     label = "test";
   };
 
+  overrideStructuredAttrs =
+    enable: drv:
+    drv.overrideAttrs (old: {
+      failed = old.failed.overrideAttrs (oldFailed: {
+        name = oldFailed.name + "${lib.optionalString (!enable) "-no"}-structuredAttrs";
+        __structuredAttrs = enable;
+      });
+    });
+  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
+    { lib, ... }:
+    {
+      name = "runNixOSTest-test";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [
+            pkgs.proof-of-overlay-hello
+            pkgs.figlet
+          ];
+        };
+      testScript = ''
+        machine.succeed("hello | figlet >/dev/console")
+      '';
+    }
+  );
+
 in
 lib.recurseIntoAttrs {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
+  hasCmakeConfigModules = pkgs.callPackage ../hasCmakeConfigModules/tests.nix { };
+
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
+
+  shfmt = pkgs.callPackages ../shfmt/tests.nix { };
 
   runCommand = lib.recurseIntoAttrs {
     bork = pkgs.python3Packages.bork.tests.pytest-network;
@@ -52,24 +84,27 @@ lib.recurseIntoAttrs {
     };
   };
 
-  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
-    { lib, ... }:
-    {
-      name = "runNixOSTest-test";
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          system.nixos = dummyVersioning;
-          environment.systemPackages = [
-            pkgs.proof-of-overlay-hello
-            pkgs.figlet
-          ];
-        };
-      testScript = ''
-        machine.succeed("hello | figlet >/dev/console")
-      '';
-    }
-  );
+  inherit runNixOSTest-example;
+
+  runNixOSTest-extendNixOS =
+    let
+      t = runNixOSTest-example.extendNixOS {
+        module =
+          { hi, lib, ... }:
+          {
+            config = {
+              assertions = [ { assertion = hi; } ];
+            };
+            options = {
+              itsProofYay = lib.mkOption { };
+            };
+          };
+        specialArgs.hi = true;
+      };
+    in
+    assert lib.isDerivation t;
+    assert t.nodes.machine ? itsProofYay;
+    t;
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
@@ -92,7 +127,7 @@ lib.recurseIntoAttrs {
     }
   );
 
-  testBuildFailure = lib.recurseIntoAttrs {
+  testBuildFailure = lib.recurseIntoAttrs rec {
     happy =
       runCommand "testBuildFailure-happy"
         {
@@ -121,6 +156,8 @@ lib.recurseIntoAttrs {
 
           touch $out
         '';
+
+    happyStructuredAttrs = overrideStructuredAttrs true happy;
 
     helloDoesNotFail =
       runCommand "testBuildFailure-helloDoesNotFail"
@@ -167,7 +204,50 @@ lib.recurseIntoAttrs {
           echo 'All good.'
           touch $out
         '';
+
+    multiOutputStructuredAttrs = overrideStructuredAttrs true multiOutput;
+
+    sideEffects =
+      runCommand "testBuildFailure-sideEffects"
+        {
+          failed = testers.testBuildFailure (
+            stdenvNoCC.mkDerivation {
+              name = "fail-with-side-effects";
+              src = emptyDirectory;
+
+              postHook = ''
+                echo touching side-effect...
+                # Assert that the side-effect doesn't exist yet...
+                # We're checking that this hook isn't run by expect-failure.sh
+                if [[ -e side-effect ]]; then
+                  echo "side-effect already exists"
+                  exit 1
+                fi
+                touch side-effect
+              '';
+
+              buildPhase = ''
+                echo i am failing
+                exit 1
+              '';
+            }
+          );
+        }
+        ''
+          grep -F 'touching side-effect...' $failed/testBuildFailure.log >/dev/null
+          grep -F 'i am failing' $failed/testBuildFailure.log >/dev/null
+          [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
+          [[ ! -e side-effect ]]
+
+          touch $out
+        '';
+
+    sideEffectStructuredAttrs = overrideStructuredAttrs true sideEffects;
   };
+
+  testBuildFailure' = lib.recurseIntoAttrs (
+    pkgs.callPackages ../testBuildFailurePrime/tests.nix { inherit overrideStructuredAttrs; }
+  );
 
   testEqualContents = lib.recurseIntoAttrs {
     equalDir = testers.testEqualContents {
@@ -190,22 +270,40 @@ lib.recurseIntoAttrs {
       '';
     };
 
-    fileMissing = testers.testBuildFailure (
-      testers.testEqualContents {
-        assertion = "Directories with different file list are not recognized as equal";
-        expected = runCommand "expected" { } ''
-          mkdir -p -- "$out/c"
-          echo a >"$out/a"
-          echo b >"$out/b"
-          echo d >"$out/c/d"
+    # - Test whether a missing file triggers a failure as expected
+    # - Test the postFailureMessage
+    fileMissing =
+      let
+        log = testers.testBuildFailure (
+          testers.testEqualContents {
+            assertion = "Directories with different file list are not recognized as equal";
+            expected = runCommand "expected" { } ''
+              mkdir -p -- "$out/c"
+              echo a >"$out/a"
+              echo b >"$out/b"
+              echo d >"$out/c/d"
+            '';
+            actual = runCommand "actual" { } ''
+              mkdir -p -- "$out/c"
+              echo a >"$out/a"
+              echo d >"$out/c/d"
+            '';
+            inherit postFailureMessage;
+          }
+        );
+        postFailureMessage = ''
+          If after careful review, you find that the changes are acceptable, run `suchandsuch` to adopt the new behavior.
         '';
-        actual = runCommand "actual" { } ''
-          mkdir -p -- "$out/c"
-          echo a >"$out/a"
-          echo d >"$out/c/d"
+      in
+      runCommand "fileMissing-failure-and-log-check"
+        {
+          inherit log;
+          inherit postFailureMessage;
+        }
+        ''
+          grep -F "$postFailureMessage" "$log/testBuildFailure.log"
+          touch $out
         '';
-      }
-    );
 
     equalExe = testers.testEqualContents {
       assertion = "The same executable file contents at different paths are recognized as equal";
@@ -301,4 +399,6 @@ lib.recurseIntoAttrs {
         touch -- "$out"
       '';
   };
+
+  testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
 }

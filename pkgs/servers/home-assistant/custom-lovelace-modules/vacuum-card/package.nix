@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "vacuum-card";
-  version = "2.10.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = "vacuum-card";
     rev = "v${version}";
-    hash = "sha256-NJeD6YhXmNNBuhRWjK74sTrxzXyGSbehm5lz05sNA3Y=";
+    hash = "sha256-egWseYspxm+zkfFwTEBYQfBox3sswYMuOYqU6oEQTb4=";
   };
 
-  npmDepsHash = "sha256-x+pq58chBSgFVGr9Xtka5/MH/AHV0zMpyKfA/kEEXBM=";
+  npmDepsHash = "sha256-dfsKBTJV1QC8pmb/EIh4n5I9CDnOjy7+sPwQA/eLEi0=";
 
   installPhase = ''
     runHook preInstall
@@ -28,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "vacuum-card.js";
 
-  meta = with lib; {
+  meta = {
     description = "Vacuum cleaner card for Home Assistant Lovelace UI";
     homepage = "https://github.com/denysdovhan/vacuum-card";
-    license = licenses.mit;
-    maintainers = with maintainers; [ baksa ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ baksa ];
+    platforms = lib.platforms.all;
   };
 }

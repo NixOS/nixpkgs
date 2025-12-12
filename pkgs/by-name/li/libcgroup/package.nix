@@ -5,21 +5,35 @@
   pam,
   bison,
   flex,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
+  musl-fts,
   autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
-  version = "3.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "libcgroup";
+    repo = "libcgroup";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-CnejQcOyW3QzHuvsAdKe4M4XgmG9ufRaEBdO48+8ZqQ=";
+    hash = "sha256-kWW9ID/eYZH0O/Ge8pf3Cso4yu644R5EiQFYfZMcizs=";
   };
+
+  configureFlags = [
+    (lib.enableFeature enableSystemd "systemd")
+  ]
+  # implicit declaration of function 'rpl_malloc', ; did you mean 'realloc'
+  #
+  # It looks like in case of cross-compilation, autoconf assumes that malloc of the
+  # target platform is broken.
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -28,8 +42,9 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     pam
-    systemdLibs
-  ];
+  ]
+  ++ lib.optional enableSystemd systemdLibs
+  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   postPatch = ''
     substituteInPlace src/tools/Makefile.am \

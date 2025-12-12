@@ -1,44 +1,34 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  darwin,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "node_exporter";
-  version = "1.8.2";
-  rev = "v${version}";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    hash = "sha256-b2uior67RcCCpUE+qx55G1eWiT2wWDVsnosSH9fd3/I=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-UaybbRmcvifXNwTNXg7mIYN9JnonSxwG62KfvU5auIE=";
   };
 
-  vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
+  vendorHash = "sha256-zQn3Hn40zZT3ZLiYQc/68i9t791eisBSiB6Re24/Ncg=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      IOKit
-    ]
-  );
 
   excludedPackages = [ "docs/node-mixin" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/prometheus/common/version.Version=${version}"
-    "-X github.com/prometheus/common/version.Revision=${rev}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
     "-X github.com/prometheus/common/version.Branch=unknown"
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
     "-X github.com/prometheus/common/version.BuildDate=unknown"
@@ -46,17 +36,22 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Prometheus exporter for machine metrics";
     mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
-    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin
       Frostman
     ];
   };
-}
+})

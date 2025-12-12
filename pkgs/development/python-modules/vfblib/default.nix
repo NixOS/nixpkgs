@@ -5,7 +5,9 @@
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   fonttools,
+  orjson,
   typing-extensions,
   ufonormalizer,
   ufolib2,
@@ -14,20 +16,24 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.7.1";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
-    rev = "v${version}";
-    hash = "sha256-p+uoSB3LIEi1Zvm8HgsOJcRXngZWXj3BwIlxqIBfmB4=";
+    tag = "v${version}";
+    hash = "sha256-fAczRejHDe02iWMWXQzNHLmxRX5ApIPvUzsYnwqrKn8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     fonttools
+    orjson
     typing-extensions
     ufonormalizer
     ufolib2
@@ -40,10 +46,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Converter and deserializer for FontLab Studio 5 VFB files";
     homepage = "https://github.com/LucasFonts/vfbLib";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

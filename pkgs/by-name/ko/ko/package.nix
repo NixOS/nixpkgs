@@ -1,28 +1,31 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.15.4";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "ko-build";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MeFoy2WoPsJIgUhpzt/4sEP6J9lM4nsSAK2VZiTS7jo=";
+    repo = "ko";
+    tag = "v${version}";
+    hash = "sha256-fAdogzNCuz8vHWF1UOFmDKSRXbNvY5knKIhfJzXNGzw=";
   };
 
-  vendorHash = "sha256-n/NbbitSyjl05gESPVG3Uv2ek1U0Cd2fQqcxBhDKULU=";
+  vendorHash = "sha256-R+vGG2u/unXffD/9Aq065zR7Xq9KEWZl4llYFxR0HLU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # Pin so that we don't build the several other development tools
   subPackages = ".";
+
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
@@ -31,11 +34,11 @@ buildGoModule rec {
   ];
 
   checkFlags = [
-    # requires docker daemon
-    "-skip=TestNewPublisherCanPublish"
+    # requires docker daemon, pulls and builds delve debugger
+    "-skip=(TestNewPublisherCanPublish|TestDebugger)"
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we
@@ -53,26 +56,26 @@ buildGoModule rec {
     unset GOOS GOARCH GOARM
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ko \
       --bash <($out/bin/ko completion bash) \
       --fish <($out/bin/ko completion fish) \
       --zsh <($out/bin/ko completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ko-build/ko";
     changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
-    description = "Build and deploy Go applications on Kubernetes";
+    description = "Build and deploy Go applications";
     mainProgram = "ko";
     longDescription = ''
       ko is a simple, fast container image builder for Go applications.
       It's ideal for use cases where your image contains a single Go application without any/many dependencies on the OS base image (e.g. no cgo, no OS package dependencies).
       ko builds images by effectively executing go build on your local machine, and as such doesn't require docker to be installed. This can make it a good fit for lightweight CI/CD use cases.
-      ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
+      ko makes multi-platform builds easy, produces SBOMs by default, and includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nickcao
       jk
       vdemeester

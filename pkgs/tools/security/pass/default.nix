@@ -3,6 +3,7 @@
   lib,
   pkgs,
   fetchurl,
+  bash,
   buildEnv,
   coreutils,
   findutils,
@@ -47,8 +48,11 @@ let
   env =
     extensions:
     let
-      selected =
-        [ pass ] ++ extensions passExtensions ++ lib.optional tombPluginSupport passExtensions.tomb;
+      selected = [
+        pass
+      ]
+      ++ extensions passExtensions
+      ++ lib.optional tombPluginSupport passExtensions.tomb;
     in
     buildEnv {
       name = "pass-env";
@@ -88,9 +92,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ bash ];
 
   installFlags = [
     "PREFIX=$(out)"
@@ -129,48 +136,46 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  postFixup =
-    ''
-      # Fix program name in --help
-      substituteInPlace $out/bin/pass \
-        --replace 'PROGRAM="''${0##*/}"' "PROGRAM=pass"
+  postFixup = ''
+    # Fix program name in --help
+    substituteInPlace $out/bin/pass \
+      --replace 'PROGRAM="''${0##*/}"' "PROGRAM=pass"
 
-      # Ensure all dependencies are in PATH
-      wrapProgram $out/bin/pass \
-        --prefix PATH : "${wrapperPath}"
-    ''
-    + lib.optionalString dmenuSupport ''
-      # We just wrap passmenu with the same PATH as pass. It doesn't
-      # need all the tools in there but it doesn't hurt either.
-      wrapProgram $out/bin/passmenu \
-        --prefix PATH : "$out/bin:${wrapperPath}"
-    '';
+    # Ensure all dependencies are in PATH
+    wrapProgram $out/bin/pass \
+      --prefix PATH : "${wrapperPath}"
+  ''
+  + lib.optionalString dmenuSupport ''
+    # We just wrap passmenu with the same PATH as pass. It doesn't
+    # need all the tools in there but it doesn't hurt either.
+    wrapProgram $out/bin/passmenu \
+      --prefix PATH : "$out/bin:${wrapperPath}"
+  '';
 
   # Turn "check" into "installcheck", since we want to test our pass,
   # not the one before the fixup.
-  postPatch =
-    ''
-      patchShebangs tests
+  postPatch = ''
+    patchShebangs tests
 
-      substituteInPlace src/password-store.sh \
-        --replace "@out@" "$out"
+    substituteInPlace src/password-store.sh \
+      --replace "@out@" "$out"
 
-      # the turning
-      sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
-             -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
-             -e '/which gpg/ d' \
-        tests/setup.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # 'pass edit' uses hdid, which is not available from the sandbox.
-      rm -f tests/t0200-edit-tests.sh
-      rm -f tests/t0010-generate-tests.sh
-      rm -f tests/t0020-show-tests.sh
-      rm -f tests/t0050-mv-tests.sh
-      rm -f tests/t0100-insert-tests.sh
-      rm -f tests/t0300-reencryption.sh
-      rm -f tests/t0400-grep.sh
-    '';
+    # the turning
+    sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
+           -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+           -e '/which gpg/ d' \
+      tests/setup.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # 'pass edit' uses hdid, which is not available from the sandbox.
+    rm -f tests/t0200-edit-tests.sh
+    rm -f tests/t0010-generate-tests.sh
+    rm -f tests/t0020-show-tests.sh
+    rm -f tests/t0050-mv-tests.sh
+    rm -f tests/t0100-insert-tests.sh
+    rm -f tests/t0300-reencryption.sh
+    rm -f tests/t0400-grep.sh
+  '';
 
   doCheck = false;
 
@@ -183,19 +188,20 @@ stdenv.mkDerivation rec {
     withExtensions = env;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://www.passwordstore.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "pass";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       fpletz
       tadfisher
       globin
       ma27
+      ryan4yin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       pass is a very simple password store that keeps passwords inside gpg2

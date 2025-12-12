@@ -35,13 +35,15 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-declarations"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IPFS C++ API client library";
     homepage = "https://github.com/vasild/cpp-ipfs-http-client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

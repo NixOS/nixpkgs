@@ -22,24 +22,23 @@
 
 stdenv.mkDerivation rec {
   pname = "sirikali";
-  version = "1.7.2";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
     rev = version;
-    hash = "sha256-UtgK+q06J6T6RJ8jQiwzg5yVtgGZaZzmfadNyXxTCIk=";
+    hash = "sha256-vrhHpQzTwiU0NGcXRBt9mtr5qbwL3LEtZYoYc+IkJHw=";
   };
 
-  buildInputs =
-    [
-      qt6.qtbase
-      libpwquality
-      hicolor-icon-theme
-      libgcrypt
-    ]
-    ++ lib.optionals withKWallet [ kdePackages.kwallet ]
-    ++ lib.optionals withLibsecret [ libsecret ];
+  buildInputs = [
+    qt6.qtbase
+    libpwquality
+    hicolor-icon-theme
+    libgcrypt
+  ]
+  ++ lib.optionals withKWallet [ kdePackages.kwallet ]
+  ++ lib.optionals withLibsecret [ libsecret ];
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -69,13 +68,13 @@ stdenv.mkDerivation rec {
     "-DBUILD_WITH_QT6=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
     homepage = "https://github.com/mhogomchungu/sirikali";
     changelog = "https://github.com/mhogomchungu/sirikali/blob/${src.rev}/changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linuxissuper ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "sirikali";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

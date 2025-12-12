@@ -14,40 +14,35 @@
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
-  darwin,
-  buildPackages,
   nix-update-script,
-  withApplePCSC ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opensc";
-  version = "0.26.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
-    rev = version;
-    sha256 = "sha256-EIQ9YpIGwckg/JjpK0S2ZYdFf/0YC4KaWcLXRNRMuzA=";
+    tag = version;
+    hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    libxslt # xsltproc
   ];
-  buildInputs =
-    [
-      zlib
-      readline
-      openssl
-      libassuan
-      libXt
-      libxslt
-      libiconv
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Carbon
-    ++ (if withApplePCSC then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ]);
+  buildInputs = [
+    zlib
+    readline
+    openssl
+    libassuan
+    libXt
+    libiconv
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) pcsclite;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -62,23 +57,10 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    "--with-pcsc-provider=${
-      if withApplePCSC then
-        "${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-      else
-        "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-    }"
-    (lib.optionalString (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
-  ];
-
-  PCSC_CFLAGS = lib.concatStringsSep " " (
-    lib.optionals withApplePCSC [
-      "-I${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/Headers"
-      "-I${lib.getDev pcsclite}/include/PCSC"
-    ]
-  );
+  ]
+  ++
+    lib.optional (!stdenv.hostPlatform.isDarwin)
+      "--with-pcsc-provider=${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   installFlags = [
     "sysconfdir=$(out)/etc"
@@ -87,11 +69,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.michaeladler ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.michaeladler ];
   };
 }

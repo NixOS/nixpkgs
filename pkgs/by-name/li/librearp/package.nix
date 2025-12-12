@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r VST3/LibreArp.vst3 $out/lib/vst3
   '';
 
-  meta = with lib; {
-    description = "A pattern-based arpeggio generator plugin";
+  meta = {
+    description = "Pattern-based arpeggio generator plugin";
     homepage = "https://librearp.gitlab.io/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 })

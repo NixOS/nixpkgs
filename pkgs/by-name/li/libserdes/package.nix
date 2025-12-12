@@ -4,7 +4,6 @@
   fetchFromGitHub,
   perl,
   which,
-  boost,
   rdkafka,
   jansson,
   curl,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "7.8.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
-    repo = pname;
+    repo = "libserdes";
     rev = "v${version}";
-    hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
+    hash = "sha256-zEBJD7DOhpxfkAPypCZhygA6uaXIdK4yXZtDiuGA5Yg=";
   };
 
   outputs = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
     rdkafka
     jansson
     curl
@@ -43,10 +41,26 @@ stdenv.mkDerivation rec {
     avro-cpp
   ];
 
-  makeFlags = [ "GEN_PKG_CONFIG=y" ];
+  configureFlags = [
+    # avro-cpp public headers use at least C++17 features, but libserdes configure scripts
+    # basically cap it at C++11. It's really unfortunate that we have to patch the configure scripts for this,
+    # but this seems to be the most sensible way.
+    # - NIX_CFLAGS_COMPILE - fails because of -Werror in compiler checks since --std=... has no effect for C compilers.
+    # - CXXFLAGS without patching configure.self does nothing, because --std=c++11 is appended to the final flags, overriding
+    #   everything specified manually.
+    "--CXXFLAGS=${toString [ "--std=c++17" ]}"
+  ];
+
+  makeFlags = [
+    "GEN_PKG_CONFIG=y"
+  ];
 
   postPatch = ''
     patchShebangs configure lds-gen.pl
+    # Don't append the standard to CXXFLAGS, since we want to set it higher for avro-cpp.
+    substituteInPlace configure.self --replace-fail \
+      'mkl_mkvar_append CXXFLAGS CXXFLAGS "--std=c++11"' \
+      ":" # Do nothing, we set the standard ourselves.
   '';
 
   # Has a configure script but it’s not Autoconf so steal some bits from multiple-outputs.sh:
@@ -70,11 +84,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Schema-based serializer/deserializer C/C++ library with support for Avro and the Confluent Platform Schema Registry";
     homepage = "https://github.com/confluentinc/libserdes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ liff ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ liff ];
+    platforms = lib.platforms.all;
   };
 }

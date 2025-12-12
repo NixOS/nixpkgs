@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karajan1001";
     repo = "aiooss2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6tkJG6Jjvo2OaN9cRbs/7ApcrKiZ5tGSPUfugAx7iJU=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "tests/unit/test_adapter.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for aliyun OSS (Object Storage Service)";
     homepage = "https://github.com/karajan1001/aiooss2";
     changelog = "https://github.com/karajan1001/aiooss2/blob/${version}/CHANGES.txt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

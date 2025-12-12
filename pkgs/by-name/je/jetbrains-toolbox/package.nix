@@ -1,78 +1,128 @@
-{ stdenv
-, lib
-, fetchzip
-, copyDesktopItems
-, makeWrapper
-, runCommand
-, appimageTools
-, icu
-, genericUpdater
-, writeShellScript
+{
+  lib,
+  stdenvNoCC,
+  buildFHSEnv,
+  fetchzip,
+  fetchurl,
+  appimageTools,
+  undmg,
 }:
+
 let
   pname = "jetbrains-toolbox";
-  version = "2.5.1.34629";
+  version = "3.1.0.62320";
 
-  src = fetchzip {
-    url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    hash = "sha256-YaMlvgktoa738grHarJX2Uh5PZ7qHuASyJBcUhMssEI=";
-    stripRoot = false;
-  };
+  updateScript = ./update.sh;
 
-  appimageContents = runCommand "${pname}-extracted"
-    {
-      nativeBuildInputs = [ appimageTools.appimage-exec ];
-    }
-    ''
-      appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
-
-      # JetBrains ship a broken desktop file. Despite registering a custom
-      # scheme handler for jetbrains:// URLs, they never mark the command as
-      # being suitable for passing URLs to. Ergo, the handler never receives
-      # its payload. This causes various things to break, including login.
-      # Reported upstream at: https://youtrack.jetbrains.com/issue/TBX-11478/
-      sed -Ei '/^Exec=/s/( %U)?$/ %U/' $out/jetbrains-toolbox.desktop
-    '';
-
-  appimage = appimageTools.wrapAppImage {
-    inherit pname version;
-    src = appimageContents;
-  };
-in
-stdenv.mkDerivation {
-  inherit pname version src appimage;
-
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/jetbrains-toolbox $out/bin/jetbrains-toolbox \
-      --append-flags "--update-failed" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
-
-    runHook postInstall
-  '';
-
-  desktopItems = [ "${appimageContents}/jetbrains-toolbox.desktop" ];
-
-  # Disabling the tests, this seems to be very difficult to test this app.
-  doCheck = false;
-
-  passthru.updateScript = genericUpdater {
-    versionLister = writeShellScript "jetbrains-toolbox-versionLister" ''
-      curl -Ls 'https://data.services.jetbrains.com/products?code=TBA&release.type=release' \
-        | jq -r '.[] | .releases | flatten[] | .build'
-    '';
-  };
-
-  meta = with lib; {
-    description = "Jetbrains Toolbox";
-    homepage = "https://jetbrains.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ AnatolyPopov ];
-    platforms = [ "x86_64-linux" ];
+  meta = {
+    description = "JetBrains Toolbox";
+    homepage = "https://www.jetbrains.com/toolbox-app";
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ ners ];
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     mainProgram = "jetbrains-toolbox";
   };
+
+  selectSystem =
+    let
+      inherit (stdenvNoCC.hostPlatform) system;
+    in
+    attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+
+  selectKernel =
+    let
+      inherit (stdenvNoCC.hostPlatform.parsed) kernel;
+    in
+    attrs: attrs.${kernel.name} or (throw "Unsupported kernel: ${kernel.name}");
+
+  selectCpu =
+    let
+      inherit (stdenvNoCC.hostPlatform.parsed) cpu;
+    in
+    attrs: attrs.${cpu.name} or (throw "Unsupported CPU: ${cpu.name}");
+
+  sourceForVersion =
+    version:
+    let
+      archSuffix = selectCpu {
+        x86_64 = "";
+        aarch64 = "-arm64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-Fmnj1mYMpsiBpnERiWPAwQaH7qLqkrTICn0mxX0h+2U=";
+        aarch64-linux = "sha256-ogLaPN9nxZFQ09qmIF2mEi5o9LVgjoGtmYclc6KmrNU=";
+        x86_64-darwin = "sha256-hO5J9I8ZrzsgGtb9dMg2SeI/PrxpkFRjDRUdrjqMnPw=";
+        aarch64-darwin = "sha256-xA0LbwDKR6/64K9uUJHvrPC+0mRLGM/axz8+Knc+X8A=";
+      };
+    in
+    selectKernel {
+      linux = fetchzip {
+        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
+        inherit hash;
+      };
+      darwin = fetchurl {
+        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
+        inherit hash;
+      };
+    };
+in
+selectKernel {
+  linux =
+    let
+      src = sourceForVersion version;
+    in
+    buildFHSEnv {
+      inherit pname version meta;
+      passthru = {
+        inherit src updateScript;
+      };
+      multiPkgs =
+        pkgs:
+        with pkgs;
+        [
+          icu
+          libappindicator-gtk3
+        ]
+        ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
+      runScript = "${src}/bin/jetbrains-toolbox --update-failed";
+
+      extraInstallCommands = ''
+        install -Dm0644 ${src}/bin/jetbrains-toolbox.desktop -t $out/share/applications
+        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/jetbrains-toolbox.png
+      '';
+    };
+
+  darwin = stdenvNoCC.mkDerivation (finalAttrs: {
+    inherit
+      pname
+      version
+      meta
+      ;
+
+    src = sourceForVersion finalAttrs.version;
+
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "JetBrains Toolbox.app";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/Applications $out/bin
+      cp -r . $out/Applications/"JetBrains Toolbox.app"
+      ln -s $out/Applications/"JetBrains Toolbox.app"/Contents/MacOS/jetbrains-toolbox $out/bin/jetbrains-toolbox
+
+      runHook postInstall
+    '';
+
+    passthru = {
+      inherit updateScript;
+    };
+  });
 }

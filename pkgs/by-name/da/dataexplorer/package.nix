@@ -8,17 +8,18 @@
   swt,
   makeWrapper,
   strip-nondeterminism,
+  udevCheckHook,
 }:
 let
   swt-jdk17 = swt.override { jdk = jdk17; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
-  version = "3.9.0";
+  version = "3.9.3";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-MQAnLCkcs3r8/2j4zYaMC/JM8nBCEvqHKk8lv+7b9KE=";
+    hash = "sha256-NfbhamhRx78MW5H4BpKMDfrV2d082UkaIBFfbemOSOY=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk17
     makeWrapper
     strip-nondeterminism
+    udevCheckHook
   ];
 
   buildPhase = ''
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   #checkPhase = ''
   #  ant -f build/build.xml check
   #'';
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall
@@ -75,13 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type jar $out/share/DataExplorer/{DataExplorer.jar,devices/*.jar}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical tool to analyze data, gathered from various hardware devices";
     homepage = "https://www.nongnu.org/dataexplorer/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ panicgh ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # contains RXTXcomm (JNI library with *.so files)
       binaryBytecode # contains thirdparty jar files, e.g. javax.json, org.glassfish.json

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-6TGptKWX0hSNL3Z3ioP7puzozWLiMhCybN7hATQdD/k=";
   };
 
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     fuse3
     gumbo
     libuuid
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=attribute-warning"
+    "-Wno-error=pedantic"
   ];
 
   passthru = {

@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "editorconfig";
-  version = "0.12.4";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    hash = "sha256-+m674bLj6xs7MWU+8BMixEwy7/TjyES0lvCLLogTDHQ=";
+    hash = "sha256-3wEW2FMBKBS9mekYgmYG3Ohd3plCtYDFejwG3W6B9IA=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ cmake ];
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editorconfig" ];
 
-  meta = with lib; {
+  meta = {
     description = "EditorConfig File Locator and Interpreter for Python";
     mainProgram = "editorconfig";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

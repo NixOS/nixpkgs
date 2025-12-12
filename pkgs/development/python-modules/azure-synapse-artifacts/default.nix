@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.19.0";
+  version = "0.21.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UvCSsiZ315IoDwvMI02JLJ9zjpPI4Ut0wZUQG5uicYQ=";
+    pname = "azure_synapse_artifacts";
+    inherit version;
+    hash = "sha256-1+N1Fs+FaeA8YE2SHjQH1xQM91I7Z7Z/dXyvmZ48juc=";
   };
 
   propagatedBuildInputs = [
@@ -33,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.artifacts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Synapse Artifacts Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-artifacts_${version}/sdk/synapse/azure-synapse-artifacts/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

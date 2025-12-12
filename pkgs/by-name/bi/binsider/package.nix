@@ -1,32 +1,23 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "binsider";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "binsider";
     rev = "v${version}";
-    hash = "sha256-FNaYMp+vrFIziBzZ8//+ppq7kwRjBJypqsxg42XwdEs=";
+    hash = "sha256-k40mnDRbvwWJmcT02aVWdwwEiDCuL4hQnvnPitrW8qA=";
   };
 
-  cargoHash = "sha256-EGqoHMkBPIhKV/PozArQ62bH/Gqc92S6ZabTjmIbQeE=";
+  cargoHash = "sha256-hysp7AeYJ153AC0ERcrRzf4ujmM+V9pgAxOvOlG/2aE=";
 
   buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      AppKit
-      CoreServices
-    ]
-  );
 
   checkType = "debug";
   checkFlags = [
@@ -34,14 +25,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_init"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analyzer of executables using a terminal user interface";
     homepage = "https://github.com/orhun/binsider";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ samueltardieu ];
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "binsider";
   };
 }

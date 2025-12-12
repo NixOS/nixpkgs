@@ -10,6 +10,7 @@
   autoreconfHook,
   pkg-config,
   pandoc,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/mp3fs.cc \
-      --replace "#include <fuse_darwin.h>" "" \
-      --replace "osxfuse_version()" "fuse_version()"
+      --replace-fail "#include <fuse_darwin.h>" "" \
+      --replace-fail "osxfuse_version()" "fuse_version()"
   '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pandoc
+  ];
 
   buildInputs = [
     flac
@@ -35,16 +42,12 @@ stdenv.mkDerivation rec {
     lame
     libid3tag
     libvorbis
-  ];
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    pandoc
+    zlib
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "FUSE file system that transparently transcodes to MP3";
     longDescription = ''
       A read-only FUSE filesystem which transcodes between audio formats
@@ -54,9 +57,9 @@ stdenv.mkDerivation rec {
       files through simple drag-and-drop in a file browser.
     '';
     homepage = "https://khenriks.github.io/mp3fs/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Luflosi ];
     mainProgram = "mp3fs";
   };
 }

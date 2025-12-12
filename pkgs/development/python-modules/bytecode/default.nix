@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.16.0";
+  version = "0.17.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vstinner";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Nj/GKZC+zZt1M4Qd7CMXQCLwTIu64aidasH4PwBLtzw=";
+    repo = "bytecode";
+    tag = version;
+    hash = "sha256-AocS5Z4WkHTR+nO5/4B7oV/fb/ASG0aGrG/722Ioup0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bytecode" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vstinner/bytecode";
     description = "Python module to generate and modify bytecode";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

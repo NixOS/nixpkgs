@@ -5,35 +5,27 @@
   pkg-config,
   sqlite,
   stdenv,
-  darwin,
   nixosTests,
   rocksdb,
   rust-jemalloc-sys,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-conduit";
-  version = "0.9.0";
+  version = "0.10.9";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
-    rev = "v${version}";
-    hash = "sha256-mQLfRAun2G/LDnw3jyFGJbOqpxh2PL8IGzFELRfAgAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rJyuR8Ie/JiNKNjQL21+Q1PWliEAm+lwGraGeDxEHyY=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ruma-0.10.1" = "sha256-VmIZ24vULpm6lF24OFZdsI5JG+XqVPpUWM/R64X17jo=";
-    };
-  };
+  cargoHash = "sha256-4ZA+3f8Kt+1JAm9KXnMRxAF+X9z8HSJoJe6Ny63SlnA=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
   preBuild = ''
-    substituteInPlace Cargo.toml --replace "features = [\"bundled\"]" "features = []"
+    substituteInPlace Cargo.toml --replace-fail "features = [\"bundled\"]" "features = []"
     cargo update --offline -p rusqlite
   '';
 
@@ -42,15 +34,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      sqlite
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    rust-jemalloc-sys
+    rocksdb
+  ];
 
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
@@ -64,14 +52,14 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) matrix-conduit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       pstn
-      pimeys
+      SchweGELBin
     ];
     mainProgram = "conduit";
   };
-}
+})

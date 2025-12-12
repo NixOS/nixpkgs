@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "1.6.2";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LZQNJU7QEoHo+RWvHnQkNxBg6t322u/c3PyBhy1eVZc=";
+    tag = version;
+    hash = "sha256-oRitXlQunfqLSKMaSW3E1BnL0otA4UPj/y6bbiN0kPM=";
   };
 
   postPatch = ''
@@ -50,12 +50,17 @@ buildPythonPackage rec {
     six
   ];
 
+  disabledTests = [
+    # The memory usage goes *down* on Darwin, which the test confuses for an increase and fails
+    "test_get_metadata_memory_usage"
+  ];
+
   pythonImportsCheck = [ "pyeclib" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides a simple Python interface for implementing erasure codes";
     homepage = "https://github.com/openstack/pyeclib";
-    license = licenses.bsd2;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.bsd2;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -6,10 +6,10 @@
   cmake,
   nasm,
   alsa-lib,
-  ffmpeg_6,
+  ffmpeg_7,
   glew,
   glib,
-  gtk2,
+  gtk3,
   libmad,
   libogg,
   libpng,
@@ -17,6 +17,7 @@
   libvorbis,
   udev,
   xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -31,16 +32,27 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    # https://github.com/stepmania/stepmania/pull/2247
     (fetchpatch {
-      name = "fix-building-with-ffmpeg6.patch";
-      url = "https://github.com/stepmania/stepmania/commit/3fef5ef60b7674d6431f4e1e4ba8c69b0c21c023.patch";
+      # Fix building with newer FFmpeg
+      name = "fix-building-with-newer-ffmpeg.patch";
+      url = "https://github.com/stepmania/stepmania/commit/3fef5ef60b7674d6431f4e1e4ba8c69b0c21c023.patch?full_index=1";
       hash = "sha256-m+5sP+mIpcSjioRBdzChqja5zwNcwdSNAfvSJ2Lww+g=";
     })
+    (fetchpatch {
+      # Fix crash on loading animated previews while using newer FFmpeg
+      name = "fix-crash-newer-ffmpeg.patch";
+      url = "https://github.com/stepmania/stepmania/commit/e0d2a5182dcd855e181fffa086273460c553c7ff.patch?full_index=1";
+      hash = "sha256-XacaMn29FwG3WgFBfB890I8mzVrvuOL4wPWcHHNYfXM=";
+    })
+    # FFmpeg 7 frame_number compatibility fix
+    ./ffmpeg-7.patch
   ];
 
   postPatch = ''
     sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [
@@ -50,10 +62,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
-    ffmpeg_6
+    ffmpeg_7
     glew
     glib
-    gtk2
+    gtk3
     libmad
     libogg
     libpng
@@ -61,13 +73,13 @@ stdenv.mkDerivation {
     libvorbis
     udev
     xorg.libXtst
+    zlib
   ];
 
   cmakeFlags = [
     "-DWITH_SYSTEM_FFMPEG=1"
     "-DWITH_SYSTEM_PNG=on"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+    "-DWITH_SYSTEM_ZLIB=on"
   ];
 
   postInstall = ''
@@ -80,12 +92,12 @@ stdenv.mkDerivation {
     install -Dm444 $src/stepmania.desktop -t $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.stepmania.com/";
     description = "Free dance and rhythm game for Windows, Mac, and Linux";
-    platforms = platforms.linux;
-    license = licenses.mit; # expat version
-    maintainers = with maintainers; [ h7x4 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit; # expat version
+    maintainers = with lib.maintainers; [ h7x4 ];
     mainProgram = "stepmania";
   };
 }

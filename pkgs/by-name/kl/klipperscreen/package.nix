@@ -8,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
-  version = "0.4.4";
+  version = "0.4.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "KlipperScreen";
     repo = "KlipperScreen";
     rev = "v${version}";
-    hash = "sha256-MxuUmkuEnfFC0iPwNUc0Wh8bIEl1J1FMgGEYMjHePZ8=";
+    hash = "sha256-lKGMz5N4lKSqA614wjJiUfP5fUY+WqFDPxeX/Iyp2TQ=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     mpv
     six
     dbus-python
+    sdbus-networkmanager
   ];
 
   dontWrapGApps = true;
@@ -47,11 +48,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { url = meta.homepage; };
 
-  meta = with lib; {
+  meta = {
     description = "Touchscreen GUI for the Klipper 3D printer firmware";
     homepage = "https://github.com/jordanruthe/KlipperScreen";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       cab404
       saturn745
     ];

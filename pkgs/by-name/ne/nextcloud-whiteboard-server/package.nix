@@ -8,16 +8,16 @@
 }:
 buildNpmPackage rec {
   pname = "nextcloud-whiteboard-server";
-  version = "1.0.4";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "whiteboard";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-27w8FZz9PbVdYV7yR5iRXi5edw7U/3bLVYfdRa8yPzo=";
+    tag = "v${version}";
+    hash = "sha256-fk+BiQ6jM/SvBioz56WHIhWGErgroCvagQq6/vMWCyk=";
   };
 
-  npmDepsHash = "sha256-SwFQRDRo7Q8+0zYWx5szahJzDSoxkkJDPQ3qEdNLVaE=";
+  npmDepsHash = "sha256-x6ccAOq0yZ8DfZLIp2ZNpT8HMAjBr+e4gsEOUOskABs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -31,5 +31,6 @@ buildNpmPackage rec {
     homepage = "https://apps.nextcloud.com/apps/whiteboard";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.onny ];
+    mainProgram = "nextcloud-whiteboard-server";
   };
 }

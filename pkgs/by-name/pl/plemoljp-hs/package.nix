@@ -1,16 +1,19 @@
 {
-  lib,
   stdenvNoCC,
   fetchzip,
+  plemoljp,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plemoljp-hs";
-  version = "1.7.1";
+
+  # plemoljp's updateScript also updates this version.
+  # nixpkgs-update: no auto update
+  inherit (plemoljp) version;
 
   src = fetchzip {
-    url = "https://github.com/yuru7/PlemolJP/releases/download/v${version}/PlemolJP_HS_v${version}.zip";
-    hash = "sha256-JbuKBU1TT0qE89N61jX+WF25PBRHo/RSAtdPa5Ni8og=";
+    url = "https://github.com/yuru7/PlemolJP/releases/download/v${finalAttrs.version}/PlemolJP_HS_v${finalAttrs.version}.zip";
+    hash = "sha256-V21T8ktNZE4nq3SH6aN9iIJHmGTkZuMsvT84yHbwSqI=";
   };
 
   installPhase = ''
@@ -24,11 +27,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = plemoljp.meta // {
     description = "Composite font of IBM Plex Mono, IBM Plex Sans JP and hidden full-width space";
-    homepage = "https://github.com/yuru7/PlemolJP";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ kachick ];
   };
-}
+})

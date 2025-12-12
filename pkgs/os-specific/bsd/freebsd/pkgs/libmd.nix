@@ -13,15 +13,20 @@
   # this is set to true when used as the dependency of install
   # this is set to false when used as the dependency of libc
   bootstrapInstallation ? false,
+  extraSrc ? [ ],
 }:
 
 mkDerivation (
   {
+    pname = "libmd" + lib.optionalString bootstrapInstallation "-boot";
     path = "lib/libmd";
     extraPaths = [
       "sys/crypto"
       "sys/sys"
-    ];
+      "sys/kern"
+      "lib/libc/Versions.def"
+    ]
+    ++ extraSrc;
 
     outputs = [
       "out"
@@ -31,6 +36,8 @@ mkDerivation (
 
     noLibc = !bootstrapInstallation;
 
+    MK_TESTS = "no";
+
     buildInputs =
       lib.optionals (!bootstrapInstallation) [
         libcMinimal
@@ -39,13 +46,12 @@ mkDerivation (
       ]
       ++ compatIfNeeded;
 
-    preBuild =
-      ''
-        mkdir $BSDSRCDIR/lib/libmd/sys
-      ''
-      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
-      '';
+    preBuild = ''
+      mkdir $BSDSRCDIR/lib/libmd/sys
+    ''
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    '';
 
     installPhase =
       if (!bootstrapInstallation) then

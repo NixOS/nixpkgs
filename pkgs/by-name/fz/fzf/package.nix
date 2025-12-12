@@ -1,37 +1,43 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runtimeShell
-, installShellFiles
-, bc
-, ncurses
-, testers
-, fzf
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runtimeShell,
+  installShellFiles,
+  bc,
+  ncurses,
+  testers,
+  fzf,
 }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.57.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "v${version}";
-    hash = "sha256-WEdCa6Krj+VicB1vxWzyY1rCHvmaL4t2njhhjq0Bppw=";
+    hash = "sha256-P6jyKskc2jT6zMLAMxklN8e/630oWYT4bWim20IMKvo=";
   };
 
-  vendorHash = "sha256-utHQzXjtdnshUsYDQEQY2qoQGZsnfXXPj3A9VsDj0vQ=";
+  vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";
 
   env.CGO_ENABLED = 0;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -59,12 +65,6 @@ buildGoModule rec {
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-      status is-interactive; or exit 0
-      fzf_key_bindings
-    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
@@ -84,7 +84,10 @@ buildGoModule rec {
     description = "Command-line fuzzy finder written in Go";
     homepage = "https://github.com/junegunn/fzf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Br1ght0ne ma27 zowoq ];
+    maintainers = with lib.maintainers; [
+      ma27
+      zowoq
+    ];
     mainProgram = "fzf";
     platforms = lib.platforms.unix;
   };

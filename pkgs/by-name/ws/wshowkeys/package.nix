@@ -14,7 +14,7 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wshowkeys-unstable";
   version = "2021-08-01";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "ammgws";
     repo = "wshowkeys";
     rev = "e8bfc78f08ebdd1316daae59ecc77e62bba68b2b";
-    sha256 = "sha256-/HvNCQWsXOJZeCxHWmsLlbBDhBzF7XP/SPLdDiWMDC4=";
+    hash = "sha256-/HvNCQWsXOJZeCxHWmsLlbBDhBzF7XP/SPLdDiWMDC4=";
   };
 
   strictDeps = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Displays keys being pressed on a Wayland session";
     longDescription = ''
       Displays keypresses on screen on supported Wayland compositors (requires
@@ -51,15 +51,14 @@ stdenv.mkDerivation rec {
       setuid binary (use "programs.wshowkeys.enable = true;").
     '';
     homepage = "https://github.com/ammgws/wshowkeys";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       mit
     ];
     # Some portions of the code are taken from Sway which is MIT licensed.
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      primeos
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       berbiche
     ];
     mainProgram = "wshowkeys";

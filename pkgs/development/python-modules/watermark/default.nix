@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = "watermark";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UR4kV6UoZ/JLO19on+qEH+M05QIsT0SXvXJtTMCKuZM=";
   };
 
@@ -37,15 +37,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "watermark" ];
 
-  meta = with lib; {
+  meta = {
     description = "IPython extension for printing date and timestamps, version numbers, and hardware information";
     homepage = "https://github.com/rasbt/watermark";
     changelog = "https://github.com/rasbt/watermark/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nphilou ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nphilou ];
   };
 }

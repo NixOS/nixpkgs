@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   kdePackages,
   gnome-themes-extra,
@@ -10,7 +10,7 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   # pypinput is marked as broken for darwin
   pynputSupport ? stdenv.hostPlatform.isLinux,
-  # Experimental Drag & Drop support requires x11 & pyinput suport
+  # Experimental Drag & Drop support requires x11 & pyinput support
   hasDndSupport ? x11Support && pynputSupport,
   enableDragAndDrop ? false,
 }:
@@ -18,21 +18,21 @@
 lib.throwIf (enableDragAndDrop && !hasDndSupport)
   "Drag and drop support is only available for linux with xorg."
 
-  python3.pkgs.buildPythonApplication
+  python3Packages.buildPythonApplication
   rec {
     pname = "tuifimanager";
-    version = "5.0.5";
+    version = "5.1.5";
 
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "GiorgosXou";
       repo = "TUIFIManager";
-      rev = "v.${version}";
-      hash = "sha256-KwyRGNT3o/Ww+szBI+MmMMw5ZaSPT+G3xJIw5g9iBKo=";
+      tag = "v.${version}";
+      hash = "sha256-5ShrmjEFKGdmaGBFjMnIfcM6p8AZd13uIEFwDVAkU/8=";
     };
 
-    build-system = with python3.pkgs; [
+    build-system = with python3Packages; [
       setuptools
       setuptools-scm
     ];
@@ -44,19 +44,18 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
         makeWrapper
       ]);
 
-    propagatedBuildInputs =
-      [
-        python3.pkgs.send2trash
-        python3.pkgs.unicurses
-      ]
-      ++ (lib.optionals enableDragAndDrop [
-        python3.pkgs.pynput
-        python3.pkgs.pyside6
-        python3.pkgs.requests
-        python3.pkgs.xlib
-        kdePackages.qtbase
-        kdePackages.qt6gtk2
-      ]);
+    dependencies = [
+      python3Packages.send2trash
+      python3Packages.unicurses
+    ]
+    ++ (lib.optionals enableDragAndDrop [
+      python3Packages.pynput
+      python3Packages.pyside6
+      python3Packages.requests
+      python3Packages.xlib
+      kdePackages.qtbase
+      kdePackages.qt6gtk2
+    ]);
 
     postFixup =
       let

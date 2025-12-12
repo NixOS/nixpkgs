@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "logging-journald";
+    tag = version;
     hash = "sha256-RQ9opkAOZfhYuqOXJ2Mtnig8soL+lCveYH2YdXL1AGM=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logging_journald" ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging handler for writing logs to the journald";
     homepage = "https://github.com/mosquito/logging-journald";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -10,21 +10,21 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
-    repo = pname;
+    repo = "cargo-xbuild";
     rev = "v${version}";
     hash = "sha256-29rCjmzxxIjR5nBN2J3xxP+r8NnPIJV90FkSQQEBbo4=";
   };
 
-  cargoHash = "sha256-tyPhKWDSDNxQy+vpWNS5VP5D8TkUR7MJSAlG8wZsDy4=";
+  cargoHash = "sha256-8ceL4Ntb+P+BvLqlnSxKcyZREckyWAKDhxR6prjaxHM=";
 
-  meta = with lib; {
+  meta = {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";
     homepage = "https://github.com/rust-osdev/cargo-xbuild";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johntitor
       xrelkd
     ];

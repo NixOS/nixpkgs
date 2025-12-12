@@ -6,18 +6,24 @@
   gflags,
   gtest,
   perl,
+  pkgsBuildHost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glog";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
-    rev = "v${version}";
-    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
+
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    substituteInPlace src/logging_unittest.cc \
+      --replace-warn "/usr/bin/true" "${pkgsBuildHost.coreutils}/bin/true"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -67,8 +73,13 @@ stdenv.mkDerivation rec {
         lib.optionals stdenv.hostPlatform.isDarwin [
           "mock-log"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-          "logging" # works around segfaults on aarch64-darwin for now
+        ++ [
+          "logging" # works around segfaults for now
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+          # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
+          # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
+          "symbolize"
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
@@ -80,14 +91,14 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/glog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Library for application-level logging";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nh2
       r-burns
     ];
   };
-}
+})

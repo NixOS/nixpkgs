@@ -33,17 +33,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dovecot=${dovecot}/lib/dovecot"
+    "--with-moduledir=${placeholder "out"}/lib/dovecot/modules"
     "--without-dovecot-install-dirs"
-    "--with-moduledir=$(out)/lib/dovecot"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pigeonhole.dovecot.org/";
     description = "Sieve plugin for the Dovecot IMAP server";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ globin ] ++ teams.helsinki-systems.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ ];
+    teams = [ lib.teams.helsinki-systems ];
+    platforms = lib.platforms.unix;
   };
 }

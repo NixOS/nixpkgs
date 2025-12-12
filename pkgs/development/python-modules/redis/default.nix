@@ -4,10 +4,12 @@
   buildPythonPackage,
   pythonOlder,
 
-  # propagates
+  # build-system
+  hatchling,
+
+  # dependencies
   async-timeout,
   deprecated,
-  importlib-metadata,
   packaging,
   typing-extensions,
 
@@ -22,22 +24,24 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "5.2.0";
-  format = "setuptools";
+  version = "6.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CxCHZlp3Gx/y4AOqW901TxWnDJ4l1afb+cciwWUop7A=";
+    hash = "sha256-6CHxKbdd3my5ndNeXHboxJUSpaDY39xWCy+9RLhcqXc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     async-timeout
     deprecated
     packaging
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     hiredis = [ hiredis ];
@@ -61,10 +65,10 @@ buildPythonPackage rec {
   # Tests require a running redis
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/redis/redis-py";
     changelog = "https://github.com/redis/redis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

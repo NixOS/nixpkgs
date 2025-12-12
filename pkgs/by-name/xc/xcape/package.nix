@@ -9,13 +9,13 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xcape";
   version = "unstable-2018-03-01";
 
   src = fetchFromGitHub {
     owner = "alols";
-    repo = pname;
+    repo = "xcape";
     rev = "a34d6bae27bbd55506852f5ed3c27045a3c0bd9e";
     sha256 = "04grs4w9kpfzz25mqw82zdiy51g0w355gpn5b170p7ha5972ykc8";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
-  meta = with lib; {
+  meta = {
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
       released on its own.
     '';
     homepage = "https://github.com/alols/xcape";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     mainProgram = "xcape";
   };
 }

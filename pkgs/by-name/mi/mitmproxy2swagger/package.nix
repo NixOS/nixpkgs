@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = "mitmproxy2swagger";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VHxqxee5sQWRS13V4SfY4LWaN0oxxWsNVDOEqUyKHfg=";
+    tag = version;
+    hash = "sha256-bQ9zjRsMrC/B118iP2hevj2hhSFD7FTnsCe6lUMwYSI=";
   };
 
   pythonRelaxDeps = [
@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mitmproxy2swagger" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automagically reverse-engineer REST APIs";
     homepage = "https://github.com/alufers/mitmproxy2swagger";
     changelog = "https://github.com/alufers/mitmproxy2swagger/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mitmproxy2swagger";
   };
 }

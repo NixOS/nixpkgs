@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.7.9";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dTsWFWaqX6YypNJz9WSlcxJlYOstmTu2ZgOG3RPSViw=";
+    hash = "sha256-3zxXWzFOjWcnX8hAQpRzGlzTmnXjZjn9jF+MdsHuGkw=";
   };
 
   build-system = [ hatchling ];
@@ -54,11 +54,11 @@ buildPythonPackage rec {
     "fxa/tests/test_oauth.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Firefox Accounts client library";
     mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

@@ -6,30 +6,37 @@
   setuptools,
   setuptools-scm,
 
+  bottle,
   certifi,
   filelock,
   isodate,
+  jaconv,
+  jsonschema,
   lxml,
   numpy,
   openpyxl,
+  pillow,
   pyparsing,
   python-dateutil,
   regex,
+  truststore,
+  typing-extensions,
 
   gui ? true,
   tkinter,
 
-  pycryptodome,
+  aniso8601,
+  cheroot,
+  graphviz,
+  holidays,
+  matplotlib,
   pg8000,
+  pycryptodome,
   pymysql,
   pyodbc,
-  rdflib,
-  holidays,
   pytz,
+  rdflib,
   tinycss2,
-  graphviz,
-  cheroot,
-  cherrypy,
   tornado,
 
   sphinxHook,
@@ -38,20 +45,21 @@
   sphinx-copybutton,
   furo,
 
+  writableTmpDirAsHomeHook,
   pytestCheckHook,
   boto3,
 }:
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.30.25";
+  version = "2.37.72";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
+    tag = version;
+    hash = "sha256-wytYETzntY1sGHgXua/MOkceiNKjr5qddAGWPMJni98=";
   };
 
   outputs = [
@@ -61,9 +69,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-        'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
+        'requires = ["setuptools>=80.9,<81", "wheel>=0.45,<1", "setuptools_scm[toml]>=9.2,<10"]' \
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
   '';
+
+  pythonRelaxDeps = [
+    "pillow" # pillow's current version is above what arelle officially supports, but it should be fine
+  ];
 
   build-system = [
     setuptools
@@ -71,16 +83,23 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bottle
     certifi
     filelock
     isodate
+    jaconv
+    jsonschema
     lxml
     numpy
     openpyxl
+    pillow
     pyparsing
     python-dateutil
     regex
-  ] ++ lib.optionals gui [ tkinter ];
+    truststore
+    typing-extensions
+  ]
+  ++ lib.optionals gui [ tkinter ];
 
   optional-dependencies = {
     crypto = [ pycryptodome ];
@@ -91,16 +110,18 @@ buildPythonPackage rec {
       rdflib
     ];
     efm = [
+      aniso8601
       holidays
+      matplotlib
       pytz
     ];
     esef = [ tinycss2 ];
     objectmaker = [ graphviz ];
     webserver = [
       cheroot
-      cherrypy
       tornado
     ];
+    xule = [ aniso8601 ];
   };
 
   nativeBuildInputs = [
@@ -118,23 +139,20 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     pytestCheckHook
     boto3
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  disabledTestPaths =
-    [
-      "tests/integration_tests"
-    ]
-    ++ lib.optionals (!gui) [
-      # these tests import tkinter
-      "tests/unit_tests/arelle/test_updater.py"
-      "tests/unit_tests/arelle/test_import.py"
-    ];
+  disabledTestPaths = [
+    "tests/integration_tests"
+  ]
+  ++ lib.optionals (!gui) [
+    # these tests import tkinter
+    "tests/unit_tests/arelle/test_updater.py"
+    "tests/unit_tests/arelle/test_import.py"
+  ];
 
   meta = {
     description = "Open source XBRL platform";

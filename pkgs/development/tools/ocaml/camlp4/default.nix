@@ -4,10 +4,12 @@
   fetchzip,
   which,
   ocaml,
+  camlp-streams,
   ocamlbuild,
+  findlib,
 }:
 
-if lib.versionAtLeast ocaml.version "4.15" then
+if lib.versionAtLeast ocaml.version "5.4" then
   throw "camlp4 is not available for OCaml ${ocaml.version}"
 else
 
@@ -66,6 +68,22 @@ else
           version = "4.14+1";
           sha256 = "sha256-cPN3GioZT/Zt6uzbjGUPEGVJcPQdsAnCkU/AQoPfvuo=";
         };
+        "5.0" = {
+          version = "5.0";
+          sha256 = "sha256-oZptFNPUEAq5YlcqAoDWfLghGMF9AN7E7hUN55SAX+4=";
+        };
+        "5.1" = {
+          version = "5.1";
+          sha256 = "sha256-Ubedjg3BeHA0bJbEalQN9eEk5+LRAI/er+8mWfVYchg=";
+        };
+        "5.2" = {
+          version = "5.2";
+          sha256 = "sha256-lzbc9xsgeYlbVf71O+PWYS14QivAH1aPdnvWhe0HHME=";
+        };
+        "5.3" = {
+          version = "5.3";
+          sha256 = "sha256-V/kKhTP9U4jWDFuQKuB7BS3XICg1lq/2Avj7UJR55+k=";
+        };
       }
       .${ocaml.meta.branch};
   in
@@ -84,6 +102,14 @@ else
     nativeBuildInputs = [
       which
       ocaml
+      ocamlbuild
+    ]
+    ++ lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
+      findlib
+    ];
+
+    buildInputs = lib.optionals (lib.versionAtLeast ocaml.version "5.0") [
+      camlp-streams
       ocamlbuild
     ];
 
@@ -119,7 +145,7 @@ else
 
     dontStrip = true;
 
-    meta = with lib; {
+    meta = {
       description = "Software system for writing extensible parsers for programming languages";
       homepage = "https://github.com/ocaml/camlp4";
       platforms = ocaml.meta.platforms or [ ];

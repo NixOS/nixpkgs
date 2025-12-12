@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "std-uritemplate";
-  version = "1.0.6";
+  version = "2.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "std_uritemplate";
     inherit version;
-    hash = "sha256-m+1iEgSp27R/ieqVjJfEY9FfKLzLyAGquMmw11cZ7GI=";
+    hash = "sha256-E4zv8sW/7ximUDcqXoyC/n94DIcjVRPebDQvtffhg0c=";
   };
 
   build-system = [ poetry-core ];
@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stduritemplate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Std-uritemplate implementation for Python";
     homepage = "https://github.com/std-uritemplate/std-uritemplate";
     changelog = "https://github.com/std-uritemplate/std-uritemplate/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

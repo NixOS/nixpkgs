@@ -13,7 +13,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "clean-fid";
   version = "0.1.35";
   format = "setuptools";
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   # no tests1
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch - FID calculation with proper image resizing and quantization steps [CVPR 2022]";
     homepage = "https://github.com/GaParmar/clean-fid";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

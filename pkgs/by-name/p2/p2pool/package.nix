@@ -12,21 +12,17 @@
   openssl,
   pkg-config,
   zeromq,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Foundation;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "p2pool";
-  version = "4.2";
+  version = "4.12";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
-    rev = "v${version}";
-    hash = "sha256-zowRQeFrT0sY9L5XJQ10f8tRnEchjKVdBixtPbAQyvo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Yrc36tibHanXZcE3I+xcmkCzBALE09zi1Zg0Lz3qS2g=";
     fetchSubmodules = true;
   };
 
@@ -42,17 +38,9 @@ stdenv.mkDerivation rec {
     hwloc
     openssl
     curl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  ];
 
   cmakeFlags = [ "-DWITH_LTO=OFF" ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
-      [
-        "-faligned-allocation"
-      ]
-  );
 
   installPhase = ''
     runHook preInstall
@@ -66,12 +54,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized pool for Monero mining";
     homepage = "https://github.com/SChernykh/p2pool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ratsclub ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ratsclub
+      JacoMalan1
+      jk
+    ];
     mainProgram = "p2pool";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

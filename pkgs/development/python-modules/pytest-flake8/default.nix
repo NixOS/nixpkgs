@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coherent-oss";
     repo = "pytest-flake8";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uc5DOqqdoLfhzI2ogDOqhbJOHzdu+uqSOojIH+S1LZI=";
   };
 

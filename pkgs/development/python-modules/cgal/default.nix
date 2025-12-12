@@ -4,12 +4,13 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchurl,
   setuptools,
   boost,
   cgal,
   cmake,
   gmp,
-  tbb,
+  onetbb,
   LAStools,
   eigen,
   mpfr,
@@ -19,6 +20,16 @@
   withLAS ? false, # unfree
 }:
 
+let
+  # Use CGAL 6.0.1 for compatibility with cgal-swig-bindings
+  cgal_6_0_1 = cgal.overrideAttrs (oldAttrs: {
+    version = "6.0.1";
+    src = fetchurl {
+      url = "https://github.com/CGAL/cgal/releases/download/v6.0.1/CGAL-6.0.1.tar.xz";
+      hash = "sha256-Cs378xfFVmMN1SbzJTeA8ptuyXE+6SkD6Btck8D1m38=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "cgal";
   version = "6.0.1.post202410241521";
@@ -27,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "cgal-swig-bindings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 
@@ -39,19 +50,18 @@ buildPythonPackage rec {
     swig
   ];
 
-  buildInputs =
-    [
-      cgal
-      gmp
-      mpfr
-      boost
-      zlib
-      tbb
-      eigen
-    ]
-    ++ lib.optionals withLAS [
-      LAStools
-    ];
+  buildInputs = [
+    cgal_6_0_1
+    gmp
+    mpfr
+    boost
+    zlib
+    onetbb
+    eigen
+  ]
+  ++ lib.optionals withLAS [
+    LAStools
+  ];
 
   dependencies = [
     numpy
@@ -83,7 +93,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/CGAL/cgal-swig-bindings";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbsds ];
-    # error: no template named 'unary_function' in namespace 'boost::functional::detail'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -2,26 +2,25 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
-  fetchPypi,
-  IOKit,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   python,
-  pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "7.1.2";
+  pyproject = true;
 
   inherit stdenv;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-j6rk8xC22Wn6JsoFRTOLIfc8axXbfEqNk0pUgvqoGPI=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
   };
 
   postPatch = ''
@@ -32,10 +31,7 @@ buildPythonPackage rec {
       --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,8 +42,8 @@ buildPythonPackage rec {
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
-  # - the other disabled tests are likely due to sanboxing (missing specific errors)
-  pytestFlagsArray = [
+  # - the other disabled tests are likely due to sandboxing (missing specific errors)
+  enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
     "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];
@@ -67,11 +63,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

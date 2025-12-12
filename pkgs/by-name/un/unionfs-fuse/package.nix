@@ -1,20 +1,22 @@
 {
+  nix-update-script,
   lib,
   stdenv,
   fetchFromGitHub,
   cmake,
-  fuse,
+  pkg-config,
+  fuse3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
-  version = "2.2";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
-    rev = "v${version}";
-    sha256 = "sha256-EJryML6E0CW4kvsqMRqV3cq77j50HuylNzgaHD6CL/o=";
+    tag = "v${version}";
+    hash = "sha256-wha1AMwJMbC5rZBE4ybeOmH7Dq4p5YdMJDCT/a3B6cI=";
   };
 
   patches = [
@@ -27,11 +29,14 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuse}/include/fuse'
+      --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuse3}/include/fuse'
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [ fuse3 ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:
@@ -42,16 +47,18 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
-    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse3}/sbin/mount.fuse3
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

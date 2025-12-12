@@ -1,10 +1,9 @@
 {
   lib,
-  SDL2,
   alsa-lib,
-  apple-sdk_11,
-  autoPatchelfHook,
-  fetchFromGitHub,
+  apple-sdk,
+  cmake,
+  fetchzip,
   gtk3,
   gtksourceview3,
   libGL,
@@ -12,99 +11,115 @@
   libX11,
   libXv,
   libao,
-  libicns,
   libpulseaudio,
+  libretro-shaders-slang,
+  librashader,
+  ninja,
+  moltenvk,
   openal,
   pkg-config,
+  replaceVars,
+  sdl3,
   stdenv,
   udev,
   vulkan-loader,
-  which,
   wrapGAppsHook3,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "136";
+  version = "146";
 
-  src = fetchFromGitHub {
-    owner = "ares-emulator";
-    repo = "ares";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Hks/MWusPiBVdb5L+53qtR6VmXG/P4rDzsvHxLeA8Do=";
+  src = fetchzip {
+    url = "https://github.com/ares-emulator/ares/releases/download/v${finalAttrs.version}/ares-source.tar.gz";
+    hash = "sha256-D4N0u9NNlhs4nMoUrAY+sg6Ybt1xQPMiH1u0cV0Qixs=";
+    stripRoot = false;
   };
 
-  patches = [
-    ./patches/001-dont-rebuild-on-install.patch
-    ./patches/002-fix-ruby.diff
-    ./patches/003-darwin-specific.patch
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-      pkg-config
-      which
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-    ];
+  buildInputs = [
+    sdl3
+    libao
+    librashader
+    vulkan-loader
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    gtksourceview3
+    libGL
+    libGLU
+    libX11
+    libXv
+    libpulseaudio
+    openal
+    udev
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      gtksourceview3
-      libGL
-      libGLU
-      libX11
-      libXv
-      libpulseaudio
-      openal
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  patches = [
+    (replaceVars ./darwin-build-fixes.patch {
+      sdkVersion = apple-sdk.version;
+    })
+  ];
 
-  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
+  cmakeFlags = [
+    (lib.cmakeBool "ARES_BUILD_LOCAL" false)
+    (lib.cmakeBool "ARES_SKIP_DEPS" true)
+    (lib.cmakeBool "ARES_BUILD_OFFICIAL" true)
+  ];
 
-  makeFlags =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      "hiro=gtk3"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "hiro=cocoa"
-      "lto=false"
-      "vulkan=false"
-    ]
-    ++ [
-      "local=false"
-      "openmp=true"
-      "prefix=$(out)"
-    ];
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir $out/Applications
+        cp -a desktop-ui/ares.app $out/Applications/ares.app
+        # Shaders directory is already populated with Metal shaders, so can't simply symlink the slang shaders directory itself
+        for f in ${libretro-shaders-slang}/share/libretro/shaders/shaders_slang/*; do
+          ln -s "$f" $out/Applications/ares.app/Contents/Resources/Shaders/
+        done
+      ''
+    else
+      ''
+        ln -s ${libretro-shaders-slang}/share/libretro $out/share/libretro
+      '';
 
-  enableParallelBuilding = true;
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.14";
+  postFixup =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        install_name_tool \
+          -add_rpath ${librashader}/lib \
+          -add_rpath ${moltenvk}/lib \
+          $out/Applications/ares.app/Contents/MacOS/ares
+      ''
+    else
+      ''
+        patchelf $out/bin/.ares-wrapped \
+          --add-rpath ${
+            lib.makeLibraryPath [
+              librashader
+              vulkan-loader
+            ]
+          }
+      '';
 
   meta = {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = lib.licenses.isc;
     mainProgram = "ares";
-    maintainers = with lib.maintainers; [
-      Madouura
-      AndersonTorres
-    ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
-# TODO: select between Qt and GTK3
-# TODO: call Darwin hackers to deal with specific errors

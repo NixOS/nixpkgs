@@ -25,34 +25,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "grails";
-  version = "6.2.2";
+  version = "7.0.0-M3";
 
   src = fetchurl {
     url = "https://github.com/grails/grails-core/releases/download/v${version}/grails-${version}.zip";
-    sha256 = "sha256-UPgayFp4CYZzo1yHhII28Bx+CUq+z5E3+yKjXVLSZ0E=";
+    sha256 = "sha256-BM3fxmf86o+Ob63bE9aSCBh2MlkIS4AsYj7CZr/PVWU=";
   };
 
   nativeBuildInputs = [ unzip ];
 
   dontBuild = true;
 
-  installPhase =
-    ''
-      mkdir -p "$out"
-      cp -vr . "$out"
-      # Remove (for now) uneeded Windows .bat files
-      rm -f "$out"/bin/*.bat
-      # Improve purity
-      sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-    ''
-    + lib.optionalString (jdk != null) ''
-      # Inject JDK path into grails
-      sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
-    '';
+  installPhase = ''
+    mkdir -p "$out"
+    cp -vr . "$out"
+    # Remove (for now) uneeded Windows .bat files
+    rm -f "$out"/bin/*.bat
+    # Improve purity
+    sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
+  ''
+  + lib.optionalString (jdk != null) ''
+    # Inject JDK path into grails
+    sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
+  '';
 
   preferLocalBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Full stack, web application framework for the JVM";
     mainProgram = "grails";
     longDescription = ''
@@ -62,9 +61,9 @@ stdenv.mkDerivation rec {
       experience.
     '';
     homepage = "https://grails.org/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

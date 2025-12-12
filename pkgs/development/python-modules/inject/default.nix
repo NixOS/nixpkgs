@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "inject";
-  version = "5.2.1";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivankorobkov";
     repo = "python-inject";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ws296ESjb+a322imiRRWTS43w32rJc/7Y//OBQXOwnw=";
+    tag = "v${version}";
+    hash = "sha256-c/OpEsT9KF7285xfD+VRorrNHn3r9IPp/ts9JHyGK9s=";
   };
 
   build-system = [
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ivankorobkov/python-inject";
     changelog = "https://github.com/ivankorobkov/python-inject/blob/${version}/CHANGES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

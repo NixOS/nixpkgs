@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.10";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-L6xCX+NHASunB876N1R++xMOx55Z8zc77j5QwKqHsNY=";
+    tag = version;
+    hash = "sha256-cSoH3g5olrcv4/IJeRWFR6Yy1ntBuL0zpO1TrnwvIwk=";
   };
 
   build-system = [ setuptools ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "huawei_lte_api.Connection"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "API For huawei LAN/WAN LTE Modems";
     homepage = "https://github.com/Salamek/huawei-lte-api";
-    changelog = "https://github.com/Salamek/huawei-lte-api/releases/tag/${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/Salamek/huawei-lte-api/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
-    repo = pname;
+    repo = "bitvavo-aio";
     rev = version;
     sha256 = "1d9nbbvv7xnkixj03sfhs2da5j3i2m7p73r7j1yb7b39zas2rbig";
   };
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitvavo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Bitvavo crypto exchange API";
     homepage = "https://github.com/cyberjunky/bitvavo-aio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

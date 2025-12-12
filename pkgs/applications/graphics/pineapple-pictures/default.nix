@@ -1,32 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtsvg
-, qttools
-, exiv2
-, wrapQtAppsHook
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6Packages,
+  exiv2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pineapple-pictures";
-  version = "0.9.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = finalAttrs.version;
-    hash = "sha256-NXg+lCkm4i4ONkIp3F7Z1yHHO9daXucC+X1SuNxPJgQ=";
+    hash = "sha256-wWu1nGAJ+8s7CIyFR0lJkxZ1C72Qvkfdvsw4Dvb4aKI=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtsvg
+    qt6Packages.qtsvg
     exiv2
   ];
 
@@ -40,6 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "ppic";
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

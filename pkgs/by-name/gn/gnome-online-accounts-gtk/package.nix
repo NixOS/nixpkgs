@@ -11,17 +11,18 @@
   gnome-online-accounts,
   gtk4,
   libadwaita,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.5";
+  version = "3.50.8";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-E4gZsPLOCK15xG5MiwN5sNQs/3KEkzC57I5moqcGy20=";
+    hash = "sha256-DcW88Zx8uoxOL+2mV7uBIsnmQEuy02tbAO1ljf0ZigQ=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita # for goa-backend
   ];
 
-  meta = with lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : ${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}
+    )
+  '';
+
+  meta = {
     description = "Online accounts configuration utility";
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 })

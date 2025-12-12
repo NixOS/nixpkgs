@@ -6,16 +6,14 @@
 buildHomeAssistantComponent rec {
   owner = "bjrnptrsn";
   domain = "climate_group";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "climate_group";
-    rev = "refs/tags/${version}";
-    hash = "sha256-f/VQUNzRSxmKGNgijaafQ5NbngUUKmcdkafYC3Ol9qM=";
+    tag = version;
+    hash = "sha256-HwMHhrmQ+fbdLHQAM+ka/1oNCIBFaLTqOlPMzCEEeQ0=";
   };
-
-  dontBuild = true;
 
   meta = {
     changelog = "https://github.com/bjrnptrsn/climate_group/blob/${src.rev}/README.md#changelog";

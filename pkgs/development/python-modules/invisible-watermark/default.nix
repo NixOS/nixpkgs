@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   opencv-python,
   torch,
   onnx,
@@ -18,28 +19,30 @@
 buildPythonPackage rec {
   pname = "invisible-watermark";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ShieldMnt";
     repo = "invisible-watermark";
+    # nixpkgs-update: no auto update
     rev = "e58e451cff7e092457cd915e445b1a20b64a7c8f"; # No git tag, see https://github.com/ShieldMnt/invisible-watermark/issues/22
     hash = "sha256-6SjVpKFtiiLLU7tZ3hBQr0KT/YEQyywJj0e21/dJRzk=";
   };
 
-  propagatedBuildInputs =
-    [
-      opencv-python
-      torch
-      pillow
-      pywavelets
-      numpy
-    ]
-    ++ lib.optionals withOnnx [
-      onnx
-      onnxruntime
-    ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    opencv-python
+    torch
+    pillow
+    pywavelets
+    numpy
+  ]
+  ++ lib.optionals withOnnx [
+    onnx
+    onnxruntime
+  ];
 
   postPatch = ''
     substituteInPlace imwatermark/rivaGan.py --replace \
@@ -83,7 +86,7 @@ buildPythonPackage rec {
               ;
           };
         };
-      allTests = builtins.map createTest testCases;
+      allTests = map createTest testCases;
     in
     (lib.attrsets.mergeAttrsList allTests)
     // {
@@ -92,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imwatermark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating and decoding invisible image watermarks";
     mainProgram = "invisible-watermark";
     homepage = "https://github.com/ShieldMnt/invisible-watermark";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

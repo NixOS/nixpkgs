@@ -1,25 +1,45 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs
-, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  docutils,
+  libpthreadstubs,
+  withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
+  libpciaccess,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
+  valgrind-light,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.123";
+  version = "2.4.128";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ormFZ6FJp0sPUOkegl+cAxXYbnvpt0OU2uiymMqtt54=";
+    hash = "sha256-O7NduHAMKgtWnyxnKaU/VJV4aFazEIVMjeV3gqIr3aw=";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
-  nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs ]
-    ++ lib.optional withIntel libpciaccess
-    ++ lib.optional withValgrind valgrind-light;
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    docutils
+  ];
+  buildInputs = [
+    libpthreadstubs
+  ]
+  ++ lib.optional withIntel libpciaccess
+  ++ lib.optional withValgrind valgrind-light;
 
   mesonFlags = [
     "-Dinstall-test-programs=true"
@@ -27,9 +47,11 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "intel" withIntel)
     (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "valgrind" withValgrind)
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=enabled"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Detnaviv=disabled"
   ];
 
@@ -43,7 +65,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
     downloadPage = "https://dri.freedesktop.org/libdrm/";
     description = "Direct Rendering Manager library and headers";
@@ -59,8 +81,8 @@ stdenv.mkDerivation rec {
       libdrm is a low-level library, typically used by graphics drivers such as
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
-    license = licenses.mit;
-    platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.mit;
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+    maintainers = [ ];
   };
 }

@@ -6,7 +6,7 @@ export PATH=@coreutils@/bin
 if test "$1" = "start"; then
 	if ! @procps@/bin/pgrep ircd; then
 	if @ipv6Enabled@; then 
-		while ! @iproute@/sbin/ip addr | 
+		while ! @iproute2@/sbin/ip addr | 
 			@gnugrep@/bin/grep inet6 | 
 			@gnugrep@/bin/grep global; do
 			sleep 1;

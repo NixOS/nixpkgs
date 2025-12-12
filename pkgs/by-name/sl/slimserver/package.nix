@@ -26,6 +26,7 @@ let
     ]
     ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
   );
+
   libPath = lib.makeLibraryPath [
     zlib
     stdenv.cc.cc
@@ -33,13 +34,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.0.0";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
-    rev = version;
-    hash = "sha256-Sd39J8YOywOOtVHxO3OPABULwRI5VGovS33tAj4TFkw=";
+    tag = version;
+    hash = "sha256-Yc/XBINSX1JN7lJn4fin4qcTUSF8Bg+FbFe23KlYkfs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,6 +52,7 @@ perlPackages.buildPerlPackage rec {
       ArchiveZip
       AsyncUtil
       AudioScan
+      CarpAssert
       CarpClan
       CGI
       ClassAccessor
@@ -167,19 +169,19 @@ perlPackages.buildPerlPackage rec {
     updateScript = ./update.nu;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lyrion.org/";
     changelog = "https://lyrion.org/getting-started/changelog-lms${lib.versions.major version}";
     description = "Lyrion Music Server (formerly Logitech Media Server) is open-source server software which controls a wide range of Squeezebox audio players";
     # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/LMS-Community/slimserver/blob/public/8.3/License.txt
-    license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
+    license = if enableUnfreeFirmware then lib.licenses.unfree else lib.licenses.gpl2Only;
     mainProgram = "slimserver";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       adamcstephens
       jecaro
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

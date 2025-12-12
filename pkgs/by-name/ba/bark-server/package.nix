@@ -3,17 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bark-server";
-  version = "2.1.9";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "Finb";
     repo = "bark-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bZWX47krx9V0qXg6Yl8yQbX1zd5DtsWkIBLi0bDxrpA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O4Bo3OuC8uwgFpwAY/zwSUQW6EY7h90Dn3tUjZA3j4E=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,18 +27,21 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Yti+W3GKUMEfNBHf4C435BpYsDjCzgfLr55iqU3BGbA=";
+  vendorHash = "sha256-/h3L4Ow2aBPkbH1hPXCEb9DKrzVEcaLh2+O9iZXkXN8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   preBuild = ''
-    ldflags+=" -X \"main.buildDate=$(cat SOURCE_DATE_EPOCH)\""
-    ldflags+=" -X main.commitID==$(cat COMMIT)"
+    ldflags+=" -X \"main.buildDate=$(<SOURCE_DATE_EPOCH)\""
+    ldflags+=" -X main.commitID==$(<COMMIT)"
   '';
+
+  # All tests require network
+  doCheck = false;
 
   doInstallCheck = true;
 
@@ -47,12 +51,14 @@ buildGoModule rec {
     versionCheckHook
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Backend of Bark, an iOS App which allows you to push customed notifications to your iPhone";
     homepage = "https://github.com/Finb/bark-server";
-    changelog = "https://github.com/Finb/bark-server/releases/tag/v${version}";
+    changelog = "https://github.com/Finb/bark-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "bark-server";
   };
-}
+})

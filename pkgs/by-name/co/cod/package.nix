@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dim-an";
-    repo = pname;
+    repo = "cod";
     rev = "v${version}";
     hash = "sha256-mT7OkR8fXXTE3TPx9AmH6ehKGLk4CP9euBPs2zVAJnI=";
   };
@@ -38,11 +38,11 @@ buildGoModule rec {
     substituteInPlace test/learn_test.go --replace TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "cod";
   };

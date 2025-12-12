@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-botan";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "botan";
     rev = "v${version}";
-    hash = "sha256-5/vcm6vNucBhl1Aki+OFNjAU7Hvc7OLAAH4CYchlBIY=";
+    hash = "sha256-b5yOkjXKnJBQWSKCqiHJcznH1QOmTVgBbS5IwP3VTXA=";
   };
 
   buildInputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Securely clears secrets from memory in Emilua";
     homepage = "https://emilua.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manipuladordedados ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ manipuladordedados ];
+    platforms = lib.platforms.linux;
   };
 }

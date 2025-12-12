@@ -210,7 +210,7 @@ in
               root * ${cfg.ui.package}/dist
               file_server
             }
-            handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
+            handle_path /static/${cfg.ui.package.version}/* {
               root * ${cfg.ui.package}/dist
               file_server
             }
@@ -325,9 +325,9 @@ in
 
           wantedBy = [ "multi-user.target" ];
 
-          after = [ "pict-rs.service" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+          after = [ "pict-rs.service" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
 
-          requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+          requires = lib.optionals cfg.database.createLocally [ "postgresql.target" ];
 
           # substitute secrets and prevent others from reading the result
           # if somehow $CREDENTIALS_DIRECTORY is not set we fail

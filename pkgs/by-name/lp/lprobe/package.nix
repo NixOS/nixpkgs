@@ -7,23 +7,23 @@
 
 buildGoModule rec {
   pname = "lprobe";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "fivexl";
     repo = "lprobe";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WC0MDTyd5tRtSQ1LQsYJgV9CwJwtvnIO6tQnPrjpfcY=";
+    tag = "v${version}";
+    hash = "sha256-Cb6jzL/BAhfwvGENLFfphATDz0EjFFT7qeHFiZCrvBk=";
   };
 
-  vendorHash = "sha256-Ot9eePv/bjOZJfOjTCOJGXCaM8hoO4ZUPrpec8lT/JY=";
+  vendorHash = "sha256-wQrbRch+5srZfQgEz7aacfbUXJfHeDCz52pPrgDFaNg=";
 
   buildInputs = [
     libpcap
   ];
 
   meta = {
-    description = "A command-line tool to perform Local Health Check Probes inside Container Images (ECS, Docker)";
+    description = "Command-line tool to perform Local Health Check Probes inside Container Images (ECS, Docker)";
     homepage = "https://github.com/fivexl/lprobe";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

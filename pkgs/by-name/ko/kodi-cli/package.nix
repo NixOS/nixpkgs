@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nawar";
-    repo = pname;
+    repo = "kodi-cli";
     rev = version;
     sha256 = "0f9wdq2fg8hlpk3qbjfkb3imprxkvdrhxfkcvr3dwfma0j2yfwam";
   };
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nawar/kodi-cli";
     description = "Kodi/XBMC bash script to send Kodi commands using JSON RPC. It also allows sending YouTube videos to Kodi";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.pstn ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.pstn ];
   };
 }

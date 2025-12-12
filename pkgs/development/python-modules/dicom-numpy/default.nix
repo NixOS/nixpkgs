@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  setuptools,
   numpy,
   pydicom,
 }:
@@ -17,10 +18,19 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "innolitics";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "dicom-numpy";
+    tag = "v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
+
+  postPatch = ''
+    substituteInPlace dicom_numpy/zip_archive.py \
+      --replace-fail "pydicom.read_file" "pydicom.dcmread"
+  '';
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -31,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dicom_numpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read DICOM files into Numpy arrays";
     homepage = "https://github.com/innolitics/dicom-numpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

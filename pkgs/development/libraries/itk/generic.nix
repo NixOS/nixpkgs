@@ -1,6 +1,6 @@
 {
   version,
-  rev,
+  tag,
   sourceSha256,
 }:
 
@@ -30,8 +30,8 @@
   vtk,
   which,
   zlib,
-  Cocoa,
   enablePython ? false,
+  enableRtk ? true,
 }:
 
 let
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
-    inherit rev;
+    inherit tag;
     sha256 = sourceSha256;
   };
 
@@ -96,56 +96,54 @@ stdenv.mkDerivation {
     ln -sr ${rtkSrc} Modules/Remote/RTK
   '';
 
-  cmakeFlags =
-    [
-      "-DBUILD_EXAMPLES=OFF"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DITK_FORBID_DOWNLOADS=ON"
-      "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
-      "-DITK_USE_SYSTEM_EIGEN=ON"
-      "-DITK_USE_SYSTEM_EIGEN=OFF"
-      "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
-      "-DITK_USE_SYSTEM_GDCM=ON"
-      "-DITK_USE_SYSTEM_MINC=ON"
-      "-DLIBMINC_DIR=${libminc}/lib/cmake"
-      "-DModule_ITKMINC=ON"
-      "-DModule_ITKIOMINC=ON"
-      "-DModule_ITKIOTransformMINC=ON"
-      "-DModule_SimpleITKFilters=ON"
-      "-DModule_ITKReview=ON"
-      "-DModule_MGHIO=ON"
-      "-DModule_AdaptiveDenoising=ON"
-      "-DModule_GenericLabelInterpolator=ON"
-      "-DModule_RTK=ON"
-    ]
-    ++ lib.optionals enablePython [
-      "-DITK_WRAP_PYTHON=ON"
-      "-DITK_USE_SYSTEM_CASTXML=ON"
-      "-DITK_USE_SYSTEM_SWIG=ON"
-      "-DPY_SITE_PACKAGES_PATH=${placeholder "out"}/${python.sitePackages}"
-    ]
-    ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DITK_FORBID_DOWNLOADS=ON"
+    "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
+    (lib.cmakeBool "ITK_USE_SYSTEM_EIGEN" (lib.versionAtLeast version "5.4"))
+    "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
+    "-DITK_USE_SYSTEM_GDCM=ON"
+    "-DITK_USE_SYSTEM_MINC=ON"
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
+    "-DModule_ITKMINC=ON"
+    "-DModule_ITKIOMINC=ON"
+    "-DModule_ITKIOTransformMINC=ON"
+    "-DModule_SimpleITKFilters=ON"
+    "-DModule_ITKReview=ON"
+    "-DModule_MGHIO=ON"
+    "-DModule_AdaptiveDenoising=ON"
+    "-DModule_GenericLabelInterpolator=ON"
+  ]
+  ++ lib.optionals enableRtk [
+    "-DModule_RTK=ON"
+  ]
+  ++ lib.optionals enablePython [
+    "-DITK_WRAP_PYTHON=ON"
+    "-DITK_USE_SYSTEM_CASTXML=ON"
+    "-DITK_USE_SYSTEM_SWIG=ON"
+    "-DPY_SITE_PACKAGES_PATH=${placeholder "out"}/${python.sitePackages}"
+  ]
+  ++ lib.optionals withVtk [ "-DModule_ITKVtkGlue=ON" ]
+  ++ lib.optionals (lib.versionOlder version "5.4") [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      xz
-    ]
-    ++ lib.optionals enablePython [
-      castxml
-      swig
-      which
-    ];
+  nativeBuildInputs = [
+    cmake
+    xz
+  ]
+  ++ lib.optionals enablePython [
+    castxml
+    swig
+    which
+  ];
 
-  buildInputs =
-    [
-      eigen
-      libX11
-      libuuid
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
-    ++ lib.optionals enablePython [ python ]
-    ++ lib.optionals withVtk [ vtk ];
+  buildInputs = [
+    libX11
+    libuuid
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]
+  ++ lib.optionals enablePython [ python ]
+  ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9
   # (specifically libGL and libX11 on Linux),
   # it's now seemingly necessary for packages that configure ITK to
@@ -166,7 +164,9 @@ stdenv.mkDerivation {
     libpng
     libtiff
     zlib
-  ] ++ lib.optionals withVtk vtk.propagatedBuildInputs ++ lib.optionals enablePython [ numpy ];
+  ]
+  ++ lib.optionals withVtk vtk.propagatedBuildInputs
+  ++ lib.optionals enablePython [ numpy ];
 
   postInstall = lib.optionalString enablePython ''
     substitute \

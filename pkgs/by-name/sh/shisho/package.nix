@@ -13,12 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "flatt-security";
-    repo = pname;
-    rev = "v${version}";
+    repo = "shisho";
+    tag = "v${version}";
     hash = "sha256-G7sHaDq+F5lXNaF1sSLUecdjZbCejJE79P4AQifKdFY=";
     fetchSubmodules = true;
   };
-  cargoHash = "sha256-xd4andytmDMOIT+3DkmUC9fkxxGJ6yRY2WSdnGB6ZwY=";
+
+  cargoHash = "sha256-gv3qvDzqwuuAVpbaOpMI7DuapSALMr/qzyhor3avYQI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.shisho.dev/shisho/";
     changelog = "https://docs.shisho.dev/changelog/";
     description = "Lightweight static analyzer for several programming languages";
@@ -56,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       and integration capabilities, the rules will help you find and fix issues
       semiautomatically.
     '';
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ jk ];
   };
 }

@@ -26,6 +26,12 @@ stdenv.mkDerivation {
     sha256 = "3ef3103030ecb04d7fe80180e3fd490377cf81fb2af96782323fddabc3225030";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-function-declaration"
+    "-Wno-error=int-conversion"
+    "-Wno-error=return-mismatch"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoconf
@@ -47,14 +53,14 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive LDAP client for Unix terminals";
     longDescription = ''
       ldapvi is an interactive LDAP client for Unix terminals. Using it, you
       can update LDAP entries with a text editor.
     '';
     homepage = "http://www.lichteblau.com/ldapvi/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "ldapvi";

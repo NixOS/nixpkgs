@@ -1,48 +1,67 @@
 {
+  autoreconfHook,
+  fetchFromGitHub,
   lib,
-  stdenv,
-  fetchurl,
-  postgresql,
+  libpq,
+  nix-update-script,
   openssl,
+  stdenv,
+
   withLibiodbc ? false,
   libiodbc,
+
   withUnixODBC ? true,
   unixODBC,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psqlodbc";
-  version = "16.00.0000";
+  version = "17.00.0006";
 
-  src = fetchurl {
-    url = "mirror://postgresql/odbc/versions.old/src/${pname}-${version}.tar.gz";
-    hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
+  src = fetchFromGitHub {
+    owner = "postgresql-interfaces";
+    repo = "psqlodbc";
+    tag = "REL-${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-iu1PWkfOyWtMmy7/8W+acu8v+e8nUPkCIHtVNZ8HzRg=";
   };
 
-  buildInputs =
-    [
-      postgresql
-      openssl
-    ]
-    ++ lib.optional withLibiodbc libiodbc
-    ++ lib.optional withUnixODBC unixODBC;
+  buildInputs = [
+    libpq
+    openssl
+  ]
+  ++ lib.optional withLibiodbc libiodbc
+  ++ lib.optional withUnixODBC unixODBC;
 
-  passthru = lib.optionalAttrs withUnixODBC {
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  strictDeps = true;
+
+  configureFlags = [
+    "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
+    "--with-libpq=${lib.getDev libpq}"
+  ]
+  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^REL-(\\d+)_(\\d+)_(\\d+)$" ];
+    };
+  }
+  // lib.optionalAttrs withUnixODBC {
     fancyName = "PostgreSQL";
     driver = "lib/psqlodbcw.so";
   };
 
-  configureFlags = [
-    "--with-libpq=${lib.getDev postgresql}/bin/pg_config"
-  ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
-
-  meta = with lib; {
+  meta = {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    teams = libpq.meta.teams;
   };
-}
+})

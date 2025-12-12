@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aiodhcpwatcher";
-  version = "1.0.2";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodhcpwatcher";
     rev = "v${version}";
-    hash = "sha256-KZL5DejzDmizvvMUNfkFltl1xXz+2jX/3DVj60x6xOk=";
+    hash = "sha256-+BF3sBam8O9I4tY7QqnA4iNcJFsK9+imS8pY3N/v1HY=";
   };
 
   postPatch = ''
@@ -45,12 +45,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiodhcpwatcher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Watch for DHCP packets with asyncio";
     homepage = "https://github.com/bdraco/aiodhcpwatcher";
     changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    platforms = lib.platforms.linux;
   };
 }

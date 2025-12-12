@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "karate";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://github.com/karatelabs/karate/releases/download/v${version}/karate-${version}.jar";
-    sha256 = "sha256-3uz51dQvyvK7gcmRoUjfszghBaPfVc/SJaKSEWkfgr8=";
+    sha256 = "sha256-zPR0DGShVMTCRX1vD9GajzeQLCnTKqxOIwEuCoeGFL4=";
   };
   dontUnpack = true;
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "API Test Automation Made Simple";
     mainProgram = "karate";
     longDescription = ''
@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/karatelabs/karate";
     changelog = "https://github.com/karatelabs/karate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kephasp ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kephasp ];
     platforms = jre.meta.platforms;
   };
 }

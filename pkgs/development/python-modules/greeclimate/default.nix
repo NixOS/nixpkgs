@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   pythonOlder,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "greeclimate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SO7/uheAPVFZ1C2qrzP7jB88u6EH79f1+qMZIgHZaCE=";
   };
 
@@ -62,12 +61,11 @@ buildPythonPackage rec {
     "greeclimate.network"
   ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Discover, connect and control Gree based minisplit systems";
     homepage = "https://github.com/cmroche/greeclimate";
     changelog = "https://github.com/cmroche/greeclimate/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

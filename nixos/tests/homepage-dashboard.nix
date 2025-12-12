@@ -1,43 +1,61 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "homepage-dashboard";
-    meta.maintainers = with lib.maintainers; [ jnsgruk ];
+{ lib, ... }:
+{
+  name = "homepage-dashboard";
+  meta.maintainers = with lib.maintainers; [ parthiv-krishna ];
 
-    nodes.unmanaged_conf =
-      { pkgs, ... }:
-      {
-        services.homepage-dashboard.enable = true;
-      };
+  nodes.machine = _: {
+    services.homepage-dashboard = {
+      enable = true;
+      settings.title = "test title rodUsEagid"; # something random/unique
+      bookmarks = [
+        {
+          Developer = [
+            {
+              nixpkgs = [
+                {
+                  abbr = "NX";
+                  href = "https://github.com/nixos/nixpkgs";
+                }
+              ];
+            }
+          ];
+        }
+      ];
+      services = [
+        {
+          Machines = [
+            {
+              Localhost = {
+                ping = "127.0.0.1";
+              };
+            }
+          ];
+        }
+      ];
+    };
+  };
 
-    nodes.managed_conf =
-      { pkgs, ... }:
-      {
-        services.homepage-dashboard = {
-          enable = true;
-          settings.title = "custom";
-        };
-      };
+  testScript = ''
+    import json
 
-    testScript = ''
-      # Ensure the services are started on unmanaged machine
-      unmanaged_conf.wait_for_unit("homepage-dashboard.service")
-      unmanaged_conf.wait_for_open_port(8082)
-      unmanaged_conf.succeed("curl --fail http://localhost:8082/")
+    # Ensure the services are started on managed machine
+    machine.wait_for_unit("homepage-dashboard.service")
+    machine.wait_for_open_port(8082)
+    machine.succeed("curl --fail http://localhost:8082/")
 
-      # Ensure that /etc/homepage-dashboard doesn't exist, and boilerplate
-      # configs are copied into place.
-      unmanaged_conf.fail("test -d /etc/homepage-dashboard")
-      unmanaged_conf.succeed("test -f /var/lib/private/homepage-dashboard/settings.yaml")
+    # Ensure /etc/homepage-dashboard is created.
+    machine.succeed("test -d /etc/homepage-dashboard")
 
-      # Ensure the services are started on managed machine
-      managed_conf.wait_for_unit("homepage-dashboard.service")
-      managed_conf.wait_for_open_port(8082)
-      managed_conf.succeed("curl --fail http://localhost:8082/")
+    # Ensure that we see the custom title reflected in the manifest
+    page = machine.succeed("curl --fail http://localhost:8082/site.webmanifest?v=4")
+    assert "test title rodUsEagid" in page, "Custom title not found"
 
-      # Ensure /etc/homepage-dashboard is created and unmanaged conf location isn't.
-      managed_conf.succeed("test -d /etc/homepage-dashboard")
-      managed_conf.fail("test -f /var/lib/private/homepage-dashboard/settings.yaml")
-    '';
-  }
-)
+    # Ensure that we see the custom bookmarks on the page
+    page = machine.succeed("curl --fail http://127.0.0.1:8082/api/bookmarks")
+    assert "nixpkgs" in page, "Custom bookmarks not found"
+
+    # Ensure that the ping command works
+    response = machine.succeed("curl --fail \"http://localhost:8082/api/ping?groupName=Machines&serviceName=Localhost\"")
+    assert json.loads(response)["alive"] is True, "Ping to localhost failed"
+  '';
+}

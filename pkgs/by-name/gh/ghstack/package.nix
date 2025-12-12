@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "ghstack";
-  version = "0.9.4";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {

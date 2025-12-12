@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.9.2";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hrRn6ITsN7kFL1T6VjSXPDytANEeJYKwMaSdCG+YJyM=";
+    repo = "stanza";
+    tag = "v${version}";
+    hash = "sha256-zY2+8QuPJTX/HSkE/gKMCWpSanKpYSGZeeYgb4eFuuw=";
   };
 
   propagatedBuildInputs = [
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stanza" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Stanford NLP Python Library for Many Human Languages";
     homepage = "https://github.com/stanfordnlp/stanza/";
     changelog = "https://github.com/stanfordnlp/stanza/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ riotbib ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ riotbib ];
   };
 }

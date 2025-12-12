@@ -8,26 +8,33 @@
   pygments,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "devtools";
   version = "0.12.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  patches = [
+    # https://github.com/samuelcolvin/python-devtools/pull/166
+    ./fix-test-ast-expr.patch
+  ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0' \
+  '';
+
+  build-system = [ hatchling ];
+
+  dependencies = [
     asttokens
     executing
     pygments
@@ -45,6 +52,7 @@ buildPythonPackage rec {
     "test_multiple_not_verbose"
     # Sensitive to interpreter output
     "test_simple"
+    "test_expr_render"
   ];
 
   disabledTestPaths = [
@@ -54,11 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
-    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jdahm ];
+    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jdahm ];
   };
 }

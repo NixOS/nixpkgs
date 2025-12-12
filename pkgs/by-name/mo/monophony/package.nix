@@ -3,36 +3,37 @@
   fetchFromGitLab,
   python3Packages,
   wrapGAppsHook4,
-  gst_all_1,
   gobject-introspection,
   yt-dlp,
+  gst_all_1,
   libadwaita,
   glib-networking,
   nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.15.0";
-  pyproject = false;
+  version = "4.2.1";
+  pyproject = true;
 
-  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
-    rev = "v${version}";
-    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
+    tag = "v${version}";
+    hash = "sha256-3RuAFg+9Mi+tBuLmXyWlFFNOfrUvrkNvedo9Au3tMYU=";
   };
 
-  pythonPath = with python3Packages; [
-    mpris-server
-    pygobject3
+  sourceRoot = "${src.name}/source";
+
+  dependencies = with python3Packages; [
+    mprisify
+    requests
     ytmusicapi
+    logboth
   ];
 
   build-system = with python3Packages; [
-    pip
     setuptools
-    wheel
+    pip
   ];
 
   nativeBuildInputs = [
@@ -40,22 +41,20 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      libadwaita
-      # needed for gstreamer https
-      glib-networking
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    libadwaita
+    # needed for gstreamer https
+    glib-networking
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
-  # Makefile only contains `install`
-  dontBuild = true;
-
-  installFlags = [ "prefix=$(out)" ];
+  postInstall = ''
+    make install prefix=$out
+  '';
 
   dontWrapGApps = true;
 
@@ -68,13 +67,16 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://gitlab.com/zehkira/monophony";
+  meta = {
     description = "Linux app for streaming music from YouTube";
-    longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
-    license = licenses.agpl3Plus;
+    longDescription = "Monophony allows you to stream and download music from YouTube Music without ads, as well as create and import playlists without signing in.";
+    homepage = "https://gitlab.com/zehkira/monophony";
+    license = lib.licenses.bsd0;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      quadradical
+      aleksana
+    ];
     mainProgram = "monophony";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ quadradical ];
   };
 }

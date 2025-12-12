@@ -6,18 +6,19 @@
   eth-utils,
   hypothesis,
   pytestCheckHook,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "pyrlp";
     rev = "v${version}";
-    hash = "sha256-cRp+ZOPYs9kcqMKGaiYMOFBY+aPCyFqu+1/5wloLwqU=";
+    hash = "sha256-moerdcAJXqhlzDnTlvxL3Nzz485tOzJVCPlGrof80eQ=";
   };
 
   build-system = [ setuptools ];
@@ -27,14 +28,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    pydantic
   ];
 
   pythonImportsCheck = [ "rlp" ];
 
-  meta = with lib; {
+  disabledTests = [ "test_install_local_wheel" ];
+
+  meta = {
     description = "RLP serialization library";
     homepage = "https://github.com/ethereum/pyrlp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

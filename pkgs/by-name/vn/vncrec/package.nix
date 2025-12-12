@@ -27,6 +27,15 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    substituteInPlace vncpasswd/vncpasswd.c \
+      --replace-fail "return;" "return 0;"
+
+    sed -i '7i #include <stdlib.h>' vncconnect/vncconnect.c
+    sed -i '8i #include <string.h>' vncconnect/vncconnect.c
+    sed -i '31i #include <time.h>' libvncauth/vncauth.c
+  '';
+
   nativeBuildInputs = [
     imake
     gccmakedep

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  future,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -17,14 +16,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
+    repo = "grandalf";
     rev = "v${version}";
     hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
   };
 
   propagatedBuildInputs = [
     pyparsing
-    future
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -33,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grandalf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for experimentations with graphs and drawing algorithms";
     homepage = "https://github.com/bdcht/grandalf";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

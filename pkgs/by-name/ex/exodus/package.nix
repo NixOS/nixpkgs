@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exodus";
-  version = "24.41.6";
+  version = "25.28.4";
 
   src = requireFile {
     name = "exodus-linux-x64-${finalAttrs.version}.zip";
     url = "https://downloads.exodus.com/releases/exodus-linux-x64-${finalAttrs.version}.zip";
-    hash = "sha256-lUL9n3EZVe2J7uCHUSJgI2g75Sp1Y/nfBTde7VId6sA=";
+    hash = "sha256-AGeFsMHSywC32iaIGI9/VY2YC3gR5bHu33rOWJlyFFM=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/Exodus $out/bin/exodus
     ln -s $out/exodus.desktop $out/share/applications
     substituteInPlace $out/share/applications/exodus.desktop \
-          --replace 'Exec=bash -c "cd \`dirname %k\` && ./Exodus %u"' "Exec=Exodus %u"
+          --replace-fail 'Exec=bash -c "cd \\`dirname %k\\` && ./Exodus %u"' "Exec=Exodus %u"
   '';
 
   dontPatchELF = true;
@@ -96,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
         $out/Exodus
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mmahut
       rople380
       Crafter

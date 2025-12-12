@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rosegarden";
-  version = "24.12";
+  version = "25.06";
 
   src = fetchurl {
     url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.xz";
-    sha256 = "sha256-fz9mE2sJrxS9mZjkreTWIE1Fiv0WlHiP1tyzqW6/Fcw=";
+    sha256 = "sha256-df5SsAWJlHHMSw5JVL5dNe4c6PQWWauO9IomF4qlw20=";
   };
 
   postPhase = ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     "-DLILV_INCLUDE_DIR=${lilv.dev}/include/lilv-0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
     mainProgram = "rosegarden";
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
       ideal for composers, musicians, music students, and small studio or home
       recording environments.
     '';
-    maintainers = with maintainers; [ lebastr ];
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lebastr ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -3,15 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   scipy,
   numpy,
-  pyqt6,
   pyopengl,
+
+  # buildInputs
+  pyqt6,
+
+  # tests
   qt6,
   pytestCheckHook,
   freefont_ttf,
   makeFontsConf,
-  setuptools,
 }:
 
 let
@@ -20,18 +29,31 @@ in
 buildPythonPackage rec {
   pname = "pyqtgraph";
   version = "0.13.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
-    rev = "refs/tags/pyqtgraph-${version}";
+    tag = "pyqtgraph-${version}";
     hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    # Fixes a segmentation fault in tests with Qt 6.10. See:
+    # https://github.com/pyqtgraph/pyqtgraph/issues/3390
+    # The patch is the merge commit of:
+    # https://github.com/pyqtgraph/pyqtgraph/pull/3370
+    (fetchpatch {
+      url = "https://github.com/pyqtgraph/pyqtgraph/commit/bf38b8527e778c9c0bb653bc0df7bb36018dcbae.patch";
+      hash = "sha256-Tv4QK/OZvmDO3MOjswjch7DpF96U1uRN0dr8NIQ7+LY=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     scipy
     pyopengl
@@ -52,7 +74,7 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontsConf}
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # we only want to run unittests
     "tests"
   ];
@@ -72,7 +94,7 @@ buildPythonPackage rec {
   meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
-    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
+    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

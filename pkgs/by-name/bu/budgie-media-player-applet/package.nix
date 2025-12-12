@@ -8,17 +8,18 @@
   ninja,
   nix-update-script,
   python3Packages,
+  xfce,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-media-player-applet";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "zalesyc";
     repo = "budgie-media-player-applet";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-wmtO4Djs1xXBjimAEV6pvPo7zxDM+XQIOi/WOPRieQ8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ekt6OXSjqKF4d6a9lmZyUa06pqz1uYkCHbzvLM7Z+W8=";
   };
 
   strictDeps = true;
@@ -31,8 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.wrapPython
   ];
 
+  # To be passed to budgie-desktop-with-plugins.
+  buildInputs = [
+    glib
+    gtk3
+    xfce.libxfce4windowing
+  ];
+
   pythonPath = with python3Packages; [
     requests
+  ];
+
+  mesonFlags = [
+    "-Dbudgie-api-v2=true"
   ];
 
   postPatch = ''
@@ -54,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zalesyc/budgie-media-player-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
   };
 })

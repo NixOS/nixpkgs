@@ -17,7 +17,6 @@
   coreutils,
   curl, # Preferred to using the Perl HTTP libs - according to hw-probe.
   dmidecode,
-  edid-decode,
   gnugrep,
   gnutar,
   hwinfo,
@@ -27,6 +26,7 @@
   perl,
   smartmontools,
   usbutils,
+  v4l-utils,
   xz,
 
   # Conditionally recommended
@@ -60,13 +60,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hw-probe";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WlLSgjVLqGGtwCyyUn9X3XbE2Yhz6LD245+U2JgGd+k=";
+    sha256 = "sha256-8dLfk2k7xG2CXMHfMPrpgq43j3ttj5a0bgNPEahl2rQ=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
@@ -83,34 +83,33 @@ stdenv.mkDerivation rec {
         smartmontools
         pciutils
         usbutils
-        edid-decode
         iproute2 # (ip)
         coreutils # (sort)
         gnugrep
         curl
         gnutar
+        v4l-utils
         xz
         kmod # (lsmod)
       ];
-      recommendedPrograms =
-        [
-          mcelog
-          hdparm
-          acpica-tools
-          drm_info
-          mesa-demos
-          memtester
-          sysstat # (iostat)
-          util-linuxMinimal # (rfkill)
-          xinput
-          libva-utils # (vainfo)
-          inxi
-          vulkan-tools
-          i2c-tools
-          opensc
-        ]
-        # cpuid is only compatible with i686 and x86_64
-        ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
+      recommendedPrograms = [
+        mcelog
+        hdparm
+        acpica-tools
+        drm_info
+        mesa-demos
+        memtester
+        sysstat # (iostat)
+        util-linuxMinimal # (rfkill)
+        xinput
+        libva-utils # (vainfo)
+        inxi
+        vulkan-tools
+        i2c-tools
+        opensc
+      ]
+      # cpuid is only compatible with i686 and x86_64
+      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)
@@ -145,15 +144,15 @@ stdenv.mkDerivation rec {
       $makeWrapperArgs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Probe for hardware, check operability and find drivers";
     homepage = "https://github.com/linuxhw/hw-probe";
-    platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
-    license = with licenses; [
+    platforms = with lib.platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
+    license = with lib.licenses; [
       lgpl21
       bsdOriginal
     ];
-    maintainers = with maintainers; [ rehno-lindeque ];
+    maintainers = with lib.maintainers; [ rehno-lindeque ];
     mainProgram = "hw-probe";
   };
 }

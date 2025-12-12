@@ -11,6 +11,17 @@
       system.etc.overlay.enable = true;
       system.etc.overlay.mutable = true;
 
+      environment.etc = {
+        modetest = {
+          text = "foo";
+          mode = "300";
+        };
+        modetest2 = {
+          text = "foo";
+          mode = "0300";
+        };
+      };
+
       # Prerequisites
       boot.initrd.systemd.enable = true;
       boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -27,8 +38,8 @@
     ''
       newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
 
-      with subtest("/run/etc-metadata/ is mounted"):
-        print(machine.succeed("mountpoint /run/etc-metadata"))
+      with subtest("/run/nixos-etc-metadata/ is mounted"):
+        print(machine.succeed("mountpoint /run/nixos-etc-metadata"))
 
       with subtest("No temporary files leaked into stage 2"):
         machine.succeed("[ ! -e /etc-metadata-image ]")
@@ -36,6 +47,12 @@
 
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
+
+      with subtest("modes work correctly"):
+        machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -Eq '^regular file$'")
+        machine.succeed("stat --format '%a' /etc/modetest | tee /dev/stderr | grep -Eq '^300$'")
+        machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -Eq '^regular file$'")
+        machine.succeed("stat --format '%a' /etc/modetest2 | tee /dev/stderr | grep -Eq '^300$'")
 
       with subtest("switching to the same generation"):
         machine.succeed("/run/current-system/bin/switch-to-configuration test")
@@ -68,10 +85,14 @@
         machine.succeed(f"{newergen} switch")
         assert machine.succeed("cat /etc/newergen") == "newergen"
 
-        tmpMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc\\..*' | wc -l").rstrip()
-        metaMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc-metadata\\..*' | wc -l").rstrip()
+        tmpMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc\\..*'").rstrip()
+        print(tmpMounts)
+        metaMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc-metadata.*'").rstrip()
+        print(metaMounts)
 
-        assert tmpMounts == "0", f"Found {tmpMounts} remaining tmpmounts"
-        assert metaMounts == "1", f"Found {metaMounts} remaining metamounts"
+        numOfTmpMounts = len(tmpMounts.splitlines())
+        numOfMetaMounts = len(metaMounts.splitlines())
+        assert numOfTmpMounts == 0, f"Found {numOfTmpMounts} remaining tmpmounts"
+        assert numOfMetaMounts == 1, f"Found {numOfMetaMounts} remaining metamounts"
     '';
 }

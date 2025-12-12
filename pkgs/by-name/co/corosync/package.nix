@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
-, systemd, dbus, rdma-core, libstatgrab, net-snmp
-, enableDbus ? false
-, enableInfiniBandRdma ? false
-, enableMonitoring ? false
-, enableSnmp ? false
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  makeWrapper,
+  pkg-config,
+  kronosnet,
+  nss,
+  nspr,
+  libqb,
+  systemd,
+  dbus,
+  rdma-core,
+  libstatgrab,
+  net-snmp,
+  enableDbus ? false,
+  enableInfiniBandRdma ? false,
+  enableMonitoring ? false,
+  enableSnmp ? false,
+  nixosTests,
 }:
 
 let
@@ -19,14 +33,30 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2025-30472.patch";
+      url = "https://github.com/corosync/corosync/commit/7839990f9cdf34e55435ed90109e82709032466a.patch??full_index=1";
+      hash = "sha256-EgGTfOM9chjLnb1QWNGp6IQQKQGdetNkztdddXlN/uo=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = [
-    kronosnet nss nspr libqb systemd.dev
-  ] ++ optional enableDbus dbus
-    ++ optional enableInfiniBandRdma rdma-core
-    ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net-snmp;
+    kronosnet
+    nss
+    nspr
+    libqb
+    systemd.dev
+  ]
+  ++ optional enableDbus dbus
+  ++ optional enableInfiniBandRdma rdma-core
+  ++ optional enableMonitoring libstatgrab
+  ++ optional enableSnmp net-snmp;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -36,10 +66,11 @@ stdenv.mkDerivation rec {
     "--enable-qdevices"
     # allows Type=notify in the systemd service
     "--enable-systemd"
-  ] ++ optional enableDbus "--enable-dbus"
-    ++ optional enableInfiniBandRdma "--enable-rdma"
-    ++ optional enableMonitoring "--enable-monitoring"
-    ++ optional enableSnmp "--enable-snmp";
+  ]
+  ++ optional enableDbus "--enable-dbus"
+  ++ optional enableInfiniBandRdma "--enable-rdma"
+  ++ optional enableMonitoring "--enable-monitoring"
+  ++ optional enableSnmp "--enable-snmp";
 
   installFlags = [
     "sysconfdir=$(out)/etc"
@@ -71,11 +102,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
-  meta = with lib; {
-    homepage = "http://corosync.org/";
+  meta = {
+    homepage = "https://corosync.org/";
     description = "Group Communication System with features for implementing high availability within applications";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ montag451 ryantm ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      montag451
+      ryantm
+    ];
   };
 }

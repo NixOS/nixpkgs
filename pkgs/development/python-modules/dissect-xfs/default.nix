@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.11";
+  version = "3.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+dt47Wo5IMkMgd5lUWgpbB6n/tkWc+d1jnKD46Cq1Lc=";
+    tag = version;
+    hash = "sha256-dFM/xYJR3wBvOe/8rLJz4AK2jmp67T5vo/4TCMRSXzw=";
   };
 
   build-system = [
@@ -41,11 +38,11 @@ buildPythonPackage rec {
   # Archive files seems to be corrupt
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the XFS file system";
     homepage = "https://github.com/fox-it/dissect.xfs";
-    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

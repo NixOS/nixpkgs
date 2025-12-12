@@ -13,7 +13,7 @@
   typing,
 }:
 
-rec {
+{
   /*
     Upstream isn't interested in packaging this as a library
     (or accepting all of the patches we need to do so).
@@ -22,6 +22,7 @@ rec {
   oildev = python27.pkgs.buildPythonPackage rec {
     pname = "oildev-unstable";
     version = "2024-02-26";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "oilshell";

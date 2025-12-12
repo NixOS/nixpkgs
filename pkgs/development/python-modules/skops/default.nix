@@ -1,38 +1,43 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
+  hatchling,
   huggingface-hub,
   matplotlib,
+  numpy,
+  packaging,
   pandas,
+  prettytable,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rich,
   scikit-learn,
-  stdenv,
   streamlit,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "skops";
-  version = "0.10";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2uX5sGVdTnZEbl0VXI8E7h1pQYQVbpQeUKUchCZpgg4=";
+    tag = "v${version}";
+    hash = "sha256-1550LIVyChqP5q4VZmflCXPyXXg4eHJU5AlVQJD2M8c=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    huggingface-hub
+    numpy
+    packaging
+    prettytable
     scikit-learn
     tabulate
   ];
@@ -40,36 +45,48 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     pandas
-    pytestCheckHook
     pytest-cov-stub
+    pytestCheckHook
+    pyyaml
     streamlit
   ];
-  pytestFlagsArray = [ "skops" ];
+
+  optional-dependencies = {
+    rich = [ rich ];
+  };
+
+  enabledTestPaths = [ "skops" ];
+
   disabledTests = [
     # flaky
     "test_base_case_works_as_expected"
+    # fairlearn is not available in nixpkgs
+    "TestAddFairlearnMetricFrame"
   ];
-  disabledTestPaths =
-    [
-      # try to download data from Huggingface Hub:
-      "skops/hub_utils/tests"
-      "skops/card/tests"
-      # minor output formatting issue
-      "skops/card/_model_card.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Segfaults on darwin
-      "skops/io/tests/test_persist.py"
-    ];
+
+  disabledTestPaths = [
+    # minor output formatting issue
+    "skops/card/_model_card.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Segfaults on darwin
+    "skops/io/tests/test_persist.py"
+  ];
+
+  pytestFlags = [
+    # Warning from scipy.optimize in skops/io/tests/test_persist.py::test_dump_and_load_with_file_wrapper
+    # https://github.com/skops-dev/skops/issues/479
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "skops" ];
 
   meta = {
     description = "Library for saving/loading, sharing, and deploying scikit-learn based models";
-    mainProgram = "skops";
     homepage = "https://skops.readthedocs.io/en/stable";
-    changelog = "https://github.com/skops-dev/skops/releases/tag/v${version}";
+    changelog = "https://github.com/skops-dev/skops/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bcdarwin ];
+    mainProgram = "skops";
   };
 }

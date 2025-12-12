@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "stringparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gj0ooeb869JhlB9Mf5nBydiV2thTes8ys+BLJ516iSA=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stringparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use pattern matching and information extraction";
     homepage = "https://github.com/hgrecco/stringparser";
     changelog = "https://github.com/hgrecco/stringparser/blob/${version}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evilmav ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

@@ -17,19 +17,20 @@
   librsvg,
   python3Packages,
   blueprint-compiler,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.3";
+  version = "1.0.2";
   format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "eartag";
     rev = version;
-    hash = "sha256-eo6Vboo2Kn39M0r1OeqRFG3ug6frxzMKler5qT9KysY=";
+    hash = "sha256-Iwfk0SqxYF2bzkKZNqGonJh8MQ2c+K1wN0o4GECR/Rw=";
   };
 
   postPatch = ''
@@ -51,7 +52,8 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook4
     blueprint-compiler
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [
     librsvg
@@ -59,6 +61,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    aiofiles
+    aiohttp
     pygobject3
     eyed3
     pillow
@@ -66,6 +70,7 @@ python3Packages.buildPythonApplication rec {
     pytaglib
     python-magic
     pyacoustid
+    xxhash
   ];
 
   dontWrapGApps = true;
@@ -73,14 +78,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
+    changelog = "https://gitlab.gnome.org/World/eartag/-/releases/${version}";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

@@ -13,16 +13,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jpcre2";
     repo = "jpcre2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CizjxAiajDLqajZKizMRAk5UEZA+jDeBSldPyIb6Ic8=";
   };
 
   buildInputs = [ pcre2 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.neuzunix.com/jpcre2/latest/";
     description = "C++ wrapper for PCRE2 Library";
     platforms = lib.platforms.all;
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

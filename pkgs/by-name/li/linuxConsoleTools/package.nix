@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
-  SDL,
   SDL2,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TaKXRceCt9sY9fN8Sed78WMSHdN2Hi/HY2+gy/NcJFY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [
-    SDL
     SDL2
   ];
 
@@ -26,12 +28,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=\"\"" ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "Set of tools for joysticks and serial peripherals";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       pSub
       ebzzry
     ];

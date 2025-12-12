@@ -1,34 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  django,
   django-stubs,
-  pytestCheckHook,
+  django,
+  fetchFromGitHub,
+  parameterized,
   pytest-cov-stub,
   pytest-django,
-  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
 }:
-let
-  # 0.18.12 was yanked from PyPI, it refers to this issue:
-  # https://github.com/deschler/django-modeltranslation/issues/701
-  version = "0.19.11";
-in
-buildPythonPackage {
+
+buildPythonPackage rec {
   pname = "django-modeltranslation";
-  inherit version;
+  version = "0.19.17";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J/D0rHhxJMpOSGu9LQ6tPKnjBZhqTX6I5YcSkx5+qXk=";
+    tag = "v${version}";
+    hash = "sha256-SaCuo/vnH7fDZnOZvrV3HbLtq6q2bTzhPvBCdrzukoA=";
   };
 
-  disabled = pythonOlder "3.6";
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     django-stubs
@@ -38,10 +42,13 @@ buildPythonPackage {
     parameterized
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "modeltranslation" ];
+
+  meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ augustebaum ];
+    changelog = "https://github.com/deschler/django-modeltranslation/blob/v${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

@@ -16,19 +16,18 @@
   liburcu,
   ncurses,
   pkg-config,
-  gnumake42,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = pname;
+    repo = "netsniff-ng";
+    owner = "netsniff-ng";
     rev = "v${version}";
-    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
+    hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     flex
     makeWrapper
     pkg-config
-    gnumake42 # fails with make 4.4
   ];
 
   buildInputs = [
@@ -55,9 +53,13 @@ stdenv.mkDerivation rec {
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs configure
     substituteInPlace configure --replace "which" "command -v"
     NACL_INC_DIR=${libsodium.dev}/include/sodium NACL_LIB=sodium ./configure
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.linux;
   };
 }

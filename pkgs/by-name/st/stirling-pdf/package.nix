@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_7,
+  gradle_8,
   makeWrapper,
   jre,
 }:
 
 let
-  gradle = gradle_7;
+  gradle = gradle_8;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.33.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Cl2IbFfw6TH904Y63YQnXS/mDEuUB6AdCoRT4G+W0hU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IgzBWIYK3ps0WxBMkJK/vEyvgpEv3NurbNhaTwz25Bc=";
   };
 
   patches = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [
     "-x"
     "spotlessApply"
+    "-DDISABLE_ADDITIONAL_FEATURES=true"
   ];
 
   doCheck = true;
@@ -51,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 build/libs/Stirling-PDF-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
-    makeWrapper ${jre}/bin/java $out/bin/Stirling-PDF \
-        --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
+    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
+    makeWrapper ${lib.getExe jre} $out/bin/Stirling-PDF \
+      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
 
     runHook postInstall
   '';
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     mainProgram = "Stirling-PDF";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = jre.meta.platforms;

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.22";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-y6lY6DlfdCF5dliRkiU6r+ny/a9ssDtqRmF+/rcKFkg=";
+    tag = version;
+    hash = "sha256-RKihR3UJLuBYSHK79pcxIx/hT0nCkqQO8zBrq4AWaYM=";
   };
 
   patches = [
@@ -67,11 +67,11 @@ buildPythonPackage rec {
     "tests/test_tutorial/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with SQL databases";
     homepage = "https://github.com/tiangolo/sqlmodel";
     changelog = "https://github.com/tiangolo/sqlmodel/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

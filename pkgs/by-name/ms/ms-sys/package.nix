@@ -5,16 +5,14 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ms-sys";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ms-sys/ms-sys-${version}.tar.gz";
-    sha256 = "06xqpm2s9cg8fj7a1822wmh3p4arii0sifssazg1gr6i7xg7kbjz";
+    url = "mirror://sourceforge/ms-sys/ms-sys-${finalAttrs.version}.tar.gz";
+    hash = "sha256-qQLuPr0MtwOO0HfjqoqMgzWmxHL1BW1+CK8z1+eD8Vc=";
   };
-  # TODO: Remove with next release, see https://sourceforge.net/p/ms-sys/patches/8/
-  patches = [ ./manpages-without-build-timestamps.patch ];
 
   nativeBuildInputs = [ gettext ];
 
@@ -22,11 +20,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program for writing Microsoft-compatible boot records";
     homepage = "https://ms-sys.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
     mainProgram = "ms-sys";
   };
-}
+})

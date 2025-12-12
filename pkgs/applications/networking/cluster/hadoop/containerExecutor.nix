@@ -21,19 +21,22 @@ stdenv.mkDerivation (finalAttrs: {
     "hadoop-${finalAttrs.version}-src/hadoop-yarn-project/hadoop-yarn/"
     + "hadoop-yarn-server/hadoop-yarn-server-nodemanager/src";
 
+  postPatch = ''
+    sed -i -r 's/(cmake_minimum_required\(VERSION) [0-9.]+/\1 3.10/' CMakeLists.txt
+  '';
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
   cmakeFlags = [ "-DHADOOP_CONF_DIR=/run/wrappers/yarn-nodemanager/etc/hadoop" ];
 
   installPhase = ''
     mkdir $out
-    mv target/var/empty/local/bin $out/
+    mv target/usr/local/bin $out/
   '';
 
   meta = with lib; {
     homepage = "https://hadoop.apache.org/";
     description = "Framework for distributed processing of large data sets across clusters of computers";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
 
     longDescription = ''
       The Hadoop YARN Container Executor is a native component responsible for managing the lifecycle of containers
@@ -41,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       resources like CPU and memory are allocated according to the policies defined in the ResourceManager.
     '';
 
-    maintainers = with maintainers; [ illustris ];
+    maintainers = with lib.maintainers; [ illustris ];
     platforms = filter (strings.hasSuffix "linux") (attrNames platformAttrs);
   };
 })

@@ -21,7 +21,7 @@
   withMysql ? false,
   libmysqlclient,
   withPostgresql ? false,
-  postgresql,
+  libpq,
   withPcap ? true,
   libpcap,
   withRedis ? false,
@@ -38,41 +38,41 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.5";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
-    rev = "refs/tags/release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-1n447BpTqmkg5tyXe9yPzjfDoh7wMLZhwouUEzkwxKM=";
+    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-FG0/quBB5Q/bdYQqkFaZc/BhcIC/n2uVstlIGe4EPvE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs =
-    [
-      openssl
-      talloc
-      bsd-finger
-      perl
-    ]
-    ++ lib.optional withCap libcap
-    ++ lib.optional withCollectd collectd
-    ++ lib.optional withJson json_c
-    ++ lib.optional withLdap openldap
-    ++ lib.optional withMemcached libmemcached
-    ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withPostgresql postgresql
-    ++ lib.optional withPcap libpcap
-    ++ lib.optional withRedis hiredis
-    ++ lib.optional withRest curl
-    ++ lib.optional withSqlite sqlite
-    ++ lib.optional withYubikey libyubikey;
+  buildInputs = [
+    openssl
+    talloc
+    bsd-finger
+    perl
+  ]
+  ++ lib.optional withCap libcap
+  ++ lib.optional withCollectd collectd
+  ++ lib.optional withJson json_c
+  ++ lib.optional withLdap openldap
+  ++ lib.optional withMemcached libmemcached
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withPostgresql libpq
+  ++ lib.optional withPcap libpcap
+  ++ lib.optional withRedis hiredis
+  ++ lib.optional withRest curl
+  ++ lib.optional withSqlite sqlite
+  ++ lib.optional withYubikey libyubikey;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ lib.optional (!linkOpenssl) "--with-openssl=no";
+  ]
+  ++ lib.optional (!linkOpenssl) "--with-openssl=no";
 
   postPatch = ''
     substituteInPlace src/main/checkrad.in \
@@ -101,15 +101,12 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freeradius.org/";
     description = "Modular, high performance free RADIUS suite";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      sheenobu
-      willibutz
-    ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
   };
 }
 ## TODO: include windbind optionally (via samba?)

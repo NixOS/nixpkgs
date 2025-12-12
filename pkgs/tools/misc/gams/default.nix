@@ -8,8 +8,6 @@
   optgamsFile ? null,
 }:
 
-assert licenseFile != null;
-
 stdenv.mkDerivation rec {
   version = "25.0.2";
   pname = "gams";
@@ -23,6 +21,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase =
+    assert licenseFile != null;
     ''
       mkdir -p "$out/bin" "$out/share/gams"
       cp -a * "$out/share/gams"
@@ -46,16 +45,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General Algebraic Modeling System";
     longDescription = ''
       The General Algebraic Modeling System is a high-level modeling system for mathematical optimization.
       GAMS is designed for modeling and solving linear, nonlinear, and mixed-integer optimization problems.
     '';
     homepage = "https://www.gams.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.Scriptkiddi ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.Scriptkiddi ];
+    platforms = lib.platforms.linux;
   };
 }

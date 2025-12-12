@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
 
   # nativeBuildInputs
   scons,
@@ -36,60 +35,56 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.25";
+  version = "3.27";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s2i2owXj96Y4LSOgy/wdeJIwYLa39Uz3mHpzx7Spr8I=";
+    sha256 = "sha256-YZUpLdeRC+aMtwGNRRZig+rv0/nbl3P81umnjUnqyZk=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3Packages.wrapPython
-      scons
-    ]
-    ++ lib.optionals guiSupport [
-      gobject-introspection
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3Packages.wrapPython
+    scons
+  ]
+  ++ lib.optionals guiSupport [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      dbus
-      libusb1
-      ncurses
-      python3Packages.python
-    ]
-    ++ lib.optionals kppsSupport [
-      pps-tools
-    ]
-    ++ lib.optionals guiSupport [
-      atk
-      dbus-glib
-      gdk-pixbuf
-      libX11
-      libXaw
-      libXext
-      libXpm
-      libXt
-      pango
-    ];
+  buildInputs = [
+    dbus
+    libusb1
+    ncurses
+    python3Packages.python
+  ]
+  ++ lib.optionals kppsSupport [
+    pps-tools
+  ]
+  ++ lib.optionals guiSupport [
+    atk
+    dbus-glib
+    gdk-pixbuf
+    libX11
+    libXaw
+    libXext
+    libXpm
+    libXt
+    pango
+  ];
 
-  pythonPath = lib.optionals guiSupport [
+  pythonPath = [
+    python3Packages.pyserial
+  ]
+  ++ lib.optionals guiSupport [
     python3Packages.pygobject3
     python3Packages.pycairo
   ];
 
   patches = [
     ./sconstruct-env-fixes.patch
-
-    # fix build with Python 3.12
-    (fetchpatch {
-      url = "https://gitlab.com/gpsd/gpsd/-/commit/9157b1282d392b2cc220bafa44b656d6dac311df.patch";
-      hash = "sha256-kFMn4HgidQvHwHfcSNH/0g6i1mgvEnZfvAUDPU4gljg=";
-    })
+    ./sconstrict-rundir-fixes.patch
   ];
 
   preBuild = ''
@@ -120,6 +115,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   installTargets = [
     "install"
     "udev-install"
@@ -130,7 +127,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS
@@ -152,11 +149,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bjornfor
-      rasendubi
     ];
   };
 }

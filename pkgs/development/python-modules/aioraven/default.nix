@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aioraven";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cottsay";
     repo = "aioraven";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ux2jeXkh8YsJ6mItXOx40pp0Tc+aJXMV7ZqyZg+iy2c=";
+    tag = version;
+    hash = "sha256-rGqaDJtpdDWd8fxdfwU+rmgwEzZyYHfbiZxUlWoH2ks=";
   };
 
   build-system = [ setuptools ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioraven" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for communication with RAVEn devices";
     homepage = "https://github.com/cottsay/aioraven";
     changelog = "https://github.com/cottsay/aioraven/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

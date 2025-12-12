@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   httpx,
   poetry-core,
   pytest-asyncio,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VLsNMFFt+kMxNw/81OMX4Fg/xCbQloCURmV0OxvClq8=";
   };
 
@@ -37,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glances_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for interacting with Glances";
     homepage = "https://github.com/home-assistant-ecosystem/python-glances-api";
     changelog = "https://github.com/home-assistant-ecosystem/python-glances-api/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

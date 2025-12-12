@@ -9,34 +9,34 @@
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.7.0";
+  version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pkxu9WIsyHW2iTepv5B2naKkK+yw8lT+i3EwobE+u1M=";
+    tag = version;
+    hash = "sha256-JYb0+Dj4QowcN+I6MMoWlv+Q5YoK4nfzYB/UNwhnRu8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs =
-    [
-      httpx
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ httpx.optional-dependencies.http2;
+  dependencies = [
+    httpx
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ httpx.optional-dependencies.http2;
+
+  # requires running gotenberg service
+  doCheck = false;
 
   pythonImportsCheck = [ "gotenberg_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for interfacing with the Gotenberg API";
     homepage = "https://github.com/stumpylog/gotenberg-client";
-    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ leona ];
+    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ leona ];
   };
 }

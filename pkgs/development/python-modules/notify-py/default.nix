@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   alsa-utils,
   libnotify,
   which,
@@ -25,24 +25,22 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ms7m";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "notify-py";
+    tag = "v${version}";
     hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };
 
   patches =
     lib.optionals stdenv.hostPlatform.isLinux [
       # hardcode paths to aplay and notify-send
-      (substituteAll {
-        src = ./linux-paths.patch;
+      (replaceVars ./linux-paths.patch {
         aplay = "${alsa-utils}/bin/aplay";
         notifysend = "${libnotify}/bin/notify-send";
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # hardcode path to which
-      (substituteAll {
-        src = ./darwin-paths.patch;
+      (replaceVars ./darwin-paths.patch {
         which = "${which}/bin/which";
       })
     ];
@@ -82,13 +80,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notifypy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform desktop notification library for Python";
     mainProgram = "notifypy";
     homepage = "https://github.com/ms7m/notify-py";
     changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       austinbutler
       dotlambda
     ];

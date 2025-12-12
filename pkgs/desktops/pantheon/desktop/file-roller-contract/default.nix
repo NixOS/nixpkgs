@@ -3,24 +3,23 @@
   stdenv,
   fetchFromGitHub,
   unstableGitUpdater,
-  substituteAll,
+  replaceVars,
   file-roller,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "file-roller-contract";
   version = "0-unstable-2021-02-22";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "file-roller-contract";
     rev = "cf001d84a7e2ddcfbee2cfdb19885798a869833e";
     sha256 = "sha256-jnXq44NiQiSYsvaBF828TklLg9d6z6n+gCZKgbFiERI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./exec-path.patch;
+    (replaceVars ./exec-path.patch {
       file_roller = file-roller;
     })
   ];
@@ -44,11 +43,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Contractor extension for File Roller";
     homepage = "https://github.com/elementary/file-roller-contract";
-    license = licenses.gpl3Plus;
-    maintainers = teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

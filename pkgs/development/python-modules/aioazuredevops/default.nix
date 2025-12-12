@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aioazuredevops";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,14 +30,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aioazuredevops";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RZBiFPzYtEoc51T3irVHL9xVlZgACyM2lu1TkMoatqU=";
+    tag = version;
+    hash = "sha256-0KQHL9DmNeRvEs51XPcncxNzXb+SqYM5xPDvOdKSQMI=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements_setup.txt \
-      --replace-fail "==" ">="
-  '';
 
   build-system = [
     incremental
@@ -65,15 +60,20 @@ buildPythonPackage rec {
     "test_get_build"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  disabledTestPaths = [
+    # https://github.com/timmo001/aioazuredevops/commit/d6278d92937dd47de272ac6371b2d007067763c3
+    "tests/test__version.py"
+  ];
+
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "aioazuredevops" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/timmo001/aioazuredevops/releases/tag/${version}";
     description = "Get data from the Azure DevOps API";
     homepage = "https://github.com/timmo001/aioazuredevops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

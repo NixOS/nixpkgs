@@ -1,53 +1,66 @@
 {
+  autoPatchelfHook,
+  buildPythonPackage,
+  cudaPackages,
   lib,
   python,
-  autoAddDriverRunpath,
-  buildPythonPackage,
-  autoPatchelfHook,
-  unzip,
-  cudaPackages,
+  stdenv,
 }:
-
 let
-  pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
+  inherit (cudaPackages.tensorrt)
+    meta
+    pname
+    src
+    version
+    ;
+  inherit (lib.versions) major minor;
+  inherit (stdenv.hostPlatform) parsed;
 in
-buildPythonPackage rec {
-  pname = "tensorrt";
-  version = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
+buildPythonPackage {
+  # Make sure to add the cudaNamePrefix tag since we're not using cudaPackages.buildRedist but this is a
+  # redistributable.
+  pname = "${cudaPackages.cudaNamePrefix}-${pname}";
 
-  src = cudaPackages.tensorrt.src;
+  inherit version;
+
+  src =
+    let
+      # https://peps.python.org/pep-0427/#file-name-convention
+      distribution = pname;
+      pythonTag = "cp${major python.version}${minor python.version}";
+      abiTag = "none";
+      platformTag = "${parsed.kernel.name}_${parsed.cpu.name}";
+    in
+    src + "/python/${distribution}-${version}-${pythonTag}-${abiTag}-${platformTag}.whl";
 
   format = "wheel";
-  # We unpack the wheel ourselves because of the odd packaging.
-  dontUseWheelUnpack = true;
 
   nativeBuildInputs = [
-    unzip
     autoPatchelfHook
-    autoAddDriverRunpath
   ];
 
-  preUnpack = ''
-    mkdir -p dist
-    tar --strip-components=2 -xf "$src" --directory=dist \
-      "TensorRT-${version}/python/tensorrt-${version}-cp${pyVersion}-none-linux_x86_64.whl"
-  '';
-
-  sourceRoot = ".";
-
   buildInputs = [
-    cudaPackages.cudnn
     cudaPackages.tensorrt
   ];
 
   pythonImportsCheck = [ "tensorrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for TensorRT, a high-performance deep learning interface";
-    homepage = "https://developer.nvidia.com/tensorrt";
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aidalgol ];
-    broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
+
+    # Explicitly inherit from TensorRT's meta to avoid pulling in attributes added by stdenv.mkDerivation.
+    inherit (meta)
+      badPlatforms
+      broken
+      changelog
+      downloadPage
+      homepage
+      license
+      longDescription
+      maintainers
+      platforms
+      sourceProvenance
+      teams
+      ;
   };
 }

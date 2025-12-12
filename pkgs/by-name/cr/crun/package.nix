@@ -1,16 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, go-md2man
-, pkg-config
-, libcap
-, libseccomp
-, python3
-, systemd
-, yajl
-, nixosTests
-, criu
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  go-md2man,
+  pkg-config,
+  libcap,
+  libseccomp,
+  python3,
+  systemdMinimal,
+  yajl,
+  nixosTests,
+  criu,
+  versionCheckHook,
 }:
 
 let
@@ -37,35 +39,54 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.19.1";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = version;
-    hash = "sha256-st8zap9WiM5+aX3spga19Ty4a4297rR3SjAY9Hrv4qg=";
+    repo = "crun";
+    tag = finalAttrs.version;
+    hash = "sha256-WBAwyDODMrUDlgonRbxaNQ+aN8K6YicY2JVArXDJem8=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    go-md2man
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ criu libcap libseccomp systemd yajl ];
+  buildInputs = [
+    criu
+    libcap
+    libseccomp
+    systemdMinimal
+    yajl
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
-  NIX_LDFLAGS = "-lcriu";
+  env = {
+    NIX_LDFLAGS = "-lcriu";
+  };
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
   postPatch = ''
-    echo ${version} > .tarball-version
-    echo '#define GIT_VERSION "${src.rev}"' > git-version.h
+    echo ${finalAttrs.version} > .tarball-version
+    echo "#define GIT_VERSION \"$(cat COMMIT)\"" > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+    ${lib.concatMapStringsSep "\n" (
+      e: "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
   '';
 
@@ -73,13 +94,17 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/crun/releases/tag/${version}";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.podman ];
     mainProgram = "crun";
   };
-}
+})

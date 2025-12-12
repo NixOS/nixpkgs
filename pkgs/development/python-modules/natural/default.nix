@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "natural";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DERFKDGVUPcjYAxiTYWgWkPp+Myd/9CNytQWgRya570=";
   };
 

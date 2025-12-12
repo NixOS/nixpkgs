@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "23.7";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "psmisc";
+    repo = "psmisc";
     rev = "v${version}";
     hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
       ./autogen.sh
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/psmisc/psmisc";
     description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ryantm ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ryantm ];
   };
 }

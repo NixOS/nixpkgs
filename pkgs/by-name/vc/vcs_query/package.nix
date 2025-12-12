@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/bin/vcs_query
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mageta/vcs_query";
-    description = "eMail query-command to use vCards in mutt and Vim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    description = "Email query-command to use vCards in mutt and Vim";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ma27 ];
     mainProgram = "vcs_query";
   };
 }

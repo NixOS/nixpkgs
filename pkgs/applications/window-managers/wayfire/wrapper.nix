@@ -13,7 +13,8 @@ symlinkJoin {
 
   paths = [
     wayfire
-  ] ++ plugins;
+  ]
+  ++ plugins;
 
   postBuild = ''
     for binary in $out/bin/*; do
@@ -30,6 +31,7 @@ symlinkJoin {
   };
 
   meta = wayfire.meta // {
+    outputsToInstall = [ "out" ];
     # To prevent builds on hydra
     hydraPlatforms = [ ];
     # prefer wrapper over the package

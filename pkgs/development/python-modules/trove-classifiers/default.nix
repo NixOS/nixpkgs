@@ -4,23 +4,25 @@
   fetchPypi,
   calver,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2024.9.12";
+    version = "2025.9.11.17";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       pname = "trove_classifiers";
       inherit version;
-      hash = "sha256-S0az4TSk0BmZrFvG5SivzBDMSPD3JPGF8mfidgBXaPQ=";
+      hash = "sha256-kxyphBpenJQIvCrme1DSis+FvvViGbVoYIdt0fLQJN0=";
     };
+
+    postPatch = ''
+      substituteInPlace tests/test_cli.py \
+        --replace-fail "BINDIR = Path(sys.executable).parent" "BINDIR = '$out/bin'"
+    '';
 
     build-system = [
       calver
@@ -40,6 +42,7 @@ let
       homepage = "https://github.com/pypa/trove-classifiers";
       changelog = "https://github.com/pypa/trove-classifiers/releases/tag/${version}";
       license = lib.licenses.asl20;
+      mainProgram = "trove-classifiers";
       maintainers = with lib.maintainers; [ dotlambda ];
     };
   };

@@ -23,7 +23,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "pynx584";
-    rev = "refs/tags/0.8.2";
+    tag = "0.8.2";
     hash = "sha256-q5ra7tH4kaBrw0VAiyMsmWOkVhA7Y6bRuFP8dlxQjsE=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nx584" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for communicating to NX584/NX8E interfaces";
     homepage = "https://github.com/kk7ds/pynx584";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

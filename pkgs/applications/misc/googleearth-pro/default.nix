@@ -9,6 +9,8 @@
   libGLU,
   libSM,
 
+  libXcomposite,
+  libXi,
   libXrender,
   libX11,
 
@@ -18,7 +20,7 @@
   fontconfig,
   dpkg,
   libproxy,
-  libxml2,
+  libxml2_13,
   gst_all_1,
   dbus,
   makeWrapper,
@@ -38,11 +40,11 @@ let
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.6.9796";
+  version = "7.3.6.10201";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "sha256-Wv2jPGN7LC5T32WdX3W1BfGYrcXTNWTI1Wv+PmD0gNM=";
+    sha256 = "sha256-LqkXOSfE52+7x+Y0DBjYzvVKO0meytLNHuS/ia88FbI=";
   };
 
   nativeBuildInputs = [
@@ -63,10 +65,12 @@ mkDerivation rec {
     libGLU
     libSM
     libX11
+    libXcomposite
+    libXi
     libXrender
     libproxy
     libxcb
-    libxml2
+    libxml2_13
     sqlite
     zlib
     alsa-lib
@@ -77,9 +81,13 @@ mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     mkdir deb
     dpkg --fsys-tarfile $src | tar --extract -C deb
+
+    runHook postUnpack
   '';
 
   installPhase = ''
@@ -120,16 +128,16 @@ mkDerivation rec {
       --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       shamilton
       xddxdd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     knownVulnerabilities = [
       "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
     ];

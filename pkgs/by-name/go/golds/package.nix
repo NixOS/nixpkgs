@@ -3,17 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "golds";
-  version = "0.7.2";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "go101";
     repo = "golds";
     tag = "v${version}";
-    hash = "sha256-ExvCVGWYAngasnDHVzBLeLmms4cFNcQ/KzuE4t3r36A=";
+    hash = "sha256-6jtBwET3JSSh2DQq9MtLn2YokfK9ODYtYrcfI0W8m5I=";
   };
 
   # nixpkgs is not using the go distpack archive and missing a VERSION file in the source
@@ -21,13 +22,15 @@ buildGoModule rec {
   # https://github.com/NixOS/nixpkgs/pull/358316#discussion_r1855322027
   patches = [ ./info_module-gover.patch ];
 
-  vendorHash = "sha256-omjHRZB/4VzPhc6RrFY11s6BRD69+Y4RRZ2XdeKbZf0=";
+  vendorHash = "sha256-CL9CdLGeMTxXazJUr2+syQYJZXafX6ARzmEOHn7l14I=";
 
   ldflags = [ "-s" ];
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Experimental Go local docs server/generator and code reader implemented with some fresh ideas";

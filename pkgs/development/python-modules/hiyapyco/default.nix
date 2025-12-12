@@ -14,8 +14,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zerwes";
-    repo = pname;
-    rev = "refs/tags/release-${version}";
+    repo = "hiyapyco";
+    tag = "release-${version}";
     hash = "sha256-uF5DblAg4q8L1tZKopcjJ14NIQVQF5flNHdZ/jnw71M=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hiyapyco" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library allowing hierarchical overlay of config files in YAML syntax";
     homepage = "https://github.com/zerwes/hiyapyco";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

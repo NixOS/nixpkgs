@@ -12,11 +12,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cross-rs";
     repo = "cross";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 
-  cargoHash = "sha256-x+DrKo79R8TAeLVuvIIguQs3gdAHiAQ9dUU2/eZRZ0c=";
+  cargoHash = "sha256-omk9UqijrQQ49AYEQjJ+iTT1M0GW7gJD+oG8xAL243A=";
 
   checkFlags = [
     "--skip=docker::shared::tests::directories::test_host"
@@ -31,15 +31,15 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/cross-rs/cross";
     changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "cross";
   };
 }

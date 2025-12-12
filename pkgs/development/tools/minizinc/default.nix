@@ -13,15 +13,31 @@
   zlib,
 }:
 
+let
+  gecode_6_3_0 = gecode.overrideAttrs (_: {
+    version = "6.3.0";
+    src = fetchFromGitHub {
+      owner = "gecode";
+      repo = "gecode";
+      rev = "f7f0d7c273d6844698f01cec8229ebe0b66a016a";
+      hash = "sha256-skf2JEtNkRqEwfHb44WjDGedSygxVuqUixskTozi/5k=";
+    };
+    patches = [ ];
+  });
+in
+let
+  gecode = gecode_6_3_0;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.8.7";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
     rev = finalAttrs.version;
-    sha256 = "sha256-2JCTOgnzGeh106YBkLPM46MgnB4XHZmdMXNn1P0OBqA=";
+    sha256 = "sha256-eu2yNRESypXWCn8INTjGwwRXTWdGYvah/hc2iqFKQmw=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/minizinc/solvers/
     jq \
       '.version = "${gecode.version}"
-       | .mznlib = "${gecode}/share/gecode/mznlib"
+       | .mznlib = "${gecode}/share/minizinc/gecode/"
        | .executable = "${gecode}/bin/fzn-gecode"' \
        ${./gecode.msc} \
        >$out/share/minizinc/solvers/gecode.msc
@@ -52,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     simple = callPackage ./simple-test { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.minizinc.org/";
     description = "Medium-level constraint modelling language";
     longDescription = ''
@@ -62,8 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       that it can be mapped onto existing solvers easily and consistently.
       It is a subset of the higher-level language Zinc.
     '';
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.sheenobu ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 })

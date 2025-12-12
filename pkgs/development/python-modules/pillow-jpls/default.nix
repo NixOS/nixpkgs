@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "planetmarshall";
     repo = "pillow-jpls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 
@@ -65,9 +65,8 @@ buildPythonPackage rec {
     pyproject-metadata
   ];
 
-  pypaBuildFlags = [
-    "-C"
-    "cmake.args=--preset=sysdeps"
+  cmakeFlags = [
+    "--preset=sysdeps"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -77,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pillow_jpls" ];
 
-  meta = with lib; {
+  meta = {
     description = "JPEG-LS plugin for the Python Pillow library";
     homepage = "https://github.com/planetmarshall/pillow-jpls";
     changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

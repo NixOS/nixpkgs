@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -15,6 +16,12 @@ stdenv.mkDerivation {
     sha256 = "sha256-5jN9xy3+kk540PAyfsxIqck9hdI3t2CNpgqKxLbAsDg=";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   dontBuild = true;
   dontConfigure = true;
 
@@ -23,14 +30,14 @@ stdenv.mkDerivation {
     cp 20-hw1.rules $out/lib/udev/rules.d/20-ledger.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "udev rules for Ledger devices";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       asymmetric
       toasteruwu
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/LedgerHQ/udev-rules";
   };
 }

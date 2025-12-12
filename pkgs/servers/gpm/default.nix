@@ -14,7 +14,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpm";
   version = "unstable-2020-06-17";
 
@@ -64,22 +64,29 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     (if withNcurses then "--with-curses" else "--without-curses")
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
   ];
 
   enableParallelBuilding = true;
 
   # Provide libgpm.so for compatibility
   postInstall = ''
-    ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
+    if test -e "$out/lib/libgpm.so.2"; then
+      ln -sv "$out/lib/libgpm.so.2" "$out/lib/libgpm.so"
+    else
+      rm -f "$out/lib/libgpm.so.2"
+    fi
   '';
 
   passthru.tests.static = pkgsStatic.gpm;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "Daemon that provides mouse support on the Linux console";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.cygwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.cygwin;
     maintainers = [ ];
   };
 }

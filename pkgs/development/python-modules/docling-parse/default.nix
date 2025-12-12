@@ -5,29 +5,40 @@
   cmake,
   pkg-config,
   cxxopts,
-  poetry-core,
+  setuptools,
   pybind11,
-  tabulate,
   zlib,
   nlohmann_json,
   utf8cpp,
   libjpeg,
   qpdf,
   loguru-cpp,
+  # python dependencies
+  tabulate,
+  pillow,
+  pydantic,
+  docling-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "2.0.3";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-parse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pZJ7lneg4ftAoWS5AOflkkKCwZGF4TJIuqDjq4W4VBw=";
+    tag = "v${version}";
+    hash = "sha256-8eHYMvfjPuGgrgrlqEh061ug+yer+1nQLbeDR1dQu68=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"cmake>=3.27.0,<4.0.0"' \
+        '"cmake>=3.27.0"'
+  '';
 
   dontUseCmakeConfigure = true;
 
@@ -37,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
+    setuptools
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev utf8cpp}/include/utf8cpp";
@@ -61,7 +72,21 @@ buildPythonPackage rec {
 
   dependencies = [
     tabulate
+    pillow
+    pydantic
+    docling-core
   ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+    "pillow"
+  ];
+
+  # Listed as runtime dependencies but only used in CI to build wheels
+  preBuild = ''
+    sed -i '/cibuildwheel/d' pyproject.toml
+    sed -i '/delocate/d' pyproject.toml
+  '';
 
   pythonImportsCheck = [
     "docling_parse"
@@ -72,10 +97,13 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
+    # error: no matching conversion for functional-style cast from 'bool' to 'nlohmann::basic_json<>'
+    # See https://github.com/docling-project/docling-parse/issues/172 for context
+    broken = true;
   };
 }

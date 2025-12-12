@@ -4,21 +4,18 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autoslot";
-  version = "2024.12.1";
+  version = "2025.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "autoslot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wYjsBrjvSZFHDt0HLrnS9Xwk8EHVQupfPSkQnUFmMAk=";
+    tag = "v${version}";
+    hash = "sha256-mPGfBUSKkskiiokqo/TJWdDzuvcg/LDULx+Gx8LexV8=";
   };
 
   build-system = [ flit-core ];
@@ -27,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoslot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic __slots__ for your Python classes";
     homepage = "https://github.com/cjrh/autoslot";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

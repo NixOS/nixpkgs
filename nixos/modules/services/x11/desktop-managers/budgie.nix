@@ -140,6 +140,13 @@ in
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
         fi
       '') cfg.sessionPath}
+    ''
+    + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+      # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+      # applies to sessions not managed by systemd.
+      if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+      fi
     '';
 
     environment.systemPackages =
@@ -199,13 +206,6 @@ in
       monospace = mkDefault [ "Hack" ];
     };
 
-    # Qt application style.
-    qt = {
-      enable = mkDefault true;
-      style = mkDefault "gtk2";
-      platformTheme = mkDefault "gtk2";
-    };
-
     environment.pathsToLink = [
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
     ];
@@ -252,8 +252,7 @@ in
     services.system-config-printer.enable = config.services.printing.enable;
 
     # For BCC's Sharing panel.
-    services.dleyna-renderer.enable = mkDefault true;
-    services.dleyna-server.enable = mkDefault true;
+    services.dleyna.enable = mkDefault true;
     services.gnome.gnome-user-share.enable = mkDefault true;
     services.gnome.rygel.enable = mkDefault true;
 
@@ -261,6 +260,7 @@ in
     services.gnome.evolution-data-server.enable = mkDefault true;
     services.gnome.glib-networking.enable = mkDefault true;
     services.gnome.gnome-keyring.enable = mkDefault true;
+    services.gnome.gcr-ssh-agent.enable = mkDefault true;
     services.gnome.gnome-settings-daemon.enable = mkDefault true;
     services.gvfs.enable = mkDefault true;
 

@@ -6,21 +6,22 @@
   removeReferencesTo,
   tzdata,
   wire,
-  yarn,
-  nodejs,
+  yarn-berry_4,
+  yarn-berry_4-fetcher,
+  buildPackages,
   python3,
-  cacert,
   jq,
   moreutils,
   nix-update-script,
   nixosTests,
   xcbuild,
   faketty,
+  nodejs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "11.4.0";
+  version = "12.3.0";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -31,72 +32,71 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
-    rev = "v${version}";
-    hash = "sha256-47jQ+ksq6zdS73o884q0xKLtOHssTnaIPdDOejlv/gU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5DfPxsP8Lo8y8S44S/OkxOxWFL0JfAxPF7ZmT8FRPbw=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env =
-    {
-      CYPRESS_INSTALL_BINARY = 0;
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Fix error: no member named 'aligned_alloc' in the global namespace.
-      # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-      NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
-    };
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+    PUPPETEER_SKIP_DOWNLOAD = 1;
 
-  offlineCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-yarn-offline-cache";
-    inherit src env;
-    nativeBuildInputs = [
-      yarn
-      nodejs
-      cacert
-      jq
-      moreutils
-      python3
-      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
-    buildPhase = ''
-      runHook preBuild
-      export HOME="$(mktemp -d)"
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-      runHook postBuild
-    '';
-    dontConfigure = true;
-    dontInstall = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash =
-      rec {
-        x86_64-linux = "sha256-5/l0vXVjHC4oG7ahVscJOwS74be7F8jei9nq6m2v2tQ=";
-        aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-+texKSlcvtoi83ySEXy2E4SqnfyQ0l4MixTBpdemWvI=";
-        x86_64-darwin = aarch64-darwin;
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    # The build OOMs on memory constrained aarch64 without this
+    NODE_OPTIONS = "--max_old_space_size=4096";
   };
 
-  disallowedRequisites = [ offlineCache ];
+  missingHashes = ./missing-hashes.json;
+  # Since this is not a dependency attribute the buildPackages has to be specified.
+  offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-CAEhdKsFMUuIs8DsJ9xSr2FRdBp4fPUWyvjC6FuiyG8=";
+  };
 
-  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
+  disallowedRequisites = [ finalAttrs.offlineCache ];
+
+  vendorHash = "sha256-qoku03G6lQlwTzm/UpnrEpPqIxJmPZAy8VJ/KfYXhHM=";
+
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  # However, while `substituteInPlace --replace-fail` is desirable to keep
+  # the section up-to-date, this gets increasingly annoying since there's
+  # an inconsistent 1% with a different version. So we now blindly set all
+  # `go` directives to whatever nixpkgs provides and make it the maintainer's
+  # duty to ensure that the mandated
+  # Go version is compatible with what we provide.
+  # This is still better than maintaining some list of go.mod files (or exclusions of that)
+  # where to patch the go version (and where to not do that).
+  postPatch = ''
+    find . \( -name go.mod -or -name "go.work" \) -type f -exec sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/g' {} \;
+  '';
 
   proxyVendor = true;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     wire
-    yarn
     jq
     moreutils
     removeReferencesTo
-    python3
+    # required to run old node-gyp
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.distutils ]))
     faketty
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+    nodejs
+    yarn-berry_4
+    yarn-berry_4-fetcher.yarnBerryConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+
+  # We have to remove this setupHook, otherwise it also runs in the `goModules`
+  # derivation and fails because `offlineCache` is missing there.
+  overrideModAttrs = (
+    old: {
+      nativeBuildInputs = lib.filter (
+        x: lib.getName x != (lib.getName buildPackages.yarn-berry_4-fetcher.yarnBerryConfigHook)
+      ) old.nativeBuildInputs;
+    }
+  );
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -104,24 +104,14 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
-    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    # Setup node_modules
-    export HOME="$(mktemp -d)"
-
-    # Help node-gyp find Node.js headers
-    # (see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls)
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder $offlineCache
-    yarn install --immutable-cache
-
-    # The build OOMs on memory constrained aarch64 without this
-    export NODE_OPTIONS=--max_old_space_size=4096
+    # ```
+    # go-1.25.4/share/go/pkg/tool/linux_amd64/link: running aarch64-unknown-linux-gnu-gcc failed: exit status 1
+    # aarch64-unknown-linux-gnu-gcc -m64 -s -o $WORK/b001/exe/gen -rdynamic /build/go-link-507658645/go.o
+    # aarch64-unknown-linux-gnu-gcc: error: unrecognized command-line option '-m64'
+    # ```
+    # Above log is due to https://github.com/golang/go/blob/b194f5d24a71e34f147c90e4351d80ac75be55de/src/cmd/cgo/gcc.go#L1763
+    CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
+    CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
   '';
 
   postBuild = ''
@@ -135,7 +125,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -164,17 +154,17 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       fpletz
-      willibutz
       globin
       ma27
       Frostman
+      ryan4yin
     ];
     platforms = [
       "x86_64-linux"
@@ -184,4 +174,4 @@ buildGoModule rec {
     ];
     mainProgram = "grafana-server";
   };
-}
+})

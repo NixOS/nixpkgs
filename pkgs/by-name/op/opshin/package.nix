@@ -4,20 +4,31 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python3' = python3.override {
+    self = python3;
+    packageOverrides = (
+      final: prev: {
+        cbor2 = prev.cbor2WithoutCExtensions;
+      }
+    );
+  };
+in
+
+python3'.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.23.0";
+  version = "0.24.3";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "opshin";
-    rev = "refs/tags/${version}";
-    hash = "sha256-H6tuSJYV9bAwXu/5Y8g6aFbbQFCpq2aqcmRaDq2cAEg=";
+    tag = version;
+    hash = "sha256-2HfX4yNCVILGuztxwA1L+In+ZiSXLDaO+K9ccgHn3zw=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3'.pkgs; [
     setuptools
     poetry-core
     uplc
@@ -28,16 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     ordered-set
   ];
 
-  pythonRelaxDeps = [
-    "pluthon"
-    "uplc"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Simple pythonic programming language for Smart Contracts on Cardano";
     homepage = "https://opshin.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aciceri ];
     mainProgram = "opshin";
   };
 }

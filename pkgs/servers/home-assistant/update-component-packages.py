@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt-rfc-style
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p pyright ruff isort nixfmt
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -39,13 +39,13 @@ PKG_SET = "home-assistant.python.pkgs"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "av": "av",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
-    "paho-mqtt": "paho-mqtt_1",
-    "pysuezV2": "pysuez",
+    "paho-mqtt": "paho-mqtt",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
@@ -70,7 +70,9 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
+    "proxmoxer": "2.2.0",
     "pybluez": "0.22",
+    "pyps4-2ndscreen": "1.3.1",
 }
 
 
@@ -98,7 +100,7 @@ def parse_components(version: str = "master"):
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
         ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
+            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp, filter="data")
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
 
@@ -113,9 +115,6 @@ def parse_components(version: str = "master"):
             specific_integrations=None,
             action="generate",
             requirements=False,
-            core_integrations_path=pathlib.Path(
-                os.path.join(core_path, "homeassistant/components")
-            ),
         )
         integrations = Integration.load_dir(config.core_integrations_path, config)
         for domain in sorted(integrations):

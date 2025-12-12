@@ -14,21 +14,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.38";
+  version = "1.45";
 
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
     &&
       # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
       stdenv.hostPlatform.linker == "bfd"
+    &&
+      # Even with bfd linker, the above issue occurs on platforms with stricter linker requirements
+      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48#note_1453201
+      !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
     && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/xcpLAUVnSsgzmys/kLX4xooGY+hQpp2mwOvfDhYHb4=";
+    hash = "sha256-TSsqnj4JnQF9yBB78cM00nu4fZ5K/xmgyNhW0XzUHvA=";
   };
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     patchShebangs tests/
   '';
 
@@ -45,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ wayland ];
   strictDeps = true;
 
-  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
+  mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}" ];
 
   meta = {
     description = "Wayland protocol extensions";
@@ -59,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/wayland/wayland-protocols";
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = with lib.maintainers; [ wineee ];
     pkgConfigModules = [ "wayland-protocols" ];
   };
 

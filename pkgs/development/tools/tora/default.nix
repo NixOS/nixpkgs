@@ -42,7 +42,7 @@ mkDerivation {
     loki
     libmysqlclient
     openssl
-    postgresql
+    postgresql # needs libecpg, which is not available in libpq package
     qscintilla
     qtbase
   ];
@@ -74,11 +74,18 @@ mkDerivation {
     ''--prefix PATH : ${lib.getBin graphviz}/bin''
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Tora SQL tool";
     mainProgram = "tora";
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    # fails to build on hydra since 2024
+    broken = true;
   };
 }

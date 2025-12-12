@@ -1,53 +1,60 @@
 {
   lib,
   buildPythonPackage,
-  setuptools,
-  pip,
-  cython,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  pkgconfig,
+  setuptools,
+  setuptools-git-versioning,
+
+  # dependencies
   mpi4py,
   numpy,
   precice,
-  pkgconfig,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.1.2";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/atuMJVgvY4kgvrB+LuQZmJuSK4O8TJdguC7NCiRS2Y=";
+    tag = "v${version}";
+    hash = "sha256-NkTrMZ7UKB5O2jIlhLhgkOm8ZeWJA1FoursA1df7XOk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    pip
+  build-system = [
     cython
     pkgconfig
+    setuptools
+    setuptools-git-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     mpi4py
+  ];
+
+  buildInputs = [
     precice
   ];
 
-  # Disable Test because everything depends on open mpi which requires network
+  # no official test instruction
   doCheck = false;
 
-  # Do not use pythonImportsCheck because this will also initialize mpi which requires a network interface
+  pythonImportsCheck = [
+    "precice"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python language bindings for preCICE";
     homepage = "https://github.com/precice/python-bindings";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

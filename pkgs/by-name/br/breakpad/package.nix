@@ -14,12 +14,12 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "breakpad";
 
-  version = "2023.06.01";
+  version = "2024.02.16";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8AkC/8oX4OWAcV21laJ0AeMRB9G04rFc6UJFy7Wus4A=";
+    hash = "sha256-yk+TSzjmAr9QMTYduKVe/Aizph/NNmSS385pvGJckiQ=";
   };
 
   buildInputs = [ zlib ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${lss} $sourceRoot/src/third_party/lss
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source multi-platform crash reporting system";
     homepage = "https://chromium.googlesource.com/breakpad";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ berberman ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ berberman ];
+    platforms = lib.platforms.all;
   };
 })

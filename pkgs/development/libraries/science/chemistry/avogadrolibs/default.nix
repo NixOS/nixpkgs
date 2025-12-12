@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   zlib,
   eigen,
@@ -13,7 +12,7 @@
   python3,
   libarchive,
   libmsym,
-  msgpack,
+  jkqtplotter,
   qttools,
   wrapQtAppsHook,
 }:
@@ -21,7 +20,7 @@
 let
   pythonWP = python3.withPackages (
     p: with p; [
-      openbabel-bindings
+      openbabel
       numpy
     ]
   );
@@ -30,32 +29,32 @@ let
   moleculesRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molecules";
-    rev = "1.0.0";
-    sha256 = "guY6osnpv7Oqt+HE1BpIqL10POp+x8GAci2kY0bLmqg=";
+    tag = "1.102.1";
+    hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
   };
   crystalsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "crystals";
-    rev = "1.0.1";
-    sha256 = "sH/WuvLaYu6akOc3ssAKhnxD8KNoDxuafDSozHqJZC4=";
+    tag = "1.102.1";
+    hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
   };
   fragmentsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "fragments";
-    rev = "8dc711a59d016604b3e9b6d59dec178b8e6ccd36";
-    hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
+    tag = "1.102.1";
+    hash = "sha256-x10jGl3lAEfm8OxUZJnjXRJCQg8RLQZTstjwnt5B2bw=";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avogadrolibs";
-  version = "1.99.0";
+  version = "1.102.1";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-3jUbzEd7tUeHlVFAO9KJ+LOQlkLzJQvwmHp8gOriZRI=";
+    repo = "avogadrolibs";
+    tag = finalAttrs.version;
+    hash = "sha256-RmGRdCy1ubwAkEJlfldscR84NLOMBx33OdHdcq1R1gg=";
   };
 
   postUnpack = ''
@@ -63,15 +62,6 @@ stdenv.mkDerivation rec {
     cp -r ${crystalsRepo} crystals
     cp -r ${fragmentsRepo} fragments
   '';
-
-  patches = [
-    # Fix a Cmake error when searching the fragments directory.
-    # Can be removed upon next release
-    (fetchpatch {
-      url = "https://github.com/OpenChemistry/avogadrolibs/commit/6e2e84dbb088a40d69117c1836f4306792f57acd.patch";
-      hash = "sha256-0tY9kHh6e5IDZQ8cWPgTpwIBhfZQlgUEZbPHOmtOVUQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -88,24 +78,24 @@ stdenv.mkDerivation rec {
     glew
     libarchive
     libmsym
-    msgpack
+    jkqtplotter
     qttools
   ];
 
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsConfig.cmake \
       --replace "$out/" ""
 
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsTargets.cmake \
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Molecule editor and visualizer";
-    maintainers = with maintainers; [ sheepforce ];
+    maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadrolibs";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
-}
+})

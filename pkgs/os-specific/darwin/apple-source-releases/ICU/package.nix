@@ -2,9 +2,11 @@
   lib,
   bootstrapStdenv,
   buildPackages,
-  fixDarwinDylibNames,
+  fetchpatch2,
+  icu76, # The ICU version should correspond to the same one used by Apple’s ICU package
   mkAppleDerivation,
   python3,
+  stdenvNoCC,
   testers,
 }:
 
@@ -12,6 +14,19 @@
 # - ../../../development/libraries/icu/make-icu.nix
 # - https://github.com/apple-oss-distributions/ICU/blob/main/makefile
 let
+  privateHeaders = stdenvNoCC.mkDerivation {
+    name = "ICU-deps-private-headers";
+
+    buildCommand = ''
+      mkdir -p "$out/include/os"
+      cat <<EOF > "$out/include/os/feature_private.h"
+      #pragma once
+      extern "C" bool _os_feature_enabled_impl(const char*, const char*);
+      #define os_feature_enabled(a, b) _os_feature_enabled_impl(#a, #b)
+      EOF
+    '';
+  };
+
   stdenv = bootstrapStdenv;
   withStatic = stdenv.hostPlatform.isStatic;
 
@@ -21,7 +36,7 @@ let
   baseAttrs = finalAttrs: {
     releaseName = "ICU";
 
-    sourceRoot = "source/icu/icu4c/source";
+    sourceRoot = "${finalAttrs.src.name}/icu/icu4c/source";
 
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
@@ -29,6 +44,7 @@ let
     ];
 
     preConfigure = ''
+      sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
       patchShebangs --build .
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
@@ -36,21 +52,20 @@ let
 
     dontDisableStatic = withStatic;
 
-    configureFlags =
-      [
-        (lib.enableFeature false "debug")
-        (lib.enableFeature false "renaming")
-        (lib.enableFeature false "extras")
-        (lib.enableFeature false "layout")
-        (lib.enableFeature false "samples")
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) [
-        (lib.enableFeature true "rpath")
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        (lib.withFeatureAs true "cross-build" nativeBuildRoot)
-      ]
-      ++ lib.optionals withStatic [ (lib.enableFeature true "static") ];
+    configureFlags = [
+      (lib.enableFeature false "debug")
+      (lib.enableFeature false "renaming")
+      (lib.enableFeature false "extras")
+      (lib.enableFeature false "layout")
+      (lib.enableFeature false "samples")
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) [
+      (lib.enableFeature true "rpath")
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      (lib.withFeatureAs true "cross-build" nativeBuildRoot)
+    ]
+    ++ lib.optionals withStatic [ (lib.enableFeature true "static") ];
 
     nativeBuildInputs = [ python3 ];
 
@@ -60,6 +75,7 @@ let
     env.NIX_CFLAGS_COMPILE = toString [
       "-DU_SHOW_CPLUSPLUS_API=1"
       "-DU_SHOW_INTERNAL_API=1"
+      "-I${privateHeaders}/include"
     ];
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -68,7 +84,7 @@ let
     meta = {
       description = "Unicode and globalization support library with Apple customizations";
       license = [ lib.licenses.icu ];
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       pkgConfigModules = [
         "icu-i18n"
@@ -82,27 +98,42 @@ let
     outputs = [
       "out"
       "dev"
-    ] ++ lib.optional withStatic "static";
+    ]
+    ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    postPatch = lib.optionalString self.finalPackage.doCheck ''
-      # Skip test for missing encodingSamples data.
-      substituteInPlace test/cintltst/ucsdetst.c \
-        --replace-fail "&TestMailFilterCSS" "NULL"
+    postPatch =
+      lib.optionalString self.finalPackage.doCheck (
+        ''
+          # Skip test for missing encodingSamples data.
+          substituteInPlace test/cintltst/ucsdetst.c \
+            --replace-fail "&TestMailFilterCSS" "NULL"
 
-      # Disable failing tests
-      substituteInPlace test/cintltst/cloctst.c \
-        --replace-fail 'TESTCASE(TestCanonicalForm);' ""
+          # Disable failing tests
+          substituteInPlace test/cintltst/cloctst.c \
+            --replace-fail 'TESTCASE(TestCanonicalForm);' ""
 
-      substituteInPlace test/intltest/rbbitst.cpp \
-        --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
+          substituteInPlace test/intltest/rbbitst.cpp \
+            --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
 
-      # Otherwise `make install` is broken.
-      substituteInPlace Makefile.in \
-        --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
-      substituteInPlace config/dist-data.sh \
-        --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
-    '';
+          # Add missing test data. It’s not included in the source release.
+          chmod u+w "$NIX_BUILD_TOP/source/icu"
+          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu76.src} icu/testdata
+        ''
+        + lib.optionalString stdenv.hostPlatform.isx86_64 ''
+          # These tests fail under Rosetta 2 with a floating-point exception.
+          substituteInPlace test/intltest/caltest.cpp \
+            --replace-fail 'TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);' "" \
+            --replace-fail 'TESTCASE_AUTO(Test22750Roll);' ""
+        ''
+      )
+      + ''
+        # Otherwise `make install` is broken.
+        substituteInPlace Makefile.in \
+          --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
+        substituteInPlace config/dist-data.sh \
+          --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+      '';
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall =
@@ -181,19 +212,17 @@ let
   buildRootOnlyAttrs = self: super: {
     pname = "ICU-build-root";
 
-    preConfigure =
-      super.preConfigure
-      + ''
-        mkdir build
-        cd build
-        configureScript=../configure
+    preConfigure = super.preConfigure + ''
+      mkdir build
+      cd build
+      configureScript=../configure
 
-        # Apple’s customizations require building and linking additional files, which are handled via `Makefile.local`.
-        # These need copied into the build environment to avoid link errors from not building them.
-        mkdir common i18n
-        cp ../common/Makefile.local common/Makefile.local
-        cp ../i18n/Makefile.local i18n/Makefile.local
-      '';
+      # Apple’s customizations require building and linking additional files, which are handled via `Makefile.local`.
+      # These need copied into the build environment to avoid link errors from not building them.
+      mkdir common i18n
+      cp ../common/Makefile.local common/Makefile.local
+      cp ../i18n/Makefile.local i18n/Makefile.local
+    '';
 
     postBuild = ''
       cd ..

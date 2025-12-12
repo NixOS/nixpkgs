@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-order";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V1qJGkXn+HhuK5wiwkkJBEbfnv23R4x9Cv0J6ZTj5xE=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
     homepage = "https://github.com/pytest-dev/pytest-order";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jacg
       Luflosi
     ];

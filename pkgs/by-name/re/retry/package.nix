@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "retry";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "minfrin";
     repo = "retry";
     rev = "${pname}-${version}";
-    hash = "sha256-5H2MnnThi4rT/o3oTkGDKXStQwob4G9mMsZewItPub4=";
+    hash = "sha256-26sSjz4UE7TVP66foVhDFTNNzdh/6OY6CaFS/544RQU=";
   };
 
   nativeBuildInputs = [
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/minfrin/retry";
-    description = "Retry a command until the command succeeds";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gfrascadorio ];
-    platforms = platforms.all;
+    description = "Command wrapper that retries until the command succeeds";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gfrascadorio ];
+    platforms = lib.platforms.all;
     mainProgram = "retry";
   };
 }

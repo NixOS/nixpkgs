@@ -8,6 +8,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   rustc,
@@ -17,20 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lorem";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/design";
     repo = "lorem";
     rev = finalAttrs.version;
-    hash = "sha256-6+kDKKK1bkIOZlqzKWpzpjAS5o7bkbVFITMZVmJijuU=";
+    hash = "sha256-q6gpxxNebf2G/lT5wWXT/lVp3zR8QLWB8/sdK+wLTJ8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-nzP2Jp9l1QgL7Wk9SWlsSVNaeVe3t48MmeX7Xuz+PKM=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-4JYYcfsEoCGJWZCp0273gXrf8hfuHL/QSsLEHvNa4uA=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     changelog = "https://gitlab.gnome.org/World/design/lorem/-/releases/${finalAttrs.version}";
     description = "Generate placeholder text";
     homepage = "https://apps.gnome.org/Lorem/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "lorem";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

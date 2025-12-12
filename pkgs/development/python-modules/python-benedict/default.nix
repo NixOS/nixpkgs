@@ -14,27 +14,25 @@
   python-decouple,
   python-fsutil,
   python-slugify,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
   toml,
+  useful-types,
   xlrd,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HQ9VVgRfF5qA36yOyKT63gXuKNLLjouqYKz5EuqGA2E=";
+    tag = version;
+    hash = "sha256-b9tAK500Hr2flYI82weNMCM88d6b5+Oz9HgvBDaqNZw=";
   };
 
   pythonRelaxDeps = [ "boto3" ];
@@ -45,6 +43,7 @@ buildPythonPackage rec {
     python-fsutil
     python-slugify
     requests
+    useful-types
   ];
 
   optional-dependencies = {
@@ -93,7 +92,8 @@ buildPythonPackage rec {
     orjson
     pytestCheckHook
     python-decouple
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access
@@ -112,11 +112,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "benedict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
-    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

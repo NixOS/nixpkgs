@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
 }:
 
 buildDotnetModule rec {
@@ -16,16 +17,17 @@ buildDotnetModule rec {
     hash = "sha512-aUjjT5Qf64wrKRn1vkwJadMOBWMkvsXUjtZ7S3/ZWAh1CCDkQNO84mSbtbVc9ny0fKeJEqaDX2tJNwq7pYqAbA==";
   };
 
+  patches = [ ./dotnet-8-upgrade.patch ];
+
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   projectFile = "inklecate/inklecate.csproj";
   nugetDeps = ./deps.json;
   executables = [ "inklecate" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for ink, inkle's scripting language";
     mainProgram = "inklecate";
     longDescription = ''
@@ -34,9 +36,9 @@ buildDotnetModule rec {
     '';
     homepage = "https://www.inklestudios.com/ink/";
     downloadPage = "https://github.com/inkle/ink/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    badPlatforms = platforms.aarch64;
-    maintainers = with maintainers; [ shreerammodi ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.aarch64;
+    maintainers = with lib.maintainers; [ shreerammodi ];
   };
 }

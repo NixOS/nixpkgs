@@ -5,10 +5,10 @@
 }:
 let
   pname = "snipaste";
-  version = "2.10.3";
+  version = "2.10.8";
   src = fetchurl {
     url = "https://download.snipaste.com/archives/Snipaste-${version}-x86_64.AppImage";
-    hash = "sha256-/3y3dEcottZIKGLQY4VBZs7ClYVedNwXXFLKfHezS3Q=";
+    hash = "sha256-Ieitxc1HPjqBpf7/rREKca+U0srE+q/s8mz+9Vhczk0=";
   };
   contents = appimageTools.extract { inherit pname version src; };
 in

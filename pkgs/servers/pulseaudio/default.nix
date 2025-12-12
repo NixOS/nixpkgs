@@ -20,6 +20,7 @@
   sbc,
   bluez5,
   udev,
+  udevCheckHook,
   openssl,
   fftwFloat,
   soxr,
@@ -61,10 +62,6 @@
   # Whether to build only the library.
   libOnly ? false,
 
-  AudioUnit,
-  Cocoa,
-  CoreServices,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -95,135 +92,144 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Fails in LXC containers where not all cores are enabled, where this setaffinity call will return EINVAL
+    sed -i "/fail_unless(pthread_setaffinity_np/d" src/tests/once-test.c
+  '';
+
   outputs = [
     "out"
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      makeWrapper
-      perlPackages.perl
-      perlPackages.XMLParser
-      m4
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ glib ]
-    # gstreamer plugin discovery requires wrapping
-    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    makeWrapper
+    perlPackages.perl
+    perlPackages.XMLParser
+    m4
+    udevCheckHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
+  # gstreamer plugin discovery requires wrapping
+  ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
-  buildInputs =
+  buildInputs = [
+    libtool
+    libsndfile
+    soxr
+    speexdsp
+    fftwFloat
+    check
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    glib
+    dbus
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
+    libintl
+  ]
+  ++ lib.optionals (!libOnly) (
     [
-      libtool
-      libsndfile
-      soxr
-      speexdsp
-      fftwFloat
-      check
+      libasyncns
+      webrtc-audio-processing_1
     ]
+    ++ lib.optional jackaudioSupport libjack2
+    ++ lib.optionals x11Support [
+      xorg.libICE
+      xorg.libSM
+      xorg.libX11
+      xorg.libXi
+      xorg.libXtst
+    ]
+    ++ lib.optional useSystemd systemd
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib
-      dbus
+      alsa-lib
+      udev
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreServices
-      CoreAudio
-      libintl
+    ++ lib.optional airtunesSupport openssl
+    ++ lib.optionals bluetoothSupport [
+      bluez5
+      sbc
     ]
-    ++ lib.optionals (!libOnly) (
-      [
-        libasyncns
-        webrtc-audio-processing_1
-      ]
-      ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [
-        xorg.libICE
-        xorg.libSM
-        xorg.libX11
-        xorg.libXi
-        xorg.libXtst
-      ]
-      ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        alsa-lib
-        udev
-      ]
-      ++ lib.optional airtunesSupport openssl
-      ++ lib.optionals bluetoothSupport [
-        bluez5
-        sbc
-      ]
-      # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
-      ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) (
-        builtins.attrValues {
-          inherit (gst_all_1)
-            gst-plugins-bad
-            gst-plugins-good
-            gst-plugins-base
-            gstreamer
-            ;
-        }
-      )
-      ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport avahi
-    );
+    # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
+    ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) (
+      builtins.attrValues {
+        inherit (gst_all_1)
+          gst-plugins-bad
+          gst-plugins-good
+          gst-plugins-base
+          gstreamer
+          ;
+      }
+    )
+    ++ lib.optional remoteControlSupport lirc
+    ++ lib.optional zeroconfSupport avahi
+  );
 
-  mesonFlags =
-    [
-      (lib.mesonEnable "alsa" (!libOnly && alsaSupport))
-      (lib.mesonEnable "asyncns" (!libOnly))
-      (lib.mesonEnable "avahi" zeroconfSupport)
-      (lib.mesonEnable "bluez5" (!libOnly && bluetoothSupport))
-      # advanced bluetooth audio codecs are provided by gstreamer
-      (lib.mesonEnable "bluez5-gstreamer" (!libOnly && bluetoothSupport && advancedBluetoothCodecs))
-      (lib.mesonOption "database" "simple")
-      (lib.mesonBool "doxygen" false)
-      (lib.mesonEnable "elogind" false)
-      # gsettings does not support cross-compilation
-      (lib.mesonEnable "gsettings" (
-        stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
-      ))
-      (lib.mesonEnable "gstreamer" false)
-      (lib.mesonEnable "gtk" false)
-      (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
-      (lib.mesonEnable "lirc" remoteControlSupport)
-      (lib.mesonEnable "openssl" airtunesSupport)
-      (lib.mesonEnable "orc" false)
-      (lib.mesonEnable "systemd" (useSystemd && !libOnly))
-      (lib.mesonEnable "tcpwrap" false)
-      (lib.mesonEnable "udev" (!libOnly && udevSupport))
-      (lib.mesonEnable "valgrind" false)
-      (lib.mesonEnable "webrtc-aec" (!libOnly))
-      (lib.mesonEnable "x11" x11Support)
+  env =
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/3848
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
-      (lib.mesonOption "localstatedir" "/var")
-      (lib.mesonOption "sysconfdir" "/etc")
-      (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
-      (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
+  mesonFlags = [
+    (lib.mesonEnable "alsa" (!libOnly && alsaSupport))
+    (lib.mesonEnable "asyncns" (!libOnly))
+    (lib.mesonEnable "avahi" zeroconfSupport)
+    (lib.mesonEnable "bluez5" (!libOnly && bluetoothSupport))
+    # advanced bluetooth audio codecs are provided by gstreamer
+    (lib.mesonEnable "bluez5-gstreamer" (!libOnly && bluetoothSupport && advancedBluetoothCodecs))
+    (lib.mesonOption "database" "simple")
+    (lib.mesonBool "doxygen" false)
+    (lib.mesonEnable "elogind" false)
+    # gsettings does not support cross-compilation
+    (lib.mesonEnable "gsettings" (
+      stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+    ))
+    (lib.mesonEnable "gstreamer" false)
+    (lib.mesonEnable "gtk" false)
+    (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
+    (lib.mesonEnable "lirc" remoteControlSupport)
+    (lib.mesonEnable "openssl" airtunesSupport)
+    (lib.mesonEnable "orc" false)
+    (lib.mesonEnable "systemd" (useSystemd && !libOnly))
+    (lib.mesonEnable "tcpwrap" false)
+    (lib.mesonEnable "udev" (!libOnly && udevSupport))
+    (lib.mesonEnable "valgrind" false)
+    (lib.mesonEnable "webrtc-aec" (!libOnly))
+    (lib.mesonEnable "x11" x11Support)
 
-      # pulseaudio complains if its binary is moved after installation;
-      # this is needed so that wrapGApp can operate *without*
-      # renaming the unwrapped binaries (see below)
-      "--bindir=${placeholder "out"}/.bin-unwrapped"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && useSystemd) [
-      (lib.mesonOption "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.mesonEnable "consolekit" false)
-      (lib.mesonEnable "dbus" false)
-      (lib.mesonEnable "glib" false)
-      (lib.mesonEnable "oss-output" false)
-    ];
+    (lib.mesonOption "localstatedir" "/var")
+    (lib.mesonOption "sysconfdir" "/etc")
+    (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+    (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
+
+    # pulseaudio complains if its binary is moved after installation;
+    # this is needed so that wrapGApp can operate *without*
+    # renaming the unwrapped binaries (see below)
+    "--bindir=${placeholder "out"}/.bin-unwrapped"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && useSystemd) [
+    (lib.mesonOption "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.mesonEnable "consolekit" false)
+    (lib.mesonEnable "dbus" false)
+    (lib.mesonEnable "glib" false)
+    (lib.mesonEnable "oss-output" false)
+  ];
 
   # tests fail on Darwin because of timeouts
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  doInstallCheck = true;
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -269,7 +275,9 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  passthru.tests = { inherit (nixosTests) pulseaudio; };
+  passthru.tests = {
+    inherit (nixosTests) pulseaudio pulseaudio-tcp;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

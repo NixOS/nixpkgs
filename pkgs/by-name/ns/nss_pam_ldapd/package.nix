@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nss-pam-ldapd";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchurl {
     url = "https://arthurdejong.org/nss-pam-ldapd/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xtZh50aTy/Uxp5BjHKk7c/KR+yPMOUZbCd642iv7DhQ=";
+    sha256 = "sha256-4BeE4Xy1M7tmvQYB4gXnhSY0RcPC33pvkCMqtBMccW0=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/sbin/nslcd --prefix LD_LIBRARY_PATH ":" $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LDAP identity and authentication for NSS/PAM";
     homepage = "https://arthurdejong.org/nss-pam-ldapd/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

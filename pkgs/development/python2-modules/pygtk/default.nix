@@ -58,25 +58,25 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.hostPlatform.isDarwin "-ObjC"
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) " -lpython2.7";
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) " -lpython2.7"
+    + " -fpermissive"; # downgrade code errors to warnings
 
   installPhase = "installPhase";
 
-  checkPhase =
-    ''
-      sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
-             tests/common.py
-      sed -i -e "s/, glade$//" \
-             -e "s/.*testGlade.*//" \
-             -e "s/.*(glade.*//" \
-             tests/test_api.py
-    ''
-    + ''
-      sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
-             -e "s/sys.path.insert(0, buildDir)//" \
-             tests/common.py
-      make check
-    '';
+  checkPhase = ''
+    sed -i -e "s/glade = importModule('gtk.glade', buildDir)//" \
+           tests/common.py
+    sed -i -e "s/, glade$//" \
+           -e "s/.*testGlade.*//" \
+           -e "s/.*(glade.*//" \
+           tests/test_api.py
+  ''
+  + ''
+    sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
+           -e "s/sys.path.insert(0, buildDir)//" \
+           tests/common.py
+    make check
+  '';
   # XXX: TypeError: Unsupported type: <class 'gtk._gtk.WindowType'>
   # The check phase was not executed in the previous
   # non-buildPythonPackage setup - not sure why not.
@@ -89,10 +89,11 @@ buildPythonPackage rec {
                   $out/${python.sitePackages}/${pname}-${version}.pth
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK 2 Python bindings";
     homepage = "https://gitlab.gnome.org/Archive/pygtk";
-    platforms = platforms.all;
-    license = with licenses; [ lgpl21Plus ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [ lgpl21Plus ];
+    maintainers = with lib.maintainers; [ bryango ];
   };
 }

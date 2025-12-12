@@ -5,10 +5,10 @@
   ncurses,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "swaglyrics";
-  version = "unstable-2021-06-17";
-  format = "setuptools";
+  version = "1.2.2-unstable-2021-06-17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SwagLyrics";
@@ -19,10 +19,12 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace-fail "==" ">="
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     colorama
     flask
@@ -61,11 +63,11 @@ python3.pkgs.buildPythonApplication rec {
     "swaglyrics"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lyrics fetcher for currently playing Spotify song";
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "swaglyrics";
   };
 }

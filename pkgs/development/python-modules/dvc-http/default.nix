@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-http";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ru/hOFv/RcS/7SBpTJU8xFxdllmaiH4dV1ouS6GGKkY=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_http" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP plugin for dvc";
     homepage = "https://github.com/iterative/dvc-http";
     changelog = "https://github.com/iterative/dvc-http/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

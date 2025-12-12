@@ -17,17 +17,16 @@
   librsvg,
   libzip,
   openssl,
-  webkitgtk_4_0,
   libappindicator-gtk3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "trillian-im";
-  version = "6.3.0.1";
+  version = "6.3.0.2";
 
   src = fetchurl {
     url = "https://www.trillian.im/get/linux/6.3/trillian_${version}_amd64.deb";
-    sha256 = "42e3466ee236ac2644907059f0961eba3a6ed6b6156afb2c57f54ebe6065ac6f";
+    hash = "sha256-5QvvAld9IC+6DAWVsyT6BoyKx+0WUA+UC8q1RBnwjqg=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     librsvg
     libzip
     openssl
-    webkitgtk_4_0
     libappindicator-gtk3
   ];
 
@@ -69,11 +67,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern instant messaging for home and work that prioritizes chat interoperability and security";
     homepage = "https://www.trillian.im/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ majiir ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ majiir ];
     platforms = [ "x86_64-linux" ];
   };
 }

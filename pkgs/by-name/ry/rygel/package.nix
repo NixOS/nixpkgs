@@ -11,7 +11,7 @@
   libxml2,
   libxslt,
   gobject-introspection,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   wrapGAppsNoGuiHook,
   python3,
   gdk-pixbuf,
@@ -25,7 +25,7 @@
   libsoup_3,
   libX11,
   withGtk ? true,
-  gtk3,
+  gtk4,
   libmediaart,
   pipewire,
   sqlite,
@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "0.44.1";
+  version = "45.0";
 
   # TODO: split out lib
   outputs = [
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eyxjG4QkCNonpUJC+Agqukm9HKAgQeeeHu+6DHAJqHs=";
+    url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gmZ7kC/AZy5kz5HrcnpwE3qP3+ej2aTBWLD0sfxwCII=";
   };
 
   patches = [
@@ -65,40 +65,39 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt # for xsltproc
     gobject-introspection
-    (if withGtk then wrapGAppsHook3 else wrapGAppsNoGuiHook)
+    (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
     python3
   ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      glib
-      gssdp_1_6
-      gupnp_1_6
-      gupnp-av
-      gupnp-dlna
-      libgee
-      libsoup_3
-      libmediaart
-      pipewire
-      # Move this to withGtk when it's not unconditionally included
-      # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
-      # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
-      libX11
-      sqlite
-      systemd
-      tinysparql
-      shared-mime-info
-    ]
-    ++ lib.optionals withGtk [ gtk3 ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-editing-services
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    gdk-pixbuf
+    glib
+    gssdp_1_6
+    gupnp_1_6
+    gupnp-av
+    gupnp-dlna
+    libgee
+    libsoup_3
+    libmediaart
+    pipewire
+    # Move this to withGtk when it's not unconditionally included
+    # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
+    # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
+    libX11
+    sqlite
+    systemd
+    tinysparql
+    shared-mime-info
+  ]
+  ++ lib.optionals withGtk [ gtk4 ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-editing-services
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
@@ -122,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
     noGtk = rygel.override { withGtk = false; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
     changelog = "https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

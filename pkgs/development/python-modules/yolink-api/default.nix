@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "yolink-api";
-  version = "0.4.7";
+  version = "0.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
     repo = "yolink-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VJqKORyAlTBIRsHaeUrLDuvVAU/EX/Zzh8u7xxmD2IE=";
+    tag = "v${version}";
+    hash = "sha256-lIwslGErlMGAu8BzM2gt1vVcaWy7S3Rqw7ce+qvQ+WU=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yolink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with Yolink";
     homepage = "https://github.com/YoSmart-Inc/yolink-api";
-    changelog = "https://github.com/YoSmart-Inc/yolink-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/YoSmart-Inc/yolink-api/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

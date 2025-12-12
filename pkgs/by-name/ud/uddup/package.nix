@@ -7,16 +7,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "uddup";
   version = "0.9.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rotemreiss";
-    repo = pname;
+    repo = "uddup";
     rev = "v${version}";
     sha256 = "1f5dm3772hiik9irnyvbs7wygcafbwi7czw3b47cwhb90b8fi5hg";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     colorama
   ];
 
@@ -28,11 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     "uddup"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for de-duplication URLs";
     mainProgram = "uddup";
     homepage = "https://github.com/rotemreiss/uddup";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

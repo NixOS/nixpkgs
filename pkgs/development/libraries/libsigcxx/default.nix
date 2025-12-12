@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "2.12.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libsigc++/${lib.versions.majorMinor version}/libsigc++-${version}.tar.xz";
     sha256 = "sha256-qdvuMjNR0Qm3ruB0qcuJyj57z4rY7e8YUfTPNZvVCEM=";
   };
 
@@ -32,17 +32,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libsigc++";
       attrPath = "libsigcxx";
       versionPolicy = "odd-unstable";
       freeze = "2.99.1";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
     description = "Typesafe callback system for standard C++";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
 }

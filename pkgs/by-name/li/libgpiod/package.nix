@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config
-, enable-tools ? true }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  gitUpdater,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  enable-tools ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "2.2";
+  version = "2.2.2";
 
-  src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    hash = "sha256-rjUynbcCfHQOkMiDuvJ8JjEfBhTmp7EVdxsoGIuZKuw=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
+    tag = "v${version}";
+    hash = "sha256-MePv6LsK+8zCxG8l4vyiiZPSVqv9F4H4KQB0gHjm0YM=";
   };
 
   nativeBuildInputs = [
@@ -17,11 +26,16 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
+
+  meta = {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
       Since linux 4.8 the GPIO sysfs interface is deprecated. User space should use
@@ -29,11 +43,14 @@ stdenv.mkDerivation rec {
       data structures behind a straightforward API.
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
-    license = with licenses; [
-      lgpl21Plus # libgpiod
-      lgpl3Plus # C++ bindings
-    ] ++ lib.optional enable-tools gpl2Plus;
-    maintainers = [];
-    platforms = platforms.linux;
+    license =
+      with lib.licenses;
+      [
+        lgpl21Plus # libgpiod
+        lgpl3Plus # C++ bindings
+      ]
+      ++ lib.optional enable-tools gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

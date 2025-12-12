@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "birdwatcher";
-    rev = version;
+    tag = version;
     hash = "sha256-TTU5TYWD/KSh/orDdQnNrQJ/G7z5suBu7psF9V6AAIw=";
   };
 

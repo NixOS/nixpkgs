@@ -31,11 +31,11 @@ buildPythonPackage rec {
   # No local packages or download links found for requests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ncrocfer/clf";
     description = "Command line tool to search snippets on Commandlinefu.com";
     mainProgram = "clf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

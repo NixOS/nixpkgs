@@ -10,7 +10,8 @@
   XCTest,
   sqlite,
   ncurses,
-  substituteAll,
+  clang,
+  replaceVars,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -40,9 +41,10 @@ stdenv.mkDerivation {
   ];
 
   patches = [
-    ./patches/nix-resource-root.patch
     ./patches/disable-catalyst.patch
-    ./patches/linux-fix-linking.patch
+    (replaceVars ./patches/linux-fix-linking.patch {
+      inherit clang;
+    })
     # TODO: Replace with branch patch once merged:
     # https://github.com/apple/swift-driver/pull/1197
     (fetchpatch {
@@ -50,24 +52,12 @@ stdenv.mkDerivation {
       hash = "sha256-eVBaKN6uzj48ZnHtwGV0k5ChKjak1tDCyE+wTdyGq2c=";
     })
     # Prevent a warning about SDK directories we don't have.
-    (substituteAll {
-      src = ./patches/prevent-sdk-dirs-warnings.patch;
+    (replaceVars ./patches/prevent-sdk-dirs-warnings.patch {
       inherit (builtins) storeDir;
     })
   ];
 
-  configurePhase =
-    generated.configure
-    + ''
-      swiftpmMakeMutable swift-tools-support-core
-      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${
-        fetchpatch {
-          url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-          hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-          includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-        }
-      }
-    '';
+  configurePhase = generated.configure;
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.
@@ -87,6 +77,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-driver";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

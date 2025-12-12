@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "shellingham";
+    tag = version;
     hash = "sha256-xeBo3Ok+XPrHN4nQd7M8/11leSV/8z1f7Sj33+HFVtQ=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shellingham" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
     changelog = "https://github.com/sarugaku/shellingham/blob/${version}/CHANGELOG.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ mbode ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ mbode ];
   };
 }

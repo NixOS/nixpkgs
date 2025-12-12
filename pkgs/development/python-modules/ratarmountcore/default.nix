@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fsspec,
   indexed-gzip,
   indexed-zstd,
   libarchive-c,
   pytestCheckHook,
   python-xz,
   pythonOlder,
+  writableTmpDirAsHomeHook,
   rapidgzip,
   rarfile,
   setuptools,
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.15.2";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2LPGKdofx2ID8BU0dZhGiZ3tUkd+niEVGvTSBFX4InU=";
+    tag = "v${version}";
+    hash = "sha256-8DjmYYTb0BR5KvtSeI2s7VtYdbRSI+QCjhZfDwqnk3M=";
     fetchSubmodules = true;
   };
 
@@ -54,7 +56,10 @@ buildPythonPackage rec {
     pytestCheckHook
     zstandard
     zstd
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    fsspec
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ratarmountcore" ];
 
@@ -73,13 +78,15 @@ buildPythonPackage rec {
     "test_file_versions"
     "test_stream_compressed"
     "test_chimera_file"
+    "test_URLContextManager"
+    "test_URL"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
-    changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-v${version}/core/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-${src.tag}/core/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

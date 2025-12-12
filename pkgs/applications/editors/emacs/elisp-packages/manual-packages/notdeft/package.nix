@@ -18,13 +18,13 @@
 
 melpaBuild {
   pname = "notdeft";
-  version = "0-unstable-2021-12-04";
+  version = "0-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "hasu";
     repo = "notdeft";
-    rev = "1b7054dcfc3547a7cafeb621552cec01d0540478";
-    hash = "sha256-LMMLJFVpmoE/y3MqrgY2fmsehmzk6TkLsVoHmFUxiSw=";
+    rev = "de2b6a7666e9e5010184966f89a04241f221afe3";
+    hash = "sha256-B8aVRb8hyAKmHTTVCtDRcb2F0Rs5zhlqyfRe7IxH5jc=";
   };
 
   packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
@@ -41,8 +41,6 @@ melpaBuild {
      ${lib.optionalString withHydra ''"extras/notdeft-mode-hydra.el"''}
      ${lib.optionalString withIvy ''"extras/notdeft-ivy.el"''})
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [ pkg-config ];
 

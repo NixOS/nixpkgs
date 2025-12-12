@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "mobian1";
-    repo = pname;
-    rev = version;
+    repo = "callaudiod";
+    tag = version;
     hash = "sha256-gc66XrrFyhF1TvrDECBfGQc+MiDtqZPxdCn0S/43XQU=";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for dealing with audio routing during phone calls";
     homepage = "https://gitlab.com/mobian1/callaudiod";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pacman99 ];
+    platforms = lib.platforms.linux;
   };
 }

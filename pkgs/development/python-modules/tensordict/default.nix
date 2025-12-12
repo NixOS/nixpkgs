@@ -1,50 +1,68 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
+  pybind11,
   setuptools,
-  torch,
-  which,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
+  importlib-metadata,
   numpy,
   orjson,
+  packaging,
+  pyvers,
+  torch,
 
-  # checks
+  # tests
   h5py,
   pytestCheckHook,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.5.0";
+  version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jnRlN9gefR77pioIXf0qM1CP6EtpeQkBvVIecGkb/pw=";
+    tag = "v${version}";
+    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
+
   build-system = [
+    pybind11
     setuptools
-    torch
-    which
+    setuptools-scm
   ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    importlib-metadata
     numpy
     orjson
+    packaging
+    pyvers
     torch
   ];
 
@@ -60,44 +78,38 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # Hangs forever
-      "test_copy_onto"
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
+    "test_tensorclass_instance_methods"
+    "test_tensorclass_stub_methods"
 
-      # EOFError (MPI related)
-      # AssertionError: assert tensor(False)
-      # +  where tensor(False) = <built-in method all of Tensor object at 0x7ffe49bf87d0>()
-      "test_mp"
+    # hangs forever on some CPUs
+    "test_map_iter_interrupt_early"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs due to the use of a pool
+    "test_chunksize_num_chunks"
+    "test_index_with_generator"
+    "test_map_exception"
+    "test_map"
+    "test_multiprocessing"
+  ];
 
-      # torch._dynamo.exc.InternalTorchDynamoError: RuntimeError: to_module requires TORCHDYNAMO_INLINE_INBUILT_NN_MODULES to be set.
-      "test_functional"
-
-      # hangs forever on some CPUs
-      "test_map_iter_interrupt_early"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # RuntimeError: internal error
-      "test_add_scale_sequence"
-      "test_modules"
-      "test_setattr"
-
-      # _queue.Empty errors in multiprocessing tests
-      "test_isend"
-    ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # OpenMP support not found.
+  disabledTestPaths = [
+    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
     "test/test_compile.py"
-
-    # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
     "test/test_distributed.py"
+    # Hangs after testing due to pool usage
+    "test/test_h5.py"
+    "test/test_memmap.py"
   ];
 
   meta = {
     description = "Pytorch dedicated tensor container";
-    changelog = "https://github.com/pytorch/tensordict/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${src.tag}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];

@@ -17,7 +17,7 @@
 }:
 
 let
-  rev = "1.1.1";
+  rev = "1.2.1";
 in
 buildDotnetModule rec {
   pname = "XIVLauncher";
@@ -27,7 +27,7 @@ buildDotnetModule rec {
     owner = "goatcorp";
     repo = "XIVLauncher.Core";
     inherit rev;
-    hash = "sha256-gXec5Btnm/9M7jgPdrnLn8im0jCdLCJjsEBPpuCNz2I=";
+    hash = "sha256-bGHUDPUrohcc/lLE647cicaEIYo9t1/anc2VeMJlsGc=";
     fetchSubmodules = true;
   };
 
@@ -111,12 +111,12 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom launcher for FFXIV";
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      sersorrel
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      keysmashes
       witchof0x20
     ];
     platforms = [ "x86_64-linux" ];

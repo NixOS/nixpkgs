@@ -11,13 +11,11 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
-  tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.10.1";
+  version = "1.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "setuptools_rust";
     inherit version;
-    hash = "sha256-15A1/FTN+TQunt9LAJSR7KsGw6ZSs3w8E3x7qFVH0+Y=";
+    hash = "sha256-2UqT8Ml3UcFwFFZfB73DJL7kXTls0buoPY56+SuUXww=";
   };
 
   build-system = [
@@ -47,13 +45,14 @@ buildPythonPackage rec {
       format = "setuptools";
       buildAndTestSubdir = null;
 
-      nativeBuildInputs =
-        [ setuptools-rust ]
-        ++ [
-          rustPlatform.cargoSetupHook
-          cargo
-          rustc
-        ];
+      nativeBuildInputs = [
+        setuptools-rust
+      ]
+      ++ [
+        rustPlatform.cargoSetupHook
+        cargo
+        rustc
+      ];
 
       preConfigure = ''
         # sourceRoot puts Cargo.lock in the wrong place due to the
@@ -63,11 +62,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
     changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

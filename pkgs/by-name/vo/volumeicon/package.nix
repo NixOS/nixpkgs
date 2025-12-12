@@ -7,6 +7,7 @@
   pkg-config,
   gtk3,
   alsa-lib,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,12 +32,16 @@ stdenv.mkDerivation rec {
     alsa-lib
   ];
 
-  meta = with lib; {
+  # Work around regressions introduced by bad interaction between
+  # gettext >= 0.25 and autoconf (2.72 at the time of writing).
+  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
+
+  meta = {
     description = "Lightweight volume control that sits in your systray";
-    homepage = "http://nullwise.com/volumeicon.html";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bobvanderlinden ];
-    license = licenses.gpl3;
+    homepage = "https://nullwise.com/pages/volumeicon/volumeicon.html";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    license = lib.licenses.gpl3;
     mainProgram = "volumeicon";
   };
 }

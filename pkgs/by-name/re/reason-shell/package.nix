@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,26 +17,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oytRquZJgb1sfpZil1bSGwIIvm+5N4mkVmIMzWyzDco=";
   };
 
-  cargoHash = "sha256-4AEuFSM2dY6UjjIFRU8ipkRMoEb2LjnOr3H6rZrLokE=";
+  cargoHash = "sha256-LXVP8cAbPCPCE3DNBX2znyFn/E/cN2civX0qT0B5FVw=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Shell for research papers";
     mainProgram = "reason";
     homepage = "https://github.com/jaywonchung/reason";
     changelog = "https://github.com/jaywonchung/reason/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

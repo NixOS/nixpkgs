@@ -21,6 +21,12 @@ mkLibretroCore rec {
     "NP2KAI_HASH=${builtins.substring 0 7 src.rev}"
   ];
 
+  # Fix build with GCC 14
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=int-conversion"
+  ];
+
   preBuild = "cd sdl";
 
   meta = {

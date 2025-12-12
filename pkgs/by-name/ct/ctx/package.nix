@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       a vector graphics protocol.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbdkit";
-  version = "1.40.4";
+  version = "1.44.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/nbdkit/${lib.versions.majorMinor finalAttrs.version}-stable/nbdkit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hGoc34F7eAvHjdQHxcquNJhpwpL5CLfv2DBZKVmpcpw=";
+    hash = "sha256-WQRLqBtYkPBmeK2I4aCt1P7r78fjVLsCOnUEjml1lmM=";
   };
 
   prePatch = ''

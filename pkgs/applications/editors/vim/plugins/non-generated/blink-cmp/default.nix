@@ -5,44 +5,43 @@
   stdenv,
   vimUtils,
   nix-update-script,
-  git,
-  replaceVars,
+  gitMinimal,
 }:
 let
-  version = "0.8.2";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-b+7be0ShxFhkUfQo0QTnYaaEE62HQKF5g+xCuTrPRXE=";
+    hash = "sha256-JjlcPj7v9J+v1SDBYIub6jFEslLhZGHmsipV1atUAFo=";
   };
-  libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-t84hokb2loZ6FPPt4eN8HzgNQJrQUdiG5//ZbmlasWY=";
+    cargoHash = "sha256-Qdt8O7IGj2HySb1jxsv3m33ZxJg96Ckw26oTEEyQjfs=";
 
-    nativeBuildInputs = [ git ];
+    nativeBuildInputs = [ gitMinimal ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
     };
   };
 in
 vimUtils.buildVimPlugin {
   pname = "blink.cmp";
   inherit version src;
-  preInstall = ''
-    mkdir -p target/release
-    ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
-  '';
-
-  patches = [
-    (replaceVars ./force-version.patch { inherit (src) tag; })
-  ];
+  preInstall =
+    let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      mkdir -p target/release
+      ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
+    '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -56,11 +55,16 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
+    changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       balssh
       redxtech
+      llakala
     ];
   };
-  doInstallCheck = true;
-  nvimRequireCheck = "blink-cmp";
+
+  nvimSkipModules = [
+    # Module for reproducing issues
+    "repro"
+  ];
 }

@@ -1,19 +1,20 @@
 {
   lib,
   buildGoModule,
+  installShellFiles,
   fetchFromGitHub,
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "exercism";
-  version = "3.5.4";
+  version = "3.5.8";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo = "cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7euitdo/rdeopnP7hHHxQ5lPh8wJVDaTneckeR5BEGo=";
+    tag = "v${version}";
+    hash = "sha256-vYbOagP3RwqD2+x0Mvve66Xm88jeRVzHU7nsN432j6k=";
   };
 
   vendorHash = "sha256-xY3C3emqtPIKyxIN9aEkrLXhTxWNmo0EJXNZVtbtIvs=";
@@ -22,15 +23,24 @@ buildGoModule rec {
 
   subPackages = [ "./exercism" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  postInstall = ''
+    installShellCompletion --cmd exercism \
+      --bash shell/exercism_completion.bash \
+      --fish shell/exercism.fish \
+      --zsh shell/exercism_completion.zsh
+  '';
+
+  meta = {
     inherit (src.meta) homepage;
     description = "Go based command line tool for exercism.io";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.rbasso
-      maintainers.nobbz
+      lib.maintainers.rbasso
+      lib.maintainers.nobbz
     ];
     mainProgram = "exercism";
   };

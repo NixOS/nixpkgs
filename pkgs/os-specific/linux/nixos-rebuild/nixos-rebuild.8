@@ -21,7 +21,7 @@
 .br
 .Op Fl -file | f Ar path
 .Op Fl -attr | A Ar attrPath
-.Op Fl -flake Ar flake-uri
+.Op Fl -flake | F Ar flake-uri
 .Op Fl -no-flake
 .Op Fl -recreate-lock-file
 .Op Fl -no-update-lock-file
@@ -38,7 +38,7 @@
 .br
 .Op Fl -build-host Va host
 .Op Fl -target-host Va host
-.Op Fl -use-remote-sudo
+.Op Fl -sudo
 .Op Fl -no-ssh-tty
 .br
 .Op Fl -verbose | v
@@ -231,7 +231,7 @@ partition.
 .It Cm build-image
 Build a disk-image variant, pre-configured for the given platform/provider.
 Select a variant with the
-.Fl --image-variant
+.Fl -image-variant
 option or run without any options to get a list of available variants.
 
 .Bd -literal -offset indent
@@ -272,7 +272,7 @@ relevant configuration options.
 Normally,
 .Nm
 first builds the
-.Ql nixUnstable
+.Ql nix
 attribute in Nixpkgs, and uses the resulting instance of the Nix package manager
 to build the new system configuration. This is necessary if the NixOS modules
 use features not provided by the currently installed version of Nix. This option
@@ -404,7 +404,7 @@ or
 is also set. This is useful when the target-host connection to cache.nixos.org
 is faster than the connection between hosts.
 .
-.It Fl -use-remote-sudo
+.It Fl -sudo
 When set, nixos-rebuild prefixes activation commands that run on the
 .Fl -target-host
 system with
@@ -500,7 +500,7 @@ Builder options:
 .Fl K Ns ,
 .Fl -fallback Ns ,
 .Fl I Ns ,
-.Fl -option Ns
+.Fl -option Ns ,
 .Fl -repair Ns ,
 .Fl -builders Ns ,
 .Fl -accept-flake-config Ns ,

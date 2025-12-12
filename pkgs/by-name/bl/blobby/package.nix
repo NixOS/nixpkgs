@@ -15,7 +15,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "blobby-volley";
   version = "1.1.1";
 
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/blobby"
   '';
 
-  meta = with lib; {
-    description = "Blobby volleyball game";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+  meta = {
+    description = "Volleyball game";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
     homepage = "https://blobbyvolley.de/";
     downloadPage = "https://sourceforge.net/projects/blobby/files/Blobby%20Volley%202%20%28Linux%29/";
     mainProgram = "blobby";

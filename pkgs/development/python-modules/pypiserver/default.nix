@@ -7,19 +7,17 @@
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools-git,
   setuptools,
   twine,
   watchdog,
   webtest,
-  wheel,
   build,
   importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.2.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,20 +25,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypiserver";
     repo = "pypiserver";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5GJthS3kWOyWvYW+mYnIcNKD3fgSVexABZ+DpVh7qkE=";
+    tag = "v${version}";
+    hash = "sha256-tbBSZdkZJGcas3PZ3dj7CqAYNH2Mt0a4aXl6t7E+wNY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"setuptools-git>=0.3",' ""
+  '';
 
   build-system = [
     setuptools
-    setuptools-git
-    wheel
   ];
 
   dependencies = [
     distutils
     pip
-  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -54,7 +56,8 @@ buildPythonPackage rec {
     twine
     webtest
     build
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   __darwinAllowLocalNetworking = true;
 
@@ -81,15 +84,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypiserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimal PyPI server for use with pip/easy_install";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with lib.maintainers; [ austinbutler ];
     mainProgram = "pypi-server";
   };
 }

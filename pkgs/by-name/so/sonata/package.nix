@@ -15,7 +15,6 @@
 let
   inherit (python3Packages)
     buildPythonApplication
-    isPy3k
     dbus-python
     pygobject3
     mpd2
@@ -24,16 +23,15 @@ let
 in
 buildPythonApplication rec {
   pname = "sonata";
-  version = "1.7.0";
+  version = "1.7.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
-    rev = "v${version}";
-    sha256 = "0rl8w7s2asff626clzfvyz987l2k4ml5dg417mqp9v8a962q0v2x";
+    tag = "v${version}";
+    hash = "sha256-B/2wLNbeVJJA/rMc6ZcLqH4SqyW5NzomrVPctIWGaIY=";
   };
-
-  disabled = !isPy3k;
 
   nativeBuildInputs = [
     gettext
@@ -49,13 +47,15 @@ buildPythonApplication rec {
     gdk-pixbuf
   ];
 
+  build-system = [ setuptools ];
+
   # The optional tagpy dependency (for editing metadata) is not yet
   # included because it's difficult to build.
   pythonPath = [
     dbus-python
     mpd2
     pygobject3
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   postPatch = ''
@@ -90,7 +90,9 @@ buildPythonApplication rec {
        - Available in 24 languages
     '';
     homepage = "https://www.nongnu.org/sonata/";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/multani/sonata/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

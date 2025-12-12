@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  gi-docgen,
   glib,
   gobject-introspection,
   flex,
@@ -12,14 +13,11 @@
   vala,
   gettext,
   gnome,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_43,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "template-glib";
-  version = "3.36.2";
+  version = "3.38.0";
 
   outputs = [
     "out"
@@ -28,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ACDzpAGIjOdjs6F1CML1jpGXKkg6DFR6/bfMviVhmUg=";
+    url = "mirror://gnome/sources/template-glib/${lib.versions.majorMinor finalAttrs.version}/template-glib-${finalAttrs.version}.tar.xz";
+    hash = "sha256-QNANwiPc8ut/LsQi997FpnNzoMoRAavKD0nGLwUMsxI=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +38,8 @@ stdenv.mkDerivation rec {
     flex
     bison
     vala
+    gi-docgen
     glib
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
     gobject-introspection
   ];
 
@@ -52,23 +48,28 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Ddocs=true"
   ];
 
   doCheck = true;
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/template-glib-1.0 "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "template-glib";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for template expansion which supports calling into GObject Introspection from templates";
     homepage = "https://gitlab.gnome.org/GNOME/template-glib";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "inotify-info";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mxZpJMmSCgm5uV5/wknVb1PdxRIF/b2k+6rdOh4b8zA=";
   };
 
@@ -18,12 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$$out" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily track down the number of inotify watches, instances, and which files are being watched";
     homepage = "https://github.com/mikesart/inotify-info";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "inotify-info";
-    maintainers = with maintainers; [ motiejus ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ motiejus ];
+    platforms = lib.platforms.linux;
   };
 })

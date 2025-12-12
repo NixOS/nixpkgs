@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.7.2";
-  format = "setuptools";
+  version = "1.7.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3Dt4WEABf1/LY4HFZoJZjOu/yEUYUXaPheIxioTga2g=";
+    hash = "sha256-0fCi69T/7e+NBnrzhVIW21GQx/byfI0tzUZ+CXAckLA=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     pbr
     ply
     pyyaml
+    requests
     six
     yamlloader
   ];
@@ -54,18 +55,17 @@ buildPythonPackage rec {
     lxml
     pytest
     pytz
-    requests
     requests-mock
     testfixtures
   ];
 
   pythonImportsCheck = [ "pywbem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

@@ -1,14 +1,16 @@
-{ config
-, lib
-, linuxPackages
-, pkgs
-, generateSplicesForMkScope
-, makeScopeWithSplicing'
+{
+  config,
+  lib,
+  linuxPackages,
+  pkgs,
+  generateSplicesForMkScope,
+  makeScopeWithSplicing',
 }:
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "xfce";
-  f = (self:
+  f = (
+    self:
     let
       inherit (self) callPackage;
     in
@@ -31,9 +33,9 @@ makeScopeWithSplicing' {
 
       libxfce4windowing = callPackage ./core/libxfce4windowing { };
 
-      thunar = callPackage ./core/thunar {
-        thunarPlugins = [ ];
-      };
+      thunar-unwrapped = callPackage ./core/thunar { };
+
+      thunar = callPackage ./core/thunar/wrapper.nix { };
 
       thunar-volman = callPackage ./core/thunar-volman { };
 
@@ -42,6 +44,8 @@ makeScopeWithSplicing' {
       thunar-dropbox-plugin = callPackage ./thunar-plugins/dropbox { };
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
+
+      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
 
       tumbler = callPackage ./core/tumbler { };
 
@@ -107,6 +111,8 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
+      xfce4-alsa-plugin = callPackage ./panel-plugins/xfce4-alsa-plugin { };
+
       xfce4-battery-plugin = callPackage ./panel-plugins/xfce4-battery-plugin { };
 
       xfce4-clipman-plugin = callPackage ./panel-plugins/xfce4-clipman-plugin { };
@@ -114,8 +120,6 @@ makeScopeWithSplicing' {
       xfce4-cpufreq-plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin { };
 
       xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
-
-      xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
@@ -159,18 +163,25 @@ makeScopeWithSplicing' {
 
       xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 
-    } // lib.optionalAttrs config.allowAliases {
+    }
+    // lib.optionalAttrs config.allowAliases {
       #### ALIASES
 
       automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
 
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
-      thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
+      thunar-bare = self.thunar-unwrapped; # added 2019-11-04
+
+      xfce4-datetime-plugin = throw ''
+        xfce4-datetime-plugin has been removed: this plugin has been merged into the xfce4-panel's built-in clock
+        plugin and thus no longer maintained upstream, see https://gitlab.xfce.org/xfce/xfce4-panel/-/issues/563.
+      ''; # Added 2025-05-20
 
       xfce4-embed-plugin = throw "xfce4-embed-plugin has been removed, as it was broken"; # Added 2024-07-15
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
       xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
-    });
+    }
+  );
 }

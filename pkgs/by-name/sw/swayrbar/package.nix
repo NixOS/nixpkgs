@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-qfk4yqJkqTiFKFZXCVPPZM0g0/+A8d8fDeat9ZsfokI=";
   };
 
-  cargoHash = "sha256-+YhBwQWDxjS8yAS/+uX7I72qNad9N/xQCVr4QHp+kyw=";
+  cargoHash = "sha256-rByw6l/4CATEIDS5h1owGCr1x8Qt4+lzabLwni7PYMc=";
 
   # don't build swayr
   buildAndTestSubdir = pname;
@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Status command for sway's swaybar implementing the swaybar-protocol";
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
-    license = with licenses; [ gpl3Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "swayrbar";
   };
 }

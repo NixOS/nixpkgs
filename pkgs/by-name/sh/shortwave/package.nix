@@ -23,24 +23,24 @@
   libshumate,
   libseccomp,
   lcms2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "shortwave";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "sha256-W1eOMyiooDesI13lOze/JcxzhSSxYOW6FOY85NkVyps=";
+    sha256 = "sha256-MbkfbpX2av/o+wC1pORHfaLXnchEIFmhQ5mqPuMElak=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-O5K5aNcWwUYkaJbGzTzS3FdNbEsQsdliyi0YShw+6PU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-DBWg9Xss1ChbPyI3MiN7eTXhSUG37ZaYS/HFxou9d/w=";
   };
 
   nativeBuildInputs = [
@@ -57,31 +57,35 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      openssl
-      sqlite
-      libshumate
-      libseccomp
-      lcms2
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    dbus
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    openssl
+    sqlite
+    libshumate
+    libseccomp
+    lcms2
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     mainProgram = "shortwave";
-    maintainers = with lib.maintainers; [ lasandell ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ lasandell ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

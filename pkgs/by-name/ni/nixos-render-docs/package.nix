@@ -38,9 +38,12 @@ python.pkgs.buildPythonApplication rec {
     src = ./src;
   };
 
-  nativeBuildInputs = with python.pkgs; [
-    setuptools
-    pytestCheckHook
+  nativeCheckInputs = [
+    python.pkgs.pytestCheckHook
+  ];
+
+  build-system = [
+    python.pkgs.setuptools
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -48,8 +51,11 @@ python.pkgs.buildPythonApplication rec {
     mdit-py-plugins
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-vvrP"
+  ];
+
+  enabledTestPaths = [
     "tests/"
   ];
 
@@ -74,10 +80,10 @@ python.pkgs.buildPythonApplication rec {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Renderer for NixOS manual and option docs";
     mainProgram = "nixos-render-docs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

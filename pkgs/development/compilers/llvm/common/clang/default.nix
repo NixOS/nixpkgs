@@ -1,160 +1,200 @@
-{ lib
-, stdenv
-, llvm_meta
-, patches ? []
-, src ? null
-, monorepoSrc ? null
-, runCommand
-, cmake
-, ninja
-, libxml2
-, libllvm
-, release_version
-, version
-, python3
-, buildLlvmTools
-, fixDarwinDylibNames
-, enableManpages ? false
-, devExtraCmakeFlags ? []
+{
+  lib,
+  stdenv,
+  llvm_meta,
+  src ? null,
+  monorepoSrc ? null,
+  runCommand,
+  cmake,
+  ninja,
+  libxml2,
+  libllvm,
+  release_version,
+  version,
+  python3,
+  buildLlvmPackages,
+  fixDarwinDylibNames,
+  enableManpages ? false,
+  enableClangToolsExtra ? true,
+  devExtraCmakeFlags ? [ ],
+  replaceVars,
+  getVersionFile,
+  fetchpatch,
+  # for tests
+  libclang,
 }:
+stdenv.mkDerivation (
+  finalAttrs:
+  {
+    pname = "clang";
+    inherit version;
 
-let
-  pname = "clang";
+    src =
+      if monorepoSrc != null then
+        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/clang "$out"
+          ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+        ''
+      else
+        src;
 
-  src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
-      mkdir -p "$out"
-    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    '' + ''
-      cp -r ${monorepoSrc}/${pname} "$out"
-      cp -r ${monorepoSrc}/clang-tools-extra "$out"
-    '') else src;
+    sourceRoot = "${finalAttrs.src.name}/clang";
 
-  self = stdenv.mkDerivation (finalAttrs: rec {
-    inherit pname version patches;
+    patches = [
+      (getVersionFile "clang/purity.patch")
+      # Remove extraneous ".a" suffix from baremetal clang_rt.builtins when compiling for baremetal.
+      # https://reviews.llvm.org/D51899
+      (getVersionFile "clang/gnu-install-dirs.patch")
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "20") [
+      # https://github.com/llvm/llvm-project/pull/116476
+      # prevent clang ignoring warnings / errors for unsuppored
+      # options when building & linking a source file with trailing
+      # libraries. eg: `clang -munsupported hello.c -lc`
+      ./clang-unsupported-option.patch
+    ]
+    # Pass the correct path to libllvm
+    ++ [
+      (replaceVars ./clang-at-least-16-LLVMgold-path.patch {
+        libllvmLibdir = "${libllvm.lib}/lib";
+      })
+    ]
+    # Fixes a bunch of lambda-related crashes
+    # https://github.com/llvm/llvm-project/pull/93206
+    ++ lib.optional (lib.versions.major release_version == "18") (fetchpatch {
+      name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
+      url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
+      # TreeTransform.h is not affected in LLVM 18.
+      excludes = [
+        "docs/ReleaseNotes.rst"
+        "lib/Sema/TreeTransform.h"
+      ];
+      stripLen = 1;
+      hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
+    });
 
-    src = src';
+    nativeBuildInputs = [
+      cmake
+      python3
+      ninja
+    ]
+    ++ lib.optionals enableManpages [
+      python3.pkgs.myst-parser
+      python3.pkgs.sphinx
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    sourceRoot = "${src.name}/${pname}";
+    buildInputs = [
+      libxml2
+      libllvm
+    ];
 
-    nativeBuildInputs = [ cmake ]
-      ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ [ python3 ]
-      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
-      ++ lib.optional enableManpages python3.pkgs.sphinx
-      ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-
-    buildInputs = [ libxml2 libllvm ];
-
-    cmakeFlags = (lib.optionals (lib.versionAtLeast release_version "15") [
-      "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
-    ]) ++ [
-      "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_ENABLE_RTTI=ON"
-    ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
-      "-DLLVM_INCLUDE_TESTS=OFF"
-    ] ++ lib.optionals enableManpages [
-      "-DCLANG_INCLUDE_DOCS=ON"
-      "-DLLVM_ENABLE_SPHINX=ON"
-      "-DSPHINX_OUTPUT_MAN=ON"
-      "-DSPHINX_OUTPUT_HTML=OFF"
-      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
-    ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
-      # Added in LLVM15:
-      # `clang-tidy-confusable-chars-gen`: https://github.com/llvm/llvm-project/commit/c3574ef739fbfcc59d405985a3a4fa6f4619ecdb
-      # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
-      "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
-      "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]) ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
-      ++ devExtraCmakeFlags;
+    cmakeFlags = [
+      (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
+      (lib.cmakeBool "CLANGD_BUILD_XPC" false)
+      (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
+      (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/clang-tblgen")
+      (lib.cmakeFeature "CLANG_TIDY_CONFUSABLE_CHARS_GEN" "${buildLlvmPackages.tblgen}/bin/clang-tidy-confusable-chars-gen")
+    ]
+    ++ lib.optional (lib.versionAtLeast release_version "20") (
+      lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm"
+    )
+    ++ lib.optionals (lib.versionAtLeast release_version "21") [
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" "${placeholder "lib"}/lib/clang/${lib.versions.major release_version}")
+    ]
+    ++ lib.optionals enableManpages [
+      (lib.cmakeBool "CLANG_INCLUDE_DOCS" true)
+      (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_MAN" true)
+      (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+      (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
+    ]
+    ++ lib.optionals (lib.versionOlder release_version "20") [
+      # clang-pseudo removed in LLVM20: https://github.com/llvm/llvm-project/commit/ed8f78827895050442f544edef2933a60d4a7935
+      (lib.cmakeFeature "CLANG_PSEUDO_GEN" "${buildLlvmPackages.tblgen}/bin/clang-pseudo-gen")
+    ]
+    ++ devExtraCmakeFlags;
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64
       substituteInPlace lib/Driver/ToolChains/Darwin.cpp \
         --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
       (cd tools && ln -s ../../clang-tools-extra extra)
-    '' + lib.optionalString (lib.versionOlder release_version "13") ''
-      substituteInPlace tools/extra/clangd/quality/CompletionModel.cmake \
-        --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
     ''
     + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 
-    outputs = [ "out" "lib" "dev" "python" ];
+    outputs = [
+      "out"
+      "lib"
+      "dev"
+      "python"
+    ];
+
+    separateDebugInfo = stdenv.buildPlatform.is64bit; # OOMs on 32 bit
 
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
-    '' + (lib.optionalString (lib.versions.major release_version == "17") ''
-
-      mkdir -p $lib/lib/clang
-      mv $lib/lib/17 $lib/lib/clang/17
-    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
-      mv $out/lib/clang $lib/lib/clang
-    '') + ''
+    ''
+    + (lib.optionalString
+      ((lib.versionAtLeast release_version "19") && !(lib.versionAtLeast release_version "21"))
+      ''
+        mv $out/lib/clang $lib/lib/clang
+      ''
+    )
+    + ''
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"
-    '' + (if lib.versionOlder release_version "15" then ''
-      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '' else ''
-      substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '') + ''
-
-    '' + (if lib.versionOlder release_version "15" then ''
-      mkdir -p $python/bin $python/share/{clang,scan-view}
-    '' else ''
       mkdir -p $python/bin $python/share/clang/
-    '') + ''
+    ''
+    + ''
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
-    '' + (lib.optionalString (lib.versionOlder release_version "15") ''
-      mv $out/share/scan-view/*.py $python/share/scan-view
-    '') + ''
+    ''
+    + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
+    ''
+    + ''
       patchShebangs $python/bin
 
       mkdir -p $dev/bin
-    '' + (if lib.versionOlder release_version "15" then ''
       cp bin/clang-tblgen $dev/bin
-    '' else if lib.versionOlder release_version "20" then ''
-      cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
-    '' else ''
-      cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen} $dev/bin
-    '');
+    ''
+    + lib.optionalString enableClangToolsExtra ''
+      cp bin/clang-tidy-confusable-chars-gen $dev/bin
+    ''
+    + lib.optionalString (enableClangToolsExtra && lib.versionOlder release_version "20") ''
+      cp bin/clang-pseudo-gen $dev/bin
+    '';
+
+    env =
+      lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM)
+        {
+          # The following warning is triggered with (at least) gcc >=
+          # 12, but appears to occur only for cross compiles.
+          NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
+        };
 
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+      hardeningUnsupportedFlagsByTargetPlatform =
+        targetPlatform:
         [ "fortify3" ]
+        ++ lib.optional (!targetPlatform.isLinux || !targetPlatform.isx86_64) "shadowstack"
+        ++ lib.optional (!targetPlatform.isAarch64 || !targetPlatform.isLinux) "pacret"
         ++ lib.optional (
-          (lib.versionOlder release_version "7")
-          || !targetPlatform.isLinux
-          || !targetPlatform.isx86_64
-        ) "shadowstack"
-        ++ lib.optional (
-          (lib.versionOlder release_version "8")
-          || !targetPlatform.isAarch64
-          || !targetPlatform.isLinux
-        ) "pacret"
-        ++ lib.optional (
-          (lib.versionOlder release_version "11")
-          || (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))
-          || (targetPlatform.isFreeBSD && (lib.versionOlder release_version "15"))
-          || !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
+          !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
           || !(
             targetPlatform.isx86
             || targetPlatform.isPower64
@@ -162,13 +202,14 @@ let
             || targetPlatform.isAarch64
           )
         ) "stackclashprotection"
-        ++ lib.optional (
-          (lib.versionOlder release_version "15")
-          || !(targetPlatform.isx86_64 || targetPlatform.isAarch64)
-        ) "zerocallusedregs"
-        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
+        ++ lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or [ ]);
+      tests.withoutOptionalFeatures = libclang.override {
+        enableClangToolsExtra = false;
+      };
     };
 
+    requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
       description = "C language family frontend for LLVM";
@@ -185,8 +226,11 @@ let
       '';
       mainProgram = "clang";
     };
-  } // lib.optionalAttrs enableManpages ({
+  }
+  // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
+
+    ninjaFlags = [ "docs-clang-man" ];
 
     installPhase = ''
       mkdir -p $out/share/man/man1
@@ -201,18 +245,5 @@ let
     meta = llvm_meta // {
       description = "man page for Clang ${version}";
     };
-  } // (if lib.versionOlder release_version "15" then {
-    buildPhase = ''
-      make docs-clang-man
-    '';
-  } else {
-    ninjaFlags = [ "docs-clang-man" ];
-  }))
-  // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
-      # The following warning is triggered with (at least) gcc >=
-      # 12, but appears to occur only for cross compiles.
-      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
-    };
-  }));
-in self
+  }
+)

@@ -10,6 +10,9 @@
   writeShellApplication,
   common-updater-scripts,
   jq,
+  buildPackages,
+
+  tde2eOnly ? false,
 }:
 
 let
@@ -34,8 +37,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "tdlib";
-  version = "1.8.41";
+  pname = if tde2eOnly then "tde2e" else "tdlib";
+  version = "1.8.58";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -44,42 +47,61 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "5b974c298d4ed551d3ad2c061ad7b8280d137c7e";
-    hash = "sha256-1TyGv2yMjX75+ccZSox/2m6SMmwEZAkShIhLfCeNmZg=";
+    rev = "282f96ca66421c348ed75aaca84471b3e39e64dd";
+    hash = "sha256-Qry/jL/7pyPribh1Nn6L5hx5BfNNn+EG0YeOs5Z0M9Q=";
   };
 
   buildInputs = [
-    gperf
     openssl
     readline
     zlib
   ];
-  nativeBuildInputs = [ cmake ];
+
+  nativeBuildInputs = [
+    cmake
+    gperf
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cmake -B native-build \
+      -DCMAKE_C_COMPILER=$CC_FOR_BUILD \
+      -DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD \
+      -DCMAKE_AR=$(command -v $AR_FOR_BUILD) \
+      -DCMAKE_RANLIB=$(command -v $RANLIB_FOR_BUILD) \
+      -DCMAKE_STRIP=$(command -v $STRIP_FOR_BUILD) \
+      -DTD_GENERATE_SOURCE_FILES=ON .
+    cmake --build native-build -j $NIX_BUILD_CORES
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "TD_E2E_ONLY" tde2eOnly)
+  ];
 
   # https://github.com/tdlib/td/issues/1974
-  postPatch =
-    ''
-      substituteInPlace CMake/GeneratePkgConfig.cmake \
-        --replace 'function(generate_pkgconfig' \
-                  'include(GNUInstallDirs)
-                   function(generate_pkgconfig' \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      sed -i "/vptr/d" test/CMakeLists.txt
-    '';
+  postPatch = ''
+    substituteInPlace CMake/GeneratePkgConfig.cmake \
+      --replace 'function(generate_pkgconfig' \
+                'include(GNUInstallDirs)
+                 function(generate_pkgconfig' \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    sed -i "/vptr/d" test/CMakeLists.txt
+  '';
 
   passthru.updateScript = lib.getExe updateScript;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
-    license = [ licenses.boost ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.boost ];
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.vyorkin
-      maintainers.vonfry
+      lib.maintainers.vyorkin
+      lib.maintainers.vonfry
     ];
   };
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchurl {
     url = "https://github.com/riemann/riemann/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-B09QBOVRHxwPR7oBZaurXMglx5cR/oN7eEKVhs3ZUyc=";
+    sha256 = "sha256-gsJMfLo7zpaVfyVmHznGFiomK6dq7yTphuc9vyp5t6Y=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://riemann.io/";
     description = "Network monitoring system";
     mainProgram = "riemann";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
-    platforms = platforms.all;
-    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ crimeminister ];
   };
 }

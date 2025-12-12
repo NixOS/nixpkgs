@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cython,
-  fetchpatch,
   fetchPypi,
   fontconfig,
   gdal,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
+    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
   };
 
   build-system = [ setuptools-scm ];
@@ -70,18 +69,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "cartopy"
-    "-m"
-    "'not network and not natural_earth'"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "natural_earth"
   ];
 
   disabledTests = [
@@ -89,12 +92,12 @@ buildPythonPackage rec {
     "test_gridliner_labels_bbox_style"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     mainProgram = "feature_download";
   };
 }

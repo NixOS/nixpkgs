@@ -4,7 +4,7 @@
   buildPackages,
   version,
   src,
-  substituteAll,
+  replaceVars,
   extraMeta ? { },
   self,
   packageOverrides ? (final: prev: { }),
@@ -87,23 +87,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     "amalg" # Build highly optimized version
   ];
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "DEFAULT_CC=cc"
-      "CROSS=${stdenv.cc.targetPrefix}"
-      "HOST_CC=${buildStdenv.cc}/bin/cc"
-    ]
-    ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
-    ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DEFAULT_CC=cc"
+    "CROSS=${stdenv.cc.targetPrefix}"
+    "HOST_CC=${buildStdenv.cc}/bin/cc"
+  ]
+  ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
+  ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
     mkdir -p $out/nix-support
     cp ${
-      substituteAll {
-        src = ../lua-5/utils.sh;
+      replaceVars ../lua-5/utils.sh {
         luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
         luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
       }
@@ -149,18 +147,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
   meta =
-    with lib;
+
     {
       description = "High-performance JIT compiler for Lua 5.1";
       homepage = "https://luajit.org/";
-      license = licenses.mit;
-      platforms = platforms.linux ++ platforms.darwin;
+      license = lib.licenses.mit;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
       badPlatforms = [
-        "riscv64-linux"
+        "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
         "powerpc64le-linux" # `#error "No support for PPC64"`
       ];
-      maintainers = with maintainers; [
+      mainProgram = "lua";
+      maintainers = with lib.maintainers; [
         thoughtpolice
         smironov
         vcunat

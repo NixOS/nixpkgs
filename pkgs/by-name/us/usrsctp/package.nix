@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sctplab/usrsctp/commit/ac559d2a95277e5e0827e9ee5a1d3b1b50e0822a.patch";
       hash = "sha256-QBlzH37Xwwnn1y8pM941Zesz18p2EazfeD0lCU8n6nI=";
     })
+
+    (fetchpatch {
+      name = "usrsctp-fix-cmake-4.patch";
+      url = "https://github.com/sctplab/usrsctp/commit/7569d2ce1e8658534369ad9726ca62139211db84.patch";
+      hash = "sha256-Hxp1SGwmpm6UK//KFLQoOmmI0a1QpSNaTaEEUbC8jbg=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -39,11 +45,11 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sctplab/usrsctp";
     description = "Portable SCTP userland stack";
-    maintainers = with maintainers; [ misuzu ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ misuzu ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

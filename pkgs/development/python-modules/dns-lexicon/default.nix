@@ -31,9 +31,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Analogj";
     repo = "lexicon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
+
+  # https://beautiful-soup-4.readthedocs.io/en/latest/#method-names
+  postPatch = ''
+    sed 's/\<findAll\>/find_all/g' \
+      -i src/lexicon/_private/providers/*.py
+    sed 's/\<renderContents\>/encode_contents/g' \
+      -i src/lexicon/_private/providers/*.py
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -44,7 +52,8 @@ buildPythonPackage rec {
     pyyaml
     requests
     tldextract
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     route53 = [ boto3 ];
@@ -66,9 +75,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-vcr
-  ] ++ optional-dependencies.full;
+  ]
+  ++ optional-dependencies.full;
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTestPaths = [
     # Needs network access
@@ -89,12 +99,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lexicon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate DNS records on various DNS providers in a standardized way";
     mainProgram = "lexicon";
     homepage = "https://github.com/AnalogJ/lexicon";
     changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ aviallon ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ aviallon ];
   };
 }

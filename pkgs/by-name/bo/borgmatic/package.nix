@@ -4,6 +4,7 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
+  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -14,19 +15,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.14";
+  version = "2.0.12";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WYs7wiwZ1TvTdeUpWv7FbREXWfdGcYRarP4FXFOfp0Y=";
+    hash = "sha256-z2LOj7NW1S1C6hSsaeBKXYnrwS0XskOK9idwIfiA9Do=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;
     [
       flexmock
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
     ]
     ++ optional-dependencies.apprise;
 
@@ -53,7 +57,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   postInstall =
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
         --bash <($out/bin/borgmatic --bash-completion)
     ''
@@ -63,10 +67,10 @@ python3Packages.buildPythonApplication rec {
       # there is another "sleep", so choose the one with the space after it
       # due to https://github.com/borgmatic-collective/borgmatic/commit/2e9f70d49647d47fb4ca05f428c592b0e4319544
       substitute sample/systemd/borgmatic.service \
-                 $out/lib/systemd/system/borgmatic.service \
-                 --replace /root/.local/bin/borgmatic $out/bin/borgmatic \
-                 --replace systemd-inhibit ${systemd}/bin/systemd-inhibit \
-                 --replace "sleep " "${coreutils}/bin/sleep "
+        $out/lib/systemd/system/borgmatic.service \
+        --replace-fail /root/.local/bin/borgmatic $out/bin/borgmatic \
+        --replace-fail systemd-inhibit ${systemd}/bin/systemd-inhibit \
+        --replace-fail "sleep " "${coreutils}/bin/sleep "
     '';
 
   passthru.tests = {
@@ -81,6 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    mainProgram = "borgmatic";
     maintainers = with lib.maintainers; [
       imlonghao
       x123

@@ -1,32 +1,38 @@
 {
   cmake,
+  curl,
   fetchFromGitHub,
+  gitUpdater,
   jazz2-content,
   lib,
+  libGL,
   libopenmpt,
   libvorbis,
   openal,
   SDL2,
   stdenv,
-  testers,
+  versionCheckHook,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "3.0.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
-    rev = finalAttrs.version;
-    hash = "sha256-t1bXREL/WWnYnSfCyAY5tus/Bq5V4HVHg9s7oltGoIg=";
+    tag = finalAttrs.version;
+    hash = "sha256-96NiBE0/sBnIdajKui3pZmR8IGlElbeoyqYEYFWtOuM=";
   };
 
   patches = [ ./nocontent.patch ];
 
+  strictDeps = true;
   nativeBuildInputs = [ cmake ];
   buildInputs = [
+    curl
+    libGL
     libopenmpt
     libvorbis
     openal
@@ -35,21 +41,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DLIBOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include/libopenmpt"
-    "-DNCINE_DOWNLOAD_DEPENDENCIES=OFF"
-    "-DNCINE_OVERRIDE_CONTENT_PATH=${jazz2-content}"
+    (lib.cmakeBool "NCINE_DOWNLOAD_DEPENDENCIES" false)
+    (lib.cmakeFeature "LIBOPENMPT_INCLUDE_DIR" "${lib.getDev libopenmpt}/include/libopenmpt")
+    (lib.cmakeFeature "NCINE_OVERRIDE_CONTENT_PATH" "${jazz2-content}")
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Jazz Jackrabbit 2 reimplementation";
     homepage = "https://github.com/deathkiller/jazz2-native";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "jazz2";
-    maintainers = with maintainers; [ surfaceflinger ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ surfaceflinger ];
+    platforms = lib.platforms.linux;
   };
 })

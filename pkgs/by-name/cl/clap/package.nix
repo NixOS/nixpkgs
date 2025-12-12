@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clap";
-  version = "1.2.2";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
     rev = finalAttrs.version;
-    hash = "sha256-W3cvAtBrd+zyGj7xNSuFFChUUVjRadH6aCv5Zcvq/qs=";
+    hash = "sha256-FtsqfpUBn0YGEyhRrJnPGSqrawS1g3F/exVGAuvXkRQ=";
   };
 
   postPatch = ''
@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Clever Audio Plugin API interface headers";
     homepage = "https://cleveraudio.org/";
     pkgConfigModules = [ "clap" ];
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ris ];
   };
 })

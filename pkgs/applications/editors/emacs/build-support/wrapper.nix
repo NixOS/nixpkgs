@@ -125,9 +125,19 @@ runCommand (lib.appendToName "with-packages" emacs).name
             local origin_path=$2
             local dest_path=$3
 
-            # Add the path to the search path list, but only if it exists
+            # Add the path to the search path list, but only if it exists.
+            # Executables in /bin are linked by their resolved paths in case they are
+            # relative symlinks (which break when 'lndir'ed as is);
+            # see https://github.com/NixOS/nixpkgs/issues/395442
             if [[ -d "$pkg/$origin_path" ]]; then
-              $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path"
+              case "$origin_path" in
+                bin)
+                  for exe in $pkg/$origin_path/*; do
+                    ln -s "$(realpath "$exe")" "$out/$dest_path/$(basename "$exe")"
+                  done
+                  ;;
+                *) $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path";;
+              esac
             fi
           }
 
@@ -164,6 +174,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
           # buffer.
           rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
           cat >"$siteStart" <<EOF
+          ;;; -*- lexical-binding: t -*-
           (let ((inhibit-message t))
             (load "$emacs/share/emacs/site-lisp/site-start"))
           ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
@@ -175,11 +186,14 @@ runCommand (lib.appendToName "with-packages" emacs).name
           EOF
 
           # Generate a subdirs.el that statically adds all subdirectories to load-path.
+          cat >"$subdirs" <<EOF
+          ;;; -*- lexical-binding: t -*-
+          EOF
           $emacs/bin/emacs \
             --batch \
             --load ${./mk-wrapper-subdirs.el} \
             --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
-            > "$subdirs"
+            >> "$subdirs"
 
           # Byte-compiling improves start-up time only slightly, but costs nothing.
           $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"

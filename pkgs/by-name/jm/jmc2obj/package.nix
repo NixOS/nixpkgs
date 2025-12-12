@@ -12,7 +12,7 @@ maven.buildMavenPackage rec {
 
   src = fetchFromGitHub {
     owner = "jmc2obj";
-    repo = pname;
+    repo = "j-mc-2-obj";
     rev = version;
     hash = "sha256-c0qLryv9Gx9BlKXmwSKkK5/v3Wypny841htNfsNNxpg=";
   };

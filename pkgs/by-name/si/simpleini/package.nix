@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gtest,
   nix-update-script,
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "simpleini-sources-${finalAttrs.version}";
     owner = "brofield";
     repo = "simpleini";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H4J4+v/3A8ZTOp4iMeiZ0OClu68oP4vUZ8YOFZbllcM=";
   };
 
@@ -30,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [ (lib.cmakeBool "SIMPLEINI_USE_SYSTEM_GTEST" true) ];
+
+  patches = [
+    # Fixes for cmake export from master, can be removed after the next release
+    (fetchpatch {
+      url = "https://github.com/brofield/simpleini/commit/aeacf861a8ad8add5f4974792a88ffea393e41db.patch";
+      hash = "sha256-lpoQHff8JwfljMUxL6Y2MqsGDZtDPjnOIKSIJ1rqrAI=";
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -46,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       HeitorAugustoLN
-      AndersonTorres
     ];
     platforms = lib.platforms.all;
   };

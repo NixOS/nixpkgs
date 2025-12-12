@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~julienxx";
-    repo = pname;
+    repo = "castor";
     rev = version;
     sha256 = "sha256-yYLDbxmUR86fdpbHQQTiHVUbicnOD75cl3Vhofw5qr0=";
   };
 
-  cargoHash = "sha256-AHhKfy2AAcDBcknzNb8DAzm51RQqFQDuWN+Hp5731Yk=";
+  cargoHash = "sha256-6X3qZZ1iKXYtl59aGAnd4RzY/kBI4Q8zmX+JYMlKwJU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
-  meta = with lib; {
+  meta = {
     description = "Graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
     mainProgram = "castor";
     homepage = "https://sr.ht/~julienxx/Castor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

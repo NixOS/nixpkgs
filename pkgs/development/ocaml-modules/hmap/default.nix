@@ -11,8 +11,6 @@
 let
   minimumSupportedOcamlVersion = "4.02.0";
 in
-assert lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
-
 stdenv.mkDerivation rec {
   pname = "hmap";
   version = "0.8.1";
@@ -46,5 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/hmap";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.pmahoney ];
+    broken = !(lib.versionOlder minimumSupportedOcamlVersion ocaml.version);
   };
 }

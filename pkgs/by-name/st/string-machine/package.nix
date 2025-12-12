@@ -10,13 +10,13 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "string-machine";
   version = "unstable-2020-01-20";
 
   src = fetchFromGitHub {
     owner = "jpcima";
-    repo = pname;
+    repo = "string-machine";
     rev = "188082dd0beb9a3c341035604841c53675fe66c4";
     sha256 = "0l9xrzp3f0hk6h320qh250a0n1nbd6qhjmab21sjmrlb4ngy672v";
     fetchSubmodules = true;
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jpcima/string-machine";
     description = "Digital model of electronic string ensemble instrument";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = intersectLists platforms.linux platforms.x86;
-    license = licenses.boost;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = intersectLists lib.platforms.linux lib.platforms.x86;
+    license = lib.licenses.boost;
   };
 }

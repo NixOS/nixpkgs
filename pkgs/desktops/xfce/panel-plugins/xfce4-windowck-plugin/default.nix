@@ -2,33 +2,47 @@
   stdenv,
   lib,
   fetchurl,
-  intltool,
+  gettext,
+  meson,
+  ninja,
   pkg-config,
+  python3,
+  glib,
+  gtk3,
   libwnck,
   libxfce4ui,
+  libxfce4util,
   xfce4-panel,
   xfconf,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-windowck-plugin";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchurl {
-    # Use dist tarballs to avoid pulling extra deps and generating images ourselves.
-    url = "mirror://xfce/src/panel-plugins/xfce4-windowck-plugin/${lib.versions.majorMinor version}/xfce4-windowck-plugin-${version}.tar.bz2";
-    sha256 = "sha256-p4FEi3gemE072lmw2qsNGE1M7CJSMW9zcKxKmO/kgfQ=";
+    url = "mirror://xfce/src/panel-plugins/xfce4-windowck-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-windowck-plugin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Ay4wXXTxe9ZbKL0mDPGS/PiqDfM9EWCH5IX9E2i3zzk=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    intltool
+    gettext
+    glib # glib-compile-resources
+    meson
+    ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [
+    glib
+    gtk3
     libwnck
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
   ];
@@ -38,11 +52,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "xfce4-windowck-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Xfce panel plugin for displaying window title and buttons";
     homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-windowck-plugin";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

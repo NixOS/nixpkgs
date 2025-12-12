@@ -3,10 +3,11 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
-  version = "1.0.16";
-  hash = "sha256-jsBLy5WDl2l8o/2ccIk1XMqOukeDX5eZ+VH5Dyo5BaA=";
+  version = "1.0.17";
+  hash = "sha256-9/t+Mvfnq0KkPbe1mnrVy4mzNaK7vAgLuhUnOeEvBfI=";
 in
 stdenv.mkDerivation {
   name = "system76-module-${version}-${kernel.version}";
@@ -24,6 +25,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+  makeFlags = kernelModuleMakeFlags;
+
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -35,6 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
     license = [ lib.licenses.gpl2Plus ];
     platforms = [
       "i686-linux"

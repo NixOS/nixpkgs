@@ -10,21 +10,22 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gtk3,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "popsicle";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "popsicle";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-sWQNav7odvX+peDglLHd7Jrmvhm5ddFBLBla0WK7wcE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-KWVX5eOewARccI+ukNfEn8Wc3He1lWXjm9E/Dl0LuM4=";
   };
 
@@ -47,15 +48,18 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Multiple USB File Flasher";
     homepage = "https://github.com/pop-os/popsicle";
-    changelog = "https://github.com/pop-os/popsicle/releases/tag/${version}";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/pop-os/popsicle/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       _13r0ck
-      figsoda
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

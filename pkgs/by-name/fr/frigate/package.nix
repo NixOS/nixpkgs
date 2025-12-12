@@ -1,43 +1,61 @@
 {
   lib,
+  stdenv,
   callPackage,
-  python312,
+  python313Packages,
   fetchFromGitHub,
   fetchurl,
+  ffmpeg-headless,
+  sqlite-vec,
   frigate,
   nixosTests,
+  fetchpatch,
 }:
 
 let
-  version = "0.14.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
+    tag = "v${version}";
+    hash = "sha256-gbEUmo28vjYsfIlHSBaLTUh9kK5rM17hkfKBQ9KhiBU=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python312.override {
-    self = python;
+  python = python313Packages.python.override {
     packageOverrides = self: super: {
-      paho-mqtt = super.paho-mqtt_2;
+      joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "authlib";
+          repo = "joserfc";
+          tag = version;
+          hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
+        };
+      });
+      onnxruntime = super.onnxruntime.override (old: {
+        onnxruntime = old.onnxruntime.override (old: {
+          withFullProtobuf = true;
+        });
+      });
     };
   };
+  python3Packages = python.pkgs;
 
   # Tensorflow audio model
+  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
   tflite_audio_model = fetchurl {
     url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
     hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
   };
 
   # Tensorflow Lite models
-  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L96-L97
+  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L115-L117
   tflite_cpu_model = fetchurl {
     url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
     hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
@@ -47,95 +65,129 @@ let
     hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
   };
 
-  # OpenVino models
-  # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L101
-  openvino_model = fetchurl {
+  # TODO: OpenVino model
+  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
+  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
+  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
+  coco_91cl_bkgr = fetchurl {
     url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
 in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
   format = "other";
 
   inherit src;
 
+  patches = [
+    ./constants.patch
+    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
+    (fetchpatch {
+      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
+      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
+    })
+    ./ffmpeg.patch
+  ];
+
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
 
-    substituteInPlace frigate/app.py \
+    substituteInPlace \
+      frigate/app.py \
+      frigate/test/test_{http,storage}.py \
+      frigate/test/http_api/base_http_test.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
     substituteInPlace frigate/const.py \
+      --replace-fail "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
       --replace-fail "/media/frigate" "/var/lib/frigate" \
       --replace-fail "/tmp/cache" "/var/cache/frigate" \
       --replace-fail "/config" "/var/lib/frigate" \
       --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/comms/{config,detections,events}_updater.py frigate/comms/inter_process.py \
+    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
       --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
+
+    substituteInPlace frigate/db/sqlitevecq.py \
+      --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+    # provide default paths for models and maps that are shipped with frigate
+    substituteInPlace frigate/config/config.py \
+      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
-    substituteInPlace frigate/output/birdseye.py \
-      --replace-fail "/opt/frigate/" "${placeholder "out"}/${python.sitePackages}/"
-
-    # work around onvif-zeep idiosyncrasy
-    substituteInPlace frigate/ptz/onvif.py \
-      --replace-fail dist-packages site-packages
-
-    # provide default paths for models and maps that are shipped with frigate
-    substituteInPlace frigate/config.py \
-      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
-
     substituteInPlace frigate/events/audio.py \
       --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
       --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
-
-    substituteInPlace frigate/test/test_config.py \
-      --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
-      --replace-fail "/config/model_cache" "/build/model_cache"
   '';
 
   dontBuild = true;
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3Packages; [
     # docker/main/requirements.txt
     scikit-build
     # docker/main/requirements-wheel.txt
+    aiofiles
+    aiohttp
+    appdirs
+    argcomplete
+    contextlib2
     click
-    distutils
-    flask
-    flask-limiter
-    imutils
+    distlib
+    fastapi
+    filelock
+    importlib-metadata
+    importlib-resources
+    google-generativeai
     joserfc
+    levenshtein
     markupsafe
-    matplotlib
+    netaddr
+    netifaces
     norfair
     numpy
-    onvif-zeep
+    ollama
+    onnxruntime
+    onvif-zeep-async
+    openai
     opencv4
     openvino
-    pandas
     paho-mqtt
+    pandas
+    pathvalidate
     peewee
     peewee-migrate
+    prometheus-client
     psutil
     py3nvml
+    pyclipper
     pydantic
+    python-multipart
     pytz
-    pyyaml
+    py-vapid
+    pywebpush
     pyzmq
     requests
     ruamel-yaml
     scipy
     setproctitle
+    shapely
+    slowapi
+    starlette
+    starlette-context
     tensorflow-bin
+    titlecase
+    transformers
     tzlocal
     unidecode
+    uvicorn
+    verboselogs
+    virtualenv
     ws4py
   ];
 
@@ -151,15 +203,26 @@ python.pkgs.buildPythonApplication rec {
     tar --extract --gzip --file ${tflite_audio_model}
     cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
 
-    cp --no-preserve=mode ${openvino_model} $out/share/frigate/coco_91cl_bkgr.txt
+    cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
 
     runHook postInstall
   '';
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
+    ffmpeg-headless
     pytestCheckHook
   ];
+
+  # interpreter crash in onnxruntime on aarch64-linux
+  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
+
+  preCheck = ''
+    # Unavailable in the build sandbox
+    substituteInPlace frigate/const.py \
+      --replace-fail "/var/lib/frigate" "$TMPDIR/" \
+      --replace-fail "/var/cache/frigate" "$TMPDIR"
+  '';
 
   disabledTests = [
     # Test needs network access
@@ -169,15 +232,14 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     web = frigate-web;
     inherit python;
-    pythonPath =
-      (python.pkgs.makePythonPath propagatedBuildInputs) + ":${frigate}/${python.sitePackages}";
+    pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
     tests = {
       inherit (nixosTests) frigate;
     };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI
@@ -185,7 +247,7 @@ python.pkgs.buildPythonApplication rec {
       object detection locally for IP cameras.
     '';
     homepage = "https://github.com/blakeblackshear/frigate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

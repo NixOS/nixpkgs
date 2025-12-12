@@ -8,7 +8,7 @@
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "vqgan-jax";
   version = "unstable-2022-04-20";
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vqgan_jax" ];
 
-  meta = with lib; {
+  meta = {
     description = "JAX implementation of VQGAN";
     homepage = "https://github.com/patil-suraj/vqgan-jax";
     # license unknown: https://github.com/patil-suraj/vqgan-jax/issues/9
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ r-burns ];
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

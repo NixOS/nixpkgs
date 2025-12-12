@@ -11,7 +11,6 @@
   click,
   prettytable,
   prompt-toolkit,
-  ptable,
   pygments,
   requests,
   rich,
@@ -23,34 +22,30 @@
   sphinx,
   testtools,
   tkinter,
+  writableTmpDirAsHomeHook,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.2.5";
+  version = "6.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
     tag = "v${version}";
-    hash = "sha256-wDLMVonPUexoaZ60kRBILmr5l46yajzACozCp6uETGY=";
+    hash = "sha256-mlC4o39Ol1ALguc9KGpxB0M0vhWz4LG2uwhW8CBrVgg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "rich"
-  ];
+  pythonRelaxDeps = [ "rich" ];
 
   dependencies = [
     click
     prettytable
     prompt-toolkit
-    ptable
     pygments
     requests
     rich
@@ -65,21 +60,14 @@ buildPythonPackage rec {
     sphinx
     testtools
     tkinter
+    writableTmpDirAsHomeHook
     zeep
   ];
 
-  # Otherwise soap_tests.py will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
-    "--deselect=tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
-  ];
-
   disabledTestPaths = [
+    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+    "tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
+
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
   ];
@@ -89,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };

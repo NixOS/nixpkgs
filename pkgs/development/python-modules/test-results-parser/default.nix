@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "test-results-parser";
-  version = "0.5.1";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "test_results_parser";
-    hash = "sha256-DaUSTu4Hg9SbJwBd3PlMcIAm/o63Q1yM5E7dVxbOwM8=";
+    hash = "sha256-Xqktx66EvYnpw/w3UxfYXJgfnROcPMobCv4W2W405/Y=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-dhreAWm/Hses/N3XocYX7IZru9nYJqDrmTnJPkKaOwY=";
+    hash = "sha256-xnX9YwRHo5vFcF4HDj9K/hLV88ZB0UZdpx8RdA+EmrU=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  pythonImpotsCheck = [
+  pythonImportsCheck = [
     "test_results_parser"
   ];
 

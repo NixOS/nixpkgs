@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   format = pkgs.formats.json { };
   commonOptions =
@@ -14,26 +11,26 @@ let
       pkgName,
       flavour ? pkgName,
     }:
-    mkOption {
+    lib.mkOption {
       default = { };
       description = ''
         Attribute set of ${flavour} instances.
         Creates independent `${flavour}-''${name}.service` systemd units for each instance defined here.
       '';
       type =
-        with types;
+        with lib.types;
         attrsOf (
           submodule (
             { name, ... }:
             {
               options = {
-                enable = mkEnableOption "this ${flavour} instance" // {
+                enable = lib.mkEnableOption "this ${flavour} instance" // {
                   default = true;
                 };
 
-                package = mkPackageOption pkgs pkgName { };
+                package = lib.mkPackageOption pkgs pkgName { };
 
-                user = mkOption {
+                user = lib.mkOption {
                   type = types.str;
                   default = "root";
                   description = ''
@@ -41,7 +38,7 @@ let
                   '';
                 };
 
-                group = mkOption {
+                group = lib.mkOption {
                   type = types.str;
                   default = "root";
                   description = ''
@@ -49,34 +46,17 @@ let
                   '';
                 };
 
-                settings = mkOption {
+                settings = lib.mkOption {
                   type = types.submodule {
                     freeformType = format.type;
 
                     options = {
-                      pid_file = mkOption {
+                      pid_file = lib.mkOption {
                         default = "/run/${flavour}/${name}.pid";
                         type = types.str;
                         description = ''
                           Path to use for the pid file.
                         '';
-                      };
-
-                      template = mkOption {
-                        default = null;
-                        type = with types; nullOr (listOf (attrsOf anything));
-                        description =
-                          let
-                            upstreamDocs =
-                              if flavour == "vault-agent" then
-                                "https://developer.hashicorp.com/vault/docs/agent/template"
-                              else
-                                "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#templates";
-                          in
-                          ''
-                            Template section of ${flavour}.
-                            Refer to <${upstreamDocs}> for supported values.
-                          '';
                       };
                     };
                   };
@@ -116,7 +96,7 @@ let
     let
       configFile = format.generate "${name}.json" instance.settings;
     in
-    mkIf (instance.enable) {
+    lib.mkIf (instance.enable) {
       description = "${flavour} daemon - ${name}";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -127,8 +107,8 @@ let
         User = instance.user;
         Group = instance.group;
         RuntimeDirectory = flavour;
-        ExecStart = "${getExe instance.package} ${
-          optionalString ((getName instance.package) == "vault") "agent"
+        ExecStart = "${lib.getExe instance.package} ${
+          lib.optionalString (flavour == "vault-agent") "agent"
         } -config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
@@ -146,17 +126,17 @@ in
     };
   };
 
-  config = mkMerge (
+  config = lib.mkMerge (
     map
       (
         flavour:
         let
           cfg = config.services.${flavour};
         in
-        mkIf (cfg.instances != { }) {
-          systemd.services = mapAttrs' (
+        lib.mkIf (cfg.instances != { }) {
+          systemd.services = lib.mapAttrs' (
             name: instance:
-            nameValuePair "${flavour}-${name}" (createAgentInstance {
+            lib.nameValuePair "${flavour}-${name}" (createAgentInstance {
               inherit name instance flavour;
             })
           ) cfg.instances;
@@ -168,7 +148,7 @@ in
       ]
   );
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     emilylange
     tcheronneau
   ];

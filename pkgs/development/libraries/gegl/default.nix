@@ -16,7 +16,7 @@
   lensfun,
   libspiro,
   maxflow,
-  netsurf,
+  libnsgif,
   pango,
   poly2tri-c,
   poppler,
@@ -30,7 +30,6 @@
   libwebp,
   luajit,
   openexr,
-  OpenCL,
   suitesparse,
   withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
   gimp,
@@ -38,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.50";
+  version = "0.4.64";
 
   outputs = [
     "out"
@@ -49,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YISWmwbuhspxFCEzdz8n4T8C5aaiLCz85FLsqt23kME=";
+    hash = "sha256-DeHJ3SLBYNXkvfw4jSkvA0R8ymJYVBuaEv7Xg9DPfGA=";
   };
 
   nativeBuildInputs = [
@@ -62,35 +61,31 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs =
-    [
-      libpng
-      cairo
-      libjpeg
-      librsvg
-      lensfun
-      libspiro
-      maxflow
-      netsurf.libnsgif
-      pango
-      poly2tri-c
-      poppler
-      bzip2
-      libraw
-      libwebp
-      gexiv2
-      openexr
-      suitesparse
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenCL
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ]
-    ++ lib.optionals withLuaJIT [
-      luajit
-    ];
+  buildInputs = [
+    libpng
+    cairo
+    libjpeg
+    librsvg
+    lensfun
+    libspiro
+    maxflow
+    libnsgif
+    pango
+    poly2tri-c
+    poppler
+    bzip2
+    libraw
+    libwebp
+    gexiv2
+    openexr
+    suitesparse
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals withLuaJIT [
+    luajit
+  ];
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -99,21 +94,20 @@ stdenv.mkDerivation (finalAttrs: {
     babl
   ];
 
-  mesonFlags =
-    [
-      "-Dmrg=disabled" # not sure what that is
-      "-Dsdl2=disabled"
-      "-Dpygobject=disabled"
-      "-Dlibav=disabled"
-      "-Dlibv4l=disabled"
-      "-Dlibv4l2=disabled"
-      # Disabled due to multiple vulnerabilities, see
-      # https://github.com/NixOS/nixpkgs/pull/73586
-      "-Djasper=disabled"
-    ]
-    ++ lib.optionals (!withLuaJIT) [
-      "-Dlua=disabled"
-    ];
+  mesonFlags = [
+    "-Dmrg=disabled" # not sure what that is
+    "-Dsdl2=disabled"
+    "-Dpygobject=disabled"
+    "-Dlibav=disabled"
+    "-Dlibv4l=disabled"
+    "-Dlibv4l2=disabled"
+    # Disabled due to multiple vulnerabilities, see
+    # https://github.com/NixOS/nixpkgs/pull/73586
+    "-Djasper=disabled"
+  ]
+  ++ lib.optionals (!withLuaJIT) [
+    "-Dlua=disabled"
+  ];
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh
@@ -129,14 +123,16 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    inherit gimp;
+    tests = {
+      inherit gimp;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

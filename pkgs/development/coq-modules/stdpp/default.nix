@@ -6,43 +6,26 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "stdpp";
   inherit version;
   domain = "gitlab.mpi-sws.org";
   owner = "iris";
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.19" "8.20";
-        out = "1.11.0";
-      }
-      {
-        case = range "8.18" "8.19";
-        out = "1.10.0";
-      }
-      {
-        case = range "8.16" "8.18";
-        out = "1.9.0";
-      }
-      {
-        case = range "8.13" "8.17";
-        out = "1.8.0";
-      }
-      {
-        case = range "8.12" "8.14";
-        out = "1.6.0";
-      }
-      {
-        case = range "8.11" "8.13";
-        out = "1.5.0";
-      }
-      {
-        case = range "8.8" "8.10";
-        out = "1.4.0";
-      }
+      (case (range "8.19" "9.1") "1.12.0")
+      (case (range "8.18" "8.19") "1.10.0")
+      (case (range "8.16" "8.18") "1.9.0")
+      (case (range "8.13" "8.17") "1.8.0")
+      (case (range "8.12" "8.14") "1.6.0")
+      (case (range "8.11" "8.13") "1.5.0")
+      (case (range "8.8" "8.10") "1.4.0")
     ] null;
+  release."1.12.0".sha256 = "sha256-2o8YMkKbXrKHwtfpkdAovxl+2NZZk958GjSSd9wcEIU=";
   release."1.11.0".sha256 = "sha256-yqnkaA5gUdZBJZ3JnvPYh11vKQRl0BAnior1yGowG7k=";
   release."1.10.0".sha256 = "sha256-bfynevIKxAltvt76lsqVxBmifFkzEhyX8lRgTKxr21I=";
   release."1.9.0".sha256 = "sha256-OXeB+XhdyzWMp5Karsz8obp0rTeMKrtG7fu/tmc9aeI=";
@@ -61,12 +44,12 @@ mkCoqDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extended “Standard Library” for Coq";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [
-      maintainers.vbgl
-      maintainers.ineol
+      lib.maintainers.vbgl
+      lib.maintainers.ineol
     ];
   };
 }

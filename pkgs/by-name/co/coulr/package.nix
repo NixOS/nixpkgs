@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Coulr";
-    rev = version;
+    tag = version;
     hash = "sha256-1xnL5AWl/rLQu3i9m6uxbS4QT+690hmEW8kYTwkg7Gw=";
   };
 

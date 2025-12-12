@@ -1,58 +1,82 @@
 {
   lib,
-  mkYarnPackage,
   fetchFromGitHub,
-  fetchYarnDeps,
+  unstableGitUpdater,
   makeWrapper,
-  nodejs,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
+  serve,
+  stdenv,
   xsel,
+  yarn-berry_4,
 }:
-
-mkYarnPackage rec {
+let
+  yarn-berry = yarn-berry_4;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2024-09-23";
+  version = "0-unstable-2025-11-27";
 
   src = fetchFromGitHub {
-    owner = "linkeddata";
+    owner = "dokieli";
     repo = "dokieli";
-    rev = "40ebbc60ba48d8b08f763b07befba96382c5f027";
-    hash = "sha256-lc96jOR8uXLcZFhN3wpSd9O5cUdKxllB8WWCh2oWuEw=";
+    rev = "25c20daf88a7d7e8d816a7deed4e2fe134bdb97d";
+    hash = "sha256-GiMBCUT9wd/6bZ1hXt9431Ax1Z7BLHOXfWiiPxKZsCs=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-TEXCCLFhpwHZJ8zRGsC7J6EwNaFpIi+CZ3L5uilebK4=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-8LBMHdjWaxno4I+ZAwTw9WCVotX7O0eufhGJGg1a0w4=";
   };
-
-  packageJSON = ./package.json;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r * $out
+
+    runHook postInstall
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    yarn-berry.yarnBerryConfigHook
+  ];
 
   postFixup = ''
-    makeWrapper ${nodejs}/bin/npx $out/bin/dokieli           \
-      --prefix PATH : ${
-        lib.makeBinPath ([
-          nodejs
-          xsel
-        ])
-      }   \
-      --add-flags serve                                      \
-      --chdir $out/deps/dokieli
+    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
+      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+      --chdir $out
   '';
 
-  doDist = false;
+  passthru = {
+    updateScriptSrc = unstableGitUpdater { };
+    updateScriptDeps = writeShellApplication {
+      name = "update-dokieli-berry-deps";
+      runtimeInputs = [
+        nix
+        yarn-berry.yarn-berry-fetcher
+      ];
+      text = lib.strings.readFile ./updateDeps.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc
+      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+    ];
+  };
 
   meta = {
-    description = "dokieli is a clientside editor for decentralised article publishing, annotations and social interactions";
+    description = "Clientside editor for decentralised article publishing, annotations and social interactions";
     homepage = "https://github.com/linkeddata/dokieli";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      cc-by-40
+      mit
+    ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "dokieli";
   };
-}
+})

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
-  cargoHash = "sha256-vN62QmCuhu7AjL6xSpBU6/ul4WgNLZbjWDCFyHj6rIM=";
+  cargoHash = "sha256-7rqfJ3l4qdVcmfMZgZpL8qomnytiOSqWtFFZFeB047I=";
 
   # Devendor gettext in the gettext-sys crate. The paths to the bin/lib/include folders have to be specified because
   # setting `GETTEXT_SYSTEM` only works on some platforms (i.e., not Darwin).
@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--lib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust Cargo sub-command and libraries to extract and build localization resources to embed in your application/library";
     homepage = "https://github.com/kellpossible/cargo-i18n";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xrelkd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "cargo-i18n";
   };
 }

@@ -2,28 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   pkg-config,
+  vst2-sdk,
   wine64,
+  nix-update-script,
   enableJackAssWine64 ? false,
 }:
 
-let
-  # equal to vst-sdk in ../oxefmsynth/default.nix
-  vst-sdk = stdenv.mkDerivation (finalAttrs: {
-    name = "vstsdk3610_11_06_2018_build_37";
-    src = fetchzip {
-      url = "https://web.archive.org/web/20181016150224if_/https://download.steinberg.net/sdk_downloads/${finalAttrs.name}.zip";
-      hash = "sha256-cjYakxnqSDqSZ32FPK3OUhDpslOlavHh5SAVpng0QTU=";
-    };
-    installPhase = ''
-      runHook preInstall
-      cp -r . $out
-      runHook postInstall
-    '';
-  });
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jackass";
   version = "1.1";
@@ -36,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    cp -r ${vst-sdk}/VST2_SDK/{public.sdk,pluginterfaces} vstsdk2.4
+    cp -r ${vst2-sdk}/{public.sdk,pluginterfaces} vstsdk2.4
   '';
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableJackAssWine64 [ wine64 ];
@@ -57,21 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "JackAss is a VST plugin that provides JACK-MIDI support for VST hosts";
+  meta = {
+    description = "VST plugin that provides JACK-MIDI support for VST hosts";
     longDescription = ''
       Simply load the plugin in your favourite host to get a JACK-MIDI port.
       Optionally includes a special Wine build for running in Wine
       applications. Set enableJackAssWine64 to true to enable this output.
     '';
     homepage = "https://github.com/falkTX/JackAss";
-    maintainers = with maintainers; [ PowerUser64 ];
-    license = with licenses; [
-      mit
-      unfree
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
     ];
-    platforms = platforms.linux;
+    license = [ lib.licenses.mit ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiran";
     repo = "defusedxml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-X88A5V9uXP3wJQ+olK6pZJT66LP2uCXLK8goa5bPARA=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "defusedxml" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tiran/defusedxml/blob/v${version}/CHANGES.txt";
     description = "Python module to defuse XML issues";
     homepage = "https://github.com/tiran/defusedxml";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

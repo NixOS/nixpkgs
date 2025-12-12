@@ -3,23 +3,30 @@
   stdenvNoCC,
   fetchzip,
   writeScript,
+  # Can be overridden to alter the display name in steam
+  # This could be useful if multiple versions should be installed together
+  steamDisplayName ? "GE-Proton",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-21";
+  version = "GE-Proton10-26";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-WNOl0pu3xcEObxSK054u4e3hTWtA/51mH25uQih0+a0=";
+    hash = "sha256-Q5bKTDn3sTgp4mbsevOdN3kcdRsyKylghXqM2I2cYq8=";
   };
+
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   outputs = [
     "out"
     "steamcompattool"
   ];
 
-  buildCommand = ''
-    runHook preBuild
+  installPhase = ''
+    runHook preInstall
 
     # Make it impossible to add to an environment. You should use the appropriate NixOS option.
     # Also leave some breadcrumbs in the file.
@@ -27,13 +34,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir $steamcompattool
     ln -s $src/* $steamcompattool
-    rm $steamcompattool/{compatibilitytool.vdf,proton,version}
-    cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf
+    cp $src/compatibilitytool.vdf $steamcompattool
 
-    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/compatibilitytool.vdf
-    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/proton
+    runHook postInstall
+  '';
 
-    runHook postBuild
+  preFixup = ''
+    substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
+      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
   /*
@@ -61,7 +70,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      Gliczy
       NotAShelf
+      Scrumplex
       shawn8901
     ];
     platforms = [ "x86_64-linux" ];

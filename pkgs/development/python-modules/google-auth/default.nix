@@ -1,23 +1,21 @@
 {
   lib,
-  stdenv,
+  fetchFromGitHub,
   aiohttp,
   aioresponses,
   buildPythonPackage,
   cachetools,
   cryptography,
-  fetchPypi,
   flask,
   freezegun,
   grpcio,
   mock,
-  oauth2client,
   pyasn1-modules,
+  pyjwt,
   pyopenssl,
   pytest-asyncio,
   pytest-localserver,
   pytestCheckHook,
-  pythonOlder,
   pyu2f,
   requests,
   responses,
@@ -27,20 +25,19 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.36.0";
+  version = "2.41.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_auth";
-    inherit version;
-    hash = "sha256-VF6WGPLfC8u33LxFpUZIWxISYkcWl1oepa6BSc52mrE=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-auth-library-python";
+    tag = "v${version}";
+    hash = "sha256-EPiI3cJy+NkT1oyKZJKcvQwAb64UQZDSNfWorZjIew8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     pyasn1-modules
     rsa
@@ -59,56 +56,55 @@ buildPythonPackage rec {
       cryptography
       pyopenssl
     ];
+    pyjwt = [
+      cryptography
+      pyjwt
+    ];
     reauth = [ pyu2f ];
     requests = [ requests ];
   };
 
-  nativeCheckInputs =
-    [
-      aioresponses
-      flask
-      freezegun
-      grpcio
-      mock
-      oauth2client
-      pytest-asyncio
-      pytest-localserver
-      pytestCheckHook
-      responses
-    ]
-    ++ optional-dependencies.aiohttp
-    ++ optional-dependencies.enterprise_cert
-    ++ optional-dependencies.reauth;
+  pythonRelaxDeps = [ "cachetools" ];
+
+  nativeCheckInputs = [
+    aioresponses
+    flask
+    freezegun
+    grpcio
+    mock
+    pytest-asyncio
+    pytest-localserver
+    pytestCheckHook
+    responses
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTestPaths = [
+    "samples/"
+    "system_tests/"
+    # Requires a running aiohttp event loop
+    "tests_async/"
+
+    # cryptography 44 compat issue
+    "tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
+  ];
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  pytestFlagsArray = [
-    # cryptography 44 compat issue
-    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
-  ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # Disable tests using pyOpenSSL as it does not build on M1 Macs
-    "tests/transport/test__mtls_helper.py"
-    "tests/transport/test_requests.py"
-    "tests/transport/test_urllib3.py"
-    "tests/transport/test__custom_tls_signer.py"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Google Auth Python Library";
     longDescription = ''
       This library simplifies using Google's various server-to-server
       authentication mechanisms to access Google APIs.
     '';
     homepage = "https://github.com/googleapis/google-auth-library-python";
-    changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/google-auth-library-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

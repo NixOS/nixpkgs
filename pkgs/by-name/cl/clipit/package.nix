@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
   autoreconfHook,
@@ -27,16 +28,30 @@ stdenv.mkDerivation rec {
     intltoolize --copy --force --automake
   '';
 
+  patches = [
+    # Fixes for GCC14
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/clipit/-/raw/d4bafc28fcb445d1940cdfede6c70142cf3162f5/debian/patches/incompatible-pointer-types.patch";
+      hash = "sha256-STI1fpnoPdEqu1embQcUlTG712HPbJ+LPm930P13Ixo=";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/clipit/-/raw/656d0814030c13437b10d40ee75615d0e8cd873e/debian/patches/missing-prototypes.patch";
+      hash = "sha256-UD183IjV5BprPHQK9bhmUBKfUYgqEZ9M1cRE+AmhAPA=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
     autoreconfHook
     intltool
   ];
+
   configureFlags = [
     "--with-gtk3"
     "--enable-appindicator=yes"
   ];
+
   buildInputs = [
     gtk3
     libayatana-appindicator
@@ -52,12 +67,12 @@ stdenv.mkDerivation rec {
     ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight GTK Clipboard Manager";
     inherit (src.meta) homepage;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "clipit";
-    maintainers = with maintainers; [ kamilchm ];
+    maintainers = with lib.maintainers; [ kamilchm ];
   };
 }

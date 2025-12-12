@@ -2,7 +2,7 @@
   lib,
   writeScript,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   inkscape,
   pdflatex,
   lualatex,
@@ -21,20 +21,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
-  version = "1.10.2";
+  version = "1.12.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
+    tag = version;
+    sha256 = "sha256-Ka8NIvzhMZYPlc3q0U5Je7eXyBT61dJ3O++ETl+D7w0=";
   };
 
   patches = [
     # Make sure we can point directly to pdflatex in the extension,
     # instead of relying on the PATH (which might not have it)
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit pdflatex lualatex;
     })
 
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.lxml
     python3.pkgs.cssselect
     python3.pkgs.numpy
+    python3.pkgs.tinycss2
   ];
 
   # strictDeps do not play nicely with introspection setup hooks.
@@ -116,11 +117,11 @@ python3.pkgs.buildPythonApplication rec {
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Re-editable LaTeX graphics for Inkscape";
     homepage = "https://textext.github.io/textext/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.raboof ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.raboof ];
+    platforms = lib.platforms.all;
   };
 }

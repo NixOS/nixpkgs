@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, which
-, autoconf
-, automake
-, flex
-, bison
-, kernel
-, glibc
-, perl
-, libtool_2
-, libkrb5
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  which,
+  autoconf,
+  automake,
+  flex,
+  bison,
+  kernel,
+  glibc,
+  perl,
+  libtool_2,
+  libkrb5,
 }:
 
 let
@@ -27,28 +28,33 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux: Define Clear/Set PageError macros as NOPs
+    # Linux: Use struct kiocb * for aops write_begin/end
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/15964/revisions/917d071a1b3c3e23c984ca8e5501ddccd62a01b6/patch";
-      decode = "base64 -d";
-      hash = "sha256-WqAHRN1YZj7Cz4X4iF1K3DJC1h8nXlnA9gveClL3KHc=";
+      url = "https://github.com/openafs/openafs/commit/a765a9ddd412c8d1e5cb0f5cf497a8606251811e.patch";
+      hash = "sha256-RkIAdXMvelnWs4YB3OMj6AIQlUbSqdKJpwc6wiSZzrM=";
     })
-    # Linux: Refactor afs_linux_write_begin() variants
+    # linux: remove implied def HAVE_LINUX_FILEMAP_GET_FOLIO
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/15965/revisions/c955b666b904b96620df10328a9a37c2fb5f2ed6/patch";
-      decode = "base64 -d";
-      hash = "sha256-U2W+8YrD1K7Pb/Jq08uBcuPnGkVvcSyTpwaWWcTbq0w=";
+      url = "https://github.com/openafs/openafs/commit/c379ff006d8b7db425f7648321c549ab24919d92.patch";
+      hash = "sha256-fDtX3NhWIWupTArEauCM2rEaO3l8jWBVC5mAMil2+nU=";
     })
-    # Linux: Use folios for aops->write_begin/end
+    # LINUX: Zero code on EEXIST in afs_linux_read_cache
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/15966/revisions/d1706bdc5080b86b1876d10f062c369e8d898188/patch";
-      decode = "base64 -d";
-      hash = "sha256-jY+r9LO/4g6K9J1stxNCa38nyr1/J3beOhG9YilEbzg=";
+      url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
+      hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
-    ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libtool_2
+    perl
+    which
+    bison
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
 
@@ -83,12 +89,15 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
-    license = licenses.ipl10;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ andersk maggesi spacefrogg ];
+    license = lib.licenses.ipl10;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      andersk
+      spacefrogg
+    ];
     broken = kernel.isHardened;
   };
 }

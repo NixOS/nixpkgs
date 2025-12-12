@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  postgresql,
+  libpq,
   openssl,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pgmanage";
   # The last release 11.0.1 from 2018 fails the NixOS test
   # probably because of PostgreSQL-12 incompatibility.
@@ -29,13 +29,17 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    postgresql
+    libpq
     openssl
+  ];
+
+  nativeBuildInputs = [
+    libpq.pg_config
   ];
 
   passthru.tests.sign-in = nixosTests.pgmanage;
 
-  meta = with lib; {
+  meta = {
     description = "Fast replacement for PGAdmin";
     longDescription = ''
       At the heart of pgManage is a modern, fast, event-based C-binary, built in
@@ -44,8 +48,8 @@ stdenv.mkDerivation rec {
       which is no longer maintained.)
     '';
     homepage = "https://github.com/pgManage/pgManage";
-    license = licenses.postgresql;
-    maintainers = [ maintainers.basvandijk ];
+    license = lib.licenses.postgresql;
+    maintainers = [ lib.maintainers.basvandijk ];
     mainProgram = "pgmanage";
   };
 }

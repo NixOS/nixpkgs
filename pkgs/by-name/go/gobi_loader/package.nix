@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,13 +19,19 @@ stdenv.mkDerivation rec {
     substituteInPlace 60-gobi.rules --replace "/lib/firmware" "/run/current-system/firmware"
   '';
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Firmware loader for Qualcomm Gobi USB chipsets";
     homepage = "https://www.codon.org.uk/~mjg59/gobi_loader/";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
   };
 }

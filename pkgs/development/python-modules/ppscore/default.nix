@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = "ppscore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gJStsL8fN17kvXO8EH/NHGIBelPknJzYw5WEvHsFooU=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppscore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
     changelog = "https://github.com/8080labs/ppscore/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evax ];
   };
 }

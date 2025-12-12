@@ -2,28 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   autoconf-archive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxls";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "libxls";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vjmYByk+IDBon8xGR1+oNaEQTiJK+IVpDXsG1IyVNoY=";
+    repo = "libxls";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KbITHQ9s2RUeo8zR53R9s4WUM6z8zzddz1k47So0Mlw=";
   };
 
-  patches = [
-    # Fix cross-compilation
-    (fetchpatch {
-      url = "https://github.com/libxls/libxls/commit/007e63c1f5e19bc73292f267c85d7dd14e9ecb38.patch";
-      sha256 = "sha256-PjPHuXth4Yaq9nVfk5MYJMRo5B0R6YA1KEqgwfjF3PM=";
-    })
+  # workaround required to build against gettext >= 0.25
+  # https://savannah.gnu.org/support/index.php?111272
+  preAutoreconf = ''
+    autopoint --force
+  '';
+
+  # workaround required to build against gettext >= 0.25
+  # https://savannah.gnu.org/support/index.php?111273
+  autoreconfFlags = [
+    "--include=m4"
+    "--install"
+    "--force"
+    "--verbose"
   ];
 
   nativeBuildInputs = [
@@ -33,20 +39,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  doCheck = true;
+
+  meta = {
     description = "Extract Cell Data From Excel xls files";
+    changelog = "https://github.com/libxls/libxls/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/libxls/libxls";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
     mainProgram = "xls2csv";
-    platforms = platforms.unix;
-    knownVulnerabilities = [
-      "CVE-2023-38851"
-      "CVE-2023-38852"
-      "CVE-2023-38853"
-      "CVE-2023-38854"
-      "CVE-2023-38855"
-      "CVE-2023-38856"
-    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/scrypt/${pname}-${version}.tgz";
-    sha256 = "sha256-1jLBGTQgrG+uv5SC5l4z06VmTszWQ7CaUJ0h0cHym+I=";
+    sha256 = "sha256-HCcQUX6ZjqrC6X2xHwkuNxOeaYhrIaGyZh9k4TAhWuk=";
   };
 
   outputs = [
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ util-linux ];
 
-  meta = with lib; {
+  meta = {
     description = "Encryption utility";
     mainProgram = "scrypt";
     homepage = "https://www.tarsnap.com/scrypt.html";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

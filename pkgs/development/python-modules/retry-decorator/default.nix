@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pnpnpn";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "retry-decorator";
+    tag = "v${version}";
     hash = "sha256-0dZq4YbPcH4ItyMnpF7B20YYLtzwniJClBK9gRndU1M=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "retry_decorator" ];
 
-  meta = with lib; {
+  meta = {
     description = "Decorator for retrying when exceptions occur";
     homepage = "https://github.com/pnpnpn/retry-decorator";
     changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    license = with lib.licenses; [ asl20 ];
   };
 }

@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  fetchpatch,
   lib,
   mqttx-cli,
   nodejs,
@@ -13,28 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mqttx-cli";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "MQTTX";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IPIiSav6MPJmzetBgVw9fLGPjJ+JKS3oWMEfCJmEY84=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aUxhCUx89Qrqkv0zvgMZhC6SUQlxFoJs2elYtUlMio4=";
   };
-
-  patches = [
-    # moves @faker-js/faker from devDependencies to dependencies
-    # because the final package depends on it
-    # https://github.com/emqx/MQTTX/pull/1801
-    (fetchpatch {
-      url = "https://github.com/emqx/MQTTX/commit/3d89c3a08477e9e2b5d83f2a222ceaa8c08e50ce.patch";
-      hash = "sha256-Rd6YpGHsvAYD7/XCJq6dgvGeKfOiLh7IUQFr/AQz0mY=";
-    })
-  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/cli/yarn.lock";
-    hash = "sha256-vwPwSE6adxM1gkdsJBq3LH2eXze9yXADvnM90LsKjjo=";
+    hash = "sha256-bhqZLZRRAgsvxo2uAS7x77b5OtGn6x/M2tM72UI1Ayc=";
   };
 
   nativeBuildInputs = [

@@ -4,22 +4,22 @@
   fetchPypi,
   pythonOlder,
   unittestCheckHook,
-  setuptools,
+  pdm-backend,
 }:
 
 buildPythonPackage rec {
   pname = "webcolors";
-  version = "24.8.0";
+  version = "24.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CLB68oagG80w1YOnrK32KVg9H3m/7yfdLCxcJjgXJ30=";
+    hash = "sha256-7LPXaPMiAq93BHe4tl8xj6T1ZsIpSGc6l3sA1YndgPY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ pdm-backend ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webcolors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with color names/values defined by the HTML and CSS specifications";
     homepage = "https://github.com/ubernostrum/webcolors";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -6,21 +6,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.9";
+  version = "1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.clfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VK17Q28Bqdu/NckBZNMJciWbnGkhfEbPmBeVo0etnW0=";
+    tag = version;
+    hash = "sha256-IwiE7sikZ2Rqg8GS0DKLbV/ENcRPTm0eAS3xvVG0gLw=";
   };
 
   build-system = [
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.clfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
     homepage = "https://github.com/fox-it/dissect.clfs";
-    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

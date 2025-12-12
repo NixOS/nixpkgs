@@ -5,22 +5,18 @@
   cmake,
   libcxx,
   zlib,
+  nix-update-script,
 }:
-let
-  version = "0.30.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splitcode";
-  inherit version;
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
-    rev = "v${version}";
-    hash = "sha256-g38pJFP9uA2P5ktogAPXKgPtsEJn5vtnK5HClqqezmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2N+IQHB6gbEKTEofsWy7SwVf1lvRxh5f93avtAs8fM=";
   };
-
-  patches = [ ./add-stdint.patch ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -29,12 +25,20 @@ stdenv.mkDerivation {
     zlib
   ];
 
+  postPatch = ''
+    # https://github.com/pachterlab/splitcode/pull/46
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 2.8.12 3.10
+  '';
+
   doCheck = true;
   checkPhase = ''
     mkdir func_tests
     cp $src/func_tests/* ./func_tests/
     bash ./func_tests/runtests.sh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for flexible, efficient parsing, interpreting, and editing of technical sequences in sequencing reads";
@@ -43,5 +47,9 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimward ];
     mainProgram = "splitcode";
+    badPlatforms = [
+      # Test hangs indefinitely. See https://github.com/pachterlab/splitcode/issues/31
+      "aarch64-linux"
+    ];
   };
-}
+})

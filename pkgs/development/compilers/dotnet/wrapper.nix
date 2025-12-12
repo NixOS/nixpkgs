@@ -6,18 +6,19 @@
   testers,
   runCommand,
   runCommandWith,
+  darwin,
   expect,
   curl,
   installShellFiles,
   callPackage,
   zlib,
   swiftPackages,
-  darwin,
   icu,
   lndir,
-  substituteAll,
+  replaceVars,
   nugetPackageHook,
   xmlstarlet,
+  pkgs,
 }:
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -38,14 +39,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = unwrapped;
   dontUnpack = true;
 
-  setupHooks =
-    [
-      ./dotnet-setup-hook.sh
-    ]
-    ++ lib.optional (type == "sdk") (substituteAll {
-      src = ./dotnet-sdk-setup-hook.sh;
+  setupHooks = [
+    ./dotnet-setup-hook.sh
+  ]
+  ++ lib.optional (type == "sdk") (
+    replaceVars ./dotnet-sdk-setup-hook.sh {
       inherit lndir xmlstarlet;
-    });
+    }
+  );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -75,13 +76,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/dotnet --info
+    HOME=$(mktemp -d) $out/bin/dotnet --info
     runHook postInstallCheck
   '';
 
   postFixup = lib.optionalString (unwrapped ? man) ''
     ln -s ${unwrapped.man} "$man"
   '';
+
   passthru = unwrapped.passthru // {
     inherit unwrapped;
     tests =
@@ -91,6 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             name,
             stdenv ? stdenvNoCC,
             template,
+            lang ? null,
             usePackageSource ? false,
             build,
             buildInputs ? [ ],
@@ -102,20 +105,33 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           let
             sdk = finalAttrs.finalPackage;
             built = stdenv.mkDerivation {
-              name = "dotnet-test-${name}";
-              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional (usePackageSource) sdk.packages;
+              name = "${sdk.name}-test-${name}";
+              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional usePackageSource sdk.packages;
               # make sure ICU works in a sandbox
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
-              unpackPhase = ''
-                mkdir test
-                cd test
-                dotnet new ${template} -o . --no-restore
-              '';
+              unpackPhase =
+                let
+                  unpackArgs = [
+                    template
+                  ]
+                  ++ lib.optionals (lang != null) [
+                    "-lang"
+                    lang
+                  ];
+                in
+                ''
+                  mkdir test
+                  cd test
+                  dotnet new ${lib.escapeShellArgs unpackArgs} -o . --no-restore
+                '';
               buildPhase = build;
               dontPatchELF = true;
             };
           in
-          if run == null then
+          # older SDKs don't include an embedded FSharp.Core package
+          if lang == "F#" && lib.versionOlder sdk.version "6.0.400" then
+            null
+          else if run == null then
             built
           else
             runCommand "${built.name}-run"
@@ -142,61 +158,89 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                 + run
               );
 
-        # Setting LANG to something other than 'C' forces the runtime to search
-        # for ICU, which will be required in most user environments.
-        checkConsoleOutput = command: ''
-          output="$(LANG=C.UTF-8 ${command})"
-          # yes, older SDKs omit the comma
-          [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
-        '';
-      in
-      unwrapped.passthru.tests or { }
-      // {
-        version = testers.testVersion (
-          {
-            package = finalAttrs.finalPackage;
+        mkConsoleTests =
+          lang: suffix: output:
+          let
+            # Setting LANG to something other than 'C' forces the runtime to search
+            # for ICU, which will be required in most user environments.
+            checkConsoleOutput = command: ''
+              output="$(LANG=C.UTF-8 ${command})"
+              [[ "$output" =~ ${output} ]] && touch "$out"
+            '';
+
+            mkConsoleTest =
+              { name, ... }@args:
+              mkDotnetTest (
+                args
+                // {
+                  name = "console-${name}-${suffix}";
+                  template = "console";
+                  inherit lang;
+                }
+              );
+          in
+          lib.recurseIntoAttrs {
+            run = mkConsoleTest {
+              name = "run";
+              build = checkConsoleOutput "dotnet run";
+            };
+
+            publish = mkConsoleTest {
+              name = "publish";
+              build = "dotnet publish -o $out/bin";
+              run = checkConsoleOutput "$src/bin/test";
+            };
+
+            self-contained = mkConsoleTest {
+              name = "self-contained";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime --sc -o $out";
+              runtime = null;
+              run = checkConsoleOutput "$src/test";
+            };
+
+            single-file = mkConsoleTest {
+              name = "single-file";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
+              runtime = null;
+              run = checkConsoleOutput "$src/bin/test";
+            };
+
+            ready-to-run = mkConsoleTest {
+              name = "ready-to-run";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
+              run = checkConsoleOutput "$src/bin/test";
+            };
           }
-          // lib.optionalAttrs (type != "sdk") {
-            command = "dotnet --info";
-          }
-        );
-      }
-      // lib.optionalAttrs (type == "sdk") (
-        {
-          console = mkDotnetTest {
-            name = "console";
-            template = "console";
-            build = checkConsoleOutput "dotnet run";
+          // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
+            aot = mkConsoleTest {
+              name = "aot";
+              stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
+              usePackageSource = true;
+              buildInputs = [
+                zlib
+              ]
+              ++ lib.optional stdenv.hostPlatform.isDarwin [
+                swiftPackages.swift
+                darwin.ICU
+              ];
+              build = ''
+                dotnet restore -p:PublishAot=true
+                dotnet publish -p:PublishAot=true -o $out/bin
+              '';
+              runtime = null;
+              run = checkConsoleOutput "$src/bin/test";
+            };
           };
 
-          publish = mkDotnetTest {
-            name = "publish";
-            template = "console";
-            build = "dotnet publish -o $out/bin";
-            run = checkConsoleOutput "$src/bin/test";
-          };
-
-          self-contained = mkDotnetTest {
-            name = "self-contained";
-            template = "console";
-            usePackageSource = true;
-            build = "dotnet publish --use-current-runtime --sc -o $out";
-            runtime = null;
-            run = checkConsoleOutput "$src/test";
-          };
-
-          single-file = mkDotnetTest {
-            name = "single-file";
-            template = "console";
-            usePackageSource = true;
-            build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
-            runtime = null;
-            run = checkConsoleOutput "$src/bin/test";
-          };
-
-          web = mkDotnetTest {
-            name = "web";
+        mkWebTest =
+          lang: suffix:
+          mkDotnetTest {
+            name = "web-${suffix}";
             template = "web";
+            inherit lang;
             build = "dotnet publish -o $out/bin";
             runtime = finalAttrs.finalPackage.aspnetcore;
             runInputs = [
@@ -228,36 +272,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             '';
             runAllowNetworking = true;
           };
-        }
-        // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
-          aot = mkDotnetTest {
-            name = "aot";
-            stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-            template = "console";
-            usePackageSource = true;
-            buildInputs =
-              [
-                zlib
-              ]
-              ++ lib.optional stdenv.hostPlatform.isDarwin (
-                with darwin;
-                with apple_sdk.frameworks;
-                [
-                  swiftPackages.swift
-                  Foundation
-                  CryptoKit
-                  GSS
-                  ICU
-                ]
-              );
-            build = ''
-              dotnet restore -p:PublishAot=true
-              dotnet publish -p:PublishAot=true -o $out/bin
-            '';
-            runtime = null;
-            run = checkConsoleOutput "$src/bin/test";
-          };
-        }
-      );
+      in
+      unwrapped.passthru.tests or { }
+      // {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
+        };
+      }
+      // lib.optionalAttrs (type == "sdk") {
+        buildDotnetModule = lib.recurseIntoAttrs (
+          (pkgs.appendOverlays [
+            (self: super: {
+              dotnet-sdk = finalAttrs.finalPackage;
+              dotnet-runtime = finalAttrs.finalPackage.runtime;
+            })
+          ]).callPackage
+            ../../../test/dotnet/default.nix
+            { }
+        );
+
+        console = lib.recurseIntoAttrs {
+          # yes, older SDKs omit the comma
+          cs = mkConsoleTests "C#" "cs" "Hello,?\\ World!";
+          fs = mkConsoleTests "F#" "fs" "Hello\\ from\\ F#";
+          vb = mkConsoleTests "VB" "vb" "Hello,?\\ World!";
+        };
+
+        web = lib.recurseIntoAttrs {
+          cs = mkWebTest "C#" "cs";
+          fs = mkWebTest "F#" "fs";
+        };
+      };
   };
 })

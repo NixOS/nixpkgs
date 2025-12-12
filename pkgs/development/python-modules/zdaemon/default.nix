@@ -2,35 +2,48 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  setuptools,
   zconfig,
+  manuel,
+  unittestCheckHook,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "5.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "5.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Iun+UFDq67ngPZrWTk9jzNheBMOP2zUc8RO+9vaNt6Q=";
+    hash = "sha256-8GwsfK9RnHYINPj+JuVzWVDVAX9y1cII3IsZABQFlM0=";
   };
 
-  propagatedBuildInputs = [ zconfig ];
+  build-system = [ setuptools ];
 
-  # too many deps..
-  doCheck = false;
+  dependencies = [ zconfig ];
 
   pythonImportsCheck = [ "zdaemon" ];
 
-  meta = with lib; {
+  # require zc-customdoctests but it is not packaged
+  doCheck = false;
+
+  nativeCheckInputs = [
+    manuel
+    unittestCheckHook
+    # zc-customdoctests
+    zope-testing
+  ];
+
+  unittestFlagsArray = [ "src/zdaemon/tests" ];
+
+  meta = {
     description = "Daemon process control library and tools for Unix-based systems";
     mainProgram = "zdaemon";
-    homepage = "https://pypi.python.org/pypi/zdaemon";
+    homepage = "https://github.com/zopefoundation/zdaemon";
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
+    broken = true;
   };
 }

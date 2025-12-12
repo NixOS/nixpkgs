@@ -42,6 +42,13 @@ def is_dynamic_executable(elf: ELFFile) -> bool:
     # section but their ELF type is DYN.
     return bool(elf.get_section_by_name(".interp"))
 
+def is_separate_debug_object(elf: ELFFile) -> bool:
+    # objects created by separateDebugInfo = true have all the section headers
+    # of the unstripped objects but those that normal `strip` would have kept
+    # are NOBITS
+    text_section = elf.get_section_by_name(".text")
+    return elf.has_dwarf_info() and bool(text_section) and text_section.header['sh_type'] == "SHT_NOBITS"
+
 
 def get_dependencies(elf: ELFFile) -> list[list[Path]]:
     dependencies = []
@@ -174,6 +181,10 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
 
             try:
                 with open_elf(path) as elf:
+                    if is_separate_debug_object(elf):
+                        print(f"skipping {path} because it looks like a separate debug object")
+                        continue
+
                     osabi = get_osabi(elf)
                     arch = get_arch(elf)
                     rpath = [Path(p) for p in get_rpath(elf)
@@ -234,6 +245,10 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
     except ELFError:
         return []
+
+    # these platforms are packaged in nixpkgs with ld.so in a separate derivation
+    # than libc.so and friends. keep_libc is mandatory.
+    keep_libc |= file_osabi in ('ELFOSABI_FREEBSD', 'ELFOSABI_OPENBSD')
 
     rpath = []
     if file_is_dynamic_executable:
@@ -320,6 +335,7 @@ def auto_patchelf(
         ignore_missing: list[str] = [],
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
+        add_existing: bool = True,
         extra_args: list[str] = []) -> None:
 
     if not paths_to_patch:
@@ -327,7 +343,9 @@ def auto_patchelf(
 
     # Add all shared objects of the current output path to the cache,
     # before lib_dirs, so that they are chosen first in find_dependency.
-    populate_cache(paths_to_patch, recursive)
+    if add_existing:
+        populate_cache(paths_to_patch, recursive)
+
     populate_cache(lib_dirs)
 
     dependencies = []
@@ -360,35 +378,51 @@ def main() -> None:
         prog="auto-patchelf",
         description='auto-patchelf tries as hard as possible to patch the'
                     ' provided binary files by looking for compatible'
-                    'libraries in the provided paths.')
+                    ' libraries in the provided paths.')
     parser.add_argument(
         "--ignore-missing",
         nargs="*",
         type=str,
-        help="Do not fail when some dependencies are not found.")
+        default=[],
+        help="Do not fail when some dependencies are not found."
+    )
     parser.add_argument(
         "--no-recurse",
         dest="recursive",
         action="store_false",
-        help="Disable the recursive traversal of paths to patch.")
+        help="Disable the recursive traversal of paths to patch."
+    )
     parser.add_argument(
-        "--paths", nargs="*", type=Path,
+        "--paths",
+        nargs="*",
+        type=Path,
+        required=True,
         help="Paths whose content needs to be patched."
              " Single files and directories are accepted."
-             " Directories are traversed recursively by default.")
+             " Directories are traversed recursively by default."
+    )
     parser.add_argument(
-        "--libs", nargs="*", type=Path,
+        "--libs",
+        nargs="*",
+        type=Path,
+        default=[],
         help="Paths where libraries are searched for."
              " Single files and directories are accepted."
-             " Directories are not searched recursively.")
+             " Directories are not searched recursively."
+    )
     parser.add_argument(
-        "--runtime-dependencies", nargs="*", type=Path,
+        "--runtime-dependencies",
+        nargs="*",
+        type=Path,
+        default=[],
         help="Paths to prepend to the runtime path of executable binaries."
-             " Subject to deduplication, which may imply some reordering.")
+             " Subject to deduplication, which may imply some reordering."
+    )
     parser.add_argument(
         "--append-rpaths",
         nargs="*",
         type=Path,
+        default=[],
         help="Paths to append to all runtime paths unconditionally",
     )
     parser.add_argument(
@@ -398,13 +432,20 @@ def main() -> None:
         help="Attempt to search for and relink libc dependencies.",
     )
     parser.add_argument(
+        "--ignore-existing",
+        dest="add_existing",
+        action="store_false",
+        help="Do not add the existing rpaths of the patched files to the list of directories to search for dependencies.",
+    )
+    parser.add_argument(
         "--extra-args",
         # Undocumented Python argparse feature: consume all remaining arguments
         # as values for this one. This means this argument should always be passed
         # last.
         nargs="...",
         type=str,
-        help="Extra arguments to pass to patchelf. This argument should always come last."
+        default=[],
+        help="Extra arguments to pass to patchelf. This argument should always come last.",
     )
 
     print("automatically fixing dependencies for ELF files")
@@ -419,6 +460,7 @@ def main() -> None:
         args.ignore_missing,
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
+        add_existing=args.add_existing,
         extra_args=args.extra_args)
 
 

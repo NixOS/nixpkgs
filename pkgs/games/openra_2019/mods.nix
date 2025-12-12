@@ -24,6 +24,7 @@ in
       rev = "fc3cf0baf2b827650eaae9e1d2335a3eed24bac9";
       sha256 = "15w91xs253gyrlzsgid6ixxjazx0fbzick6vlkiay0znb58n883m";
     };
+    pos = __curPos;
     engine = {
       version = "b8a7dd5";
       src = fetchFromGitHub {
@@ -48,6 +49,7 @@ in
       rev = "69a4aa708e2c26376469c0048fac13592aa452ca";
       sha256 = "1mfch4s6c05slyqvxllklbxpqq8dqcbx3515n3gyylyq43gq481r";
     };
+    pos = __curPos;
     engine = rec {
       version = "release-20181215";
       mods = [
@@ -81,6 +83,7 @@ in
       rev = "ffcd6ba72979e5f77508136ed7b0efc13e4b100e";
       sha256 = "07g4qw909649s3i1yhw75613mpwfka05jana5mpp5smhnf0pkack";
     };
+    pos = __curPos;
     engine = {
       version = "DarkReign";
       src = fetchFromGitHub {
@@ -105,6 +108,7 @@ in
       rev = "4f5e11d916e4a03d8cf1c97eef484ce2d77d7df2";
       sha256 = "1wnl4qrlhynnlahgdlxwhgsdba5wgdg9yrv9f8hkgi69j60szypd";
     };
+    pos = __curPos;
     engine = rec {
       version = "gen-20190128_3";
       src = fetchFromGitHub {
@@ -134,6 +138,7 @@ in
         rev = "5530babcb05170e0959e4cf2b079161e9fedde4f";
         sha256 = "07jczrarmgm6zdk0myzwgq200x19yvpjyxrnhdac08mjgyz75zk1";
       };
+      pos = __curPos;
       engine = {
         version = "4e8eab4ca00d1910203c8a103dfd2c002714daa8";
         src = fetchFromGitHub {
@@ -165,6 +170,7 @@ in
       rev = "c9be8f2a6f1dd710b1aedd9d5b00b4cf5020e2fe";
       sha256 = "09fp7k95jd6hjqdasbspbd43z5670wkyzbbgqkll9dfsrv0sky0v";
     };
+    pos = __curPos;
     engine = {
       version = "MedievalWarfareEngine";
       src = fetchFromGitHub {
@@ -189,6 +195,7 @@ in
       rev = "2f7c700d6d63c0625e7158ef3098221fa6741569";
       sha256 = "11vnzwczn47wjfrq6y7z9q234p27ihdrcl5p87i6h2xnrpwi8b6m";
     };
+    pos = __curPos;
     engine = rec {
       version = "release-20180923";
       src = fetchFromGitHub {
@@ -217,6 +224,7 @@ in
       rev = "c76c13e9f0912a66ddebae8d05573632b19736b2";
       sha256 = "1cnr3ccvrkjlv8kkdcglcfh133yy0fkva9agwgvc7wlj9n5ydl4g";
     };
+    pos = __curPos;
     engine = rec {
       version = "release-20190314";
       src = fetchFromGitHub {
@@ -241,6 +249,7 @@ in
       rev = "9230e6f1dd9758467832aee4eda115e18f0e635f";
       sha256 = "0bwbmmlhp1kh8rgk2nx1ca9vqssj849amndacf318d61gksc1w9n";
     };
+    pos = __curPos;
     engine = {
       version = "f3873ae";
       mods = [ "as" ];
@@ -270,6 +279,7 @@ in
       rev = "ac000cc15377cdf6d3c2b72c737d692aa0ed8bcd";
       sha256 = "16mzs5wcxj9nlpcyx2c87idsqpbm40lx0rznsccclnlb3hiwqas9";
     };
+    pos = __curPos;
     engine = {
       version = "SP-22-04-19";
       mods = [
@@ -298,6 +308,7 @@ in
       rev = "23e1f3e5d8b98c936797b6680d95d56a69a9e2ab";
       sha256 = "104clmxphchs7r8y7hpmw103bychayz80bqj98bp89i64nv9d89x";
     };
+    pos = __curPos;
     engine = {
       version = "6de92de";
       src = fetchFromGitHub {
@@ -322,6 +333,7 @@ in
       rev = "128dc53741fae923f4af556f2293ceaa0cf571f0";
       sha256 = "1mhr8kyh313z52gdrqv31d6z7jvdldiajalca5mcr8gzg6mph66p";
     };
+    pos = __curPos;
     engine = rec {
       version = "unplugged-cd82382";
       src = fetchFromGitHub {
@@ -346,6 +358,7 @@ in
       rev = "5b8b952dbe21f194a6d00485f20e215ce8362712";
       sha256 = "0hxzrqnz5d7qj1jjr20imiyih62x1cnmndf75nnil4c4sj82f9a6";
     };
+    pos = __curPos;
     engine = rec {
       version = "release-20190314";
       src = fetchFromGitHub {

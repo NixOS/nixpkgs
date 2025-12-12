@@ -14,7 +14,7 @@ let
         builtins.toJSON (
           lib.filterAttrs (
             n: v:
-            builtins.any (x: x == n) [
+            builtins.elem n [
               "name"
               "system"
             ]

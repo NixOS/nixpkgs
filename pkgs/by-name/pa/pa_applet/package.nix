@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "pa-applet";
-  version = "unstable-2012-04-11";
+  version = "0-unstable-2012-04-11";
 
   src = fetchFromGitHub {
     owner = "fernandotcl";
@@ -47,11 +47,11 @@ stdenv.mkDerivation {
 
   postInstall = "";
 
-  meta = with lib; {
+  meta = {
     description = "";
     mainProgram = "pa-applet";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

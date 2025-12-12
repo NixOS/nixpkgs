@@ -16,18 +16,18 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blade-formatter";
-  version = "1.41.1";
+  version = "1.44.2";
 
   src = fetchFromGitHub {
     owner = "shufo";
     repo = "blade-formatter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iaWpIa+H+ocAXGc042PfmCu9UcJZeso9ripWB2/1oTs=";
+    hash = "sha256-FrP+D7SYUPSn82TIRGh9mo/ZpbYxmiTOKagbl/9D7Hk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-zn0PgLIWk23EhYeOKF2RkpvLOusVrqoBazKcJpIAzm8=";
+    hash = "sha256-XUd1p9AQXVUtADERNcHY7pHkMCr2g7+N/Dy7z4hL0g4=";
   };
 
   nativeBuildInputs = [

@@ -18,7 +18,7 @@ buildGoModule.override
     src = fetchFromGitHub {
       owner = "goccy";
       repo = "bigquery-emulator";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-iAVbxbm1G7FIWTB5g6Ff8h2dZjZssONA2MOCGuvK180=";
     };
 
@@ -33,12 +33,12 @@ buildGoModule.override
 
     doCheck = false;
 
-    meta = with lib; {
-      description = "BigQuery emulator server implemented in Go.";
+    meta = {
+      description = "BigQuery emulator server implemented in Go";
       homepage = "https://github.com/goccy/bigquery-emulator";
       changelog = "https://github.com/goccy/pname/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ tarantoj ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ tarantoj ];
       mainProgram = "bigquery-emulator";
     };
   }

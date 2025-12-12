@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U0tKYFRZToMALSeItn9yia7Dl7omETDTkuRlWJ8EZEo=";
   };
 
-  cargoHash = "sha256-OQXGn6m6VdSlxaCPRonjvEo/GOpsEiZkqL12UdoLu0Q=";
+  cargoHash = "sha256-VUMVul3P2GRwihTilVpcEb+A5pJaHxlzkwa3uq+pHtY=";
 
   postPatch = ''
     # Upstream doesn't set the version string itself

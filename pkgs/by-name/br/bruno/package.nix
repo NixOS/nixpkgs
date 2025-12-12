@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
@@ -13,46 +14,42 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  apple-sdk_11,
+  jq,
+  moreutils,
 }:
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.34.2";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
-    rev = "v${version}";
-    hash = "sha256-ydb80+FP2IsobvCZiIKzbErAJNakVoSoYrhddmPmYkc=";
+    tag = "v${version}";
+    hash = "sha256-REK3rJ+Svf6bLIfLwizlLa3rIBgnhQHbhzTTe8VPoc4=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ODE8GLIgdUEOiniki8jzkHfU5TKHWoIIbjGJjNzMZCI=";
+  npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
   npmFlags = [ "--legacy-peer-deps" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      makeWrapper
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  buildInputs =
-    [
-      pixman
-      cairo
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-      apple-sdk_11
-    ];
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -69,6 +66,14 @@ buildNpmPackage rec {
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+
+    # disable telemetry
+    substituteInPlace packages/bruno-app/src/providers/App/index.js \
+      --replace-fail "useTelemetry({ version });" ""
+
+    # fix version reported in sidebar and about page
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
   '';
 
   postConfigure = ''
@@ -81,9 +86,12 @@ buildNpmPackage rec {
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
   preBuild = ''
-    substituteInPlace node_modules/canvas/binding.gyp \
-      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-    npm rebuild
+    # upstream keeps removing and adding back canvas, only patch it when it is present
+    if [[ -e node_modules/canvas/binding.gyp ]]; then
+      substituteInPlace node_modules/canvas/binding.gyp \
+        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+      npm rebuild
+    fi
   '';
 
   buildPhase = ''
@@ -91,8 +99,11 @@ buildNpmPackage rec {
 
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
+    npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
+    npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
 
@@ -137,7 +148,6 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -181,6 +191,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

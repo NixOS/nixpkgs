@@ -19,10 +19,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    rev = "refs/tags/${version}";
+    tag = "v${version}";
     # for tests
     fetchSubmodules = true;
-    hash = "sha256-Exjxdm0VnnjHUKjquXsC/zDmwA7bELHdX1f55IGBjYk=";
+    hash = "sha256-GVymUobWAE0YS65lti9dXRIIGpx0YkwF/vSb3y7cpYY=";
   };
 
   build-system = [ flit-core ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level CSS parser for Python";
     homepage = "https://github.com/Kozea/tinycss2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

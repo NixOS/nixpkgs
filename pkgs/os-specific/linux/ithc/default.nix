@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -29,12 +30,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux driver for Intel Touch Host Controller";
     homepage = "https://github.com/quo/ithc-linux";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.9";
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ aacebedo ];
+    platforms = lib.platforms.linux;
+    broken = kernel.kernelOlder "5.9" || kernel.kernelAtLeast "6.10";
   };
 }

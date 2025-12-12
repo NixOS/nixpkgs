@@ -1,12 +1,14 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, gnustep
-, libxkbcommon
-, makeWrapper
-, wayland
-, wayland-scanner
-, darwin
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  gnustep-back,
+  wrapGNUstepAppsHook,
+  libxkbcommon,
+  makeWrapper,
+  wayland,
+  wayland-scanner,
+  darwin,
 }:
 
 let
@@ -15,7 +17,7 @@ in
 
 stdenv.mkDerivation {
   pname = "owl-compositor";
-  version = "unstable-2021-11-10";
+  version = "0-unstable-2021-11-10";
 
   src = fetchFromGitHub {
     owner = "owl-compositor";
@@ -37,23 +39,21 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     wayland-scanner
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
     darwin.bootstrap_cmds
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.make
-    gnustep.wrapGNUstepAppsHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    wrapGNUstepAppsHook
   ];
 
   buildInputs = [
     libxkbcommon
     wayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gnustep.back
-    gnustep.base
-    gnustep.gui
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gnustep-back
   ];
 
   preConfigure = ''
@@ -64,7 +64,12 @@ stdenv.mkDerivation {
   configureScript = "../configure";
 
   # error: "Your gnustep-base was configured for the objc-nonfragile-abi but you are not using it now."
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-fobjc-runtime=gnustep-2.0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    !stdenv.hostPlatform.isDarwin
+  ) "-fobjc-runtime=gnustep-2.0";
+
+  # ld: Seat/OwlPointer.o: undefined reference to symbol 'round@@GLIBC_2.2.5'
+  env.NIX_LDFLAGS = "-lm";
 
   installPhase = ''
     runHook preInstall
@@ -76,12 +81,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable Wayland compositor in Objective-C";
     homepage = "https://github.com/owl-compositor/owl";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
     mainProgram = "Owl";
   };
 }

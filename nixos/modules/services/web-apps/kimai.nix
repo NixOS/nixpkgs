@@ -112,7 +112,7 @@ let
             description = ''
               MySQL *exact* version string. Not used if `createdLocally` is set,
               but must be set otherwise. See
-              https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous
+              <https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous>
               for how to set this value, especially if you're using MariaDB.
             '';
           };
@@ -238,12 +238,14 @@ in
       services.phpfpm.pools = mapAttrs' (
         hostName: cfg:
         (nameValuePair "kimai-${hostName}" {
+          phpPackage = cfg.package.php;
           inherit user;
           group = webserver.group;
           settings = {
             "listen.owner" = webserver.user;
             "listen.group" = webserver.group;
-          } // cfg.poolConfig;
+          }
+          // cfg.poolConfig;
         })
       ) eachSite;
 
@@ -319,9 +321,19 @@ in
 
                 umask $oldUmask
 
-                # Run kimai:install to ensure database is created or updated.
+                # Ensure that our local.yaml is valid (see kimai:reload command).
+                ${pkg hostName cfg}/bin/console lint:yaml --parse-tags \
+                  ${pkg hostName cfg}/share/php/kimai/config
+
+                # Before running any further console commands, clear cache. This
+                # avoids errors due to old cache getting used with new version
+                # of Kimai.
+                ${pkg hostName cfg}/bin/console cache:clear --env=prod
+                # Then, run kimai:install to ensure database is created or updated.
                 # Note that kimai:update is an alias to kimai:install.
-                ${pkg hostName cfg}/bin/console kimai:install
+                ${pkg hostName cfg}/bin/console kimai:install --no-cache
+                # Finally, warm up cache.
+                ${pkg hostName cfg}/bin/console cache:warmup --env=prod
               '';
 
             serviceConfig = {
@@ -335,7 +347,7 @@ in
 
         (mapAttrs' (
           hostName: cfg:
-          (nameValuePair "phpfpm-kimai-${hostName}.service" {
+          (nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
               EnvironmentFile = [ cfg.environmentFile ];
             };

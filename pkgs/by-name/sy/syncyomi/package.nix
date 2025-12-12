@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SyncYomi";
     repo = "SyncYomi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PPE6UXHo2ZlN0A0VkUH+8pkdfm6WEvpofusk6c3RBHk=";
   };
 
@@ -33,6 +33,7 @@ buildGoModule rec {
         src
         sourceRoot
         ;
+      fetcherVersion = 1;
       hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 

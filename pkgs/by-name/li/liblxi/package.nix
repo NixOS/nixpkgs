@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, cmake
-, libtirpc, rpcsvc-proto, avahi, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  cmake,
+  libtirpc,
+  rpcsvc-proto,
+  avahi,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,16 +30,24 @@ stdenv.mkDerivation (finalAttrs: {
         -i src/bonjour.c
   '';
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config rpcsvc-proto ];
-
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libtirpc
-    avahi
-  ] ++ [
-    libxml2
+  nativeBuildInputs = [
+    meson
+    ninja
+    cmake
+    pkg-config
+    rpcsvc-proto
   ];
 
-  meta = with lib; {
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libtirpc
+      avahi
+    ]
+    ++ [
+      libxml2
+    ];
+
+  meta = {
     description = "Library for communicating with LXI compatible instruments";
     longDescription = ''
       liblxi is an open source software library which offers a simple
@@ -39,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
       on networks and communicate SCPI commands.
     '';
     homepage = "https://lxi-tools.github.io/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vq ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vq ];
   };
 })

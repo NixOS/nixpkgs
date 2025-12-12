@@ -4,59 +4,33 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  zstd,
-  libgit2,
-  libssh2,
-  openssl,
-  darwin,
-  libiconv,
-  git,
+  gitMinimal,
   gnupg,
   openssh,
   buildPackages,
   nix-update-script,
-  testers,
-  jujutsu,
+  versionCheckHook,
 }:
 
-let
-  version = "0.24.0";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  inherit version;
+  version = "0.36.0";
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HGMzNXm6vWKf/RHPwB/soDqxAvCOW1J6BPs0tsrEuTI=";
   };
 
-  cargoHash = "sha256-9JwRdeHo8JkwRQwPA+UsIEWar4gYQS4SIM/uj1TU2yg";
+  cargoHash = "sha256-jai0FNuCUcgN+ZmmYgbFrMK1Z1vcv21wALkEb74h7H0=";
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-      libgit2
-      libssh2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      libiconv
-    ];
-
   nativeCheckInputs = [
-    git
+    gitMinimal
     gnupg
     openssh
   ];
@@ -89,8 +63,8 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
@@ -98,20 +72,19 @@ rustPlatform.buildRustPackage {
         --zsh <(COMPLETE=zsh ${jj})
     '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/jj";
+  versionCheckProgramArg = "--version";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = jujutsu;
-        command = "jj --version";
-      };
-    };
   };
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -121,4 +94,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "jj";
   };
-}
+})

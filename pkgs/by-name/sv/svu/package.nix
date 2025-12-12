@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "svu";
-  version = "2.2.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
-    repo = pname;
+    repo = "svu";
     rev = "v${version}";
-    sha256 = "sha256-C5ATwRsi9hJBO9xFlyMDoxu97rJHwcKNToWhcmx6M6g=";
+    sha256 = "sha256-NzhVEChNsUkzGe1/M8gl1K0SD5nAQ/PrYUxGQKQUAtU=";
   };
 
-  vendorHash = "sha256-/FSvNoVDWAkQs09gMrqyoA0su52nlk/nSCYRAhQhbwQ=";
+  vendorHash = "sha256-xhNJsARuZZx9nhmTNDMB51VC0QgjZgOYFKLhLf+3b3A=";
 
   ldflags = [
     "-s"
@@ -33,11 +33,11 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = svu; };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Version Util";
     homepage = "https://github.com/caarlos0/svu";
-    maintainers = with maintainers; [ caarlos0 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ caarlos0 ];
+    license = lib.licenses.mit;
     mainProgram = "svu";
   };
 }

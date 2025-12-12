@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.1.0";
+  version = "5.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "noxdafox";
     repo = "pebble";
     tag = version;
-    hash = "sha256-Y6E+Mu5Ch+VTHryTY3pvHQD6GzaTLrtf78DqUWa7nt0=";
+    hash = "sha256-17kAIvHI2/6p8Chm7pTkLWP+QcnIcARpH+OBVerbefQ=";
   };
 
   build-system = [
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "API to manage threads and processes within an application";
     homepage = "https://github.com/noxdafox/pebble";
-    changelog = "https://github.com/noxdafox/pebble/releases/tag/${version}";
+    changelog = "https://github.com/noxdafox/pebble/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

@@ -10,6 +10,8 @@
   pkg-config,
   smpeg,
   stdenv,
+  # passthru.tests
+  onscripter,
   # Boolean flags
   enableNativeMidi ? false,
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
@@ -20,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_mixer";
   version = "1.2.12";
 
+  # word of caution: while there is a somewhat maintained SDL-1.2 branch on
+  # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
+  # breaks autoconf in a bunch of packages, it's better to cherry-pick patches as needed
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-${finalAttrs.version}.tar.gz";
     hash = "sha256-FkQwgnmpdXmQSeSCavLPx4fK0quxGqFFYuQCUh+GmSo=";
@@ -70,9 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    SDL
     pkg-config
-    smpeg
   ];
 
   buildInputs = [
@@ -83,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     smpeg
   ];
+
+  # pass in correct *-config for cross builds
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+  env.SMPEG_CONFIG = lib.getExe' smpeg.dev "smpeg-config";
 
   configureFlags = [
     (lib.enableFeature false "music-ogg-shared")
@@ -100,10 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru.tests = {
+    inherit onscripter;
+  };
+
   meta = {
     description = "SDL multi-channel audio mixer library";
     homepage = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
   };

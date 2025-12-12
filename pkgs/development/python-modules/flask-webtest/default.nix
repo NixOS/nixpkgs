@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "flask-webtest";
-  version = "0.1.4";
+  version = "0.1.6";
   pyproject = true;
 
   # Pypi tarball doesn't include version.py
   src = fetchFromGitHub {
     owner = "level12";
     repo = "flask-webtest";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4USNT6HYh49v+euCePYkL1gR6Ul8C0+/xanuYGxKpfM=";
+    tag = version;
+    hash = "sha256-wcEc9j62bQXAmXczsunITQP3sU040d6Ws8cz0w7+5r4=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_webtest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for testing Flask applications with WebTest";
     homepage = "https://github.com/level12/flask-webtest";
     changelog = "https://github.com/level12/flask-webtest/blob/${src.rev}/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

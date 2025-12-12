@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, libcanberra
-, gtk3
-, glib
-, libgee
-, libhandy
-, libportal-gtk3
-, granite
-, pango
-, bamf
-, sqlite
-, zeitgeist
-, libcloudproviders
-, libgit2-glib
-, wrapGAppsHook3
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  libcanberra,
+  gtk3,
+  glib,
+  libgee,
+  libhandy,
+  libportal-gtk3,
+  granite,
+  pango,
+  sqlite,
+  zeitgeist,
+  libcloudproviders,
+  libgit2-glib,
+  wrapGAppsHook3,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "7.1.0";
+  version = "7.2.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "files";
     rev = version;
-    hash = "sha256-KGp1qhUhig4h8iQljJTBdwZT3P2prB/pFyfJWXjtPLk=";
+    hash = "sha256-m6ICWL2JZoWh3myHLOhrKZ4St8zJcyVWhfozg+kdOng=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +50,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
     glib
     granite
     gtk3
@@ -67,12 +69,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.files";
   };
 }

@@ -9,24 +9,56 @@ let
   inherit (lib) types;
 
   imageModules = {
-    azure = [ ../virtualisation/azure-image.nix ];
-    digital-ocean = [ ../virtualisation/digital-ocean-image.nix ];
-    google-compute = [ ../virtualisation/google-compute-image.nix ];
-    hyperv = [ ../virtualisation/hyperv-image.nix ];
-    linode = [ ../virtualisation/linode-image.nix ];
-    lxc = [ ../virtualisation/lxc-container.nix ];
-    lxc-metadata = [ ../virtualisation/lxc-image-metadata.nix ];
-    oci = [ ../virtualisation/oci-image.nix ];
-    proxmox = [ ../virtualisation/proxmox-image.nix ];
-    kubevirt = [ ../virtualisation/kubevirt.nix ];
-    vagrant-virtualbox = [ ../virtualisation/vagrant-virtualbox-image.nix ];
-    virtualbox = [ ../virtualisation/virtualbox-image.nix ];
-    vmware = [ ../virtualisation/vmware-image.nix ];
+    amazon = ../../maintainers/scripts/ec2/amazon-image.nix;
+    azure = ../virtualisation/azure-image.nix;
+    cloudstack = ../../maintainers/scripts/cloudstack/cloudstack-image.nix;
+    digital-ocean = ../virtualisation/digital-ocean-image.nix;
+    google-compute = ../virtualisation/google-compute-image.nix;
+    hyperv = ../virtualisation/hyperv-image.nix;
+    linode = ../virtualisation/linode-image.nix;
+    lxc = ../virtualisation/lxc-container.nix;
+    lxc-metadata = ../virtualisation/lxc-image-metadata.nix;
+    oci = ../virtualisation/oci-image.nix;
+    openstack = ../../maintainers/scripts/openstack/openstack-image.nix;
+    openstack-zfs = ../../maintainers/scripts/openstack/openstack-image-zfs.nix;
+    proxmox = ../virtualisation/proxmox-image.nix;
+    proxmox-lxc = ../virtualisation/proxmox-lxc.nix;
+    qemu-efi = ../virtualisation/disk-image.nix;
+    qemu = {
+      imports = [ ../virtualisation/disk-image.nix ];
+      image.efiSupport = false;
+    };
+    raw-efi = {
+      imports = [ ../virtualisation/disk-image.nix ];
+      image.format = "raw";
+    };
+    raw = {
+      imports = [ ../virtualisation/disk-image.nix ];
+      image.format = "raw";
+      image.efiSupport = false;
+    };
+    kubevirt = ../virtualisation/kubevirt.nix;
+    vagrant-virtualbox = ../virtualisation/vagrant-virtualbox-image.nix;
+    virtualbox = ../virtualisation/virtualbox-image.nix;
+    vmware = ../virtualisation/vmware-image.nix;
+    iso = ../installer/cd-dvd/iso-image.nix;
+    iso-installer = ../installer/cd-dvd/installation-cd-base.nix;
+    sd-card = {
+      imports =
+        let
+          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.qemuArch}.nix";
+        in
+        if builtins.pathExists module then
+          [ module ]
+        else
+          throw "The module ${toString module} does not exist.";
+    };
+    kexec = ../installer/netboot/netboot-minimal.nix;
   };
   imageConfigs = lib.mapAttrs (
-    name: modules:
+    name: module:
     extendModules {
-      inherit modules;
+      modules = [ module ];
     }
   ) config.image.modules;
 in
@@ -42,7 +74,7 @@ in
       };
     };
     image.modules = lib.mkOption {
-      type = types.attrsOf (types.listOf types.deferredModule);
+      type = types.attrsOf types.deferredModule;
       description = ''
         image-specific NixOS Modules used for `system.build.images`.
       '';

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gama-tui";
-  version = "1.1.4";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "termkit";
     repo = "gama";
     tag = "v${version}";
-    hash = "sha256-laE3lW2MX3vYxsF5iHl0sLKCAPRAIZGQs72+vdbX4t0=";
+    hash = "sha256-ISgORjzH7ZigQYm7PSA4ZClhpw2GU7yor580fEf5UNc=";
   };
 
-  vendorHash = "sha256-rx18df0iiYqQToydXcA6Kqsn3lePIL1RNMSvD+a4WrI=";
+  vendorHash = "sha256-PTyrSXLMr244+ZTvjBBUc1gmwYXBAs0bXZS2t3aSWFQ=";
 
   ldflags = [
     "-s"

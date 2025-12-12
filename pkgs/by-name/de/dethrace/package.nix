@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dethrace";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "dethrace-labs";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bt2wwF5cquXZwFpFyJ0TDmbFdTHbboQ93W/DvP9bsMo=";
+    repo = "dethrace";
+    tag = "v${version}";
+    hash = "sha256-+C3NyRLmvXrkZuhLGwIIHFWjXLMpt3srLZCVrxRUlkA=";
     fetchSubmodules = true;
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     install -Dm755 dethrace $out/bin/dethrace
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://twitter.com/dethrace_labs";
     description = "Reverse engineering the 1997 game Carmageddon";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astro ];
     mainProgram = "dethrace";
   };
 }

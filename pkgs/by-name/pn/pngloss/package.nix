@@ -7,13 +7,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pngloss";
   version = "unstable-2020-11-25";
 
   src = fetchFromGitHub {
     owner = "foobaz";
-    repo = pname;
+    repo = "pngloss";
     rev = "559f09437e1c797a1eaf08dfdcddd9b082f0e09c";
     sha256 = "sha256-dqrrzbLu4znyWOlTDIf56O3efxszetiP+CdFiy2PBd4=";
   };
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lossy compression of PNG images";
     homepage = "https://github.com/foobaz/pngloss";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ _2gn ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ _2gn ];
     mainProgram = "pngloss";
   };
 }

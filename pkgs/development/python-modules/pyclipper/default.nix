@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "pyclipper";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-s2D0ipDatAaF7A1RYOKyI31nkfc/WL3vHWsAMbo+WcY=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyclipper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython wrapper for clipper library";
     homepage = "https://github.com/fonttools/pyclipper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

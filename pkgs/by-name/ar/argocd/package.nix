@@ -3,48 +3,82 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
 }:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.13.2";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    hash = "sha256-G74chKEh/zXfImvmXAWIf+Ny7obJ+YiXpNVVs3uJRoU=";
+    hash = "sha256-l8MlEVfw8BoHS/ZCtxzi7M0xMMOvotXYnconB+3x/1k=";
+  };
+
+  ui = stdenv.mkDerivation {
+    pname = "${pname}-ui";
+    inherit version;
+    src = src + "/ui";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      hash = "sha256-ekhSPWzIgFhwSw0bIlBqu8LTYk3vuJ9VM8eHc3mnHGM=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
+
+    postInstall = ''
+      mkdir -p $out
+      cp -r dist $out/dist
+    '';
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-p+9Q9VOdN7v7iK5oaO5f+B1iyOwVdk672zQsYsrb398=";
+  vendorHash = "sha256-oI0N6V8enziJK21VCgQ4KUOWqbC5TcZd3QnWiTTeTHQ=";
 
   # Set target as ./cmd per cli-local
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile
   subPackages = [ "cmd" ];
 
   ldflags =
     let
-      package_url = "github.com/argoproj/argo-cd/v2/common";
+      packageUrl = "github.com/argoproj/argo-cd/v3/common";
     in
     [
       "-s"
       "-w"
-      "-X ${package_url}.version=${version}"
-      "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${src.rev}"
-      "-X ${package_url}.gitTag=${src.rev}"
-      "-X ${package_url}.gitTreeState=clean"
-      "-X ${package_url}.kubectlVersion=v0.31.2"
-      # NOTE: Update kubectlVersion when upgrading this package with
-      # https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22k8s.io%2Fkubectl%22+path%3Ago.mod&type=code
-      # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
-      # Will need a way to automate it :P
+      "-X ${packageUrl}.version=${version}"
+      "-X ${packageUrl}.buildDate=unknown"
+      "-X ${packageUrl}.gitCommit=${src.rev}"
+      "-X ${packageUrl}.gitTag=${src.rev}"
+      "-X ${packageUrl}.gitTreeState=clean"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
 
+  preBuild = ''
+    cp -r ${ui}/dist ./ui
+    stat ./ui/dist/app/index.html # Sanity check
+  '';
+
+  # set ldflag for kubectlVersion since it is needed for argo
+  # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
+  prePatch = ''
+    export KUBECTL_VERSION=$(grep 'k8s.io/kubectl v' go.mod | cut -f 2 -d " " | cut -f 1 -d "=" )
+    echo using $KUBECTL_VERSION
+    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
+  '';
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -64,16 +98,18 @@ buildGoModule rec {
       --zsh <($out/bin/argocd completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Declarative continuous deployment for Kubernetes";
     mainProgram = "argocd";
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       shahrukh330
-      bryanasdev000
       qjoly
+      FKouhai
     ];
   };
 }

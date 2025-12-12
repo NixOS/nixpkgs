@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "pcsx-rearmed";
-  version = "0-unstable-2024-11-17";
+  version = "0-unstable-2025-11-24";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "pcsx_rearmed";
-    rev = "e3d7ea45c75f2752e351d5c5b54cf7e79e66d26e";
-    hash = "sha256-dJqomyUHYQ+vpyu7/w2S/NidgYbHiGBWjebFQAXjzI0=";
+    rev = "9059485691c44cb3a555464b06eddfb1082d586c";
+    hash = "sha256-sm59Xo6bEiajbmRYbCNnWToDLpJPdaJhovJe+g+GWVg=";
   };
 
   dontConfigure = true;

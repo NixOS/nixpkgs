@@ -5,11 +5,12 @@
   setuptools,
   wheel,
   # dependencies
-  django_5,
+  django,
   apscheduler,
   # tests
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    django_5
+    django
     apscheduler
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+    pytz
   ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";

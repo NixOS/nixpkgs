@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "der-ascii";
-  version = "0.3.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "der-ascii";
     rev = "v${version}";
-    sha256 = "sha256-LgxGSZQNxwx08mK9G8mSuBFTOd3pC1mvz3Wz7Y+6XR4=";
+    sha256 = "sha256-i4rNeNDE7bIsO04haMKsbJmyvQRhhEt3I7UxmfTtL78=";
   };
   vendorHash = null;
 
@@ -21,14 +21,14 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''
-      A small human-editable language to emit DER or BER encodings of ASN.1
+      Small human-editable language to emit DER or BER encodings of ASN.1
       structures and malformed variants of them
     '';
     homepage = "https://github.com/google/der-ascii";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       alexshpilkin
       cpu
       hawkw

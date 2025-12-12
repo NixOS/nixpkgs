@@ -1,55 +1,63 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
+{
+  lib,
+  elixir,
+  fetchFromGitHub,
+  fetchMixDeps,
+  mixRelease,
+  nix-update-script,
+
+  # for tests
+  beam27Packages,
+  beam28Packages,
+}:
 # Based on ../elixir-ls/default.nix
 
 let
   pname = "ex_doc";
-  version = "0.34.1";
+  version = "0.39.2";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-OXIRippEDYAKD222XzNJkkZdXbUkDUauv5amr4oAU7c=";
+    hash = "sha256-khQIYS7iHOODlLMwFYPJTVE0MNia/gwYcin9ITpwttY=";
   };
 in
 mixRelease {
-  inherit pname version src elixir;
+  inherit
+    pname
+    version
+    src
+    elixir
+    ;
+
+  escriptBinName = "ex_doc";
 
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-fYINsATbw3M3r+IVoYS14aVEsg9OBuH6mNUqzQJuDQo=";
+    hash = "sha256-TknrENa0Nb1Eobd4oTBl6TilPVEsw9+XjPdF3Ntq+DI=";
   };
 
-  configurePhase = ''
-    runHook preConfigure
-    mix deps.compile --no-deps-check
-    runHook postConfigure
-  '';
+  passthru = {
+    tests = {
+      # ex_doc is the doc generation for OTP 27+, so let's make sure they build
+      erlang_27 = beam27Packages.erlang;
+      erlang_28 = beam28Packages.erlang;
+    };
 
-  buildPhase = ''
-    runHook preBuild
-    mix do escript.build
-    runHook postBuild
-  '';
+    updateScript = nix-update-script { };
+  };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -v ex_doc $out/bin
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [chiroptical];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
-  passthru.updateScript = nix-update-script { };
 }

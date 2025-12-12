@@ -1,29 +1,35 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
   buildPythonPackage,
   dos2unix,
+  setuptools,
   pyasn1,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ldap3";
   version = "2.9.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f3e7fc4718e3f09dda568b57100095e0ce58633bcabbed8667ce3f8fbaa4229f";
+  src = fetchFromGitHub {
+    owner = "cannatag";
+    repo = "ldap3";
+    tag = "v${version}";
+    hash = "sha256-B+Sb6zMifkSKfaPYrXML5ugHGanbH5CPKeVdHshe3R4=";
   };
 
   prePatch = ''
     # patch fails to apply because of line endings
     dos2unix ldap3/utils/asn1.py
+    substituteInPlace _version.json \
+      --replace-fail '"version": "2.9",' '"version": "${version}",'
   '';
 
   patches = [
-    # fix pyasn1 0.5.0 compability
+    # fix pyasn1 0.5.0 compatibility
     # https://github.com/cannatag/ldap3/pull/983
     (fetchpatch {
       url = "https://github.com/cannatag/ldap3/commit/ca689f4893b944806f90e9d3be2a746ee3c502e4.patch";
@@ -33,14 +39,22 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ dos2unix ];
 
-  propagatedBuildInputs = [ pyasn1 ];
+  build-system = [ setuptools ];
 
-  doCheck = false; # requires network
+  dependencies = [ pyasn1 ];
 
-  meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/ldap3";
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  enabledTestPaths = [ "test/" ];
+
+  preCheck = ''
+    export SERVER=NONE
+  '';
+
+  meta = {
+    homepage = "https://github.com/cannatag/ldap3";
     description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

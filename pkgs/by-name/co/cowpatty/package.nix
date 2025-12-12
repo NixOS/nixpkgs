@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "joswr1ght";
-    repo = pname;
-    rev = version;
+    repo = "cowpatty";
+    tag = version;
     sha256 = "0fvwwghhd7wsx0lw2dj9rdsjnirawnq3c6silzvhi0yfnzn5fs0s";
   };
 
@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
     installManPage genpmk.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline dictionary attack against WPA/WPA2 networks";
     homepage = "https://github.com/joswr1ght/cowpatty";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       nico202
       fab
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

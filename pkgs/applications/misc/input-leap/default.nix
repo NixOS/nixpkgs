@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
 
-  withLibei ? true,
+  withLibei ? !stdenv.hostPlatform.isDarwin,
 
   avahi,
   curl,
@@ -19,6 +19,7 @@
   libei,
   libportal,
   openssl,
+  pkgsStatic,
   pkg-config,
   qtbase,
   qttools,
@@ -28,15 +29,17 @@
 
 stdenv.mkDerivation rec {
   pname = "input-leap";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
     rev = "v${version}";
-    hash = "sha256-YkBHvwN573qqQWe/p0n4C2NlyNQHSZNz2jyMKGPITF4=";
+    hash = "sha256-zSaeeMlhpWIX3y4OmZ7eHXCu1HPP7NU5HFkME/JZjuQ=";
     fetchSubmodules = true;
   };
+
+  patches = [ ./macos-no-dmg.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -45,28 +48,32 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     qttools
   ];
-  buildInputs =
-    [
-      curl
-      qtbase
-      avahi
-      libX11
-      libXext
-      libXtst
-      libXinerama
-      libXrandr
-      libXdmcp
-      libICE
-      libSM
-    ]
-    ++ lib.optionals withLibei [
-      libei
-      libportal
-    ];
+
+  buildInputs = [
+    curl
+    qtbase
+    avahi
+    libX11
+    libXext
+    libXtst
+    libXinerama
+    libXrandr
+    libXdmcp
+    libICE
+    libSM
+  ]
+  ++ lib.optionals withLibei [
+    libei
+    libportal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkgsStatic.openssl
+  ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
-  ] ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
+  ]
+  ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
 
   dontWrapGApps = true;
   preFixup = ''
@@ -74,11 +81,6 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
         --prefix PATH : "${lib.makeBinPath [ openssl ]}"
     )
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/applications/io.github.input_leap.InputLeap.desktop \
-      --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 
   meta = {
@@ -94,11 +96,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/input-leap/input-leap";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kovirobi
       phryneas
       twey
       shymega
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

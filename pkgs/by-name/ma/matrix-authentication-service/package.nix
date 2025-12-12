@@ -10,36 +10,33 @@
   sqlite,
   zstd,
   stdenv,
-  darwin,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.12.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7bwpXy6y3tFeAExxu4oRT6jjOq375MFpEqpAP2hsBmg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
-    };
-  };
+  cargoHash = "sha256-hpf4ocUSPi6jVvEKdhEYewjPVhwEmtE2+2FNS/JPuQU=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
-    hash = "sha256-EfDxbdjzF0yLQlueIYKmdpU4v9dx7g8bltU63mIWfo0=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-HVT1x378CRvyW1m9peM3Q0xHLRKocmtDUPkvnV5XQeQ=";
   };
 
   npmRoot = "frontend";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -47,21 +44,17 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
-  buildInputs =
-    [
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -70,13 +63,13 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace crates/config/src/sections/http.rs \
-      --replace ./frontend/dist/    "$out/share/$pname/assets/"
+      --replace-fail ./share/assets/    "$out/share/$pname/assets/"
     substituteInPlace crates/config/src/sections/templates.rs \
-      --replace ./share/templates/    "$out/share/$pname/templates/" \
-      --replace ./share/translations/    "$out/share/$pname/translations/" \
-      --replace ./share/manifest.json "$out/share/$pname/assets/manifest.json"
+      --replace-fail ./share/templates/    "$out/share/$pname/templates/" \
+      --replace-fail ./share/translations/    "$out/share/$pname/translations/" \
+      --replace-fail ./share/manifest.json "$out/share/$pname/assets/manifest.json"
     substituteInPlace crates/config/src/sections/policy.rs \
-      --replace ./share/policy.wasm "$out/share/$pname/policy.wasm"
+      --replace-fail ./share/policy.wasm "$out/share/$pname/policy.wasm"
   '';
 
   preBuild = ''
@@ -84,23 +77,32 @@ rustPlatform.buildRustPackage rec {
     (cd "$npmRoot" && npm run build)
   '';
 
-  # Adopted from https://github.com/element-hq/matrix-authentication-service/blob/main/Dockerfile
+  # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''
     install -Dm444 -t "$out/share/$pname"        "policies/policy.wasm"
+    install -Dm444 -t "$out/share/$pname"        "$npmRoot/dist/manifest.json"
     install -Dm444 -t "$out/share/$pname/assets" "$npmRoot/dist/"*
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid unstable pre‐releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
     homepage = "https://github.com/element-hq/matrix-authentication-service";
-    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
-    # Note: broken on x86_64-darwin because of aligned_alloc, can be revisited after
-    # https://github.com/NixOS/nixpkgs/pull/346043 is merged
-    badPlatforms = [ "x86_64-darwin" ];
   };
-}
+})

@@ -7,6 +7,7 @@
   qttools,
   replaceVars,
   libGLU,
+  zlib,
   wrapQtAppsHook,
   fetchpatch,
 }:
@@ -19,12 +20,13 @@ stdenv.mkDerivation {
     owner = "niftools";
     repo = "nifskope";
     rev = "47b788d26ae0fa12e60e8e7a4f0fa945a510c7b2"; # `v${version}` doesn't work with submodules
-    sha256 = "1wqpn53rkq28ws3apqghkzyrib4wis91x171ns64g8kp4q6mfczi";
+    hash = "sha256-8TNXDSZ3okeMtuGEHpKOnKyY/Z/w4auG5kjgmUexF/M=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./external-lib-paths.patch
+    ./zlib.patch
     (replaceVars ./qttools-bins.patch {
       qttools = "${qttools.dev}/bin";
     })
@@ -33,12 +35,14 @@ stdenv.mkDerivation {
       url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
       sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
     })
-  ] ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
+  ]
+  ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
 
   buildInputs = [
     qtbase
     qttools
     libGLU
+    zlib
   ];
   nativeBuildInputs = [
     qmake
@@ -74,12 +78,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://niftools.sourceforge.net/wiki/NifSkope";
+  meta = {
+    homepage = "https://github.com/niftools/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "NifSkope";
   };
 }

@@ -1,5 +1,4 @@
 {
-  rocfft,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -15,18 +14,19 @@
   gtest,
   openmp,
   rocrand,
-  gpuTargets ? [ ],
+  hiprand,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocfft";
-  version = "6.0.2";
+  pname = "rocfft${clr.gpuArchSuffix}";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6Gjsy14GeR08VqnNmFhu8EyYDnQ+VZRlg+u9MAAWfHc=";
+    hash = "sha256-yaOjBF2aJkCBlxkydyOsrfT4lNZ0BVkS2jJC0fEiBug=";
   };
 
   nativeBuildInputs = [
@@ -36,22 +36,32 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+    hiprand
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ];
+  patches = [
+    # Fixes build timeout due to no log output during rocfft_aot step
+    ./log-every-n-aot-jobs.patch
+  ];
+
+  cmakeFlags = [
+    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+    "-DHIP_PLATFORM=amd"
+    "-DBUILD_CLIENTS=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_HIPRAND=ON"
+    "-DROCFFT_KERNEL_CACHE_ENABLE=ON"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -74,11 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         gtest
         openmp
         rocrand
-      ];
-
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
+        hiprand
       ];
 
       postInstall = ''
@@ -112,11 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
         rocrand
       ];
 
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
-      ];
-
       postInstall = ''
         cp -a ../../../scripts/perf "$out/bin"
       '';
@@ -141,11 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
         rocrand
       ];
 
-      cmakeFlags = [
-        "-DCMAKE_C_COMPILER=hipcc"
-        "-DCMAKE_CXX_COMPILER=hipcc"
-      ];
-
       installPhase = ''
         runHook preInstall
         mkdir "$out"
@@ -156,21 +152,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      owner = finalAttrs.src.owner;
-      repo = finalAttrs.src.repo;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
     };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocFFT";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
-    platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.24.0";
+  version = "2.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Tg41ZH91yyE3N2ndmQ9VsK/0t7g9cBNZd4A6XcqBZdo=";
+    tag = version;
+    hash = "sha256-PYlNMAomqN9T60b8bRqb8mnLjFRn3JnI79Tynncxje8=";
   };
 
   postPatch = ''
@@ -54,7 +54,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     virtualenv
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -63,12 +64,15 @@ buildPythonPackage rec {
     "test_console"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ charlesbaynham ];
+    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      charlesbaynham
+      mdaniels5757
+    ];
     mainProgram = "pipdeptree";
   };
 }

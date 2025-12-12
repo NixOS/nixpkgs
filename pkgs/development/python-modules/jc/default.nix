@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.25.4";
+  version = "1.25.6";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9006FoIGUpmb+tC2d6jLsYpKUPM5OEXxK1ztAREwZ1E=";
+    repo = "jc";
+    tag = "v${version}";
+    hash = "sha256-nq5RyCnsWwFfnrlgmWEZg0gqTaJO9RBHTvtF7mBQ9i4=";
   };
 
   propagatedBuildInputs = [
@@ -50,12 +50,12 @@ buildPythonPackage rec {
   # tests require timezone to set America/Los_Angeles
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
     homepage = "https://github.com/kellyjonbrazil/jc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atemu ];
-    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atemu ];
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/${src.tag}/CHANGELOG";
     mainProgram = "jc";
   };
 }

@@ -19,12 +19,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "45.2";
   pname = "gpaste";
+  version = "45.3";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2WC0FGPQisY3YH4EgJcR/Re69fJznUD1KlCGljivyEE=";
+    hash = "sha256-UU8pw7bqEwg2Vh7S6GTx8swI/2IhlwjQgkGNZCzoMwc=";
   };
 
   patches = [
@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
+
+    substituteInPlace src/gnome-shell/metadata.json.in --replace-fail \
+      '"shell-version": [ "45", "46", "47", "48" ],' \
+      '"shell-version": [ "45", "46", "47", "48", "49" ],'
   '';
 
   nativeBuildInputs = [
@@ -59,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
-    "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
+    (lib.mesonOption "control-center-keybindings-dir" "${placeholder "out"}/share/gnome-control-center/keybindings")
+    (lib.mesonOption "dbus-services-dir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "systemd-user-unit-dir" "${placeholder "out"}/etc/systemd/user")
   ];
 
   postInstall = ''
@@ -72,19 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$extensionDir/"{prefs,.prefs-wrapped}.js
     substitute "${./wrapper.js}" "$extensionDir/extension.js" \
       --subst-var-by originalName "extension" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
     substitute "${./wrapper.js}" "$extensionDir/prefs.js" \
       --subst-var-by originalName "prefs" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Keruspe/GPaste";
     changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
     description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
   };
 })

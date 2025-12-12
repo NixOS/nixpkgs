@@ -2,49 +2,54 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  defusedxml,
   fetchFromGitHub,
+  freezegun,
   geopy,
   imageio,
   lxml,
+  numpy,
   pandas,
   pillow,
+  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
+  syrupy,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.7.2";
+  version = "0.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3SVpzWii9/ViJ7mbrqzKmN5FkOOYTeYdhJll6q/IseU=";
+    tag = "v${version}";
+    hash = "sha256-mv4InXpnNUix+JnupU93o8yeWDqBLschBvCgxlrvlGA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    defusedxml
     geopy
     imageio
     lxml
+    numpy
     pandas
     pillow
     python-dateutil
     voluptuous
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    freezegun
+    pytestCheckHook
+    syrupy
+  ];
 
   disabledTests = [
     # Tests require network access
@@ -57,15 +62,18 @@ buildPythonPackage rec {
     "test_get_loop"
     "test_get_ec_sites"
     "test_ecradar"
+    "test_historical_number_values"
+    "test_basemap_caching_behavior"
+    "test_layer_image_caching"
   ];
 
   pythonImportsCheck = [ "env_canada" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
-    changelog = "https://github.com/michaeldavie/env_canada/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/michaeldavie/env_canada/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

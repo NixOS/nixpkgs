@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rohankapoorcom";
     repo = "zm-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-n9FRX2Pnn96H0HVT4SHLJgONc0XzQ005itMNpvl9IYg=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zoneminder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Loose python wrapper around the ZoneMinder REST API";
     homepage = "https://github.com/rohankapoorcom/zm-py";
     changelog = "https://github.com/rohankapoorcom/zm-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

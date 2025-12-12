@@ -11,20 +11,21 @@
   pytestCheckHook,
   pythonOlder,
   sigstore,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "24.6.0";
+  version = "25.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "aiogithubapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
+    tag = version;
+    hash = "sha256-zl9QpFpkvSTs0BUDMBmwTeLY1YvNRSqbkIZ5LDUP3zw=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -35,6 +36,8 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0"' 'version = "${version}"'
   '';
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   build-system = [ poetry-core ];
 
@@ -51,13 +54,12 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Need sigstore is an optional dependencies and need <2
     rm -rf tests/test_helper.py
   '';

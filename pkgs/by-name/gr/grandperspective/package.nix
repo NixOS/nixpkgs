@@ -4,10 +4,15 @@
   fetchurl,
   undmg,
   makeWrapper,
+  writeShellApplication,
+  curl,
+  cacert,
+  gnugrep,
+  common-updater-scripts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.4.2";
+  version = "3.6";
   pname = "grandperspective";
 
   src = fetchurl {
@@ -15,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/grandperspectiv/GrandPerspective-${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.dmg";
-    hash = "sha256-ZgyBeQCoixLGCFS8+UFoMilvtswplEC8MzK3BE4ocDg=";
+    hash = "sha256-DSdtaf5GN1PSIt8GTGrMUuaVI2C+ANKi78E1cxVrYTE=";
   };
 
   sourceRoot = "GrandPerspective.app";
@@ -29,7 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/Applications/GrandPerspective.app/Contents/MacOS/GrandPerspective" "$out/bin/grandperspective"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "grandperspective-update-script";
+    runtimeInputs = [
+      curl
+      cacert
+      gnugrep
+      common-updater-scripts
+    ];
+    text = ''
+      url="https://sourceforge.net/p/grandperspectiv/documentation/ci/master/tree/CHANGES.txt?format=raw"
+      version=$(curl -s "$url" | grep -oP 'Version \K[0-9.]+(?=,)' | head -n 1)
+      update-source-version grandperspective "$version"
+    '';
+  });
+
+  meta = {
     description = "Open-source macOS application to analyze disk usage";
     longDescription = ''
       GrandPerspective is a small utility application for macOS that graphically shows the disk usage within a file
@@ -39,10 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "grandperspective";
     homepage = "https://grandperspectiv.sourceforge.net";
-    license = licenses.gpl2Only;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ eliandoran ];
-    platforms = platforms.darwin;
+    license = lib.licenses.gpl2Only;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      eliandoran
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.darwin;
   };
 
 })

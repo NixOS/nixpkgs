@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "littlefs-fuse";
-  version = "2.7.9";
+  version = "2.7.14";
   src = fetchFromGitHub {
     owner = "littlefs-project";
     repo = "littlefs-fuse";
     rev = "v${version}";
-    hash = "sha256-77bm3cnigMewmCywp1ivT/a9PCc6fKmavcKysJvYrSc=";
+    hash = "sha256-TWvBEoH4YvK4Jdg+QAMyskBUYhCWnmdtEoVXwoKJqIo=";
   };
   buildInputs = [ fuse ];
   installPhase = ''
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   meta = src.meta // {
     description = "FUSE wrapper that puts the littlefs in user-space";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "littlefs-fuse";
     inherit (fuse.meta) platforms;
     # fatal error: 'linux/fs.h' file not found

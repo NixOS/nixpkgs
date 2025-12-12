@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-YKGVuT28MLcLO9T8ZJqbHqMN0SAn1P1l8JTDBo4n838=";
+    repo = "cinnamon-desktop";
+    tag = version;
+    hash = "sha256-kNxVdPtCQtz4TSyCc6uKHmAGWm2nlWnLwC3Cm0E42Jc=";
   };
 
   outputs = [
@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x install-scripts/meson_install_schemas.py # patchShebangs requires executable file
     patchShebangs install-scripts/meson_install_schemas.py
-    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon-common/share/cinnamon
+    sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     '';
 
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

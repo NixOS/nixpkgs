@@ -12,11 +12,12 @@
   libsoup_3,
   libadwaita,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "valuta";
-  version = "1.3.2";
+  version = "1.4.2";
 
   pyproject = false;
 
@@ -24,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ideveCore";
     repo = "Valuta";
     rev = "v${version}";
-    hash = "sha256-g2x+pqs7dXdTMSxzSU5TeQtE+Q+tdQ93xaMtUVEE5/U=";
+    hash = "sha256-1vcjmSXEKy6XTEPV5jiz+ZxzFFUhVnmLK6MDjqoWTHs=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +57,17 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ arthsmn ] ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ arthsmn ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "currencyconverter";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

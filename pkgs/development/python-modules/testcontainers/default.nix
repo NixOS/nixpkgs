@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.9.0";
+  version = "4.13.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
     tag = "testcontainers-v${version}";
-    hash = "sha256-E0g0A3RJY2l/0N6t+/OSXB+Xm2O/9y7FkscXfGm/nKw=";
+    hash = "sha256-/lIjrJO+Mw0gv0Ym98A4TrISvmKkCKLFeoJu6t9q9kE=";
   };
 
   postPatch = ''

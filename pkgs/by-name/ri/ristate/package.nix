@@ -2,26 +2,29 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "ristate";
-  version = "unstable-2021-09-10";
+  version = "0-unstable-2023-07-23";
 
   src = fetchFromGitLab {
     owner = "snakedye";
-    repo = pname;
-    rev = "34dfd0a0bab5b36df118d8da3956fd938c625b15";
-    hash = "sha256-CH9DZ/7Bhbe6qKg1Nbj1rA9SzIsqVlBJg51XxAh0XnY=";
+    repo = "ristate";
+    rev = "92e989f26cadac69af1208163733e73b4cf447da";
+    hash = "sha256-6slH7R6kbSXQBd7q38oBEbngaCbFv0Tyq34VB1PAfhM=";
   };
 
-  cargoHash = "sha256-HTfRWvE3m7XZhZDj5bEkrQI3pD6GNiKd2gJtMjRQ8Rw=";
+  cargoHash = "sha256-6uvIc69x/yHkAC3GJUuYGcCbpVyX/mb/pXLf+BQC+48=";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "River-status client written in Rust";
     homepage = "https://gitlab.com/snakedye/ristate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
     mainProgram = "ristate";
   };
 }

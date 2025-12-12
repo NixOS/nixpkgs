@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  testers,
   autoreconfHook,
   pkg-config,
   glib,
@@ -10,11 +11,12 @@
   systemd,
   bluez,
   mobile-broadband-provider-info,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ofono";
-  version = "2.3";
+  version = "2.17";
 
   outputs = [
     "out"
@@ -22,17 +24,22 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${version}.tar.gz";
-    sha256 = "sha256-rX3ngXoW7YISyytpRPLX/lGmQa5LPtFxeA2XdtU1gV0=";
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VJhLJeC1pwXuAadKvYPel6Xb3RZG4vwDhhKefRVrt3Y=";
   };
 
-  patches = [
-    ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch
-  ];
+  patches = [ ./0001-Search-connectors-in-OFONO_PLUGIN_PATH.patch ];
+
+  postPatch = ''
+    patchShebangs tools/provisiontool
+  '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -45,28 +52,31 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-dbusconfdir=${placeholder "out"}/share"
-    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
-    "--enable-external-ell"
+    (lib.strings.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share")
+    (lib.strings.withFeatureAs true "systemdunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.strings.enableFeature true "external-ell")
     "--sysconfdir=/etc"
   ];
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   enableParallelBuilding = true;
   enableParallelChecking = false;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
     homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
-    changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
-    license = licenses.gpl2Only;
+    changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ofonod";
+    pkgConfigModules = [
+      "ofono"
+    ];
   };
-}
+})

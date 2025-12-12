@@ -7,7 +7,7 @@
   qtbase,
   SDL,
   SDL_mixer,
-  boost,
+  boost181,
   curl,
   gsasl,
   libgcrypt,
@@ -15,9 +15,13 @@
   protobuf,
   sqlite,
   wrapQtAppsHook,
-  tinyxml2,
+  tinyxml,
   target ? "client",
 }:
+
+let
+  boost = boost181;
+in
 
 mkDerivation rec {
   pname = "pokerth-${target}";
@@ -73,7 +77,7 @@ mkDerivation rec {
     protobuf
     qtbase
     sqlite
-    tinyxml2
+    tinyxml
   ];
 
   qmakeFlags = [
@@ -83,12 +87,12 @@ mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
     mainProgram = "pokerth";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ obadz ];
+    platforms = lib.platforms.all;
   };
 }

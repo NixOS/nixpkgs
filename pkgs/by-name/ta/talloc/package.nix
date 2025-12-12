@@ -16,24 +16,23 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
+    sha256 = "sha256-3EbEC59GuzTdl/5B9Uiw6LJHt3qRhXZzPFKOg6vYVN0=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      python3
-      wafHook
-      docbook-xsl-nons
-      docbook_xml_dtd_42
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    wafHook
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     python3
@@ -51,21 +50,25 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--enable-talloc-compat1"
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ];
+  wafConfigureFlags = [
+    "--enable-talloc-compat1"
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
+
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
 
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -76,11 +79,11 @@ stdenv.mkDerivation rec {
     ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc.c.[0-9]*.o
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical pool based memory allocator with destructors";
     homepage = "https://tdb.samba.org/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

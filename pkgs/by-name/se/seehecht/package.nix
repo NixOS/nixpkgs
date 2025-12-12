@@ -16,16 +16,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KIxK0JYfq/1Bn4LOn+LzWPBUvGYMvOEuqS7GMpDRvW0=";
   };
 
-  cargoHash = "sha256-AeVUVF4SBS9FG0iezLBKUm4Uk1PPRXPTON93evgL9IA=";
+  cargoHash = "sha256-xsZyLyw+IC17QSVEtUJWIkQiaG7JtcLWr8xypTwYMUo=";
 
   postInstall = ''
     ln -s $out/bin/seh $out/bin/seehecht
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to quickly open a markdown document with already filled out frontmatter";
-    license = licenses.lgpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

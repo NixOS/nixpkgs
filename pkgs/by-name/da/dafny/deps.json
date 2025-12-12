@@ -1,73 +1,73 @@
 [
   {
     "pname": "Boogie",
-    "version": "3.1.3",
-    "hash": "sha256-0XQcD1ImPNPXQ43fTkahC3qr2zUvHNdmgw0tmYE+7Hc="
+    "version": "3.5.5",
+    "hash": "sha256-8+/ZHJYvaAp3EoWGDKdVDWMEv1Q8MdTszDU9xFpKBGk="
   },
   {
     "pname": "Boogie.AbstractInterpretation",
-    "version": "3.2.3",
-    "hash": "sha256-SwJ5D3tOU+qcyQdNITIM15ujMEC++aXHOsUSovWbsC4="
+    "version": "3.5.5",
+    "hash": "sha256-PBMwpm19GwzDDtf8ONiKLs1BNhEJ1TwJdzW/ktGzpBE="
   },
   {
     "pname": "Boogie.BaseTypes",
-    "version": "3.2.3",
-    "hash": "sha256-cIUdpGGjMKn70Z0nD8rvva8UbFSoLDUrBprC+TMG/EA="
+    "version": "3.5.5",
+    "hash": "sha256-qGnzoVzf2S8sBU9XAIg/JcS5hqGLikEhalkOBhnuRdQ="
   },
   {
     "pname": "Boogie.CodeContractsExtender",
-    "version": "3.2.3",
-    "hash": "sha256-L+phJ66oHNINliPkabU3vO4Vl9Lkv+nug+DWC8VmFlc="
+    "version": "3.5.5",
+    "hash": "sha256-XEZ1htkdiOsowqc3JQ8iBF6ty/OPqcaG68CwR8cRNa8="
   },
   {
     "pname": "Boogie.Concurrency",
-    "version": "3.2.3",
-    "hash": "sha256-w+5B+uyfKCf8j8hP0G/SSPUd2lT2T8A4Lkg0tsxniBg="
+    "version": "3.5.5",
+    "hash": "sha256-0zKDKhIxSV9GK77UHGBlhHXPhHUVIkLzUgoi8GfQj3s="
   },
   {
     "pname": "Boogie.Core",
-    "version": "3.2.3",
-    "hash": "sha256-qqoeLAdpRRaTISdgxyE3iFqhrmezxISaE5bm02rXVyE="
+    "version": "3.5.5",
+    "hash": "sha256-aotlVqCDEDLiHYVqJPE+BP+rjH6TKmLa/wsUlEVkvWg="
   },
   {
     "pname": "Boogie.ExecutionEngine",
-    "version": "3.2.3",
-    "hash": "sha256-8EKwiBnoMFGxeK2+IuG5p6BtnPlR0CCekXi4PBFLEbU="
+    "version": "3.5.5",
+    "hash": "sha256-Pwe2V0pJMYp5TGF8yWu5D2ZC/Ct3+EjEH2tG6xWCvbU="
   },
   {
     "pname": "Boogie.Graph",
-    "version": "3.2.3",
-    "hash": "sha256-7XjrCHSnvEL7eMmma2vKA7r8YGJe8Oo4E8U9Wja/al0="
+    "version": "3.5.5",
+    "hash": "sha256-DgPrUOVMIzTY87Ytq0WAu8j/OahLIVLO3Nh5VgYdDiM="
   },
   {
     "pname": "Boogie.Houdini",
-    "version": "3.2.3",
-    "hash": "sha256-g7i0yF/89IWXElTi0onOgvPaesqlPGl3qINMCePHGA8="
+    "version": "3.5.5",
+    "hash": "sha256-84RbD21xds0ycZ0aQEAaQDUKV9nyYn6O8mUJKygI+nM="
   },
   {
     "pname": "Boogie.Model",
-    "version": "3.2.3",
-    "hash": "sha256-gRMZQQFMjQEQasg3A3iZ9/0KUWCxAoUPiHPZHbWXUs4="
+    "version": "3.5.5",
+    "hash": "sha256-7mJYhgT2XsnA1yZ5lHU9gbog9BHDwmCM0U6nIg7WxAc="
   },
   {
     "pname": "Boogie.Provers.LeanAuto",
-    "version": "3.2.3",
-    "hash": "sha256-kMLvTTnvKWjggSby7D4jkaRmdvvOum0ZlfM6yU2760Q="
+    "version": "3.5.5",
+    "hash": "sha256-s7zqacQxogd5yFEtVxb6NzFoQjoB/NkzulkWGty4Zm8="
   },
   {
     "pname": "Boogie.Provers.SMTLib",
-    "version": "3.2.3",
-    "hash": "sha256-SCfEJCRueTE66ZZbHX8FHpD50SrBDQne8725uiKjbvM="
+    "version": "3.5.5",
+    "hash": "sha256-PNprXXr7p0jbS6aL8PDelvINo6QCUJs6b+fBajMG1Ok="
   },
   {
     "pname": "Boogie.VCExpr",
-    "version": "3.2.3",
-    "hash": "sha256-U6Rc5P0dUtNZ1IGDBU4hggwreVxSZqu6cZSKcWLpq/o="
+    "version": "3.5.5",
+    "hash": "sha256-8f4e51g2N/jpT2BJ5LZrXsIKqrlCvWtS63hFUBK5lAk="
   },
   {
     "pname": "Boogie.VCGeneration",
-    "version": "3.2.3",
-    "hash": "sha256-snbFiueD508B1GLqIC8cQdT9jW2jkRyhmYxPTlfnyrQ="
+    "version": "3.5.5",
+    "hash": "sha256-BGeJ1F14hZSeY9bwCpNnyh5F6whAWX18YBcOMorS9/Y="
   },
   {
     "pname": "CocoR",
@@ -290,6 +290,11 @@
     "hash": "sha256-N9EVZbl5w1VnMywGXyaVWzT9lh84iaJ3aD48hIBk1zA="
   },
   {
+    "pname": "Namotion.Reflection",
+    "version": "3.2.0",
+    "hash": "sha256-yHTow9l4YkN3SKsCkW2htxcoCX3/ewXVavFzucl835M="
+  },
+  {
     "pname": "Nerdbank.Streams",
     "version": "2.6.81",
     "hash": "sha256-0Zshmi1IMWj9/MKUieffpgJxKhJyVgBXPKMg9RSDkRs="
@@ -301,8 +306,18 @@
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.1",
-    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "NJsonSchema",
+    "version": "11.1.0",
+    "hash": "sha256-DaBs+DNbMzkzfEbMd2Y2dNrubNzaa1nu2wnno6y8+Wk="
+  },
+  {
+    "pname": "NJsonSchema.Annotations",
+    "version": "11.1.0",
+    "hash": "sha256-oxr6gv3VIvk1vH0YZdAmWgyY0yobxtjFfRwnW1D8Pcc="
   },
   {
     "pname": "OmniSharp.Extensions.JsonRpc",
@@ -741,11 +756,6 @@
   },
   {
     "pname": "System.Runtime.Handles",
-    "version": "4.0.1",
-    "hash": "sha256-j2QgVO9ZOjv7D1het98CoFpjoYgxjupuIhuBUmLLH7w="
-  },
-  {
-    "pname": "System.Runtime.Handles",
     "version": "4.3.0",
     "hash": "sha256-KJ5aXoGpB56Y6+iepBkdpx/AfaJDAitx4vrkLqR7gms="
   },
@@ -846,7 +856,7 @@
   },
   {
     "pname": "Tomlyn",
-    "version": "0.16.2",
-    "hash": "sha256-ULW4n8s2lvTMG3I18rpsVfXtKXN7C8nPrMXQowxGIsU="
+    "version": "0.17.0",
+    "hash": "sha256-pJHF7w8RJhV23wiI3qzm5el4qPlPlgYTmTKA8yGhzXY="
   }
 ]

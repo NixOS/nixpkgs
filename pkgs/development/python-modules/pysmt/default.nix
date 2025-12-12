@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pysmt";
-    repo = pname;
+    repo = "pysmt";
     rev = "v${version}";
     hash = "sha256-HmEdCJOF04h0z5UPpfYa07b78EEBj5KyVAk6aNRFPEo=";
   };
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for SMT formulae manipulation and solving";
     mainProgram = "pysmt-install";
     homepage = "https://github.com/pysmt/pysmt";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

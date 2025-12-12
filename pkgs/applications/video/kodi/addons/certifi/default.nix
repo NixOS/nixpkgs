@@ -38,10 +38,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://certifi.io";
     description = "Python package for providing Mozilla's CA Bundle";
-    license = licenses.mpl20;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mpl20;
+    teams = [ lib.teams.kodi ];
   };
 }

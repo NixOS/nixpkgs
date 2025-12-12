@@ -6,24 +6,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.3.49";
-  format = "setuptools";
+  version = "1.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wg9n7x7KDqFecZZVmJwpE1kP0eKt1Gmld6XEcavcyU0=";
+    tag = version;
+    hash = "sha256-wWwYM1ZCHiBdbjl5kRI9dFSWp7mpYb/2HlV7lbU/Xeg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "IPython==7.16.1" "IPython" \
-      --replace "diskcache==5.1.0" "diskcache>=5.1.0" \
-      --replace "radish-bdd==0.13.1" "radish-bdd" \
-  '';
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "radish-bdd"
+    "IPython"
+  ];
+
+  dependencies = with python3.pkgs; [
     diskcache
     emoji
     filetype
@@ -51,13 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     "terraform_compliance"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "BDD test framework for terraform";
     mainProgram = "terraform-compliance";
     homepage = "https://github.com/terraform-compliance/cli";
-    changelog = "https://github.com/terraform-compliance/cli/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/terraform-compliance/cli/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kalbasit
       kashw2
     ];

@@ -16,6 +16,7 @@ in
 buildPythonPackage rec {
   pname = "typing";
   version = "3.10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,9 +37,9 @@ buildPythonPackage rec {
     testDir
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Backport of typing module to Python versions older than 3.5";
     homepage = "https://docs.python.org/3/library/typing.html";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
   };
 }

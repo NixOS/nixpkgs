@@ -2,39 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  mdformat,
-  pytestCheckHook,
   pythonOlder,
+
+  # build dependencies
+  flit-core,
+
+  # dependencies
+  mdformat,
+  wcwidth,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-tables";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Q61GmaRxjxJh9GjyR8QCZOH0njFUtAWihZ9lFQJ2nQQ=";
+    repo = "mdformat-tables";
+    tag = "v${version}";
+    hash = "sha256-7MbpGBGprhGrQ9P31HUU2h0bjyHWap6DETVN/dCDA1w=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ mdformat ];
+  dependencies = [
+    mdformat
+    wcwidth
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mdformat_tables" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for rendering tables";
     homepage = "https://github.com/executablebooks/mdformat-tables";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       polarmutex
     ];

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.17.0dev4";
+  version = "1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "wrapt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q2DYCzTWxGpuIa5v6cyDCTekXfDlFML4eo8J60YdCsc=";
+    tag = version;
+    hash = "sha256-QduT5bncXi4LeI034h5Pqtwybru0QcQIYI7cMchLy7c=";
   };
 
   build-system = [ setuptools ];
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wrapt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for decorators, wrappers and monkey patching";
     homepage = "https://github.com/GrahamDumpleton/wrapt";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

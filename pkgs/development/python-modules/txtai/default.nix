@@ -16,20 +16,26 @@
   regex,
 
   # optional-dependencies
+  # agent
+  mcpadapt,
+  smolagents,
   # ann
   annoy,
   hnswlib,
   pgvector,
   sqlalchemy,
-  sqlite-vec,
+  sqlite-vec-c,
   # api
   aiohttp,
   fastapi,
+  fastapi-mcp,
+  httpx,
   pillow,
   python-multipart,
   uvicorn,
   # cloud
   # apache-libcloud, (unpackaged)
+  fasteners,
   # console
   rich,
   # database
@@ -38,7 +44,6 @@
   # grand-cypher (unpackaged)
   # grand-graph (unpackaged)
   networkx,
-  python-louvain,
   # model
   onnx,
   onnxruntime,
@@ -61,8 +66,9 @@
   litellm,
   # llama-cpp-python, (unpackaged)
   # pipeline-text
-  fasttext,
+  gliner,
   sentencepiece,
+  staticvectors,
   # pipeline-train
   accelerate,
   bitsandbytes,
@@ -70,6 +76,7 @@
   peft,
   skl2onnx,
   # vectors
+  fasttext,
   # pymagnitude-lite, (unpackaged)
   scikit-learn,
   sentence-transformers,
@@ -82,27 +89,35 @@
   xmltodict,
 
   # tests
-  httpx,
   msgpack,
   pytestCheckHook,
 }:
 let
-  version = "8.1.0";
+  version = "9.2.0";
+  agent = [
+    mcpadapt
+    smolagents
+  ];
   ann = [
     annoy
     hnswlib
     pgvector
     sqlalchemy
-    sqlite-vec
+    sqlite-vec-c
   ];
   api = [
     aiohttp
     fastapi
+    fastapi-mcp
+    httpx
     pillow
     python-multipart
     uvicorn
   ];
-  # cloud = [ apache-libcloud ];
+  cloud = [
+    # apache-libcloud
+    fasteners
+  ];
   console = [ rich ];
   database = [
     duckdb
@@ -113,7 +128,6 @@ let
     # grand-cypher
     # grand-graph
     networkx
-    python-louvain
     sqlalchemy
   ];
   model = [
@@ -145,8 +159,9 @@ let
     # llama-cpp-python
   ];
   pipeline-text = [
-    fasttext
+    gliner
     sentencepiece
+    staticvectors
   ];
   pipeline-train = [
     accelerate
@@ -186,7 +201,8 @@ let
   ];
   similarity = ann ++ vectors;
   all =
-    api
+    agent
+    ++ api
     ++ ann
     ++ console
     ++ database
@@ -199,13 +215,16 @@ let
 
   optional-dependencies = {
     inherit
+      agent
       ann
       api
+      cloud
       console
       database
       graph
       model
       pipeline-audio
+      pipeline-data
       pipeline-image
       pipeline-llm
       pipeline-text
@@ -217,18 +236,18 @@ let
       all
       ;
   };
-in
-buildPythonPackage {
-  pname = "txtai";
-  inherit version;
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-12EeYzZEHUS5HVxpKlTnV6mwnnOw1pQVG0f0ID/Ugik=";
+    hash = "sha256-OZy1pNwQa5Qqj8ejJnADAmYpniEfcIXeDxLB+Je8+88=";
   };
+in
+buildPythonPackage {
+  pname = "txtai";
+  inherit version src;
+  pyproject = true;
 
   build-system = [ setuptools ];
 
@@ -263,26 +282,16 @@ buildPythonPackage {
     msgpack
     pytestCheckHook
     python-multipart
+    timm
     sqlalchemy
-  ] ++ optional-dependencies.ann ++ optional-dependencies.api ++ optional-dependencies.similarity;
+  ]
+  ++ optional-dependencies.agent
+  ++ optional-dependencies.ann
+  ++ optional-dependencies.api
+  ++ optional-dependencies.similarity;
 
-  # The deselected paths depend on the huggingface hub and should be run as a passthru test
-  # disabledTestPaths won't work as the problem is with the classes containing the tests
-  # (in other words, it fails on __init__)
   pytestFlagsArray = [
-    "test/python/test*.py"
-    "--deselect=test/python/testagent.py"
-    "--deselect=test/python/testcloud.py"
-    "--deselect=test/python/testconsole.py"
-    "--deselect=test/python/testembeddings.py"
-    "--deselect=test/python/testgraph.py"
-    "--deselect=test/python/testapi/testembeddings.py"
-    "--deselect=test/python/testapi/testpipelines.py"
-    "--deselect=test/python/testapi/testworkflow.py"
-    "--deselect=test/python/testdatabase/testclient.py"
-    "--deselect=test/python/testdatabase/testduckdb.py"
-    "--deselect=test/python/testdatabase/testencoder.py"
-    "--deselect=test/python/testworkflow.py"
+    "test/python/*"
   ];
 
   disabledTests = [
@@ -290,7 +299,14 @@ buildPythonPackage {
     "testInvalidTar"
     "testInvalidZip"
     # Downloads from Huggingface
+    "TestAgent"
+    "TestCloud"
+    "TestConsole"
+    "TestEmbeddings"
+    "TestGraph"
+    "TestWorkflow"
     "testPipeline"
+    "testVectors"
     # Not finding sqlite-vec despite being supplied
     "testSQLite"
     "testSQLiteCustom"
@@ -298,7 +314,7 @@ buildPythonPackage {
 
   meta = {
     description = "Semantic search and workflows powered by language models";
-    changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
+    changelog = "https://github.com/neuml/txtai/releases/tag/${src.tag}";
     homepage = "https://github.com/neuml/txtai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];

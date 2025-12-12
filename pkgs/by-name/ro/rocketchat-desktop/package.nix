@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rocketchat-desktop";
-  version = "4.1.2";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/download/${version}/rocketchat-${version}-linux-amd64.deb";
-    hash = "sha256-lcMxBEcZkJARFd+ZQTAdLQLVy4/SIi4ps8N798PomyM=";
+    hash = "sha256-71B5EqsMVGsTvrdl4gLW3O+7/xy2DNv/zROg2CfXl1E=";
   };
 
   nativeBuildInputs = [
@@ -92,13 +92,13 @@ stdenv.mkDerivation rec {
       sed -i -e "s|Exec=.*$|Exec=$out/bin/rocketchat-desktop|" $out/share/applications/rocketchat-desktop.desktop
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Official Desktop client for Rocket.Chat";
     mainProgram = "rocketchat-desktop";
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ gbtb ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

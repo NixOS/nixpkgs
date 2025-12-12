@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/share/pkgconfig $out/lib/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mdds/mdds";
     description = "Collection of multi-dimensional data structure and indexing algorithms";
     changelog = "https://gitlab.com/mdds/mdds/-/blob/${finalAttrs.version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })
 # TODO: multi-output

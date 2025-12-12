@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "command-runner";
-  version = "1.7.0";
+  version = "1.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netinvent";
     repo = "command_runner";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rdbZtqNndtIxrLA90eWzR6dB8EyFrBALduBUkOVq4oE=";
+    tag = "v${version}";
+    hash = "sha256-jGYIz+c6wt137b8kG1QVVAvBAaJQAzNnZyKVeKHIk5c=";
   };
 
   build-system = [ setuptools ];
@@ -31,14 +31,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "command_runner" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/netinvent/command_runner";
     description = ''
       Platform agnostic command execution, timed background jobs with live
       stdout/stderr output capture, and UAC/sudo elevation
     '';
-    changelog = "https://github.com/netinvent/command_runner/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = teams.wdz.members;
+    changelog = "https://github.com/netinvent/command_runner/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.wdz ];
   };
 }

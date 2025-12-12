@@ -19,7 +19,6 @@
   libdvdcss,
   normalize,
   sox,
-  transcode,
   vcdimager,
 }:
 mkKdeDerivation {
@@ -51,7 +50,6 @@ mkKdeDerivation {
         libburn
         normalize
         sox
-        transcode
         vcdimager
         flac
       ]

@@ -6,29 +6,25 @@
   rustPlatform,
   nixosTests,
   nix-update-script,
-
   autoPatchelfHook,
+  installShellFiles,
   cmake,
   ncurses,
+  scdoc,
   pkg-config,
-
   gcc-unwrapped,
   fontconfig,
   libGL,
   vulkan-loader,
   libxkbcommon,
-  apple-sdk_11,
-
   withX11 ? !stdenv.hostPlatform.isDarwin,
   libX11,
   libXcursor,
   libXi,
   libXrandr,
   libxcb,
-
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
-
   testers,
   rio,
 }:
@@ -52,28 +48,30 @@ let
       wayland
     ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.1.17";
+  version = "0.2.36";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-10E7tIuix0BGKFbADLhcReRC01FXV/dBivJjfSe/X/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c/+agFoGRB+kvVSUo5+yc1LlSvLsgD5J1yk2ufDRgc4=";
   };
 
-  cargoHash = "sha256-yGOvY5+ThSey/k8ilTTC0CzaOIJtc4hDYmdrHJC3HyE=";
+  cargoHash = "sha256-KITGepJC6luNwA7ypGDjajLtmBx5faV2ruJ0aXyrFVo=";
 
-  nativeBuildInputs =
-    [
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      cmake
-      pkg-config
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    ncurses
+    scdoc
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cmake
+    pkg-config
+    autoPatchelfHook
+  ];
 
   runtimeDependencies = rlinkLibs;
 
@@ -81,7 +79,6 @@ rustPlatform.buildRustPackage rec {
     rlinkLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.libutil
-      apple-sdk_11 # Needs _NSPasteboardTypeFileURL, can be removed once x86_64-darwin defaults to a higher SDK
     ];
 
   outputs = [
@@ -97,23 +94,27 @@ rustPlatform.buildRustPackage rec {
     "--skip=sys::unix::eventedfd::EventedFd"
   ];
 
-  postInstall =
-    ''
-      install -D -m 644 misc/rio.desktop -t $out/share/applications
-      install -D -m 644 misc/logo.svg \
-                        $out/share/icons/hicolor/scalable/apps/rio.svg
+  postInstall = ''
+    install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
-      install -dm 755 "$terminfo/share/terminfo/r/"
-      tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
-      mkdir -p $out/nix-support
-      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications/
-      mv misc/osx/Rio.app/ $out/Applications/
-      mkdir $out/Applications/Rio.app/Contents/MacOS/
-      ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
-    '';
+    install -dm 755 "$terminfo/share/terminfo/r/"
+    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    scdoc < extra/man/rio.1.scd > rio.1
+    scdoc < extra/man/rio.5.scd > rio.5
+    scdoc < extra/man/rio-bindings.5.scd > rio-bindings.5
+    installManPage rio.1 rio.5 rio-bindings.5
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications/
+    mv misc/osx/Rio.app/ $out/Applications/
+    mkdir $out/Applications/Rio.app/Contents/MacOS/
+    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -123,22 +124,21 @@ rustPlatform.buildRustPackage rec {
       ];
     };
 
-    tests =
-      {
-        version = testers.testVersion { package = rio; };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isLinux {
-        # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
-        # 'passthru.tests' nixosTests are failing on Darwin architectures.
-        #
-        # Ref: https://github.com/NixOS/nixpkgs/issues/345825
-        test = nixosTests.terminal-emulators.rio;
-      };
+    tests = {
+      version = testers.testVersion { package = rio; };
+    }
+    // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
+    };
   };
 
   meta = {
     description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
-    homepage = "https://raphamorim.io/rio";
+    homepage = "https://rioterm.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tornax
@@ -146,7 +146,7 @@ rustPlatform.buildRustPackage rec {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";
     mainProgram = "rio";
   };
-}
+})

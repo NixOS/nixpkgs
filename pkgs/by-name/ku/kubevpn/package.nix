@@ -1,30 +1,70 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  go,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubevpn";
-  version = "2.2.10";
+  version = "2.9.10";
 
   src = fetchFromGitHub {
     owner = "KubeNetworks";
     repo = "kubevpn";
-    rev = "v${version}";
-    hash = "sha256-2LDV2aVdGuclVmOgIIwMYRKTMVLzlmNFI6xHFpxMRJw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5yuJfGWNEQ/1ufV1rVze2JrL/67/UlYdG2YH9i+gI3w=";
   };
 
   vendorHash = null;
 
-  # TODO investigate why some config tests are failing
-  doCheck = false;
+  tags = [
+    "noassets" # required to build synthing gui without generating assets
+  ];
 
-  meta = with lib; {
-    changelog = "https://github.com/KubeNetworks/kubevpn/releases/tag/${src.rev}";
+  ldflags = [
+    "-X github.com/wencaiwulue/kubevpn/v2/pkg/config.Version=v${finalAttrs.version}"
+    "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${go.GOOS}/${go.GOARCH}"
+  ];
+
+  # Resolve configuration tests, which access $HOME
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Disable network tests
+        "TestRoute"
+        "TestFunctions"
+        "TestByDumpClusterInfo"
+        "TestByCreateSvc"
+        "TestElegant"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Not sure why these test fail on darwin with __darwinAllowLocalNetworking.
+        "TestHttpOverUnix"
+        "TestConnectionRefuse"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+
+  meta = {
+    changelog = "https://github.com/KubeNetworks/kubevpn/releases/tag/${finalAttrs.src.rev}";
     description = "Create a VPN and connect to Kubernetes cluster network, access resources, and more";
+    mainProgram = "kubevpn";
     homepage = "https://github.com/KubeNetworks/kubevpn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mig4ng ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mig4ng ];
   };
-}
+})

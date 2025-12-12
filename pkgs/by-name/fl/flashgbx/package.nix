@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flashgbx";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jPD+7bFU6k1+NRKRHwynEmZ0G6ZwnF8AZVuTqk5DjEY=";
+    tag = version;
+    hash = "sha256-C5RljQB6km5yYvFRj/s5AZfMIuMmaqsHnn9BhYWAP4o=";
   };
 
   desktopItems = [
@@ -56,11 +56,11 @@ python3Packages.buildPythonApplication rec {
       qt6.qtwayland
     ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for reading and writing GB and GBA cartridges with the GBxCart RW";
     homepage = "https://github.com/lesserkuma/FlashGBX";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "flashgbx";
-    maintainers = with maintainers; [ grahamnorris ];
+    maintainers = with lib.maintainers; [ grahamnorris ];
   };
 }

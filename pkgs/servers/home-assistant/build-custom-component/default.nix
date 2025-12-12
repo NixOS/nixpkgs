@@ -22,17 +22,13 @@ home-assistant.python.pkgs.buildPythonPackage (
     pname = "${owner}/${domain}";
     inherit version format;
 
-    buildPhase = ''
-      true
-    '';
-
     installPhase = ''
       runHook preInstall
 
       mkdir $out
       if [[ -f ./manifest.json ]]; then
         mkdir $out/custom_components
-        cp -R $(realpath .)  $out/custom_components/
+        cp -R "$(realpath .)" "$out/custom_components/${domain}"
       else
         cp -r ./custom_components/ $out/
       fi
@@ -45,24 +41,26 @@ home-assistant.python.pkgs.buildPythonPackage (
       runHook postInstall
     '';
 
-    nativeCheckInputs =
+    nativeBuildInputs =
       with home-assistant.python.pkgs;
       [
         manifestRequirementsCheckHook
         packaging
       ]
-      ++ (args.nativeCheckInputs or [ ]);
+      ++ (args.nativeBuildInputs or [ ]);
 
     passthru = {
       isHomeAssistantComponent = true;
-    } // args.passthru or { };
+    }
+    // args.passthru or { };
 
     meta = {
       inherit (home-assistant.meta) platforms;
-    } // args.meta or { };
+    }
+    // args.meta or { };
 
   }
-  // builtins.removeAttrs args [
+  // removeAttrs args [
     "meta"
     "nativeCheckInputs"
     "passthru"

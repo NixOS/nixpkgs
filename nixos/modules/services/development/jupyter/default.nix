@@ -2,13 +2,20 @@
   config,
   lib,
   pkgs,
+  options,
   ...
 }:
 let
 
   cfg = config.services.jupyter;
 
-  package = cfg.package;
+  package = pkgs.python3.withPackages (
+    ps:
+    [
+      cfg.package
+    ]
+    ++ cfg.extraPackages
+  );
 
   kernels = (
     pkgs.jupyter-kernel.create {
@@ -16,15 +23,17 @@ let
     }
   );
 
-  notebookConfig = pkgs.writeText "jupyter_config.py" ''
+  notebookConfig = pkgs.writeText "jupyter_server_config.py" ''
     ${cfg.notebookConfig}
-
-    c.NotebookApp.password = ${cfg.password}
+    c.ServerApp.password = "${cfg.password}"
   '';
 
 in
 {
-  meta.maintainers = with lib.maintainers; [ aborsu ];
+  meta.maintainers = with lib.maintainers; [
+    aborsu
+    b-m-f
+  ];
 
   options.services.jupyter = {
     enable = lib.mkEnableOption "Jupyter development server";
@@ -37,18 +46,42 @@ in
       '';
     };
 
-    # NOTE: We don't use top-level jupyter because we don't
-    # want to pass in JUPYTER_PATH but use .environment instead,
-    # saving a rebuild.
-    package = lib.mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
+    package = lib.mkPackageOption pkgs [
+      "python3"
+      "pkgs"
+      "jupyter"
+    ] { };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        [
+          pkgs.python3.pkgs.nbconvert
+          pkgs.python3.pkgs.playwright
+        ]
+      '';
+      description = "Extra packages to be available in the jupyter runtime environment";
+    };
+    extraEnvironmentVariables = lib.mkOption {
+      description = "Extra environment variables to be set in the runtime context of jupyter notebook";
+      default = { };
+      example = lib.literalExpression ''
+        {
+          PLAYWRIGHT_BROWSERS_PATH = "''${pkgs.playwright-driver.browsers}";
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
+        }
+      '';
+      inherit (options.environment.variables) type apply;
+    };
 
     command = lib.mkOption {
       type = lib.types.str;
-      default = "jupyter-notebook";
-      example = "jupyter-lab";
+      default = "jupyter notebook";
+      example = "jupyter lab";
       description = ''
         Which command the service runs. Note that not all jupyter packages
-        have all commands, e.g. jupyter-lab isn't present in the default package.
+        have all commands, e.g. `jupyter lab` isn't present in the `notebook` package.
       '';
     };
 
@@ -93,16 +126,9 @@ in
       type = lib.types.str;
       description = ''
         Password to use with notebook.
-        Can be generated using:
-          In [1]: from notebook.auth import passwd
-          In [2]: passwd('test')
-          Out[2]: 'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'
-          NOTE: you need to keep the single quote inside the nix string.
-        Or you can use a python oneliner:
-          "open('/path/secret_file', 'r', encoding='utf8').read().strip()"
-        It will be interpreted at the end of the notebookConfig.
+        Can be generated following: <https://jupyter-server.readthedocs.io/en/stable/operators/public-server.html#preparing-a-hashed-password>
       '';
-      example = "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'";
+      example = "argon2:$argon2id$v=19$m=10240,t=10,p=8$48hF+vTUuy1LB83/GzNhUg$J1nx4jPWD7PwOJHs5OtDW8pjYK2s0c1R3rYGbSIKB54";
     };
 
     notebookConfig = lib.mkOption {
@@ -110,6 +136,7 @@ in
       default = "";
       description = ''
         Raw jupyter config.
+        Please use the password configuration option to set a password instead of passing it in here.
       '';
     };
 
@@ -175,7 +202,8 @@ in
 
         environment = {
           JUPYTER_PATH = toString kernels;
-        };
+        }
+        // cfg.extraEnvironmentVariables;
 
         serviceConfig = {
           Restart = "always";
@@ -185,7 +213,8 @@ in
                         --ip=${cfg.ip} \
                         --port=${toString cfg.port} --port-retries 0 \
                         --notebook-dir=${cfg.notebookDir} \
-                        --NotebookApp.config_file=${notebookConfig}
+                        --JupyterApp.config_file=${notebookConfig}
+
           '';
           User = cfg.user;
           Group = cfg.group;

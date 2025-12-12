@@ -6,11 +6,14 @@
   click,
   construct,
   construct-classes,
+  cryptography,
   ecdsa,
   libusb1,
   mnemonic,
   requests,
   setuptools,
+  shamir-mnemonic,
+  slip10,
   typing-extensions,
   trezor-udev-rules,
   pytestCheckHook,
@@ -18,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.9";
+  version = "0.13.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFC9e7nSPl4zo8nljhjwWLRMnZw0ymZLSYGnlaqfse8=";
+    hash = "sha256-egtq5GKN0MMaXOtRJYkY2bvdOthROIg3IlgmsijuUE8=";
   };
 
   build-system = [ setuptools ];
@@ -32,12 +35,16 @@ buildPythonPackage rec {
     click
     construct
     construct-classes
+    cryptography
     ecdsa
     libusb1
     mnemonic
     requests
+    shamir-mnemonic
+    slip10
     typing-extensions
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -52,13 +59,13 @@ buildPythonPackage rec {
     $out/bin/trezorctl --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communicating with Trezor Hardware Wallet";
     mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     changelog = "https://github.com/trezor/trezor-firmware/blob/python/v${version}/python/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       np
       prusnak
       mmahut

@@ -2,20 +2,23 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libX11,
 }:
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.7.4";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Nk+iLsTXnw6RAc1VztW8ZqeUVsywFjMCOBY2yuWbUXQ=";
+    tag = "v${version}";
+    hash = "sha256-mEzTvurjG/58qgNtJie7Iy6rSkiu2VbDIu1MiyrcEyo=";
   };
 
-  vendorHash = "sha256-docq/r6yyMPsuUyFbtCMaYfEVL0gLmyTy4PbrAemR00=";
+  vendorHash = "sha256-Xilu4wzDkwf15LmVH0Pkk91/nDisUu66aPP0JvT4ldo=";
+
+  buildInputs = [ libX11 ];
 
   ldflags = [
     "-s"
@@ -24,15 +27,16 @@ buildGoModule rec {
 
   preCheck = ''
     # Remove test which need network access
-    rm providers/koboldai/koboldai_test.go
+    rm src/providers/koboldai/koboldai_test.go
+    rm src/providers/phind/phind_test.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ChatGPT in terminal without needing API keys";
     homepage = "https://github.com/aandrew-me/tgpt";
     changelog = "https://github.com/aandrew-me/tgpt/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tgpt";
   };
 }

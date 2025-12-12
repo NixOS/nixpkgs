@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "1.3.0";
+  version = "1.4.3";
   pyproject = true;
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kKkAdQymmgJ9V+73nYi4MhOSJvrO2jwJ2BUYhUGPHe0=";
+    repo = "skrl";
+    tag = version;
+    hash = "sha256-5lkoYAmMIWqK3+E3WxXMWS9zal2DhZkfl30EkrHKpdI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -61,10 +61,11 @@ buildPythonPackage rec {
     "skrl.utils.model_instantiators"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
+    changelog = "https://github.com/Toni-SM/skrl/releases/tag/${version}";
     homepage = "https://skrl.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -13,7 +13,7 @@
   ninja,
   pkg-config,
   python3,
-  substituteAll,
+  replaceVars,
   systemdMinimal,
   usbutils,
   vala,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.18.4";
+  version = "0.19.3";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EVMG8Xvnj4yZ4gZS4t7M3UjfOHNr8A609D/vw4CaMZw=";
+    hash = "sha256-RuReq29la/wJJDjX4OXfTF9R0Y46gzYMK+aAsgehoLc=";
   };
 
   patches = [
@@ -44,25 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace references to udevadm with an absolute paths, so programs using
     # umockdev will just work without having to provide it in their test environment
     # $PATH.
-    (substituteAll {
-      src = ./substitute-udevadm.patch;
+    (replaceVars ./substitute-udevadm.patch {
       udevadm = "${systemdMinimal}/bin/udevadm";
     })
   ];
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
@@ -116,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/martinpitt/umockdev";
     changelog = "https://github.com/martinpitt/umockdev/releases/tag/${finalAttrs.version}";
     description = "Mock hardware devices for creating unit tests";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
+    platforms = with lib.platforms; linux;
   };
 })

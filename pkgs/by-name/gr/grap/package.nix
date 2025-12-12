@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost183,
   libseccomp,
   flex,
   swig,
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "QuoSecGmbH";
     repo = "grap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zLIKoNOdrmTyZkQGRogeKfIRk4kpG0hmeN0519SJbbo=";
   };
 
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    boost.all
+    boost183.all
     libseccomp
   ];
 

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "upterm";
-  version = "0.14.3";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${version}";
-    hash = "sha256-koZRKxp6Q52jvpmQqQAGvPHoiiU2LaEuNeRY/rru+XM=";
+    hash = "sha256-9h4Poz0hUg5/7CrF0ZzT4KrVaFlhvcorIgZbleMpV6w=";
   };
 
-  vendorHash = "sha256-PUcfE7LQQh2ftiOiOoucSfxYnTI4zRNmmSqqmvvvs7g=";
+  vendorHash = "sha256-i92RshW5dsRE88X8bXyrj13va66cc0Yu/btpR0pvoSM=";
 
   subPackages = [
     "cmd/upterm"
@@ -40,10 +40,10 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hax404 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
 }

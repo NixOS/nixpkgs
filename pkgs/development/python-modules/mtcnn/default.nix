@@ -25,20 +25,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipazc";
     repo = "mtcnn";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gp+jfa1arD3PpJpuRFKIUznV0Lyjt3DPn/HHUviDXhk=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      joblib
-      lz4
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      distutils
-    ];
+  dependencies = [
+    joblib
+    lz4
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    distutils
+  ];
 
   pythonImportsCheck = [ "mtcnn" ];
 

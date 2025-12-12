@@ -19,48 +19,42 @@
   libXtst,
   libXi,
   wayland,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
   pname = "kando";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OTNxK2D7lM8IluZa6Rydd3WSP3hPNcT9nkQm1smq4ms=";
+    tag = "v${version}";
+    hash = "sha256-pgHhMzObj8Fh6pw1wjJXjghjKzKiM64lXS4Xlwh3omY=";
   };
 
-  npmDepsHash = "sha256-1LIfYwhLL8M2A4C6u9l5YUe7Y6xJeir8A5HQ7QghvhA=";
+  npmDepsHash = "sha256-vytwJdVnkm1AlDoM86xh5Vx5lsaDRcNdwjhP43A6KF8=";
 
   npmFlags = [ "--ignore-scripts" ];
 
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    zip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+    copyDesktopItems
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      libX11
-      libXtst
-      libXi
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    libX11
+    libXtst
+    libXi
+    wayland
+  ];
 
   dontUseCmakeConfigure = true;
 

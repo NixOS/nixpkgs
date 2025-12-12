@@ -16,17 +16,33 @@
   setuptools,
 }:
 
+let
+  instrument-hooks = fetchFromGitHub {
+    owner = "CodSpeedHQ";
+    repo = "instrument-hooks";
+    rev = "b003e5024d61cfb784d6ac6f3ffd7d61bf7b9ec9";
+    hash = "sha256-JTSH4wOpOGJ97iV6sagiRUu8d3sKM2NJRXcB3NmozNQ=";
+  };
+in
+
 buildPythonPackage rec {
   pname = "pytest-codspeed";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A8H8gx+g2Fcf+aapahnAiVBt5vUzPc1SW4scOmSjI0g=";
+    tag = "v${version}";
+    hash = "sha256-5fdG7AEiLD3ZZzU/7zBK0+LDacTZooyDUo+FefcE4uQ=";
   };
+
+  postPatch = ''
+    pushd src/pytest_codspeed/instruments/hooks
+    rmdir instrument-hooks
+    ln -nsf ${instrument-hooks} instrument-hooks
+    popd
+  '';
 
   build-system = [ hatchling ];
 
@@ -58,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to create CodSpeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/pytest-codspeed";
-    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/v${version}";
+    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

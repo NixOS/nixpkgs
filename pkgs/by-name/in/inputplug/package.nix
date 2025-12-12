@@ -24,20 +24,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libbsd ];
 
-  cargoHash = "sha256-W6LvdjR3jTf08X75wPWloLx7FUYTpboB3E5f0g75M5g=";
+  cargoHash = "sha256-+GbbCAdEkxhyQoe8g4me2jlsuHx4R5vibd2PQLmqNM4=";
 
   postInstall = ''
     installManPage inputplug.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";
     homepage = "https://github.com/andrewshadura/inputplug";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     # `daemon(3)` is deprecated on macOS and `pidfile-rs` needs updating
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ jecaro ];
+    maintainers = with lib.maintainers; [ jecaro ];
     mainProgram = "inputplug";
   };
 }

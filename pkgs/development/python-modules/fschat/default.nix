@@ -40,7 +40,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "lm-sys";
     repo = "FastChat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tQuvQXzQbQjU16DfS1o55VHW6eklngEvIigzZGgrKB8=";
   };
 
@@ -90,10 +90,10 @@ buildPythonPackage {
   # tests require networking
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open platform for training, serving, and evaluating large language models. Release repo for Vicuna and Chatbot Arena";
     homepage = "https://github.com/lm-sys/FastChat";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

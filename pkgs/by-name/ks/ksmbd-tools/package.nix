@@ -14,19 +14,20 @@
 
 stdenv.mkDerivation rec {
   pname = "ksmbd-tools";
-  version = "3.5.3";
+  version = "3.5.6";
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
-    repo = pname;
+    repo = "ksmbd-tools";
     rev = version;
-    sha256 = "sha256-f2B+24AboAWLIrtuHWn8YMEPzWahIafc3kfx0zKyz8g=";
+    sha256 = "sha256-JwfxYFBwrMtP2D7GcDpW44WYbLJyxZy3Jhgi+7HsIng=";
   };
 
   buildInputs = [
     glib
     libnl
-  ] ++ lib.optional withKerberos libkrb5;
+  ]
+  ++ lib.optional withKerberos libkrb5;
 
   nativeBuildInputs = [
     meson
@@ -41,10 +42,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir /etc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Userspace utilities for the ksmbd kernel SMB server";
     homepage = "https://www.kernel.org/doc/html/latest/filesystems/cifs/ksmbd.html";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

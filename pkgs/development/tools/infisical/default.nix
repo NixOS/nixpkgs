@@ -21,7 +21,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.32.0";
+  version = "0.41.90";
 
   # the platform-specific, statically linked binary
   src =
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
@@ -82,9 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://infisical.com";
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "infisical";
-    maintainers = teams.infisical.members ++ (with maintainers; [ hausken ]);
+    maintainers = with lib.maintainers; [ hausken ];
+    teams = [ lib.teams.infisical ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

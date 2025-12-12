@@ -1,63 +1,70 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  setuptools,
   certifi,
   click,
+  fetchFromGitHub,
+  fido2,
   keyring,
   keyrings-alt,
-  pytz,
-  requests,
-  six,
-  tzlocal,
   pytest-mock,
+  pytest-socket,
   pytestCheckHook,
-  future,
+  pythonAtLeast,
+  requests,
+  setuptools,
+  setuptools-scm,
+  srp,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "1.0.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "picklepete";
-    repo = pname;
-    rev = version;
-    hash = "sha256-2E1pdHHt8o7CGpdG+u4xy5OyNCueUGVw5CY8oicYd5w=";
+    owner = "timlaing";
+    repo = "pyicloud";
+    tag = version;
+    hash = "sha256-Lkabmeh+D+nv30DyVRTQhnoyEt6cp2003uGn/GyOrHs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     click
-    future
+    fido2
     keyring
     keyrings-alt
-    pytz
     requests
-    six
+    srp
     tzlocal
   ];
 
   nativeCheckInputs = [
     pytest-mock
+    pytest-socket
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "pyicloud" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/picklepete/pyicloud/issues/446
     "test_storage"
   ];
 
-  meta = with lib; {
-    description = "PyiCloud is a module which allows pythonistas to interact with iCloud webservices";
+  meta = {
+    description = "Module to interact with iCloud webservices";
     mainProgram = "icloud";
-    homepage = "https://github.com/picklepete/pyicloud";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    homepage = "https://github.com/timlaing/pyicloud";
+    changelog = "https://github.com/timlaing/pyicloud/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

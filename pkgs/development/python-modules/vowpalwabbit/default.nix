@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   # As we disable configure via cmake, pass explicit global options to enable
   # spdlog and fmt packages
-  setupPyGlobalFlags = [ "--cmake-options=\"-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON\"" ];
+  setupPyGlobalFlags = [ "--cmake-options=-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON" ];
 
   propagatedBuildInputs = [
     numpy
@@ -65,11 +65,11 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py check -ms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
     homepage = "https://github.com/JohnLangford/vowpal_wabbit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
     # Test again when new version is released
     broken = stdenv.hostPlatform.isLinux;
   };

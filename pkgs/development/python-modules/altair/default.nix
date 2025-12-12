@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "5.4.1";
+  version = "5.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7C51ACaBuNtOSXqLpuCI5bnLyE9U64vNXlD4/msPq2k=";
+    tag = "v${version}";
+    hash = "sha256-lrKC4FYRQEax5E0lQNhO9FLk5UOJ0TnYzqZjndlRpGI=";
   };
 
   build-system = [ hatchling ];
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     packaging
     pandas
     toolz
-  ] ++ lib.optional (pythonOlder "3.14") typing-extensions;
+  ]
+  ++ lib.optional (pythonOlder "3.14") typing-extensions;
 
   nativeCheckInputs = [
     ipython
@@ -60,6 +61,11 @@ buildPythonPackage rec {
   disabledTests = [
     # ValueError: Saving charts in 'svg' format requires the vl-convert-python or altair_saver package: see http://github.com/altair-viz/altair_saver/
     "test_renderer_with_none_embed_options"
+    # Sometimes conflict due to parallelism
+    "test_dataframe_to_csv[polars]"
+    "test_dataframe_to_csv[pandas]"
+    # Network access
+    "test_theme_remote_lambda"
   ];
 
   disabledTestPaths = [
@@ -73,13 +79,13 @@ buildPythonPackage rec {
     "tests/utils/test_compiler.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative statistical visualization library for Python";
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       teh
       vinetos
     ];

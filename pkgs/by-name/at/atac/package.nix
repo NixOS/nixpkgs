@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "atac";
-  version = "0.18.1";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "Julien-cpsn";
     repo = "ATAC";
     rev = "v${version}";
-    hash = "sha256-RrtRflMTsbR/A2kb2kdwsE7zN43TzzvFkUPcmL4YGqs=";
+    hash = "sha256-PXSjyMe7Rcoeczm/cqFgn1Ra66T9cA34NdfaqLTljmc=";
   };
 
-  cargoHash = "sha256-JlS+95/C2vMvFiCE4/hHWfkH1WL1hNSgUtyOeGDV8pY=";
+  cargoHash = "sha256-qjg5yxWRcNnmrl91kogUEOfFOs06tcgmK2hpqx6nftU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple API client (postman like) in your terminal";
     homepage = "https://github.com/Julien-cpsn/ATAC";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "atac";
   };
 }

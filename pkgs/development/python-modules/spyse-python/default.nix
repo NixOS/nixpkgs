@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyse-com";
     repo = "spyse-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c7BAJOplWNcd9v7FrEZuMHHdMpqtHljF7YpbdQYAMxA=";
   };
 
@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spyse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
     changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

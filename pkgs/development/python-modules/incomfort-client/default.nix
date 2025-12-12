@@ -6,25 +6,23 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  poetry-core,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.6.4";
+  version = "0.6.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
     tag = "v${version}";
-    hash = "sha256-fyQKkwHQEvRNTh1IBqE0/YSskBfrFEequ+VxoHSeShA=";
+    hash = "sha256-+RSKmWVNLiI/NzfbM/xu+/sCNYvkZ2l/AE5TwnF4RCc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [ aiohttp ];
 
@@ -36,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "incomfortclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to poll Intergas boilers via a Lan2RF gateway";
     homepage = "https://github.com/zxdavb/incomfort-client";
-    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -163,7 +163,7 @@ in
         default = 10;
       };
       ioSchedulingClass = mkOption {
-        description = "IO scheduling class for btrbk (see ionice(1) for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
+        description = "IO scheduling class for btrbk (see {manpage}`ionice(1)` for a quick description). Applies to local instances, and remote ones connecting by ssh if set to idle.";
         type = types.enum [
           "idle"
           "best-effort"
@@ -181,8 +181,19 @@ in
                 type = types.nullOr types.str;
                 default = "daily";
                 description = ''
-                  How often this btrbk instance is started. See systemd.time(7) for more information about the format.
+                  How often this btrbk instance is started. See {manpage}`systemd.time(7)` for more information about the format.
                   Setting it to null disables the timer, thus this instance can only be started manually.
+                '';
+              };
+              snapshotOnly = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to run in snapshot only mode. This skips backup creation and deletion steps.
+                  Useful when you want to manually backup to an external drive that might not always be connected.
+                  Use `btrbk -c /path/to/conf resume` to trigger manual backups.
+                  More examples [here](https://github.com/digint/btrbk#example-backups-to-usb-disk).
+                  See also `snapshot` subcommand in {manpage}`btrbk(1)`.
                 '';
               };
               settings = mkOption {
@@ -343,17 +354,20 @@ in
       value = {
         description = "Takes BTRFS snapshots and maintains retention policies.";
         unitConfig.Documentation = "man:btrbk(1)";
-        path =
-          [ "/run/wrappers" ]
-          ++ cfg.extraPackages
-          ++ optional (instance.settings.stream_compress != "no") (
-            getAttr instance.settings.stream_compress streamCompressMap
-          );
+        path = [
+          "/run/wrappers"
+        ]
+        ++ cfg.extraPackages
+        ++ optional (instance.settings.stream_compress != "no") (
+          getAttr instance.settings.stream_compress streamCompressMap
+        );
         serviceConfig = {
           User = "btrbk";
           Group = "btrbk";
           Type = "oneshot";
-          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf run";
+          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf ${
+            if instance.snapshotOnly then "snapshot" else "run"
+          }";
           Nice = cfg.niceness;
           IOSchedulingClass = cfg.ioSchedulingClass;
           StateDirectory = "btrbk";

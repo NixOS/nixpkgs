@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.25";
+  version = "0.2.26";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
+    tag = version;
+    hash = "sha256-JwgElt0FFSGs3v+04AKPwTTpxvn8YzihJeD/+llbSMI=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvlx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to work with Velux units";
     longDescription = ''
       PyVLX uses the Velux KLF 200 interface to control io-Homecontrol
@@ -45,8 +44,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

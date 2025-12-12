@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "2.0.25";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
   };
 
   # glib-2.62 deprecations
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     hamlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Amateur radio logging program";
     longDescription = ''
       Xlog is an amateur radio logging program.
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
       both for short and long path.
     '';
     homepage = "https://www.nongnu.org/xlog";
-    maintainers = [ maintainers.mafo ];
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.mafo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     mainProgram = "xlog";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

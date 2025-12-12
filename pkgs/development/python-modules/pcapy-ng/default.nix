@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stamparm";
-    repo = pname;
+    repo = "pcapy-ng";
     rev = version;
     hash = "sha256-6LA2n7Kv0MiZcqUJpi0lDN4Q+GcOttYw7hJwVqK/DU0=";
   };
@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   doCheck = pythonOlder "3.10";
 
-  pytestFlagsArray = [ "pcapytests.py" ];
+  enabledTestPaths = [ "pcapytests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interface with the libpcap packet capture library";
     homepage = "https://github.com/stamparm/pcapy-ng/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -8,17 +8,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "3.1.3";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "usit-gd";
+    owner = "unioslo";
     repo = "zabbix-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hvLtc6owEOD29Y1oC7EmOOFp9P8hWOuj9N7qhtqkpks=";
+    tag = version;
+    hash = "sha256-Fk3o0+cNCX/ixqNd9oldY6JJ+wQWlMjBAEwuAWCLURQ=";
   };
-
-  pythonRelaxDeps = [ "click-repl" ];
 
   build-system = with python3Packages; [
     hatchling
@@ -27,11 +25,11 @@ python3Packages.buildPythonApplication rec {
   dependencies =
     with python3Packages;
     [
-      click-repl
       httpx
       httpx.optional-dependencies.socks
       packaging
       platformdirs
+      prompt-toolkit
       pydantic
       requests
       rich
@@ -49,6 +47,7 @@ python3Packages.buildPythonApplication rec {
     freezegun
     inline-snapshot
     pytestCheckHook
+    pytest-httpserver
   ];
 
   # Otherwise tests will fail to create directory
@@ -57,6 +56,11 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+  disabledTests = [
+    # Disable failing test with Click >= v8.2.0
+    "test_patch_get_click_type"
+  ];
+
   pythonImportsCheck = [ "zabbix_cli" ];
 
   passthru.tests.version = testers.testVersion {
@@ -64,11 +68,11 @@ python3Packages.buildPythonApplication rec {
     command = "HOME=$(mktemp -d) zabbix-cli --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "zabbix-cli";
-    maintainers = [ maintainers.anthonyroussel ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
   };
 }

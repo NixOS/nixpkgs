@@ -2,8 +2,8 @@
   lib,
   stdenv,
   bash,
-  darwin,
   fetchFromGitHub,
+  fetchpatch,
   libiconv,
   makeWrapper,
   openssl,
@@ -19,23 +19,32 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vi";
     repo = "websocat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
   };
 
-  cargoHash = "sha256-2THUFcaM4niB7YiQiRXJQuaQu02fpgZKPWrejfhmRQ0=";
+  # Fix build with Rust 1.87
+  # FIXME: remove in next update
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/vi/websocat/commit/d4455623e777231d69b029d69d7a17c0de2bafe7.diff";
+      hash = "sha256-OUQQ+3eESE3XcGgToErqvF8ItpT8YCMAZhbvRzkFKpc=";
+    })
+  ];
+
+  cargoHash = "sha256-3m7Gg//vjNjYlesEjKsdqjU48dAtgSeugxingr8OJyY=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -54,14 +63,13 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
     changelog = "https://github.com/vi/websocat/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      Br1ght0ne
     ];
     mainProgram = "websocat";
   };

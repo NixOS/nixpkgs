@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cproto";
-  version = "4.7w";
+  version = "4.7y";
 
   src = fetchurl {
     urls = [
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       # No version listings and apparently no versioned tarball over http(s).
       "ftp://ftp.invisible-island.net/cproto/cproto-${version}.tgz"
     ];
-    sha256 = "sha256-ix1GjM2aKFnzmcdf773KDf3KTcMYkf7bxArFwybSe20=";
+    sha256 = "sha256-C9HYvo/wpMpD+Uf5V1DTT2TtqTyeLKeRAP1gFAt8YzE=";
   };
 
   # patch made by Joe Khoobyar copied from gentoo bugs
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     [ "$("$out/bin/cproto" -V 2>&1)" = '${version}' ]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate C function prototypes from C source code";
     mainProgram = "cproto";
     homepage = "https://invisible-island.net/cproto/";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
   };
 }

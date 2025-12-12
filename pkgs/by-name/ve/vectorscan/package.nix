@@ -1,34 +1,48 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, ragel
-, util-linux
-, python3
-, boost
-, sqlite
-, pcre
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ragel,
+  util-linux,
+  python3,
+  boost,
+  sqlite,
+  pcre,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.11";
+  version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
+    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
+
+  postPatch = ''
+    sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+    substituteInPlace cmake/cflags-generic.cmake \
+      --replace-fail "-Werror" ""
+    substituteInPlace cmake/build_wrapper.sh \
+      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
+      --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     ragel
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
     boost
@@ -45,19 +59,38 @@ stdenv.mkDerivation rec {
   #
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
-  cmakeFlags = [ (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON") ]
-    ++
-    (if lib.elem stdenv.hostPlatform.system [ "x86_64-linux" "i686-linux" ] then
-      [ "-DBUILD_AVX2=ON" "-DBUILD_AVX512=ON" "-DBUILD_AVX512VBMI=ON" "-DFAT_RUNTIME=ON" ]
+  cmakeFlags = [
+    "-DBUILD_BENCHMARKS=OFF"
+    (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
+  ]
+  ++ (
+    if
+      lib.elem stdenv.hostPlatform.system [
+        "x86_64-linux"
+        "i686-linux"
+      ]
+    then
+      [
+        "-DBUILD_AVX2=ON"
+        "-DBUILD_AVX512=ON"
+        "-DBUILD_AVX512VBMI=ON"
+        "-DFAT_RUNTIME=ON"
+      ]
     else
-      (if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-        [ "-DBUILD_SVE=ON" "-DBUILD_SVE2=ON" "-DBUILD_SVE2_BITPERM=ON" "-DFAT_RUNTIME=ON" ]
-      else
-        [ "-DFAT_RUNTIME=OFF" ]
+      (
+        if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
+          [
+            "-DBUILD_SVE=ON"
+            "-DBUILD_SVE2=ON"
+            "-DBUILD_SVE2_BITPERM=ON"
+            "-DFAT_RUNTIME=ON"
+          ]
+        else
+          [ "-DFAT_RUNTIME=OFF" ]
           ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
           ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
       )
-    );
+  );
 
   doCheck = true;
   checkPhase = ''
@@ -68,7 +101,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Portable fork of the high-performance regular expression matching library";
     longDescription = ''
       A fork of Intel's Hyperscan, modified to run on more platforms. Currently
@@ -84,8 +117,15 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
     changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
-    platforms = platforms.unix;
-    license = with licenses; [ bsd3 /* and */ bsd2 /* and */ licenses.boost ];
-    maintainers = with maintainers; [ tnias vlaci ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
+      bsd3 # and
+      bsd2 # and
+      lib.licenses.boost
+    ];
+    maintainers = with lib.maintainers; [
+      tnias
+      vlaci
+    ];
   };
 }

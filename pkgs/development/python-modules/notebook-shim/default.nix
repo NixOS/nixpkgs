@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   # TODO: understand & possibly fix why tests fail. On github most testfiles
-  # have been comitted with msgs "wip" though.
+  # have been committed with msgs "wip" though.
   doCheck = false;
 
   nativeCheckInputs = [
@@ -39,14 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notebook_shim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Switch frontends to Jupyter Server";
     longDescription = ''
       This project provides a way for JupyterLab and other frontends to switch
       to Jupyter Server for their Python Web application backend.
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

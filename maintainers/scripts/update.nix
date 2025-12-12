@@ -16,6 +16,7 @@
   keep-going ? null,
   commit ? null,
   skip-prompt ? null,
+  order ? null,
 }:
 
 let
@@ -119,7 +120,7 @@ let
     let
       maintainer =
         if !builtins.hasAttr maintainer' lib.maintainers then
-          builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
+          throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
           builtins.getAttr maintainer' lib.maintainers;
     in
@@ -146,7 +147,7 @@ let
       pathContent = lib.attrByPath prefix null pkgs;
     in
     if pathContent == null then
-      builtins.throw "Attribute path `${path}` does not exist."
+      throw "Attribute path `${path}` does not exist."
     else
       packagesWithPath prefix (path: pkg: (get-script pkg != null)) pathContent;
 
@@ -157,9 +158,9 @@ let
       package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
     if package == null then
-      builtins.throw "Package with an attribute name `${path}` does not exist."
+      throw "Package with an attribute name `${path}` does not exist."
     else if get-script package == null then
-      builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
+      throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
     else
       {
         attrPath = path;
@@ -177,7 +178,7 @@ let
     else if path != null then
       packagesWithUpdateScript path pkgs
     else
-      builtins.throw "No arguments provided.\n\n${helpText}";
+      throw "No arguments provided.\n\n${helpText}";
 
   helpText = ''
     Please run:
@@ -217,6 +218,18 @@ let
     to skip prompt:
 
         --argstr skip-prompt true
+
+    By default, the updater will update the packages in arbitrary order. Alternately, you can force a specific order based on the packages’ dependency relations:
+
+        - Reverse topological order (e.g. {"gnome-text-editor", "gimp"}, {"gtk3", "gtk4"}, {"glib"}) is useful when you want checkout each commit one by one to build each package individually but some of the packages to be updated would cause a mass rebuild for the others. Of course, this requires that none of the updated dependents require a new version of the dependency.
+
+            --argstr order reverse-topological
+
+        - Topological order (e.g. {"glib"}, {"gtk3", "gtk4"}, {"gnome-text-editor", "gimp"}) is useful when the updated dependents require a new version of updated dependency.
+
+            --argstr order topological
+
+    Note that sorting requires instantiating each package and then querying Nix store for requisites so it will be pretty slow with large number of packages.
   '';
 
   # Transform a matched package into an object for update.py.
@@ -229,7 +242,7 @@ let
       name = package.name;
       pname = lib.getName package;
       oldVersion = lib.getVersion package;
-      updateScript = map builtins.toString (lib.toList (updateScript.command or updateScript));
+      updateScript = map toString (lib.toList (updateScript.command or updateScript));
       supportedFeatures = updateScript.supportedFeatures or [ ];
       attrPath = updateScript.attrPath or attrPath;
     };
@@ -241,7 +254,8 @@ let
     lib.optional (max-workers != null) "--max-workers=${max-workers}"
     ++ lib.optional (keep-going == "true") "--keep-going"
     ++ lib.optional (commit == "true") "--commit"
-    ++ lib.optional (skip-prompt == "true") "--skip-prompt";
+    ++ lib.optional (skip-prompt == "true") "--skip-prompt"
+    ++ lib.optional (order != null) "--order=${order}";
 
   args = [ packagesJson ] ++ optionalArgs;
 

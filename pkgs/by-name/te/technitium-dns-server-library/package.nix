@@ -7,23 +7,24 @@
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server-library";
-  version = "dns-server-v13.2";
+  version = "dns-server-v14.2.0";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "TechnitiumLibrary";
-    rev = "refs/tags/${version}";
-    hash = "sha256-stfxYe0flE1daPuXw/GAgY52ZD7pkqnBIBvmSVPWWjI=";
+    tag = version;
+    hash = "sha256-a5gCwOxBlp+MzcxrYWY56ihb2ayC/l9G3SQ31ZVpBZc=";
     name = "${pname}-${version}";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
   nugetDeps = ./nuget-deps.json;
 
   projectFile = [
     "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"
     "TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj"
+    "TechnitiumLibrary.Security.OTP/TechnitiumLibrary.Security.OTP.csproj"
   ];
 
   passthru.updateScript = nix-update-script { };

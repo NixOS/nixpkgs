@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     install -Dm555 ./paulstretch $out/bin/paulstretch
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Produces high quality extreme sound stretching";
     longDescription = ''
       This is a program for stretching the audio. It is suitable only for
@@ -66,9 +66,9 @@ stdenv.mkDerivation {
       special effects by "spectral smoothing" the sounds.
       It can transform any sound/music to a texture.
     '';
-    homepage = "https://hypermammut.sourceforge.net/paulstretch/";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    homepage = "https://github.com/paulnasca/paulstretch_cpp/";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
     mainProgram = "paulstretch";
   };
 }

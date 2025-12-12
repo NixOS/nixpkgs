@@ -3,16 +3,16 @@
   fetchurl,
   webkitgtk_4_1,
   libsoup_3,
+  libpng,
   lib,
-  hicolor-icon-theme,
 }:
 let
   pname = "qidi-slicer";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchurl {
-    url = "https://github.com/QIDITECH/QIDISlicer/releases/download/V${version}/QIDISlicer_${version}_Linux_x64_newer.AppImage";
-    hash = "sha256-WMurkt9VJTlFnx66ByQq+WVtx37q5P4mA4cxF/UzC50=";
+    url = "https://github.com/QIDITECH/QIDISlicer/releases/download/V${version}/QIDISlicer_${version}_Linux_Ubuntu24.AppImage";
+    hash = "sha256-76bdVQu+xCf6uCwkHcpLNNna5MgHm4vbuwMFoQ26N0Y=";
   };
 
   appimageContents = appimageTools.extract {
@@ -24,6 +24,7 @@ appimageTools.wrapType2 {
   extraPkgs = pkgs: [
     webkitgtk_4_1
     libsoup_3
+    libpng
   ];
 
   extraInstallCommands = ''

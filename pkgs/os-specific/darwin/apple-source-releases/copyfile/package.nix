@@ -71,19 +71,6 @@ mkAppleDerivation {
 
   xcodeHash = "sha256-SYW6pBlCQkcbkBqCq+W/mDYZZ7/co2HlPZwXzgh/LnI=";
 
-  postPatch = ''
-    # Disable experimental bounds safety stuff that’s not available in LLVM 16.
-    for header in copyfile.h xattr_flags.h; do
-      substituteInPlace "$header" \
-        --replace-fail '__ptrcheck_abi_assume_single()' "" \
-        --replace-fail '__unsafe_indexable' ""
-    done
-
-    # clang 16 does not support C23 empty initializers. This can be removed once the bootstrap tools are updated.
-    substituteInPlace copyfile.c \
-      --replace-fail 'filesec_t fsec_tmp = {};' 'filesec_t fsec_tmp = {0};'
-  '';
-
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   meta.description = "Darwin file copying library";

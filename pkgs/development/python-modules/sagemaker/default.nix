@@ -11,10 +11,13 @@
   boto3,
   cloudpickle,
   docker,
+  fastapi,
   google-pasta,
+  graphene,
   importlib-metadata,
   jsonschema,
   numpy,
+  omegaconf,
   packaging,
   pandas,
   pathos,
@@ -24,12 +27,12 @@
   pyyaml,
   requests,
   sagemaker-core,
-  sagemaker-mlflow,
   schema,
   smdebug-rulesconfig,
   tblib,
   tqdm,
   urllib3,
+  uvicorn,
 
   # optional-dependencies
   scipy,
@@ -38,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.232.3";
+  version = "2.254.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6kGxmgkR/1ih2V49C9aEUBBCJS6s1Jbev80FDnJtHFg=";
+    tag = "v${version}";
+    hash = "sha256-tE8AD/nVrlP96ihVjzpos1IUGPR2T47HAMczCGP3S9M=";
   };
 
   build-system = [
@@ -57,6 +60,9 @@ buildPythonPackage rec {
     "boto3"
     "cloudpickle"
     "importlib-metadata"
+    "numpy"
+    "omegaconf"
+    "packaging"
     "protobuf"
   ];
 
@@ -65,10 +71,13 @@ buildPythonPackage rec {
     boto3
     cloudpickle
     docker
+    fastapi
     google-pasta
+    graphene
     importlib-metadata
     jsonschema
     numpy
+    omegaconf
     packaging
     pandas
     pathos
@@ -78,12 +87,12 @@ buildPythonPackage rec {
     pyyaml
     requests
     sagemaker-core
-    sagemaker-mlflow
     schema
     smdebug-rulesconfig
     tblib
     tqdm
     urllib3
+    uvicorn
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs
@@ -107,8 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
-    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

@@ -1,11 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   meson,
   ninja,
   pkg-config,
-  pkgsCross,
   appstream-glib,
   desktop-file-utils,
   gobject-introspection,
@@ -16,18 +15,19 @@
   libadwaita,
   glib-networking,
   webkitgtk_6_0,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wike";
-  version = "3.1.0";
-  format = "other";
+  version = "3.1.3";
+  pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
-    rev = version;
-    hash = "sha256-Wx0jMO9a2K22zIU0B++0ZtPzLi+PrsJ5Sw8Sb8BODdU=";
+    tag = version;
+    hash = "sha256-+N9yhzIErFc0z/2JqEtit02GZKqo11viGCLoyQxtxBU=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     requests
     pygobject3
   ];
@@ -63,15 +63,16 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    tests.cross = pkgsCross.aarch64-multiplatform.wike;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wikipedia Reader for the GNOME Desktop";
     homepage = "https://github.com/hugolabe/Wike";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ samalws ] ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ samalws ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "wike";
   };
 }

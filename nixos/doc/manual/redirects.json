@@ -1,6 +1,84 @@
 {
+  "module-security-tpm2": [
+    "index.html#module-security-tpm2"
+  ],
+  "module-security-tpm2-introduction": [
+    "index.html#module-security-tpm2-introduction"
+  ],
+  "module-security-tpm2-introduction-hli": [
+    "index.html#module-security-tpm2-introduction-hli"
+  ],
+  "module-security-tpm2-introduction-resourcemanagers": [
+    "index.html#module-security-tpm2-introduction-resourcemanagers"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture-tcti": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture-tcti"
+  ],
+  "module-security-tpm2-nixosmodule": [
+    "index.html#module-security-tpm2-nixosmodule"
+  ],
+  "module-security-tpm2-nixosmodule-fapiconfiguration": [
+    "index.html#module-security-tpm2-nixosmodule-fapiconfiguration"
+  ],
+  "module-boot-plymouth-tpm2-totp": [
+    "index.html#module-boot-plymouth-tpm2-totp"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-check": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-check"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-configure": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-configure"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-enable": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
+  ],
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
+  ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-service-review": [
+    "index.html#modular-service-review"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
+  "module-services-anubis": [
+    "index.html#module-services-anubis"
+  ],
+  "module-services-anubis-configuration": [
+    "index.html#module-services-anubis-configuration"
+  ],
+  "module-services-anubis-quickstart": [
+    "index.html#module-services-anubis-quickstart"
   ],
   "module-services-crab-hole": [
     "index.html#module-services-crab-hole"
@@ -41,11 +119,80 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-firefox-syncserver-clients": [
+    "index.html#module-services-firefox-syncserver-clients"
+  ],
+  "module-services-firefox-syncserver-clients-android": [
+    "index.html#module-services-firefox-syncserver-clients-android"
+  ],
+  "module-services-firefox-syncserver-clients-desktop": [
+    "index.html#module-services-firefox-syncserver-clients-desktop"
+  ],
+  "module-services-opencloud": [
+    "index.html#module-services-opencloud"
+  ],
+  "module-services-opencloud-basic-usage": [
+    "index.html#module-services-opencloud-basic-usage"
+  ],
+  "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
+    "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
+  ],
+  "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
+    "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
+  ],
+  "module-services-strfry": [
+    "index.html#module-services-strfry"
+  ],
+  "module-services-strfry-basic-usage": [
+    "index.html#module-services-strfry-basic-usage"
+  ],
+  "module-services-strfry-reverse-proxy": [
+    "index.html#module-services-strfry-reverse-proxy"
+  ],
+  "module-services-dump1090-fa": [
+    "index.html#module-services-dump1090-fa"
+  ],
+  "module-services-dump1090-fa-configuration": [
+    "index.html#module-services-dump1090-fa-configuration"
+  ],
   "preface": [
     "index.html#preface"
   ],
   "ch-installation": [
     "index.html#ch-installation"
+  ],
+  "sec-contributing-development-env": [
+    "index.html#sec-contributing-development-env"
+  ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
+  "sec-nixos-test-wifi": [
+    "index.html#sec-nixos-test-wifi"
+  ],
+  "sec-nixos-test-wifi-ap": [
+    "index.html#sec-nixos-test-wifi-ap"
+  ],
+  "sec-nixos-test-wifi-monitor": [
+    "index.html#sec-nixos-test-wifi-monitor"
+  ],
+  "sec-nixos-test-wifi-station": [
+    "index.html#sec-nixos-test-wifi-station"
+  ],
+  "sec-nixos-test-wifi-vwifi-server": [
+    "index.html#sec-nixos-test-wifi-vwifi-server"
   ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
@@ -116,6 +263,9 @@
   "ex-config": [
     "index.html#ex-config"
   ],
+  "ex-nixos-rebuild-build-image-customize": [
+    "index.html#ex-nixos-rebuild-build-image-customize"
+  ],
   "sec-installation-additional-notes": [
     "index.html#sec-installation-additional-notes"
   ],
@@ -170,11 +320,20 @@
   "sec-image-nixos-rebuild-build-image": [
     "index.html#sec-image-nixos-rebuild-build-image"
   ],
+  "sec-image-nixos-rebuild-build-image-customize": [
+    "index.html#sec-image-nixos-rebuild-build-image-customize"
+  ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],
+  "sec-image-repart-store-paths": [
+    "index.html#sec-image-repart-store-paths"
+  ],
   "sec-image-repart-store-partition": [
     "index.html#sec-image-repart-store-partition"
+  ],
+  "sec-image-repart-store-subvolume": [
+    "index.html#sec-image-repart-store-subvolume"
   ],
   "sec-image-repart-appliance": [
     "index.html#sec-image-repart-appliance"
@@ -224,6 +383,9 @@
   "sec-userborn": [
     "index.html#sec-userborn"
   ],
+  "sec-restrict-usage-time": [
+    "index.html#sec-restrict-usage-time"
+  ],
   "ch-file-systems": [
     "index.html#ch-file-systems"
   ],
@@ -259,6 +421,9 @@
   ],
   "sec-x11-auto-login": [
     "index.html#sec-x11-auto-login"
+  ],
+  "sec-x11-startx": [
+    "index.html#sec-x11-startx"
   ],
   "sec-x11--graphics-cards-intel": [
     "index.html#sec-x11--graphics-cards-intel"
@@ -467,6 +632,18 @@
   "module-services-youtrack-upgrade-2022_3-2023_1": [
     "index.html#module-services-youtrack-upgrade-2022_3-2023_1"
   ],
+  "module-services-szurubooru": [
+    "index.html#module-services-szurubooru"
+  ],
+  "module-services-szurubooru-basic-usage": [
+    "index.html#module-services-szurubooru-basic-usage"
+  ],
+  "module-services-szurubooru-reverse-proxy-configuration": [
+    "index.html#module-services-szurubooru-reverse-proxy-configuration"
+  ],
+  "module-services-szurubooru-extra-config": [
+    "index.html#module-services-szurubooru-extra-config"
+  ],
   "module-services-suwayomi-server": [
     "index.html#module-services-suwayomi-server"
   ],
@@ -478,6 +655,18 @@
   ],
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
+  ],
+  "module-services-immich": [
+    "index.html#module-services-immich"
+  ],
+  "module-services-immich-vectorchord-migration": [
+    "index.html#module-services-immich-vectorchord-migration"
+  ],
+  "module-services-paisa": [
+    "index.html#module-services-paisa"
+  ],
+  "module-services-paisa-usage": [
+    "index.html#module-services-paisa-usage"
   ],
   "module-services-plausible": [
     "index.html#module-services-plausible"
@@ -517,6 +706,9 @@
   ],
   "module-services-nextcloud-httpd": [
     "index.html#module-services-nextcloud-httpd"
+  ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
   ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"
@@ -632,12 +824,6 @@
   "module-services-glance-quickstart": [
     "index.html#module-services-glance-quickstart"
   ],
-  "module-services-filesender": [
-    "index.html#module-services-filesender"
-  ],
-  "module-services-filesender-quickstart": [
-    "index.html#module-services-filesender-quickstart"
-  ],
   "module-services-discourse": [
     "index.html#module-services-discourse"
   ],
@@ -673,6 +859,15 @@
   ],
   "module-services-davis-basic-usage": [
     "index.html#module-services-davis-basic-usage"
+  ],
+  "module-services-draupnir": [
+    "index.html#module-services-draupnir"
+  ],
+  "module-services-draupnir-setup": [
+    "index.html#module-services-draupnir-setup"
+  ],
+  "module-services-draupnir-setup-ems": [
+    "index.html#module-services-draupnir-setup-ems"
   ],
   "module-services-castopod": [
     "index.html#module-services-castopod"
@@ -731,6 +926,12 @@
   "modules-services-akkoma-distributed-deployment": [
     "index.html#modules-services-akkoma-distributed-deployment"
   ],
+  "module-services-atalkd": [
+    "index.html#module-services-atalkd"
+  ],
+  "module-services-atalkd-basic-usage": [
+    "index.html#module-services-atalkd-basic-usage"
+  ],
   "module-services-systemd-lock-handler": [
     "index.html#module-services-systemd-lock-handler"
   ],
@@ -762,9 +963,7 @@
     "index.html#module-services-meilisearch-quickstart-search"
   ],
   "module-services-meilisearch-defaults": [
-    "index.html#module-services-meilisearch-defaults"
-  ],
-  "module-services-meilisearch-missing": [
+    "index.html#module-services-meilisearch-defaults",
     "index.html#module-services-meilisearch-missing"
   ],
   "module-services-networking-yggdrasil": [
@@ -824,6 +1023,12 @@
   "module-services-netbird-multiple-connections": [
     "index.html#module-services-netbird-multiple-connections"
   ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
@@ -874,6 +1079,12 @@
   ],
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
   ],
   "module-services-samba": [
     "index.html#module-services-samba"
@@ -965,18 +1176,6 @@
   "module-services-taskserver-manual-ca-management": [
     "index.html#module-services-taskserver-manual-ca-management"
   ],
-  "module-services-sourcehut": [
-    "index.html#module-services-sourcehut"
-  ],
-  "module-services-sourcehut-basic-usage": [
-    "index.html#module-services-sourcehut-basic-usage"
-  ],
-  "module-services-sourcehut-configuration": [
-    "index.html#module-services-sourcehut-configuration"
-  ],
-  "module-services-sourcehut-httpd": [
-    "index.html#module-services-sourcehut-httpd"
-  ],
   "module-services-gitlab": [
     "index.html#module-services-gitlab"
   ],
@@ -1057,6 +1256,15 @@
   ],
   "module-services-mautrix-signal-migrate-configuration": [
     "index.html#module-services-mautrix-signal-migrate-configuration"
+  ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
   ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
@@ -1196,23 +1404,24 @@
   "module-services-postgres-initializing-extra-permissions": [
     "index.html#module-services-postgres-initializing-extra-permissions"
   ],
-  "module-services-postgres-initializing-extra-permissions-superuser": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser"
-  ],
   "module-services-postgres-initializing-extra-permissions-superuser-post-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user"
   ],
-  "module-services-postgres-initializing-extra-permissions-service-user-pre-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
+  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
+  ],
+  "module-services-postgres-authentication": [
+    "index.html#module-services-postgres-authentication"
+  ],
+  "module-services-postgres-authentication-user-mapping": [
+    "index.html#module-services-postgres-authentication-user-mapping"
+  ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
   ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
@@ -1225,6 +1434,9 @@
   ],
   "module-services-postgres-plugins": [
     "index.html#module-services-postgres-plugins"
+  ],
+  "module-services-postgres-pls": [
+    "index.html#module-services-postgres-pls"
   ],
   "module-services-postgres-jit": [
     "index.html#module-services-postgres-jit"
@@ -1265,6 +1477,12 @@
   "module-services-foundationdb-full-docs": [
     "index.html#module-services-foundationdb-full-docs"
   ],
+  "module-service-umurmur": [
+    "index.html#module-service-umurmur"
+  ],
+  "module-service-umurmur-quick-start": [
+    "index.html#module-service-umurmur-quick-start"
+  ],
   "module-borgbase": [
     "index.html#module-borgbase"
   ],
@@ -1300,6 +1518,9 @@
   ],
   "module-security-acme-fix-jws": [
     "index.html#module-security-acme-fix-jws"
+  ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
   ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
@@ -1351,6 +1572,21 @@
   ],
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
+  ],
+  "module-services-networking-pihole-ftl": [
+    "index.html#module-services-networking-pihole-ftl"
+  ],
+  "module-services-networking-pihole-ftl-administration": [
+    "index.html#module-services-networking-pihole-ftl-administration"
+  ],
+  "module-services-networking-pihole-ftl-configuration": [
+    "index.html#module-services-networking-pihole-ftl-configuration"
+  ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
   ],
   "ch-profiles": [
     "index.html#ch-profiles"
@@ -1405,6 +1641,9 @@
   ],
   "sect-nixos-systemd-nixos": [
     "index.html#sect-nixos-systemd-nixos"
+  ],
+  "sect-nixos-systemd-custom-services": [
+    "index.html#sect-nixos-systemd-custom-services"
   ],
   "sect-nixos-systemd-template-units": [
     "index.html#sect-nixos-systemd-template-units"
@@ -1559,6 +1798,9 @@
   "sec-option-types-string": [
     "index.html#sec-option-types-string"
   ],
+  "sec-option-types-specialised": [
+    "index.html#sec-option-types-specialised"
+  ],
   "sec-option-types-submodule": [
     "index.html#sec-option-types-submodule"
   ],
@@ -1618,6 +1860,9 @@
   ],
   "sec-option-definitions-merging": [
     "index.html#sec-option-definitions-merging"
+  ],
+  "sec-option-definitions-definitions": [
+    "index.html#sec-option-definitions-definitions"
   ],
   "sec-assertions": [
     "index.html#sec-assertions"
@@ -1736,6 +1981,15 @@
   "sec-test-options-reference": [
     "index.html#sec-test-options-reference"
   ],
+  "test-opt-sshBackdoor.enable": [
+    "index.html#test-opt-sshBackdoor.enable"
+  ],
+  "test-opt-sshBackdoor.vsockOffset": [
+    "index.html#test-opt-sshBackdoor.vsockOffset"
+  ],
+  "test-opt-enableDebugHook": [
+    "index.html#test-opt-enableDebugHook"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -1774,6 +2028,9 @@
   ],
   "test-opt-meta.platforms": [
     "index.html#test-opt-meta.platforms"
+  ],
+  "test-opt-meta.hydraPlatforms": [
+    "index.html#test-opt-meta.hydraPlatforms"
   ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"
@@ -1823,6 +2080,9 @@
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
   ],
+  "sec-nixos-test-ssh-access": [
+    "index.html#sec-nixos-test-ssh-access"
+  ],
   "sec-nixos-test-port-forwarding": [
     "index.html#sec-nixos-test-port-forwarding"
   ],
@@ -1834,6 +2094,12 @@
   ],
   "sec-linking-nixos-tests-to-packages": [
     "index.html#sec-linking-nixos-tests-to-packages"
+  ],
+  "sec-nixos-test-testing-hardware-features": [
+    "index.html#sec-nixos-test-testing-hardware-features"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"
@@ -1871,6 +2137,43 @@
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
   ],
+  "sec-release-26.05": [
+    "release-notes.html#sec-release-26.05"
+  ],
+  "sec-release-26.05-highlights": [
+    "release-notes.html#sec-release-26.05-highlights"
+  ],
+  "sec-release-26.05-new-modules": [
+    "release-notes.html#sec-release-26.05-new-modules"
+  ],
+  "sec-release-26.05-incompatibilities": [
+    "release-notes.html#sec-release-26.05-incompatibilities"
+  ],
+  "sec-release-26.05-notable-changes": [
+    "release-notes.html#sec-release-26.05-notable-changes"
+  ],
+  "sec-release-25.11": [
+    "release-notes.html#sec-release-25.11"
+  ],
+  "sec-release-25.11-highlights": [
+    "release-notes.html#sec-release-25.11-highlights"
+  ],
+  "sec-release-25.11-new-modules": [
+    "release-notes.html#sec-release-25.11-new-modules"
+  ],
+  "sec-release-25.11-incompatibilities": [
+    "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-incompatibilities-sourcehut-removed": [
+    "release-notes.html#sec-release-25.11-incompatibilities-sourcehut-removed",
+    "index.html#module-services-sourcehut",
+    "index.html#module-services-sourcehut-basic-usage",
+    "index.html#module-services-sourcehut-configuration",
+    "index.html#module-services-sourcehut-httpd"
+  ],
+  "sec-release-25.11-notable-changes": [
+    "release-notes.html#sec-release-25.11-notable-changes"
+  ],
   "sec-release-25.05": [
     "release-notes.html#sec-release-25.05"
   ],
@@ -1886,11 +2189,39 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
-  "sec-release-25.05-lib": [
-    "release-notes.html#sec-release-25.05-lib"
+  "sec-release-25.05-wiki": [
+    "release-notes.html#sec-release-25.05-wiki"
   ],
-  "sec-release-25.05-lib-breaking": [
-    "release-notes.html#sec-release-25.05-lib-breaking"
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

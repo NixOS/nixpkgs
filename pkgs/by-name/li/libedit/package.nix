@@ -3,15 +3,16 @@
   stdenv,
   fetchurl,
   ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libedit";
-  version = "20240808-3.1";
+  version = "20251016-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/libedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XwVzNJ13xKSJZxkc3WY03Xql9jmMalf+A3zAJpbWCZ8=";
+    hash = "sha256-ITYrAGU7v8HHH3GnV42ma1tSA1WdQxNNLddxnjE84EE=";
   };
 
   outputs = [
@@ -22,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./01-cygwin.patch
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
   ];
 
   propagatedBuildInputs = [
@@ -56,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       similar to those found in GNU Readline.
     '';
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

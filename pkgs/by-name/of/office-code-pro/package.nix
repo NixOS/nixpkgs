@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Customized version of Source Code Pro";
     longDescription = ''
       Office Code Pro is a customized version of Source Code Pro, the monospaced
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
       and coding environments, but are still very usable in other applications.
     '';
     homepage = "https://github.com/nathco/Office-Code-Pro";
-    license = licenses.ofl;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.ofl;
+    maintainers = [ ];
   };
 }

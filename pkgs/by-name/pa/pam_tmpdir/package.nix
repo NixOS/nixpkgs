@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tracker.debian.org/pkg/pam-tmpdir";
     description = "PAM module for creating safe per-user temporary directories";
     mainProgram = "pam-tmpdir-helper";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

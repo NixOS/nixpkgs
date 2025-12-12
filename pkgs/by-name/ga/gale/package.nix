@@ -1,70 +1,77 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 
-  fetchNpmDeps,
-  npmHooks,
+  jq,
+  moreutils,
+  pnpm_10,
   nodejs,
   cargo-tauri,
   pkg-config,
   wrapGAppsHook3,
 
-  openssl,
+  glib-networking,
   libsoup_3,
+  openssl,
   webkitgtk_4_1,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.1.4";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-yAfQuLfucz522ln0YNMy8nppp2jk6tGJnP/WhK7JdhI=";
+    tag = finalAttrs.version;
+    hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
   };
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    hash = "sha256-xKg/ABUdtylFpT3EisXVvyv38++KjucrZ+s3/fFjzmM=";
-  };
+  postPatch = ''
+    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-u7UbC9TyEQwYpcVWt8/NsweDNWbQi6NuD9ay9gmMDjg=";
+    fetcherVersion = 1;
+    hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
   };
 
   cargoRoot = "src-tauri";
-
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
+  cargoHash = "sha256-tWQRYD6hMU7cvtelGryLdpfoEnUKYt7yYNwHTFZ4pLw=";
+
   nativeBuildInputs = [
-    npmHooks.npmConfigHook
+    jq
+    moreutils
+    pnpm_10.configHook
     nodejs
-    rustPlatform.cargoSetupHook
     cargo-tauri.hook
-    rustPlatform.cargoCheckHook
     pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs = [
+    glib-networking # needed to load icons
     libsoup_3
-    webkitgtk_4_1
     openssl
+    webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight Thunderstore client";
     homepage = "https://github.com/Kesomannen/gale";
     license = lib.licenses.gpl3Only;
     mainProgram = "gale";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      notohh
+    ];
     platforms = lib.platforms.linux;
   };
 })

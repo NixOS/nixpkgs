@@ -6,9 +6,7 @@
   libgit2,
   oniguruma,
   zlib,
-  stdenv,
-  darwin,
-  git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,24 +20,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sy2qNFn8JLE173HVWfFXBx21jcx4kpFMwi9a0m38lso=";
   };
 
-  cargoHash = "sha256-Z3TgVunC/qNzUe0X9xIg3fTFXFk2w9yDA+EskSCg0Qo=";
+  cargoHash = "sha256-qRF111ofiM8SNUjQfpDg75OPpJnP7fOqM8Ih3NQUdGY=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      oniguruma
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    oniguruma
+    zlib
+  ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # don't use vendored libgit2
@@ -61,15 +55,15 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";
     changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "git-dive";
   };
 }

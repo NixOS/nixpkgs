@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fschulze";
     repo = "setuptools-changelog-shortener";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-K8oVcX40K5j2CwQnulK55HykkEXAmOiUg4mZPg5T+YI=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_changelog_shortener" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools-changelog-shortener: add only newest changelog entries to long_description";
     homepage = "https://github.com/fschulze/setuptools-changelog-shortener";
     changelog = "https://github.com/fschulze/setuptools-changelog-shortener/blob/${src.rev}/README.rst#changelog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

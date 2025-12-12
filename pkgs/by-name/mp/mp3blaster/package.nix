@@ -8,15 +8,15 @@
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mp3blaster";
   version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "stragulus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0pzwml3yhysn8vyffw9q9p9rs8gixqkmg4n715vm23ib6wxbliqs";
+    repo = "mp3blaster";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gke6OjcrDlF3CceSVyfu8SGd0004cef8RlZ76Aet/F8=";
   };
 
   patches = [
@@ -25,14 +25,15 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://github.com/stragulus/mp3blaster/commit/62168cba5eaba6ffe56943552837cf033cfa96ed.patch";
-      sha256 = "088l27kl1l58lwxfnw5x2n64sdjy925ycphni3icwag7zvpj0xz1";
+      hash = "sha256-4Xcg7/7nKc7iiBZe5otIXjZNjBW9cOs6p6jQQOcRFCE=";
     })
   ];
 
   buildInputs = [
     ncurses
     libvorbis
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin SDL;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin SDL;
 
   env.NIX_CFLAGS_COMPILE = toString (
     [
@@ -40,14 +41,15 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-reserved-user-defined-literal"
+      "-Wno-register"
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Audio player for the text console";
     homepage = "http://www.mp3blaster.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ earldouglas ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ earldouglas ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

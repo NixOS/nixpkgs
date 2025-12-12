@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-U1q15D59N55qBf4NVOpe5RpQjlE1ye2TNNIZf2IZV3U=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "ldap3" ];
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     impacket
@@ -29,12 +29,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to evaluate Active Directory Security";
     homepage = "https://github.com/oppsec/breads";
     changelog = "https://github.com/oppsec/breads/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "breads-ad";
   };
 }

@@ -1,18 +1,25 @@
 {
   lib,
+  flutter335,
   fetchFromGitHub,
-  flutter,
+  runCommand,
+  yq-go,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  dart,
 }:
+
 let
-  version = "2.2.2";
+  version = "2.4.1";
+
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tq2pBvGHDdZoi2EMgBIgNgsg3Ovh2PLCvET98oB+7Sw=";
+    tag = "v${version}";
+    hash = "sha256-izoxMMvNjcgBPpc0kvhv4OIuqa1OHvmeoqFKrVgp0bE=";
   };
 in
-flutter.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -20,32 +27,61 @@ flutter.buildFlutterApplication {
 
   sourceRoot = "${src.name}/app";
 
-  gitHashes = {
-    dart_leap = "sha256-eEyUqdVToybQoDwdmz47H0f3/5zRdJzmPv1d/5mTOgA=";
-    lw_file_system = "sha256-qglyQu/Qu4F0z//hhVmCMHKuh9GclBKLC8G+qKFhd24=";
-    flutter_secure_storage_web = "sha256-ULYXcFjz9gKMjw1Q1KAmX2J7EcE8CbW0MN/EnwmaoQY=";
-    networker = "sha256-1b8soPRbHOGAb2wpsfw/uETnAlaCJZyLmynVRDX9Y8s=";
-    lw_file_system_api = "sha256-OOLbqKLvgHUJf3LiiQoHJS6kngnWtHPhswM69sX5fwE=";
-    lw_sysapi = "sha256-9hCAYB5tqYKQPHGa7+Zma6fE8Ei08RvyL9d65FMuI+I=";
-    flex_color_scheme = "sha256-MYEiiltevfz0gDag3yS/ZjeVaJyl1JMS8zvgI0k4Y0k=";
-    material_leap = "sha256-eEwyu7qn3oMQl5q7Mbunxwwhnk5EuM3mNqnZUcZIpFw=";
-    networker_socket = "sha256-8LRyo5HzreUMGh5j39vL+Gqzxp4MN/jhHYpDxbFV0Ao=";
-    perfect_freehand = "sha256-dMJ8CyhoQWbBRvUQyzPc7vdAhCzcAl1X7CcaT3u6dWo=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   postInstall = ''
     cp -r linux/debian/usr/share $out/share
   '';
 
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/app/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (
+        (gitUpdater {
+          ignoredVersions = ".*(rc|beta).*";
+          rev-prefix = "v";
+        })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
+
   meta = {
-    description = "Powerful, minimalistic, cross-platform, opensource note-taking app";
+    description = "Note taking app where your ideas come first";
     homepage = "https://github.com/LinwoodDev/Butterfly";
     mainProgram = "butterfly";
     license = with lib.licenses; [
       agpl3Plus
       cc-by-sa-40
+      asl20
     ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

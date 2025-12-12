@@ -19,14 +19,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  prePatch =
-    ''
-      patchShebangs .
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace GNUmakefile \
-        --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
-    '';
+  prePatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace GNUmakefile \
+      --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
+  '';
 
   makeTarget = "libstemmer.a";
 
@@ -38,11 +37,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snowball Stemming Algorithms";
     homepage = "https://snowballstem.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.all;
   };
 }

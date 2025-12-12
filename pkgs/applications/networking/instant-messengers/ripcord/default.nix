@@ -42,26 +42,25 @@ mkDerivation rec {
     desktop-file-utils
     imagemagick
   ];
-  buildInputs =
-    [
-      libsodium
-      libopus
-      libGL
-      alsa-lib
-    ]
-    ++ [
-      qtbase
-      qtsvg
-      qtmultimedia
-      qtwebsockets
-      qtimageformats
-    ]
-    ++ (with xorg; [
-      libX11
-      libXScrnSaver
-      libXcursor
-      xkeyboardconfig
-    ]);
+  buildInputs = [
+    libsodium
+    libopus
+    libGL
+    alsa-lib
+  ]
+  ++ [
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtwebsockets
+    qtimageformats
+  ]
+  ++ (with xorg; [
+    libX11
+    libXScrnSaver
+    libXcursor
+    xkeyboardconfig
+  ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];
@@ -97,12 +96,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

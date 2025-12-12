@@ -1,40 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doxygen
-, graphviz
-, makeWrapper
-, boost179
-, SDL2
-, python3
-, freetype
-, openal
-, libogg
-, libvorbis
-, zlib
-, libpng
-, libtiff
-, libjpeg
-, libGLU
-, libGL
-, glew
-, libxslt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  graphviz,
+  makeWrapper,
+  boost,
+  SDL2,
+  python3,
+  freetype,
+  openal,
+  libogg,
+  libvorbis,
+  zlib,
+  libpng,
+  libtiff,
+  libjpeg,
+  libGLU,
+  libGL,
+  glew,
+  libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeorion";
-  version = "0.5.0.1";
+  version = "0.5.1.1";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
-    rev = "v${version}";
-    sha256 = "sha256-VvTq6TcLc5BMvRTjVsZ2HA9ug3WAqFuTHIoFQ/9/zWc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0z3EPiSlViWQzpUu6+4IZ3ih0pbwdkZWAiVPsVcJr8o=";
   };
 
   buildInputs = [
-    (boost179.override { enablePython = true; python = python3; })
+    (boost.override {
+      enablePython = true;
+      python = python3;
+    })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype
@@ -77,11 +81,14 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "https://www.freeorion.org/";
-    license = with licenses; [ gpl2Only cc-by-sa-30 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tex ];
+    license = with lib.licenses; [
+      gpl2Only
+      cc-by-sa-30
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.3.0";
+  version = "4.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ku5qCuyRNRgermBn69YX/Z3o111xT7VIcopJM7HeplE=";
+    hash = "sha256-On/S3/twXU0O+u1DBqcEyJud7oULaI8GCosWFaeeX3Q=";
   };
 
   outputs = [
@@ -43,7 +43,8 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   env.LC_ALL = "en_US.utf-8";
 
@@ -52,27 +53,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # To prevent test from writing out non-reproducible .pyc files
+  # https://github.com/agronholm/typeguard/blob/ca512c28132999da514f31b5e93ed2f294ca8f77/tests/test_typechecked.py#L641
+  preCheck = "export PYTHONDONTWRITEBYTECODE=1";
+
   pythonImportsCheck = [ "typeguard" ];
 
-  disabledTestPaths = [
-    # mypy tests aren't passing with latest mypy
-    "tests/mypy"
-  ];
-
-  disabledTests = [
-    # AssertionError: 'type of argument "x" must be ' != 'None'
-    "TestPrecondition::test_precondition_ok_and_typeguard_fails"
-    # AttributeError: 'C' object has no attribute 'x'
-    "TestInvariant::test_invariant_ok_and_typeguard_fails"
-    # AttributeError: 'D' object has no attribute 'x'
-    "TestInheritance::test_invariant_ok_and_typeguard_fails"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

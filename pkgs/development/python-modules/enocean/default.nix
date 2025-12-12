@@ -3,10 +3,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+
+  # build-system
   setuptools,
+
+  # dependencies
   beautifulsoup4,
-  enum-compat,
   pyserial,
+
+  # tests
   pytestCheckHook,
 }:
 
@@ -18,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "enocean";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-S62YvRP1bvEzzzMd/jMjIdHAZsUImF9EQhsrPPzebDE=";
   };
 
@@ -32,9 +37,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRemoveDeps = [ "enum-compat" ];
+
   dependencies = [
     beautifulsoup4
-    enum-compat
     pyserial
   ];
 
@@ -46,12 +52,12 @@ buildPythonPackage rec {
     "enocean.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kipe/enocean/releases/tag/${version}";
     description = "EnOcean serial protocol implementation";
     mainProgram = "enocean_example.py";
     homepage = "https://github.com/kipe/enocean";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

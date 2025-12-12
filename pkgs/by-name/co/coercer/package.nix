@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "Coercer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WeaKToKYIB+jjTNIQvAUQQNb25TsNWALYZwIZuBjkPE=";
   };
 
@@ -33,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     rm Coercer.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automatically coerce a Windows server";
     homepage = "https://github.com/p0dalirius/Coercer";
     changelog = "https://github.com/p0dalirius/Coercer/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "coercer";
   };
 }

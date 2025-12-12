@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "tdl";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
     rev = "v${version}";
-    hash = "sha256-/aZ85FLGlNVfHG/LyfbvxBdZlne/s3ktw7RNmKeNSeI=";
+    hash = "sha256-EYS4EK0NmNHnvjMkf5AHrYpZeGw+n2ovFDLanbqpF4Y=";
   };
 
-  vendorHash = "sha256-o1GVra4kbjkLtFkoqK+8We/Ov+JHsEI+4jJYX5tPimM=";
+  vendorHash = "sha256-GpqgH23eK0h2BYxjN5TNUWEOT72smYdUoD1Iy6L2jL4=";
 
   ldflags = [
     "-s"
@@ -28,11 +28,11 @@ buildGoModule rec {
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Telegram downloader/tools written in Golang";
     homepage = "https://github.com/iyear/tdl";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Ligthiago ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "tdl";
   };
 }

@@ -3,12 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
 
-  # runtime
+  # dependencies
   audioread,
   decorator,
   joblib,
@@ -22,47 +21,42 @@
   scipy,
   soundfile,
   soxr,
+  standard-aifc,
+  standard-sunau,
   typing-extensions,
 
   # tests
   ffmpeg-headless,
   packaging,
+  pytest-cov-stub,
   pytest-mpl,
   pytestCheckHook,
   resampy,
   samplerate,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.10.2.post1";
-  format = "pyproject";
+  version = "0.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
     repo = "librosa";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true; # for test data
-    hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
+    hash = "sha256-T58J/Gi3tHzelr4enbYJi1KmO46QxE5Zlhkc0+EgvRg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
   patches = [
-    (fetchpatch2 {
-      # https://github.com/librosa/librosa/issues/1849
-      name = "librosa-scipy-1.14-compat.patch";
-      url = "https://github.com/librosa/librosa/commit/d0a12c87cdff715ffb8ac1c7383bba1031aa71e4.patch";
-      hash = "sha256-NHuGo4U1FRikb5OIkycQBvuZ+0OdG/VykTcuhXkLUug=";
-    })
+    # <https://github.com/librosa/librosa/pull/1977>
+    ./fix-with-numba-0.62.0.patch
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov-report term-missing --cov librosa --cov-report=xml " ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     audioread
     decorator
     joblib
@@ -71,10 +65,12 @@ buildPythonPackage rec {
     numba
     numpy
     pooch
-    scipy
     scikit-learn
+    scipy
     soundfile
     soxr
+    standard-aifc
+    standard-sunau
     typing-extensions
   ];
 
@@ -86,44 +82,58 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ffmpeg-headless
     packaging
+    pytest-cov-stub
     pytest-mpl
     pytestCheckHook
     resampy
     samplerate
-  ] ++ optional-dependencies.matplotlib;
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.matplotlib;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  disabledTests = [
+    # requires network access
+    "test_example"
+    "test_example_info"
+    "test_load_resample"
+    "test_cite_released"
+    "test_cite_badversion"
+    "test_cite_unreleased"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # crashing the python interpreter
+    "test_unknown_time_unit"
+    "test_unknown_wavaxis"
+    "test_waveshow_unknown_wavaxis"
+    "test_waveshow_bad_maxpoints"
+    "test_waveshow_deladaptor"
+    "test_waveshow_disconnect"
+    "test_unknown_axis"
+    "test_axis_bound_warning"
+    "test_auto_aspect"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # AssertionError (numerical comparison fails)
+    "test_beat_track_multi"
+    "test_beat_track_multi_bpm_vector"
+    "test_melspectrogram_multi"
+    "test_melspectrogram_multi_time"
+    "test_nnls_matrix"
+    "test_nnls_multiblock"
+    "test_onset_detect"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky (numerical comparison fails)
+    "test_istft_multi"
+    "test_pitch_shift_multi"
+    "test_time_stretch_multi"
+  ];
 
-  disabledTests =
-    [
-      # requires network access
-      "test_example"
-      "test_example_info"
-      "test_load_resample"
-      "test_cite_released"
-      "test_cite_badversion"
-      "test_cite_unreleased"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # crashing the python interpreter
-      "test_unknown_time_unit"
-      "test_unknown_wavaxis"
-      "test_waveshow_unknown_wavaxis"
-      "test_waveshow_bad_maxpoints"
-      "test_waveshow_deladaptor"
-      "test_waveshow_disconnect"
-      "test_unknown_axis"
-      "test_axis_bound_warning"
-      "test_auto_aspect"
-    ];
-
-  meta = with lib; {
+  meta = {
     description = "Python library for audio and music analysis";
     homepage = "https://github.com/librosa/librosa";
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ carlthome ];
   };
 }

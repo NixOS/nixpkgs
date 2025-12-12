@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "monzopy";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JakeMartin-ICL";
     repo = "monzopy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bWuWc2+80Og9mjzgqatGeR028CD3oqwKrw/BRTz3KXg=";
+    tag = "v${version}";
+    hash = "sha256-LMg3hCaNa9LF3pZEQ/uQgt81V6qKmOwZnKHdsI8MHLY=";
   };
 
   build-system = [ setuptools ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "monzopy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to work with the Monzo API";
     homepage = "https://github.com/JakeMartin-ICL/monzopy";
     changelog = "https://github.com/JakeMartin-ICL/monzopy/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

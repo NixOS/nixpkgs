@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.8";
+  version = "2.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abhinavsingh";
     repo = "proxy.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VQjK4wNOuUk3KhlvSlDbyclC+RUjeEIVvPN+bKq0fFc=";
+    tag = "v${version}";
+    hash = "sha256-47Qt8J60QFfHUSquD17xMfl+wBTsSimaPSRvS/sSPMI=";
   };
 
   postPatch = ''
@@ -85,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proxy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
-    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

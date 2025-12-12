@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "enjarify";
     rev = version;
     sha256 = "sha256-VDBC5n2jWLNJsilX+PV1smL5JeBDj23jYFRwdObXwYs=";
   };
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/enjarify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for translating Dalvik bytecode to equivalent Java bytecode";
     homepage = "https://github.com/google/enjarify/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "enjarify";
   };

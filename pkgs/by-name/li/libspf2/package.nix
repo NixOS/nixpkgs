@@ -28,19 +28,20 @@ stdenv.mkDerivation rec {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+  CFLAGS = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description =
       "Implementation of the Sender Policy Framework for SMTP " + "authorization (Helsinki Systems fork)";
     homepage = "https://github.com/helsinki-systems/libspf2";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       bsd2
     ];
-    maintainers = with maintainers; [ euxane ] ++ teams.helsinki-systems.members;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ euxane ];
+    teams = [ lib.teams.helsinki-systems ];
+    platforms = lib.platforms.all;
   };
 }

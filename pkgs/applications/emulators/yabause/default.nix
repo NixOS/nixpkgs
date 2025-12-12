@@ -18,7 +18,7 @@ mkDerivation rec {
   version = "0.9.15";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/yabause/releases/${version}/${pname}-${version}.tar.gz";
+    url = "https://web.archive.org/web/20250129091147/http://free.downloads.tuxfamily.net/yabause/releases/${version}/yabause-${version}.tar.gz";
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
@@ -47,14 +47,22 @@ mkDerivation rec {
     "-DYAB_NETWORK=ON"
     "-DYAB_OPTIMIZED_DMA=ON"
     "-DYAB_PORTS=qt"
+    "-DSH2_DYNAREC=OFF" # https://github.com/Yabause/yabause/issues/270
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace {./,src/,src/runner/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace src/{c68k,musashi}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Open-source Sega Saturn emulator";
     mainProgram = "yabause";
     homepage = "https://yabause.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

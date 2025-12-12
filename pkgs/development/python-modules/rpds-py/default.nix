@@ -5,7 +5,6 @@
   cargo,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   libiconv,
@@ -13,21 +12,18 @@
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.20.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-1yohCCT6z9r4dozy18oloELDAyCzAg3i+gRkCSDU4SE=";
+    hash = "sha256-TZdmG/WEjdnl633tSA3sz50yzizVALiKJqy/e9KGSYU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-5vbR2EbrAPJ8pb78tj/+r9nOWgQDT5aO/LUQI4kAGjU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-0wMmhiUjXY5DaA43l7kBKE7IX1UoEFZBJ8xnafVlU60=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpds" ];
 
-  meta = with lib; {
-    description = "Python bindings to Rust's persistent data structures (rpds";
-    homepage = "https://pypi.org/project/rpds-py/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+  meta = {
+    changelog = "https://github.com/crate-py/rpds/releases/tag/v${version}";
+    description = "Python bindings to Rust's persistent data structures";
+    homepage = "https://github.com/crate-py/rpds";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

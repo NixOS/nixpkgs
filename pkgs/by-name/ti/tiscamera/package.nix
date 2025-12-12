@@ -52,49 +52,47 @@ stdenv.mkDerivation rec {
       --replace "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      wrapGAppsHook3
-      gobject-introspection
-    ]
-    ++ lib.optionals withDoc [
-      sphinx
-      graphviz
-    ]
-    ++ lib.optionals withAravis [
-      meson
-    ]
-    ++ lib.optionals withGui [
-      qt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    gobject-introspection
+  ]
+  ++ lib.optionals withDoc [
+    sphinx
+    graphviz
+  ]
+  ++ lib.optionals withAravis [
+    meson
+  ]
+  ++ lib.optionals withGui [
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      elfutils
-      libselinux
-      libsepol
-      libunwind
-      libusb1
-      libuuid
-      libzip
-      orc
-      pcre
-      zstd
-      glib
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-    ]
-    ++ lib.optionals withAravis [
-      aravis
-    ]
-    ++ lib.optionals withGui [
-      qt5.qtbase
-    ];
+  buildInputs = [
+    elfutils
+    libselinux
+    libsepol
+    libunwind
+    libusb1
+    libuuid
+    libzip
+    orc
+    pcre
+    zstd
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+  ]
+  ++ lib.optionals withAravis [
+    aravis
+  ]
+  ++ lib.optionals withGui [
+    qt5.qtbase
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -111,6 +109,7 @@ stdenv.mkDerivation rec {
     "-DTCAM_INTERNAL_ARAVIS=OFF"
     "-DTCAM_ARAVIS_USB_VISION=${if withAravis && withAravisUsbVision then "ON" else "OFF"}"
     "-DTCAM_INSTALL_FORCE_PREFIX=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   env.CXXFLAGS = "-include cstdint";
@@ -129,15 +128,17 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  doInstallCheck = true;
+
   preFixup = ''
     gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jraygauthier ];
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

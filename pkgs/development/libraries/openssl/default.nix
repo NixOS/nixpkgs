@@ -15,11 +15,19 @@
   enableSSL3 ? false,
   enableMD2 ? false,
   enableKTLS ? stdenv.hostPlatform.isLinux,
+  # change this to a value between 0 and 5 (as of OpenSSL 3.5)
+  # if null, default is used, changes the permitted algorithms
+  # and key lengths in the default config
+  # see: https://docs.openssl.org/3.5/man3/SSL_CTX_set_security_level/
+  securityLevel ? null,
   static ? stdenv.hostPlatform.isStatic,
   # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
   conf ? null,
   removeReferencesTo,
   testers,
+  providers ? [ ], # Each provider in the format { name = "provider-name"; package = <drv>; }
+  autoloadProviders ? false,
+  extraINIConfig ? null, # Extra INI config in the format { section_name = { key = "value"}; }
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -27,7 +35,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
+# check from time to time, if this range is still correct
+assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
+
 let
+  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+
   common =
     {
       version,
@@ -54,54 +67,66 @@ let
 
       inherit patches;
 
-      postPatch =
-        ''
-          patchShebangs Configure
-        ''
-        + lib.optionalString (lib.versionOlder version "1.1.1") ''
-          patchShebangs test/*
-          for a in test/t* ; do
-            substituteInPlace "$a" \
-              --replace /bin/rm rm
-          done
-        ''
-        # config is a configure script which is not installed.
-        + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
-          substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-        ''
-        + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
-          substituteInPlace crypto/async/arch/async_posix.h \
-            --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
-                      '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
-        ''
-        # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
-        # it to the separate etc output.
-        + lib.optionalString static ''
-          substituteInPlace Configurations/unix-Makefile.tmpl \
-            --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
-                      'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
-        '';
+      postPatch = ''
+        patchShebangs Configure
+      ''
+      + lib.optionalString (lib.versionOlder version "1.1.1") ''
+        patchShebangs test/*
+        for a in test/t* ; do
+          substituteInPlace "$a" \
+            --replace /bin/rm rm
+        done
+      ''
+      # config is a configure script which is not installed.
+      + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
+        substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+      ''
+      + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
+        substituteInPlace crypto/async/arch/async_posix.h \
+          --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+                    '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+      ''
+      # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
+      # it to the separate etc output.
+      + lib.optionalString static ''
+        substituteInPlace Configurations/unix-Makefile.tmpl \
+          --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
+                    'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
+      ''
+      # This test will fail if the error strings between the build libc and host
+      # libc mismatch, e.g. when cross-compiling from glibc to musl
+      +
+        lib.optionalString
+          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
+          ''
+            rm test/recipes/02-test_errstr.t
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
+      '';
 
-      outputs =
-        [
-          "bin"
-          "dev"
-          "out"
-          "man"
-        ]
-        ++ lib.optional withDocs "doc"
-        # Separate output for the runtime dependencies of the static build.
-        # Specifically, move OPENSSLDIR into this output, as its path will be
-        # compiled into 'libcrypto.a'. This makes it a runtime dependency of
-        # any package that statically links openssl, so we want to keep that
-        # output minimal.
-        ++ lib.optional static "etc";
+      outputs = [
+        "bin"
+        "dev"
+        "out"
+        "man"
+      ]
+      ++ lib.optional withDocs "doc"
+      # Separate output for the runtime dependencies of the static build.
+      # Specifically, move OPENSSLDIR into this output, as its path will be
+      # compiled into 'libcrypto.a'. This makes it a runtime dependency of
+      # any package that statically links openssl, so we want to keep that
+      # output minimal.
+      ++ lib.optional static "etc";
       setOutputFlags = false;
       separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+        !stdenv.hostPlatform.isDarwin
+        && !stdenv.hostPlatform.isAndroid
+        && !(stdenv.hostPlatform.useLLVM or false)
+        && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -117,6 +142,7 @@ let
           aarch64-darwin = "./Configure darwin64-arm64-cc";
           x86_64-linux = "./Configure linux-x86_64";
           x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+          powerpc-linux = "./Configure linux-ppc";
           powerpc64-linux = "./Configure linux-ppc64";
           riscv32-linux = "./Configure ${
             if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
@@ -154,79 +180,97 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
 
       # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
       dontAddStaticConfigureFlags = true;
-      configureFlags =
-        [
-          "shared" # "shared" builds both shared and static libraries
-          "--libdir=lib"
-          (
-            if !static then
-              "--openssldir=etc/ssl"
-            else
-              # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
-              # to the path to make it appear absolute before variable expansion,
-              # else the 'prefix' would be prepended to it.
-              "--openssldir=/.$(etc)/etc/ssl"
-          )
-        ]
-        ++ lib.optionals withCryptodev [
-          "-DHAVE_CRYPTODEV"
-          "-DUSE_CRYPTODEV_DIGESTS"
-        ]
-        ++ lib.optional enableMD2 "enable-md2"
-        ++ lib.optional enableSSL2 "enable-ssl2"
-        ++ lib.optional enableSSL3 "enable-ssl3"
-        # We select KTLS here instead of the configure-time detection (which we patch out).
-        # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-        ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
-        ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
-        # OpenSSL needs a specific `no-shared` configure flag.
-        # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
-        # for a comprehensive list of configuration options.
-        ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
-        ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
-        # This introduces a reference to the CTLOG_FILE which is undesired when
-        # trying to build binaries statically.
-        ++ lib.optional static "no-ct"
-        ++ lib.optional withZlib "zlib"
-        # /dev/crypto support has been dropped in OpenBSD 5.7.
+      configureFlags = [
+        "shared" # "shared" builds both shared and static libraries
+        "--libdir=lib"
+        (
+          if !static then
+            "--openssldir=etc/ssl"
+          else
+            # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
+            # to the path to make it appear absolute before variable expansion,
+            # else the 'prefix' would be prepended to it.
+            "--openssldir=/.$(etc)/etc/ssl"
+        )
+      ]
+      ++ lib.optionals withCryptodev [
+        "-DHAVE_CRYPTODEV"
+        "-DUSE_CRYPTODEV_DIGESTS"
+      ]
+      # enable optimized EC curve primitives on x86_64,
+      # can provide a 2x up to 4x speedup at best
+      # with combined PQC and conventional crypto handshakes
+      # starting with 3.5 its nice to speed things up for free
+      ++ lib.optional stdenv.hostPlatform.isx86_64 "enable-ec_nistp_64_gcc_128"
+      # useful to set e.g. 256 bit security level with setting this to 5
+      ++ lib.optional (securityLevel != null) "-DOPENSSL_TLS_SECURITY_LEVEL=${toString securityLevel}"
+      ++ lib.optional enableMD2 "enable-md2"
+      ++ lib.optional enableSSL2 "enable-ssl2"
+      ++ lib.optional enableSSL3 "enable-ssl3"
+      # We select KTLS here instead of the configure-time detection (which we patch out).
+      # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      # OpenSSL needs a specific `no-shared` configure flag.
+      # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+      # for a comprehensive list of configuration options.
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
+      # This introduces a reference to the CTLOG_FILE which is undesired when
+      # trying to build binaries statically.
+      ++ lib.optional static "no-ct"
+      ++ lib.optional withZlib "zlib"
+      # /dev/crypto support has been dropped in OpenBSD 5.7.
+      #
+      # OpenBSD's ports does this too,
+      # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+      #
+      # https://github.com/openssl/openssl/pull/10565 indicated the
+      # intent was that this would be configured properly automatically,
+      # but that doesn't appear to be the case.
+      ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
+      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
+        # This is necessary in order to avoid openssl adding -march
+        # flags which ultimately conflict with those added by
+        # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
+        # detect any -march flags, using this perl code:
         #
-        # OpenBSD's ports does this too,
-        # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+        #   && !grep { $_ =~ /-m(ips|arch=)/ } (@{$config{CFLAGS}})
         #
-        # https://github.com/openssl/openssl/pull/10565 indicated the
-        # intent was that this would be configured properly automatically,
-        # but that doesn't appear to be the case.
-        ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
-        ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
-          # This is necessary in order to avoid openssl adding -march
-          # flags which ultimately conflict with those added by
-          # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
-          # detect any -march flags, using this perl code:
-          #
-          #   && !grep { $_ =~ /-m(ips|arch=)/ } (@{$config{CFLAGS}})
-          #
-          # The following bogus CFLAGS environment variable triggers the
-          # the code above, inhibiting `./Configure` from adding the
-          # conflicting flags.
-          "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
-        ];
+        # The following bogus CFLAGS environment variable triggers the
+        # the code above, inhibiting `./Configure` from adding the
+        # conflicting flags.
+        "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
+      ]
+      # tests are not being installed, it makes no sense
+      # to build them if check is disabled, e.g. on cross.
+      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
 
       makeFlags = [
         "MANDIR=$(man)/share/man"
         # This avoids conflicts between man pages of openssl subcommands (for
         # example 'ts' and 'err') man pages and their equivalent top-level
         # command in other packages (respectively man-pages and moreutils).
-        # This is done in ubuntu and archlinux, and possiibly many other distros.
+        # This is done in ubuntu and archlinux, and possibly many other distros.
         "MANSUFFIX=ssl"
       ];
 
       enableParallelBuilding = true;
+
+      doCheck = true;
+      preCheck = ''
+        patchShebangs util
+      '';
+
+      __darwinAllowLocalNetworking = true;
 
       postInstall =
         (
@@ -253,7 +297,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -275,7 +319,47 @@ let
         ''
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
+        ''
+
+        # Replace the config's default provider section with the providers we wish
+        # to automatically load
+        + lib.optionalString autoloadProviders ''
+          sed -i '/^[[:space:]]*#/!s|\[provider_sect\]|${
+            let
+              config-provider-attrset = lib.foldl' (acc: elem: acc // elem) { } (
+                map (provider: { "${provider.name}" = "${provider.name}_sect"; }) providers
+              );
+            in
+            lib.escape [ "\n" ] (lib.generators.toINI { } { provider_sect = config-provider-attrset; })
+          }|' $etc/etc/ssl/openssl.cnf
+
+          # Activate the default provider
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.concatStringsSep "\n" (
+          map
+            (provider: ''
+              cp ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+
+              ${lib.optionalString autoloadProviders ''
+                echo '${
+                  lib.generators.toINI { } {
+                    "${provider.name}_sect" = {
+                      activate = 1;
+                    };
+                  }
+                }' >> $etc/etc/ssl/openssl.cnf
+              ''}
+            '')
+
+            providers
+        )
+        + lib.optionalString (extraINIConfig != null) ''
+          echo '${lib.generators.toINI { } extraINIConfig}' >> $etc/etc/ssl/openssl.cnf
         '';
+
+      allowedImpureDLLs = [ "CRYPT32.dll" ];
 
       postFixup =
         lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -300,14 +384,16 @@ let
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
-        maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
+        maintainers = with lib.maintainers; [ thillux ];
+        teams = [ lib.teams.stridtech ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"
           "openssl"
         ];
         platforms = lib.platforms.all;
-      } // extraMeta;
+      }
+      // extraMeta;
     });
 
 in
@@ -344,20 +430,27 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.15";
-    hash = "sha256-I8Zm0O3yDxQkmz2PA2isrumrWFsJ4d6CEHxm4fPslTM=";
+    version = "3.0.18";
+    hash = "sha256-2Aw09c+QLczx8bXfXruG0DkuNwSeXXPfGzq65y5P/os=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 
@@ -366,24 +459,34 @@ in
     };
   };
 
-  openssl_3_3 = common {
-    version = "3.3.2";
-    hash = "sha256-LopAsBl5r+i+C7+z3l3BxnCf7bRtbInBDaEUq1/D0oE=";
+  openssl_3_6 = common {
+    version = "3.6.0";
+    hash = "sha256-tqX0S362nj+jXb8VUkQFtEg3pIHUPYHa3d4/8h/LuOk=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then
-          ./3.3/use-etc-ssl-certs-darwin.patch
+          ./3.5/use-etc-ssl-certs-darwin.patch
         else
-          ./3.3/use-etc-ssl-certs.patch
+          ./3.5/use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./3.5/fix-mingw-linking.patch
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 

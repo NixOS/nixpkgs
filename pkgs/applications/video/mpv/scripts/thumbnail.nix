@@ -23,15 +23,15 @@ buildLua rec {
   dontBuild = false;
 
   scriptPath = "mpv_thumbnail_script_client_osc.lua";
-  extraScripts = [ "mpv_thumbnail_script_server.lua" ];
-  passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
+  extraScriptsToCopy = [ "mpv_thumbnail_script_server.lua" ];
+  extraScriptsToLoad = [ "mpv_thumbnail_script_server.lua" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lua script to show preview thumbnails in mpv's OSC seekbar";
     homepage = "https://github.com/marzzzello/mpv_thumbnail_script";
     changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thegu5 ];
   };
 }

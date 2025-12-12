@@ -12,12 +12,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "I60R";
-    repo = pname;
+    repo = "page";
     rev = "v${version}";
     hash = "sha256-uNdtgx9/9+KOfQvHiKNrT8NFWtR2tfJuI2bMwywBC/4=";
   };
 
-  cargoHash = "sha256-ctYQMBAdSUfEek2vcCa3gnI9N6ZG9b+VvtAzT20jlXY=";
+  cargoHash = "sha256-ZoLYnXU1y+7AcbxUlcY9MPGZuuxzG8d5Im2/uSlCoaw=";
 
   cargoPatches = [
     # Cargo.lock is outdated.
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $completions_dir/_page
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Use neovim as pager";
     homepage = "https://github.com/I60R/page";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "page";
-    maintainers = [ maintainers.s1341 ];
+    maintainers = [ lib.maintainers.s1341 ];
   };
 }

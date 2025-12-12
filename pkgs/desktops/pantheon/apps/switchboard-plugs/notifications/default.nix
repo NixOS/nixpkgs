@@ -9,6 +9,8 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
+  glib,
   granite7,
   gtk4,
   switchboard,
@@ -17,16 +19,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-53rpnp1RWdPofY00XWKiz8WDPC7RNMaGQFHBDzjsIt4=";
+    repo = "settings-notifications";
+    tag = version;
+    hash = "sha256-MYvSru/78jMhc1Rk8YuztajEdmRRssCFN7IMUHWzW78=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config
@@ -46,11 +50,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Notifications Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-notifications";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-notifications";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

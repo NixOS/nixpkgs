@@ -1,7 +1,7 @@
 {
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   lib,
   stdenv,
   docutils,
@@ -24,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  perl,
   desktop-file-utils,
   libpulseaudio,
   libical,
@@ -52,16 +51,20 @@
   pipewire,
   gst_all_1,
   adwaita-icon-theme,
+  glycin-loaders,
   gnome-bluetooth,
   gnome-clocks,
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
   bash-completion,
+  lcms2,
   libgbm,
   libGL,
   libXi,
   libX11,
+  libxkbcommon,
+  libsoup_3,
   libxml2,
 }:
 
@@ -70,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.2";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -79,13 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QYTQGhq4LLQh0couK8zgKSzrRsTHSeYbC95LdQBNLgA=";
+    hash = "sha256-0TuFXY35nev37M+BC24FT9sK64fvixMZGKbkyRl6Asc=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
       tecla = "${lib.getBin gnome-tecla}/bin/tecla";
@@ -118,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     gi-docgen
-    perl
     wrapGAppsHook4
     sassc
     desktop-file-utils
@@ -155,10 +156,13 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
+    lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
+    libxkbcommon
+    libsoup_3
     libxml2
 
     # recording
@@ -186,11 +190,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.pl
+    patchShebangs \
+      src/data-to-c.py \
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
+  '';
+
+  preInstall = ''
+    # gnome-shell contains GSettings schema overrides for Mutter.
+    schemadir="$out/share/glib-2.0/schemas"
+    mkdir -p "$schemadir"
+    cp "${glib.getSchemaPath mutter}/org.gnome.mutter.gschema.xml" "$schemadir"
   '';
 
   postInstall = ''
@@ -209,9 +222,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Until glib’s xdgmime is patched
-      # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --prefix XDG_DATA_DIRS : ${
+        lib.makeSearchPath "share" [
+          # Until glib’s xdgmime is patched
+          # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
+          shared-mime-info
+          # For background images https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/4554
+          glycin-loaders
+        ]
+      }
     )
   '';
 
@@ -234,13 +253,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 
 })

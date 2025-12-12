@@ -12,7 +12,7 @@ let
   inherit (rustPackages) rustPlatform;
   bpftool = llvmPackages.stdenv.mkDerivation {
     pname = "bpftool";
-    version = "unstable-2023-03-11";
+    version = "0-unstable-2023-03-11";
 
     # this fork specialized for some functions
     # and has eventually been embedded into the ecc binary
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-t8sPwAha90SMC/SJqZngXD9hpoaWh9e91X/kuHN4G7o=";
+  cargoHash = "sha256-iYceYwRqnYA6KxCQxOieR8JZ6TQlIL+OSzAjyr4Cu/g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -123,12 +123,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eunomia.dev";
     description = "EBPF compile toolchain for eunomia-bpf";
     mainProgram = "ecc-rs";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

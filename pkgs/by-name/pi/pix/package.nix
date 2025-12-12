@@ -30,17 +30,18 @@
   desktop-file-utils,
   itstool,
   xapp,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.4.4";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "pix";
     rev = version;
-    hash = "sha256-BasS0Z8fj7vxFnMZ6KOd5LkvSvTaw6+DDfcRFrdus7A=";
+    hash = "sha256-zK02qhTGuYgZWHkJ6c3EVinUcojNEWwecvPjblECLkw=";
   };
 
   nativeBuildInputs = [
@@ -85,7 +86,6 @@ stdenv.mkDerivation rec {
 
     patchShebangs data/gschemas/make-enums.py \
       pix/make-pix-h.py \
-      po/make-potfiles-in.py \
       postinstall.py \
       pix/make-authors-tab.py
   '';
@@ -95,15 +95,20 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dwebservices=false" ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${
+      lib.makeSearchPath "share" [
+        shared-mime-info
+        xapp-symbolic-icons
+      ]
+    }")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

@@ -50,13 +50,12 @@ stdenv.mkDerivation {
     which
   ];
 
-  makeFlags =
-    [
-      "-C Linux"
-    ]
-    ++ lib.optionals debug [
-      "DEBUG=1"
-    ];
+  makeFlags = [
+    "-C Linux"
+  ]
+  ++ lib.optionals debug [
+    "DEBUG=1"
+  ];
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -85,7 +84,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/intel/intel-sgx-ssl";
     maintainers = with lib.maintainers; [
       phlip9
-      trundle
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];

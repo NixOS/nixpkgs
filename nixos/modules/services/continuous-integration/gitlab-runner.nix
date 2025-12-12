@@ -68,18 +68,19 @@ let
   configPath = ''"$HOME"/.gitlab-runner/config.toml'';
   configureScript = pkgs.writeShellApplication {
     name = "gitlab-runner-configure";
-    runtimeInputs =
-      [ cfg.package ]
-      ++ (with pkgs; [
-        bash
-        gawk
-        jq
-        moreutils
-        remarshal
-        util-linux
-        perl
-        python3
-      ]);
+    runtimeInputs = [
+      cfg.package
+    ]
+    ++ (with pkgs; [
+      bash
+      gawk
+      jq
+      moreutils
+      remarshal
+      util-linux
+      perl
+      python3
+    ]);
     text =
       if (cfg.configFile != null) then
         ''
@@ -188,6 +189,7 @@ let
                         [ "--docker-image ${service.dockerImage}" ]
                         ++ optional service.dockerDisableCache "--docker-disable-cache"
                         ++ optional service.dockerPrivileged "--docker-privileged"
+                        ++ optional (service.dockerPullPolicy != null) "--docker-pull-policy ${service.dockerPullPolicy}"
                         ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
                         ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
                         ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
@@ -273,7 +275,8 @@ in
       type = types.listOf types.package;
       default = [ ];
       description = ''
-        Extra packages to add to PATH for the gitlab-runner process.
+        Extra packages to add to `PATH` for the `gitlab-runner` process.
+        These packages won't be added to the system, use `environment.systemPackages` for that.
       '';
     };
     services = mkOption {
@@ -315,7 +318,7 @@ in
 
               ''${pkgs.nix}/bin/nix-env -i ''${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
 
-              ''${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+              ''${pkgs.nix}/bin/nix-channel --add https://channels.nixos.org/nixpkgs-unstable
               ''${pkgs.nix}/bin/nix-channel --update nixpkgs
             ''';
             environmentVariables = {
@@ -455,7 +458,7 @@ in
               default = "docker";
               description = ''
                 Select executor, eg. shell, docker, etc.
-                See [runner documentation](https://docs.gitlab.com/runner/executors/README.html) for more information.
+                See [runner executor documentation](https://docs.gitlab.com/runner/executors/) for more information.
               '';
             };
             buildsDir = mkOption {
@@ -480,6 +483,19 @@ in
               default = null;
               description = ''
                 Docker image to be used.
+              '';
+            };
+            dockerPullPolicy = mkOption {
+              type = types.nullOr (
+                types.enum [
+                  "always"
+                  "never"
+                  "if-not-present"
+                ]
+              );
+              default = null;
+              description = ''
+                Default pull-policy for Docker images
               '';
             };
             dockerVolumes = mkOption {
@@ -761,8 +777,11 @@ in
     systemd.services.gitlab-runner = {
       description = "Gitlab Runner";
       documentation = [ "https://docs.gitlab.com/runner/" ];
-      after =
-        [ "network.target" ] ++ optional hasDocker "docker.service" ++ optional hasPodman "podman.service";
+      after = [
+        "network.target"
+      ]
+      ++ optional hasDocker "docker.service"
+      ++ optional hasPodman "podman.service";
 
       requires = optional hasDocker "docker.service" ++ optional hasPodman "podman.service";
       wantedBy = [ "multi-user.target" ];
@@ -783,24 +802,23 @@ in
         ++ cfg.extraPackages;
 
       reloadIfChanged = true;
-      serviceConfig =
-        {
-          # Set `DynamicUser` under `systemd.services.gitlab-runner.serviceConfig`
-          # to `lib.mkForce false` in your configuration to run this service as root.
-          # You can also set `User` and `Group` options to run this service as desired user.
-          # Make sure to restart service or changes won't apply.
-          DynamicUser = true;
-          StateDirectory = "gitlab-runner";
-          SupplementaryGroups = optional hasDocker "docker" ++ optional hasPodman "podman";
-          ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
-          ExecStart = "${startScript}/bin/gitlab-runner-start";
-          ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
-        }
-        // optionalAttrs cfg.gracefulTermination {
-          TimeoutStopSec = "${cfg.gracefulTimeout}";
-          KillSignal = "SIGQUIT";
-          KillMode = "process";
-        };
+      serviceConfig = {
+        # Set `DynamicUser` under `systemd.services.gitlab-runner.serviceConfig`
+        # to `lib.mkForce false` in your configuration to run this service as root.
+        # You can also set `User` and `Group` options to run this service as desired user.
+        # Make sure to restart service or changes won't apply.
+        DynamicUser = true;
+        StateDirectory = "gitlab-runner";
+        SupplementaryGroups = optional hasDocker "docker" ++ optional hasPodman "podman";
+        ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
+        ExecStart = "${startScript}/bin/gitlab-runner-start";
+        ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
+      }
+      // optionalAttrs cfg.gracefulTermination {
+        TimeoutStopSec = "${cfg.gracefulTimeout}";
+        KillSignal = "SIGQUIT";
+        KillMode = "process";
+      };
     };
     # Enable periodic clear-docker-cache script
     systemd.services.gitlab-runner-clear-docker-cache =

@@ -7,13 +7,12 @@
   libxslt,
   perl,
   curl,
-  pcre,
   libxml2,
   librdf_rasqal,
   gmp,
   libmysqlclient,
   withMysql ? false,
-  postgresql,
+  libpq,
   withPostgresql ? false,
   sqlite,
   withSqlite ? true,
@@ -33,42 +32,42 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
-  ];
+  ]
+  ++ lib.optional withPostgresql libpq.pg_config;
 
-  buildInputs =
-    [
-      openssl
-      libxslt
-      curl
-      pcre
-      libxml2
-      gmp
-    ]
-    ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withSqlite sqlite
-    ++ lib.optional withPostgresql postgresql
-    ++ lib.optional withBdb db;
+  buildInputs = [
+    openssl
+    libxslt
+    curl
+    libxml2
+    gmp
+  ]
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withSqlite sqlite
+  ++ lib.optional withPostgresql libpq
+  ++ lib.optional withBdb db;
 
   propagatedBuildInputs = [ librdf_rasqal ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
 
-  configureFlags =
-    [ "--with-threads" ]
-    ++ lib.optionals withBdb [
-      "--with-bdb-include=${db.dev}/include"
-      "--with-bdb-lib=${db.out}/lib"
-    ];
+  configureFlags = [
+    "--with-threads"
+  ]
+  ++ lib.optionals withBdb [
+    "--with-bdb-include=${db.dev}/include"
+    "--with-bdb-lib=${db.out}/lib"
+  ];
 
   # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
   NIX_CFLAGS_LINK = "-lraptor2";
 
   doCheck = false; # fails 1 out of 17 tests with a segmentation fault
 
-  meta = with lib; {
+  meta = {
     description = "C libraries that provide support for the Resource Description Framework (RDF)";
     homepage = "https://librdf.org/";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

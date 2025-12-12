@@ -5,26 +5,29 @@
   installShellFiles,
   pkg-config,
   openssl,
-  xz,
   nix-update-script,
   versionCheckHook,
+  callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.12.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GAHG0TF+6rdgVolJLdFw7uVz/UBLsnibcaEvInRf7Jk=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-dphMJ1KkZARSntvyEayAtlYw8lL39K7Iw0X4n8nz3z8=";
-  };
+  cargoHash = "sha256-UQAKvBlT+c5eUNAmN2lzbjZG1kBrE88CTx2t1F4tprQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,7 +36,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    xz
   ];
 
   env = {
@@ -41,10 +43,17 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
-    # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
-    substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
-    substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+    substituteInPlace tests/src/tests.rs --replace-fail \
+      'ARGS.num_threads' \
+      'ARGS.test_threads'
+    substituteInPlace tests/src/args.rs --replace-fail \
+      'num_threads' \
+      'test_threads'
+    substituteInPlace crates/typst-cli/build.rs --replace-fail \
+      '"cargo:rustc-env=TYPST_COMMIT_SHA={}", typst_commit_sha()' \
+      "\"cargo:rustc-env=TYPST_COMMIT_SHA={}\", \"$(cat COMMIT | cut -c1-8)\""
   '';
 
   postInstall = ''
@@ -55,25 +64,29 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoTestFlags = [ "--workspace" ];
+  # The following test fails when using `release`
+  # ❌ issue-7257-break-tags-show-par-none (tests/suite/pdftags/break.typ:29) not emitted
+  checkType = "debug";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    packages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/v${version}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
     mainProgram = "typst";
     maintainers = with lib.maintainers; [
-      drupol
-      figsoda
       kanashimia
+      RossSmyth
     ];
   };
-}
+})

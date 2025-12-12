@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5";
+  version = "2.1.1";
   pname = "lcalc";
 
   src = fetchFromGitLab {
     owner = "sagemath";
-    repo = pname;
-    rev = version;
-    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    repo = "lcalc";
+    tag = version;
+    hash = "sha256-0CYrRGn5YQ07BaGu0Q5otnjwyh3sNq21EXp3M/KlRdw=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     "--with-pari"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/sagemath/lcalc";
     description = "Program for calculating with L-functions";
     mainProgram = "lcalc";
-    license = with licenses; [ gpl2 ];
-    maintainers = teams.sage.members;
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2 ];
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
   };
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "calo001";
-    repo = pname;
+    repo = "fondo";
     rev = version;
     sha256 = "sha256-JiDbkVs+EZRWRohSiuh8xFFgEhbnMYZfnZtz5Z4Wdb0=";
   };
@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/calo001/fondo";
     description = "Find the most beautiful wallpapers for your desktop";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.calo001.fondo";
   };
 }

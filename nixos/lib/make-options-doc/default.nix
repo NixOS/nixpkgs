@@ -1,3 +1,5 @@
+# Tests: ./tests.nix
+
 /**
   Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
@@ -43,7 +45,7 @@
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
 
-  > Note: NixOS itself uses this ouput to to build the configuration.nix man page"
+  > Note: NixOS itself uses this output to to build the configuration.nix man page"
 
   ## optionsNix
 
@@ -57,9 +59,6 @@
   let
     # Evaluate a NixOS configuration
     eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-      # Overriden explicitly here, this would include all modules from NixOS otherwise.
-      # See: docs of eval-config.nix for more details
-      baseModules = [];
       modules = [
         ./module.nix
       ];
@@ -193,12 +192,16 @@ rec {
   optionsCommonMark =
     pkgs.runCommand "options.md"
       {
+        __structuredAttrs = true;
         nativeBuildInputs = [ pkgs.nixos-render-docs ];
+        # For overriding
+        extraArgs = [ ];
       }
       ''
         nixos-render-docs -j $NIX_BUILD_CORES options commonmark \
           --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
           --revision ${lib.escapeShellArg revision} \
+          ''${extraArgs[@]} \
           ${optionsJSON}/share/doc/nixos/options.json \
           $out
       '';

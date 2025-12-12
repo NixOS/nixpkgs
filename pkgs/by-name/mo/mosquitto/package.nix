@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.20";
+  version = "2.0.22";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
+    hash = "sha256-PCiNxRG2AqVlS2t/u7Cqn8NbTrrYGO1OXl8zvPQRrJM=";
   };
 
   postPatch = ''
@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     libwebsockets'
     openssl
     uthash
-  ] ++ lib.optional withSystemd systemd;
+  ]
+  ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)
@@ -89,7 +90,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mosquitto.org/";
     changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      sikmir
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "mosquitto";
   };

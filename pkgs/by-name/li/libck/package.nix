@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "concurrencykit";
-    repo = pname;
+    repo = "ck";
     rev = version;
     sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
@@ -27,18 +27,18 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-performance concurrency research library";
     longDescription = ''
       Concurrency primitives, safe memory reclamation mechanisms and non-blocking data structures for the research, design and implementation of high performance concurrent systems.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd2
     ];
-    homepage = "http://concurrencykit.org/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    homepage = "https://concurrencykit.org/";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       chessai
       thoughtpolice
     ];

@@ -1,54 +1,71 @@
 {
   lib,
-  fetchzip,
   stdenv,
+  fetchzip,
+  python3Packages,
+  withV8 ? false,
 }:
-let
-  version = "6899";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "pdfium-binaries";
+  version = "7363";
+
   src =
     let
-      inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system};
-      suffix = selectSystem {
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      system = selectSystem {
         x86_64-linux = "linux-x64";
         aarch64-linux = "linux-arm64";
         x86_64-darwin = "mac-x64";
         aarch64-darwin = "mac-arm64";
       };
-      hash = selectSystem {
-        x86_64-linux = "sha256-JPXgjdGfQK1BztK3opqKfg5P2lAnmkcVj3qk2Ck8vHg=";
-        aarch64-linux = "sha256-za1d1jKM3LdeBFttBBHQ+Nx1O4KC6FFwotuRHTj8tFk=";
-        x86_64-darwin = "sha256-K2Sr4z4+WWmK9OxvkZB0k9LQDxCNnUvL0RArG5v2aYs=";
-        aarch64-darwin = "sha256-wLa61Af4G47AE99M+uPlBjR2rdP5yUenoW9gsrOmZpw=";
-      };
     in
     fetchzip {
-      url = "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F${version}/pdfium-${suffix}.tgz";
-      inherit hash;
+      url = "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F${finalAttrs.version}/pdfium${lib.optionalString withV8 "-v8"}-${system}.tgz";
+      hash =
+        if withV8 then
+          selectSystem {
+            x86_64-linux = "sha256-KbAJUdbT3XjLs68y4xwEG5w8o/89epkXSCKpQsyuNec=";
+            aarch64-linux = "sha256-zvaTKszH5yT1afzs0W3LV1caN6gaCIJiKIh9bElfI48=";
+            x86_64-darwin = "sha256-xGnmndTkYSIGn44Y4cfYW36QmkVAOhgIlcsWaRYFbCk=";
+            aarch64-darwin = "sha256-NYY/YIVtSux4B6UZb7kkZs+GzxXNopmvtknw/HhVEQs=";
+          }
+        else
+          selectSystem {
+            x86_64-linux = "sha256-mlSmVeE1oDQ1OlW8K7EXk51r7GCbDXH2l/tbat2aiB0=";
+            aarch64-linux = "sha256-YiCMdwQ2Y0F120iKW3ZkxJKvDgP/vpPw1ItmRnsnz9U=";
+            x86_64-darwin = "sha256-I2fWQC+GKzZwqTPwXkl9vDJ/HIH3GKzD+kNaUDcNKuw=";
+            aarch64-darwin = "sha256-AhYAr5SySWJO3jbvs+DvEZ/WaCJ+KhxpFVyOVsJxuXE=";
+          };
       stripRoot = false;
     };
-in
-stdenv.mkDerivation {
-  pname = "pdfium-binaries";
-  inherit version src;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -r ./ $out/
+    cp -r . $out
 
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (python3Packages) pypdfium2;
+    };
+  };
 
   meta = {
     description = "Binary distribution of PDFium";
     homepage = "https://github.com/bblanchon/pdfium-binaries";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
@@ -56,4 +73,4 @@ stdenv.mkDerivation {
       "x86_64-darwin"
     ];
   };
-}
+})

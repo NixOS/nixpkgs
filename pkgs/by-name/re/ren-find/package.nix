@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "ren-find";
   version = "0-unstable-2024-01-11";
 
@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zVIt6Xp+Mvym6gySvHIZJt1QgzKVP/wbTGTubWk6kzI=";
   };
 
-  cargoHash = "sha256-pUy8850v4m9P5OuL15qxmDDQYYyae9HFXRbg3b4f3Lw=";
+  cargoHash = "sha256-lSeO/GaJPZ8zosOIJRXVIEuPXaBg1GBvKBIuXtu1xZg=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility that takes find-formatted lines and batch renames them";
     homepage = "https://github.com/robenkleene/ren-find";
-    license = licenses.mit;
-    maintainers = with maintainers; [ philiptaron ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ philiptaron ];
     mainProgram = "ren";
   };
 }

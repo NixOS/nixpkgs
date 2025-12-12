@@ -20,31 +20,33 @@
   libiconv,
   # FONTCONFIG_FILE
   makeFontsConf,
-  gentium,
+  gentium-plus,
 
   # passthru.tests
   runCommand,
-  poppler_utils,
+  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.8";
+  version = "0.15.13";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    hash = "sha256-ZMF6uv1bHvMEGagbAAmYhwwbCBtjctVbwx35w7g/D2o=";
+    hash = "sha256-XpfBllGv9xBoe5MpLVNhy0EWUglLzIxiyBHBn3qBRks=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+    dontConfigure = true;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-xv411fxOkjsbVNCNEIaopjLHbUCWdw+1JWePXHdrKBc=";
+    hash = "sha256-phRnyaF8KTYlgrgBeVNPxBAokRBUoj9vs7P9y97wbG8=";
   };
 
   nativeBuildInputs = [
     zstd
     pkg-config
+    fontconfig # fc-match
     jq
     cargo
     rustc
@@ -62,26 +64,25 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
-  configureFlags =
-    [
-      # Nix will supply all the Lua dependencies, so stop the build system from
-      # bundling vendored copies of them.
-      "--with-system-lua-sources"
-      "--with-system-luarocks"
-      # The automake check target uses pdfinfo to confirm the output of a test
-      # run, and uses autotools to discover it. This flake build eschews that
-      # test because it is run from the source directory but the binary is
-      # already built with system paths, so it can't be checked under Nix until
-      # after install. After install the Makefile isn't available of course, so
-      # we have our own copy of it with a hard coded path to `pdfinfo`. By
-      # specifying some binary here we skip the configure time test for
-      # `pdfinfo`, by using `false` we make sure that if it is expected during
-      # build time we would fail to build since we only provide it at test time.
-      "PDFINFO=false"
-    ]
-    ++ lib.optionals (!lua.pkgs.isLuaJIT) [
-      "--without-luajit"
-    ];
+  configureFlags = [
+    # Nix will supply all the Lua dependencies, so stop the build system from
+    # bundling vendored copies of them.
+    "--with-system-lua-sources"
+    "--with-system-luarocks"
+    # The automake check target uses pdfinfo to confirm the output of a test
+    # run, and uses autotools to discover it. This flake build eschews that
+    # test because it is run from the source directory but the binary is
+    # already built with system paths, so it can't be checked under Nix until
+    # after install. After install the Makefile isn't available of course, so
+    # we have our own copy of it with a hard coded path to `pdfinfo`. By
+    # specifying some binary here we skip the configure time test for
+    # `pdfinfo`, by using `false` we make sure that if it is expected during
+    # build time we would fail to build since we only provide it at test time.
+    "PDFINFO=false"
+  ]
+  ++ lib.optionals (!lua.pkgs.isLuaJIT) [
+    "--without-luajit"
+  ];
 
   outputs = [
     "out"
@@ -98,9 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
-      gentium
+      gentium-plus
     ];
   };
+  strictDeps = true;
+  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 
@@ -114,38 +117,37 @@ stdenv.mkDerivation (finalAttrs: {
     #    "lua-resty-http"
     #  ]) ps
     # )
-    luaPackages =
-      [
-        "cassowary"
-        "cldr"
-        "fluent"
-        "linenoise"
-        "loadkit"
-        "lpeg"
-        "lua-zlib"
-        "lua_cliargs"
-        "luaepnf"
-        "luaexpat"
-        "luafilesystem"
-        "luarepl"
-        "luasec"
-        "luasocket"
-        "luautf8"
-        "penlight"
-        "vstruct"
-        # lua packages needed for testing
-        "busted"
-        "luacheck"
-        # packages needed for building api docs
-        "ldoc"
-        # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
-      ]
-      ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
-        "bit32"
-      ]
-      ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
-        "compat53"
-      ];
+    luaPackages = [
+      "cassowary"
+      "cldr"
+      "fluent"
+      "linenoise"
+      "loadkit"
+      "lpeg"
+      "lua-zlib"
+      "lua_cliargs"
+      "luaepnf"
+      "luaexpat"
+      "luafilesystem"
+      "luarepl"
+      "luasec"
+      "luasocket"
+      "luautf8"
+      "penlight"
+      "vstruct"
+      # lua packages needed for testing
+      "busted"
+      "luacheck"
+      # packages needed for building api docs
+      "ldoc"
+      # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
+    ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+      "bit32"
+    ]
+    ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+      "compat53"
+    ];
     luaEnv = lua.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
 
     # Copied from Makefile.am
@@ -153,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler_utils
+            poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;
@@ -167,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

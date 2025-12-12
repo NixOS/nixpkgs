@@ -15,6 +15,7 @@
   pango,
   cairo,
   libXres,
+  libXi,
   libstartup_notification,
   gettext,
   gobject-introspection,
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "43.1";
+  version = "43.3";
 
   outputs = [
     "out"
@@ -33,24 +34,23 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Y0tFh7c2ekk9OBjEtXdA2sBhU8+PJc1k9a8WtlfdaEU=";
+    url = "mirror://gnome/sources/libwnck/${lib.versions.major version}/libwnck-${version}.tar.xz";
+    sha256 = "avisQajwZ63h08qu0lSoNCO19hrT96Rg/Ky6wuGSvfc=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      gobject-introspection
-      gtk-doc
-      docbook_xsl
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     libX11
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     pango
     cairo
     libXres
+    libXi
   ];
 
   propagatedBuildInputs = [
@@ -71,14 +72,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libwnck";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ liff ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ liff ];
   };
 }

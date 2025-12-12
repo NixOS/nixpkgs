@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nettools,
+  net-tools,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     owner = "friedrich";
   };
 
-  buildInputs = [ nettools ];
+  buildInputs = [ net-tools ];
 
   postPatch = ''
-    substituteInPlace src/tun.cpp --replace "/sbin/" "${nettools}/bin/"
+    substituteInPlace src/tun.cpp --replace "/sbin/" "${net-tools}/bin/"
   '';
 
   enableParallelBuilding = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -D -m0755 hans $out/bin/hans
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tunnel IPv4 over ICMP";
     longDescription = ''
       Hans makes it possible to tunnel IPv4 through ICMP echo packets, so you
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       allowed.
     '';
     homepage = "https://code.gerade.org/hans/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "hans";
   };
 }

@@ -10,20 +10,20 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Wulfsta";
-    repo = pname;
+    repo = "psw";
     rev = version;
     sha256 = "sha256-Rf6vpVgenTzb42/aGqItuxUodl61eNyUPlry7rgLPbI=";
   };
 
-  cargoHash = "sha256-+0eMhOteNK3QTnG0HB3/TYDFmPTztdQ0h3RKBTN0J/o=";
+  cargoHash = "sha256-dfHcyGQYkjEAhrNRlD5BTbMwaZaO/E0KwqZJ8TjelGw=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to write random bytes to stdout";
     homepage = "https://github.com/Wulfsta/psw";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ wulfsta ];
+    maintainers = with lib.maintainers; [ wulfsta ];
   };
 }

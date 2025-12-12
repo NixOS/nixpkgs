@@ -37,7 +37,7 @@ printf '{\n' > "$dirname/hashes.nix"
 
 for family in "${families[@]}"; do
     url="https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip"
-    printf '  "%s" = "%s";\n' "$family" "$(nix-prefetch-url --unpack "$url" | xargs nix hash convert --hash-algo sha256)" >>"$dirname/hashes.nix"
+    printf '  "%s" = "%s";\n' "$family" "$(nix-prefetch-url --unpack "$url" | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256)" >>"$dirname/hashes.nix"
 done
 
 printf '}\n' >> "$dirname/hashes.nix"

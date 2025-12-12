@@ -19,27 +19,27 @@
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
-    repo = pname;
+    repo = "executing";
     rev = "v${version}";
-    hash = "sha256-epgKMPOvPdkpRp0n5A22gZ5DeXLyI60bqzLTx5JFlLk=";
+    hash = "sha256-2BT4VTZBAJx8Gk4qTTyhSoBMjJvKzmL4PO8IfTpN+2g=";
   };
 
   patches = [
     (fetchpatch {
-      name = "python-3.12.6.patch";
-      url = "https://github.com/alexmojaki/executing/commit/3f11fdcd7a017fbdca8a3a9de23dab18d3ba2100.patch";
-      hash = "sha256-ZnTO9lT+bj4nekPx4D0DxjhJOCkZn6lDm5xdLrziB+4=";
+      name = "pytest-8.4.1-compat.patch";
+      url = "https://github.com/alexmojaki/executing/commit/fae0dd2f4bd0e74b8a928e19407fd4167f4b2295.patch";
+      hash = "sha256-ccYBeP4yXf3U4sRyeGUYhLz7QHbXFiMviQ1n+AIVMdo=";
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -48,7 +48,8 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency
@@ -58,14 +59,17 @@ buildPythonPackage rec {
     # if the test runs fast enough. That makes the test flaky when
     # running on slow systems or cross- / emulated building
     "test_many_source_for_filename_calls"
+
+    # https://github.com/alexmojaki/executing/issues/91
+    "test_exception_catching"
   ];
 
   pythonImportsCheck = [ "executing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get information about what a frame is currently doing, particularly the AST node being executed";
     homepage = "https://github.com/alexmojaki/executing";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renatoGarcia ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renatoGarcia ];
   };
 }

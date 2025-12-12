@@ -13,28 +13,23 @@
   pkg-config,
   python3,
   wrapGAppsHook4,
-  zint,
+  libzint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "pablo-s";
     repo = "passes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RfoqIyqc9zwrWZ5RLhQl+6vTccbCTwtDcMlnWPCDOag=";
+    hash = "sha256-e6nHCOrb2PX47REr7sy80n1aTdMZ0c2QZlIIib4vll8=";
   };
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace /app/lib ${zint}/lib
-    substituteInPlace src/view/window.blp \
-      --replace reveal_flap reveal-flap
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-    patchShebangs build-aux/meson/postinstall.py
+      --replace-fail /app/lib ${lib.getLib libzint}/lib
   '';
 
   strictDeps = true;
@@ -54,16 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    zint
+    libzint
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Digital pass manager";
     mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Crashes
   };
 })

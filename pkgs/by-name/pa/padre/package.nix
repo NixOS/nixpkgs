@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "glebarez";
     repo = "padre";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UkL0EydwQfZl4HVtXiU8AyLJnzqBwECIgwm3bpQvyes=";
   };
 
@@ -22,13 +22,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced exploiting tool for Padding Oracle attacks against CBC mode encryption";
     homepage = "https://github.com/glebarez/padre";
     changelog = "https://github.com/glebarez/padre/releases/tag/v${version}";
     # https://github.com/glebarez/padre/issues/28
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "padre";
   };
 }

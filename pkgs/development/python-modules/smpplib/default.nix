@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "smpplib";
-  version = "2.2.3";
+  version = "2.2.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
+    hash = "sha256-bzsDb8smQ8G3oyibtaxMmnIK8b9z5XLicp22tdgAwnM=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smpplib" ];
 
-  meta = with lib; {
+  meta = {
     description = "SMPP library for Python";
     homepage = "https://github.com/python-smpplib/python-smpplib";
     changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

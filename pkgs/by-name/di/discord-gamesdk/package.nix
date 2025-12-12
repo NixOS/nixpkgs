@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      processor = stdenv.hostPlatform.uname.processor;
+      processor = stdenv.hostPlatform.parsed.cpu.name;
       sharedLibrary = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://discord.com/developers/docs/game-sdk/sdk-starter-guide";
     description = "Library to allow other programs to interact with the Discord desktop application";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ tomodachi94 ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ tomodachi94 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

@@ -17,7 +17,6 @@
   msgpack,
   mujson,
   orjson,
-  pytest-asyncio,
   pytest7CheckHook,
   pyyaml,
   rapidjson,
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-umNuHyZrdDGyrhQEG9+f08D4Wwrz6bVJ6ysw8pfbHv4=";
   };
 
@@ -65,7 +64,6 @@ buildPythonPackage rec {
     orjson
 
     # ASGI specific
-    pytest-asyncio
     aiofiles
     httpx
     uvicorn
@@ -76,25 +74,24 @@ buildPythonPackage rec {
     msgpack
     mujson
     ujson
-  ] ++ lib.optionals (pythonOlder "3.10") [ testtools ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ testtools ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
-  disabledTestPaths =
-    [
-      # needs a running server
-      "tests/asgi/test_asgi_servers.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # ModuleNotFoundError: No module named 'distutils'
-      "tests/asgi/test_cythonized_asgi.py"
-    ];
+  disabledTestPaths = [
+    # needs a running server
+    "tests/asgi/test_asgi_servers.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # ModuleNotFoundError: No module named 'distutils'
+    "tests/asgi/test_cythonized_asgi.py"
+  ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.asl20;
   };
 }

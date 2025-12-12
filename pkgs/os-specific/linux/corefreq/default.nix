@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "corefreq";
-  version = "1.98.7";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "cyring";
     repo = "CoreFreq";
     rev = version;
-    hash = "sha256-/kvDwIEUbcO80keG3w3x3IfLaXbrbaptUAJxvDh5rlY=";
+    hash = "sha256-SD3/3j8kIpxRA3Z0zxnkKczkBqJUzn40cTbllwIFrgc=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
-  ] ++ extraFlags;
+  ]
+  ++ extraFlags;
 
   preInstall = ''
     mkdir -p $out/bin

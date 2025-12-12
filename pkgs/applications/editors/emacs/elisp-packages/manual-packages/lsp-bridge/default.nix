@@ -4,6 +4,7 @@
   melpaBuild,
   fetchFromGitHub,
   replaceVars,
+  fetchpatch,
   acm,
   markdown-mode,
   basedpyright,
@@ -12,6 +13,7 @@
   gopls,
   tempel,
   unstableGitUpdater,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -31,13 +33,13 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-12-20";
+  version = "0-unstable-2025-11-13";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "acebc35d9fed200bfb8237087074a50fcb0d71d2";
-    hash = "sha256-PwielZ2uTW+snP2D0p1pwSCTRQ83EO1sU90lMrd0pvE=";
+    rev = "426794a45b57d923129dfa1e4ca07c34aa72e69c";
+    hash = "sha256-9nNg0yCtEBFNWP7TFGo1SsmtnnufoROyaeIJK0tjoEQ=";
   };
 
   patches = [
@@ -45,6 +47,13 @@ melpaBuild {
     # don't have to modify their global environment
     (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
+    })
+
+    # Revert using quelpa repo to get check inputs
+    (fetchpatch {
+      url = "https://github.com/manateelazycat/lsp-bridge/commit/a999c8432817a806ed9ad74b5e918ab9612bd09b.patch";
+      revert = true;
+      hash = "sha256-NK6hooWn78Hk26tcQbIwUiiJuQ/hhlbLK+pgiZT//fI=";
     })
   ];
 
@@ -56,13 +65,16 @@ melpaBuild {
   checkInputs = [
     # Emacs packages
     tempel
+  ];
 
+  nativeCheckInputs = [
     # Executables
     basedpyright
     git
     go
     gopls
     python
+    writableTmpDirAsHomeHook
   ];
 
   files = ''
@@ -80,7 +92,7 @@ melpaBuild {
 
     mkfifo test.log
     cat < test.log &
-    HOME=$(mktemp -d) python -m test.test
+    python -m test.test
 
     runHook postCheck
   '';

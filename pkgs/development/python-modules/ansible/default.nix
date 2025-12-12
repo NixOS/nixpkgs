@@ -1,8 +1,9 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  jmespath,
   jsonschema,
   jxmlease,
   ncclient,
@@ -14,6 +15,7 @@
   textfsm,
   ttp,
   xmltodict,
+  passlib,
 
   # optionals
   withJunos ? false,
@@ -22,28 +24,29 @@
 
 let
   pname = "ansible";
-  version = "11.1.0";
+  version = "13.0.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0BtCWZDZYNKjP8N44bc9vKHA4ovCL0BWq2s8jprnT7o=";
+    hash = "sha256-/Q9KKcPndhcBG5jYDkV5wx4dWPQJKNPo/V5DRpZnZ5c=";
   };
 
-  postPatch = ''
-    # we make ansible-core depend on ansible, not the other way around
-    sed -Ei '/ansible-core/d' setup.py
-  '';
+  # we make ansible-core depend on ansible, not the other way around,
+  # since when you install ansible-core you will not have ansible
+  # executables installed in the PATH variable
+  pythonRemoveDeps = [ "ansible-core" ];
 
-  propagatedBuildInputs = lib.unique (
+  build-system = [ setuptools ];
+
+  dependencies = lib.unique (
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
+      passlib
       jxmlease
       ncclient
       netaddr
@@ -58,11 +61,15 @@ buildPythonPackage {
       xmltodict
       # ansible.windows
 
+      # Default ansible collections dependencies
+      # community.general
+      jmespath
+
       # lots of collections with dedicated requirements.txt and pyproject.toml files,
       # add the dependencies for the collections you need conditionally and install
       # ansible using overrides to enable the collections you need.
     ]
-    ++ lib.optionals (withJunos) [
+    ++ lib.optionals withJunos [
       # ansible_collections/junipernetworks/junos/requirements.txt
       jxmlease
       ncclient
@@ -71,7 +78,7 @@ buildPythonPackage {
       scp
       xmltodict
     ]
-    ++ lib.optionals (withNetbox) [
+    ++ lib.optionals withNetbox [
       # ansible_collections/netbox/netbox/pyproject.toml
       pynetbox
     ]
@@ -83,12 +90,15 @@ buildPythonPackage {
   # difficult to test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Radically simple IT automation";
     mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -11,33 +11,29 @@
   qcs-api-client-common,
   quil,
   rustPlatform,
-  darwin,
-  libiconv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.4";
+  version = "0.21.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
-    rev = "python/v${version}";
-    hash = "sha256-PIU/JPf4GcTl0LeT+BkzZTRzKUQT2BvNzBWP9+/RCKM=";
+    tag = "python/v${version}";
+    hash = "sha256-uaoXSkc8yg+WZONgvRkOARaf9kvLKv6S+K5yMDuXbbA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-j2qEjmmeUy+nqOrklGXW/tsGqNAs2SxuvVPW2ywXlsA=";
+    hash = "sha256-/SkYzQisSACTedC4FsEp4rXXdWV5f64gA33I/Ubu80E=";
   };
 
   buildAndTestSubdir = "crates/python";
 
-  build-system = [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
@@ -51,12 +47,6 @@ buildPythonPackage rec {
     tracing-opentelemetry = [ opentelemetry-api ];
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    libiconv
-  ];
-
   nativeCheckInputs = [
     opentelemetry-sdk
     pytest-asyncio
@@ -69,13 +59,20 @@ buildPythonPackage rec {
     "test_conjugate_pauli_by_clifford"
     "test_execute_qvm"
     "test_generate_randomized_benchmark_sequence"
+    "test_get_instruction_set_actitecture_public"
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"
+    "test_quilc_tracing"
+    "test_qvm_tracing"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "python/v";
+  };
+
   meta = {
-    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.rev}/crates/python/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";
     description = "Python interface for the QCS Rust SDK";
     homepage = "https://github.com/rigetti/qcs-sdk-rust/tree/main/crates/python";
     license = lib.licenses.asl20;

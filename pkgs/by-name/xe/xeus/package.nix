@@ -6,18 +6,19 @@
   doctest,
   nlohmann_json,
   libuuid,
+  nix-update-script,
   xtl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xeus";
-  version = "3.2.0";
+  version = "5.2.4";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
+    repo = "xeus";
+    tag = finalAttrs.version;
+    hash = "sha256-siQzTu2IYHLbZrgLTbHPt8Ek8vLA/wXB0jx7oXC6d7k=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +29,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     nlohmann_json
     libuuid
-    xtl
   ];
 
   cmakeFlags = [
@@ -38,11 +38,13 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''export LD_LIBRARY_PATH=$PWD'';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://xeus.readthedocs.io";
     description = "C++ implementation of the Jupyter Kernel protocol";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ serge_sans_paille ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ serge_sans_paille ];
+    platforms = lib.platforms.all;
   };
-}
+})

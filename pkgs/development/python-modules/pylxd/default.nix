@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonica";
     repo = "pylxd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Q4GMz7HFpJNPYlYgLhE0a7mVCwNpdbw4XVcUGQ2gUJ0=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylxd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with the LXD REST API";
     homepage = "https://pylxd.readthedocs.io/";
     changelog = "https://github.com/canonical/pylxd/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

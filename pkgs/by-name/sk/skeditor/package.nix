@@ -9,13 +9,13 @@
 }:
 buildDotnetModule rec {
   pname = "skeditor";
-  version = "2.8.1";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "skeditorteam";
     repo = "skeditor";
     rev = "v${version}";
-    hash = "sha256-ojE276nonX52UTjvdKL5mX8dj3MNElqlR1A/c0vT9WE=";
+    hash = "sha256-KC9s9FE/6te8JnLcSBZNQ05DpKFG7jT6eHDS6OWsOBU=";
   };
 
   projectFile = "SkEditor/SkEditor.csproj";

@@ -36,13 +36,9 @@ let
 
     darktile.pkg = p: p.darktile;
 
-    deepin-terminal.pkg = p: p.deepin.deepin-terminal;
-
-    eterm.pkg = p: p.eterm;
-    eterm.executable = "Eterm";
-    eterm.pinkValue = "#D40055";
-
     germinal.pkg = p: p.germinal;
+
+    ghostty.pkg = p: p.ghostty;
 
     gnome-terminal.pkg = p: p.gnome-terminal;
 
@@ -61,12 +57,7 @@ let
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";
 
-    konsole.pkg = p: p.plasma5Packages.konsole;
-
-    lomiri-terminal-app.pkg = p: p.lomiri.lomiri-terminal-app;
-    # after recent Mesa change, borked software rendering config under x86_64 icewm?
-    # BGR colour display on x86_64, RGB on aarch64
-    lomiri-terminal-app.colourTest = false;
+    konsole.pkg = p: p.kdePackages.konsole;
 
     lxterminal.pkg = p: p.lxterminal;
 
@@ -74,8 +65,7 @@ let
     mate-terminal.cmd = "SHELL=$command mate-terminal --disable-factory"; # factory mode uses dbus, and we don't have a proper dbus session set up
 
     mlterm.pkg = p: p.mlterm;
-
-    mrxvt.pkg = p: p.mrxvt;
+    mlterm.kill = true;
 
     qterminal.pkg = p: p.lxqt.qterminal;
     qterminal.kill = true;

@@ -62,8 +62,8 @@ let
   withRedis = cfg.settings.redis.location != null;
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ];
+  meta = {
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
   options.services.pretix = {
@@ -439,7 +439,7 @@ in
                 expires 7d;
               '';
             };
-            "^~ /media/(cachedfiles|invoices)" = {
+            "^~ (/media/(cachedfiles|invoices)|/static/(staticfiles.json|CACHE/manifest.json))" = {
               extraConfig = ''
                 deny all;
                 return 404;
@@ -533,7 +533,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''
@@ -574,7 +574,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

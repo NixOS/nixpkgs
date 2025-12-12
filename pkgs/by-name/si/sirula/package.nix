@@ -1,4 +1,5 @@
 {
+  nix-update-script,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -9,21 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sirula";
-  version = "1.0.0-unstable-2023-09-02";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "DorianRudolph";
-    repo = pname;
-    rev = "b15efe85ef1fe50849a33e5919d53d05f4f66090";
-    hash = "sha256-S0WbqY49nKaBUMWfgDKZxFLJuk7uFcnTfV8s86V0Zxs=";
+    repo = "sirula";
+    tag = "v${version}";
+    hash = "sha256-rBaH2cIIaRoaw8Os60s4MknZywzDuGLagJiAvEYU4m8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "osstrtools-0.2.2" = "sha256-Co4pcikfN4vtIVK7ZsRGCWMAhMJWNNVZe/AdN1nMlmQ=";
-    };
-  };
+  cargoHash = "sha256-7trHMGTWtf4IT7efyKIXM7n4x6j7n2V3I7ZXSSwvzys=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,11 +28,13 @@ rustPlatform.buildRustPackage rec {
     gtk-layer-shell
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Simple app launcher for wayland written in rust";
     homepage = "https://github.com/DorianRudolph/sirula";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = [ lib.licenses.gpl3Plus ];
+    maintainers = [ lib.maintainers.atagen ];
+    platforms = lib.platforms.linux;
   };
 }

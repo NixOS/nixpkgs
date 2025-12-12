@@ -27,13 +27,13 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "videolan";
-    repo = pname;
+    repo = "dav1d";
     rev = version;
-    hash = "sha256-eOMQj88vlgoxguV+eK4iWXFjUPiXwqRTJlhehev+yGY=";
+    hash = "sha256-rxRO5EWjrOUsCYXd2rDDhfcEZbfSuMfjujRAHTqUYhI=";
   };
 
   outputs = [
@@ -48,14 +48,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs =
-    [ xxHash ]
-    ++ lib.optional withExamples SDL2
-    ++ lib.optionals useVulkan [
-      libplacebo
-      vulkan-loader
-      vulkan-headers
-    ];
+  buildInputs = [
+    xxHash
+  ]
+  ++ lib.optional withExamples SDL2
+  ++ lib.optionals useVulkan [
+    libplacebo
+    vulkan-loader
+    vulkan-headers
+  ];
 
   mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform AV1 decoder focused on speed and correctness";
     longDescription = ''
       The goal of this project is to provide a decoder for most platforms, and
@@ -85,8 +86,8 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
-    license = licenses.bsd2;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = [ ];
   };
 }

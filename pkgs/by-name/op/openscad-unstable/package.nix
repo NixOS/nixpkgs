@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   clangStdenv,
   llvmPackages,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   bison,
   boost,
   cairo,
-  cgal_5,
+  cgal,
   clipper2,
   double-conversion,
   eigen,
@@ -33,37 +34,39 @@
   mesa,
   mpfr,
   python3,
-  tbb_2021_11,
+  onetbb,
   wayland,
   wayland-protocols,
   wrapGAppsHook3,
   xorg,
   mimalloc,
   opencsg,
+  ctestCheckHook,
 }:
 # clang consume much less RAM than GCC
-clangStdenv.mkDerivation rec {
-  pname = "openscad-unstable";
-  version = "2024-12-21";
-  src = fetchFromGitHub {
-    owner = "openscad";
-    repo = "openscad";
-    rev = "30cbdf6c7214be7cc00b4cca2cef8396e1d69498";
-    hash = "sha256-wpw4JStAWNcHU6PoHGcIKAeVjtlTJsS4ZFMkTpj6xRk=";
-    # Unfortunately, we can't selectively fetch submodules. It would be good
-    # to see that we don't accidentally depend on it.
-    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
-  };
-
-  patches = [ ./test.diff ];
-
-  nativeBuildInputs = [
-    (python3.withPackages (
+let
+  python3withPackages = (
+    python3.withPackages (
       ps: with ps; [
         numpy
         pillow
       ]
-    ))
+    )
+  );
+in
+clangStdenv.mkDerivation rec {
+  pname = "openscad-unstable";
+  version = "2021.01-unstable-2025-10-27";
+  src = fetchFromGitHub {
+    owner = "openscad";
+    repo = "openscad";
+    rev = "aa785fe4ab3d52450a5e51eb73585ac9bbcc8798";
+    hash = "sha256-TngfItArYtm8243DdYkQlkfc/MBTZGYrf08hfloWRWk=";
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
+  };
+
+  nativeBuildInputs = [
+    python3withPackages
     bison
     cmake
     flex
@@ -79,16 +82,15 @@ clangStdenv.mkDerivation rec {
     [
       clipper2
       glm
-      tbb_2021_11
+      onetbb
       mimalloc
       boost
       cairo
-      cgal_5
+      cgal
       double-conversion
       eigen
       fontconfig
       freetype
-      ghostscript
       glib
       gmp
       opencsg
@@ -124,19 +126,48 @@ clangStdenv.mkDerivation rec {
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+
+    # The sources enable this for only apple. We turn it off globally anyway to stay
+    # consistent.
+    "-DUSE_QT6=OFF"
+
+    # For tests
+    "-DVENV_DIR=${python3withPackages}"
+    "-DVENV_BIN_PATH=${python3withPackages}/bin"
   ];
 
-  doCheck = true;
+  # tests rely on sysprof which is not available on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # remove unused submodules, to ensure correct dependency usage
+  postUnpack = ''
+    ( cd $sourceRoot
+      for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
+      do rm -r $m
+      done )
+  '';
+
+  postPatch = ''
+    # Take Python3 executable as passed
+    sed -e '/set(VENV_DIR /d' -i tests/cmake/ImageCompare.cmake
+    sed -e '/find_path(VENV_BIN_PATH /d' -i tests/cmake/ImageCompare.cmake
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin
+  '';
 
   nativeCheckInputs = [
     mesa.llvmpipeHook
+    ctestCheckHook
+    ghostscript
   ];
 
-  checkPhase = ''
-    # some fontconfig issues cause pdf output to have wrong font
-    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
-  '';
-  meta = with lib; {
+  dontUseNinjaCheck = true;
+
+  meta = {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free

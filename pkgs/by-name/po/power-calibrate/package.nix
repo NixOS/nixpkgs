@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
+    repo = "power-calibrate";
     rev = "V${version}";
     hash = "sha256-DZ6rXbhaSNy3TEX+lwv3tyKQ7BXOZ9ycrff/7pF60j0=";
   };
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to calibrate power consumption";
     mainProgram = "power-calibrate";
     homepage = "https://github.com/ColinIanKing/power-calibrate";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }

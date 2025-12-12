@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.10.7";
+  version = "0.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R6/Y9brIYBA1P3YeG8zGaoPcxWFUDqZlqbZpWu3MIIw=";
+    tag = "v${version}";
+    hash = "sha256-4DwODJw1U/0+K/d7znYtDO2va71lzp1gDm4Bg9OBjQY=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
@@ -50,15 +50,14 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      packaging
-      pathspec
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
+  dependencies = [
+    packaging
+    pathspec
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+    tomli
+  ];
 
   nativeCheckInputs = [
     build
@@ -76,8 +75,14 @@ buildPythonPackage rec {
 
   # cmake is only used for tests
   dontUseCmakeConfigure = true;
+  setupHooks = [
+    ./append-cmakeFlags.sh
+  ];
 
-  pytestFlagsArray = [ "-m 'not isolated and not network'" ];
+  disabledTestMarks = [
+    "isolated"
+    "network"
+  ];
 
   disabledTestPaths = [
     # store permissions issue in Nix:
@@ -86,11 +91,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scikit_build_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
-    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.rev}/docs/changelog.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.tag}/docs/about/changelog.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

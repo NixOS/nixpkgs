@@ -1,22 +1,26 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "go-judge";
-  version = "1.8.5";
+  version = "1.9.10";
 
   src = fetchFromGitHub {
     owner = "criyle";
-    repo = pname;
+    repo = "go-judge";
     rev = "v${version}";
-    hash = "sha256-yvuljBNPkAsTJ7jT1BrInTfUlBuE8zSV60MBWuIlW5I=";
+    hash = "sha256-do+CvDEyYt9Yxrpkvyk6TWYt3TMjIcxkBQ8qf4rzT/E=";
   };
 
-  vendorHash = "sha256-LvKLhC9I/hJSIP3zRkJAYNvTFLiNTTu87Fe4DDTWnMo=";
+  vendorHash = "sha256-XigQHewE0ehdMuYEktPSHcAZ3G1QxjoHVG616FZ9KZw=";
 
-  tags = [ "nomsgpack" ];
+  tags = [
+    "nomsgpack"
+    "grpcnotrace"
+  ];
 
   subPackages = [ "cmd/go-judge" ];
 
@@ -26,11 +30,11 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     description = "High performance sandbox service based on container technologies";
-    homepage = "https://github.com/criyle/go-judge";
-    license = licenses.mit;
+    homepage = "https://docs.goj.ac";
+    license = lib.licenses.mit;
     mainProgram = "go-judge";
-    maintainers = with maintainers; [ criyle ];
+    maintainers = with lib.maintainers; [ criyle ];
   };
 }

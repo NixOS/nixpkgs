@@ -2,40 +2,53 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  yamlfmt,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yamlfmt";
-  version = "0.14.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l9PtVaAKjtP9apTrKCkC1KDR0IXqLqinpj1onzSrPnI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KMIkll7seKslvb4ErelpKxWg/T2P9FLYKfTyAEWlbWk=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse --short HEAD > "$out/.git_head"
+      rm -rf "$out/.git"
+    '';
   };
 
-  vendorHash = "sha256-lsNldfacBoeTPyhkjyDZhI5YR+kDke0TarfG/KdjEOg=";
+  vendorHash = "sha256-Cy1eBvKkQ90twxjRL2bHTk1qNFLQ22uFrOgHKmnoUIQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = yamlfmt;
-  };
+  preBuild = ''
+    ldflags+=" -X=main.commit=$(<.git_head)"
+  '';
 
-  meta = with lib; {
+  # Test failure in vendored yaml package, see:
+  # https://github.com/google/yamlfmt/issues/256
+  checkFlags = [ "-run=!S/TestNodeRoundtrip" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Extensible command line tool or library to format yaml files";
     homepage = "https://github.com/google/yamlfmt";
-    changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sno2wman ];
+    changelog = "https://github.com/google/yamlfmt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "yamlfmt";
   };
-}
+})

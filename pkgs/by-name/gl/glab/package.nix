@@ -1,39 +1,51 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  makeBinaryWrapper,
   stdenv,
   nix-update-script,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  gitMinimal,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.51.0";
+  version = "1.74.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-EWcoEm6DbRT0PP2qYhdwDHCkbeAG6vDVATPhX9pPfiw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4nQg7wb3+nc9Pxdf9ys8aMzSgF6boNzri+MmtDLS5jE=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  vendorHash = "sha256-f6qAFeB9kshtQ2AW6OnEGSnhJYlJ2gAGRDplVmQSVNA=";
+  vendorHash = "sha256-htb/LAX3SOZEDHTYcu9WRcAkuY+fUMolODYfGE3qihY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    # failed to read configuration:  mkdir /homeless-shelter: permission denied
-    export HOME=$TMPDIR
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
   '';
 
-  subPackages = [ "cmd/glab" ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  subPackages = [ "cmd/glab" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     make manpage
@@ -42,7 +54,26 @@ buildGo123Module rec {
       --bash <($out/bin/glab completion -s bash) \
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
+
+    wrapProgram $out/bin/glab \
+      --set-default GLAB_CHECK_UPDATE 0 \
+      --set-default GLAB_SEND_TELEMETRY 0
   '';
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  preCheck = ''
+    git init
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -50,11 +81,11 @@ buildGo123Module rec {
     description = "GitLab CLI tool bringing GitLab to your command line";
     license = lib.licenses.mit;
     homepage = "https://gitlab.com/gitlab-org/cli";
-    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${version}";
+    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      freezeboy
       luftmensch-luftmensch
+      anthonyroussel
     ];
     mainProgram = "glab";
   };
-}
+})

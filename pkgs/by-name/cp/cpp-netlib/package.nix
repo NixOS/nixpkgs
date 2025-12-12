@@ -3,25 +3,43 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
+  boost186,
   openssl,
+  llvmPackages_18,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # std::char_traits has been removed
+  stdenvForCppNetlib = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
+in
+stdenvForCppNetlib.mkDerivation rec {
   pname = "cpp-netlib";
   version = "0.13.0-final";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
+    owner = "cpp-netlib";
+    repo = "cpp-netlib";
+    tag = "cpp-netlib-${version}";
     sha256 = "18782sz7aggsl66b4mmi1i0ijwa76iww337fi9sygnplz2hs03a3";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # 'u32_to_u8_iterator' was not declared
+    ./0001-Compatibility-with-boost-1.83.patch
+  ];
+
+  # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    # io_service.hpp has been removed in boost 1.87+
+    boost186
     openssl
   ];
 
@@ -35,10 +53,10 @@ stdenv.mkDerivation rec {
   # Most tests make network GET requests to various websites
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of open-source libraries for high level network programming";
     homepage = "https://cpp-netlib.org";
-    license = licenses.boost;
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
   };
 }

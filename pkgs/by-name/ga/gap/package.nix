@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, readline
-, gmp
-, pari
-, zlib
-# one of
-# - "minimal" (~400M):
-#     Install the bare minimum of packages required by gap to start.
-#     This is likely to break a lot of stuff. Do not expect upstream support with
-#     this configuration.
-# - "standard" (~700M):
-#     Install the "standard packages" which gap autoloads by default. These
-#     packages are effectively considered a part of gap.
-# - "full" (~1.7G):
-#     Install all available packages. This takes a lot of space.
-, packageSet ? "standard"
-# Kept for backwards compatibility. Overrides packageSet to "full".
-, keepAllPackages ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  readline,
+  gmp,
+  pari,
+  zlib,
+  # one of
+  # - "minimal" (~400M):
+  #     Install the bare minimum of packages required by gap to start.
+  #     This is likely to break a lot of stuff. Do not expect upstream support with
+  #     this configuration.
+  # - "standard" (~700M):
+  #     Install the "standard packages" which gap autoloads by default. These
+  #     packages are effectively considered a part of gap.
+  # - "full" (~1.7G):
+  #     Install all available packages. This takes a lot of space.
+  packageSet ? "standard",
+  # Kept for backwards compatibility. Overrides packageSet to "full".
+  keepAllPackages ? false,
 }:
 let
   # packages absolutely required for gap to start
@@ -45,10 +46,10 @@ let
     "resclasses"
     "sophus"
     "tomlib"
-    "autodoc"  # dependency of atlasrep
-    "io"       # used by atlasrep to fetch data from online sources
+    "autodoc" # dependency of atlasrep
+    "io" # used by atlasrep to fetch data from online sources
     "radiroot" # dependency of polenta
-    "utils"    # dependency of atlasrep
+    "utils" # dependency of atlasrep
   ];
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
@@ -56,21 +57,25 @@ let
   # Generate bash script that removes all packages from the `pkg` subdirectory
   # that are not on the whitelist. The whitelist consists of strings expected by
   # `find`'s `-name`.
-  removeNonWhitelistedPkgs = whitelist: ''
-    find pkg -type d -maxdepth 1 -mindepth 1 \
-  '' + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist)) + ''
-    -exec echo "Removing package {}" \; \
-    -exec rm -r '{}' \;
-  '';
+  removeNonWhitelistedPkgs =
+    whitelist:
+    ''
+      find pkg -type d -maxdepth 1 -mindepth 1 \
+    ''
+    + (lib.concatStringsSep "\n" (map (str: "-not -name '${str}' \\") whitelist))
+    + ''
+      -exec echo "Removing package {}" \; \
+      -exec rm -r '{}' \;
+    '';
 in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.14.0";
+  version = "4.15.1";
 
   src = fetchurl {
     url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
-    sha256 = "sha256-hF9ScsJv6xuOue8pS/BUXyZMH+WhmwYBu8ZdedlQZIc=";
+    hash = "sha256-YEnVPpmxLiXC2EjbIaxKBjgKRv5MQVckPVVv4GkwBCw=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -134,6 +139,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/192548#discussion_r992824942
     rm -r "$out/share/gap/pkg"
     cp -ar pkg tst "$out/share/gap"
+    cp -a etc/Makefile.gappkg "$out/share/gap/etc"
   '';
 
   preFixup = ''
@@ -141,18 +147,18 @@ stdenv.mkDerivation rec {
     rm -rf pkg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Computational discrete algebra system";
     # We are also grateful to ChrisJefferson for previous work on the package,
     # and to ChrisJefferson and fingolfin for help with GAP-related questions
     # from the upstream point of view.
-    maintainers = teams.sage.members;
-    platforms = platforms.all;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
     # keeping all packages increases the package size considerably, which is
     # why a local build is preferable in that situation. The timeframe is
     # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://www.gap-system.org";
   };
 }

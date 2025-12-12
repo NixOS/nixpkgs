@@ -1,35 +1,53 @@
 {
-  fetchPypi,
   lib,
-  python3,
+  fetchFromGitHub,
+  python3Packages,
   xorg,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "exegol";
-  version = "4.3.9";
-  format = "setuptools";
+  version = "5.1.2";
+  pyproject = true;
 
-  # Project has no unit tests
-  doCheck = false;
-
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      pyyaml
-      gitpython
-      docker
-      requests
-      rich
-      argcomplete
-    ]
-    ++ [ xorg.xhost ];
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
+  src = fetchFromGitHub {
+    owner = "ThePorgs";
+    repo = "Exegol";
+    tag = version;
+    hash = "sha256-eoOCVYKHWPsaSxdOF3FTg6dS5JdTSlfNTM6Hrf6KTlc=";
   };
 
-  meta = with lib; {
+  build-system = with python3Packages; [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    "rich"
+    "argcomplete"
+    "supabase"
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      argcomplete
+      cryptography
+      docker
+      gitpython
+      ifaddr
+      pydantic
+      pyjwt
+      pyyaml
+      requests
+      rich
+      supabase
+    ]
+    ++ pyjwt.optional-dependencies.crypto
+    ++ [ xorg.xhost ]
+    ++ lib.optional (!stdenv.hostPlatform.isLinux) tzlocal;
+
+  doCheck = true;
+
+  pythonImportsCheck = [ "exegol" ];
+
+  meta = {
     description = "Fully featured and community-driven hacking environment";
     longDescription = ''
       Exegol is a community-driven hacking environment, powerful and yet
@@ -40,10 +58,19 @@ python3.pkgs.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${src.tag}";
+    license = with lib.licenses; [
+      gpl3Only
+      {
+        fullName = "Exegol Software License (ESL) - Version 1.0";
+        url = "https://docs.exegol.com/legal/software-license";
+        # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
+        free = false;
+        redistributable = false;
+      }
+    ];
     mainProgram = "exegol";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0b11stan
       charB66
     ];

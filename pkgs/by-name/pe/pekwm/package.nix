@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pekwm";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-l43xxCowSEBQjwg7hjpBwybFB12ESOep6hqdzSsD3YI=";
+    hash = "sha256-rwvecE9T+/zZg0rRUDl/DEMGH9ZmuvYj/Rz6vzmMv1I=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "pekwm";
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

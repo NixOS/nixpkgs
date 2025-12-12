@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "malt";
-  version = "1.2.3";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "memtt";
     repo = "malt";
     rev = "v${version}";
-    sha256 = "sha256-eeiThHorLxL2qHIXd9vzc2jRYd7BN3/OHCqM9BmXi0U=";
+    sha256 = "sha256-4lCAEk/b8APuOo+x/kGSTg7vFSBZf/VBuSMDM7o5sts=";
   };
 
   postPatch = ''
@@ -26,17 +26,21 @@ stdenv.mkDerivation rec {
       src/integration/malt-{webview,passwd}.sh.in
   '';
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_JEMALLOC" false)
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libelf
     libunwind
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory tool to find where you allocate your memory";
     homepage = "https://github.com/memtt/malt";
-    license = licenses.cecill-c;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.cecill-c;
+    maintainers = with lib.maintainers; [ skohtv ];
+    platforms = lib.platforms.linux;
   };
 }

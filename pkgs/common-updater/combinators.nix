@@ -14,7 +14,7 @@
     = FilePath
     // Path to execute plus arguments to pass it
     | [ (FilePath | String) ]
-    // Advanced attribue set (experimental)
+    // Advanced attribute set (experimental)
     | {
       // Script to execute (same as basic update script above)
       command : (FilePath | [ (FilePath | String) ])
@@ -52,7 +52,7 @@ let
     arg:
     if builtins.isPath arg then
       {
-        args = args ++ [ { __rawShell = "\"\$${builtins.toString maxArgIndex}\""; } ];
+        args = args ++ [ { __rawShell = "\"\$${toString maxArgIndex}\""; } ];
         maxArgIndex = maxArgIndex + 1;
         paths = paths ++ [ arg ];
       }
@@ -144,7 +144,7 @@ rec {
     scripts:
 
     let
-      scriptsNormalized = builtins.map normalize scripts;
+      scriptsNormalized = map normalize scripts;
     in
     let
       scripts = scriptsNormalized;
@@ -169,22 +169,25 @@ rec {
 
     assert lib.assertMsg (lib.all validateFeatures scripts)
       "Combining update scripts with features enabled (other than “silent” scripts and an optional single script with “commit”) is currently unsupported.";
+
     assert lib.assertMsg (
       builtins.length (
         lib.unique (
-          builtins.map (
-            {
-              attrPath ? null,
-              ...
-            }:
-            attrPath
-          ) scripts
+          builtins.filter (attrPath: attrPath != null) (
+            map (
+              {
+                attrPath ? null,
+                ...
+              }:
+              attrPath
+            ) scripts
+          )
         )
-      ) == 1
+      ) <= 1
     ) "Combining update scripts with different attr paths is currently unsupported.";
 
     {
-      command = commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);
+      command = commandsToShellInvocation (map ({ command, ... }: command) scripts);
       supportedFeatures =
         if hasCommitSupport then
           [ "commit" ]

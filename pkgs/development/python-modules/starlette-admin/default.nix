@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-admin";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
-    rev = version;
-    hash = "sha256-DoYD8Hc5pd68+BhASw3mwwCdhu0vYHiELjVmVwU8FHs=";
+    tag = version;
+    hash = "sha256-yPePxdKrg41kycXl1fDKf1jWx0YD+K26w8z2LmQV0g0=";
   };
 
   build-system = [ hatchling ];
@@ -92,20 +92,21 @@ buildPythonPackage rec {
     "test_api"
   ];
 
-  disabledTestPaths =
-    [
-      # odmantic is not packaged
-      "tests/odmantic"
-      # needs mongodb running on port 27017
-      "tests/mongoengine"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # very flaky, sandbox issues?
-      # libcloud.storage.types.ContainerDoesNotExistError
-      # sqlite3.OperationalError: attempt to write a readonly database
-      "tests/sqla/test_sync_engine.py"
-      "tests/sqla/test_async_engine.py"
-    ];
+  disabledTestPaths = [
+    # odmantic is not packaged
+    "tests/odmantic"
+    # beanie is not packaged
+    "tests/beanie"
+    # needs mongodb running on port 27017
+    "tests/mongoengine"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # very flaky, sandbox issues?
+    # libcloud.storage.types.ContainerDoesNotExistError
+    # sqlite3.OperationalError: attempt to write a readonly database
+    "tests/sqla/test_sync_engine.py"
+    "tests/sqla/test_async_engine.py"
+  ];
 
   pythonImportsCheck = [
     "starlette_admin"
@@ -117,11 +118,11 @@ buildPythonPackage rec {
     "starlette_admin.views"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
-    changelog = "https://github.com/jowilf/starlette-admin/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    changelog = "https://jowilf.github.io/starlette-admin/changelog/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

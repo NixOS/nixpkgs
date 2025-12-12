@@ -1,44 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, wrapGAppsHook3
-, pkg-config
-, meson
-, ninja
-, vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, json-glib
-, elementary-gtk-theme
-, elementary-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  wayland-scanner,
+  wrapGAppsHook3,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gala,
+  glib,
+  gtk3,
+  libgee,
+  granite,
+  gettext,
+  mutter,
+  wayland,
+  json-glib,
+  elementary-gtk-theme,
+  elementary-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.5";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+    repo = "wingpanel";
+    tag = version;
+    hash = "sha256-+m1TydQtbXuA7uS6hZVC8z6JgOUxDh/QXL/4tROHhwk=";
   };
 
   patches = [
     ./indicators.patch
+  ];
 
-    # Add sorting for QuickSettings
-    # https://github.com/elementary/wingpanel/pull/516
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel/commit/cae197c953f4332e67cf0a5457b4e54f8adc3424.patch";
-      hash = "sha256-P7Cl6M3qvh9pa1qIwWQV4XG5NoCQId+buzEChcUOapk=";
-    })
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -54,10 +55,15 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     gala
     granite
-    gtk3
     json-glib
     libgee
     mutter
+    wayland
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
   ];
 
   preFixup = ''
@@ -74,16 +80,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.wingpanel";
   };
 }

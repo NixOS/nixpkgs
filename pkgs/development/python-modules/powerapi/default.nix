@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "powerapi";
-  version = "2.9.1";
+  version = "2.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "powerapi-ng";
     repo = "powerapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iFWCrO9frMK68kefmKQrXra1g5efDCj2ZOlVwxDNvXw=";
+    tag = "v${version}";
+    hash = "sha256-rn1qe0RwYuUR23CgzOOeiwe1wuFihnhQ9a6ALgSP/cQ=";
   };
 
   build-system = [ setuptools ];
@@ -50,7 +50,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     pytest-timeout
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "powerapi" ];
 

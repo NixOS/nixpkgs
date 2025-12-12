@@ -3,84 +3,101 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
   just,
-  pkg-config,
+  libcosmicAppHook,
   glib,
-  libxkbcommon,
-  wayland,
-  xorg,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
-    rev = "epoch-${version}";
-    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-LZ2vO9e5h/jnFa3iAoXSBvp+fe4SBogEUYbuQWir9nM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-Dz8jKqfm/VgvCmEpNXice+M7mwd5Q2XyCl5vl7p6nWI=";
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    glib
-    libxkbcommon
-    wayland
+    libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
 
+  buildInputs = [ glib ];
+
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-files" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXi
-          wayland
-        ]
-      }
+  # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary
+  # at the same time, which would cause problems with the desktop items applet
+  buildPhase = ''
+    runHook preBuild
+
+    defaultCargoBuildFlags="$cargoBuildFlags"
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+
+    runHook postBuild
   '';
 
-  meta = with lib; {
+  checkPhase = ''
+    runHook preCheck
+
+    defaultCargoTestFlags="$cargoTestFlags"
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
+
+    runHook postCheck
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      ahoneybun
-      nyabinary
-    ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "cosmic-files";
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

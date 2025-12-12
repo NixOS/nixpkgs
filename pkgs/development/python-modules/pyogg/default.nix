@@ -8,12 +8,13 @@
   libogg,
   libopus,
   opusfile,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pyogg";
   version = "0.6.14a1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyOgg";
@@ -45,8 +46,7 @@ buildPythonPackage rec {
     "--binary"
   ];
   patches = [
-    (substituteAll {
-      src = ./pyogg-paths.patch;
+    (replaceVars ./pyogg-paths.patch {
       flacLibPath = "${flac.out}/lib/libFLAC${stdenv.hostPlatform.extensions.sharedLibrary}";
       oggLibPath = "${libogg}/lib/libogg${stdenv.hostPlatform.extensions.sharedLibrary}";
       vorbisLibPath = "${libvorbis}/lib/libvorbis${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -57,10 +57,10 @@ buildPythonPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Xiph.org's Ogg Vorbis, Opus and FLAC for Python";
     homepage = "https://github.com/Zuzu-Typ/PyOgg";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

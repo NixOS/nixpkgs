@@ -1,41 +1,43 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, fetchurl
-, testers
+{
+  lib,
+  stdenv,
+  callPackage,
+  ctestCheckHook,
+  fetchFromGitHub,
+  testers,
 
-, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
+  enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format,
 
-, cmake
-, curl
-, gdal
-, hdf5-cpp
-, laszip
-, libe57format
-, libgeotiff
-, libtiff
-, libxml2
-, openscenegraph
-, pkg-config
-, postgresql
-, proj
-, sqlite
-, tiledb
-, xercesc
-, zlib
-, zstd
+  cmake,
+  curl,
+  gdal,
+  gtest,
+  hdf5-cpp,
+  laszip,
+  libe57format,
+  libgeotiff,
+  libpq,
+  libtiff,
+  libxml2,
+  openscenegraph,
+  pkg-config,
+  proj,
+  sqlite,
+  tiledb,
+  xercesc,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.8.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
-    rev = finalAttrs.version;
-    hash = "sha256-zHy/fZ6vlgbBvYZ1olmkO4qsqW5Y2UU5fT1XQPvNmas=";
+    tag = finalAttrs.version;
+    hash = "sha256-htuvNheRwzpdSKc4FbwugBWWaCNC7/20TSKwRpLr+7Y=";
   };
 
   nativeBuildInputs = [
@@ -46,22 +48,26 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     gdal
+    gtest
     hdf5-cpp
     laszip
     libgeotiff
+    libpq
     libtiff
     libxml2
     openscenegraph
-    postgresql
     proj
     sqlite
     tiledb
     xercesc
     zlib
     zstd
-  ] ++ lib.optionals enableE57 [
+  ]
+  ++ lib.optionals enableE57 [
     libe57format
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_PLUGIN_E57=${if enableE57 then "ON" else "OFF"}"
@@ -88,11 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # tests are flaky and they seem to fail less often when they don't run in
+  # parallel
+  enableParallelChecking = false;
 
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
     # by upstream CI.
-    # See: https://github.com/PDAL/PDAL/blob/bc46bc77f595add4a6d568a1ff923d7fe20f7e74/.github/workflows/linux.yml#L81
+    # See: https://github.com/PDAL/PDAL/blob/2.9.3/.github/workflows/linux.yml#L81
     "pdal_io_tiledb_writer_test"
     "pdal_io_tiledb_reader_test"
     "pdal_io_tiledb_time_writer_test"
@@ -103,19 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
     "pdal_io_e57_write_test"
     "pdal_io_stac_reader_test"
 
-    # Segfault
-    "pdal_io_hdf_reader_test"
-
-    # Failure
-    "pdal_app_plugin_test"
+    # Require data to be downloaded from Internet
+    "pdal_io_copc_reader_test"
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    # tests are flaky and they seem to fail less often when they don't run in
-    # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
-    runHook postCheck
+  nativeCheckInputs = [
+    gdal # gdalinfo
+    ctestCheckHook
+  ];
+
+  postInstall = ''
+    patchShebangs --update --build $out/bin/pdal-config
   '';
 
   passthru.tests = {
@@ -130,12 +137,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
+  meta = {
+    description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pdal" ];
   };
 })

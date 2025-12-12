@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpifileutils";
-  version = "0.11.1";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "mpifileutils";
     rev = "v${version}";
-    hash = "sha256-3nls82awMMCwlfafsOy3AY8OvT9sE+BvvsDOY14YvQc=";
+    hash = "sha256-WnjStOLWP/VsZyl2wPqR1Q+YqlJQRCQ4R50uOyqkWuM=";
   };
 
   outputs = [
@@ -45,11 +45,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Suite of MPI-based tools to manage large datasets";
     homepage = "https://hpc.github.io/mpifileutils";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }

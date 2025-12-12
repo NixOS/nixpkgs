@@ -3,29 +3,44 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pytestCheckHook,
+  hatchling,
+
+  # dependencies
   beancount-black,
   beancount-parser,
   beanhub-forms,
   beanhub-import,
+  beanhub-inbox,
   click,
   fastapi,
-  httpx,
   jinja2,
-  poetry-core,
-  pydantic,
-  pydantic-core,
   pydantic-settings,
-  pytz,
+  pydantic,
   pyyaml,
   rich,
   starlette-wtf,
   uvicorn,
+
+  # optional-dependencies
+  attrs,
+  cryptography,
+  httpx,
+  pynacl,
+  python-dateutil,
+  tomli-w,
+  tomli,
+
+  # tests
+  pytest-asyncio,
+  pytest-factoryboy,
+  pytest-httpx,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "1.4.1";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -33,43 +48,68 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZPRQLdNDp/LOXmxU9H6fh9raPPiDsTiEW3j8ncgt8sY=";
+    tag = version;
+    hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
   };
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "rich" ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     beancount-black
     beancount-parser
     beanhub-forms
     beanhub-import
+    beanhub-inbox
     click
     fastapi
     jinja2
     pydantic
-    pydantic-core
     pydantic-settings
-    pytz
     pyyaml
     rich
     starlette-wtf
     uvicorn
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  optional-dependencies = {
+    login = [
+      attrs
+      httpx
+      python-dateutil
+      tomli
+      tomli-w
+    ];
+    connect = [
+      attrs
+      cryptography
+      httpx
+      pynacl
+      python-dateutil
+      tomli
+      tomli-w
+    ];
+  };
 
   nativeCheckInputs = [
+    pytest-asyncio
+    pytest-factoryboy
+    pytest-httpx
+    pytest-mock
     pytestCheckHook
-    httpx
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "beanhub_cli" ];
 
   meta = {
     description = "Command line tools for BeanHub or Beancount users";
-    mainProgram = "bh";
     homepage = "https://github.com/LaunchPlatform/beanhub-cli/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
+    mainProgram = "bh";
   };
 }

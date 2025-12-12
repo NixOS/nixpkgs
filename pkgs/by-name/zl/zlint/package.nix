@@ -3,45 +3,40 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  zlint,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zlint";
-  version = "3.6.4";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FFgBRuNvm4Cnjls9y+L256vMGGNu10x7Vh+V9HBon70=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mi7ySXVqnL/LVi4YS1r4hBcM/JrjThJEkw3+1k1vjRQ=";
   };
 
   modRoot = "v3";
 
-  vendorHash = "sha256-RX7B9RyNmEO9grMR9Mqn1jXDH5sgT0QDvdhXgY1HYtQ=";
-
-  postPatch = ''
-    # Remove a package which is not declared in go.mod.
-    rm -rf v3/cmd/genTestCerts
-  '';
+  vendorHash = "sha256-AdJxcJ/qjY6lzoK4PGNjR+7lYAypgCOk6Nt5sqP+ayA=";
 
   excludedPackages = [
+    "cmd/genTestCerts"
+    "cmd/gen_test_crl"
     "lints"
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
-    package = zlint;
-    command = "zlint -version";
+    package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "X.509 Certificate Linter focused on Web PKI standards and requirements";
     longDescription = ''
       ZLint is a X.509 certificate linter written in Go that checks for
@@ -49,8 +44,8 @@ buildGoModule rec {
       requirements (e.g. CA/Browser Forum Baseline Requirements).
     '';
     homepage = "https://github.com/zmap/zlint";
-    changelog = "https://github.com/zmap/zlint/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ baloo ];
+    changelog = "https://github.com/zmap/zlint/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

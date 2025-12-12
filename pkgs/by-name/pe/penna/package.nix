@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/penna/";
     description = "Geometric sans serif designed by Sora Sagano";
     longDescription = ''
@@ -34,11 +34,10 @@ stdenvNoCC.mkDerivation {
       with outsized counters in the uppercase and a lowercase
       with a small x-height.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      leenaars
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

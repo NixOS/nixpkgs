@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "databricks";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "databricks-cli";
+    tag = version;
     hash = "sha256-dH95C2AY/B6F9BROr6rh+gVtKqxsg1gyEU5MzCd5aqs=";
   };
 
@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "databricks_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for Databricks";
     homepage = "https://github.com/databricks/databricks-cli";
     changelog = "https://github.com/databricks/databricks-cli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

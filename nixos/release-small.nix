@@ -48,8 +48,13 @@ rec {
       dummy
       ;
     tests = {
+      acme = {
+        inherit (nixos'.tests.acme)
+          http01-builtin
+          dns01
+          ;
+      };
       inherit (nixos'.tests)
-        acme
         containers-imperative
         containers-ip
         firewall
@@ -64,6 +69,11 @@ rec {
         proxy
         simple
         ;
+      latestKernel = {
+        inherit (nixos'.tests.latestKernel)
+          login
+          ;
+      };
       installer = {
         inherit (nixos'.tests.installer)
           lvm
@@ -93,7 +103,7 @@ rec {
       opensshTest
       php
       postgresql
-      python
+      python3
       release-checks
       rsyslog
       stdenv
@@ -130,13 +140,15 @@ rec {
         (map onSupported [
           "nixos.dummy"
           "nixos.manual"
-          "nixos.tests.acme"
+          "nixos.tests.acme.http01-builtin"
+          "nixos.tests.acme.dns01"
           "nixos.tests.containers-imperative"
           "nixos.tests.containers-ip"
           "nixos.tests.firewall"
           "nixos.tests.ipv6"
           "nixos.tests.installer.simpleUefiSystemdBoot"
           "nixos.tests.login"
+          "nixos.tests.latestKernel.login"
           "nixos.tests.misc"
           "nixos.tests.nat.firewall"
           "nixos.tests.nat.standalone"

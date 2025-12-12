@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  flask,
   httpx,
   lxml,
   pyparsing,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "twill";
-  version = "3.2.5";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/WIcM/zQ2UjGlGiJRYg9iTCQayzisxGBa5P0/2FDK2Q=";
+    hash = "sha256-/ZT5ntn7YMafrD9/rWaOvROKo+CGFKSldG9jjH/eR0Q=";
   };
 
   pythonRelaxDeps = [ "lxml" ];
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    flask
     pytestCheckHook
     quixote
   ];
@@ -45,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple scripting language for Web browsing";
     homepage = "https://twill-tools.github.io/twill/";
     changelog = "https://github.com/twill-tools/twill/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

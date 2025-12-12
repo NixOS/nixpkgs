@@ -48,81 +48,96 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.5";
+  version = "9.8";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
+    hash = "sha256-5tT9LYUskUGhwqGKE9FGoM1+RRlfcik6TkwETsbMyhU=";
   };
 
-  patches =
-    [
-      # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
-      # This is not precisely the patch provided - this is a diff of the Makefile.in
-      # after the patch was applied and autoreconf was run, since adding autoreconf
-      # here causes infinite recursion.
-      ./fix-mix-flags-deps-libintl.patch
+  patches = [
+    # Extremely bad bug where `tail` prints fewer lines than it should.
+    # https://github.com/coreutils/coreutils/commit/914972e80dbf82aac9ffe3ff1f67f1028e1a788b
+    ./tail.patch
+    # Fix performance regression in cp.
+    # https://github.com/coreutils/coreutils/commit/231cc20195294c9774ab68f523dd06059f4b0a5c
+    # https://github.com/coreutils/coreutils/commit/64b8fdb5b4767e0f833486507c3eae46ed1b40f8
+    # https://github.com/coreutils/coreutils/commit/2c5754649e08a664f3d43f7bc1df08f498bc1554
+    ./cp-1.patch
+    ./cp-2.patch
+    ./cp-3.patch
+  ];
+
+  postPatch = ''
+    # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
+    sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
+    sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
+    sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
+    sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+    sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
+    sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
+    sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+
+    # The test tends to fail on cephfs
+    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
+
+    # Some target platforms, especially when building inside a container have
+    # issues with the inotify test.
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
+
+    # sandbox does not allow setgid
+    sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
+    substituteInPlace ./tests/install/install-C.sh \
+      --replace 'mode3=2755' 'mode3=1755'
+
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
+
+    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+      sed '2i echo Skipping chgrp && exit 77' -i "$f"
+    done
+    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
+
+    # We don't have localtime in the sandbox
+    for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
+
+    # These tests sometimes fail on ZFS-backed NFS filesystems
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+    sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
+    # intermittent failures on builders, unknown reason
+    sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+
+    # fails when syscalls related to acl not being available, e.g. in sandboxed environment
+    sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
+  ''
+  + (optionalString (stdenv.hostPlatform.libc == "musl") (
+    concatStringsSep "\n" [
+      ''
+        echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+        echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+      ''
     ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
-      ./fix-test-failure-musl.patch
-    ];
-
-  postPatch =
+  ))
+  + (optionalString stdenv.hostPlatform.isAarch64 ''
+    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
+  '')
+  + (optionalString stdenv.hostPlatform.isPower64
+    # test command fails to parse long fraction part on ppc64
+    # When fraction parsing is fixed, still wrong output due to fraction length mismatch
+    # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=78985
     ''
-      # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
-      sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
-      sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
-      sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
-      sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
-      sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
-      sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
-      sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
-
-      # The test tends to fail on cephfs
-      sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
-
-      # Some target platforms, especially when building inside a container have
-      # issues with the inotify test.
-      sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
-
-      # sandbox does not allow setgid
-      sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
-      substituteInPlace ./tests/install/install-C.sh \
-        --replace 'mode3=2755' 'mode3=1755'
-
-      # Fails on systems with a rootfs. Looks like a bug in the test, see
-      # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
-      sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
-
-      # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
-      for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
-        sed '2i echo Skipping chgrp && exit 77' -i "$f"
-      done
-      for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
-        echo "int main() { return 77; }" > "$f"
-      done
-
-      # We don't have localtime in the sandbox
-      for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
-        echo "int main() { return 77; }" > "$f"
-      done
-
-      # intermittent failures on builders, unknown reason
-      sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+      sed '2i echo Skipping float sort-ing test && exit 77' -i ./tests/sort/sort-float.sh
     ''
-    + (optionalString (stdenv.hostPlatform.libc == "musl") (
-      concatStringsSep "\n" [
-        ''
-          echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-          echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-        ''
-      ]
-    ))
-    + (optionalString stdenv.hostPlatform.isAarch64 ''
-      # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-      sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-    '');
+  );
 
   outputs = [
     "out"
@@ -130,16 +145,15 @@ stdenv.mkDerivation rec {
   ];
   separateDebugInfo = true;
 
-  nativeBuildInputs =
-    [
-      perl
-      xz.bin
-    ]
-    ++ optionals stdenv.hostPlatform.isCygwin [
-      # due to patch
-      autoreconfHook
-      texinfo
-    ];
+  nativeBuildInputs = [
+    perl
+    xz.bin
+  ]
+  ++ optionals stdenv.hostPlatform.isCygwin [
+    # due to patch
+    autoreconfHook
+    texinfo
+  ];
 
   buildInputs =
     [ ]
@@ -156,27 +170,33 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  configureFlags =
-    [ "--with-packager=https://nixos.org" ]
-    ++ optional (singleBinary != false) (
-      "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
-    )
-    ++ optional withOpenssl "--with-openssl"
-    ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
-    ++ optional withPrefix "--program-prefix=g"
-    # the shipped configure script doesn't enable nls, but using autoreconfHook
-    # does so which breaks the build
-    ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
-    ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
-      # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
-      # don't know why it is not properly detected cross building with glibc.
-      "fu_cv_sys_stat_statfs2_bsize=yes"
-    ]
-    # /proc/uptime is available on Linux and produces accurate results even if
-    # the boot time is set to the epoch because the system has no RTC. We
-    # explicitly enable it for cases where it can't be detected automatically,
-    # such as when cross-compiling.
-    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
+  configureFlags = [
+    "--with-packager=https://nixos.org"
+  ]
+  ++ optional (singleBinary != false) (
+    "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
+  )
+  ++ optional withOpenssl "--with-openssl"
+  ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
+  ++ optional withPrefix "--program-prefix=g"
+  # the shipped configure script doesn't enable nls, but using autoreconfHook
+  # does so which breaks the build
+  ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
+  # The VMULL-based CRC implementation produces incorrect results on musl.
+  # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
+  ++ optional (
+    stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
+  ) "utils_cv_vmull_intrinsic_exists=no"
+  ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
+    # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
+    # don't know why it is not properly detected cross building with glibc.
+    "fu_cv_sys_stat_statfs2_bsize=yes"
+  ]
+  # /proc/uptime is available on Linux and produces accurate results even if
+  # the boot time is set to the epoch because the system has no RTC. We
+  # explicitly enable it for cases where it can't be detected automatically,
+  # such as when cross-compiling.
+  ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
@@ -200,6 +220,9 @@ stdenv.mkDerivation rec {
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+    # gnulib does not consider Clang-specific warnings to be bugs:
+    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:
@@ -241,7 +264,7 @@ stdenv.mkDerivation rec {
       '';
     };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/coreutils/";
     description = "GNU Core Utilities";
     longDescription = ''
@@ -249,9 +272,9 @@ stdenv.mkDerivation rec {
       utilities of the GNU operating system. These are the core utilities which
       are expected to exist on every operating system.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
-    platforms = with platforms; unix ++ windows;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ das_j ];
+    platforms = with lib.platforms; unix ++ windows;
     priority = 10;
   };
 }

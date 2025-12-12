@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.librenms;
@@ -6,26 +11,32 @@ let
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
   package = cfg.package.override {
-    logDir = cfg.logDir;
-    dataDir = cfg.dataDir;
+    inherit (cfg) logDir dataDir;
   };
 
-  phpOptions = ''
-    log_errors = on
-    post_max_size = 100M
-    upload_max_filesize = 100M
-    memory_limit = ${toString cfg.settings.php_memory_limit}M
-    date.timezone = "${config.time.timeZone}"
-  '';
-  phpIni = pkgs.runCommand "php.ini"
-    {
-      inherit (package) phpPackage;
-      inherit phpOptions;
-      preferLocalBuild = true;
-      passAsFile = [ "phpOptions" ];
-    } ''
-    cat $phpPackage/etc/php.ini $phpOptionsPath > $out
-  '';
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
+  };
+
+  defaultPHPSettings = {
+    log_errors = "on";
+    post_max_size = "100M";
+    upload_max_filesize = "100M";
+    memory_limit = "${toString cfg.settings.php_memory_limit}M";
+    "date.timezone" = config.time.timeZone;
+  };
+
+  phpIni =
+    pkgs.runCommand "php.ini"
+      {
+        inherit (package) phpPackage;
+        phpOptions = toKeyValue cfg.phpOptions;
+        preferLocalBuild = true;
+        passAsFile = [ "phpOptions" ];
+      }
+      ''
+        cat $phpPackage/etc/php.ini $phpOptionsPath > $out
+      '';
 
   artisanWrapper = pkgs.writeShellScriptBin "librenms-artisan" ''
     cd ${package}
@@ -44,8 +55,6 @@ let
     fi
     $sudo ${package}/lnms "$@"
   '';
-
-
 
   configFile = pkgs.writeText "config.php" ''
     <?php
@@ -207,8 +216,59 @@ in
       };
     };
 
+    phpOptions = mkOption {
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+        ]);
+      defaultText = literalExpression (
+        generators.toPretty { } (
+          defaultPHPSettings
+          // {
+            "zend_extension" = lib.literalExpression "opcache";
+            "opcache.enable" = lib.literalExpression "1";
+            "opcache.memory_consumption" = lib.literalExpression "256";
+            "date.timezone" = lib.literalExpression "config.time.timeZone";
+            memory_limit = lib.literalExpression "\${toString cfg.settings.php_memory_limit}M";
+          }
+        )
+      );
+      description = ''
+        Options for PHP's php.ini file for librenms.
+
+        Please note that this option is _additive_ on purpose while the
+        attribute values inside the default are option defaults: that means that
+
+        ```nix
+        {
+          services.librenms.phpOptions."opcache.enable" = 1;
+        }
+        ```
+
+        will override the `php.ini` option `opcache.enable` without discarding the rest of the defaults.
+
+        Overriding all of `phpOptions` can be done like this:
+
+        ```nix
+        {
+          services.librenms.phpOptions = lib.mkForce {
+            /* ... */
+          };
+        }
+        ```
+      '';
+    };
+
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -225,9 +285,7 @@ in
 
     nginx = mkOption {
       type = types.submodule (
-        recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-          { }
+        recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
       default = { };
       example = literalExpression ''
@@ -344,9 +402,9 @@ in
       };
       description = ''
         Attrset of the LibreNMS configuration.
-        See https://docs.librenms.org/Support/Configuration/ for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
-        See https://docs.librenms.org/Extensions/Authentication/ for setting other authentication methods.
+        See <https://docs.librenms.org/Support/Configuration/> for reference.
+        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
+        See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
       example = {
@@ -361,7 +419,7 @@ in
       default = null;
       description = ''
         Additional config for LibreNMS that will be appended to the `config.php`. See
-        https://github.com/librenms/librenms/blob/master/misc/config_definitions.json
+        <https://github.com/librenms/librenms/blob/master/misc/config_definitions.json>
         for possible options. Useful if you want to use PHP-Functions in your config.
       '';
     };
@@ -390,6 +448,8 @@ in
 
     users.groups.${cfg.group} = { };
 
+    services.librenms.phpOptions = lib.mapAttrs (lib.const lib.mkOptionDefault) defaultPHPSettings;
+
     services.librenms.settings = {
       # basic configs
       "user" = cfg.user;
@@ -409,15 +469,20 @@ in
       # one minute polling
       "rrd.step" = if cfg.enableOneMinutePolling then 60 else 300;
       "rrd.heartbeat" = if cfg.enableOneMinutePolling then 120 else 600;
-    } // (lib.optionalAttrs cfg.distributedPoller.enable {
+    }
+    // (lib.optionalAttrs cfg.distributedPoller.enable {
       "distributed_poller" = true;
-      "distributed_poller_name" = lib.mkIf (cfg.distributedPoller.name != null) cfg.distributedPoller.name;
+      "distributed_poller_name" = lib.mkIf (
+        cfg.distributedPoller.name != null
+      ) cfg.distributedPoller.name;
       "distributed_poller_group" = cfg.distributedPoller.group;
       "distributed_billing" = cfg.distributedPoller.distributedBilling;
       "distributed_poller_memcached_host" = cfg.distributedPoller.memcachedHost;
       "distributed_poller_memcached_port" = cfg.distributedPoller.memcachedPort;
-      "rrdcached" = "${cfg.distributedPoller.rrdcachedHost}:${toString cfg.distributedPoller.rrdcachedPort}";
-    }) // (lib.optionalAttrs cfg.useDistributedPollers {
+      "rrdcached" =
+        "${cfg.distributedPoller.rrdcachedHost}:${toString cfg.distributedPoller.rrdcachedPort}";
+    })
+    // (lib.optionalAttrs cfg.useDistributedPollers {
       "distributed_poller" = true;
       # still enable a local poller with distributed polling
       "distributed_poller_group" = lib.mkDefault "0";
@@ -454,7 +519,8 @@ in
       settings.mysqld = {
         innodb_file_per_table = 1;
         lower_case_table_names = 0;
-      } // (lib.optionalAttrs cfg.useDistributedPollers {
+      }
+      // (lib.optionalAttrs cfg.useDistributedPollers {
         bind-address = "0.0.0.0";
       });
       ensureDatabases = [ cfg.database.database ];
@@ -466,10 +532,12 @@ in
           };
         }
       ];
-      initialScript = lib.mkIf cfg.useDistributedPollers (pkgs.writeText "mysql-librenms-init" ''
-        CREATE USER IF NOT EXISTS '${cfg.database.username}'@'%';
-        GRANT ALL PRIVILEGES ON ${cfg.database.database}.* TO '${cfg.database.username}'@'%';
-      '');
+      initialScript = lib.mkIf cfg.useDistributedPollers (
+        pkgs.writeText "mysql-librenms-init" ''
+          CREATE USER IF NOT EXISTS '${cfg.database.username}'@'%';
+          GRANT ALL PRIVILEGES ON ${cfg.database.database}.* TO '${cfg.database.username}'@'%';
+        ''
+      );
     };
 
     services.nginx = lib.mkIf (!cfg.distributedPoller.enable) {
@@ -494,12 +562,13 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      inherit phpOptions;
+      phpOptions = toKeyValue cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     systemd.services.librenms-scheduler = {
@@ -526,11 +595,21 @@ in
     systemd.services.librenms-setup = {
       description = "Preparation tasks for LibreNMS";
       before = [ "phpfpm-librenms.service" ];
-      after = [ "systemd-tmpfiles-setup.service" "network.target" ]
-        ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
+      after = [
+        "systemd-tmpfiles-setup.service"
+        "network.target"
+      ]
+      ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ package configFile ];
-      path = [ pkgs.mariadb pkgs.unixtools.whereis pkgs.gnused ];
+      restartTriggers = [
+        package
+        configFile
+      ];
+      path = [
+        pkgs.mariadb
+        pkgs.unixtools.whereis
+        pkgs.gnused
+      ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -559,75 +638,101 @@ in
           }"
         ];
       };
-      script = ''
-        set -euo pipefail
-
-        # config setup
-        ln -sf ${configFile} ${cfg.dataDir}/config.php
-        ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
-        export PHPRC=${phpIni}
-
-        if [[ ! -s ${cfg.dataDir}/.env ]]; then
-          # init .env file
-          echo "APP_KEY=" > ${cfg.dataDir}/.env
-          ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
-          ${artisanWrapper}/bin/librenms-artisan webpush:vapid
-          echo "" >> ${cfg.dataDir}/.env
-          echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
-          ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
-          echo "" >> ${cfg.dataDir}/.env
-        else
-          # .env file already exists --> only update database and cache config
-          ${pkgs.gnused}/bin/sed -i /^DB_/d ${cfg.dataDir}/.env
-          ${pkgs.gnused}/bin/sed -i /^CACHE_DRIVER/d ${cfg.dataDir}/.env
-        fi
-        ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
-          echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
-        ''}
-        echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
-      ''
-      + (
-        if ! isNull cfg.database.socket
-        then ''
-          # use socket connection
-          echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
-          echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
+      script =
+        let
+          nginxHasSSL =
+            with config.services.nginx.virtualHosts."${cfg.hostname}";
+            onlySSL || addSSL || forceSSL;
+        in
         ''
-        else ''
-          # use TCP connection
-          echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
-          echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
-          echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
-          echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
-          cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
+          set -euo pipefail
+
+          PATH=$PATH:${lib.makeBinPath (with pkgs; [ gnused ])}
+
+          # config setup
+          ln -sf ${configFile} ${cfg.dataDir}/config.php
+          ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
+          export PHPRC=${phpIni}
+
+          INIT=false
+          if [[ ! -s ${cfg.dataDir}/.env ]]; then
+            INIT=true
+            # init .env file
+            echo "APP_KEY=" > ${cfg.dataDir}/.env
+            ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
+            ${artisanWrapper}/bin/librenms-artisan webpush:vapid
+            echo "" >> ${cfg.dataDir}/.env
+            echo -n "NODE_ID=" >> ${cfg.dataDir}/.env
+            ${package.phpPackage}/bin/php -r "echo uniqid();" >> ${cfg.dataDir}/.env
+            echo "" >> ${cfg.dataDir}/.env
+          else
+            # .env file already exists --> only update database and cache config
+            sed -i /^APP_URL=/d ${cfg.dataDir}/.env
+            sed -i /^DB_/d ${cfg.dataDir}/.env
+            sed -i /^CACHE_DRIVER=/d ${cfg.dataDir}/.env
+          fi
+          ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
+            echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
+          ''}
+          echo "APP_URL=http${lib.optionalString nginxHasSSL "s"}://${cfg.hostname}/" >> ${cfg.dataDir}/.env
+          echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
         ''
-      )
-      + ''
-        # clear cache after update (before migrations)
-        OLD_VERSION=$(cat ${cfg.dataDir}/version)
-        if [[ $OLD_VERSION != "${package.version}" ]]; then
-          rm -r ${cfg.dataDir}/cache/*
-        fi
+        + (
+          if !isNull cfg.database.socket then
+            ''
+              # use socket connection
+              echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
+              echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
+            ''
+          else
+            ''
+              # use TCP connection
+              echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
+              echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
+              echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
+              echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
+              cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
+            ''
+        )
+        + ''
+          # clear cache if package has changed (cache may contain cached paths
+          # to the old package)
+          OLD_PACKAGE=$(cat ${cfg.dataDir}/package)
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            rm -r ${cfg.dataDir}/cache/*
+          fi
 
-        # convert rrd files when the oneMinutePolling option is changed
-        OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
-        if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
-          ${package}/scripts/rrdstep.php -h all
-          echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
-        fi
+          # convert rrd files when the oneMinutePolling option is changed
+          OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
+          if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
+            ${package}/scripts/rrdstep.php -h all
+            echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
+          fi
 
-        # migrate db
-        ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+          # migrate db if package version has changed
+          # not necessary for every package change
+          OLD_VERSION=$(cat ${cfg.dataDir}/version)
+          if [[ $OLD_VERSION != "${package.version}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
+            echo "${package.version}" > ${cfg.dataDir}/version
+          fi
 
-        # regenerate cache after migrations after update
-        if [[ $OLD_VERSION != "${package.version}" ]]; then
-          ${artisanWrapper}/bin/librenms-artisan view:clear
-          ${artisanWrapper}/bin/librenms-artisan optimize:clear
-          ${artisanWrapper}/bin/librenms-artisan view:cache
-          ${artisanWrapper}/bin/librenms-artisan optimize
-          echo "${package.version}" > ${cfg.dataDir}/version
-        fi
-      '';
+          if [[ $INIT == "true" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
+          fi
+
+          # regenerate cache if package has changed
+          if [[ $OLD_PACKAGE != "${package}" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan view:clear
+            ${artisanWrapper}/bin/librenms-artisan optimize:clear
+            ${artisanWrapper}/bin/librenms-artisan view:cache
+            ${artisanWrapper}/bin/librenms-artisan optimize
+            echo "${package}" > ${cfg.dataDir}/package
+          fi
+
+          # to make sure to not read an outdated .env file
+          ${artisanWrapper}/bin/librenms-artisan config:cache
+        '';
     };
 
     programs.mtr.enable = true;
@@ -657,7 +762,9 @@ in
           "33 */6 * * * ${cfg.user} ${env} ${package}/cronic ${package}/discovery-wrapper.py 1"
           "*/5 * * * * ${cfg.user} ${env} ${package}/discovery.php -h new >> /dev/null 2>&1"
 
-          "${if cfg.enableOneMinutePolling then "*" else "*/5"} * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
+          "${
+            if cfg.enableOneMinutePolling then "*" else "*/5"
+          } * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
           "* * * * * ${cfg.user} ${env} ${package}/alerts.php >> /dev/null 2>&1"
 
           "*/5 * * * * ${cfg.user} ${env} ${package}/check-services.php >> /dev/null 2>&1"
@@ -670,7 +777,8 @@ in
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh notifications >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh peeringdb >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh mac_oui >> /dev/null 2>&1"
-        ] ++ lib.optionals cfg.enableLocalBilling [
+        ]
+        ++ lib.optionals cfg.enableLocalBilling [
           "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
           "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
         ];
@@ -685,7 +793,10 @@ in
       };
     };
 
-    environment.systemPackages = [ artisanWrapper lnmsWrapper ];
+    environment.systemPackages = [
+      artisanWrapper
+      lnmsWrapper
+    ];
 
     systemd.tmpfiles.rules = [
       "d ${cfg.logDir}                               0750 ${cfg.user} ${cfg.group} - -"
@@ -693,6 +804,7 @@ in
       "d ${cfg.dataDir}                              0750 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/.env                         0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/version                      0600 ${cfg.user} ${cfg.group} - -"
+      "f ${cfg.dataDir}/package                      0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/one_minute_enabled           0600 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config.json                  0600 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/storage                      0700 ${cfg.user} ${cfg.group} - -"
@@ -705,7 +817,8 @@ in
       "d ${cfg.dataDir}/storage/logs                 0700 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/rrd                          0700 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/cache                        0700 ${cfg.user} ${cfg.group} - -"
-    ] ++ lib.optionals cfg.useDistributedPollers [
+    ]
+    ++ lib.optionals cfg.useDistributedPollers [
       "d ${cfg.dataDir}/rrdcached-journal            0700 ${cfg.user} ${cfg.group} - -"
     ];
 

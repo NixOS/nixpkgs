@@ -1,28 +1,30 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  stdenv,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.2";
+  version = "3.17.11";
   pyproject = true;
 
-  # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-UjKYHZwAOOv3Adj13r2zJkVmxwEpJLQk87UslddX9Qk=";
+    hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
   };
 
-  # relax dep constrains, keep environment constraints
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-requirements-txt
+  ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
     # and https://github.com/Flexget/Flexget/blob/develop/requirements.txt
     apscheduler
@@ -40,12 +42,14 @@ python3.pkgs.buildPythonApplication rec {
     pyrss2gen
     python-dateutil
     pyyaml
+    rarfile
     rebulk
     requests
     rich
     rpyc
     sqlalchemy
     zstandard
+    pillow
 
     # WebUI requirements
     cherrypy
@@ -66,6 +70,8 @@ python3.pkgs.buildPythonApplication rec {
     deluge-client
     cloudscraper
     python-telegram-bot
+    boto3
+    libtorrent-rasterbar
   ];
 
   pythonImportsCheck = [
@@ -93,14 +99,70 @@ python3.pkgs.buildPythonApplication rec {
     "flexget.plugins.services.pogcal_acquired"
   ];
 
-  # ~400 failures
-  doCheck = false;
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.pytest-vcr
+    python3Packages.pytest-xdist
+    python3Packages.paramiko
+  ];
 
-  meta = with lib; {
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = [
+    # reach the Internet
+    "TestExistsMovie"
+    "TestImdb"
+    "TestImdbLookup"
+    "TestImdbParser"
+    "TestInputHtml"
+    "TestInputSites"
+    "TestNfoLookupWithMovies"
+    "TestNpoWatchlistInfo"
+    "TestNpoWatchlistLanguageTheTVDBLookup"
+    "TestNpoWatchlistPremium"
+    "TestPlex"
+    "TestRadarrListActions"
+    "TestRssOnline"
+    "TestSeriesRootAPI"
+    "TestSftpDownload"
+    "TestSftpList"
+    "TestSonarrListActions"
+    "TestSubtitleList"
+    "TestTMDBMovieLookupAPI"
+    "TestTVDBEpisodeABSLookupAPI"
+    "TestTVDBEpisodeAirDateLookupAPI"
+    "TestTVDBEpisodeLookupAPI"
+    "TestTVDBExpire"
+    "TestTVDBFavorites"
+    "TestTVDBLanguages"
+    "TestTVDBList"
+    "TestTVDBLookup"
+    "TestTVDBLookup"
+    "TestTVDBSeriesActorsLookupAPI"
+    "TestTVDBSeriesLookupAPI"
+    "TestTVDSearchIMDBLookupAPI"
+    "TestTVDSearchNameLookupAPI"
+    "TestTVDSearchZAP2ITLookupAPI"
+    "TestTVMAzeSeriesLookupAPI"
+    "TestTVMazeSeasonLookup"
+    "TestTVMazeShowLookup"
+    "TestTVMazeUnicodeLookup"
+    "TestTaskParsing::test_selected_parser_cleared"
+    "TestTheTVDBLanguages"
+    "TestTheTVDBList"
+    "TestTmdbLookup"
+    "TestURLRewriters"
+    "TestURLRewriters::test_ettv"
+    # others
+    "TestRegexp"
+    "TestYamlLists"
+  ];
+
+  meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
     description = "Multipurpose automation tool for all of your media";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

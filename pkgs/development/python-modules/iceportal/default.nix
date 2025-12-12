@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-iceportal";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kpAUgGi2fAHzQYuZAaQW9wdrYjwbduRsoTwSuzcjJa8=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iceportal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for getting data from the ICE Portal";
     homepage = "https://github.com/home-assistant-ecosystem/python-iceportal";
     changelog = "https://github.com/home-assistant-ecosystem/python-iceportal/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -14,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
     hash = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
   };
@@ -33,11 +33,11 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
-    description = "kernel {module, exploit} development tool";
+  meta = {
+    description = "Kernel {module, exploit} development tool";
     mainProgram = "out-of-tree";
     homepage = "https://out-of-tree.io";
-    maintainers = [ maintainers.dump_stack ];
-    license = licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.dump_stack ];
+    license = lib.licenses.agpl3Plus;
   };
 }

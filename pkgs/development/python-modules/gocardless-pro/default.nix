@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "gocardless-pro";
-  version = "2.0.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gocardless";
     repo = "gocardless-pro-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RHvGrBIDtjnLax2x7FPu0S5vizUW7dQMaQsyGPXqEh4=";
+    tag = "v${version}";
+    hash = "sha256-XD5GUiSHTq/DLrKo6FY4moNnbFpXkVJWM13Yu6c+tZw=";
   };
 
   build-system = [ setuptools ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
     responses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for the GoCardless Pro API";
     homepage = "https://github.com/gocardless/gocardless-pro-python";
-    changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

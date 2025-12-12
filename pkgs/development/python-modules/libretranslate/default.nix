@@ -1,8 +1,10 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  runCommand,
   hatchling,
   argostranslate,
   flask,
@@ -15,6 +17,7 @@
   expiringdict,
   langdetect,
   lexilang,
+  libretranslate,
   ltpycld2,
   morfessor,
   appdirs,
@@ -26,18 +29,19 @@
   prometheus-client,
   polib,
   python,
+  xorg,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.6.2";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u0m9dTxwSGU50YplV24daSO+WY/At648OpIEZYMmqqo=";
+    tag = "v${version}";
+    hash = "sha256-nWm0h/ceGDtoUVqYPkIC+anXrneJsxlZ4DN3Wge0NCk=";
   };
 
   build-system = [
@@ -85,11 +89,31 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libretranslate" ];
 
-  meta = with lib; {
+  passthru = {
+    static-compressed =
+      runCommand "libretranslate-data-compressed"
+        {
+          nativeBuildInputs = [
+            pkgs.brotli
+            xorg.lndir
+          ];
+        }
+        ''
+          mkdir -p $out/share/libretranslate/static
+          lndir ${libretranslate}/share/libretranslate/static $out/share/libretranslate/static
+
+          # Create static gzip and brotli files
+          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|ico|js|svg|ttf)' \
+            -exec gzip --best --keep --force {} ';' \
+            -exec brotli --best --keep --no-copy-stat {} ';'
+        '';
+  };
+
+  meta = {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
-    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ misuzu ];
+    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

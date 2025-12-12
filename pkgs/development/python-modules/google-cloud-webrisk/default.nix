@@ -9,21 +9,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-webrisk";
-  version = "1.16.0";
+  version = "1.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
     inherit version;
-    hash = "sha256-pF0iqlwXq7wevsmnzkO76I1DlcQdOegmmVo2uF0QAho=";
+    hash = "sha256-TuWU+3pfwFt8E06zUDAY8+JJb+2j4l/eHP7Y0dgE0gs=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,8 @@ buildPythonPackage rec {
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -47,11 +45,11 @@ buildPythonPackage rec {
     "google.cloud.webrisk_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for Web Risk";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-webrisk";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-webrisk-v${version}/packages/google-cloud-webrisk/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

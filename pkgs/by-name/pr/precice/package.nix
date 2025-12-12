@@ -3,61 +3,69 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  gcc,
+  pkg-config,
   boost,
   eigen,
   libxml2,
   mpi,
-  python3,
+  python3Packages,
   petsc,
-  pkg-config,
+  ctestCheckHook,
+  mpiCheckPhaseHook,
 }:
 
-stdenv.mkDerivation rec {
+assert petsc.mpiSupport;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "precice";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "precice";
-    rev = "v${version}";
-    hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1FbTNo2F+jH1EVV6gXc9o0T31UHY/wBK3vQeCV7wW5E=";
   };
 
   cmakeFlags = [
-    "-DPRECICE_PETScMapping=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DPYTHON_LIBRARIES=${python3.libPrefix}"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [ "-D_GNU_SOURCE" ]
-    # libxml2-2.12 changed const qualifiers
-    ++ [ "-fpermissive" ]
-  );
 
   nativeBuildInputs = [
     cmake
-    gcc
     pkg-config
-    python3
-    python3.pkgs.numpy
   ];
+
   buildInputs = [
     boost
     eigen
     libxml2
     mpi
     petsc
+    python3Packages.python
+    python3Packages.numpy
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    mpiCheckPhaseHook
+  ];
+
+  disabledTests = [
+    # Because preciceDt becomes very small. Test is likely to fail on other platform.
+    "precice.Integration/Serial/Time/Explicit/ParallelCoupling/ReadWriteScalarDataWithSubcycling6400Steps"
   ];
 
   meta = {
-    description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    description = "PreCICE stands for Precise Code Interaction Coupling Environment";
     homepage = "https://precice.org/";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ lgpl3Only ];
     maintainers = with lib.maintainers; [ Scriptkiddi ];
-    mainProgram = "binprecice";
+    mainProgram = "precice-tools";
     platforms = lib.platforms.unix;
   };
-}
+})

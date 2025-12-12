@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
-  gnused,
   libbpf,
   libcap_ng,
   nix-update-script,
@@ -14,32 +14,67 @@
   python3,
   unbound,
   xdp-tools,
+  openvswitch,
+  gawk,
+  coreutils,
+  gnugrep,
+  gnused,
+  makeWrapper,
 }:
-
-stdenv.mkDerivation rec {
+let
+  withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "24.09.1";
+  version = "25.09.0";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Fz/YNEbMZ2mB4Fv1nKE3H3XrihehYP7j0N3clnTJ5x8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
     fetchSubmodules = true;
   };
+
+  outputs = [
+    "out"
+    "lib"
+    "man"
+    "dev"
+    "tools"
+  ];
+
+  patches = [
+    # Fix test failure with musl libc.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
+      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
+    })
+    # Fix sandbox test failure.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
+      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
+    })
+    # Fix build failure due to make install race condition.
+    # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
+    ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     python3
+    makeWrapper
   ];
 
   buildInputs = [
-    libbpf
     libcap_ng
     numactl
     openssl
     unbound
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    libbpf
     xdp-tools
   ];
 
@@ -47,27 +82,59 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure
+    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
 
-  configureFlags = [ "--localstatedir=/var" ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sharedstatedir=/var"
+    "--with-dbdir=/var/lib/ovn"
+    "--sbindir=$(out)/bin"
+    "--enable-ssl"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic withOpensslConfigureFlag;
 
   enableParallelBuilding = true;
 
-  # disable tests due to networking issues and because individual tests can't be skipped easily
-  doCheck = false;
+  doCheck = true;
 
   nativeCheckInputs = [
-    gnused
+    openssl # used to generate certificates used for test services
     procps
   ];
 
   postInstall = ''
+    moveToOutput 'share/ovn/bugtool-plugins' "$tools"
+    moveToOutput 'share/ovn/scripts/ovn-bugtool-*' "$tools"
+
+    moveToOutput 'bin/ovn-detrace' "$tools"
+    moveToOutput 'bin/ovn_detrace*' "$tools"
+    moveToOutput 'bin/ovn-trace' "$tools"
+    moveToOutput 'bin/ovn-debug' "$tools"
+    moveToOutput 'bin/ovn-docker*' "$tools"
+
+    sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
+
     mkdir -vp $out/share/openvswitch/scripts
-    cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
+    ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
+
+    wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          openvswitch
+          gawk
+          coreutils # tr
+          gnugrep
+          gnused
+        ]
+      }
   '';
+
+  env = {
+    SKIP_UNSTABLE = "yes";
+  };
 
   # https://docs.ovn.org/en/latest/topics/testing.html
   preCheck = ''
@@ -82,15 +149,22 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open Virtual Network";
     longDescription = ''
       OVN (Open Virtual Network) is a series of daemons that translates virtual network configuration into OpenFlow, and installs them into Open vSwitch.
     '';
-    homepage = "https://github.com/ovn-org/ovn";
-    changelog = "https://github.com/ovn-org/ovn/blob/${src.rev}/NEWS";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    homepage = "https://www.ovn.org";
+    changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
+    license = with lib.licenses; [
+      asl20
+      lgpl21Plus # bugtool plugins
+      sissl11 # lib/sflow from ovs submodule
+    ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      booxter
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

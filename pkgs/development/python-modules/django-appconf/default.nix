@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-appconf";
-  version = "1.0.6";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-appconf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-H9MwX5LtHkYN6TshP7rRKlX/iOJZHbQVsZeki95yks4=";
+    tag = "v${version}";
+    hash = "sha256-kpytEpvibnumkQGfHBDKA0GzSB0R8o0g0f51Rv6KEhA=";
   };
 
   build-system = [ setuptools ];
@@ -41,11 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "appconf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-appconf/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.bsd2;
   };
 }

@@ -4,12 +4,10 @@
   aiormq,
   buildPythonPackage,
   docker,
-  exceptiongroup,
   fetchFromGitHub,
   pamqp,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   shortuuid,
   testcontainers,
   wrapt,
@@ -18,23 +16,20 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.5.0";
+  version = "9.5.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4MweCuZbo/XDur9iwM3MT/P75HjEQvMlPI82bDxuol8=";
+    tag = version;
+    hash = "sha256-0jVxgU+r/d2n4YO5/YAZrZUWDCAlZldBshCGpcEV/sQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiormq
-    exceptiongroup
     yarl
   ];
 
@@ -70,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aio_pika" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP 0.9 client designed for asyncio and humans";
     homepage = "https://github.com/mosquito/aio-pika";
     changelog = "https://github.com/mosquito/aio-pika/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

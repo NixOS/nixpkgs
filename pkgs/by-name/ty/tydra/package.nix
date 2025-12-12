@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Mange";
-    repo = pname;
+    repo = "tydra";
     rev = "v${version}";
     sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 
-  cargoHash = "sha256-emZWQHOgYUQzCa/SmztSLa19bB1aJpPUiBg2C7w6W8M=";
+  cargoHash = "sha256-sFNrpddhsqxy7HtCXV78oacyNzrTeM0rUcL7qgeJTcM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,11 +30,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion tydra.{bash,fish} _tydra
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shortcut menu-based task runner, inspired by Emacs Hydra";
     homepage = "https://github.com/Mange/tydra";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
     mainProgram = "tydra";
   };
 }

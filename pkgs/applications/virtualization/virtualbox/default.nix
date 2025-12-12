@@ -14,8 +14,8 @@
   xorgproto,
   libXext,
   libXcursor,
+  libXfixes,
   libXmu,
-  libIDL,
   SDL2,
   libcap,
   libGL,
@@ -35,9 +35,9 @@
   alsa-lib,
   curl,
   libvpx,
-  nettools,
+  net-tools,
   dbus,
-  substituteAll,
+  replaceVars,
   gsoap,
   zlib,
   xz,
@@ -49,7 +49,6 @@
   open-watcom-bin,
   makeself,
   perl,
-  vulkan-loader,
   javaBindings ? true,
   jdk, # Almost doesn't affect closure size
   pythonBindings ? false,
@@ -73,17 +72,21 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.1.4";
-  virtualboxSha256 = "872e7a42b41f8558abbf887f1bdc7aac932bb88b2764d07cbce270cab57e3b5e";
+  virtualboxVersion = "7.2.4";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
 
-  kvmPatchVersion = "20241220";
-  kvmPatchHash = "sha256-SYyD79iN6Sp/Mxat+ml3fee9X1vFUFyrwHPnQNboc1c=";
+  kvmPatchVboxVersion = "7.2.4";
+  kvmPatchVersion = "20251103";
+  kvmPatchHash = "sha256-VhSuRYiZLg8hIGatf27u/nBBBtB1zz4ePxtiRYy84Hw=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
   withModsrc = !enableKvm;
 
-  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
+  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix {
+    inherit virtualboxVersion;
+  };
 
   inherit (lib)
     optional
@@ -103,11 +106,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "virtualbox";
-  version = finalAttrs.virtualboxVersion;
+  version = "${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}";
 
   inherit
     buildType
     virtualboxVersion
+    virtualboxSubVersion
     virtualboxSha256
     kvmPatchVersion
     kvmPatchHash
@@ -115,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}.tar.bz2";
+    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}.tar.bz2";
     sha256 = finalAttrs.virtualboxSha256;
   };
 
@@ -128,55 +132,54 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     yasm
     glslang
-  ] ++ optional (!headless) wrapQtAppsHook;
+  ]
+  ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
 
-  buildInputs =
-    [
-      acpica-tools
-      dev86
-      libxslt
-      libxml2
-      xorgproto
-      libX11
-      libXext
-      libXcursor
-      libIDL
-      libcap
-      glib
-      lvm2
-      alsa-lib
-      curl
-      libvpx
-      pam
-      makeself
-      perl
-      libXmu
-      libXrandr
-      libpng
-      libopus
-      libtpms
-      python3
-      xz
-    ]
-    ++ optional javaBindings jdk
-    ++ optional pythonBindings python3 # Python is needed even when not building bindings
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libGL ]
-    ++ optionals (!headless) [
-      qtbase
-      qttools
-      qtscxml
-      libXinerama
-      SDL2
-      libGLU
-    ]
-    ++ optionals enableWebService [
-      gsoap
-      zlib
-    ];
+  buildInputs = [
+    acpica-tools
+    dev86
+    libxslt
+    libxml2
+    xorgproto
+    libX11
+    libXext
+    libXcursor
+    libcap
+    glib
+    lvm2
+    alsa-lib
+    curl
+    libvpx
+    pam
+    makeself
+    perl
+    libXmu
+    libXrandr
+    libpng
+    libopus
+    libtpms
+    python3
+    xz
+    libGL
+  ]
+  ++ optional javaBindings jdk
+  ++ optional pythonBindings python3 # Python is needed even when not building bindings
+  ++ optional pulseSupport libpulseaudio
+  ++ optionals (!headless) [
+    qtbase
+    qttools
+    qtscxml
+    libXinerama
+    SDL2
+    libGLU
+  ]
+  ++ optionals enableWebService [
+    gsoap
+    zlib
+  ];
 
   hardeningDisable = [
     "format"
@@ -204,8 +207,14 @@ stdenv.mkDerivation (finalAttrs: {
     grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
+    grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
+
+    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
+      --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
 
     export USER=nix
     set +x
@@ -219,8 +228,8 @@ stdenv.mkDerivation (finalAttrs: {
       # No update patch disables check for update function
       # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
       (fetchpatch {
-        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/42a1ca1291fde365bfba140cb21a8a074aaccce2/debian/patches/16-no-update.patch";
-        hash = "sha256-qM2e4DkkpmA18Z76OUsnY1MhcGb1dT2PG68JUy6fZEE=";
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
+        hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
     ]
     ++ [ ./extra_symbols.patch ]
@@ -231,32 +240,31 @@ stdenv.mkDerivation (finalAttrs: {
     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
     # the user's icon theme can be loaded.
-    ++ optional (!headless && enableHardening) (substituteAll {
-      src = ./qt-env-vars.patch;
-      qtPluginPath = "${qtbase}/bin/${qtbase.qtPluginPrefix}:${qtsvg}/bin/${qtbase.qtPluginPrefix}:${qtwayland}/bin/${qtbase.qtPluginPrefix}";
-    })
-    # While the KVM patch should not break any other behavior if --with-kvm is not specified,
-    # we don't take any chances and only apply it if people actually want to use KVM support.
-    ++ optional enableKvm (
-      let
-        patchVboxVersion =
-          # There is no updated patch for 7.0.22 yet, but the older one still applies.
-          if finalAttrs.virtualboxVersion == "7.0.22" then "7.0.20" else finalAttrs.virtualboxVersion;
-      in
-      fetchpatch {
-        name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
-        url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${patchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
-        hash = finalAttrs.kvmPatchHash;
+    ++ optional (!headless && enableHardening) (
+      replaceVars ./qt-env-vars.patch {
+        qtPluginPath = "${qtbase}/bin/${qtbase.qtPluginPrefix}:${qtsvg}/bin/${qtbase.qtPluginPrefix}:${qtwayland}/bin/${qtbase.qtPluginPrefix}";
       }
     )
+    # While the KVM patch should not break any other behavior if --with-kvm is not specified,
+    # we don't take any chances and only apply it if people actually want to use KVM support.
+    ++ optional enableKvm (fetchpatch {
+      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${kvmPatchVboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
+      hash = finalAttrs.kvmPatchHash;
+    })
     ++ [
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      # curl 8.16 upgrade breakage
+      (fetchpatch {
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
+        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
+      })
     ];
 
   postPatch = ''
-    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+    sed -i -e 's|/sbin/ifconfig|${net-tools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 
@@ -308,10 +316,10 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString (enableKvm) "--with-kvm"} \
+      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
-    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
+    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
@@ -387,8 +395,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
     # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
-      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
-         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+      wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
 
   passthru = {
@@ -409,10 +416,9 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryNativeCode
     ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
-      sander
       friedrichaltheide
       blitz
     ];

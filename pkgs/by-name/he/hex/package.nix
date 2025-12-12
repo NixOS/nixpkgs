@@ -17,19 +17,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YctXDhCMJvDQLPsuhzdyYDUIlFE2vKltNtrFFeE7YE8=";
   };
 
-  cargoHash = "sha256-Nlha9Zn0qaQhpN2ivbBvpIPxCN2I7BtJJULb6sYdpdo=";
+  cargoHash = "sha256-3lrNZyQVP+gswbF+pqQmVIHg3bjiJ22y87PtTHDwIXs=";
 
   passthru.tests.version = testers.testVersion {
     package = hex;
     version = "hx ${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Futuristic take on hexdump, made in Rust";
     homepage = "https://github.com/sitkevij/hex";
     changelog = "https://github.com/sitkevij/hex/releases/tag/v${version}";
     mainProgram = "hx";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

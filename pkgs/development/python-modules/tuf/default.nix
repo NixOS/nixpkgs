@@ -2,37 +2,44 @@
   lib,
   buildPythonPackage,
   ed25519,
+  freezegun,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
+  flit-core,
   requests,
   securesystemslib,
 }:
 
 buildPythonPackage rec {
   pname = "tuf";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "python-tuf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qv9SH4ObC7bgPLd2Wu5XynBddlW6pycwLwaKhZ+l61k=";
+    tag = "v${version}";
+    hash = "sha256-CPbZOpUYi7MWKLMj7kwTsmEkxLCf4wU7IOCcbzMkPlU=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    flit-core
+    hatchling
+  ];
 
-  dependencies =
-    [
-      requests
-      securesystemslib
-    ]
-    ++ securesystemslib.optional-dependencies.pynacl
-    ++ securesystemslib.optional-dependencies.crypto;
+  dependencies = [
+    requests
+    securesystemslib
+  ]
+  ++ securesystemslib.optional-dependencies.pynacl
+  ++ securesystemslib.optional-dependencies.crypto;
+
+  __darwinAllowLocalNetworking = true;
+
+  checkInputs = [
+    freezegun
+  ];
 
   nativeCheckInputs = [
     ed25519

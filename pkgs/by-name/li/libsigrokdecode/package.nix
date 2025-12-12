@@ -10,14 +10,14 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsigrokdecode";
-  version = "0.5.3-unstable-2023-10-23";
+  version = "0.5.3-unstable-2024-10-01";
 
   src = fetchgit {
     url = "git://sigrok.org/libsigrokdecode";
-    rev = "0c35c5c5845d05e5f624c99d58af992d2f004446";
-    hash = "sha256-1kQB7uk2c+6Uriw+1o6brThDcBLoCdPV0MVWAha7ohk=";
+    rev = "71f451443029322d57376214c330b518efd84f88";
+    hash = "sha256-aW0llB/rziJxLW3OZU1VhxeM3MDWsaMVVgvDKZzdiIY=";
   };
 
   nativeBuildInputs = [
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ check ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Protocol decoding library for the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       vifino
     ];

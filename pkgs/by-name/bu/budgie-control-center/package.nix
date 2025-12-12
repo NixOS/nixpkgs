@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   budgie-desktop,
@@ -61,7 +61,7 @@
   shared-mime-info,
   testers,
   tzdata,
-  udisks2,
+  udisks,
   upower,
   webp-pixbuf-loader,
   wrapGAppsHook3,
@@ -70,24 +70,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-W5PF7BPdQdg/7xJ4J+fEnuDdpoG/lyhX56RDnX2DXoY=";
+    hash = "sha256-Je3X1V4U2t0LMxWwtoYZKEI56IS4zK/w6OL615tqKkk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
       gcm = gnome-color-manager;
       inherit
         cups
-        glibc
         libgnomekbd
         shadow
         ;
@@ -147,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    udisks2
+    udisks
     upower
   ];
 
@@ -200,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-control-center/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;
   };

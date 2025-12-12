@@ -3,28 +3,38 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  version = "0.3.7";
+  version = "0.5.0";
 in
 rustPlatform.buildRustPackage {
   pname = "lla";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "triyanox";
+    owner = "chaqchase";
     repo = "lla";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8BnYLC5SGFvk9srRyLxflDgfVbbGMSHXBOjXQLMLIi8=";
+    tag = "v${version}";
+    hash = "sha256-xbXTiOr3c9PX0SRfjO+3Kib5S0fruFhjHO2Mf00BVBg=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
 
-  cargoHash = "sha256-H/BnJiR9+wcddAEWkKaqamTEDgjTUOMq1AiGWQAfjDM=";
+  cargoHash = "sha256-qKeNSaZMpyQpI7oGqn416pfBINMsIE+0sjzg38roxc8=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
+  postInstall = ''
+    installShellCompletion completions/{_lla,lla{.bash,.fish}}
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/lla \
@@ -37,13 +47,15 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Modern alternative to ls";
+    description = "Blazing-fast `ls` replacement with superpowers";
     longDescription = ''
-      `lla` is a high-performance, extensible alternative to the traditional ls command, written in Rust.
-      It offers enhanced functionality, customizable output, and a plugin system for extended capabilities.
+      `lla` is a modern `ls` replacement that transforms how developers interact with their filesystem.
+      Built with Rust's performance capabilities and designed with user experience in mind,
+      `lla` combines the familiarity of ls with powerful features like specialized views,
+      Git integration, and a robust plugin system with an extensible list of plugins to add more functionality.
     '';
-    homepage = "https://github.com/triyanox/lla";
-    changelog = "https://github.com/triyanox/lla/blob/refs/tags/v${version}/CHANGELOG.md";
+    homepage = "https://lla.chaqchase.com";
+    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;

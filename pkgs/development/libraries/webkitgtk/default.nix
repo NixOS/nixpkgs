@@ -18,7 +18,7 @@
   gnutls,
   libgcrypt,
   libgpg-error,
-  gtk3,
+  gtk4,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -32,11 +32,12 @@
   at-spi2-core,
   cairo,
   libxml2,
-  libsoup,
+  libsoup_3,
   libsecret,
   libxslt,
   harfbuzz,
   hyphen,
+  icu,
   libsysprof-capture,
   libpthreadstubs,
   nettle,
@@ -45,7 +46,6 @@
   libidn,
   libedit,
   readline,
-  apple_sdk,
   libGL,
   libGLU,
   libgbm,
@@ -57,6 +57,7 @@
   fontconfig,
   freetype,
   openssl,
+  openxr-loader,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -66,7 +67,7 @@
   libbacktrace,
   systemd,
   xdg-dbus-proxy,
-  substituteAll,
+  replaceVars,
   glib,
   unifdef,
   addDriverRunpath,
@@ -75,18 +76,18 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  fetchpatch,
 }:
+
+let
+  abiVersion = if lib.versionAtLeast gtk4.version "4.0" then "6.0" else "4.1";
+in
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.46.5";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
-    if lib.versionAtLeast gtk3.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"
-  }";
+  version = "2.50.3";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
     "out"
@@ -100,126 +101,117 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-utQCC7DPs+dA3zCCwtnL9nz0CVWWWIpWrs3eZwITeAU=";
+    hash = "sha256-cKAGtGlbtrLhV+gB9aDQKfQRDwUMbwiC3s2KO/WU1U8=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./fix-bubblewrap-paths.patch;
+    (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })
+
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      gettext
-      gobject-introspection
-      gperf
-      ninja
-      perl
-      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-      pkg-config
-      python3
-      ruby
-      gi-docgen
-      glib # for gdbus-codegen
-      unifdef
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+    pkg-config
+    python3
+    ruby
+    gi-docgen
+    glib # for gdbus-codegen
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      cairo # required even when using skia
-      enchant2
-      libavif
-      libepoxy
-      libjxl
-      gnutls
-      gst-plugins-bad
-      gst-plugins-base
-      harfbuzz
-      hyphen
-      libGL
-      libGLU
-      libgbm
-      libgcrypt
-      libgpg-error
-      libidn
-      libintl
-      lcms2
-      libpthreadstubs
-      libsysprof-capture
-      libtasn1
-      libwebp
-      libxkbcommon
-      libxml2
-      libxslt
-      libbacktrace
-      nettle
-      p11-kit
-      sqlite
-      woff2
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-      # https://bugs.webkit.org/show_bug.cgi?id=274032
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-      libedit
-      readline
-    ]
-    ++
-      lib.optional
-        (
-          clangStdenv.hostPlatform.isDarwin
-          && lib.versionOlder clangStdenv.hostPlatform.darwinSdkVersion "11.0"
-        )
-        (
-          # this can likely be removed as:
-          # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
-          # but the package is marked broken on darwin so unable to test
-
-          # Pull a header that contains a definition of proc_pid_rusage().
-          # (We pick just that one because using the other headers from `sdk` is not
-          # compatible with our C++ standard library. This header is already in
-          # the standard library on aarch64)
-          runCommand "webkitgtk_headers" { } ''
-            install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
-          ''
-        )
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libseccomp
-      libmanette
-      wayland
-      xorg.libX11
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableExperimental [
-      flite
-      openssl
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-      wayland-protocols
-    ];
+  buildInputs = [
+    at-spi2-core
+    cairo # required even when using skia
+    enchant2
+    flite
+    libavif
+    libepoxy
+    libjxl
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    hyphen
+    icu
+    libGL
+    libGLU
+    libgbm
+    libgcrypt
+    libgpg-error
+    libidn
+    libintl
+    lcms2
+    libpthreadstubs
+    libsysprof-capture
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    libbacktrace
+    nettle
+    p11-kit
+    sqlite
+    woff2
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libedit
+    readline
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libseccomp
+    libmanette
+    wayland
+    xorg.libX11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+    # For ENABLE_WEBXR
+    openxr-loader
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk4.version "4.0") [
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
-    gtk3
-    libsoup
+    gtk4
+    libsoup_3
   ];
 
   cmakeFlags =
@@ -229,7 +221,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
@@ -248,7 +240,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "-DUSE_APPLE_ICU=OFF"
       "-DUSE_OPENGL_OR_ES=OFF"
     ]
-    ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+    ++ lib.optionals (lib.versionOlder gtk4.version "4.0") [
       "-DUSE_GTK4=OFF"
     ]
     ++ lib.optionals (!systemdSupport) [
@@ -268,18 +260,26 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
-    pkgConfigModules = [
-      "javascriptcoregtk-4.0"
-      "webkit2gtk-4.0"
-      "webkit2gtk-web-extension-4.0"
-    ];
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.bsd2;
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

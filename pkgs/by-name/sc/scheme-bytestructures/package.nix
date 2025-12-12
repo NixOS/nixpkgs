@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
-    repo = pname;
+    repo = "scheme-bytestructures";
     rev = "v${version}";
     sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   # In procedure bytevector-u8-ref: Argument 2 out of range
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Structured access to bytevector contents";
     homepage = "https://github.com/TaylanUB/scheme-bytestructures";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    platforms = lib.platforms.unix;
   };
 }

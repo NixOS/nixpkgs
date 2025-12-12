@@ -6,6 +6,7 @@
   wxGTK31,
   prusa-slicer,
   libspnav,
+  opencascade-occt_7_6,
 }:
 let
   appname = "SuperSlicer";
@@ -13,39 +14,56 @@ let
   description = "PrusaSlicer fork with more features and faster development cycle";
 
   patches = [
-    # Fix compile error with boost 1.79. See https://github.com/supermerill/SuperSlicer/issues/2823
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/81e3ca3b7c131e8345aede89e3bbcd700e1ad567/media-gfx/superslicer/files/superslicer-2.4.58.3-boost-1.79-port-v2.patch";
-      # Excludes Linux-only patches
-      excludes = [
-        "src/slic3r/GUI/FreeCADDialog.cpp"
-        "src/slic3r/GUI/Tab.cpp"
-        "src/slic3r/Utils/Http.cpp"
-      ];
-      hash = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
-    })
     # Drop if this fix gets merged upstream
     (fetchpatch {
       url = "https://github.com/supermerill/SuperSlicer/commit/fa7c545efa5d1880cf24af32083094fc872d3692.patch";
       hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
     })
+    ./super-slicer-use-boost186.patch
+    ./super-slicer-fix-cereal-1.3.1.patch
   ];
+
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+    patches = [
+      ../../../by-name/wx/wxGTK31/0001-fix-assertion-using-hide-in-destroy.patch
+    ];
+  });
 
   versions = {
     stable = {
-      version = "2.3.57.12";
-      hash = "sha256-lePhDRHI++9zs54bTt2/Lu6ZQ7egjJCWb752aI0s7Mw==";
-      patches = null;
+      version = "2.5.59.13";
+      hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
+      inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     latest = {
-      version = "2.4.58.5";
-      hash = "sha256-UywxEGedXaBUTKojEkbkuejI6SdPSkPxTJMwUDNW6W0=";
+      version = "2.5.59.13";
+      hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     beta = {
-      version = "2.5.59.6";
-      hash = "sha256-4ivhkcvVw5NlPsDz3J840aWc0qnp/XzCnTTCICwi3/c=";
-      inherit patches;
+      version = "2.7.61.6";
+      hash = "sha256-j9er2/z4jl04HI6aOMJ6YCXwhZ6qEhgMJjW117cLnz0=";
+      # this can be removed once prusa-slicer natively supports WayLand
+      # https://github.com/prusa3d/PrusaSlicer/issues/8284
+      # https://github.com/prusa3d/PrusaSlicer/pull/13307
+      # https://gitlab.archlinux.org/schiele/prusa-slicer/-/blob/d839bb84345c0f3ab3eb151a5777f0ca85b5f318/allow_wayland.patch
+      # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/issues/3
+      patches = [ ./super-slicer-allow-wayland.patch ];
     };
   };
 
@@ -53,7 +71,8 @@ let
     {
       version,
       hash,
-      patches,
+      patches ? [ ],
+      ...
     }:
     super: {
       inherit version pname patches;
@@ -68,24 +87,28 @@ let
 
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
-      postPatch =
-        super.postPatch
-        + ''
-          substituteInPlace src/CMakeLists.txt \
-            --replace "scintilla" "" \
-            --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
+      postPatch = (super.postPatch or "") + ''
+        substituteInPlace src/CMakeLists.txt \
+          --replace "scintilla" "" \
+          --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
 
-          substituteInPlace src/libslic3r/CMakeLists.txt \
-            --replace "libexpat" "EXPAT::EXPAT"
+        substituteInPlace src/libslic3r/CMakeLists.txt \
+          --replace "libexpat" "EXPAT::EXPAT"
 
-          # fixes GCC 14 error
-          substituteInPlace src/libslic3r/MeshBoolean.cpp \
-            --replace-fail 'auto &face' 'auto face' \
-            --replace-fail 'auto &vi' 'auto vi'
-        '';
+        # fixes GCC 14 error
+        substituteInPlace src/libslic3r/MeshBoolean.cpp \
+          --replace-fail 'auto &face' 'auto face' \
+          --replace-fail 'auto &vi' 'auto vi'
+      '';
 
-      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
-      postInstall = null;
+      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary
+      # but we do still need to move OCCTWrapper.so to the lib directory
+      postInstall = ''
+        if [[ -f $out/bin/OCCTWrapper.so ]]; then
+          mkdir -p "$out/lib"
+          mv -v $out/bin/*.* $out/lib/
+        fi
+      '';
       separateDebugInfo = true;
 
       buildInputs = super.buildInputs ++ [
@@ -104,11 +127,11 @@ let
         })
       ];
 
-      meta = with lib; {
+      meta = {
         inherit description;
         homepage = "https://github.com/supermerill/SuperSlicer";
-        license = licenses.agpl3Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.agpl3Plus;
+        maintainers = with lib.maintainers; [
           cab404
           tmarkus
         ];
@@ -118,20 +141,12 @@ let
       passthru = allVersions;
 
     };
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.1.4";
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "489f6118256853cf5b299d595868641938566cdb";
-      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
-      fetchSubmodules = true;
-    };
-  });
-  prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
+  prusa-slicer-deps-override = prusa-slicer.override {
+    opencascade-override = opencascade-occt_7_6;
+  };
   allVersions = builtins.mapAttrs (
-    _name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))
+    _name: version:
+    (prusa-slicer-deps-override.override (version.overrides or { })).overrideAttrs (override version)
   ) versions;
 in
 allVersions.stable

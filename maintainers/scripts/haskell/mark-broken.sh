@@ -35,19 +35,19 @@ trap "rm ${tmpfile}" 0
 
 echo "Remember that you need to manually run 'maintainers/scripts/haskell/hydra-report.hs get-report' sometime before running this script."
 echo "Generating a list of broken builds and displaying for manual confirmation ..."
-maintainers/scripts/haskell/hydra-report.hs mark-broken-list $mark_broken_list_flags | sort -i > "$tmpfile"
+maintainers/scripts/haskell/hydra-report.hs mark-broken-list $mark_broken_list_flags | LC_ALL=C.UTF-8 sort --ignore-case > "$tmpfile"
 
 $EDITOR "$tmpfile"
 
 tail -n +3 "$broken_config" >> "$tmpfile"
 
 cat > "$broken_config" << EOF
+# These packages don't compile.
 broken-packages:
-  # These packages don't compile.
 EOF
 
 # clear environment here to avoid things like allowing broken builds in
-sort -iu "$tmpfile" >> "$broken_config"
+LC_ALL=C.UTF-8 sort --ignore-case --unique "$tmpfile" >> "$broken_config"
 clear="env -u HOME -u NIXPKGS_CONFIG"
 $clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
 evalline=$(maintainers/scripts/haskell/hydra-report.hs eval-info)

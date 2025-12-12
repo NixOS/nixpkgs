@@ -19,7 +19,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "distutils";
   inherit (setuptools) version;
   pyproject = true;
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   # jaraco-path depends ob pyobjc
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Distutils as found in cpython";

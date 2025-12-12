@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cYlkMnZOa0J6dOiWsWZplk/MajVRiCYe8tK3641fD0w=";
+    tag = "v${version}";
+    hash = "sha256-TZLL7pzX8xPtB/9k3l5395eHrNojmqTH7PfB1kf99Io=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
@@ -64,7 +64,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.asl20;
   };
 }

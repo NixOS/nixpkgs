@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.6.3";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-OMK0ROrbuMDKt42QpE7D6/9CvUEMW4SpEBjO5+tk0rs=";
   };
 
@@ -28,17 +28,14 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  env =
-    {
-      GUILE_SITE = "${guile-lib}/${guile.siteDir}";
-    }
-    // lib.optionalAttrs stdenv.cc.isClang {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    };
+  env = {
+    GUILE_SITE = "${guile-lib}/${guile.siteDir}";
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/guile-reader/";
     description = "Simple framework for building readers for GNU Guile";
     longDescription = ''
@@ -50,8 +47,8 @@ stdenv.mkDerivation rec {
       Scheme readers. For example, it is used to implement Skribilo's
       R5RS-derived document syntax.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-mqtt-forwarder";
-  version = "4.3.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-mqtt-forwarder";
     rev = "v${version}";
-    hash = "sha256-jbu8O1Wag6KpN49VyXsYO8os95ctZjzuxKXoDMLyiKU=";
+    hash = "sha256-qkktkydg5Xe6q5IFalkxtGjO2zK9mZVMnKOBassiEtk=";
   };
 
-  cargoHash = "sha256-1tAZjsjoVKUkrF0WAqxs9d+1w8/AqFGDfpFGAHvf+D0=";
+  cargoHash = "sha256-rQPmFmra9Gd8XDP9HuTZZru780RmmqWEKX2iuuRkZQw=";
 
   nativeBuildInputs = [ protobuf ];
 

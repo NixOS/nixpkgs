@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "robertoszek";
-    repo = pname;
+    repo = "pleroma-bot";
     rev = version;
     hash = "sha256-vJxblpf3NMSyYMHeWG7vHP5AeluTtMtVxOsHgvGDHeA=";
   };
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pleroma_bot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
     mainProgram = "pleroma-bot";
     homepage = "https://robertoszek.github.io/pleroma-bot/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ robertoszek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ robertoszek ];
   };
 }

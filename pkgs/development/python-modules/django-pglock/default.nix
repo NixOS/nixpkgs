@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pglock";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Opus10";
+    owner = "AmbitionEng";
     repo = "django-pglock";
     tag = version;
-    hash = "sha256-7PBZvI4OTDIZjjLWnfOwGAdEJr3D6snmR20hPboLvXc=";
+    hash = "sha256-IXP7iZmGx0Odn73Tje/UkIpEkHCLhz42kLJppgy2nuU=";
   };
 
   build-system = [ poetry-core ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Postgres advisory locks, table locks, and blocking lock management";
-    homepage = "https://github.com/Opus10/django-pglock";
-    changelog = "https://github.com/Opus10/django-pglock/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/AmbitionEng/django-pglock";
+    changelog = "https://github.com/AmbitionEng/django-pglock/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };

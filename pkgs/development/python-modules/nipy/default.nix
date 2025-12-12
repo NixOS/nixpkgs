@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   cython,
@@ -24,14 +25,24 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.6.1";
   pname = "nipy";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BTn2nV4VMeT8bxTOJTHjRU8I2bxFZCzIZCZVn/QcUrk=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipy";
+    tag = version;
+    hash = "sha256-KGMGu0/0n1CzN++ri3Ig1AJjeZfkl4KzNgm6jdwXB7o=";
   };
+
+  patches = [
+    # https://github.com/nipy/nipy/pull/589
+    (fetchpatch2 {
+      url = "https://github.com/nipy/nipy/pull/589/commits/76f2aae95dede9b8ac025dc32ce94791904f25e4.patch?full_index=1";
+      hash = "sha256-Rnwfx6JKl+nE9wvBGKXFtizjuB4Bl1QDF88CvSZU/RQ=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs nipy/_build_utils/cythoner.py
@@ -65,10 +76,10 @@ buildPythonPackage rec {
     "nipy.algorithms"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
     downloadPage = "https://github.com/nipy/nipy";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

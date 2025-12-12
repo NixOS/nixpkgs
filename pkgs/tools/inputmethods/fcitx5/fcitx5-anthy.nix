@@ -13,30 +13,30 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-anthy";
-  version = "5.1.5";
+  version = "5.1.8";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/fcitx5-anthy/${pname}-${version}.tar.zst";
-    hash = "sha256-heSO2eArdSnOmIg7JG8vOo5y3g5dSPOuXkUfeNqKzSA=";
+    hash = "sha256-O/fpLWh5eE22lZEz4cyI60Xf/rTWpTCWjAib3y0Yac8=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext # msgfmt
     pkg-config
     zstd
   ];
   buildInputs = [
     fcitx5
     anthy
-    gettext
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anthy Wrapper for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-anthy";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elnudev ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ elnudev ];
+    platforms = lib.platforms.linux;
   };
 }

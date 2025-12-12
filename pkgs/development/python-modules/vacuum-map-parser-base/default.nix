@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "vacuum-map-parser-base";
-  version = "0.1.3";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PiotrMachowski";
     repo = "Python-package-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wX7RsJKSNZmi6uIDqsKxWe8VaYJPg4I3pwHHckMUOw4=";
+    tag = "v${version}";
+    hash = "sha256-jB3/m2qlaDnc9fVTlM0wR2ROZmJQ1h6a+awauOa312g=";
   };
 
   postPatch = ''
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vacuum_map_parser_base" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base";
     description = "Common code for vacuum map parsers";
-    changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base/releases/tag/v${version}";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.asl20;
+    changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
   };
 }

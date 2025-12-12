@@ -5,8 +5,8 @@
   pythonOlder,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   flexcache,
@@ -21,11 +21,12 @@
   numpy,
   matplotlib,
   uncertainties,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.24.4";
+  version = "0.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,13 +34,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Pr+BRLj6BjEDwKJ24qxmfiJswpgQJDumAx3rT6tQHSY=";
+    tag = version;
+    hash = "sha256-Ushg7e920TTW7AYXg5C076Bl/yWPLO+H8I3Ytlc7OKc=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -60,13 +61,10 @@ buildPythonPackage rec {
     pytest-subtests
     pytest-benchmark
     matplotlib
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  pytestFlags = [ "--benchmark-disable" ];
 
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";

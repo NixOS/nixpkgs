@@ -19,18 +19,30 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix the build against gcc-14:
+    # https://github.com/scheme/scsh/pull/50
+    ./gcc-14-p1.patch
+    # Fix the build against gcc-14:
+    # https://github.com/scheme/scsh/pull/51
+    ./gcc-14-p2.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ scheme48 ];
   configureFlags = [ "--with-scheme48=${scheme48}" ];
+  makeFlags = [
+    "SCHEME48VERSION=${scheme48.version}"
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Scheme shell";
     homepage = "http://www.scsh.net/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = with lib.platforms; unix;
     mainProgram = "scsh";
   };
 }

@@ -39,7 +39,8 @@ buildPythonPackage rec {
     tqdm
     setuptools
     six
-  ] ++ requests.optional-dependencies.socks;
+  ]
+  ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null
@@ -47,12 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gdown" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for downloading large files from Google Drive";
     mainProgram = "gdown";
     homepage = "https://github.com/wkentaro/gdown";
     changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ breakds ];
   };
 }

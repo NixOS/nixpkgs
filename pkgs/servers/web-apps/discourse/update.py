@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl prefetch-yarn-deps
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl
 from __future__ import annotations
 
 import click
@@ -86,13 +86,6 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
-    def get_yarn_lock_hash(self, rev: str, path: str):
-        yarnLockText = self.get_file(path, rev)
-        with tempfile.NamedTemporaryFile(mode='w') as lockFile:
-            lockFile.write(yarnLockText)
-            hash = subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode().strip()
-            return subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", hash]).decode().strip()
-
     def get_file(self, filepath, rev):
         """Return file contents at a given rev.
 
@@ -103,6 +96,24 @@ class DiscourseRepo:
         r = requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}')
         r.raise_for_status()
         return r.text
+
+
+def _get_build_lock_hash():
+    nixpkgs_path = Path(__file__).parent / '../../../../'
+    output = subprocess.run(['nix-build', '-A', 'discourse'], text=True, cwd=nixpkgs_path, capture_output=True)
+    # The line is of the form "    got:    sha256-xxx"
+    lines = [i.strip() for i in output.stderr.splitlines()]
+    new_hash_lines = [i.strip("got:").strip() for i in lines if i.startswith("got:")]
+    if len(new_hash_lines) == 0:
+        if output.returncode != 0:
+            print("Error while fetching new hash with nix build")
+            print(output.stderr)
+        print("No hash change is needed")
+        return None
+    if len(new_hash_lines) > 1:
+        print(new_hash_lines)
+        raise Exception("Got an unexpected number of new hash lines:")
+    return new_hash_lines[0]
 
 
 def _call_nix_update(pkg, version):
@@ -233,16 +244,17 @@ def update(rev):
 
     _call_nix_update('discourse', version.version)
 
-    old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
-    new_yarn_hash = repo.get_yarn_lock_hash(version.tag, "yarn.lock")
-    click.echo(f"Updating yarn lock hash: {old_yarn_hash} -> {new_yarn_hash}")
+    old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')
+    new_pnpm_hash = _get_build_lock_hash()
+    if new_pnpm_hash is not None:
+        click.echo(f"Updating yarn lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
 
-    with open(Path(__file__).parent / "default.nix", 'r+') as f:
-        content = f.read()
-        content = content.replace(old_yarn_hash, new_yarn_hash)
-        f.seek(0)
-        f.write(content)
-        f.truncate()
+        with open(Path(__file__).parent / "default.nix", 'r+') as f:
+            content = f.read()
+            content = content.replace(old_pnpm_hash, new_pnpm_hash)
+            f.seek(0)
+            f.write(content)
+            f.truncate()
 
 
 @cli.command()
@@ -268,25 +280,11 @@ def update_mail_receiver(rev):
 def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
-        {'name': 'discourse-assign'},
         {'name': 'discourse-bbcode-color'},
-        {'name': 'discourse-calendar'},
-        {'name': 'discourse-canned-replies'},
-        {'name': 'discourse-chat-integration'},
-        {'name': 'discourse-checklist'},
-        {'name': 'discourse-data-explorer'},
         {'name': 'discourse-docs'},
-        {'name': 'discourse-github'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
-        {'name': 'discourse-math'},
-        {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
-        {'name': 'discourse-openid-connect'},
         {'name': 'discourse-prometheus'},
-        {'name': 'discourse-reactions'},
         {'name': 'discourse-saved-searches'},
-        {'name': 'discourse-solved'},
-        {'name': 'discourse-spoiler-alert'},
-        {'name': 'discourse-voting'},
         {'name': 'discourse-yearly-review'},
     ]
 
@@ -307,8 +305,9 @@ def update_plugins():
         # https://meta.discourse.org/t/pinning-plugin-and-theme-versions-for-older-discourse-installs/156971
         # this makes sure we don't upgrade plugins to revisions that
         # are incompatible with the packaged Discourse version
+        repo_latest_commit = repo.latest_commit_sha
         try:
-            compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
+            compatibility_spec = repo.get_file('.discourse-compatibility', repo_latest_commit)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
                         in [line.lstrip("< ").split(':')
@@ -317,12 +316,12 @@ def update_plugins():
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
             versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
             if versions == []:
-                rev = repo.latest_commit_sha
+                rev = repo_latest_commit
             else:
                 rev = versions[0][1]
                 print(rev)
         except requests.exceptions.HTTPError:
-            rev = repo.latest_commit_sha
+            rev = repo_latest_commit
 
         filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
         if filename is None:

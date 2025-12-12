@@ -1,58 +1,50 @@
 {
   lib,
-  fetchpatch,
   rustPlatform,
   fetchFromGitHub,
-  testers,
-  difftastic,
+  stdenv,
+  versionCheckHook,
+  nix-update-script,
+  rust-jemalloc-sys,
 }:
 
-let
-  mimallocPatch = fetchpatch {
-    # fixes compilation error on x86_64-darwin
-    # remove after update to libmimalloc-sys >= 0.1.29
-    # (fixed in mimalloc >= 1.7.6 which is included with libmimalloc-sys >= 0.1.29)
-    url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-    hash = "sha256-DK0LqsVXXiEVQSQCxZ5jyZMg0UJJx9a/WxzCroYSHZc=";
-  };
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "difftastic";
-  version = "0.61.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
-    repo = pname;
-    rev = version;
-    hash = "sha256-hhkcujMuirBTIwUP3RMZ+F76T1TLcjMqa5l328xrwRg=";
+    repo = "difftastic";
+    tag = finalAttrs.version;
+    hash = "sha256-AgY/v1z4ETHawT+yEwTEaPOLC9GmhR8bGUUBKHY/meQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-TTg5Cky1exlvJokIw1IFGbPq4eJe2xSAPsGgI7BU+Jw=";
+
+  buildInputs = [ rust-jemalloc-sys ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };
 
   # skip flaky tests
-  checkFlags = [
-    "--skip=options::tests::test_detect_display_width"
-  ];
+  checkFlags = [ "--skip=options::tests::test_detect_display_width" ];
 
-  postPatch = ''
-    patch -d $cargoDepsCopy/libmimalloc-sys-0.1.24/c_src/mimalloc \
-      -p1 < ${mimallocPatch}
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/difft";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  passthru.tests.version = testers.testVersion { package = difftastic; };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
-    changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Wilfred/difftastic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ethancedwards8
-      figsoda
       matthiasbeyer
+      defelo
     ];
     mainProgram = "difft";
   };
-}
+})

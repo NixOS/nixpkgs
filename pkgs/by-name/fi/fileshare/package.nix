@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchgit,
+  fetchFromGitea,
   pkg-config,
   git,
   libmicrohttpd,
@@ -11,15 +11,22 @@ stdenv.mkDerivation rec {
   pname = "fileshare";
   version = "0.2.4";
 
-  src = fetchgit {
-    url = "https://git.tkolb.de/Public/fileshare.git";
+  src = fetchFromGitea {
+    domain = "git.tkolb.de";
+    owner = "Public";
+    repo = "fileshare";
     rev = "v${version}";
-    sha256 = "03jrhk4vj6bc2w3lsrfjpfflb4laihysgs5i4cv097nr5cz32hyk";
+    sha256 = "sha256-00MxPivZngQ2I7Hopz2MipJFnbvSZU0HF2wZucmEWQ4=";
   };
 
   postPatch = ''
     sed -i 's,$(shell git rev-parse --short HEAD),/${version},g' Makefile
+    substituteInPlace Makefile \
+      --replace-fail pkg-config "${stdenv.cc.targetPrefix}pkg-config" \
+      --replace-fail gcc "${stdenv.cc.targetPrefix}cc"
   '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,13 +41,13 @@ stdenv.mkDerivation rec {
     cp bin/release/fileshare $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small HTTP Server for quickly sharing files over the network";
     longDescription = "Fileshare is a simple tool for sharing the contents of a directory via a webserver and optionally allowing uploads.";
     homepage = "https://git.tkolb.de/Public/fileshare";
-    license = licenses.mit;
-    maintainers = [ maintainers.esclear ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.esclear ];
+    platforms = lib.platforms.linux;
     mainProgram = "fileshare";
   };
 }

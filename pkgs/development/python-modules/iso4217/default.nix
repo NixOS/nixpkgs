@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.12";
+  version = "1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xOKfdk8Bn9f5oszS0IHUD6HgzL9VSa5GBZ28n4fvAck=";
+    tag = version;
+    hash = "sha256-lGXNSUBv/So3UgqXQ5AksqrCJVoyU8icDCfOda7Y5BE=";
   };
 
   build-system = [ setuptools ];
@@ -48,14 +48,14 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [ "iso4217/test.py" ];
+  enabledTestPaths = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 
-  meta = with lib; {
+  meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

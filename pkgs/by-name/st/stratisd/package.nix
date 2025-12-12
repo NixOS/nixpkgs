@@ -23,24 +23,25 @@
   curl,
   tpm2-tools,
   coreutils,
+  udevCheckHook,
   clevisSupport ? false,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.7.3";
+  version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = pname;
-    rev = "refs/tags/stratisd-v${version}";
-    hash = "sha256-W8ssLTFU36t6iLrt9S9V8qcN7EP4IsL7VbhNPLpftio=";
+    repo = "stratisd";
+    tag = "stratisd-v${version}";
+    hash = "sha256-Kky/6sgvA8NDDGLQLS3sjPJWTCxkoTP/ow+netnK6tY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Qv2qknWNx2OQeucUFwL1veu3MSF+fd19jFfHCCVGprM=";
+    hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
   };
 
   postPatch = ''
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     ncurses # tput
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -108,12 +110,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  doInstallCheck = true;
+
   # remove files for supporting dracut
   postInstall = ''
     mkdir -p "$initrd/bin"
-    cp "$out/lib/dracut/modules.d/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    cp "$out/lib/dracut/modules.d/50stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
-    substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
+    substitute "$out/lib/dracut/modules.d/50stratis/stratisd-min.service" \
       "$initrd/lib/systemd/system/stratisd-min.service" \
       --replace-fail mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
@@ -126,11 +130,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use local storage management for Linux";
     homepage = "https://stratis-storage.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

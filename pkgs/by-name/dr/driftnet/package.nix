@@ -6,7 +6,7 @@
   fetchFromGitHub,
   giflib,
   glib,
-  gtk2-x11,
+  gtk3,
   libjpeg,
   libpcap,
   libpng,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "driftnet";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
+    tag = "v${version}";
+    hash = "sha256-f7EPC/n3CyxVOXC6j43Nnwkgu/aDVst8lQpzfgegDsI=";
   };
 
   enableParallelBuilding = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cairo
     giflib
     glib
-    gtk2-x11
+    gtk3
     libjpeg
     libpcap
     libpng
@@ -49,13 +49,15 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+
+  meta = {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
     changelog = "https://github.com/deiv/driftnet/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "driftnet";
   };
 }

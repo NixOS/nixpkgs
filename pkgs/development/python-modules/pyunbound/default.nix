@@ -5,6 +5,8 @@
   openssl,
   expat,
   libevent,
+  bison,
+  flex,
   swig,
   python,
   stdenv,
@@ -17,7 +19,11 @@ buildPythonPackage rec {
 
   patches = unbound.patches or null;
 
-  nativeBuildInputs = [ swig ];
+  nativeBuildInputs = [
+    bison
+    flex
+    swig
+  ];
 
   buildInputs = [
     openssl
@@ -62,25 +68,23 @@ buildPythonPackage rec {
   ];
 
   # All we want is the Unbound Python module
-  postInstall =
-    ''
-      # Generate the built in root anchor and root key and store these in a logical place
-      # to be used by tools depending only on the Python module
-      $out/bin/unbound-anchor -l | head -1 > $out/etc/${pname}/root.anchor
-      $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
-      # We don't need anything else
-      rm -r $out/bin $out/share $out/include $out/etc/unbound
-    ''
-    # patchelf is only available on Linux and no patching is needed on darwin
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
-    '';
+  postInstall = ''
+    # Generate the built in root anchor and root key and store these in a logical place
+    # to be used by tools depending only on the Python module
+    $out/bin/unbound-anchor -l | head -1 > $out/etc/${pname}/root.anchor
+    $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
+    # We don't need anything else
+    rm -r $out/bin $out/share $out/include $out/etc/unbound
+  ''
+  # patchelf is only available on Linux and no patching is needed on darwin
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

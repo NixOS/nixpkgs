@@ -14,7 +14,7 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gem-unstable";
   version = "2023-07-28";
 
@@ -42,14 +42,14 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphics Environment for Multimedia";
     homepage = "http://puredata.info/downloads/gem";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       raboof
       carlthome
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

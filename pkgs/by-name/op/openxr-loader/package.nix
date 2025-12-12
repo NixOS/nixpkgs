@@ -1,22 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL, vulkan-loader, wayland, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  libX11,
+  libXxf86vm,
+  libXrandr,
+  vulkan-headers,
+  libGL,
+  vulkan-loader,
+  wayland,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.1.43";
+  version = "1.1.51";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
-    rev = "release-${version}";
-    sha256 = "sha256-Ze7r3qcYomcAIAoAO6FZDraKfFr/Wwrnv0HxmY6uE6w=";
+    tag = "release-${version}";
+    hash = "sha256-NEArzegPZNL0zRbnUHrNbNhBtj0IJP+uha1ehzwB7wA=";
   };
 
-  nativeBuildInputs = [ cmake python3 pkg-config ];
-  buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL vulkan-loader wayland ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    libX11
+    libXxf86vm
+    libXrandr
+    vulkan-headers
+    libGL
+    vulkan-loader
+    wayland
+  ];
 
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
-  outputs = [ "out" "dev" "layers" ];
+  outputs = [
+    "out"
+    "dev"
+    "layers"
+  ];
 
   # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
   postPatch = ''
@@ -35,11 +65,11 @@ stdenv.mkDerivation rec {
     mv "$out/lib/libXrApiLayer"* "$layers/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenXR loader";
-    homepage    = "https://www.khronos.org/openxr";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    homepage = "https://www.khronos.org/openxr";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

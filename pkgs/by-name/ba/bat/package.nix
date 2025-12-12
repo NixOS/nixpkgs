@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -8,19 +7,21 @@
   installShellFiles,
   makeWrapper,
   zlib,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bat";
-  version = "0.24.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
-    rev = "v${version}";
-    hash = "sha256-1RjlJEmY/jMf0IYQbrWrT1CHFyiqgarOl72u9xjjQiQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
   };
-  cargoHash = "sha256-b7wNWdKQ4QLeCf7bNZRfzT9hD/D/oDglU7Xyb65IrGY=";
+
+  cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,6 +63,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=file_with_invalid_utf8_filename"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
@@ -75,20 +79,20 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
-    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sharkdp/bat/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "bat";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
       zowoq
       SuperSandro2000
       sigmasquadron
     ];
   };
-}
+})

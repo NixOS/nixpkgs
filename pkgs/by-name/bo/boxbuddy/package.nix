@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxbuddy";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
-    rev = version;
-    hash = "sha256-SI/Yxk3bJayXPIWlJLG/je7NBG0I+49cIIlfBeMhTBk=";
+    tag = version;
+    hash = "sha256-9BGgm4yRjCarJIGP/G9gPj/qsYWb96XGJmpgLj3XCdM=";
   };
 
-  cargoHash = "sha256-5R+PWV34Ob9y/EtO+46kI/fzqYw6QI86bRVpvMznw9Y=";
+  cargoHash = "sha256-2ipLO2b/mEEwSl0PSCq6m9tBhhaiDj9mXXVO4pr/78c=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here
@@ -51,12 +51,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # No checks defined
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
     homepage = "https://dvlv.github.io/BoxBuddyRS";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "boxbuddy-rs";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
 }

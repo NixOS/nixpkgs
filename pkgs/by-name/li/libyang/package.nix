@@ -7,8 +7,9 @@
   cmake,
   pkg-config,
 
-  # run time
+  # dependencies
   pcre2,
+  xxHash,
 
   # update script
   gitUpdater,
@@ -16,14 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.1.148";
+  version = "3.13.6";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    hash = "sha256-uYZJo8lUv6tq0MRRJvbTS/8t1eZNGqcMb5k5sVCwMJM=";
+    hash = "sha256-rc/WdBCVZDwensqnVMrQXCPevLg0INidzN9Qwhqw2Mk=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -31,6 +37,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    xxHash
+  ];
+
+  propagatedBuildInputs = [
     pcre2
   ];
 
@@ -43,7 +53,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "YANG data modelling language parser and toolkit";
     longDescription = ''
       libyang is a YANG data modelling language parser and toolkit written (and
@@ -51,8 +61,8 @@ stdenv.mkDerivation rec {
       sysrepo or FRRouting projects.
     '';
     homepage = "https://github.com/CESNET/libyang";
-    license = with licenses; [ bsd3 ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ woffs ];
+    license = with lib.licenses; [ bsd3 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ woffs ];
   };
 }

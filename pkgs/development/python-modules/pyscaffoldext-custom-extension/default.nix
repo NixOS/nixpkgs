@@ -11,7 +11,7 @@
   pyscaffold,
   pre-commit,
   pytest,
-  pytest-cov-stub,
+  pytest-cov,
   pytest-xdist,
   tox,
   virtualenv,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
       configupdater
       pre-commit
       pytest
-      pytest-cov-stub
+      pytest-cov
       pytest-xdist
       setuptools-scm
       tox
@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.custom_extension" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyScaffold extension to create a custom PyScaffold extension";
     homepage = "https://pypi.org/project/pyscaffoldext-custom-extension/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
   };
 }

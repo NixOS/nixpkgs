@@ -9,15 +9,15 @@
   callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-native";
-  version = "22.1.0.5";
+  version = "27.0.2.0";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lEUHRU7+sFWtEYTOB2F+SmMNG8nrjro3IL7BgYuIGgM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sJEDCt8DTP6FjtbROVCZVD0we0OA07wjkiLnXoQfTuc=";
     fetchSubmodules = true;
   };
 
@@ -26,16 +26,18 @@ rustPlatform.buildRustPackage rec {
     "dev"
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-frlGlUqyKa3PTRbpLhcnUvu+SX64V/CnZGa6+ADxKCo=";
+  cargoHash = "sha256-ZQiX7IZsbjlDzRNlYgpRnLfCKGAYnSwvACRMNkZPjbE=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     vulkan-loader
   ];
+
+  env.WGPU_NATIVE_VERSION = finalAttrs.version;
 
   postInstall = ''
     rm $out/lib/libwgpu_native.a
@@ -46,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     examples = callPackage ./examples.nix {
-      inherit version src;
+      inherit (finalAttrs) version src;
     };
   };
 
@@ -59,4 +61,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ niklaskorz ];
   };
-}
+})

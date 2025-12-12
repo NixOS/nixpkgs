@@ -1,24 +1,27 @@
-{ lib
-, fetchFromGitHub
-, buildNpmPackage
-, electron_32
-, makeDesktopItem
-, makeShellWrapper
-, copyDesktopItems
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  python3,
+  electron_37,
+  makeDesktopItem,
+  makeShellWrapper,
+  copyDesktopItems,
 }:
 
 buildNpmPackage rec {
   pname = "zulip";
-  version = "5.11.1";
+  version = "5.12.2";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
-    rev = "v${version}";
-    hash = "sha256-ELuQ/K5QhtS4QiTR35J9VtYNe1qBrS56Ay6mtcGL+FI=";
+    tag = "v${version}";
+    hash = "sha256-+OS3Fw4Z1ZOzXou1sK39AUFLI78nUl4UBVYA3SNH7I0=";
   };
 
-  npmDepsHash = "sha256-13Rlqa7TC2JUq6q1b2U5X3EXpOJGZ62IeF163/mTo68=";
+  npmDepsHash = "sha256-5qjBZfl9kse97y5Mru4RF4RLTbojoXeUp84I/bOHEcw=";
+  makeCacheWritable = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -27,6 +30,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     makeShellWrapper
     copyDesktopItems
+    (python3.withPackages (ps: with ps; [ distutils ]))
   ];
 
   dontNpmBuild = true;
@@ -34,8 +38,8 @@ buildNpmPackage rec {
     runHook preBuild
 
     npm run pack -- \
-      -c.electronDist=${electron_32}/libexec/electron \
-      -c.electronVersion=${electron_32.version}
+      -c.electronDist=${electron_37}/libexec/electron \
+      -c.electronVersion=${electron_37.version}
 
     runHook postBuild
   '';
@@ -48,7 +52,7 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_32}' "$out/bin/zulip" \
+    makeShellWrapper '${lib.getExe electron_37}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
@@ -63,17 +67,21 @@ buildNpmPackage rec {
       icon = "zulip";
       desktopName = "Zulip";
       comment = "Zulip Desktop Client for Linux";
-      categories = [ "Chat" "Network" "InstantMessaging" ];
+      categories = [
+        "Chat"
+        "Network"
+        "InstantMessaging"
+      ];
       startupWMClass = "Zulip";
       terminal = false;
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };

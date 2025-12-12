@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "moat-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dy1Fm0Z1PUsPY8QTiXUcWSi+csFnTUsobSkA92m06QI=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moat_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Moat BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/moat-ble";
     changelog = "https://github.com/Bluetooth-Devices/moat-ble/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -10,15 +10,12 @@ buildDunePackage {
 
   inherit (lwd) version src;
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
-
   propagatedBuildInputs = [ nottui ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty-printer based on PPrint rendering UIs";
-    license = licenses.mit;
-    maintainers = [ maintainers.alizter ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";
   };
 }

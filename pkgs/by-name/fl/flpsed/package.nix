@@ -23,11 +23,17 @@ stdenv.mkDerivation rec {
         -i src/GsWidget.cxx
   '';
 
-  meta = with lib; {
+  configureFlags = [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+    "FLTKCONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
+  ];
+
+  meta = {
     description = "WYSIWYG PostScript annotator";
     homepage = "https://flpsed.org/flpsed.html";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "flpsed";
   };

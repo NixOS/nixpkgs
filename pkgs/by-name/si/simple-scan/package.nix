@@ -7,7 +7,6 @@
   pkg-config,
   gettext,
   itstool,
-  python3,
   wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "46.0";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
+    hash = "sha256-mujUFR7K+VhF65+ZtDbVecg48s8Cdj+6O8A3gCUb4zQ=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    python3
     wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
@@ -60,10 +58,6 @@ stdenv.mkDerivation rec {
     sane-backends
   ];
 
-  postPatch = ''
-    patchShebangs data/meson_compile_gschema.py
-  '';
-
   doCheck = true;
 
   passthru = {
@@ -72,7 +66,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple scanning utility";
     mainProgram = "simple-scan";
     longDescription = ''
@@ -85,8 +79,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
     changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

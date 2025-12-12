@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "dyff";
-  version = "1.9.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
-    sha256 = "sha256-y5gep3v+totupFbsAuGhySUbcESmQeGHWteQFFXj2Kw=";
+    sha256 = "sha256-kmL1WzsfuV6O3mFryQKnUeImisMlLd3K43/00l6Trvs=";
   };
 
-  vendorHash = "sha256-cRPAjFVvjCgT+m8ceAQJt5ZE8ax7jefzdVWPGM45LpY=";
+  vendorHash = "sha256-8xXw2ITHqw6dPtRuO4aesJzeobb/QGI+z1tn1ebNdzQ=";
 
   subPackages = [
     "cmd/dyff"
@@ -38,14 +39,14 @@ buildGoModule rec {
     "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dyff \
       --bash <($out/bin/dyff completion bash) \
       --fish <($out/bin/dyff completion fish) \
       --zsh <($out/bin/dyff completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Diff tool for YAML files, and sometimes JSON";
     mainProgram = "dyff";
     longDescription = ''
@@ -57,8 +58,8 @@ buildGoModule rec {
       using either the Spruce or go-patch path syntax.
     '';
     homepage = "https://github.com/homeport/dyff";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edlimerkaj
       jceb
     ];

@@ -13,27 +13,30 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "4.3.1";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    hash = "sha256-IZflevmuYJJyfL6DG8JnRRzV8imVUiH/cmPDqfpYzXM=";
+    hash = "sha256-GAHuaUVtdLvyWNeOxu46+IOw2Mf42z3yUjZNiyeE1xs=";
   };
 
-  vendorHash = "sha256-uoJjJ2wP8O7mLVj3MMe/pmTes3HmgD6v5M63ZhZSj78=";
+  vendorHash = "sha256-NsD2yt73+uRitegezTWwBhF0iMCQ8XhDf6WM/j7kT0o=";
 
-  subPackages = [ "cmd" ];
+  subPackages = [
+    "cmd"
+    "."
+  ];
 
   allowGoReference = true;
 
   ldflags = [
-    "-X main.kubeBuilderVersion=v${version}"
-    "-X main.goos=${go.GOOS}"
-    "-X main.goarch=${go.GOARCH}"
-    "-X main.gitCommit=unknown"
-    "-X main.buildDate=unknown"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.kubeBuilderVersion=v${version}"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.goos=${go.GOOS}"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.goarch=${go.GOARCH}"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.gitCommit=unknown"
+    "-X sigs.k8s.io/kubebuilder/v4/cmd.buildDate=unknown"
   ];
 
   nativeBuildInputs = [
@@ -43,12 +46,12 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
       --prefix PATH : ${
         lib.makeBinPath [
           go
           gnumake
+          git
         ]
       }
 

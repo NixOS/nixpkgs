@@ -5,24 +5,22 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   umodbus,
 }:
 
 buildPythonPackage rec {
   pname = "async-modbus";
-  version = "0.2.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "async_modbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xms2OfX5bHPXswwhLhyh6HFsm1YqDwKclUirxrgL4i0=";
+    tag = "v${version}";
+    hash = "sha256-d4TTs3TtD/9eFdzXBaY+QeAMeRWTvsWeaxONeG0AXJU=";
   };
 
   patches = [
@@ -35,29 +33,29 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"--cov=async_modbus",' "" \
-      --replace '"--cov-report=html", "--cov-report=term",' "" \
       --replace '"--durations=2", "--verbose"' ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     connio
     umodbus
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "async_modbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Modbus communication";
     homepage = "https://github.com/tiagocoutinho/async_modbus";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tiagocoutinho/async_modbus/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

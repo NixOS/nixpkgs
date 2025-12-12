@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1
     sed -i 's/\(^\|\s\|"\)i3lock\(\s\|$\)/\1i3lock-color\2/g' $out/share/man/man1/i3lock-color.1
   '';
-  meta = with lib; {
+  meta = {
     description = "Simple screen locker like slock, enhanced version with extra configuration options";
     longDescription = ''
       Simple screen locker. After locking, a colored background (default: white) or
@@ -87,10 +87,11 @@ stdenv.mkDerivation rec {
         - keyboard-layout
     '';
     homepage = "https://github.com/PandorasFox/i3lock-color";
-    maintainers = with maintainers; [ malyn ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ malyn ];
+    mainProgram = "i3lock-color";
+    license = lib.licenses.bsd3;
 
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

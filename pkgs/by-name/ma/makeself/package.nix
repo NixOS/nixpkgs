@@ -9,15 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.5";
   pname = "makeself";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
-    rev = "release-${version}";
+    tag = "release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
+    hash = "sha256-F5lx8B2C8CsEUXQPQTK1q8PAMf5yzIEAqq3zbYnseTs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     installManPage makeself.1
     install -Dm555 makeself.sh $out/bin/makeself
-    install -Dm444 -t ${sharePath}/ makeself.lsm README.md makeself-header.sh
+    install -Dm444 -t ${sharePath}/ README.md makeself-header.sh
     runHook postInstall
   '';
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     sed -e "s|^HEADER=.*|HEADER=${sharePath}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.wmertens ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = lib.platforms.all;
     mainProgram = "makeself";
   };
 }

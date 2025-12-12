@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libtirpc";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${
       lib.replaceStrings [ "." ] [ "-" ] version
     };sf=tgz";
-    hash = "sha256-pTUfqnfHOQKCV0svKF/lo4hq1GlD/+YFjXP2CNygx9I=";
+    hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
     name = "${pname}-${version}.tar.gz";
   };
 
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
 
+  configureFlags = lib.optional (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "LDFLAGS=-Wl,--undefined-version";
+
   enableParallelBuilding = true;
 
   preInstall = ''
@@ -40,12 +44,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/libtirpc/";
     description = "Transport-independent Sun RPC implementation (TI-RPC)";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     longDescription = ''
       Currently, NFS commands use the SunRPC routines provided by the
       glibc.  These routines do not support IPv6 addresses.  Ulrich

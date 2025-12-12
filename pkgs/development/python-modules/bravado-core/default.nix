@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = pname;
+    repo = "bravado-core";
     rev = "v${version}";
     hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     swagger-spec-validator
     pytz
     msgpack
-  ] ++ jsonschema.optional-dependencies.format-nongpl;
+  ]
+  ++ jsonschema.optional-dependencies.format-nongpl;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -62,12 +63,12 @@ buildPythonPackage rec {
     "tests/spec/Spec"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
     changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       vanschelven
       nickcao
     ];

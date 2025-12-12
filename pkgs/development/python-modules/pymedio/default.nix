@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcreinhold";
     repo = "pymedio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x3CHoWASDrUoCXfj73NF+0Y/3Mb31dK2Lh+o4OD9ryk=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymedio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read medical image files into Numpy arrays";
     homepage = "https://github.com/jcreinhold/pymedio";
     changelog = "https://github.com/jcreinhold/pymedio/blob/v${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

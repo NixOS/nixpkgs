@@ -26,13 +26,15 @@ stdenv.mkDerivation {
     libxmlxx3
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+
   buildFlags = [ "gtk3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for DeaDBeeF audio player that fetches and shows the song’s lyrics";
     homepage = "https://github.com/C0rn3j/deadbeef-lyricbar";
-    license = licenses.mit;
-    maintainers = [ maintainers.jtojnar ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jtojnar ];
+    platforms = lib.platforms.linux;
   };
 }

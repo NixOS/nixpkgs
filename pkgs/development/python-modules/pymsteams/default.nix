@@ -5,11 +5,12 @@
   pythonOlder,
   requests,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pymsteams";
-  version = "0.2.3";
+  version = "0.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,11 +18,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rveachkc";
     repo = "pymsteams";
-    rev = "refs/tags/${version}";
-    hash = "sha256-suPCAzjQp46+kKFiCtm65lxBbsn78Owq4dVmWCdhIpA=";
+    tag = version;
+    hash = "sha256-Ze25mcXCRaon6qzWzcltD8kwJTfrG2w5jMswXymmKo4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ requests ];
 
@@ -30,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymsteams" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Microsoft Teams";
     homepage = "https://github.com/rveachkc/pymsteams";
     changelog = "https://github.com/rveachkc/pymsteams/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

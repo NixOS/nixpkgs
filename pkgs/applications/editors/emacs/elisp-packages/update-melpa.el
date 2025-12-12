@@ -101,7 +101,7 @@ return Promise to resolve in that process."
             ("gitlab"    (list "nix-prefetch-url"
                                "--unpack" (concat "https://gitlab.com/api/v4/projects/"
                                                   (url-hexify-string repo)
-                                                  "/repository/archive.tar.gz?ref="
+                                                  "/repository/archive.tar.gz?sha="
                                                   commit)))
             ("sourcehut" (list "nix-prefetch-url"
                                "--unpack" (concat "https://git.sr.ht/~" repo "/archive/" commit ".tar.gz")))

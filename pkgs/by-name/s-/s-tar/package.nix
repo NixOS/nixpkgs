@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = "rm configure";
   preBuild = "sed 's_/bin/__g' -i RULES/*";
   makeFlags = [ "GMAKE_NOWARN=true" ];
+  env.NIX_CFLAGS_COMPILE = "-std=c89";
   installFlags = [
     "DESTDIR=$(out)"
     "INS_BASE=/"

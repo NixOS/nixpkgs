@@ -17,17 +17,17 @@ For example, to create a service for `swaylock`:
 
   systemd.user.services.swaylock = {
     description = "Screen locker for Wayland";
-    documentation = ["man:swaylock(1)"];
+    documentation = [ "man:swaylock(1)" ];
 
     # If swaylock exits cleanly, unlock the session:
-    onSuccess = ["unlock.target"];
+    onSuccess = [ "unlock.target" ];
 
     # When lock.target is stopped, stops this too:
-    partOf = ["lock.target"];
+    partOf = [ "lock.target" ];
 
     # Delay lock.target until this service is ready:
-    before = ["lock.target"];
-    wantedBy = ["lock.target"];
+    before = [ "lock.target" ];
+    wantedBy = [ "lock.target" ];
 
     serviceConfig = {
       # systemd will consider this service started when swaylock forks...

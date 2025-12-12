@@ -14,6 +14,7 @@
   gtk3,
   systemdMinimal,
   udisks,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
-    rev = "Release_${version}";
+    tag = "Release_${version}";
     sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
     fetchSubmodules = true;
   };
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     gtk3
     systemdMinimal
     udisks
+    xz
   ];
 
   preConfigure = ''
@@ -65,12 +67,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/endlessm/eos-installer";
     description = "Installer UI which writes images to disk";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
     mainProgram = "gnome-image-installer";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

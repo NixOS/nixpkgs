@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   cryptography,
   pytestCheckHook,
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "warner";
     repo = "python-spake2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WPMGH1OzG+5O+2lNl2sv06/dNardY+BHYDS290Z36vQ=";
   };
 
@@ -28,11 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/warner/python-spake2/blob/v${version}/NEWS";
     description = "SPAKE2 password-authenticated key exchange library";
     homepage = "https://github.com/warner/python-spake2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "riscv-config";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eaHi6ezgU8gQYH97gCS2TzEzIP3F4zfn7uiA/To2Gmc=";
   };
 
@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riscv_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "RISC-V configuration validator";
     homepage = "https://github.com/riscv/riscv-config";
     changelog = "https://github.com/riscv-software-src/riscv-config/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
     mainProgram = "riscv-config";
   };
 }

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   glib,
   flex,
   bison,
@@ -16,7 +17,8 @@
   cctools,
   cairo,
   gnome,
-  substituteAll,
+  replaceVars,
+  replaceVarsWith,
   buildPackages,
   gobject-introspection-unwrapped,
   nixStoreDir ? builtins.storeDir,
@@ -41,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.82.0";
+  version = "1.86.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -55,46 +57,45 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
+    hash = "sha256-kg0aP87ercMqz/lcLiA7MZA53UtKCN0aLf0oPRnAua4=";
   };
 
-  patches =
-    [
-      # Make g-ir-scanner put absolute path to GIR files it generates
-      # so that programs can just dlopen them without having to muck
-      # with LD_LIBRARY_PATH environment variable.
-      (substituteAll {
-        src = ./absolute_shlib_path.patch;
-        inherit nixStoreDir;
-      })
-    ]
-    ++ lib.optionals x11Support [
-      # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
-      # https://github.com/NixOS/nixpkgs/issues/34080
-      (substituteAll {
-        src = ./absolute_gir_path.patch;
-        cairoLib = "${lib.getLib cairo}/lib";
-      })
-    ];
+  patches = [
+    # Make g-ir-scanner put absolute path to GIR files it generates
+    # so that programs can just dlopen them without having to muck
+    # with LD_LIBRARY_PATH environment variable.
+    (replaceVars ./absolute_shlib_path.patch {
+      inherit nixStoreDir;
+    })
+  ]
+  ++ lib.optionals x11Support [
+    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
+    # https://github.com/NixOS/nixpkgs/issues/34080
+    (replaceVars ./absolute_gir_path.patch {
+      cairoLib = "${lib.getLib cairo}/lib";
+      # original source code in patch's context
+      CAIRO_GIR_PACKAGE = null;
+      CAIRO_SHARED_LIBRARY = null;
+    })
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      flex
-      bison
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_45
-      # Build definition checks for the Python modules needed at runtime by importing them.
-      (buildPackages.python3.withPackages pythonModules)
-      finalAttrs.setupHook # move .gir files
-      # can't use canExecute, we need prebuilt when cross
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    flex
+    bison
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    # Build definition checks for the Python modules needed at runtime by importing them.
+    (buildPackages.python3.withPackages pythonModules)
+    finalAttrs.setupHook # move .gir files
+    # can't use canExecute, we need prebuilt when cross
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     (python3.withPackages pythonModules)
@@ -109,28 +110,29 @@ stdenv.mkDerivation (finalAttrs: {
     (if propagateFullGlib then glib else glib')
   ];
 
-  mesonFlags =
-    [
-      "--datadir=${placeholder "dev"}/share"
-      "-Dcairo=disabled"
-      "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "-Dgi_cross_ldd_wrapper=${
-        substituteAll {
-          name = "g-ir-scanner-lddwrapper";
-          isExecutable = true;
-          src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+  mesonFlags = [
+    "--datadir=${placeholder "dev"}/share"
+    "-Dcairo=disabled"
+    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-Dgi_cross_ldd_wrapper=${
+      replaceVarsWith {
+        name = "g-ir-scanner-lddwrapper";
+        isExecutable = true;
+        src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+        replacements = {
           inherit (buildPackages) bash;
           buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
-        }
-      }"
-      "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
-      # can't use canExecute, we need prebuilt when cross
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-Dgi_cross_use_prebuilt_gi=true"
-    ];
+        };
+      }
+    }"
+    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+    # can't use canExecute, we need prebuilt when cross
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgi_cross_use_prebuilt_gi=true"
+  ];
 
   doCheck = !stdenv.hostPlatform.isAarch64;
 
@@ -154,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that we will delete before installation.
     mkdir -p $out/lib
-    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   postCheck = ''
-    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+    rm $out/lib/libregress-1.0${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   setupHook = ./setup-hook.sh;
@@ -171,19 +173,18 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers =
-      teams.gnome.members
-      ++ (with maintainers; [
-        lovek323
-        artturin
-      ]);
+    maintainers = with lib.maintainers; [
+      lovek323
+      artturin
+    ];
+    teams = [ lib.teams.gnome ];
     pkgConfigModules = [ "gobject-introspection-1.0" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];

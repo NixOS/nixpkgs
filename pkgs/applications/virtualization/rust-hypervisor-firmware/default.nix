@@ -12,14 +12,14 @@ let
 
 in
 
-assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
-
 let
   cross = import ../../../.. {
     system = stdenv.hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
       rust.rustcTarget = "${arch}-unknown-none";
-      rust.platform = lib.importJSON target;
+      rust.platform =
+        assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
+        lib.importJSON target;
     };
   };
 
@@ -29,16 +29,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-hypervisor-firmware";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-hKk5pcop8rb5Q+IVchcl+XhMc3DCBBPn5P+AkAb9XxI=";
+    repo = "rust-hypervisor-firmware";
+    tag = version;
+    sha256 = "sha256-iLYmPBJH7I6EJ8VTUbR0+lZaebvbZlRv2KglbjKX76Q=";
   };
 
-  cargoHash = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
+  cargoHash = "sha256-iqsU4t8Zz9UTtAu+a6kqwnPZ6qdGAriQ7hcU58KDQ8M=";
 
   # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249
@@ -55,11 +55,11 @@ rustPlatform.buildRustPackage rec {
   # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloud-hypervisor/rust-hypervisor-firmware";
     description = "Simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ astro ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
     mainProgram = "hypervisor-fw";
   };

@@ -9,6 +9,7 @@
   # dependencies
   anyio,
   pycrdt,
+  pycrdt-store,
   sqlite-anyio,
 
   # optional-dependencies
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jupyter-server";
+    owner = "y-crdt";
     repo = "pycrdt-websocket";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-O0GRk81at8bgv+/4au8A55dZK2A28+ghy3sitAAZQBI=";
+    tag = version;
+    hash = "sha256-Qux8IxJR1nGbdpGz7RZBKJjYN0qfwfEpd2UDlduOna0=";
   };
 
   build-system = [ hatchling ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     pycrdt
+    pycrdt-store
     sqlite-anyio
   ];
 
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     django = [ channels ];
   };
 
-  pythonImportsCheck = [ "pycrdt_websocket" ];
+  pythonImportsCheck = [ "pycrdt.websocket" ];
 
   nativeCheckInputs = [
     httpx-ws
@@ -58,6 +60,13 @@ buildPythonPackage rec {
     trio
     uvicorn
     websockets
+  ];
+
+  disabledTests = [
+    # Looking for a certfile
+    # FileNotFoundError: [Errno 2] No such file or directory
+    "test_asgi"
+    "test_yroom_restart"
   ];
 
   disabledTestPaths = [
@@ -70,8 +79,8 @@ buildPythonPackage rec {
   meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
-    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

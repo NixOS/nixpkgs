@@ -27,11 +27,10 @@ buildGoModule rec {
   # which is not the case once entered the nix store
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable";
     mainProgram = "statik";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Madouura ];
+    license = lib.licenses.asl20;
   };
 }

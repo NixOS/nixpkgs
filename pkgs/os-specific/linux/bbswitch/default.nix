@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   runtimeShell,
 }:
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
       --replace "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
@@ -61,14 +62,14 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for powering off hybrid GPUs";
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
   };
 }

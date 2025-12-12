@@ -1,7 +1,8 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   matplotlib,
   numpy,
@@ -16,39 +17,25 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
+  src = fetchFromGitHub {
+    owner = "ESSS";
+    repo = "pytest-regressions";
+    tag = "v${version}";
+    hash = "sha256-8FbPWKYHy/0ITrCx9044iYOR7B9g8tgEdV+QfUg4esk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytest-datadir
     pyyaml
-  ];
-
-  nativeCheckInputs = [
-    matplotlib
-    pandas
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  pythonImportsCheck = [
-    "pytest_regressions"
-    "pytest_regressions.plugin"
   ];
 
   optional-dependencies = {
@@ -66,7 +53,31 @@ buildPythonPackage rec {
     ];
   };
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    matplotlib
+    pandas
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/ESSS/pytest-regressions/issues/156
+    # i686-linux not listed in the report, but seems to have this issue as well
+    "test_different_data_types"
+    "test_common_case" # not listed in the issue, but fails after the above is skipped
+  ];
+
+  pythonImportsCheck = [
+    "pytest_regressions"
+    "pytest_regressions.plugin"
+  ];
+
+  meta = {
+    changelog = "https://github.com/ESSS/pytest-regressions/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixtures to write regression tests";
     longDescription = ''
       pytest-regressions makes it simple to test general data, images,
@@ -75,7 +86,7 @@ buildPythonPackage rec {
       that future runs produce the same data.
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

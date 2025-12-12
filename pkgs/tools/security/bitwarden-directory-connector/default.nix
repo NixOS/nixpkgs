@@ -7,7 +7,7 @@
   python3,
   pkg-config,
   libsecret,
-  nodejs_18,
+  nodejs_22,
 }:
 
 let
@@ -19,14 +19,14 @@ let
     }:
     buildNpmPackage rec {
       pname = name;
-      version = "2024.10.0";
-      nodejs = nodejs_18;
+      version = "2025.11.0";
+      nodejs = nodejs_22;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
         rev = "v${version}";
-        hash = "sha256-jisMEuIpTWCy+N1QeERf+05tsugY0f+H2ntcRcFKkgo=";
+        hash = "sha256-U2/u29MKbnW0gcEZ08lhc31XsBxsoonON5/v3Ur7xXo=";
       };
 
       postPatch = ''
@@ -38,7 +38,7 @@ let
           --replace-fail "AppImage" "dir"
       '';
 
-      npmDepsHash = "sha256-Zi7EHzQSSrZ6XGGV1DOASuddYA4svXQc1eGmchcLFBc=";
+      npmDepsHash = "sha256-9vQcR59eyQapiFzGfxYAJL6WHWS8VSJHnmccgALmRuc=";
 
       env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -54,15 +54,15 @@ let
         pkg-config
       ];
 
-      meta = with lib; {
+      meta = {
         description = "LDAP connector for Bitwarden";
         homepage = "https://github.com/bitwarden/directory-connector";
-        license = licenses.gpl3Only;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl3Only;
+        maintainers = with lib.maintainers; [
           Silver-Golden
           SuperSandro2000
         ];
-        platforms = platforms.linux;
+        platforms = lib.platforms.linux;
         mainProgram = name;
       };
     };

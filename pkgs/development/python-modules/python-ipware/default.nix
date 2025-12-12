@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-ipware";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S8/HbRztYGzrpLQRTHcvO7Zv3mNn/0+y5PNBYLpd++E=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_ipware" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for server applications to retrieve client's IP address";
     homepage = "https://github.com/un33k/python-ipware";
     changelog = "https://github.com/un33k/python-ipware/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ e1mo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ e1mo ];
   };
 }

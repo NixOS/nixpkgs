@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qwlroots";
-  version = "0.3.0-wlroots0.17-0.18";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "qwlroots";
     rev = finalAttrs.version;
-    hash = "sha256-ObXegiJ4LT8bTUxNVJ9wBKN5oILWPDYTsuCy+OCsh3k=";
+    hash = "sha256-ZyG0JGUlz/ubtwN5wYtC8qeYsPur+0kTkD7iIjHX7KU=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
     ];
     platforms = wlroots.meta.platforms;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

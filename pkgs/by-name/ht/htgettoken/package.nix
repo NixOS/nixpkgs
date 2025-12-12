@@ -7,13 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "htgettoken";
-  version = "2.0-2";
+  version = "2.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fermitools";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1rF72zo/Jj4ZeEG2Nk6Wla+AfaDo5iPZhZP1j9WAK5I=";
+    repo = "htgettoken";
+    tag = "v${version}";
+    hash = "sha256-CUzkivrkvMr8EE00tjHswyK5WidQjmki5nLYpeb8jjU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -32,10 +33,10 @@ python3.pkgs.buildPythonApplication rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gets OIDC authentication tokens for High Throughput Computing via a Hashicorp vault server ";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/fermitools/htgettoken";
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

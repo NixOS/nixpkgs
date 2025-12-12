@@ -61,16 +61,33 @@ rec {
             description = "Which principal the rule applies to";
           };
           access = mkOption {
-            type = either (listOf (enum [
-              "add"
-              "cpw"
-              "delete"
-              "get"
-              "list"
-              "modify"
-            ])) (enum [ "all" ]);
+            type = coercedTo str singleton (
+              listOf (enum [
+                "all"
+                "add"
+                "cpw"
+                "delete"
+                "get-keys"
+                "get"
+                "list"
+                "modify"
+              ])
+            );
             default = "all";
-            description = "The changes the principal is allowed to make.";
+            description = ''
+              The changes the principal is allowed to make.
+
+              :::{.important}
+              The "all" permission does not imply the "get-keys" permission. This
+              is consistent with the behavior of both MIT Kerberos and Heimdal.
+              :::
+
+              :::{.warning}
+              Value "all" is allowed as a list member only if it appears alone
+              or accompanied by "get-keys". Any other combination involving
+              "all" will raise an exception.
+              :::
+            '';
           };
           target = mkOption {
             type = str;
@@ -107,39 +124,38 @@ rec {
     in
     submodule {
       freeformType = attrsOf sectionType;
-      options =
-        {
-          include = mkOption {
-            default = [ ];
-            description = ''
-              Files to include in the Kerberos configuration.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
-          includedir = mkOption {
-            default = [ ];
-            description = ''
-              Directories containing files to include in the Kerberos configuration.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
-          module = mkOption {
-            default = [ ];
-            description = ''
-              Modules to obtain Kerberos configuration from.
-            '';
-            type = coercedTo path singleton (listOf path);
-          };
+      options = {
+        include = mkOption {
+          default = [ ];
+          description = ''
+            Files to include in the Kerberos configuration.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
+        includedir = mkOption {
+          default = [ ];
+          description = ''
+            Directories containing files to include in the Kerberos configuration.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
+        module = mkOption {
+          default = [ ];
+          description = ''
+            Modules to obtain Kerberos configuration from.
+          '';
+          type = coercedTo path singleton (listOf path);
+        };
 
-        }
-        // (lib.optionalAttrs enableKdcACLEntries {
-          realms = mkOption {
-            type = attrsOf realm;
-            description = ''
-              The realm(s) to serve keys for.
-            '';
-          };
-        });
+      }
+      // (lib.optionalAttrs enableKdcACLEntries {
+        realms = mkOption {
+          type = attrsOf realm;
+          description = ''
+            The realm(s) to serve keys for.
+          '';
+        };
+      });
     };
 
   generate =

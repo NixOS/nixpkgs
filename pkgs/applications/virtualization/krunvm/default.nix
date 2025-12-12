@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
+    repo = "krunvm";
     rev = "v${version}";
-    hash = "sha256-IXofYsOmbrjq8Zq9+a6pvBYsvZFcKzN5IvCuHaxwazI=";
+    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Y0FNi/+HuN5SqexHTKjcW6lEaeis7xZDYc2/FOAANIA=";
+    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
   };
 
   nativeBuildInputs = [
@@ -36,13 +36,15 @@ stdenv.mkDerivation rec {
     rustc
     asciidoctor
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs =
-    [ libkrun ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    libkrun
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -67,11 +69,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ buildah ]} \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI-based utility for creating microVMs from OCI images";
     homepage = "https://github.com/containers/krunvm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = libkrun.meta.platforms;
     mainProgram = "krunvm";
   };

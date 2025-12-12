@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pystac";
-  version = "1.11.0";
+  version = "1.14.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yuAam/sXaGMFp1Kwxd28v3nOV05GC3sUY+gKJ4nLwTs=";
+    tag = "v${version}";
+    hash = "sha256-k2w/Se/XdPLZQ69TQkIomPsI6uiM+dO2H2HQ3fvPyF0=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Python library for working with any SpatioTemporal Asset Catalog (STAC)";
     homepage = "https://github.com/stac-utils/pystac";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

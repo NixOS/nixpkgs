@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jna";
-  version = "5.15.0";
+  version = "5.18.1";
 
   src = fetchFromGitHub {
     owner = "java-native-access";
     repo = "jna";
     rev = finalAttrs.version;
-    hash = "sha256-PadOJtoH+guPBQ/j6nIBp7BokNz23OQhaYpcFl/wbpQ=";
+    hash = "sha256-S0magEmA/Gw/26ZdjVnRTOJxBmRiw8DLQg49pRmaUU4=";
   };
 
   nativeBuildInputs = [
@@ -37,15 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/java-native-access/jna/blob/${finalAttrs.version}/CHANGES.md";
     description = "Java Native Access";
     homepage = "https://github.com/java-native-access/jna";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       asl20
     ];
-    maintainers = with maintainers; [ nagy ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ nagy ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

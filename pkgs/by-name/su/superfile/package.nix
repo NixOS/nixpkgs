@@ -1,32 +1,56 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
+  exiftool,
 }:
-buildGoModule rec {
+let
+  version = "1.3.3";
+  tag = "v${version}";
+in
+buildGoModule {
   pname = "superfile";
-  version = "1.1.6";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    rev = "v${version}";
-    hash = "sha256-3zQDErfst0CAE9tdOUtPGtGWuOo/K8x/M+r6+RPrlCM=";
+    inherit tag;
+    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
   };
 
-  vendorHash = "sha256-DU0Twutepmk+8lkBM2nDChbsSHh4awt5m33ACUtH4AQ=";
+  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  nativeBuildInputs = [ exiftool ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # Upstream notes that this could be flaky, and it consistently fails for me.
+  checkFlags = [
+    "-skip=^TestReturnDirElement/Sort_by_Date$"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Only failing on nix darwin. I suspect this is due to the way
+    # darwin handles file permissions.
+    "-skip=^TestCompressSelectedFiles"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       momeemt
       redyf
     ];

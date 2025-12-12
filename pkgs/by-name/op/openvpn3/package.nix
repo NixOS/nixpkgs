@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asio,
+  asio_1_32_0,
   glib,
   jsoncpp,
   libcap_ng,
@@ -22,23 +22,28 @@
   gdbuspp,
   cmake,
   git,
+  nix-update-script,
   enableSystemdResolved ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  # also update openvpn3-core
-  version = "24";
+  version = "25";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e3NRLrznTEolTzMO+kGEh48MCrcEr8p7JG3hG889aK4=";
+    tag = "v${version}";
+    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
+    ./v25-latest-linux-fix.patch
+  ];
 
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
   pythonPath = python3.withPackages (ps: [
     ps.dbus-python
     ps.pygobject3
-    ps.systemd
+    ps.systemd-python
   ]);
 
   nativeBuildInputs = [
@@ -76,7 +81,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    asio
+    # Depends on io_service
+    asio_1_32_0
     glib
     jsoncpp
     libcap_ng
@@ -87,7 +93,8 @@ stdenv.mkDerivation rec {
     protobuf
     tinyxml-2
     gdbuspp
-  ] ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ]
+  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")
@@ -95,7 +102,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "bash-completion" "enabled")
     (lib.mesonOption "test_programs" "disabled")
     (lib.mesonOption "unit_tests" "disabled")
-    (lib.mesonOption "asio_path" "${asio}")
+    (lib.mesonOption "asio_path" "${asio_1_32_0}")
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
@@ -113,6 +120,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lpthread";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenVPN 3 Linux client";

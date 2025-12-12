@@ -1,25 +1,20 @@
 {
   cmake,
-  copyPkgconfigItems,
   fetchFromGitHub,
-  fetchpatch,
-  fmt,
   git,
   gitUpdater,
-  gtest,
+  fetchpatch,
   lib,
-  makePkgconfigItem,
+  nlohmann_json,
   pkg-config,
   python3,
-  range-v3,
-  rapidjson,
   stdenv,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "3.2.1";
+  version = "4.0.4";
 
   outputs = [
     "out"
@@ -30,17 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "v-novaltd";
     repo = "LCEVCdec";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Nf0YntB1A3AH0MTXlfUHhxYbzZqeB0EH9Fe9Xrqdsts=";
+    tag = finalAttrs.version;
+    hash = "sha256-49ZDTYdsgv/RxUZlhIDrqJ3a3QCYA4pGG0QgOpKxzrI=";
   };
-
-  patches = [
-    # fix for build with GCC 14
-    (fetchpatch {
-      url = "https://github.com/v-novaltd/LCEVCdec/commit/43ef5a17ec1ced77f834136945b3cbfe2e46b9b4.patch";
-      hash = "sha256-8OgPh6v+nmRIUB6flR93qOjvaL8fUJdqIe48ZA+8Pr0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cmake/tools/version_files.py \
@@ -54,47 +41,26 @@ stdenv.mkDerivation (finalAttrs: {
     libdir = "${placeholder "out"}/lib";
   };
 
-  pkgconfigItems = [
-    (makePkgconfigItem rec {
-      name = "lcevc_dec";
-      inherit (finalAttrs) version;
-      libs = [
-        "-L${variables.libdir}"
-        "-llcevc_dec_api"
-      ];
-      libsPrivate = [
-        "-lpthread"
-        "-llcevc_dec_core"
-      ];
-      cflags = [
-        "-I${variables.includedir}"
-      ];
-      variables = {
-        prefix = "@dev@";
-        includedir = "@includedir@";
-        libdir = "@libdir@";
-      };
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
-    python3
     git
     pkg-config
-    copyPkgconfigItems
+    python3
   ];
 
   buildInputs = [
-    rapidjson
-    fmt
-    range-v3
+    nlohmann_json
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "VN_SDK_FFMPEG_LIBS_PACKAGE" "")
     (lib.cmakeBool "VN_SDK_UNIT_TESTS" false)
     (lib.cmakeBool "VN_SDK_SAMPLE_SOURCE" false)
+    (lib.cmakeBool "VN_SDK_JSON_CONFIG" true)
+    (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
+    # Requires avx for checking on runtime
+    (lib.cmakeBool "VN_CORE_SSE" stdenv.hostPlatform.avxSupport)
+    (lib.cmakeBool "VN_SDK_SIMD" stdenv.hostPlatform.avxSupport)
   ];
 
   passthru = {
@@ -108,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3Clear;
     pkgConfigModules = [ "lcevc_dec" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    # https://github.com/v-novaltd/LCEVCdec/blob/bf7e0d91c969502e90a925942510a1ca8088afec/cmake/modules/VNovaProject.cmake#L29
+    platforms = lib.platforms.aarch ++ lib.platforms.x86;
   };
 })

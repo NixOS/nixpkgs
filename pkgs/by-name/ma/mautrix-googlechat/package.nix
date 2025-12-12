@@ -10,11 +10,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4H+zUH0GEQ5e/9Bv0BVdf1/pXulx2ihZrhJ+jl/db+U=";
   };
 
@@ -67,12 +68,12 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mautrix/googlechat";
     description = "Matrix-Google Chat puppeting bridge";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ arcnmx ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ arcnmx ];
     mainProgram = "mautrix-googlechat";
   };
 }

@@ -22,7 +22,7 @@
 # The fourth and final goal is debugging. Normal packages should only source
 # their dependencies from the current stage. But for the sake of debugging, it
 # is nice that all packages still remain accessible. We make sure previous
-# stages are kept around with a `stdenv.__bootPackges` attribute referring the
+# stages are kept around with a `stdenv.__bootPackages` attribute referring the
 # previous stage. It is idiomatic that attributes prefixed with `__` come with
 # special restrictions and should not be used under normal circumstances.
 { lib, allPackages }:
@@ -31,7 +31,7 @@
 #   [ pkgset -> (args to stage/default.nix) or ({ __raw = true; } // pkgs) ]
 #   -> pkgset
 #
-# In english: This takes a list of function from the previous stage pkgset and
+# In English: This takes a list of function from the previous stage pkgset and
 # returns the final pkgset. Each of those functions returns, if `__raw` is
 # undefined or false, args for this stage's pkgset (the most complex and
 # important arg is the stdenv), or, if `__raw = true`, simply this stage's
@@ -108,7 +108,7 @@ let
           args'
         else
           allPackages (
-            (builtins.removeAttrs args' [ "selfBuild" ])
+            (removeAttrs args' [ "selfBuild" ])
             // {
               adjacentPackages =
                 if args.selfBuild or true then
@@ -162,5 +162,9 @@ let
         buildPackages.stdenv.cc;
   };
 
+  pkgs = dfold folder postStage (_: { }) withAllowCustomOverrides;
+
 in
-dfold folder postStage (_: { }) withAllowCustomOverrides
+# Return the spliced package set, so that consumers of the nixpkgs top-level
+# attributes, like NixOS, don't break when cross-compiling.
+pkgs.__splicedPackages

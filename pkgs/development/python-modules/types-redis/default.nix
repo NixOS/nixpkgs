@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "types-redis";
-  version = "4.6.0.20240903";
+  version = "4.6.0.20241004";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S6saN42/I8LJXDcN/biajwM5V8T9GlP+5xtSnBgv4Ag=";
+    hash = "sha256-XxfSs/kJGrdThBU7+idmGf+hz2o42mDhDV5nScxbkC4=";
   };
 
   build-system = [ setuptools ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redis-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for redis";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

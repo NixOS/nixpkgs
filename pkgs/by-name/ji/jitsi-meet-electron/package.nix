@@ -11,54 +11,37 @@
   libXi,
   libXtst,
   zlib,
-  darwin,
   electron,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    Carbon
-    CoreFoundation
-    ApplicationServices
-    OpenGL
-    ;
-in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2024.6.0";
+  version = "2025.2.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
+    hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   # robotjs node-gyp dependencies
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libpng
-      libX11
-      libXi
-      libXtst
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreFoundation
-      ApplicationServices
-      OpenGL
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libpng
+    libX11
+    libXi
+    libXtst
+    zlib
+  ];
 
-  npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
+  npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
 
   makeCacheWritable = true;
 
@@ -90,6 +73,8 @@ buildNpmPackage rec {
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   installPhase = ''
     runHook preInstall
@@ -135,13 +120,14 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = teams.jitsi.members ++ [ maintainers.tomasajt ];
+    maintainers = [ lib.maintainers.tomasajt ];
+    teams = [ lib.teams.jitsi ];
     inherit (electron.meta) platforms;
   };
 }

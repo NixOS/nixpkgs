@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chimpler";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyhocon";
+    tag = version;
     hash = "sha256-xXx30uxJ8+KPVdYC6yRzEDJbwYSzIO/Gy1xrehvI5ZE=";
   };
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     "test_include_dict"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HOCON parser for Python";
     mainProgram = "pyhocon";
     homepage = "https://github.com/chimpler/pyhocon/";
@@ -61,7 +61,7 @@ buildPythonPackage rec {
       A HOCON parser for Python. It additionally provides a tool (pyhocon) to convert
       any HOCON content into JSON, YAML and properties format.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chreekat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chreekat ];
   };
 }

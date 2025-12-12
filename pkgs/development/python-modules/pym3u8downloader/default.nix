@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pym3u8downloader";
-  version = "0.1.5";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pym3u8downloader";
-    rev = version;
-    hash = "sha256-Kcvtl4jP2pSiETTKUmuiBsysxaFfd4K/E2/nXY8Vlw8=";
+    tag = version;
+    hash = "sha256-VfNzHysvEVUNx8OK28v2l3QYTMn0ydE/LH+DBXpLfE8=";
   };
 
   build-system = [ setuptools ];
@@ -37,35 +37,29 @@ buildPythonPackage rec {
       pytest = pym3u8downloader.overridePythonAttrs (previousPythonAttrs: {
         TEST_SERVER_PORT = "8000";
 
-        postPatch =
-          previousPythonAttrs.postPatch or ""
-          + ''
-            # Patch test data location
-            substituteInPlace tests/commonclass.py \
-              --replace-fail \
-                "f'https://raw.githubusercontent.com/coldsofttech/pym3u8downloader/{branch_name}/tests/files'" \
-                "'http://localhost:$TEST_SERVER_PORT/tests/files'"
-            # Patch the `is_internet_connected()` method
-            substituteInPlace pym3u8downloader/__main__.py \
-              --replace-fail "'http://www.github.com'" "'http://localhost:$TEST_SERVER_PORT'"
-          '';
+        postPatch = previousPythonAttrs.postPatch or "" + ''
+          # Patch test data location
+          substituteInPlace tests/commonclass.py \
+            --replace-fail \
+              "f'https://raw.githubusercontent.com/coldsofttech/pym3u8downloader/{branch_name}/tests/files'" \
+              "'http://localhost:$TEST_SERVER_PORT/tests/files'"
+          # Patch the `is_internet_connected()` method
+          substituteInPlace pym3u8downloader/__main__.py \
+            --replace-fail "'http://www.github.com'" "'http://localhost:$TEST_SERVER_PORT'"
+        '';
 
         doCheck = true;
 
         nativeCheckInputs = [ pytestCheckHook ];
 
-        preCheck =
-          previousPythonAttrs.preCheck or ""
-          + ''
-            python3 -m http.server "$TEST_SERVER_PORT" &
-            TEST_SERVER_PID="$!"
-          '';
+        preCheck = previousPythonAttrs.preCheck or "" + ''
+          python3 -m http.server "$TEST_SERVER_PORT" &
+          TEST_SERVER_PID="$!"
+        '';
 
-        postCheck =
-          previousPythonAttrs.postCheck or ""
-          + ''
-            kill -s TERM "$TEST_SERVER_PID"
-          '';
+        postCheck = previousPythonAttrs.postCheck or "" + ''
+          kill -s TERM "$TEST_SERVER_PID"
+        '';
       });
     };
   };
@@ -81,7 +75,7 @@ buildPythonPackage rec {
       and manage various error conditions.
     '';
     homepage = "https://github.com/coldsofttech/pym3u8downloader";
-    changelog = "https://github.com/coldsofttech/pym3u8downloader/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/coldsofttech/pym3u8downloader/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };

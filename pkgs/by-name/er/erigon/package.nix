@@ -7,20 +7,20 @@
 
 let
   pname = "erigon";
-  version = "2.60.10";
+  version = "3.0.4";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-14s3Dfo1sqQlNZSdjByUCAsYzbv6xjPcCsBxEmoY3pU=";
+    repo = "erigon";
+    tag = "v${version}";
+    hash = "sha256-MQpHRlKxWCBD2Tj9isxMKwvYBy9HtDkQPyKPse8uB3g=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-I4rdz8dswA9/w4S9BNS43VTD9iDsH+cNK2haWowhBO4=";
+  vendorHash = "sha256-ocnq97cMsiMgDTZhwZ/fiGzaHiSAiJckPwWZu2q3f58=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
@@ -51,17 +51,22 @@ buildGoModule {
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid testing‐releases
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [
-      d-xo
+    maintainers = with lib.maintainers; [
       happysalada
     ];
   };

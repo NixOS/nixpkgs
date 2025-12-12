@@ -1,12 +1,12 @@
 {
   "dependencies": {
     "ae": {
-      "version": "0.0.3236",
-      "sha256": "0by9yclvk795nw7ilwhv7wh17j2dd7xk54phs8s5jxrwpqx10x52"
+      "version": "0.0.3461",
+      "sha256": "1mk075r3bas8s699y6sc4fxbdyjhc9cm6qxcqqaj0di9ijb71fq1"
     },
     "btrfs": {
-      "version": "0.0.18",
-      "sha256": "0m8r4skfiryn2nk4wyb61lpvlga1330crr4y1h0q39g9xl3g6myf"
+      "version": "0.0.21",
+      "sha256": "0j7ksngwn8kilbql6p7hh5jvmrxqsr7pniw2n1qlrwdsms6qv72m"
     },
     "ncurses": {
       "version": "1.0.0",

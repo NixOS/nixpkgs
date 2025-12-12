@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "smtpdfix";
-  version = "0.5.2";
+  version = "0.5.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5NGs6Q83EqGRJ+2IdOaXqGFIwfSNKy2wwHIJaOjj7JU=";
+    hash = "sha256-LqSbIv4ITJy5KlLlboNRx1PJhe7PcTx38IUW7F4uf9A=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -41,11 +41,11 @@ buildPythonPackage rec {
     "test_missing_certs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SMTP server for use as a pytest fixture for testing";
     homepage = "https://github.com/bebleo/smtpdfix";
     changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = teams.wdz.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.wdz ];
   };
 }

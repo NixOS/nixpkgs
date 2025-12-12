@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "agebox";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "slok";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QH0kkquLnB00oKuwb5j2ZoAKPnZkSHJRGaq3RXO5ggg=";
+    repo = "agebox";
+    tag = "v${version}";
+    hash = "sha256-/FTNvGV7PsJmpSU1dI/kjfiY5G7shomvLd3bvFqORfg=";
   };
 
   vendorHash = "sha256-s3LZgQpUF0t9ETNloJux4gXXSn5Kg+pcuhJSMfWWnSo=";
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/slok/agebox";
     changelog = "https://github.com/slok/agebox/releases/tag/v${version}";
     description = "Age based repository file encryption gitops tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "agebox";
   };
 }

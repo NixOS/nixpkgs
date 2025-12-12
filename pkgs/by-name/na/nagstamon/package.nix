@@ -8,11 +8,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "nagstamon";
   version = "3.16.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HenriWahl";
     repo = "Nagstamon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9w8ux+AeSg0vDhnk28/2eCE2zYLvAjD7mB0pJBMFs2I=";
   };
 
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
     requests
     requests-kerberos
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -59,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       pSub
       liberodark
+      videl
     ];
     mainProgram = "nagstamon.py";
     # NameError: name 'bdist_rpm_options' is not defined. Did you mean: 'bdist_mac_options'?

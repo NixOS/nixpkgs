@@ -8,13 +8,13 @@
 
 buildDubPackage rec {
   pname = "btdu";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
     rev = "v${version}";
-    hash = "sha256-3sSZq+5UJH02IO0Y1yL3BLHDb4lk8k6awb5ZysBQciE=";
+    hash = "sha256-B8ojxdXibeNEZay9S5lzpB6bTKNB2ZI6AQ3XKUHioE0=";
   };
 
   dubLock = ./dub-lock.json;
@@ -30,13 +30,13 @@ buildDubPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sampling disk usage profiler for btrfs";
     homepage = "https://github.com/CyberShadow/btdu";
     changelog = "https://github.com/CyberShadow/btdu/releases/tag/${src.rev}";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       atila
       cybershadow
     ];

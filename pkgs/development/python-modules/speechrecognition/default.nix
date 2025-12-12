@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cacert,
+  faster-whisper,
   flac,
+  google-cloud-speech,
   groq,
   httpx,
   openai-whisper,
@@ -15,12 +18,13 @@
   respx,
   setuptools,
   soundfile,
+  standard-aifc,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.12.0";
+  version = "3.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
+    tag = version;
+    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
   };
 
   postPatch = ''
@@ -43,11 +47,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    standard-aifc
+    typing-extensions
+  ];
 
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
+    faster-whisper = [ faster-whisper ];
+    google-cloud = [ google-cloud-speech ];
     groq = [
       groq
       httpx
@@ -68,7 +77,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pocketsphinx
     respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -77,14 +87,14 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

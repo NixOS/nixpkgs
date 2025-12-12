@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
     "all"
   ];
 
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=return-mismatch -Wno-error=implicit-int";
+
   outputs = [
     "out"
     "doc"
@@ -82,7 +85,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multipole-accelerated capacitance extraction program";
     longDescription = ''
       Fastcap is  a three dimensional capacitance extraction program that
@@ -90,9 +93,9 @@ stdenv.mkDerivation rec {
       shapes, sizes and orientations.
     '';
     homepage = "https://www.rle.mit.edu/cpg/research_codes.htm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.linux;
     mainProgram = "fastcap";
   };
 }

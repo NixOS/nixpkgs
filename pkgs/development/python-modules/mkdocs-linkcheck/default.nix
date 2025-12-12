@@ -1,12 +1,13 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonPackages,
+  requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mkdocs-linkcheck";
   version = "unstable-2021-08-24";
   format = "setuptools";
@@ -20,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-z59F7zUKZKIQSiTlE6wGbGDecPMeruNgltWUYfDf8jY=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
     aiohttp
     requests
   ];
 
   pythonImportsCheck = [ "mkdocs_linkcheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Validate links in Markdown files for static site generators like MkDocs, Hugo or Jekyll";
     mainProgram = "mkdocs-linkcheck";
     longDescription = ''
@@ -35,7 +36,7 @@ buildPythonPackage rec {
       static site generators like MkDocs, Hugo or Jekyll. It can be used with any text files containing links.
     '';
     homepage = "https://github.com/byrnereese/mkdocs-linkcheck";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
   };
 }

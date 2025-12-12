@@ -28,26 +28,26 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "qRXNFyoMUpRMVXn8tGg/ioeMVxv16SglS12v78cn5ac=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-      gtk-doc
-      docbook_xsl
-      docbook_xml_dtd_412
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
   buildInputs = [
     sqlite
@@ -69,14 +69,15 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libchamplain";
+      attrPath = "libchamplain_libsoup3";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libchamplain";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     description = "C library providing a ClutterActor to display maps";
 
@@ -88,7 +89,10 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-    maintainers = teams.gnome.members ++ teams.pantheon.members;
-    platforms = platforms.unix;
+    teams = lib.optionals withLibsoup3 [
+      lib.teams.gnome
+      lib.teams.pantheon
+    ];
+    platforms = lib.platforms.unix;
   };
 }

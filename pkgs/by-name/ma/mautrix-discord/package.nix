@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "mautrix-discord";
-  version = "0.7.0";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "discord";
     rev = "v${version}";
-    hash = "sha256-N6CepP+P63TIKKi6FQLJEuV5hFtiv1CcBM+1Y/QPZrI=";
+    hash = "sha256-puYPsHahXdKYR16hPnvYCrSGqnWc7sZ8HmmPlkysvs0=";
   };
 
-  vendorHash = "sha256-QdH98NA5Y9YKkvL8Gq8ChgvHFOyOBFXDDulxwql6v5c=";
+  vendorHash = "sha256-ffdR5OymFO7di4eOmL3zn6BvHgaLFBsmBkC4LKnw8Qg=";
 
   ldflags = [
     "-s"
@@ -37,12 +37,15 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Discord puppeting bridge";
     homepage = "https://github.com/mautrix/discord";
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ MoritzBoehme ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      MoritzBoehme
+      sumnerevans
+    ];
     mainProgram = "mautrix-discord";
   };
 }

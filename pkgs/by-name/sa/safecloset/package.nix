@@ -3,42 +3,37 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
   xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "safecloset";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     rev = "v${version}";
-    hash = "sha256-buIceYP/dZMDw3tyrzj1bY6+sIIPaVJIVj1L//jZnws=";
+    hash = "sha256-ZLAgSD03Qfoz+uGjVJF7vCkV1pUWqw6yG/9+redbQQ8=";
   };
 
-  cargoHash = "sha256-rxNp9dOvy/UTx6Q9pzZGccEKmIiWxzWVYyMxb+h5bqw=";
+  cargoHash = "sha256-BSWUWB8OrdmDtU+cGCVp75hakpdd9G3cs9ythDn4nnY=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libxcb
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libxcb
+  ];
 
   checkFlags = [
     # skip flaky test
     "--skip=timer::timer_tests::test_timer_reset"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform secure TUI secret locker";
     homepage = "https://github.com/Canop/safecloset";
     changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
     mainProgram = "safecloset";
   };
 }

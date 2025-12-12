@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kde-gruvbox";
-  version = "unstable-2015-08-09";
+  version = "0-unstable-2015-08-09";
 
   src = fetchFromGitHub {
     owner = "printesoi";
-    repo = pname;
+    repo = "kde-gruvbox";
     rev = "2dd95283076d7194345a460edb3630cfd020759c";
     sha256 = "sha256-ppAeEfwoHZg7XEj3zGc+uq4Z6hUgJNM2EjuDsc8pFQo=";
   };
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Suite of themes for KDE applications that match the retro gruvbox colorscheme";
     homepage = "https://github.com/printesoi/kde-gruvbox";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ymarkus ];
+    platforms = lib.platforms.all;
   };
 }

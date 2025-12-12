@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rbw";
-    repo = pname;
+    repo = "pysnow";
     rev = version;
     hash = "sha256-nKOPCkS2b3ObmBnk/7FTv4o4vwUX+tOtZI5OQQ4HSTY=";
   };
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    # Switch to peotry-core, https://github.com/rbw/pysnow/pull/183
+    # Switch to poetry-core, https://github.com/rbw/pysnow/pull/183
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/rbw/pysnow/commit/f214a203432b329df5317f3a25b2c0d9b55a9029.patch";
@@ -66,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnow" ];
 
-  meta = with lib; {
+  meta = {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
-    license = licenses.mit;
-    maintainers = with maintainers; [ almac ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ almac ];
   };
 }

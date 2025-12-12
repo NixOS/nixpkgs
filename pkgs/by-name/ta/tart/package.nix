@@ -9,14 +9,16 @@
   # See https://github.com/cirruslabs/softnet#installing
   enableSoftnet ? false,
   softnet,
+  nix-update-script,
+  versionCheckHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.20.2";
+  version = "2.30.0";
 
   src = fetchurl {
-    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-arm64.tar.gz";
-    hash = "sha256-caHuBTRpbmFbmTlDRnxZyGM6F95iKjMhKbPTez5Hecc=";
+    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
+    hash = "sha256-NUjF5hX+M12WcT+T/QXqHBFz2UOVm0NFtYzKGQmS6kg=";
   };
   sourceRoot = ".";
 
@@ -37,16 +39,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "macOS VMs on Apple Silicon to use in CI and other automations";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = licenses.fairsource09;
-    maintainers = with maintainers; [
+    license = lib.licenses.fairsource09;
+    maintainers = with lib.maintainers; [
       emilytrau
       aduh95
     ];
-    mainProgram = finalAttrs.pname;
-    platforms = [ "aarch64-darwin" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "tart";
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

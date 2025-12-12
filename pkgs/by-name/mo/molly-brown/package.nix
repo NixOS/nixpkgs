@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "molly-brown";
   version = "unstable-2023-02-10";
 
@@ -24,11 +24,10 @@ buildGoModule rec {
 
   passthru.tests.basic = nixosTests.molly-brown;
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured Gemini server";
     mainProgram = "molly-brown";
     homepage = "https://tildegit.org/solderpunk/molly-brown";
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

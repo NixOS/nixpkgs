@@ -2,7 +2,7 @@
   mattermost,
 }:
 
-mattermost.overrideAttrs (o: {
+mattermost.withoutTests.server.overrideAttrs (o: {
   pname = "mmctl";
   subPackages = [ "cmd/mmctl" ];
 

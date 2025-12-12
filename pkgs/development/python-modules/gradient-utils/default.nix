@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Paperspace";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "gradient-utils";
+    tag = "v${version}";
     hash = "sha256-swnl0phdOsBSP8AX/OySI/aYI9z60Ss3SsJox/mb9KY=";
   };
 
@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradient_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utils and helpers library for Gradient";
     homepage = "https://github.com/Paperspace/gradient-utils";
-    license = licenses.mit;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

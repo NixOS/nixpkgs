@@ -34,18 +34,15 @@ let
       description = "Reverse engineered headers for Apple's CoreSymbolication framework";
       homepage = "https://github.com/matthewbauer/CoreSymbolication";
       license = lib.licenses.mit;
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
     };
   });
 in
 self: super: {
-  buildPhase =
-    super.buildPhase or ""
-    + ''
-      mkdir -p System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
-      ln -s A System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/Current
-      ln -s Versions/Current/Headers System/Library/PrivateFrameworks/CoreSymbolication.framework/Headers
-      cp '${CoreSymbolication}/include/'*.h System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
-    '';
+  buildPhase = super.buildPhase or "" + ''
+    mkdir -p System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
+    ln -s Versions/Current/Headers System/Library/PrivateFrameworks/CoreSymbolication.framework/Headers
+    cp '${CoreSymbolication}/include/'*.h System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/Headers
+  '';
 }

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "inshellisense";
-  version = "0.0.1-rc.18";
+  version = "0.0.1-rc.21";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-9cSygGQar2rD3lorehlNmUzd0ZnABNJSJwmoNH3MTmk=";
+    repo = "inshellisense";
+    tag = version;
+    hash = "sha256-zERwrvioPwGm/351kYuK9S3uOrrzs/6OFPRdNSSr7Tc=";
   };
 
-  npmDepsHash = "sha256-/FSzeHPgVb5OB6mjP5GYAYBdTmk93xyWJI+NH7L61Do=";
+  npmDepsHash = "sha256-iD5SvkVbrHh0Hx44y6VtNerwBA8K7vSe/yfvhgndMEw=";
 
   # Needed for dependency `@homebridge/node-pty-prebuilt-multiarch`
   # On Darwin systems the build fails with,
@@ -29,10 +29,10 @@ buildNpmPackage rec {
   makeCacheWritable = stdenv.hostPlatform.isDarwin;
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin cacert;
 
-  meta = with lib; {
+  meta = {
     description = "IDE style command line auto complete";
     homepage = "https://github.com/microsoft/inshellisense";
-    license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
   };
 }

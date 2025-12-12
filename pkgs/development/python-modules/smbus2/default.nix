@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "smbus2";
+    tag = version;
     hash = "sha256-3ZAjviVLO/c27NzrPcWf6RlZYclYkmUmOskTP9TVbNM=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smbus2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for smbus-cffi/smbus-python";
     homepage = "https://smbus2.readthedocs.io/";
     changelog = "https://github.com/kplindegaard/smbus2/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fsaintjacques";
-    repo = pname;
+    repo = "semver-tool";
     rev = version;
     sha256 = "sha256-BnHuiCxE0VjzMWFTEMunQ9mkebQKIKbbMxZVfBUO57Y=";
   };
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fsaintjacques/semver-tool";
-    description = "semver bash implementation";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.qyliss ];
+    description = "Semver bash implementation";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.qyliss ];
     mainProgram = "semver";
   };
 }

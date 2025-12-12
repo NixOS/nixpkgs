@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-themes";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-themes";
     rev = version;
-    hash = "sha256-TUBcYQ7mWGVZKHNi4zQh8/ogSuMr20xIAoR+IGYQE0w=";
+    hash = "sha256-sdfLwLYE29Qh0QCU6t5pKIyW2RYx32WRNvNV46nCaXo=";
   };
 
   nativeBuildInputs = [
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-themes";
     description = "Themes, graphics and icons for LXQt";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

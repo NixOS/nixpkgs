@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elfx86exts";
-  version = "unstable-2023-04-20";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "pkgw";
-    repo = pname;
-    rev = "26bf98cf1fc773196e594c48bfe808d7151076f6";
-    hash = "sha256-xNmaKGbMN92CPIQQRbdmeePk5Wt9XcIsB/2vbk5NJzg=";
+    repo = "elfx86exts";
+    tag = "elfx86exts@${finalAttrs.version}";
+    hash = "sha256-lqaOnZxuiip1HPDpQraXlpUBYeJuBCRTaNARZVEV5UY=";
   };
 
-  cargoHash = "sha256-NH7QK8a+ndhZGlLa3gWlnQdBQil1pi2AAi5TtFgkVf0=";
+  cargoHash = "sha256-7FVcLvbZQK5M90ofoBpK2V/1+vWlBI/Z2x3ydbCwVbM=";
 
-  meta = with lib; {
+  meta = {
     description = "Decode x86 binaries and print out which instruction set extensions they use";
     longDescription = ''
       Disassemble a binary containing x86 instructions and print out which extensions it uses.
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
       perhaps PE-format ones as well. (It used to be more limited.)
     '';
     homepage = "https://github.com/pkgw/elfx86exts";
-    maintainers = with maintainers; [ rmcgibbo ];
-    license = with licenses; [ mit ];
+    maintainers = with lib.maintainers; [ rmcgibbo ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "elfx86exts";
   };
-}
+})

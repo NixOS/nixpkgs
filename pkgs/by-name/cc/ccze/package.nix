@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf
   '';
 
-  meta = with lib; {
+  # provide correct pcre2-config for cross
+  env.PCRE_CONFIG = lib.getExe' (lib.getDev pcre2) "pcre2-config";
+
+  meta = {
     mainProgram = "ccze";
     description = "Fast, modular log colorizer";
     homepage = "https://salsa.debian.org/debian/ccze";
@@ -48,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
       Fast log colorizer written in C, intended to be a drop-in replacement for the Perl colorize tool.
       Includes plugins for a variety of log formats (Apache, Postfix, Procmail, etc.).
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       malyn
       philiptaron
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

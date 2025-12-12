@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coursier";
-  version = "2.1.19";
+  version = "2.1.24";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    hash = "sha256-E6LEi2m/BMCT9T5UYzMbIcoj42MKP2OIc27XGDMUI7w=";
+    hash = "sha256-eql18SRpcm1ruHhSEHr+C41vPIKxKknvQ8xmR8TgV8o=";
   };
 
   dontUnpack = true;
@@ -66,15 +66,14 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://get-coursier.io/";
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
     mainProgram = "cs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       adelbertc
-      nequissimus
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

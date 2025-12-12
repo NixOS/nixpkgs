@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidbrochart";
     repo = "sqlite-anyio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cZyTpFmYD0l20Cmxl+Hwfh3oVkWvtXD45dMpcSwA2QE=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     trio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous client for SQLite using AnyIO";
     homepage = "https://github.com/davidbrochart/sqlite-anyio";
     changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -40,7 +40,7 @@ for (const attr_path of Object.keys(lockfile)) {
   }
 
   const version_nixpkgs = !ungoogled ? lockfile[attr_path].version : lockfile[attr_path].deps['ungoogled-patches'].rev
-  const version_upstream = !ungoogled ? await get_latest_chromium_release() :
+  const version_upstream = !ungoogled ? await get_latest_chromium_release('linux') :
     ungoogled_rev ?? await get_latest_ungoogled_release()
 
   console.log(`[${attr_path}] ${chalk.red(version_nixpkgs)} (nixpkgs)`)
@@ -59,10 +59,10 @@ for (const attr_path of Object.keys(lockfile)) {
 
     lockfile[attr_path] = {
       version: version_chromium,
-      chromedriver: !ungoogled ? await fetch_chromedriver_binaries(version_chromium) : undefined,
+      chromedriver: !ungoogled ? await fetch_chromedriver_binaries(await get_latest_chromium_release('mac')) : undefined,
       deps: {
         depot_tools: {},
-        gn: {},
+        gn: await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn),
         'ungoogled-patches': !ungoogled ? undefined : {
           rev: ungoogled_patches.rev,
           hash: ungoogled_patches.hash,
@@ -76,12 +76,6 @@ for (const attr_path of Object.keys(lockfile)) {
     lockfile[attr_path].deps.depot_tools = {
       rev: depot_tools.rev,
       hash: depot_tools.hash,
-    }
-
-    const gn = await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn)
-    lockfile[attr_path].deps.gn = {
-      rev: gn.rev,
-      hash: gn.hash,
     }
 
     // DEPS update loop
@@ -133,14 +127,38 @@ for (const attr_path of Object.keys(lockfile)) {
 
 async function fetch_gn(chromium_rev, gn_previous) {
   const DEPS_file = await get_gitiles_file('https://chromium.googlesource.com/chromium/src', chromium_rev, 'DEPS')
-  const gn_rev = /^\s+'gn_version': 'git_revision:(?<rev>.+)',$/m.exec(DEPS_file).groups.rev
-  const hash = gn_rev === gn_previous.rev ? gn_previous.hash : ''
+  const { rev } = /^\s+'gn_version': 'git_revision:(?<rev>.+)',$/m.exec(DEPS_file).groups
 
-  return await prefetch_gitiles('https://gn.googlesource.com/gn', gn_rev, hash)
+  const cache_hit = rev === gn_previous.rev;
+  if (cache_hit) {
+    return gn_previous
+  }
+
+  const commit_date = await get_gitiles_commit_date('https://gn.googlesource.com/gn', rev)
+  const version = `0-unstable-${commit_date}`
+
+  const expr = [`(import ./. {}).gn.override { version = "${version}"; rev = "${rev}"; hash = ""; }`]
+  const derivation = await $nixpkgs`nix-instantiate --expr ${expr}`
+
+  return {
+    version,
+    rev,
+    hash: await prefetch_FOD(derivation),
+  }
 }
 
 
-async function fetch_chromedriver_binaries(chromium_version) {
+async function get_gitiles_commit_date(base_url, rev) {
+  const url = `${base_url}/+/${rev}?format=json`
+  const response = await (await fetch(url)).text()
+  const json = JSON.parse(response.replace(`)]}'\n`, ''))
+
+  const date = new Date(json.committer.time)
+  return date.toISOString().split("T")[0]
+}
+
+
+async function fetch_chromedriver_binaries(version) {
   // https://developer.chrome.com/docs/chromedriver/downloads/version-selection
   const prefetch = async (url) => {
     const expr = [`(import ./. {}).fetchzip { url = "${url}"; hash = ""; }`]
@@ -149,8 +167,9 @@ async function fetch_chromedriver_binaries(chromium_version) {
   }
 
   // if the URL ever changes, the URLs in the chromedriver derivations need updating as well!
-  const url = (platform) => `https://storage.googleapis.com/chrome-for-testing-public/${chromium_version}/${platform}/chromedriver-${platform}.zip`
+  const url = (platform) => `https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chromedriver-${platform}.zip`
   return {
+    version,
     hash_darwin: await prefetch(url('mac-x64')),
     hash_darwin_aarch64: await prefetch(url('mac-arm64')),
   }
@@ -172,8 +191,8 @@ async function resolve_DEPS(depot_tools_checkout, chromium_rev) {
 }
 
 
-async function get_latest_chromium_release() {
-  const url = `https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions/all/releases?` + new URLSearchParams({
+async function get_latest_chromium_release(platform) {
+  const url = `https://versionhistory.googleapis.com/v1/chrome/platforms/${platform}/channels/stable/versions/all/releases?` + new URLSearchParams({
     order_by: 'version desc',
     filter: 'endtime=none,fraction>=0.5'
   })
@@ -258,4 +277,3 @@ async function prefetch_FOD(...args) {
 
   return hash
 }
-

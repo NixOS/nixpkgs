@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "0.10.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5XyCc/OMFA99qwVjsVLCA4NedvcDBSSBzG8TvSg4sk0=";
+    tag = "v${version}";
+    hash = "sha256-MPX9WXK2Z+QLGfQSJUlPrUhpjI2oNh7T6u6IfaVglO0=";
   };
 
   build-system = [ poetry-core ];
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocomelit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control Comelit Simplehome";
     homepage = "https://github.com/chemelli74/aiocomelit";
-    changelog = "https://github.com/chemelli74/aiocomelit/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/chemelli74/aiocomelit/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

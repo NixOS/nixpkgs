@@ -4,24 +4,20 @@
   SDL2_image,
   SDL2_mixer,
   cmake,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   stdenv,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
-  version = "5.6";
+  version = "5.8";
 
   src = fetchFromGitHub {
     owner = "bradharding";
     repo = "doomretro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ykErEXKpd/79cUhubZiLC7u10yJy8oYCWOMeHLYRHts=";
+    hash = "sha256-UCLIQEeKNJ0qTZQdzybdBxt/6catf8y3lnWKsjg2Mf8=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_mixer
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   strictDeps = true;
 
@@ -72,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "doomretro";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

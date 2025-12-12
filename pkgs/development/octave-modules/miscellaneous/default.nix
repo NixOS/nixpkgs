@@ -24,10 +24,10 @@ buildOctavePackage rec {
     units
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/miscellaneous/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/miscellaneous/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Miscellaneous tools that don't fit somewhere else";
   };
 }

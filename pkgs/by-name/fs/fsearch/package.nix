@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
-    repo = pname;
+    repo = "fsearch";
     rev = version;
     hash = "sha256-VBcoDxh4ip2zLBcXVHDe9s1lVRQF4bZJKsGUt6sPcos=";
   };
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       --replace "Exec=fsearch" "Exec=$out/bin/fsearch"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast file search utility for Unix-like systems based on GTK+3";
     homepage = "https://github.com/cboxdoerfer/fsearch.git";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ artturin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ artturin ];
+    platforms = lib.platforms.unix;
     mainProgram = "fsearch";
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/fsearch.x86_64-darwin
   };

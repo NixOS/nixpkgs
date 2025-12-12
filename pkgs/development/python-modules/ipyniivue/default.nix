@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ipyniivue";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,13 +23,13 @@ buildPythonPackage rec {
     owner = "niivue";
     repo = "ipyniivue";
     rev = "v${version}";
-    hash = "sha256-6DZmHVVxJspjUhJ9pzTmTvwAnQfvTp8OL2xZONz2XbU=";
+    hash = "sha256-rgScBBJ0Jqr5REZ+YFJcKwWcV33RzJ/sn6RqTL/limo=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     inherit src;
-    hash = "sha256-ZJRBGMNn5clxMavimfl6Jwqf7M2pRo+WLne0gUWOiJ8=";
+    hash = "sha256-3IR2d4/i/e1dRlvKN21XnadUfx2lP5SuToQJ9tMhzp4=";
   };
 
   # We do not need the build hooks, because we do not need to
@@ -55,11 +55,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ipyniivue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Show a nifti image in a webgl 2.0 canvas within a jupyter notebook cell";
     homepage = "https://github.com/niivue/ipyniivue";
     changelog = "https://github.com/niivue/ipyniivue/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-wKU2c8QRBKFVFqg+DAeH5+cwm5jpDLmPZG3YBUsh/lM=";
     # Use git, to also fetch tree-sitter repositories that upstream puts their
-    # hases in the repository as well, in repos.txt.
+    # hashes in the repository as well, in repos.txt.
     forceFetchGit = true;
     postFetch = ''
       cd $out
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Binary Python wheels for all tree sitter languages";
     homepage = "https://github.com/grantjenks/py-tree-sitter-languages";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
     # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
     broken = versionAtLeast tree-sitter.version "0.22";
   };

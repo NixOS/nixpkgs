@@ -8,7 +8,7 @@
   pytz,
   regex,
   tzlocal,
-  hijri-converter,
+  hijridate,
   convertdate,
   fasttext,
   langdetect,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.2.0";
+  version = "1.2.2";
 
   disabled = pythonOlder "3.7";
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mnL44hojebOwP6qtEBHs5QM4uRmLuGlVNr+sM3jZEKE=";
+    tag = "v${version}";
+    hash = "sha256-cUbY6c0JFzs1oZJOTnMXz3uCah2f50g8/3uWQXtwiGY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     calendars = [
-      hijri-converter
+      hijridate
       convertdate
     ];
     fasttext = [ fasttext ];
@@ -60,14 +60,15 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME="$TEMPDIR"
   '';
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # access network
@@ -81,12 +82,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dateparser" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
+  meta = {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.tag}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "dateparser-download";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

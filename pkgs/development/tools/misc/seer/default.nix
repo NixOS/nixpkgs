@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seer";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "epasveer";
     repo = "seer";
     rev = "v${version}";
-    sha256 = "sha256-ZvoRC34496fUldL3jOdxcO/TVmfPNmmr2GkJG4gJXzk=";
+    sha256 = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
   };
 
   preConfigure = ''
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     kdePackages.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt gui frontend for GDB";
     mainProgram = "seergdb";
     homepage = "https://github.com/epasveer/seer";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foolnotion ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ foolnotion ];
   };
 }

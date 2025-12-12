@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.5.1";
+  version = "3.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,20 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kislyuk";
     repo = "argcomplete";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-um8iFzEHExTRV1BAl86/XKLc7vmf2Ws1dB83agfvoec=";
+    tag = "v${version}";
+    hash = "sha256-2o0gQtkQP9cax/8SUd9+65TwAIAjBYnI+ufuzZtrVyo=";
   };
 
-  patches = [
-    # fixes issues with python3Packages.traitlets tests
-    # https://git.launchpad.net/ubuntu/+source/python-argcomplete/tree/debian/patches/python-3.13-compat.patch?h=ubuntu/plucky
-    # https://github.com/kislyuk/argcomplete/pull/513
-    ./python-3.13-compat.patch
-  ];
-
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   # Tries to build and install test packages which fails
@@ -38,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argcomplete" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    changelog = "https://github.com/kislyuk/argcomplete/blob/${src.tag}/Changes.rst";
     downloadPage = "https://github.com/kislyuk/argcomplete";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 }

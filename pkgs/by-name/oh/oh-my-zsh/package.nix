@@ -10,7 +10,6 @@
   common-updater-scripts,
   git,
   nix,
-  nixfmt-classic,
   jq,
   coreutils,
   gnused,
@@ -20,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2024-10-01";
+  version = "2025-11-23";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "f4423ebd09fbc7670815c3c20cc86c81b7319e5f";
-    sha256 = "sha256-JlYgWssS1DT1/Jlk6fOZqyEr6ta3ky6tlDqDZbJ1A9k=";
+    rev = "beadd56dd75e8a40fe0a7d4a5d63ed5bf9efcd48";
+    sha256 = "sha256-e3zTM3rj4z6RwDai9i7KKrz6imTGmZiSAqcS9Mw2LZU=";
   };
 
   strictDeps = true;
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
     chmod -R +w templates
 
     # Change the path to oh-my-zsh dir and disable auto-updating.
-    sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
+    sed -i -e "s#ZSH=\"\$HOME/.oh-my-zsh\"#ZSH=\"$outdir\"#" \
            -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
      $template
 
@@ -99,7 +98,6 @@ stdenv.mkDerivation rec {
           curl
           cacert
           git
-          nixfmt-classic
           nix
           jq
           coreutils
@@ -111,18 +109,15 @@ stdenv.mkDerivation rec {
       latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
 
       if [ ! "null" = "$latestSha" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
         update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.
@@ -133,8 +128,7 @@ stdenv.mkDerivation rec {
         $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     '';
     homepage = "https://ohmyz.sh/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nequissimus ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

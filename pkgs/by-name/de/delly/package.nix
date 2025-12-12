@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.3.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nMMEQwsaRidv5MMbGF2s1wuRQX2COvWsJA67N8HiCZA=";
+    hash = "sha256-OoQivDDoYtYYPsl5U4hJGE7b+IU/jrqWejiXY5Py4n4=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"
@@ -58,12 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Structural variant caller for mapped DNA sequenced data";
     mainProgram = "delly";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,

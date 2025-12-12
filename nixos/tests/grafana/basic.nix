@@ -63,7 +63,7 @@ import ../make-test-python.nix (
             }
           ];
         };
-        systemd.services.grafana.after = [ "postgresql.service" ];
+        systemd.services.grafana.after = [ "postgresql.target" ];
       };
 
       mysql = {
@@ -94,9 +94,7 @@ import ../make-test-python.nix (
   {
     name = "grafana-basic";
 
-    meta = with maintainers; {
-      maintainers = [ willibutz ];
-    };
+    meta.maintainers = [ ];
 
     inherit nodes;
 
@@ -135,7 +133,7 @@ import ../make-test-python.nix (
 
       with subtest("Successful API query as admin user with postgresql db"):
           postgresql.wait_for_unit("grafana.service")
-          postgresql.wait_for_unit("postgresql.service")
+          postgresql.wait_for_unit("postgresql.target")
           postgresql.wait_for_open_port(3000)
           postgresql.wait_for_open_port(5432)
           postgresql.succeed(

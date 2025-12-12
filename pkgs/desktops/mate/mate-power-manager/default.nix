@@ -24,6 +24,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
   version = "1.28.1";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -58,14 +62,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE Power Manager";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       fdl11Plus
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ chpatrick ];
+    teams = [ lib.teams.mate ];
   };
 }

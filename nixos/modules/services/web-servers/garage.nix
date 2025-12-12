@@ -11,18 +11,14 @@ let
   cfg = config.services.garage;
   toml = pkgs.formats.toml { };
   configFile = toml.generate "garage.toml" cfg.settings;
-
-  anyHasPrefix =
-    prefix: strOrList:
-    if isString strOrList then
-      hasPrefix prefix strOrList
-    else
-      any ({ path, ... }: hasPrefix prefix path) strOrList;
 in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = [ maintainers.mjm ];
+    maintainers = with lib.maintainers; [
+      mjm
+      cything
+    ];
   };
 
   options.services.garage = {
@@ -44,13 +40,13 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ([
+      type = types.enum [
         "error"
         "warn"
         "info"
         "debug"
         "trace"
-      ]);
+      ];
       default = "info";
       example = "debug";
       description = "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
@@ -78,7 +74,7 @@ in
             type = with types; either path (listOf attrs);
             description = ''
               The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD.
-              Since v0.9.0, Garage supports multiple data directories, refer to https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir for the exact format.
+              Since v0.9.0, Garage supports multiple data directories, refer to <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir> for the exact format.
             '';
           };
         };
@@ -124,22 +120,40 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
-      ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/garage server";
+      ]
+      ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+      serviceConfig =
+        let
+          paths = lib.flatten (
+            with cfg.settings;
+            [
+              metadata_dir
+            ]
+            # data_dir can either be a string or a list of attrs
+            # if data_dir is a list, the actual path will in in the `path` attribute of each item
+            # see https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir
+            ++ lib.optional (lib.isList data_dir) (map (item: item.path) data_dir)
+            ++ lib.optional (lib.isString data_dir) [ data_dir ]
+          );
+          isDefault = lib.hasPrefix "/var/lib/garage";
+          isDefaultStateDirectory = lib.any isDefault paths;
+        in
+        {
+          ExecStart = "${cfg.package}/bin/garage server";
 
-        StateDirectory = mkIf (
-          anyHasPrefix "/var/lib/garage" cfg.settings.data_dir
-          || hasPrefix "/var/lib/garage" cfg.settings.metadata_dir
-        ) "garage";
-        DynamicUser = lib.mkDefault true;
-        ProtectHome = true;
-        NoNewPrivileges = true;
-        EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-      };
+          StateDirectory = lib.mkIf isDefaultStateDirectory "garage";
+          DynamicUser = lib.mkDefault true;
+          ProtectHome = true;
+          NoNewPrivileges = true;
+          EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+          ReadWritePaths = lib.filter (x: !(isDefault x)) (lib.flatten [ paths ]);
+          # Upstream recommendation https://garagehq.deuxfleurs.fr/documentation/cookbook/systemd/
+          LimitNOFILE = 42000;
+        };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
     };
   };
 }

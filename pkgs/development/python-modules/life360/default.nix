@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = "life360";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GkCs479lXcnCvb5guxyc+ZuZdiH4n8uD2VbkC+yijgg=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "life360" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
     changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

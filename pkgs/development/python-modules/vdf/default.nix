@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   # The python updater requires GitHub releases, but vdf only uses tags
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with Valve's VDF text format";
     homepage = "https://github.com/ValvePython/vdf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

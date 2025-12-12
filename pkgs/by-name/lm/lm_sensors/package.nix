@@ -7,73 +7,91 @@
   flex,
   which,
   perl,
+  rrdtool,
   sensord ? false,
-  rrdtool ? null,
 }:
 
-assert sensord -> rrdtool != null;
+let
+  version = "3.6.2";
+  tag = "V" + lib.replaceStrings [ "." ] [ "-" ] version;
 
-stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "lm-sensors";
-  version = "3.6.0";
-  dashedVersion = lib.replaceStrings [ "." ] [ "-" ] version;
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "lm-sensors";
+    owner = "hramrach"; # openSUSE fork used by openSUSE and Gentoo
     repo = "lm-sensors";
-    rev = "V${dashedVersion}";
-    hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
+    inherit tag;
+    hash = "sha256-EmS9H3TQac6bHs2G8t1C2cQNAjN13zPoKDysny6aTFw=";
   };
 
-  # Upstream build system have knob to enable and disable building of static
-  # library, shared library is built unconditionally.
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    sed -i 'lib/Module.mk' -e '/LIBTARGETS :=/,+1d; /-m 755/ d'
-    substituteInPlace prog/sensors/Module.mk --replace 'lib/$(LIBSHBASENAME)' ""
-  '';
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
+
+  postPatch =
+    # This allows sensors to continue reading the sensors3.conf as provided by
+    # upstream and also look for config fragments in /etc/sensors.d
+    ''
+      substituteInPlace lib/init.c \
+        --replace-fail 'ETCDIR "/sensors.d"' '"/etc/sensors.d"'
+    '';
 
   nativeBuildInputs = [
     bison
     flex
     which
   ];
+
   # bash is required for correctly replacing the shebangs in all tools for cross-compilation.
   buildInputs = [
     bash
     perl
-  ] ++ lib.optional sensord rrdtool;
+  ]
+  ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "bin"}/bin"
+    "SBINDIR=${placeholder "bin"}/bin"
+    "INCLUDEDIR=${placeholder "dev"}/include"
+    "MANDIR=${placeholder "man"}/share/man"
+    # This is a dependency of the library.
+    "ETCDIR=${placeholder "out"}/etc"
+    "BUILD_SHARED_LIB=${if stdenv.hostPlatform.isStatic then "0" else "1"}"
+    "BUILD_STATIC_LIB=${if stdenv.hostPlatform.isStatic then "1" else "0"}"
+
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
+  ]
+  ++ lib.optional sensord "PROG_EXTRA=sensord";
 
-  installFlags = [
-    "ETCDIR=${placeholder "out"}/etc"
-  ];
+  enableParallelBuilding = true;
 
-  # Making regexp to patch-out installing of .so symlinks from Makefile is
-  # complicated, it is easier to remove them post-install.
-  postInstall =
-    ''
-      mkdir -p $out/share/doc/${pname}
-      cp -r configs doc/* $out/share/doc/${pname}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      rm $out/lib/*.so*
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc/lm_sensors
+    cp -r configs doc/* $doc/share/doc/lm_sensors
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
-    changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
-    description = "Tools for reading hardware sensors";
-    license = with licenses; [
+    changelog = "https://raw.githubusercontent.com/hramrach/lm-sensors/${tag}/CHANGES";
+    description = "Tools for reading hardware sensors - maintained fork";
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [ pmy ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      pmy
+      oxalica
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "sensors";
   };
 }

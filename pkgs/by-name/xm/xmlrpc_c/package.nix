@@ -2,18 +2,27 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
   curl,
   libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xmlrpc-c";
-  version = "1.59.03";
+  version = "1.60.05";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
-    hash = "sha256-vbcdtCqwvlFZFVWIXRFoKwRMEDTUoylkAb+SHsCyM/4=";
+    hash = "sha256-Z9hgBiRZ6ieEwHtNeRMxnZU5+nKfU0N46OQciRjyrfY=";
   };
+
+  postPatch = ''
+    rm -rf lib/expat
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     curl
@@ -34,13 +43,12 @@ stdenv.mkDerivation rec {
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight RPC library based on XML and HTTP";
     homepage = "https://xmlrpc-c.sourceforge.net/";
-    # <xmlrpc-c>/doc/COPYING also lists "Expat license",
-    # "ABYSS Web Server License" and "Python 1.5.2 License"
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    # <xmlrpc-c>/doc/COPYING also lists "ABYSS Web Server License" and "Python 1.5.2 License"
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

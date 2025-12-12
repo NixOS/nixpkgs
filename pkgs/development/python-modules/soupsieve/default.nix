@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "2.6";
+  version = "2.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4uaEF3d681nsZdqsEFdASjyKVFW7irw28amGarGlGrs=";
+    hash = "sha256-rSgvm2kmKG0urUdQVSyKYUK8THg/1msCk1R8j+auEmo=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -23,9 +23,9 @@ buildPythonPackage rec {
   # Circular dependency on beautifulsoup4
   # pythonImportsCheck = [ "soupsieve" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS4 selector implementation for Beautiful Soup";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/facelessuser/soupsieve";
     maintainers = [ ];
   };

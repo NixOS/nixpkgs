@@ -4,63 +4,51 @@
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
-  cargo-tauri_1,
+  cargo-tauri,
   nodejs,
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   dbus,
-  darwin,
   nix-update-script,
+  restic,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restic-browser";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "emuell";
     repo = "restic-browser";
     rev = "v${version}";
-    hash = "sha256-KE9pa4P6WyzNo3CxPKgREb6EEkUEQSuhihn938XN45A=";
+    hash = "sha256-K8JEt1kOvu/G3S1O6W/ee2JM968bgPR/FeGaBKP6elU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-window-state-0.1.1" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  cargoHash = "sha256-/EgSr46mJV84s/MG/3nUnU6XQ8RtEWiWo0gFtegblEQ=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-npm-deps-${version}";
     inherit src;
-    hash = "sha256-OhJQ+rhtsEkwrPu+V6ITkXSJT6RJ8pYFATo0VfJaijc=";
+    hash = "sha256-uyn5cXMKm7+LLuF+n94pBTypLiPvfAs5INDEtd9cHs0=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
+  nativeBuildInputs = [
+    cargo-tauri.hook
 
-      nodejs
-      npmHooks.npmConfigHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      wrapGAppsHook3
-    ];
+    nodejs
+    npmHooks.npmConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_0
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        WebKit
-      ]
-    );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+    dbus
+    restic
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
@@ -73,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A GUI to browse and restore restic backup repositories";
+    description = "GUI to browse and restore restic backup repositories";
     homepage = "https://github.com/emuell/restic-browser";
     changelog = "https://github.com/emuell/restic-browser/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -9,18 +10,18 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.22";
+  version = "3.0.46";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-m1tfYuRDPxm8Q1e4RIzqfkv9vOjGUPvI0FADvYXep/c=";
+    tag = "v${version}";
+    hash = "sha256-Be0mlPd6+KFipISu8ctoHYs1I8P80h5XNpC4YPU+pZA=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-+DmElfOZcSnGaxEj4Ca1ysIb1M7N0kxtJx8+TXFOREY=";
+  vendorHash = "sha256-HyhGdrV5kLtWh6bAvCwZ0ES5QYfELoawdAvIt241tGY=";
 
   subPackages = [ "." ];
 
@@ -57,7 +58,7 @@ buildGoModule rec {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
@@ -66,9 +67,9 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
     changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
@@ -83,8 +84,8 @@ buildGoModule rec {
       time. Kubescape integrates natively with other DevOps tools, including
       Jenkins, CircleCI and Github workflows.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];

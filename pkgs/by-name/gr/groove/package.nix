@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     icotool -x -i 2 -o $out/share/icons/hicolor/16x16/apps/groove.png groove-green-g.ico
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GRaphs for Object-Oriented VErification";
-    homepage = "http://groove.cs.utwente.nl/";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.all;
+    homepage = "https://groove.cs.utwente.nl/";
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "jinja2-git";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jinja2_git" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wemake-services/jinja2-git";
     description = "Jinja2 extension to handle git-specific things";
     changelog = "https://github.com/wemake-services/jinja2-git/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

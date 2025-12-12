@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "apollo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EDI+bRDePEbkxfQKuDgRsJtlAE0jqcIoQHjpgW0jIoY=";
   };
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/greatscottgadgets/apollo/releases/tag/v${version}";
-    description = "microcontroller-based FPGA / JTAG programmer";
+    description = "Microcontroller-based FPGA / JTAG programmer";
     homepage = "https://github.com/greatscottgadgets/apollo";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];

@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
-  version = "1.5.191";
+  version = "1.5.239";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    hash = "sha256-t9SvQrOpcJ646WyUqX//4Rv7M8Ix2NbjgAAlrR0e31E=";
+    hash = "sha256-oeT58SO8aDwqiKbi9v7R+sclinTH8+x9XoQSOCnXCt8=";
   };
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "uuu_\\([0-9.]+\\)"
+      "uuu_([0-9.]+)"
     ];
   };
 
@@ -61,12 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     cat <($out/bin/uuu -udev) > $out/lib/udev/rules.d/70-uuu.rules
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Freescale/NXP I.MX Chip image deploy tools";
     homepage = "https://github.com/nxp-imx/mfgtools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "uuu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

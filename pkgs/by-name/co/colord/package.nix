@@ -31,6 +31,7 @@
   gtk-doc,
   libxslt,
   enableDaemon ? true,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -76,45 +77,46 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "udev_rules" (lib.elem "udev" udev.meta.pkgConfigModules))
   ];
 
-  nativeBuildInputs =
-    [
-      docbook_xml_dtd_412
-      docbook_xsl
-      docbook_xsl_ns
-      gettext
-      gobject-introspection
-      gtk-doc
-      libxslt
-      meson
-      ninja
-      pkg-config
-      shared-mime-info
-      vala
-      wrapGAppsNoGuiHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_412
+    docbook_xsl
+    docbook_xsl_ns
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    meson
+    ninja
+    pkg-config
+    shared-mime-info
+    vala
+    wrapGAppsNoGuiHook
+    udevCheckHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      argyllcms
-      bash-completion
-      dbus
-      glib
-      gusb
-      lcms2
-      libgudev
-      sane-backends
-      sqlite
-      udev
-    ]
-    ++ lib.optionals enableSystemd [
-      systemd
-    ]
-    ++ lib.optionals enableDaemon [
-      polkit
-    ];
+  buildInputs = [
+    argyllcms
+    bash-completion
+    dbus
+    glib
+    gusb
+    lcms2
+    libgudev
+    sane-backends
+    sqlite
+    udev
+  ]
+  ++ lib.optionals enableSystemd [
+    systemd
+  ]
+  ++ lib.optionals enableDaemon [
+    polkit
+  ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
@@ -132,11 +134,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
-    license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
   };
 }

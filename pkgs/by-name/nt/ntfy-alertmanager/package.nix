@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "ntfy-alertmanager";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://git.xenrox.net/~xenrox/ntfy-alertmanager/refs/download/v${version}/ntfy-alertmanager-${version}.tar.gz";
-    hash = "sha256-5rQzJZ0BaLtfj2MfyZZJ3PEiWnaTjWOMlsJYeYENW7U=";
+    hash = "sha256-Sn2hPt03o4Pi1WY/3d5oWhWUt8x+3P8hoNPS58tj0Kw=";
   };
 
-  vendorHash = "sha256-8a6dvBERegpFYFHQGJppz5tlQioQAudCe3/Q7vro+ZI=";
+  vendorHash = "sha256-NHaLv+Ulzl4ev3a6OjZiacCSmYAtvqFFmbYzAp+4AFU=";
 
-  meta = with lib; {
-    description = "A bridge between ntfy and Alertmanager";
+  meta = {
+    description = "Bridge between ntfy and Alertmanager";
     homepage = "https://git.xenrox.net/~xenrox/ntfy-alertmanager";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "ntfy-alertmanager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bleetube
       fpletz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

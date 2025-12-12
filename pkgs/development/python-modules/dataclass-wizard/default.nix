@@ -1,42 +1,47 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
   pythonAtLeast,
+  pythonOlder,
   pytimeparse,
   pyyaml,
-  pytestCheckHook,
-  pytest-mock,
+  setuptools,
   typing-extensions,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
-  version = "0.22.2";
-  format = "setuptools";
+  version = "0.35.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
-    rev = "v${version}";
-    hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
+    tag = "v${version}";
+    hash = "sha256-GnD0Rxvy46+SLP5oFYVPO4+4VSBAPPRip//8e7xyylA=";
   };
 
-  propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     timedelta = [ pytimeparse ];
+    toml = [ tomli-w ];
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-    ]
-    ++ optional-dependencies.timedelta
-    ++ optional-dependencies.yaml;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests =
     [ ]
@@ -52,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclass_wizard" ];
 
-  meta = with lib; {
-    description = "Set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
-    mainProgram = "wiz";
+  meta = {
+    description = "Wizarding tools for interacting with the Python dataclasses module";
     homepage = "https://github.com/rnag/dataclass-wizard";
-    changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ codifryed ];
+    changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ codifryed ];
+    mainProgram = "wiz";
   };
 }

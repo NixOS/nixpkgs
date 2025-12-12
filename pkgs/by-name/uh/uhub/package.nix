@@ -12,7 +12,7 @@
 
 assert tlsSupport -> openssl != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhub";
   version = "unstable-2019-12-13";
 
@@ -30,12 +30,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite
     systemd
-  ] ++ lib.optional tlsSupport openssl;
+  ]
+  ++ lib.optional tlsSupport openssl;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/lib/uhub/" "$out/plugins" \
-      --replace "/etc/uhub" "$TMPDIR"
+      --replace-fail "/usr/lib/uhub/" "$out/plugins" \
+      --replace-fail "/etc/uhub" "$TMPDIR" \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [
@@ -43,11 +45,10 @@ stdenv.mkDerivation rec {
     "-DSSL_SUPPORT=${if tlsSupport then "ON" else "OFF"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance peer-to-peer hub for the ADC network";
     homepage = "https://www.uhub.org/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

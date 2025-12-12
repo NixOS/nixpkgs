@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opensoundmeter";
-  version = "1.4";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "psmokotnin";
     repo = "osm";
     rev = "v${version}";
-    hash = "sha256-yFA1bwCv6E7za54FQREuT3nMZhY0lmHSsDz4PIAjarg=";
+    hash = "sha256-jM9tkfNjPNHcPOG0n7NeohC/O3E6CUspOF3UTkQ2rs8=";
   };
 
   patches = [ ./build.patch ];
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sound measurement application for tuning audio systems in real-time";
     homepage = "https://opensoundmeter.com/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "OpenSoundMeter";
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

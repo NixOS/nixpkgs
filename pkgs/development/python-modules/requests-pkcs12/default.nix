@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "requests-pkcs12";
-  version = "1.25";
+  version = "1.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "m-click";
     repo = "requests_pkcs12";
     rev = version;
-    hash = "sha256-ukS0vxG2Rd71GsF1lmpsDSM2JovwqhXsaAnZdF8WGQo=";
+    hash = "sha256-4B7jL3OubIF8ZOYzsODltZCAHhb+PM18uJDOssuM6R4=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_pkcs12" ];
 
-  meta = with lib; {
+  meta = {
     description = "PKCS#12 support for the Python requests library";
     homepage = "https://github.com/m-click/requests_pkcs12";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,11 +1,15 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, protobuf
-, elfutils
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  protobuf,
+  elfutils,
+  nix-update-script,
+  testers,
+  router,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "apollographql";
-    repo = pname;
+    repo = "router";
     rev = "v${version}";
     hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
   };
 
-  cargoHash = "sha256-zeMUw/OLPXM1uARrUeva90DLgpD5qFDhVKWgP/c3w7g=";
+  cargoHash = "sha256-1AKYOv7kT60H8x1qmtPqR4Wxq1DxSCDzt+Uv7MRUeaw=";
 
   nativeBuildInputs = [
     cmake
@@ -39,10 +43,15 @@ rustPlatform.buildRustPackage rec {
     "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = router; };
+  };
+
+  meta = {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
-    license = licenses.elastic20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.elastic20;
+    maintainers = [ lib.maintainers.bbigras ];
   };
 }

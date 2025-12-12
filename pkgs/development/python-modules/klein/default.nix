@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "klein";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2/zl4fS9ZP73quPmGnz2+brEt84ODgVS89Om/cUsj0M=";
   };
 
@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "klein" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/twisted/klein/releases/tag/${version}";
     description = "Klein Web Micro-Framework";
     homepage = "https://github.com/twisted/klein";
-    license = licenses.mit;
-    maintainers = with maintainers; [ exarkun ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exarkun ];
   };
 }

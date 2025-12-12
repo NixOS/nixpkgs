@@ -18,6 +18,7 @@
   adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
+  icu,
   shared-mime-info,
   libnotify,
   libexif,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "47.1";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FUUOvHqmHtL65jEwr567uuFM5walR/WUxmu4zKck10w=";
+    hash = "sha256-JXazS+0ngaifCQUeyfyuOuF+txcs175nj1kqoU5MJrE=";
   };
 
   patches = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gexiv2
     glib-networking
+    icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas
@@ -100,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''
@@ -124,12 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
     mainProgram = "nautilus";
   };
 })

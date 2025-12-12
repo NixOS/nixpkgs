@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gprbuild
-, which
-, gnatcoll-core
-, component
-# components built by this derivation other components depend on
-, gnatcoll-sql
-, gnatcoll-sqlite
-, gnatcoll-xref
-# component specific extra dependencies
-, gnatcoll-iconv
-, gnatcoll-readline
-, sqlite
-, postgresql
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  gprbuild,
+  which,
+  gnatcoll-core,
+  component,
+  # components built by this derivation other components depend on
+  gnatcoll-sql,
+  gnatcoll-sqlite,
+  gnatcoll-xref,
+  # component specific extra dependencies
+  gnatcoll-iconv,
+  gnatcoll-readline,
+  sqlite,
+  libpq,
 }:
 
 let
@@ -29,7 +30,7 @@ let
     ];
     postgres = [
       gnatcoll-sql
-      postgresql
+      libpq
     ];
     sqlite = [
       gnatcoll-sql
@@ -51,9 +52,10 @@ in
 stdenv.mkDerivation rec {
   # executables don't adhere to the string gnatcoll-* scheme
   pname =
-    if onlyExecutable
-    then builtins.replaceStrings [ "_" ] [ "-" ] component
-    else "gnatcoll-${component}";
+    if onlyExecutable then
+      builtins.replaceStrings [ "_" ] [ "-" ] component
+    else
+      "gnatcoll-${component}";
   version = "25.0.0";
 
   src = fetchFromGitHub {
@@ -83,24 +85,27 @@ stdenv.mkDerivation rec {
   # the closure size dramatically
   ${if onlyExecutable then "buildInputs" else "propagatedBuildInputs"} = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [];
+  ]
+  ++ libsFor."${component}" or [ ];
 
   makeFlags = [
-    "-C" component
+    "-C"
+    component
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optionals (component == "sqlite") [
+  ]
+  ++ lib.optionals (component == "sqlite") [
     # link against packaged, not vendored libsqlite3
     "GNATCOLL_SQLITE=external"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GNAT Components Collection - Database packages";
     homepage = "https://github.com/AdaCore/gnatcoll-db";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.all;
   };
 }

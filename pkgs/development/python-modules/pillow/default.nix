@@ -8,10 +8,12 @@
   # build-system
   setuptools,
   pkg-config,
+  pybind11,
 
   # native dependencies
   freetype,
   lcms2,
+  libavif,
   libimagequant,
   libjpeg,
   libraqm,
@@ -19,8 +21,7 @@
   libwebp,
   libxcb,
   openjpeg,
-  tkinter,
-  zlib,
+  zlib-ng,
 
   # optional dependencies
   defusedxml,
@@ -43,17 +44,20 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.0.0";
+  version = "12.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vWNqzA2ZfJcWexXw790RgyYtP8WDtahoQIX16otCRnk=";
+    tag = version;
+    hash = "sha256-58mjwHErEZPkkGBVZznkkMQN5Zo4ZBBiXnhqVp1F81g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    pybind11
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -61,6 +65,7 @@ buildPythonPackage rec {
   buildInputs = [
     freetype
     lcms2
+    libavif
     libimagequant
     libjpeg
     libraqm
@@ -68,13 +73,12 @@ buildPythonPackage rec {
     libwebp
     libxcb
     openjpeg
-    tkinter
-    zlib
+    zlib-ng
   ];
 
   pypaBuildFlags = [
     # Disable platform guessing, which tries various FHS paths
-    "--config=setting=--disable-platform-guessing"
+    "--config-setting=--disable-platform-guessing"
   ];
 
   preConfigure =
@@ -84,6 +88,7 @@ buildPythonPackage rec {
     ''
       # The build process fails to find the pkg-config files for these dependencies
       substituteInPlace setup.py \
+        --replace-fail 'AVIF_ROOT = None' 'AVIF_ROOT = ${getLibAndInclude libavif}' \
         --replace-fail 'IMAGEQUANT_ROOT = None' 'IMAGEQUANT_ROOT = ${getLibAndInclude libimagequant}' \
         --replace-fail 'JPEG2K_ROOT = None' 'JPEG2K_ROOT = ${getLibAndInclude openjpeg}'
 
@@ -103,23 +108,26 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     numpy
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests =
-    [
-      # Code quality mismathch 9 vs 10
-      "test_pyroma"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Disable darwin tests which require executables: `iconutil` and `screencapture`
-      "test_grab"
-      "test_grabclipboard"
-      "test_save"
-    ];
+  disabledTests = [
+    # Code quality mismathch 9 vs 10
+    "test_pyroma"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disable darwin tests which require executables: `iconutil` and `screencapture`
+    "test_grab"
+    "test_grabclipboard"
+    "test_save"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes the interpreter
     "Tests/test_imagetk.py"
+
+    # Checks for very precise color values on what's basically white
+    "Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
   ];
 
   passthru.tests = {
@@ -133,8 +141,8 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
-    homepage = "https://python-pillow.org";
+  meta = {
+    homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
     longDescription = ''
@@ -143,8 +151,8 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = licenses.mit-cmu;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit-cmu;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
 }

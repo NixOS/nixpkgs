@@ -1,35 +1,39 @@
-{ libX11
-, libxcb
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, stdenv
-, lib
-, alsa-lib
-, at-spi2-atk
-, atkmm
-, cairo
-, cups
-, dbus
-, expat
-, glib
-, gtk3
-, libdrm
-, libglvnd
-, libxkbcommon
-, libgbm
-, nspr
-, nss
-, pango
-, systemd
-, fetchurl
-, autoPatchelfHook
-, dpkg
+{
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  stdenv,
+  lib,
+  alsa-lib,
+  at-spi2-atk,
+  atkmm,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  gtk3,
+  libdrm,
+  libglvnd,
+  libxkbcommon,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
 }:
 let
-  glLibs = [ libglvnd libgbm ];
+  glLibs = [
+    libglvnd
+    libgbm
+  ];
   libs = [
     alsa-lib
     atkmm
@@ -54,8 +58,11 @@ let
     pango
   ];
   buildInputs = glLibs ++ libs;
-  runpathPackages = glLibs ++ [ stdenv.cc.cc stdenv.cc.libc ];
-  version = "1.0.20";
+  runpathPackages = glLibs ++ [
+    stdenv.cc.cc
+    stdenv.cc.libc
+  ];
+  version = "1.0.48";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -63,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-fJiAqPppPoIN4gT54YMgbf/Fe9eVgRYHU6q6Yopl46I=";
+    hash = "sha256-IQ7KRqPvLiUzNU279IirHq21Q9DeFfkQ+B3i9rTgYR0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +78,9 @@ stdenv.mkDerivation {
     dpkg
   ];
 
-  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [ "${placeholder "out"}/lib/tana" ];
+  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [
+    "${placeholder "out"}/lib/tana"
+  ];
 
   # Needed for Zygote
   runtimeDependencies = [
@@ -91,8 +100,8 @@ stdenv.mkDerivation {
       --replace "Name=tana" "Name=Tana"
   '';
 
-  meta = with lib; {
-    description = "Tana is an intelligent all-in-one workspace";
+  meta = {
+    description = "Intelligent all-in-one workspace";
     longDescription = ''
       At its core, Tana is an outline editor which can be extended to
       cover multiple use-cases and different workflows.
@@ -104,9 +113,9 @@ stdenv.mkDerivation {
     '';
     homepage = "https://tana.inc";
     changelog = "https://tana.inc/releases";
-    license = licenses.unfree;
-    maintainers = [ maintainers.massimogengarelli ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.massimogengarelli ];
+    platforms = lib.platforms.linux;
     mainProgram = "tana";
   };
 }

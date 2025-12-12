@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wbarnha";
     repo = "kafka-python-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a2RFiBRh3S2YQBekpwEK74ow8bGlgWCGqSf2vcgYPYk=";
   };
 
@@ -44,7 +44,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     xxhash
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
     changelog = "https://github.com/wbarnha/kafka-python-ng/releases/tag/v${version}";

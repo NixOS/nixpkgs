@@ -10,12 +10,28 @@ for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
   hardeningEnableMap["$flag"]=1
 done
 
+
 # fortify3 implies fortify enablement - make explicit before
 # we filter unsupported flags because unsupporting fortify3
 # doesn't mean we should unsupport fortify too
 if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   hardeningEnableMap["fortify"]=1
 fi
+
+# strictflexarrays3 implies strictflexarrays1 enablement - make explicit before
+# we filter unsupported flags because unsupporting strictflexarrays3
+# doesn't mean we should unsupport strictflexarrays1 too
+if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then
+  hardeningEnableMap["strictflexarrays1"]=1
+fi
+
+# libcxxhardeningextensive implies libcxxhardeningfast enablement - make explicit before
+# we filter unsupported flags because unsupporting libcxxhardeningextensive
+# doesn't mean we should unsupport libcxxhardeningfast too
+if [[ -n "${hardeningEnableMap[libcxxhardeningextensive]-}" ]]; then
+  hardeningEnableMap["libcxxhardeningfast"]=1
+fi
+
 
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
@@ -24,15 +40,35 @@ for flag in @hardening_unsupported_flags@; do
   if [[ "$flag" = 'fortify' ]] ; then
     unset -v "hardeningEnableMap['fortify3']"
   fi
+  # strictflexarrays1 being unsupported implies strictflexarrays3 is unsupported
+  if [[ "$flag" = 'strictflexarrays1' ]] ; then
+    unset -v "hardeningEnableMap['strictflexarrays3']"
+  fi
+  # libcxxhardeningfast being unsupported implies libcxxhardeningextensive is unsupported
+  if [[ "$flag" = 'libcxxhardeningfast' ]] ; then
+    unset -v "hardeningEnableMap['libcxxhardeningextensive']"
+  fi
 done
+
 
 # now make fortify and fortify3 mutually exclusive
 if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   unset -v "hardeningEnableMap['fortify']"
 fi
 
+# now make strictflexarrays1 and strictflexarrays3 mutually exclusive
+if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then
+  unset -v "hardeningEnableMap['strictflexarrays1']"
+fi
+
+# now make libcxxhardeningfast and libcxxhardeningextensive mutually exclusive
+if [[ -n "${hardeningEnableMap[libcxxhardeningextensive]-}" ]]; then
+  unset -v "hardeningEnableMap['libcxxhardeningfast']"
+fi
+
+
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection pacret pie pic strictoverflow format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret strictflexarrays1 strictflexarrays3 pic strictoverflow libcxxhardeningfast libcxxhardeningextensive glibcxxassertions format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -79,26 +115,41 @@ for flag in "${!hardeningEnableMap[@]}"; do
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling shadowstack >&2; fi
       hardeningCFlagsBefore+=('-fcf-protection=return')
       ;;
+    strictflexarrays1)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictflexarrays1 >&2; fi
+      hardeningCFlagsBefore+=('-fstrict-flex-arrays=1')
+      ;;
+    strictflexarrays3)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictflexarrays3 >&2; fi
+      hardeningCFlagsBefore+=('-fstrict-flex-arrays=3')
+      ;;
     pacret)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pacret >&2; fi
       hardeningCFlagsBefore+=('-mbranch-protection=pac-ret')
+      ;;
+    glibcxxassertions)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling glibcxxassertions >&2; fi
+      hardeningCFlagsBefore+=('-D_GLIBCXX_ASSERTIONS')
+      ;;
+    libcxxhardeningfast)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling libcxxhardeningfast >&2; fi
+      hardeningCFlagsBefore+=('-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST')
+      ;;
+    libcxxhardeningextensive)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling libcxxhardeningextensive >&2; fi
+      hardeningCFlagsBefore+=('-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE')
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
       hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
     stackclashprotection)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stack-clash-protection >&2; fi
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackclashprotection >&2; fi
       hardeningCFlagsBefore+=('-fstack-clash-protection')
       ;;
-    pie)
-      # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
-      hardeningCFlagsBefore=('-fPIE' "${hardeningCFlagsBefore[@]}")
-      if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningCFlagsBefore=('-pie' "${hardeningCFlagsBefore[@]}")
-      fi
+    nostrictaliasing)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling nostrictaliasing >&2; fi
+      hardeningCFlagsBefore+=('-fno-strict-aliasing')
       ;;
     pic)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi

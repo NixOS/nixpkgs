@@ -1,64 +1,75 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  libcosmicAppHook,
   pkg-config,
-  libxkbcommon,
   libinput,
-  libglvnd,
   libgbm,
   udev,
-  wayland,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
-    rev = "epoch-${version}";
-    hash = "sha256-z3xQ6Vgqkm8hYLo2550NbFRkTMRQ0F9zn85iobnykH5=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-qqnZAQp8SweVMe59m02xe27qw4S7ypraASgV8lCWB2I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QRBgFTXPWQ0RCSfCA2WpBs+vKTFD7Xfz60cIDtbYb5Y=";
+  cargoHash = "sha256-ZVl09YgeH+V4X3H88rdeiBgua1IpVcfKe0y8A78wzl4=";
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    libcosmicAppHook
+  ];
+
   buildInputs = [
-    libxkbcommon
     libinput
-    libglvnd
     libgbm
     udev
-    wayland
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
-    cp data/*.desktop $out/share/applications/
-    cp data/*.svg $out/share/icons/hicolor/scalable/apps/
-  '';
+  dontCargoInstall = true;
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-workspaces-epoch";
     description = "Workspaces Epoch for the COSMIC Desktop Environment";
     mainProgram = "cosmic-workspaces";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

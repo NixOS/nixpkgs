@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "svetlitski";
     repo = "fcp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "0f242n8w88rikg1srimdifadhggrb2r1z0g65id60ahb4bjm8a0x";
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-Cargo.lock.patch
   ];
 
-  cargoHash = "sha256-wFXvaARflHsT1xz3muC/BPRmhnXEEIk2pBsu87E7Wo8=";
+  cargoHash = "sha256-WcbrHAgFTP5OtLI+T0d0BoIxG0MBJzPgjjgCWL2nPus=";
 
   nativeBuildInputs = [ expect ];
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fcp";
   };
 }

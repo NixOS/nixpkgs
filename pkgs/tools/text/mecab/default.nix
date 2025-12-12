@@ -21,13 +21,13 @@ stdenv.mkDerivation (
         ln -s ${mecab-ipadic} $out/lib/mecab/dic/ipadic
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Japanese morphological analysis system";
         homepage = "http://taku910.github.io/mecab";
-        license = licenses.bsd3;
-        platforms = platforms.unix;
+        license = lib.licenses.bsd3;
+        platforms = lib.platforms.unix;
         mainProgram = "mecab";
-        maintainers = with maintainers; [ auntie ];
+        maintainers = with lib.maintainers; [ auntie ];
       };
     }
   )

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-base-url";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3P3Uk3QoznAtNODLjXFbeNn3AOfp9owWU2jqkxTEAa4=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytest-metadata
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # should be xfail? or mocking doesn't work
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_base_url" ];
 
-  meta = with lib; {
-    description = "pytest plugin for URL based tests";
+  meta = {
+    description = "Pytest plugin for URL based tests";
     homepage = "https://github.com/pytest-dev/pytest-base-url";
     changelog = "https://github.com/pytest-dev/pytest-base-url/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

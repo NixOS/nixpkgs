@@ -7,6 +7,7 @@
   lib,
   proto-plus,
   protobuf,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
-  version = "1.13.1";
+  version = "1.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_artifact_registry";
     inherit version;
-    hash = "sha256-wbr6WfuA9n94DK/B0OKS8PrnP1tiCRORKGXtDv6vU0Q=";
+    hash = "sha256-X3v503uTPImEhSFw/oQlAaitx/MSgagblK1hkkSL7M4=";
   };
 
   build-system = [ setuptools ];
@@ -33,9 +34,13 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.artifactregistry"
@@ -43,11 +48,11 @@ buildPythonPackage rec {
     "google.cloud.artifactregistry_v1beta2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Artifact Registry API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-artifact-registry";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-artifact-registry-v${version}/packages/google-cloud-artifact-registry/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

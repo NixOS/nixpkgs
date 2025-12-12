@@ -15,7 +15,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.6";
+  version = "0.33.9";
 
   pythonDeps =
     with python3.pkgs;
@@ -37,12 +37,11 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "bup";
     owner = "bup";
-    rev = version;
-    hash = "sha256-78lKB4iKlcHKR+suHDKJlDpZ2Gj8mfXmGK8tK/gFYMw=";
+    tag = version;
+    hash = "sha256-MW4kScu81XW89W7WpvOj40+S8bG5QozN30Hfj4TsnX4=";
   };
 
   buildInputs = [
-    git
     python3
   ];
   nativeBuildInputs = [
@@ -51,7 +50,13 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  postPatch = "patchShebangs .";
+  configurePlatforms = [ ];
+
+  postPatch = ''
+    patchShebangs --build .
+    substituteInPlace ./config/configure \
+      --replace-fail 'bup_git=' 'bup_git="${lib.getExe git}" #'
+  '';
 
   dontAddPrefix = true;
 
@@ -62,6 +67,7 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
+  env.BUP_PYTHON_CONFIG = lib.getExe' (lib.getDev python3) "python-config";
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
@@ -75,18 +81,20 @@ stdenv.mkDerivation {
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     mainProgram = "bup";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Highly efficient file backup system based on the git packfile format.
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    # bespoke ./configure does not like cross
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

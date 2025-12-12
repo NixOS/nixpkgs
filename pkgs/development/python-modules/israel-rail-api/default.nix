@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "israel-rail-api";
-  version = "0.1.2";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sh0oki";
     repo = "israel-rail-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OiWK3gi7dQ7SF4fvusKtSFzdhrsvePlscX0EYQ/hlYk=";
+    tag = "v${version}";
+    hash = "sha256-vYMqMrvLQsy0MSfYAdlXqV1rF76A/cqkttWh47J8xn8=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/sh0oki/israel-rail-api/releases/tag/v${version}";
+    changelog = "https://github.com/sh0oki/israel-rail-api/releases/tag/${src.tag}";
     description = "Python wrapping of the Israeli Rail API";
     homepage = "https://github.com/sh0oki/israel-rail-api";
     license = lib.licenses.mit;

@@ -13,6 +13,7 @@ let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
     version = "2.4.7";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "pyparsing";
@@ -38,10 +39,10 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/pyparsing/pyparsing";
       description = "Alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 in

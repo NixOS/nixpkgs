@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pri22296";
-    repo = pname;
+    repo = "beautifultable";
     rev = "v${version}";
     hash = "sha256-/SReCEvSwiNjBoz/3tGJ9zUNBAag4mLsHlUXwm47zCw=";
   };
@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "beautifultable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for printing visually appealing tables";
     homepage = "https://github.com/pri22296/beautifultable";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

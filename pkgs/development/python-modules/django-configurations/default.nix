@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configurations" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper for organizing Django settings";
     mainProgram = "django-cadmin";
     homepage = "https://django-configurations.readthedocs.io/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
     maintainers = [ ];
   };
 }

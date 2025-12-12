@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.12";
+  version = "3.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datafolklabs";
     repo = "cement";
-    rev = "refs/tags/${version}";
-    hash = "sha256-weBqmNEjeSh5YQfHK48VVFW3UbZQmV4MiIQ3UPQKTTI=";
+    tag = version;
+    hash = "sha256-hZ9kKQmMomjy5nnHKQ2RWB+6vIID8XMn3qutg0wCBq8=";
   };
 
   build-system = [ pdm-backend ];
@@ -56,7 +56,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cement" ];
 
@@ -75,12 +76,12 @@ buildPythonPackage rec {
     "tests/ext/test_ext_smtp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
     changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ eqyiel ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ eqyiel ];
     mainProgram = "cement";
   };
 }

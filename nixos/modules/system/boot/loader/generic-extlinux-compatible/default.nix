@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,9 +15,12 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   # The builder used to write during system activation
-  builder = import ./extlinux-conf-builder.nix { inherit pkgs; };
+  builder = import ./extlinux-conf-builder.nix { inherit lib pkgs; };
   # The builder exposed in populateCmd, which runs on the build architecture
-  populateBuilder = import ./extlinux-conf-builder.nix { pkgs = pkgs.buildPackages; };
+  populateBuilder = import ./extlinux-conf-builder.nix {
+    inherit lib;
+    pkgs = pkgs.buildPackages;
+  };
 in
 {
   options = {
@@ -64,18 +72,20 @@ in
           Mirror the boot configuration to multiple paths.
         '';
 
-        type = with types; listOf (submodule {
-          options = {
-            path = mkOption {
-              example = "/boot1";
-              type = types.str;
-              description = ''
-                The path to the boot directory where the extlinux-compatible
-                configuration files will be written.
-              '';
+        type =
+          with types;
+          listOf (submodule {
+            options = {
+              path = mkOption {
+                example = "/boot1";
+                type = types.str;
+                description = ''
+                  The path to the boot directory where the extlinux-compatible
+                  configuration files will be written.
+                '';
+              };
             };
-          };
-        });
+          });
       };
 
       populateCmd = mkOption {
@@ -92,17 +102,22 @@ in
     };
   };
 
-  config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
-      + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
-      + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
-    installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (''
-      #!${pkgs.runtimeShell}
-      set -e
-    '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-      ${builder} ${builderArgs} -d '${args.path}' -c "$@"
-    ''));
-  in
+  config =
+    let
+      builderArgs =
+        "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+        + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
+        + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
+      installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (
+        ''
+          #!${pkgs.runtimeShell}
+          set -e
+        ''
+        + flip concatMapStrings cfg.mirroredBoots (args: ''
+          ${builder} ${builderArgs} -d '${args.path}' -c "$@"
+        '')
+      );
+    in
     mkIf cfg.enable {
       system.build.installBootLoader = installBootLoader;
       system.boot.loader.id = "generic-extlinux-compatible";

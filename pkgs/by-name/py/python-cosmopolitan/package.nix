@@ -6,7 +6,7 @@
   bintools-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "python-cosmopolitan";
   version = "3.6.14";
 
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://justine.lol/cosmopolitan/";
     description = "Actually Portable Python using Cosmopolitan";
-    platforms = platforms.x86_64;
-    badPlatforms = platforms.darwin;
-    license = licenses.isc;
-    maintainers = teams.cosmopolitan.members;
+    platforms = lib.platforms.x86_64;
+    badPlatforms = lib.platforms.darwin;
+    license = lib.licenses.isc;
+    teams = [ lib.teams.cosmopolitan ];
     mainProgram = "python.com";
   };
 }

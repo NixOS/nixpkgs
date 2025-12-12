@@ -6,20 +6,21 @@
   poetry-core,
   setuptools,
   fnvhash,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "1.0.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kJQZnj1ja7cVZSDOuUI3rkNIvyH508wFKAvJ5XfwCNU=";
+    tag = "v${version}";
+    hash = "sha256-1o/SwX9N+wBNVkihUuCYrJAEH28FxhKEhyOEK7tK1XE=";
   };
 
   build-system = [
@@ -30,18 +31,21 @@ buildPythonPackage rec {
 
   dependencies = [ fnvhash ];
 
+  pythonRelaxDeps = [ "fnvhash" ];
+
   pythonImportsCheck = [ "fnv_hash_fast" ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast version of fnv1a";
     homepage = "https://github.com/bdraco/fnv-hash-fast";
-    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

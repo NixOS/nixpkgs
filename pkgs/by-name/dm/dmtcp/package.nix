@@ -7,13 +7,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dmtcp";
   version = "unstable-2022-02-28";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "dmtcp";
+    repo = "dmtcp";
     rev = "133687764c6742906006a1d247e3b83cd860fa1d";
     hash = "sha256-9Vr8IhoeATCfyt7Lp7kYe/7e87mFX9KMNGTqxJgIztE=";
   };
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       not modify the user's program or the operating system.
     '';
     homepage = "http://dmtcp.sourceforge.net/";
-    license = licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
-    platforms = intersectLists platforms.linux platforms.x86; # broken on ARM and Darwin
+    license = lib.licenses.lgpl3Plus; # most files seem this or LGPL-2.1+
+    platforms = intersectLists lib.platforms.linux lib.platforms.x86; # broken on ARM and Darwin
   };
 }

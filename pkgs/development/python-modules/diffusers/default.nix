@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  writeText,
+
+  #  build-system
   setuptools,
+
+  # dependencies
   filelock,
   huggingface-hub,
   importlib-metadata,
@@ -13,6 +15,7 @@
   regex,
   requests,
   safetensors,
+
   # optional dependencies
   accelerate,
   datasets,
@@ -24,7 +27,9 @@
   protobuf,
   tensorboard,
   torch,
-  # test dependencies
+
+  # tests
+  writeText,
   parameterized,
   pytest-timeout,
   pytest-xdist,
@@ -40,16 +45,14 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.30.3";
+  version = "0.35.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/3lHJdsNblKb6xX03OluSCApMK3EXJbRLboBk8CjobE=";
+    tag = "v${version}";
+    hash = "sha256-VZXf1YCIFtzuBWaeYG3A+AyqnMEAKEI2nStjuPJ8ZTk=";
   };
 
   build-system = [ setuptools ];
@@ -90,8 +93,6 @@ buildPythonPackage rec {
   # it takes a few hours
   doCheck = false;
 
-  passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
-
   nativeCheckInputs = [
     parameterized
     pytest-timeout
@@ -102,7 +103,8 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ optional-dependencies.torch;
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     let
@@ -128,33 +130,42 @@ buildPythonPackage rec {
       '';
     in
     ''
-      export HOME=$TMPDIR
+      export HOME=$(mktemp -d)
       cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # depends on current working directory
-      "test_deprecate_stacklevel"
-      # fails due to precision of floating point numbers
-      "test_model_cpu_offload_forward_pass"
-      # tries to run ruff which we have intentionally removed from nativeCheckInputs
-      "test_is_copy_consistent"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
+  disabledTests = [
+    # depends on current working directory
+    "test_deprecate_stacklevel"
+    # fails due to precision of floating point numbers
+    "test_full_loop_no_noise"
+    "test_model_cpu_offload_forward_pass"
+    # tries to run ruff which we have intentionally removed from nativeCheckInputs
+    "test_is_copy_consistent"
 
-      # RuntimeError: Dynamo is not supported on Python 3.12+
-      "test_from_save_pretrained_dynamo"
-    ];
+    # Require unpackaged torchao:
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
+    "test_load_attn_procs_raise_warning"
+    "test_save_attn_procs_raise_warning"
+    "test_save_load_lora_adapter_0"
+    "test_save_load_lora_adapter_1"
+    "test_wrong_adapter_name_raises_error"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_from_save_pretrained_dynamo"
+  ];
 
-  meta = with lib; {
+  passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
+
+  meta = {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
     mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
-    changelog = "https://github.com/huggingface/diffusers/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -5,12 +5,11 @@
   nixosTests,
   bash,
   which,
-  ffmpeg,
+  ffmpeg-full,
   makeBinaryWrapper,
 }:
-
 let
-  version = "0.1.3";
+  version = "0.2.3";
 in
 buildGoModule {
   pname = "owncast";
@@ -19,13 +18,19 @@ buildGoModule {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    hash = "sha256-VoItAV/8hzrqj4bIgMum9Drr/kAafH63vXw3GO6nSOc=";
+    hash = "sha256-JCIB4G3cOSkEEO/jcsj4mUP+HeQfgn0jX4OL8NX9/C0=";
   };
-  vendorHash = "sha256-JitvKfCLSravW5WRE0QllJTrRPLaaBg1GxJi3kmtiIU=";
+  vendorHash = "sha256-FuynEBoPS0p1bRgmaeCxn1RPqbYHcltZpQ9SE71xHEE=";
 
-  propagatedBuildInputs = [ ffmpeg ];
+  propagatedBuildInputs = [ ffmpeg-full ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
+
+  # lefthook is included as a tool in go.mod for a pre-commit hook, but causes the build to fail
+  preBuild = ''
+    # Remove lefthook from tools section in go.mod
+    sed -i '/tool (/,/)/{ /[[:space:]]*github.com\/evilmartians\/lefthook[[:space:]]*$/d; }' go.mod
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/owncast \
@@ -33,7 +38,7 @@ buildGoModule {
         lib.makeBinPath [
           bash
           which
-          ffmpeg
+          ffmpeg-full
         ]
       }
   '';
@@ -46,13 +51,15 @@ buildGoModule {
 
   passthru.tests.owncast = nixosTests.owncast;
 
-  meta = with lib; {
-    description = "self-hosted video live streaming solution";
+  meta = {
+    description = "Self-hosted video live streaming solution";
     homepage = "https://owncast.online";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ MayNiklas ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      flexiondotorg
+      MayNiklas
+    ];
     mainProgram = "owncast";
   };
-
 }

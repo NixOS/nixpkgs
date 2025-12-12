@@ -6,24 +6,30 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerregistry";
-  version = "10.3.0";
-  format = "setuptools";
+  version = "14.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-riFlGFXfsZxC2R1rOpZcbGEeI/i8S/cTiDXmUtL5GOM=";
+    pname = "azure_mgmt_containerregistry";
+    inherit version;
+    hash = "sha256-c4PxxVR7z/525BHt2CUNVcNM3fXvaATVh1wWPMpmxLU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
+    typing-extensions
   ];
 
   # no tests included
@@ -34,11 +40,11 @@ buildPythonPackage rec {
     "azure.mgmt.containerregistry"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Container Registry Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/containerregistry/azure-mgmt-containerregistry";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-containerregistry_${version}/sdk/containerregistry/azure-mgmt-containerregistry/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

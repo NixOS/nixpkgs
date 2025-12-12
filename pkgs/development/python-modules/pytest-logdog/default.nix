@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ods";
-    repo = pname;
+    repo = "pytest-logdog";
     rev = version;
     hash = "sha256-Tmoq+KAGzn0MMj29rukDfAc4LSIwC8DoMTuBAppV32I=";
   };
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_logdog" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to test logging";
     homepage = "https://github.com/ods/pytest-logdog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

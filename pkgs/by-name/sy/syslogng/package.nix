@@ -19,7 +19,6 @@
   python3,
   riemann_c_client,
   protobufc,
-  pcre,
   paho-mqtt-c,
   python3Packages,
   libnet,
@@ -66,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.8.1";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${finalAttrs.version}";
-    hash = "sha256-YdGbDpGMC0DPuPSbfe9HvZshBVdv1s1+hiHDnhYbs6Q=";
+    tag = "syslog-ng-${finalAttrs.version}";
+    hash = "sha256-hUaDeJBW3jgXRD9uy4yzQsMm0QpprNeQZL8jjP2NOGs=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [
@@ -88,34 +87,32 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.setuptools
   ];
 
-  buildInputs =
-    [
-      libcap
-      curl
-      openssl
-      eventlog
-      glib
-      py
-      systemd
-      riemann_c_client
-      protobufc
-      pcre
-      libnet
-      json_c
-      libuuid
-      libivykis
-      mongoc
-      rabbitmq-c
-      libesmtp
-      pcre2
-      paho-mqtt-c
-      hiredis
-      rdkafka
-    ]
-    ++ (lib.optionals withGrpc [
-      protobuf
-      grpc
-    ]);
+  buildInputs = [
+    libcap
+    curl
+    openssl
+    eventlog
+    glib
+    py
+    systemd
+    riemann_c_client
+    protobufc
+    libnet
+    json_c
+    libuuid
+    libivykis
+    mongoc
+    rabbitmq-c
+    libesmtp
+    pcre2
+    paho-mqtt-c
+    hiredis
+    rdkafka
+  ]
+  ++ (lib.optionals withGrpc [
+    protobuf
+    grpc
+  ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -132,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
+  ]
+  ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
   outputs = [
     "out"

@@ -1,13 +1,11 @@
 {
   rustPlatform,
-  stdenv,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
   perl,
   openssl,
   lib,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "r0vm";
@@ -26,17 +24,13 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs =
-    [
-      openssl.dev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl.dev
+  ];
 
   doCheck = false;
 
-  cargoHash = "sha256-WLd/cUiaIR04CIOaf9JwFmAY4fU9yH2QHDuT3Q54Gvg=";
+  cargoHash = "sha256-7vN3HRBCzvXT5Xoj+ciCiy+OQ0bC8s4C5360W+1Uld0=";
 
   postPatch =
     let
@@ -52,12 +46,12 @@ rustPlatform.buildRustPackage rec {
       ln -sf ${recursionZkr} ./risc0/circuit/recursion/src/recursion_zkr.zip
     '';
 
-  meta = with lib; {
+  meta = {
     description = "RISC Zero zero-knowledge VM";
     homepage = "https://github.com/risc0/risc0";
     changelog = "https://github.com/risc0/risc0/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ marijanp ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ marijanp ];
     mainProgram = "r0vm";
   };
 }

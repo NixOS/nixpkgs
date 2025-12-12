@@ -18,43 +18,41 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiliwili";
-  version = "1.5.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "xfangfang";
     repo = "wiliwili";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-IHGUNnBSwCi+DU7K2yjRLUFRjeysiMojyGXMVecNyu4=";
+    hash = "sha256-NPJ1PLO6eqm4rBn4t965S0lqzT+npfYLWN6FKYCpnlQ=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      openssl
-      curl
-      libxkbcommon
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi # needed for wayland
-      wayland
-      egl-wayland
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXi
-    ];
+  buildInputs = [
+    mpv-unwrapped
+    openssl
+    curl
+    libxkbcommon
+    dbus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi # needed for wayland
+    wayland
+    egl-wayland
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXi
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "PLATFORM_DESKTOP" true)

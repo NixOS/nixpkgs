@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
-    repo = pname;
+    repo = "wlsunset";
     rev = version;
     sha256 = "sha256-U/yROKkU9pOBLIIIsmkltF64tt5ZR97EAxxGgrFYwNg=";
   };
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Day/night gamma adjustments for Wayland";
     longDescription = ''
       Day/night gamma adjustments for Wayland compositors supporting
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sr.ht/~kennylevinsen/wlsunset/";
     changelog = "https://git.sr.ht/~kennylevinsen/wlsunset/refs/${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "wlsunset";
   };
 }

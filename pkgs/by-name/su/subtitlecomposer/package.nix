@@ -3,7 +3,7 @@
   fetchFromGitLab,
   cmake,
   extra-cmake-modules,
-  ffmpeg,
+  ffmpeg_6,
   openal,
   stdenv,
   libsForQt5,
@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitlecomposer";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
     rev = "v${version}";
-    hash = "sha256-5RBrxOy1EIgDLb21r1y+Pou8d/j05a1YYMRJh1n8vSA=";
+    hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
   nativeBuildInputs = [
@@ -26,25 +26,24 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     libsForQt5.wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      ffmpeg
-      openal
-    ]
-    ++ (with libsForQt5; [
-      kcodecs
-      kconfig
-      kconfigwidgets
-      kcoreaddons
-      ki18n
-      kio
-      ktextwidgets
-      kwidgetsaddons
-      kxmlgui
-      sonnet
-    ]);
+  buildInputs = [
+    ffmpeg_6
+    openal
+  ]
+  ++ (with libsForQt5; [
+    kcodecs
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    ki18n
+    kio
+    ktextwidgets
+    kwidgetsaddons
+    kxmlgui
+    sonnet
+  ]);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.kde.org/subtitlecomposer";
     description = "Open source text-based subtitle editor";
     longDescription = ''
@@ -53,9 +52,9 @@ stdenv.mkDerivation rec {
       Subtitle Workshop for every platform supported by Plasma Frameworks.
     '';
     changelog = "https://invent.kde.org/multimedia/subtitlecomposer/-/blob/master/ChangeLog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kugland ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kugland ];
     mainProgram = "subtitlecomposer";
-    platforms = with platforms; linux ++ freebsd ++ windows;
+    platforms = with lib.platforms; linux ++ freebsd ++ windows;
   };
 }

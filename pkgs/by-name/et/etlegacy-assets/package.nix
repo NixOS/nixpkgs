@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "etlegacy-assets";
-  version = "2.83.1";
+  version = "2.83.2";
 
   srcs =
     let
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
       gameplay is still considered unmatched by many, despite its great age.
     '';
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

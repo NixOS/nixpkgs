@@ -1,25 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  freezegun,
   pytestCheckHook,
   pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-json-logger";
-  version = "2.0.7";
+  version = "3.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I+fsAtNCN8WqHimgcBk6Tqh1g7tOf4/QbT3oJkxLLhw=";
+  src = fetchFromGitHub {
+    owner = "nhairs";
+    repo = "python-json-logger";
+    tag = "v${version}";
+    hash = "sha256-q1s+WRU5xTmF4YW20DrDnXbMeW6vGYzVekxxIDVt8gw=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   disabledTests =
     lib.optionals (pythonAtLeast "3.12") [
@@ -33,10 +39,10 @@ buildPythonPackage rec {
       "test_json_default_encoder_with_timestamp"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

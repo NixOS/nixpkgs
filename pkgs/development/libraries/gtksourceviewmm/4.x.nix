@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gtksourceviewmm4";
-      packageName = pname;
+      packageName = "gtksourceviewmm";
       versionPolicy = "none";
     };
   };
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     gtksourceview4
   ];
 
-  meta = with lib; {
-    platforms = platforms.linux;
+  meta = {
+    platforms = lib.platforms.linux;
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
     description = "C++ wrapper for gtksourceview";
-    license = licenses.lgpl2;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl2;
+    teams = [ lib.teams.gnome ];
   };
 }

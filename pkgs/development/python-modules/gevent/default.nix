@@ -11,10 +11,8 @@
   greenlet,
   importlib-metadata,
   setuptools,
-  wheel,
   zope-event,
   zope-interface,
-  pythonOlder,
   c-ares,
   libuv,
 
@@ -26,21 +24,19 @@
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "24.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "25.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qy/Hb2gKz3zxiMLuD106tztjwfAxFMfNijTOu+WqIFY=";
+    hash = "sha256-WCyUj6miMYi4kNC8Ewc0pQbQOaLlrYfa4nakVsxoPmE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
-    wheel
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [
     libev
@@ -48,11 +44,12 @@ buildPythonPackage rec {
     c-ares
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     zope-event
     zope-interface
-  ] ++ lib.optionals (!isPyPy) [ greenlet ];
+  ]
+  ++ lib.optionals (!isPyPy) [ greenlet ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
@@ -72,15 +69,16 @@ buildPythonPackage rec {
       gunicorn
       pika
       ;
-  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+  }
+  // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
   GEVENTSETUP_EMBED = "0";
 
-  meta = with lib; {
+  meta = {
     description = "Coroutine-based networking library";
     homepage = "http://www.gevent.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
   };
 }

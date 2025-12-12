@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tar-compatible block-based archiver";
     mainProgram = "btar";
     license = lib.licenses.gpl3Plus;
-    homepage = "https://viric.name/cgi-bin/btar";
-    platforms = platforms.all;
+    homepage = "https://briantracy.xyz/writing/btar.html";
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

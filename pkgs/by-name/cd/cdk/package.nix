@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdk";
-  version = "5.0-20240619";
+  version = "5.0-20251014";
 
   src = fetchurl {
     url = "https://invisible-mirror.net/archives/cdk/cdk-${finalAttrs.version}.tgz";
-    hash = "sha256-Q28U6KdW5j3f9ZJ+73DJ3PceTFnVZYfiYwKk9yahnv8=";
+    hash = "sha256-DtRpScaApfQuNCzEiizmC8/CzIue67F2h3takfgpQ1w=";
   };
 
   buildInputs = [
@@ -28,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
-      AndersonTorres
     ];
     inherit (ncurses.meta) platforms;
   };

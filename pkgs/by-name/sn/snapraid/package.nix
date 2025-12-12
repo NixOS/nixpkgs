@@ -9,18 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "snapraid";
-  version = "12.3";
+  version = "12.4";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    hash = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
+    hash = "sha256-7guTRH9AZCsQYyWLpws19/sEe9GVFop21GYPzXCK6Fg=";
   };
 
   VERSION = version;
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   nativeBuildInputs = [
     autoreconfHook

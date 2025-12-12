@@ -7,7 +7,7 @@
   # build-system
   flit-core,
 
-  # dependenices
+  # dependencies
   progress,
   pyserial,
 
@@ -50,16 +50,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flash firmware to STM32 microcontrollers in Python";
     mainProgram = "stm32loader";
     homepage = "https://github.com/florisla/stm32loader";
     changelog = "https://github.com/florisla/stm32loader/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

@@ -10,10 +10,10 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
-  version = "1.3.12";
+  version = "1.3.13";
   src = fetchzip {
     url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
-    hash = "sha256-poWaU0vZS1cpMbbvN7/s1RRUKhekdfTi08fF/IZsVGs=";
+    hash = "sha256-ypiOeXA+14Js31WPGJAdSjskQJR9sBPVWGecLkKHiN4=";
   };
 
   dontBuild = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "kotlin language server";
+    description = "Kotlin language server";
     longDescription = ''
       About Kotlin code completion, linting and more for any editor/IDE
       using the Language Server Protocol Topics'';
@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    mainProgram = "kotlin-language-server";
   };
 }

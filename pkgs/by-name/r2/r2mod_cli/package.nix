@@ -1,9 +1,11 @@
-{ fetchFromGitHub
-, bashInteractive
-, jq
-, makeWrapper
-, p7zip
-, lib, stdenv
+{
+  fetchFromGitHub,
+  bashInteractive,
+  jq,
+  makeWrapper,
+  p7zip,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,18 +23,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${
+      lib.makeBinPath [
+        jq
+        p7zip
+      ]
+    }";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Risk of Rain 2 Mod Manager in Bash";
     homepage = "https://github.com/foldex/r2mod_cli";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.reedrw ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.reedrw ];
     mainProgram = "r2mod";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

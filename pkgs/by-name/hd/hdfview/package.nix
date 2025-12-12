@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdfview";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-aJHeknkF38qDH9l+vuzdKFZZTcs/XMjtlHuu/LTF124=";
   };
 
@@ -67,27 +67,26 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/bin $out/lib
-      cp -a build/dist/HDFView/bin/HDFView $out/bin/
-      cp -a build/dist/HDFView/lib/app $out/lib/
-      cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
-      ln -s ${jdk}/lib/openjdk $out/lib/runtime
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/bin $out/lib
+    cp -a build/dist/HDFView/bin/HDFView $out/bin/
+    cp -a build/dist/HDFView/lib/app $out/lib/
+    cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
+    ln -s ${jdk}/lib/openjdk $out/lib/runtime
 
-      mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
-      cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -a build/dist/HDFView.app $out/Applications/
-    ''
-    + ''
-      runHook postInstall
-    '';
+    mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
+    cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -a build/dist/HDFView.app $out/Applications/
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   preFixup = ''
     # Remove build timestamp from javadoc files
@@ -95,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A visual tool for browsing and editing HDF4 and HDF5 files";
+    description = "Visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
     downloadPage = "https://github.com/HDFGroup/hdfview";

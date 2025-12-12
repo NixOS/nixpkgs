@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mysqlclient";
-  version = "2.2.4";
+  version = "2.2.7";
   format = "setuptools";
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,13 +20,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M7yfs0ZOfXwQser3M2xf+PKj07iLq0MhFq0kkL6zv0E=";
+    hash = "sha256-JK4itZQW1fzOfpnJ03VINQtFZbqsgvleFJysbOQWOEU=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ y0no ];
+    license = lib.licenses.gpl2Only;
   };
 }

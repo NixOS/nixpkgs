@@ -10,6 +10,7 @@
   aiohttp,
 
   # tests
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -24,7 +25,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
-    repo = pname;
+    repo = "uasiren";
     rev = "v${version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
@@ -33,18 +34,21 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "uasiren"
     "uasiren.client"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
     description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
     homepage = "https://github.com/PaulAnnekov/uasiren";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

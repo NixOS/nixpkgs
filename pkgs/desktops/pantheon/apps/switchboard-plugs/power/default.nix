@@ -9,6 +9,7 @@
   vala,
   libadwaita,
   libgee,
+  gettext,
   gnome-settings-daemon,
   granite7,
   gtk4,
@@ -21,16 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-GKZouuWdWl1JDCmzPImeW/hStyFQA6NOAFFmAhiiFe8=";
+    repo = "settings-power";
+    tag = version;
+    hash = "sha256-JfOLGDS2/Qa6RmEfiDBZfeT+dM4NN4N2NoXRNJ4Q+Es=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -54,11 +56,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Power Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-power";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-power";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   testers,
+  nix-update-script,
 }:
 let
   tools = [
@@ -15,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfsprogs";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rolbBLdE98jqlKC06fTo6eJU3abKzgB3QIlaw4bza9U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GhhuielfFvcpe9hL3fUcg2xlwFrzjiUS/ZLn0jkfkh8=";
   };
 
   postPatch = ''
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
           version = "v${finalAttrs.version}";
         };
       };
-      versionTestList = builtins.map mkVersionTest tools;
+      versionTestList = map mkVersionTest tools;
 
       versionTests = lib.mergeAttrsList versionTestList;
     in
@@ -68,14 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     }
     // versionTests;
 
+  passthru.updateScript = nix-update-script { };
+
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Experimental APFS tools for linux";
     homepage = "https://github.com/linux-apfs/apfsprogs";
     changelog = "https://github.com/linux-apfs/apfsprogs/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 })

@@ -8,7 +8,7 @@
 
 let
   name = "liblc3";
-  version = "1.1.1";
+  version = "1.1.3";
 in
 stdenv.mkDerivation {
   pname = name;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-h9qy04FqlHXp0bOUoP4+WqI0yrM78e56S+DEn3HztYo=";
+    sha256 = "sha256-4KsvCQ1JZaj0yCT7En7ZcNk0rA8LyDwwcSga2IoVd6A=";
   };
 
   outputs = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LC3 (Low Complexity Communication Codec) is an efficient low latency audio codec";
     homepage = "https://github.com/google/liblc3";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jansol ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jansol ];
   };
 }

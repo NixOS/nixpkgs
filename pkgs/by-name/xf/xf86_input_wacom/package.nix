@@ -14,24 +14,26 @@
   pixman,
   pkg-config,
   udev,
+  udevCheckHook,
   utilmacros,
   xorgserver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xf86-input-wacom";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-0eDik4fhsg1HAL6lCZMll/0VAghpzMSHY0RoKxSOIbc=";
+    repo = "xf86-input-wacom";
+    rev = "xf86-input-wacom-${version}";
+    sha256 = "sha256-12m9PL28NnqIwNpGHOFqjJaNrzBaagdG3Sp/jSLpgkE=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -49,17 +51,19 @@ stdenv.mkDerivation rec {
     xorgserver
   ];
 
+  doInstallCheck = true;
+
   configureFlags = [
     "--with-xorg-module-dir=${placeholder "out"}/lib/xorg/modules"
     "--with-sdkdir=${placeholder "out"}/include/xorg"
     "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ moni ];
+  meta = {
+    maintainers = with lib.maintainers; [ moni ];
     description = "Wacom digitizer driver for X11";
     homepage = "https://linuxwacom.sourceforge.net";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux; # Probably, works with other unixes as well
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux; # Probably, works with other unixes as well
   };
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   uget,
   python3Packages,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0bfqwbpprxp5sy49p2hqcjdfj7zamnp2hhcnnyccffkn7pghx8pp";
   };
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.wrapPython
+  ];
 
   buildInputs = [
     uget
@@ -29,7 +33,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $f --replace "/usr" "$out"
     done
 
-    install -D -t $out/bin                                   bin/uget-integrator
+    installBin bin/uget-integrator
     install -D -t $out/etc/opt/chrome/native-messaging-hosts conf/com.ugetdm.chrome.json
     install -D -t $out/etc/chromium/native-messaging-hosts   conf/com.ugetdm.chrome.json
     install -D -t $out/etc/opera/native-messaging-hosts      conf/com.ugetdm.chrome.json
@@ -38,12 +42,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host to integrate uGet Download Manager with web browsers";
     mainProgram = "uget-integrator";
     homepage = "https://github.com/ugetdm/uget-integrator";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

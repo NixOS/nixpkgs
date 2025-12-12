@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "setuptools_scm";
   version = "5.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "setuptools_scm" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

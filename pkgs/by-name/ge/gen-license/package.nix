@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,17 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VOmt8JXd2+ykhkhupv/I4RfXz9P0eEesW3JGAoXStUI=";
   };
 
-  cargoHash = "sha256-TEsWACxEs4eJ8rO4RnKJWpwT1KcDoBEGftHSJt4YXVw=";
+  cargoHash = "sha256-xXzUobB8RMyJOC4lKayE+6SKC7NW1dNWGUUH3i1TaW0=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Create licenses for your projects right from your terminal";
     mainProgram = "gen-license";
     homepage = "https://github.com/nexxeln/license-generator";
-    license = licenses.mit;
-    maintainers = [ maintainers.ryanccn ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ryanccn ];
   };
 }

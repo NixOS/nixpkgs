@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_multiversion" ];
 
-  meta = with lib; {
-    description = "Sphinx extension for building self-hosted versioned docs.";
+  meta = {
+    description = "Sphinx extension for building self-hosted versioned docs";
     homepage = "https://sphinx-contrib.github.io/multiversion";
     changelog = "https://github.com/sphinx-contrib/multiversion/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ cynerd ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
 }

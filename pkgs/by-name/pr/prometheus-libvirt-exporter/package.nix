@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Tinkoff";
     repo = "libvirt-exporter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-loh7fgeF1/OuTt2MQSkl/7VnX25idoF57+HtzV9L/ns=";
   };
 
@@ -25,10 +25,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus metrics exporter for libvirt";
     homepage = "https://github.com/Tinkoff/libvirt-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ farcaller ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ farcaller ];
   };
 }

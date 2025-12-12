@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   glfw,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -15,18 +16,27 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/HCP6F7N+J97n4orlLxg/4agEoq4+rJdpeW/3q+DI1I=";
   };
 
-  postPatch =
-    ''
-      patchShebangs --build ./tools
-    ''
-    + lib.optionalString enableShared ''
-      substituteInPlace CMakeLists.txt \
-          --replace-fail "mlx42 STATIC" "mlx42 SHARED"
-    '';
+  patches = [
+    # clang no longer allows using -Ofast
+    # see: https://github.com/codam-coding-college/MLX42/issues/147
+    (fetchpatch {
+      name = "replace-ofast-with-o3.patch";
+      url = "https://github.com/codam-coding-college/MLX42/commit/ce254c3a19af8176787601a2ac3490100a5c4c61.patch";
+      hash = "sha256-urL/WVOXinf7hWR5kH+bAVTcAzldkkWfY0+diSf7jHE=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs --build ./tools
+  ''
+  + lib.optionalString enableShared ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "mlx42 STATIC" "mlx42 SHARED"
+  '';
 
   strictDeps = true;
 

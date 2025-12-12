@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pykeepass";
-  version = "4.1.0.post1";
+  version = "4.1.1.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-64is/XoRF/kojqd4jQIAQi1od8TRhiv9uR+WNIGvP2A=";
+    tag = "v${version}";
+    hash = "sha256-DeEz3zrUK3cXIvMK/32Zn3FPiNsenhpAb17Zgel826s=";
   };
 
   build-system = [ setuptools ];
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykeepass" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libkeepass/pykeepass";
     changelog = "https://github.com/libkeepass/pykeepass/blob/${src.rev}/CHANGELOG.rst";
     description = "Python library to interact with keepass databases (supports KDBX3 and KDBX4)";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

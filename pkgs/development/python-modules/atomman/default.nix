@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "atomman";
-  version = "1.4.11";
+  version = "1.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2yxHv9fSgLM5BeUkXV9NX+xyplXtyfWodwS9sVUVzqU=";
+    tag = "v${version}";
+    hash = "sha256-UmvMYVM1YmLvSaVLzWHdxYpRU+Z3z65cy7mfmDZfDG0=";
   };
 
   build-system = [
@@ -73,11 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atomman" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

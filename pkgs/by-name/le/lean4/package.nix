@@ -5,29 +5,54 @@
   fetchFromGitHub,
   git,
   gmp,
+  cadical,
+  pkg-config,
+  libuv,
+  enableMimalloc ? true,
   perl,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.11.0";
+  version = "4.25.0";
+
+  # Using a vendored version rather than nixpkgs' version to match the exact version required by
+  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
+  mimalloc-src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v2.2.3";
+    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
+  };
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-5KIZGt4glC2rZDKDL0FiHUNVjVZAyY8iWDWQgdF/PIs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VM7Y3KzsAWAvDTFXbi183s6tVqlyrMlV3oEsc9d8Rk0=";
   };
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.rev}")'
+  postPatch =
+    let
+      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
+    in
+    ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
 
-    # Remove tests that fails in sandbox.
-    # It expects `sourceRoot` to be a git repository.
-    rm -rf src/lake/examples/git/
-  '';
+      # Remove tests that fails in sandbox.
+      # It expects `sourceRoot` to be a git repository.
+      rm -rf src/lake/examples/git/
+    ''
+    + (lib.optionalString enableMimalloc ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
+      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
+        substituteInPlace "$file" \
+          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+      done
+    '');
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
@@ -35,10 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [
     gmp
+    libuv
+    cadical
   ];
 
   nativeCheckInputs = [
@@ -46,9 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  patches = [ ./mimalloc.patch ];
+
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
+    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 
   passthru.tests = {
@@ -58,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       danielbritten
       jthulhu
     ];

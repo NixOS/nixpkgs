@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "teyjus";
     repo = "teyjus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N4XKDd0NFr501PYUdb7PM2sWh0uD1/SUFXoMr10f064=";
   };
 
@@ -28,12 +28,12 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Efficient implementation of the Lambda Prolog language";
     homepage = "https://github.com/teyjus/teyjus";
     changelog = "https://github.com/teyjus/teyjus/releases/tag/v${version}";
     license = lib.licenses.gpl3;
-    maintainers = [ maintainers.bcdarwin ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kichiki";
-    repo = pname;
+    repo = "waon";
     rev = "v${version}";
     sha256 = "1xmq8d2rj58xbp4rnyav95y1vnz3r9s9db7xxfa2rd0ilq0ps4y7";
   };
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin waon pv gwaon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wave-to-Notes transcriber";
     homepage = "https://kichiki.github.io/WaoN/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.puckipedia ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.puckipedia ];
+    platforms = lib.platforms.all;
   };
 }

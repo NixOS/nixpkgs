@@ -5,7 +5,6 @@
   six,
   pythonOlder,
   scandir ? null,
-  glibcLocales,
   typing,
 }:
 
@@ -19,22 +18,18 @@ buildPythonPackage rec {
     hash = "sha256-n+DtrYmLg8DD4ZnIQrJ+0hZkXS4Xd1ey3Wc4TUETxkE=";
   };
 
-  propagatedBuildInputs =
-    [ six ]
-    ++ lib.optionals (pythonOlder "3.5") [
-      scandir
-      typing
-    ];
-  nativeCheckInputs = [ glibcLocales ];
+  propagatedBuildInputs = [
+    six
+  ]
+  ++ lib.optionals (pythonOlder "3.5") [
+    scandir
+    typing
+  ];
 
-  preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems";
     homepage = "https://pypi.org/project/pathlib2/";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
 }

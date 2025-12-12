@@ -2,22 +2,34 @@
   directoryListingUpdater,
   fetchurl,
   lib,
-  stdenv,
+  stdenvNoCC,
+  coreutils,
+  kmod,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.12";
+  version = "1.2.14";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/alsa-ucm-conf-${version}.tar.bz2";
-    hash = "sha256-Fo58BUm3v4mRCS+iv7kDYx33edxMQ+6PQnf8t3LYwDU=";
+    url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-MumAn1ktkrl4qhAy41KTwzuNDx7Edfk3Aiw+6aMGnCE=";
   };
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
+
+    substituteInPlace ucm2/lib/card-init.conf \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    substituteInPlace ucm2/common/ctl/led.conf \
+      --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
+  ''
+  + ''
 
     mkdir -p $out/share/alsa
     cp -r ucm ucm2 $out/share/alsa
@@ -29,7 +41,7 @@ stdenv.mkDerivation rec {
     url = "https://www.alsa-project.org/files/pub/lib/";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.alsa-project.org/";
     description = "ALSA Use Case Manager configuration";
 
@@ -38,8 +50,12 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.bsd3;
-    maintainers = [ maintainers.roastiek ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      roastiek
+      mvs
+    ];
+
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

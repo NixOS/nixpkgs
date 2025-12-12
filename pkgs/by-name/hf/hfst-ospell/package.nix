@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst-ospell";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BmM0acqPL8qPOJ0KEkcI264xj89v+VaItZ0yS8QLF3o=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-tinyxml2"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hfst/hfst-ospell/";
     description = "HFST spell checker library and command line tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lurkki ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lurkki ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.vault;
   opt = options.services.vault;
@@ -32,10 +29,10 @@ let
       }
     ''}
     storage "${cfg.storageBackend}" {
-      ${optionalString (cfg.storagePath != null) ''path = "${cfg.storagePath}"''}
-      ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
+      ${lib.optionalString (cfg.storagePath != null) ''path = "${cfg.storagePath}"''}
+      ${lib.optionalString (cfg.storageConfig != null) cfg.storageConfig}
     }
-    ${optionalString (cfg.telemetryConfig != "") ''
+    ${lib.optionalString (cfg.telemetryConfig != "") ''
       telemetry {
         ${cfg.telemetryConfig}
       }
@@ -44,10 +41,10 @@ let
   '';
 
   allConfigPaths = [ configFile ] ++ cfg.extraSettingsPaths;
-  configOptions = escapeShellArgs (
+  configOptions = lib.escapeShellArgs (
     lib.optional cfg.dev "-dev"
     ++ lib.optional (cfg.dev && cfg.devRootTokenID != null) "-dev-root-token-id=${cfg.devRootTokenID}"
-    ++ (concatMap (p: [
+    ++ (lib.concatMap (p: [
       "-config"
       p
     ]) allConfigPaths)
@@ -58,56 +55,56 @@ in
 {
   options = {
     services.vault = {
-      enable = mkEnableOption "Vault daemon";
+      enable = lib.mkEnableOption "Vault daemon";
 
-      package = mkPackageOption pkgs "vault" { };
+      package = lib.mkPackageOption pkgs "vault" { };
 
-      dev = mkOption {
-        type = types.bool;
+      dev = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           In this mode, Vault runs in-memory and starts unsealed. This option is not meant production but for development and testing i.e. for nixos tests.
         '';
       };
 
-      devRootTokenID = mkOption {
-        type = types.nullOr types.str;
+      devRootTokenID = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Initial root token. This only applies when {option}`services.vault.dev` is true
         '';
       };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1:8200";
         description = "The name of the ip interface to listen to";
       };
 
-      tlsCertFile = mkOption {
-        type = types.nullOr types.str;
+      tlsCertFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/path/to/your/cert.pem";
         description = "TLS certificate file. TLS will be disabled unless this option is set";
       };
 
-      tlsKeyFile = mkOption {
-        type = types.nullOr types.str;
+      tlsKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/path/to/your/key.pem";
         description = "TLS private key file. TLS will be disabled unless this option is set";
       };
 
-      listenerExtraConfig = mkOption {
-        type = types.lines;
+      listenerExtraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           tls_min_version = "tls12"
         '';
         description = "Extra text appended to the listener section.";
       };
 
-      storageBackend = mkOption {
-        type = types.enum [
+      storageBackend = lib.mkOption {
+        type = lib.types.enum [
           "inmem"
           "file"
           "consul"
@@ -127,11 +124,11 @@ in
         description = "The name of the type of storage backend";
       };
 
-      storagePath = mkOption {
-        type = types.nullOr types.path;
+      storagePath = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default =
           if cfg.storageBackend == "file" || cfg.storageBackend == "raft" then "/var/lib/vault" else null;
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           if config.${opt.storageBackend} == "file" || cfg.storageBackend == "raft"
           then "/var/lib/vault"
           else null
@@ -139,8 +136,8 @@ in
         description = "Data directory for file backend";
       };
 
-      storageConfig = mkOption {
-        type = types.nullOr types.lines;
+      storageConfig = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           HCL configuration to insert in the storageBackend section.
@@ -152,20 +149,20 @@ in
         '';
       };
 
-      telemetryConfig = mkOption {
-        type = types.lines;
+      telemetryConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Telemetry configuration";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Extra text appended to {file}`vault.hcl`.";
       };
 
-      extraSettingsPaths = mkOption {
-        type = types.listOf types.path;
+      extraSettingsPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
         description = ''
           Configuration files to load besides the immutable one defined by the NixOS module.
@@ -196,7 +193,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
@@ -219,7 +216,7 @@ in
     };
     users.groups.vault.gid = config.ids.gids.vault;
 
-    systemd.tmpfiles.rules = optional (
+    systemd.tmpfiles.rules = lib.optional (
       cfg.storagePath != null
     ) "d '${cfg.storagePath}' 0700 vault vault - -";
 
@@ -229,7 +226,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-      ] ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
+      ]
+      ++ lib.optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
       restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
 
@@ -255,7 +253,7 @@ in
         Restart = "on-failure";
       };
 
-      unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
+      unitConfig.RequiresMountsFor = lib.optional (cfg.storagePath != null) cfg.storagePath;
     };
   };
 

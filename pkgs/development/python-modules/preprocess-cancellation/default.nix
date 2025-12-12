@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kageurufu";
     repo = "cancelobject-preprocessor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MJ4mwOFswLYHhg2LNZ+/ZwDvSjoxElVxlaWjArHV2NY=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "preprocess_cancellation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Klipper GCode Preprocessor for Object Cancellation";
     homepage = "https://github.com/kageurufu/cancelobject-preprocessor";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

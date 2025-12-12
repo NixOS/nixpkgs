@@ -4,7 +4,6 @@
   ceres-solver,
   cmake,
   cminpack,
-  darwin,
   dlib,
   fetchFromGitHub,
   hdf5,
@@ -18,24 +17,21 @@
   spectra,
   stdenv,
   swig,
-  tbb,
+  onetbb,
   # Boolean flags
   runTests ? false, # tests take an hour to build on a 48-core machine
   enablePython ? false,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Accelerate;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
-  version = "1.23";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-csl5cZvxU8fdLKvh04ZWKizClrHqF79c7tAMSejo2lk=";
+    hash = "sha256-TwM6RvXG4+IBNxH2Ajg9atcaOGlC4kzusH8+6VbI6m4=";
   };
 
   nativeBuildInputs = [
@@ -57,16 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     pagmo2
     spectra
     swig
-    tbb
+    onetbb
   ]
   ++ lib.optionals enablePython [
     python3Packages.dill
     python3Packages.matplotlib
     python3Packages.psutil
     python3Packages.python
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
   ];
 
   cmakeFlags = [
@@ -91,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openturns.github.io/www/";
     description = "Multivariate probabilistic modeling and uncertainty treatment library";
     changelog = "https://github.com/openturns/openturns/raw/v${finalAttrs.version}/ChangeLog";
-    license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
+    license = with lib.licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
     maintainers = with lib.maintainers; [ gdinh ];
     platforms = lib.platforms.unix;
   };

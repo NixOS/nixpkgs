@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
-    homepage = "http://www.cs.fsu.edu/~engelen/soap.html";
+    homepage = "https://www.genivia.com/products.html";
     # gsoap is dual/triple licensed (see homepage for details):
     # 1. gSOAP Public License 1.3 (based on Mozilla Public License 1.1).
     #    Components NOT covered by the gSOAP Public License are:
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     # 2. GPLv2 covers all of the software
     # 3. Proprietary commercial software development license (removes GPL
     #    restrictions)
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

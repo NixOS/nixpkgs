@@ -1,52 +1,45 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-
-  flit-core,
-
+  hatch-vcs,
+  hatchling,
   prometheus-client,
+  pytest-asyncio,
+  pytestCheckHook,
+  twisted,
   typing-extensions,
   wrapt,
-  aiohttp,
-  twisted,
-
-  pytestCheckHook,
-  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-async";
-  version = "22.1.0";
+  version = "25.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "prometheus-async";
     rev = version;
-    hash = "sha256-2C4qr0gLYHndd49UfjtuF/v05Hl2PuyegPUhCAmd5/E=";
+    hash = "sha256-e/BVxATpafxddq26Rt7XTiK4ajY+saUApXbmTG0/I6I=";
   };
 
-  nativeBuildInputs = [
-    flit-core
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     prometheus-client
     typing-extensions
     wrapt
   ];
 
   optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    consul = [
-      aiohttp
-    ];
-    twisted = [
-      twisted
-    ];
+    aiohttp = [ aiohttp ];
+    consul = [ aiohttp ];
+    twisted = [ twisted ];
   };
 
   nativeCheckInputs = [
@@ -56,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_async" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async helpers for prometheus_client";
     homepage = "https://github.com/hynek/prometheus-async";
     changelog = "https://github.com/hynek/prometheus-async/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

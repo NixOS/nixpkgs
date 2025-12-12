@@ -10,19 +10,18 @@
 
 buildPythonPackage rec {
   pname = "lzallright";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vlaci";
-    repo = pname;
+    repo = "lzallright";
     rev = "v${version}";
-    hash = "sha256-6Dez14qlZ7cnVQfaiTHGuiTSAHvBoKtolgKF7ne9ASw=";
+    hash = "sha256-bnGnx+CKcneBWd5tpYWxEPp5f3hvGxM+8QcD2NKX4Tw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-ZYFAWkcDdX10024hc+gdARyaJFpNNcXf+gGLxBP5VlA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-RxR1EFssGCp7etTdh56LSEfDQsx8uPrQTVqTsDVvkHo=";
   };
 
   format = "pyproject";
@@ -42,13 +41,13 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       A Python 3.8+ binding for lzokay library which is an MIT licensed
       a minimal, C++14 implementation of the LZO compression format.
     '';
     homepage = "https://github.com/vlaci/lzallright";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vlaci ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vlaci ];
   };
 }

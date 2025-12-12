@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
-  darwin,
   xorg,
 }:
 
@@ -19,25 +18,21 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ROCZDa5eyGF9yE+zdZ4snzdz8+jk+H6ZnqsnCe8JtJw=";
   };
 
-  cargoHash = "sha256-6zD9WRPWEt0ubppaMRTOusy0zm3z6SGB/5/kMxcJ/Ag=";
+  cargoHash = "sha256-wG1uB/oOUUAQVpGXe7sTqt9tLmFoLrOAmeat/d1xOM8=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libX11
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Keyboard tester in terminal";
     homepage = "https://github.com/bloznelis/kbt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "kbt";
   };
 }

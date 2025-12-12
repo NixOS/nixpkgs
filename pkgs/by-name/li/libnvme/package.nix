@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.11.1";
+  version = "1.15";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CEGr7PDOVRi210XvICH8iLYDKn8S9bGruBO4tycvsT8=";
+    hash = "sha256-PdSlynwOjC9SkUh3H6doEgHwwBry5Ti5XjRoS2bc5a0=";
   };
 
   postPatch = ''
@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   # mocked ioctl conflicts with the musl one: https://github.com/NixOS/nixpkgs/pull/263768#issuecomment-1782877974
   doCheck = !stdenv.hostPlatform.isMusl;
 
-  meta = with lib; {
+  meta = {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = with maintainers; [ vifino ];
-    license = with licenses; [ lgpl21Plus ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ vifino ];
+    license = with lib.licenses; [ lgpl21Plus ];
+    platforms = lib.platforms.linux;
   };
 })

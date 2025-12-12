@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   config,
   callPackages,
   lib,
@@ -20,6 +21,7 @@
   libffi,
   libiconv,
   libkrb5,
+  libpq,
   libsodium,
   libxml2,
   libxslt,
@@ -30,10 +32,8 @@
   openldap,
   openssl_1_1,
   openssl,
-  overrideSDK,
   pam,
   pcre2,
-  postgresql,
   bison,
   re2c,
   readline,
@@ -43,7 +43,6 @@
   uwimap,
   valgrind,
   zlib,
-  fetchpatch,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -117,7 +116,7 @@ lib.makeScope pkgs.newScope (
         ...
       }@args:
       stdenv.mkDerivation (
-        (builtins.removeAttrs args [ "name" ])
+        (removeAttrs args [ "name" ])
         // {
           pname = "php-${name}";
           extensionName = extName;
@@ -207,12 +206,13 @@ lib.makeScope pkgs.newScope (
           meta = {
             description = "PHP upstream extension: ${name}";
             inherit (php.meta)
-              maintainers
+              teams
               homepage
               license
               platforms
               ;
-          } // args.meta or { };
+          }
+          // args.meta or { };
         }
       )
     );
@@ -220,50 +220,47 @@ lib.makeScope pkgs.newScope (
     php = phpPackage;
 
     # This is a set of interactive tools based on PHP.
-    tools =
-      {
-        box = callPackage ../development/php-packages/box { };
+    tools = {
+      box = callPackage ../development/php-packages/box { };
 
-        castor = callPackage ../development/php-packages/castor { };
+      castor = callPackage ../development/php-packages/castor { };
 
-        composer = callPackage ../development/php-packages/composer { };
+      composer = callPackage ../development/php-packages/composer { };
 
-        composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+      composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
 
-        cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
+      cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
 
-        deployer = callPackage ../development/php-packages/deployer { };
+      grumphp = callPackage ../development/php-packages/grumphp { };
 
-        grumphp = callPackage ../development/php-packages/grumphp { };
+      phan = callPackage ../development/php-packages/phan { };
 
-        phan = callPackage ../development/php-packages/phan { };
+      phing = callPackage ../development/php-packages/phing { };
 
-        phing = callPackage ../development/php-packages/phing { };
+      phive = callPackage ../development/php-packages/phive { };
 
-        phive = callPackage ../development/php-packages/phive { };
+      php-codesniffer = callPackage ../development/php-packages/php-codesniffer { };
 
-        php-codesniffer = callPackage ../development/php-packages/php-codesniffer { };
+      php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
-        php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
+      php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
-        php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
+      phpinsights = callPackage ../development/php-packages/phpinsights { };
 
-        phpinsights = callPackage ../development/php-packages/phpinsights { };
+      phpmd = callPackage ../development/php-packages/phpmd { };
 
-        phpmd = callPackage ../development/php-packages/phpmd { };
+      phpspy = callPackage ../development/php-packages/phpspy { };
 
-        phpspy = callPackage ../development/php-packages/phpspy { };
+      phpstan = callPackage ../development/php-packages/phpstan { };
 
-        phpstan = callPackage ../development/php-packages/phpstan { };
-
-        psalm = callPackage ../development/php-packages/psalm { };
-
-        psysh = callPackage ../development/php-packages/psysh { };
-      }
-      // lib.optionalAttrs config.allowAliases {
-        phpcbf = throw "`phpcbf` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
-        phpcs = throw "`phpcs` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
-      };
+      psalm = callPackage ../development/php-packages/psalm { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      deployer = throw "`php8${lib.versions.minor php.version}Packages.deployer` has been removed, use `deployer`";
+      phpcbf = throw "`php8${lib.versions.minor php.version}Packages.phpcbf` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      phpcs = throw "`php8${lib.versions.minor php.version}Packages.phpcs` has been removed, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+      psysh = throw "`php8${lib.versions.minor php.version}Packages.psysh` has been removed, use `psysh`";
+    };
 
     # This is a set of PHP extensions meant to be used in php.buildEnv
     # or php.withExtensions to extend the functionality of the PHP
@@ -281,20 +278,19 @@ lib.makeScope pkgs.newScope (
 
         ast = callPackage ../development/php-packages/ast { };
 
-        blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { };
+        blackfire = callPackage ../by-name/bl/blackfire/php-probe.nix { };
 
         couchbase = callPackage ../development/php-packages/couchbase { };
 
-        datadog_trace = callPackage ../development/php-packages/datadog_trace {
-          buildPecl = buildPecl.override {
-            stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-          };
-          inherit (pkgs) darwin;
-        };
+        datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+
+        decimal = callPackage ../development/php-packages/decimal { };
 
         ds = callPackage ../development/php-packages/ds { };
 
         event = callPackage ../development/php-packages/event { };
+
+        excimer = callPackage ../development/php-packages/excimer { };
 
         gnupg = callPackage ../development/php-packages/gnupg { };
 
@@ -311,6 +307,8 @@ lib.makeScope pkgs.newScope (
 
         ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
+        luasandbox = callPackage ../development/php-packages/luasandbox { };
+
         mailparse = callPackage ../development/php-packages/mailparse { };
 
         maxminddb = callPackage ../development/php-packages/maxminddb { };
@@ -323,9 +321,7 @@ lib.makeScope pkgs.newScope (
 
         memprof = callPackage ../development/php-packages/memprof { };
 
-        mongodb = callPackage ../development/php-packages/mongodb {
-          inherit (pkgs) darwin;
-        };
+        mongodb = callPackage ../development/php-packages/mongodb { };
 
         msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -341,23 +337,26 @@ lib.makeScope pkgs.newScope (
 
         pcov = callPackage ../development/php-packages/pcov { };
 
-        pdo_oci = buildPecl rec {
-          inherit (php.unwrapped) src version;
+        pdo_oci =
+          if (lib.versionAtLeast php.version "8.4") then
+            callPackage ../development/php-packages/pdo_oci { }
+          else
+            buildPecl rec {
+              inherit (php.unwrapped) src version;
 
-          pname = "pdo_oci";
-          sourceRoot = "php-${version}/ext/pdo_oci";
+              pname = "pdo_oci";
+              sourceRoot = "php-${version}/ext/pdo_oci";
 
-          buildInputs = [ pkgs.oracle-instantclient ];
-          configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+              buildInputs = [ pkgs.oracle-instantclient ];
+              configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
-          internalDeps = [ php.extensions.pdo ];
+              internalDeps = [ php.extensions.pdo ];
+              postPatch = ''
+                sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+              '';
 
-          postPatch = ''
-            sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-          '';
-
-          meta.maintainers = lib.teams.php.members;
-        };
+              meta.teams = [ lib.teams.php ];
+            };
 
         pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
@@ -379,9 +378,7 @@ lib.makeScope pkgs.newScope (
 
         smbclient = callPackage ../development/php-packages/smbclient { };
 
-        snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
-          inherit (pkgs) darwin;
-        };
+        snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
 
         spx = callPackage ../development/php-packages/spx { };
 
@@ -391,6 +388,8 @@ lib.makeScope pkgs.newScope (
 
         swoole = callPackage ../development/php-packages/swoole { };
 
+        systemd = callPackage ../development/php-packages/systemd { };
+
         tideways = callPackage ../development/php-packages/tideways { };
 
         uuid = callPackage ../development/php-packages/uuid { };
@@ -398,6 +397,8 @@ lib.makeScope pkgs.newScope (
         uv = callPackage ../development/php-packages/uv { };
 
         vld = callPackage ../development/php-packages/vld { };
+
+        wikidiff2 = callPackage ../development/php-packages/wikidiff2 { };
 
         xdebug = callPackage ../development/php-packages/xdebug { };
 
@@ -407,6 +408,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -415,419 +417,429 @@ lib.makeScope pkgs.newScope (
           # want to build.
           #
           # These will be passed as arguments to mkExtension above.
-          extensionData =
-            [
-              { name = "bcmath"; }
-              {
-                name = "bz2";
-                buildInputs = [ bzip2 ];
-                configureFlags = [ "--with-bz2=${bzip2.dev}" ];
-              }
-              { name = "calendar"; }
-              { name = "ctype"; }
-              {
-                name = "curl";
-                buildInputs = [ curl ];
-                configureFlags = [ "--with-curl=${curl.dev}" ];
-                doCheck = false;
-              }
-              { name = "dba"; }
-              {
-                name = "dom";
-                buildInputs = [ libxml2 ];
-                configureFlags = [
-                  "--enable-dom"
-                ];
-              }
-              {
-                name = "enchant";
-                buildInputs = [ enchant2 ];
-                configureFlags = [ "--with-enchant" ];
-                doCheck = false;
-              }
-              {
-                name = "exif";
-                doCheck = false;
-              }
-              {
-                name = "ffi";
-                buildInputs = [ libffi ];
-              }
-              {
-                name = "fileinfo";
-                buildInputs = [ pcre2 ];
-              }
-              {
-                name = "filter";
-                buildInputs = [ pcre2 ];
-              }
-              {
-                name = "ftp";
-                buildInputs = [ openssl ];
-              }
-              {
-                name = "gd";
-                buildInputs = [
-                  zlib
-                  gd
-                ];
-                configureFlags = [
-                  "--enable-gd"
-                  "--with-external-gd=${gd.dev}"
-                  "--enable-gd-jis-conv"
-                ];
-                doCheck = false;
-              }
-              {
-                name = "gettext";
-                buildInputs = [ gettext ];
-                postPhpize = ''substituteInPlace configure --replace-fail 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-                configureFlags = [ "--with-gettext=${gettext}" ];
-              }
-              {
-                name = "gmp";
-                buildInputs = [ gmp ];
-                configureFlags = [ "--with-gmp=${gmp.dev}" ];
-              }
-              {
-                name = "iconv";
-                buildInputs = [ libiconv ];
-                configureFlags = [ "--with-iconv" ];
-                # Some other extensions support separate libdirs, but iconv does not. This causes problems with detecting
-                # Darwin’s libiconv because it has separate outputs. Adding `-liconv` works around the issue.
-                env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
-                doCheck = stdenv.hostPlatform.isLinux;
-              }
-              {
-                name = "intl";
-                buildInputs = [ icu73 ];
-              }
-              {
-                name = "ldap";
-                buildInputs = [
-                  openldap
-                  cyrus_sasl
-                ];
-                configureFlags =
-                  [
-                    "--with-ldap"
-                    "LDAP_DIR=${openldap.dev}"
-                    "LDAP_INCDIR=${openldap.dev}/include"
-                    "LDAP_LIBDIR=${openldap.out}/lib"
-                  ]
-                  ++ lib.optionals stdenv.hostPlatform.isLinux [
-                    "--with-ldap-sasl=${cyrus_sasl.dev}"
+          extensionData = [
+            { name = "bcmath"; }
+            {
+              name = "bz2";
+              buildInputs = [ bzip2 ];
+              configureFlags = [ "--with-bz2=${bzip2.dev}" ];
+            }
+            { name = "calendar"; }
+            {
+              name = "ctype";
+              postPatch =
+                lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast php.version "8.2")
+                  # Broken test on aarch64-darwin
+                  ''
+                    rm ext/ctype/tests/lc_ctype_inheritance.phpt
+                  '';
+            }
+            {
+              name = "curl";
+              buildInputs = [ curl ];
+              configureFlags = [ "--with-curl=${curl.dev}" ];
+              doCheck = false;
+            }
+            { name = "dba"; }
+            {
+              name = "dom";
+              buildInputs = [ libxml2 ];
+              configureFlags = [
+                "--enable-dom"
+              ];
+              patches = lib.optionals (lib.versionOlder php.version "8.3") [
+                # Fix gh10234 test with libxml 2.15.0
+                (fetchpatch {
+                  url = "https://github.com/php/php-src/commit/d6e70e705323a50b616ffee9402245ab97de3e4e.patch";
+                  hash = "sha256-Axu09l3uQ83qe30aDsR+Bt29cJiF4mLknwDyQf94vic=";
+                  includes = [
+                    "ext/dom/tests/gh10234.phpt"
                   ];
-                doCheck = false;
-              }
-              {
-                name = "mbstring";
-                buildInputs = [
-                  oniguruma
-                  pcre2
-                ];
-                doCheck = false;
-              }
-              {
-                name = "mysqli";
-                internalDeps = [ php.extensions.mysqlnd ];
-                configureFlags = [
-                  "--with-mysqli=mysqlnd"
-                  "--with-mysql-sock=/run/mysqld/mysqld.sock"
-                ];
-                doCheck = false;
-              }
-              {
-                name = "mysqlnd";
-                buildInputs = [
-                  zlib
-                  openssl
-                ];
-                # The configure script doesn't correctly add library link
-                # flags, so we add them to the variable used by the Makefile
-                # when linking.
-                MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
-                # The configure script builds a config.h which is never
-                # included. Let's include it in the main header file
-                # included by all .c-files.
-                patches = [
-                  (pkgs.writeText "mysqlnd_config.patch" ''
-                    --- a/ext/mysqlnd/mysqlnd.h
-                    +++ b/ext/mysqlnd/mysqlnd.h
-                    @@ -1,3 +1,6 @@
-                    +#ifdef HAVE_CONFIG_H
-                    +#include "config.h"
-                    +#endif
-                     /*
-                       +----------------------------------------------------------------------+
-                       | Copyright (c) The PHP Group                                          |
-                  '')
-                ];
-              }
-              {
-                name = "opcache";
-                buildInputs =
-                  [ pcre2 ]
-                  ++ lib.optional (
-                    !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
-                  ) valgrind.dev;
-                configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
-                zendExtension = true;
-                postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-                  # Tests are flaky on darwin
-                  rm ext/opcache/tests/blacklist.phpt
-                  rm ext/opcache/tests/bug66338.phpt
-                  rm ext/opcache/tests/bug78106.phpt
-                  rm ext/opcache/tests/issue0115.phpt
-                  rm ext/opcache/tests/issue0149.phpt
-                  rm ext/opcache/tests/revalidate_path_01.phpt
-                '';
-                # Tests launch the builtin webserver.
-                __darwinAllowLocalNetworking = true;
-              }
-              {
-                name = "openssl";
-                buildInputs = [ openssl ];
-                configureFlags = [ "--with-openssl" ];
-                doCheck = false;
-              }
-              # This provides a legacy OpenSSL PHP extension
-              # For situations where OpenSSL 3 do not support a set of features
-              # without a specific openssl.cnf file
-              {
-                name = "openssl-legacy";
-                extName = "openssl";
-                buildInputs = [ openssl_1_1 ];
-                configureFlags = [ "--with-openssl" ];
-                doCheck = false;
-              }
-              { name = "pcntl"; }
-              {
-                name = "pdo";
-                doCheck = false;
-              }
-              {
-                name = "pdo_dblib";
-                internalDeps = [ php.extensions.pdo ];
-                configureFlags = [ "--with-pdo-dblib=${freetds}" ];
-                meta.broken = stdenv.hostPlatform.isDarwin;
-                doCheck = false;
-              }
-              {
-                name = "pdo_mysql";
-                internalDeps = with php.extensions; [
-                  pdo
-                  mysqlnd
-                ];
-                configureFlags = [
-                  "--with-pdo-mysql=mysqlnd"
-                  "PHP_MYSQL_SOCK=/run/mysqld/mysqld.sock"
-                ];
-                doCheck = false;
-              }
-              {
-                name = "pdo_odbc";
-                internalDeps = [ php.extensions.pdo ];
-                buildInputs = [ unixODBC ];
-                configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
-                doCheck = false;
-              }
-              {
-                name = "pdo_pgsql";
-                internalDeps = [ php.extensions.pdo ];
-                configureFlags = [ "--with-pdo-pgsql=${lib.getDev postgresql}" ];
-                doCheck = false;
-              }
-              {
-                name = "pdo_sqlite";
-                internalDeps = [ php.extensions.pdo ];
-                buildInputs = [ sqlite ];
-                configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ];
-                doCheck = false;
-              }
-              {
-                name = "pgsql";
-                buildInputs = [ pcre2 ];
-                configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
-                doCheck = false;
-              }
-              {
-                name = "posix";
-                doCheck = false;
-              }
-              {
-                name = "readline";
-                buildInputs = [
-                  readline
-                ];
-                configureFlags = [
-                  "--with-readline=${readline.dev}"
-                ];
-                postPatch = ''
-                  # Fix `--with-readline` option not being available.
-                  # `PHP_ALWAYS_SHARED` generated by phpize enables all options
-                  # without the possibility to override them. But when `--with-libedit`
-                  # is enabled, `--with-readline` is not registered.
-                  echo '
-                  AC_DEFUN([PHP_ALWAYS_SHARED],[
-                    test "[$]$1" != "no" && ext_shared=yes
-                  ])dnl
-                  ' | cat - ext/readline/config.m4 > ext/readline/config.m4.tmp
-                  mv ext/readline/config.m4{.tmp,}
-                '';
-                doCheck = false;
-              }
-              {
-                name = "session";
-                doCheck = false;
-              }
-              { name = "shmop"; }
-              {
-                name = "simplexml";
-                buildInputs = [
-                  libxml2
-                  pcre2
-                ];
-                configureFlags = [
-                  "--enable-simplexml"
-                ];
-              }
-              {
-                name = "snmp";
-                buildInputs = [
-                  net-snmp
-                  openssl
-                ];
-                configureFlags = [ "--with-snmp" ];
-                doCheck = false;
-              }
-              {
-                name = "soap";
-                buildInputs = [ libxml2 ];
-                configureFlags = [
-                  "--enable-soap"
-                ];
-                # Some tests are causing issues in the Darwin sandbox with issues
-                # such as
-                #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
-                doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
-                internalDeps = [ php.extensions.session ];
-              }
-              {
-                name = "sockets";
-                doCheck = false;
-              }
-              {
-                name = "sodium";
-                buildInputs = [ libsodium ];
-              }
-              {
-                name = "sqlite3";
-                buildInputs = [ sqlite ];
+                })
+              ];
+            }
+            {
+              name = "enchant";
+              buildInputs = [ enchant2 ];
+              configureFlags = [ "--with-enchant" ];
+              doCheck = false;
+            }
+            {
+              name = "exif";
+              doCheck = false;
+            }
+            {
+              name = "ffi";
+              buildInputs = [ libffi ];
+            }
+            {
+              name = "fileinfo";
+              buildInputs = [ pcre2 ];
+            }
+            {
+              name = "filter";
+              buildInputs = [ pcre2 ];
+            }
+            {
+              name = "ftp";
+              buildInputs = [ openssl ];
+            }
+            {
+              name = "gd";
+              buildInputs = [
+                zlib
+                gd
+              ];
+              configureFlags = [
+                "--enable-gd"
+                "--with-external-gd=${gd.dev}"
+                "--enable-gd-jis-conv"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "gettext";
+              buildInputs = [ gettext ];
+              postPhpize = ''substituteInPlace configure --replace-fail 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
+              configureFlags = [ "--with-gettext=${gettext}" ];
+            }
+            {
+              name = "gmp";
+              buildInputs = [ gmp ];
+              configureFlags = [ "--with-gmp=${gmp.dev}" ];
+            }
+            {
+              name = "iconv";
+              buildInputs = [ libiconv ];
+              configureFlags = [ "--with-iconv" ];
+              # Some other extensions support separate libdirs, but iconv does not. This causes problems with detecting
+              # Darwin’s libiconv because it has separate outputs. Adding `-liconv` works around the issue.
+              env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
+              doCheck = stdenv.hostPlatform.isLinux;
+            }
+            {
+              name = "intl";
+              buildInputs = [ icu73 ];
+            }
+            {
+              name = "ldap";
+              buildInputs = [
+                openldap
+                cyrus_sasl
+              ];
+              configureFlags = [
+                "--with-ldap"
+                "LDAP_DIR=${openldap.dev}"
+                "LDAP_INCDIR=${openldap.dev}/include"
+                "LDAP_LIBDIR=${openldap.out}/lib"
+              ]
+              ++ lib.optionals stdenv.hostPlatform.isLinux [
+                "--with-ldap-sasl=${cyrus_sasl.dev}"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "mbstring";
+              buildInputs = [
+                oniguruma
+                pcre2
+              ];
+              doCheck = false;
+            }
+            {
+              name = "mysqli";
+              internalDeps = [ php.extensions.mysqlnd ];
+              configureFlags = [
+                "--with-mysqli=mysqlnd"
+                "--with-mysql-sock=/run/mysqld/mysqld.sock"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "mysqlnd";
+              buildInputs = [
+                zlib
+                openssl
+              ];
+              configureFlags = [ "--with-mysqlnd-ssl" ];
+              # The configure script doesn't correctly add library link
+              # flags, so we add them to the variable used by the Makefile
+              # when linking.
+              MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
+              # The configure script builds a config.h which is never
+              # included. Let's include it in the main header file
+              # included by all .c-files.
+              patches = [
+                (pkgs.writeText "mysqlnd_config.patch" ''
+                  --- a/ext/mysqlnd/mysqlnd.h
+                  +++ b/ext/mysqlnd/mysqlnd.h
+                  @@ -1,3 +1,6 @@
+                  +#ifdef HAVE_CONFIG_H
+                  +#include "config.h"
+                  +#endif
+                   /*
+                     +----------------------------------------------------------------------+
+                     | Copyright (c) The PHP Group                                          |
+                '')
+              ];
+            }
+            {
+              name = "opcache";
+              buildInputs = [
+                pcre2
+              ]
+              ++ lib.optional (
+                !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+              ) valgrind.dev;
+              configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
+              zendExtension = true;
+              postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+                # Tests are flaky on darwin
+                rm ext/opcache/tests/blacklist.phpt
+                rm ext/opcache/tests/bug66338.phpt
+                rm ext/opcache/tests/bug78106.phpt
+                rm ext/opcache/tests/issue0115.phpt
+                rm ext/opcache/tests/issue0149.phpt
+                rm ext/opcache/tests/revalidate_path_01.phpt
+              '';
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
+            }
+            {
+              name = "openssl";
+              buildInputs = [ openssl ];
+              configureFlags = [ "--with-openssl" ];
+              doCheck = false;
+            }
+            { name = "pcntl"; }
+            {
+              name = "pdo";
+              doCheck = false;
+            }
+            {
+              name = "pdo_dblib";
+              internalDeps = [ php.extensions.pdo ];
+              configureFlags = [ "--with-pdo-dblib=${freetds}" ];
+              meta.broken = stdenv.hostPlatform.isDarwin;
+              doCheck = false;
+            }
+            {
+              name = "pdo_mysql";
+              internalDeps = with php.extensions; [
+                pdo
+                mysqlnd
+              ];
+              configureFlags = [
+                "--with-pdo-mysql=mysqlnd"
+                "PHP_MYSQL_SOCK=/run/mysqld/mysqld.sock"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "pdo_odbc";
+              internalDeps = [ php.extensions.pdo ];
+              buildInputs = [ unixODBC ];
+              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+              doCheck = false;
+            }
+            {
+              name = "pdo_pgsql";
+              internalDeps = [ php.extensions.pdo ];
+              configureFlags = [ "--with-pdo-pgsql=${libpq.pg_config}" ];
+              doCheck = false;
+            }
+            {
+              name = "pdo_sqlite";
+              internalDeps = [ php.extensions.pdo ];
+              buildInputs = [ sqlite ];
+              configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ];
+              doCheck = false;
+            }
+            {
+              name = "pgsql";
+              buildInputs = [
+                pcre2
+              ];
+              configureFlags = [ "--with-pgsql=${libpq.pg_config}" ];
+              doCheck = false;
+            }
+            {
+              name = "posix";
+              doCheck = false;
+            }
+            {
+              name = "readline";
+              buildInputs = [
+                readline
+              ];
+              configureFlags = [
+                "--with-readline=${readline.dev}"
+              ];
+              postPatch = ''
+                # Fix `--with-readline` option not being available.
+                # `PHP_ALWAYS_SHARED` generated by phpize enables all options
+                # without the possibility to override them. But when `--with-libedit`
+                # is enabled, `--with-readline` is not registered.
+                echo '
+                AC_DEFUN([PHP_ALWAYS_SHARED],[
+                  test "[$]$1" != "no" && ext_shared=yes
+                ])dnl
+                ' | cat - ext/readline/config.m4 > ext/readline/config.m4.tmp
+                mv ext/readline/config.m4{.tmp,}
+              '';
+              doCheck = false;
+            }
+            {
+              name = "session";
+              doCheck = false;
+            }
+            { name = "shmop"; }
+            {
+              name = "simplexml";
+              buildInputs = [
+                libxml2
+                pcre2
+              ];
+              configureFlags = [
+                "--enable-simplexml"
+              ];
+            }
+            {
+              name = "snmp";
+              buildInputs = [
+                net-snmp
+                openssl
+              ];
+              configureFlags = [ "--with-snmp" ];
+              doCheck = false;
+            }
+            {
+              name = "soap";
+              buildInputs = [ libxml2 ];
+              configureFlags = [
+                "--enable-soap"
+              ];
+              # Some tests are causing issues in the Darwin sandbox with issues
+              # such as
+              #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
+              doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
+              internalDeps = [ php.extensions.session ];
+            }
+            {
+              name = "sockets";
+              doCheck = false;
+            }
+            {
+              name = "sodium";
+              buildInputs = [ libsodium ];
+            }
+            {
+              name = "sqlite3";
+              buildInputs = [ sqlite ];
 
-                # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
-                # - https://github.com/php/php-src/issues/12076
-                # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
-                patches = lib.optionals (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isLinux) [
-                  ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch
-                ];
-              }
-              { name = "sysvmsg"; }
-              { name = "sysvsem"; }
-              { name = "sysvshm"; }
-              {
-                name = "tidy";
-                configureFlags = [ "--with-tidy=${html-tidy}" ];
-                doCheck = false;
-              }
-              {
-                name = "tokenizer";
-                patches = [ ../development/interpreters/php/fix-tokenizer-php81.patch ];
-              }
-              {
-                name = "xml";
-                buildInputs = [ libxml2 ];
-                configureFlags = [
-                  "--enable-xml"
-                ];
-                doCheck = false;
-              }
-              {
-                name = "xmlreader";
-                buildInputs = [ libxml2 ];
-                internalDeps = [ php.extensions.dom ];
-                env.NIX_CFLAGS_COMPILE = toString [
-                  "-I../.."
-                  "-DHAVE_DOM"
-                ];
-                doCheck = false;
-                configureFlags = [
-                  "--enable-xmlreader"
-                ];
-              }
-              {
-                name = "xmlwriter";
-                buildInputs = [ libxml2 ];
-                configureFlags = [
-                  "--enable-xmlwriter"
-                ];
-              }
-              {
-                name = "xsl";
-                buildInputs = [
-                  libxslt
-                  libxml2
-                ];
-                internalDeps = [ php.extensions.dom ];
-                doCheck = false;
-                env.NIX_CFLAGS_COMPILE = toString [
-                  "-I../.."
-                  "-DHAVE_DOM"
-                ];
-                configureFlags = [ "--with-xsl=${libxslt.dev}" ];
-              }
-              {
-                name = "zend_test";
-                internalDeps = [ php.extensions.dom ];
-                env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
-              }
-              {
-                name = "zip";
-                buildInputs = [
-                  libzip
-                  pcre2
-                ];
-                configureFlags = [
-                  "--with-zip"
-                ];
-                doCheck = false;
-              }
-              {
-                name = "zlib";
-                buildInputs = [ zlib ];
-                configureFlags = [
-                  "--with-zlib"
-                ];
-              }
-            ]
-            ++ lib.optionals (lib.versionOlder php.version "8.3") [
-              # Using version from PECL on new PHP versions.
-              {
-                name = "imap";
-                buildInputs = [
-                  uwimap
-                  openssl
-                  pam
-                  pcre2
-                  libkrb5
-                ];
-                configureFlags = [
-                  "--with-imap=${uwimap}"
-                  "--with-imap-ssl"
-                  "--with-kerberos"
-                ];
-              }
-            ];
+              # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
+              # - https://github.com/php/php-src/issues/12076
+              # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
+              patches = lib.optionals (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isLinux) [
+                ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch
+              ];
+            }
+            { name = "sysvmsg"; }
+            { name = "sysvsem"; }
+            { name = "sysvshm"; }
+            {
+              name = "tidy";
+              configureFlags = [ "--with-tidy=${html-tidy}" ];
+              doCheck = false;
+            }
+            {
+              name = "tokenizer";
+              patches = [ ../development/interpreters/php/fix-tokenizer-php81.patch ];
+            }
+            {
+              name = "xml";
+              buildInputs = [ libxml2 ];
+              configureFlags = [
+                "--enable-xml"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "xmlreader";
+              buildInputs = [ libxml2 ];
+              internalDeps = [ php.extensions.dom ];
+              env.NIX_CFLAGS_COMPILE = toString [
+                "-I../.."
+                "-DHAVE_DOM"
+              ];
+              doCheck = false;
+              configureFlags = [
+                "--enable-xmlreader"
+              ];
+            }
+            {
+              name = "xmlwriter";
+              buildInputs = [ libxml2 ];
+              configureFlags = [
+                "--enable-xmlwriter"
+              ];
+            }
+            {
+              name = "xsl";
+              buildInputs = [
+                libxslt
+                libxml2
+              ];
+              internalDeps = [ php.extensions.dom ];
+              doCheck = false;
+              env.NIX_CFLAGS_COMPILE = toString [
+                "-I../.."
+                "-DHAVE_DOM"
+              ];
+              configureFlags = [ "--with-xsl=${libxslt.dev}" ];
+            }
+            {
+              name = "zend_test";
+              internalDeps = [ php.extensions.dom ];
+              env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+            }
+            {
+              name = "zip";
+              buildInputs = [
+                libzip
+                pcre2
+              ];
+              configureFlags = [
+                "--with-zip"
+              ];
+              doCheck = false;
+            }
+            {
+              name = "zlib";
+              buildInputs = [ zlib ];
+              configureFlags = [
+                "--with-zlib"
+              ];
+            }
+          ]
+          ++ lib.optionals (lib.versionOlder php.version "8.3") [
+            # Using version from PECL on new PHP versions.
+            {
+              name = "imap";
+              buildInputs = [
+                uwimap
+                openssl
+                pam
+                pcre2
+                libkrb5
+              ];
+              configureFlags = [
+                "--with-imap=${uwimap}"
+                "--with-imap-ssl"
+                "--with-kerberos"
+              ];
+            }
+          ];
 
           # Convert the list of attrs:
           # [ { name = <name>; ... } ... ]
@@ -835,7 +847,7 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
+          namedExtensions = map (drv: {
             name = drv.name;
             value = mkExtension drv;
           }) extensionData;

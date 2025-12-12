@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.11.0";
   src = fetchFromGitHub {
     owner = "ketiltrout";
-    repo = pname;
+    repo = "getdata";
     rev = "v${version}";
     sha256 = "sha256-fuFakbkxDwDp6Z9VITPIB8NiYRSp98Ub1y5SC6W5S1E=";
   };
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libtool ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of the Dirfile Standards";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://getdata.sourceforge.net/";
   };
 }

@@ -4,6 +4,9 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bash,
+  buildPackages,
+  coreutils,
   nixosTests,
   perl,
 }:
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dex4er";
-    repo = pname;
+    repo = "fakechroot";
     rev = version;
     sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
@@ -54,8 +57,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    for f in scripts/*; do
+      substituteInPlace $f \
+        --replace-quiet "@SHELL@" "${lib.getExe bash}" \
+        --replace-quiet "@CHROOT@" "${lib.getExe' coreutils "chroot"}" \
+        --replace-quiet "@ECHO@" "${lib.getExe' coreutils "echo"}" \
+        --replace-quiet "@ENV@" "${lib.getExe' coreutils "env"}" \
+        --replace-quiet "@MKFIFO@" "${lib.getExe' coreutils "mkfifo"}" \
+        --replace-quiet "@SEQ@" "${lib.getExe' coreutils "seq"}"
+    done
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl ];
+
+  buildInputs = [
+    bash
+    perl
+  ];
+
+  configureFlags = [
+    # pass in correct pod2man when cross-compiling
+    "ac_cv_path_POD2MAN=${lib.getExe' buildPackages.perl "pod2man"}"
+  ];
 
   passthru = {
     tests = {
@@ -64,12 +88,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  preFixup = ''
+    patchShebangs --host $out/bin
+  '';
+
+  meta = {
     homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.linux;
   };
 
 }

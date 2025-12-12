@@ -1,13 +1,12 @@
 {
   buildPythonPackage,
+  setuptools,
   cirq-core,
-  freezegun,
   google-api-core,
   protobuf,
+  freezegun,
   pytestCheckHook,
-  setuptools,
-  protobuf4,
-  fetchpatch,
+  typedunits,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +18,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  patches = [
-    # https://github.com/quantumlib/Cirq/pull/6683 Support for protobuf5
-    (fetchpatch {
-      url = "https://github.com/quantumlib/Cirq/commit/bae02e4d83aafa29f50aa52073d86eb913ccb2d3.patch";
-      hash = "sha256-MqHhKa38BTM6viQtWik0TQjN0OPdrwzCZkkqZsiyF5w=";
-      includes = [ "cirq_google/serialization/arg_func_langs_test.py" ];
-      stripLen = 1;
-    })
-  ];
-
   pythonRelaxDeps = [
     "protobuf"
   ];
@@ -37,7 +26,9 @@ buildPythonPackage rec {
     cirq-core
     google-api-core
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+    typedunits
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     freezegun

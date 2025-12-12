@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dK02y8HXhwq1W6NOYsycjTpIMxoQY4qNT4n8TEycmWM=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmi" ];
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/pysnmp/pysmi";
     changelog = "https://github.com/pysnmp/pysmi/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

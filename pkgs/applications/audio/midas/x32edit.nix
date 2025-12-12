@@ -5,9 +5,9 @@ callPackage ./generic.nix (
   // rec {
     brand = "Behringer";
     type = "X32";
-    version = "4.1";
-    url = "https://mediadl.musictribe.com/download/software/behringer/${type}/${type}-Edit_LINUX_${version}.tar.gz";
-    sha256 = "0zsw7qfmcci87skkpq8vx5zxk35phn8y4byispvki9ascifnnb33";
-    homepage = "https://www.behringer.com/behringer/product?modelCode=P0ASF";
+    version = "4.4.1";
+    url = "https://cdn.mediavalet.com/aunsw/musictribe/6-vOpP2lRkyNSDXgZEUbQA/FyIw4jc3bk60nseai05MBQ/Original/${type}-Edit_LINUX_${version}.tar.gz";
+    hash = "sha256-HrSPDWnWF2s1U8Khj6VnLptPdcMVyTivewWAIIdArMc=";
+    homepage = "https://www.behringer.com/product.html?modelCode=0603-ACE";
   }
 )

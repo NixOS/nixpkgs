@@ -5,15 +5,16 @@
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-jE/zdVPL6JYY4Yfkx3n3GpuyqLJ7kfh+1AmHzJIz2PY=";
+    hash = "sha256-vpyIoLNgQ2fddBZ6K3VKNeFC9nApKuR6L97yei7pejI=";
   };
 
   patches = [
@@ -36,9 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = directoryListingUpdater {
+      url = "https://www.alsa-project.org/files/pub/lib/";
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
     mainProgram = "aserver";
@@ -48,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     pkgConfigModules = [
       "alsa"
       "alsa-topology"
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ l-as ];
+    platforms = with lib.platforms; linux ++ freebsd;
+    maintainers = [ ];
   };
 })

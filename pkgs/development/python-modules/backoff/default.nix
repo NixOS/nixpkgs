@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
   responses,
 }:
 
@@ -15,25 +15,25 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "litl";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "backoff";
+    tag = "v${version}";
     hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     responses
   ];
 
   pythonImportsCheck = [ "backoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chkno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chkno ];
   };
 }

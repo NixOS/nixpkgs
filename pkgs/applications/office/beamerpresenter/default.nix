@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
-    owner = "stiglers-eponym";
+    owner = "beamerpresenter";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    hash = "sha256-ofS0KMsn0KG8squIvMPxSCgE/qNK+Kd47psNziLBBoo=";
+    hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
   };
 
   nativeBuildInputs = [
@@ -47,30 +47,29 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  buildInputs =
-    [
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      zlib
-      qtbase
-      qtsvg
-      qtmultimedia
-      qttools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals useMupdf [
-      freetype
-      gumbo
-      jbig2dec
-      mupdf
-      openjpeg
-    ]
-    ++ lib.optionals usePoppler [
-      poppler
-    ];
+  buildInputs = [
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    zlib
+    qtbase
+    qtsvg
+    qtmultimedia
+    qttools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ]
+  ++ lib.optionals useMupdf [
+    freetype
+    gumbo
+    jbig2dec
+    mupdf
+    openjpeg
+  ]
+  ++ lib.optionals usePoppler [
+    poppler
+  ];
 
   cmakeFlags = [
     "-DGIT_VERSION=OFF"
@@ -89,15 +88,15 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular multi screen pdf presentation viewer";
-    homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
-    license = with licenses; [
+    homepage = "https://github.com/beamerpresenter/BeamerPresenter";
+    license = with lib.licenses; [
       agpl3Only
       gpl3Plus
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       euxane
       dotlambda
     ];

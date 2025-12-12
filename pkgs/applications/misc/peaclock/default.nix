@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "octobanana";
-    repo = pname;
+    repo = "peaclock";
     rev = version;
     sha256 = "1582vgslhpgbvcd7ipgf1d1razrvgpq1f93q069yr2bbk6xn8i16";
   };
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clock, timer, and stopwatch for the terminal";
     homepage = "https://octobanana.com/software/peaclock";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ djanatyn ];
     mainProgram = "peaclock";
   };
 }

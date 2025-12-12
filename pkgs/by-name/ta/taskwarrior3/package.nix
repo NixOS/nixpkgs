@@ -11,35 +11,34 @@
   installShellFiles,
 
   # buildInputs
+  corrosion,
   libuuid,
-  xdg-utils,
 
   # passthru.tests
   nixosTests,
 
   # nativeCheckInputs
   python3,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.3.0";
+  version = "3.4.2";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "dcbe916286792e6f5d2d3af3baab79918ebc5f71";
-    hash = "sha256-jma1BYZugMH+JiX5Xu6VI8ZFn4FBr1NxbNrOHX0bFk0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y0jnAW4OtPI9GCOSFRPf8/wo4qBB6O1FASj40S601+E=";
     fetchSubmodules = true;
   };
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-mzmrbsUuIjUVuNEa33EgtOTl9r+0xYj2WkKqFjxX1oU=";
+    hash = "sha256-03HG8AGe6PJ516zL23iNjGUYmGOZa8NuFljb1ll2pjs=";
   };
 
-  postPatch = ''
-    substituteInPlace src/commands/CmdNews.cpp \
-      --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
-  '';
   # The CMakeLists files used by upstream issue a `cargo install` command to
   # install a rust tool (cxxbridge-cmd) that is supposed to be included in the Cargo.toml's and
   # `Cargo.lock` files of upstream. Setting CARGO_HOME like that helps `cargo
@@ -48,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     export CARGO_HOME=$PWD/.cargo
   '';
+  cmakeFlags = [
+    (lib.cmakeBool "SYSTEM_CORROSION" true)
+  ];
   failingTests = [
     # It would be very hard to make this test succeed, as the bash completion
     # needs to be installed and the builder's `bash` should be aware of it.
@@ -56,14 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     "bash_completion.test.py"
   ];
   # Contains Bash and Python scripts used while testing.
-  preConfigure =
-    ''
-      patchShebangs test
-    ''
-    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
-      substituteInPlace test/CMakeLists.txt \
-        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-    '';
+  preConfigure = ''
+    patchShebangs test
+  ''
+  + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+    substituteInPlace test/CMakeLists.txt \
+      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -77,18 +78,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    corrosion
     libuuid
   ];
 
   doCheck = true;
   # See:
-  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
+  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.4.1/doc/devel/contrib/development.md#run-the-test-suite
   preCheck = ''
     make test_runner
   '';
   nativeCheckInputs = [
     python3
   ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
@@ -108,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
-    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/${finalAttrs.src.tag}";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
@@ -117,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       oxalica
       mlaradji
       doronbehar
+      Necior
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;

@@ -119,7 +119,7 @@ rec {
     x;
 
   /**
-    Return the fixpoint that `f` converges to when called iteratively, starting
+    Returns the fixpoint that `f` converges to when called iteratively, starting
     with the input `x`.
 
     ```
@@ -329,7 +329,7 @@ rec {
 
   /**
     Compose two overlay functions and return a single overlay function that combines them.
-    For more details see: [composeManyExtensions](#function-library-lib.fixedPoints.composeManyExtensions).
+    For more details see: [`composeManyExtensions`](#function-library-lib.fixedPoints.composeManyExtensions).
   */
   composeExtensions =
     f: g: final: prev:
@@ -389,7 +389,7 @@ rec {
 
       extensions = composeManyExtensions [ overlayA overlayB ];
 
-      # Caluculate the fixed point of all composed overlays.
+      # Calculate the fixed point of all composed overlays.
       fixedpoint = lib.fix (lib.extends extensions original );
 
     in fixedpoint

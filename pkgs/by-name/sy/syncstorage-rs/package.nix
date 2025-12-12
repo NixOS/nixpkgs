@@ -8,6 +8,7 @@
   makeBinaryWrapper,
   lib,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -22,13 +23,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.18.2";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-YIj9yoZrVRMcWFczyy5RR2Djwhu1/CyQuumzPoApp3I=";
+    repo = "syncstorage-rs";
+    tag = version;
+    hash = "sha256-WkUU6013sdLMh3hq9CE/D5+ftpdisihVD6W+FvjwbP4=";
   };
 
   nativeBuildInputs = [
@@ -47,14 +48,14 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-V6shIxNpw+WHqypNgE02Sr7DO8l3H9tb72a1u2UHDfo=";
 
   # almost all tests need a DB to test against
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = { inherit (nixosTests) firefox-syncserver; };
 
   meta = {
     description = "Mozilla Sync Storage built with Rust";

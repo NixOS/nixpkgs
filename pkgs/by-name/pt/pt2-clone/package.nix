@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pt2-clone";
-  version = "1.71";
+  version = "1.78";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wyiY4qiWnisWKjBmkZSbmndJMMtogAQ+MWu4VLHROY0=";
+    sha256 = "sha256-qbzs+EaypbulB1jkKQHMbhXwJIQwoyqVCdSvx5vYk2A=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     pt2-clone-opens = nixosTests.pt2-clone;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly accurate clone of the classic ProTracker 2.3D software for Amiga";
     homepage = "https://16-bits.org/pt2.php";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fgaz ];
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
-    platforms = platforms.littleEndian;
+    platforms = lib.platforms.littleEndian;
     mainProgram = "pt2-clone";
   };
 })

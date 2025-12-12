@@ -29,7 +29,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = [
     glib # schema hook
     lomiri-system-settings-unwrapped
-  ] ++ plugins;
+  ]
+  ++ plugins;
 
   installPhase = ''
     runHook preInstall

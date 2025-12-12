@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
-  version = "R2024_12_12";
+  version = "20250807";
 
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vxiWYUAEk54F1M0WrrMTHZ4DNJxxT/GaXetd5LjE808=";
+    tag = finalAttrs.version;
+    hash = "sha256-OY7jEirUDpzhgT9iCUYWeZmbCQl2R/agGIHXqJI/UBo=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     "iasl"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     "-O3"
-  ]);
+  ];
 
   enableParallelBuilding = true;
 

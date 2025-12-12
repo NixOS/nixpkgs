@@ -1,5 +1,6 @@
 {
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
@@ -7,12 +8,13 @@
 
   # dependencies
   alembic,
-  buildPythonPackage,
   cachetools,
   click,
   cloudpickle,
+  cryptography,
   databricks-sdk,
   docker,
+  fastapi,
   flask,
   gitpython,
   graphene,
@@ -34,6 +36,7 @@
   scipy,
   sqlalchemy,
   sqlparse,
+  uvicorn,
 
   # tests
   aiohttp,
@@ -44,7 +47,6 @@
   botocore,
   catboost,
   datasets,
-  fastapi,
   google-cloud-storage,
   httpx,
   jwt,
@@ -59,32 +61,29 @@
   pytestCheckHook,
   pytorch-lightning,
   sentence-transformers,
+  shap,
   starlette,
   statsmodels,
   tensorflow,
   torch,
   transformers,
-  uvicorn,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.18.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-etfgdSf3pbcKtCOk9MOgcR+Tzg4cmLbdadAOtQqN4PM=";
+    tag = "v${version}";
+    hash = "sha256-5zObSnGx7+cCrqRfvcnprQN05NqVBCeWcAZEE1Jpeuo=";
   };
 
-  # Remove currently broken dependency `shap`, a model explainability package.
-  # This seems quite unprincipled especially with tests not being enabled,
-  # but not mlflow has a 'skinny' install option which does not require `shap`.
-  pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
+    "cryptography"
     "gunicorn"
     "importlib-metadata"
     "packaging"
@@ -100,8 +99,10 @@ buildPythonPackage rec {
     cachetools
     click
     cloudpickle
+    cryptography
     databricks-sdk
     docker
+    fastapi
     flask
     gitpython
     graphene
@@ -117,12 +118,15 @@ buildPythonPackage rec {
     pandas
     protobuf
     pyarrow
+    pydantic
     pyyaml
     requests
     scikit-learn
     scipy
+    shap
     sqlalchemy
     sqlparse
+    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
@@ -136,7 +140,6 @@ buildPythonPackage rec {
     botocore
     catboost
     datasets
-    fastapi
     google-cloud-storage
     httpx
     jwt
@@ -194,7 +197,7 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tbenst ];
   };

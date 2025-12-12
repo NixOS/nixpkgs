@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "credhub-cli";
-  version = "2.9.40";
+  version = "2.9.52";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry-incubator";
     repo = "credhub-cli";
     rev = version;
-    sha256 = "sha256-9W/rn56RM+ooq18jCH/5m54bxAQWzcDsjx7V6T0J/yU=";
+    sha256 = "sha256-qTRRk7n8f5tC/uiBJgbZpd+tsoOPK5qTgZnqfwi5YlA=";
   };
 
   # these tests require network access that we're not going to give them
@@ -34,10 +38,10 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides a command line interface to interact with CredHub servers";
     homepage = "https://github.com/cloudfoundry-incubator/credhub-cli";
-    maintainers = with maintainers; [ ris ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
+    license = lib.licenses.asl20;
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ElYma6RH2u1faIgOvGpMQA26dSIibWcO4mWU6NAA5PQ=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cron_descriptor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that converts cron expressions into human readable strings";
     homepage = "https://github.com/Salamek/cron-descriptor";
     changelog = "https://github.com/Salamek/cron-descriptor/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

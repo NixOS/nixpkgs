@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Soft";
-    repo = pname;
+    repo = "xcolor";
     rev = version;
     sha256 = "sha256-NfmoBZek4hsga6RflE5EKkWarhCFIcTwEXhg2fpkxNE=";
   };
 
-  cargoHash = "sha256-Zh73+FJ63SkusSavCqSCLbHVnU++4ZFSMFUIM7TnOj0=";
+  cargoHash = "sha256-8hx8c0LvzI2T/kONq29XzCbFGGMiO1J0XXxbzi+FSxM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,11 +58,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight color picker for X11";
     homepage = "https://github.com/Soft/xcolor";
     maintainers = with lib.maintainers; [ moni ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "xcolor";
   };
 }

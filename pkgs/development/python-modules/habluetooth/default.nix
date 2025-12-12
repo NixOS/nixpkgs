@@ -1,16 +1,18 @@
 {
   lib,
   async-interrupt,
-  bleak,
   bleak-retry-connector,
+  bleak,
   bluetooth-adapters,
   bluetooth-auto-recovery,
   bluetooth-data-tools,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
+  freezegun,
   poetry-core,
   pytest-asyncio,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "3.6.0";
+  version = "5.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ypE/PvJV29+P389wLKZUErqLRvy935dAZYeap7n1z4M=";
+    tag = "v${version}";
+    hash = "sha256-VbD4fAOZtDtPIGGYb3ISP7c9YLBXAXeOIICqf9Pm5ho=";
   };
 
   build-system = [
@@ -47,18 +49,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
+    pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "habluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
-    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,21 +6,21 @@
 
 buildDunePackage rec {
   pname = "metadata";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-metadata";
-    rev = "v${version}";
-    sha256 = "sha256-SQ8fNl62fvoCgbIt0axQyE3Eqwl8EOtYiz3xN96al+g=";
+    tag = "v${version}";
+    sha256 = "sha256-CsmKk14jk/PuTibEmlFr/QZbmDIkLJ5QJSIZQXLRmGw=";
   };
 
   minimalOCamlVersion = "4.14";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-metadata";
-    description = "Library to read metadata from files in various formats.";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dandellion ];
+    description = "Library to read metadata from files in various formats";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

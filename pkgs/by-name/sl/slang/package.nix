@@ -5,7 +5,6 @@
   libiconv,
   libpng,
   ncurses,
-  pcre,
   readline,
   zlib,
   writeScript,
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-pcre=${pcre.dev}"
+    "--without-pcre"
     "--with-png=${libpng.dev}"
     "--with-readline=${readline.dev}"
     "--with-z=${zlib.dev}"
@@ -44,10 +43,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpng
-    pcre
     readline
     zlib
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 
@@ -79,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small, embeddable multi-platform programming library";
     longDescription = ''
       S-Lang is an interpreted language that was designed from the start to be
@@ -102,9 +101,9 @@ stdenv.mkDerivation rec {
       Guide.
     '';
     homepage = "http://www.jedsoft.org/slang/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
     mainProgram = "slsh";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CharlesBlonde";
     repo = "libsoundtouch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-am8nHPdtKMh8ZA/jKgz2jnltpvgEga8/BjvP5nrhgvI=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libsoundtouch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bose Soundtouch Python library";
     homepage = "https://github.com/CharlesBlonde/libsoundtouch";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

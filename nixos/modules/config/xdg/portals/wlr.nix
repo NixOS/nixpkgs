@@ -28,7 +28,7 @@ in
       description = ''
         Configuration for `xdg-desktop-portal-wlr`.
 
-        See `xdg-desktop-portal-wlr(5)` for supported
+        See {manpage}`xdg-desktop-portal-wlr(5)` for supported
         values.
       '';
 
@@ -47,7 +47,7 @@ in
             exec_before = "disable_notifications.sh";
             exec_after = "enable_notifications.sh";
             chooser_type = "simple";
-            chooser_cmd = "''${pkgs.slurp}/bin/slurp -f %o -or";
+            chooser_cmd = "''${pkgs.slurp}/bin/slurp -f 'Monitor: %o' -or";
           };
         }
       '';

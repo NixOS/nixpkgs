@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.hologram-server;
 
@@ -38,93 +35,93 @@ in
 {
   options = {
     services.hologram-server = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Hologram server for AWS instance credentials";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0:3100";
         description = "Address and port to listen on";
       };
 
-      ldapHost = mkOption {
-        type = types.str;
+      ldapHost = lib.mkOption {
+        type = lib.types.str;
         description = "Address of the LDAP server to use";
       };
 
-      ldapInsecure = mkOption {
-        type = types.bool;
+      ldapInsecure = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to connect to LDAP over SSL or not";
       };
 
-      ldapUserAttr = mkOption {
-        type = types.str;
+      ldapUserAttr = lib.mkOption {
+        type = lib.types.str;
         default = "cn";
         description = "The LDAP attribute for usernames";
       };
 
-      ldapBaseDN = mkOption {
-        type = types.str;
+      ldapBaseDN = lib.mkOption {
+        type = lib.types.str;
         description = "The base DN for your Hologram users";
       };
 
-      ldapBindDN = mkOption {
-        type = types.str;
+      ldapBindDN = lib.mkOption {
+        type = lib.types.str;
         description = "DN of account to use to query the LDAP server";
       };
 
-      ldapBindPassword = mkOption {
-        type = types.str;
+      ldapBindPassword = lib.mkOption {
+        type = lib.types.str;
         description = "Password of account to use to query the LDAP server";
       };
 
-      enableLdapRoles = mkOption {
-        type = types.bool;
+      enableLdapRoles = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to assign user roles based on the user's LDAP group memberships";
       };
 
-      groupClassAttr = mkOption {
-        type = types.str;
+      groupClassAttr = lib.mkOption {
+        type = lib.types.str;
         default = "groupOfNames";
         description = "The objectclass attribute to search for groups when enableLdapRoles is true";
       };
 
-      roleAttr = mkOption {
-        type = types.str;
+      roleAttr = lib.mkOption {
+        type = lib.types.str;
         default = "businessCategory";
         description = "Which LDAP group attribute to search for authorized role ARNs";
       };
 
-      awsAccount = mkOption {
-        type = types.str;
+      awsAccount = lib.mkOption {
+        type = lib.types.str;
         description = "AWS account number";
       };
 
-      awsDefaultRole = mkOption {
-        type = types.str;
+      awsDefaultRole = lib.mkOption {
+        type = lib.types.str;
         description = "AWS default role";
       };
 
-      statsAddress = mkOption {
-        type = types.str;
+      statsAddress = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Address of statsd server";
       };
 
-      cacheTimeoutSeconds = mkOption {
-        type = types.int;
+      cacheTimeoutSeconds = lib.mkOption {
+        type = lib.types.int;
         default = 3600;
         description = "How often (in seconds) to refresh the LDAP cache";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.hologram-server = {
       description = "Provide EC2 instance credentials to machines outside of EC2";
       after = [ "network.target" ];

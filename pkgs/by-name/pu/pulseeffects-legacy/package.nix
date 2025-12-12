@@ -46,15 +46,15 @@ let
     zam-plugins # maximizer
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pulseeffects";
-  version = "4.8.7";
+  version = "4.8.7-unstable-2024-09-17";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
-    rev = "v${version}";
-    sha256 = "sha256-ldvcA8aTHOgaascH6MF4CzmJ8I2rYOiR0eAkCZzvK/M=";
+    rev = "fbe0a724c1405cee624802f381476cf003dfcfa";
+    hash = "sha256-tyVUWc8w08WUnJRTjJVTIiG/YBWTETNYG+4amwEYezY=";
   };
 
   nativeBuildInputs = [
@@ -106,12 +106,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     mainProgram = "pulseeffects";
     homepage = "https://github.com/wwmm/pulseeffects";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

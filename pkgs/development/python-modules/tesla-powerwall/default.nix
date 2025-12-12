@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jrester";
     repo = "tesla_powerwall";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cAsJKFM0i0e7w2T4HP4a5ybJGuDvBAGCGmPEKFzNFAY=";
   };
 
@@ -43,15 +43,15 @@ buildPythonPackage rec {
     "test_parse_endpoint"
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "tesla_powerwall" ];
 
-  meta = with lib; {
+  meta = {
     description = "API for Tesla Powerwall";
     homepage = "https://github.com/jrester/tesla_powerwall";
     changelog = "https://github.com/jrester/tesla_powerwall/blob/v${version}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

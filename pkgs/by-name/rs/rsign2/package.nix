@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsign2";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-bJeM1HTzmC8QZ488PpqQ0qqdFg1/rjPWuTtqo1GXyHM=";
+    hash = "sha256-cjucecEg5ERPsiaDuGESf2u9RTYHpQmHwWPnx1ask0I=";
   };
 
-  cargoHash = "sha256-xqNFJFNV9mIVxzyQvhv5QwHVcXLuH76VYFAsgp5hW+w=";
+  cargoHash = "sha256-pVEv7FST/jm4YNoU8T48/an2MsqboHXc+PMPYf13pKQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to sign files and verify signatures";
     homepage = "https://github.com/jedisct1/rsign2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "rsign";
   };
 }

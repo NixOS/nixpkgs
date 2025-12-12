@@ -67,7 +67,7 @@ in
       ];
       description = ''
         A list of device nodes to which {command}`esphome` has access to.
-        Refer to DeviceAllow in systemd.resource-control(5) for more information.
+        Refer to DeviceAllow in {manpage}`systemd.resource-control(5)` for more information.
         Beware that if a device is referred to by an absolute path instead of a device category,
         it will only allow devices that already are plugged in when the service is started.
       '';
@@ -93,7 +93,8 @@ in
       environment = {
         # platformio fails to determine the home directory when using DynamicUser
         PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
-      } // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
+      }
+      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";

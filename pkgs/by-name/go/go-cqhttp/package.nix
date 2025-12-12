@@ -10,17 +10,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Mrs4s";
-    repo = pname;
+    repo = "go-cqhttp";
     rev = "v${version}";
     hash = "sha256-mKenmsGdVg60zjVMTfbEtqtPcJdJo60Nz6IUQ9RB7j0=";
   };
 
   vendorHash = "sha256-YNARh25xrcPGvhhXzYmg3CsWwzvXq44uWt0S1PjRVdM=";
 
-  meta = with lib; {
+  meta = {
     description = "Golang implementation of OneBot based on Mirai and MiraiGo";
     homepage = "https://github.com/Mrs4s/go-cqhttp";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Anillc ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Anillc ];
   };
 }

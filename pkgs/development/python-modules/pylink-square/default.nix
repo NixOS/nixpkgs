@@ -2,27 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  mock,
+
+  # dependencies
   psutil,
-  pytestCheckHook,
-  pythonOlder,
   six,
+
+  # tests
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.3.0";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4tdtyb0AjsAmFOPdkxbbro8PH3akC5uihN59lgijhkc=";
+    tag = "v${version}";
+    hash = "sha256-rkkdnpkl9UHcBDjp6lsFXR1zNn7tH1KeTQ7wV+yJ3m0=";
   };
+
+  patches = [
+    # ERROR: /build/source/setup.cfg:16: unexpected value continuation
+    ./fix-setup-cfg-syntax.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -45,11 +53,11 @@ buildPythonPackage rec {
     "test_set_log_file_success"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for the SEGGER J-Link";
     homepage = "https://github.com/square/pylink";
-    changelog = "https://github.com/square/pylink/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dump_stack ];
+    changelog = "https://github.com/square/pylink/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dump_stack ];
   };
 }

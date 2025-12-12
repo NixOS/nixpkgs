@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nV6mePSWzfPW2RwXg/mxgzfT9wD95mmTuPnPEro1kEY=";
   };
 
@@ -50,7 +50,8 @@ buildPythonPackage rec {
   dependencies = [
     black
     python-lsp-server
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pylsp_black" ];
 

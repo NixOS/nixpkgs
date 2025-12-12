@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cykerway";
-    repo = pname;
-    rev = version;
+    repo = "complete-alias";
+    tag = version;
     sha256 = "18lmdb3inphxyjv08ing5wckqnjq0m5zfl0f15mqzlvf2ypar63x";
   };
 
@@ -35,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automagical shell alias completion";
     homepage = "https://github.com/cykerway/complete-alias";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ tuxinaut ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ tuxinaut ];
     mainProgram = "complete_alias";
   };
 }

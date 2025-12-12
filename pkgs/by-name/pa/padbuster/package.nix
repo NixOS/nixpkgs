@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "padbuster";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "AonCyberLabs";
-    repo = pname;
+    repo = "padbuster";
     rev = "50e4a3e2bf5dfff5699440b3ebc61ed1b5c49bbe";
     sha256 = "VIvZ28MVnTSQru6l8flLVVqIIpxxXD8lCqzH81sPe/U=";
   };
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automated script for performing Padding Oracle attacks";
     homepage = "https://www.gdssecurity.com/l/t.php";
     mainProgram = "padBuster.pl";
-    maintainers = with maintainers; [ emilytrau ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }

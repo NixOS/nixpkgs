@@ -13,7 +13,7 @@
   perl,
   cryptopp,
   libupnp,
-  boost, # Not using boost leads to crashes with gtk3
+  boost186, # Not using boost leads to crashes with gtk3
   gettext,
   libpng,
   pkg-config,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
-    rev = version;
+    tag = version;
     sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
@@ -53,17 +53,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      wxGTK32
-      perl
-      cryptopp.dev
-      libupnp
-      boost
-    ]
-    ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  buildInputs = [
+    zlib
+    wxGTK32
+    perl
+    cryptopp.dev
+    libupnp
+    boost186
+  ]
+  ++ lib.optional httpServer libpng
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
@@ -80,6 +79,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     echo "find_package(Threads)" >> cmake/options.cmake
+
+    substituteInPlace src/libs/ec/abstracts/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 2.8)" "CMAKE_MINIMUM_REQUIRED (VERSION 3.10)"
   '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
@@ -89,7 +91,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libupnp ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer client for the eD2K and Kademlia networks";
     longDescription = ''
       aMule is an eMule-like client for the eD2k and Kademlia
@@ -103,9 +105,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://github.com/amule-project/amule";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # Undefined symbols for architecture arm64: "_FSFindFolder"
     broken = stdenv.hostPlatform.isDarwin;
   };

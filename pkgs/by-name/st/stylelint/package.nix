@@ -3,22 +3,18 @@
   fetchFromGitHub,
   lib,
 }:
-
-let
-  version = "16.12.0";
-in
-buildNpmPackage {
+buildNpmPackage rec {
   pname = "stylelint";
-  inherit version;
+  version = "16.26.0";
 
   src = fetchFromGitHub {
     owner = "stylelint";
     repo = "stylelint";
-    rev = version;
-    hash = "sha256-tFM4HR7n7GP+kawa1tcV/Hleb+IoCOKEHiKgULQySww=";
+    tag = version;
+    hash = "sha256-Lw36rmGNoqobDoMdzYX7JaOFTyFGmjiBe55WI9RgAlY=";
   };
 
-  npmDepsHash = "sha256-ypQBWWsQiHFsU8JG+ACbKjOjYoYyoPQ6Ws3IrNgAwsU=";
+  npmDepsHash = "sha256-CCvyJzLCXbuipBXJrLdkAv/dT9RoZNhbwrUZhSaja8s=";
 
   dontNpmBuild = true;
 

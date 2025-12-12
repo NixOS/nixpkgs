@@ -1,10 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   fast-histogram,
@@ -12,38 +11,28 @@
   numpy,
   wheel,
   pytest-mpl,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
-  version = "0.7";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astrofrog";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-MMxM+iv5p9ZLcBpqa3tBBPbsMM/PTg6BXaDpGgSw+DE=";
+    repo = "mpl-scatter-density";
+    tag = "v${version}";
+    hash = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };
 
-  patches = [
-    # https://github.com/astrofrog/mpl-scatter-density/pull/37
-    (fetchpatch {
-      name = "distutils-removal.patch";
-      url = "https://github.com/ifurther/mpl-scatter-density/commit/6feedabe1e82da67d8eec46a80eb370d9f334251.patch";
-      sha256 = "sha256-JqWlSm8mIwqjRPa+kMEaKipJyzGEO+gJK+Q045N1MXA=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     fast-histogram
@@ -52,7 +41,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
+    writableTmpDirAsHomeHook
   ];
+
+  # Need to set MPLBACKEND=agg for headless `matplotlib` on darwin.
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "agg";
 
   disabledTests = [
     # AssertionError: (240, 240) != (216, 216)
@@ -62,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpl_scatter_density" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/astrofrog/mpl-scatter-density";
     description = "Fast scatter density plots for Matplotlib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

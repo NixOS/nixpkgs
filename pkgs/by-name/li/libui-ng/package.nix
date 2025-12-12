@@ -2,7 +2,6 @@
   lib,
   stdenv,
   cmocka,
-  darwin,
   fetchFromGitHub,
   gtk3,
   meson,
@@ -11,20 +10,20 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libui-ng";
-  version = "4.1-unstable-2024-12-08";
+  version = "4.1-unstable-2025-03-15";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
     repo = "libui-ng";
-    rev = "ba11e53d6afd0a12831f988f350c376de50a8841";
-    hash = "sha256-edzQhuQsLJkfJsmyioLrI+YTG1qyd6ZGPtPRtSgxvuw=";
+    rev = "43ba1ef553c8993a43a67f1ce6e35983a2660d8c";
+    hash = "sha256-pnfrSPDIvG0tFYQoeMBONATkNRNjY/tJGp9n2I4cN/U=";
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
-  '';
+  patches = [
+    ./darwin-no-universal.patch
+  ];
 
   nativeBuildInputs = [
     cmocka
@@ -33,19 +32,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        darwin.libobjc
-        darwin.apple_sdk_11_0.Libsystem
-        darwin.apple_sdk_11_0.frameworks.Cocoa
-        darwin.apple_sdk_11_0.frameworks.AppKit
-        darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      ]
-    else
-      [
-        gtk3
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk3
+  ];
 
   mesonFlags = [
     (lib.mesonBool "examples" (!stdenv.hostPlatform.isDarwin))
@@ -55,11 +44,11 @@ stdenv.mkDerivation rec {
     tagPrefix = "alpha";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

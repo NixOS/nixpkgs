@@ -15,17 +15,12 @@
 
   defaultVersion =
     let
+      case = case: out: { inherit case out; };
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      {
-        case = range "8.14" "8.20";
-        out = "0.2.0";
-      }
-      {
-        case = range "8.14" "8.20";
-        out = "0.1.3";
-      }
+      (case (range "8.14" "9.1") "0.2.0")
+      (case (range "8.14" "8.20") "0.1.3")
     ] null;
   release = {
     "0.2.0".sha256 = "sha256-qDRTgWLUvu4x3/d3BDcqo2I4W5ZmLyRiwuY/Tm/FuKA=";
@@ -42,7 +37,7 @@
   useDuneifVersion = v: lib.versions.isGe "0.2.0" v || v == "dev";
 
   meta = {
-    description = "From JSON to Coq, and vice versa.";
+    description = "From JSON to Coq, and vice versa";
     license = lib.licenses.bsd3;
   };
 }).overrideAttrs

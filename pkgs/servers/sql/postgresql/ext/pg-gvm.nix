@@ -1,5 +1,4 @@
 {
-  buildPostgresqlExtension,
   cmake,
   fetchFromGitHub,
   glib,
@@ -10,25 +9,23 @@
   pcre2,
   pkg-config,
   postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg-gvm";
-  version = "22.6.6";
+  version = "22.6.12";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pg-gvm";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4620xHKh6dB3eIoBVZDf+qxLxmCCfFvdNDN/KnegWWA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x+RTB4/Uj8Cif+JTVQjRU0UZxa3+LHwtooJi9eoB8vE=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    postgresql
   ];
 
   buildInputs = [
@@ -45,7 +42,6 @@ buildPostgresqlExtension (finalAttrs: {
     changelog = "https://github.com/greenbone/pg-gvm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tochiaha ];
-    mainProgram = "pg-gvm";
     platforms = postgresql.meta.platforms;
   };
 })

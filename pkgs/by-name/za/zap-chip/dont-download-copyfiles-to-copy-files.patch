@@ -1,28 +1,28 @@
 diff --git a/src-script/pack-apack-win-linux.js b/src-script/pack-apack-win-linux.js
-index 0120f9f9..41fcf99c 100644
+index 7eaaedc1..35b41431 100644
 --- a/src-script/pack-apack-win-linux.js
 +++ b/src-script/pack-apack-win-linux.js
-@@ -6,12 +6,12 @@ exports.default = async function (context) {
+@@ -6,13 +6,13 @@ exports.default = async function (context) {
      context.electronPlatformName === 'win32' ||
      context.electronPlatformName === 'linux'
    ) {
--    return scriptUtil.executeCmd({}, 'npx', [
+-    await scriptUtil.executeCmd({}, 'npx', [
 -      'copyfiles',
 -      '-V',
 -      '-f',
--      path.resolve(context.outDir, '../apack.json'),
--      context.appOutDir
-+    return scriptUtil.executeCmd({}, 'install', [
++    await scriptUtil.executeCmd({}, 'install', [
 +      '-m466',
 +      '-v',
 +      '-Dt',
 +      context.appOutDir,
-+      path.resolve(context.outDir, '../apack.json')
+       path.resolve(context.outDir, '../apack.json'),
+       path.resolve(context.outDir, '../src/assets/zap.png'),
+-      context.appOutDir
      ])
+     console.log('Files copied successfully.')
    }
- }
 diff --git a/src-script/script-util.js b/src-script/script-util.js
-index 1897c2b8..9faa5f20 100644
+index 1897c2b8..ed6bba12 100644
 --- a/src-script/script-util.js
 +++ b/src-script/script-util.js
 @@ -181,11 +181,9 @@ async function rebuildBackendIfNeeded() {

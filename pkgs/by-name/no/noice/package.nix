@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.2f30.org/noice.git";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "0975j4m93s9a21pazwdzn4gqhkngwq7q6ghp0q8a75r6c4fb7aar";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small ncurses-based file browser";
     homepage = "https://git.2f30.org/noice/";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ iogamaster ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
     mainProgram = "noice";
   };
 }

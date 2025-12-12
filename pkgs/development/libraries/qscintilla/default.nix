@@ -1,28 +1,28 @@
 {
-  stdenv,
   lib,
+  stdenv,
+
   fetchurl,
   unzip,
   qtbase,
   qtmacextras ? null,
   qmake,
   fixDarwinDylibNames,
-  darwin,
 }:
 
 let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  qtVersion = lib.versions.major qtbase.version;
 in
-stdenv'.mkDerivation rec {
-  pname = "qscintilla-qt5";
-  version = "2.13.2";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qscintilla-qt${qtVersion}";
+  version = "2.14.1";
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
-    sha256 = "sha256-tsfl8ntR0l8J/mz4Sumn8Idq8NZdjMtVEQnm57JYhfQ=";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${finalAttrs.version}/QScintilla_src-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-3+E8asydhd/Lp2zMgGHnGiI5V6bALzw0OzCp1DpM3U0=";
   };
 
-  sourceRoot = "QScintilla_src-${version}/src";
+  sourceRoot = "QScintilla_src-${finalAttrs.version}/src";
 
   buildInputs = [ qtbase ];
 
@@ -31,13 +31,18 @@ stdenv'.mkDerivation rec {
   nativeBuildInputs = [
     unzip
     qmake
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
-  postFixup = ''
-    ln -s $out/lib/libqscintilla2_qt5.so $out/lib/libqscintilla2.so
-  '';
+  postFixup =
+    let
+      libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      ln -s $out/lib/libqscintilla2_qt${qtVersion}${libExt} $out/lib/libqscintilla2${libExt}
+    '';
 
   dontWrapQtApps = true;
 
@@ -50,7 +55,7 @@ stdenv'.mkDerivation rec {
       --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -67,10 +72,8 @@ stdenv'.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl3 ]; # and commercial
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
-    # ld: library not found for -lcups
-    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})

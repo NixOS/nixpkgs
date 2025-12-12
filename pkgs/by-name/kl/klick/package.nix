@@ -25,16 +25,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    rubberband
     scons
   ];
   buildInputs = [
+    rubberband
     libsamplerate
     libsndfile
     liblo
     libjack2
     boost
   ];
+
+  preBuild = ''
+    substituteInPlace SConstruct \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
+  '';
+
   prefixKey = "PREFIX=";
 
   meta = {

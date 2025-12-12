@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lcm";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
     rev = "v${version}";
-    hash = "sha256-IFHoJl5OtnUb+w3gLG5f578yAektjgrY9Uj2eUVoIrc=";
+    hash = "sha256-72fytJY+uXEHGdZ7N+0g+JK7ALb2e2ZtJuvhiGIMHiA=";
   };
 
   outputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Communications and Marshalling (LCM)";
     homepage = "https://github.com/lcm-proj/lcm";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ kjeremy ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ kjeremy ];
     platforms = lib.platforms.unix;
   };
 }

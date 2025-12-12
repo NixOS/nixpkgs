@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stella";
-  version = "7.0b";
+  version = "7.0c";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = "stella";
     rev = finalAttrs.version;
-    hash = "sha256-310rGYfCVRoTi9kq9XqmvTCVLLDY/PG2qgBG1kNT/DY=";
+    hash = "sha256-AbZBBg4P0qnB+mZpiG8/kHixBfkKQptyLrF4lwgRr/Y=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/stella-emu/stella/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "stella";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

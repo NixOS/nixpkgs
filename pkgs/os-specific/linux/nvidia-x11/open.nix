@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   nvidia_x11,
   hash,
   patches ? [ ],
@@ -25,24 +26,27 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
-    makeFlags = kernel.makeFlags ++ [
-      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-      {
-        aarch64-linux = "TARGET_ARCH=aarch64";
-        x86_64-linux = "TARGET_ARCH=x86_64";
-      }
-      .${stdenv.hostPlatform.system}
-    ];
+    makeFlags =
+      kernelModuleMakeFlags
+      ++ [
+        "IGNORE_PREEMPT_RT_PRESENCE=1"
+        "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+        "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+        "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
+        "DATE="
+        "TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
+      ];
 
     installTargets = [ "modules_install" ];
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       description = "NVIDIA Linux Open GPU Kernel Module";
       homepage = "https://github.com/NVIDIA/open-gpu-kernel-modules";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl2Plus
         mit
       ];
@@ -50,7 +54,7 @@ stdenv.mkDerivation (
         "x86_64-linux"
         "aarch64-linux"
       ];
-      maintainers = with maintainers; [ nickcao ];
+      maintainers = with lib.maintainers; [ nickcao ];
       inherit broken;
     };
   }

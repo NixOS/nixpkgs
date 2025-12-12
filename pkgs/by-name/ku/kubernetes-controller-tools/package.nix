@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "controller-tools";
-  version = "0.16.5";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6It4C8TWA8V0YwUHoSoJK8IbjZ8yfBzR5iX9lzenIY0=";
+    repo = "controller-tools";
+    tag = "v${version}";
+    sha256 = "sha256-NPyX89Hr1MAUdMafEEvcf/geQD1PxkDFSRPCFZBh29g=";
   };
 
-  vendorHash = "sha256-wS1+cUXZzfDz5BRHcqV8T050z54VrJB4FcWqRzwsYrc=";
+  vendorHash = "sha256-97FtwBaN8rMTsz9XbTEB1PSC454N2SLSWyOzXSWld9Y=";
 
   ldflags = [
     "-s"
@@ -31,11 +31,11 @@ buildGoModule rec {
     "cmd/helpgen"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to use with the Kubernetes controller-runtime libraries";
     homepage = "https://github.com/kubernetes-sigs/controller-tools";
     changelog = "https://github.com/kubernetes-sigs/controller-tools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ michojel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ michojel ];
   };
 }

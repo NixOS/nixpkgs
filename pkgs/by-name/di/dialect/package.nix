@@ -16,20 +16,21 @@
   glib-networking,
   libadwaita,
   libsecret,
+  libspelling,
   nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.5.0";
+  version = "2.6.1";
   pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "dialect-app";
     repo = "dialect";
-    rev = "refs/tags/${version}";
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-TWXJlzuSBy+Ij3s0KS02bh8vdXP10hQpgdz4QMTLf/Q=";
+    hash = "sha256-Gy5KlcY22ykoWUzVk6w46SLndOmEQxMCcvo1ClMq0LM=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     glib-networking
     libadwaita
     libsecret
+    libspelling
   ];
 
   dependencies = with python3.pkgs; [
@@ -68,17 +70,20 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  postFixup = ''
+    patchShebangs --update --host $out/share/dialect/search_provider
+  '';
+
   doCheck = false;
 
-  # handle setup hooks better
-  strictDeps = false;
+  strictDeps = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/dialect-app/dialect";
+    homepage = "https://dialectapp.org";
     description = "Translation app for GNOME";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "dialect";

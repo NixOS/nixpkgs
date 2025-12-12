@@ -1,22 +1,23 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gobject-introspection,
   wrapGAppsHook3,
   killall,
+  socat,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "waypaper";
-  version = "2.3";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ty3KiKkIyv6aqTua3YUB2smYJv7dXGPP5k3lXoxDzI0=";
+    tag = version;
+    hash = "sha256-wtYF9H56IARkrFbChtuhWtOietA88khQJSOpfDtGQro=";
   };
 
   nativeBuildInputs = [
@@ -24,16 +25,21 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
-    python3.pkgs.pygobject3
-    python3.pkgs.platformdirs
-    python3.pkgs.importlib-metadata
-    python3.pkgs.pillow
+  dependencies = with python3Packages; [
+    imageio
+    imageio-ffmpeg
+    pillow
+    platformdirs
+    pygobject3
+    screeninfo
   ];
 
-  propagatedBuildInputs = [ killall ];
+  propagatedBuildInputs = [
+    killall
+    socat
+  ];
 
   # has no tests
   doCheck = false;
@@ -44,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
@@ -54,8 +60,11 @@ python3.pkgs.buildPythonApplication rec {
       If wallpaper does not change, make sure that swaybg or swww is installed.
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ totalchaos ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      prince213
+      totalchaos
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "deckmaster";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1hZ7yAKTvkk20ho+QOqFEtspBvFztAtfmITs2uxhdmQ=";
   };
 
@@ -36,13 +36,13 @@ buildGoModule rec {
       --prefix XDG_DATA_DIRS : "${roboto.out}/share/" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Application to control your Elgato Stream Deck on Linux";
     mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
     changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

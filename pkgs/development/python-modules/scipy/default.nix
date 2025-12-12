@@ -28,13 +28,15 @@
   pybind11,
   pooch,
   xsimd,
+  boost188,
+  qhull,
 
   # dependencies
   numpy,
 
   # tests
   hypothesis,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-xdist,
 
   # Reverse dependency
@@ -48,8 +50,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.14.1";
-  srcHash = "sha256-eYuUHr9wZMXvEsIhssGR35JnRBNGaOL/j1LNM5sHuYY=";
+  version = "1.16.3";
+  srcHash = "sha256-2NVmsJqsUjWSD7oEJhRkRjbKvqwikBJenAhBio/+IuU=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -78,7 +80,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = srcHash;
     fetchSubmodules = true;
   };
@@ -91,29 +93,38 @@ buildPythonPackage {
       excludes = [ "doc/source/dev/contributor/meson_advanced.rst" ];
     })
   ];
-
+  # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
+  # 2.x are supported. However upstream wants to always build with Numpy 2,
+  # and with it to still be able to run with a Numpy 1 or 2. We insist to
+  # perform this substitution even though python3.pkgs.numpy is of version 2
+  # nowadays, because our ecosystem unfortunately doesn't allow easily
+  # separating runtime and build-system dependencies. See also:
+  #
+  # https://discourse.nixos.org/t/several-comments-about-priorities-and-new-policies-in-the-python-ecosystem/51790
+  #
+  # Being able to build (& run) with Numpy 1 helps for python environments
+  # that override globally the `numpy` attribute to point to `numpy_1`.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
+      --replace-fail "numpy>=2.0.0,<2.6" numpy
   '';
 
-  build-system =
-    [
-      cython
-      gfortran
-      meson-python
-      nukeReferences
-      pythran
-      pkg-config
-      setuptools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Minimal version required according to:
-      # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
-      (xcbuild.override {
-        sdkVer = "13.3";
-      })
-    ];
+  build-system = [
+    cython
+    gfortran
+    meson-python
+    nukeReferences
+    pythran
+    pkg-config
+    setuptools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Minimal version required according to:
+    # https://github.com/scipy/scipy/blob/v1.16.0/scipy/meson.build#L238-L244
+    (xcbuild.override {
+      sdkVer = "13.3";
+    })
+  ];
 
   buildInputs = [
     blas
@@ -121,6 +132,8 @@ buildPythonPackage {
     pybind11
     pooch
     xsimd
+    boost188
+    qhull
   ];
 
   dependencies = [ numpy ];
@@ -129,41 +142,54 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     hypothesis
-    # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
-    pytest7CheckHook
+    pytestCheckHook
     pytest-xdist
   ];
 
-  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
-  # See https://github.com/scipy/scipy/issues/18308
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
-    "test_dst4_definition_ortho"
-    "test_load_mat4_le"
-    "hyp2f1_test_case47"
-    "hyp2f1_test_case3"
-    "test_uint64_max"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+      # See https://github.com/scipy/scipy/issues/18308
+      "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+      "test_dst4_definition_ortho"
+      "test_load_mat4_le"
+      "hyp2f1_test_case47"
+      "hyp2f1_test_case3"
+      "test_uint64_max"
+      "test_large_m4" # https://github.com/scipy/scipy/issues/22466
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+      # https://github.com/scipy/scipy/issues/24090
+      "test_cython_api"
+      "test_distance_transform_cdt05"
+      "test_eval_chebyt_gh20129"
+      "test_hyp0f1"
+      "test_hyp0f1_gh5764"
+      "test_simple_det_shapes_real_complex"
+    ]
+    ++ lib.optionals (python.isPy311) [
+      # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
+      "test_funcs"
+    ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  preConfigure =
-    ''
-      # Helps parallelization a bit
-      export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
-      # We download manually the datasets and this variable tells the pooch
-      # library where these files are cached. See also:
-      # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
-      # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
-      export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
-    ''
-    + (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        d: dpath:
-        # Actually copy the datasets
-        "cp ${dpath} scipy-data/${d}.dat"
-      ) datasets
-    ));
+  preConfigure = ''
+    # Helps parallelization a bit
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+    # We download manually the datasets and this variable tells the pooch
+    # library where these files are cached. See also:
+    # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
+    # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
+    export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
+  ''
+  + (lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (
+      d: dpath:
+      # Actually copy the datasets
+      "cp ${dpath} scipy-data/${d}.dat"
+    ) datasets
+  ));
 
   mesonFlags = [
     "-Dblas=${blas.pname}"
@@ -172,6 +198,7 @@ buildPythonPackage {
     # meson the proper cross compilation related arguments. See also:
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
     "--cross-file=${crossFileScipy}"
+    "-Duse-system-libraries=all"
   ];
 
   # disable stackprotector on aarch64-darwin for now
@@ -201,14 +228,13 @@ buildPythonPackage {
 
   passthru = {
     inherit blas;
-    updateScript =
-      [
-        ./update.sh
-        # Pass it this file name as argument
-        (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
-      ]
-      # Pass it the names of the datasets to update their hashes
-      ++ (builtins.attrNames datasetsHashes);
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" python.pkgs.scipy).file
+    ]
+    # Pass it the names of the datasets to update their hashes
+    ++ (builtins.attrNames datasetsHashes);
     tests = {
       inherit sage;
     };

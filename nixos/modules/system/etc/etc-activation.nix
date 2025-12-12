@@ -15,6 +15,7 @@
       system.activationScripts.etc = lib.stringAfter [
         "users"
         "groups"
+        "specialfs"
       ] config.system.build.etcActivationCommands;
     }
 
@@ -32,8 +33,10 @@
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
-          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
-          message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
+          assertion =
+            (config.system.switch.enable)
+            -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
+          message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
       ];
 
@@ -43,13 +46,17 @@
         "overlay"
       ];
 
+      system.requiredKernelConfig = with config.lib.kernelConfig; [
+        (isEnabled "EROFS_FS")
+      ];
+
       boot.initrd.systemd = {
         mounts = [
           {
-            where = "/run/etc-metadata";
+            where = "/run/nixos-etc-metadata";
             what = "/etc-metadata-image";
             type = "erofs";
-            options = "loop,ro";
+            options = "loop,ro,nodev,nosuid";
             unitConfig = {
               # Since this unit depends on the nix store being mounted, it cannot
               # be a dependency of local-fs.target, because if it did, we'd have
@@ -78,10 +85,12 @@
             type = "overlay";
             options = lib.concatStringsSep "," (
               [
+                "nodev"
+                "nosuid"
                 "relatime"
                 "redirect_dir=on"
                 "metacopy=on"
-                "lowerdir=/run/etc-metadata::/etc-basedir"
+                "lowerdir=/run/nixos-etc-metadata::/etc-basedir"
               ]
               ++ lib.optionals config.system.etc.overlay.mutable [
                 "rw"
@@ -94,24 +103,22 @@
             );
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
-            after =
-              [
-                config.boot.initrd.systemd.services.initrd-find-etc.name
-              ]
-              ++ lib.optionals config.system.etc.overlay.mutable [
-                config.boot.initrd.systemd.services."rw-etc".name
-              ];
+            requires = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
+            after = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ]
+            ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
             unitConfig = {
               RequiresMountsFor = [
                 "/sysroot/nix/store"
-                "/run/etc-metadata"
+                "/run/nixos-etc-metadata"
               ];
               DefaultDependencies = false;
             };
@@ -137,15 +144,10 @@
           {
             initrd-find-etc = {
               description = "Find the path to the etc metadata image and based dir";
-              requires = [
-                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-              ];
-              after = [
-                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
-              ];
               before = [ "shutdown.target" ];
               conflicts = [ "shutdown.target" ];
               requiredBy = [ "initrd.target" ];
+              path = [ config.system.nixos-init.package ];
               unitConfig = {
                 DefaultDependencies = false;
                 RequiresMountsFor = "/sysroot/nix/store";
@@ -153,20 +155,8 @@
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
+                ExecStart = "${config.system.nixos-init.package}/bin/find-etc";
               };
-
-              script = # bash
-                ''
-                  set -uo pipefail
-
-                  closure="$(realpath /nixos-closure)"
-
-                  metadata_image="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-metadata-image")"
-                  ln -s "/sysroot$metadata_image" /etc-metadata-image
-
-                  basedir="$(${pkgs.chroot-realpath}/bin/chroot-realpath /sysroot "$closure/etc-basedir")"
-                  ln -s "/sysroot$basedir" /etc-basedir
-                '';
             };
           }
         ];

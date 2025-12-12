@@ -1,35 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  pdm-backend,
+  acres,
   click,
   pyyaml,
-  jsonschema,
 }:
 
 buildPythonPackage rec {
   pname = "bidsschematools";
-  version = "1.0.0";
+  version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    pname = "bidsschematools";
-    inherit version;
-    hash = "sha256-XqtCKtg3oqLCz5KihW9yk96fJ1uDcgag6qKCU9Bdqe4=";
+  src = fetchFromGitHub {
+    owner = "bids-standard";
+    repo = "bids-specification";
+    tag = "schema-${version}";
+    hash = "sha256-77ctT1Btin9gJSfgu1euFep0lg6SauCZn60VRrJ0IRk=";
   };
 
+  sourceRoot = "${src.name}/tools/schemacode";
+
   build-system = [
-    setuptools
+    pdm-backend
   ];
 
   dependencies = [
+    acres
     click
     pyyaml
-    jsonschema
   ];
 
   pythonImportsCheck = [

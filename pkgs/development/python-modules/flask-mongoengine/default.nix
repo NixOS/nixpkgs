@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
-    repo = pname;
+    repo = "flask-mongoengine";
     rev = "d4526139cb1e2e94111ab7de96bb629d574c1690";
     hash = "sha256-oMQU9Z8boc0q+0KzIQAZ8qSyxiITDY0M9FCg75S9MEY=";
   };
@@ -40,13 +40,15 @@ buildPythonPackage rec {
     flask
     flask-wtf
     mongoengine
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   optional-dependencies = {
     wtf = [
       flask-wtf
       wtforms
-    ] ++ wtforms.optional-dependencies.email;
+    ]
+    ++ wtforms.optional-dependencies.email;
     # toolbar = [
     #   flask-debugtoolbar
     # ];
@@ -58,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_mongoengine" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

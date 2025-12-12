@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "47.0";
+  version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/baobab/${lib.versions.major version}/baobab-${version}.tar.xz";
-    hash = "sha256-uI90+cBS08I4j3Bi0ijPXpJ1Raz3QIxWhB34DM0fnDc=";
+    hash = "sha256-YkPJIAK+fpH13s0klhL6zipKEtN0Kv2IsIapS4dd/+A=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Graphical application to analyse disk usage in any GNOME environment";
     mainProgram = "baobab";
     homepage = "https://apps.gnome.org/Baobab/";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

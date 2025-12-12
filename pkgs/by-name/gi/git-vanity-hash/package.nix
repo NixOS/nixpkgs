@@ -16,18 +16,18 @@ rustPlatform.buildRustPackage {
     hash = "sha256-1z4jbtzUB3SH79dDXAITf7Vup1YZdTLHBieSrhrvSXc=";
   };
 
-  cargoHash = "sha256-+SQ0HpURBjnnwH1Ue7IUReOtI4LxVPK9AGSAihs0qsc=";
+  cargoHash = "sha256-aHqH7SQBIe0oqD3MegWvAR3UvzRBm2X92lP931nVVtA=";
 
   postInstall = ''
     mkdir -p $out/share/doc/git-vanity-hash
     cp README.md $out/share/doc/git-vanity-hash
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/prasmussen/git-vanity-hash";
     description = "Tool for creating commit hashes with a specific prefix";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.kaction ];
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers.kaction ];
     mainProgram = "git-vanity-hash";
   };
 }

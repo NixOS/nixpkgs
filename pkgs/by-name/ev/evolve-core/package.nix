@@ -1,21 +1,20 @@
 {
   lib,
-  fetchurl,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "evolve-core";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "arcnations-united";
     repo = "evolve-core";
     tag = "v${version}";
-    hash = "sha256-W8KpGQ81wjv/tAl09ax/a4Any5PNhhl1DIABhWgAwdc=";
+    hash = "sha256-U5qMJ3aquD2EzWXwTKw0GJPdaCmK68v8DLdJMAwKrzs=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

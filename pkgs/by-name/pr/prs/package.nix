@@ -9,31 +9,39 @@
   gpgme,
   gtk3,
   stdenv,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prs";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-W5wNmZWjSsM6Xe50fCpa/aGsJ8PDyh2INs1Oj86et04=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RWquV2apUazgGiwzTc0cMzKNItJOBZDSRMp13k+mhS0=";
   };
 
-  cargoHash = "sha256-T57RqIzurpYLHyeFhvqxmC+DoB6zUf+iTu1YkMmwtp8=";
+  cargoHash = "sha256-v5jZJQHXxMENJ5EbZjoI4sZ0EpCfVZOkOX442S1TReU=";
 
   nativeBuildInputs = [
     gpgme
     installShellFiles
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix following error on darwin sandbox mode:
+    # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
+    writableTmpDirAsHomeHook
   ];
 
   cargoBuildFlags = [
     "--no-default-features"
-    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim-bin,tomb,totp"
+    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim,tomb,totp"
   ];
 
   buildInputs = [
@@ -48,15 +56,23 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Secure, fast & convenient password manager CLI using GPG and git to sync";
     homepage = "https://gitlab.com/timvisee/prs";
-    changelog = "https://gitlab.com/timvisee/prs/-/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://gitlab.com/timvisee/prs/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       lgpl3Only # lib
       gpl3Only # everything else
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ colemickens ];
     mainProgram = "prs";
   };
-}
+})

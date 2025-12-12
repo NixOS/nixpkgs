@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.10.0";
+  version = "4.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_keyvault_keys";
     inherit version;
-    hash = "sha256-URIGrpCuwXJqTW/1qS11S9DA8eh1GJE2jTD7cLYpVfE=";
+    hash = "sha256-8lexkXosOoiYPj9WdaZBlEnrJiMYiI1bUeHLO+15d5o=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "azure.keyvault.keys"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Key Vault Keys Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-keys";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-keys_${version}/sdk/keyvault/azure-keyvault-keys";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

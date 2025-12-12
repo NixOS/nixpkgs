@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.8.8";
+    version = "1.10.8";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
-      rev = "v${version}";
-      hash = "sha256-qH08gSQijn/o+YlMUXKdNaSY8lBk0u/pN28TBcevDvE=";
+      tag = "v${version}";
+      hash = "sha256-3Sl34tPRA2BF59bouPkuS/CiYcZfRivD+PozTT+srT0=";
     };
 
-    vendorHash = "sha256-Ijgr5XhsFM3M8f4bnMAQ691kNnQPAGQ8pHv1BCqZU3I=";
+    vendorHash = "sha256-rOSl5WE1/WcgCVpcAOXVl8cBSxjrlG7fxzpRO/5i5GA=";
     ldflags = [
       "-s"
       "-w"
@@ -42,7 +42,7 @@ let
     patches = [ ./provider-path-0_15.patch ];
 
     passthru = {
-      inherit full plugins withPlugins;
+      inherit plugins;
       tests = {
         inherit opentofu_plugins_test;
       };
@@ -60,20 +60,18 @@ let
 
     subPackages = [ "./cmd/..." ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [
         nickcao
         zowoq
       ];
       mainProgram = "tofu";
     };
   };
-
-  full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
   opentofu_plugins_test =
     let
@@ -88,7 +86,7 @@ let
 
         resource "random_id" "test" {}
       '';
-      opentofu = package.withPlugins (p: [ p.random ]);
+      opentofu = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
         # make it fail outside of sandbox
         export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
@@ -99,112 +97,101 @@ let
     in
     test;
 
-  plugins =
-    lib.mapAttrs
-      (
-        _: provider:
-        if provider ? override then
-          # use opentofu plugin registry over terraform's
-          provider.override (oldArgs: {
-            provider-source-address =
-              lib.replaceStrings
-                [ "https://registry.terraform.io/providers" ]
-                [
-                  "registry.opentofu.org"
-                ]
-                oldArgs.homepage;
+  plugins = removeAttrs terraform-providers [
+    "override"
+    "overrideDerivation"
+    "recurseForDerivations"
+  ];
+
+  pluggable =
+    opentofu:
+    let
+      withPlugins =
+        plugins:
+        let
+          actualPlugins = plugins opentofu.plugins;
+
+          # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
+          wrapperInputs = lib.unique (
+            lib.flatten (lib.catAttrs "propagatedBuildInputs" (builtins.filter (x: x != null) actualPlugins))
+          );
+
+          passthru = {
+            withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
+
+            # Expose wrappers around the override* functions of the terraform
+            # derivation.
+            #
+            # Note that this does not behave as anyone would expect if plugins
+            # are specified. The overrides are not on the user-visible wrapper
+            # derivation but instead on the function application that eventually
+            # generates the wrapper. This means:
+            #
+            # 1. When using overrideAttrs, only `passthru` attributes will
+            #    become visible on the wrapper derivation. Other overrides that
+            #    modify the derivation *may* still have an effect, but it can be
+            #    difficult to follow.
+            #
+            # 2. Other overrides may work if they modify the terraform
+            #    derivation, or they may have no effect, depending on what
+            #    exactly is being changed.
+            #
+            # 3. Specifying overrides on the wrapper is unsupported.
+            #
+            # See nixpkgs#158620 for details.
+            overrideDerivation = f: (pluggable (opentofu.overrideDerivation f)).withPlugins plugins;
+            overrideAttrs = f: (pluggable (opentofu.overrideAttrs f)).withPlugins plugins;
+            override = x: (pluggable (opentofu.override x)).withPlugins plugins;
+          };
+        in
+        # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
+        # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+        if actualPlugins == [ ] then
+          opentofu.overrideAttrs (orig: {
+            passthru = orig.passthru // passthru;
           })
         else
-          provider
-      )
-      (
-        removeAttrs terraform-providers [
-          "override"
-          "overrideDerivation"
-          "recurseForDerivations"
-        ]
-      );
+          lib.appendToName "with-plugins" (
+            stdenv.mkDerivation {
+              inherit (opentofu) meta pname version;
+              nativeBuildInputs = [ makeWrapper ];
 
-  withPlugins =
-    plugins:
-    let
-      actualPlugins = plugins package.plugins;
+              # Expose the passthru set with the override functions
+              # defined above, as well as any passthru values already
+              # set on `terraform` at this point (relevant in case a
+              # user overrides attributes).
+              passthru = opentofu.passthru // passthru;
 
-      # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
-      wrapperInputs = lib.unique (
-        lib.flatten (lib.catAttrs "propagatedBuildInputs" (builtins.filter (x: x != null) actualPlugins))
-      );
+              buildCommand = ''
+                # Create wrappers for terraform plugins because OpenTofu only
+                # walks inside of a tree of files.
+                # Also replace registry.terraform.io dir with registry.opentofu.org,
+                # so OpenTofu can find the plugins.
+                for providerDir in ${toString actualPlugins}
+                do
+                  for file in $(find $providerDir/libexec/terraform-providers -type f)
+                  do
+                    relFile=''${file#$providerDir/}
+                    relFile=''${relFile/registry.terraform.io/registry.opentofu.org}
+                    mkdir -p $out/$(dirname $relFile)
+                    cat <<WRAPPER > $out/$relFile
+                #!${runtimeShell}
+                exec "$file" "$@"
+                WRAPPER
+                    chmod +x $out/$relFile
+                  done
+                done
 
-      passthru = {
-        withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
-
-        # Expose wrappers around the override* functions of the terraform
-        # derivation.
-        #
-        # Note that this does not behave as anyone would expect if plugins
-        # are specified. The overrides are not on the user-visible wrapper
-        # derivation but instead on the function application that eventually
-        # generates the wrapper. This means:
-        #
-        # 1. When using overrideAttrs, only `passthru` attributes will
-        #    become visible on the wrapper derivation. Other overrides that
-        #    modify the derivation *may* still have an effect, but it can be
-        #    difficult to follow.
-        #
-        # 2. Other overrides may work if they modify the terraform
-        #    derivation, or they may have no effect, depending on what
-        #    exactly is being changed.
-        #
-        # 3. Specifying overrides on the wrapper is unsupported.
-        #
-        # See nixpkgs#158620 for details.
-        overrideDerivation = f: (package.overrideDerivation f).withPlugins plugins;
-        overrideAttrs = f: (package.overrideAttrs f).withPlugins plugins;
-        override = x: (package.override x).withPlugins plugins;
-      };
+                # Create a wrapper for opentofu to point it to the plugins dir.
+                mkdir -p $out/bin/
+                makeWrapper "${opentofu}/bin/tofu" "$out/bin/tofu" \
+                  --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
+                  --prefix PATH : "${lib.makeBinPath wrapperInputs}"
+              '';
+            }
+          );
     in
-    # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
-    # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
-    if actualPlugins == [ ] then
-      package.overrideAttrs (orig: {
-        passthru = orig.passthru // passthru;
-      })
-    else
-      lib.appendToName "with-plugins" (
-        stdenv.mkDerivation {
-          inherit (package) meta pname version;
-          nativeBuildInputs = [ makeWrapper ];
-
-          # Expose the passthru set with the override functions
-          # defined above, as well as any passthru values already
-          # set on `terraform` at this point (relevant in case a
-          # user overrides attributes).
-          passthru = package.passthru // passthru;
-
-          buildCommand = ''
-            # Create wrappers for terraform plugins because Terraform only
-            # walks inside of a tree of files.
-            for providerDir in ${toString actualPlugins}
-            do
-              for file in $(find $providerDir/libexec/terraform-providers -type f)
-              do
-                relFile=''${file#$providerDir/}
-                mkdir -p $out/$(dirname $relFile)
-                cat <<WRAPPER > $out/$relFile
-            #!${runtimeShell}
-            exec "$file" "$@"
-            WRAPPER
-                chmod +x $out/$relFile
-              done
-            done
-
-            # Create a wrapper for opentofu to point it to the plugins dir.
-            mkdir -p $out/bin/
-            makeWrapper "${package}/bin/tofu" "$out/bin/tofu" \
-              --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
-              --prefix PATH : "${lib.makeBinPath wrapperInputs}"
-          '';
-        }
-      );
+    withPlugins (_: [ ]);
 in
-package
+pluggable package

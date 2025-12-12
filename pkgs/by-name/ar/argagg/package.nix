@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required( VERSION 2.8 )" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     homepage = "https://github.com/vietjtnguyen/argagg";
     description = "Argument Aggregator";
@@ -35,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       pointers into the original command line argument C-strings.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
   };

@@ -6,19 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offat";
-  version = "0.19.3";
+  version = "0.19.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "OFFAT";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LZd9nMeI+TMd95r6CuNAB7eMqrE97ne0ioPjuIbtK7w=";
+    tag = "v${version}";
+    hash = "sha256-XFYG8/QJfm9fx88xHBXe3hK6rTj1lVQze/X9joxKZuc=";
   };
 
   sourceRoot = "${src.name}/src";
 
   pythonRelaxDeps = [
+    "rich"
     "setuptools"
     "tenacity"
   ];
@@ -51,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "offat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test APIs for prevalent vulnerabilities";
     homepage = "https://github.com/OWASP/OFFAT/";
-    changelog = "https://github.com/OWASP/OFFAT/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/OWASP/OFFAT/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "offat";
   };
 }

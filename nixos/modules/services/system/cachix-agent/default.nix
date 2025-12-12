@@ -4,47 +4,44 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.cachix-agent;
 in
 {
-  meta.maintainers = [ lib.maintainers.domenkozar ];
+  meta.maintainers = lib.teams.cachix.members;
 
   options.services.cachix-agent = {
-    enable = mkEnableOption "Cachix Deploy Agent: https://docs.cachix.org/deploy/";
+    enable = lib.mkEnableOption "Cachix Deploy Agent: <https://docs.cachix.org/deploy/>";
 
-    name = mkOption {
-      type = types.str;
+    name = lib.mkOption {
+      type = lib.types.str;
       description = "Agent name, usually same as the hostname";
       default = config.networking.hostName;
       defaultText = "config.networking.hostName";
     };
 
-    verbose = mkOption {
-      type = types.bool;
+    verbose = lib.mkOption {
+      type = lib.types.bool;
       description = "Enable verbose output";
       default = false;
     };
 
-    profile = mkOption {
-      type = types.nullOr types.str;
+    profile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Profile name, defaults to 'system' (NixOS).";
     };
 
-    host = mkOption {
-      type = types.nullOr types.str;
+    host = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Cachix uri to use.";
     };
 
-    package = mkPackageOption pkgs "cachix" { };
+    package = lib.mkPackageOption pkgs "cachix" { };
 
-    credentialsFile = mkOption {
-      type = types.path;
+    credentialsFile = lib.mkOption {
+      type = lib.types.path;
       default = "/etc/cachix-agent.token";
       description = ''
         Required file that needs to contain CACHIX_AGENT_TOKEN=...
@@ -52,7 +49,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
       wants = [ "network-online.target" ];
@@ -76,7 +73,7 @@ in
           ${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} ${
             lib.optionalString (cfg.host != null) "--host ${cfg.host}"
           } \
-            deploy agent ${cfg.name} ${optionalString (cfg.profile != null) cfg.profile}
+            deploy agent ${cfg.name} ${lib.optionalString (cfg.profile != null) cfg.profile}
         '';
       };
     };

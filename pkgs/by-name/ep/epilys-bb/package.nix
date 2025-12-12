@@ -6,23 +6,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "epilys-bb";
-  version = "unstable-2020-12-04";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "epilys";
     repo = "bb";
-    rev = "c903d4c2975509299fd3d2600a0c4c2102f445d0";
-    hash = "sha256-KOXK+1arUWtu/QU7dwXhojIM0faMtwNN3AqVbofq1lY=";
+    rev = "v${version}";
+    hash = "sha256-szeEBiolg2rVD2XZoNrncUYnA8KPhWwhQPYsjuxp904=";
   };
 
-  cargoHash = "sha256-+aCMwKOg+3HDntG14gjJLec8XD51wuTyYyzLjuW6lbY=";
+  cargoHash = "sha256-xUNvVG5jdAXsro2P8je3LFxqMycJEB4j7w3abf6jilw=";
 
-  meta = with lib; {
+  meta = {
     description = "Clean, simple, and fast process viewer";
     homepage = "https://nessuent.xyz/bb.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cafkafk ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cafkafk ];
+    platforms = lib.platforms.linux;
     mainProgram = "bb";
   };
 }

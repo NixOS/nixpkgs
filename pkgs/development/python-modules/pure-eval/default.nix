@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pure_eval" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safely evaluate AST nodes without side effects";
     homepage = "https://github.com/alexmojaki/pure_eval";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

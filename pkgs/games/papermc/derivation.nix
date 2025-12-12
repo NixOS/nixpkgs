@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       buildNum = builtins.elemAt version-split 1;
     in
     fetchurl {
-      url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
+      url = "https://api.papermc.io/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
       inherit (finalAttrs) hash;
     };
 
@@ -56,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       aaronjanse
-      neonfuz
       MayNiklas
     ];
     mainProgram = "minecraft-server";

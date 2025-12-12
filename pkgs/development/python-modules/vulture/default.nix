@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.13";
+  version = "2.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eCSL9Y9er/zCreMGFB6tc/Q3M5lQ+ABF3Of4sHjloao=";
+    hash = "sha256-y4J3kCoRON7qt5bsW+9wdqbgJIyjYHo/Pe4LbZ6bhBU=";
   };
 
   build-system = [ setuptools ];
@@ -34,14 +34,19 @@ buildPythonPackage rec {
     toml
   ];
 
+  disabledTestPaths = [
+    # missing pytype package/executable
+    "tests/test_pytype.py"
+  ];
+
   pythonImportsCheck = [ "vulture" ];
 
-  meta = with lib; {
+  meta = {
     description = "Finds unused code in Python programs";
     homepage = "https://github.com/jendrikseipp/vulture";
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mcwitt ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mcwitt ];
     mainProgram = "vulture";
   };
 }

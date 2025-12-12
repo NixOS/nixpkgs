@@ -38,10 +38,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-VEL96JrJ5eJEoX2miiB4dqGUXizNlYWCUZkkYkh09B8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-RWMNeMrctIlcA4MiRx9t7OfzKeHtw3phrYsYFZH7z4c=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-H8sv7faI/qbmcP7ir++/vIpN+cvRQ254rXmAvGyjdsY=";
   };
 
   nativeBuildInputs = [
@@ -60,30 +59,29 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-      a52dec
-      fdk_aac
-      ffmpeg
-      x264
-      x265
-      vo-aacenc
-      svt-av1
-      libmpeg2
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gstreamer
-      gst-editing-services
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    a52dec
+    fdk_aac
+    ffmpeg
+    x264
+    x265
+    vo-aacenc
+    svt-av1
+    libmpeg2
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gstreamer
+    gst-editing-services
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "5.5.0";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WG9PiUMVGaEXXHKbtOFEGjLiSbNnpSI2fXCogpGj1PI=";
+    tag = "v${version}";
+    hash = "sha256-o3Ice6w7Ovot+nsmTpsl/toosZuVbi9RvRGs07W4H0Y=";
   };
 
   build-system = [ setuptools ];
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cachetools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible memoizing collections and decorators";
     homepage = "https://github.com/tkem/cachetools";
     changelog = "https://github.com/tkem/cachetools/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

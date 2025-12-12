@@ -2,26 +2,19 @@
   lib,
   ocamlPackages,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   python3,
   dune_3,
   makeWrapper,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   testers,
   docfd,
 }:
 
-let
-  # Needed for x86_64-darwin
-  buildDunePackage' = ocamlPackages.buildDunePackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildDunePackage' rec {
+ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "8.0.3";
+  version = "12.2.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,8 +22,11 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-890/3iBruaQtWwlcvwuz4ujp7+P+5y1/2Axx4Iuik8Q=";
+    hash = "sha256-0URs7X94/2D0WLpVBXjYZ3zDR3uGXSVG+WLdsAqVKBg=";
   };
+
+  # Compatibility with nottui ≥ 0.4
+  patches = [ ./nottui-unix.patch ];
 
   nativeBuildInputs = [
     python3
@@ -42,18 +38,23 @@ buildDunePackage' rec {
     cmdliner
     containers-data
     decompress
+    diet
     digestif
     eio_main
     lwd
     nottui
+    nottui-unix
     notty
+    ocaml_sqlite3
     ocolor
     oseq
     ppx_deriving
     ppxlib
+    progress
     re
     spelll
     timedesc
+    uuseg
     yojson
   ];
 
@@ -61,14 +62,14 @@ buildDunePackage' rec {
     wrapProgram $out/bin/docfd --prefix PATH : "${
       lib.makeBinPath [
         pandoc
-        poppler_utils
+        poppler-utils
       ]
     }"
   '';
 
   passthru.tests.version = testers.testVersion { package = docfd; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
       Think interactive grep for text and other document files.
@@ -77,9 +78,9 @@ buildDunePackage' rec {
       integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
 }

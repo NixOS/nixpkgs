@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "0br5nvlna86k4ya4q13gz0i7nlmk225lqmpfiqlkldxkr473kf0s";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Gopher server";
     homepage = "https://gofish.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

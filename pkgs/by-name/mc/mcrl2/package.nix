@@ -5,31 +5,31 @@
   cmake,
   libGLU,
   libGL,
-  qt5,
+  qt6,
   boost,
 }:
 
 stdenv.mkDerivation rec {
-  version = "202307";
+  version = "202407";
   build_nr = "1";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-zCHCO8tGyOxqUc0x3t/N3dUh4eG7slemlgK/QZsA4JA=";
+    hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     libGLU
     libGL
-    qt5.qtbase
+    qt6.qtbase
     boost
   ];
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       concurrent systems and protocols
     '';
     homepage = "https://www.mcrl2.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [ moretea ];
-    platforms = platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ moretea ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exfatprogs";
-  version = "1.2.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "exfatprogs";
+    repo = "exfatprogs";
     rev = version;
-    sha256 = "sha256-VUvVPABgQ7EUQu90DbWU7a+YThrWhusTk/YreKSqU/M=";
+    sha256 = "sha256-2kD2ZENAyhApYHs6+NNYkxfLj5fw/cIHRUhw0UnQx04=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  meta = with lib; {
+  meta = {
     description = "exFAT filesystem userspace utilities";
     homepage = "https://github.com/exfatprogs/exfatprogs";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuannan ];
+    platforms = lib.platforms.linux;
   };
 }

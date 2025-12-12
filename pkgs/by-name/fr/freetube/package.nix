@@ -20,13 +20,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.22.1";
+  version = "0.23.12";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-FND4jYnNeqsyCXkVB+DKr8hu720+XEjOZJ/iRZGI3y8=";
+    hash = "sha256-DH5uT3dPDFZnFYoiMjxpNouNDRbWDctVqvDwHpUlnkY=";
   };
 
   # Darwin requires writable Electron dist
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-cvRnPxRy3oawZUu97qYu+IgbXLYej/kykrCDJ4qLvIg=";
+    hash = "sha256-sM9CkDnATSEUf/uuUyT4JuRmjzwa1WzIyNYEw69MPtU=";
   };
 
   nativeBuildInputs = [
@@ -60,28 +60,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-      mkdir -p $out/share/freetube
-      cp -r build/*-unpacked/{locales,resources{,.pak}} -t $out/share/freetube
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    mkdir -p $out/share/freetube
+    cp -r build/*-unpacked/{locales,resources{,.pak}} -t $out/share/freetube
 
-      makeWrapper ${lib.getExe electron} $out/bin/freetube \
-        --add-flags "$out/share/freetube/resources/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    makeWrapper ${lib.getExe electron} $out/bin/freetube \
+      --add-flags "$out/share/freetube/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-      install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
-    ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r build/mac*/FreeTube.app $out/Applications
-      ln -s "$out/Applications/FreeTube.app/Contents/MacOS/FreeTube" $out/bin/freetube
-    ''
-    + ''
-      runHook postInstall
-    '';
+    install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r build/mac*/FreeTube.app $out/Applications
+    ln -s "$out/Applications/FreeTube.app/Contents/MacOS/FreeTube" $out/bin/freetube
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -106,9 +105,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ryneeverett
-      alyaeanyx
+      pentane
       ryand56
       sigmasquadron
+      ddogfoodd
+    ];
+    badPlatforms = [
+      # output app is called "Electron.app" while derivation expects "FreeTube.app"
+      #see: https://github.com/NixOS/nixpkgs/pull/384596#issuecomment-2677141349
+      lib.systems.inspect.patterns.isDarwin
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

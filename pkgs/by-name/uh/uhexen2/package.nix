@@ -3,13 +3,15 @@
   fetchgit,
   SDL,
   stdenv,
+  alsa-lib,
+  libGL,
   libogg,
   libvorbis,
   libmad,
   xdelta,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uhexen2";
   version = "1.5.9";
 
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL
+    alsa-lib
+    libGL
     libogg
     libvorbis
     libmad
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform port of Hexen II game";
     longDescription = ''
@@ -75,8 +79,8 @@ stdenv.mkDerivation rec {
       support for many operating systems and architectures, and documentation among many others.
     '';
     homepage = "https://uhexen2.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ xdhampus ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ xdhampus ];
+    platforms = lib.platforms.all;
   };
 }

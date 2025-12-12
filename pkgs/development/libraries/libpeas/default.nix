@@ -2,7 +2,8 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -28,17 +29,28 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libpeas/${lib.versions.majorMinor version}/libpeas-${version}.tar.xz";
     sha256 = "KXy5wszNjoYXYj0aPoQVtFMLjlqJPjUnu/0e3RMje0w=";
   };
 
   patches = [
     # Make PyGObject’s gi library available.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
         python3.pkgs.pygobject3
       ];
+    })
+
+    # girepository: port libpeas ABI to girepository
+    # https://gitlab.gnome.org/GNOME/libpeas/-/issues/58
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libpeas/-/commit/73e25b6059d2fdc090a3feb8341ff902c3ec0d16.patch";
+      hash = "sha256-xNp/DbLV2mdMiUALdEWE4ssyD3krWmzmJIwgStsNShM=";
+    })
+    # build: handle depending on development releases of GLib
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libpeas/-/commit/4613accc2e22395bb77bdf612fcdf90bf65f230f.patch";
+      hash = "sha256-VGPLDswH3St/SzS19iHr5dA/ywzDsXhd7FMUg4rII9U=";
     })
   ];
 
@@ -80,18 +92,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libpeas";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject-based plugins engine";
     mainProgram = "peas-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libpeas";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

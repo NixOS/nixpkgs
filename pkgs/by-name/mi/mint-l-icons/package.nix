@@ -8,16 +8,16 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.7.4";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
-    rev = "b442277c822c92f7bb68282cb82c7d1a98e3fd37";
-    hash = "sha256-vPDEribE/CZwoAK1C9fjbWQEO/NWMWCKCUO/Xw/SxZ0=";
+    rev = "fa88b00e10b0978e0309acccfa95d80005422b1a";
+    hash = "sha256-XXy1eO0a/5bBnP/inaUa/c09D/6QDmnik1LH382NGIw=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ stdenvNoCC.mkDerivation rec {
     gtk3
   ];
 
+  # FIXME: https://hydra.nixos.org/build/287344480/nixlog/5
+  dontCheckForBrokenSymlinks = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''
@@ -45,11 +47,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-l-icons";
     description = "Mint-L icon theme";
-    license = licenses.gpl3Plus; # from debian/copyright
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl3Plus; # from debian/copyright
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

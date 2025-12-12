@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1Z+kXvBmENNXIqdZgPDx7ZSwJMFAm2oMih6eFFAsA/A=";
+    repo = "cinnamon-control-center";
+    tag = version;
+    hash = "sha256-nw70sbiz3+dp40WP957hOVo/mQOg2MJknZNN5Kw/Q/0=";
   };
 
   buildInputs = [
@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "Collection of configuration plugins used in cinnamon-settings";
     mainProgram = "cinnamon-control-center";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

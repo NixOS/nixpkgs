@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "allpairspy";
+    tag = "v${version}";
     hash = "sha256-0wzoQDHB7Tt80ZTlKrNxFutztsgUuin5D2eb80c4PBI=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allpairspy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pairwise test combinations generator";
     homepage = "https://github.com/thombashi/allpairspy";
     changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

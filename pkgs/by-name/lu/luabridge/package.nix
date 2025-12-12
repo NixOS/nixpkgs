@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, dependency-free library for binding Lua to C++";
     homepage = "https://github.com/vinniefalco/LuaBridge";
     changelog = "https://github.com/vinniefalco/LuaBridge/blob/${version}/CHANGES.md";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

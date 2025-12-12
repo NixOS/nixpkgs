@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roxterm";
-  version = "3.15.3";
+  version = "3.17.2";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = finalAttrs.version;
-    hash = "sha256-IvbAL96tILXgeutoSKhNkxxfLb+d2xgKUuvyGobOTUs=";
+    hash = "sha256-QMWxNgMbodkyUDG2o7nrnVZiWFpIYTdphU9yDEhzKNM=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/realh/roxterm";
-    description = " A highly configurable terminal emulator";
+    description = "Highly configurable terminal emulator";
     longDescription = ''
       ROXTerm is a terminal emulator intended to provide similar features to
       gnome-terminal, based on the same VTE library. It was originally designed
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Plus
     ];
     mainProgram = "roxterm";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

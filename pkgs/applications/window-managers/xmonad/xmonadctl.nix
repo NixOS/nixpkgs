@@ -12,7 +12,7 @@ let
     self.X11
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xmonadctl";
 
   inherit (haskellPackages.xmonad-contrib) src version;
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    platforms = platforms.unix;
+  meta = {
+    platforms = lib.platforms.unix;
     description = "Send commands to a running instance of xmonad";
     mainProgram = "xmonadctl";
     homepage = "https://github.com/xmonad/xmonad-contrib";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.ajgrf ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ajgrf ];
   };
 }

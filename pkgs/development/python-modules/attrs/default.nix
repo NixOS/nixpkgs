@@ -4,25 +4,24 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "24.2.0";
+  version = "25.3.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XPsbkUi1sIZWm67APyDXtr87ysyaQr6/h/+qyjYvY0Y=";
+    hash = "sha256-ddfO/H+1dnR7LIG0RC1NShzgkAlzUnwBHRAw/Tv0rxs=";
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./remove-hatch-plugins.patch {
       # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
-      src = ./remove-hatch-plugins.patch;
       inherit version;
     })
   ];
@@ -50,11 +49,11 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

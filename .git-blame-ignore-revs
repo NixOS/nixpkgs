@@ -1,5 +1,11 @@
 # This file contains a list of commits that are not likely what you
 # are looking for in a blame, such as mass reformatting or renaming.
+#
+# If a commit's line ends with `# !autorebase <command>`,
+# where <command> is an idempotent bash command that reapplies the changes from the commit,
+# the `maintainers/scripts/auto-rebase/run.sh` script can be used to rebase
+# across that commit while automatically resolving merge conflicts caused by the commit.
+#
 # You can set this file as a default ignore file for blame by running
 # the following command.
 #
@@ -187,6 +193,13 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchgit, fetchurl, fetchzip:
+# format after refactoring with lib.extendMkDerivation (#455994)
+aeddd850c6d3485fc1af2edfb111e58141d18dc1
+
+# fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
+34a5b1eb23129f8fb62c677e3760903f6d43228f
+
 # fetchurl: nixfmt-rfc-style
 ce21e97a1f20dee15da85c084f9d1148d84f853b
 
@@ -221,3 +234,79 @@ adb9714bd909df283c66bbd641bd631ff50a4260
 667d42c00d566e091e6b9a19b365099315d0e611
 84d4f874c2bac9f3118cb6907d7113b3318dcb5e
 
+# tmuxPlugins sha-to-sri.py script
+516b1e74c358a9c4b06e5591f8c1a2897aad0c33
+
+# treewide: migrate comments in lib to rfc145 style
+ef85e0daa092c9eae0d32c7ce16b889728a5fbc0
+d89ad6c70e0e89aaae75e9f886878ea4e103965a
+e0fe216f4912dd88a021d12a44155fd2cfeb31c8
+80d5b411f6397d5c3e755a0635d95742f76f3c75
+
+# nixos/movim: format with nixfmt-rfc-style
+43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# nixos/iso-image.nix: nixfmt
+da9a092c34cef6947d7aee2b134f61df45171631
+
+# python-packages: format with nixfmt-rfc-style
+5f6f5e13ae0b6960cbf1be8aeb3d0048285a08d1
+
+# python-packages: sort with keep-sorted
+fd14c067813572afc03ddbf7cdedc3eab5a59954
+783add849cbca228a36ffdf407e5d380dc2fe6c4
+
+# treewide format of all Nix files
+374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt
+
+# nix: nixfmt-rfc-style
+a4f7e161b380b35b2f7bc432659a95fd71254ad8
+0812c9a321003c924868051d2b2e1934e8880f3f
+34f269c14ac18d89ddee9a8f54b1ca92a85bbcc6
+062c34cdace499aa44f0fa6ca6f2ca71769f6c43
+
+# haskellPackages.hercules-ci-agent (cabal2nix -> nixfmt-rfc-style)
+9314da7ee8d2aedfb15193b8c489da51efe52bb5
+
+# haskell-updates: nixfmt-rfc-style
+9e296dcf846294e0aa94af7d3235e82eee7fe055
+
+# nix-builder-vm: nixfmt-rfc-style
+a034fb50f79816c6738fb48b48503b09ea3b0132
+
+# treewide: switch instances of lib.teams.*.members to the new meta.teams attribute
+05580f4b4433fda48fff30f60dfd303d6ee05d21
+
+# nixos/redmine: Get rid of global lib expansions
+d7f1102f04c58b2edfc74c9a1d577e3aebfca775
+
+# **/README.md: one sentence per line
+3d505c03610b6102af6d870ae3506a151cef1f68
+60e35e4ded6e91524364a74b3b4ec233ed9321f2
+99f2e655d9db009ee0b4ede3edced5f6c882c7f4
+b4532efe93882ae2e3fc579929a42a5a56544146
+
+# emacs: keep elpa/nongnu/melpa package overrides sorted
+9f2faf683ed48704aa17f693208a13aa64e22181
+
+# nixfmt 1.0.0
+62fe01651911043bd3db0add920af3d2935d9869 # !autorebase nix-shell --run treefmt
+5a0711127cd8b916c3d3128f473388c8c79df0da # !autorebase nix-shell --run treefmt
+
+# systemd: nixfmt
+b1c5cd3e794cdf89daa5e4f0086274a416a1cded
+
+#nixos/nextcloud: remove with lib usage
+b6088b0d8e13e8d18464d78935f0130052784658
+f7611cad5154a9096faa26d156a4079577bfae17
+
+# nixf-diagnose
+90e7159c559021ac4f4cc1222000f08a91feff69 # !autorebase nix-shell --run treefmt
+c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
+91a8fee3aaf79348aa2dc1552a29fc1b786c5133 # !autorebase nix-shell --run treefmt
+
+# aliases: keep-sorted
+48ce0739044bd6eba83c3a43bd4ad1046399cdad # !autorebase nix-shell --run treefmt
+
+# treewide: clean up 'meta = with' pattern
+567e8dfd8eddc5468e6380fc563ab8a27422ab1d

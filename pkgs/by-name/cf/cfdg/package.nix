@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cfdg";
-  version = "3.4.1";
+  version = "3.4.2";
   src = fetchFromGitHub {
     owner = "MtnViewJohn";
     repo = "context-free";
     rev = "Version${version}";
-    sha256 = "sha256-f2VMb0TM50afKf/lGdZBP2z13UrCVgG4/IYi5gnD+ow=";
+    sha256 = "sha256-PtkvhX5PIeN/5UDpAaVwBwfp8ykjsjfH+8iGdbNQOfI=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Context-free design grammar - a tool for graphics generation";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://contextfreeart.org/";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "cfdg";
   };
 }

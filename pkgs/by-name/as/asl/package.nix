@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p .objdir
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://john.ccac.rwth-aachen.de:8000/as/index.html";
     description = "Portable macro cross assembler";
     longDescription = ''
@@ -57,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
       single-board computers, you also find CPU families in the target list that
       are used in workstations and PCs.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })
 # TODO: cross-compilation support

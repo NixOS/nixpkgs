@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d7d7qF+emI+brYXfNFtRTp5kx/DoIpkqsd9KeKxk/B4=";
+    hash = "sha256-c27FBIOlRIWXHbITvpIH405R/BRMeDQ2JbaZF0I2RLo=";
   };
 
   build-system = [
@@ -50,9 +50,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter lab environment notebook server extension";
     homepage = "https://github.com/jupyter/nbclassic";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

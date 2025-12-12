@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dmidecode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library that parses the output of dmidecode";
     homepage = "https://github.com/zaibon/py-dmidecode/";
     changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

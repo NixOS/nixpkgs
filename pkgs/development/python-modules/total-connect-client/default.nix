@@ -2,15 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pycryptodome,
+  pyjwt,
   pytestCheckHook,
   pythonOlder,
+  requests-mock,
+  requests-oauthlib,
   setuptools,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2024.12.1";
+  version = "2025.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,22 +23,32 @@ buildPythonPackage rec {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     tag = version;
-    hash = "sha256-FcPm2Nc6pUGC86K3GLAiQRot0JXYqoZh19dXMCl99eI=";
+    hash = "sha256-xVpR5gd185eZBoqUhVVcFGPbPFjCavwOZP7yFObzGic=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ zeep ];
+  pythonRelaxDeps = [ "pycryptodome" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    pycryptodome
+    pyjwt
+    requests-oauthlib
+    zeep
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
 
   pythonImportsCheck = [ "total_connect_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interact with Total Connect 2 alarm systems";
     homepage = "https://github.com/craigjmidwinter/total-connect-client";
-    changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

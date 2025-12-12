@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiowithings";
-  version = "3.1.4";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,14 +23,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-withings";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0UWwiLSTXcNDS30NWsKI1f/kTczdYXwRZr+JREU0NCM=";
+    tag = "v${version}";
+    hash = "sha256-YC1rUyPXWbJ/xfUus5a7vw44gw7PIAdwhrUstXB/+nI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -41,13 +37,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
   pythonImportsCheck = [ "aiowithings" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   disabledTests = [
     # Tests require network access
@@ -70,11 +67,11 @@ buildPythonPackage rec {
     "test_unexpected_server_response"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Withings";
     homepage = "https://github.com/joostlek/python-withings";
     changelog = "https://github.com/joostlek/python-withings/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

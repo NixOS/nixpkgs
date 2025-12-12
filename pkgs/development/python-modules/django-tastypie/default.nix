@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-tastypie";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-tastypie";
     repo = "django-tastypie";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-StXWqwGVILXtK53fa2vSNXSIf7UGfdn7iJyOIzdnth4=";
+    tag = "v${version}";
+    hash = "sha256-KmBI8kHcmRfbNIfBEz5pHyseWcWnfP3tq6GAPi4tdhE=";
   };
 
   build-system = [ setuptools ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tastypie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/django-tastypie/django-tastypie";
     changelog = "https://github.com/django-tastypie/django-tastypie/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
   cmake,
   pkg-config,
   gtest,
@@ -18,24 +17,25 @@
   libICE,
   stb,
   openssl,
+  xxHash,
+  pugixml,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.61.0";
+  version = "3.73.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-q2LnJhIQYdjvVk+fQQ2tjoEw046DUR1o+RUG2bp/w3M=";
+    hash = "sha256-9m1YvuYuiiEXAX8HFt61VGZN/ThYXdBcwOSeL05mwOU=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ];
   buildInputs = [
     gtest
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     libICE
     stb
     openssl
+    xxHash
+    pugixml
   ];
 
   postPatch = ''
@@ -58,36 +60,12 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${ffmpeg}/bin/ffmpeg"
+    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${lib.getExe ffmpeg}"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/docroot" "$out/share/lms/docroot"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/approot" "$out/share/lms/approot"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"
     install -Dm444 $out/share/lms/default.service -T $out/lib/systemd/system/lmsd.service
-  '';
-
-  preFixup = ''
-    wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
-    wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
-    wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
   '';
 
   meta = {

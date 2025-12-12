@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "gdb-pt-dump";
   version = "0-unstable-2024-04-01";
   pyproject = true;
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pt" ];
 
-  meta = with lib; {
+  meta = {
     description = "GDB script to enhance debugging of a QEMU-based virtual machine";
     homepage = "https://github.com/martinradev/gdb-pt-dump";
-    license = licenses.mit;
-    maintainers = with maintainers; [ msanft ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ msanft ];
   };
 }

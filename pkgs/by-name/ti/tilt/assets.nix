@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation {
     dontInstall = true;
 
     outputHashAlgo = "sha256";
-    outputHash = "sha256-1poTBB9cm0EHeIvXhan6/kaxr22LXvhHD4Y+JBocioE=";
+    outputHash = "sha256-UdNvUSz86E1W1gVPQrxt5g3Z3JIX/tq8rI5E8+h20PI=";
     outputHashMode = "recursive";
   };
 
@@ -98,11 +98,11 @@ stdenvNoCC.mkDerivation {
     cp -r build/. $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assets needed for Tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

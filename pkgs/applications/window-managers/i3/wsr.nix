@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3wsr";
-  version = "2.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "roosta";
-    repo = pname;
+    repo = "i3wsr";
     rev = "v${version}";
-    sha256 = "sha256-Mq4TpQDiIYePUS3EwBfOe2+QmvF6+WEDK12WahbuhSU=";
+    hash = "sha256-8cQM2M9XjS4FSSX1/WHqmTP842Ahd1XoaqOWSGSEE0s=";
   };
 
-  cargoHash = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
+  cargoHash = "sha256-d+pFDvmfsuJbanUlheHxln9BY1HxU3UQE+pWRthGcc4=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   # has not tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "i3wsr";
     description = "Automatically change i3 workspace names based on their contents";
     longDescription = ''
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
       window property for each window in a workspace.
     '';
     homepage = "https://github.com/roosta/i3wsr";
-    license = licenses.mit;
-    maintainers = [ maintainers.sebbadk ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sebbadk ];
   };
 }

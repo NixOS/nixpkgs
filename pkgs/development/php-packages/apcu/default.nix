@@ -1,13 +1,12 @@
 {
   buildPecl,
   lib,
-  fetchpatch,
   pcre2,
   fetchFromGitHub,
 }:
 
 let
-  version = "5.1.24";
+  version = "5.1.27";
 in
 buildPecl {
   inherit version;
@@ -17,7 +16,7 @@ buildPecl {
     owner = "krakjoe";
     repo = "apcu";
     rev = "v${version}";
-    sha256 = "sha256-g+Oo6y+24VOWHaDZ23iItkGwOa5bTtKMAjZOmAi6EOo=";
+    sha256 = "sha256-kf1d+WLpwhzQVn9pnkXtPPTXI5XaAuIAReI6rDGypB8=";
   };
 
   buildInputs = [ pcre2 ];
@@ -28,11 +27,11 @@ buildPecl {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/krakjoe/apcu/releases/tag/v${version}";
     description = "Userland cache for PHP";
     homepage = "https://pecl.php.net/package/APCu";
-    license = licenses.php301;
-    maintainers = teams.php.members;
+    license = lib.licenses.php301;
+    teams = [ lib.teams.php ];
   };
 }

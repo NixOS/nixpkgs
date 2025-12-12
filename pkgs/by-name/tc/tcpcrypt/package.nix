@@ -30,25 +30,24 @@ stdenv.mkDerivation rec {
     "out"
   ];
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [
-      openssl
-      libpcap
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libnfnetlink
-      libnetfilter_conntrack
-      libnetfilter_queue
-    ];
+  buildInputs = [
+    openssl
+    libpcap
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libnfnetlink
+    libnetfilter_conntrack
+    libnetfilter_queue
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://tcpcrypt.org/";
     description = "Fast TCP encryption";
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

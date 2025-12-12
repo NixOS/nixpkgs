@@ -6,28 +6,28 @@
 
 buildGoModule rec {
   pname = "misconfig-mapper";
-  version = "1.12.4";
+  version = "1.14.14";
 
   src = fetchFromGitHub {
     owner = "intigriti";
     repo = "misconfig-mapper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-v+Ls3P+s/pBMLgFMIHcfs+z9GsYNCcpOxoKlO+OjpzE=";
+    tag = "v${version}";
+    hash = "sha256-5tugmwr1TyBa89a/yrch+cshyoiJ3uj4EoweltN5d/0=";
   };
 
-  vendorHash = "sha256-+DA/eicufx4odMmHJEFKkDH6XbLLXCg3CRHT2kJhy8M=";
+  vendorHash = "sha256-pLhc3Lc8Mp5ZRmNvac3qdQcw1rPQs7bbn4K0UHp04Qs=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to uncover security misconfigurations on popular third-party services";
     homepage = "https://github.com/intigriti/misconfig-mapper";
     changelog = "https://github.com/intigriti/misconfig-mapper/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "misconfig-mapper";
   };
 }

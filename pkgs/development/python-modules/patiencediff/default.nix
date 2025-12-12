@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "breezy-team";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "patiencediff";
+    tag = "v${version}";
     hash = "sha256-SFu1oN1yE9tKeBgWhgWjDpR31AptGrls0D5kKQed+HI=";
   };
 
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "patiencediff" ];
 
-  meta = with lib; {
+  meta = {
     description = "C implementation of patiencediff algorithm for Python";
     mainProgram = "patiencediff";
     homepage = "https://github.com/breezy-team/patiencediff";
     changelog = "https://github.com/breezy-team/patiencediff/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wildsebastian ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wildsebastian ];
   };
 }

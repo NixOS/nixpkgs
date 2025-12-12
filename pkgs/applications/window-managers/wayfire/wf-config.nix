@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-config";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-config";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5HejuluCTsRsnHuaMCTnCPkbFvT/IcLkfNGjnXnZjJ0=";
+    hash = "sha256-WcGt6yl2LpLnAOVtiCyMyWsoMAUMG1MYhvW/m2DDMX4=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     cmake
+  ];
+  checkInputs = [
     doctest
   ];
   # CMake is just used for finding doctest.
   dontUseCmakeConfigure = true;
+
+  strictDeps = true;
 
   mesonFlags = [
     (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
@@ -56,8 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for managing configuration files, written for Wayfire";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      teatwig
       wucke13
-      rewine
+      wineee
     ];
     platforms = lib.platforms.unix;
   };

@@ -9,7 +9,6 @@
   wayland-scanner,
   wayland,
   xorg,
-  darwin,
   nix-update-script,
   alsa-lib,
   openssl,
@@ -36,18 +35,16 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi
-      wayland-protocols
-      wayland
-      xorg.libX11
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi
+    wayland-protocols
+    wayland
+    xorg.libX11
+    alsa-lib
+  ];
 
   cmakeBuildType = "MinSizeRel";
 
@@ -62,12 +59,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.all;
     mainProgram = "cb";
   };
 }

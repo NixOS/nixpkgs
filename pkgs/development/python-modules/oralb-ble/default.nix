@@ -11,21 +11,18 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "0.18.0";
+  version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "oralb-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e6L8HXpqOAHnEktIJ1N1atC5QXno669W3c/S7cISa48=";
+    tag = "v${version}";
+    hash = "sha256-NKNglslwEltThQ3fto++WNYRyjWVt9UmsFmps651dpM=";
   };
 
   build-system = [ poetry-core ];
@@ -51,11 +48,11 @@ buildPythonPackage rec {
     "test_async_poll"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
-    changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

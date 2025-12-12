@@ -6,32 +6,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svg2pdf";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "svg2pdf";
     rev = "v${version}";
-    hash = "sha256-9v4A0mZjknc6a933b3ifPJo3xyem17Vpp0Wu0sUS0DM=";
+    hash = "sha256-A3lUX2q5D1Z5Q3sZOl2uvaOLTuLRdtJyR9tmfPkE7TI=";
   };
 
-  cargoHash = "sha256-oCyvssTtUr8FR0XaFx2syxE8+zWXOGrf8kvQiBCyq18=";
+  cargoHash = "sha256-Fr4UC12WpJiIkLKcxk9D7AdBD+VSyS4NQVfqn/p6NqM=";
 
   cargoBuildFlags = [
     "-p=svg2pdf-cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert SVG files to PDFs";
     homepage = "https://github.com/typst/svg2pdf";
     changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
     mainProgram = "svg2pdf";
   };

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zircolite";
-  version = "2.30.1";
+  version = "2.40.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "wagga40";
     repo = "Zircolite";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9stQa0EMNA/qEN+bU7qBOdcwUR1vMGk70Br6wxRK8cs=";
+    tag = version;
+    hash = "sha256-11jNd7Ids2aB+R+Hv6n8Wfm2hDuKCxC0EMZSBWJfDos=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -54,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SIGMA-based detection tool for EVTX, Auditd, Sysmon and other logs";
     mainProgram = "zircolite";
     homepage = "https://github.com/wagga40/Zircolite";
-    changelog = "https://github.com/wagga40/Zircolite/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/wagga40/Zircolite/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

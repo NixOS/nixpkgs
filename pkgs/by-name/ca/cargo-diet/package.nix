@@ -15,16 +15,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SuJ1H/2YfSVVigdgLUd9veMClI7ZT7xkkyQ4PfXoQdQ=";
   };
 
-  cargoHash = "sha256-MASftcn3WmB3M6bvmtnK3nlroE8nq9zdkleSEgzA5lk=";
+  cargoHash = "sha256-crdRRlRi3H8j/ojGH+oqmaeSS8ee8dUALorZPWE/j1Y=";
 
-  meta = with lib; {
+  meta = {
     description = "Help computing optimal include directives for your Cargo.toml manifest";
     mainProgram = "cargo-diet";
     homepage = "https://github.com/the-lean-crate/cargo-diet";
     changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

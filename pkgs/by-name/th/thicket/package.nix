@@ -10,7 +10,7 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
-    repo = pname;
+    repo = "thicket";
     rev = "v${version}";
     sha256 = "sha256-sF+fNKEZEfjpW3buh6kFUpL1P0yO9g4SrTb0rhx1uNc=";
   };
@@ -22,11 +22,10 @@ crystal.buildCrystalPackage rec {
   # there is one test that tries to clone a repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Better one-line git log";
     homepage = "https://github.com/taylorthurlow/thicket";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
     mainProgram = "thicket";
   };
 }

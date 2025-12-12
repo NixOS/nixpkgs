@@ -164,7 +164,7 @@ in
                 '';
               };
 
-              auto_update_enable = lib.mkOption {
+              auto_update_enabled = lib.mkOption {
                 type = lib.types.bool;
                 default = true;
                 description = ''
@@ -228,7 +228,7 @@ in
                   default = true;
                   description = ''
                     Enable WAL mode for SQLite. This is recommended for production environments.
-                    https://www.sqlite.org/wal.html
+                    <https://www.sqlite.org/wal.html>
                   '';
                   example = true;
                 };
@@ -407,12 +407,29 @@ in
                 example = [ "alice@example.com" ];
               };
 
-              strip_email_domain = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = ''
-                  Whether the domain part of the email address should be removed when generating namespaces.
-                '';
+              pkce = {
+                enabled = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Enable or disable PKCE (Proof Key for Code Exchange) support.
+                    PKCE adds an additional layer of security to the OAuth 2.0
+                    authorization code flow by preventing authorization code
+                    interception attacks
+                    See https://datatracker.ietf.org/doc/html/rfc7636
+                  '';
+                  example = true;
+                };
+
+                method = lib.mkOption {
+                  type = lib.types.str;
+                  default = "S256";
+                  description = ''
+                    PKCE method to use:
+                      - plain: Use plain code verifier
+                      - S256: Use SHA256 hashed code verifier (default, recommended)
+                  '';
+                };
               };
             };
 
@@ -493,7 +510,11 @@ in
   imports = with lib; [
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "autoUpdate" ]
-      [ "services" "headscale" "settings" "derp" "auto_update_enable" ]
+      [ "services" "headscale" "settings" "derp" "auto_update_enabled" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "headscale" "derp" "auto_update_enable" ]
+      [ "services" "headscale" "settings" "derp" "auto_update_enabled" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "derp" "paths" ]
@@ -560,16 +581,6 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        # This is stricter than it needs to be but is exactly what upstream does:
-        # https://github.com/kradalby/headscale/blob/adc084f20f843d7963c999764fa83939668d2d2c/hscontrol/types/config.go#L799
-        assertion =
-          with cfg.settings;
-          dns.use_username_in_magic_dns or false
-          || dns.base_domain == ""
-          || !lib.hasInfix dns.base_domain server_url;
-        message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
-      }
-      {
         assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
         message = "dns.base_domain must be set when using MagicDNS";
       }
@@ -591,6 +602,11 @@ in
         "dns_config"
         "nameservers"
       ] "Use `dns.nameservers.global` instead.")
+      (assertRemovedOption [
+        "settings"
+        "oidc"
+        "strip_email_domain"
+      ] "The strip_email_domain option got removed upstream")
     ];
 
     services.headscale.settings = lib.mkMerge [
@@ -639,6 +655,7 @@ in
         in
         {
           Restart = "always";
+          RestartSec = "5s";
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;

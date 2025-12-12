@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "radvd";
-  version = "2.20_rc1";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner = "radvd-project";
     repo = "radvd";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-+cZn4pE4hBZDckfcQJzYdZxHkexWl/AmufCN5BiwWwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s9KP6F6rSumuNDOV4rtE7I+o742al4hc3/dgNkpCCyQ=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     privacy_networkd = nixosTests.networking.networkd.privacy;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.litech.org/radvd/";
     changelog = "https://github.com/radvd-project/radvd/blob/${finalAttrs.src.rev}/CHANGES";
     description = "IPv6 Router Advertisement Daemon";
     downloadPage = "https://github.com/radvd-project/radvd";
-    platforms = platforms.linux;
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ fpletz ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 })

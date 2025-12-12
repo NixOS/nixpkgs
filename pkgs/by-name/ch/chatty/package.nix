@@ -18,12 +18,10 @@
   gtk4,
   gtksourceview5,
   gst_all_1,
-  json-glib,
-  libgcrypt,
+  libcmatrix,
   libadwaita,
   libphonenumber,
   modemmanager,
-  olm,
   pidgin,
   protobuf,
   sqlite,
@@ -32,15 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.4";
+  version = "0.8.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-1CHreTkw1C3tc6vOCG+7Y/u4R/xTFOnlI4mcxjY/alY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pLdl44nLRFLH76499JcaKgXRpf51wqFm174gUa7noKc=";
   };
 
   nativeBuildInputs = [
@@ -63,12 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     gtksourceview5
     gst_all_1.gstreamer
-    json-glib
-    libgcrypt
+    libcmatrix
     libadwaita
     libphonenumber
     modemmanager
-    olm
     pidgin
     protobuf
     sqlite
@@ -81,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
-    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.tag}/NEWS";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,30 +1,28 @@
-{ lib, buildGoModule, fetchFromGitLab, bash }:
+{
+  lib,
+  stdenv,
+  bash,
+  buildGoModule,
+  fetchFromGitLab,
+  nix-update-script,
+  versionCheckHook,
+}:
 
-let
-  version = "17.2.0";
-in
-buildGoModule rec {
-  inherit version;
+buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-
-  commonPackagePath = "gitlab.com/gitlab-org/gitlab-runner/common";
-  ldflags = [
-    "-X ${commonPackagePath}.NAME=gitlab-runner"
-    "-X ${commonPackagePath}.VERSION=${version}"
-    "-X ${commonPackagePath}.REVISION=v${version}"
-  ];
-
-  # For patchShebangs
-  buildInputs = [ bash ];
-
-  vendorHash = "sha256-1MwHss76apA9KoFhEU6lYiUACrPMGYzjhds6nTyNuJI=";
+  version = "18.5.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
-    rev = "v${version}";
-    hash = "sha256-a2Igy4DS3fYTvPW1vvDrH/DjMQ4lG9cm/P3mFr+y9s4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xuRYnK5Ev2M/vrVWMHcTcK7LLwlQ30MVadMjA67fHpY=";
   };
+
+  vendorHash = "sha256-5Gh9jQ4GkvtN8inEUphehbsnmfyQldvxjbxBkXQ63wc=";
+
+  # For patchShebangs
+  buildInputs = [ bash ];
 
   patches = [
     ./fix-shell-path.patch
@@ -34,42 +32,87 @@ buildGoModule rec {
   prePatch = ''
     # Remove some tests that can't work during a nix build
 
-    # Requires to run in a git repo
-    sed -i "s/func TestCacheArchiverAddingUntrackedFiles/func OFF_TestCacheArchiverAddingUntrackedFiles/" commands/helpers/file_archiver_test.go
-    sed -i "s/func TestCacheArchiverAddingUntrackedUnicodeFiles/func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles/" commands/helpers/file_archiver_test.go
+    # Needs the build directory to be a git repo
+    substituteInPlace commands/helpers/file_archiver_test.go \
+      --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
+      --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
+    rm shells/abstract_test.go
 
     # No writable developer environment
-    rm common/build_test.go
     rm common/build_settings_test.go
+    rm common/build_test.go
     rm executors/custom/custom_test.go
 
-    # No docker during build
-    rm executors/docker/terminal_test.go
+    # No Docker during build
     rm executors/docker/docker_test.go
-    rm helpers/docker/auth/auth_test.go
     rm executors/docker/services_test.go
+    rm executors/docker/terminal_test.go
+    rm helpers/docker/auth/auth_test.go
+
+    # No Kubernetes during build
+    rm executors/kubernetes/feature_test.go
+    rm executors/kubernetes/kubernetes_test.go
+    rm executors/kubernetes/overwrites_test.go
+  ''
+  + lib.optionalString stdenv.buildPlatform.isDarwin ''
+    # Invalid bind arguments break Unix socket tests
+    substituteInPlace commands/wrapper_test.go \
+      --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
+
+    # No keychain access during build breaks X.509 certificate tests
+    substituteInPlace helpers/certificate/x509_test.go \
+      --replace-fail "func TestCertificate" "func OFF_TestCertificate"
+    substituteInPlace network/client_test.go \
+      --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
   '';
 
   excludedPackages = [
-    # CI helper script for pushing images to Docker and ECR registries
-    # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
-    "./scripts/sync-docker-images"
+    # Nested dependency Go module, used with go.mod replace directive
+    #
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/commit/57ea9df5d8a8deb78c8d1972930bbeaa80d05e78
+    "./helpers/runner_wrapper/api"
+    # Helper scripts for upstream Make targets, not intended for downstream consumers
+    "./scripts"
   ];
 
-  postInstall = ''
-    install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
-  '';
+  ldflags =
+    let
+      ldflagsPackageVariablePrefix = "gitlab.com/gitlab-org/gitlab-runner/common";
+    in
+    [
+      "-X ${ldflagsPackageVariablePrefix}.NAME=gitlab-runner"
+      "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
+      "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
+    ];
 
   preCheck = ''
     # Make the tests pass outside of GitLab CI
     export CI=0
   '';
 
-  meta = with lib; {
-    description = "GitLab Runner the continuous integration executor of GitLab";
-    license = licenses.mit;
-    homepage = "https://docs.gitlab.com/runner/";
-    platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ zimbatm ] ++ teams.gitlab.members;
+  # Many tests start servers which bind to ports
+  __darwinAllowLocalNetworking = true;
+
+  postInstall = ''
+    install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
+  '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
-}
+
+  meta = {
+    description = "GitLab Runner the continuous integration executor of GitLab";
+    homepage = "https://docs.gitlab.com/runner";
+    license = lib.licenses.mit;
+    mainProgram = "gitlab-runner";
+    maintainers = with lib.maintainers; [ zimbatm ];
+    teams = [ lib.teams.gitlab ];
+  };
+})

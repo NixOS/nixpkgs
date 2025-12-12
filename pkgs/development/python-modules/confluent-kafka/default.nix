@@ -1,24 +1,38 @@
 {
   lib,
+  attrs,
+  authlib,
   avro,
+  azure-identity,
+  azure-keyvault-keys,
+  boto3,
   buildPythonPackage,
+  cachetools,
   fastavro,
   fetchFromGitHub,
+  google-auth,
+  google-api-core,
+  google-cloud-kms,
+  hvac,
+  httpx,
   jsonschema,
+  orjson,
   protobuf,
   pyflakes,
   pyrsistent,
   pytestCheckHook,
   pythonOlder,
+  pyyaml,
   rdkafka,
   requests,
   requests-mock,
+  respx,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.5.3";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b9RTz4wUtDzGkoeB0cp5vbZEBk8jSw2JiXEx6tUuPVw=";
+    tag = "v${version}";
+    hash = "sha256-WpvWv6UG7T0yJ1ZKZweHbWjh+C0PbEIYbbMAS4yyhzg=";
   };
 
   buildInputs = [ rdkafka ];
@@ -49,14 +63,38 @@ buildPythonPackage rec {
       protobuf
       requests
     ];
-    schema-registry = [ requests ];
+    rules = [
+      azure-identity
+      azure-keyvault-keys
+      boto3
+      # TODO: cel-python
+      google-auth
+      google-api-core
+      google-cloud-kms
+      # hkdf was removed
+      hvac
+      # TODO: jsonata-python
+      pyyaml
+      # TODO: tink
+    ];
+    schema-registry = [
+      attrs
+      authlib
+      cachetools
+      httpx
+      orjson
+    ];
   };
 
   nativeCheckInputs = [
+    cachetools
+    orjson
     pyflakes
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    respx
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -64,13 +102,24 @@ buildPythonPackage rec {
     "tests/integration/"
     "tests/test_Admin.py"
     "tests/test_misc.py"
+    # Failed: async def functions are not natively supported.
+    "tests/schema_registry/_async"
+    # missing cel-python dependency
+    "tests/schema_registry/_sync/test_avro_serdes.py"
+    "tests/schema_registry/_sync/test_json_serdes.py"
+    "tests/schema_registry/_sync/test_proto_serdes.py"
+    # missing tink dependency
+    "tests/schema_registry/_async/test_config.py"
+    "tests/schema_registry/_sync/test_config.py"
+    # crashes the test runner on shutdown
+    "tests/test_kafka_error.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
-    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mlieberman85 ];
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mlieberman85 ];
   };
 }

@@ -12,8 +12,6 @@
   readline,
 }:
 
-assert libuuid != null;
-
 stdenv.mkDerivation rec {
   pname = "lash";
   version = "0.5.4";
@@ -40,7 +38,9 @@ stdenv.mkDerivation rec {
     libxml2
     readline
   ];
-  propagatedBuildInputs = [ libuuid ];
+  propagatedBuildInputs =
+    assert libuuid != null;
+    [ libuuid ];
   NIX_LDFLAGS = "-lm -lpthread -luuid";
 
   postInstall = ''
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux Audio Session Handler";
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';
     homepage = "https://www.nongnu.org/lash";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

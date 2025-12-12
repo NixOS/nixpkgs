@@ -7,25 +7,25 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.2.1";
+  version = "0.2.2-pre";
   pname = "kdotool";
 
   src = fetchFromGitHub {
     owner = "jinliu";
     repo = "kdotool";
     rev = "v${version}";
-    hash = "sha256-ogdZziNV4b3h9LiEyWFrD/I/I4k8Z5rNFTNjQpWBQtg=";
+    hash = "sha256-qx4bWAFQcoLM/r4aNzmoZdjclw8ccAW8lKLda6ON1aQ=";
   };
 
-  cargoHash = "sha256-pL5vLfNWsZi75mI5K/PYVmgHTPCyIKpQY0YU2CJABN8=";
+  cargoHash = "sha256-ASR2zMwVCKeEZPYQNoO54J00eZyTn1i6FE0NBCJWSCs=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
-  meta = with lib; {
-    description = "xdotool-like for KDE Wayland";
+  meta = {
+    description = "xdotool clone for KDE Wayland";
     homepage = "https://github.com/jinliu/kdotool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kotatsuyaki ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kotatsuyaki ];
   };
 }

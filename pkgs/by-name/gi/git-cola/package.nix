@@ -5,68 +5,88 @@
   python3Packages,
   gettext,
   git,
-  qt5,
-  gitUpdater,
+  qt6,
+  versionCheckHook,
+  copyDesktopItems,
+  imagemagick,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.10.1";
+  version = "4.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    rev = "v${version}";
-    hash = "sha256-tOd+LSS6inGLRb6Wm92tta0JbjSZw+88hqFDJmSSJlY=";
+    tag = "v${version}";
+    hash = "sha256-rNu0D3mbGP9cEtVekwSgvjUoTKQkoLx6VuSbyXJEqjY=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    qt5.qtwayland
+  build-system = with python3Packages; [
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    setuptools
+  buildInputs = [
     git
-    pyqt5
+    qt6.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+
+  dependencies = with python3Packages; [
+    polib
+    pyqt6
     qtpy
     send2trash
-    polib
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+  nativeBuildInputs = [
     gettext
-    qt5.wrapQtAppsHook
-  ];
+    qt6.wrapQtAppsHook
+    imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
     git
-    pytestCheckHook
+    python3Packages.pytestCheckHook
+    versionCheckHook
   ];
 
-  disabledTestPaths =
-    [
-      "qtpy/"
-      "contrib/win32"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "cola/inotify.py"
-    ];
+  versionCheckProgramArg = "--version";
+
+  disabledTestPaths = [
+    "qtpy/"
+    "contrib/win32"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  desktopItems = [
+    "share/applications/git-cola-folder-handler.desktop"
+    "share/applications/git-cola.desktop"
+    "share/applications/git-dag.desktop"
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/git-cola/git-cola";
+  postInstall = ''
+    for i in 16 24 48 64 96 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
+      magick cola/icons/git-cola.svg -background none -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+    done
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Sleek and powerful Git GUI";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.bobvanderlinden ];
+    homepage = "https://git-cola.github.io/";
+    changelog = "https://github.com/git-cola/git-cola/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
     mainProgram = "git-cola";
   };
 }

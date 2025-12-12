@@ -3,33 +3,29 @@
   buildPythonPackage,
   cherrypy,
   fetchFromGitHub,
-  flit-core,
   filelock,
-  mock,
   msgpack,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.14.1";
+  version = "0.14.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = "cachecontrol";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
+    tag = "v${version}";
+    hash = "sha256-627SqJocVOO0AfI8vswPqOr15MA/Lx7RLAdRAXzWu84=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
     msgpack
@@ -43,19 +39,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cherrypy
-    mock
     pytestCheckHook
-    requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "cachecontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
-    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

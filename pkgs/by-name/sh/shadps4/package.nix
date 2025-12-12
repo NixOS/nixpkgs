@@ -18,39 +18,39 @@
   libusb1,
   magic-enum,
   libgbm,
+  pipewire,
   pkg-config,
   pugixml,
-  qt6,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
   sndio,
   stb,
+  toml11,
+  util-linux,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
+  xbyak,
   xorg,
   xxHash,
   zlib-ng,
-  unstableGitUpdater,
+  zydis,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.4.0-unstable-2024-12-08";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "4fb2247196d4626bab8f2c28710b0c34cad053fe";
-    hash = "sha256-bRURBUhIVQLrBxJFaJirw3n1n7xviRoAZGLZ+rV/UeM=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-H/GOnArWxMe/90qgyLb9fXbeJabUOV8CjLtpGokoStQ=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix controls without a numpad
-    ./laptop-controls.patch
-  ];
 
   buildInputs = [
     alsa-lib
@@ -69,32 +69,31 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     magic-enum
     libgbm
+    pipewire
     pugixml
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtmultimedia
-    qt6.qttools
-    qt6.qtwayland
     rapidjson
     renderdoc
     robin-map
+    sdl3
     sndio
     stb
+    toml11
+    util-linux
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    xbyak
     xxHash
     zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT_GUI" true)
     (lib.cmakeBool "ENABLE_UPDATER" false)
   ];
 
@@ -113,21 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    patchelf --add-rpath ${
-      lib.makeLibraryPath [
-        vulkan-loader
-        xorg.libXi
-      ]
-    } \
-      $out/bin/shadps4
-  '';
+  runtimeDependencies = [
+    vulkan-loader
+    xorg.libXi
+  ];
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = unstableGitUpdater {
-      tagFormat = "v.*";
-      tagPrefix = "v.";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
     };
   };
 
@@ -135,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Early in development PS4 emulator";
     homepage = "https://github.com/shadps4-emu/shadPS4";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ryand56 ];
+    maintainers = with lib.maintainers; [
+      ryand56
+      liberodark
+    ];
     mainProgram = "shadps4";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };

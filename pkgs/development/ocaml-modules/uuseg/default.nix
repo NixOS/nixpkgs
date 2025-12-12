@@ -9,7 +9,7 @@
   uucp,
   uutf,
   cmdliner,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
   cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     url = "${webpage}/releases/${pname}-${version}.tbz";
     hash =
       {
-        "16.0.0" = "sha256-WAP9uyofhtw6ag6/U4GQAanIFoKWvyA4NgeVweTs/iQ=";
+        "17.0.0" = "sha256-Fn41ajEFbMv3LLkD+zqy76217/kWFS7q9jm9ubc6TI4=";
         "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
       }
       ."${version}";
@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     topkg
     uutf
-  ] ++ lib.optional cmdlinerSupport cmdliner;
+  ]
+  ++ lib.optional cmdlinerSupport cmdliner;
   propagatedBuildInputs = [ uucp ];
 
   strictDeps = true;
@@ -57,11 +58,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) installPhase;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml library for segmenting Unicode text";
     homepage = webpage;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "usegtrip";
     inherit (ocaml.meta) platforms;
   };

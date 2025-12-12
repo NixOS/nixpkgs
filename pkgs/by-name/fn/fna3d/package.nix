@@ -2,38 +2,38 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   SDL2,
+  sdl3,
+  useSDL3 ? false,
 }:
+
 stdenv.mkDerivation rec {
   pname = "fna3d";
-  version = "24.12";
+  version = "25.12";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-ieodMkzBDPq8WCTEyPMENFxoGwrknWV6qsVCZmi0TwQ=";
+    hash = "sha256-nrCBW3UypXUYAt7Ccr3w64QikmN/Vg5TSlQ19/g+anM=";
   };
 
-  buildInputs = [ SDL2 ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SDL3" useSDL3)
+  ];
+  buildInputs = if useSDL3 then [ sdl3 ] else [ SDL2 ];
   nativeBuildInputs = [ cmake ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 libFNA3D.so $out/lib/libFNA3D.so
-    ln -s libFNA3D.so $out/lib/libFNA3D.so.0
-    ln -s libFNA3D.so $out/lib/libFNA3D.so.0.${version}
-    runHook postInstall
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Accuracy-focused XNA4 reimplementation for open platforms";
     homepage = "https://fna-xna.github.io/";
-    license = lib.licenses.mspl;
+    license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
-    mainProgram = pname;
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
 }

@@ -4,45 +4,54 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
   setuptools,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "bring-api";
-  version = "0.9.1";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "bring-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wPplw1yYJ5xR2CzhDXXjhMFJ7swGf2AARI4a1kE8MRw=";
+    tag = version;
+    hash = "sha256-BslU1ekbQIZh1f1zRYXbZdbOepB2+NWIuWZI4L/oxSg=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    # https://github.com/miaucl/bring-api/blob/1.0.0/requirements.txt
+    # pyproject.toml is out of sync
+    aiohttp
+    yarl
+    mashumaro
+    orjson
+  ];
 
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
     python-dotenv
+    syrupy
   ];
 
   pythonImportsCheck = [ "bring_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access the Bring! shopping lists API";
     homepage = "https://github.com/miaucl/bring-api";
-    changelog = "https://github.com/miaucl/bring-api/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/miaucl/bring-api/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

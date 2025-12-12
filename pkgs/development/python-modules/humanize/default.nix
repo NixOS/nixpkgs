@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.11.0";
+  version = "4.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-humanize";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-C6u7t7RedInHJtN4yHli22Wc7llnrxn4YeKssyQ+hS4=";
+    repo = "humanize";
+    tag = version;
+    hash = "sha256-VsB59tS2KRZ0JKd1FzA+RTEzpkUyj9RhhSopseHg+m8=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,6 @@ buildPythonPackage rec {
     hatchling
     gettext
   ];
-
-  postPatch = ''
-    # Remove dependency on pytest-cov
-    substituteInPlace pyproject.toml --replace-fail \
-      '"ignore:sys.monitoring isn'"'"'t available, using default core:coverage.exceptions.CoverageWarning",' ""
-  '';
 
   postBuild = ''
     scripts/generate-translation-binaries.sh
@@ -52,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "humanize" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
     changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rmcgibbo
       Luflosi
     ];

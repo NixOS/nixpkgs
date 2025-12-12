@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  Foundation,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -14,25 +13,23 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.8.2";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-rust";
     rev = version;
-    hash = "sha256-0hIwFJn/cwtKHKoD+upeorC52YnDlej3TrWf3PmAQAQ=";
+    hash = "sha256-yJ78P00h4SITVuDnIh5IIlWkoed/VtIw3NB8ETB95bk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-Gdypi9DJAXQgNaRCLEt4LTqUhBJC8plH0YhgNOIOGvA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-9OgUuuMuo2l4YsZMhBZJBqKqbNwj1W4yidoogjcNgm8=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Foundation
   ];
   nativeBuildInputs = [
     setuptools-rust
@@ -47,10 +44,10 @@ buildPythonPackage rec {
   doCheck = false; # tests for this package are in skytemple-files package
   pythonImportsCheck = [ "skytemple_rust" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-rust";
     description = "Binary Rust extensions for SkyTemple";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

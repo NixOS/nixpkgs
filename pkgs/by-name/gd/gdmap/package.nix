@@ -1,48 +1,45 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  gtk2,
+  fetchFromGitLab,
+  meson,
+  cairo,
+  gtk3,
+  ninja,
   pkg-config,
   libxml2,
-  intltool,
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gdmap";
-  version = "0.8.1";
+  version = "1.3.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gdmap/gdmap-${version}.tar.gz";
-    sha256 = "0nr8l88cg19zj585hczj8v73yh21k7j13xivhlzl8jdk0j0cj052";
+  src = fetchFromGitLab {
+    owner = "sjohannes";
+    repo = "gdmap";
+    tag = "v1.3.1";
+    sha256 = "sha256-dgZ+EDk7O+nuqrBsTPVW7BHufvkqLnWbXrIOOn7YlW4=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    intltool
   ];
   buildInputs = [
-    gtk2
+    gtk3
+    cairo
     libxml2
     gettext
   ];
 
-  patches = [
-    ./get_sensitive.patch
-    ./set_flags.patch
-  ];
-
-  hardeningDisable = [ "format" ];
-
-  NIX_LDFLAGS = "-lm";
-
-  meta = with lib; {
-    homepage = "https://gdmap.sourceforge.net";
-    description = "Recursive rectangle map of disk usage";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+  meta = {
+    homepage = "https://gitlab.com/sjohannes/gdmap";
+    description = "Tool to visualize disk space (GTK 3 port of Original)";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "gdmap";
   };
 }

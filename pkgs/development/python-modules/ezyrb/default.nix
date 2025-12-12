@@ -2,36 +2,55 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   future,
   numpy,
   scipy,
   matplotlib,
   scikit-learn,
   torch,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ezyrb";
   version = "1.3.0.post2404";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "EZyRB";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nu75Geyeu1nTLoGaohXB9pmbUWKgdgch9Z5OJqz9xKQ=";
   };
 
-  propagatedBuildInputs = [
+  # AttributeError: module 'numpy' has no attribute 'VisibleDeprecationWarning'
+  postPatch = ''
+    substituteInPlace \
+      tests/test_k_neighbors_regressor.py \
+      tests/test_linear.py \
+      tests/test_radius_neighbors_regressor.py \
+      --replace-fail \
+        "np.VisibleDeprecationWarning" \
+        "np.exceptions.VisibleDeprecationWarning"
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     future
-    numpy
-    scipy
     matplotlib
+    numpy
     scikit-learn
+    scipy
     torch
   ];
 
@@ -44,11 +63,11 @@ buildPythonPackage rec {
     "tests/test_podae.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy Reduced Basis method";
     homepage = "https://mathlab.github.io/EZyRB/";
     downloadPage = "https://github.com/mathLab/EZyRB/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

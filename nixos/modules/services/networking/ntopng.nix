@@ -58,7 +58,7 @@ in
           interfaces and displays its findings at http://localhost:''${toString
           config.${opt.http-port}}. Default username and password is admin/admin.
 
-          See the ntopng(8) manual page and http://www.ntop.org/products/ntop/
+          See the {manpage}`ntopng(8)` manual page and http://www.ntop.org/products/ntop/
           for more info.
 
           Note that enabling ntopng will also enable redis (key-value
@@ -80,7 +80,7 @@ in
 
       httpPort = mkOption {
         default = 3000;
-        type = types.int;
+        type = types.port;
         description = ''
           Sets the HTTP port of the embedded web server.
         '';

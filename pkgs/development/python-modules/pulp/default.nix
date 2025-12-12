@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "coin-or";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pulp";
+    tag = version;
     hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to generate MPS or LP files";
     mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

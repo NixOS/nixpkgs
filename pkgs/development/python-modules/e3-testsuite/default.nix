@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "e3-testsuite";
-  version = "26.0";
+  version = "27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-testsuite";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-V20tX0zi2DRHO42udUcW/CDMyBxh1uSTgac0zZGubsI=";
+    tag = "v${version}";
+    hash = "sha256-qG8SHwogBle3demgFJCqcfCh5ktLvOqh2XSwxPCANFk=";
   };
 
   build-system = [ setuptools ];
@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "e3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic testsuite framework in Python";
-    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${src.tag}";
     homepage = "https://github.com/AdaCore/e3-testsuite/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ heijligen ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ heijligen ];
+    platforms = lib.platforms.linux;
   };
 }

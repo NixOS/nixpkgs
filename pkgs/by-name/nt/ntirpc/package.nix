@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
   postPatch = ''
-    substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
-    sed '1i#include <assert.h>' -i src/work_pool.c
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6.3)" \
+      "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace ntirpc/netconfig.h --replace-fail \
+      "/etc/netconfig" "$out/etc/netconfig"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -44,11 +48,11 @@ stdenv.mkDerivation rec {
     cp ${libtirpc}/etc/netconfig $out/etc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

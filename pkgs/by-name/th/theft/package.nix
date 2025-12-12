@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
+  patches = [ ./disable-failing-test.patch ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "ar -rcs" "${stdenv.cc.targetPrefix}ar -rcs"
+  '';
+
   preConfigure = "patchShebangs ./scripts/mk_bits_lut";
 
   doCheck = true;
@@ -31,12 +38,12 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for property-based testing";
     homepage = "https://github.com/silentbicycle/theft/";
-    platforms = platforms.unix;
-    license = licenses.isc;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
       kquick
       thoughtpolice
     ];

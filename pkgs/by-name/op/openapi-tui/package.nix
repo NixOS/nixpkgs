@@ -8,27 +8,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openapi-tui";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "zaghaghi";
     repo = "openapi-tui";
     rev = version;
-    hash = "sha256-EUWL16cHgPF88CoCD9sqnxLOlmWoe1tu5ps01AYwwzc=";
+    hash = "sha256-rC0lfWZpiiAAShyVDqr1gKTeWmWC+gVp4UmL96Y81mE=";
   };
 
-  cargoHash = "sha256-sINwuMgBbc/Xn73Gy+Wwb0QtIHGGB02fVyz/K/tg5Ys=";
+  cargoHash = "sha256-911ARjYvTNqLVVUWxATbtiKXOC9AqalFvDvp/qAef1Q=";
 
   OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal UI to list, browse and run APIs defined with openapi spec";
     homepage = "https://github.com/zaghaghi/openapi-tui";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "openapi-tui";
   };
 }

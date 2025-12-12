@@ -1,24 +1,28 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   azure-identity,
   azure-monitor-ingestion,
   boto3,
-  buildPythonPackage,
   dateparser,
   dnspython,
   elastic-transport,
-  elasticsearch,
   elasticsearch-dsl,
+  elasticsearch,
   expiringdict,
-  fetchPypi,
-  fetchurl,
   geoip2,
   google-api-core,
   google-api-python-client,
-  google-auth,
   google-auth-httplib2,
   google-auth-oauthlib,
-  hatchling,
+  google-auth,
   imapclient,
   kafka-python-ng,
   lxml,
@@ -28,10 +32,12 @@
   opensearch-py,
   publicsuffixlist,
   pygelf,
-  pythonOlder,
   requests,
   tqdm,
   xmltodict,
+
+  # test
+  unittestCheckHook,
 }:
 
 let
@@ -42,17 +48,17 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.15.4";
+  version = "8.18.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lxW92jlSWgGVxOO+CwIZi5sKHqoZuR5VQCnDVORXmXU=";
+  src = fetchFromGitHub {
+    owner = "domainaware";
+    repo = "parsedmarc";
+    tag = version;
+    hash = "sha256-wwncnkZnd8GsjvwsuJEgFYCtapzGYYcVBRYoJ1cwVEw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
@@ -61,7 +67,7 @@ buildPythonPackage rec {
     "elasticsearch-dsl"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-identity
     azure-monitor-ingestion
     boto3
@@ -82,17 +88,17 @@ buildPythonPackage rec {
     lxml
     mailsuite
     msgraph-core
+    opensearch-py
     publicsuffixlist
     pygelf
     requests
     tqdm
     xmltodict
-    opensearch-py
   ];
 
-  # no tests on PyPI, no tags on GitHub
-  # https://github.com/domainaware/parsedmarc/issues/426
-  doCheck = false;
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "parsedmarc" ];
 
@@ -101,14 +107,12 @@ buildPythonPackage rec {
     tests = nixosTests.parsedmarc;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ talyz ];
+    changelog = "https://github.com/domainaware/parsedmarc/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
     # https://github.com/domainaware/parsedmarc/issues/464
     broken = lib.versionAtLeast msgraph-core.version "1.0.0";

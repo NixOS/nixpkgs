@@ -35,26 +35,24 @@ let
       }) supportedDevices
     );
 
-  unsupportedDeviceIds = lib.filterAttrs (
-    name: value: !(lib.hasAttr name supportedDeviceIds)
-  ) deviceIds;
+  unsupportedDeviceIds = lib.removeAttrs deviceIds (lib.attrNames supportedDeviceIds);
 
   componentHashes = {
-    "arria_lite" = "0fg9mmncbb8vmmbc3hxgmrgvgfphn3k4glv7w2yjq66vz6nd8zql";
-    "cyclone" = "1min1hjaw8ll0c1gvl6ihp7hczw36ag8l2yzgl6avcapcw53hgyp";
-    "cyclone10lp" = "1kjjm11hjg0h6i7kilxvhmkay3v416bhwp0frg2bnwggpk29drxj";
-    "cyclonev" = "10v928qhyfqw3lszhhcdishh1875k1bki9i0czx9252jprgd1g7g";
-    "max" = "04sszzz3qnjziirisshhdqs7ks8mcvy15lc1mpp9sgm09pwlhgbb";
-    "max10" = "0dqlq477zdx4pf5hlbkl1ycxiav19vx4sk6277cpxm8y1xz70972";
+    "arria_lite" = "sha256-ASvi9YX15b4XXabGjkuR5wl9wDwCijl8s750XTR/4XU=";
+    "cyclone" = "sha256-iNA4S5mssffgn29NUhibJk6iKnmJ+vG9LYY3W+nnqcI=";
+    "cyclone10lp" = "sha256-247yR2fm5A3LWRjePJU99z1NBYziV8WkPL05wHJ4Z1Q=";
+    "cyclonev" = "sha256-Fa1PQ3pp9iTPYQljeKGyxHIXHaSolJZR8vXVb3gEN7g=";
+    "max" = "sha256-lAA1CgSfAjfilLDhRzfU2OkzGAChk7TMFckeboMB4mI=";
+    "max10" = "sha256-edycBj0P3qwLN2YS//QpCHQeGOW8WM0RqTIWdGAkEv8=";
   };
 
-  version = "23.1std.0.991";
+  version = "24.1std.0.1077";
 
   download =
     { name, sha256 }:
     fetchurl {
       inherit name sha256;
-      # e.g. "23.1std.0.991" -> "23.1std/921"
+      # e.g. "23.1std.1.993" -> "23.1std/993"
       url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std/${lib.elemAt (lib.splitVersion version) 4}/ib_installers/${name}";
     };
 
@@ -62,12 +60,12 @@ let
     [
       {
         name = "QuartusLiteSetup-${version}-linux.run";
-        sha256 = "1mg4db56rg407kdsvpzys96z59bls8djyddfzxi6bdikcklxz98h";
+        sha256 = "sha256-NFWT1VWcb3gun7GhpPbHzR3SIYBMpK40jESXS/vC5II=";
       }
     ]
     ++ lib.optional withQuesta {
       name = "QuestaSetup-${version}-linux.run";
-      sha256 = "0f9lyphk4vf4ijif3kb4iqf18jl357z9h8g16kwnzaqwfngh2ixk";
+      sha256 = "sha256-4+Y34UiJwenlIp/XKzMs+2aYZt/Y6XmNmiYyXVmOQkc=";
     }
   );
   components = map (
@@ -79,7 +77,7 @@ let
   ) (lib.attrValues supportedDeviceIds);
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "quartus-prime-lite-unwrapped";
 
@@ -95,14 +93,13 @@ stdenv.mkDerivation rec {
       '';
       copyComponent = component: "cp ${component} $TEMP/${component.name}";
       # leaves enabled: quartus, devinfo
-      disabledComponents =
-        [
-          "quartus_help"
-          "quartus_update"
-          "questa_fe"
-        ]
-        ++ (lib.optional (!withQuesta) "questa_fse")
-        ++ (lib.attrValues unsupportedDeviceIds);
+      disabledComponents = [
+        "quartus_help"
+        "quartus_update"
+        "questa_fe"
+      ]
+      ++ (lib.optional (!withQuesta) "questa_fse")
+      ++ (lib.attrValues unsupportedDeviceIds);
     in
     ''
       echo "setting up installer..."
@@ -125,15 +122,16 @@ stdenv.mkDerivation rec {
         --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fpgasoftware.intel.com";
     description = "FPGA design and simulation software";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bjornfor
       kwohlfahrt
+      zainkergaye
     ];
   };
 }

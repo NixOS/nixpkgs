@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-bxp38zWufqS6PZqhw8X5HR5zMRcwH58MuZaJmDRuiys=";
   };
 
-  cargoHash = "sha256-Se4q4G3hzXIHHSY2YxeRHxU6+wnqR9bfrIQSOagFYZE=";
+  cargoHash = "sha256-zzbGyfuzJXB/Rf/cm4JTVfjx2rWz1iTnELokie6qBrw=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     $releaseDir/ptags --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel universal-ctags wrapper for git repository";
     mainProgram = "ptags";
     homepage = "https://github.com/dalance/ptags";
-    maintainers = with maintainers; [ pamplemousse ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
   };
 }

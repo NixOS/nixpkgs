@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tee-ar-ex";
     repo = "trx-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gKPgP3GJ7QY0Piylk5L0HxnscRCREP1Hm5HZufL2h5g=";
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [ "trx/tests" ];
+  enabledTestPaths = [ "trx/tests" ];
 
   disabledTestPaths = [
     # access to network
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tee-ar-ex/trx-python";
     changelog = "https://github.com/tee-ar-ex/trx-python/releases/tag/${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

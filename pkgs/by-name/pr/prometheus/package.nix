@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   lib,
   go,
   buildGoModule,
@@ -31,16 +32,9 @@
   enableZookeeper ? true,
 }:
 
-let
-  version = "3.0.0";
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    hash = "sha256-a3xyStDsutLjYIEm7t3WilmvO36eMHvd4pOtZYYsJCM=";
-  };
-in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus";
-  inherit version;
+  version = "3.8.0";
 
   outputs = [
     "out"
@@ -51,19 +45,27 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus";
-    rev = "v${version}";
-    hash = "sha256-IMYDtAb2ojzZLBqRJkMcB8yFpmmJPwbbyAxFfbCikkA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hRuZxwPPDLxQvy5MPKEyfmanNabcSjLRO+XbNKugPtk=";
   };
 
-  vendorHash = "sha256-c96YnWPLH/tbGRb2Zlqrl3PXSZvI+NeYTGlef6REAOw=";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  vendorHash = "sha256-5wDaG01vcTtGzrS/S33U5XWXoSWM+N9z3dzXZlILxD8=";
+
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
+    hash = "sha256-oOEvNZFlYtTNBsn+B2pAWXi0A2oJ6IAo7V8bOLtjfCM=";
+  };
 
   excludedPackages = [
     "documentation/prometheus-mixin"
+    "internal/tools"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${webUiStatic}
+    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
 
     patchShebangs scripts
 
@@ -97,7 +99,9 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then
+      GOARCH= CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" make -o assets assets-compress plugins
+    fi
   '';
 
   tags = [ "builtinassets" ];
@@ -108,8 +112,7 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -130,16 +133,24 @@ buildGoModule rec {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
+  checkFlags = [
+    # Skip for issue during TSDB compaction
+    "-skip=TestBlockRanges"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
+
   passthru.tests = { inherit (nixosTests) prometheus; };
 
-  meta = with lib; {
+  meta = {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fpletz
-      willibutz
       Frostman
     ];
+    mainProgram = "prometheus";
   };
-}
+})

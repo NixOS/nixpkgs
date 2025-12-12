@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-COU2JtiJcPRA3Jno0qLEIVgimYBWfn5Pgc1OMImsJtI=";
   };
 
-  cargoHash = "sha256-nf9JM5FfXBNEKzZrfu3jphupL9PdoQLVpqGoZ/X9p5E=";
+  cargoHash = "sha256-4LgJP3xtN009rf12hOZvmqXK6iz7yn0Y4zwVSo+qEZQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "Wallpaper daemon and control tool for Wayland";
     longDescription = ''
       Created to allow displaying dynamic wallpapers based on the specification format used for example in the `Gnome` desktop environment.
@@ -42,8 +42,8 @@ rustPlatform.buildRustPackage rec {
       For a fast handling `enkei` uses `OpenGL` to render images and blending them for transitions.
     '';
     homepage = "https://github.com/jwuensche/enkei";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ppenguin ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ppenguin ];
   };
 }

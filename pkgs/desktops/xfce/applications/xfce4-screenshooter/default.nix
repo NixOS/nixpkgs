@@ -1,9 +1,17 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
   wayland-scanner,
+  wrapGAppsHook3,
   exo,
   gtk3,
+  gtk-layer-shell,
   libX11,
   libXext,
   libXfixes,
@@ -14,27 +22,41 @@
   wlr-protocols,
   xfce4-panel,
   xfconf,
-  curl,
-  zenity,
-  jq,
-  xclip,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-screenshooter";
-  version = "1.11.1";
-  odd-unstable = false;
+  version = "1.11.3";
 
-  sha256 = "sha256-/N79YK233k9rVg5fGr27b8AZD9bCXllNQvrN4ghir/M=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-screenshooter";
+    tag = "xfce4-screenshooter-${finalAttrs.version}";
+    hash = "sha256-VN9j5Ieg3MZwhS4mE4LMRbQ5AM9F8O2n5lx/V0Qk0Po=";
+  };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
+    gettext
+    glib # glib-compile-resources
+    meson
+    ninja
+    pkg-config
     wayland-scanner
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     exo
     gtk3
+    gtk-layer-shell
     libX11
     libXext
     libXfixes
@@ -47,24 +69,14 @@ mkXfceDerivation {
     xfconf
   ];
 
-  preFixup = ''
-    # For Imgur upload action
-    # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
-    gappsWrapperArgs+=(
-      --prefix PATH : ${
-        lib.makeBinPath [
-          curl
-          zenity
-          jq
-          xclip
-        ]
-      }
-    )
-  '';
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-screenshooter-"; };
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot utility for the Xfce desktop";
+    homepage = "https://gitlab.xfce.org/apps/xfce4-screenshooter";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "xfce4-screenshooter";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

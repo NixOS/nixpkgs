@@ -55,12 +55,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Get the contributor stats summary from all repos of any given organization";
     homepage = "https://github.com/caarlos0/org-stats";
     changelog = "https://github.com/caarlos0/org-stats/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "org-stats";
   };
 }

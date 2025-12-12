@@ -1,7 +1,7 @@
 {
   lib,
   fetchurl,
-  nettools,
+  net-tools,
   openssl,
   readline,
   stdenv,
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "socat";
-  version = "1.8.0.1";
+  version = "1.8.0.3";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/${pname}-${version}.tar.bz2";
-    hash = "sha256-aig1Zdt8+GKSxvcFBMWKuwPimIit7tWmxfNFfoA8G4E=";
+    hash = "sha256-AesBc2HZW7OmlB6EC1nkRjo/q/kt9BVO0CsWou1qAJU=";
   };
 
   postPatch = ''
@@ -25,18 +25,24 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
+  configureFlags =
+    lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--disable-posixmq"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "--disable-dccp"
+    ];
+
   buildInputs = [
     openssl
     readline
   ];
 
-  hardeningEnable = [ "pie" ];
-
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
     which
-    nettools
+    net-tools
   ];
   doCheck = false; # fails a bunch, hangs
 
@@ -44,12 +50,12 @@ stdenv.mkDerivation rec {
     musl = buildPackages.pkgsMusl.socat;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for bidirectional data transfer between two independent data channels";
     homepage = "http://www.dest-unreach.org/socat/";
-    platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ ryan4yin ];
     mainProgram = "socat";
   };
 }

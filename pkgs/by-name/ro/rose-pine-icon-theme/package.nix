@@ -5,7 +5,7 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "rose-pine-icon-theme";
   version = "unstable-2022-09-01";
 
@@ -38,12 +38,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rosé Pine icon theme for GTK";
     homepage = "https://github.com/rose-pine/gtk";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       romildo
       the-argus
     ];

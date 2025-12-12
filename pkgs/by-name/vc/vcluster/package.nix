@@ -1,9 +1,8 @@
 {
+  lib,
   buildGoModule,
   fetchFromGitHub,
   go,
-  installShellFiles,
-  lib,
   nix-update-script,
   testers,
   vcluster,
@@ -11,13 +10,13 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.19.7";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "vcluster";
-    rev = "v${version}";
-    hash = "sha256-sO/kpbzoAy4ohmLZ3Q7+HzoC0NoK2y0qkJ6Ib8TlEns=";
+    tag = "v${version}";
+    hash = "sha256-LsyJ1qiSAWOfh9DWrO1JNxf5ItH7pMn8jW/GQ9Skeq4=";
   };
 
   vendorHash = null;
@@ -31,28 +30,20 @@ buildGoModule rec {
     "-X main.goVersion=${lib.getVersion go}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
   # Test is disabled because e2e tests expect k8s.
   doCheck = false;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -Dm755 "$GOPATH/bin/vclusterctl" -T $out/bin/vcluster
-    runHook postInstall
-  '';
 
-  postInstall = ''
-    installShellCompletion --cmd vcluster \
-      --bash <($out/bin/vcluster completion bash) \
-      --fish <($out/bin/vcluster completion fish) \
-      --zsh <($out/bin/vcluster completion zsh)
+    install -Dm755 $GOPATH/bin/vclusterctl $out/bin/vcluster
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {
     package = vcluster;
-    command = "vcluster --version";
+    command = "HOME=$(mktemp -d) vcluster --version";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -65,8 +56,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
     maintainers = with lib.maintainers; [
-      berryp
-      peterromfeldhk
       qjoly
     ];
   };

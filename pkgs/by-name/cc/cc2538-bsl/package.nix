@@ -1,57 +1,72 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
-  pname = "cc2538-bsl";
-  version = "2.1-unstable-2023-10-03";
-  format = "pyproject";
+let
+  pypkgs = python3Packages;
+
+  version = "2.1-unstable-2025-03-28";
 
   src = fetchFromGitHub {
     owner = "JelmerT";
     repo = "cc2538-bsl";
-    rev = "4d64ac633dbaf29d098842c5937ed6eea2fd7c45";
-    hash = "sha256-NX2jPYAz15bSucj/YR5E/0eJy/cbszSrNxyJHRsbXxo=";
+    rev = "250e8616e6cb00f1b23cb251154de984ce506f7b";
+    hash = "sha256-SNWHCSbaeO4s4W29Jly9bAEhFjfej9J9qn+mxxpoe30=";
   };
 
-  patches = [
-    (fetchpatch {
-      # fix extras specification in setup.py; https://github.com/JelmerT/cc2538-bsl/pull/143
-      url = "https://github.com/JelmerT/cc2538-bsl/commit/c70f58ec0222357db8020176711d6d45cf24da35.patch";
-      hash = "sha256-Rxm/TRcm87WgRfq60cu0loyrbJmZou09XYR7uhrhhj8=";
-    })
-  ];
+  version' = "${lib.versions.majorMinor version}.dev0+g${lib.substring 0 7 src.rev}";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev0+g${lib.substring 0 7 src.rev}";
+in
+pypkgs.buildPythonApplication rec {
+  pname = "cc2538-bsl";
+  inherit version src;
+  pyproject = true;
 
-  nativeBuildInputs = with python3Packages; [
+  # if you happen to run cc2538-bsl from a git repository of any kind, you will get the
+  # version of *that* rather than the application itself because it will run 'git describe'
+  patches = [ ./do_not_run_git.patch ];
+
+  postPatch = ''
+    substituteInPlace cc2538_bsl/cc2538_bsl.py  \
+      --replace-fail '__version__ = "2.1"' '__version__ = "${version'}"'
+  '';
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version';
+
+  build-system = with pypkgs; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with pypkgs; [
     intelhex
     pyserial
     python-magic
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pypkgs; [
     pytestCheckHook
     scripttest
   ];
 
-  postInstall = ''
-    # Remove .py from binary
-    mv $out/bin/cc2538-bsl.py $out/bin/cc2538-bsl
+  # we need to patch these tests to make them work inside our sandbox, so just disable them for
+  # now as we run this in `postInstallCheck`
+  disabledTests = [
+    "test_help_output"
+    "test_version"
+  ];
+
+  # this is just to ensure that `meta.mainProgram` exists and is executable since we disable `test_help_output`
+  postInstallCheck = ''
+    $out/bin/${meta.mainProgram} --help
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JelmerT/cc2538-bsl";
     description = "Flash TI SimpleLink chips (CC2538, CC13xx, CC26xx) over serial";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lorenz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lorenz ];
     mainProgram = "cc2538-bsl";
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   mercurial,
   makeWrapper,
   nix-update-script,
@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    gitMinimal
+    makeWrapper
+  ];
   buildInputs = [
     mercurial.python
     mercurial
@@ -48,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for script in $out/bin/*.sh; do
       wrapProgram $script \
-        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
+        --prefix PATH : "${gitMinimal}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
@@ -56,22 +59,28 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   # deliberately not adding git or hg into nativeInstallCheckInputs - package should
   # be able to work without them in runtime env
+
+  nativeCheckInputs = [
+    gitMinimal
+    mercurial
+  ];
+
   installCheckPhase = ''
     mkdir repo-hg
     pushd repo-hg
-    ${mercurial}/bin/hg init
+    hg init
     echo foo > bar
-    ${mercurial}/bin/hg add bar
-    ${mercurial}/bin/hg commit --message "baz"
+    hg add bar
+    hg commit --message "baz"
     popd
 
     mkdir repo-git
     pushd repo-git
-    ${git}/bin/git init
-    ${git}/bin/git config core.ignoreCase false  # for darwin
+    git init
+    git config core.ignoreCase false  # for darwin
     $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
     for s in "foo" "bar" "baz" ; do
-      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+      (git show | grep $s > /dev/null) && echo $s found
     done
     popd
   '';
@@ -84,5 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.koral ];
     platforms = lib.platforms.unix;
+    mainProgram = "hg-fast-export.sh";
   };
 })

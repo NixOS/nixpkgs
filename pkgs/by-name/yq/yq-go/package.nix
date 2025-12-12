@@ -1,50 +1,65 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  pandoc,
   runCommand,
-  yq-go,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.44.6";
+  version = "4.49.2";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
-    rev = "v${version}";
-    hash = "sha256-C9ql10PnEeGF8mnyLR25ibwLyE4SlqnpDNcPei9FnBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r+9TjdVRcHx5Ijea/4ITCqyJIngEcfzrCBP3Xlgd1xE=";
   };
 
-  vendorHash = "sha256-B6ivzm7J0wYdYruGZ2N6SyvghsRRJlVlk84CuaF5PVA=";
+  vendorHash = "sha256-fcjHqWLDvXyALkh3TR8lOnv7McXUVtcb1VpVbMuUMtk=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+    pandoc
+  ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yq \
       --bash <($out/bin/yq shell-completion bash) \
       --fish <($out/bin/yq shell-completion fish) \
       --zsh <($out/bin/yq shell-completion zsh)
+
+    patchShebangs ./scripts/generate-man-page*
+    export MAN_HEADER="yq (https://github.com/mikefarah/yq/) version ${finalAttrs.version}"
+    ./scripts/generate-man-page-md.sh
+    ./scripts/generate-man-page.sh
+    installManPage yq.1
   '';
 
-  passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
-      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
-      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
-    '';
+  passthru = {
+    tests = {
+      simple = runCommand "yq-go-test" { } ''
+        echo "test: 1" | ${finalAttrs.finalPackage}/bin/yq eval -j > $out
+        [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+      '';
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
-    changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
+    changelog = "https://github.com/mikefarah/yq/raw/${finalAttrs.src.tag}/release_notes.txt";
     mainProgram = "yq";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = [ lib.licenses.mit ];
+    maintainers = with lib.maintainers; [
       lewo
+      prince213
       SuperSandro2000
     ];
   };
-}
+})

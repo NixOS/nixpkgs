@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     else
       throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
 
-  phases = "installPhase";
   ld_preload = ./isatty.c;
 
   libPath =
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
       alsa-lib
     ];
 
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/libexec/strangeloop/vessel/
     mkdir -p $out/bin
 
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,
@@ -97,8 +96,8 @@ stdenv.mkDerivation rec {
       to life, and all the consequences that ensue.
     '';
     homepage = "http://www.strangeloopgames.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 
 }

@@ -6,9 +6,9 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "textual-slider";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "TomJGooding";
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   dependencies = [ textual ];
 
-  meta = with lib; {
+  meta = {
     description = "Textual widget for a simple slider";
     homepage = "https://github.com/TomJGooding/textual-slider";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.lukegb ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.lukegb ];
   };
 }

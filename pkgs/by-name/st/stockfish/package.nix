@@ -3,9 +3,12 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  apple-sdk,
-  apple-sdk_11,
-  darwinMinVersionHook,
+  versionCheckHook,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  writeShellApplication,
+  nix,
+  gnugrep,
 }:
 
 let
@@ -26,29 +29,31 @@ let
       "unknown";
 
   # These files can be found in src/evaluate.h
-  nnueBigFile = "nn-1111cefa1111.nnue";
+  nnueBigFile = "nn-1c0000000000.nnue";
+  nnueBigHash = "sha256-HAAAAAAApn1imZnZMtDDc/dFDOQ80S0FYoaPTq+a4q0=";
   nnueBig = fetchurl {
     name = nnueBigFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = nnueBigHash;
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
+  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   nnueSmall = fetchurl {
     name = nnueSmallFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = nnueSmallHash;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "17";
+  version = "17.1";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
-    rev = "sf_${version}";
-    sha256 = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
+    tag = "sf_${version}";
+    hash = "sha256-c8o1d7/yPnF3Eo7M/MSzYuYQr2qt2tIwyu7WfuKMAzg=";
   };
 
   postUnpack = ''
@@ -64,16 +69,40 @@ stdenv.mkDerivation rec {
   ];
   buildFlags = [ "build" ];
 
-  buildInputs =
-    lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "11")
-      [
-        apple-sdk_11
-        (darwinMinVersionHook "10.15")
-      ];
-
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/stockfish";
+  versionCheckProgramArg = "--help";
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [ "--version-regex=^sf_([\\d.]+)$" ];
+      })
+      (lib.getExe (writeShellApplication {
+        name = "${pname}-nnue-updater";
+        runtimeInputs = [
+          nix
+          gnugrep
+        ];
+        runtimeEnv = {
+          PNAME = pname;
+          PKG_FILE = toString ./package.nix;
+          NNUE_BIG_FILE = nnueBigFile;
+          NNUE_BIG_HASH = nnueBigHash;
+          NNUE_SMALL_FILE = nnueSmallFile;
+          NNUE_SMALL_HASH = nnueSmallHash;
+        };
+        text = builtins.readFile ./update.bash;
+      }))
+    ];
+  };
+
+  meta = {
     homepage = "https://stockfishchess.org/";
     description = "Strong open source chess engine";
     mainProgram = "stockfish";
@@ -81,7 +110,7 @@ stdenv.mkDerivation rec {
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       luispedro
       siraben
       thibaultd
@@ -93,7 +122,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 
 }

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-autoit-ripper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
   };
 
@@ -44,12 +44,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.autoit_ripper" ];
 
-  meta = with lib; {
+  meta = {
     description = "AutoIt script ripper for Karton framework";
     mainProgram = "karton-autoit-ripper";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
     changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

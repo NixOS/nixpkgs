@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vesoft-inc";
     repo = "nebula-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p2dXpcOwVKbdfRKKTAc4LhaNuTjvPd8BBBI8aUivaZ4=";
   };
 
@@ -34,7 +34,8 @@ buildPythonPackage rec {
     httpx
     pytz
     six
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -54,11 +55,11 @@ buildPythonPackage rec {
     "tests/test_ssl_pool.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client API of Nebula Graph in Python";
     homepage = "https://github.com/vesoft-inc/nebula-python";
     changelog = "https://github.com/vesoft-inc/nebula-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

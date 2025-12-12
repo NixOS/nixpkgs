@@ -3,29 +3,29 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  gitleaks,
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  git,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.22.0";
+  version = "8.30.0";
 
   src = fetchFromGitHub {
-    owner = "zricethezav";
+    owner = "gitleaks";
     repo = "gitleaks";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f3dSKYRkXt/YT5PgFS7pclRcKvfGl2sFopqfJkEwnhw=";
+    tag = "v${version}";
+    hash = "sha256-nCalZlKvH3d75GKo3Qr5580kG77A2zTvsddLElYwZ8A=";
   };
 
-  vendorHash = "sha256-qjchUWWnG2CYXTM4aGkh+UgaJuPQ6yEpetXJ5ORqNuE=";
+  vendorHash = "sha256-whJtl34dNltH/dk9qWSThcCYXC0x9PzbAUOO97Int+k=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
   ];
 
   nativeBuildInputs = [
@@ -33,8 +33,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  # With v8 the config tests are blocking
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
@@ -47,16 +46,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Scan git repos (or files) for secrets";
     longDescription = ''
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
       API keys and tokens in git repos.
     '';
-    homepage = "https://github.com/zricethezav/gitleaks";
-    changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/gitleaks/gitleaks";
+    changelog = "https://github.com/gitleaks/gitleaks/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      fab
+      friedow
+    ];
     mainProgram = "gitleaks";
   };
 }

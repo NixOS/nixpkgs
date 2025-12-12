@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.26";
+  version = "0.4.32";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,13 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ogX0KsfHRQW7+exRMKGwJiNINrOKPiTKxAqiTZyEWrg=";
+    tag = "v${version}";
+    hash = "sha256-J68feE7C4I0zHmRjop7Pexx2ApkzUefz/lokYTINSiI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-bDiGk7hsXuVntAP0UfiXlnYX+k4/pf+2k54WgeIW8Jg=";
+    hash = "sha256-IPQrqayhyQ/gmT6nK+TgDcUQ4mPrG9yiJJk6enBzybA=";
   };
 
   nativeBuildInputs = [
@@ -59,10 +59,10 @@ buildPythonPackage rec {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster tokenizer for the json-stream Python library";
     homepage = "https://github.com/smheidrich/py-json-stream-rs-tokenizer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winter ];
   };
 }

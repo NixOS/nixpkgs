@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flask-api";
     repo = "flask-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nHgeI5FLKkDp4uWO+0eaT4YSOMkeQ0wE3ffyJF+WzTM=";
   };
 
@@ -47,11 +47,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flask-api/flask-api";
     changelog = "https://github.com/flask-api/flask-api/releases/tag/v${version}";
     description = "Browsable web APIs for Flask";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

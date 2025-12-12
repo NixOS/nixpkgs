@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "3.2.5";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jYAzFqHuTpcgmnodt7vuNWTHRP3rd0B/3tp2Q04/N9o=";
+    tag = version;
+    hash = "sha256-fO4a1DCDM5RCeaPUHtPPGgTtZPRHOl9nuxbipDJZy7A=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       jinja2
       oyaml
       pathspec
+      platformdirs
       pytest
       regex
       tblib
@@ -61,16 +62,18 @@ python3.pkgs.buildPythonApplication rec {
     "test__linter__skip_dbt_model_disabled"
     "test_rules__test_helper_has_variable_introspection"
     "test__rules__std_file_dbt"
+    # Assertion failure
+    "test_html_with_external_css"
   ];
 
   pythonImportsCheck = [ "sqlfluff" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQL linter and auto-formatter";
     homepage = "https://www.sqlfluff.com/";
-    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sqlfluff/sqlfluff/blob/${src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sqlfluff";
   };
 }

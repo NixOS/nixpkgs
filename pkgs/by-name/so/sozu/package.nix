@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   protobuf,
   nix-update-script,
   testers,
@@ -12,20 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
-    repo = pname;
+    repo = "sozu";
     rev = version;
-    hash = "sha256-Cda53lhKPxm2w8guoKuQjdjhZNWJinzR1PHc5S57y2w=";
+    hash = "sha256-a/Pna2l1gRv4kxIyGUuUHlN+lIQemGjZXwM65Ccc24Y=";
   };
 
-  cargoHash = "sha256-DCiPy9bU56ocWwQ8sTVZ5T9eMi1ifj3enCHPuC2x6aY=";
+  cargoHash = "sha256-9ZmlUUdtVAvri9v+EJb6vRQ7Yc3FjRwU5I5Xe8je9/c=";
 
   nativeBuildInputs = [ protobuf ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   doCheck = false;
 
@@ -38,13 +35,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source HTTP Reverse Proxy built in Rust for Immutable Infrastructures";
     homepage = "https://www.sozu.io";
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       gaelreyrol
     ];
     mainProgram = "sozu";

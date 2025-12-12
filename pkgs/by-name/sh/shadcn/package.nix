@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    fetcherVersion = 1;
     hash = "sha256-/80LJm65ZRqyfhsNqGl83bsI2wjgVkvrA6Ij4v8rtoQ=";
   };
 
@@ -61,6 +62,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontCheckForBrokenSymlinks = true;
 
   passthru.tests.version = testers.testVersion {
     package = shadcn;

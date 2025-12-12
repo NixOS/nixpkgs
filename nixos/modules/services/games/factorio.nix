@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.factorio;
   name = "Factorio";
@@ -33,12 +38,15 @@ let
     only_admins_can_pause_the_game = true;
     autosave_only_on_server = true;
     non_blocking_saving = cfg.nonBlockingSaving;
-  } // cfg.extraSettings;
+  }
+  // cfg.extraSettings;
   serverSettingsString = builtins.toJSON (lib.filterAttrsRecursive (n: v: v != null) serverSettings);
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
-  playerListOption = name: list:
-    lib.optionalString (list != [])
-      "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
+  playerListOption =
+    name: list:
+    lib.optionalString (
+      list != [ ]
+    ) "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {
@@ -67,8 +75,11 @@ in
         # --use-server-whitelist) so we can't implement that behaviour, so we
         # might as well match theirs.
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "Rseding91" "Oxyd" ];
+        default = [ ];
+        example = [
+          "Rseding91"
+          "Oxyd"
+        ];
         description = ''
           If non-empty, only these player names are allowed to connect. The game
           will not be able to save any changes made in-game with the /whitelist
@@ -87,7 +98,7 @@ in
 
       admins = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         example = [ "username" ];
         description = ''
           List of player names which will be admin.
@@ -167,7 +178,7 @@ in
       };
       mods = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         description = ''
           Mods the server should install and activate.
 
@@ -202,8 +213,10 @@ in
       };
       extraSettings = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
-        example = { max_players = 64; };
+        default = { };
+        example = {
+          max_players = 64;
+        };
         description = ''
           Extra game configuration that will go into server-settings.json
         '';
@@ -283,14 +296,23 @@ in
           Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
         '';
       };
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--rcon-bind=localhost:27015"
+          "--rcon-password=..."
+        ];
+        description = "Extra command line arguments.";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.factorio = {
-      description   = "Factorio headless server";
-      wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      description = "Factorio headless server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       preStart =
         (toString [
@@ -299,11 +321,13 @@ in
           "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
-          (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (lib.optionalString (cfg.mods != [ ]) "--mod-directory=${modDir}")
         ])
-        + (lib.optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
+        + (lib.optionalString (cfg.extraSettingsFile != null) (
+          "\necho ${lib.strings.escapeShellArg serverSettingsString}"
           + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
-          + " > ${stateDir}/server-settings.json"));
+          + " > ${stateDir}/server-settings.json"
+        ));
 
       serviceConfig = {
         Restart = "always";
@@ -318,15 +342,14 @@ in
           "--bind=${cfg.bind}"
           (lib.optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${
-            if (cfg.extraSettingsFile != null)
-            then "${stateDir}/server-settings.json"
-            else serverSettingsFile
+            if (cfg.extraSettingsFile != null) then "${stateDir}/server-settings.json" else serverSettingsFile
           }"
           (lib.optionalString cfg.loadLatestSave "--start-server-load-latest")
-          (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
+          (lib.optionalString (cfg.mods != [ ]) "--mod-directory=${modDir}")
           (playerListOption "server-adminlist" cfg.admins)
           (playerListOption "server-whitelist" cfg.allowedPlayers)
-          (lib.optionalString (cfg.allowedPlayers != []) "--use-server-whitelist")
+          (lib.optionalString (cfg.allowedPlayers != [ ]) "--use-server-whitelist")
+          cfg.extraArgs
         ];
 
         # Sandboxing
@@ -338,7 +361,12 @@ in
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;

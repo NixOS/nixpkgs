@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "0.1";
+  version = "0.3";
 
   pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     gstreamer
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     owner = "hzeller";
     repo = "gmrender-resurrect";
     rev = "v${version}";
-    sha256 = "sha256-FR5bMjwPnY1/PNdPRiaxoY1keogq40M06YOaoks4zVY=";
+    sha256 = "sha256-Zt8YYRqqX5L/MGLsFzR8JOdYoNX9ypXLX5i+fqkzPkk=";
   };
 
   buildInputs = [
@@ -53,13 +53,13 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Resource efficient UPnP/DLNA renderer, optimal for Raspberry Pi, CuBox or a general MediaServer";
     mainProgram = "gmediarender";
     homepage = "https://github.com/hzeller/gmrender-resurrect";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       koral
       hzeller
     ];

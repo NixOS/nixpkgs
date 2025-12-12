@@ -4,23 +4,17 @@
   pkgs,
   ...
 }:
-with lib;
 let
   cfg = config.services.tang;
 in
 {
   options.services.tang = {
-    enable = mkEnableOption "tang";
+    enable = lib.mkEnableOption "tang";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tang;
-      defaultText = literalExpression "pkgs.tang";
-      description = "The tang package to use.";
-    };
+    package = lib.mkPackageOption pkgs "tang" { };
 
-    listenStream = mkOption {
-      type = with types; listOf str;
+    listenStream = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [ "7654" ];
       example = [
         "198.168.100.1:7654"
@@ -33,9 +27,9 @@ in
       '';
     };
 
-    ipAddressAllow = mkOption {
+    ipAddressAllow = lib.mkOption {
       example = [ "192.168.1.0/24" ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         Whitelist a list of address prefixes.
         Preferably, internal addresses should be used.
@@ -43,7 +37,7 @@ in
     };
 
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services."tangd@" = {

@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -8,10 +9,11 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest =
-    { kernelPackages
-    , enableSystemdStage1 ? false
-    , zfsPackage
-    , extraTest ? ""
+    {
+      kernelPackages,
+      enableSystemdStage1 ? false,
+      zfsPackage,
+      extraTest ? "",
     }:
     makeTest {
       name = zfsPackage.kernelModuleAttribute;
@@ -19,96 +21,106 @@ let
         maintainers = [ elvishjerricco ];
       };
 
-      nodes.machine = { config, pkgs, lib, ... }:
+      nodes.machine =
+        {
+          config,
+          pkgs,
+          lib,
+          ...
+        }:
         let
           usersharePath = "/var/lib/samba/usershares";
-        in {
-        virtualisation = {
-          emptyDiskImages = [ 4096 4096 ];
-          useBootLoader = true;
-          useEFIBoot = true;
-        };
-        boot.loader.systemd-boot.enable = true;
-        boot.loader.timeout = 0;
-        boot.loader.efi.canTouchEfiVariables = true;
-        networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackages;
-        boot.zfs.package = zfsPackage;
-        boot.supportedFilesystems = [ "zfs" ];
-        boot.initrd.systemd.enable = enableSystemdStage1;
+        in
+        {
+          virtualisation = {
+            emptyDiskImages = [
+              4096
+              4096
+            ];
+            useBootLoader = true;
+            useEFIBoot = true;
+          };
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.timeout = 0;
+          boot.loader.efi.canTouchEfiVariables = true;
+          networking.hostId = "deadbeef";
+          boot.kernelPackages = kernelPackages;
+          boot.zfs.package = zfsPackage;
+          boot.supportedFilesystems = [ "zfs" ];
+          boot.initrd.systemd.enable = enableSystemdStage1;
 
-        environment.systemPackages = [ pkgs.parted ];
+          environment.systemPackages = [ pkgs.parted ];
 
-        # /dev/disk/by-id doesn't get populated in the NixOS test framework
-        boot.zfs.devNodes = "/dev/disk/by-uuid";
+          # /dev/disk/by-id doesn't get populated in the NixOS test framework
+          boot.zfs.devNodes = "/dev/disk/by-uuid";
 
-        specialisation.samba.configuration = {
-          services.samba = {
-            enable = true;
-            settings.global = {
-              "registry shares" = true;
-              "usershare path" = "${usersharePath}";
-              "usershare allow guests" = true;
-              "usershare max shares" = "100";
-              "usershare owner only" = false;
+          specialisation.samba.configuration = {
+            services.samba = {
+              enable = true;
+              settings.global = {
+                "registry shares" = true;
+                "usershare path" = "${usersharePath}";
+                "usershare allow guests" = true;
+                "usershare max shares" = "100";
+                "usershare owner only" = false;
+              };
+            };
+            systemd.services.samba-smbd.serviceConfig.ExecStartPre =
+              "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
+            virtualisation.fileSystems = {
+              "/tmp/mnt" = {
+                device = "rpool/root";
+                fsType = "zfs";
+              };
             };
           };
-          systemd.services.samba-smbd.serviceConfig.ExecStartPre =
-            "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
-          virtualisation.fileSystems = {
-            "/tmp/mnt" = {
-              device = "rpool/root";
+
+          specialisation.encryption.configuration = {
+            boot.zfs.requestEncryptionCredentials = [ "automatic" ];
+            virtualisation.fileSystems."/automatic" = {
+              device = "automatic";
               fsType = "zfs";
             };
+            virtualisation.fileSystems."/manual" = {
+              device = "manual";
+              fsType = "zfs";
+            };
+            virtualisation.fileSystems."/manual/encrypted" = {
+              device = "manual/encrypted";
+              fsType = "zfs";
+              options = [ "noauto" ];
+            };
+            virtualisation.fileSystems."/manual/httpkey" = {
+              device = "manual/httpkey";
+              fsType = "zfs";
+              options = [ "noauto" ];
+            };
           };
-        };
 
-        specialisation.encryption.configuration = {
-          boot.zfs.requestEncryptionCredentials = [ "automatic" ];
-          virtualisation.fileSystems."/automatic" = {
-            device = "automatic";
-            fsType = "zfs";
+          specialisation.forcepool.configuration = {
+            systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ "forcepool.mount" ];
+            systemd.targets.zfs.wantedBy = lib.mkVMOverride [ ];
+            boot.zfs.forceImportAll = true;
+            virtualisation.fileSystems."/forcepool" = {
+              device = "forcepool";
+              fsType = "zfs";
+              options = [ "noauto" ];
+            };
           };
-          virtualisation.fileSystems."/manual" = {
-            device = "manual";
-            fsType = "zfs";
-          };
-          virtualisation.fileSystems."/manual/encrypted" = {
-            device = "manual/encrypted";
-            fsType = "zfs";
-            options = [ "noauto" ];
-          };
-          virtualisation.fileSystems."/manual/httpkey" = {
-            device = "manual/httpkey";
-            fsType = "zfs";
-            options = [ "noauto" ];
-          };
-        };
 
-        specialisation.forcepool.configuration = {
-          systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [ "forcepool.mount" ];
-          systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
-          boot.zfs.forceImportAll = true;
-          virtualisation.fileSystems."/forcepool" = {
-            device = "forcepool";
-            fsType = "zfs";
-            options = [ "noauto" ];
-          };
-        };
-
-        services.nginx = {
-          enable = true;
-          virtualHosts = {
-            localhost = {
-              locations = {
-                "/zfskey" = {
-                  return = ''200 "httpkeyabc"'';
+          services.nginx = {
+            enable = true;
+            virtualHosts = {
+              localhost = {
+                locations = {
+                  "/zfskey" = {
+                    return = ''200 "httpkeyabc"'';
+                  };
                 };
               };
             };
           };
         };
-      };
 
       testScript = ''
         machine.wait_for_unit("multi-user.target")
@@ -184,30 +196,25 @@ let
                 "systemctl start forcepool.mount",
                 "mount | grep forcepool",
             )
-      '' + extraTest;
+      ''
+      + extraTest;
 
     };
 
+in
+{
 
-in {
-
-  # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest {
-    zfsPackage = pkgs.zfs_2_1;
+  series_2_3 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_3;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  series_2_2 = makeZfsTest {
-    zfsPackage = pkgs.zfs_2_2;
-    kernelPackages = pkgs.linuxPackages;
-  };
-
-  unstable = makeZfsTest rec {
+  unstable = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest rec {
+  unstableWithSystemdStage1 = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
     enableSystemdStage1 = true;
@@ -219,22 +226,32 @@ in {
   expand-partitions = makeTest {
     name = "multi-disk-zfs";
     nodes = {
-      machine = { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.parted ];
-        boot.supportedFilesystems = [ "zfs" ];
-        networking.hostId = "00000000";
+      machine =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [ pkgs.parted ];
+          boot.supportedFilesystems = [ "zfs" ];
+          networking.hostId = "00000000";
 
-        virtualisation = {
-          emptyDiskImages = [ 20480 20480 20480 20480 20480 20480 ];
-        };
+          virtualisation = {
+            emptyDiskImages = [
+              20480
+              20480
+              20480
+              20480
+              20480
+              20480
+            ];
+          };
 
-        specialisation.resize.configuration = {
-          services.zfs.expandOnBoot = [ "tank" ];
+          specialisation.resize.configuration = {
+            services.zfs.expandOnBoot = [ "tank" ];
+          };
         };
-      };
     };
 
-    testScript = { nodes, ... }:
+    testScript =
+      { nodes, ... }:
       ''
         start_all()
         machine.wait_for_unit("default.target")

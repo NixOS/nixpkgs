@@ -19,13 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rog3rSm1th";
     repo = "frelatage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eHVqp6govBV9FvSQyaZuEEImHQRs/mbLaW86RCvtDbM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     numpy
     timeout-decorator
   ];
@@ -34,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frelatage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Greybox and Coverage-based library to fuzz Python applications";
     homepage = "https://github.com/Rog3rSm1th/frelatage";
     changelog = "https://github.com/Rog3rSm1th/frelatage/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

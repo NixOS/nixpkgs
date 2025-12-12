@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "24.2.2";
+  version = "25.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
+    tag = version;
+    hash = "sha256-7N8JJAJwnmesQIoZttcphmUW5HLEi8Rxv70MGNjOO98=";
   };
 
   build-system = [
@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "templateflow" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://templateflow.org/python-client";
     description = "Python API to query TemplateFlow via pyBIDS";
-    changelog = "https://github.com/templateflow/python-client/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/templateflow/python-client/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

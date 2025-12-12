@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
+  gtk-doc,
   pkg-config,
   atk,
   cairo,
@@ -45,29 +46,32 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Fix build with gcc 14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   nativeBuildInputs = [
     pkg-config
     intltool
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ autoreconfHook ];
-  buildInputs =
-    [
-      atk
-      cairo
-      glib
-      gtk2
-      pango
-      libxml2Python
-      perl
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gnome-common
-      gtk-mac-integration-gtk2
-    ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    autoreconfHook
+    gtk-doc
+  ];
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    intltoolize --force
-  '';
+  buildInputs = [
+    atk
+    cairo
+    glib
+    gtk2
+    pango
+    libxml2Python
+    perl
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gnome-common
+    gtk-mac-integration-gtk2
+  ];
 
   doCheck = false; # requires X11 daemon
 

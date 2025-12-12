@@ -1,29 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gmp
-, libffi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
+  libffi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
-  version = "5.9.1";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "polyml";
     repo = "polyml";
     rev = "v${version}";
-    sha256 = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
+    sha256 = "sha256-dHP5XNoLcFIqASfZVWu3MtY3B3H66skEl8ohlwTGyyM=";
   };
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure.ac --replace stdc++ c++
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'AC_FUNC_ALLOCA' "AC_FUNC_ALLOCA
+    AH_TEMPLATE([_Static_assert])
+    AC_DEFINE([_Static_assert], [static_assert])
+    "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac --replace-fail stdc++ c++
   '';
 
-  buildInputs = [ libffi gmp ];
+  buildInputs = [
+    libffi
+    gmp
+  ];
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--enable-shared"
@@ -39,14 +50,16 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
-    license = licenses.lgpl21;
-    platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi kovirobi ];
+    license = lib.licenses.lgpl21;
+    platforms = with lib.platforms; (linux ++ darwin);
+    maintainers = with lib.maintainers; [
+      kovirobi
+    ];
   };
 }

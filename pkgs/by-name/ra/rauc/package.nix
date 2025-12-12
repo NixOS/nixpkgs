@@ -1,4 +1,5 @@
 {
+  composefs,
   curl,
   dbus,
   fetchFromGitHub,
@@ -13,22 +14,19 @@
   ninja,
   util-linux,
   libnl,
-  systemd,
+  systemdLibs,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.11.3";
+  version = "1.15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "rauc";
+    repo = "rauc";
     rev = "v${version}";
-    sha256 = "sha256-sFOvkr6WbiP99GNAttK9ZmRg+O/hoUQDCnW7vq9s/vo=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script { };
+    sha256 = "sha256-TnOpWLJREbx707W3W2w1WkMQoV6R2A5+jA4hGIT8V9E=";
   };
 
   enableParallelBuilding = true;
@@ -41,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    composefs
     curl
     dbus
     glib
@@ -48,23 +47,33 @@ stdenv.mkDerivation rec {
     openssl
     util-linux
     libnl
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
     "--buildtype=release"
+    (lib.mesonEnable "composefs" true)
     (lib.mesonOption "systemdunitdir" "${placeholder "out"}/lib/systemd/system")
     (lib.mesonOption "dbusinterfacesdir" "${placeholder "out"}/share/dbus-1/interfaces")
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+    (lib.mesonOption "systemdcatalogdir" "${placeholder "out"}/lib/systemd/catalog")
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.rauc = nixosTests.rauc;
+  };
+
+  meta = {
     description = "Safe and secure software updates for embedded Linux";
     homepage = "https://rauc.io";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
+      emantor
+      numinit
+    ];
+    platforms = with lib.platforms; linux;
     mainProgram = "rauc";
   };
 }

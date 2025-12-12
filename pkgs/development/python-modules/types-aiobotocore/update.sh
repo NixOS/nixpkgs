@@ -1,18 +1,17 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update nixfmt-classic curl jq
+#!nix-shell -i bash -p nix-update curl jq
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-nix-update python312Packages.types-aiobotocore --commit --build
+nix-update python313Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-accessanalyzer
   types-aiobotocore-account
   types-aiobotocore-acm
   types-aiobotocore-acm-pca
-  # types-aiobotocore-alexaforbusiness  Obsolete, will be removed soon
   types-aiobotocore-amp
   types-aiobotocore-amplify
   types-aiobotocore-amplifybackend
@@ -39,7 +38,6 @@ packages=(
   types-aiobotocore-autoscaling-plans
   types-aiobotocore-backup
   types-aiobotocore-backup-gateway
-  # types-aiobotocore-backupstorage  Obsolete, will be removed soon
   types-aiobotocore-batch
   types-aiobotocore-billingconductor
   types-aiobotocore-braket
@@ -68,12 +66,13 @@ packages=(
   types-aiobotocore-codebuild
   types-aiobotocore-codecatalyst
   types-aiobotocore-codecommit
+  types-aiobotocore-codeconnections
   types-aiobotocore-codedeploy
   types-aiobotocore-codeguru-reviewer
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
-  # types-aiobotocore-codestar  Obsolete, will be removed soon
+  types-aiobotocore-codestar
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -86,16 +85,20 @@ packages=(
   types-aiobotocore-connect
   types-aiobotocore-connect-contact-lens
   types-aiobotocore-connectcampaigns
+  types-aiobotocore-connectcampaignsv2
   types-aiobotocore-connectcases
   types-aiobotocore-connectparticipant
+  types-aiobotocore-controlcatalog
   types-aiobotocore-controltower
   types-aiobotocore-cur
   types-aiobotocore-customer-profiles
   types-aiobotocore-databrew
   types-aiobotocore-dataexchange
   types-aiobotocore-datapipeline
+  types-aiobotocore-datazone
   types-aiobotocore-datasync
   types-aiobotocore-dax
+  types-aiobotocore-deadline
   types-aiobotocore-detective
   types-aiobotocore-devicefarm
   types-aiobotocore-devops-guru
@@ -107,6 +110,7 @@ packages=(
   types-aiobotocore-docdb-elastic
   types-aiobotocore-drs
   types-aiobotocore-ds
+  types-aiobotocore-dsql
   types-aiobotocore-dynamodb
   types-aiobotocore-dynamodbstreams
   types-aiobotocore-ebs
@@ -117,7 +121,6 @@ packages=(
   types-aiobotocore-ecs
   types-aiobotocore-efs
   types-aiobotocore-eks
-  types-aiobotocore-elastic-inference
   types-aiobotocore-elasticache
   types-aiobotocore-elasticbeanstalk
   types-aiobotocore-elastictranscoder
@@ -138,9 +141,9 @@ packages=(
   types-aiobotocore-forecast
   types-aiobotocore-forecastquery
   types-aiobotocore-frauddetector
+  types-aiobotocore-freetier
   types-aiobotocore-fsx
   types-aiobotocore-gamelift
-  # types-aiobotocore-gamesparks  Obsolete, will be removed soon
   types-aiobotocore-glacier
   types-aiobotocore-globalaccelerator
   types-aiobotocore-glue
@@ -151,7 +154,6 @@ packages=(
   types-aiobotocore-guardduty
   types-aiobotocore-health
   types-aiobotocore-healthlake
-  # types-aiobotocore-honeycode  Obsolete, will be removed soon
   types-aiobotocore-iam
   types-aiobotocore-identitystore
   types-aiobotocore-imagebuilder
@@ -162,14 +164,10 @@ packages=(
   types-aiobotocore-iot
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
-  # types-aiobotocore-iot-roborunner  Obsolete, will be removed soon
-  types-aiobotocore-iot1click-devices
-  types-aiobotocore-iot1click-projects
   types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
   types-aiobotocore-iotevents-data
-  types-aiobotocore-iotfleethub
   types-aiobotocore-iotfleetwise
   types-aiobotocore-iotsecuretunneling
   types-aiobotocore-iotsitewise
@@ -206,11 +204,8 @@ packages=(
   types-aiobotocore-location
   types-aiobotocore-logs
   types-aiobotocore-lookoutequipment
-  types-aiobotocore-lookoutmetrics
-  types-aiobotocore-lookoutvision
   types-aiobotocore-m2
   types-aiobotocore-machinelearning
-  # types-aiobotocore-macie  Obsolete, will be removed soon
   types-aiobotocore-macie2
   types-aiobotocore-managedblockchain
   types-aiobotocore-managedblockchain-query
@@ -235,20 +230,16 @@ packages=(
   types-aiobotocore-migrationhub-config
   types-aiobotocore-migrationhuborchestrator
   types-aiobotocore-migrationhubstrategy
-  # types-aiobotocore-mobile  Obsolete, will be removed soon
   types-aiobotocore-mq
   types-aiobotocore-mturk
   types-aiobotocore-mwaa
   types-aiobotocore-neptune
   types-aiobotocore-network-firewall
   types-aiobotocore-networkmanager
-  types-aiobotocore-nimble
   types-aiobotocore-oam
   types-aiobotocore-omics
   types-aiobotocore-opensearch
   types-aiobotocore-opensearchserverless
-  types-aiobotocore-opsworks
-  types-aiobotocore-opsworkscm
   types-aiobotocore-organizations
   types-aiobotocore-osis
   types-aiobotocore-outposts
@@ -266,10 +257,7 @@ packages=(
   types-aiobotocore-pipes
   types-aiobotocore-polly
   types-aiobotocore-pricing
-  types-aiobotocore-privatenetworks
   types-aiobotocore-proton
-  types-aiobotocore-qldb
-  types-aiobotocore-qldb-session
   types-aiobotocore-quicksight
   types-aiobotocore-ram
   types-aiobotocore-rbin
@@ -279,11 +267,11 @@ packages=(
   types-aiobotocore-redshift-data
   types-aiobotocore-redshift-serverless
   types-aiobotocore-rekognition
+  types-aiobotocore-repostspace
   types-aiobotocore-resiliencehub
   types-aiobotocore-resource-explorer-2
   types-aiobotocore-resource-groups
   types-aiobotocore-resourcegroupstaggingapi
-  types-aiobotocore-robomaker
   types-aiobotocore-rolesanywhere
   types-aiobotocore-route53
   types-aiobotocore-route53-recovery-cluster
@@ -291,6 +279,7 @@ packages=(
   types-aiobotocore-route53-recovery-readiness
   types-aiobotocore-route53domains
   types-aiobotocore-route53resolver
+  types-aiobotocore-rtbfabric
   types-aiobotocore-rum
   types-aiobotocore-s3
   types-aiobotocore-s3control
@@ -319,8 +308,6 @@ packages=(
   types-aiobotocore-shield
   types-aiobotocore-signer
   types-aiobotocore-simspaceweaver
-  types-aiobotocore-sms
-  types-aiobotocore-sms-voice
   types-aiobotocore-snow-device-management
   types-aiobotocore-snowball
   types-aiobotocore-sns
@@ -355,7 +342,6 @@ packages=(
   types-aiobotocore-wellarchitected
   types-aiobotocore-wisdom
   types-aiobotocore-workdocs
-  types-aiobotocore-worklink
   types-aiobotocore-workmail
   types-aiobotocore-workmailmessageflow
   types-aiobotocore-workspaces
@@ -371,7 +357,7 @@ for package in "${packages[@]}"; do
 
   url="https://pypi.io/packages/source/t/${package}/${package//-/_}-${version}.tar.gz"
   hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash convert --hash-algo sha256 --to sri $hash)"
+  sri_hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $hash)"
   package_short="${package#types-aiobotocore-}"
 
   awk -i inplace -v pkg="$package" -v pkg_short="$package_short" -v ver="$version" -v hash="$sri_hash" '
@@ -392,5 +378,3 @@ for package in "${packages[@]}"; do
   }' ${source_file}
 
 done
-
-nixfmt ${source_file}

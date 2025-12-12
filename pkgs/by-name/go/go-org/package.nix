@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "niklasfasching";
-    repo = pname;
+    repo = "go-org";
     rev = "v${version}";
     hash = "sha256-BPCQxl0aJ9PrEC5o5dc5uBbX8eYAxqB+qMLXo1LwCoA=";
   };
@@ -21,11 +21,11 @@ buildGoModule rec {
     $out/bin/go-org > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Org-mode parser and static site generator in go";
     homepage = "https://niklasfasching.github.io/go-org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhankas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bhankas ];
     mainProgram = "go-org";
   };
 }

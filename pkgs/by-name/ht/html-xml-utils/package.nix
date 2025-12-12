@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "html-xml-utils";
-  version = "8.6";
+  version = "8.7";
 
   src = fetchurl {
     url = "https://www.w3.org/Tools/HTML-XML-utils/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XoRynvNszTkk0ocu1O5pVMYzMtylQAuo606u8fLbT7I=";
+    sha256 = "sha256-iIoxYxp6cDCLsvMz4HfQQW9Lt4MX+Gl/+0qVGH9ncwE=";
   };
 
   buildInputs = [
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for manipulating HTML and XML files";
     homepage = "https://www.w3.org/Tools/HTML-XML-utils/";
-    license = licenses.w3c;
-    platforms = platforms.all;
+    license = lib.licenses.w3c;
+    platforms = lib.platforms.all;
   };
 }

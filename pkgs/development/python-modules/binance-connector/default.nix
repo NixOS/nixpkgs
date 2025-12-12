@@ -5,10 +5,10 @@
   pycryptodome,
   pythonOlder,
   requests,
+  setuptools,
   websocket-client,
   # dependencies for tests
   pytest-cov-stub,
-  pytest,
   sure,
   responses,
   pytestCheckHook,
@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "binance-connector";
-  version = "3.11.0";
-  format = "setuptools";
+  version = "3.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,10 +25,12 @@ buildPythonPackage rec {
     owner = "binance";
     repo = "${pname}-python";
     tag = "v${version}";
-    hash = "sha256-qy6J/03GzpvDX+KJz9ZrQc0OoT1LXWD0umN7dMLxxb4=";
+    hash = "sha256-8O73+fli0HNbvGBcyg79ZGOTQvL0TF5SCfogI6btlrA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     pycryptodome
     websocket-client
@@ -36,7 +38,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-cov-stub
-    pytest
     sure
     responses
     pytestCheckHook
@@ -51,10 +52,10 @@ buildPythonPackage rec {
     "binance.websocket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple connector to Binance Public API";
     homepage = "https://github.com/binance/binance-connector-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ trishtzy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ trishtzy ];
   };
 }

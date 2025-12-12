@@ -5,13 +5,12 @@
   buildPackages,
   runCommand,
   lib,
-  substituteAll,
+  replaceVars,
   writeClosure,
 }:
 
 let
-  builder = substituteAll {
-    src = ./builder.pl;
+  builder = replaceVars ./builder.pl {
     inherit (builtins) storeDir;
   };
 in
@@ -80,7 +79,7 @@ lib.makeOverridable (
             [ drv ]
         )
         # Add any extra outputs specified by the caller of `buildEnv`.
-        ++ lib.filter (p: p != null) (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+        ++ lib.filter (p: p != null) (map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or lib.meta.defaultPriority;
     }) paths;
 
@@ -106,6 +105,7 @@ lib.makeOverridable (
           nativeBuildInputs
           buildInputs
           ;
+        pathsToLinkJSON = builtins.toJSON pathsToLink;
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
         preferLocalBuild = true;

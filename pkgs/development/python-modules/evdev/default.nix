@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   linuxHeaders,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "evdev";
-  version = "1.7.1";
+  version = "1.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DHLDcL2inYV+GI2TEBnDJlGpweqXfAjI2TmxztFjf94=";
+    hash = "sha256-XTJ4iSzh+Sp01r+IjMhSXZ9or4Xb4zbJXRyH+49CMGk=";
   };
 
   patchPhase = ''
@@ -32,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evdev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides bindings to the generic input event interface in Linux";
     homepage = "https://python-evdev.readthedocs.io/";
     changelog = "https://github.com/gvalkov/python-evdev/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

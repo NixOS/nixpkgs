@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jckuester";
-    repo = pname;
+    repo = "awsweeper";
     rev = "v${version}";
     sha256 = "sha256-5D/4Z8ADlA+4+2EINmP5OfX5exzhfbq2TydPRlJDA6Y=";
   };
@@ -27,10 +27,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to clean out your AWS account";
     homepage = "https://github.com/jckuester/awsweeper";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
     mainProgram = "awsweeper";
   };

@@ -7,45 +7,46 @@
   libiconv,
   openssl,
   pkg-config,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "convco";
-    repo = pname;
+    repo = "convco";
     rev = "v${version}";
-    hash = "sha256-s0rcSekJLe99oxi6JD8VL1S6nqQTUFTn5pdgxnknbaY=";
+    hash = "sha256-giVaDOYYH3YE9Gy0byt92vGEfyM4rTjpHDsKm5lqlP4=";
   };
 
-  cargoHash = "sha256-oQBCPfwlMJ0hLZskv+KUNVBHH550yAUI1jY40Eah3Bc=";
+  cargoHash = "sha256-DTeZDpS3OaGcem9AaAPFN+2AWuqWSGfk2KknbcgFzi0=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   checkFlags = [
     # disable test requiring networking
     "--skip=git::tests::test_find_last_unordered_prerelease"
+    "--skip=git::tests::test_find_matching_prerelease"
+    "--skip=git::tests::test_find_matching_prerelease_without_matching_release"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       hoverbear
       cafkafk
     ];

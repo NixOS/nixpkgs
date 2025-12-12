@@ -2,7 +2,6 @@
   cmake,
   fetchFromGitHub,
   freetype,
-  ilmbase,
   lib,
   libjpeg,
   libtiff,
@@ -17,7 +16,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libyafaray";
   version = "unstable-2022-09-17";
 
@@ -33,10 +32,6 @@ stdenv.mkDerivation rec {
       include/geometry/poly_double.h include/noise/noise_generator.h # gcc12
   '';
 
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -isystem ${ilmbase.dev}/include/OpenEXR"
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -44,7 +39,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
-    ilmbase
     libjpeg
     libtiff
     libxml2
@@ -52,14 +46,15 @@ stdenv.mkDerivation rec {
     openexr
     swig
     zlib
-  ] ++ lib.optional withPython python3;
+  ]
+  ++ lib.optional withPython python3;
 
-  meta = with lib; {
+  meta = {
     description = "Free, open source raytracer";
     downloadPage = "https://github.com/YafaRay/libYafaRay";
     homepage = "http://www.yafaray.org";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.lgpl21;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.lgpl21;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

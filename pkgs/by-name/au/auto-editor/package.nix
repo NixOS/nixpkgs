@@ -1,65 +1,111 @@
 {
   lib,
-  python3Packages,
+  buildNimPackage,
   fetchFromGitHub,
-  replaceVars,
+
+  withHEVC ? true,
+  withWhisper ? false,
+
   ffmpeg,
   yt-dlp,
+  lame,
+  libopus,
+  libvpx,
+  x264,
+  x265,
+  dav1d,
+  svt-av1,
+  whisper-cpp,
+
+  python3,
+  python3Packages,
+  nimble,
+  nim,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildNimPackage rec {
   pname = "auto-editor";
-  version = "24w29a";
-  pyproject = true;
+  version = "29.4.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2/6IqwMlaWobOlDr/h2WV2OqkxqVmUI65XsyBphTbpA=";
+    tag = version;
+    hash = "sha256-DzgR/GyVIUq6Dfes6OnTdYO/vyGBPcKSeD2IikF7sIM=";
   };
 
-  patches = [
-    (replaceVars ./set-exe-paths.patch {
-      ffmpeg = lib.getExe ffmpeg;
-      yt_dlp = lib.getExe yt-dlp;
-    })
+  lockFile = ./lock.json;
+
+  buildInputs = [
+    ffmpeg
+    lame
+    libopus
+    libvpx
+    x264
+    dav1d
+    svt-av1
+  ]
+  ++ lib.optionals withHEVC [
+    x265
+  ]
+  ++ lib.optionals withWhisper [
+    whisper-cpp
+  ];
+
+  nimFlags = [
+    "--passc:-Wno-incompatible-pointer-types"
+  ]
+  ++ lib.optionals withHEVC [
+    "-d:enable_hevc"
+  ]
+  ++ lib.optionals withWhisper [
+    "-d:enable_whisper"
   ];
 
   postPatch = ''
-    # pyav is a fork of av, but has since mostly been un-forked
-    substituteInPlace pyproject.toml \
-        --replace-fail '"pyav==12.2.*"' '"av"'
+    substituteInPlace src/log.nim \
+      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+
+    # buildNimPackage hack
+    substituteInPlace ae.nimble \
+      --replace-fail '"main=auto-editor"' '"main"'
   '';
 
-  # our patch file also removes the dependency on ae-ffmpeg
-  pythonRemoveDeps = [ "ae-ffmpeg" ];
+  # TODO: Fix checks
+  /*
+    nativeCheckInputs = [
+      python3Packages.av
+      python3
+    ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+    checkPhase = ''
+      runHook preCheck
 
-  dependencies = with python3Packages; [
-    av
-    numpy
-  ];
+      nim c \
+      ${if withHEVC then "-d:enable_hevc" else ""} \
+      ${if withWhisper then "-d:enable_whisper" else ""} \
+      -r $src/src/rationals
 
-  checkPhase = ''
-    runHook preCheck
+      python3 $src/tests/test.py
 
-    $out/bin/auto-editor test all
+      runHook postCheck
+    '';
+  */
 
-    runHook postCheck
+  postInstall = ''
+    mv $out/bin/main $out/bin/auto-editor
   '';
-
-  pythonImportsCheck = [ "auto_editor" ];
 
   meta = {
-    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${version}";
+    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${src.tag}";
     description = "Command line application for automatically editing video and audio by analyzing a variety of methods, most notably audio loudness";
     homepage = "https://auto-editor.com/";
     license = lib.licenses.unlicense;
     mainProgram = "auto-editor";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      utopiatopia
+    ];
+    platforms = lib.platforms.unix;
   };
 }

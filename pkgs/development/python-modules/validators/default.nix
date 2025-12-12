@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-validators";
     repo = "validators";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1QKo6nidaHeKCbti/xALbgylHYbtBUJlWrjhNtdx8kU=";
+    tag = version;
+    hash = "sha256-b3kjKbqmfny6YnU0rlrralTgvYT06sUpckI4EDKDleA=";
   };
 
   build-system = [ setuptools ];
@@ -28,15 +28,15 @@ buildPythonPackage rec {
     crypto-eth-addresses = [ eth-hash ] ++ eth-hash.optional-dependencies.pycryptodome;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "validators" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Data Validation for Humans";
     homepage = "https://github.com/python-validators/validators";
     changelog = "https://github.com/python-validators/validators/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

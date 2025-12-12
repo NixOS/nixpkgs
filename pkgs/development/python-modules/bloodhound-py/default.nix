@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "bloodhound-py";
-  version = "1.7.2";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "bloodhound";
-    hash = "sha256-USZU19dLppoq19+JMFtiojyJk6bj96nP2JQDq7JFkHM=";
+    hash = "sha256-n1+0jv73lrn2FMNhDVUPDJxgUATa2oRO4S5P7/xQyFw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bloodhound" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python based ingestor for BloodHound, based on Impacket";
     mainProgram = "bloodhound-python";
     homepage = "https://github.com/dirkjanm/BloodHound.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ exploitoverload ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exploitoverload ];
   };
 }

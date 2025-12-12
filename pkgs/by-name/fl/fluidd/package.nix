@@ -1,36 +1,41 @@
-{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  replaceVars,
+  nixosTests,
+}:
 
-stdenvNoCC.mkDerivation rec {
+buildNpmPackage rec {
   pname = "fluidd";
-  version = "1.31.0";
+  version = "1.34.4";
 
-  src = fetchurl {
-    name = "fluidd-v${version}.zip";
-    url = "https://github.com/fluidd-core/fluidd/releases/download/v${version}/fluidd.zip";
-    sha256 = "sha256-ym3ZVY4GzCjGSy11l3eWV9F/P75e2SJqZA+gse0QJlI=";
+  src = fetchFromGitHub {
+    owner = "fluidd-core";
+    repo = "fluidd";
+    tag = "v${version}";
+    hash = "sha256-EixAax+Bd0IoGdk6Q9FoMQoWAa1U+O3SYeYEnuonHEI=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  patches = [
+    (replaceVars ./hardcode-version.patch {
+      inherit version;
+    })
+  ];
 
-  dontConfigure = true;
-  dontBuild = true;
-
-  unpackPhase = ''
-    mkdir fluidd
-    unzip $src -d fluidd
-  '';
+  npmDepsHash = "sha256-08tm+NuDLwilwo7SCmncIGAbEIW0tJLZi1HaoWGgAJA=";
 
   installPhase = ''
     mkdir -p $out/share/fluidd
-    cp -r fluidd $out/share/fluidd/htdocs
+    cp -r dist $out/share/fluidd/htdocs
   '';
 
   passthru.tests = { inherit (nixosTests) fluidd; };
 
-  meta = with lib; {
+  meta = {
     description = "Klipper web interface";
     homepage = "https://docs.fluidd.xyz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

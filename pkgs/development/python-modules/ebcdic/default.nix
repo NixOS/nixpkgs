@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "CodecMapper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gRyZychcF3wYocgVbdF255cSuZh/cl8X0WH/Iplkmxc=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ebcdic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Additional EBCDIC codecs";
     homepage = "https://github.com/roskakori/CodecMapper/tree/master/ebcdic";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

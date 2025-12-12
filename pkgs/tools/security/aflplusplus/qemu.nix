@@ -25,9 +25,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "AFLplusplus";
     repo = "qemuafl";
-    # rev origin: https://github.com/AFLplusplus/AFLplusplus/blob/v4.21c/qemu_mode/QEMUAFL_VERSION
-    rev = "a6f0632a65e101e680dd72643a6128dd180dff72";
-    sha256 = "sha256-4kaQA5KDUqkK+fbjHg47lxZHRN8JrfSC2zdjrbMbDPo=";
+    rev = "0732e079ed3716ef0b81e708cd9dcd372238a07f";
+    hash = "sha256-YoMHnJuyOdGcFVrY0I0Oja0qKNKdAa25RByVB5ui2do=";
     fetchSubmodules = true;
   };
 
@@ -139,7 +138,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/AFLplusplus/qemuafl";
     description = "Fork of QEMU with AFL++ instrumentation support";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      msanft
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "smhi-pkg";
-  version = "1.0.18";
+  version = "1.0.19";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joysoftware";
     repo = "pypi_smhi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ygjlUEQpyHjIO1QLB+MrijWQr84v3v+RdlcRwi9H/cs=";
+    tag = version;
+    hash = "sha256-8jx2lDBXflnt/Ou+7rnetPEnvpsJ72OWenw8lct+u3M=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smhi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing SMHI open forecast data";
     homepage = "https://github.com/joysoftware/pypi_smhi";
     changelog = "https://github.com/joysoftware/pypi_smhi/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

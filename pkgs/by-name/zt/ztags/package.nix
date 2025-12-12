@@ -4,7 +4,6 @@
   fetchFromGitHub,
   scdoc,
   zig_0_13,
-  apple-sdk_11,
 }:
 
 let
@@ -26,8 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     zig.hook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
-
   postInstall = ''
     zig build docs --prefix $out
   '';
@@ -36,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate tags files for Zig projects";
     homepage = "https://github.com/gpanders/ztags";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "ztags";
     inherit (zig.meta) platforms;
   };

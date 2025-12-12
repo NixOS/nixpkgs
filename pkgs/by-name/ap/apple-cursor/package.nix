@@ -22,7 +22,7 @@ let
   ];
   version = "2.0.1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apple_cursor";
   inherit version;
   inherit srcs;
@@ -34,16 +34,16 @@ stdenv.mkDerivation rec {
     cp -r macOS/macOS* $out/share/icons/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opensource macOS Cursors";
     homepage = "https://github.com/ful1e5/apple_cursor";
     license = [
-      licenses.gpl3Only
+      lib.licenses.gpl3Only
       # Potentially a derivative work of copyrighted Apple designs
-      licenses.unfree
+      lib.licenses.unfree
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       colemickens
       dxwil
     ];

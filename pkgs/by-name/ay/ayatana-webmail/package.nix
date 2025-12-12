@@ -20,11 +20,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "ayatana-webmail";
   version = "24.5.17";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
   };
   postConfigure = ''
@@ -52,7 +53,11 @@ python3Packages.buildPythonApplication rec {
     glib # For compiling gsettings-schemas
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     urllib3
     babel
     psutil

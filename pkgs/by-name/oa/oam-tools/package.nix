@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "owasp-amass";
     repo = "oam-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vt4V8em8Iaz3BVKIqlcAv+VIpJtD58xb3QrkIr4tYuU=";
   };
 
@@ -22,10 +22,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analysis and management tools for an Open Asset Model database";
     homepage = "https://github.com/owasp-amass/oam-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

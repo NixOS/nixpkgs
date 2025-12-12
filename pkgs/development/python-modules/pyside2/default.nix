@@ -8,14 +8,15 @@
   ninja,
   qt5,
   shiboken2,
+  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.15";
+  version = "5.15.17";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    hash = "sha256-IdaBiwZINLCFARgOSIkOX9h98vs3afgMWBQ0V/VIxAg=";
+    hash = "sha256-hKSzKPamAjW4cXrVIriKe2AAWSYMV6IYntAFEJ8kxSc=";
   };
 
   patches = [
@@ -36,6 +37,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cd sources/pyside2
+    for i in {.,doc}/CMakeLists.txt; do
+      substituteInPlace $i --replace-fail \
+        "cmake_minimum_required(VERSION 3.1)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace $i --replace-fail \
+        "cmake_policy(VERSION 3.1)" \
+        "cmake_policy(VERSION 3.10)"
+    done
   '';
 
   cmakeFlags = [
@@ -67,13 +76,15 @@ stdenv.mkDerivation rec {
       qtlocation
       qtscript
       qtwebsockets
-      qtwebengine
       qtwebchannel
       qtcharts
       qtsensors
       qtsvg
       qt3d
     ])
+    ++ lib.optionals withWebengine [
+      qt5.qtwebengine
+    ]
     ++ (with python.pkgs; [ setuptools ])
     ++ (lib.optionals (python.pythonOlder "3.9") [
       # see similar issue: 202262
@@ -91,12 +102,12 @@ stdenv.mkDerivation rec {
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LGPL-licensed Python bindings for Qt";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

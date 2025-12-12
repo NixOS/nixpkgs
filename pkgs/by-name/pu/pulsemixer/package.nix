@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "GeorgeFilipkin";
-    repo = pname;
+    repo = "pulsemixer";
     rev = version;
     sha256 = "1jagx9zmz5pfsld8y2rj2kqg6ww9f6vqiawfy3vhqc49x3xx92p4";
   };
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
       --replace-fail "libpulse.so.0" "$libpulseaudio/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli and curses mixer for pulseaudio";
     homepage = "https://github.com/GeorgeFilipkin/pulsemixer";
-    license = licenses.mit;
-    maintainers = [ maintainers.woffs ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.woffs ];
+    platforms = lib.platforms.all;
     mainProgram = "pulsemixer";
   };
 }

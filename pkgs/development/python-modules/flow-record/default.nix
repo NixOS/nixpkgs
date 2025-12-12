@@ -11,25 +11,24 @@
   maxminddb,
   msgpack,
   pytest7CheckHook,
-  pythonOlder,
   pytz,
   setuptools-scm,
   setuptools,
+  structlog,
+  tqdm,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.18";
+  version = "3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tEKmwDZOoGIXfJqxIat6WTbEv4EkiwkJGMpNxfv2Zd0=";
+    tag = version;
+    hash = "sha256-hJZCWF81pMeHOZGc6zTA046hV1J0PNQGMlPD3mgyrRI=";
   };
 
   build-system = [
@@ -52,27 +51,36 @@ buildPythonPackage rec {
     geoip = [ maxminddb ];
     avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
     splunk = [ httpx ];
+    # xlsx = [ openpyxl ]; # Not available
+    full = [
+      structlog
+      tqdm
+    ]
+    ++ optional-dependencies.compression;
   };
 
   nativeCheckInputs = [
     elastic-transport
     pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "flow.record" ];
 
   disabledTestPaths = [
-    # Test requires rdump
-    "tests/test_rdump.py"
+    # Input not available
+    "tests/adapter/test_xlsx.py"
+    # Requires rdump
+    "tests/tools/test_rdump.py"
   ];
 
   disabledTests = [ "test_rdump_fieldtype_path_json" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
-    changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

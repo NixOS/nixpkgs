@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dwisiswant0";
     repo = "apkleaks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8P4LZsyq0mSVdE6QhnW3QaaA3UAg4UDBS3jSg7Kg/oY=";
   };
 
@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "apkleaks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scanning APK file for URIs, endpoints and secrets";
     homepage = "https://github.com/dwisiswant0/apkleaks";
     changelog = "https://github.com/dwisiswant0/apkleaks/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "apkleaks";
   };
 }

@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/TASEmulators/desmume/commit/24eb5ed95c6cbdaba8b3c63a99e95e899e8a5061.patch";
       hash = "sha256-J3ZRU1tPTl+4/jg0DBo6ro6DTUZkpQCey+QGF2EugCQ=";
     })
+
+    # Fix strdup implicit declaration errors
+    (fetchpatch {
+      url = "https://github.com/TASEmulators/desmume/commit/738298a9e887bf7220fed026cb872a544fd60431.patch?full_index=1";
+      hash = "sha256-JNq++g6olaKsNa1XIs9Zz1YQxAsN3vAuFkykdlrfzaQ=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -80,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwifi=true"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.github.com/TASVideos/desmume/";
     description = "Open-source Nintendo DS emulator";
     longDescription = ''
@@ -90,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
       demo nds roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

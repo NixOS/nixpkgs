@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-logger-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i6S5S2ZUwC5gQPdVjefUXrKj43iLIqxd8tdXbMBJNnA=";
   };
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
     "fluent.sender"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Structured logger for Fluentd (Python)";
     homepage = "https://github.com/fluent/fluent-logger-python";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

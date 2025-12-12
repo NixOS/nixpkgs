@@ -46,11 +46,13 @@ mkCoqDerivation {
   release."8.7.2".sha256 = "15zlcrx06qqxjy3nhh22wzy0rb4npc8l4nx2bbsfsvrisbq1qb7k";
   releaseRev = v: "v${v}";
 
+  mlPlugin = true; # uses coq-bignums.plugin
+
   propagatedBuildInputs = [ bignums ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to certify primality using Pocklington certificate and Elliptic Curve Certificate";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -4,35 +4,26 @@
   fetchFromGitHub,
   stdenv,
   xorg,
-  darwin,
   testers,
   src-cli,
 }:
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "5.10.0";
+  version = "6.11.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-7CjvnPWc7gxxreo4Vw/5oz2EkKIjPk/G3FSiTsKN+ps=";
+    hash = "sha256-uJAiNBrZmaDV7Etr3xAkDHXs7H9YZYLsyTcnaHGVJfI=";
   };
 
-  vendorHash = "sha256-4Tn71Zk6Rd2teOlMo9MUMMHw5tq9tgwfShgiMjMFSCQ=";
+  vendorHash = "sha256-H8xJtlAWkk7AcZBYR/xggs/Ut0cnHC49XiScEcdlkMc=";
 
   subPackages = [
     "cmd/src"
   ];
-
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-    ];
 
   ldflags = [
     "-s"
@@ -40,21 +31,21 @@ buildGoModule rec {
     "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${version}"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   passthru.tests = {
     version = testers.testVersion {
       package = src-cli;
-      command = "src version || true";
+      command = "src version -client-only";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sourcegraph CLI";
     homepage = "https://github.com/sourcegraph/src-cli";
     changelog = "https://github.com/sourcegraph/src-cli/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      keegancsmith
+    ];
     mainProgram = "src";
   };
 }

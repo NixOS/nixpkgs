@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cli11";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x3/kBlf5LdzkTO4NYOKanZBfcU4oK+fJw9L7cf88LsY=";
+    hash = "sha256-73dfpZDnKl0cADM4LTP3/eDFhwCdiHbEaGRF7ZyWsdQ=";
   };
 
   buildInputs = [ catch2 ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 })

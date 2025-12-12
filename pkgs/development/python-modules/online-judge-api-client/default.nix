@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "api-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
   };
 
@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "onlinejudge_api"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "API client to develop tools for competitive programming";
     mainProgram = "oj-api";
     homepage = "https://github.com/online-judge-tools/api-client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sei40kr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sei40kr ];
   };
 }

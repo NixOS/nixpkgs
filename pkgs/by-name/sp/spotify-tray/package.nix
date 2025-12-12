@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tsmetana";
-    repo = pname;
+    repo = "spotify-tray";
     rev = "v${version}";
     sha256 = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
   };
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/spotify-tray --set GDK_BACKEND x11
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tsmetana/spotify-tray";
     description = "Adds a tray icon to the Spotify Linux client application";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "spotify-tray";
   };

@@ -3,29 +3,34 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "django-soft-delete";
-  version = "1.0.14";
+  version = "1.0.22";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Qo31bqT7sT9C1PdS8R8qUXqjGsPRtFDmt4xMXV2d/Ds=";
+    pname = "django_soft_delete";
+    inherit version;
+    hash = "sha256-MtC7lfGAwopAFj54pViswYkB/VYBH5H47nNcFxptQkQ=";
   };
 
-  dependencies = [ django ];
+  build-system = [ hatchling ];
 
-  build-system = [ setuptools ];
+  dependencies = [ django ];
 
   # No tests
   doCheck = false;
 
+  pythonImportsCheck = [ "django_softdelete" ];
+
   meta = {
+    changelog = "https://github.com/san4ezy/django_softdelete/blob/master/CHANGELOG.md";
     description = "Soft delete models, managers, queryset for Django";
     homepage = "https://github.com/san4ezy/django_softdelete";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

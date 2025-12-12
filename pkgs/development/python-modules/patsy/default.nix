@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "patsy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gtkvFxNzMFiBBiuKhelSSsTilA/fLJSC5QHqDLiRrWE=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "patsy" ];
 
   meta = {
-    changelog = "https://github.com/pydata/patsy/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/pydata/patsy/releases/tag/v${version}";
     description = "Python package for describing statistical models";
     homepage = "https://github.com/pydata/patsy";
     license = lib.licenses.bsd2;

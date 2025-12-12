@@ -42,7 +42,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/magnetophon/constant-detune-chorus";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
-    # ERROR3 : n is NaN in an Interval
-    broken = true;
   };
 }

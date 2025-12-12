@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dop251";
-    repo = pname;
+    repo = "diskrsync";
     rev = "v${version}";
     sha256 = "sha256-hM70WD+M3jwze0IG84WTFf1caOUk2s9DQ7pR+KNIt1M=";
   };
@@ -30,11 +30,11 @@ buildGoModule rec {
     wrapProgram "$out/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rsync for block devices and disk images";
     mainProgram = "diskrsync";
     homepage = "https://github.com/dop251/diskrsync";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

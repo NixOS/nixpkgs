@@ -1,7 +1,7 @@
 {
   lib,
   buildNpmPackage,
-  pnpm,
+  pnpm_9,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
@@ -17,7 +17,7 @@ buildNpmPackage rec {
     hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
   };
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpm_9.configHook;
 
   installPhase = ''
     runHook preInstall
@@ -26,8 +26,9 @@ buildNpmPackage rec {
   '';
 
   npmDeps = pnpmDeps;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-WtZfRZFRV9I1iBlAoV69GGFjdiQhTSBG/iiEadPVcys=";
   };
 

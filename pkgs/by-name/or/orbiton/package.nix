@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.68.5";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
-    rev = "v${version}";
-    hash = "sha256-d3+EsyIl1pa2itEPhEqJqBKBWaov8ZkSvCYZnBVfSSg=";
+    tag = "v${version}";
+    hash = "sha256-3EAYPCNVQiED8qHyLbwyYU7gXJn2TFgiJ2/JyxyD7+M=";
   };
 
   vendorHash = null;
@@ -37,22 +37,21 @@ buildGoModule rec {
     "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
   ];
 
-  postInstall =
-    ''
-      cd ..
-      installManPage o.1
-      mv $out/bin/{orbiton,o}
-    ''
-    + lib.optionalString withGui ''
-      make install-gui PREFIX=$out
-      wrapProgram $out/bin/og --prefix PATH : $out/bin
-    '';
+  postInstall = ''
+    cd ..
+    installManPage o.1
+    mv $out/bin/{orbiton,o}
+  ''
+  + lib.optionalString withGui ''
+    make install-gui PREFIX=$out
+    wrapProgram $out/bin/og --prefix PATH : $out/bin
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Config-free text editor and IDE limited to VT100";
-    homepage = "https://orbiton.zip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
+    homepage = "https://roboticoverlords.org/orbiton/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "o";
   };
 }

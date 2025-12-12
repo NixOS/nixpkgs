@@ -6,6 +6,8 @@
   installShellFiles,
   bubblewrap,
   nix-output-monitor,
+  delta,
+  glow,
   cacert,
   git,
   nix,
@@ -14,18 +16,20 @@
   withAutocomplete ? true,
   withSandboxSupport ? false,
   withNom ? false,
+  withDelta ? false,
+  withGlow ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "3.0.0";
+  version = "3.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     tag = version;
-    hash = "sha256-C2JAlCgH5OCMAZr/Rvi0H7xAwesnkVCJ3kZyyVYaLg4=";
+    hash = "sha256-43+H68OPABAqg9GQZJ+XehyWmUWk+EWiHzSxyc55luY=";
   };
 
   build-system = [
@@ -36,23 +40,28 @@ python3Packages.buildPythonApplication rec {
     python3Packages.argcomplete
   ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals withAutocomplete [
-      python3Packages.argcomplete
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withAutocomplete [
+    python3Packages.argcomplete
+  ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
 
   makeWrapperArgs =
     let
-      binPath =
-        [
-          nix
-          git
-        ]
-        ++ lib.optional withSandboxSupport bubblewrap
-        ++ lib.optional withNom nix-output-monitor;
+      binPath = [
+        nix
+        git
+      ]
+      ++ lib.optional withSandboxSupport bubblewrap
+      ++ lib.optional withNom nix-output-monitor
+      ++ lib.optional withDelta delta
+      ++ lib.optional withGlow glow;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"
@@ -70,19 +79,14 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${src.tag}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
     maintainers = with lib.maintainers; [
-      figsoda
+      mdaniels5757
       mic92
     ];
   };

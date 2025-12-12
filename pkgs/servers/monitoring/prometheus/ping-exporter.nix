@@ -6,22 +6,22 @@
 
 buildGoModule rec {
   pname = "ping-exporter";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "ping_exporter";
     rev = version;
-    hash = "sha256-Jdo+6/e9gES8q4wTGRuy5HSj7VimOMZ9q3guKDcKJxg=";
+    hash = "sha256-H+HcwDMnRgvEnbaI/tcS457Ir2Xtq30g44EYo4UPCE0=";
   };
 
-  vendorHash = "sha256-1oNbg6lu9xLJKeYOzK23HOTLJc3KWri7z4/2AZ7Hzms=";
+  vendorHash = "sha256-bEJstamu0+EfHL2cduWb/iDeYCp8tzGCS2Lvc7Onp48=";
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for ICMP echo requests";
     mainProgram = "ping_exporter";
     homepage = "https://github.com/czerwonk/ping_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nudelsalat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nudelsalat ];
   };
 }

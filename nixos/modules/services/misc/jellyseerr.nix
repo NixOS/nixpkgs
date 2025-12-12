@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.jellyseerr;
 in
@@ -20,6 +25,12 @@ in
       default = 5055;
       description = ''The port which the Jellyseerr web UI should listen to.'';
     };
+
+    configDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/jellyseerr/config";
+      description = "Config data directory";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,14 +38,15 @@ in
       description = "Jellyseerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment.PORT = toString cfg.port;
+      environment = {
+        PORT = toString cfg.port;
+        CONFIG_DIRECTORY = cfg.configDir;
+      };
       serviceConfig = {
         Type = "exec";
         StateDirectory = "jellyseerr";
-        WorkingDirectory = "${cfg.package}/libexec/jellyseerr/deps/jellyseerr";
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
-        BindPaths = [ "/var/lib/jellyseerr/:${cfg.package}/libexec/jellyseerr/deps/jellyseerr/config/" ];
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

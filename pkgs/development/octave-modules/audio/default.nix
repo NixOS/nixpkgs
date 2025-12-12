@@ -27,11 +27,11 @@ buildOctavePackage rec {
     rtmidi
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/audio/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/audio/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Audio and MIDI Toolbox for GNU Octave";
-    platforms = platforms.linux; # Because of run-time dependency on jack2 and alsa-lib
+    platforms = lib.platforms.linux; # Because of run-time dependency on jack2 and alsa-lib
   };
 }

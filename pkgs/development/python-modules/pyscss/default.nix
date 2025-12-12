@@ -9,11 +9,12 @@
 buildPythonPackage rec {
   pname = "pyscss";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "pyScss";
     owner = "Kronuz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
   };
 
@@ -25,10 +26,10 @@ buildPythonPackage rec {
   # See https://github.com/Kronuz/pyScss/issues/415
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Scss compiler for Python";
     homepage = "https://pyscss.readthedocs.org/en/latest/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

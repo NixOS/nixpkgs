@@ -3,22 +3,21 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_20,
   nixosTests,
 }:
-
 buildNpmPackage rec {
   pname = "send";
-  version = "3.4.23";
+  version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bqQEXLwUvTKX+m2yNHRnrl+eeaGmcovXpXugxd+j14A=";
+    tag = "v${version}";
+    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  npmDepsHash = "sha256-r1iaurKuhpP0sevB5pFdtv9j1ikM1fKL7Jgakh4FzTI=";
+  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -38,7 +37,7 @@ buildNpmPackage rec {
     cp -r dist $out/lib/node_modules/send/
     ln -s $out/lib/node_modules/send/dist/version.json $out/lib/node_modules/send/version.json
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/send \
+    makeWrapper ${lib.getExe nodejs_20} $out/bin/send \
       --add-flags $out/lib/node_modules/send/server/bin/prod.js \
       --set "NODE_ENV" "production"
   '';
@@ -52,7 +51,10 @@ buildNpmPackage rec {
     changelog = "https://github.com/timvisee/send/releases/tag/v${version}";
     homepage = "https://github.com/timvisee/send";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      MrSom3body
+    ];
     mainProgram = "send";
   };
 }

@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       desktopName = "ÁNYK";
       name = "anyk";
       exec = "anyk";
@@ -135,18 +135,18 @@ stdenv.mkDerivation {
     ln -s $out/opt/abevjava.png $out/share/icons/anyk.png
   '';
 
-  meta = with lib; {
-    description = "Tool for filling forms for the Hungarian government,";
+  meta = {
+    description = "Tool for filling forms for the Hungarian government";
     longDescription = ''
       Official tool for filling Hungarian government forms.
 
       Use `anyk-java` to install form templates/help files like this: `anyk-java -jar NAV_IGAZOL.jar`
     '';
     homepage = "https://nav.gov.hu/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/javakitolto";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ chpatrick ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ chpatrick ];
     platforms = openjdk.meta.platforms;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     mainProgram = "anyk";
   };
 }

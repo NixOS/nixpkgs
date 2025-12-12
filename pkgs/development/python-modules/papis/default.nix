@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   hatchling,
@@ -27,23 +28,34 @@
   requests,
   stevedore,
 
+  # optional dependencies
+  chardet,
+  citeproc-py,
+  jinja2,
+  markdownify,
+  whoosh,
+
+  # switch for optional dependencies
+  withOptDeps ? false,
+
   # tests
   docutils,
   git,
   pytestCheckHook,
+  pytest-cov-stub,
   sphinx,
   sphinx-click,
 }:
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.14";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "papis";
     repo = "papis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UpZoMYk4URN8tSFGIynVzWMk+9S0izROAgbx6uI2cN8=";
+    tag = "v${version}";
+    hash = "sha256-V4YswLNYwfBYe/Td0PEeDG++ClZoF08yxXjUXuyppPI=";
   };
 
   build-system = [ hatchling ];
@@ -68,12 +80,18 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ];
+  ]
+  ++ lib.optionals withOptDeps optional-dependencies.complete;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=papis" ""
-  '';
+  optional-dependencies = {
+    complete = [
+      chardet
+      citeproc-py
+      jinja2
+      markdownify
+      whoosh
+    ];
+  };
 
   pythonImportsCheck = [ "papis" ];
 
@@ -81,6 +99,7 @@ buildPythonPackage rec {
     docutils
     git
     pytestCheckHook
+    pytest-cov-stub
     sphinx
     sphinx-click
   ];
@@ -89,7 +108,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "papis"
     "tests"
   ];
@@ -105,11 +124,19 @@ buildPythonPackage rec {
     "test_yaml_unicode_dump"
   ];
 
+  patches = [
+    (fetchpatch2 {
+      name = "fix-support-new-click-in-papisrunner.patch";
+      url = "https://github.com/papis/papis/commit/0e3ffff4bd1b62cdf0a9fdc7f54d6a2e2ab90082.patch?full_index=1";
+      hash = "sha256-KUw5U5izTTWqXHzGWLibtqHWAsVxla6SA8x6SJ07/zU=";
+    })
+  ];
+
   meta = {
     description = "Powerful command-line document and bibliography manager";
     mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
-    changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/papis/papis/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nico202

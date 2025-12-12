@@ -1,32 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libGL
-, libGLU
-, libpng
-, libjpeg_turbo
-, libuv
-, libvorbis
-, mbedtls_2
-, openal
-, pcre
-, SDL2
-, sqlite
-, getconf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  libGL,
+  libGLU,
+  libpng,
+  libjpeg_turbo,
+  libuv,
+  libvorbis,
+  mbedtls_2,
+  openal,
+  pcre,
+  SDL2,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hashlink";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
+    sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  # incompatible pointer type error: const char ** -> const void **
+  postPatch = ''
+    substituteInPlace libs/sqlite/sqlite.c \
+     --replace-warn \
+       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, &tl)" \
+       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, (const void**)&tl)"
+  '';
 
   buildInputs = [
     libGL
@@ -42,27 +50,35 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  nativeBuildInputs = [ getconf ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   # append default installPhase with library install for haxe
-  postInstall = let
-    haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
-  in ''
-    mkdir -p "${haxelibPath}"
-    echo -n "${version}" > "${haxelibPath}/../.current"
-    cp -r other/haxelib/* "${haxelibPath}"
-  '';
+  postInstall =
+    let
+      haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
+    in
+    ''
+      mkdir -p "${haxelibPath}"
+      echo -n "${version}" > "${haxelibPath}/../.current"
+      cp -r ../other/haxelib/* "${haxelibPath}"
+    '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Virtual machine for Haxe";
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ iblech locallycompact logo ];
+    license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
+    maintainers = with lib.maintainers; [
+      iblech
+      locallycompact
+      logo
+    ];
   };
 }

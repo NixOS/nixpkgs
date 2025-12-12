@@ -7,21 +7,21 @@
   django,
   dropbox,
   fetchFromGitHub,
+  fetchpatch,
   google-cloud-storage,
   libcloud,
   moto,
   paramiko,
+  pynacl,
   pytestCheckHook,
   pythonOlder,
   rsa,
   setuptools,
-  pynacl,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.4";
+  version = "1.14.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
+    tag = version;
+    hash = "sha256-br7JGPf5EAAl0Qg7b+XaksxNPCTJsSS8HLgvA0wZmeI=";
   };
 
   patches = [
@@ -40,13 +40,6 @@ buildPythonPackage rec {
       url = "https://github.com/jschneier/django-storages/commit/e1aedcf2d137f164101d31f2f430f1594eedd78c.patch";
       hash = "sha256-jSb/uJ0RXvPsXl+WUAzAgDvJl9Y3ad2F30X1SbsCc04=";
       name = "add_moto_5_support.patch";
-    })
-    # Fix Google Cloud tests
-    # https://github.com/jschneier/django-storages/pull/1476
-    (fetchpatch {
-      url = "https://github.com/jschneier/django-storages/commit/fda4e2375bfc5b400593ce01f6516dc3264d0357.patch";
-      hash = "sha256-Dga4xvCjeKEwuH0ynyJeM0criBtKT6Z+4gINXMKh4Ng=";
-      name = "fix_google_cloud_tests.patch";
     })
   ];
 
@@ -69,7 +62,8 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     rsa
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   checkInputs = [ pynacl ];
 

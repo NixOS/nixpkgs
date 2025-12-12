@@ -22,7 +22,7 @@ cd package
 awk <meshcentral.js "
   BEGIN { RS=\"[\n;]\" }
   match(\$0, /(modules|passport) = (\[.*\])$/, a) { print a[2] }
-  match(\$0, /(modules|passport).push\(('[^']+')\)/, a) { print a[2] }
+  match(\$0, /(modules|passport).push\(('[^)]+')\)/, a) { print \"[\" a[2] \"]\" }
 " |
     tr \' \" |
     jq --slurp '[if type == "array" then .[] else . end] | flatten' |

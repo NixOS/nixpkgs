@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "showwin";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "speedtest-go";
+    tag = "v${version}";
     hash = "sha256-w0gIyeoQP+MfA9Q2CD7+laABmSrJ9u836E+UIhJeWdk=";
   };
 

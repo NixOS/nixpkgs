@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "michaelforney";
-    repo = pname;
+    repo = "samurai";
     rev = version;
     hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
   };
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "ninja-compatible build tool written in C";
+  meta = {
+    description = "Ninja-compatible build tool written in C";
     longDescription = ''
       samurai is a ninja-compatible build tool with a focus on simplicity,
       speed, and portability.
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
       respectively.
     '';
     homepage = "https://github.com/michaelforney/samurai";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ]; # see LICENSE
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "samu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

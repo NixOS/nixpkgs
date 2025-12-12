@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # tests
+  pytestCheckHook,
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-html,
@@ -14,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.23.2";
+  version = "0.25.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
+    tag = "v${version}";
+    hash = "sha256-MgiVxq9MUaOkNNgn46g2Cy7/IUx/yatKSR1vE6LscKg=";
     fetchSubmodules = true;
   };
 
@@ -45,11 +46,18 @@ buildPythonPackage rec {
     rm -r tree_sitter
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # Test fails only in the Nix sandbox, with:
+    #
+    #    AssertionError: Lists differ: ['', '', ''] != ['graph {\n', 'label="new_parse"\n', '}\n']
+    "test_dot_graphs"
+  ];
+
+  meta = {
     description = "Python bindings to the Tree-sitter parsing library";
     homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

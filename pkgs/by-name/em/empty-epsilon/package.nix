@@ -7,42 +7,42 @@
   libX11,
   glew,
   python3,
-  glm,
+  glm_1_0_1,
   meshoptimizer,
   SDL2,
   ninja,
 }:
 
 let
-  version = {
-    seriousproton = "2024.08.09";
-    emptyepsilon = "2024.08.09";
-    basis-universal = "v1_15_update2";
+  versions = {
+    seriousproton = "2024.12.08";
+    emptyepsilon = "2024.12.08";
+    basis-universal = "1.15_final";
   };
 
   basis-universal = fetchFromGitHub {
     owner = "BinomialLLC";
     repo = "basis_universal";
-    rev = version.basis-universal;
-    hash = "sha256-2snzq/SnhWHIgSbUUgh24B6tka7EfkGO+nwKEObRkU4=";
+    tag = versions.basis-universal;
+    hash = "sha256-pKvfVvdbPIdzdSOklicThS7xwt4i3/21bE6wg9f8kHY=";
   };
 
   serious-proton = stdenv.mkDerivation {
     pname = "serious-proton";
-    version = version.seriousproton;
+    version = versions.seriousproton;
 
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
-      rev = "EE-${version.seriousproton}";
-      hash = "sha256-B7BUe5rtN/eABJwkuSyn+h1lIHuV/tZUNcGXTyaWIr4=";
+      tag = "EE-${versions.seriousproton}";
+      hash = "sha256-k1YCB7EJIL+kdlHEU4cJjmLZZAZyxIPU0XlSn2t4C90=";
     };
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       sfml
       libX11
-      glm
+      glm_1_0_1
       SDL2
     ];
 
@@ -51,12 +51,12 @@ let
       (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
     ];
 
-    meta = with lib; {
+    meta = {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
       homepage = "https://github.com/daid/SeriousProton";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fpletz ];
-      platforms = platforms.linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fpletz ];
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -64,13 +64,13 @@ in
 
 stdenv.mkDerivation {
   pname = "empty-epsilon";
-  version = version.emptyepsilon;
+  version = versions.emptyepsilon;
 
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
-    rev = "EE-${version.emptyepsilon}";
-    hash = "sha256-DxaasUyJa8n0ha8RqAfEnqCVELs5Or0zvIOgcK75TnU=";
+    tag = "EE-${versions.emptyepsilon}";
+    hash = "sha256-JsHFwbt4VGsgaZz9uxEmwzZGfkYTNsIZTKkpvCCmI48=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -80,17 +80,17 @@ stdenv.mkDerivation {
     glew
     libX11
     python3
-    glm
+    glm_1_0_1
     SDL2
     ninja
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "SERIOUS_PROTON_DIR" "${serious-proton.src}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION" "${version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MAJOR" "${lib.versions.major version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MINOR" "${lib.versions.minor version.emptyepsilon}")
-    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_PATCH" "${lib.versions.patch version.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION" "${versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MAJOR" "${lib.versions.major versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_MINOR" "${lib.versions.minor versions.emptyepsilon}")
+    (lib.cmakeFeature "CPACK_PACKAGE_VERSION_PATCH" "${lib.versions.patch versions.emptyepsilon}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BASIS" "${basis-universal}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MESHOPTIMIZER" "${meshoptimizer.src}")
     (lib.cmakeFeature "CMAKE_AR" "${stdenv.cc.cc}/bin/gcc-ar")
@@ -99,15 +99,15 @@ stdenv.mkDerivation {
     "-G Ninja"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source bridge simulator based on Artemis";
     mainProgram = "EmptyEpsilon";
     homepage = "https://daid.github.io/EmptyEpsilon/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fpletz
       ma27
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

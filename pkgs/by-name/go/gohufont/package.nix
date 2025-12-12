@@ -8,7 +8,7 @@
   libfaketime,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gohufont";
   version = "2.1";
 
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
     homepage = "https://font.gohu.org/";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

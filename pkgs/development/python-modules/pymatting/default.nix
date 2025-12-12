@@ -8,27 +8,35 @@
   pytestCheckHook,
   scipy,
   setuptools,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cupy,
+  pyopencl,
 }:
 
 buildPythonPackage rec {
   pname = "pymatting";
-  version = "1.1.10";
+  version = "1.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
+    tag = "v${version}";
+    hash = "sha256-AzdhRZgcT+gfLPZYKJLQUW7uLyXoRy6SP2raHWd9XUY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numba
     numpy
     pillow
     scipy
+  ]
+  ++ lib.optionals cudaSupport [
+    cupy
+    pyopencl
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -44,11 +52,14 @@ buildPythonPackage rec {
     "test_lkm"
   ];
 
-  meta = with lib; {
+  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+  disabledTestPaths = lib.optional cudaSupport "tests/test_foreground.py";
+
+  meta = {
     description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
-    changelog = "https://github.com/pymatting/pymatting/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

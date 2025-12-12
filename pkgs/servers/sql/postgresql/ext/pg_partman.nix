@@ -1,29 +1,28 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  lib,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_partman";
-  version = "5.2.2";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "pgpartman";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-+T+JOGVOyxJH+mb0IhCJbSh+5DDlhaXvagy8C4lQizo=";
+    repo = "pg_partman";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LK+z/0puUuNLz2ah/SDaxxyLS/On/cmCBhKNwTLa7Pk=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Partition management extension for PostgreSQL";
     homepage = "https://github.com/pgpartman/pg_partman";
-    changelog = "https://github.com/pgpartman/pg_partman/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ ggpeti ];
+    changelog = "https://github.com/pgpartman/pg_partman/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ ggpeti ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
-    broken = versionOlder postgresql.version "14";
+    license = lib.licenses.postgresql;
+    broken = lib.versionOlder postgresql.version "14";
   };
-}
+})

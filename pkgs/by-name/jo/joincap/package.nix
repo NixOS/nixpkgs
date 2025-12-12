@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "assafmo";
     repo = "joincap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HvqtAno26ZSggiXbQpkw5ghxCrmmLb5uDdeSQ2QVeq0=";
   };
 
@@ -25,12 +25,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Merge multiple pcap files together, gracefully";
     homepage = "https://github.com/assafmo/joincap";
     changelog = "https://github.com/assafmo/joincap/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "joincap";
   };
 }

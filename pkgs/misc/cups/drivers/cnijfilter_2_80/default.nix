@@ -51,6 +51,8 @@ stdenv.mkDerivation {
     ghostscript
   ];
 
+  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
+
   patches = [
     ./patches/missing-include.patch
     ./patches/libpng15.patch
@@ -129,15 +131,15 @@ stdenv.mkDerivation {
   # https://github.com/NixOS/nixpkgs/issues/276125
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Canon InkJet printer drivers for the iP5400, MP520, MP210, MP140, iP3500, and MP610 series.  (MP520 drivers also work for MX700.)";
     homepage = "http://support-asia.canon-asia.com/content/EN/0100084101.html";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
     ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jerith666 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

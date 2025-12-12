@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   bzip2,
   cmake,
   curl,
@@ -34,11 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "2.9.18";
+  version = "3.1.5";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/a/apt/apt_${finalAttrs.version}.tar.xz";
-    hash = "sha256-mQO7u8ibtqRoeggKG/kLuLo2gC7BlrNUmkwf0FAtGjo=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "apt-team";
+    repo = "apt";
+    rev = finalAttrs.version;
+    hash = "sha256-hVnKI23HWwXkY174HT/Crz2V4FycaIyhhcS18D1zVy0=";
   };
 
   # cycle detection; lib can't be split
@@ -51,43 +54,46 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    dpkg # dpkg-architecture
+    gettext # msgfmt
     gtest
     (lib.getBin libxslt)
     pkg-config
     triehash
+    perlPackages.perl
+  ]
+  ++ lib.optionals withDocs [
+    docbook_xml_dtd_45
+    doxygen
+    perlPackages.Po4a
+    w3m
   ];
 
-  buildInputs =
-    [
-      bzip2
-      curl
-      db
-      dpkg
-      gnutls
-      libgcrypt
-      libgpg-error
-      libseccomp
-      libtasn1
-      lz4
-      p11-kit
-      perlPackages.perl
-      udev
-      xxHash
-      xz
-      zstd
-    ]
-    ++ lib.optionals withDocs [
-      docbook_xml_dtd_45
-      doxygen
-      perlPackages.Po4a
-      w3m
-    ]
-    ++ lib.optionals withNLS [
-      gettext
-    ];
+  buildInputs = [
+    bzip2
+    curl
+    db
+    dpkg
+    gnutls
+    gtest
+    libgcrypt
+    libgpg-error
+    libseccomp
+    libtasn1
+    lz4
+    p11-kit
+    udev
+    xxHash
+    xz
+    zstd
+  ]
+  ++ lib.optionals withNLS [
+    gettext
+  ];
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
+    (lib.cmakeOptionType "filepath" "DPKG_DATADIR" "${dpkg}/share/dpkg")
     (lib.cmakeOptionType "filepath" "DOCBOOK_XSL" "${docbook_xsl}/share/xml/docbook-xsl")
     (lib.cmakeOptionType "filepath" "GNUTLS_INCLUDE_DIR" "${lib.getDev gnutls}/include")
     (lib.cmakeFeature "DROOT_GROUP" "root")
@@ -101,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "apt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

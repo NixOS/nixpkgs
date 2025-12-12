@@ -37,7 +37,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
+  postPatch = ''
+    for i in cstream intinf libgmp libjson-c libpcre; do
+      ln -sf ../../../../../share/Makefile.gen contrib/atscntrb/atscntrb-hx-$i/SATS/DOCUGEN/Makefile.gen
+    done
+    for i in libcairo libsdl2; do
+      ln -sf ../../../../../../share/Makefile.gen npm-utils/contrib/atscntrb/atscntrb-hx-$i/SATS/DOCUGEN/Makefile.gen
+    done
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
   '';
 
@@ -52,7 +60,7 @@ stdenv.mkDerivation rec {
     "CCOMP=${stdenv.cc.targetPrefix}cc"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   setupHook =
     let
@@ -62,12 +70,12 @@ stdenv.mkDerivation rec {
 
   postInstall = postInstallContrib + postInstallEmacs;
 
-  meta = with lib; {
+  meta = {
     description = "Functional programming language with dependent types";
     homepage = "http://www.ats-lang.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       ttuegel
       bbarker

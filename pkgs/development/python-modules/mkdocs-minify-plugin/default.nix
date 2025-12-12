@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "mkdocs-minify-plugin";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LDCAWKVbFsa6Y/tmY2Zne4nOtxe4KvNplZuWxg4e4L8=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mkdocs plugin to minify the HTML of a page before it is written to disk";
     homepage = "https://github.com/byrnereese/mkdocs-minify-plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tfc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tfc ];
   };
 }

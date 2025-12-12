@@ -2,7 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
   addDriverRunpath,
   setuptools,
   cudaPackages,
@@ -11,19 +11,18 @@
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
-  version = "12.560.30";
+  version = "13.580.82";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-8CVNx0AGR2gKBy7gJQm/1GECtgvf7KMhV21NSBfn/pc=";
+    pname = "nvidia_ml_py";
+    inherit version;
+    hash = "sha256-DAKIBdxToOKmmF6oAYiBl3Zawu+PHJ4pp78NNhal78c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
+    (replaceVars ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];

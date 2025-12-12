@@ -3,6 +3,8 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
+  unstableGitUpdater,
 }:
 
 let
@@ -10,17 +12,19 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "0-unstable-2024-08-22";
+  version = "0-unstable-2025-11-30";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "764a1ee307d7e5720a93b8139c94d76737eced91";
-    hash = "sha256-xHo9Qww3w36/UFhMhoLjSzZKpC2VKywJZlCPL30XirA=";
+    rev = "3309c45c283cbd996e1e05eeddf90c4fa589b90b";
+    hash = "sha256-AtDAzguL71hvgh/xvbBKWmza05n2D5Q+W3YkHQXdup8=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 
@@ -34,18 +38,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl2Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tvorog
       atila
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "4.20";
     priority = -1;
   };

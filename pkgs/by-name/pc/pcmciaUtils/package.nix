@@ -8,6 +8,7 @@
   sysfsutils,
   kmod,
   udev,
+  udevCheckHook,
   firmware ? config.pcmciaUtils.firmware or [ ], # Special pcmcia cards.
   configOpts ? config.pcmciaUtils.config or null, # Special hardware (map memory & port & irq)
 }: # used to generate postInstall script.
@@ -30,19 +31,25 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  patchPhase =
-    ''
-      sed -i "
-        s,/sbin/modprobe,${kmod}&,;
-        s,/lib/udev/,$out/sbin/,;
-      " udev/* # fix-color */
-      sed -i "
-        s,/lib/firmware,$out&,;
-        s,/etc/pcmcia,$out&,;
-      " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
-    ''
-    + (lib.optionalString (firmware == [ ]) ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'')
-    + (lib.optionalString (configOpts != null) "ln -sf ${configOpts} ./config/config.opts");
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
+  patchPhase = ''
+    sed -i "
+      s,/sbin/modprobe,${kmod}&,;
+      s,/lib/udev/,$out/sbin/,;
+      s,__UDEVHELPERDIR__/,$out/lib/udev/,;
+    " udev/* # fix-color */
+    sed -i "
+      s,/lib/firmware,$out&,;
+      s,/etc/pcmcia,$out&,;
+    " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
+  ''
+  + (lib.optionalString (firmware == [ ]) ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'')
+  + (lib.optionalString (configOpts != null) "ln -sf ${configOpts} ./config/config.opts");
 
   makeFlags = [ "LEX=flex" ];
   installFlags = [

@@ -1,40 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  maison,
+
+  # build-system
   pdm-backend,
+  setuptools,
+
+  # dependencies
+  click,
+  maison,
+  pydantic,
+  ruyaml,
+
+  # tests
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  ruyaml,
-  setuptools,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.16.0";
+  version = "1.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
+    tag = version;
+    hash = "sha256-c8vspcouS3r0S/4S210QGYT2XdU3aR0FvUoKaC2WLUM=";
   };
 
   build-system = [
-    setuptools
     pdm-backend
+    setuptools
   ];
 
   dependencies = [
     click
     maison
+    pydantic
     ruyaml
   ];
 
@@ -42,24 +49,30 @@ buildPythonPackage rec {
     pytest-freezegun
     pytest-xdist
     pytestCheckHook
+    writableTmpDirAsHomeHook
+    versionCheckHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::ResourceWarning"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "tests/e2e/test_cli.py"
+  ];
+
+  meta = {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
-    changelog = "https://github.com/lyz-code/yamlfix/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ koozz ];
+    changelog = "https://github.com/lyz-code/yamlfix/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ koozz ];
+    mainProgram = "yamlfix";
   };
 }

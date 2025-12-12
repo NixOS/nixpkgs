@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-jupyterbook-latex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
@@ -50,11 +50,11 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Latex specific features for jupyter book";
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
     changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

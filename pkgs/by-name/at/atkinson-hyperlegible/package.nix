@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "atkinson-hyperlegible";
-  version = "unstable-2021-04-29";
+  version = "0-unstable-2021-04-29";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Typeface designed to offer greater legibility and readability for low vision readers";
     homepage = "https://brailleinstitute.org/freefont";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

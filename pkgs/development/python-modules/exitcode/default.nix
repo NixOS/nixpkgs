@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rumpelsepp";
     repo = "exitcode";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MZeLwU1gODqH752y/nc9WkUArl48pyq9Vun7tX620No=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exitcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Preferred system exit codes as defined by sysexits.h";
     homepage = "https://github.com/rumpelsepp/exitcode";
     changelog = "https://github.com/rumpelsepp/exitcode/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

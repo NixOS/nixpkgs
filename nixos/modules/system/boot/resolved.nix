@@ -193,25 +193,29 @@ in
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
         aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-        restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        reloadTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        stopIfChanged = false;
       };
 
-      environment.etc =
-        {
-          "systemd/resolved.conf".text = resolvedConf;
+      environment.etc = {
+        "systemd/resolved.conf".text = resolvedConf;
 
-          # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
-          # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-          "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-        }
-        // optionalAttrs dnsmasqResolve {
-          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        };
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
+      }
+      // optionalAttrs dnsmasqResolve {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
       networking.resolvconf.package = pkgs.systemd;
+
+      nix.firewall.extraNftablesRules = [
+        "ip daddr { 127.0.0.53, 127.0.0.54 } udp dport 53 accept comment \"systemd-resolved listening IPs\""
+      ];
 
     })
 

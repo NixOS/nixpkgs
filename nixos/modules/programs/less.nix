@@ -123,16 +123,15 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.variables =
-      {
-        LESSKEYIN_SYSTEM = builtins.toString lessKey;
-      }
-      // lib.optionalAttrs (cfg.lessopen != null) {
-        LESSOPEN = cfg.lessopen;
-      }
-      // lib.optionalAttrs (cfg.lessclose != null) {
-        LESSCLOSE = cfg.lessclose;
-      };
+    environment.variables = {
+      LESSKEYIN_SYSTEM = builtins.toString lessKey;
+    }
+    // lib.optionalAttrs (cfg.lessopen != null) {
+      LESSOPEN = cfg.lessopen;
+    }
+    // lib.optionalAttrs (cfg.lessclose != null) {
+      LESSCLOSE = cfg.lessclose;
+    };
 
     warnings =
       lib.optional

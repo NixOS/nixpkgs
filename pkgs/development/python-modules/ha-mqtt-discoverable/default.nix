@@ -8,12 +8,11 @@
   pyaml,
   pydantic,
   pythonOlder,
-  thelogrus,
 }:
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.16.2";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,11 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2Ti03c9eyiBBJy5vTUMQddL2SE3Vyjc7gt/0LkgMkbE=";
+    tag = "v${version}";
+    hash = "sha256-RITgyY9aAkDDm+SrBpfL4s2DJ2ssWddtbm0IvXswXxM=";
   };
 
-  pythonRelaxDeps = [ "pyaml" ];
+  pythonRelaxDeps = [
+    "paho-mqtt"
+    "pyaml"
+    "pydantic"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -34,7 +37,6 @@ buildPythonPackage rec {
     paho-mqtt
     pyaml
     pydantic
-    thelogrus
   ];
 
   # Test require a running Mosquitto instance
@@ -42,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ha_mqtt_discoverable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
     homepage = "https://github.com/unixorn/ha-mqtt-discoverable";
-    changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

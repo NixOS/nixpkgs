@@ -2,26 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  build,
+  cython,
+  findutils,
   pip,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
   setuptools,
   tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "extension-helpers";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "extension-helpers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qneulhSYB2gYiCdgoU7Dqg1luLWhVouFVihcKeOA37E=";
+    tag = "v${version}";
+    hash = "sha256-coSgaPoz93CqJRb65xYs1sNOwoGhcxWGJF7Jc9N2W1I=";
   };
 
   build-system = [
@@ -32,24 +34,28 @@ buildPythonPackage rec {
   dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    build
+    cython
+    findutils
     pip
+    pytestCheckHook
+    wheel
   ];
 
   pythonImportsCheck = [ "extension_helpers" ];
 
-  pytestFlagsArray = [ "extension_helpers/tests" ];
+  enabledTestPaths = [ "extension_helpers/tests" ];
 
   disabledTests = [
-    # Test require network access
-    "test_only_pyproject"
+    # https://github.com/astropy/extension-helpers/issues/43
+    "test_write_if_different"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Helpers to assist with building Python packages with compiled C/Cython extensions";
     homepage = "https://github.com/astropy/extension-helpers";
-    changelog = "https://github.com/astropy/extension-helpers/blob/${version}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/astropy/extension-helpers/blob/${src.tag}/CHANGES.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

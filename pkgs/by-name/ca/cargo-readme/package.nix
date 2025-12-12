@@ -10,12 +10,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "webern";
-    repo = pname;
+    repo = "cargo-readme";
     rev = "v${version}";
     sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
   };
 
-  cargoHash = "sha256-OEArMqOiT+PZ+zMRt9h0EzeP7ikFuOYR8mFGtm+xCkQ=";
+  cargoHash = "sha256-24D+ZcMGZN175LZNcNW8F5IsStk4au4xB0ZFe95EjPk=";
 
   # disable doc tests
   cargoTestFlags = [
@@ -23,15 +23,15 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate README.md from docstrings";
     mainProgram = "cargo-readme";
     homepage = "https://github.com/livioribeiro/cargo-readme";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       baloo
       matthiasbeyer
     ];

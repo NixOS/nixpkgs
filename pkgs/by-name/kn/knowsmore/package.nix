@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knowsmore";
-  version = "0.1.43";
+  version = "0.1.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rLESaedhEHTMYVbITr3vjyE6urhwl/g1/iTMZ4ruE1c=";
+    tag = "v${version}";
+    hash = "sha256-1qWbDf5lh9HogjjPoI51znpcQrriB2Eg4eA4xDQDYA8=";
   };
 
   pythonRelaxDeps = [
@@ -45,14 +45,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "knowsmore" ];
 
-  pytestFlagsArray = [ "tests/tests*" ];
+  enabledTestPaths = [ "tests/tests*" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Issue with later neo4j versions
+    "test_create_db"
+  ];
+
+  meta = {
     description = "Tool for pentesting Microsoft Active Directory";
     homepage = "https://github.com/helviojunior/knowsmore";
-    changelog = "https://github.com/helviojunior/knowsmore/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/helviojunior/knowsmore/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "knowsmore";
   };
 }

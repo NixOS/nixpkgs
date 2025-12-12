@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "4.0.24";
+  version = "5.0.2";
 
   src = fetchurl {
     url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
-    sha256 = "sha256-2/82g1VovsInGHb3C/zKbeuA4bF5RTzKk0pQLqMBu4A=";
+    sha256 = "sha256-cPgvEbG3ZOIH3PVWiILHjcdyk/MHgWJCOUo/enTyDoE=";
   };
 
   nativeBuildInputs = [
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Agile dynamic language for the Java Platform";
     homepage = "http://groovy-lang.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
   };
 }

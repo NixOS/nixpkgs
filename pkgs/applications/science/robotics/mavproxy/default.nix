@@ -17,38 +17,38 @@
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.71";
+  version = "1.8.74";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ArduPilot";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A7tqV1kBCSuWHJUTdUZGcPY/r7X1edGZs6xDctpMbMI=";
+    repo = "MAVProxy";
+    tag = "v${version}";
+    hash = "sha256-1/bp3vlCXt4Hg36zwMKSzPSxW7xlxpfx2o+2uQixdos=";
   };
 
-  propagatedBuildInputs =
-    [
-      lxml
-      matplotlib
-      numpy
-      opencv-python
-      pymavlink
-      pyserial
-      setuptools
-      wxpython
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      billiard
-      gnureadline
-    ];
+  propagatedBuildInputs = [
+    lxml
+    matplotlib
+    numpy
+    opencv-python
+    pymavlink
+    pyserial
+    setuptools
+    wxpython
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    billiard
+    gnureadline
+  ];
 
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "MAVLink proxy and command line ground station";
     homepage = "https://github.com/ArduPilot/MAVProxy";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lopsided98 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lopsided98 ];
   };
 }

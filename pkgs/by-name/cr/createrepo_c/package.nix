@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   bzip2,
-  expat,
+  doxygen,
   glib,
   curl,
   libxml2,
@@ -15,7 +15,6 @@
   sqlite,
   file,
   xz,
-  pcre,
   bash-completion,
   zstd,
   zchunk,
@@ -24,38 +23,35 @@
 
 stdenv.mkDerivation rec {
   pname = "createrepo_c";
-  version = "0.17.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "createrepo_c";
-    rev = version;
-    sha256 = "sha256-rcrJjcWj+cTAE3k11Ynr7CQCOWD+rb60lcar0G2w06A=";
+    tag = version;
+    hash = "sha256-2mvU2F9rvG4FtDgq+M9VXWg+c+AsW/+tDPaEj7zVmQ0=";
   };
-
-  patches = [
-    # Use the output directory to install the bash completions.
-    ./fix-bash-completion-path.patch
-    # Use the output directory to install the python modules.
-    ./fix-python-install-path.patch
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace '@BASHCOMP_DIR@' "$out/share/bash-completion/completions"
+      --replace-fail 'execute_process(COMMAND ''${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion OUTPUT_VARIABLE BASHCOMP_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)' "SET(BASHCOMP_DIR \"$out/share/bash-completion/completions\")"
     substituteInPlace src/python/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
+      --replace-fail "EXECUTE_PROCESS(COMMAND \''${PYTHON_EXECUTABLE} -c \"from sys import stdout; from sysconfig import get_path; stdout.write(get_path('platlib'))\" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)" "SET(PYTHON_INSTALL_DIR \"$out/${python3.sitePackages}\")"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
     cmake
+    doxygen
     pkg-config
     rpm
+    bash-completion
   ];
 
   buildInputs = [
     bzip2
-    expat
     glib
     curl
     libxml2
@@ -64,18 +60,16 @@ stdenv.mkDerivation rec {
     sqlite
     file
     xz
-    pcre
-    bash-completion
     zstd
     zchunk
     libmodulemd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C implementation of createrepo";
     homepage = "https://rpm-software-management.github.io/createrepo_c/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

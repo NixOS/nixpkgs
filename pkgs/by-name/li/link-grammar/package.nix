@@ -62,13 +62,13 @@ let
           '';
     };
 
-    meta = with lib; {
+    meta = {
       description = "Grammar Checking library";
       homepage = "https://www.abisource.com/projects/link-grammar/";
       changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";
-      license = licenses.lgpl21Only;
-      maintainers = with maintainers; [ jtojnar ];
-      platforms = platforms.unix;
+      license = lib.licenses.lgpl21Only;
+      maintainers = with lib.maintainers; [ jtojnar ];
+      platforms = lib.platforms.unix;
     };
   };
 

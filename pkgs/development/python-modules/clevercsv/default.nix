@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.8.3";
+  version = "0.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-T4eYTr3+MUr1fPWE490v1m8THdZrBUP4wODftjpvnLQ=";
+    tag = "v${version}";
+    hash = "sha256-yp102f0WHu9wdVpXBIXn4lP7fi1UOQdA7M11hyVyRyM=";
   };
 
   build-system = [ setuptools ];
@@ -65,15 +65,15 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  pytestFlagsArray = [ "./tests/test_unit" ];
+  enabledTestPaths = [ "./tests/test_unit" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'wilderness'
     "tests/test_unit/test_console.py"
   ];
 
-  meta = with lib; {
-    description = "CleverCSV is a Python package for handling messy CSV files";
+  meta = {
+    description = "Python package for handling messy CSV files";
     mainProgram = "clevercsv";
     longDescription = ''
       CleverCSV is a Python package for handling messy CSV files. It provides
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
     changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

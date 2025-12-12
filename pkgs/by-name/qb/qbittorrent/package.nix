@@ -1,5 +1,4 @@
 {
-  apple-sdk_11,
   boost,
   cmake,
   dbus,
@@ -17,17 +16,18 @@
   webuiSupport ? true,
   wrapGAppsHook3,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.0.3";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-nz9no2+nsC+PEnqPyUJpup0OLsS6G+yvTwbwDPko7Eg=";
+    hash = "sha256-9RfKir/e+8Kvln20F+paXqtWzC3KVef2kNGyk1YpSv4=";
   };
 
   nativeBuildInputs = [
@@ -37,29 +37,28 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      libtorrent-rasterbar
-      openssl
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
-    ++ lib.optionals guiSupport [ dbus ]
-    ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
-    ++ lib.optionals trackerSearch [ python3 ];
+  buildInputs = [
+    boost
+    libtorrent-rasterbar
+    openssl
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    zlib
+  ]
+  ++ lib.optionals guiSupport [ dbus ]
+  ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
+  ++ lib.optionals trackerSearch [ python3 ];
 
-  cmakeFlags =
-    [ "-DVERBOSE_CONFIGURE=ON" ]
-    ++ lib.optionals (!guiSupport) [
-      "-DGUI=OFF"
-      "-DSYSTEMD=ON"
-      "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
-    ]
-    ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
+  cmakeFlags = [
+    "-DVERBOSE_CONFIGURE=ON"
+  ]
+  ++ lib.optionals (!guiSupport) [
+    "-DGUI=OFF"
+    "-DSYSTEMD=ON"
+    "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
+  ]
+  ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
 
   qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 
@@ -76,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+    tests.testService = nixosTests.qbittorrent;
+  };
 
   meta = {
     description = "Featureful free software BitTorrent client";

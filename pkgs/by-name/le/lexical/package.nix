@@ -2,26 +2,25 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  elixir,
   nix-update-script,
   versionCheckHook,
 }:
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
     tag = "v${version}";
-    hash = "sha256-mgchXc46sMN1UcgyO8uWusl2bEJr/5PqfwJ2c6j6SoI=";
+    hash = "sha256-p8XSJBX1igwC+ssEJGD8wb/ZYaEgLGozlY8N6spo3cA=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit pname version src;
 
-    hash = "sha256-Ee8RbLkb7jkdK91G4TAUIlPthBP5OyeynHJGg87UvBI=";
+    hash = "sha256-g6BZGJ33oBDXmjbb/kBfPhart4En/iDlt4yQJYeuBzw=";
   };
 
   installPhase = ''
@@ -34,7 +33,7 @@ beamPackages.mixRelease rec {
 
   postInstall = ''
     substituteInPlace "$out/bin/start_lexical.sh" \
-      --replace-fail 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+      --replace-fail 'elixir_command=' 'elixir_command="${beamPackages.elixir}/bin/"'
 
     mv "$out/bin" "$out/libexec"
     makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" \
@@ -44,7 +43,7 @@ beamPackages.mixRelease rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;
@@ -54,7 +53,7 @@ beamPackages.mixRelease rec {
   };
 
   meta = {
-    description = "Lexical is a next-generation elixir language server";
+    description = "Next-generation elixir language server";
     homepage = "https://github.com/lexical-lsp/lexical";
     changelog = "https://github.com/lexical-lsp/lexical/releases/tag/v${version}";
     license = lib.licenses.asl20;

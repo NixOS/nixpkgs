@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "ejson2env";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "Shopify";
-    repo = pname;
+    repo = "ejson2env";
     rev = "v${version}";
-    sha256 = "sha256-VXkWmmX+4D+j9ODSEeJJbIx+Bfni9d2X22BFQIe4kwk=";
+    sha256 = "sha256-0DKKdu1b/gjwtKycdXrV3hzAeGmvK41MlZbltcEzj/g=";
   };
 
-  vendorHash = "sha256-7oy8bCegsvv35zyo2aTFMSGZMFkArmxy0rOpK6WlubI=";
+  vendorHash = "sha256-UskdGQbLR4W7ucC0foMWim8o9BqyE5o0Nza9yVBTftY=";
 
   ldflags = [
     "-s"
@@ -35,11 +35,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Decrypt EJSON secrets and export them as environment variables";
     homepage = "https://github.com/Shopify/ejson2env";
-    maintainers = with maintainers; [ viraptor ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
+    license = lib.licenses.mit;
     mainProgram = "ejson2env";
   };
 }

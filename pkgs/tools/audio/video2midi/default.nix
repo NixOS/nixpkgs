@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "svsdval";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-mjqlNUCEiP5dQS0a8HAejOJyEvY6jGFJFpVcnzU2Vds=";
   };
 
@@ -38,12 +38,12 @@ pythonPackages.buildPythonApplication rec {
     install -Dm755 v2m.py $out/bin/v2m.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Youtube synthesia video to midi conversion tool";
     homepage = src.meta.homepage;
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "v2m.py";
   };
 }

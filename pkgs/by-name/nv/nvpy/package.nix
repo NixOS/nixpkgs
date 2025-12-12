@@ -8,17 +8,20 @@ let
   pythonPackages = python3Packages;
 in
 pythonPackages.buildPythonApplication rec {
-  version = "2.3.1";
   pname = "nvpy";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpbotha";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "nvpy";
+    tag = "v${version}";
     sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  build-system = with pythonPackages; [ setuptools ];
+
+  dependencies = with pythonPackages; [
     markdown
     docutils
     simplenote
@@ -35,6 +38,8 @@ pythonPackages.buildPythonApplication rec {
     install -dm755 "$out/share/doc/nvpy/"
     install -m644 README.rst "$out/share/doc/nvpy/README"
   '';
+
+  pythonImportsCheck = [ "nvpy" ];
 
   meta = with pkgs.lib; {
     description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";

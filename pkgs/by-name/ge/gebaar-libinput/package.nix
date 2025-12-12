@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Coffee2CodeNL";
-    repo = pname;
-    rev = "v${version}";
+    repo = "gebaar-libinput";
+    tag = "v${version}";
     sha256 = "1kqcgwkia1p195xr082838dvj1gqif9d63i8a52jb0lc32zzizh6";
     fetchSubmodules = true;
   };
@@ -38,14 +38,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gebaar, A Super Simple WM Independent Touchpad Gesture Daemon for libinput";
     mainProgram = "gebaard";
     homepage = "https://github.com/Coffee2CodeNL/gebaar-libinput";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      colemickens
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       lovesegfault
     ];
   };

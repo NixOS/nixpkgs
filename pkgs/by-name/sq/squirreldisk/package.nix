@@ -1,22 +1,27 @@
 {
-  dbus,
-  openssl,
-  freetype,
-  libsoup_2_4,
-  gtk3,
-  webkitgtk_4_0,
-  pkg-config,
-  wrapGAppsHook3,
-  parallel-disk-usage,
-  fetchFromGitHub,
-  buildNpmPackage,
-  rustPlatform,
   lib,
   stdenv,
-  copyDesktopItems,
-  makeDesktopItem,
+  rustPlatform,
+
+  fetchFromGitHub,
+  fetchNpmDeps,
+
+  cargo-tauri_1,
+  makeBinaryWrapper,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  wrapGAppsHook3,
+
+  dbus,
+  freetype,
+  gtk3,
+  libsoup_2_4,
+  openssl,
+  parallel-disk-usage,
 }:
-let
+
+rustPlatform.buildRustPackage rec {
   pname = "squirreldisk";
   version = "0.3.4";
 
@@ -26,92 +31,82 @@ let
     rev = "v${version}";
     hash = "sha256-As2nvc68knjeLPuX0QLBoybj8vuvkpS5Vr+7U7E5CjA=";
   };
-  frontend-build = buildNpmPackage {
-    inherit version src;
-    pname = "squirreldisk-ui";
 
-    npmDepsHash = "sha256-Japcn0KYP7aYIDK8+Ns+mrnbbAb0fLWXHIV2+yltI6I=";
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
 
-    packageJSON = ./package.json;
-    postBuild = ''
-      cp -r dist/ $out
-    '';
-    distPhase = "true";
-    dontInstall = true;
-  };
-in
-rustPlatform.buildRustPackage rec {
-  inherit version src pname;
+  cargoHash = "sha256-PfpbzawgwkqykG4u2G05rgZwksuxWJUcv6asnJvZJvU=";
 
-  sourceRoot = "${src.name}/src-tauri";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "window-shadows-0.2.1" = "sha256-3meM04TG63PvB0M5wUH1cDMBo7ObcB0zdgwGt2aKHMs=";
-    };
+  npmDeps = fetchNpmDeps {
+    name = "squirreldisk-${version}-npm-deps";
+    inherit src;
+    hash = "sha256-Japcn0KYP7aYIDK8+Ns+mrnbbAb0fLWXHIV2+yltI6I=";
   };
 
-  # copy the frontend static resources to final build directory
-  # Also modify tauri.conf.json so that it expects the resources at the new location
+  patches = [
+    # Update field names to work with pdu versions >=0.10.0
+    # https://github.com/adileo/squirreldisk/pull/47
+    ./update-pdu-json-format.patch
+  ];
+
+  cargoPatches = [
+    # Remove dependency on parallel-disk-usage crate. The version is outdated and
+    # does not compile anymore with Rust 1.87.0.
+    # https://github.com/adileo/squirreldisk/pull/49
+    ./remove-pdu-crate.patch
+  ];
+
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-
-    mkdir -p frontend-build
-    cp -r ${frontend-build}/* frontend-build
-
-    substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend-build"'
-
-    # Copy pdu binary from nixpkgs, since the default packaged binary has issues.
-    cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
+    # Use pdu binary from nixpkgs instead of the vendored prebuilt binary
+    rm src-tauri/bin/pdu-*
+    cp ${parallel-disk-usage}/bin/pdu src-tauri/bin/pdu-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   nativeBuildInputs = [
+    cargo-tauri_1.hook
+    npmHooks.npmConfigHook
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
     wrapGAppsHook3
-    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
-  buildInputs = [
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dbus
-    openssl
     freetype
-    libsoup_2_4
     gtk3
-    webkitgtk_4_0
+    libsoup_2_4
+    openssl
+    # webkitgtk_4_0
   ];
 
   # Disable checkPhase, since the project doesn't contain tests
   doCheck = false;
 
-  postInstall = ''
-    mv $out/bin/squirreldisk-tauri $out/bin/squirreldisk
-    install -DT icons/256x256.png $out/share/icons/hicolor/256x256/apps/squirrel-disk.png
-    install -DT icons/128x128@2x.png $out/share/icons/hicolor/128x128@2/apps/squirrel-disk.png
-    install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/squirrel-disk.png
-    install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/squirrel-disk.png
-  '';
+  # We'll wrap the main binary manually
+  dontWrapGApps = true;
 
   # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
-  postFixup = ''
-    wrapProgram "$out/bin/squirreldisk" \
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapGApp "$out/bin/squirrel-disk" \
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper "$out/Applications/SquirrelDisk.app/Contents/MacOS/SquirrelDisk" "$out/bin/squirrel-disk"
+    '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "SquirrelDisk";
-      exec = "squirreldisk";
-      icon = "squirrel-disk";
-      desktopName = "SquirrelDisk";
-      comment = meta.description;
-    })
-  ];
-
-  meta = with lib; {
+  meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Cross-platform disk usage analysis tool";
     homepage = "https://www.squirreldisk.com/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ peret ];
-    mainProgram = "squirreldisk";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ peret ];
+    mainProgram = "squirrel-disk";
   };
 }

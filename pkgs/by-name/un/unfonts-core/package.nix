@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kldp.net/unfonts/";
     description = "Korean Hangul typeface collection";
     longDescription = ''
@@ -29,8 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
       They were converted to TrueType with the FontForge (PfaEdit) by Won-kyu Park in 2003.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.ehmry ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

@@ -20,8 +20,8 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "kevlened";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pytest-parallel";
+    tag = version;
     hash = "sha256-ddpoWBTf7Zor569p6uOMjHSTx3Qa551f4mSwyTLDdBU=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage {
     py
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for parallel and concurrent testing";
     homepage = "https://github.com/kevlened/pytest-parallelt";
     changelog = "https://github.com/kevlened/pytest-parallel/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

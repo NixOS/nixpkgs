@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "6.3";
+  version = "7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "svg.path";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qes6cKw/Ok0WgcPO/NPuREVNUbnlhm82jF90dK7Ay8U=";
+    tag = version;
+    hash = "sha256-x1u56O3HilA7Zmkrsot6Nh9E1e88qHwYnk1ySs08tbQ=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svg.path" ];
 
-  meta = with lib; {
+  meta = {
     description = "SVG path objects and parser";
     homepage = "https://github.com/regebro/svg.path";
     changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

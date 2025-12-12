@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bderrly";
     repo = "braincurses";
-    rev = version;
+    tag = version;
     sha256 = "0gpny9wrb0zj3lr7iarlgn9j4367awj09v3hhxz9r9a6yhk4anf5";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin braincurses
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bderrly/braincurses";
     description = "Version of the classic game Mastermind";
     mainProgram = "braincurses";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
-  version = "297";
+  version = "302";
 
   src = fetchurl {
     url = "https://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-S+0EryX+6AhQ6WjaSHYtLACkWk+pr9t9EqDkTPYlE4k=";
+    hash = "sha256-8N4BLtYiGOBJ0Jo5rmqTh1mNjqwSp8LX2dkGwnw271Q=";
   };
 
   buildInputs = [ libffi ];
@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.kylheku.com/cgit/txr/tree/RELNOTES?h=txr-${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      AndersonTorres
       dtzWill
     ];
     platforms = lib.platforms.all;

@@ -7,18 +7,9 @@
   speex,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "speex";
-  version = "0.4.1";
-
-  useDune2 = true;
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-speex";
-    rev = "v${version}";
-    sha256 = "0p4ip37kihlz9qy604llak2kzd00g45ix1yiihnrri2nm01scfab";
-  };
+  inherit (ogg) version src;
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
@@ -26,10 +17,10 @@ buildDunePackage rec {
     speex.dev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-speex";
     description = "Bindings to libspeex";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nmap,
   python,
 }:
@@ -20,8 +20,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./nmap-path.patch;
+    (replaceVars ./nmap-path.patch {
       nmap = "${lib.getBin nmap}/bin/nmap";
     })
   ];
@@ -36,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python class to use nmap and access scan results from python3";
     homepage = "https://github.com/home-assistant-libs/python-nmap";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

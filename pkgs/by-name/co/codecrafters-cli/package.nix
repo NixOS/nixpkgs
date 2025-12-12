@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "codecrafters-cli";
-  version = "34";
+  version = "44";
 
   src = fetchFromGitHub {
     owner = "codecrafters-io";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-+daBduhjUt7lrjTdXgm1qpZN1oEHC3Nx+ZiOLoO5+s4=";
+    tag = "v${version}";
+    hash = "sha256-eyKQMMF9EEF55r+Q1QcqiswctXCqetgnAKQJTwaC60s=";
     # A shortened git commit hash is part of the version output, and is
     # needed at build time. Use the `.git` directory to retrieve the
     # commit SHA, and remove the directory afterwards since it is not needed
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-TQcxzfiqKeCQZUKLHnPjBa/0WsYJhER3fmr4cRGFknw=";
+  vendorHash = "sha256-LfchGzJPgPVa4wTXoViIEx8B17HMoPPME/2RLkatGUQ=";
 
   ldflags = [
     "-s"
@@ -38,15 +38,17 @@ buildGoModule rec {
     ldflags+=" -X github.com/codecrafters-io/cli/internal/utils.Commit=$(cat COMMIT)"
   '';
 
-  doCheck = true;
+  # We need to disable tests because the tests for respecting .gitignore
+  # include setting up a global gitignore which doesn't work.
+  doCheck = false;
 
   nativeBuildInputs = [ git ];
 
-  meta = with lib; {
+  meta = {
     description = "CodeCrafters CLI to run tests";
     mainProgram = "codecrafters";
     homepage = "https://github.com/codecrafters-io/cli";
-    maintainers = with maintainers; [ builditluc ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ builditluc ];
+    license = lib.licenses.mit;
   };
 }

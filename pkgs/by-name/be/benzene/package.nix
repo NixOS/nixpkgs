@@ -24,6 +24,12 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    # Fixes for boost v1.85.0+
+    # https://github.com/cgao3/benzene-vanilla-cmake/issues/18
+    substituteInPlace src/util/Misc.cpp \
+      --replace-fail '.branch_path()' '.parent_path()' \
+      --replace-fail '.normalize()' '.lexically_normal()'
+
     substituteInPlace CMakeLists.txt \
       --replace-fail '-DABS_TOP_SRCDIR="''${top_srcdir}"' '-DABS_TOP_SRCDIR="$ENV{out}"' \
       --replace-fail '-DDATADIR="''${pkgdatadir}"' '-DDATADIR="$ENV{out}/share"'

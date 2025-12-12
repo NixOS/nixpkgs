@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
-  version = "6.5";
+  version = "6.6";
 
   src = fetchzip {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
-    sha256 = "sha256-+ZZF/k3eTKT2KbWsk5jJtsdcbkOH90ytlSEEdJ2EMbU=";
+    sha256 = "sha256-BNiUIk5h38oEM4IliHdy8rNmZY0frQ1RaFeJ7HI5nOI=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.languagetool = nixosTests.languagetool;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://languagetool.org";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ edwtjo ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ edwtjo ];
     platforms = jre.meta.platforms;
     description = "Proofreading program for English, French German, Polish, and more";
   };

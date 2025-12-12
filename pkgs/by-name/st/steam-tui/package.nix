@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dmadisetti";
-    repo = pname;
+    repo = "steam-tui";
     rev = version;
     sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };
 
-  cargoHash = "sha256-poNPdrMguV79cwo2Eq1dGVUN0E4yG84Q63kU9o+eABo=";
+  cargoHash = "sha256-/39MrHCdJGTBTZplQcwYk6zpaVFYHpRKHhZC1GTNysY=";
 
   nativeBuildInputs = [
     openssl
@@ -45,12 +45,11 @@ rustPlatform.buildRustPackage rec {
 
   PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
-  meta = with lib; {
+  meta = {
     description = "Rust TUI client for steamcmd";
     homepage = "https://github.com/dmadisetti/steam-tui";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      lom
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dmadisetti
     ];
     # steam only supports that platform

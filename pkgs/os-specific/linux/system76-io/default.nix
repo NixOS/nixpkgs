@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
   version = "1.0.4";
@@ -24,12 +25,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+  makeFlags = kernelModuleMakeFlags;
+
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   installPhase = ''
     install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko
+    install -D system76-thelio-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-thelio-io.ko
   '';
 
   meta = {

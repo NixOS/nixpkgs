@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "multiformats";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "py-multicodec";
+    tag = "v${version}";
     hash = "sha256-2aK+bfhqCMqSO+mtrHIfNQmQpQHpwd7yHseI/3O7Sp4=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multicodec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact self-describing codecs";
     homepage = "https://github.com/multiformats/py-multicodec";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

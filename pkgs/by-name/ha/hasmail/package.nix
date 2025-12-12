@@ -8,7 +8,7 @@
   gtk2,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "hasmail-unstable";
   version = "2019-08-24";
 
@@ -33,11 +33,11 @@ buildGoModule rec {
     gtk2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple tray icon for detecting new email on IMAP servers";
     mainProgram = "hasmail";
     homepage = "https://github.com/jonhoo/hasmail";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

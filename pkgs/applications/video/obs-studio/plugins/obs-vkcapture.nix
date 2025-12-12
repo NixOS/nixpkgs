@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RIDsT6eL6bUfqPiyPlecnZHu5OorcJb3Xal8pjdOpAA=";
+    hash = "sha256-zra7fwYnUfPKS4AA6Z9FIPP3p/uR5O1wB6Z76aivtZI=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isi686 [
@@ -42,21 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
   ];
-  buildInputs =
-    [
-      libGL
-      libffi
-      libX11
-      libXau
-      libXdmcp
-      libxcb
-      vulkan-headers
-      vulkan-loader
-      wayland
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-      obs-studio
-    ];
+  buildInputs = [
+    libGL
+    libffi
+    libX11
+    libXau
+    libXdmcp
+    libxcb
+    vulkan-headers
+    vulkan-loader
+    wayland
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    obs-studio
+  ];
 
   postPatch = ''
     substituteInPlace src/glinject.c \
@@ -81,15 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
     changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atila
       pedrohlc
     ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 })

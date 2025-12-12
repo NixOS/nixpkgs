@@ -16,21 +16,30 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.0.1";
+  version = "2.2.0";
 
   outputs = [
     "out"
     "doc"
-  ] ++ lib.optional withMan "man";
+  ]
+  ++ lib.optional withMan "man";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gD0XRZThU/T8qxLyyboyE6GsX911ylt7hH59S+rB7vQ=";
+    tag = "v${version}";
+    hash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
   };
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # When cross-compiling with CGO_ENABLED=0, we can't use -extldflags "-static"
+    # Remove it from SHIM_GO_LDFLAGS to avoid linking errors
+    substituteInPlace Makefile \
+      --replace-fail '-extldflags "-static"' ""
+  '';
 
   vendorHash = null;
 
@@ -38,7 +47,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     util-linux
-  ] ++ lib.optional withMan go-md2man;
+  ]
+  ++ lib.optional withMan go-md2man;
 
   buildInputs = lib.optional btrfsSupport btrfs-progs;
 
@@ -55,7 +65,8 @@ buildGoModule rec {
   installTargets = [
     "install"
     "install-doc"
-  ] ++ lib.optional withMan "install-man";
+  ]
+  ++ lib.optional withMan "install-man";
 
   buildPhase = ''
     runHook preBuild
@@ -89,7 +100,7 @@ buildGoModule rec {
   meta = {
     description = "Daemon to control runC";
     homepage = "https://containerd.io/";
-    changelog = "https://github.com/containerd/containerd/releases/tag/${version}";
+    changelog = "https://github.com/containerd/containerd/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       offline

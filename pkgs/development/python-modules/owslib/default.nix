@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lxml,
   pytest-cov-stub,
+  pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.32.0";
+  version = "0.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,13 +23,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q2O9FNBszNWfL1ekcohSd1RbdLFu8c+zxi+UFeQ7/mk=";
+    tag = version;
+    hash = "sha256-/5FJai6ad4ZQAK/IhiIuGv4yiBcT/iXFYcbZ+jeCoyI=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace-fail " --doctest-modules --doctest-glob 'tests/**/*.txt'" ""
+      --replace-fail "--doctest-modules" "" \
+      --replace-fail "--doctest-glob='tests/**/*.txt'" ""
   '';
 
   build-system = [ setuptools ];
@@ -42,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-cov-stub
+    pytest-httpserver
     pytestCheckHook
   ];
 
@@ -52,9 +55,9 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # Disable tests which require network access
-    "-m 'not online'"
+    "online"
   ];
 
   disabledTestPaths = [
@@ -62,11 +65,11 @@ buildPythonPackage rec {
     "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
-    changelog = "https://github.com/geopython/OWSLib/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

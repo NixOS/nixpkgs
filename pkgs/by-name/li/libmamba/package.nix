@@ -16,23 +16,23 @@
   zstd,
   nix-update-script,
   bzip2,
-  python3Packages,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
-  version = "2.0.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "libmamba-${finalAttrs.version}";
-    hash = "sha256-UzuWQOFvp6KFDwcjjiwl0ek7pLuPvOijksUxp+hk/NU=";
+    tag = finalAttrs.version;
+    hash = "sha256-ojcAS5NYAhklACrBkmSHRPNiVLjUR/umll0vhoFnFBs=";
   };
 
   nativeBuildInputs = [
     cmake
-    python3Packages.python
+    python3
   ];
 
   buildInputs = [
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/mamba-org/mamba/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;

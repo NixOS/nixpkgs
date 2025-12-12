@@ -1,32 +1,51 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   fetchzip,
+  nodejs,
+  makeBinaryWrapper,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.1.36";
+  version = "0.0.367";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-${version}.tgz";
-    hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
+    url = "https://registry.npmjs.org/@github/copilot/-/copilot-${finalAttrs.version}.tgz";
+    hash = "sha256-RkJLklYZx1xWuRpxbZQDLPvRbfSbI6JhBZAswfyN+zk=";
   };
 
-  npmDepsHash = "sha256-h0StxzGbl3ZeOQ4Jy1BgJ5sJ0pAbubMCRsiIOYpU04w=";
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/@github/copilot
+    cp -r . $out/lib/node_modules/@github/copilot
+
+    mkdir -p $out/bin
+    makeBinaryWrapper ${nodejs}/bin/node $out/bin/copilot \
+      --add-flags "$out/lib/node_modules/@github/copilot/index.js"
+
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  meta = with lib; {
-    description = "CLI experience for letting GitHub Copilot help you on the command line";
-    homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.unfree; # upstream has no license
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
-    mainProgram = "github-copilot-cli";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
+    homepage = "https://github.com/github/copilot-cli";
+    changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://www.npmjs.com/package/@github/copilot";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      dbreyfogle
+    ];
+    mainProgram = "copilot";
   };
-}
+})

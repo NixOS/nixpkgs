@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spaceship-prompt";
-  version = "4.17.0";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
-    repo = pname;
+    repo = "spaceship-prompt";
     rev = "v${version}";
-    sha256 = "sha256-a7z/z++dmwMqIrutOc74ljz/Tu/wuEuQaN2XRBMtOvw=";
+    sha256 = "sha256-zMazuPTwvbmtd6BIjD7oDJ3V4TGlUnxJT25Pe1TI3UY=";
   };
 
   strictDeps = true;
@@ -33,13 +33,13 @@ stdenvNoCC.mkDerivation rec {
     ln -s "$out/lib/spaceship-prompt/spaceship.zsh" "$out/share/zsh/site-functions/prompt_spaceship_setup"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zsh prompt for Astronauts";
     homepage = "https://github.com/denysdovhan/spaceship-prompt/";
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       nyanloutre
       moni
       kyleondy

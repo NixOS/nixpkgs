@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "graysky2";
-    repo = pname;
+    repo = "pulseaudio-ctl";
     rev = "v${version}";
     sha256 = "sha256-ZB1jrr31PF7+vNB+Xo5CATJmYbuDAPwewpDxCVnAowY=";
   };
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
     mainProgram = "pulseaudio-ctl";
     homepage = "https://bbs.archlinux.org/viewtopic.php?id=124513";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 }

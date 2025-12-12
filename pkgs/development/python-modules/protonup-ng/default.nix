@@ -31,12 +31,11 @@ buildPythonPackage rec {
   doCheck = false; # protonup does not have any tests
   pythonImportsCheck = [ "protonup" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloudishBenne/protonup-ng";
     description = "CLI program and API to automate the installation and update of GloriousEggroll's Proton-GE";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      Madouura
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       cafkafk
     ];
     mainProgram = "protonup";

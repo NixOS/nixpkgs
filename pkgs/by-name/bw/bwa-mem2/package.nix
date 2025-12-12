@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  safestringlib,
   zlib,
 }:
 
@@ -13,20 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bwa-mem2";
     repo = "bwa-mem2";
     rev = "cf4306a47dac35e7e79a9e75398a35f33900cfd0";
-    fetchSubmodules = true;
-    hash = "sha256-1AYSn7nBrDwbX7oSrdEoa1d3t6xzwKnA0S87Y/XeXJg=";
+    hash = "sha256-hY8nLRFWt0GAElhDIcYdUX6cJrzOE3NlYRQr0tC3on4=";
   };
 
   buildInputs = [ zlib ];
-
-  # see https://github.com/bwa-mem2/bwa-mem2/issues/93
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i 's/memset_s/memset8_s/g' ext/safestringlib/include/safe_mem_lib.h
-    sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/memset16_s.c
-    sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/memset32_s.c
-    sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/memset_s.c
-    sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/wmemset_s.c
-  '';
 
   buildFlags = [
     (
@@ -43,14 +34,45 @@ stdenv.mkDerivation (finalAttrs: {
     )
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = toString [
+  patches = [
+    ./no-submodule.patch
+  ];
+
+  # Also, patch the tests
+  postPatch =
+    # Force path to static link, otherwise, it fails at runtime to
+    # find the shared library
+    ''
+      substituteInPlace Makefile \
+        --replace-fail "-Iext/safestringlib/include" "-I${safestringlib}/include" \
+        --replace-fail "-Lext/safestringlib" "-L${safestringlib}/lib"
+    ''
+    # Make test compile by changing the compiler and path to library
+    # Remove xeonbsw test that fails to compile due to missing _rdsc
+    # also, not portable
+    + ''
+      substituteInPlace test/Makefile \
+        --replace-fail "icpc" "g++" \
+        --replace-fail "../ext/safestringlib/libsafestring.a"  \
+                       "${safestringlib}/lib/libsafestring.a" \
+        --replace-fail \
+          "fmi_test smem2_test bwt_seed_strategy_test sa2ref_test xeonbsw" \
+          "fmi_test smem2_test bwt_seed_strategy_test sa2ref_test"
+    '';
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-error=register"
       "-Wno-error=implicit-function-declaration"
-    ];
-  };
+    ]
+  );
+
+  nativeBuildInputs = [
+    safestringlib
+  ];
 
   enableParallelBuilding = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -60,13 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Next version of the bwa-mem algorithm in bwa, a software package for mapping low-divergent sequences against a large reference genome";
     mainProgram = "bwa-mem2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/bwa-mem2/bwa-mem2/";
     changelog = "https://github.com/bwa-mem2/bwa-mem2/blob/${finalAttrs.src.rev}/NEWS.md";
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ alxsimon ];
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 })

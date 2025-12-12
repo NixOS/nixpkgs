@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ago";
-  version = "0.0.95";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0gEPXqw99UTsSOwRYQLgaFkaNFsaWA8ylz24pQX8p0Q=";
+    hash = "sha256-FWBBWXEcR+CPISUfKL+0ODlCCHU1Zg2+ZAsvYZP5K+Q=";
   };
 
   build-system = [ setuptools ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Human Readable Time Deltas";
     homepage = "https://git.unturf.com/python/ago";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

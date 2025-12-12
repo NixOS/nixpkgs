@@ -37,13 +37,13 @@ bash.runCommand "${pname}-${version}"
         mkdir ''${out}
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU implementation of the Unix grep command";
       homepage = "https://www.gnu.org/software/grep";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
       mainProgram = "grep";
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
     };
   }
   ''

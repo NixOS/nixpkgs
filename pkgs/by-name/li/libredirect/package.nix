@@ -23,7 +23,7 @@ if stdenv.hostPlatform.isStatic then
     work on static builds where dynamic loader is not used.
   ''
 else
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "libredirect";
     version = "0";
 
@@ -87,37 +87,37 @@ else
     # existing ones do not have the intended effect.
     dontStrip = true;
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        install -vD "$libName" "$out/lib/$libName"
+      install -vD "$libName" "$out/lib/$libName"
 
-      ''
-      + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-        # dylib will be rejected unless dylib rpath gets explictly set
-        install_name_tool \
-          -change $libName $out/lib/$libName \
-          $out/lib/$libName
-      ''
-      + ''
-        # Provide a setup hook that injects our library into every process.
-        mkdir -p "$hook/nix-support"
-        cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
-        ${
-          if stdenv.hostPlatform.isDarwin then
-            ''
-              export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
-            ''
-          else
-            ''
-              export LD_PRELOAD="$out/lib/$libName"
-            ''
-        }
-        SETUP_HOOK
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+      # dylib will be rejected unless dylib rpath gets explicitly set
+      install_name_tool \
+        -change $libName $out/lib/$libName \
+        $out/lib/$libName
+    ''
+    + ''
+      # Provide a setup hook that injects our library into every process.
+      mkdir -p "$hook/nix-support"
+      cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
+      echo "Setting up libredirect"
+      ${
+        if stdenv.hostPlatform.isDarwin then
+          ''
+            export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
+          ''
+        else
+          ''
+            export LD_PRELOAD="$out/lib/$libName"
+          ''
+      }
+      SETUP_HOOK
 
-        runHook postInstall
-      '';
+      runHook postInstall
+    '';
 
     doInstallCheck = true;
 
@@ -128,8 +128,8 @@ else
       )
     '';
 
-    meta = with lib; {
-      platforms = platforms.unix;
+    meta = {
+      platforms = lib.platforms.unix;
       description = "LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
       longDescription = ''
         libredirect is an LD_PRELOAD library to intercept and rewrite the paths in

@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "git-annex-metadata-gui";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alpernebbi";
@@ -33,12 +34,15 @@ buildPythonApplication rec {
     git-annex-adapter
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
     description = "Graphical interface for git-annex metadata commands";
     mainProgram = "git-annex-metadata-gui";
-    maintainers = with maintainers; [ dotlambda ];
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      matthiasbeyer
+    ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
   };
 }

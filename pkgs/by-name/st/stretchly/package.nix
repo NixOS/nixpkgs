@@ -4,18 +4,17 @@
   fetchurl,
   makeWrapper,
   electron,
-  common-updater-scripts,
-  writeShellScript,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stretchly";
-  version = "1.16.0";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${finalAttrs.version}/stretchly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gOMUXGldtZUfqLABJHfbToYe0pcAn8dRWEFxCi/gY9Y=";
+    hash = "sha256-llcKbzlqGMxwrqH1qvQo4fHxO0C1itVZ5wlkwL1IOOU=";
   };
 
   icon = fetchurl {
@@ -28,41 +27,32 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${finalAttrs.pname}/
-    mv resources/app.asar* $out/share/${finalAttrs.pname}/
+    mkdir -p $out/bin $out/share/stretchly/
+    mv resources/app.asar* $out/share/stretchly/
 
     mkdir -p $out/share/applications
     ln -s ${finalAttrs.desktopItem}/share/applications/* $out/share/applications/
 
-    makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
-      --add-flags $out/share/${finalAttrs.pname}/app.asar
+    makeWrapper ${electron}/bin/electron $out/bin/stretchly \
+      --add-flags $out/share/stretchly/app.asar
 
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = writeShellScript "update-stretchly" ''
-      set -eu -o pipefail
-
-      # get the latest release version
-      latest_version=$(curl -s https://api.github.com/repos/hovancik/stretchly/releases/latest | jq --raw-output .tag_name | sed -e 's/^v//')
-
-      echo "updating to $latest_version..."
-
-      ${common-updater-scripts}/bin/update-source-version stretchly "$latest_version"
-    '';
-  };
-
   desktopItem = makeDesktopItem {
-    name = finalAttrs.pname;
-    exec = finalAttrs.pname;
+    name = "stretchly";
+    exec = "stretchly";
     icon = finalAttrs.icon;
     desktopName = "Stretchly";
     genericName = "Stretchly";
     categories = [ "Utility" ];
   };
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take
@@ -73,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://hovancik.net/stretchly";
     downloadPage = "https://hovancik.net/stretchly/downloads/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.linux;
     mainProgram = "stretchly";
   };
 })

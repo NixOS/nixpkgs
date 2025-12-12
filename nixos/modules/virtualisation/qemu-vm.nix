@@ -20,25 +20,17 @@ let
 
   cfg = config.virtualisation;
 
-  opt = options.virtualisation;
-
   qemu = cfg.qemu.package;
 
   hostPkgs = cfg.host.pkgs;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOpts =
+  driveOptions =
     { ... }:
     {
 
       options = {
-
-        file = mkOption {
-          type = types.str;
-          description = "The file image used for this drive.";
-        };
-
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -62,8 +54,20 @@ let
     };
 
   selectPartitionTableLayout =
-    { useEFIBoot, useDefaultFilesystems }:
-    if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
+    {
+      useEFIBoot,
+      useDefaultFilesystems,
+      useBIOSBoot,
+    }:
+    if useDefaultFilesystems then
+      if useEFIBoot then
+        "efi"
+      else if useBIOSBoot then
+        "legacy+boot"
+      else
+        "legacy"
+    else
+      "none";
 
   driveCmdline =
     idx:
@@ -125,21 +129,27 @@ let
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
-        echo "Disk image do not exist, creating the virtualisation disk image..."
+        echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
           if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
+              BACKING_SIZE_MB=$(( $(${lib.getExe' qemu "qemu-img"} info ${systemImage}/nixos.qcow2 --output=json | ${lib.getExe hostPkgs.jq} -r '."virtual-size"') / 1024 / 1024 ))
+              DISK_SIZE_MB=${toString cfg.diskSize}
+              if (( DISK_SIZE_MB < BACKING_SIZE_MB )); then
+                OVERLAY_SIZE_MB=$BACKING_SIZE_MB
+              else
+                OVERLAY_SIZE_MB=$DISK_SIZE_MB
+              fi
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                 ''${OVERLAY_SIZE_MB}M
             ''
           else if cfg.useDefaultFilesystems then
             ''
@@ -182,6 +192,7 @@ let
           -L ${nixStoreFilesystemLabel} \
           -U eb176051-bd15-49b7-9e6b-462e0b467019 \
           -T 0 \
+          --hard-dereference \
           --tar=f \
           "$TMPDIR"/store.img
 
@@ -286,7 +297,9 @@ let
 
     ${lib.pipe cfg.emptyDiskImages [
       (lib.imap0 (
-        idx: size: ''
+        idx:
+        { size, ... }:
+        ''
           test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
         ''
       ))
@@ -337,7 +350,9 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout {
+      inherit (cfg) useBIOSBoot useDefaultFilesystems useEFIBoot;
+    };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
@@ -391,7 +406,7 @@ in
       type = types.ints.positive;
       default = 1024;
       description = ''
-        The memory size in megabytes of the virtual machine.
+        The memory size of the virtual machine in MiB (1024×1024 bytes).
       '';
     };
 
@@ -431,8 +446,17 @@ in
 
     virtualisation.bootPartition = mkOption {
       type = types.nullOr types.path;
-      default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-      defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+      default =
+        if cfg.useEFIBoot then
+          "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then
+          "/dev/disk/by-label/BOOT"
+        else
+          null;
+      defaultText = literalExpression ''
+        if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then "/dev/disk/by-label/BOOT"
+        else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
         The path (inside the VM) to the device containing the EFI System Partition (ESP).
@@ -453,11 +477,25 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf types.ints.positive;
+      type = types.listOf (
+        types.coercedTo types.ints.positive (size: { inherit size; }) (
+          types.submodule {
+            options.size = mkOption {
+              type = types.ints.positive;
+              description = "The size of the disk in MiB";
+            };
+            options.driveConfig = mkOption {
+              type = lib.types.submodule driveOptions;
+              default = { };
+              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
+            };
+          }
+        )
+      );
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
-        a list of size in megabytes of each disk. These disks are
+        a list of size in MiB (1024×1024 bytes) of each disk. These disks are
         writeable by the VM.
       '';
     };
@@ -805,7 +843,18 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (types.submodule driveOpts);
+        type = types.listOf (
+          types.submodule {
+            imports = [ driveOptions ];
+
+            options = {
+              file = mkOption {
+                type = types.str;
+                description = "The file image used for this drive.";
+              };
+            };
+          }
+        );
         description = "Drives passed to qemu.";
       };
 
@@ -868,6 +917,23 @@ in
       '';
     };
 
+    virtualisation.nixStore9pCache = mkOption {
+      type = types.enum [
+        "loose"
+        "none"
+        "fscache"
+      ];
+      default = "loose";
+      description = ''
+        Type of 9p cache to use when mounting host nix store. "none" provides
+        no caching. "loose" enables Linux's local VFS cache. "fscache" uses Linux's
+        fscache subsystem.
+
+        This option is only respected when {option}`virtualisation.mountHostNixStore`
+        is enabled.
+      '';
+    };
+
     virtualisation.directBoot = {
       enable = mkOption {
         type = types.bool;
@@ -926,6 +992,14 @@ in
 
         This is best-effort and may break with unconventional partition setups.
         Use `virtualisation.useDefaultFilesystems` for a known-working configuration.
+      '';
+    };
+
+    virtualisation.useBIOSBoot = mkEnableOption null // {
+      description = ''
+        If enabled for legacy MBR VMs, the VM image will have a separate boot
+        partition mounted at /boot.
+        useBIOSBoot is ignored if useEFIBoot == true.
       '';
     };
 
@@ -1098,7 +1172,7 @@ in
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
-            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047 MiB RAM on 32bit max.
           '';
         }
         {
@@ -1128,6 +1202,9 @@ in
       `useBootLoader` useless. You might want to disable one of those options.
     '';
 
+    # Install Limine on the bootloader device
+    boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
+
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
     # Otherwise, we set the proper bootloader device for this.
@@ -1151,8 +1228,7 @@ in
     '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
-      ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1276,10 +1352,16 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (idx: _: {
-        file = "$(pwd)/empty${toString idx}.qcow2";
-        driveExtraOpts.werror = "report";
-      }) cfg.emptyDiskImages)
+      (imap0 (
+        idx: imgCfg:
+        lib.mkMerge [
+          {
+            file = "$(pwd)/empty${toString idx}.qcow2";
+            driveExtraOpts.werror = "report";
+          }
+          imgCfg.driveConfig
+        ]
+      ) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
@@ -1303,7 +1385,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ] ++ lib.optional (tag == "nix-store") "cache=loose";
+          ]
+          ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
       in
       lib.mkMerge [
@@ -1314,6 +1397,7 @@ in
               {
                 device = "tmpfs";
                 fsType = "tmpfs";
+                options = [ "mode=755" ];
               }
             else
               {

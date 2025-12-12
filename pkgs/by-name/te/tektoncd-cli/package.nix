@@ -3,17 +3,24 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+
+  writableTmpDirAsHomeHook,
+
+  stdenv,
+  buildPackages,
+
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tektoncd-cli";
-  version = "0.39.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-yEtHPA1MG+Cud9KhTrsvhQp1Q+Mu073AoNwOvZH8xBU=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-75pyN+Sr5IttqrQYIveePabcuxnx8G48aiP5rw2v/Jo=";
   };
 
   vendorHash = null;
@@ -21,47 +28,62 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}"
+    "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${finalAttrs.version}"
   ];
+
+  # tests bind to ::1
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/tkn" ];
+  subPackages = [
+    "cmd/tkn"
+  ];
+
+  excludedPackages = [
+    "test/e2e"
+  ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    # some tests try to write to the home dir
-    export HOME="$TMPDIR"
-
     # run all tests
     unset subPackages
 
     # the tests expect the clientVersion ldflag not to be set
     unset ldflags
-
-    # remove tests with networking
-    rm pkg/cmd/version/version_test.go
   '';
 
   postInstall = ''
     installManPage docs/man/man1/*
+  ''
+  + (
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}"
+        else
+          lib.getExe buildPackages.tektoncd-cli;
+    in
+    ''
+      installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    ''
+  );
 
-    installShellCompletion --cmd tkn \
-      --bash <($out/bin/tkn completion bash) \
-      --fish <($out/bin/tkn completion fish) \
-      --zsh <($out/bin/tkn completion zsh)
-  '';
-
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/tkn --help
-    $out/bin/tkn version | grep "Client version: ${version}"
-    runHook postInstallCheck
-  '';
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tekton.dev";
-    changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
+    changelog = "https://github.com/tektoncd/cli/releases/tag/${finalAttrs.src.tag}";
     description = "Provides a CLI for interacting with Tekton - tkn";
     longDescription = ''
       The Tekton Pipelines cli project provides a CLI for interacting with
@@ -69,12 +91,12 @@ buildGoModule rec {
       Tekton CLI, tkn, together with the core component of Tekton, Tekton
       Pipelines.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       mstrangfeld
       vdemeester
     ];
     mainProgram = "tkn";
   };
-}
+})

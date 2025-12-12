@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "hatch-regex-commit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E0DIBBaDmTCsZQ41NcjcbzgJ16BwhdexlrGWBdf77oA=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hatch_regex_commit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hatch plugin to create a commit and tag when bumping version";
     homepage = "https://github.com/frankie567/hatch-regex-commit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

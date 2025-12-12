@@ -1,56 +1,70 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "conftest";
-  version = "0.56.0";
+  version = "0.63.0";
+
+  __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7R6qMjwPtlpnsm6xej7jQntv9709//q4VVbatuzLuwk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gmfzMup4fdsbdyUufxjcJRPF2faj3RUlvIn2ciyalaQ=";
   };
-  vendorHash = "sha256-QPFLHP4nyJqB7tVVk00J+V+1YXGSsRvCZ1aLEMg0kfc=";
+  vendorHash = "sha256-pBUWM6st5FhhOki3n9NIN4/U8JB7Kq3Aph3AtQs+Ogg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
+    "-X github.com/open-policy-agent/conftest/internal/commands.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  postInstall =
+    let
+      conftest =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.conftest;
+    in
+    ''
+      installShellCompletion --cmd conftest \
+        --bash <(${conftest}/bin/conftest completion bash) \
+        --fish <(${conftest}/bin/conftest completion fish) \
+        --zsh <(${conftest}/bin/conftest completion zsh)
+    '';
 
-  postInstall = ''
-    installShellCompletion --cmd conftest \
-      --bash <($out/bin/conftest completion bash) \
-      --fish <($out/bin/conftest completion fish) \
-      --zsh <($out/bin/conftest completion zsh)
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    export HOME="$(mktemp -d)"
-    $out/bin/conftest --version | grep ${version} > /dev/null
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Write tests against structured configuration data";
     mainProgram = "conftest";
     downloadPage = "https://github.com/open-policy-agent/conftest";
     homepage = "https://www.conftest.dev";
-    changelog = "https://github.com/open-policy-agent/conftest/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/open-policy-agent/conftest/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     longDescription = ''
       Conftest helps you write tests against structured configuration data.
       Using Conftest you can write tests for your Kubernetes configuration,
@@ -61,9 +75,9 @@ buildGoModule rec {
       assertions. You can read more about Rego in 'How do I write policies' in
       the Open Policy Agent documentation.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       yurrriq
     ];
   };
-}
+})

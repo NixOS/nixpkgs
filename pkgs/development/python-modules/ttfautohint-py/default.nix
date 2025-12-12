@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "ttfautohint-py";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "ttfautohint-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NTog461RpyHKo/Qpicj3tflehaKj9LlZEN9qeCMM6JQ=";
+    tag = "v${version}";
+    hash = "sha256-wA8su7HEQnDbCShrX9fiP/VKNMtMqeayHbQXHqy8iOA=";
   };
 
   postPatch = ''
     substituteInPlace src/python/ttfautohint/__init__.py \
-      --replace-fail 'find_library("ttfautohint")' '"${lib.getLib ttfautohint}/lib/libttfautohint${stdenv.hostPlatform.extensions.sharedLibrary}"'
+      --replace-fail '_exe_full_path = None' '_exe_full_path = "${lib.getExe ttfautohint}"'
   '';
 
   env.TTFAUTOHINTPY_BUNDLE_DLL = false;
@@ -34,6 +34,10 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     distutils
+  ];
+
+  dependencies = [
+    setuptools # for pkg_resources
   ];
 
   buildInputs = [ ttfautohint ];
@@ -48,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for ttfautohint, a free auto-hinter for TrueType fonts";
     homepage = "https://github.com/fonttools/ttfautohint-py";
-    changelog = "https://github.com/fonttools/ttfautohint-py/releases/tag/v${version}";
+    changelog = "https://github.com/fonttools/ttfautohint-py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };

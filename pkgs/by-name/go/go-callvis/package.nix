@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "go-callvis";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ofabry";
     repo = "go-callvis";
     rev = "v${version}";
-    hash = "sha256-PIzmnqlK+uFtzZW4H0xpP5c+X30hFvOjQydvreJn4xM=";
+    hash = "sha256-gCQjxJH03QAg6MZx5NJUJR6tKP02ThIa5BGN6A/0ejM=";
   };
 
-  vendorHash = "sha256-AfbUxA5C5dH70+vqC+1RGaTt7S0FL9CBcxel0ifmHKs=";
+  vendorHash = "sha256-IS8lkDBy7Y/qAaDxmWRfrVQEF9OFo7VofqSNgNTEQQw=";
 
   ldflags = [
     "-s"
@@ -26,11 +26,11 @@ buildGoModule rec {
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Visualize call graph of a Go program using Graphviz";
     mainProgram = "go-callvis";
     homepage = "https://github.com/ofabry/go-callvis";
-    license = licenses.mit;
-    maintainers = with maintainers; [ meain ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ meain ];
   };
 }

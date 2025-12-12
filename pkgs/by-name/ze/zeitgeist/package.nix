@@ -28,12 +28,13 @@ stdenv.mkDerivation rec {
     "lib"
     "dev"
     "man"
-  ] ++ lib.optional pythonSupport "py";
+  ]
+  ++ lib.optional pythonSupport "py";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = pname;
-    repo = pname;
+    owner = "zeitgeist";
+    repo = "zeitgeist";
     rev = "v${version}";
     sha256 = "kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
   };
@@ -77,11 +78,11 @@ stdenv.mkDerivation rec {
     moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.freedesktop ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

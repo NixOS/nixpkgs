@@ -23,12 +23,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "spacevim";
-  version = "2.3.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "SpaceVim";
     repo = "SpaceVim";
     rev = "v${version}";
-    hash = "sha256-MHsAA0x/rfwRupe8aW1JVKGiYkySAX0AhOkBuScpn7I=";
+    hash = "sha256-qiNadhQJjU9RY14X8+pd4Ul+NLoNqbxuh3Kenw1dHDc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://spacevim.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.perchun ];
+    maintainers = [ lib.maintainers.PerchunPak ];
     platforms = lib.platforms.all;
     mainProgram = "spacevim";
   };

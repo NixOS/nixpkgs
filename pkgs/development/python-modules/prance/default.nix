@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "23.06.21.0";
+  version = "25.04.08.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RonnyPfannschmidt";
     repo = "prance";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
+    hash = "sha256-71M9ufxb0aaSgokThlsTS4ElOJLZntF2TYIErPccQbU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -54,7 +54,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];
@@ -66,11 +67,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "prance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "prance";
   };

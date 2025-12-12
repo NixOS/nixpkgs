@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch2,
-  substituteAll,
+  replaceVars,
   libtool,
   gettext,
   zlib,
@@ -48,25 +48,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-u48xLFHSAlciQ/ETxrYtghAwGrMMuu5gT5g32HjN91U=";
   };
 
-  patches =
-    [
-      # 0008513: test_exiv2 fails with Exiv2 0.28
-      # https://bugs.gnunet.org/view.php?id=8513
-      (fetchpatch2 {
-        url = "https://sources.debian.org/data/main/libe/libextractor/1%3A1.13-4/debian/patches/exiv2-0.28.diff";
-        hash = "sha256-Re5iwlSyEpWu3PcHibaRKSfmdyHSZGMOdMZ6svTofvs=";
-      })
-    ]
-    ++ lib.optionals gstreamerSupport [
+  patches = [
+    # 0008513: test_exiv2 fails with Exiv2 0.28
+    # https://bugs.gnunet.org/view.php?id=8513
+    (fetchpatch2 {
+      url = "https://sources.debian.org/data/main/libe/libextractor/1%3A1.13-4/debian/patches/exiv2-0.28.diff";
+      hash = "sha256-Re5iwlSyEpWu3PcHibaRKSfmdyHSZGMOdMZ6svTofvs=";
+    })
+  ]
+  ++ lib.optionals gstreamerSupport [
 
-      # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
-      (substituteAll {
-        src = ./gst-hardcode-plugins.patch;
-        load_gst_plugins = lib.concatMapStrings (
-          plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");''
-        ) (gstPlugins gst_all_1);
-      })
-    ];
+    # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
+    (replaceVars ./gst-hardcode-plugins.patch {
+      load_gst_plugins = lib.concatMapStrings (
+        plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");''
+      ) (gstPlugins gst_all_1);
+    })
+  ];
 
   preConfigure = ''
     echo "patching installation directory in \`extractor.c'..."
@@ -76,24 +74,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libtool
-      gettext
-      zlib
-      bzip2
-      flac
-      libvorbis
-      exiv2
-      libgsf
-    ]
-    ++ lib.optionals rpmSupport [ rpm ]
-    ++ lib.optionals gstreamerSupport ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
-    ++ lib.optionals gtkSupport [
-      glib
-      gtk3
-    ]
-    ++ lib.optionals videoSupport [ libmpeg2 ];
+  buildInputs = [
+    libtool
+    gettext
+    zlib
+    bzip2
+    flac
+    libvorbis
+    exiv2
+    libgsf
+  ]
+  ++ lib.optionals rpmSupport [ rpm ]
+  ++ lib.optionals gstreamerSupport ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
+  ++ lib.optionals gtkSupport [
+    glib
+    gtk3
+  ]
+  ++ lib.optionals videoSupport [ libmpeg2 ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.
@@ -101,7 +98,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = "make check";
 
-  meta = with lib; {
+  meta = {
     description = "Simple library for keyword extraction";
     mainProgram = "extract";
 
@@ -126,9 +123,9 @@ stdenv.mkDerivation rec {
       additional MIME types are detected.
     '';
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ maintainers.jorsn ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.jorsn ];
+    platforms = lib.platforms.unix;
   };
 }

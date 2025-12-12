@@ -15,13 +15,13 @@
   indicator-application-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wingpanel-indicator-namarupa";
   version = "0.0.0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "lenemter";
-    repo = pname;
+    repo = "wingpanel-indicator-namarupa";
     rev = "d9fc4e47d58c72e0cf08aa11246910ce84fcef50";
     sha256 = "sha256-8jzhrCMkP5ui964JRZUs+tl2ShxeB8q60fBUI4okrpg=";
   };
@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wingpanel Namarupa Indicator (Ayatana support)";
     homepage = "https://github.com/lenemter/wingpanel-indicator-namarupa";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

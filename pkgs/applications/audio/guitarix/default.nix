@@ -101,11 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-  ] ++ optional optimizationSupport "--optimization";
+  ]
+  ++ optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
     longDescription = ''
@@ -131,11 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
       crazy sounds never heard before.
     '';
     homepage = "https://github.com/brummer10/guitarix";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      astsmtl
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       lord-valen
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

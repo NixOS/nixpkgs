@@ -28,6 +28,8 @@ let
         "-DWITH_RPC=ON"
       ];
 
+      doInstallCheck = true;
+
       postPatch = ''
         substituteInPlace CMakeLists.txt \
           --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d" \
@@ -37,16 +39,16 @@ let
           --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
       '';
 
-      meta = with lib; {
+      meta = {
         inherit (meta) longDescription homepage;
         description = "Software to turn the RTL2832U into a SDR receiver";
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
           bjornfor
           skovati
           Tungsten842
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         mainProgram = "rtl_sdr";
       };
     };

@@ -16,7 +16,8 @@
   doxygen,
   python3,
   python3Packages,
-  systemd, # for libudev
+  udev,
+  libpisp,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
   withQcam ? false,
@@ -26,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.3.2";
+  version = "0.5.2";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-rW1BG5blozQKA73P5vH5dGkwQG5JJzxdOU2GCB3xIns=";
+    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
   };
 
   outputs = [
@@ -56,41 +57,41 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa/ipa_*.so
   '';
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      # IPA and signing
-      openssl
+  buildInputs = [
+    # IPA and signing
+    openssl
 
-      # gstreamer integration
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
+    # gstreamer integration
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
 
-      # cam integration
-      libevent
-      libdrm
+    # cam integration
+    libevent
+    libdrm
 
-      # hotplugging
-      systemd
+    # hotplugging
+    udev
 
-      # pycamera
-      python3Packages.pybind11
+    # pycamera
+    python3Packages.pybind11
 
-      # yamlparser
-      libyaml
+    # yamlparser
+    libyaml
 
-      gtest
-    ]
-    ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [
-      libtiff
-      qt6.qtbase
-      qt6.qttools
-    ];
+    gtest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
+  ++ lib.optionals withTracing [ lttng-ust ]
+  ++ lib.optionals withQcam [
+    libtiff
+    qt6.qtbase
+    qt6.qttools
+  ];
 
   nativeBuildInputs = [
     meson
@@ -104,7 +105,8 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
+  ]
+  ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
@@ -126,12 +128,13 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ citadelcore ];
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ citadelcore ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

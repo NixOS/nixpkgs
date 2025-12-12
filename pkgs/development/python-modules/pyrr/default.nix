@@ -6,7 +6,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyrr";
   version = "unstable-2022-07-22";
   format = "setuptools";
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "3D mathematical functions using NumPy";
     homepage = "https://github.com/adamlwgriffiths/Pyrr/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ c0deaddict ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ c0deaddict ];
   };
 }

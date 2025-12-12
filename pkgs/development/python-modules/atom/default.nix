@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "atom";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3Xk4CM8Cnkc0lIdjJUYs/6UTqqpPALrUa3DpKD40og8=";
   };
 
@@ -34,11 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atom.api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory efficient Python objects";
     homepage = "https://github.com/nucleic/atom";
     changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.bsd3;
   };
 }

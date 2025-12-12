@@ -12,7 +12,6 @@
   desktop-file-utils,
   libadwaita,
   gst_all_1,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +26,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-/Ri723ub8LMlhbPObC83bay63JuWIQpgxAT5UUYuwZI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "kana-${version}";
-    hash = "sha256-Z7DpPe8/Tt8AcLjCwKbwzQTsLe6YvWBCG7DlDkkklew=";
+    hash = "sha256-3ODkAstBZQE3eqGmRUdm3xyCoBXV41hK4ndxeDK8+Yc=";
   };
 
   nativeBuildInputs = [
@@ -44,19 +43,15 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+  ]);
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
@@ -64,12 +59,12 @@ stdenv.mkDerivation rec {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     description = "Learn Japanese hiragana and katakana characters";
     homepage = "https://gitlab.gnome.org/fkinoshita/kana";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kana";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

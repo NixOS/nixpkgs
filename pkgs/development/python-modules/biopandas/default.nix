@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
     homepage = "https://github.com/BioPandas/biopandas";
-    changelog = "https://github.com/BioPandas/biopandas/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/BioPandas/biopandas/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
   };

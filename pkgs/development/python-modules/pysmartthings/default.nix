@@ -1,49 +1,60 @@
 {
   lib,
   aiohttp,
+  aiohttp-sse-client2,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "0.7.8";
-  format = "setuptools";
+  version = "3.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
-    repo = pname;
-    rev = version;
-    hash = "sha256-r+f2+vEXJdQGDlbs/MhraFgEmsAf32PU282blLRLjzc=";
+    repo = "pysmartthings";
+    tag = "v${version}";
+    hash = "sha256-+7d/KuuBQSe+U8oIWng8f5D0UObIYfFjikXVdxQ7fX8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
-  '';
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  # https://github.com/andrewsayre/pysmartthings/issues/80
-  doCheck = lib.versionOlder aiohttp.version "3.9.0";
+  dependencies = [
+    aiohttp
+    aiohttp-sse-client2
+    mashumaro
+    orjson
+    yarl
+  ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "pysmartthings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
-    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

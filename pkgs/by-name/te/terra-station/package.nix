@@ -71,11 +71,11 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/${pname}/resources/app.aasar
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terra station is the official wallet of the Terra blockchain";
-    homepage = "https://docs.terra.money/docs/learn/terra-station/README.html";
-    license = licenses.isc;
-    maintainers = [ maintainers.peterwilli ];
+    homepage = "https://station.money/";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.peterwilli ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "terra-station";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

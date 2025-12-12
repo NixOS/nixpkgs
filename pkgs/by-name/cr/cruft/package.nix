@@ -5,30 +5,38 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cruft";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cruft";
     repo = "cruft";
-    rev = version;
-    hash = "sha256-qIVyNMoI3LsoOV/6XPa60Y1vTRvkezesF7wF9WVSLGk=";
+    tag = version;
+    hash = "sha256-hUucSfgDBlT5jVk/oF8JjbcYhjHgkprfGRwsSNfgjfg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
   nativeCheckInputs = with python3Packages; [
     pytest7CheckHook
   ];
 
-  dependencies = with python3Packages; [
-    click
-    cookiecutter
-    gitpython
-    typer
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      click
+      cookiecutter
+      gitpython
+      typer
+    ]
+    ++ lib.optional (pythonOlder "3.11") python3Packages.toml;
 
   pythonImportsCheck = "cruft";
 
@@ -57,6 +65,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/cruft/cruft";
     license = lib.licenses.mit;
     mainProgram = "cruft";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

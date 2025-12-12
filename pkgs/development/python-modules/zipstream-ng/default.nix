@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mmPxzml+gaVg2IQ/Gql+3ru0hHosbyX4WjLCMxD/MJw=";
+    tag = "v${version}";
+    hash = "sha256-dkSTZkj6Rx6OMdlX4oDOydetosf/iEJhlARmEc0W9gQ=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to generate streamable zip files";
     mainProgram = "zipserver";
     longDescription = ''
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pR0Ps/zipstream-ng";
     changelog = "https://github.com/pR0Ps/zipstream-ng/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

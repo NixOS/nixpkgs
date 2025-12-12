@@ -10,18 +10,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "caramelli";
-    repo = pname;
+    repo = "fbmark";
     rev = "v${version}";
     sha256 = "0n2czl2sy1k6r5ri0hp7jgq84xcwrx4x43bqvw1b4na99mqhyahn";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux Framebuffer Benchmark";
     homepage = "https://github.com/caramelli/fbmark";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ davidak ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -49,6 +49,10 @@
       description = "path functions";
     }
     {
+      name = "fetchers";
+      description = "functions which can be reused across fetchers";
+    }
+    {
       name = "filesystem";
       description = "filesystem functions";
     }
@@ -90,10 +94,7 @@
 stdenvNoCC.mkDerivation {
   name = "nixpkgs-lib-docs";
 
-  src = lib.fileset.toSource {
-    root = ../..;
-    fileset = ../../lib;
-  };
+  src = ../../lib;
 
   nativeBuildInputs = [
     nixdoc
@@ -101,6 +102,10 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
+    cd ..
+
     export NIX_STATE_DIR=$(mktemp -d)
     nix-instantiate --eval --strict --json ${./lib-function-locations.nix} \
       --arg nixpkgsPath "./." \
@@ -140,5 +145,7 @@ stdenvNoCC.mkDerivation {
     ) libsets}
 
     echo '```' >> "$out/index.md"
+
+    runHook postInstall
   '';
 }

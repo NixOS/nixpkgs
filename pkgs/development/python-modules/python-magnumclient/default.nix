@@ -6,8 +6,8 @@
   fetchFromGitHub,
   fixtures,
   keystoneauth1,
+  openstacksdk,
   openstackdocstheme,
-  os-client-config,
   osc-lib,
   oslo-i18n,
   oslo-log,
@@ -18,27 +18,25 @@
   pbr,
   prettytable,
   python-openstackclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
   sphinxHook,
   stestr,
+  stevedore,
   testtools,
 }:
 
 buildPythonPackage rec {
   pname = "python-magnumclient";
-  version = "4.7.0";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2JHI3CB/DSZZ4LXzL3PCUSmubTciUXtZkc5jpeEc4kk=";
+    tag = version;
+    hash = "sha256-Ok211QgvsKqkotXrC4HwMyonLv7LzuCjs2hjruGDEvY=";
   };
 
   env.PBR_VERSION = version;
@@ -59,7 +57,7 @@ buildPythonPackage rec {
     cryptography
     decorator
     keystoneauth1
-    os-client-config
+    openstacksdk
     osc-lib
     oslo-i18n
     oslo-log
@@ -67,6 +65,7 @@ buildPythonPackage rec {
     oslo-utils
     prettytable
     requests
+    stevedore
   ];
 
   nativeCheckInputs = [
@@ -92,6 +91,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Magnum API";
     license = lib.licenses.asl20;
     mainProgram = "magnum";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

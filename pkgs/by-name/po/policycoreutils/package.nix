@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
-  version = "3.7";
+  version = "3.8.1";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
-    hash = "sha256-WP5OSB7ftEVsEUklRC4ROJ3xc5SSWs26PeIRFFzl6pg=";
+    hash = "sha256-7vIxlrUB0UHLlfX8Uu8acon0WbZeRBXqD+mu7cXYDvI=";
   };
 
   postPatch = ''
@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(out)/share/man/man5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
 }

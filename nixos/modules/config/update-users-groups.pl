@@ -54,15 +54,14 @@ sub dry_print {
 # Functions for allocating free GIDs/UIDs. FIXME: respect ID ranges in
 # /etc/login.defs.
 sub allocId {
-    my ($used, $prevUsed, $idMin, $idMax, $up, $getid) = @_;
-    my $id = $up ? $idMin : $idMax;
+    my ($used, $prevUsed, $idMin, $idMax, $delta, $getid) = @_;
+    my $id = $delta > 0 ? $idMin : $idMax;
     while ($id >= $idMin && $id <= $idMax) {
         if (!$used->{$id} && !$prevUsed->{$id} && !defined &$getid($id)) {
             $used->{$id} = 1;
             return $id;
         }
-        $used->{$id} = 1;
-        if ($up) { $id++; } else { $id--; }
+        $id += $delta;
     }
     die "$0: out of free UIDs or GIDs\n";
 }
@@ -77,19 +76,19 @@ sub allocGid {
         $gidsUsed{$prevGid} = 1;
         return $prevGid;
     }
-    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, 0, sub { my ($gid) = @_; getgrgid($gid) });
+    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, -1, sub { my ($gid) = @_; getgrgid($gid) });
 }
 
 sub allocUid {
     my ($name, $isSystemUser) = @_;
-    my ($min, $max, $up) = $isSystemUser ? (400, 999, 0) : (1000, 29999, 1);
+    my ($min, $max, $delta) = $isSystemUser ? (400, 999, -1) : (1000, 29999, 1);
     my $prevUid = $uidMap->{$name};
     if (defined $prevUid && $prevUid >= $min && $prevUid <= $max && !defined $uidsUsed{$prevUid}) {
         dry_print("reviving", "would revive", "user '$name' with UID $prevUid");
         $uidsUsed{$prevUid} = 1;
         return $prevUid;
     }
-    return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
+    return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $delta, sub { my ($uid) = @_; getpwuid($uid) });
 }
 
 # Read the declared users/groups
@@ -335,19 +334,20 @@ $subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
 sub allocSubUid {
     my ($name, @rest) = @_;
 
-    # TODO: No upper bounds?
-    my ($min, $max, $up) = (100000, 100000 * 100, 1);
+    # The upper bound of 29000 users is derived from limits in
+    # nixos/modules/programs/shadow.nix which allocates the UID ranges
+    # 1000-29999 for regular users. System users are not allocated
+    # subordinate user or group IDs, and so after removing those 999
+    # system users, we end up with 29000 users that are non-system users
+    # that need subUIDs and subGIDs.
+    my ($min, $max, $delta) = (100000, 100000 + 29000 * 65536 - 1, 65536);
     my $prevId = $subUidMap->{$name};
     if (defined $prevId && !defined $subUidsUsed{$prevId}) {
         $subUidsUsed{$prevId} = 1;
         return $prevId;
     }
 
-    my $id = allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
-    my $offset = $id - 100000;
-    my $count = $offset * 65536;
-    my $subordinate = 100000 + $count;
-    return $subordinate;
+    return allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $delta, sub { undef });
 }
 
 my @subGids;
@@ -367,6 +367,14 @@ foreach my $u (values %usersOut) {
 
     if($u->{autoSubUidGidRange}) {
         my $subordinate = allocSubUid($name);
+        if (defined $subUidMap->{$name} && $subUidMap->{$name} != $subordinate) {
+          print STDERR "warning: The subuids for '$name' changed, as they coincided with the subuids of a different user (see /etc/subuid). "
+            . "The range now starts with $subordinate instead of $subUidMap->{$name}. "
+            . "If the subuids were used (e.g. with rootless container managers like podman), please change the ownership of affected files accordingly. "
+            . "Alternatively, to keep the old overlapping ranges, add this to the system configuration: "
+            . "users.users.$name.subUidRanges = [{startUid = $subUidMap->{$name}; count = 65536;}]; "
+            . "users.users.$name.subGidRanges = [{startGid = $subUidMap->{$name}; count = 65536;}];\n";
+        }
         $subUidMap->{$name} = $subordinate;
         my $value = join(":", ($name, $subordinate, 65536));
         push @subUids, $value;
@@ -376,4 +384,4 @@ foreach my $u (values %usersOut) {
 
 updateFile("/etc/subuid", join("\n", @subUids) . "\n");
 updateFile("/etc/subgid", join("\n", @subGids) . "\n");
-updateFile($subUidMapFile, encode_json($subUidMap) . "\n");
+updateFile($subUidMapFile, to_json($subUidMap) . "\n");

@@ -1,15 +1,18 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
+  autoconf,
+  automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tftp-hpa";
-  version = "5.2";
-  src = fetchurl {
-    url = "mirror://kernel/software/network/tftp/tftp-hpa/${pname}-${version}.tar.xz";
-    sha256 = "12vidchglhyc20znq5wdsbhi9mqg90jnl7qr9qs8hbvaz4fkdvmg";
+  version = "5.2-untagged-2024-06-10";
+  src = fetchgit {
+    url = "git://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git";
+    hash = "sha256-lTMldYO/cZdLj0UjOPPBHfYf2GBG0O+5lhP9ikqn3tY=";
+    rev = "2c86ff58dcc003107b47f2d35aa0fdc4a3fd95e1";
   };
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -18,11 +21,20 @@ stdenv.mkDerivation rec {
   #     `toplevel'; tftp.o:/build/tftp-hpa-5.2/tftp/tftp.c:51: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = with lib; {
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
+
+  meta = {
     description = "TFTP tools - a lot of fixes on top of BSD TFTP";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     homepage = "https://www.kernel.org/pub/software/network/tftp/";
   };
 

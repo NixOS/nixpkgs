@@ -33,17 +33,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cbftp.eu/";
-    description = " An advanced multi-purpose FTP/FXP client";
+    description = "Advanced multi-purpose FTP/FXP client";
     longDescription = ''
       Cbftp is an advanced multi-purpose FTP/FXP client that focuses on
       efficient large-scale data spreading, while also supporting most regular
       FTP/FXP use cases in a modern way. It runs in a terminal and provides a
       semi-graphical user interface through ncurses.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }

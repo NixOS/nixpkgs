@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-b/3NvY+puffiQFCQuhRMe81x2wm3vR01MR3iwe/gJkw=";
   };
 
-  cargoHash = "sha256-45cb0yO/ypGLcvEgPOkN6Py99yqK09xnCmMOLOOYYSA=";
+  cargoHash = "sha256-6KkZg8MXQIewhwdLE8NiqllJifa0uvebU1/MqeE/bdI=";
 
-  meta = with lib; {
+  meta = {
     description = "Fast CLI documentation searcher for Nix";
     homepage = "https://github.com/nix-community/manix";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
-      iogamaster
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       lecoqjacob
     ];
     mainProgram = "manix";

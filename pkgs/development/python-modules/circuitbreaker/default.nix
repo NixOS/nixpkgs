@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "circuitbreaker";
-  version = "2.0.0";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabfuel";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-jaDCMGCZZu3STluYeHDNgdEPf2DNq7bXJ0LPV3JZdk0=";
+    repo = "circuitbreaker";
+    tag = version;
+    hash = "sha256-7BpYGhha0PTYzsE9CsN4KxfJW/wm2i6V+uAeamBREBQ=";
   };
 
   nativeCheckInputs = [
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "circuitbreaker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Circuit Breaker implementation";
     homepage = "https://github.com/fabfuel/circuitbreaker";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pabluk";
     repo = "libgravatar";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rJv/jfdT+JldxR0kKtXQLOI5wXQYSQRWJnqwExwWjTA=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libgravatar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides a Python 3 interface for the Gravatar API";
     homepage = "https://github.com/pabluk/libgravatar";
     changelog = "https://github.com/pabluk/libgravatar/releases/tag/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

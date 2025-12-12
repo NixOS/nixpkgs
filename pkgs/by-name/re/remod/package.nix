@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "samuela";
     repo = "remod";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7tLxvh/pLlt3Y+PkNF0s5f/wh/wGdeDtt0dc4eQqWlw=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/samuela/remod/releases/tag/v${finalAttrs.version}";
-    description = "chmod for human beings!";
+    description = "chmod for human beings";
     homepage = "https://github.com/samuela/remod";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

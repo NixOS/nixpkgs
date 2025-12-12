@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maccy";
-  version = "0.31.0";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
-    hash = "sha256-vjfFtlX0b3howUc2bTR/pqXwnzjXpK6qPR8+81sANTs=";
+    hash = "sha256-pwMiCAS+1uEtEQv2e1UflxYuuh/qqYJbMcp2ZVvZBTA=";
   };
 
   dontUnpack = true;
@@ -27,12 +27,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple clipboard manager for macOS";
     homepage = "https://maccy.app";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [
+      emilytrau
+      baongoc124
+    ];
+    platforms = lib.platforms.darwin;
   };
 })

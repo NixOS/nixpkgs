@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "olofk";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TCMzvRWd2Fx2/7UtUGOwblLhRyTAqPp9s70Oyc3U3r0=";
+    repo = "edalize";
+    tag = "v${version}";
+    hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
   };
 
   postPatch = ''
@@ -52,7 +52,8 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "edalize" ];
 
@@ -98,12 +99,12 @@ buildPythonPackage rec {
     "tests/test_xsim.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Abstraction library for interfacing EDA tools";
     mainProgram = "el_docker";
     homepage = "https://github.com/olofk/edalize";
-    changelog = "https://github.com/olofk/edalize/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ astro ];
+    changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ astro ];
   };
 }

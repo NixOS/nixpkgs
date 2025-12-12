@@ -1,11 +1,12 @@
 {
-  fetchurl,
   lib,
+  stdenvNoCC,
+  fetchurl,
   makeWrapper,
   patchelf,
-  stdenv,
-
-  # Linked dynamic libraries.
+  bintools,
+  dpkg,
+  # Linked dynamic libraries
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -45,21 +46,16 @@
   pipewire,
   vulkan-loader,
   wayland, # ozone/wayland
-
   # Command line programs
   coreutils,
-
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
-
   # Will crash without.
   systemd,
-
   # Loaded at runtime.
   libexif,
   pciutils,
-
-  # Additional dependencies according to other distros.
+  # Additional dependencies according to other distros
   ## Ubuntu
   curl,
   liberation_ttf,
@@ -77,102 +73,100 @@
   ## Gentoo
   bzip2,
   libcap,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
-
   adwaita-icon-theme,
   gsettings-desktop-schemas,
-
   # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
   libva,
   libvaSupport ? true,
-
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
-
+  # For QT support
+  qt6,
+  # Edge AAD sync
+  cacert,
+  libsecret,
   # Edge Specific
   libuuid,
 }:
-
 let
-
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-      libuuid
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
-      gtk3
-      gtk4
-    ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cacert
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libxkbcommon
+    libXrandr
+    libXrender
+    libXScrnSaver
+    libxshmfence
+    libXtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+    libsecret
+    libuuid
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals libvaSupport [ libva ];
 in
-
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "131.0.2903.112";
+  version = "143.0.3650.66";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-4qQNcoBXOS4Uz+MR4jItOgcnMKqB6J541cvrb5md/oc=";
+    hash = "sha256-Oak7r7ykODJsqzdb+cEmzkUrcezTUe+Xl9oo1lUrq6w=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -182,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     patchelf
+    dpkg
   ];
 
   buildInputs = [
@@ -194,13 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    ar x $src
-    tar xf data.tar.xz
-    runHook postUnpack
-  '';
-
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binpath = lib.makeBinPath deps;
 
@@ -212,9 +200,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     exe=$out/bin/microsoft-edge
 
-    mkdir -p $out/bin $out/share
-    cp -v -a opt/* $out/share
-    cp -v -a usr/share/* $out/share
+    mkdir -p $out/bin
+    cp -v -a usr/share $out/share
+    cp -v -a opt/microsoft $out/share/microsoft
 
     # replace bundled vulkan-loader
     rm -v $out/share/microsoft/$appname/libvulkan.so.1
@@ -224,11 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/microsoft-edge.desktop \
       --replace-fail /usr/bin/microsoft-edge-$dist $exe
+    substituteInPlace $out/share/applications/com.microsoft.Edge.desktop \
+      --replace-fail /usr/bin/microsoft-edge-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
       --replace-fail /opt/microsoft/msedge $exe
-    substituteInPlace $out/share/menu/microsoft-edge.menu \
-      --replace-fail /opt $out/share \
-      --replace-fail $out/share/microsoft/$appname/microsoft-edge $exe
 
     for icon_file in $out/share/microsoft/msedge/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
@@ -245,12 +232,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
     makeWrapper "$out/share/microsoft/$appname/microsoft-edge" "$exe" \
+      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+      --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -262,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
     runHook postInstall
@@ -277,9 +268,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "microsoft-edge";
     maintainers = with lib.maintainers; [
-      zanculmarktum
-      kuwii
-      rhysmdnz
+      cholli
+      ulrikstrid
+      maeve-oake
+      leleuvilela
+      bricklou
+      jonhermansen
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

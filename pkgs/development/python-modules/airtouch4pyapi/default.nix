@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "LonePurpleWolf";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "airtouch4pyapi";
+    tag = "v${version}";
     hash = "sha256-RiRwebumidn0nijL/e9J74ZYx0DASi1up5BTNxYoGEA=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airtouch4pyapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Airtouch 4 controllers";
     homepage = "https://github.com/LonePurpleWolf/airtouch4pyapi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

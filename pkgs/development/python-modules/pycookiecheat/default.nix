@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
@@ -61,14 +61,15 @@ buildPythonPackage rec {
     "test_load_firefox_cookie_db"
     "test_no_cookies"
     "test_warns_for_string_browser"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_slack_config" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_slack_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
     homepage = "https://github.com/n8henrie/pycookiecheat";
     changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       n8henrie
     ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter-sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o/i3WravKZPf7uw2H4SVYfAyaZGf19ZJlkmeHCWcGtE=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
-    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
   };
 }

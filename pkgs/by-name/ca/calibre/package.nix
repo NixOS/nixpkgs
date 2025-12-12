@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  espeak-ng,
   fetchpatch,
   ffmpeg,
   fontconfig,
@@ -17,11 +18,13 @@
   libuchardet,
   libusb1,
   libwebp,
+  nix-update-script,
+  onnxruntime,
   optipng,
   piper-tts,
   pkg-config,
-  podofo,
-  poppler_utils,
+  podofo_0_10,
+  poppler-utils,
   python3Packages,
   qt6,
   speechd-minimal,
@@ -35,26 +38,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.22.0";
+  version = "8.14.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RmCte6tok0F/ts5cacAFBksNYfnLylY4JCmTyb+6IUk=";
+    hash = "sha256-97kkjzjbrdmiWpNaz9nSt6BbgVvczsxunLrKVJvqxVQ=";
   };
 
-  patches = [
-    #  allow for plugin update check, but no calibre version check
-    (fetchpatch {
-      name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
-      hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
-    })
-    (fetchpatch {
-      name = "0007-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-9hi4T9LB7aklWASMR8hIuKBgZm2arDvORfmk9S8wgCA=";
-    })
-  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  patches =
+    let
+      debian-source = "ds+_0.10.5-1";
+    in
+    [
+      #  allow for plugin update check, but no calibre version check
+      (fetchpatch {
+        name = "0001-only-plugin-update.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+      })
+      (fetchpatch {
+        name = "0007-Hardening-Qt-code.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
+      })
+    ]
+    ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -66,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseQmakeConfigure = true;
   dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
 
   nativeBuildInputs = [
     cmake
@@ -76,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    espeak-ng
     ffmpeg
     fontconfig
     hunspell
@@ -88,9 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
-    piper-tts
-    podofo
-    poppler_utils
+    onnxruntime
+    podofo_0_10
+    poppler-utils
     qt6.qtbase
     qt6.qtwayland
     sqlite
@@ -104,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
         beautifulsoup4
         css-parser
         cssselect
+        fonttools
         python-dateutil
         dnspython
         faust-cchardet
@@ -131,31 +142,31 @@ stdenv.mkDerivation (finalAttrs: {
         # the following are distributed with calibre, but we use upstream instead
         odfpy
       ]
-      ++
-        lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms)
-          [
-            # much of calibre's functionality is usable without a web
-            # browser, so we enable building on platforms which qtwebengine
-            # does not support by simply omitting qtwebengine.
-            pyqt6-webengine
-          ]
+      ++ lib.optionals (lib.lists.elem stdenv.hostPlatform.system pyqt6-webengine.meta.platforms) [
+        # much of calibre's functionality is usable without a web
+        # browser, so we enable building on platforms which qtwebengine
+        # does not support by simply omitting qtwebengine.
+        pyqt6-webengine
+      ]
       ++ lib.optional unrarSupport unrardll
     ))
+    piper-tts
     xdg-utils
-  ] ++ lib.optional speechSupport speechd-minimal;
+  ]
+  ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo_0_10}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
     export PIPER_TTS_DIR=${piper-tts}/bin
@@ -186,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+      popplerArgs = "--prefix PATH : ${poppler-utils.out}/bin";
     in
     ''
       for program in $out/bin/*; do
@@ -206,26 +217,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckInputs = with python3Packages; [
-    fonttools
     psutil
   ];
-  installCheckPhase = ''
-    runHook preInstallCheck
+  installCheckPhase =
+    let
+      excludedTestNames = [
+        "test_7z" # we don't include 7z support
+        "test_zstd" # we don't include zstd support
+        "test_qt" # we don't include svg or webp support
+        "test_import_of_all_python_modules" # explores actual file paths, gets confused
+        "test_websocket_basic" # flaky
 
-    ETN='--exclude-test-name'
-    EXCLUDED_FLAGS=(
-      $ETN 'test_7z'  # we don't include 7z support
-      $ETN 'test_zstd'  # we don't include zstd support
-      $ETN 'test_qt'  # we don't include svg or webp support
-      $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
-      $ETN 'test_websocket_basic'  # flakey
-      ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
-    )
+        # hangs with cuda enabled, also:
+        # eglInitialize: Failed to get system egl display
+        # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+        "test_recipe_browser_webengine"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+        # https://github.com/microsoft/onnxruntime/issues/10038
+        "test_piper"
 
-    python setup.py test ''${EXCLUDED_FLAGS[@]}
+        # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+        #  what():  /build/source/include/onnxruntime/core/common/logging/logging.h:371
+        # static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
+        # Attempt to use DefaultLogger but none has been registered.
+        "test_plugins"
+      ]
+      ++ lib.optionals (!unrarSupport) [
+        "test_unrar"
+      ];
 
-    runHook postInstallCheck
-  '';
+      testFlags = lib.concatStringsSep " " (
+        lib.map (testName: "--exclude-test-name ${testName}") excludedTestNames
+      );
+    in
+    ''
+      runHook preInstallCheck
+
+      python setup.py test ${testFlags}
+
+      runHook postInstallCheck
+    '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
+  };
 
   meta = {
     homepage = "https://calibre-ebook.com";

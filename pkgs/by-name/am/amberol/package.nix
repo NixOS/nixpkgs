@@ -18,24 +18,25 @@
   gst_all_1,
   libadwaita,
   dbus,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "amberol";
-  version = "2024.2";
+  version = "2025.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "amberol";
-    rev = version;
-    hash = "sha256-FK0TJFjknEFraY8T+PQ/ABiid36kEYIEhekgyx0y3aI=";
+    tag = version;
+    hash = "sha256-vF6O7+cQFoYpO4MHHHuacwjP7AUqFQCVUivCSZO7v3o=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "amberol-${version}";
-    hash = "sha256-9YRd1iOh+l+Jy8eSwJP6pxonEofBkMpFqb+JAAFDbCA=";
+    hash = "sha256-j/xkdLcmu02e+b8skx5U3uG2R2rIxwSJsYzyJ5tn5uU=";
   };
 
   postPatch = ''
@@ -56,26 +57,30 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    dbus
+    glib
+    gtk4
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ linsui ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "amberol";

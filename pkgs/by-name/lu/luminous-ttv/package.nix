@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "luminous-ttv";
-  version = "0.5.7";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "AlyoshaVasilieva";
     repo = "luminous-ttv";
     rev = "v${version}";
-    hash = "sha256-uaq5uiSp4lci27BxtqjdtUeiJvXhWo25lfFE+dQys6Y=";
+    hash = "sha256-DlKoRP9ibJMrpX8YBWThYZdaVGCUsV4D+Gqme0J0cFg=";
   };
 
-  cargoHash = "sha256-jbtHxarRQ8gpCBc/HZWSnkzMrlMMltpknUBV1SGVq/I=";
+  cargoHash = "sha256-I3oZiAxhsFCxOTztegK6jjH/sJ4eJZNNFAoJfg/DALw=";
 
   meta = {
     description = "Rust server to retrieve and relay a playlist for Twitch livestreams/VODs";

@@ -136,7 +136,7 @@ in
         '';
         description = ''
           Contents of the runtime configuration file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };
@@ -168,7 +168,7 @@ in
         '';
         description = ''
           Contents of the database initialization config file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };
@@ -207,7 +207,7 @@ in
         configFile = settingsFormat.generate "config.yaml" cfg.settings;
         stepsFile = settingsFormat.generate "steps.yaml" cfg.steps;
 
-        args = lib.cli.toGNUCommandLineShell { } {
+        args = lib.cli.toCommandLineShellGNU { } {
           config = cfg.extraSettingsPaths ++ [ configFile ];
           steps = cfg.extraStepsPaths ++ [ stepsFile ];
           masterkeyFile = cfg.masterKeyFile;

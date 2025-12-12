@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "zimfw";
-  version = "1.16.0";
+  version = "1.18.0";
   src = fetchFromGitHub {
     owner = "zimfw";
     repo = "zimfw";
-    rev = "v${version}";
+    tag = "v${version}";
     ## zim only needs this one file to be installed.
     sparseCheckout = [ "zimfw.zsh" ];
-    hash = "sha256-kAy7wT7K1x9di1RRcXHk5e0johdDWtSzDD85chSkNZ0=";
+    hash = "sha256-qQViaQOpLp8F4zvJETbNp0lxpdVhM1Meg7WcMKkjJRQ=";
   };
   strictDeps = true;
   dontConfigure = true;
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "The Zsh configuration framework with blazing speed and modular extensions";
+  meta = {
+    description = "Zsh configuration framework with blazing speed and modular extensions";
     homepage = "https://zimfw.sh";
-    license = licenses.mit;
-    maintainers = [ maintainers.joedevivo ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.joedevivo ];
+    platforms = lib.platforms.all;
   };
 }

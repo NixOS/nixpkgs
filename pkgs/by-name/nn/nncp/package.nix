@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.11.0";
+  version = "8.13.0";
   outputs = [
     "out"
     "doc"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7EEUvNkYSqh4HzjbqjqgQlXfu6nDU2v3WWnma8M0r/I=";
+    hash = "sha256-jONoDpgAUZjYl14DF2CzqbM75tLWGETHmfd4yiM9BfQ=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ./bin/build
+    ./build
     runHook postBuild
   '';
 
@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
       transmission exists.
     '';
     maintainers = with lib.maintainers; [
-      ehmry
       woffs
     ];
     platforms = lib.platforms.all;

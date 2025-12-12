@@ -12,17 +12,18 @@
   pytestCheckHook,
   rich,
   setuptools,
+  stdenv,
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "mkdocs-plugins";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qizF1Y3BUyr0ekoATJVa62q7gvpbMW3fIKViov2tFTI=";
+    tag = "v${version}";
+    hash = "sha256-l5jJCmsBns1bGv+yBA0R6TDlfQuweFr92kNnQalWB7k=";
   };
 
   buildInputs = [ hatchling ];
@@ -48,12 +49,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neoteroi.mkdocs" ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests start a server using a hardcoded port, and since
+    # multiple Python versions are always built simultaneously, this
+    # failure is quite likely to occur.
+    "tests/test_http.py"
+  ];
+
+  meta = {
     homepage = "https://github.com/Neoteroi/mkdocs-plugins";
     description = "Plugins for MkDocs";
-    changelog = "https://github.com/Neoteroi/mkdocs-plugins/releases/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Neoteroi/mkdocs-plugins/releases/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];

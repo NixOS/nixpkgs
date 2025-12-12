@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "manrope";
   version = "4.505";
 
   src = fetchFromGitHub {
     owner = "sharanda";
-    repo = pname;
+    repo = "manrope";
     rev = "d79b66b10608610692d59f4107791d249d244416"; # no tags in repo
     hash = "sha256-dxnCOkPUEG0knSekolx2+SGJR81vRK0wUrbzGH4KGD0=";
   };
@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source modern sans-serif font family";
     homepage = "https://www.gent.media/manrope";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

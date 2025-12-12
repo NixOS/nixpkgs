@@ -32,18 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
-        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
-        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
+  postPatch = ''
+    substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
+      --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
+      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
 
-      substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
-        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/{client,script}/*.py
-    '';
+    substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
+      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/{client,script}/*.py
+  '';
 
   strictDeps = true;
 
@@ -92,16 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt5 renderer for Ayatana Indicators";
     longDescription = ''
       QMenuModel - a Qt/QML binding for GMenuModel
       (see http://developer.gnome.org/gio/unstable/GMenuModel.html)
     '';
     homepage = "https://github.com/AyatanaIndicators/qmenumodel";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "qmenumodel"
     ];

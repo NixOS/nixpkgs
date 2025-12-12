@@ -3,36 +3,34 @@
   python3Packages,
   fetchFromGitHub,
   ffmpeg,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-rc.6";
+  version = "2.1.1";
   pyproject = true;
 
-  disabled = python3Packages.pythonOlder "3.9";
   pythonRelaxDeps = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-h7ziP3+qHUFs16MuUaUPZ7qspIFCIzExDyUEo12DJIE=";
+    tag = "v${version}";
+    hash = "sha256-zolH3mf9YQLZLK98hhbHqUdDLRDodS/fChyfZ/xzVew=";
   };
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
     with python3Packages;
     [
-      httpx
       aiofiles
       biliass
       dict2xml
-      colorama
+      httpx
       typing-extensions
       pydantic
+      returns
     ]
     ++ (with httpx.optional-dependencies; http2 ++ socks);
 
@@ -40,20 +38,17 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg ]})
   '';
 
+  postPatch = ''
+    sed -ie 's/requires = \["uv_build[^"]*"]/requires = ["uv_build"]/' pyproject.toml
+  '';
+
   pythonImportsCheck = [ "yutto" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-    ];
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Bilibili downloader";
     homepage = "https://github.com/yutto-dev/yutto";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "yutto";
   };
 }

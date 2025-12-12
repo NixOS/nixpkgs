@@ -55,6 +55,8 @@ in
 callPackage' ./hadrian.nix (
   {
     inherit userSettings;
+    # Taking `ghc` as an input may be too confusing
+    bootGhcVersion = bootPkgs.ghc.version;
   }
   // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
     # Starting with GHC 9.9 development, additional in tree packages are required
@@ -64,6 +66,6 @@ callPackage' ./hadrian.nix (
   }
   // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
     # See https://gitlab.haskell.org/ghc/ghc/-/commit/145a6477854d4003a07573d5e7ffa0c9a64ae29c
-    Cabal = bootPkgs.Cabal_3_14_0_0;
+    Cabal = bootPkgs.Cabal_3_14_2_0;
   }
 )

@@ -19,9 +19,9 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
+    owner = "powerline";
+    repo = "powerline";
+    tag = version;
     hash = "sha256-snJrfUvP11lBIy6F0WtqJt9fiYm5jxMwm9u3u5XFO84=";
   };
 
@@ -31,7 +31,8 @@ buildPythonPackage rec {
     python-hglib
     pygit2
     pyuv
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ i3ipc ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ i3ipc ];
 
   # tests are travis-specific
   doCheck = false;

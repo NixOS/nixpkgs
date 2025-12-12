@@ -17,7 +17,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "github";
-    repo = pname;
+    repo = "hub";
     rev = "38bcd4ae469e5f53f01901340b715c7658ab417a";
     hash = "sha256-V2GvwKj0m2UXxE42G23OHXyAsTrVRNw1p5CAaJxGYog=";
   };
@@ -73,10 +73,10 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) hub; };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line wrapper for git that makes you better at GitHub";
     homepage = "https://hub.github.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

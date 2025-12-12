@@ -12,7 +12,7 @@
   gitSupport ? false,
   git,
   docutilsSupport ? false,
-  python,
+  python3,
   docutils,
   monotoneSupport ? false,
   monotone,
@@ -38,49 +38,48 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs =
-    [
-      which
-      highlight
-    ]
-    ++ (with perlPackages; [
-      perl
-      TextMarkdown
-      URI
-      HTMLParser
-      HTMLScrubber
-      HTMLTemplate
-      TimeDate
-      gettext
-      DBFile
-      CGISession
-      CGIFormBuilder
-      LocaleGettext
-      RpcXML
-      XMLSimple
-      ImageMagick
-      YAML
-      YAMLLibYAML
-      HTMLTree
-      AuthenPassphrase
-      NetOpenIDConsumer
-      LWPxParanoidAgent
-      CryptSSLeay
-    ])
-    ++ lib.optionals docutilsSupport [
-      (python.withPackages (pp: with pp; [ pygments ]))
-      docutils
-    ]
-    ++ lib.optionals gitSupport [ git ]
-    ++ lib.optionals monotoneSupport [ monotone ]
-    ++ lib.optionals bazaarSupport [ breezy ]
-    ++ lib.optionals cvsSupport [
-      cvs
-      cvsps
-      perlPackages.Filechdir
-    ]
-    ++ lib.optionals subversionSupport [ subversion ]
-    ++ lib.optionals mercurialSupport [ mercurial ];
+  buildInputs = [
+    which
+    highlight
+  ]
+  ++ (with perlPackages; [
+    perl
+    TextMarkdown
+    URI
+    HTMLParser
+    HTMLScrubber
+    HTMLTemplate
+    TimeDate
+    gettext
+    DBFile
+    CGISession
+    CGIFormBuilder
+    LocaleGettext
+    RpcXML
+    XMLSimple
+    ImageMagick
+    YAML
+    YAMLLibYAML
+    HTMLTree
+    AuthenPassphrase
+    NetOpenIDConsumer
+    LWPxParanoidAgent
+    CryptSSLeay
+  ])
+  ++ lib.optionals docutilsSupport [
+    (python3.withPackages (pp: with pp; [ pygments ]))
+    docutils
+  ]
+  ++ lib.optionals gitSupport [ git ]
+  ++ lib.optionals monotoneSupport [ monotone ]
+  ++ lib.optionals bazaarSupport [ breezy ]
+  ++ lib.optionals cvsSupport [
+    cvs
+    cvsps
+    perlPackages.Filechdir
+  ]
+  ++ lib.optionals subversionSupport [ subversion ]
+  ++ lib.optionals mercurialSupport [ mercurial ];
 
   patches = [
     # A few markdown tests fail, but this is expected when using Text::Markdown
@@ -136,11 +135,11 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wentasah ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wentasah ];
   };
 }

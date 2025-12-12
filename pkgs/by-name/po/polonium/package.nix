@@ -16,7 +16,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
-    repo = pname;
+    repo = "polonium";
     rev = "v" + version;
     hash = "sha256-AdMeIUI7ZdctpG/kblGdk1DBy31nDyolPVcTvLEHnNs=";
   };
@@ -46,10 +46,10 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       peterhoeg
       kotatsuyaki
       HeitorAugustoLN

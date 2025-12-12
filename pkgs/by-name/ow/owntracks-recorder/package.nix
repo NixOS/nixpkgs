@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";
-  version = "0.9.9";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
     rev = finalAttrs.version;
-    hash = "sha256-6oCWzTiQgpp75xojd2ZFsrg+Kd5/gex1BPQVOWHfMuk=";
+    hash = "sha256-/nLt8R8s3k6MQhtMXOLUDluuU7eNwZGYh5/km8tXtiE=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace config.mk \
       --replace "INSTALLDIR = /usr/local" "INSTALLDIR = $out" \
+      --replace "DOCROOT = /var/spool/owntracks/recorder/htdocs" "DOCROOT = $out/htdocs" \
       --replace "WITH_LUA ?= no" "WITH_LUA ?= yes" \
       --replace "WITH_ENCRYPT ?= no" "WITH_ENCRYPT ?= yes"
 
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 0755 ot-recorder $out/bin
     install -m 0755 ocat $out/bin
 
+    cp -r docroot $out/htdocs
+
     runHook postInstall
   '';
 
@@ -71,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = finalAttrs.version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Store and access data published by OwnTracks apps";
     homepage = "https://github.com/owntracks/recorder";
     changelog = "https://github.com/owntracks/recorder/blob/master/Changelog";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "ot-recorder";
   };
 })

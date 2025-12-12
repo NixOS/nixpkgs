@@ -6,20 +6,23 @@
   testers,
   nix-update-script,
   nb,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.15.0";
+  version = "7.23.2";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    hash = "sha256-dZl/WYmm+UTPYuvVf+7zvU7ms5x/cwnC56y+PIRx3Hc=";
+    hash = "sha256-JwbIETH2D/qYZTNUemsYSmcCjV/7kXKUK9JKnuBBe/0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ bashInteractive ];
 
   dontBuild = true;
 
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line note-taking, bookmarking, archiving, and knowledge base application";
     longDescription = ''
       `nb` creates notes in text-based formats like Markdown, Emacs Org mode,
@@ -77,9 +80,9 @@ stdenv.mkDerivation rec {
       of features. `nb` is flexible.
     '';
     homepage = "https://xwmx.github.io/nb/";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.toonn ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.toonn ];
+    platforms = lib.platforms.all;
     mainProgram = "nb";
   };
 }

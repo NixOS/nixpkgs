@@ -1,43 +1,57 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  shen-sources,
+  stdenvNoCC,
+  fetchzip,
   sbcl,
+  installStandardLibrary ? true,
 }:
-
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "3.0.3";
+  version = "39.2";
 
-  src = fetchurl {
-    url = "https://github.com/Shen-Language/shen-cl/releases/download/v${version}/shen-cl-v${version}-sources.tar.gz";
-    sha256 = "0mc10jlrxqi337m6ngwbr547zi4qgk69g1flz5dsddjy5x41j0yz";
+  src = fetchzip {
+    url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
+    hash = "sha256-V6op0G4aEdKifP6L0ho6cy1FPNax+0aE5ltWxT7Xniw=";
   };
 
   nativeBuildInputs = [ sbcl ];
+  dontStrip = true; # necessary to prevent runtime errors with sbcl
 
-  preBuild = ''
-    ln -s ${shen-sources} kernel
+  buildPhase = ''
+    runHook preBuild
+
+    sbcl --noinform --no-sysinit --no-userinit --load install.lsp
+
+    runHook postBuild
   '';
-
-  buildFlags = [ "build-sbcl" ];
-
-  checkTarget = "test-sbcl";
-
-  doCheck = true;
 
   installPhase = ''
-    install -m755 -D bin/sbcl/shen $out/bin/shen-sbcl
+    runHook preInstall
+
+    install -Dm755 sbcl-shen.exe $out/bin/shen-sbcl
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  postPatch = ''
+    # allow SBCL to define *release* global
+    substituteInPlace Primitives/globals.lsp \
+      --replace-fail '"2.0.0"' '(LISP-IMPLEMENTATION-VERSION)'
+
+    # remove interactive prompt during image creation
+    substituteInPlace install.lsp \
+      --replace-fail '(Y-OR-N-P "Load Shen Library? ")' '${
+        if installStandardLibrary then "T" else "NIL"
+      }'
+  '';
+
+  meta = {
     homepage = "https://shenlanguage.org";
     description = "Port of Shen running on Steel Bank Common Lisp";
-    changelog = "https://github.com/Shen-Language/shen-cl/raw/v${version}/CHANGELOG.md";
+    changelog = "https://shenlanguage.org/download.html#kernel";
     platforms = sbcl.meta.platforms;
-    maintainers = with maintainers; [ bsima ];
-    broken = true;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ hakujin ];
+    license = lib.licenses.bsd3;
+    mainProgram = "shen-sbcl";
   };
-}
+})

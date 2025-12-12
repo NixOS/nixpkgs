@@ -9,8 +9,6 @@
   qt6Packages,
   febio,
   glew,
-  apple-sdk_11,
-  darwinMinVersionHook,
   fetchpatch,
   sshSupport ? true,
   openssl,
@@ -45,14 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags =
-    [ (lib.cmakeFeature "Qt_Root" "${qt6Packages.qtbase}") ]
-    ++ lib.optional sshSupport "-DUSE_SSH=On"
-    ++ lib.optional tetgenSupport "-DUSE_TETGEN=On"
-    ++ lib.optional ffmpegSupport "-DUSE_FFMPEG=On"
-    ++ lib.optional dicomSupport "-DUSE_DICOM=On"
-    ++ lib.optional withModelRepo "-DMODEL_REPO=On"
-    ++ lib.optional withCadFeatures "-DCAD_FEATURES=On";
+  cmakeFlags = [
+    (lib.cmakeFeature "Qt_Root" "${qt6Packages.qtbase}")
+  ]
+  ++ lib.optional sshSupport "-DUSE_SSH=On"
+  ++ lib.optional tetgenSupport "-DUSE_TETGEN=On"
+  ++ lib.optional ffmpegSupport "-DUSE_FFMPEG=On"
+  ++ lib.optional dicomSupport "-DUSE_DICOM=On"
+  ++ lib.optional withModelRepo "-DMODEL_REPO=On"
+  ++ lib.optional withCadFeatures "-DCAD_FEATURES=On";
 
   nativeBuildInputs = [
     cmake
@@ -60,25 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      zlib
-      libGLU
-      glew
-      qt6Packages.qtbase
-      febio
-    ]
-    ++ lib.optionals sshSupport [
-      openssl
-      libssh
-    ]
-    ++ lib.optional tetgenSupport tetgen
-    ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optional dicomSupport dcmtk
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.15")
-    ];
+  buildInputs = [
+    zlib
+    libGLU
+    glew
+    qt6Packages.qtbase
+    febio
+  ]
+  ++ lib.optionals sshSupport [
+    openssl
+    libssh
+  ]
+  ++ lib.optional tetgenSupport tetgen
+  ++ lib.optional ffmpegSupport ffmpeg
+  ++ lib.optional dicomSupport dcmtk;
 
   meta = {
     description = "FEBio Suite Solver";

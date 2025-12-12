@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "2.8";
+  version = "2.10";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kNPobWr12VXDGZk8g1LPPpPHoMkZ7Ysq1VGnQrh+iJs=";
+    hash = "sha256-jAz5X/yp8b90CYg2GN7uZqzXPGOSkiLiNDV4DcxRaGk=";
   };
 
   propagatedBuildInputs = [
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iterm2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to iTerm2's scripting API";
     homepage = "https://github.com/gnachman/iTerm2";
-    license = licenses.gpl2;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ jeremyschlatter ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 }

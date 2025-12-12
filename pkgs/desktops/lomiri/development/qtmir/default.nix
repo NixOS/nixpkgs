@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   testers,
   cmake,
   cmake-extras,
@@ -37,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Not regular qtmir, experimental support for Mir 2.x
   # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/sunweaver/debian-upstream
   pname = "qtmir-debian-upstream";
-  version = "0.8.0-unstable-2024-03-06";
+  version = "0.8.0-unstable-2025-05-20";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qtmir";
-    rev = "de639c3a482ac6c59b9be02abb839a8c96158041";
-    hash = "sha256-AKSzkGl6bAoR4I2lolNRUp67VS/PiZnrPpCYtTlKWKc=";
+    rev = "b35762f5198873560138a810b387ae9401615c02";
+    hash = "sha256-v5mdu3XLK4F5O56GDItyeCFsFMey4JaNWwXRlgjKFMA=";
   };
 
   outputs = [
@@ -51,38 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [
-    # Mir 2.15 compatibility patch
-    # Remove when https://gitlab.com/ubports/development/core/qtmir/-/merge_requests/70 merged into branch
-    (fetchpatch {
-      name = "0001-qtmir-Update-for-Mir-2.15-removals.patch";
-      url = "https://gitlab.com/ubports/development/core/qtmir/-/commit/ead5cacd4d69094ab956627f4dd94ecaff1fd69e.patch";
-      hash = "sha256-hUUUnYwhNH3gm76J21M8gA5okaRd/Go03ZFJ4qn0JUo=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/qtmir/-/merge_requests/72 merged in branch
-    (fetchpatch {
-      name = "0002-qtmir-Add-more-better-GNUInstallDirs-variables-usage.patch";
-      url = "https://gitlab.com/ubports/development/core/qtmir/-/commit/87e2cd31052ce15e9625c1327807a320ee5d12af.patch";
-      hash = "sha256-MTE9tHw+xJhraEO1up7dLg0UIcmfHXgWOeuyYrVu2wc=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/qtmir/-/merge_requests/73 merged in branch
-    (fetchpatch {
-      name = "0003-qtmir-CMakeLists-Only-require-test-dependencies-when-building-tests.patch";
-      url = "https://gitlab.com/ubports/development/core/qtmir/-/commit/b7144e67bcbb4cfbd2283d5d05146fb22b7d8cd4.patch";
-      hash = "sha256-Afbj40MopztchDnk6fphTYk86YrQkiK8L1e/oXiL1Mw=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/qtmir/-/merge_requests/74 merged in branch
-    (fetchpatch {
-      name = "0004-qtmir-CMakeLists-Drop-call-of-Qt-internal-macro.patch";
-      url = "https://gitlab.com/ubports/development/core/qtmir/-/commit/8f9c599a4dbc4cf35e289157fd0c82df55b9f8d9.patch";
-      hash = "sha256-SMAErXnlMtVleWRPgO4xuUI7gAAy6W18LxtgXgetRA4=";
-    })
-  ];
-
   postPatch = ''
+    # 10s timeout for Mir startup is too tight for VM tests on weaker hardwre (aarch64)
+    substituteInPlace src/platforms/mirserver/qmirserver_p.cpp \
+      --replace-fail 'const int timeout = RUNNING_ON_VALGRIND ? 100 : 10' 'const int timeout = RUNNING_ON_VALGRIND ? 900 : 90' \
+      --replace-fail 'const int timeout = 10' 'const int timeout = 90'
+
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
       --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/plugins/platforms" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtPluginPrefix}/platforms" \
@@ -149,12 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "QPA plugin to make Qt a Mir server";
     homepage = "https://gitlab.com/ubports/development/core/qtmir";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [ "qtmirserver" ];
   };
 })

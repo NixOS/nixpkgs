@@ -5,12 +5,12 @@
   bash,
   makeWrapper,
   pciutils,
-  x11Support ? true,
+  x11Support ? stdenvNoCC.hostPlatform.isLinux,
   ueberzug,
   fetchpatch,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "neofetch";
   version = "unstable-2021-12-10";
 
@@ -55,7 +55,11 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/neofetch \
-      --prefix PATH : ${lib.makeBinPath ([ pciutils ] ++ lib.optional x11Support ueberzug)}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          lib.optional (!stdenvNoCC.hostPlatform.isOpenBSD) pciutils ++ lib.optional x11Support ueberzug
+        )
+      }
   '';
 
   makeFlags = [
@@ -63,12 +67,12 @@ stdenvNoCC.mkDerivation rec {
     "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, highly customizable system info script";
     homepage = "https://github.com/dylanaraps/neofetch";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ konimex ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ konimex ];
     mainProgram = "neofetch";
   };
 }

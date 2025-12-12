@@ -8,12 +8,12 @@ let
   version = "1.3.3";
   pname = "WiseUnpacker";
 in
-buildDotnetModule rec {
+buildDotnetModule {
   inherit version pname;
 
   src = fetchFromGitHub {
     owner = "mnadareski";
-    repo = pname;
+    repo = "WiseUnpacker";
     rev = version;
     hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
   };
@@ -32,10 +32,10 @@ buildDotnetModule rec {
 
   projectFile = "Test/Test.csproj";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
     description = "C# Wise installer unpacker based on HWUN and E_WISE ";
-    maintainers = [ maintainers.gigahawk ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.gigahawk ];
+    license = lib.licenses.mit;
   };
 }

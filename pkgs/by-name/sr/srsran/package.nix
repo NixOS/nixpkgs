@@ -14,6 +14,11 @@
   soapysdr-with-plugins,
   libbladeRF,
   zeromq,
+  enableLteRates ? false,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
+  enableFma ? stdenv.hostPlatform.fmaSupport,
+  enableAvx512 ? stdenv.hostPlatform.avx512Support,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +31,11 @@ stdenv.mkDerivation rec {
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "sha256-3cQMZ75I4cyHpik2d/eBuzw7M4OgbKqroCddycw4uW8=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -45,13 +55,24 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
-  cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_LTE_RATES" enableLteRates)
+    (lib.cmakeBool "ENABLE_AVX" enableAvx)
+    (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
+    (lib.cmakeBool "ENABLE_FMA" enableFma)
+    (lib.cmakeBool "ENABLE_AVX512" enableAvx512)
+  ];
 
-  meta = with lib; {
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    rm $out/lib/*.a
+  '';
+
+  meta = {
     homepage = "https://www.srslte.com/";
     description = "Open-source 4G and 5G software radio suite";
-    license = licenses.agpl3Plus;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ hexagonal-sun ];
+    license = lib.licenses.agpl3Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
 }

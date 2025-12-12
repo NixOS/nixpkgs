@@ -42,6 +42,7 @@ let
 
   lightdmConf = writeText "lightdm.conf" ''
     [LightDM]
+    minimum-vt = 1
     ${optionalString cfg.greeter.enable ''
       greeter-user = ${config.users.users.lightdm.name}
       greeters-directory = ${cfg.greeter.package}
@@ -71,8 +72,8 @@ let
 
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  meta = {
+    maintainers = [ ] ++ lib.teams.pantheon.members;
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -155,7 +156,7 @@ in
       };
 
       background = mkOption {
-        type = types.either types.path (types.strMatching "^#[0-9]\{6\}$");
+        type = types.either types.path (types.strMatching "^#[0-9A-Fa-f]{6}$");
         # Manual cannot depend on packages, we are actually setting the default in config below.
         defaultText = literalExpression "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
@@ -234,19 +235,11 @@ in
       exec ${lightdm}/sbin/lightdm
     '';
 
-    # Replaces getty
-    systemd.services.display-manager.conflicts = [
-      "getty@tty7.service"
-      # TODO: Add "plymouth-quit.service" so LightDM can control when plymouth
-      # quits. Currently this breaks switching to configurations with plymouth.
-    ];
-
     # Pull in dependencies of services we replace.
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty7.service"
       "user.slice"
     ];
 
@@ -289,6 +282,11 @@ in
       account   include       login
       password  substack      login
       session   include       login
+    ''
+    # https://github.com/elementary/switchboard-plug-parental-controls/blob/8.0.1/src/daemon/Server.vala#L325
+    # Must specify conffile since pam_time defaults to ${linux-pam}/etc/security/time.conf.
+    + lib.optionalString config.services.pantheon.parental-controls.enable ''
+      account   required      pam_time.so conffile=/etc/security/time.conf
     '';
 
     security.pam.services.lightdm-greeter.text = ''
@@ -336,7 +334,6 @@ in
     ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
-    services.xserver.tty = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }

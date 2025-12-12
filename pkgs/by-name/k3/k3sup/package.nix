@@ -1,24 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, bash
-, openssh
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  bash,
+  openssh,
 }:
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.13.7";
+  version = "0.13.11";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-B9Mo0+dqF15LuhCytMBax2gKjHl9mBkxLXCdb9f0Big=";
+    sha256 = "sha256-MLGgH9Tg3lcl/nDGlGgfvgjoxjXRux79Cz6Tig0kDM4=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   vendorHash = null;
 
@@ -30,7 +34,8 @@ buildGoModule rec {
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${version}"
     "-X github.com/alexellis/k3sup/cmd.Version=${version}"
   ];
@@ -45,11 +50,14 @@ buildGoModule rec {
       --fish <($out/bin/k3sup completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
     mainProgram = "k3sup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ welteki qjoly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      welteki
+      qjoly
+    ];
   };
 }

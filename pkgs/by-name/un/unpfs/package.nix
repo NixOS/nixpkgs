@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unpfs";
-  version = "unstable-2021-04-23";
+  version = "0-unstable-2021-04-23";
 
   src = fetchFromGitHub {
     owner = "pfpacket";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/example/unpfs";
 
-  cargoHash = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
+  cargoHash = "sha256-jRe1lgzfhzBUsS6wwwlqxxomap2TIDOyF3YBv20GJ14=";
 
   RUSTC_BOOTSTRAP = 1;
 
@@ -26,14 +26,14 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "9P2000.L server implementation in Rust";
     homepage = "https://github.com/pfpacket/rust-9p";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raskin ];
 
     # macOS build fails: https://github.com/pfpacket/rust-9p/issues/7
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "unpfs";
   };
 }

@@ -2,18 +2,19 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "prometheus-rasdaemon-exporter";
-  version = "unstable-2023-03-15";
+  version = "0-unstable-2025-01-02";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanecz";
     repo = "prometheus-rasdaemon-exporter";
-    rev = "e37084edeb4d397dd360298cb22f18f83a35ff46";
-    hash = "sha256-O0Zzog+5jDixFRGbqmjPYi6JDpHbxpU4hKfsqTnexS8=";
+    rev = "06cf02a4fa277fdc422275d9c4fe930786fc3f78";
+    hash = "sha256-QPbCwEpbG7gDPOSRcgu82QEqKkmW0uRhmSOWGgwVMDI=";
   };
 
   build-system = with python3Packages; [
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev9+ge37084e";
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev+g${lib.substring 0 7 src.rev}";
 
   dependencies = with python3Packages; [
     prometheus-client
@@ -32,6 +33,8 @@ python3Packages.buildPythonApplication {
   ];
 
   doCheck = false; # no tests
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Rasdaemon exporter for Prometheus";

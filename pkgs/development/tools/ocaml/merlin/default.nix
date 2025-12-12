@@ -3,7 +3,7 @@
   fetchurl,
   fetchpatch,
   buildDunePackage,
-  substituteAll,
+  replaceVars,
   dot-merlin-reader,
   dune_2,
   yojson,
@@ -24,9 +24,8 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02.3";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+    (replaceVars ./fix-paths.patch {
+      dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
     # https://github.com/ocaml/merlin/pull/1798
@@ -47,10 +46,10 @@ buildDunePackage rec {
     menhirSdk
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

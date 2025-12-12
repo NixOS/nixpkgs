@@ -1,20 +1,26 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
+  addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pifpaf";
-  version = "3.2.3";
-  format = "setuptools";
+  version = "3.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L039ZAFnYLCU52h1SczJU0T7+1gufxQlVzQr1EPCqc8=";
+    hash = "sha256-f9nPb483tuvNk82wDtuB6553z18qY/x0tgz1NbVGUWE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = with python3Packages; [
     click
     daiquiri
     fixtures
@@ -24,22 +30,23 @@ python3.pkgs.buildPythonApplication rec {
     xattr
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
-  nativeCheckInputs = with python3.pkgs; [
-    requests
-    testtools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      requests
+      testtools
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "pifpaf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of tools and fixtures to manage daemons for testing";
     mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

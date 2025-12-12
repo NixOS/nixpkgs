@@ -6,7 +6,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyspinel";
   version = "unstable-2021-08-19";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "openthread";
-    repo = pname;
+    repo = "pyspinel";
     rev = "50d104e29eacd92d229f0b7179ec1067f5851c17";
     sha256 = "0s2r00zb909cq3dd28i91qbl0nz8cga3g98z84gq5jqkjpiy8269";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spinel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to the OpenThread Network Co-Processor (NCP)";
     homepage = "https://github.com/openthread/pyspinel";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gebner ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

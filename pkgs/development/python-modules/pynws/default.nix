@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pynws";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = "pynws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eAXIlX/K7Cpq+aiPHiRGqhtSHQDtbHONYP0AjRW8JjY=";
+    tag = "v${version}";
+    hash = "sha256-OKq3IdBr/YDWsmyJLHNoffVp2Q0RV+rZU5rm1Ba0FoY=";
   };
 
   build-system = [
@@ -47,15 +47,16 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pynws" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to retrieve data from NWS/NOAA";
     homepage = "https://github.com/MatthewFlamm/pynws";
     changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

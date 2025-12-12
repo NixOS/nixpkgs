@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "MonkeyType";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DQ/3go53+0PQkhZcL2dX8MI/z4Iq7kTYd5EbacMNxT4=";
   };
 
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Instagram/MonkeyType/";
     changelog = "https://github.com/Instagram/MonkeyType/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

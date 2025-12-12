@@ -41,6 +41,10 @@ let
       with lib.versions;
       lib.switch coq.version [
         {
+          case = range "8.15" "9.0";
+          out = "3.16";
+        }
+        {
           case = range "8.14" "8.20";
           out = "3.15";
         }
@@ -68,6 +72,7 @@ let
       "3.13.1".sha256 = "sha256-ldXbuzVB0Z+UVTd5S4yGSg6oRYiKbXLMmUZcQsJLcns=";
       "3.14".sha256 = "sha256-QXJMpp/BaPiK5okHeo2rcmXENToXKjB51UqljMHTDgw=";
       "3.15".sha256 = "sha256-QFTueGZd0hAWUj+c5GZL/AyNpfN4FuJiIzCICmwRXJ8=";
+      "3.16".sha256 = "sha256-Ep8bcSFs3Cu+lV5qgo89JJU2vh4TTq66Or0c4evo3gM=";
     };
 
     strictDeps = true;
@@ -133,12 +138,12 @@ let
       "man"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Formally verified C compiler";
       homepage = "https://compcert.org";
-      license = licenses.inria-compcert;
+      license = lib.licenses.inria-compcert;
       platforms = builtins.attrNames targets;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         thoughtpolice
         jwiegley
         vbgl
@@ -277,6 +282,37 @@ let
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/20a5b48758bf8ac18e4c420df67017b371efc237.patch";
                 hash = "sha256-TJ87CvLiAv1absGnPsTXsD/HQwKgS82loUTcosulyso=";
+              })
+              # Support for Coq 8.20.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/e6c9a2d068ae67923bbc7c6b7035b6afde6ece3c.patch";
+                hash = "sha256-PtiEkG/aLRotIiqrmc6SQncQSi7IGSC5QX3e52xkOUQ=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (isEq "8.20")
+              (isEq "3.15")
+            ];
+            out = [
+              # Support for Coq 8.20.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/e524b0a19ae5140f64047b1cba6ebbe1d16d5bbf.patch";
+                hash = "sha256-24kt0hA75ooyXymH+kNS5VlsuXMHbkqTw4m+BzNUwrw=";
+              })
+            ];
+          }
+          {
+            cases = [
+              (isEq "9.0")
+              (isEq "3.16")
+            ];
+            out = [
+              # Support for Coq 9.0.1
+              (fetchpatch {
+                url = "https://github.com/AbsInt/CompCert/commit/a962ef9da0fb4ef2a4314ccedd111eb248e42cf2.patch";
+                hash = "sha256-ipYqcfcgz3cKyI1NGSgfOgiVdV1WUwlv6DVB1S1hJvw=";
               })
             ];
           }

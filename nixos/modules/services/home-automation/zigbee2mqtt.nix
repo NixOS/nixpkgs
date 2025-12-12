@@ -41,7 +41,7 @@ in
       default = { };
       example = lib.literalExpression ''
         {
-          homeassistant = config.services.home-assistant.enable;
+          homeassistant.enabled = config.services.home-assistant.enable;
           permit_join = true;
           serial = {
             port = "/dev/ttyACM1";
@@ -60,7 +60,7 @@ in
 
     # preset config values
     services.zigbee2mqtt.settings = {
-      homeassistant = lib.mkDefault config.services.home-assistant.enable;
+      homeassistant.enabled = lib.mkDefault config.services.home-assistant.enable;
       permit_join = lib.mkDefault false;
       mqtt = {
         base_topic = lib.mkDefault "zigbee2mqtt";
@@ -83,6 +83,8 @@ in
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
         WorkingDirectory = cfg.dataDir;
+        StateDirectory = "zigbee2mqtt";
+        StateDirectoryMode = "0700";
         Restart = "on-failure";
 
         # Hardening
@@ -112,6 +114,7 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -123,6 +126,7 @@ in
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         UMask = "0077";
       };

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
-    repo = pname;
-    rev = "v${version}";
+    repo = "stochas";
+    tag = "v${version}";
     hash = "sha256-Gp49cWvUkwz4xAq5sA1nUO+amRC39iWeUemQJyv6hTs=";
     fetchSubmodules = true;
   };
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     cp -r stochas_artefacts/Release/VST3/Stochas.vst3 $out/lib/vst3
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic polyrhythmic sequencer plugin";
     homepage = "https://stochas.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.unix;
   };
 }

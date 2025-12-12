@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   click,
-  colorama,
-  configparser,
   distro,
   fetchFromGitHub,
   gevent,
+  importlib-metadata,
   jinja2,
   packaging,
   paramiko,
@@ -14,7 +13,6 @@
   python-dateutil,
   pythonOlder,
   pywinrm,
-  pyyaml,
   setuptools,
   typeguard,
   typing-extensions,
@@ -22,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.1.1";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,16 +28,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fizzadar";
     repo = "pyinfra";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NHQpYOXlqFU4BtiwiESGV8pM0O8kqCz2TpXOGz8T4zQ=";
+    tag = "v${version}";
+    hash = "sha256-7bNkDm5SyIgVkrGQ95/q7AiY/JnxtWx+jkDO/rJQ2WQ=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    colorama
-    configparser
     distro
     gevent
     jinja2
@@ -47,10 +43,11 @@ buildPythonPackage rec {
     paramiko
     python-dateutil
     pywinrm
-    pyyaml
     setuptools
     typeguard
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -61,7 +58,7 @@ buildPythonPackage rec {
     "test_load_ssh_config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based infrastructure automation";
     longDescription = ''
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
@@ -69,9 +66,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://pyinfra.com";
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
-    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totoroot ];
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totoroot ];
     mainProgram = "pyinfra";
   };
 }

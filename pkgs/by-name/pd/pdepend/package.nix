@@ -2,21 +2,26 @@
   php,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "pdepend";
   version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "pdepend";
     repo = "pdepend";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-2Ruubcm9IWZYu2LGeGeKm1tmHca0P5xlKYkuBCCV9ag=";
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Rvvy6MI0q+T2W7xzf2UqWIbsqgrWhgqVnzhphQ3iw9g=";
+  vendorHash = "sha256-uK+nJFXDVPYFbosAUxqu+mmNsD7AnZ18NnIN9FYAaPQ=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/pdepend/pdepend/releases/tag/${finalAttrs.version}";
@@ -30,6 +35,6 @@ php.buildComposerProject (finalAttrs: {
       maintainability.
     ";
     mainProgram = "pdepend";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

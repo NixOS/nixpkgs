@@ -9,11 +9,12 @@
 buildPythonPackage rec {
   pname = "python-vxi11";
   version = "0.9";
+  format = "setuptools";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-ivi";
-    repo = pname;
+    repo = "python-vxi11";
     rev = "v${version}";
     sha256 = "1xv7chp7rm0vrvbz6q57fpwhlgjz461h08q9zgmkcl2l0w96hmsn";
   };
@@ -36,11 +37,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "VXI-11 driver for controlling instruments over Ethernet";
     mainProgram = "vxi11-cli";
     homepage = "https://github.com/python-ivi/python-vxi11";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bgamari ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bgamari ];
   };
 }

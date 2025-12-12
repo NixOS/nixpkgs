@@ -10,15 +10,19 @@
   python3Packages,
   libadwaita,
 }:
-python3Packages.buildPythonApplication rec {
+let
+
   pname = "nicotine-plus";
-  version = "3.3.6";
+  version = "3.3.10";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
   pyproject = true;
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
-    rev = "refs/tags/${version}";
-    hash = "sha256-je3hyxbF9wKW2gvHoDp712EJxBxooS2z0pQM57WDdOk=";
+    tag = version;
+    hash = "sha256-ic/+Us56UewMjD8vgmxxCisoId96Qtaq8/Ll+CCFR3Y=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
-  meta = with lib; {
+  meta = {
     description = "Graphical client for the SoulSeek peer-to-peer system";
     longDescription = ''
       Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
@@ -60,8 +64,8 @@ python3Packages.buildPythonApplication rec {
       keeping current with the Soulseek protocol.
     '';
     homepage = "https://www.nicotine-plus.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       klntsky
       amadaluzia
     ];

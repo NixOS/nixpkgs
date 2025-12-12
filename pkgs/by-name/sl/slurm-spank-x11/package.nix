@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hostlist.patch ];
 
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   buildPhase = ''
     gcc -DX11_LIBEXEC_PROG="\"$out/bin/slurm-spank-x11\"" \
         -g -o slurm-spank-x11 slurm-spank-x11.c
@@ -30,12 +33,12 @@ stdenv.mkDerivation rec {
     install -m 755 x11.so $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hautreux/slurm-spank-x11";
     description = "Plugin for SLURM to allow for interactive X11 sessions";
     mainProgram = "slurm-spank-x11";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

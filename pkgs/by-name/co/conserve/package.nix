@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,11 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rdZTx0wFFtWt3EcpvWHY6m+8TEHEj53vhVpdRp5wbos=";
   };
 
-  cargoHash = "sha256-IP9x3n5RdI+TKOhMBWEfw9P2CROcC0SmEsmMVaXjiDE=";
-
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-r14ApN9kGWIyeNlbqrb+vOvvmH2n+O5ovvtSVNTMASo=";
 
   checkFlags = [
     # expected to panic if unix user has no secondary group,
@@ -30,11 +24,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=chgrp_reported_as_changed"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Robust portable backup tool in Rust";
     homepage = "https://github.com/sourcefrog/conserve";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "conserve";
   };
 }

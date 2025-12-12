@@ -5,14 +5,13 @@
   elasticsearch,
   fetchFromGitHub,
   freezegun,
-  git,
+  gitMinimal,
   mercurial,
   nbmake,
   py-cpuinfo,
   pygal,
   pytest,
   pytestCheckHook,
-  pytest-xdist,
   pythonAtLeast,
   pythonOlder,
   setuptools,
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "pytest-benchmark";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4fD9UfZ6jtY7Gx/PVzd1JNWeQNz+DJ2kQmCku2TgxzI=";
   };
 
@@ -52,12 +51,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     mercurial
     nbmake
     pytestCheckHook
-    pytest-xdist
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

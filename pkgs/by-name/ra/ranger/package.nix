@@ -3,6 +3,8 @@
   fetchFromGitHub,
   python3Packages,
   file,
+  coreutils,
+  bashNonInteractive,
   less,
   highlight,
   w3m,
@@ -12,69 +14,86 @@
   neoVimSupport ? true,
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.3-unstable-2023-08-23";
+  version = "1.9.4-unstable-2025-11-14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "38bb8901004b75a407ffee4b9e176bc0a436cb15";
-    hash = "sha256-NpsrABk95xHNvhlRjKFh326IW83mYj1cmK3aE9JQSRo=";
+    rev = "08913377c968d39f11fa2d546aa8d53a99bb5e98";
+    hash = "sha256-vn1rAOFB2vq04Y/WAE44iH/b/zamAmvq8putUKwNqR8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    [ ]
+    ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
+    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     astroid
     pylint
   ];
-  propagatedBuildInputs =
-    [
-      less
-      file
-    ]
-    ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
-    ++ lib.optionals sixelPreviewSupport [ imagemagick ]
-    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
-    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
 
-  preConfigure =
-    ''
-      ${lib.optionalString (highlight != null) ''
-        sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
-          ranger/data/scope.sh
-      ''}
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath (
+      [
+        file
+        coreutils
+        bashNonInteractive
+      ]
+      ++ lib.optionals sixelPreviewSupport [ imagemagick ]
+    ))
+  ];
 
-      substituteInPlace ranger/__init__.py \
-        --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
+  postPatch = ''
+    substituteInPlace ranger/__init__.py \
+      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
-      # give file previews out of the box
-      substituteInPlace ranger/config/rc.conf \
-        --replace /usr/share $out/share \
-        --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
-    ''
-    + lib.optionalString imagePreviewSupport ''
-      substituteInPlace ranger/ext/img_display.py \
-        --replace /usr/lib/w3m ${w3m}/libexec/w3m
+    # give file previews out of the box
+    substituteInPlace ranger/config/rc.conf \
+      --replace /usr/share $out/share \
+      --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+  ''
+  + lib.optionalString (highlight != null) ''
+    sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
+      ranger/data/scope.sh
+  ''
+  + lib.optionalString imagePreviewSupport ''
+    substituteInPlace ranger/ext/img_display.py \
+      --replace /usr/lib/w3m ${w3m}/libexec/w3m
 
-      # give image previews out of the box when building with w3m
-      substituteInPlace ranger/config/rc.conf \
-        --replace "set preview_images false" "set preview_images true"
-    '';
+    # give image previews out of the box when building with w3m
+    substituteInPlace ranger/config/rc.conf \
+      --replace "set preview_images false" "set preview_images true"
+  '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "File manager with minimalistic curses interface";
-    homepage = "https://ranger.github.io/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    homepage = "https://ranger.fm/";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       toonn
-      magnetophon
+      lucasew
     ];
     mainProgram = "ranger";
   };

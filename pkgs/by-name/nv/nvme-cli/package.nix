@@ -9,17 +9,18 @@
   json_c,
   zlib,
   python3Packages,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "2.11";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    hash = "sha256-LkFYkfHeBKC/0kr33DKu7oXxXrtfu1YcpuwzRRWsHpc=";
+    hash = "sha256-zXzNjEpxioqYoSHDzimCnP/tKbi0H+GTH4xZ0g1+XnU=";
   };
 
   mesonFlags = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3Packages.nose2
+    udevCheckHook
   ];
   buildInputs = [
     libnvme
@@ -38,7 +40,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     inherit (src.meta) homepage; # https://nvmexpress.org/
     description = "NVM-Express user space tooling for Linux";
     longDescription = ''
@@ -49,9 +53,9 @@ stdenv.mkDerivation rec {
       tooling for NVM-Express drives. It was made specifically for Linux as it
       relies on the IOCTLs defined by the mainline kernel driver.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
       vifino
     ];

@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.3.9";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-p+W0ppNMfSgplKsQjaTnTrMvQ5poF/E/xSzsiLf9h58=";
+    repo = "dill";
+    tag = version;
+    hash = "sha256-RIyWTeIkK5cS4Fh3TK48XLa/EU9Iwlvcml0CTs5+Uh8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,11 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
     changelog = "https://github.com/uqfoundation/dill/releases/tag/dill-${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.bsd3;
   };
 }

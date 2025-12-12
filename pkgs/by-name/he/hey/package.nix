@@ -10,18 +10,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rakyll";
-    repo = pname;
+    repo = "hey";
     rev = "v${version}";
     sha256 = "0gsdksrzlwpba14a43ayyy41l1hxpw4ayjpvqyd4ycakddlkvgzb";
   };
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.asl20;
     mainProgram = "hey";
   };
 }

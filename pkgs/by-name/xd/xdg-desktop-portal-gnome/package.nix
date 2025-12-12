@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, fontconfig
-, glib
-, gnome
-, gnome-desktop
-, gsettings-desktop-schemas
-, gtk4
-, libadwaita
-, libjxl
-, librsvg
-, meson
-, ninja
-, pkg-config
-, wayland
-, wayland-scanner
-, webp-pixbuf-loader
-, wrapGAppsHook4
-, xdg-desktop-portal
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fontconfig,
+  glib,
+  gnome,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gtk4,
+  libadwaita,
+  libjxl,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  wayland,
+  wayland-scanner,
+  webp-pixbuf-loader,
+  wrapGAppsHook4,
+  xdg-desktop-portal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-gnome";
-  version = "47.1";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/xdg-desktop-portal-gnome/${lib.versions.major finalAttrs.version}/xdg-desktop-portal-gnome-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1CD/chc7BNyUkdPX3YzJYgT38/J8TL6mAkNh6pg592k=";
+    hash = "sha256-QB2vzfjLkR8JwI0oE/d03YZBJ6v8qT/0yvH8TJtexNI=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        libjxl
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   passthru = {
@@ -70,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
     homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 })

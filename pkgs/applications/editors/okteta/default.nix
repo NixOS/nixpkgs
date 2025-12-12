@@ -19,11 +19,11 @@
 
 mkDerivation rec {
   pname = "okteta";
-  version = "0.26.18";
+  version = "0.26.24";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xAlhZtQuIRtvMaHflCr89lHH6ocqIRAECwHdRa+/imM=";
+    sha256 = "sha256-MbIyPwL01PyHLD/BNdVLuQklglaB5ZHdJfSmgMDSZWo=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +50,14 @@ mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
-    license = licenses.gpl2;
+  meta = {
+    license = lib.licenses.gpl2;
     description = "Hex editor";
     homepage = "https://apps.kde.org/okteta/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peterhoeg
       bkchr
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

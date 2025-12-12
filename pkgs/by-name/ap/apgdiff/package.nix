@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
     sparseCheckout = [ "src" ];
     owner = "fordfrog";
     repo = "apgdiff";
-    rev = "refs/tags/release_${version}";
+    tag = "release_${version}";
     hash = "sha256-2m+9QNwQV2tJwOabTXE2xjRB5gDrSwyL6zL2op+wmkM=";
   };
 
@@ -36,12 +36,12 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/lib/apgdiff.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Another PostgreSQL diff tool";
     mainProgram = "apgdiff";
     homepage = "https://apgdiff.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (jre.meta) platforms;
-    maintainers = [ maintainers.misterio77 ];
+    maintainers = [ lib.maintainers.misterio77 ];
   };
 }

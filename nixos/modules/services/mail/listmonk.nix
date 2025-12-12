@@ -36,13 +36,13 @@ let
   '';
 
   databaseSettingsOpts = with lib.types; {
-    freeformType = oneOf [
+    freeformType = attrsOf (oneOf [
       (listOf str)
       (listOf (attrsOf anything))
       str
       int
       bool
-    ];
+    ]);
 
     options = {
       "app.notify_emails" = lib.mkOption {
@@ -165,11 +165,11 @@ in
     # Default parameters from https://github.com/knadh/listmonk/blob/master/config.toml.sample
     services.listmonk.settings."app".address = lib.mkDefault "localhost:9000";
     services.listmonk.settings."db" = lib.mkMerge [
-      ({
+      {
         max_open = lib.mkDefault 25;
         max_idle = lib.mkDefault 25;
         max_lifetime = lib.mkDefault "300s";
-      })
+      }
       (lib.mkIf cfg.database.createLocally {
         host = lib.mkDefault "/run/postgresql";
         port = lib.mkDefault 5432;
@@ -193,7 +193,7 @@ in
 
     systemd.services.listmonk = {
       description = "Listmonk - newsletter and mailing list manager";
-      after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";

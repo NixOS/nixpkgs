@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
 }:
 
 let
@@ -17,14 +18,13 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.9.1";
+        version = "2.2.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
-          rev = "refs/tags/${version}";
-          hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
+          tag = version;
+          hash = "sha256-l5WTjKa+A66QfWLmrjCQq7ZrSaeuylGIRZr8jsiYq+A=";
         };
-        patches = [ ];
       });
     }
     // (plugins self);
@@ -41,6 +41,7 @@ let
       poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
       poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
       poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
+      poetry-plugin-shell = callPackage ./plugins/poetry-plugin-shell.nix { };
     };
 
   # selector is a function mapping pythonPackages to a list of plugins

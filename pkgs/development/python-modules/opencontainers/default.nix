@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "opencontainers";
-  version = "0.0.14";
+  version = "0.0.15";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/eO4CZtWtclWQV34kz4iJ+GRToBaJ3uETy+eUjQXOPI=";
+    hash = "sha256-o6QBJMxo7aVse0xauSTxi1UEW4RYrKlhH1v6g/fvrv4=";
   };
 
   postPatch = ''
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python module for oci specifications";
     homepage = "https://github.com/vsoch/oci-python";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

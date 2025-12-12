@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LBNL-ETA";
     repo = "radiance";
-    rev = "refs/tags/rad${lib.versions.major finalAttrs.version}R${lib.versions.minor finalAttrs.version}";
+    tag = "rad${lib.versions.major finalAttrs.version}R${lib.versions.minor finalAttrs.version}";
     hash = "sha256-21lVWqO8uJefnm/dyfrjQJYbGck0fIRr2j0A+7WlZbM=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Validated Lighting Simulation Tool";
     homepage = "https://github.com/LBNL-ETA/Radiance";
-    license = lib.licenses.radiance;
+    license = lib.licenses.bsd3Lbnl;
     maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "rad";
   };

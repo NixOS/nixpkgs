@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "gnmic";
-  version = "0.39.1";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "openconfig";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-bFMgGPGbBWfT7M5rE6k4Q5L9srgy0UyFtAq/xOdZhxw=";
+    repo = "gnmic";
+    tag = "v${version}";
+    hash = "sha256-mcgre0HmAR2L92HBlK8jdqlOqINI/NswgZUrSI//c8k=";
   };
 
-  vendorHash = "sha256-9A/ZcamCMUpNxG3taHrqI4JChjpSjSuwx0ZUyGAuGXo=";
+  vendorHash = "sha256-u4tLuD8CuS3BzWJHDpphtkjgB0zkzBpP3FWrRWNgyJM=";
 
   ldflags = [
     "-s"
@@ -44,12 +44,12 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/gnmic completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "gNMI CLI client and collector";
     homepage = "https://gnmic.openconfig.net/";
     changelog = "https://github.com/openconfig/gnmic/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vincentbernat ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vincentbernat ];
     mainProgram = "gnmic";
   };
 }

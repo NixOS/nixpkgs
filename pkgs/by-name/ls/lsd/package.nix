@@ -1,34 +1,31 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  apple-sdk_11,
   pandoc,
   testers,
   lsd,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "1.1.5";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
     rev = "v${version}";
-    hash = "sha256-LlMcBMb40yN+rlvGVsh7JaC3j9sF60YxitQQXe1q/oI=";
+    hash = "sha256-BDwptBRGy2IGc3FrgFZ1rt/e1bpKs1Y0C3H4JfqRqHc=";
   };
 
-  cargoHash = "sha256-yyXFtMyiMq6TaN9/7+BaBERHgubeA8SJGOr08Mn3RnY=";
+  cargoHash = "sha256-TcC8ZY8Xv0076bLrprXGPh5nyGnR2NRnGeuTSEK4+Gg=";
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1
@@ -40,8 +37,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
 
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   passthru.tests.version = testers.testVersion { package = lsd; };
 

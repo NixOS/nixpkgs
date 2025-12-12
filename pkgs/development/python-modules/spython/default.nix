@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "singularityhub";
     repo = "singularity-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PNMzqnKb691wcd8aGSleqHOcsUrahl8e0r5s5ek5GmQ=";
   };
 
@@ -44,12 +44,12 @@ buildPythonPackage rec {
     "spython/tests/test_client.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Streamlined singularity python client (spython) for singularity";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "spython";
   };
 }

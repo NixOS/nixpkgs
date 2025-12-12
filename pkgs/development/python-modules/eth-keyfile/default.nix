@@ -3,43 +3,54 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  # dependencies
   eth-keys,
   eth-utils,
   pycryptodome,
+  py-ecc,
+  # nativeCheckInputs
   pytestCheckHook,
-  pythonOlder,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-keyfile";
-  version = "0.8.0";
+  version = "0.9.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keyfile";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-797yhHuU9/lm96YKxl3SZ5IQAwDxDSYkLkiBdAHh0Uk=";
+    hash = "sha256-DR17EupRDnviN6OXF+B+RlCVdG8cfcvnIgIEKxrXFKs=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     eth-keys
     eth-utils
     pycryptodome
+    py-ecc
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pydantic
+  ];
 
   pythonImportsCheck = [ "eth_keyfile" ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_install_local_wheel"
+  ];
+
+  meta = {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
     homepage = "https://github.com/ethereum/eth-keyfile";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/ethereum/eth-keyfile/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

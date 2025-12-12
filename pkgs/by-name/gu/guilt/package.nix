@@ -43,7 +43,8 @@ stdenv.mkDerivation rec {
     gawk
     git
     gnused
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
   makeFlags = [
     "PREFIX=$(out)"
   ];
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/guilt --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage patches like quilt, on top of a git repository";
     longDescription = ''
       Andrew Morton originally developed a set of scripts for
@@ -87,8 +88,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jeffpc/guilt";
     maintainers = with lib.maintainers; [ javimerino ];
-    license = [ licenses.gpl2 ];
-    platforms = platforms.all;
+    license = [ lib.licenses.gpl2 ];
+    platforms = lib.platforms.all;
     mainProgram = "guilt";
   };
 }

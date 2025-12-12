@@ -29,19 +29,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags =
-    [
-      "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
-      "PREFIX=${placeholder "out"}"
-      "ARGON2_VERSION=${version}"
-      "LIBRARY_REL=lib"
-      "PKGCONFIG_REL=lib"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "LIBRARIES=$(LIB_ST)"
-    ];
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
+    "PREFIX=${placeholder "out"}"
+    "ARGON2_VERSION=${version}"
+    "LIBRARY_REL=lib"
+    "PKGCONFIG_REL=lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "LIBRARIES=$(LIB_ST)"
+    "LINKED_LIB_EXT="
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
     longDescription = ''
       A password-hashing function created by by Alex Biryukov, Daniel Dinu, and
@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
       recommends using Argon2 rather than legacy algorithms.
     '';
     homepage = "https://www.argon2.com/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc0
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       olynch
     ];
     mainProgram = "argon2";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,7 +1,10 @@
-import nixos_render_docs as nrd
-import pytest
+import textwrap
 
+import pytest
 from markdown_it.token import Token
+
+import nixos_render_docs as nrd
+from nixos_render_docs.src_error import SrcError
 
 class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
     # actual renderer doesn't matter, we're just parsing.
@@ -498,9 +501,27 @@ def test_example() -> None:
         Token(type='paragraph_close', tag='p', nesting=-1, block=True)
     ]
 
-    with pytest.raises(RuntimeError) as exc:
+    with pytest.raises(SrcError) as exc:
         c._parse("::: {.example}\n### foo\n### bar\n:::")
-    assert exc.value.args[0] == 'unexpected non-title heading in example in line 3'
+
+    assert str(exc.value) == textwrap.dedent(
+        """
+        unexpected non-title heading in `:::{.example}`; are you missing a `:::`?
+        Note: blocks like `:::{.example}` are only allowed to contain a single heading in order to simplify TOC generation.
+
+        \x1b[33m`:::{.example}` block at lines 1-3:\x1b[0m
+        \x1b[2m\x1b[37m   1\x1b[0m \x1b[1m\x1b[33m┃\x1b[0m ::: {.example}\x1b[0m
+        \x1b[2m\x1b[37m   2\x1b[0m \x1b[1m\x1b[33m┃\x1b[0m ### foo\x1b[0m
+        \x1b[2m\x1b[37m   3\x1b[0m \x1b[1m\x1b[33m┃\x1b[0m ### bar\x1b[0m
+        \x1b[2m\x1b[37m   4\x1b[0m \x1b[2m\x1b[37m┆ :::\x1b[0m
+
+        \x1b[33mUnexpected heading at line 3:\x1b[0m
+        \x1b[2m\x1b[37m   1\x1b[0m \x1b[2m\x1b[37m┆ ::: {.example}\x1b[0m
+        \x1b[2m\x1b[37m   2\x1b[0m \x1b[2m\x1b[37m┆ ### foo\x1b[0m
+        \x1b[2m\x1b[37m   3\x1b[0m \x1b[1m\x1b[33m┃\x1b[0m ### bar\x1b[0m
+        \x1b[2m\x1b[37m   4\x1b[0m \x1b[2m\x1b[37m┆ :::\x1b[0m
+        """
+    ).strip()
 
 def test_footnotes() -> None:
     c = Converter({})

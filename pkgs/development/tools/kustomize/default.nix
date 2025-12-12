@@ -1,13 +1,16 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  kustomize,
+  testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kustomize";
-  version = "5.5.0";
+  version = "5.8.0";
 
   ldflags =
     let
@@ -15,32 +18,40 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}.version=${version}"
-      "-X ${t}.gitCommit=${src.rev}"
+      "-X ${t}.version=v${finalAttrs.version}" # add 'v' prefix to match official releases
+      "-X ${t}.gitCommit=${finalAttrs.src.rev}"
     ];
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    rev = "kustomize/v${version}";
-    hash = "sha256-7mtnSrQQPQnG0COqnzrT5DXFEbTeoc3+GZ2fFhB/lW8=";
+    repo = "kustomize";
+    rev = "kustomize/v${finalAttrs.version}";
+    hash = "sha256-BOM0m/bigELUf6xHjLbI8wzSscF0lhwCjIxa87xBbWM=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-ddARfbjuSIn2aNFILL4LA28swGBvH6kOqlg4qkw+NGw=";
+  vendorHash = "sha256-kwvfxHXL189PSK7+PnOr+1TSjuX3uHkV4VnG3gSW5v0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kustomize \
       --bash <($out/bin/kustomize completion bash) \
       --fish <($out/bin/kustomize completion fish) \
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.tests = {
+    versionCheck = testers.testVersion {
+      command = "${finalAttrs.meta.mainProgram} version";
+      version = "v${finalAttrs.version}";
+      package = kustomize;
+    };
+  };
+
+  meta = {
     description = "Customization of kubernetes YAML configurations";
     mainProgram = "kustomize";
     longDescription = ''
@@ -49,8 +60,8 @@ buildGoModule rec {
       as is.
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
       periklis
@@ -59,4 +70,4 @@ buildGoModule rec {
       saschagrunert
     ];
   };
-}
+})

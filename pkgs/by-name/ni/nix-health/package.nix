@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchCrate,
   libiconv,
   openssl,
   pkg-config,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,32 +17,19 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/I6LdcH61wgJOEv51J1jkWlD8BlSAaRR1e7gc5H9bQI=";
   };
 
-  cargoHash = "sha256-mqJA5Fv/sYj6ZkE73emtaHvg9hdT/5lN0kM3sl+GRCo=";
+  cargoHash = "sha256-3DE/NwPdi//7xaoV2SVgF5l3ndrEYraoyg5NLJzvzBI=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libiconv
-      openssl
-    ]
-    # Use a newer SDK for CoreFoundation, because the sysinfo crate requires
-    # it, https://github.com/GuillaumeGomez/sysinfo/issues/915
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        IOKit
-        CoreFoundation
-      ]
-    );
+  buildInputs = [
+    libiconv
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Check the health of your Nix setup";
     homepage = "https://github.com/juspay/nix-health";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      srid
-      shivaraj-bh
-    ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
     mainProgram = "nix-health";
   };
 }

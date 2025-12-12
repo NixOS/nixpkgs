@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  cjson,
   cmake,
+  curl,
   doxygen,
   fetchFromGitHub,
   glib,
-  glib-networking,
   gnutls,
   gpgme,
   hiredis,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.11.0";
+  version = "22.34.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VYFAy6VVASNOBLs39qukePYr5pV0IR1qjztv+veNCVc=";
+    tag = "v${version}";
+    hash = "sha256-MCriCweaB2UbQzW/ojsyJgh/bn9l5XHqSicGYTnfQrw=";
   };
 
   postPatch = ''
@@ -45,8 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cjson
+    curl
     glib
-    glib-networking
     gnutls
     gpgme
     hiredis
@@ -68,12 +70,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
-    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/v${version}";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/${src.tag}";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

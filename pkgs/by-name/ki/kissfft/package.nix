@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "KISSFFT_DATATYPE" datatype)
     (lib.cmakeBool "KISSFFT_STATIC" enableStatic)
     # `test/testkiss.py` expects this…
-    (lib.cmakeFeature "KISSFFT_OPENMP" (if enableOpenmp then "ON" else "OFF"))
+    (lib.cmakeBool "KISSFFT_OPENMP" enableOpenmp)
   ];
 
   # Required for `test/testcpp.c`.

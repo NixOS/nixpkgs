@@ -1,7 +1,7 @@
 {
   stdenv,
   clang,
-  callPackage,
+  gclient2nix,
   lib,
   gn,
   fetchurl,
@@ -9,7 +9,6 @@
   xcbuild,
   python3,
   ninja,
-  apple-sdk_14,
   darwinMinVersionHook,
   git,
   cpio,
@@ -30,11 +29,8 @@
   libxslt,
   minizip,
   ffmpeg_6,
-  writeShellScript,
 }:
 let
-  sources = callPackage ./sources.nix { };
-
   platformMap = {
     "x86_64" = "x64";
     "i686" = "x86";
@@ -70,82 +66,88 @@ let
       ffmpeg_6
       ;
   };
-  gclient2nix = python3.pkgs.callPackage ./gclient2nix.nix { };
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "m114";
+  version = "125-unstable-2025-07-25";
 
-  src = "${sources}/src";
+  gclientDeps = gclient2nix.importGclientDeps ./sources.json;
+  sourceRoot = "src";
 
-  patches =
-    [
-      # Adds missing dependencies to generated LICENSE
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
-        hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
-      })
-      # Fixes the certificate chain, required for Let's Encrypt certs
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
-        hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
-      })
-      # Adds dependencies and features required by livekit
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
-        hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
-      })
-      # Fixes concurrency and localization issues
-      (fetchpatch {
-        url = "https://github.com/zed-industries/webrtc/commit/08f7a701a2eda6407670508fc2154257a3c90308.patch";
-        hash = "sha256-oWYZLwqjRSHDt92MqsxsoBSMyZKj1ubNbOXZRbPpbEw=";
-      })
-      # Required for dynamically linking to ffmpeg libraries and exposing symbols
-      ./0001-shared-libraries.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./0002-disable-narrowing-const-reference.patch
-    ];
+  patches = [
+    # Adds missing dependencies to generated LICENSE
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
+      hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
+    })
+    # Fixes the certificate chain, required for Let's Encrypt certs
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
+      hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
+    })
+    # Adds dependencies and features required by livekit
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
+      hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
+    })
+    # Fixes "error: no matching member function for call to 'emplace'"
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/5f04705ac3f356350ae31534ffbc476abc9ea83d/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
+      hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
 
-  postPatch =
-    ''
-      substituteInPlace tools/generate_shim_headers/generate_shim_headers.py \
-        --replace-fail "OFFICIAL_BUILD" "GOOGLE_CHROME_BUILD"
+      extraPrefix = "third_party/";
+      stripLen = 1;
+    })
+    # Required for dynamically linking to ffmpeg libraries and exposing symbols
+    ./0001-shared-libraries.patch
+  ];
 
-      substituteInPlace BUILD.gn \
-        --replace-fail "rtc_static_library" "rtc_shared_library" \
-        --replace-fail "complete_static_lib = true" ""
+  postPatch = ''
+    substituteInPlace .gn \
+      --replace-fail "vpython3" "python3"
 
-      substituteInPlace webrtc.gni \
-        --replace-fail "!build_with_chromium && is_component_build" "false"
+    substituteInPlace tools/generate_shim_headers/generate_shim_headers.py \
+      --replace-fail "OFFICIAL_BUILD" "GOOGLE_CHROME_BUILD"
 
-      substituteInPlace rtc_tools/BUILD.gn \
-        --replace-fail "\":frame_analyzer\"," ""
+    substituteInPlace BUILD.gn \
+      --replace-fail "rtc_static_library" "rtc_shared_library" \
+      --replace-fail "complete_static_lib = true" ""
 
-      for lib in ${toString (builtins.attrNames gnSystemLibraries)}; do
-        if [ -d "third_party/$lib" ]; then
-          find "third_party/$lib" -type f \
-            \! -path "third_party/$lib/chromium/*" \
-            \! -path "third_party/$lib/google/*" \
-            \! -path "third_party/harfbuzz-ng/utils/hb_scoped.h" \
-            \! -regex '.*\.\(gn\|gni\|isolate\)' \
-            \! -name 'LICENSE*' \
-            \! -name 'COPYING*' \
-            -delete
-        fi
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      ln -sf ${lib.getExe gn} buildtools/linux64/gn
-      substituteInPlace build/toolchain/linux/BUILD.gn \
-        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -sf ${lib.getExe gn} buildtools/mac/gn
-      chmod +x build/toolchain/apple/linker_driver.py
-      patchShebangs build/toolchain/apple/linker_driver.py
-      substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
-    '';
+    substituteInPlace webrtc.gni \
+      --replace-fail "!build_with_chromium && is_component_build" "false"
+
+    substituteInPlace rtc_tools/BUILD.gn \
+      --replace-fail "\":frame_analyzer\"," ""
+
+    for lib in ${toString (builtins.attrNames gnSystemLibraries)}; do
+      if [ -d "third_party/$lib" ]; then
+        find "third_party/$lib" -type f \
+          \! -path "third_party/$lib/chromium/*" \
+          \! -path "third_party/$lib/google/*" \
+          \! -path "third_party/harfbuzz-ng/utils/hb_scoped.h" \
+          \! -regex '.*\.\(gn\|gni\|isolate\)' \
+          \! -name 'LICENSE*' \
+          \! -name 'COPYING*' \
+          -delete
+      fi
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -sf ${lib.getExe gn} buildtools/linux64/gn
+    substituteInPlace build/toolchain/linux/BUILD.gn \
+      --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -sf ${lib.getExe gn} buildtools/mac/gn
+    chmod +x build/toolchain/apple/linker_driver.py
+    patchShebangs build/toolchain/apple/linker_driver.py
+    substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
+  '';
+
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   nativeBuildInputs =
     (builtins.concatLists (
@@ -154,6 +156,7 @@ stdenv.mkDerivation {
       ) gnSystemLibraries
     ))
     ++ [
+      gclient2nix.gclientUnpackHook
       gn
       (python3.withPackages (ps: [ ps.setuptools ]))
       ninja
@@ -161,20 +164,17 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs =
-    [ nasm ]
-    ++ (lib.mapAttrsToList (_: library: library.package) gnSystemLibraries)
-    ++ (lib.optionals stdenv.hostPlatform.isLinux [
-      glib
-      alsa-lib
-      pulseaudio
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-      (darwinMinVersionHook "12.3")
-    ];
+  buildInputs = [
+    nasm
+  ]
+  ++ (lib.mapAttrsToList (_: library: library.package) gnSystemLibraries)
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    glib
+    alsa-lib
+    pulseaudio
+  ]);
 
   preConfigure = ''
     echo "generate_location_tags = true" >> build/config/gclient_args.gni
@@ -184,56 +184,56 @@ stdenv.mkDerivation {
         --system-libraries ${toString (builtins.attrNames gnSystemLibraries)}
   '';
 
-  gnFlags =
-    [
-      "is_debug=false"
-      "rtc_include_tests=false"
-      ''target_os="${gnOs}"''
-      ''target_cpu="${gnArch}"''
-      "treat_warnings_as_errors=false"
-      "rtc_enable_protobuf=false"
-      "rtc_include_tests=false"
-      "rtc_build_examples=false"
-      "rtc_build_tools=false"
-      "rtc_libvpx_build_vp9=true"
-      "enable_libaom=true"
-      "use_dummy_lastchange=true"
-      "is_component_build=true"
-      "enable_stripping=true"
-      "rtc_use_h264=true"
-      "use_custom_libcxx=false"
-      "use_rtti=true"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isLinux [
-      "use_goma=false"
-      "rtc_use_pipewire=false"
-      "symbol_level=0"
-      "enable_iterator_debugging=false"
-      "rtc_use_x11=false"
-      "use_sysroot=false"
-      "is_clang=false"
-    ])
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      ''mac_deployment_target="12.3"''
-      "rtc_enable_symbol_export=true"
-      "rtc_enable_objc_symbol_export=true"
-      "rtc_include_dav1d_in_internal_decoder_factory=true"
-      "clang_use_chrome_plugins=false"
-      "use_lld=false"
-      ''clang_base_path="${clang}"''
-    ]);
+  gnFlags = [
+    "is_debug=false"
+    "rtc_include_tests=false"
+    ''target_os="${gnOs}"''
+    ''target_cpu="${gnArch}"''
+    "treat_warnings_as_errors=false"
+    "rtc_enable_protobuf=false"
+    "rtc_include_tests=false"
+    "rtc_build_examples=false"
+    "rtc_build_tools=false"
+    "rtc_libvpx_build_vp9=true"
+    "enable_libaom=true"
+    "use_dummy_lastchange=true"
+    "is_component_build=true"
+    "enable_stripping=true"
+    "rtc_use_h264=true"
+    "use_custom_libcxx=false"
+    "use_rtti=true"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    "use_goma=false"
+    "rtc_use_pipewire=false"
+    "symbol_level=0"
+    "enable_iterator_debugging=false"
+    "rtc_use_x11=false"
+    "use_sysroot=false"
+    "is_clang=false"
+  ])
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    ''mac_deployment_target="${stdenv.hostPlatform.darwinMinVersion}"''
+    "rtc_enable_symbol_export=true"
+    "rtc_enable_objc_symbol_export=true"
+    "rtc_include_dav1d_in_internal_decoder_factory=true"
+    "clang_use_chrome_plugins=false"
+    "use_lld=false"
+    ''clang_base_path="${clang}"''
+  ]);
 
-  ninjaFlags =
-    [ ":default" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "api/audio_codecs:builtin_audio_decoder_factory"
-      "api/task_queue:default_task_queue_factory"
-      "sdk:native_api"
-      "sdk:default_codec_factory_objc"
-      "pc:peerconnection"
-      "sdk:videocapture_objc"
-      "sdk:mac_framework_objc"
-    ];
+  ninjaFlags = [
+    ":default"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "api/audio_codecs:builtin_audio_decoder_factory"
+    "api/task_queue:default_task_queue_factory"
+    "sdk:native_api"
+    "sdk:default_codec_factory_objc"
+    "pc:peer_connection"
+    "sdk:videocapture_objc"
+    "sdk:mac_framework_objc"
+  ];
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -245,49 +245,41 @@ stdenv.mkDerivation {
           --target ${if stdenv.hostPlatform.isDarwin then ":webrtc" else ":default"} $PWD $PWD
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/{lib,include}
-      cp obj/webrtc.ninja $out/
-      cp args.gn $out/
-      cp LICENSE.md $out/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp libwebrtc.so $out/lib/
-      cp libthird_party_boringssl.so $out/lib/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Library/Frameworks
-      cp -r WebRTC.framework $out/Library/Frameworks
-      cp libwebrtc.dylib $out/lib
-      cp libthird_party_boringssl.dylib $out/lib/
-    ''
-    + ''
-      cd ../..
-      find . -name "*.h" -print | cpio -pd $out/include
+    mkdir -p $out/lib
+    mkdir -p $dev/include
 
-      runHook postInstall
-    '';
+    install -m0644 obj/webrtc.ninja args.gn LICENSE.md $dev
+
+    pushd ../..
+    find . -name "*.h" -print | cpio -pd $dev/include
+    popd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -m0644 libwebrtc.so libthird_party_boringssl.so $out/lib
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -m0644 WebRTC.framework/Versions/A/WebRTC $out/lib/libwebrtc.dylib
+    install -m0644 libthird_party_boringssl.dylib $out/lib
+  ''
+  + ''
+    ln -s $out/lib $dev/lib
+
+    runHook postInstall
+  '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     boringssl="$out/lib/libthird_party_boringssl.dylib"
     webrtc="$out/lib/libwebrtc.dylib"
-    framework="$out/Library/Frameworks/WebRTC.framework/Versions/A/WebRTC"
 
     install_name_tool -id "$boringssl" "$boringssl"
     install_name_tool -id "$webrtc" "$webrtc"
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
-    install_name_tool -id "$framework" "$framework"
-    install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$framework"
   '';
 
-  passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''
-    set -eou pipefail
-    cd pkgs/by-name/li/livekit-libwebrtc
-    ${lib.getExe gclient2nix} --main-source-path src https://github.com/webrtc-sdk/webrtc.git m114_release
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "WebRTC library used by livekit";

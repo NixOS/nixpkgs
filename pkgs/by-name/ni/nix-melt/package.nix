@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jx7g9GOFAjOlJyNsGOUTLh2qWII9u0prOoBEvNPmdj8=";
   };
 
-  cargoHash = "sha256-CVMQPnSwGErZnf5/iAcVy37VlJjZdO/BkO3C/rlpl/w=";
+  cargoHash = "sha256-OTKK0d4yCTiK5GTw+LKagutRbok/zKqLkeOtInJ2L64=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/nix-melt.{bash,fish} --zsh artifacts/_nix-melt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ranger-like flake.lock viewer";
     mainProgram = "nix-melt";
     homepage = "https://github.com/nix-community/nix-melt";
     changelog = "https://github.com/nix-community/nix-melt/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
   };
 }

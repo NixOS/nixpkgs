@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "reedsolomon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nzdD1oGXHSeGDD/3PpQQEZYGAwn9ahD2KNYGqpgADh0=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
     "tests/test_creedsolo.py" # TODO: package creedsolo
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
     homepage = "https://github.com/tomerfiliba/reedsolomon";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ yorickvp ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ yorickvp ];
   };
 }

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "s3-credentials";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TuGrKSfnn0CSMpRxdCM6C446z+y9d2ZLB7+wSCxSqP4=";
   };
 
@@ -49,12 +49,12 @@ buildPythonPackage rec {
     "test_put_objects"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python CLI utility for creating credentials for accessing S3 buckets";
     homepage = "https://github.com/simonw/s3-credentials";
     changelog = "https://github.com/simonw/s3-credentials/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "s3-credentials";
   };
 }

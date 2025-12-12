@@ -4,74 +4,49 @@
   fetchFromGitHub,
   gitMinimal,
   cacert,
-  yarn,
   makeBinaryWrapper,
   nodejs,
   python3,
   nixosTests,
+  yarn-berry_4,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "1.10.0";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
-    rev = version;
-    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
+    tag = version;
+    hash = "sha256-ysiHvRMOgVFTFKeMWjshZpIZAOTf+EbBQQm3dDeMB3I=";
   };
-
-  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
-  offlineCache = stdenv.mkDerivation {
-    name = "hedgedoc-${version}-offline-cache";
-    inherit src;
-
-    nativeBuildInputs = [
-      cacert # needed for git
-      gitMinimal # needed to download git dependencies
-      nodejs # needed for npm to download git dependencies
-      yarn
-    ];
-
-    buildPhase = ''
-      export HOME=$(mktemp -d)
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
-  };
+  missingHashes = ./missing-hashes.json;
 
 in
 stdenv.mkDerivation {
   pname = "hedgedoc";
-  inherit version src;
+  inherit version src missingHashes;
+
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-jMJXNWvmlweCJu+xs2ucMtB6N+0r1cgP/aGt2zfH4iQ=";
+  };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     (python3.withPackages (ps: with ps; [ setuptools ])) # required to build sqlite3 bindings
-    yarn
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
   ];
 
   buildInputs = [
     nodejs # for shebangs
   ];
 
-  dontConfigure = true;
-
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$(mktemp -d)
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder ${offlineCache}
-    export npm_config_nodedir=${nodejs} # prevent node-gyp from downloading headers
-
-    yarn --immutable-cache
     yarn run build
 
     # Delete scripts that are not useful for NixOS
@@ -101,7 +76,6 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit offlineCache;
     tests = { inherit (nixosTests) hedgedoc; };
   };
 

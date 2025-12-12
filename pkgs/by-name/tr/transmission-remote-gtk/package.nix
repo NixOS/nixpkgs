@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
   };
 
@@ -58,13 +58,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Requires network access
 
-  meta = with lib; {
+  meta = {
     description = "GTK remote control for the Transmission BitTorrent client";
     mainProgram = "transmission-remote-gtk";
     homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
     changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

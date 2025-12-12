@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "livepeer";
-  version = "0.8.1";
+  version = "0.8.8";
 
   proxyVendor = true;
-  vendorHash = "sha256-vNZ2HHMv2cdMcd1xMdwFNIo3lYh3N88o60GfiG4+eAs=";
+  vendorHash = "sha256-cEpRLnLR0ia5vvoJ8Fwk/0qgvsnYw7vSpyS9BJQ8UfY=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vJeYlMOJ0/C+IKVx5gqzb8LGwLP1ca9OreCUMryqWKs=";
+    tag = "v${version}";
+    hash = "sha256-DVgB/pE3nq6oHzLi+g/WUMQqrmXvJhPub7bmeLgyEDQ=";
   };
 
   nativeBuildInputs = [

@@ -3,73 +3,59 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
-  darwin,
   udev,
   protobuf,
-  libcxx,
-  rocksdb_8_3,
   installShellFiles,
   pkg-config,
   openssl,
   nix-update-script,
+  versionCheckHook,
+  clang,
+  libclang,
+  rocksdb,
   # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
-  solanaPkgs ?
-    [
-      "solana"
-      "solana-bench-tps"
-      "solana-faucet"
-      "solana-gossip"
-      "solana-install"
-      "solana-keygen"
-      "solana-ledger-tool"
-      "solana-log-analyzer"
-      "solana-net-shaper"
-      "solana-validator"
-      "solana-test-validator"
-    ]
-    ++ [
-      # XXX: Ensure `solana-genesis` is built LAST!
-      # See https://github.com/solana-labs/solana/issues/5826
-      "solana-genesis"
-    ],
+  solanaPkgs ? [
+    "cargo-build-sbf"
+    "cargo-test-sbf"
+    "solana"
+    "solana-bench-tps"
+    "solana-faucet"
+    "solana-gossip"
+    "agave-install"
+    "solana-keygen"
+    "agave-ledger-tool"
+    "solana-log-analyzer"
+    "solana-net-shaper"
+    "agave-validator"
+    "solana-test-validator"
+  ]
+  ++ [
+    # XXX: Ensure `solana-genesis` is built LAST!
+    # See https://github.com/solana-labs/solana/issues/5826
+    "solana-genesis"
+  ],
 }:
 let
-  version = "1.18.26";
-  hash = "sha256-sJ0Zn5GMi64/S8zqomL/dYRVW8SOQWsP+bpcdatJC0A=";
-  rocksdb = rocksdb_8_3;
-
-  inherit (darwin.apple_sdk_11_0) Libsystem;
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    System
-    IOKit
-    AppKit
-    Security
-    ;
+  version = "2.3.13";
+  hash = "sha256-RSucqvbshaaby4fALhAQJtZztwsRdA+X7yRnoBxQvsg=";
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "solana-labs";
-    repo = "solana";
-    rev = "v${version}";
+    owner = "anza-xyz";
+    repo = "agave";
+    tag = "v${version}";
     inherit hash;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-
-    outputHashes = {
-      "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
-      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
-      "aes-gcm-siv-0.10.3" = "sha256-N1ppxvew4B50JQWsC3xzP0X4jgyXZ5aOQ0oJMmArjW8=";
-      "curve25519-dalek-3.2.1" = "sha256-FuVNFuGCyHXqKqg+sn3hocZf1KMCI092Ohk7cvLPNjQ=";
-    };
-  };
+  cargoHash = "sha256-yTS++bUu+4wmbXXZkU4eDq4sGNzls1euptJoY6OYZOM=";
 
   strictDeps = true;
-  cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
+  cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
+  RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code";
+  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC
   # or access internet in other ways, eventually failing due to Nix sandbox.
@@ -83,28 +69,31 @@ rustPlatform.buildRustPackage rec {
     protobuf
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libcxx
-      IOKit
-      Security
-      AppKit
-      System
-      Libsystem
-    ];
+  buildInputs = [
+    openssl
+    clang
+    libclang
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/solana";
+  versionCheckProgramArg = "--version";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd solana \
       --bash <($out/bin/solana completion --shell bash) \
       --fish <($out/bin/solana completion --shell fish)
 
-    mkdir -p $out/bin/sdk/bpf
-    cp -a ./sdk/bpf/* $out/bin/sdk/bpf/
+    mkdir -p $out/bin/platform-tools-sdk
+    cp -r ./platform-tools-sdk/sbf $out/bin/platform-tools-sdk
+
+    mkdir -p $out/bin/deps
+    find . -name libsolana_program.dylib -exec cp {} $out/bin/deps \;
+    find . -name libsolana_program.rlib -exec cp {} $out/bin/deps \;
   '';
 
   # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
@@ -113,22 +102,23 @@ rustPlatform.buildRustPackage rec {
 
   # Require this on darwin otherwise the compiler starts rambling about missing
   # cmath functions
-  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib libcxx}/lib";
+  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib stdenv.cc.libcxx}/lib";
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces";
     homepage = "https://solana.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       netfox
       happysalada
       aikooo7
+      JacoMalan1
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
   passthru.updateScript = nix-update-script { };

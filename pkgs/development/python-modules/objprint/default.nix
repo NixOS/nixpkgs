@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gaogaotiantian";
     repo = "objprint";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+OS034bikrKy4F27b6ic97fHTW6rSMxQ0dx4caF6cUM=";
   };
 
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gaogaotiantian/objprint";
     changelog = "https://github.com/gaogaotiantian/objprint/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

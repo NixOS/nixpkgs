@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "15five";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "scim2-filter-parser";
+    tag = version;
     hash = "sha256-KmtOtI/5HT0lVwvXQFTlEwMeptoa4cA5hTSgSULxhIc=";
   };
 
@@ -49,13 +49,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.django-query;
+  ]
+  ++ optional-dependencies.django-query;
 
-  meta = with lib; {
+  meta = {
     description = "Customizable parser/transpiler for SCIM2.0 filters";
     homepage = "https://github.com/15five/scim2-filter-parser";
     changelog = "https://github.com/15five/scim2-filter-parser/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ s1341 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ s1341 ];
   };
 }

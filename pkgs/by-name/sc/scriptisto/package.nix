@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iaDdOFmi4kfcJSjXOcGAFG9i1SdB+K5Qz4+NDaVQALY=";
   };
 
-  cargoHash = "sha256-LIOsl9qPKJr/ykbXeaHP6lNHGUMcw3omniSWx2FkF28=";
+  cargoHash = "sha256-20RRmbpJLHbSsa5OBk+IkyzZ4Jnss3nZ9izh7C6gmfI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language-agnostic \"shebang interpreter\" that enables you to write scripts in compiled languages";
     mainProgram = "scriptisto";
     homepage = "https://github.com/igor-petruk/scriptisto";
     changelog = "https://github.com/igor-petruk/scriptisto/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

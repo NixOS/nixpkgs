@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fonttools,
-  git,
+  gitMinimal,
   gitpython,
   pytestCheckHook,
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
   preCheck = ''
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "test_utilities_get_gitrootpath_function"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utility for manipulating font version headers";
     mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

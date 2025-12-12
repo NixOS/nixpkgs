@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "robotframework-seleniumlibrary";
-  version = "6.6.1";
+  version = "6.8.0";
   pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-ULY0FH1RFQIlhS45LU3vUKi6urZJHiDgi6NdqU5tV2g=";
+    tag = "v${version}";
+    hash = "sha256-TyYlcmoV5q3mfV4II/7P/SApfSNd3yC1EFYcuHllcyQ=";
   };
 
   build-system = [ setuptools ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";
+    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.tag}/docs/SeleniumLibrary-${version}.rst";
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
     license = lib.licenses.asl20;

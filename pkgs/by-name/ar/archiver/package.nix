@@ -10,8 +10,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mholt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "archiver";
+    tag = "v${version}";
     hash = "sha256-l9exOq8QF3WSQ/+WQr0NfPeRQ/R6VQwfT+YS76BBwd8=";
   };
 
@@ -27,11 +27,15 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easily create & extract archives, and compress & decompress files of various formats";
     homepage = "https://github.com/mholt/archiver";
     mainProgram = "arc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    knownVulnerabilities = [
+      "CVE-2024-0406"
+      "Package is unmaintained upstream"
+    ];
   };
 }

@@ -1,19 +1,19 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200125";
+  version = "20250128";
   pname = "m4ri";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "malb";
     repo = "m4ri";
-    rev = "release-${version}";
-    sha256 = "1dxgbv6zdyki3h61qlv7003wzhy6x14zmcaz9x19md1i7ng07w1k";
+    rev = version;
+    hash = "sha256-YoCTI4dLy95xuRJyNugIzGxE40B9pCWxRQtsyS/1Pds=";
   };
 
   doCheck = true;
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://malb.bitbucket.io/m4ri/";
     description = "Library to do fast arithmetic with dense matrices over F_2";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.unix;
   };
 }

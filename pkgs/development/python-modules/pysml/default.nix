@@ -1,36 +1,34 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   bitstring,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysml";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "mtdcr";
     repo = "pysml";
-    rev = "refs/tags/${version}";
-    hash = "sha256-G4t0cHbJWMmDODeldj064SlKGagOfUnnRiGRwLu1bF0=";
+    tag = version;
+    hash = "sha256-cJOf+O/Q+CfX26XQixHEZ/+N7+YsoPadxk/0Zeob2f8=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    async-timeout
     bitstring
-    pyserial-asyncio
+    pyserial-asyncio-fast
   ];
 
   # Module has no tests
@@ -38,10 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for EDL21 smart meters using Smart Message Language (SML)";
     homepage = "https://github.com/mtdcr/pysml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mtdcr/pysml/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

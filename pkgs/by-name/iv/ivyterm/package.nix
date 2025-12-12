@@ -12,17 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ivyterm";
-  version = "1.0.0";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "Tomiyou";
     repo = "ivyterm";
     tag = "v${version}";
-    hash = "sha256-2wOTUJRFtT7lJ8Km7J7qT6CIRi7wZmNAp1UHfrksyss=";
+    hash = "sha256-Xr4oXg+kZPDImY7BlKUHwgi5AtCArH1vf3+s117luTQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SyyXpV4BfXFm5SHsrXHVNXFm8xM1gBv9lBRXuHVN+lQ=";
+  cargoHash = "sha256-aBo+IAM+tAzUazw9XE80EACWyQtDIQjm33Q20p49L5s=";
 
   nativeBuildInputs = [
     pkg-config

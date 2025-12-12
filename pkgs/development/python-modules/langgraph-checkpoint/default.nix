@@ -1,67 +1,78 @@
 {
   lib,
   buildPythonPackage,
-  dataclasses-json,
   fetchFromGitHub,
+
+  # build system
+  hatchling,
+
+  # dependencies
   langchain-core,
-  langgraph-sdk,
   msgpack,
-  poetry-core,
+  ormsgpack,
+
+  # testing
+  dataclasses-json,
+  numpy,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+  redis,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.8";
+  version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-obDK6wn+oo8zDQsidogwKTIgT5wuUH/l4y+12cttkd0=";
+    hash = "sha256-3hh1KyEIsp9JzhaJW1ycp179FGpggPYzg6OwnD/cTBM=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ langchain-core ];
+  dependencies = [
+    langchain-core
+    ormsgpack
+  ];
 
   propagatedBuildInputs = [ msgpack ];
-
-  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
 
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
   nativeCheckInputs = [
     dataclasses-json
+    numpy
+    pandas
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
+    redis
   ];
 
   passthru = {
-    updateScript = langgraph-sdk.updateScript;
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpoint==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpoint==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     description = "Library with base interfaces for LangGraph checkpoint savers";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };

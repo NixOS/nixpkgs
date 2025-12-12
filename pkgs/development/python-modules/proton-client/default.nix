@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   bcrypt,
   pyopenssl,
   python-gnupg,
@@ -37,8 +37,7 @@ buildPythonPackage rec {
 
   patches = [
     # Patches library by fixing the openssl path
-    (substituteAll {
-      src = ./0001-OpenSSL-path-fix.patch;
+    (replaceVars ./0001-OpenSSL-path-fix.patch {
       openssl = openssl.out;
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     })
@@ -53,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "tewisay";
   version = "0-unstable-2022-11-04";
 
@@ -32,11 +32,10 @@ buildGoModule rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raymond-w-ko/tewisay";
     description = "Cowsay replacement with unicode and partial ansi escape support";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ Madouura ];
+    license = with lib.licenses; [ cc0 ];
     mainProgram = "tewisay";
   };
 }

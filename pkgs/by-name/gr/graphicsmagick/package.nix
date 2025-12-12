@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphicsmagick";
-  version = "1.3.45";
+  version = "1.3.46";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3OpRZ0FPfIBVV94tekepsxR7y/YXuR9fD0r+XmVDAms=";
+    hash = "sha256-x8cGpQXpxsN2QVa7lKDJZE15ExeF3xWonJ+HIdGr0GE=";
   };
 
   outputs = [
@@ -53,13 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxml2
     zlib
-  ] ++ lib.optionals libheifSupport [ libheif ];
+  ]
+  ++ lib.optionals libheifSupport [ libheif ];
 
   nativeBuildInputs = [
     nukeReferences
     pkg-config
     xz
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   configureFlags = [
     # specify delegates explicitly otherwise `gm` will invoke the build
@@ -72,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Remove CFLAGS from the binaries to avoid closure bloat.
-  # In the past we have had -dev packages in the closure of the binaries soley
+  # In the past we have had -dev packages in the closure of the binaries solely
   # due to the string references.
   postConfigure = ''
     nuke-refs -e $out ./magick/magick_config.h
@@ -109,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       PNM, TIFF, and WebP.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "gm";
     platforms = lib.platforms.all;
   };

@@ -1,15 +1,21 @@
-{ fetchFromGitHub, openttd, zstd, ... }:
+{
+  fetchFromGitHub,
+  openttd,
+  zstd,
+  ...
+}:
 
 openttd.overrideAttrs (oldAttrs: rec {
   pname = "openttd-jgrpp";
-  version = "0.63.2";
+  version = "0.67.1";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "JGRennison";
     repo = "OpenTTD-patches";
     rev = "jgrpp-${version}";
-    hash = "sha256-kf9UGhD0a8lttdL8svvEZSKEFfkAJ2xlaJ9IvO1gR1s=";
+    hash = "sha256-GMkcf3XBotPXjZC4TdtOXzutyyIiW4haE+jNIfgozbg=";
   };
+  patches = [ ];
 
   buildInputs = oldAttrs.buildInputs ++ [ zstd ];
 

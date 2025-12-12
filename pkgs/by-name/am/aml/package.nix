@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "any1";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aml";
+    tag = "v${version}";
     sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Another main loop";
     inherit (src.meta) homepage;
-    license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

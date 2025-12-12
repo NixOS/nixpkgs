@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moe";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
     url = "mirror://gnu/moe/moe-${finalAttrs.version}.tar.lz";
-    hash = "sha256-9Lq9bOCuGVFvmDRU+yDTLf9xrTFjN6xr+TpCpf8gnJ0=";
+    hash = "sha256-QfjIsJnOMEeUXKTgl6YNkkPpxz+7JowZShLaiw2fCmY=";
   };
 
   prePatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       delimiter matching, text conversion from/to UTF-8, romanization, etc.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "moe";
   };

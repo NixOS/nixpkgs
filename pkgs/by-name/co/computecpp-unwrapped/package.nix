@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     isClang = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
     homepage = "https://www.codeplay.com/products/computesuite/computecpp";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ davidtwco ];
+    license = lib.licenses.unfree;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

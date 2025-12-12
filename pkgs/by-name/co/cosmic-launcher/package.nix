@@ -4,70 +4,68 @@
   fetchFromGitHub,
   rustPlatform,
   just,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
-  appstream-glib,
-  desktop-file-utils,
-  intltool,
+  libcosmicAppHook,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-launcher";
-  version = "1.0.0-alpha.4";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
-    rev = "epoch-${version}";
-    hash = "sha256-rx2FrRSiW5UQLEUtNbQ5JEoTR9djQEtY3eOxR2IqkU4=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-BEBlBUWp7r95ErC7+aeSfxyexM8oocZHN2V+ZkPNqBo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gvrqomChaMv3u1pVUoGUkXw66Gr2wjkxNQIbrcbJrdY=";
+  cargoHash = "sha256-bmQ8Ni0sR9gfttsEhh9LNbWmTdOkW/JSMEzOf+kvN98=";
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
-    appstream-glib
-    desktop-file-utils
-    intltool
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-launcher"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  RUSTFLAGS = "--cfg tokio_unstable";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-launcher";
     description = "Launcher for the COSMIC Desktop Environment";
     mainProgram = "cosmic-launcher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

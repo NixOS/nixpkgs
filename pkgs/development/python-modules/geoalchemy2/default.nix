@@ -8,13 +8,14 @@
   shapely,
   sqlalchemy,
   alembic,
+  pytest-benchmark,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.16.0";
+  version = "0.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LjfCPSpKwcyjmGReTC4M58890ow3hbxlwl1f7iC9i6Y=";
+    tag = version;
+    hash = "sha256-F/+POYOb7PoUwLnQpM00zAPpbSXNeWJF2TZ4y260Pzw=";
   };
 
   build-system = [
@@ -38,8 +39,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     alembic
+    pytest-benchmark
     pytestCheckHook
-  ] ++ optional-dependencies.shapely;
+  ]
+  ++ optional-dependencies.shapely;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTestPaths = [
     # tests require live databases
@@ -63,11 +68,11 @@ buildPythonPackage rec {
     shapely = [ shapely ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for working with spatial databases";
     homepage = "https://geoalchemy-2.readthedocs.io/";
-    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
+    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

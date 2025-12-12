@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   gtk-doc,
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/goocanvas/2.0/goocanvas-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
@@ -41,6 +42,16 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  # add fedora patch to fix gcc-14 build
+  # https://src.fedoraproject.org/rpms/goocanvas2/tree/main
+  patches = [
+    (fetchpatch {
+      name = "goocanvas-2.0.4-Fix-building-with-GCC-14.patch";
+      hash = "sha256-9uqqC1uKZF9TDz5dfDTKSRCmjEiuvqkLnZ9w6U+q2TI=";
+      url = "https://src.fedoraproject.org/rpms/goocanvas2/raw/e799612a277262a0c6bd03db10a6ee9ca7871b9c/f/goocanvas-2.0.4-Fix-building-with-GCC-14.patch";
+    })
+  ];
+
   configureFlags = [
     "--disable-python"
   ];
@@ -49,18 +60,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      attrPath = "${pname}${lib.versions.major version}";
-      packageName = pname;
+      attrPath = "goocanvas${lib.versions.major version}";
+      packageName = "goocanvas";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

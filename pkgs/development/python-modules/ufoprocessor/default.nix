@@ -14,40 +14,39 @@
 
 buildPythonPackage rec {
   pname = "ufoprocessor";
-  version = "1.9.0";
+  version = "1.14.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "ufoProcessor";
-    inherit version;
-    sha256 = "0ns11aamgavgsfj8qf5kq7dvzmgl0mhr1cbych2f075ipfdvva5s";
-    extension = "zip";
+    inherit pname version;
+    sha256 = "sha256-/TjTzDWblBcbqNP9weTe/eIgas70+X11tIUDu4rAOwE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defcon
-    lxml
-    fonttools
-    fs
     fontmath
     fontparts
+    fonttools
     mutatormath
-  ];
+  ]
+  ++ defcon.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.ufo;
 
   checkPhase = ''
     runHook preCheck
     for t in Tests/*.py; do
-      # https://github.com/LettError/ufoProcessor/issues/32
-      [[ "$(basename "$t")" = "tests_fp.py" ]] || python "$t"
+      python "$t"
     done
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

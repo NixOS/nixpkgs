@@ -3,7 +3,7 @@
   fetchFromGitea,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "wgautomesh";
   version = "unstable-20240524";
 
@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1xphnyuRMZEeq907nyhAW7iERYJLS1kxH0wRBsfYL40=";
   };
 
-  cargoHash = "sha256-HZ1VImsfxRd0sFN/vKAKgwIV2eio2GiEz+6c1+dCmdk=";
+  cargoHash = "sha256-Lshj8L880gGLi5xY1H/7twrL3YHolqloOfXeckGw/VE=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple utility to help connect wireguard nodes together in a full mesh topology";
     homepage = "https://git.deuxfleurs.fr/Deuxfleurs/wgautomesh";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.lx ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.lx ];
     mainProgram = "wgautomesh";
   };
 }

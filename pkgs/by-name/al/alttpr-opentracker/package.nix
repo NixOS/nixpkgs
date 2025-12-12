@@ -17,29 +17,21 @@
 }:
 buildDotnetModule rec {
   pname = "opentracker";
-  version = "1.8.5";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "trippsc2";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha512-nWkPgVYdnBJibyJRdLPe3O3RioDPbzumSritRejmr4CeiPb7aUTON7HjivcV/GKor1guEYu+TJ+QxYrqO/eppg==";
+    repo = "opentracker";
+    tag = version;
+    hash = "sha256-4EBn3BX5tX+yPUjoNFQSls9CwTCd6MpvcBoUKwRndRo=";
   };
 
-  patches = [./remove-project.patch];
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   nugetDeps = ./deps.json;
 
-  projectFile = "OpenTracker.sln";
-  executables = ["OpenTracker"];
-
-  doCheck = true;
-  disabledTests = [
-    "OpenTracker.UnitTests.Models.Nodes.Factories.SLightWorldConnectionFactoryTests.GetNodeConnections_ShouldReturnExpectedValue"
-    "OpenTracker.UnitTests.Models.Sections.Factories.ItemSectionFactoryTests.GetItemSection_ShouldReturnExpected"
-  ];
+  projectFile = "src/OpenTracker/OpenTracker.csproj";
+  executables = [ "OpenTracker" ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -56,36 +48,35 @@ buildDotnetModule rec {
     openssl
   ];
 
-  runtimeDeps =
-    [
-      gtk3
-      openssl
-      xinput
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libX11
-      libXi
-    ]);
+  runtimeDeps = [
+    gtk3
+    openssl
+    xinput
+  ]
+  ++ (with xorg; [
+    libICE
+    libSM
+    libX11
+    libXi
+  ]);
 
   autoPatchelfIgnoreMissingDeps = [
     "libc.musl-x86_64.so.1"
     "libintl.so.8"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       # deps
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "OpenTracker";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

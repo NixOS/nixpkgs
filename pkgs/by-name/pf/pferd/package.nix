@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pferd";
-  version = "3.7.0";
+  version = "3.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Garmelon";
     repo = "PFERD";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-4+LlnGv/i9zDf+HeW86PJ6XsPMEkJ0JzhLr14MJ4WKM=";
+    tag = "v${version}";
+    sha256 = "sha256-ea/9+9zRlRfblPYfI40IPjHWPneXaAqtRp0Cb/FT+lg=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
     certifi
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Garmelon/PFERD";
     description = "Tool for downloading course-related files from ILIAS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _0xbe7a ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ _0xbe7a ];
     mainProgram = "pferd";
   };
 }

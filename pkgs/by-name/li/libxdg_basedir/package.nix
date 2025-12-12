@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "devnev";
-    repo = pname;
-    rev = "refs/tags/libxdg-basedir-${version}";
+    repo = "libxdg-basedir";
+    tag = "libxdg-basedir-${version}";
     hash = "sha256-ewtUKDdE6k9Q9hglWwhbTU3DTxvIN41t+zf2Gch9Dkk=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the XDG Base Directory specification";
     homepage = "https://github.com/devnev/libxdg-basedir";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.unix;
   };
 }

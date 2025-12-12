@@ -1,50 +1,52 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
+  falcon,
   fetchFromGitHub,
   furl,
   hatchling,
   jsonschema,
   pytest-asyncio,
   pytest-httpbin,
-  pytest7CheckHook,
-  pythonOlder,
-  requests,
+  pytest-pook,
+  pytestCheckHook,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.4.3";
+  version = "2.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "pook";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
+    tag = "v${version}";
+    hash = "sha256-z0QaMdsX2xLXICgQwnlUD2KsgCn0jB4wO83+6O4B3D8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    aiohttp
+  dependencies = [
     furl
     jsonschema
-    requests
     xmltodict
   ];
 
   nativeCheckInputs = [
+    falcon
     pytest-asyncio
     pytest-httpbin
-    pytest7CheckHook
+    pytest-pook
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pook" ];
+
+  disabledTests = [
+    # furl compat issue
+    "test_headers_not_matching"
+  ];
 
   disabledTestPaths = [
     # Don't test integrations
@@ -53,11 +55,14 @@ buildPythonPackage rec {
     "tests/unit/interceptors/"
   ];
 
-  meta = with lib; {
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
-    changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

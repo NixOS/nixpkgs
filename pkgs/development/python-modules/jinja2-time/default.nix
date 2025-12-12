@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jinja2_time" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hackebrot/jinja2-time";
     description = "Jinja2 Extension for Dates and Times";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

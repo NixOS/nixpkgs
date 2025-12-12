@@ -1,24 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  openssl,
+  rust-jemalloc-sys,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oha";
-  version = "1.5.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-repm6Od9vuDZVZRoU8QTXTTVeqjlw9lFmFVWDNjToyU=";
+    repo = "oha";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GDFS/f9fombAEXEf0f/issQFrFviU1nsLOIQ5nthPHk=";
   };
 
-  cargoHash = "sha256-4rKndnw+R78bfsUMOfFV3ZGM6df+ZhcxL3OeFCndZM4=";
+  cargoHash = "sha256-pZnHE89kwuByMtm5m9QLSuhJ6wxFrbVOShF7T6c2494=";
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
@@ -26,19 +31,23 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    rust-jemalloc-sys
   ];
 
   # tests don't work inside the sandbox
   doCheck = false;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
-    changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/hatoo/oha/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jpds ];
     mainProgram = "oha";
   };
-}
+})

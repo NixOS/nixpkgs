@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WY3OLPUwixrL2NSLfNBSSNMXJEoYBL+O6KoglU3Cz9g=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     "imapclient.tls"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       almac
       dotlambda
     ];

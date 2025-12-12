@@ -5,36 +5,38 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.10.1";
+  version = "0.13.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "s3transfer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
+    tag = version;
+    hash = "sha256-NDm1Lc0PXW1hbNftwdM2b87wFXSCBPCxZmwcRFmIyY8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ botocore ];
+  dependencies = [
+    botocore
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  disabledTestPaths =
-    [
-      # Requires network access
-      "tests/integration"
-    ]
-    ++
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration"
+  ]
+  ++
     # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
     # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
     # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
@@ -43,14 +45,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3transfer" ];
 
   optional-dependencies = {
-    crt = [ botocore.optional-dependencies.crt ];
+    crt = botocore.optional-dependencies.crt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     changelog = "https://github.com/boto/s3transfer/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

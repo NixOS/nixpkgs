@@ -4,23 +4,32 @@
   fetchCrate,
   docutils,
   installShellFiles,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdevctl";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4K4NW3DOTtzZJ7Gg0mnRPr88YeqEjTtKX+C4P8i923E=";
+    hash = "sha256-Zh+Dj3X87tTpqT/weZMpf7f3obqikjPy9pi50ifp6wQ=";
   };
 
-  cargoHash = "sha256-hCqNy32uPLsKfUJqiG2DRcXfqdvlp4bCutQmt+FieXc=";
+  # https://github.com/mdevctl/mdevctl/issues/111
+  patches = [
+    ./script-dir.patch
+  ];
+
+  cargoHash = "sha256-LG5UaSUTF6pVx7BBLiZ/OmAZNCKswFlTqHymg3bDkuc=";
 
   nativeBuildInputs = [
     docutils
     installShellFiles
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     ln -s mdevctl $out/bin/lsmdev
@@ -33,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/mdevctl-*/out/{lsmdev,mdevctl}.bash
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mdevctl/mdevctl";
     description = "Mediated device management utility for linux";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ edwtjo ];
+    platforms = lib.platforms.linux;
   };
 }

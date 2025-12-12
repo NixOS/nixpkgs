@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
-  version = "0.12.0";
+  version = "0.13.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ta0H6V7Zg/Jnu3973eYJXGwwQcqZnDTlsmWAHkQr2EA=";
+    hash = "sha256-lfBpHaY2UCBMg45S4IW8fcpkGkKJoT4qqR2yq5KiXuE=";
   };
 
-  cargoHash = "sha256-5F72vjEu0qrE3fYPbiw/UFUUnAZcEBcuhDkuqqCBbrM=";
+  cargoHash = "sha256-2URFqLg2aQF7MOpwG6fEPBXyBsLENWpdiXgxW/DJxQE=";
 
   buildInputs = [
     libbfd
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzing and property testing front-end framework for Rust";
     mainProgram = "cargo-bolero";
     homepage = "https://github.com/camshaft/bolero";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ekleog ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ekleog ];
   };
 }

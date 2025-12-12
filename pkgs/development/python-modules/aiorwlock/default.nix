@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiorwlock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QwjwuXjaxE1Y+Jzn8hJXY4wKltAT8mdOM7jJ9MF+DhA=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorwlock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read write lock for asyncio";
     homepage = "https://github.com/aio-libs/aiorwlock";
     changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
   };
 }

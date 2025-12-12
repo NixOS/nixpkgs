@@ -10,19 +10,19 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cpcloud";
-    repo = pname;
+    repo = "minesweep-rs";
     rev = "v${version}";
     hash = "sha256-FzMCqsPBcbblItRzfnY43glY4We9jk0eBxjG0SZnau8=";
   };
 
-  cargoHash = "sha256-VjIn4k/OuxsXLJ2LOk43LKHo0PrPyMigNOO2VVYZQYw=";
+  cargoHash = "sha256-HO0eO6Ip508AIALS50exP2btLd3jUhM+giHQpMdsAVA=";
 
-  meta = with lib; {
+  meta = {
     description = "Sweep some mines for fun, and probably not for profit";
     homepage = "https://github.com/cpcloud/minesweep-rs";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "minesweep";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,9 +12,19 @@ let
   initrdCfg = config.boot.initrd.systemd.tmpfiles;
   systemd = config.systemd.package;
 
-  attrsWith' = placeholder: elemType: types.attrsWith {
-    inherit elemType placeholder;
-  };
+  attrsWith' =
+    placeholder: elemType:
+    types.attrsWith {
+      inherit elemType placeholder;
+    };
+
+  escapeArgument = lib.strings.escapeC [
+    "\t"
+    "\n"
+    "\r"
+    " "
+    "\\"
+  ];
 
   settingsOption = {
     description = ''
@@ -28,95 +43,103 @@ let
         };
       };
     };
-    default = {};
-    type = attrsWith' "config-name" (attrsWith' "tmpfiles-type" (attrsWith' "path" (types.submodule ({ name, config, ... }: {
-      options.type = mkOption {
-        type = types.str;
-        default = name;
-        example = "d";
-        description = ''
-          The type of operation to perform on the file.
+    default = { };
+    type = attrsWith' "config-name" (
+      attrsWith' "path" (
+        attrsWith' "tmpfiles-type" (
+          types.submodule (
+            { name, config, ... }:
+            {
+              options.type = mkOption {
+                type = types.str;
+                default = name;
+                defaultText = "‹tmpfiles-type›";
+                example = "d";
+                description = ''
+                  The type of operation to perform on the file.
 
-          The type consists of a single letter and optionally one or more
-          modifier characters.
+                  The type consists of a single letter and optionally one or more
+                  modifier characters.
 
-          Please see the upstream documentation for the available types and
-          more details:
-          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
-        '';
-      };
-      options.mode = mkOption {
-        type = types.str;
-        default = "-";
-        example = "0755";
-        description = ''
-          The file access mode to use when creating this file or directory.
-        '';
-      };
-      options.user = mkOption {
-        type = types.str;
-        default = "-";
-        example = "root";
-        description = ''
-          The user of the file.
+                  Please see the upstream documentation for the available types and
+                  more details:
+                  {manpage}`tmpfiles.d(5)`
+                '';
+              };
+              options.mode = mkOption {
+                type = types.str;
+                default = "-";
+                example = "0755";
+                description = ''
+                  The file access mode to use when creating this file or directory.
+                '';
+              };
+              options.user = mkOption {
+                type = types.str;
+                default = "-";
+                example = "root";
+                description = ''
+                  The user of the file.
 
-          This may either be a numeric ID or a user/group name.
+                  This may either be a numeric ID or a user/group name.
 
-          If omitted or when set to `"-"`, the user and group of the user who
-          invokes systemd-tmpfiles is used.
-        '';
-      };
-      options.group = mkOption {
-        type = types.str;
-        default = "-";
-        example = "root";
-        description = ''
-          The group of the file.
+                  If omitted or when set to `"-"`, the user and group of the user who
+                  invokes systemd-tmpfiles is used.
+                '';
+              };
+              options.group = mkOption {
+                type = types.str;
+                default = "-";
+                example = "root";
+                description = ''
+                  The group of the file.
 
-          This may either be a numeric ID or a user/group name.
+                  This may either be a numeric ID or a user/group name.
 
-          If omitted or when set to `"-"`, the user and group of the user who
-          invokes systemd-tmpfiles is used.
-        '';
-      };
-      options.age = mkOption {
-        type = types.str;
-        default = "-";
-        example = "10d";
-        description = ''
-          Delete a file when it reaches a certain age.
+                  If omitted or when set to `"-"`, the user and group of the user who
+                  invokes systemd-tmpfiles is used.
+                '';
+              };
+              options.age = mkOption {
+                type = types.str;
+                default = "-";
+                example = "10d";
+                description = ''
+                  Delete a file when it reaches a certain age.
 
-          If a file or directory is older than the current time minus the age
-          field, it is deleted.
+                  If a file or directory is older than the current time minus the age
+                  field, it is deleted.
 
-          If set to `"-"` no automatic clean-up is done.
-        '';
-      };
-      options.argument = mkOption {
-        type = types.str;
-        default = "";
-        example = "";
-        description = ''
-          An argument whose meaning depends on the type of operation.
+                  If set to `"-"` no automatic clean-up is done.
+                '';
+              };
+              options.argument = mkOption {
+                type = types.str;
+                default = "";
+                example = "";
+                description = ''
+                  An argument whose meaning depends on the type of operation.
 
-          Please see the upstream documentation for the meaning of this
-          parameter in different situations:
-          <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
-        '';
-      };
-    }))));
+                  Please see the upstream documentation for the meaning of this
+                  parameter in different situations:
+                  {manpage}`tmpfiles.d(5)`
+                '';
+              };
+            }
+          )
+        )
+      )
+    );
   };
 
   # generates a single entry for a tmpfiles.d rule
   settingsEntryToRule = path: entry: ''
-    '${entry.type}' '${path}' '${entry.mode}' '${entry.user}' '${entry.group}' '${entry.age}' ${entry.argument}
+    '${entry.type}' '${path}' '${entry.mode}' '${entry.user}' '${entry.group}' '${entry.age}' ${escapeArgument entry.argument}
   '';
 
   # generates a list of tmpfiles.d rules from the attrs (paths) under tmpfiles.settings.<name>
-  pathsToRules = mapAttrsToList (path: types:
-    concatStrings (
-      mapAttrsToList (_type: settingsEntryToRule path) types
-    )
+  pathsToRules = mapAttrsToList (
+    path: types: concatStrings (mapAttrsToList (_type: settingsEntryToRule path) types)
   );
 
   mkRuleFileContent = paths: concatStrings (pathsToRules paths);
@@ -125,7 +148,7 @@ in
   options = {
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
         Rules for creation, deletion and cleaning of volatile and temporary files
@@ -137,18 +160,21 @@ in
 
     systemd.tmpfiles.settings = mkOption settingsOption;
 
-    boot.initrd.systemd.tmpfiles.settings = mkOption (settingsOption // {
-      description = ''
-        Similar to {option}`systemd.tmpfiles.settings` but the rules are
-        only applied by systemd-tmpfiles before `initrd-switch-root.target`.
+    boot.initrd.systemd.tmpfiles.settings = mkOption (
+      settingsOption
+      // {
+        description = ''
+          Similar to {option}`systemd.tmpfiles.settings` but the rules are
+          only applied by systemd-tmpfiles before `initrd-switch-root.target`.
 
-        See {manpage}`bootup(7)`.
-      '';
-    });
+          See {manpage}`bootup(7)`.
+        '';
+      }
+    );
 
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
       description = ''
@@ -169,17 +195,37 @@ in
   config = {
     warnings =
       let
-        paths = lib.filter (path:
-          path != null && lib.hasPrefix "/etc/tmpfiles.d/" path
-        ) (map (path: path.target) config.boot.initrd.systemd.storePaths);
+        paths = lib.filter (path: path != null && lib.hasPrefix "/etc/tmpfiles.d/" path) (
+          map (path: path.target) config.boot.initrd.systemd.storePaths
+        );
       in
-      lib.optional (lib.length paths > 0) (lib.concatStringsSep " " [
-        "Files inside /etc/tmpfiles.d in the initrd need to be created with"
-        "boot.initrd.systemd.tmpfiles.settings."
-        "Creating them by hand using boot.initrd.systemd.contents or"
-        "boot.initrd.systemd.storePaths will lead to errors in the future."
-        "Found these problematic files: ${lib.concatStringsSep ", " paths}"
-      ]);
+      lib.optional (lib.length paths > 0) (
+        lib.concatStringsSep " " [
+          "Files inside /etc/tmpfiles.d in the initrd need to be created with"
+          "boot.initrd.systemd.tmpfiles.settings."
+          "Creating them by hand using boot.initrd.systemd.contents or"
+          "boot.initrd.systemd.storePaths will lead to errors in the future."
+          "Found these problematic files: ${lib.concatStringsSep ", " paths}"
+        ]
+      )
+      ++ (lib.flatten (
+        lib.mapAttrsToList (
+          name: paths:
+          lib.mapAttrsToList (
+            path: entries:
+            lib.mapAttrsToList (
+              type': entry:
+              lib.optional (lib.match ''.*\\([nrt]|x[0-9A-Fa-f]{2}).*'' entry.argument != null) (
+                lib.concatStringsSep " " [
+                  "The argument option of ${name}.${type'}.${path} appears to"
+                  "contain escape sequences, which will be escaped again."
+                  "Unescape them if this is not intended: \"${entry.argument}\""
+                ]
+              )
+            ) entries
+          ) paths
+        ) cfg.settings
+      ));
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-tmpfiles-clean.service"
@@ -208,8 +254,15 @@ in
       description = "Re-setup tmpfiles on a system that is already running.";
 
       requiredBy = [ "sysinit-reactivation.target" ];
-      after = [ "local-fs.target" "systemd-sysusers.service" "systemd-journald.service" ];
-      before = [ "sysinit-reactivation.target" "shutdown.target" ];
+      after = [
+        "local-fs.target"
+        "systemd-sysusers.service"
+        "systemd-journald.service"
+      ];
+      before = [
+        "sysinit-reactivation.target"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
       restartTriggers = [ config.environment.etc."tmpfiles.d".source ];
 
@@ -227,24 +280,31 @@ in
           "network.hosts"
           "ssh.authorized_keys.root"
         ];
+        RestrictSUIDSGID = false;
       };
     };
 
     environment.etc = {
-      "tmpfiles.d".source = (pkgs.symlinkJoin {
-        name = "tmpfiles.d";
-        paths = map (p: p + "/lib/tmpfiles.d") cfg.packages;
-        postBuild = ''
-          for i in $(cat $pathsPath); do
-            (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
-              echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
-              exit 1
-            )
-          done
-        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
-          rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.passthru.targets;
-      }) + "/*";
+      "tmpfiles.d".source =
+        (pkgs.symlinkJoin {
+          name = "tmpfiles.d";
+          paths = map (p: p + "/lib/tmpfiles.d") cfg.packages;
+          postBuild = ''
+            for i in $(cat $pathsPath); do
+              (test -d "$i" && test $(ls "$i"/*.conf | wc -l) -ge 1) || (
+                echo "ERROR: The path '$i' from systemd.tmpfiles.packages contains no *.conf files."
+                exit 1
+              )
+            done
+          ''
+          + concatMapStrings (
+            name:
+            optionalString (hasPrefix "tmpfiles.d/" name) ''
+              rm -f $out/${removePrefix "tmpfiles.d/" name}
+            ''
+          ) config.system.build.etc.passthru.targets;
+        })
+        + "/*";
       "mtab" = {
         mode = "direct-symlink";
         source = "/proc/mounts";
@@ -253,7 +313,7 @@ in
 
     systemd.tmpfiles.packages = [
       # Default tmpfiles rules provided by systemd
-      (pkgs.runCommand "systemd-default-tmpfiles" {} ''
+      (pkgs.runCommand "systemd-default-tmpfiles" { } ''
         mkdir -p $out/lib/tmpfiles.d
         cd $out/lib/tmpfiles.d
 
@@ -280,15 +340,17 @@ in
           ${concatStringsSep "\n" cfg.rules}
         '';
       })
-    ] ++ (mapAttrsToList (name: paths:
-      pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
+    ]
+    ++ (mapAttrsToList (
+      name: paths: pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
     ) cfg.settings);
 
     systemd.tmpfiles.rules = [
       "d  /run/lock                          0755 root root - -"
       "d  /var/db                            0755 root root - -"
       "L  /var/lock                          -    -    -    - ../run/lock"
-    ] ++ lib.optionals config.nix.enable [
+    ]
+    ++ lib.optionals config.nix.enable [
       "d  /nix/var                           0755 root root - -"
       "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
     ]
@@ -297,7 +359,8 @@ in
       "R! /etc/group.lock                    -    -    -    - -"
       "R! /etc/passwd.lock                   -    -    -    - -"
       "R! /etc/shadow.lock                   -    -    -    - -"
-    ] ++ lib.optionals config.nix.enable [
+    ]
+    ++ lib.optionals config.nix.enable [
       "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
       "R! /nix/var/nix/temproots             -    -    -    - -"
     ];
@@ -322,10 +385,14 @@ in
         description = "Create Volatile Files and Directories in the Real Root";
         after = [ "initrd-fs.target" ];
         before = [
-          "initrd-nixos-activation.service"
-          "shutdown.target" "initrd-switch-root.target"
+          "initrd.target"
+          "shutdown.target"
+          "initrd-switch-root.target"
         ];
-        conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+        conflicts = [
+          "shutdown.target"
+          "initrd-switch-root.target"
+        ];
         wantedBy = [ "initrd.target" ];
         serviceConfig = {
           Type = "oneshot";
@@ -349,13 +416,11 @@ in
 
       contents."/etc/tmpfiles.d" = mkIf (initrdCfg.settings != { }) {
         source = pkgs.linkFarm "initrd-tmpfiles.d" (
-          mapAttrsToList
-            (name: paths: {
-              name = "${name}.conf";
-              path = pkgs.writeText "${name}.conf" (mkRuleFileContent paths);
-            }
-            )
-            initrdCfg.settings);
+          mapAttrsToList (name: paths: {
+            name = "${name}.conf";
+            path = pkgs.writeText "${name}.conf" (mkRuleFileContent paths);
+          }) initrdCfg.settings
+        );
       };
     };
   };

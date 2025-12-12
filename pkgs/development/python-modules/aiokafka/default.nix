@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiokafka";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OU/Kept3TvMfGvVCjSthfZnfTX6/T0Fy3PS/ynrV3Cg=";
   };
 
@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiokafka" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

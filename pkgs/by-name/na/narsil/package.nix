@@ -8,33 +8,32 @@
   enableSdl2 ? true,
   SDL2,
   SDL2_image,
-  SDL2_sound,
   SDL2_mixer,
   SDL2_ttf,
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "1.3.0-350-ga51756908";
+  version = "1.4.0-93-g3d8664466";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
-    rev = version;
-    hash = "sha256-kpfgM+FpvSZLrgu6Smbjlr8QfI400+85wqUR+l0AJkA=";
+    tag = version;
+    hash = "sha256-PsSotj2lkQcgyQ1rSJpuH+TvTWehgJsI9nWhDrQ/4Zk=";
   };
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals enableSdl2 [
-      SDL2
-      SDL2_image
-      SDL2_sound
-      SDL2_mixer
-      SDL2_ttf
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals enableSdl2 [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+  ];
 
   enableParallelBuilding = true;
 
@@ -51,7 +50,10 @@ stdenv.mkDerivation rec {
       NarSil attempts to be an almost-faithful recreation of Sil 1.3.0,
       but based on the codebase of modern Angband.
     '';
-    maintainers = with lib.maintainers; [ nanotwerp x123 ];
+    maintainers = with lib.maintainers; [
+      nanotwerp
+      x123
+    ];
     license = lib.licenses.gpl2;
   };
 }

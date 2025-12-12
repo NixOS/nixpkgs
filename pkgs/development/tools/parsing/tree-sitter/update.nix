@@ -1,12 +1,13 @@
-{ writeShellScript
-, writeText
-, writers
-, nix-prefetch-git
-, formats
-, lib
-, coreutils
-, curl
-, xe
+{
+  writeShellScript,
+  writeText,
+  writers,
+  nix-prefetch-git,
+  formats,
+  lib,
+  coreutils,
+  curl,
+  xe,
 }:
 
 # Grammar list:
@@ -77,6 +78,8 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # this is the swift language bindings, tree-sitter-swift is the (abandoned) grammar
+    "swift-tree-sitter"
     # abandoned
     "tree-sitter-agda"
     # abandoned
@@ -91,7 +94,6 @@ let
     "kotlin-tree-sitter"
     # not ready to be used
     "zig-tree-sitter"
-
 
     # Non-grammar repositories
     ".github"
@@ -142,7 +144,7 @@ let
       repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
-      orga = "cstrahan";
+      orga = "nix-community";
       repo = "tree-sitter-nix";
     };
     "tree-sitter-latex" = {
@@ -152,6 +154,10 @@ let
     "tree-sitter-lua" = {
       orga = "MunifTanjim";
       repo = "tree-sitter-lua";
+    };
+    "tree-sitter-factor" = {
+      orga = "erochest";
+      repo = "tree-sitter-factor";
     };
     "tree-sitter-fennel" = {
       orga = "travonted";
@@ -177,6 +183,10 @@ let
       orga = "stsewd";
       repo = "tree-sitter-rst";
     };
+    "tree-sitter-sml" = {
+      orga = "MatthewFluet";
+      repo = "tree-sitter-sml";
+    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
@@ -199,7 +209,7 @@ let
       repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
-      orga = "ikatyang";
+      orga = "tree-sitter-grammars";
       repo = "tree-sitter-yaml";
     };
     "tree-sitter-zig" = {
@@ -271,7 +281,7 @@ let
       repo = "tree-sitter-scss";
     };
     "tree-sitter-erlang" = {
-      orga = "abstractmachineslab";
+      orga = "WhatsApp";
       repo = "tree-sitter-erlang";
     };
     "tree-sitter-elixir" = {
@@ -329,6 +339,14 @@ let
     "tree-sitter-gdscript" = {
       orga = "prestonknopp";
       repo = "tree-sitter-gdscript";
+    };
+    "tree-sitter-gemini" = {
+      orga = "blessanabraham";
+      repo = "tree-sitter-gemini";
+    };
+    "tree-sitter-go-template" = {
+      orga = "ngalaiko";
+      repo = "tree-sitter-go-template";
     };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
@@ -462,66 +480,107 @@ let
       orga = "kaermorchen";
       repo = "tree-sitter-twig";
     };
+    "tree-sitter-hyprlang" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-hyprlang";
+    };
+    "tree-sitter-kdl" = {
+      orga = "tree-sitter-grammars";
+      repo = "tree-sitter-kdl";
+    };
+    "tree-sitter-tera" = {
+      orga = "uncenter";
+      repo = "tree-sitter-tera";
+    };
+    "tree-sitter-netlinx" = {
+      orga = "norgate-av";
+      repo = "tree-sitter-netlinx";
+    };
+    "tree-sitter-crystal" = {
+      orga = "crystal-lang-tools";
+      repo = "tree-sitter-crystal";
+    };
+    "tree-sitter-slint" = {
+      orga = "slint-ui";
+      repo = "tree-sitter-slint";
+    };
   };
+
+  pinnedGrammars = [
+    "tree-sitter-bash"
+    "tree-sitter-bibtex"
+    "tree-sitter-c"
+    "tree-sitter-comment"
+    "tree-sitter-fortran"
+    "tree-sitter-hcl"
+    "tree-sitter-hyprlang"
+    "tree-sitter-llvm"
+    "tree-sitter-markdown"
+    "tree-sitter-query"
+    "tree-sitter-rust"
+  ];
+  pinnedGrammarsJson = jsonFile pinnedGrammars;
 
   allGrammars =
     let
-      treeSitterOrgaGrammars =
-        lib.listToAttrs (map
-          (repo:
-            {
-              name = repo;
-              value = {
-                orga = "tree-sitter";
-                inherit repo;
-              };
-            })
-          knownTreeSitterOrgGrammarRepos);
+      treeSitterOrgaGrammars = lib.listToAttrs (
+        map (repo: {
+          name = repo;
+          value = {
+            orga = "tree-sitter";
+            inherit repo;
+          };
+        }) knownTreeSitterOrgGrammarRepos
+      );
 
     in
     lib.attrsets.unionOfDisjoint otherGrammars treeSitterOrgaGrammars;
 
-
-
   jsonFile = name: val: (formats.json { }).generate name val;
 
   # implementation of the updater
-  updateImpl = passArgs "updateImpl-with-args"
-    {
-      binaries = {
-        curl = "${curl}/bin/curl";
-        nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
-        printf = "${coreutils}/bin/printf";
-      };
-      inherit
-        knownTreeSitterOrgGrammarRepos
-        ignoredTreeSitterOrgRepos
-        ;
-    }
-    (writers.writePython3 "updateImpl"
+  updateImpl =
+    passArgs "updateImpl-with-args"
       {
-        flakeIgnore = [ "E501" ];
-      } ./update_impl.py);
+        binaries = {
+          curl = "${curl}/bin/curl";
+          nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+          printf = "${coreutils}/bin/printf";
+        };
+        inherit
+          knownTreeSitterOrgGrammarRepos
+          ignoredTreeSitterOrgRepos
+          pinnedGrammars
+          ;
+      }
+      (
+        writers.writePython3 "updateImpl" {
+          flakeIgnore = [ "E501" ];
+        } ./update_impl.py
+      );
 
   # Pass the given arguments to the command, in the ARGS environment variable.
   # The arguments are just a json object that should be available in the script.
-  passArgs = name: argAttrs: script: writeShellScript name ''
-    env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
-      ${script} "$@"
-  '';
+  passArgs =
+    name: argAttrs: script:
+    writeShellScript name ''
+      env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
+        ${script} "$@"
+    '';
 
-  foreachSh = attrs: f:
-    lib.concatMapStringsSep "\n" f
-      (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
+  foreachSh =
+    attrs: f: lib.concatMapStringsSep "\n" f (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
   jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON { });
 
   # Run the given script for each of the attr list.
   # The attrs are passed to the script as a json value.
-  forEachParallel = name: script: listOfAttrs: writeShellScript "for-each-parallel.sh" ''
-    < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
-      ${xe}/bin/xe -F -j5 ${script} {}
-  '';
+  forEachParallel =
+    name: script: listOfAttrs:
+    writeShellScript "for-each-parallel.sh" ''
+      < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
+        ${xe}/bin/xe -F -j5 ${script} {}
+    '';
 
   # The output directory in the current source tree.
   # This will depend on your local environment, but that is intentional.
@@ -532,32 +591,36 @@ let
     ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
      echo "writing files to ${outputDir}" 1>&2
      mkdir -p "${outputDir}"
-     ${forEachParallel
-         "repos-to-fetch"
-         (writeShellScript "fetch-repo" ''
-             ${updateImpl} fetch-repo "$1"
-         '')
-         (lib.mapAttrsToList
-           (nixRepoAttrName: attrs: attrs // {
+     ${forEachParallel "repos-to-fetch"
+       (writeShellScript "fetch-repo" ''
+         ${updateImpl} fetch-repo "$1"
+       '')
+       (
+         lib.mapAttrsToList (
+           nixRepoAttrName: attrs:
+           attrs
+           // {
              inherit
                nixRepoAttrName
-               outputDir;
-           })
-           allGrammars)
+               outputDir
+               ;
+           }
+         ) allGrammars
+       )
      }
      ${updateImpl} print-all-grammars-nix-file "$(< ${
-         jsonFile "all-grammars.json" {
-           allGrammars =
-             (lib.mapAttrsToList
-               (nixRepoAttrName: attrs: attrs // {
-                 inherit nixRepoAttrName;
-               })
-               allGrammars);
-           inherit outputDir;
-         }
+       jsonFile "all-grammars.json" {
+         allGrammars = lib.mapAttrsToList (
+           nixRepoAttrName: attrs:
+           attrs
+           // {
+             inherit nixRepoAttrName;
+           }
+         ) allGrammars;
+         inherit outputDir;
+       }
      })"
   '';
-
 
 in
 update-all-grammars

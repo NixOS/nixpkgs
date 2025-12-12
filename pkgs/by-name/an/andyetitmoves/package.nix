@@ -88,13 +88,12 @@ stdenv.mkDerivation rec {
     openal
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Physics/Gravity Platform game";
     longDescription = ''
       And Yet It Moves is an award-winning physics-based platform game in which players rotate the game world at will to solve challenging puzzles. Tilting the world turns walls into floors, slides into platforms, and stacks of rocks into dangerous hazards.
     '';
     homepage = "http://www.andyetitmoves.net/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ bluescreen303 ];
+    license = lib.licenses.unfree;
   };
 }

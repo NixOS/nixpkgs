@@ -10,15 +10,18 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "vit";
-  version = "2.3.2";
+  version = "2.3.3";
+  pyproject = true;
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qDfY6GWnDQ44Sh540xQzDwANEI+mLjpy2a7G3sfKIzw=";
+    hash = "sha256-+lrXGfhoB4z5IWkJTXMIm3GGVPfNGO9lUB3uFTx8hDY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     tasklib
     urwid
   ];
@@ -36,12 +39,14 @@ buildPythonApplication rec {
     export TERM=''${TERM-linux}
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "vit" ];
+
+  meta = {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
     mainProgram = "vit";
-    maintainers = with maintainers; [ arcnmx ];
-    platforms = platforms.all;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ arcnmx ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
   };
 }

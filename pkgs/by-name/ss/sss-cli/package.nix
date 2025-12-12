@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-cargo-lock.patch ];
 
-  cargoHash = "sha256-nKb0J9ym3ZYC80KemwQwT5vVtQUngYD4/091hAIYAiU=";
+  cargoHash = "sha256-yutjlaqLf8R8KmdeKF+CHz/s/b6T+GB9bOl2liMBmMQ=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dsprenkels/sss-cli";
     description = "Command line program for secret-sharing strings";
-    license = licenses.mit;
-    maintainers = with maintainers; [ laalsaas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ laalsaas ];
   };
 }

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   glib,
   intltool,
   libfm,
@@ -13,6 +14,8 @@
   withGtk3 ? true,
   gtk2,
   gtk3,
+  gettext,
+  nix-update-script,
 }:
 
 let
@@ -20,14 +23,23 @@ let
   gtk = if withGtk3 then gtk3 else gtk2;
   inherit (lib) optional;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanfm";
-  version = "1.3.2";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/pcmanfm-${version}.tar.xz";
-    sha256 = "sha256-FMt7JHSTxMzmX7tZAmEeOtAKeocPvB5QrcUEKMUUDPc=";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "pcmanfm";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-4kJDCnld//Vbe2KbrLoYZJ/dutagY/GImoOnbpQIdDY=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    intltool
+    autoreconfHook
+  ];
 
   buildInputs = [
     glib
@@ -37,20 +49,19 @@ stdenv.mkDerivation rec {
     pango
     adwaita-icon-theme
   ];
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-    intltool
-  ];
+
+  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "File manager with GTK interface";
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux;
     mainProgram = "pcmanfm";
   };
-}
+})

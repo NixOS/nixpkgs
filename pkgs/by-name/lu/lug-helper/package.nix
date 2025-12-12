@@ -7,17 +7,21 @@
   coreutils,
   findutils,
   zenity,
+  unzip,
+  cabextract,
+  libnotify,
+  winetricks,
   fetchFromGitHub,
   nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "lug-helper";
-  version = "3.5";
+  pname = "lug-helper";
+  version = "4.6";
   src = fetchFromGitHub {
     owner = "starcitizen-lug";
     repo = "lug-helper";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-yaYSm2vft55koZeB32Gta7RCjFTEec481LhrVHGGMm4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E8SSsAI9GvTTY121si6SsnbxXnlcc05nB+USrOdCDOw=";
   };
 
   buildInputs = [
@@ -55,8 +59,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           coreutils
           findutils
           zenity
+          cabextract
+          unzip
+          libnotify
+          winetricks
         ]
-      }
+      } \
+      --prefix XDG_DATA_DIRS : "$out"
 
   '';
   passthru.updateScript = nix-update-script { };

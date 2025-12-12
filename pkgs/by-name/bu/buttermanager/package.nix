@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "egara";
     repo = "buttermanager";
-    rev = version;
+    tag = version;
     hash = "sha256-/U5IVJvYCw/YzBWjQ949YP9uoxsTNRJ5FO7rrI6Cvhs=";
   };
 
@@ -45,11 +45,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm444 packaging/buttermanager.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Btrfs tool for managing snapshots, balancing filesystems and upgrading the system safetly";
     homepage = "https://github.com/egara/buttermanager";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ t4ccer ];
     mainProgram = "buttermanager";
   };
 }

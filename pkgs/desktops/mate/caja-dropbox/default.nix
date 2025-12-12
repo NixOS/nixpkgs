@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   gobject-introspection,
   gdk-pixbuf,
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-cli-paths.patch;
+    (replaceVars ./fix-cli-paths.patch {
       inherit dropboxd;
+      # patch context
+      DESKTOP_FILE_DIR = null;
     })
   ];
 
@@ -58,14 +59,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Dropbox extension for Caja file manager";
     homepage = "https://github.com/mate-desktop/caja-dropbox";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-nd-30
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

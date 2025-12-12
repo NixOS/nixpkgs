@@ -4,7 +4,6 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 nixpkgs=../../../../../../
-node_packages="$nixpkgs/pkgs/development/node-packages"
 owner=rust-lang
 repo=rust-analyzer
 ver=$(
@@ -22,30 +21,12 @@ if [[ "$(nix-instantiate --eval --strict -E "(builtins.compareVersions \"$req_vs
     exit 1
 fi
 
-extension_ver=$(curl "https://github.com/$owner/$repo/releases/download/$ver/rust-analyzer-linux-x64.vsix" -L |
+vsix_url="https://github.com/$owner/$repo/releases/download/$ver/rust-analyzer-linux-x64.vsix"
+extension_ver=$(curl $vsix_url -L |
     bsdtar -xf - --to-stdout extension/package.json | # Use bsdtar to extract vsix(zip).
     jq --raw-output '.version')
+echo $extension_ver > version.txt
 echo "Extension version: $extension_ver"
 
-# We need devDependencies to build vsix.
-# `esbuild` is a binary package an is already in nixpkgs so we omit it here.
-jq '{ name, version: $ver, dependencies: (.dependencies + .devDependencies | del(.esbuild)) }' "$node_src/package.json" \
-    --arg ver "$extension_ver" \
-    >"build-deps/package.json.new"
-
-old_deps="$(jq '.dependencies' build-deps/package.json)"
-new_deps="$(jq '.dependencies' build-deps/package.json.new)"
-if [[ "$old_deps" == "$new_deps" ]]; then
-    echo "package.json dependencies not changed, do simple version change"
-
-    sed -E '/^  "rust-analyzer-build-deps/,+3 s/version = ".*"/version = "'"$extension_ver"'"/' \
-        --in-place "$node_packages"/node-packages.nix
-    mv build-deps/package.json{.new,}
-else
-    echo "package.json dependencies changed, updating nodePackages"
-    mv build-deps/package.json{.new,}
-
-    ./"$node_packages"/generate.sh
-fi
-
 echo "Remember to also update the releaseTag and hash in default.nix!"
+echo "The releaseTag should be set to $ver"

@@ -9,7 +9,6 @@ in
   libtool,
   bison,
   buildPackages,
-  fetchFromGitHub,
   fetchurl,
   gettext,
   lib,
@@ -17,7 +16,6 @@ in
   perl,
   runCommand,
   zlib,
-  CoreServices,
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
@@ -34,11 +32,46 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.43.1";
+  version = "2.44";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  # gas is disabled for some targets via noconfigdirs in configure.
+  targetHasGas = !stdenv.targetPlatform.isDarwin;
+
+  # gas isn't multi-target, even with --enable-targets=all, so we do
+  # separate builds of just gas for each target.
+  #
+  # There's no way to do this exhaustively, so feel free to add
+  # additional targets here as required.
+  allGasTargets =
+    allGasTargets'
+    ++ lib.optional (
+      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+    ) targetPlatform.config;
+  allGasTargets' = [
+    "aarch64-unknown-linux-gnu"
+    "alpha-unknown-linux-gnu"
+    "arm-unknown-linux-gnu"
+    "avr-unknown-linux-gnu"
+    "cris-unknown-linux-gnu"
+    "hppa-unknown-linux-gnu"
+    "i686-unknown-linux-gnu"
+    "ia64-unknown-linux-gnu"
+    "m68k-unknown-linux-gnu"
+    "mips-unknown-linux-gnu"
+    "mips64-unknown-linux-gnu"
+    "msp430-unknown-linux-gnu"
+    "powerpc-unknown-linux-gnu"
+    "powerpc64-unknown-linux-gnu"
+    "s390-unknown-linux-gnu"
+    "sparc-unknown-linux-gnu"
+    "vax-unknown-linux-gnu"
+    "x86_64-unknown-linux-gnu"
+    "xscale-unknown-linux-gnu"
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-    hash = "sha256-vsqsXSleA3WHtjpC+tV/49nXuD9HjrJLZ/nuxdDxhy8=";
+    url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
+    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -85,45 +118,51 @@ stdenv.mkDerivation (finalAttrs: {
     ./avr-size.patch
 
     ./windres-locate-gcc.patch
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5244
+    ./CVE-2025-5244.diff
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5245
+    ./CVE-2025-5245.diff
   ];
 
-  outputs =
-    [
-      "out"
-      "info"
-      "man"
-      "dev"
-    ]
-    # Ideally we would like to always install 'lib' into a separate
-    # target. Unfortunately cross-compiled binutils installs libraries
-    # across both `$lib/lib/` and `$out/$target/lib` with a reference
-    # from $out to $lib. Probably a binutils bug: all libraries should go
-    # to $lib as binutils does not build target libraries. Let's make our
-    # life slightly simpler by installing everything into $out for
-    # cross-binutils.
-    ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "dev"
+  ]
+  # Ideally we would like to always install 'lib' into a separate
+  # target. Unfortunately cross-compiled binutils installs libraries
+  # across both `$lib/lib/` and `$out/$target/lib` with a reference
+  # from $out to $lib. Probably a binutils bug: all libraries should go
+  # to $lib as binutils does not build target libraries. Let's make our
+  # life slightly simpler by installing everything into $out for
+  # cross-binutils.
+  ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # texinfo was removed here in https://github.com/NixOS/nixpkgs/pull/210132
   # to reduce rebuilds during stdenv bootstrap.  Please don't add it back without
   # checking the impact there first.
-  nativeBuildInputs =
-    [
-      bison
-      perl
-    ]
-    ++ lib.optionals buildPlatform.isDarwin [
-      autoconf269
-      automake
-      gettext
-      libtool
-    ];
+  nativeBuildInputs = [
+    bison
+    perl
+  ]
+  ++ lib.optionals buildPlatform.isDarwin [
+    autoconf269
+    automake
+    gettext
+    libtool
+  ];
 
   buildInputs = [
     zlib
     gettext
-  ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
+  ];
 
   inherit noSysDirs;
 
@@ -150,20 +189,10 @@ stdenv.mkDerivation (finalAttrs: {
           sed -i "$i" -e 's|ln |ln -s |'
       done
 
-      # autoreconfHook is not included for all targets.
-      # Call it here explicitly as well.
-      ${finalAttrs.postAutoreconf}
+      configureScript="$PWD/configure"
+      mkdir $NIX_BUILD_TOP/build
+      cd $NIX_BUILD_TOP/build
     '';
-
-  postAutoreconf = ''
-    # As we regenerated configure build system tries hard to use
-    # texinfo to regenerate manuals. Let's avoid the dependency
-    # on texinfo in bootstrap path and keep manuals unmodified.
-    touch gas/doc/.dirstamp
-    touch gas/doc/asconfig.texi
-    touch gas/doc/as.1
-    touch gas/doc/as.info
-  '';
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
@@ -180,7 +209,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [
     "format"
-    "pie"
   ];
 
   configurePlatforms = [
@@ -189,65 +217,92 @@ stdenv.mkDerivation (finalAttrs: {
     "target"
   ];
 
-  configureFlags =
-    [
-      "--enable-64-bit-bfd"
-      "--with-system-zlib"
+  configureFlags = [
+    "--enable-64-bit-bfd"
+    "--with-system-zlib"
 
-      "--enable-deterministic-archives"
-      "--disable-werror"
-      "--enable-fix-loongson2f-nop"
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
 
-      # Turn on --enable-new-dtags by default to make the linker set
-      # RUNPATH instead of RPATH on binaries.  This is important because
-      # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
-      "--enable-new-dtags"
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
 
-      # force target prefix. Some versions of binutils will make it empty if
-      # `--host` and `--target` are too close, even if Nixpkgs thinks the
-      # platforms are different (e.g. because not all the info makes the
-      # `config`). Other versions of binutils will always prefix if `--target` is
-      # passed, even if `--host` and `--target` are the same. The easiest thing
-      # for us to do is not leave it to chance, and force the program prefix to be
-      # what we want it to be.
-      "--program-prefix=${targetPrefix}"
+    # force target prefix. Some versions of binutils will make it empty if
+    # `--host` and `--target` are too close, even if Nixpkgs thinks the
+    # platforms are different (e.g. because not all the info makes the
+    # `config`). Other versions of binutils will always prefix if `--target` is
+    # passed, even if `--host` and `--target` are the same. The easiest thing
+    # for us to do is not leave it to chance, and force the program prefix to be
+    # what we want it to be.
+    "--program-prefix=${targetPrefix}"
 
-      # Unconditionally disable:
-      # - musl target needs porting: https://sourceware.org/PR29477
-      "--disable-gprofng"
+    # Unconditionally disable:
+    # - musl target needs porting: https://sourceware.org/PR29477
+    "--disable-gprofng"
 
-      # By default binutils searches $libdir for libraries. This brings in
-      # libbfd and libopcodes into a default visibility. Drop default lib
-      # path to force users to declare their use of these libraries.
-      "--with-lib-path=:"
-    ]
-    ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
-    ++ lib.optionals enableGold [
-      "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
-      "--enable-plugins"
-    ]
-    ++ (
-      if enableShared then
-        [
-          "--enable-shared"
-          "--disable-static"
-        ]
-      else
-        [
-          "--disable-shared"
-          "--enable-static"
-        ]
-    )
-    ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    # By default binutils searches $libdir for libraries. This brings in
+    # libbfd and libopcodes into a default visibility. Drop default lib
+    # path to force users to declare their use of these libraries.
+    "--with-lib-path=:"
+  ]
+  ++ lib.optionals withAllTargets [
+    "--enable-targets=all"
+    # gas will be built separately for each target.
+    "--disable-gas"
+  ]
+  ++ lib.optionals enableGold [
+    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+    "--enable-plugins"
+  ]
+  ++ (
+    if enableShared then
       [
-        # lld17+ passes `--no-undefined-version` by default and makes this a hard
-        # error; libctf.ver version script references symbols that aren't present.
-        #
-        # This is fixed upstream and can be removed with the future release of 2.43.
-        # For now we allow this with `--undefined-version`:
-        "LDFLAGS=-Wl,--undefined-version"
+        "--enable-shared"
+        "--disable-static"
       ]
-    );
+    else
+      [
+        "--disable-shared"
+        "--enable-static"
+      ]
+  )
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; libctf.ver version script references symbols that aren't present.
+      #
+      # This is fixed upstream and can be removed with the future release of 2.43.
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+    ]
+  );
+
+  postConfigure = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      mkdir "$NIX_BUILD_TOP/build-$target"
+      env -C "$NIX_BUILD_TOP/build-$target" \
+        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        --enable-gas --program-prefix "$target-"  --target "$target"
+    done
+  '';
+
+  makeFlags = [
+    # As we regenerated configure build system tries hard to use
+    # texinfo to regenerate manuals. Let's avoid the dependency
+    # on texinfo in bootstrap path and keep manuals unmodified.
+    "MAKEINFO=true"
+  ];
+
+  postBuild = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
+        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        TARGET-gas=as-new all-gas
+    done
+  '';
 
   # Fails
   doCheck = false;
@@ -271,10 +326,21 @@ stdenv.mkDerivation (finalAttrs: {
   #   $out/$host/$target/include/* to $dev/include/*
   # TODO(trofi): fix installation paths upstream so we could remove this
   # code and have "lib" output unconditionally.
-  postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
-  '';
+  postInstall =
+    lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+    ''
+    + lib.optionalString withAllTargets ''
+      for target in ${lib.escapeShellArgs allGasTargets}; do
+        make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
+          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          install-exec-bindir
+      done
+    ''
+    + lib.optionalString (withAllTargets && targetHasGas) ''
+      ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
+    '';
 
   passthru = {
     inherit targetPrefix;
@@ -294,7 +360,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
       The GNU Binutils are a collection of binary tools.  The main
@@ -303,12 +369,12 @@ stdenv.mkDerivation (finalAttrs: {
       `gprof', `nm', `strip', etc.
     '';
     homepage = "https://www.gnu.org/software/binutils/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       ericson2314
       lovesegfault
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a
     # collision due to the ld/as wrappers/symlinks in the latter.

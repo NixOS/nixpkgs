@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   unixtools,
-  php82,
+  php,
   python3,
   makeWrapper,
   nixosTests,
@@ -23,20 +23,20 @@
 }:
 
 let
-  phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
+  phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
-phpPackage.buildComposerProject rec {
+phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "24.12.0";
+  version = "25.10.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
-    repo = pname;
-    rev = "${version}";
-    sha256 = "sha256-/0mc4wTx9WDxgDxqq+Kut8uX/Yr+bxqZ1BeJvmFDxG8=";
+    repo = "librenms";
+    tag = version;
+    hash = "sha256-SzDSeWTnsXy274H2mkGIHOsW26EoL7aony7Xcb+e+h4=";
   };
 
-  vendorHash = "sha256-DNiTSXt/1Qr67BdlTu3ccP4Whw5pyybeFJ045c/e8Dc=";
+  vendorHash = "sha256-OYQsgwbxsXsOM+sn0mJcABtyXVQAKBa6/ghfbZR1jX4=";
 
   php = phpPackage;
 
@@ -68,9 +68,8 @@ phpPackage.buildComposerProject rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/librenms/* $out
     rm -r $out/share
 
@@ -78,35 +77,37 @@ phpPackage.buildComposerProject rec {
     patch -p1 -d $out -i ${./broken-binary-paths.diff}
 
     substituteInPlace \
-      $out/misc/config_definitions.json \
-      --replace '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
-      --replace '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
-      --replace '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
-      --replace '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
-      --replace '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
-      --replace '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
-      --replace '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
-      --replace '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
-      --replace '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
-      --replace '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
-      --replace '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
-      --replace '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
-      --replace '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
-      --replace '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
-      --replace '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
-      --replace '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
-      --replace '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
-      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
-      --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
+      $out/resources/definitions/config_definitions.json \
+      --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
+      --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
+      --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
+      --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
+      --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
+      --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
+      --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
+      --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
+      --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
+      --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
+      --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
+      --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
+      --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
+      --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
+      --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
+      --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
+      --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
+      --replace-fail '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
+      --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
+      --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
-    substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
-    substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
-    substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/LibreNMS/wrapper.py --replace-fail '/usr/bin/env php' '${phpPackage}/bin/php'
+    substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
+    substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
+
+    php $out/artisan vue-i18n:generate --multi-locales --format=umd
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs
@@ -115,8 +116,6 @@ phpPackage.buildComposerProject rec {
     ln -s ${dataDir}/rrd $out/rrd
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
-
-    runHook postInstall
   '';
 
   passthru = {
@@ -124,11 +123,12 @@ phpPackage.buildComposerProject rec {
     tests.librenms = nixosTests.librenms;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ netali ];
+    teams = [ lib.teams.wdz ];
+    platforms = lib.platforms.linux;
   };
 }

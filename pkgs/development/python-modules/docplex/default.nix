@@ -2,22 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   setuptools,
-  futures ? null,
   docloud,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.28.240";
+  version = "2.30.251";
   pyproject = true;
 
-  # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wN5AfjP4cJu0zZG27+uW/Yi/7L3OLK7FGvt5JTveb/U=";
+    hash = "sha256-ZQMhn1tRJ1p+TnfKQzKQOw+Akl0gUDCkjT9qp8oNvyo=";
   };
 
   postPatch = ''
@@ -27,18 +24,20 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docloud
     requests
-  ] ++ lib.optional isPy27 futures;
+  ];
 
+  # PypI release does not include tests
   doCheck = false;
+
   pythonImportsCheck = [ "docplex" ];
 
-  meta = with lib; {
+  meta = {
     description = "IBM Decision Optimization CPLEX Modeling for Python";
     homepage = "https://onboarding-oaas.docloud.ibmcloud.com/software/analytics/docloud/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

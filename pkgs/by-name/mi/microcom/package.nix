@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pengutronix";
-    repo = pname;
+    repo = "microcom";
     rev = "v${version}";
     hash = "sha256-CT/myxOK4U3DzliGsa45WMIFcYLjcoxx6w5S1NL5c7Y=";
   };
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ readline ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic terminal program for communicating
     with devices over a serial connection";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
     mainProgram = "microcom";
   };
 }

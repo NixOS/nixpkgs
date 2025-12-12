@@ -13,8 +13,8 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "xen0l";
-    repo = pname;
-    rev = version;
+    repo = "aws-gate";
+    tag = version;
     hash = "sha256-9w2jP4s1HXf1gYiXX05Dt2iXt0bR0U48yc8h9T5M+EQ=";
   };
 
@@ -52,15 +52,15 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    $out/bin/${pname} --version
+    $out/bin/aws-gate --version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better AWS SSM Session manager CLI client";
     homepage = "https://github.com/xen0l/aws-gate";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tirimia ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tirimia ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "aws-gate";
   };
 }

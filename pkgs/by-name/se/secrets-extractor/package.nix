@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Xenios91";
     repo = "Secrets-Extractor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xtxhatxNK9bRnT1R/5BJkTcubO58sg5ssrziLYvw6mQ=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule rec {
 
   buildInputs = [ libpcap ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check packets for secrets";
     homepage = "https://github.com/Xenios91/Secrets-Extractor";
     # https://github.com/Xenios91/Secrets-Extractor/issues/1
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

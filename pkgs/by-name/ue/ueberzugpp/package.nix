@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromGitHub,
   cmake,
   pkg-config,
   openssl,
   zeromq,
   cppzmq,
-  tbb_2021_11,
+  onetbb,
   spdlog,
   libsodium,
   fmt,
@@ -28,88 +29,84 @@
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
-  version = "2.9.6";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
-    rev = "v${version}";
-    hash = "sha256-qo9Rwnx6Oh8DRcCBUMS3JVdNyx1iZSB2Z1qfptUoPFQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals enableWayland [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals enableWayland [
+    wayland-scanner
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    (lib.getBin cudaPackages.cuda_nvcc)
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zeromq
-      cppzmq
-      tbb_2021_11
-      spdlog
-      libsodium
-      fmt
-      vips
-      nlohmann_json
-      libsixel
-      microsoft-gsl
-      chafa
-      cli11
-      libexif
-      range-v3
-    ]
-    ++ lib.optionals enableOpencv [
-      opencv
-    ]
-    ++ lib.optionals enableWayland [
-      extra-cmake-modules
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals enableX11 [
-      xorg.libX11
-      xorg.xcbutilimage
-    ];
+  buildInputs = [
+    openssl
+    zeromq
+    cppzmq
+    onetbb
+    spdlog
+    libsodium
+    fmt
+    vips
+    nlohmann_json
+    libsixel
+    microsoft-gsl
+    chafa
+    cli11
+    libexif
+    range-v3
+  ]
+  ++ lib.optionals enableOpencv [
+    opencv
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals enableX11 [
+    xorg.libX11
+    xorg.xcbutilimage
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
-  cmakeFlags =
-    lib.optionals (!enableOpencv) [
-      "-DENABLE_OPENCV=OFF"
-    ]
-    ++ lib.optionals enableWayland [
-      "-DENABLE_WAYLAND=ON"
-    ]
-    ++ lib.optionals (!enableX11) [
-      "-DENABLE_X11=OFF"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_OPENCV" enableOpencv)
+    (lib.cmakeBool "ENABLE_WAYLAND" enableWayland)
+    (lib.cmakeBool "ENABLE_X11" enableX11)
+  ];
 
-  # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
-  preBuild =
-    lib.optionalString
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0")
-      ''
-        export MACOSX_DEPLOYMENT_TARGET=10.14
-      '';
-
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/jstkdng/ueberzugpp/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aleksana
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,6 +5,7 @@
   cmake,
   extra-cmake-modules,
   fcitx5,
+  gettext,
   qtbase,
   qtwayland,
   wrapQtAppsHook,
@@ -15,13 +16,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5-qt${majorVersion}";
-  version = "5.1.8";
+  version = "5.1.11";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    hash = "sha256-up4EC4GLzDjd9QJzeV2b2uVZNxYa268D/FotCyy1sos=";
+    hash = "sha256-Nr8WnEm6z16NrXxuGEP4uQ6mxe8sUYtOxVgWMmFrWVE=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext
     wrapQtAppsHook
   ];
 
@@ -49,14 +51,14 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fcitx5 Qt Library";
     homepage = "https://github.com/fcitx/fcitx5-qt";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       bsd3
     ];
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

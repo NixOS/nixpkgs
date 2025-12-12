@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "epex_spot";
-  version = "2.3.9";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PY3udPgvsaXdDRh4+NQmVlqhERswcMpaJTq5azaUFf4=";
+    tag = version;
+    hash = "sha256-kpyWBeKZ0WUoWI/KwKUo/U3RVz2Kdn4xe5WHWr2pV+U=";
   };
 
   dependencies = [
@@ -24,13 +24,12 @@ buildHomeAssistantComponent rec {
   #skip phases without activity
   dontConfigure = true;
   doCheck = false;
-  dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mampfes/ha_epex_spot/releases/tag/${version}";
     description = "This component adds electricity prices from stock exchange EPEX Spot to Home Assistant";
     homepage = "https://github.com/mampfes/ha_epex_spot";
-    maintainers = with maintainers; [ _9R ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9R ];
+    license = lib.licenses.mit;
   };
 }

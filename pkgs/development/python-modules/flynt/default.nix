@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikamensh";
     repo = "flynt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UHY4UDBHcP3ARikktIehSUD3Dx8A0xpOnfKWWrLCsOY=";
   };
 
@@ -37,12 +37,12 @@ buildPythonPackage rec {
     "test_mixed_quote_types_unsafe"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to automatically convert old string literal formatting to f-strings";
     homepage = "https://github.com/ikamensh/flynt";
     changelog = "https://github.com/ikamensh/flynt/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "flynt";
   };
 }

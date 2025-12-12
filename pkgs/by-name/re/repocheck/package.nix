@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kynikos";
     repo = "repocheck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pCz+oAfDFyDeuXumfNzLTXnftM9+IG+lZzWSKtbZ9dg=";
   };
 
@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Check the status of code repositories under a root directory";
     mainProgram = "repocheck";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

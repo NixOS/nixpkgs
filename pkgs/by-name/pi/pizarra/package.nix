@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
   };
 
-  cargoHash = "sha256-btvMUKADGHlXLmeKF1K9Js44SljZ0MejGId8aDwPhVU=";
+  cargoHash = "sha256-b1sMO5BF3js1WxUM80kowyb+6bpXiUKoTgg0QtKaXJY=";
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       --replace "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple blackboard written in GTK";
     mainProgram = "pizarra";
     longDescription = ''
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       - Grids
     '';
     homepage = "https://pizarra.categulario.xyz/en/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mglolenstine ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

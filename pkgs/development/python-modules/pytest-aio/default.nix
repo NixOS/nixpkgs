@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6RxYn8/HAvXv1AEgSIEOLiaBkGgTcqQhWK+xbtxgj/o=";
   };
 
@@ -43,15 +43,16 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     trio-asyncio
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pytest_aio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for aiohttp support";
     homepage = "https://github.com/klen/pytest-aio";
     changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

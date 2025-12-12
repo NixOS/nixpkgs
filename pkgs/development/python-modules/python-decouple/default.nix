@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "HBNetwork";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "python-decouple";
+    tag = "v${version}";
     hash = "sha256-F9Gu7Y/dJhwOJi/ZaoVclF3+4U/N5JdvpXwgGB3SF3Q=";
   };
 
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "decouple" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle code and condifuration";
     homepage = "https://github.com/HBNetwork/python-decouple";
     changelog = "https://github.com/HBNetwork/python-decouple/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

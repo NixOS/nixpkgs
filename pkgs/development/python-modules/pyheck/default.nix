@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevinheavey";
     repo = "pyheck";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-mfXkrCbBaJ0da+taKJvfyU5NS43tYJWqtTUXiCLVoGQ=";
   };
 
@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for heck, the Rust case conversion library";
     homepage = "https://github.com/kevinheavey/pyheck";
     changelog = "https://github.com/kevinheavey/pyheck/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.9.11";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "hime";
     owner = "hime-ime";
     rev = "v${version}";
     sha256 = "sha256-fCqet+foQjI+LpTQ/6Egup1GzXELlL2hgbh0dCKLwPI=";
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath $out/lib/hime:$hime_rpath $out/bin/hime
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
     description = "Useful input method engine for Asia region";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ yanganto ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yanganto ];
   };
 }

@@ -4,97 +4,95 @@
   fetchFromGitHub,
   pkg-config,
   sqlite,
+  unixODBC,
   zstd,
   fetchurl,
 }:
 
 let
   apexcharts = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/apexcharts@3.52.0/dist/apexcharts.min.js";
-    hash = "sha256-2sxp9+shRA5LMxzhgx+fpeQPIY2ZWgBdt4mp5V2Yn+E=";
+    url = "https://cdn.jsdelivr.net/npm/apexcharts@5.3.0/dist/apexcharts.min.js";
+    hash = "sha256-OtfH8igG4/XVMWV1155dCl8kGhruowISVUm7ZZF0VwU=";
   };
   tablerCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css";
-    hash = "sha256-lS3nKxMMZiKIRJG7UgUonOHYuvHgW5eckEjvHMYxb9Q=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css";
+    hash = "sha256-fvdQvRBUamldCxJ2etgEi9jz7F3n2u+xBn+dDao9HJo=";
+  };
+  tomSelectCss = fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.css";
+    hash = "sha256-vW5UjM/Ka9/jIY8I5s5KcudaTRWh/cCGE1ZUsrJvlI0=";
   };
   tablerVendorsCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css";
-    hash = "sha256-Aa7AUOaz6hJLiUzQStZTy2VPOZyg0ViSo2MCzpDU1tY=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler-vendors.min.css";
+    hash = "sha256-/VPz9GtiH1Es1KGLY706UIayEEgG93B6aIBa3WzwKYc=";
   };
   tablerJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js";
-    hash = "sha256-ygO5OTRUtYxDDkERRwBCfq+fmakhM6ybwfl6gCCPlAQ=";
-  };
-  listJsFixed = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/list.js-fixed@2.3.4/dist/list.min.js";
-    hash = "sha256-sYy7qNJW7RTuaNA0jq6Yrtfs57ypYrItZ3f8T7kqfPM=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js";
+    hash = "sha256-tgx2Fg6XYkV027jPEKvmrummSTtgCW/fwV3R3SvZnrk=";
   };
   tablerIcons = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.10.0/dist/tabler-sprite.svg";
-    hash = "sha256-lEUAtxI+NffqLDllirLgcCRjEgbeCaz9Gkn3Tu9e9F4=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.34.0/dist/tabler-sprite.svg";
+    hash = "sha256-pCPkhrx0GnPg5/EthJ7pLdMxb7wbYMJ0R7WchDcffpg=";
   };
   tomselect = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.popular.min.js";
-    hash = "sha256-51NcdIM8GseVFFmg8mUWDxfhjLCA+n8kw/Ojyo+6Hjk=";
+    url = "https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js";
+    hash = "sha256-Cb1Xmb9qQO8I1mMVkz4t2bT8l7HX+1JeKncGBSytSHQ=";
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlpage";
-  version = "0.29.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
-    rev = "v${version}";
-    hash = "sha256-wI+nXrjX98vqyCE6Ofa5KxKUvpLfHqd7KFCsILuOnGk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M9WtpDc067G/EfRTJBoDxBrdXRMqOwVTdGgyXSdHlhE=";
   };
 
   postPatch = ''
     substituteInPlace sqlpage/apexcharts.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@3.52.0/dist/apexcharts.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@5.3.0/dist/apexcharts.min.js */' \
       "$(cat ${apexcharts})"
     substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler.min.css */' \
-      "$(cat ${tablerCss})"
-    substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/css/tabler-vendors.min.css */' \
-      "$(cat ${tablerVendorsCss})"
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css */' \
+      "$(cat ${tablerCss})" \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler-vendors.min.css */' \
+      "$(cat ${tablerVendorsCss})" \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.css */' \
+      "$(cat ${tomSelectCss})"
     substituteInPlace sqlpage/sqlpage.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta20/dist/js/tabler.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js */' \
       "$(cat ${tablerJs})"
-    substituteInPlace sqlpage/sqlpage.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/list.js-fixed@2.3.4/dist/list.min.js */' \
-      "$(cat ${listJsFixed})"
     substituteInPlace sqlpage/tabler-icons.svg \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.10.0/dist/tabler-sprite.svg */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.34.0/dist/tabler-sprite.svg */' \
       "$(cat ${tablerIcons})"
     substituteInPlace sqlpage/tomselect.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.popular.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js */' \
       "$(cat ${tomselect})"
   '';
 
-  cargoHash = "sha256-/B8tayEbyOsc0/po1YQKtp694X12B3I50OU4cMwJo8Q=";
+  cargoHash = "sha256-lUQ1j2f/LXpqpb6VK4Bq2NI0L9KoyEdlPkENMOKkt0w=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     sqlite
+    unixODBC
     zstd
   ];
 
-  env = {
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
     homepage = "https://github.com/lovasoa/SQLpage";
-    changelog = "https://github.com/lovasoa/SQLpage/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/lovasoa/SQLpage/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "sqlpage";
   };
-}
+})

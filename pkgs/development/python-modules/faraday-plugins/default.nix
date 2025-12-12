@@ -8,28 +8,27 @@
   html2text,
   lxml,
   markdown,
+  pandas,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
   simplejson,
   tabulate,
+  tldextract,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.20.0";
+  version = "1.25.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    rev = "refs/tags/${version}";
-    hash = "sha256-e1VrZf0WNUZ5gU5e4uBkW8PgfQrqGgqqDb0n56nm1Xg=";
+    tag = version;
+    hash = "sha256-VkpwTHPpM1cS5HT5zE3gB25zWOTIVaZdPKNgQFJHO/Q=";
   };
 
   postPatch = ''
@@ -46,11 +45,13 @@ buildPythonPackage rec {
     html2text
     lxml
     markdown
+    pandas
     python-dateutil
     pytz
     requests
     simplejson
     tabulate
+    tldextract
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -71,12 +72,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "faraday_plugins" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-plugins";
   };
 }

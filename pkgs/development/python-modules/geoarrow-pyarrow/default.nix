@@ -9,6 +9,7 @@
   pyarrow-hotfix,
   numpy,
   pandas,
+  geoarrow-types,
   geopandas,
   pyogrio,
   pyproj,
@@ -16,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-pyarrow";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    rev = "refs/tags/geoarrow-pyarrow-${version}";
-    hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
+    tag = "geoarrow-pyarrow-${version}";
+    hash = "sha256-tgeWrVpGIyRqRGk1y9OdS/eYMJjt80sXHt6VCx8RWys=";
   };
 
   sourceRoot = "${src.name}/geoarrow-pyarrow";
@@ -57,6 +58,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    geoarrow-types
     numpy
     pandas
     geopandas
@@ -66,12 +71,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.pyarrow" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyArrow implementation of geospatial data types";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
+    teams = [ lib.teams.geospatial ];
   };
 }

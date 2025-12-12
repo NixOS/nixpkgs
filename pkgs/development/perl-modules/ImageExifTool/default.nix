@@ -1,40 +1,51 @@
 {
   buildPerlPackage,
-  exiftool,
-  fetchurl,
+  fetchFromGitHub,
   gitUpdater,
   lib,
   shortenPerlShebang,
   stdenv,
-  testers,
+  versionCheckHook,
+  ArchiveZip,
+  CompressRawLzma,
+  IOCompress,
+  IOCompressBrotli,
 }:
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "13.00";
+  version = "13.39";
 
-  src = fetchurl {
-    url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-    hash = "sha256-SJV4jzT4NHZfhr5KWtWjJDP1ctdXFg7Ne2Eur17TfoQ=";
+  src = fetchFromGitHub {
+    owner = "exiftool";
+    repo = "exiftool";
+    tag = version;
+    hash = "sha256-GPm3HOt7fNMbXRrV5V+ykJAfhww1O6NrD0l/7hA2i28=";
   };
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   postPatch = ''
     patchShebangs exiftool
   '';
 
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  propagatedBuildInputs = [
+    ArchiveZip
+    CompressRawLzma
+    IOCompress
+    IOCompressBrotli
+  ];
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-ver";
+
   passthru = {
-    tests.version = testers.testVersion {
-      inherit version;
-      command = "${lib.getExe exiftool} -ver";
-      package = exiftool;
-    };
-    updateScript = gitUpdater { url = "https://github.com/exiftool/exiftool.git"; };
+    updateScript = gitUpdater { };
   };
 
   meta = {

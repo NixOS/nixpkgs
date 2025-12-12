@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, unbound
-, cctools
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  cctools,
 }:
 
 buildNpmPackage rec {
   pname = "hsd";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "handshake-org";
     repo = "hsd";
     rev = "v${version}";
-    hash = "sha256-Rsa4LTf5lImvCwwuu0FKbBb/QLLAbR8Vce/pWEQLhS0=";
+    hash = "sha256-7hF8cJf9Oewfg5WvNpqQSrBZjpnERcdDAaxixOdArpo=";
   };
 
-  npmDepsHash = "sha256-7zD0noREaq/VNQrf/9dOFXVOngcS6G4mHZAkyQLs/1Q=";
+  npmDepsHash = "sha256-fO8ia0FwNvMMVBUO22gUNImkXY3kjdUjQIP7s5MOJDs=";
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 
@@ -37,6 +39,5 @@ buildNpmPackage rec {
     description = "Implementation of the Handshake protocol";
     homepage = "https://github.com/handshake-org/hsd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ d-xo ];
   };
 }

@@ -13,7 +13,7 @@
   mkOpenModelicaDerivation,
 }:
 with openmodelica;
-mkOpenModelicaDerivation rec {
+mkOpenModelicaDerivation {
   pname = "omedit";
   omdir = "OMEdit";
   omdeps = [
@@ -46,14 +46,14 @@ mkOpenModelicaDerivation rec {
   dontUseQmakeConfigure = true;
   QMAKESPEC = "linux-clang";
 
-  meta = with lib; {
+  meta = {
     description = "Modelica connection editor for OpenModelica";
     homepage = "https://openmodelica.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       balodja
       smironov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

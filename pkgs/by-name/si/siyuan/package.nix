@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
@@ -12,6 +12,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
@@ -35,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.16";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8+Gz9AuxmK2hOApRZ2b1+rROOG94EBJR3pyp8YwtgiA=";
+    hash = "sha256-INwbp6gGqrmOtrM5d/8iEv1nlTUDSuo9AVN0EwNhW9Y=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-B2pGXs0IN5WhNHoFgTufd46q60RNvWzNdwoCxpayYC8=";
+    vendorHash = "sha256-kt5fnkF/bxpeY9d86zKr9VlShvLy1gtaICfA0PGVGKI=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -75,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [ "fts5" ];
   };
 
+  # this should contain a 'packages' key, but it doesn't...
+  # we can remove it because it's not needed to build
+  postPatch = ''
+    rm pnpm-workspace.yaml
+  '';
+
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
@@ -88,8 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      postPatch
       ;
-    hash = "sha256-LlQdfRGsBn3IZWKSUqH5tAljXnWanuFXO2x+Wi3on7E=";
+    fetcherVersion = 1;
+    hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -130,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "WernerFP";
-    repo = pname;
+    repo = "shades-of-gray-theme";
     rev = version;
     sha256 = "13ydym0i3032g5dyrnl5wxpvxv57b43q7iaq5achpmaixgn58gs8";
   };
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     cp -a Shades-of-gray* $out/share/themes/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flat dark GTK theme with ergonomic contrasts";
     homepage = "https://github.com/WernerFP/Shades-of-gray-theme";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

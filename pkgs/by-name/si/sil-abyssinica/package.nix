@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sil-abyssinica";
-  version = "2.201";
+  version = "2.300";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${version}.zip";
-    hash = "sha256-DJWp3T9uBLnztSq9r5YCSWaBjIK/0Aljg1IiU0FLrdE=";
+    hash = "sha256-3msQRxoIV1K8mjZr7xXKW54fELjNhteXZ5qg6t5+Vcg=";
   };
 
   installPhase = ''
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font for Ethiopian and Erythrean scripts (Amharic et al.)";
     homepage = "https://software.sil.org/abyssinica/";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ serge ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = lib.platforms.all;
   };
 }

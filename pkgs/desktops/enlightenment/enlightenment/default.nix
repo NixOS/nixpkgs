@@ -14,7 +14,7 @@
   libexif,
   pam,
   xkeyboard_config,
-  udisks2,
+  udisks,
   waylandSupport ? false,
   wayland-protocols,
   xwayland,
@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.26.0";
+  version = "0.27.1";
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EbbvBnG+X+rWiL9VTDCiocaDSTrRDF/jEV/7RlVCToQ=";
+    sha256 = "sha256-tB34dx9g47lqGXOuVm10JcU6gznxjlTjEjAhh4HaL6k=";
   };
 
   nativeBuildInputs = [
@@ -41,24 +41,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
-      bc # for the Everything module calculator mode
-      ddcutil # specifically libddcutil.so.2 for backlight control
-      efl
-      libexif
-      pam
-      xkeyboard_config
-      udisks2 # for removable storage mounting/unmounting
-    ]
-    ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
-    ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
-    ++ lib.optionals waylandSupport [
-      wayland-protocols
-      xwayland
-    ];
+  buildInputs = [
+    alsa-lib
+    acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
+    bc # for the Everything module calculator mode
+    ddcutil # specifically libddcutil.so.2 for backlight control
+    efl
+    libexif
+    pam
+    xkeyboard_config
+    udisks # for removable storage mounting/unmounting
+  ]
+  ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+  ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+  ++ lib.optionals waylandSupport [
+    wayland-protocols
+    xwayland
+  ];
 
   patches = [
     # Executables cannot be made setuid in nix store. They should be
@@ -75,23 +74,22 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-D systemdunitdir=lib/systemd/user"
-  ] ++ lib.optional waylandSupport "-Dwl=true";
+  ]
+  ++ lib.optional waylandSupport "-Dwl=true";
 
   passthru.providedSessions = [ "enlightenment" ];
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

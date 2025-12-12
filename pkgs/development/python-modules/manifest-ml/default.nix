@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "manifest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
 
@@ -84,15 +84,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # this file tries importing `deepspeed`, which is not yet packaged in nixpkgs
-    "--ignore=tests/test_huggingface_api.py"
+    "tests/test_huggingface_api.py"
   ];
 
   disabledTests = [
@@ -107,17 +108,17 @@ buildPythonPackage rec {
     "test_run_chat"
     "test_run"
     "test_score_run"
-    # Test is time-senstive
+    # Test is time-sensitive
     "test_timing"
   ];
 
   pythonImportsCheck = [ "manifest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manifest for Prompting Foundation Models";
     homepage = "https://github.com/HazyResearch/manifest";
     changelog = "https://github.com/HazyResearch/manifest/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

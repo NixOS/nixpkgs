@@ -5,6 +5,7 @@
   setuptools,
   packaging,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -15,14 +16,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jumptrading";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "luddite";
+    tag = "v${version}";
     hash = "sha256-iJ3h1XRBzLd4cBKFPNOlIV5Z5XJ/miscfIdkpPIpbJ8=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
       --replace "--disable-socket" ""
   '';
 
@@ -34,14 +34,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks for out-of-date package versions";
     mainProgram = "luddite";
     homepage = "https://github.com/jumptrading/luddite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

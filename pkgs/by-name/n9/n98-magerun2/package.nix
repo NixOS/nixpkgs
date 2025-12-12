@@ -1,21 +1,26 @@
 {
   lib,
   fetchFromGitHub,
-  php,
+  php83,
+  versionCheckHook,
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+php83.buildComposerProject2 (finalAttrs: {
   pname = "n98-magerun2";
-  version = "7.5.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "netz98";
     repo = "n98-magerun2";
-    rev = finalAttrs.version;
-    hash = "sha256-1wHRzh/Fdxdgx70fIPNOIpqBX9IvYPJnV7CZ5hLQ0qE=";
+    tag = finalAttrs.version;
+    hash = "sha256-kjT72pLKuN166Edm8+8vUIfhFdMnZkeTagl0ECL20b8=";
   };
 
-  vendorHash = "sha256-KULTijHG5717dDOfvB4yR+ztrB+mbYaosgmg8aV/GAs=";
+  vendorHash = "sha256-0Bk01aU3vicwk9swkv+8VZxcPdaEMOOtp9niNfPfQyA=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";
@@ -23,6 +28,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://magerun.net/";
     license = lib.licenses.mit;
     mainProgram = "n98-magerun2";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

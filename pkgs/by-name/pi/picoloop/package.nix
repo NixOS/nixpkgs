@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
   version = "0.77e";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "picoloop";
     owner = "yoyz";
-    rev = "${pname}-${version}";
+    rev = "picoloop-${version}";
     sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
   };
 
   buildInputs = [
     libpulseaudio
     SDL2
-    SDL2.dev
+    (lib.getDev SDL2)
     SDL2_image
     SDL2_ttf
     alsa-lib
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "-f Makefile.PatternPlayer_debian_RtAudio_sdl20" ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${SDL2.dev}/include/SDL2" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude SDL2}/include/SDL2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     cp {font.*,LICENSE} $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
     mainProgram = "picoloop";
   };
 }

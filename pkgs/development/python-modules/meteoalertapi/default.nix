@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rolfberkenbosch";
     repo = "meteoalert-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Imb4DVcNB3QiVSCLCI+eKpfl73aMn4NIItQVf7p0H+E=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteoalertapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for MeteoAlarm.org";
     homepage = "https://github.com/rolfberkenbosch/meteoalert-api";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

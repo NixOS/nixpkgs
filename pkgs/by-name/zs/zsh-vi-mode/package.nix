@@ -6,28 +6,28 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-vi-mode";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "jeffreytse";
-    repo = pname;
+    repo = "zsh-vi-mode";
     rev = "v${version}";
-    sha256 = "sha256-xbchXJTFWeABTwq6h4KWLh+EvydDrDzcY9AQVK65RS8=";
+    sha256 = "sha256-EYr/jInRGZSDZj+QVAc9uLJdkKymx1tjuFBWgpsaCFw=";
   };
 
   strictDeps = true;
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/${pname}
-    cp *.zsh $out/share/${pname}/
+    mkdir -p $out/share/zsh-vi-mode
+    cp *.zsh $out/share/zsh-vi-mode/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jeffreytse/zsh-vi-mode";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Better and friendly vi(vim) mode plugin for ZSH";
-    maintainers = with maintainers; [ kyleondy ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ kyleondy ];
+    platforms = lib.platforms.all;
   };
 }

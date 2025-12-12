@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-swift";
-  version = "1.28.2";
+  version = "1.33.3";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "swift-protobuf";
     rev = "${finalAttrs.version}";
-    hash = "sha256-YOEr73xDjNrc4TTkIBY8AdAUX2MBtF9ED1UF2IjTu44=";
+    hash = "sha256-FFFHnxuynKfcmWCgJ38rKk3FS/o5buLYS7VcEivF0v0=";
   };
 
   nativeBuildInputs = [

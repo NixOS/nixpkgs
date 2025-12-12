@@ -18,19 +18,13 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.8.0";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I+/1AuYDzwqoQerqZmKkLNMGQWkWKz5ZayAiZADjTf0=";
+    hash = "sha256-jB9baCdBoDsMRgfILor0HU6cKFkCRkZWL4bN6ylZqG0=";
   };
-
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
 
   build-system = [
     openstackdocstheme
@@ -60,10 +54,10 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

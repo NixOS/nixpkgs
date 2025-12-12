@@ -1,20 +1,24 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, getconf
-, gitUpdater
-, testers
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  getconf,
+  gitUpdater,
+  testers,
+  unixtools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2024_12_11.09478d5";
+  version = "2025_09_19.623dbf6";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IE0BMM24lrl5NHeQGkAZZVwmAsvkhDN64pARdEiOM6s=";
+    hash = "sha256-3krWW/QKijgZsmHuelMjpcaL8OyRqmPKC/wUvag0ZHI=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail \
@@ -30,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
+      command = "${unixtools.script}/bin/script -c 'passt --version'";
     };
 
     updateScript = gitUpdater {
@@ -37,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://passt.top/passt/about/";
     description = "Plug A Simple Socket Transport";
     longDescription = ''
@@ -52,9 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       interfaces on the host, hence not requiring any capabilities or
       privileges.
     '';
-    license = [ licenses.bsd3 /* and */ licenses.gpl2Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _8aed ];
+    license = [
+      lib.licenses.bsd3 # and
+      lib.licenses.gpl2Plus
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "passt";
   };
 })

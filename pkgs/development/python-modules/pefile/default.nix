@@ -21,16 +21,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  # Test data contains properitary executables and malware, and is therefore encrypted
+  # Test data contains proprietary executables and malware, and is therefore encrypted
   doCheck = false;
 
   pythonImportsCheck = [ "pefile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
     changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pamplemousse ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pamplemousse ];
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "evolbioinf";
     repo = "andi";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tjQ9exFyqu/xnbUGpF6k0kE5C1D93kISjRErwHfjW9E=";
   };
 
@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gsl
     libdivsufsort
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   configureFlags = [ (lib.enableFeature finalAttrs.finalPackage.doCheck "unit-tests") ];
 

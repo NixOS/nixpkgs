@@ -1,13 +1,13 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   ninja,
   pkg-config,
   python3,
   libxml2,
-  gitUpdater,
+  gnome,
   nautilus,
   glib,
   gtk4,
@@ -30,14 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.54.2";
+  version = "3.58.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-terminal";
-    rev = finalAttrs.version;
-    hash = "sha256-81dOdmIwa3OmuUTciTlearqic6bFMfiX1nvoIxJCt/M=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor finalAttrs.version}/gnome-terminal-${finalAttrs.version}.tar.xz";
+    hash = "sha256-B+vHrxNRa+Wzd3f1INJkCzMSBiDpm7sF3upfgoD9ac4=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     desktop-file-utils
     wrapGAppsHook3
-    pcre2
     python3
   ];
 
@@ -67,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     vte
     libuuid
     nautilus # For extension
+    pcre2
   ];
 
   postPatch = ''
@@ -78,8 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      odd-unstable = true;
+    updateScript = gnome.updateScript {
+      packageName = "gnome-terminal";
+      versionPolicy = "odd-unstable";
     };
 
     tests = {
@@ -87,12 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

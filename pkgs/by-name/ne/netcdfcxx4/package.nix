@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   netcdf,
   hdf5,
   curl,
@@ -22,6 +23,12 @@ stdenv.mkDerivation rec {
   patches = [
     # This fix is included upstream, remove with next upgrade
     ./cmake-h5free.patch
+    ./netcdf.patch
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/Unidata/netcdf-cxx4/commit/8455a69867a420cffa226978174bc0f99029bc8b.patch?full_index=1";
+      hash = "sha256-AS2nQIXEW1iSR2LAzvTB04M+kyureJAn63+mPNoCq+0=";
+    })
   ];
 
   preConfigure = ''

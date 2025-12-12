@@ -8,20 +8,19 @@
   bison,
   flex,
   zlib,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "spicy";
-  version = "1.11.3";
+  version = "1.14.0";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "spicy";
-    rev = "v${version}";
-    hash = "sha256-SKhNBqZRgeN2cZZ2lv/IsOqaa5LY666OlICewN/iPVA=";
+    tag = "v${version}";
+    hash = "sha256-Pc4BqQiaifB/kAbcaHYyTUeUE/HLlvg0qDSPdC/gMko=";
     fetchSubmodules = true;
   };
 
@@ -33,14 +32,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      flex
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    flex
+    zlib
+  ];
 
   postPatch = ''
     patchShebangs scripts tests/scripts
@@ -61,7 +56,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zeek/spicy";
     description = "C++ parser generator for dissecting protocols & files";
     longDescription = ''
@@ -73,8 +68,8 @@ stdenv.mkDerivation rec {
       unified language. Think of Spicy as a domain-specific scripting language
       for all your parsing needs.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tobim ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tobim ];
+    platforms = lib.platforms.unix;
   };
 }

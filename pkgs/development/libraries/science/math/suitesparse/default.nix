@@ -13,9 +13,13 @@
   enableCuda ? config.cudaSupport,
   cudaPackages,
   openmp ? null,
-}:
+}@inputs:
 
-stdenv.mkDerivation rec {
+let
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
+in
+effectiveStdenv.mkDerivation rec {
   pname = "suitesparse";
   version = "5.13.0";
 
@@ -32,15 +36,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Anen1YtXsSPhk8DpA4JtADIz9m8oXFl9umlkb4iImf8=";
   };
 
-  nativeBuildInputs =
-    [
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   # Use compatible indexing for lapack and blas used
   buildInputs =
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
       gmp
       mpfr
     ]
-    ++ lib.optionals stdenv.cc.isClang [
+    ++ lib.optionals effectiveStdenv.cc.isClang [
       openmp
     ]
     ++ lib.optionals enableCuda [
@@ -67,29 +70,33 @@ stdenv.mkDerivation rec {
     sed -i "Makefile" -e '/GraphBLAS\|Mongoose/d'
   '';
 
-  makeFlags =
-    [
-      "INSTALL=${placeholder "out"}"
-      "INSTALL_INCLUDE=${placeholder "dev"}/include"
-      "JOBS=$(NIX_BUILD_CORES)"
-      "MY_METIS_LIB=-lmetis"
-    ]
-    ++ lib.optionals blas.isILP64 [
-      "CFLAGS=-DBLAS64"
-    ]
-    ++ lib.optionals enableCuda [
-      "CUDA_PATH=${cudaPackages.cuda_nvcc}"
-      "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
-      "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-      # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
-      "BLAS=-lblas"
-      "LAPACK=-llapack"
-    ];
+  makeFlags = [
+    "INSTALL=${placeholder "out"}"
+    "INSTALL_INCLUDE=${placeholder "dev"}/include"
+    "JOBS=$(NIX_BUILD_CORES)"
+    "MY_METIS_LIB=-lmetis"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "CFLAGS=-DBLAS64"
+  ]
+  ++ lib.optionals enableCuda [
+    "CUDA_PATH=${lib.getBin cudaPackages.cuda_nvcc}"
+    "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
+    "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
+    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
+    "BLAS=-lblas"
+    "LAPACK=-llapack"
+  ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    # in GCC14 these two warnings were promoted to error
+    # let's make them warnings again to fix the build failure
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
+  }
+  // lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
     # update the install names of the output dylibs.
     NIX_LDFLAGS = "-headerpad_max_install_names";
@@ -100,15 +107,15 @@ stdenv.mkDerivation rec {
     "library"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "Suite of sparse matrix algorithms";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ttuegel ];
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = with lib.platforms; unix;
   };
 }

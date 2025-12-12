@@ -21,34 +21,33 @@ assert desktopSupport == "gnomeflashback" || desktopSupport == "mate" || desktop
 stdenv.mkDerivation rec {
   version = "unstable-2017-09-15";
   pname = "xmonad-log-applet";
-  name = "${pname}-${desktopSupport}-${version}";
+  name = "xmonad-log-applet-${desktopSupport}-${version}";
 
   src = fetchFromGitHub {
     owner = "kalj";
-    repo = pname;
+    repo = "xmonad-log-applet";
     rev = "a1b294cad2f266e4f18d9de34167fa96a0ffdba8";
     sha256 = "042307grf4zvn61gnflhsj5xsjykrk9sjjsprprm4iij0qpybxcw";
   };
 
-  buildInputs =
-    [
-      glib
-      dbus-glib
-      xorg.xcbutilwm
-    ]
-    ++ lib.optionals (desktopSupport == "gnomeflashback") [
-      gtk3
-      gnome-panel
-    ]
-    ++ lib.optionals (desktopSupport == "mate") [
-      gtk3
-      mate.mate-panel
-    ]
-    ++ lib.optionals (desktopSupport == "xfce4") [
-      gtk2
-      libxfce4util
-      xfce4-panel
-    ];
+  buildInputs = [
+    glib
+    dbus-glib
+    xorg.xcbutilwm
+  ]
+  ++ lib.optionals (desktopSupport == "gnomeflashback") [
+    gtk3
+    gnome-panel
+  ]
+  ++ lib.optionals (desktopSupport == "mate") [
+    gtk3
+    mate.mate-panel
+  ]
+  ++ lib.optionals (desktopSupport == "xfce4") [
+    gtk2
+    libxfce4util
+    xfce4-panel
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -63,12 +62,12 @@ stdenv.mkDerivation rec {
   # --define-variable=prefix=$prefix
   PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kalj/xmonad-log-applet";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     broken = desktopSupport == "gnomeflashback" || desktopSupport == "xfce4";
     description = "Applet that will display XMonad log information (${desktopSupport} version)";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

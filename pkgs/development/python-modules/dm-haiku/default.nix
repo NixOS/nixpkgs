@@ -1,16 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   fetchpatch,
+
+  # build-system
   setuptools,
+
+  # dependencies
   absl-py,
-  flax,
-  jax,
   jaxlib,
   jmp,
   numpy,
   tabulate,
+
+  # optional-dependencies
+  jax,
+  flax,
+
+  # tests
   pytest-xdist,
   pytestCheckHook,
   bsuite,
@@ -27,14 +36,14 @@
 let
   dm-haiku = buildPythonPackage rec {
     pname = "dm-haiku";
-    version = "0.0.13";
+    version = "0.0.15";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "dm-haiku";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-RJpQ9BzlbQ4X31XoJFnsZASiaC9fP2AdyuTAGINhMxs=";
+      tag = "v${version}";
+      hash = "sha256-phJ0f+effHQzuAVtPBR0bY3C0p//LBY7k1ci4mXBGfU=";
     };
 
     patches = [
@@ -74,11 +83,12 @@ let
       dm-env
       dm-haiku
       dm-tree
+      flax
       jaxlib
       optax
       pytest-xdist
       pytestCheckHook
-      rlax
+      # rlax (broken dependency tensorflow-probability)
       tensorflow
     ];
 
@@ -97,11 +107,24 @@ let
       # other tests to fail.
       # https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html#double-64bit-precision
       "test_doctest_haiku.experimental"
+
+      # AssertionError: 1 != 0 : 1 doctests failed
+      "test_doctest_haiku"
+
+      # ValueError: pmap wrapped function must be passed at least one argument containing an array,
+      # got empty *args=() and **kwargs={}
+      "test_equivalent_when_passing_transformed_fn2"
+
+      # AssertionError: ValueError not raised
+      "test_passing_function_to_transform_pmap_transform"
+      "test_passing_function_to_transform_pmap_transform_with_state"
     ];
 
     disabledTestPaths = [
-      # Those tests requires a more recent version of tensorflow. The current one (2.13) is not enough.
-      "haiku/_src/integration/jax2tf_test.py"
+      # Require rlax which is unavailable as its dependency tensorflow-probability is broken
+      "examples/impala/actor_test.py"
+      "examples/impala/learner_test.py"
+      "examples/impala_lite_test.py"
     ];
 
     doCheck = false;
@@ -117,11 +140,12 @@ let
       dontInstall = true;
     });
 
-    meta = with lib; {
+    meta = {
       description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
       homepage = "https://github.com/deepmind/dm-haiku";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ ndl ];
+      changelog = "https://github.com/google-deepmind/dm-haiku/releases/tag/${src.tag}";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ ndl ];
     };
   };
 in

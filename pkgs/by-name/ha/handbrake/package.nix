@@ -58,8 +58,6 @@
   libdvdnav,
   libdvdcss,
   libbluray,
-  # Darwin-specific
-  darwin,
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -87,20 +85,14 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioToolbox
-    Foundation
-    VideoToolbox
-    ;
-  inherit (darwin) libobjc;
-  version = "1.9.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "fa9154a20f3f64fdc183a097e6b63f7fd4bc6cab";
-    hash = "sha256-Asf8NgYk4xxIkevYA0B62T8CTSaB7SHq0lHXkawVxb8=";
+    rev = "dddf75f756e56d2b8dbb0609175bc12047a4841d";
+    hash = "sha256-CIMpJDJ0IIz95f3/zxeQqpCFpHWEmdgA+VaaUDY516A=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -108,11 +100,11 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.1";
+  ffmpeg-version = "7.1.1";
   ffmpeg-hb =
     (ffmpeg_7-full.override {
       version = ffmpeg-version;
-      hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
+      hash = "sha256-GyS8imOqfOUPxXrzCiQtzCQIIH6bvWmQAB0fKUcRsW4=";
     }).overrideAttrs
       (old: {
         patches = (old.patches or [ ]) ++ [
@@ -137,10 +129,17 @@ let
           "${src}/contrib/ffmpeg/A15-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
           "${src}/contrib/ffmpeg/A16-avcodec-amfenc-Add-support-for-on-demand-key-frames.patch"
           "${src}/contrib/ffmpeg/A17-avcodec-amfenc-properly-set-primaries-transfer-and-m.patch"
-          "${src}/contrib/ffmpeg/A18-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
-          "${src}/contrib/ffmpeg/A19-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+          "${src}/contrib/ffmpeg/A18-libavcodec-qsvenc-update-has_b_frames-value.patch"
+          "${src}/contrib/ffmpeg/A19-libavcodec-qsv-enable-av1-scc.patch"
+          "${src}/contrib/ffmpeg/A20-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+          "${src}/contrib/ffmpeg/A21-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+          "${src}/contrib/ffmpeg/A22-avformat-mov-read-and-write-additional-iTunes-style-.patch"
+          "${src}/contrib/ffmpeg/A23-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
+          "${src}/contrib/ffmpeg/A24-AV1-videotoolbox.patch"
+          "${src}/contrib/ffmpeg/A25-videotoolbox-speedup-decoding.patch"
           "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
-          "${src}/contrib/ffmpeg/A29-Revert-lavc-Check-codec_whitelist-early-in-avcodec_o.patch"
+          "${src}/contrib/ffmpeg/A30-qsv-fixed-BT2020-BT709-conversion.patch"
+          "${src}/contrib/ffmpeg/A31-Parse-EAC3-Atmos-ComplexityIndex-for-MP4-remuxing.patch"
         ];
       });
 
@@ -154,19 +153,19 @@ let
     # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
     # are written with respect to the parent directory instead of that source directory.
     # patches which don't cleanly apply are commented out.
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        pushd ..
-        patch -p1 < ${src}/contrib/x265/A01-Do-not-set-thread-priority-on-Windows.patch
-        # patch -p1 < ${src}/contrib/x265/A02-Apple-Silicon-tuning.patch
-        patch -p1 < ${src}/contrib/x265/A03-fix-crash-when-SEI-length-is-variable.patch
-        patch -p1 < ${src}/contrib/x265/A04-implement-ambient-viewing-environment-sei.patch
-        # patch -p1 < ${src}/contrib/x265/A05-Fix-Dolby-Vision-RPU-memory-management.patch
-        # patch -p1 < ${src}/contrib/x265/A06-Simplify-macOS-cross-compilation.patch
-        # patch -p1 < ${src}/contrib/x265/A07-add-new-matrix-coefficients-from-H.273-v3.patch
-        popd
-      '';
+    postPatch = (old.postPatch or "") + ''
+      pushd ..
+      patch -p1 < ${src}/contrib/x265/A01-Do-not-set-thread-priority-on-Windows.patch
+      patch -p1 < ${src}/contrib/x265/A02-Apple-Silicon-tuning.patch
+      patch -p1 < ${src}/contrib/x265/A03-Implement-ambient-viewing-environment-sei.patch
+      patch -p1 < ${src}/contrib/x265/A04-add-new-matrix-coefficients-from-H.273-v3.patch
+      patch -p1 < ${src}/contrib/x265/A05-Fix-Dolby-Vision-RPU-memory-management.patch
+      # patch -p1 < ${src}/contrib/x265/A06-Update-version-strings.patch
+      patch -p1 < ${src}/contrib/x265/A07-Fix-macOS-cross-compilation.patch
+      # patch -p1 < ${src}/contrib/x265/A08-Fix-inconsistent-bitrate-in-second-pass.patch
+      patch -p1 < ${src}/contrib/x265/A09-Ensuring-the-mvdLX-is-compliant.patch
+      popd
+    '';
   });
 
   versionFile = writeText "version.txt" ''
@@ -191,129 +190,119 @@ let
     pname = "handbrake";
     inherit version src;
 
-    postPatch =
-      ''
-        install -Dm444 ${versionFile} ${versionFile.name}
+    postPatch = ''
+      install -Dm444 ${versionFile} ${versionFile.name}
 
-        patchShebangs scripts
-        patchShebangs gtk/data/
+      patchShebangs scripts
+      patchShebangs gtk/data/
 
-        substituteInPlace libhb/hb.c \
-          --replace-fail 'return hb_version;' 'return "${version}";'
+      substituteInPlace libhb/hb.c \
+        --replace-fail 'return hb_version;' 'return "${version}";'
 
-        # Force using nixpkgs dependencies
-        sed -i '/MODULES += contrib/d' make/include/main.defs
-        sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
-            -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
-            -i make/configure.py
-      ''
-      + optionalString stdenv.hostPlatform.isDarwin ''
-        # Prevent the configure script from failing if xcodebuild isn't available,
-        # which it isn't in the Nix context. (The actual build goes fine without
-        # xcodebuild.)
-        sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
-      ''
-      + optionalString useGtk ''
-        substituteInPlace gtk/module.rules \
-          --replace-fail '$(MESON.exe)' 'meson' \
-          --replace-fail '$(NINJA.exe)' 'ninja' \
-        # Force using nixpkgs dependencies
-        substituteInPlace gtk/meson.build \
-          --replace-fail \
-            "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
-            "hb_incdirs = include_directories(hb_dir / 'libhb')"
-        substituteInPlace gtk/ghb.spec \
-          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-        substituteInPlace gtk/data/post_install.py \
-          --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
-      '';
+      # Force using nixpkgs dependencies
+      sed -i '/MODULES += contrib/d' make/include/main.defs
+      sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
+          -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
+          -i make/configure.py
+    ''
+    + optionalString stdenv.hostPlatform.isDarwin ''
+      # Prevent the configure script from failing if xcodebuild isn't available,
+      # which it isn't in the Nix context. (The actual build goes fine without
+      # xcodebuild.)
+      sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
+    ''
+    + optionalString useGtk ''
+      substituteInPlace gtk/module.rules \
+        --replace-fail '$(MESON.exe)' 'meson' \
+        --replace-fail '$(NINJA.exe)' 'ninja' \
+      # Force using nixpkgs dependencies
+      substituteInPlace gtk/meson.build \
+        --replace-fail \
+          "hb_incdirs = include_directories(hb_dir / 'libhb', hb_dir / 'contrib/include')" \
+          "hb_incdirs = include_directories(hb_dir / 'libhb')"
+      substituteInPlace gtk/ghb.spec \
+        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+      substituteInPlace gtk/data/post_install.py \
+        --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    '';
 
-    nativeBuildInputs =
-      [
-        autoconf
-        automake
-        libtool
-        m4
-        pkg-config
-        python3
-      ]
-      ++ optionals useGtk [
-        appstream
-        desktop-file-utils
-        intltool
-        meson
-        ninja
-        wrapGAppsHook4
-      ];
+    nativeBuildInputs = [
+      autoconf
+      automake
+      libtool
+      m4
+      pkg-config
+      python3
+    ]
+    ++ optionals useGtk [
+      appstream
+      desktop-file-utils
+      intltool
+      meson
+      ninja
+      wrapGAppsHook4
+    ];
 
-    buildInputs =
-      [
-        a52dec
-        dav1d
-        ffmpeg-hb
-        fontconfig
-        freetype
-        fribidi
-        harfbuzz
-        jansson
-        lame
-        libass
-        libbluray
-        libdvdcss
-        libdvdnav
-        libdvdread
-        libiconv
-        libjpeg_turbo
-        libogg
-        libopus
-        libsamplerate
-        libtheora
-        libvorbis
-        libvpx
-        libxml2
-        speex
-        svt-av1
-        x264
-        x265-hb
-        xz
-        zimg
-      ]
-      ++ optional (!stdenv.hostPlatform.isDarwin) numactl
-      ++ optionals useGtk [
-        dbus-glib
-        glib
-        gst_all_1.gst-libav
-        gst_all_1.gst-plugins-bad
-        gst_all_1.gst-plugins-base
-        gst_all_1.gst-plugins-good
-        gst_all_1.gstreamer
-        gtk4
-        hicolor-icon-theme
-        libappindicator-gtk3
-        libgudev
-        libnotify
-        udev
-      ]
-      ++ optional useFdk fdk_aac
-      ++ optionals stdenv.hostPlatform.isDarwin [
-        AudioToolbox
-        Foundation
-        libobjc
-        VideoToolbox
-      ]
-      # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
-      # look at ./make/configure.py search "enable_nvenc"
-      ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
+    buildInputs = [
+      a52dec
+      dav1d
+      ffmpeg-hb
+      fontconfig
+      freetype
+      fribidi
+      harfbuzz
+      jansson
+      lame
+      libass
+      libbluray
+      libdvdcss
+      libdvdnav
+      libdvdread
+      libiconv
+      libjpeg_turbo
+      libogg
+      libopus
+      libsamplerate
+      libtheora
+      libvorbis
+      libvpx
+      libxml2
+      speex
+      svt-av1
+      x264
+      x265-hb
+      xz
+      zimg
+    ]
+    ++ optional (!stdenv.hostPlatform.isDarwin) numactl
+    ++ optionals useGtk [
+      dbus-glib
+      glib
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gstreamer
+      gtk4
+      hicolor-icon-theme
+      libappindicator-gtk3
+      libgudev
+      libnotify
+      udev
+    ]
+    ++ optional useFdk fdk_aac
+    # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
+    # look at ./make/configure.py search "enable_nvenc"
+    ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
 
-    configureFlags =
-      [
-        "--disable-df-fetch"
-        "--disable-df-verify"
-      ]
-      ++ optional (!useGtk) "--disable-gtk"
-      ++ optional useFdk "--enable-fdk-aac"
-      ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
-      ++ optional stdenv.hostPlatform.isx86 "--harden";
+    configureFlags = [
+      "--disable-df-fetch"
+      "--disable-df-verify"
+    ]
+    ++ optional (!useGtk) "--disable-gtk"
+    ++ optional useFdk "--enable-fdk-aac"
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
+    ++ optional stdenv.hostPlatform.isx86 "--harden";
 
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
     NIX_LDFLAGS = [ "-lx265" ];

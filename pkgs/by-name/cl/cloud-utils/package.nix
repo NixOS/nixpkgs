@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YqfkmYclPZu6Mc2bFYxtiuH7uvfa3V4YlD0aHuKn1hw=";
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Useful set of utilities for interacting with a cloud";
     homepage = "https://github.com/canonical/cloud-utils";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 }

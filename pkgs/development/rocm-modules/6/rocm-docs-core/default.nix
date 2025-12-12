@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, buildPythonPackage
-, setuptools
-, beautifulsoup4
-, gitpython
-, pydata-sphinx-theme
-, pygithub
-, sphinx
-, breathe
-, myst-parser
-, sphinx-book-theme
-, sphinx-copybutton
-, sphinx-design
-, sphinx-external-toc
-, sphinx-notfound-page
-, pyyaml
-, fastjsonschema
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  buildPythonPackage,
+  setuptools,
+  beautifulsoup4,
+  gitpython,
+  pydata-sphinx-theme,
+  pygithub,
+  sphinx,
+  breathe,
+  myst-nb,
+  myst-parser,
+  sphinx-book-theme,
+  sphinx-copybutton,
+  sphinx-design,
+  sphinx-external-toc,
+  sphinx-notfound-page,
+  pyyaml,
+  fastjsonschema,
 }:
 
 # FIXME: Move to rocmPackages_common
 buildPythonPackage rec {
   pname = "rocm-docs-core";
-  version = "1.11.0";
+  version = "1.23.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
     rev = "v${version}";
-    hash = "sha256-JDpwR56vcCJgCTOM3RsK6KygZTLylQtDcZ+0W93lAAk=";
+    hash = "sha256-5Qh83eJ9vju/uUb9gGA4B5Bh1WZCygIRbSnaEZzIdbw=";
   };
 
   buildInputs = [ setuptools ];
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     pygithub
     sphinx
     breathe
+    myst-nb
     myst-parser
     sphinx-book-theme
     sphinx-copybutton
@@ -56,11 +58,14 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm Documentation Python package for ReadTheDocs build standardization";
     homepage = "https://github.com/ROCm/rocm-docs-core";
-    license = with licenses; [ mit cc-by-40 ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      mit
+      cc-by-40
+    ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-vehicle";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MPK5Aim/kGXLMOapttkp5ygl8gIlHv0675sBBf6kyAA=";
   };
 
@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vehicle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client providing RDW vehicle information";
     homepage = "https://github.com/frenck/python-vehicle";
     changelog = "https://github.com/frenck/python-vehicle/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -26,10 +26,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [ ./libx11.patch ] ++ [
     ./format.patch
     ./gcc6.patch
-    ./libx11.patch
     ./gtk.patch
     # These patches remove use of the `register` storage class specifier,
     # allowing smpeg to build with clang 16, which defaults to C++17.
@@ -60,13 +59,14 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [ SDL ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gtk2
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    SDL
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk2
+    libGLU
+    libGL
+  ];
 
   outputs = [
     "out"
@@ -93,10 +93,10 @@ stdenv.mkDerivation rec {
       --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
-  NIX_LDFLAGS = "-lX11";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lX11";
 
   meta = {
-    homepage = "http://icculus.org/smpeg/";
+    homepage = "https://icculus.org/smpeg/";
     description = "MPEG decoding library";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

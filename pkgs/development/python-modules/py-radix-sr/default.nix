@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SEKOIA-IO";
     repo = "py-radix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HeXWHdPeW3m0FMtqyHhZGhgCc706Y2xiN8hn9MFt/RM=";
   };
 
@@ -36,13 +36,13 @@ buildPythonPackage rec {
     "test_000_check_incref"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/SEKOIA-IO/py-radix";
-    license = with licenses; [
+    license = with lib.licenses; [
       isc
       bsdOriginal
     ];
-    maintainers = teams.wdz.members;
+    teams = [ lib.teams.wdz ];
   };
 }

@@ -23,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "photutils";
-  version = "2.0.2";
+  version = "2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "photutils";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gXtC6O8rXBBa8VMuqxshnJieAahv3bCY2C1BXNmJxb4=";
+    tag = version;
+    hash = "sha256-VPiirM1eaIRnb0ED6ZyIgu1BLI3TKVtqCf7bDawC/kA=";
   };
 
   build-system = [
@@ -71,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "photutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astropy package for source detection and photometry";
     homepage = "https://github.com/astropy/photutils";
     changelog = "https://github.com/astropy/photutils/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

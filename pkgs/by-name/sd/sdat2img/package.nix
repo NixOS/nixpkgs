@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "sdat2img";
-  version = "unstable-2021-11-09";
+  version = "0-unstable-2021-11-09";
 
   src = fetchFromGitHub {
     repo = "sdat2img";

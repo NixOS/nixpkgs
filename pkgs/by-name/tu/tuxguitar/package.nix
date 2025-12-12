@@ -16,12 +16,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.5";
+  version = "1.6.6";
   pname = "tuxguitar";
 
   src = fetchurl {
     url = "https://github.com/helge17/tuxguitar/releases/download/${finalAttrs.version}/tuxguitar-${finalAttrs.version}-linux-swt-amd64.tar.gz";
-    hash = "sha256-wxiLqNc20/AROZZWghzbrUz/VK++fEIKyP5ipomy1Po=";
+    hash = "sha256-kfPk+IIg5Q4Fc9HMS0kxxCarlbJjVKluIvz8KpDjJLM=";
   };
 
   nativeBuildInputs = [

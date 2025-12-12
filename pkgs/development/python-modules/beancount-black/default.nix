@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beancount-black";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vo11mlgDhyc8YFnULJ4AFrANWmGpAMNX5jJ6QaUNqk0=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beancount_black" ];
 
-  meta = with lib; {
+  meta = {
     description = "Opinioned code formatter for Beancount";
     mainProgram = "bean-black";
     homepage = "https://github.com/LaunchPlatform/beancount-black/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ambroisie ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

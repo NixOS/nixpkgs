@@ -5,21 +5,27 @@
   cmake,
   ninja,
   pkg-config,
+  mbedtls,
+  udev,
+  linuxPackages,
 }:
 
-# Warning: We are aware that the upstream changed and there are new releases,
-# this got initally packaged for obs-studio which appears to fail to build even upstream with the new version.
-# https://github.com/NixOS/nixpkgs/pull/296191 / https://github.com/obsproject/obs-studio/pull/10037
 stdenv.mkDerivation rec {
   pname = "libajantv2";
-  version = "16.2-bugfix5";
+  version = "17.5.0";
 
   src = fetchFromGitHub {
     owner = "aja-video";
-    repo = "ntv2";
-    rev = "v${version}";
-    sha256 = "sha256-h5PKWMwqTeI5/EaTWkjYojuvDU0FyMpzIjWB98UOJwc=";
+    repo = "libajantv2";
+    rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-/BfFbBScS75TpUZEeYzAHd1PtnZgnCNfGtjwYPJJjkg=";
   };
+  patches = [
+    ./use-system-mbedtls.patch
+    ./device-info-list.patch
+    ./musl.patch
+    ./demos-ntv2overlay-no-makefile.patch
+  ];
 
   outputs = [
     "out"
@@ -31,27 +37,39 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
+  buildInputs = [
+    mbedtls
+    udev
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "AJANTV2_BUILD_SHARED" true)
+  ];
 
   postInstall = ''
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/libajantv2.pc" <<EOF
     prefix=$out
     libdir=\''${prefix}/lib
-    includedir=\''${prefix}/include/ajalibraries
+    includedir=\''${prefix}/include/libajantv2
 
     Name: libajantv2
     Description: Library for controlling AJA NTV2 video devices
     Version: ${version}
     Libs: -L\''${libdir} -lajantv2
-    Cflags: -I\''${includedir} -I\''${includedir}/ajantv2/includes
+    Cflags: -I\''${includedir} -I\''${includedir}/ajantv2/includes -I\''${includedir}/ajantv2/src/lin -DAJALinux -DAJA_LINUX -DAJA_USE_CPLUSPLUS11 -DNDEBUG -DNTV2_USE_CPLUSPLUS11
     EOF
   '';
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (linuxPackages) ajantv2;
+  };
+
+  meta = {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
-    homepage = "https://github.com/aja-video/ntv2";
-    license = with licenses; [ mit ];
-    maintainers = [ ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/aja-video/libajantv2";
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.lukegb ];
+    platforms = lib.platforms.linux;
   };
 }

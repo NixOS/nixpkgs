@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.4.3";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ajschmidt8";
     repo = "adext";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-y8BvcSc3vD0FEWiyzW2Oh6PBS2Itjs2sz+9Dzh5yqSg=";
+    tag = "v${version}";
+    hash = "sha256-cZMA8/t24xk5b1At2LQWeDWuRfPcXBCXpl2T70YxZeA=";
   };
 
   build-system = [ setuptools-scm ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python extension for AlarmDecoder";
     homepage = "https://github.com/ajschmidt8/adext";
-    changelog = "https://github.com/ajschmidt8/adext/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ajschmidt8/adext/releases/tag/${src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

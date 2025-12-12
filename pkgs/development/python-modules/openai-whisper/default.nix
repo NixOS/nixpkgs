@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -11,7 +11,7 @@
   # runtime
   ffmpeg-headless,
 
-  # propagates
+  # dependencies
   more-itertools,
   numba,
   numpy,
@@ -23,64 +23,64 @@
   # tests
   pytestCheckHook,
   scipy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20240930";
+  version = "20250625";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6wfHJM2pg+y1qUfVF1VRG86G3CtQ+UNIwMXR8pPi2k4=";
+    repo = "whisper";
+    rev = "v${version}";
+    hash = "sha256-Zn2HUCor1eCJBP7q0vpffqhw5SNguz8zCGoPgdt6P+c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = ffmpeg-headless;
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     more-itertools
     numba
     numpy
     tiktoken
     torch
     tqdm
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   nativeCheckInputs = [
     pytestCheckHook
     scipy
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # requires network access to download models
     "test_transcribe"
+
     # requires NVIDIA drivers
     "test_dtw_cuda_equivalence"
     "test_median_filter_equivalence"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "test_dtw"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      hexa
-      MayNiklas
-    ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ MayNiklas ];
   };
 }

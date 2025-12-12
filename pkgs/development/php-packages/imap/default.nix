@@ -51,10 +51,10 @@ buildPecl {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "PHP extension for checking the spelling of a word";
     homepage = "https://pecl.php.net/package/imap";
-    license = licenses.php301;
-    maintainers = teams.php.members;
+    license = lib.licenses.php301;
+    teams = [ lib.teams.php ];
   };
 }

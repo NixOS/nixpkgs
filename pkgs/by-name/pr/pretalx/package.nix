@@ -12,60 +12,59 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_2;
 
-      django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.0";
-        src = oldAttrs.src.override {
-          rev = "v${version}";
-          hash = "sha256-a8BopUwZjmvxOzBVqs4fTo0SY8sEEloGUw90daYWfz8=";
+      django-countries = prev.django-countries.overridePythonAttrs (oldAttrs: rec {
+        version = "8.1.0";
+        src = fetchFromGitHub {
+          owner = "SmileyChris";
+          repo = "django-countries";
+          tag = "v${version}";
+          hash = "sha256-KtBFSkYNKwivCFlqlWm4idiMybqsqiV0SNZx3egLl6c=";
         };
-
-        propagatedBuildInputs = with final; [
-          beautifulsoup4
-          django
-        ];
-
-        # fails with some assertions
-        doCheck = false;
+        build-system = with final; [ uv-build ];
       });
-
-      django-extensions = prev.django-extensions.overridePythonAttrs {
-        # Compat issues with Django 5.1
-        # https://github.com/django-extensions/django-extensions/issues/1885
-        doCheck = false;
-      };
     };
   };
 
-  version = "2024.3.1";
+  version = "2025.2.2";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
-    rev = "v${version}";
-    hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
+    tag = "v${version}";
+    hash = "sha256-2qru52/ZALBAdRh0I+3VimVsiRl71YZgbSUD/LdoA/0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
+    teams = [ lib.teams.c3d2 ];
+    platforms = lib.platforms.linux;
   };
 
-  frontend = buildNpmPackage {
-    pname = "pretalx-frontend";
+  pretix-schedule-editor = buildNpmPackage {
+    pname = "pretalx-schedule-editor";
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-i7awRuR7NxhpxN2IZuI01PsN6FjXht7BxTbB1k039HA=";
+    npmDepsHash = "sha256-voHiml0nFWZIST39D5ErB0xTiWAOHN9OZinYutuQcdg=";
 
     npmBuildScript = "build";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp dist/** $out/
+
+      runHook postInstall
+    '';
 
     inherit meta;
   };
@@ -80,10 +79,11 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
-  postPatch = ''
-    substituteInPlace src/pretalx/common/management/commands/rebuild.py \
-      --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
-  '';
+  patches = [
+    # don't run npm during rebuild command, we already use a separate derivation
+    # to build static assets
+    ./rebuild-no-npm.patch
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -94,15 +94,17 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
     "bleach"
     "celery"
-    "css-inline"
+    "css_inline"
     "cssutils"
+    "defusedcsv"
     "defusedxml"
-    "django-compressor"
     "django-csp"
     "django-filter"
-    "django-hierarkey"
+    "django-formset-js-improved"
+    "django-i18nfield"
     "djangorestframework"
     "markdown"
     "pillow"
@@ -121,13 +123,11 @@ python.pkgs.buildPythonApplication rec {
       bleach
       celery
       css-inline
-      csscompressor
       cssutils
       defusedcsv
       defusedxml
+      diff-match-patch
       django
-      django-bootstrap4
-      django-compressor
       django-context-decorator
       django-countries
       django-csp
@@ -136,10 +136,12 @@ python.pkgs.buildPythonApplication rec {
       django-formtools
       django-hierarkey
       django-i18nfield
-      django-libsass
+      django-minify-html
       django-scopes
+      django-tables2
       djangorestframework
-      libsass
+      drf-flex-fields
+      drf-spectacular
       markdown
       pillow
       publicsuffixlist
@@ -167,8 +169,8 @@ python.pkgs.buildPythonApplication rec {
   };
 
   postBuild = ''
-    rm -r ./src/pretalx/frontend/schedule-editor
-    ln -s ${frontend}/lib/node_modules/@pretalx/schedule-editor ./src/pretalx/frontend/schedule-editor
+    # link schedule-editor so it can be picked up in staticfiles lookups
+    ln -s ${pretix-schedule-editor}/** ./src/pretalx/static/
 
     # Generate all static files, see https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
     PYTHONPATH=$PYTHONPATH:./src python -m pretalx rebuild
@@ -178,19 +180,14 @@ python.pkgs.buildPythonApplication rec {
     mkdir -p $out/bin
     cp ./src/manage.py $out/bin/pretalx-manage
 
-    # The processed source files are in the static output, except for fonts, which are duplicated.
-    # See <https://github.com/pretalx/pretalx/issues/1585> for more details.
-    find $out/${python.sitePackages}/pretalx/static \
-      -mindepth 1 \
-      -not -path "$out/${python.sitePackages}/pretalx/static/fonts*" \
-      -delete
-
-    # Copy generated static files into dedicated output
+    # Copy and merge static files
     mkdir -p $static
     cp -r ./src/static.dist/** $static/
+    cp -r ${pretix-schedule-editor}/** $static/
 
-    # Copy frontend files
-    ln -s ${frontend}/lib/node_modules/@pretalx/schedule-editor/dist/* $static
+    # And link them into the package for staticfiles lookups
+    rm -rf $out/${python.sitePackages}/pretalx/static
+    ln -s $static/ $out/${python.sitePackages}/pretalx/static
   '';
 
   preCheck = ''
@@ -211,7 +208,7 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
       responses
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # tries to run npm run i18n:extract

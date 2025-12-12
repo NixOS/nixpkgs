@@ -9,6 +9,7 @@
   vala,
   elementary-settings-daemon,
   libgee,
+  gettext,
   granite7,
   gsettings-desktop-schemas,
   gala,
@@ -21,16 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-k6dSiiBqqbhH7rmhpBu83LX8at/qJ4gkrg4Xc+VbkIE=";
+    repo = "settings-security-privacy";
+    tag = version;
+    hash = "sha256-OlLeeS0b4IMCvOMyHlIRaQl11ivn4Y2+vYdXOzIlvaw=";
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -54,12 +56,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Security & Privacy Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    homepage = "https://github.com/elementary/settings-security-privacy";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 
 }

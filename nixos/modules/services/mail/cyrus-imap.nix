@@ -15,6 +15,7 @@ let
     optionalString
     generators
     mapAttrsToList
+    boolToYesNo
     ;
   inherit (lib.strings) concatStringsSep;
   inherit (lib.types)
@@ -63,7 +64,7 @@ let
         mkValueString =
           v:
           if builtins.isBool v then
-            if v then "yes" else "no"
+            boolToYesNo v
           else if builtins.isList v then
             concatStringsSep " " v
           else
@@ -72,6 +73,20 @@ let
     } cfg.imapdSettings;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslServerCert" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_server_cert" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslServerKey" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_server_key" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslCACert" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_client_ca_file" ]
+    )
+  ];
   options.services.cyrus-imap = {
     enable = mkEnableOption "Cyrus IMAP, an email, contacts and calendar server";
     debug = mkEnableOption "debugging messages for the Cyrus master process";
@@ -80,7 +95,7 @@ in
       type = int;
       default = 32;
       description = ''
-        Socket listen queue backlog size. See listen(2) for more information about a backlog.
+        Socket listen queue backlog size. See {manpage}`listen(2)` for more information about a backlog.
         Default is 32, which may be increased if you have a very high connection rate.
       '';
     };
@@ -194,7 +209,7 @@ in
           DAEMON = mkOption {
             default = { };
             description = ''
-              This section lists long running daemons to start before any SERVICES are spawned. master(8) will ensure that these processes are running, restarting any process which dies or forks. All listed processes will be shutdown when master(8) is exiting.
+              This section lists long running daemons to start before any SERVICES are spawned. {manpage}`master(8)` will ensure that these processes are running, restarting any process which dies or forks. All listed processes will be shutdown when {manpage}`master(8)` is exiting.
             '';
           };
         };
@@ -221,7 +236,7 @@ in
             type = path;
             default = "/run/cyrus/lmtp";
             description = ''
-              Unix socket that lmtpd listens on, used by deliver(8). This should match the path specified in cyrus.conf(5).
+              Unix socket that lmtpd listens on, used by {manpage}`deliver(8)`. This should match the path specified in {manpage}`cyrus.conf(5)`.
             '';
           };
           idlesocket = mkOption {
@@ -293,24 +308,6 @@ in
       default = null;
       description = "Path to the configuration file used for Cyrus.";
       apply = v: if v != null then v else pkgs.writeText "cyrus.conf" cyrusConfig;
-    };
-
-    sslCACert = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File path which containing one or more CA certificates to use.";
-    };
-
-    sslServerCert = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File containing the global certificate used for all services (IMAP, POP3, LMTP, Sieve)";
-    };
-
-    sslServerKey = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File containing the private key belonging to the global server certificate.";
     };
   };
 

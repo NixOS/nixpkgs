@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "2024.11.13";
+  version = "2025.5.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BPkcz+y90NVDX2jjwOZ/9F/Oedg+LXc34Tee6ZfJ1vQ=";
+    hash = "sha256-LZ/kNtw5Tw3PtqQp4Dq2qOeXgofID5upFvpLMXUIuiM=";
   };
 
   build-system = [ setuptools ];
@@ -36,12 +36,12 @@ buildPythonPackage rec {
   # Tests failing upstream
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Youtube (and other video site) to Internet Archive Uploader";
     mainProgram = "tubeup";
     homepage = "https://github.com/bibanon/tubeup";
     changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

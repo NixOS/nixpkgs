@@ -60,15 +60,39 @@
         "version": "1.21-130"
     },
     "1.21.1": {
-        "hash": "sha256-SXFrATNCx19foUHIzaJkeqCh4YGNKmGq4KQymeNf9Bg=",
-        "version": "1.21.1-132"
+        "hash": "sha256-Ob2MALnhjekdyr08w9z6UyhoWlO3GHovYygMIuLSh7k=",
+        "version": "1.21.1-133"
     },
     "1.21.3": {
-        "hash": "sha256-/nrczvDAygftMAFP+vAVygnpy6muucsiXjIY3CMswFU=",
-        "version": "1.21.3-81"
+        "hash": "sha256-h+lz4dM46Gnn/bxLj63BV517sCRqDgz25XAKzmyLwX4=",
+        "version": "1.21.3-83"
     },
     "1.21.4": {
-        "hash": "sha256-SCm+hrMdYGT8YKJAPwPBKWyUzNdrh7LM8Lp4FUP8q5w=",
-        "version": "1.21.4-12"
+        "hash": "sha256-XuT1QvYooUxkRBCwjJTqQudy700p/pKXNja2gT1Or/w=",
+        "version": "1.21.4-232"
+    },
+    "1.21.5": {
+        "hash": "sha256-KuauIq30F2mXRuD4n8LvbLbuBQpfZgjO5Y8FNdYLUJ4=",
+        "version": "1.21.5-114"
+    },
+    "1.21.6": {
+        "hash": "sha256-NeLfpms0kbnS8LsDNnn6WsoeH98JfnoGqAzor+2lwhQ=",
+        "version": "1.21.6-48"
+    },
+    "1.21.7": {
+        "hash": "sha256-g4OBiGmcsoN+VbiQ+xodOa0HEChe1jP7+fwU6fR84Hg=",
+        "version": "1.21.7-32"
+    },
+    "1.21.8": {
+        "hash": "sha256-jefFLDsCQDUD0W+sWAA/Hv733XoCVnhoQ5J/qS7lfx4=",
+        "version": "1.21.8-60"
+    },
+    "1.21.9": {
+        "hash": "sha256-rsAC53x1ZuSUlP3wVDC5YHj/0ddDDmUtTzOP75UeehA=",
+        "version": "1.21.9-59"
+    },
+    "1.21.10": {
+        "hash": "sha256-9tjYDSWmh8xSoCodBMsl8We7OoqCgnGiY74vRK2pEsw=",
+        "version": "1.21.10-91"
     }
 }

@@ -4,13 +4,14 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiooui";
-  version = "0.1.7";
+  version = "0.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,33 +19,33 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "aiooui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vnO3Lh+d/8mES2i4jKTH4RviURUFqb3Vj6u5sxUGf1o=";
+    tag = "v${version}";
+    hash = "sha256-tY8/hb3BpxzKM/IB7anfmqGcXK6FmiuoJVxqpFW1Maw=";
   };
 
   postPatch = ''
     # Remove requirements and build part for the OUI data
     substituteInPlace pyproject.toml \
-      --replace-fail "-v -Wdefault --cov=aiooui --cov-report=term-missing:skip-covered" "" \
       --replace-fail 'script = "build_oui.py"' "" \
-      --replace-fail ", 'requests'" "" \
+      --replace-fail ", 'requests', 'aiohttp'" "" \
       --replace-fail '"setuptools>=65.4.1", ' ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiooui" ];
 
-  meta = with lib; {
+  meta = {
     description = "Async OUI lookups";
     homepage = "https://github.com/Bluetooth-Devices/aiooui";
-    changelog = "https://github.com/Bluetooth-Devices/aiooui/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/aiooui/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

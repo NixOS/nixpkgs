@@ -16,12 +16,12 @@ rustPlatform.buildRustPackage rec {
     owner = "near";
     repo = "nearcore";
     # there is also a branch for this version number, so we need to be explicit
-    rev = "refs/tags/${version}";
+    tag = version;
 
     sha256 = "sha256-VjvHCiWjsx5Y7xxqck/O9gSNrL8mxCTosLwLqC85ywY=";
   };
 
-  cargoHash = "sha256-5Gs1sAzjuUO3IkwMX1NeA/Sbax0qtwvulyT66AQaNjs=";
+  cargoHash = "sha256-3MvUn6CJ3skVctTIYhib8G+UVOB/VXokwlTnseGJAGU=";
   cargoPatches = [ ./0001-make-near-test-contracts-optional.patch ];
 
   postPatch = ''
@@ -53,11 +53,13 @@ rustPlatform.buildRustPackage rec {
   # fat LTO requires ~3.4GB RAM
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mikroskeem ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mikroskeem ];
     # only x86_64 is supported in nearcore because of sse4+ support, macOS might
     # be also possible
     platforms = [ "x86_64-linux" ];

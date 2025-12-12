@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
-    repo = pname;
+    repo = "liquidprompt";
     rev = "v${version}";
     hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured & carefully designed adaptive prompt for Bash & Zsh";
     homepage = "https://github.com/liquidprompt/liquidprompt";
-    license = licenses.agpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

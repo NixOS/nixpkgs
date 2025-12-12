@@ -4,67 +4,93 @@
   fetchurl,
   pkg-config,
   intltool,
+  libxml2,
   perlPackages,
   goffice,
   gnome,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  glib,
   gtk3,
   bison,
   python3Packages,
   itstool,
+  autoreconfHook,
+  gtk-doc,
+  fetchFromGitLab,
+  gettext,
+  yelp-tools,
 }:
 
 let
   inherit (python3Packages) python pygobject3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.57";
+  version = "1.12.59";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r/ULG2I0DCT8z0U9X60+f7c/S8SzT340tsPS2a9qHk8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnumeric";
+    tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-7xCDOqPx3QLDHLoKG46e8te4smSFrLOgCcWkiJXGjDQ=";
   };
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [ "--disable-component" ];
 
   nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    gtk-doc
+    yelp-tools
     pkg-config
     intltool
     bison
     itstool
+    glib # glib-compile-resources
+    libxml2 # xmllint
+    python.pythonOnBuildForHost
     wrapGAppsHook3
   ];
 
   # ToDo: optional libgda, introspection?
-  buildInputs =
-    [
-      goffice
-      gtk3
-      adwaita-icon-theme
-      python
-      pygobject3
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ]);
+  # TODO: fix Perl plugin when cross-compiling
+  buildInputs = [
+    goffice
+    gtk3
+    adwaita-icon-theme
+    python
+    pygobject3
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnumeric";
       versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
   };
-}
+})

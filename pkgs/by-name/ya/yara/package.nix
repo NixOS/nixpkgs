@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
-  pcre,
   pkg-config,
   protobufc,
   withCrypto ? true,
@@ -19,38 +17,28 @@
   enableStatic ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yara";
-  version = "4.5.0";
+  version = "4.5.5";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a+oLxVJgdDrnOra85PPo8ZlFhinawWHuRtVE39S8yJk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "LFS64.patch";
-      url = "https://github.com/VirusTotal/yara/commit/833a580430abe0fbc9bc17a21fb95bf36dacf367.patch";
-      hash = "sha256-EmwyDsxaNd9zfpAOu6ZB9kzg04qB7LAD7UJB3eAuKd8=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  buildInputs =
-    [
-      pcre
-      protobufc
-    ]
-    ++ lib.optionals withCrypto [ openssl ]
-    ++ lib.optionals enableMagic [ file ]
-    ++ lib.optionals enableCuckoo [ jansson ];
+  buildInputs = [
+    protobufc
+  ]
+  ++ lib.optionals withCrypto [ openssl ]
+  ++ lib.optionals enableMagic [ file ]
+  ++ lib.optionals enableCuckoo [ jansson ];
 
   preConfigure = "./bootstrap.sh";
 
@@ -66,13 +54,18 @@ stdenv.mkDerivation rec {
 
   doCheck = enableStatic;
 
-  meta = with lib; {
+  # bin/yara contain forbidden references to /build/.
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/bin/yara
+  '';
+
+  meta = {
     description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
-    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yara";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

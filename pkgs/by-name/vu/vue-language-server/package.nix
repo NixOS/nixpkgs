@@ -1,34 +1,78 @@
 {
   lib,
-  buildNpmPackage,
-  fetchurl,
+  stdenv,
+  fetchFromGitHub,
+  pnpm,
+  nodejs,
+  nix-update-script,
+  makeBinaryWrapper,
 }:
-
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "2.1.10";
+  version = "3.1.5";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/@vue/language-server/-/language-server-${version}.tgz";
-    hash = "sha256-xf8EzFGNelC0ebW2jYUBWBZ/tYUHMenv1WlGbpvIVhY=";
+  src = fetchFromGitHub {
+    owner = "vuejs";
+    repo = "language-tools";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cizb5nm1udYssh4EcWEWU22sZJP5so+oiYe8yaPqO98=";
   };
 
-  npmDepsHash = "sha256-mbHNdTe2OUu64rZ9/8MWmiSG8RxNcjduT2Wm6znS830=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-urnzAHrhuqw/7UwryNnR/BCMyxbzGXKUx0PQ+oAd27o=";
+  };
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+  nativeBuildInputs = [
+    nodejs
+    pnpm.configHook
+    makeBinaryWrapper
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    pnpm run build packages/language-server
+    runHook postBuild
   '';
 
-  dontNpmBuild = true;
+  preInstall = ''
+    # the mv commands are workaround for https://github.com/pnpm/pnpm/issues/8307
+    mv packages packages.dontpruneme
+    CI=true pnpm prune --prod
+    find packages.dontpruneme/**/node_modules -xtype l -delete
+    mv packages.dontpruneme packages
 
-  passthru.updateScript = ./update.sh;
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules packages/language-server/node_modules -xtype l -delete
+
+    # remove non-deterministic files
+    rm node_modules/.modules.yaml node_modules/.pnpm-workspace-state-v1.json
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib/language-tools}
+    cp -r {node_modules,packages,extensions} $out/lib/language-tools/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/vue-language-server \
+      --inherit-argv0 \
+      --add-flags $out/lib/language-tools/packages/language-server/bin/vue-language-server.js
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Official Vue.js language server";
     homepage = "https://github.com/vuejs/language-tools#readme";
-    changelog = "https://github.com/vuejs/language-tools/releases/tag/v${version}";
+    changelog = "https://github.com/vuejs/language-tools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ friedow ];
     mainProgram = "vue-language-server";
   };
-}
+})

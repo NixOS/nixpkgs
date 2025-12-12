@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -25,7 +31,7 @@ in
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gpaste ]";
         description = ''
@@ -43,14 +49,14 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
@@ -60,7 +66,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
@@ -92,6 +98,13 @@ in
             export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
           fi
         '') cfg.sessionPath}
+      ''
+      + lib.optionalString config.services.gnome.gcr-ssh-agent.enable ''
+        # Hack: https://bugzilla.redhat.com/show_bug.cgi?id=2250704 still
+        # applies to sessions not managed by systemd.
+        if [ -z "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ]; then
+          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
+        fi
       '';
 
       # Default services
@@ -101,7 +114,7 @@ in
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
-        cinnamon-common
+        cinnamon
         cinnamon-screensaver
         nemo-with-extensions
         xapp
@@ -110,6 +123,7 @@ in
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gvfs.enable = true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
@@ -131,69 +145,75 @@ in
 
       # Fix lockscreen
       security.pam.services = {
-        cinnamon-screensaver = {};
+        cinnamon-screensaver = { };
       };
 
-      environment.systemPackages = with pkgs; ([
-        # Teach nemo-desktop how to launch file browser.
-        # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
-        (writeTextFile {
-          name = "x-cinnamon-mimeapps";
-          destination = "/share/applications/x-cinnamon-mimeapps.list";
-          text = ''
-            [Default Applications]
-            inode/directory=nemo.desktop
-          '';
-        })
+      environment.systemPackages =
+        with pkgs;
+        (
+          [
+            # Teach nemo-desktop how to launch file browser.
+            # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+            (writeTextFile {
+              name = "x-cinnamon-mimeapps";
+              destination = "/share/applications/x-cinnamon-mimeapps.list";
+              text = ''
+                [Default Applications]
+                inode/directory=nemo.desktop
+              '';
+            })
 
-        desktop-file-utils
+            desktop-file-utils
 
-        # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+            # common-files
+            cinnamon
+            cinnamon-session
+            cinnamon-desktop
+            cinnamon-menus
+            cinnamon-translations
 
-        # utils needed by some scripts
-        killall
+            # utils needed by some scripts
+            killall
 
-        # session requirements
-        cinnamon-screensaver
-        # cinnamon-killer-daemon: provided by cinnamon-common
-        networkmanagerapplet # session requirement - also nm-applet not needed
+            # session requirements
+            cinnamon-screensaver
+            # cinnamon-killer-daemon: provided by cinnamon
+            networkmanagerapplet # session requirement - also nm-applet not needed
 
-        # packages
-        nemo-with-extensions
-        gnome-online-accounts-gtk
-        cinnamon-control-center
-        cinnamon-settings-daemon
-        libgnomekbd
+            # packages
+            nemo-with-extensions
+            gnome-online-accounts-gtk
+            cinnamon-control-center
+            cinnamon-settings-daemon
+            libgnomekbd
 
-        # theme
-        adwaita-icon-theme
-        gnome-themes-extra
-        gtk3.out
+            # theme
+            adwaita-icon-theme
+            gnome-themes-extra
+            gtk3.out
 
-        # other
-        glib # for gsettings
-        xdg-user-dirs
-      ] ++ utils.removePackagesByName [
-        # accessibility
-        onboard
+            # other
+            glib # for gsettings
+            xdg-user-dirs
+          ]
+          ++ utils.removePackagesByName [
+            # accessibility
+            onboard
 
-        # theme
-        sound-theme-freedesktop
-        nixos-artwork.wallpapers.simple-dark-gray
-        mint-artwork
-        mint-cursor-themes
-        mint-l-icons
-        mint-l-theme
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        xapp # provides some xapp-* icons
-      ] config.environment.cinnamon.excludePackages);
+            # theme
+            sound-theme-freedesktop
+            nixos-artwork.wallpapers.simple-dark-gray
+            mint-artwork
+            mint-cursor-themes
+            mint-l-icons
+            mint-l-theme
+            mint-themes
+            mint-x-icons
+            mint-y-icons
+            xapp # provides some xapp-* icons
+            xapp-symbolic-icons
+          ] config.environment.cinnamon.excludePackages
+        );
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
@@ -206,7 +226,7 @@ in
 
       services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -230,25 +250,28 @@ in
     (mkIf serviceCfg.apps.enable {
       programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs; utils.removePackagesByName [
-        # cinnamon team apps
-        bulky
-        warpinator
+      environment.systemPackages =
+        with pkgs;
+        utils.removePackagesByName [
+          # cinnamon team apps
+          bulky
+          warpinator
 
-        # cinnamon xapp
-        xviewer
-        xreader
-        xed-editor
-        pix
+          # cinnamon xapp
+          xviewer
+          xreader
+          xed-editor
+          pix
 
-        # external apps shipped with linux-mint
-        celluloid
-        gnome-calculator
-        gnome-calendar
-        gnome-screenshot
-      ] config.environment.cinnamon.excludePackages;
+          # external apps shipped with linux-mint
+          celluloid
+          gnome-calculator
+          gnome-calendar
+          gnome-screenshot
+          file-roller
+          gucharmap
+        ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

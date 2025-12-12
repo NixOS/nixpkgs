@@ -1,122 +1,76 @@
 {
-  buildDotnetModule,
   cargo-about,
-  cargo-tauri_1,
-  dotnetCorePackages,
+  cargo-tauri,
   fetchFromGitHub,
   fetchNpmDeps,
   glib-networking,
-  google-fonts,
   lib,
-  libsoup_2_4,
+  libsoup_3,
+  makeBinaryWrapper,
   nodejs,
   npmHooks,
   openssl,
   pkg-config,
   rustPlatform,
   stdenv,
-  webkitgtk_4_0,
+  wrapGAppsHook4,
+  webkitgtk_4_1,
 }:
 let
   pname = "alcom";
-  version = "1.8.2";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
-    rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-jkhjJTb/U2dXj/vyaip+gWoqIOdfFKSExeDl0T11DE4=";
+    tag = "gui-v${version}";
+    hash = "sha256-xucU8nXskniHOiuwrtVoZM2FIKNKU45i4DNo6iLjZvM=";
   };
 
   subdir = "vrc-get-gui";
-
-  google-fonts' = google-fonts.override {
-    fonts = [
-      "NotoSans"
-      "NotoSansJP"
-    ];
-  };
-
-  dotnetSdk = dotnetCorePackages.sdk_8_0;
-  dotnetRuntime = dotnetCorePackages.runtime_8_0;
-
-  dotnetBuild = buildDotnetModule {
-    inherit pname version src;
-
-    dotnet-sdk = dotnetSdk;
-    dotnet-runtime = dotnetRuntime;
-
-    projectFile = [
-      "vrc-get-litedb/dotnet/vrc-get-litedb.csproj"
-      "vrc-get-litedb/dotnet/LiteDB/LiteDB/LiteDB.csproj"
-    ];
-    nugetDeps = ./deps.json;
-  };
 in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
+  patches = [
+    ./disable-updater-artifacts.patch
+  ];
+
   nativeBuildInputs = [
     cargo-about
-    cargo-tauri_1.hook
-    dotnetSdk
+    cargo-tauri.hook
     nodejs
     npmHooks.npmConfigHook
+    wrapGAppsHook4
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libsoup_2_4
-      webkitgtk_4_0
-    ]
-    ++ dotnetSdk.packages
-    ++ dotnetBuild.nugetDeps;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libsoup_3
+    makeBinaryWrapper
+    webkitgtk_4_1
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  cargoHash = "sha256-MeCx3BoEXckMZfecyBcwwVE8+6V9Di6ULkIhUvUFZIA=";
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/${subdir}";
-    hash = "sha256-4zokKLhLgW2u1GxeTlIAAxJINSpxHRtY5HXmhi9nj6c=";
+    hash = "sha256-snXOfAtanLPhQNo0mg/r8UUXJua2X+52t7+7QS1vOkI=";
   };
   npmRoot = subdir;
-
-  patches = [
-    ./use-local-fonts.patch
-  ];
-
-  postPatch = ''
-    install -Dm644 "${google-fonts'}/share/fonts/truetype/NotoSans[wdth,wght].ttf" ${subdir}/app/fonts/noto-sans.ttf
-    install -Dm644 "${google-fonts'}/share/fonts/truetype/NotoSansJP[wght].ttf" ${subdir}/app/fonts/noto-sans-jp.ttf
-  '';
-
-  preConfigure = ''
-    dotnet restore "vrc-get-litedb/dotnet/vrc-get-litedb.csproj" \
-      -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true
-  '';
-
-  passthru = {
-    inherit (dotnetBuild) fetch-deps;
-  };
 
   meta = {
     description = "Experimental GUI application to manage VRChat Unity Projects";
     homepage = "https://github.com/vrc-get/vrc-get";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    # aarch64-linux: Error failed to build app: Target aarch64-unknown-linux-gnu does not exist. Please run `rustup target list` to see the available targets.
-    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
-    mainProgram = "alcom";
+    broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "ALCOM";
   };
 }

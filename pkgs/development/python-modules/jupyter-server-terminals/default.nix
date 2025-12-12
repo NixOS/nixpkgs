@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "jupyter_server_terminals";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-af7jBscGkbekXgfDxwAfrJSY1uEuIGfzzSsjaPdlYcY=";
     };
 
@@ -38,7 +38,8 @@ let
       pytest-jupyter
       pytest-timeout
       pytestCheckHook
-    ] ++ pytest-jupyter.optional-dependencies.server;
+    ]
+    ++ pytest-jupyter.optional-dependencies.server;
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {
@@ -46,11 +47,11 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/jupyter-server/jupyter_server_terminals/releases/tag/v${version}";
       description = "Jupyter Server Extension Providing Support for Terminals";
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

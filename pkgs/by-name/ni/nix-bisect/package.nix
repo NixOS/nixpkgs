@@ -10,16 +10,18 @@ let
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timokau";
-    repo = pname;
+    repo = "nix-bisect";
     rev = "4f26082fec0817acbfa8cc6ca4c25caaf77ddcd2";
     hash = "sha256-zyeE1jYo/9NEG8fB4gQBAR01siP4tyLvjjHN1yUS4Ug=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     appdirs
     numpy
     pexpect
@@ -27,10 +29,12 @@ python3.pkgs.buildPythonApplication {
 
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "nix_bisect" ];
+
+  meta = {
     description = "Bisect nix builds";
     homepage = "https://github.com/timokau/nix-bisect";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

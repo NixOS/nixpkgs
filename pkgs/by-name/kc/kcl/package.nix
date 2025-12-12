@@ -1,6 +1,5 @@
 {
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   installShellFiles,
   kclvm_cli,
@@ -12,16 +11,16 @@
 
 buildGoModule rec {
   pname = "kcl";
-  version = "0.10.10";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-zv1YH/0JmNcWbyx9RLhyWykPbL34jnUbdy1HSZiYz3s=";
+    hash = "sha256-dwJkV5/MCUhjralKtnlmqSrb2C0kMZ1eO+6nTnenWZw=";
   };
 
-  vendorHash = "sha256-y8KWiy6onZmYdpanXcSQDmYv51pLfo1NTdg+EaR6p0E=";
+  vendorHash = "sha256-1O1oTJCdGwA0TgI8dScZq7+yfumbzyi8rD4VJkFgn5E=";
 
   subPackages = [ "cmd/kcl" ];
 
@@ -34,16 +33,10 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      kclvm
-      kclvm_cli
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ]);
+  buildInputs = [
+    kclvm
+    kclvm_cli
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME=$(mktemp -d)
@@ -70,13 +63,12 @@ buildGoModule rec {
   updateScript = nix-update-script { };
 
   meta = {
-    description = "A command line interface for KCL programming language";
+    description = "Command line interface for KCL programming language";
     changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      peefy
       selfuryon
     ];
     mainProgram = "kcl";

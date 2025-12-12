@@ -1,5 +1,4 @@
 {
-  stdenv,
   bashInteractive,
   buildPythonPackage,
   cryptography,
@@ -9,18 +8,19 @@
   rpm,
   urllib3,
   keyring,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.9.1";
+  version = "1.22.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    hash = "sha256-03EDarU7rmsiE96IYHXFuPtD8nWur0qwj8NDzSj8OX0=";
+    hash = "sha256-sohuRbWoLZ6/tBMRIKlvhmsDOgHaB8oGF58veVQBWpk=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
@@ -32,6 +32,7 @@ buildPythonPackage rec {
     urllib3
     cryptography
     keyring
+    ruamel-yaml
   ];
 
   postInstall = ''
@@ -48,15 +49,14 @@ buildPythonPackage rec {
 
   preCheck = "HOME=$TOP/tmp";
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     homepage = "https://github.com/openSUSE/osc";
-    description = "opensuse-commander with svn like handling";
+    description = "Opensuse-commander with svn like handling";
     mainProgram = "osc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peti
       saschagrunert
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

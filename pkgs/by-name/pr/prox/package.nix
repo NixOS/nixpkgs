@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "fgrosse";
-    repo = pname;
+    repo = "prox";
     rev = "v${version}";
     hash = "sha256-KSHTlcAmnuU8F17N0LBS0s5b/k6Of0OEHVd3v50bH3g=";
   };
@@ -23,11 +23,11 @@ buildGoModule rec {
       --replace '0.0.0-unknown' '${version}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fgrosse/prox";
     description = "Process runner for Procfile-based applications";
     mainProgram = "prox";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

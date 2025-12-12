@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
       makeWrapper  $pkipath/$i $out/bin/taskd-pki-$i \
         --prefix PATH : ${lib.makeBinPath [ gnutls ]}
     done
+
+    substituteInPlace {doc/,src/,./}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_policy(SET CMP0037 OLD)" ""
   '';
 
   buildInputs = [
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) taskserver; };
 
   meta = {
-    description = "Server for synchronising Taskwarrior clients";
+    description = "Server for synchronising Taskwarrior 2 clients";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

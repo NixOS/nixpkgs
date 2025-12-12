@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.9.25";
+  version = "0.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2JAZHayPyi2RI4apODQ9QDXSUI8n54SwQAxZiBhuJrE=";
+    tag = "v${version}";
+    hash = "sha256-ou4Rc50PsWtgWmD05JUU2fmZc2IRYppao5Kf0WVfYF0=";
   };
 
   build-system = [ setuptools ];
@@ -27,11 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the JSON5 data format";
     homepage = "https://github.com/dpranke/pyjson5";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch ];
+    changelog = "https://github.com/dpranke/pyjson5/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veehaitch ];
     mainProgram = "pyjson5";
   };
 }

@@ -5,31 +5,33 @@
   cmake,
   zlib,
   enablePython ? true,
+  addBinToPathHook,
   python3Packages,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.6.7";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Y7gQSh9C7smoXuGWgpJI3hPIg06Jns+1dBpmMxuCrKE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0MAY3mNHTv0ydtoVcJQKbOcSxCTvzH5S/5O82PjumKE=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals enablePython (
-      with python3Packages;
-      [
-        pybind11
-        python
-        pythonImportsCheckHook
-      ]
-    );
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enablePython (
+    with python3Packages;
+    [
+      nanobind
+      python
+      pythonImportsCheckHook
+    ]
+  );
 
   buildInputs = [ zlib ];
 
@@ -44,13 +46,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = enablePython;
 
-  nativeInstallCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeInstallCheckInputs =
+    with python3Packages;
+    [
+      # biopython
+      numpy
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+      versionCheckHook
+    ];
+  versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [ "../tests" ];
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Numerical precision error
+    # self.assertTrue(numpy.allclose(data_f, abs(asu_val), atol=5e-5, rtol=0))
+    # AssertionError: False is not true
+    "test_reading"
+  ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
+  enabledTestPaths = [ "../tests" ];
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

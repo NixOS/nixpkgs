@@ -98,12 +98,12 @@ let
           install -m644 -t $out/include/ ${bass.h}
         '';
 
-      meta = with lib; {
+      meta = {
         description = "Shareware audio library";
         homepage = "https://www.un4seen.com/";
-        license = licenses.unfreeRedistributable;
+        license = lib.licenses.unfreeRedistributable;
         platforms = builtins.attrNames bass.so;
-        maintainers = with maintainers; [ jacekpoz ];
+        maintainers = with lib.maintainers; [ poz ];
       };
     };
 

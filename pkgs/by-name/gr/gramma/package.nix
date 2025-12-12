@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "caderek";
     repo = "gramma";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gfBwKpsttdhjD/Opn8251qskURpwLX2S5NSbpwP3hFg=";
   };
 
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "command-line grammar checker";
+    description = "Command-line grammar checker";
     homepage = "https://caderek.github.io/gramma/";
     changelog = "https://github.com/caderek/gramma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;

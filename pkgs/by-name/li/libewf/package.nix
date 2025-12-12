@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     libuuid
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
 
   # cannot run test program while cross compiling
   configureFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

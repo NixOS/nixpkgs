@@ -7,8 +7,6 @@
   pkg-config,
   ronn,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
-  cargoHash = "sha256-8cH8QrnkfPF0Di7+Ns/P/8cFe0jej/v7m4fkkfTFdvs=";
+  cargoHash = "sha256-DXSHaiiIRdyrlX4UYPFD3aTAv65k3x/PU2VW047odH0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,11 +28,7 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "--bin"
@@ -49,12 +43,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${openssl}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

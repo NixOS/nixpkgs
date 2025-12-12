@@ -9,7 +9,6 @@
   libqtxdg,
   lxqt-build-tools,
   lxqt-globalkeys,
-  menu-cache,
   muparser,
   pcre,
   pkg-config,
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-runner";
     rev = version;
-    hash = "sha256-NsAlaoWMvisRZ04KkrQzwi5B2eXnaHqg0HtYG4NKLcs=";
+    hash = "sha256-h+pZiSuCdQknsyfUb9Ve1yxVyOUqNgYhIpO7kD5z3pQ=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     liblxqt
     libqtxdg
     lxqt-globalkeys
-    menu-cache
     muparser
     pcre
     qtbase
@@ -56,12 +54,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-runner";
     description = "Tool used to launch programs quickly by typing their names";
     mainProgram = "lxqt-runner";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
 }

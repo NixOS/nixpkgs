@@ -2,9 +2,7 @@
   lib,
   SDL2,
   alsa-lib,
-  apple-sdk_11,
   fetchFromGitHub,
-  fetchpatch,
   gtk3,
   gtksourceview3,
   libX11,
@@ -47,38 +45,36 @@ stdenv.mkDerivation {
     ./patches/0001-macos-copy-app-to-prefix.patch
   ];
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXv
-      udev
-      gtk3
-      gtksourceview3
-      alsa-lib
-      openal
-      libpulseaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = [
+    SDL2
+    libao
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXv
+    udev
+    gtk3
+    gtksourceview3
+    alsa-lib
+    openal
+    libpulseaudio
+  ];
 
-  makeFlags =
-    [
-      "-C bsnes"
-      "prefix=$(out)"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
+  makeFlags = [
+    "-C bsnes"
+    "prefix=$(out)"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
 
   enableParallelBuilding = true;
 
@@ -104,7 +100,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     mainProgram = "bsnes";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       stevebob
     ];
     platforms = lib.platforms.unix;

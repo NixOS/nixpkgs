@@ -1,51 +1,37 @@
 {
   stdenv,
   lib,
-  darwin,
+  gnused,
   rustPlatform,
+  karabiner-dk,
   fetchFromGitHub,
-  jq,
-  moreutils,
   versionCheckHook,
-  nix-update-script,
+  nix-update,
+  yq,
+  curl,
+  jq,
+  writeShellApplication,
+  writeShellScriptBin,
   withCmd ? false,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-cG9so0x0y8CbTxLOxSQwn5vG72KxHJzzTIH4lQA4MvE=";
+    repo = "kanata";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-IicVuJZBHzBv9SNGQuWIIaLq2qpWfn/jMFh9KPvAThs=";
   };
 
-  cargoHash = "sha256-QQrFUJ24Qnrx8+7+h9riycXZSQUdH1sXMhpDzU9AXiI=";
+  cargoHash = "sha256-2DTL1u17jUFiRoVe7973L5/352GtKte/vakk01SSRwY=";
 
-  # the dependency native-windows-gui contains both README.md and readme.md,
-  # which causes a hash mismatch on systems with a case-insensitive filesystem
-  # this removes the readme files and updates cargo's checksum file accordingly
-  depsExtraArgs = {
-    nativeBuildInputs = [
-      jq
-      moreutils
-    ];
-
-    postBuild = ''
-      pushd $name/native-windows-gui
-
-      rm --force --verbose README.md readme.md
-      jq 'del(.files."README.md") | del(.files."readme.md")' \
-        .cargo-checksum.json -c \
-        | sponge .cargo-checksum.json
-
-      popd
-    '';
-  };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: ${stdenv.hostPlatform.darwinMinVersion}'
+    '')
+  ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
@@ -59,19 +45,37 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    darwinDriverVersion = "6.2.0"; # needs to be updated if karabiner-driverkit changes
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-script-kanata";
+      runtimeInputs = [
+        curl
+        gnused
+        yq
+        jq
+        nix-update
+      ];
+      text = builtins.readFile ./update.sh;
+    });
+
+    darwinDriver =
+      if stdenv.hostPlatform.isDarwin then
+        (karabiner-dk.override {
+          driver-version = finalAttrs.passthru.darwinDriverVersion;
+        })
+      else
+        null;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      bmanuel
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       linj
+      auscyber
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "kanata";
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

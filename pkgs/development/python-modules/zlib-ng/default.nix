@@ -2,12 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
 
   # build-system
   cmake,
   setuptools,
-  versioningit,
+  setuptools-scm,
 
   # native dependencies
   zlib-ng,
@@ -18,27 +17,20 @@
 
 buildPythonPackage rec {
   pname = "zlib-ng";
-  version = "0.5.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
     rev = "v${version}";
-    hash = "sha256-UsdZgpRI7h6GemT1+1g/cP/8uhLykZ//saH4JMwwlY4=";
+    hash = "sha256-t/PSby1LUTyp+7XXKZTWjRrPvAei1ZrGSGU2CIcAQBc=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
-  ];
 
   build-system = [
     cmake
     setuptools
-    versioningit
+    setuptools-scm
   ];
 
   dontUseCmakeConfigure = true;
@@ -65,11 +57,11 @@ buildPythonPackage rec {
     "test_decompress_infile_outfile_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for Python's zlib and gzip modules using zlib-ng";
     homepage = "https://github.com/pycompression/python-zlib-ng";
     changelog = "https://github.com/pycompression/python-zlib-ng/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

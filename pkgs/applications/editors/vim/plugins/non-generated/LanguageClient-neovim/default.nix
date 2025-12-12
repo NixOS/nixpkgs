@@ -17,7 +17,11 @@ let
     pname = "LanguageClient-neovim-bin";
     inherit version src;
 
-    cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
+    cargoPatches = [
+      ./traitobject.patch
+    ];
+
+    cargoHash = "sha256-43alR84MktYTmsKeUMm4gK8AjUIkGqcsuFeQPusBKD0=";
   };
 in
 vimUtils.buildVimPlugin {

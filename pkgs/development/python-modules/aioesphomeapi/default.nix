@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -11,11 +11,11 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
-  async-timeout,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzlocal,
   zeroconf,
 
   # tests
@@ -26,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "28.0.0";
+  version = "42.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vMqDxg2BV9/g5FquejnT/Rsvwjhdh01K2LxiT355p1U=";
+    tag = "v${version}";
+    hash = "sha256-My61UXXOe7YNuq7eBltXqXmX6OqnDWUk7HJofAgR2I8=";
   };
 
   build-system = [
@@ -52,8 +50,9 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzlocal
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     mock
@@ -61,28 +60,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/esphome/aioesphomeapi/issues/837
-    "test_reconnect_logic_stop_callback"
-    # python3.12.4 regression
-    # https://github.com/esphome/aioesphomeapi/issues/889
-    "test_start_connection_cannot_increase_recv_buffer"
-    "test_start_connection_can_only_increase_buffer_size_to_262144"
-  ];
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed
-    "tests/test_bluetooth_benchmarks.py"
+    "tests/benchmarks"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aioesphomeapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

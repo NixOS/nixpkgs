@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "joker";
-  version = "1.4.0";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "candid82";
     repo = "joker";
-    sha256 = "sha256-Y7FaW3V80mXp3l87srTLyhF45MlNH7QUZ5hrTudPtDU=";
+    sha256 = "sha256-srBJiCqxNGfLZCxVHH6Mjs3Ht7Boy64qmPjr2+l/l1I=";
   };
 
-  vendorHash = "sha256-t/28kTJVgVoe7DgGzNgA1sYKoA6oNC46AeJSrW/JetU=";
+  vendorHash = "sha256-yH8QVzliAFZlOvprfdh/ClCWK2/7F96f0yLWvuAhGY8=";
 
   doCheck = false;
 
@@ -25,11 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/candid82/joker";
     description = "Small Clojure interpreter and linter written in Go";
     mainProgram = "joker";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ andrestylianos ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ andrestylianos ];
   };
 }

@@ -13,12 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ritiek";
-    repo = pname;
+    repo = "piano-rs";
     rev = "v${version}";
     hash = "sha256-qZeH9xXQPIOJ87mvLahnJB3DuEgLX0EAXPvECgxNlq0=";
   };
 
-  cargoHash = "sha256-vDqfWXeQVEnMWMjhAG/A0afff7dWMoQejDZjcVlYBMQ=";
+  cargoHash = "sha256-ygRyYFLNBCLnRhmO6DoK8fwvy/Y9jrOjWChzxc3CRPo=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
       --set ASSETS "$out"/share/piano-rs/assets
   '';
 
-  meta = with lib; {
-    description = "A multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
+  meta = {
+    description = "Multiplayer piano using UDP sockets that can be played using computer keyboard, in the terminal";
     homepage = "https://github.com/ritiek/piano-rs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "piano-rs";
-    maintainers = with maintainers; [ ritiek ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ritiek ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -28,7 +28,7 @@ let
     };
   };
 
-  juce = rec {
+  juce = {
     version = "unstable-2021-04-07";
     src = fetchFromGitHub {
       owner = "juce-framework";
@@ -39,13 +39,13 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "diopser";
   version = "unstable-2021-5-13";
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";
-    repo = pname;
+    repo = "diopser";
     fetchSubmodules = true;
     rev = "d5fdc92f1caf5a828e071dac99e106e58f06d84d";
     sha256 = "06y1h895yxh44gp4vxzrna59lf7nlfw7aacd3kk4l1g56jhy9pdx";
@@ -96,11 +96,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Totally original phase rotation plugin";
     homepage = "https://github.com/robbert-vdh/diopser";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

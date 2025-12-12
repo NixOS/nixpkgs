@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   requests,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
     repo = "fritzconnection";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1LLfSEOKqUIhWIR/RQEG0Bp41d908hAKDlslJlWCHys=";
+    tag = version;
+    hash = "sha256-ulY+nh9CSnxrktTlFSXAWJALkS4GwP/3dRIG07jQCWs=";
   };
 
   build-system = [ setuptools ];
@@ -44,12 +41,12 @@ buildPythonPackage rec {
     "fritzconnection/tests/test_functional.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with the AVM Fritz!Box";
     homepage = "https://github.com/kbr/fritzconnection";
     changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/version_history.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dotlambda
       valodim
     ];

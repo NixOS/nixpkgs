@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "trustme";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7SJk+0bDVFnm3p5FTtS6tzvkS2oqJq1Bf5toVK67ZEo=";
+    hash = "sha256-ZSi6K7x/LbQfM4JcjdE+Pj650zS6D5CXE8jDE59K5H8=";
   };
 
   build-system = [ hatchling ];
@@ -41,14 +41,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trustme" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
     changelog = "https://trustme.readthedocs.io/en/latest/#change-history";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ catern ];
   };
 }

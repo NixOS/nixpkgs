@@ -14,20 +14,20 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zhuifengshen";
-    repo = pname;
+    repo = "xmind";
     rev = "v${version}";
     sha256 = "xC1WpHz2eHb5+xShM/QUQAIYnJNyK1EKWbTXJKhDwbQ=";
   };
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
 
   pythonImportsCheck = [ "xmind" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to create mindmaps";
     homepage = "https://github.com/zhuifengshen/xmind";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

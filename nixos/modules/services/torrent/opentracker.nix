@@ -4,22 +4,20 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
   cfg = config.services.opentracker;
 in
 {
   options.services.opentracker = {
-    enable = mkEnableOption "opentracker";
+    enable = lib.mkEnableOption "opentracker";
 
-    package = mkPackageOption pkgs "opentracker" { };
+    package = lib.mkPackageOption pkgs "opentracker" { };
 
-    extraOptions = mkOption {
-      type = types.separatedString " ";
+    extraOptions = lib.mkOption {
+      type = lib.types.separatedString " ";
       description = ''
         Configuration Arguments for opentracker
-        See https://erdgeist.org/arts/software/opentracker/ for all params
+        See <https://erdgeist.org/arts/software/opentracker/> for all params
       '';
       default = "";
     };

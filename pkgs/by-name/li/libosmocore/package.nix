@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.10.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-qP5vGBgPs5y3InE3qgkVHiZgH3AW3mNyLIixgARAVRc=";
+    hash = "sha256-cEMPz5xmvaBnm+U7G1PttfhR6TXsT2PN2hk2FXHbXpg=";
   };
 
   postPatch = ''
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of Osmocom core libraries";
     homepage = "https://github.com/osmocom/libosmocore";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mog
     ];
   };

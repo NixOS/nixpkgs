@@ -1,6 +1,6 @@
 {
   buildPackages,
-  db,
+  gdbm,
   fetchurl,
   groff,
   gzip,
@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-gvBzn09hqrXrk30jTeOwFOd3tVOKKMvTFDPEWuCa77k=";
+    hash = "sha256-iv67b362u4VCkpRYhB9cfm8kDjDIY1jB+8776gdsh9k=";
   };
 
   outputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libpipeline
-    db
+    gdbm
     groff
     libiconv'
   ]; # (Yes, 'groff' is both native and build input)
@@ -66,25 +66,26 @@ stdenv.mkDerivation rec {
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
-  configureFlags =
-    [
-      "--disable-setuid"
-      "--disable-cache-owner"
-      "--localstatedir=/var"
-      "--with-config-file=${placeholder "out"}/etc/man_db.conf"
-      "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-pager=less"
-      "--with-col=${util-linuxMinimal}/bin/col"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "ac_cv_func__set_invalid_parameter_handler=no"
-      "ac_cv_func_posix_fadvise=no"
-      "ac_cv_func_mempcpy=no"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "--enable-mandirs="
-    ];
+  configureFlags = [
+    "--disable-setuid"
+    "--disable-cache-owner"
+    "--localstatedir=/var"
+    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
+  ]
+  ++ lib.optionals util-linuxMinimal.hasCol [
+    "--with-col=${util-linuxMinimal}/bin/col"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "ac_cv_func__set_invalid_parameter_handler=no"
+    "ac_cv_func_posix_fadvise=no"
+    "ac_cv_func_mempcpy=no"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
+  ];
 
   preConfigure = ''
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
@@ -120,10 +121,10 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.man;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://man-db.nongnu.org";
     description = "Implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };

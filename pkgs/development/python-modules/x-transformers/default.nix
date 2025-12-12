@@ -1,32 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  einx,
   einops,
+  loguru,
+  packaging,
   torch,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "x-transformers";
-  version = "1.32.2";
+  version = "2.11.23";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "x_transformers";
-    inherit version;
-    hash = "sha256-NUIlJ+N2/6kz3rI0oc7bfYVWnMkZhvfljQ6zSwBPkWo=";
+  src = fetchFromGitHub {
+    owner = "lucidrains";
+    repo = "x-transformers";
+    tag = version;
+    hash = "sha256-DkJTP5Y7zObnbJ0PlY/pqw/gHU697ctNgQ99yyTXv+A=";
   };
 
-  postPatch = ''
-    sed -i '/setup_requires=\[/,/\],/d' setup.py
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    einx
     einops
+    loguru
+    packaging
     torch
   ];
 
@@ -37,9 +46,10 @@ buildPythonPackage rec {
   meta = {
     description = "Concise but fully-featured transformer";
     longDescription = ''
-      A simple but complete full-attention transformer with a set of promising experimental features from various papers
+      A simple but complete full-attention transformer with a set of promising experimental features from various papers.
     '';
     homepage = "https://github.com/lucidrains/x-transformers";
+    changelog = "https://github.com/lucidrains/x-transformers/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ByteSudoer ];
   };

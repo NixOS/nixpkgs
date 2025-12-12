@@ -4,7 +4,7 @@
   fetchFromGitHub,
   mono,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wavefunctioncollapse";
   version = "0.0pre20170130";
   src = fetchFromGitHub {

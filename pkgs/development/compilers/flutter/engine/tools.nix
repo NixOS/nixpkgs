@@ -9,25 +9,28 @@
   runCommand,
   darwin,
   writeShellScriptBin,
-  depot_toolsCommit ? "7d95eb2eb054447592585c73a8ff7adad97ecba1",
-  depot_toolsHash ? "sha256-F7KDuVg11qLKkohIjuXpNdxpnSsT6Z3hE9+wFIG2sSk=",
-  cipdCommit ? "89ada246fcbf10f330011e4991d017332af2365b",
+  depot_toolsCommit ? "580b4ff3f5cd0dcaa2eacda28cefe0f45320e8f7",
+  depot_toolsHash ? "sha256-k+XQSYJQYc9vAUjwrRxaAlX/sK74W45m5byS31hSpwc=",
+  cipdCommit ? "7120a6a515089a3ff5d1f61ff4ee17750dc038af",
   cipdHashes ? {
-    "linux-386" = "7f264198598af2ef9d8878349d33c1940f1f3739e46d986962c352ec4cce2690";
-    "linux-amd64" = "2ada6b46ad1cd1350522c5c05899d273f5c894c7665e30104e7f57084a5aeeb9";
-    "linux-arm64" = "96eca7e49f6732c50122b94b793c3a5e62ed77bce1686787a8334906791b4168";
-    "linux-armv6l" = "06394601130652c5e1b055a7e4605c21fc7c6643af0b3b3cac8d2691491afa81";
-    "linux-mips64" = "f3eda6542b381b7aa8f582698498b0e197972c894590ec35f18faa467c868f5c";
-    "linux-mips64le" = "74229ada8e2afd9c8e7c58991126869b2880547780d4a197a27c1dfa96851622";
-    "linux-mipsle" = "2f3c18ec0ad48cd44a9ff39bb60e9afded83ca43fb9c7a5ea9949f6fdd4e1394";
-    "linux-ppc64" = "79425c0795fb8ba12b39a8856bf7ccb853e85def4317aa6413222f307d4c2dbd";
-    "linux-ppc64le" = "f9b3d85dde70f1b78cd7a41d2477834c15ac713a59317490a4cdac9f8f092325";
-    "linux-riscv64" = "bd695164563a66e8d3799e8835f90a398fbae9a4eec24e876c92d5f213943482";
-    "linux-s390x" = "6f501af80541e733fda23b4208a21ea05919c95d236036a2121e6b6334a2792c";
-    "macos-amd64" = "41d05580c0014912d6c32619c720646fd136e4557c9c7d7571ecc8c0462733a1";
-    "macos-arm64" = "dc672bd16d9faf277dd562f1dc00644b10c03c5d838d3cc3d3ea29925d76d931";
-    "windows-386" = "fa6ed0022a38ffc51ff8a927e3947fe7e59a64b2019dcddca9d3afacf7630444";
-    "windows-amd64" = "b5423e4b4429837f7fe4d571ce99c068aa0ccb37ddbebc1978a423fd2b0086df";
+    "linux-386" = "sha256-CshLfw49uglvWNwWE4K7ucBUF+IZlXDaIQsTXtFEJ8U=";
+    "linux-amd64" = "sha256-rxpI+HqfZiOYvzyyQ9P93s70feDmrLgbm4Xh3o88LwQ=";
+    "linux-arm64" = "sha256-XTTKbw1Q2lin+pf7VADalpBy3AWMTEd7yItsE/pePxw=";
+    "linux-armv6l" = "sha256-e5qe2KcguRLPuAq6wOG7A3YghHHon+oHY3fRLhU+e9E=";
+    "linux-loong64" = "sha256-LPTK4Ly173jac+cSGrsWw0ajrWEYepeJDGtP/7Xh528=";
+    "linux-mips" = "sha256-nR5khvHbAijs0MEr8+UgbuHTRNQAsMOyGTU/DI3K5Os=";
+    "linux-mips64" = "sha256-4a/zD1CrC/sxtBHqSRpom0SYVoN38bz3FAM40OSdVI0=";
+    "linux-mips64le" = "sha256-JnfKuBGLHYNLnRieS0KV8sYaTjh2rbp1yijvNOrU0FE=";
+    "linux-mipsle" = "sha256-nWqoay8c4faRk2+G5TvwbsbnndjTU4oglOTfhSC+TLQ=";
+    "linux-ppc64" = "sha256-pjeI/bx0i+QchQLhNB88ACPI34SrFvvFA01F5Nb16Ys=";
+    "linux-ppc64le" = "sha256-ZDMDwrP1zYlOI1hdbd3iZwKr59v/8CWj2sZ1RdosAiE=";
+    "linux-riscv64" = "sha256-O2EvOnjwbNssB7FtbK44yFcXfkrh9HOsPs/HF+uD2m8=";
+    "linux-s390x" = "sha256-BKeNDtuc9IkmV4GpuZcdsGc2F039KQeLdozxh7u+FDw=";
+    "macos-amd64" = "sha256-ZKBm8PbKjg4t0jIBPRKAv85L8eZOwJ1wBvh3cRSqHOI=";
+    "macos-arm64" = "sha256-AvjJp7JF05CetYDnwNJneAsotm1vBHWqB/vCdcIohoU=";
+    "windows-386" = "sha256-AVLbWh+WtJKynFDS6IfhuvYudw4Ow9s6w2JyDWG/2CI=";
+    "windows-amd64" = "sha256-puAQhiPGuwzkElWiBdTRGWOaUR2AIP7Qv9S3pwEY74E=";
+    "windows-arm64" = "sha256-4wxOMG+zvkM7gjhAiQvvNqNS0AamKKJdaBM/+rRxgXk=";
   },
 }:
 let
@@ -50,12 +53,12 @@ in
             src = fetchurl {
               name = "cipd-${cipdCommit}-unwrapped";
               url = "https://chrome-infra-packages.appspot.com/client?platform=${stdenv-constants.platform}&version=git_revision:${cipdCommit}";
-              sha256 = cipdHashes.${stdenv-constants.platform};
+              hash = cipdHashes.${stdenv-constants.platform};
             };
           }
           ''
-            mkdir -p $out/bin
-            install -m755 $src $out/bin/cipd
+            mkdir --parents $out/bin
+            install --mode=0755 $src $out/bin/cipd
           '';
     in
     writeShellScriptBin "cipd" ''
@@ -89,7 +92,10 @@ in
 
   vpython =
     pythonPkg:
-    runCommand "vpython3" { } "mkdir -p $out/bin && ln -s ${pythonPkg}/bin/python $out/bin/vpython3";
+    runCommand "vpython3" { } ''
+      mkdir --parents $out/bin
+      ln --symbolic ${pythonPkg}/bin/python $out/bin/vpython3
+    '';
 
   xcode-select = writeShellScriptBin "xcode-select" ''
     echo ${darwin.xcode}/Contents/Developer

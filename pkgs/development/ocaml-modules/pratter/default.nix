@@ -1,28 +1,25 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromGitLab,
   buildDunePackage,
-  camlp-streams,
   alcotest,
   qcheck,
   qcheck-alcotest,
 }:
 
 buildDunePackage rec {
-  version = "2.0.0";
+  version = "5.0.1";
   pname = "pratter";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.10";
 
-  src = fetchFromGitHub {
-    owner = "gabrielhdt";
+  src = fetchFromGitLab {
+    domain = "forge.tedomum.net";
+    owner = "koizel";
     repo = "pratter";
-    rev = version;
-    hash = "sha256-QEq8Zt2pfsRT04Zd+ugGKcHdzkqYcDDUg/iAFMMDdEE=";
+    tag = version;
+    hash = "sha256-Ib7EplEvOuYcAS9cfzo5994SqCv2eiysLekYfH09IMw=";
   };
-
-  propagatedBuildInputs = [ camlp-streams ];
 
   checkInputs = [
     alcotest
@@ -31,11 +28,11 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Extended Pratt parser";
     homepage = "https://github.com/gabrielhdt/pratter";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     changelog = "https://github.com/gabrielhdt/pratter/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

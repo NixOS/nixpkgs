@@ -3,24 +3,23 @@
   pkgs,
   mkCoqDerivation,
   coq,
-  veriT,
   zchaff,
-  fetchurl,
   cvc5,
   stdlib,
   version ? null,
 }:
 
-let
-  # version of veriT that works with SMTCoq
-  veriT' = veriT.overrideAttrs (oA: {
-    src = fetchurl {
-      url = "https://www.lri.fr/~keller/Documents-recherche/Smtcoq/veriT9f48a98.tar.gz";
-      sha256 = "sha256-Pe46PxQVHWwWwx5Ei4Bl95A0otCiXZuUZ2nXuZPYnhY=";
-    };
-    meta.broken = false;
-  });
-in
+# Broken since https://github.com/NixOS/nixpkgs/pull/354627, temporarily disactivated
+# let
+#   # version of veriT that works with SMTCoq
+#   veriT' = veriT.overrideAttrs (oA: {
+#     src = fetchurl {
+#       url = "https://www.lri.fr/~keller/Documents-recherche/Smtcoq/veriT9f48a98.tar.gz";
+#       sha256 = "sha256-Pe46PxQVHWwWwx5Ei4Bl95A0otCiXZuUZ2nXuZPYnhY=";
+#     };
+#     meta.broken = false;
+#   });
+# in
 
 mkCoqDerivation {
   pname = "smtcoq";
@@ -76,28 +75,27 @@ mkCoqDerivation {
       }
     ] null;
 
-  propagatedBuildInputs =
-    [
-      cvc5
-      veriT'
-      zchaff
-      stdlib
-    ]
-    ++ (with coq.ocamlPackages; [
-      findlib
-      num
-      zarith
-    ]);
+  propagatedBuildInputs = [
+    cvc5
+    # veriT'  # c.f. comment above
+    zchaff
+    stdlib
+  ]
+  ++ (with coq.ocamlPackages; [
+    findlib
+    num
+    zarith
+  ]);
   mlPlugin = true;
   nativeBuildInputs = (with pkgs; [ gnumake42 ]) ++ (with coq.ocamlPackages; [ ocamlbuild ]);
 
   # This is meant to ease future troubleshooting of cvc5 build failures
   passthru = { inherit cvc5; };
 
-  meta = with lib; {
+  meta = {
     description = "Communication between Coq and SAT/SMT solvers";
-    maintainers = with maintainers; [ siraben ];
-    license = licenses.cecill-b;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ siraben ];
+    license = lib.licenses.cecill-b;
+    platforms = lib.platforms.unix;
   };
 }

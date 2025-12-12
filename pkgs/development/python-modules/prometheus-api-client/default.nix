@@ -8,22 +8,25 @@
   matplotlib,
   numpy,
   pandas,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-api-client";
-  version = "0.5.5";
-  format = "setuptools";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tUu0+ZUOFxBCj//lHhNm88rhFbS01j1x508+nqIkCfQ=";
+    tag = "v${version}";
+    hash = "sha256-dpvGvI37jMoWvMrVSCwiyendGCDLCw+s2TI04y8akx8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dateparser
     matplotlib
     numpy
@@ -39,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Prometheus HTTP API";
     longDescription = ''
       The prometheus-api-client library consists of multiple modules which
@@ -47,8 +50,8 @@ buildPythonPackage rec {
       and performing various aggregation operations on the time series data.
     '';
     homepage = "https://github.com/4n4nd/prometheus-api-client-python";
-    changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

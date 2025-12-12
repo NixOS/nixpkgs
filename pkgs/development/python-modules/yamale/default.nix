@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pyyaml,
   ruamel-yaml,
@@ -11,35 +10,36 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "5.2.1";
+  version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
     repo = "yamale";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iiiQAZ050FintRSV3l2zfikTNmphhJgrn+4tUHORiSk=";
+    tag = version;
+    hash = "sha256-+UZJhZLJEZVGPF9D9B8blGh4pLszQnDoOl5xQMpvVl0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     pyyaml
-    ruamel-yaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    ruamel = [ ruamel-yaml ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.ruamel;
 
   pythonImportsCheck = [ "yamale" ];
 
-  meta = with lib; {
+  meta = {
     description = "Schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
-    changelog = "https://github.com/23andMe/Yamale/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rtburns-jpl ];
+    changelog = "https://github.com/23andMe/Yamale/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rtburns-jpl ];
     mainProgram = "yamale";
   };
 }

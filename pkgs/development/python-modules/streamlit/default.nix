@@ -28,19 +28,21 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.40.1";
+  version = "1.51.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HysJ8Etq02aix7TUgQRpfRyLwz9Ivfftk5zATBLTrsY=";
+    hash = "sha256-HnQqnAtpj0Zsb1v1jTM77aWh++jeZgdDl2eRtcFEbvY=";
   };
 
   build-system = [
     setuptools
   ];
+
+  pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
     altair
@@ -61,7 +63,8 @@ buildPythonPackage rec {
     gitpython
     pydeck
     tornado
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;
@@ -72,15 +75,15 @@ buildPythonPackage rec {
     rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       natsukium
       yrashk
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

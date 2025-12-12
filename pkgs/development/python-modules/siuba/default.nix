@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "machow";
     repo = "siuba";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rd/yQH3sbZqQAQ1AN44vChe30GMJuIlZj3Ccfv1m3lU=";
   };
 
@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "siuba.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use dplyr-like syntax with pandas and SQL";
     homepage = "https://siuba.org";
     changelog = "https://github.com/machow/siuba/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

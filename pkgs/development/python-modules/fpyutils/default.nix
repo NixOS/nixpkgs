@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "fpyutils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VVR1zsejO6kHlMjqqlftDKu3/SyDzgPov9f48HYL/Bk=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "fpyutils/tests/*.py" ];
+  enabledTestPaths = [ "fpyutils/tests/*.py" ];
 
   disabledTests = [
     # Don't run test which requires bash
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fpyutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of useful non-standard Python functions";
     homepage = "https://github.com/frnmst/fpyutils";
     changelog = "https://blog.franco.net.eu.org/software/fpyutils-${version}/release.html";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

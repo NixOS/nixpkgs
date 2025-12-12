@@ -6,6 +6,7 @@
   pkg-config,
   fftwFloat,
   libsamplerate,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jketterl";
-    repo = pname;
+    repo = "csdr";
     rev = version;
     sha256 = "sha256-LdVzeTTIvDQIXRdcz/vpQu/fUgtE8nx1kIEfoiwxrUg=";
   };
@@ -22,6 +23,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # function is not defined in any headers but used in libcsdr.c
     echo "int errhead();" >> src/predefined.h
+
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.0)" \
+      "cmake_minimum_required (VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -42,12 +47,15 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/jketterl/csdr";
     description = "Simple DSP library and command-line tool for Software Defined Radio";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = teams.c3d2.members;
   };
 }

@@ -1,41 +1,104 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, glibmm, perl, gnome }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  glibmm,
+  perl,
+  gnome,
+  meson,
+  ninja,
+  docbook5,
+  docbook-xsl-ns,
+  doxygen,
+  libxslt,
+  fop,
+  dblatex,
+  graphviz,
+
+  withDocumentation ? false,
+  withManual ? false, # Broken due to not being allowed to fetch file from web
+  withPDF ? false,
+  withExamples ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxml++";
-  version = "3.0.1";
+  version = "3.2.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19kik79fmg61nv0by0a5f9wchrcfjwzvih4v2waw01hqflhqvp0r";
+    url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/libxml++-${version}.tar.xz";
+    hash = "sha256-DJs4G1qD1rOrSwuGXXJW2rJ9V1mBtjvi+Fnty5TaWcc=";
   };
 
-  outputs = [ "out" "dev" "doc" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.lists.optionals withDocumentation [
+    "doc"
+    "devdoc"
+  ];
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [
+    ninja
+    meson
+    pkg-config
+  ]
+  ++ lib.lists.optionals withDocumentation [
+    perl
+    doxygen
+    libxslt
+    graphviz
+  ]
+  ++ lib.lists.optionals withManual [
+    docbook5
+    docbook-xsl-ns
+  ]
+  ++ lib.lists.optional withPDF [
+    fop
+    dblatex
+  ];
 
   buildInputs = [ glibmm ];
 
   propagatedBuildInputs = [ libxml2 ];
 
+  mesonFlags = [
+    (lib.mesonBool "maintainer-mode" false)
+    (lib.mesonBool "build-documentation" withDocumentation)
+    (lib.mesonBool "build-manual" withManual)
+    (lib.mesonBool "build-pdf" withPDF)
+    (lib.mesonBool "build-examples" withExamples)
+    (lib.mesonBool "build-tests" doCheck)
+  ];
+
+  preBuild = lib.strings.optionalString withDocumentation ''
+    doxygen -u docs/reference/Doxyfile
+  '';
+
   postFixup = ''
     substituteInPlace $dev/lib/pkgconfig/libxml++-3.0.pc \
-      --replace 'docdir=''${datarootdir}' "docdir=$doc/share"
+      --replace-fail 'docdir=''${datarootdir}' "docdir=$doc/share"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libxmlxx3";
-      packageName = pname;
+      packageName = "libxml++";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  doCheck = true;
+
+  meta = {
     homepage = "https://libxmlplusplus.sourceforge.net/";
     description = "C++ wrapper for the libxml2 XML parser library, version 3";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ loskutov ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ willow ];
   };
 }

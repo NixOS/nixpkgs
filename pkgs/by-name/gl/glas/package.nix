@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jMpFxzosaCedwsJ8URlR3Gd/mnlgSBEfA3oIymmEPFU=";
   };
 
-  cargoHash = "sha256-zESRtefoObpUsu4RfTsqJAyBNylouXffpNK3W/X+w9M=";
+  cargoHash = "sha256-uPCWHLqko361S/ThtWOP/XN1QFSHXv0dpYR3xweHqe0=";
 
   doInstallCheck = true;
   postInstallCheck = ''
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Language server for the Gleam programming language";
     homepage = "https://github.com/maurobalbi/glas";
-    changelog = "https://github.com/maurobalbi/glas/tag/v${version}";
+    changelog = "https://github.com/maurobalbi/glas/releases/tag/v${version}";
     license = with lib.licenses; [
       asl20
       mit

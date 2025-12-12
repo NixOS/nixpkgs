@@ -4,8 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   git,
-  Cocoa,
-  Virtualization,
   sigtool,
   testers,
   linuxkit,
@@ -13,13 +11,13 @@
 
 buildGoModule rec {
   pname = "linuxkit";
-  version = "1.5.2";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "sha256-M/M4m/vsvvtSDnNNy8p6x+xpv1QmVzyfPRf/BNBX7zA=";
+    sha256 = "sha256-0W3YWj6amNI6jr10FfLAqF1kEUwx4BU5+gjkg4iqX1Q=";
   };
 
   vendorHash = null;
@@ -36,10 +34,6 @@ buildGoModule rec {
   # - sigtool is allows us to validly sign such executables with a dummy
   #   authority.
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    Virtualization
-  ];
 
   ldflags = [
     "-s"
@@ -65,11 +59,11 @@ buildGoModule rec {
     command = "linuxkit version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for building secure, portable and lean operating systems for containers";
     mainProgram = "linuxkit";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
-    maintainers = with maintainers; [ nicknovitski ];
+    maintainers = with lib.maintainers; [ nicknovitski ];
   };
 }

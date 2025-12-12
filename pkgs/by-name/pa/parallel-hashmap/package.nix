@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parallel-hashmap";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "greg7mdp";
     repo = "parallel-hashmap";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-QDRy6YPoE34VpldN66V4mcF3PqK43RSlXThm+SzxRQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JiDhEpAQyyPXGkY9DYLvJ2XW1Bp3Ex1iMtbzNdra95g=";
   };
 
   postPatch = ''
@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Family of header-only, very fast and memory-friendly hashmap and btree containers";
     homepage = "https://github.com/greg7mdp/parallel-hashmap";
-    changelog = "https://github.com/greg7mdp/parallel-hashmap/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/greg7mdp/parallel-hashmap/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 })

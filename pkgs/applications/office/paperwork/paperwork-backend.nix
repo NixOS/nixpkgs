@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   lib,
-  fetchFromGitLab,
+  callPackage,
   pyenchant,
   scikit-learn,
   pypillowfight,
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/paperwork-backend";
@@ -84,11 +84,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aszlig
       symphorien
     ];

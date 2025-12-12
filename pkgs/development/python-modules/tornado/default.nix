@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.4.2";
+  version = "6.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
+    tag = "v${version}";
+    hash = "sha256-CtmIjPKxKC0T8PGQW1wIAJm/+XxMzZXVZyZxV56sZME=";
   };
 
   build-system = [ setuptools ];
@@ -67,10 +67,10 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

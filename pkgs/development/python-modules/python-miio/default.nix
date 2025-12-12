@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   patches = [
     (fetchpatch {
@@ -47,9 +47,14 @@ buildPythonPackage rec {
       url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
       hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
     })
+    (fetchpatch {
+      # Python 3.13 compat
+      url = "https://github.com/rytilahti/python-miio/commit/0aa4df3ab1e47d564c8312016fbcfb3a9fc06c6c.patch";
+      hash = "sha256-Zydv3xqCliA/oAnjNmqh0vDrlZFPcTAIyW6vIZzijZY=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     android-backup
     appdirs
     attrs
@@ -64,7 +69,8 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -74,10 +80,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

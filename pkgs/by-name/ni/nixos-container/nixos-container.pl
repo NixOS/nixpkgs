@@ -8,8 +8,13 @@ use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt no_bundling);
 use Cwd 'abs_path';
 use Time::HiRes;
+use IPC::Run 'run';
 
-my $nsenter = "@utillinux@/bin/nsenter";
+# Version::Compare et al. don't work because they do the wrong thing on e.g.
+# 25.11pre-git.
+my $nixpkgsLib = "@lib@";
+
+my $nsenter = "@util-linux@/bin/nsenter";
 my $su = "@su@";
 
 my $configurationDirectory = "@configurationDirectory@";
@@ -171,7 +176,7 @@ sub writeNixOSConfig {
     my $nixosConfig = <<EOF;
 { config, lib, pkgs, ... }:
 
-{ boot.isContainer = true;
+{ boot.isNspawnContainer = true;
   networking.hostName = lib.mkDefault "$containerName";
   networking.useDHCP = false;
   $localExtraConfig
@@ -364,8 +369,37 @@ sub restartContainer {
 sub runInContainer {
     my @args = @_;
     my $leader = getLeader;
-    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    exec($nsenter, "--all", "-t", $leader, "--", @args);
     die "cannot run ‘nsenter’: $!\n";
+}
+
+sub evalAttribute {
+    my ($attribute, $nixosF, $nixosConfigF, $extraArgs) = @_;
+    run [
+        "nix-instantiate", $nixosF, "-I", "nixos-config=$nixosConfigF", "-A", $attribute, "--eval"
+    ], ">", \my $result;
+    chomp $result;
+    $result =~ s/^"([^"]+)"$/$1/g;
+    return $result;
+}
+
+sub evalAttributeFlake {
+    my ($attribute) = @_;
+    run [
+        "nix", "eval", "$flake#nixosConfigurations.\"$flakeAttr\".$attribute"
+    ], ">", \my $result;
+    chomp $result;
+    $result =~ s/^"([^"]+)"$/$1/g;
+    return $result;
+}
+
+sub isAtLeast2511 {
+    my ($version) = @_;
+    run [
+        "nix-instantiate", "--eval", "-E", "with import $nixpkgsLib; versionAtLeast \"$version\" \"25.11pre-git\""
+    ], ">", \my $result;
+    chomp $result;
+    return $result eq "true";
 }
 
 # Remove a directory while recursively unmounting all mounted filesystems within
@@ -426,6 +460,10 @@ elsif ($action eq "update") {
     }
 
     if (defined $flake) {
+        my $nixpkgsVersion = evalAttributeFlake "lib.version";
+        if (isAtLeast2511($nixpkgsVersion) && evalAttributeFlake("config.boot.isNspawnContainer") ne "true") {
+            die "$0: on 25.11 and newer, containers require boot.isNspawnContainer=true. Please set this in $flake";
+        }
         buildFlake();
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
             or die "$0: failed to set container configuration\n";
@@ -441,6 +479,14 @@ elsif ($action eq "update") {
         }
 
         my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
+
+        my $nixpkgsVersion = evalAttribute "pkgs.lib.version", $nixenvF, $nixosConfigFile;
+        if (isAtLeast2511($nixpkgsVersion)
+            && evalAttribute("config.boot.isNspawnContainer", $nixenvF, $nixosConfigFile) ne "true"
+        ) {
+            die "$0: on 25.11 and newer, containers require boot.isNspawnContainer=true. Refresh your configuration (or check the 25.11 release notes on how to correctly do that)";
+        }
+
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", $nixenvF,
                "--set", "-A", "system", @nixFlags) == 0

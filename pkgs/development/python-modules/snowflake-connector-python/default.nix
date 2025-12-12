@@ -2,6 +2,8 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  boto3,
+  botocore,
   certifi,
   cffi,
   charset-normalizer,
@@ -11,6 +13,7 @@
   filelock,
   idna,
   keyring,
+  numpy,
   packaging,
   pandas,
   platformdirs,
@@ -30,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.12.4";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,8 +41,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6poMWKQB/NR40W39KDJwBgYGeAHsr4f1GJhPxYiTc1k=";
+    tag = "v${version}";
+    hash = "sha256-mow8TxmkeaMkgPTLUpx5Gucn4347gohHPyiBYjI/cDs=";
   };
 
   build-system = [
@@ -49,6 +52,8 @@ buildPythonPackage rec {
 
   dependencies = [
     asn1crypto
+    boto3
+    botocore
     certifi
     cffi
     charset-normalizer
@@ -66,6 +71,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [
+    "cffi"
+    "pyopenssl"
+  ];
+
   optional-dependencies = {
     pandas = [
       pandas
@@ -79,6 +89,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    numpy
     pytest-xdist
     pytestCheckHook
   ];
@@ -96,12 +107,17 @@ buildPythonPackage rec {
     "test/unit/test_ocsp.py"
     "test/unit/test_retry_network.py"
     "test/unit/test_s3_util.py"
+    # AssertionError: /build/source/.wiremock/wiremock-standalone.jar does not exist
+    "test/unit/test_programmatic_access_token.py"
+    "test/unit/test_oauth_token.py"
   ];
 
   disabledTests = [
     # Tests connect to the internet
     "test_status_when_num_of_chunks_is_zero"
     "test_test_socket_get_cert"
+    # Missing .wiremock/wiremock-standalone.jar
+    "test_wiremock"
   ];
 
   pythonImportsCheck = [
@@ -109,11 +125,11 @@ buildPythonPackage rec {
     "snowflake.connector"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
-    license = licenses.asl20;
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

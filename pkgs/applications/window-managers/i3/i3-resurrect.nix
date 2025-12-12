@@ -14,6 +14,7 @@
 buildPythonApplication rec {
   pname = "i3-resurrect";
   version = "1.4.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,12 +32,12 @@ buildPythonApplication rec {
   ];
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JonnyHaystack/i3-resurrect";
     description = "Simple but flexible solution to saving and restoring i3 workspaces";
     mainProgram = "i3-resurrect";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 }

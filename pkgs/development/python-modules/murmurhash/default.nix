@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.11";
+  version = "1.0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h/9oolXlTnZI0HKf9BMPQ/fzjwMoijduVnk04W25N2c=";
+    hash = "sha256-c3JG1B7gD/dLB7C9HwiIvjBNIDzmaOZCyGqmTt4w+Lc=";
   };
 
   postPatch = ''
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "murmurhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aborsu ];
   };
 }

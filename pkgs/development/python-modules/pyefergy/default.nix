@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "pyefergy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4M3r/+C42X95/7BGZAJbkXKKFEkGzLlvX0Ynv+eL8qc=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyefergy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tkdrob/pyefergy/releases/tag/v${version}";
     description = "Python API library for Efergy energy meters";
     homepage = "https://github.com/tkdrob/pyefergy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

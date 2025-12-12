@@ -2,6 +2,8 @@
   lib,
   python3,
   fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -14,56 +16,55 @@ let
         src = fetchFromGitHub {
           owner = "lark-parser";
           repo = "lark";
-          rev = version;
+          tag = version;
           hash = "sha256-KN9buVlH8hJ8t0ZP5yefeYM5vH5Gg7a7TEDGKJYpozs=";
           fetchSubmodules = true;
         };
-        patches = [ ];
       });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit3";
-  version = "3.5.0";
+  version = "3.6.0";
+  pyproject = true;
 
   # If we try to get using fetchPypi it requires GeoIP (but the package dont has that dep!?)
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
-    hash = "sha256-cMGD5Xdf9ElS1NT7Q0NPB//EvUO0MI0VTtps5JRisZ4=";
+    tag = version;
+    hash = "sha256-DRZgjCrz/U6jPx1grNuhZTx9iXNyxzR6xWoAm5DKtoA=";
   };
 
-  disabled = python.pythonOlder "3.7";
+  # pkg_resources is deprecated and causes tests to fail
+  patches = [
+    ./0001-Get-version-with-importlib-instead-of-pkg_resource.patch
+  ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python.pkgs; [
     docopt
     lark
     pyyaml
-    setuptools
+    radon
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-    # The tests want to run the installed executables
-    export PATH=$out/bin:$PATH
-
-    # gdtoolkit tries to write cache variables to $HOME/.cache
-    export HOME=$TMP
-  '';
-
-  # The tests are not working on NixOS
-  disabledTests = [
-    "test_cc_on_empty_file_succeeds"
-    "test_cc_on_file_with_single_function_succeeds"
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   pythonImportsCheck = [
     "gdtoolkit"
@@ -72,11 +73,11 @@ python.pkgs.buildPythonApplication rec {
     "gdtoolkit.parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       shiryel
       tmarkus
     ];

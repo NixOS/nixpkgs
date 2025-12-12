@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "11.2.1";
+  version = "14.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BU2D9NGNoUu3F1kx9t4j1VW0HarLVqiXTZEW67pMPV8=";
+    tag = version;
+    hash = "sha256-g9n4GuVSHB2VourVYlzp3zKO7MnJK4IAakbYV5tM8Uc=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python modle for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
     changelog = "https://github.com/sloria/environs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

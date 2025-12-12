@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "3.5.0";
+  version = "3.6.2";
 
   src = fetchFromGitLab {
     owner = "Geonkick-Synthesizer";
-    repo = pname;
+    repo = "geonkick";
     rev = "v${version}";
-    hash = "sha256-bqdqAr4NX5WZ6zp0Kq7GFHiy/JkBvDvzuZz7jxtru0Q=";
+    hash = "sha256-1khlAY9szKdwX/kMJvuD1CTO5M8GeMBVCSPmt52GJyA=";
   };
 
   nativeBuildInputs = [
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/iurie-sw/geonkick";
     description = "Free software percussion synthesizer";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.magnetophon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.magnetophon ];
     mainProgram = "geonkick";
   };
 }

@@ -3,11 +3,12 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   brightnessctl,
   cargo,
   coreutils,
-  gtk-layer-shell,
+  dbus,
+  gtk4-layer-shell,
   libevdev,
   libinput,
   libpulseaudio,
@@ -17,38 +18,41 @@
   sassc,
   stdenv,
   udev,
+  udevCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "swayosd";
-  version = "0.1.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
     rev = "v${version}";
-    hash = "sha256-GyvRWEzTxQxTAk+xCLFsHdd1SttBliOgJ6eZqAxQMME=";
+    hash = "sha256-O9A7+QvvhmH3LFLv8vufVCgNQJqKc3LJitCUHYaGHyE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-EUxJ+aGtYAO0kNggNXIZqj2DmPzc4serj0/V+fvH7ds=";
+    hash = "sha256-J2sl6/4+bRWlkvaTJtFsMqvvOxYtWLRjJcYWcu0loRE=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    wrapGAppsHook4
     pkg-config
     meson
     rustc
     cargo
     ninja
     rustPlatform.cargoSetupHook
+    udevCheckHook
   ];
 
   buildInputs = [
-    gtk-layer-shell
+    gtk4-layer-shell
     libevdev
     libinput
     libpulseaudio
+    dbus
     udev
     sassc
   ];
@@ -69,15 +73,17 @@ stdenv.mkDerivation rec {
       --replace /bin/chmod ${coreutils}/bin/chmod
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aleksana
       barab-i
       sergioribera
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

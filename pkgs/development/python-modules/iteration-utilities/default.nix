@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MSeifert04";
     repo = "iteration_utilities";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SiqNUyuvsD5m5qz5ByYyVln3SSa4/D4EHpmM+pf8ngM=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iteration_utilities" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities based on Pythons iterators and generators";
     homepage = "https://github.com/MSeifert04/iteration_utilities";
     changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

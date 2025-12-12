@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for files";
-    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-legacy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/run-llama/llama_index/tree/v0.9.48";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

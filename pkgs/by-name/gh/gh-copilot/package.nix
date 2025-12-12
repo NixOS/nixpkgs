@@ -10,26 +10,26 @@ let
   systemToPlatform = {
     "x86_64-linux" = {
       name = "linux-amd64";
-      hash = "sha256-QKrDFCVCWYYX2jM8le2X/OLhNcwxR+liUtXHhW7jcSw=";
+      hash = "sha256-WVb32g9eqoeQgvPUGOQ7r3oD+PerKYQWEh/PoZwVqkI=";
     };
     "aarch64-linux" = {
       name = "linux-arm64";
-      hash = "sha256-+l1hBwep/YMP7EOrEIn2xCIiVgWB0JCWz+fj2ZfivNQ=";
+      hash = "sha256-nZg7u0BUIHOdu3dg28fydgm6ctr4jOOIZOA5ms3/E64=";
     };
     "x86_64-darwin" = {
       name = "darwin-amd64";
-      hash = "sha256-YFQh4vDtT+mjAIMt0IEtleOFTlxkHMbJq/SrI+IzNjc=";
+      hash = "sha256-A+FQ7AgjqS1/7LExhyKwXlCAwCveSgeyhbCNAjqQ770=";
     };
     "aarch64-darwin" = {
       name = "darwin-arm64";
-      hash = "sha256-qVsItCI3LxPraOLtEvVaoTzhoGEcIySTWooMBSMLvAc=";
+      hash = "sha256-+Q1H9h1j1kusEu1HW3zHWQ8ReR50kwjj4kGC3g6Jzqc=";
     };
   };
   platform = systemToPlatform.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gh-copilot";
-  version = "1.0.5";
+  version = "1.2.0";
 
   src = fetchurl {
     name = "gh-copilot";
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/github/gh-copilot";
     license = lib.licenses.unfree;
     mainProgram = "gh-copilot";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     platforms = lib.attrNames systemToPlatform;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

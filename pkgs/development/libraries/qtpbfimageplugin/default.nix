@@ -4,42 +4,36 @@
   fetchFromGitHub,
   qmake,
   qtbase,
-  protobuf,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "3.2";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
-    rev = version;
-    sha256 = "sha256-RbGVjwVIwO6Rj/hbNEowtZLqJdtkTfnq5YdnEYnbkTM=";
+    tag = version;
+    hash = "sha256-IU9sA8yipGsqD9HadGlQce4ud0RyfMMh83cdVuSTGjs=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+  ];
+
   buildInputs = [
     qtbase
-    protobuf
   ];
 
   dontWrapQtApps = true;
 
-  postPatch =
-    ''
-      # Fix plugin dir
-      substituteInPlace pbfplugin.pro \
-        --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix darwin build
-      substituteInPlace pbfplugin.pro \
-        --replace '$$PROTOBUF/include' '${protobuf}/include' \
-        --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
-    '';
+  postPatch = ''
+    # Fix plugin dir
+    substituteInPlace pbfplugin.pro \
+      --replace-warn "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt image plugin for displaying Mapbox vector tiles";
     longDescription = ''
       QtPBFImagePlugin is a Qt image plugin that enables applications capable of
@@ -47,8 +41,8 @@ stdenv.mkDerivation rec {
       vector tiles without (almost) any application modifications.
     '';
     homepage = "https://github.com/tumic0/QtPBFImagePlugin";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 }

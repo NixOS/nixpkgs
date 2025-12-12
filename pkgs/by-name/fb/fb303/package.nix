@@ -13,15 +13,13 @@
   fbthrift,
   fizz,
   wangle,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2024.11.18.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "out"
@@ -31,28 +29,27 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-3zQLX42qeOE2bbFmu4Kuvu0Fvq2mBq8YgkVGpyfwaak=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IF3fQY8QfDBo8DoLFIFuZD8OgrrJfXLXDgFcsD1CmaY=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
   ];
 
-  buildInputs =
-    [
-      gflags
-      glog
-      folly
-      fbthrift
-      fizz
-      wangle
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    gflags
+    glog
+    folly
+    fbthrift
+    fizz
+    wangle
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -78,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

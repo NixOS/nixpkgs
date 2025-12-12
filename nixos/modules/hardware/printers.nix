@@ -10,7 +10,7 @@ let
   ensurePrinter =
     p:
     let
-      args = lib.cli.toGNUCommandLineShell { } (
+      args = lib.cli.toCommandLineShellGNU { } (
         {
           p = p.name;
           v = p.deviceUri;
@@ -28,6 +28,7 @@ let
       );
     in
     ''
+      # shellcheck disable=SC2016
       ${pkgs.cups}/bin/lpadmin ${args} -E
     '';
 

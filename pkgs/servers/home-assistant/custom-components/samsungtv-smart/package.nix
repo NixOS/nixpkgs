@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "ollo69";
   domain = "samsungtv_smart";
-  version = "0.13.5";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "ha-samsungtv-smart";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-12wx8HaTEFQZOnxfcuAKFOXPdDpfAl608N1E6gmWqBI=";
+    tag = "v${version}";
+    hash = "sha256-J3+HD/jMJDIBSiVJnHvjOJ3yswck+DV3XpPqIoR5/sU=";
   };
 
   dependencies = [
@@ -27,11 +27,11 @@ buildHomeAssistantComponent rec {
     wakeonlan
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ollo69/ha-samsungtv-smart/releases/tag/v${version}";
     description = "Home Assistant Samsung TV Integration";
     homepage = "https://github.com/ollo69/ha-samsungtv-smart";
-    maintainers = with maintainers; [ mindstorms6 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ mindstorms6 ];
+    license = lib.licenses.asl20;
   };
 }

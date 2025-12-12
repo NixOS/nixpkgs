@@ -781,8 +781,8 @@
   },
   {
     "pname": "Soulseek",
-    "version": "6.5.0",
-    "hash": "sha256-QvWiuXMYYL+u3gez7MYP3uoDmQKljsU+oM2keyH7jD0="
+    "version": "8.5.0",
+    "hash": "sha256-iiGwCgBsvkqyaOFqQLT55Smog15hekV+ZslpBGlO7Mc="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
@@ -1101,8 +1101,8 @@
   },
   {
     "pname": "System.Memory",
-    "version": "4.5.5",
-    "hash": "sha256-EPQ9o1Kin7KzGI5O3U3PUQAZTItSbk9h/i4rViN3WiI="
+    "version": "4.6.0",
+    "hash": "sha256-OhAEKzUM6eEaH99DcGaMz2pFLG/q/N4KVWqqiBYUOFo="
   },
   {
     "pname": "System.Net.Http",

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoHash = "sha256-cwk8yFt8JrYkYlNUW9n/bgMUA6jyOpG0TSh5C+eERLY=";
+  cargoHash = "sha256-3zcXHl/CK5p/5BpGwafMYF/ztE6Erid9nS49vRFyPfE=";
 
   nativeBuildInputs = [
     cmake
@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI client for installing and maintaining linux GOG games";
     mainProgram = "wyvern";
     homepage = "https://git.sr.ht/~nicohman/wyvern";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
   };
 }

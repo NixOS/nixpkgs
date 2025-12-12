@@ -1,11 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   gtk4,
   libadwaita,
   tdlib,
   rlottie,
-  stdenv,
   rustPlatform,
   meson,
   ninja,
@@ -17,7 +17,6 @@
   libxml2,
   libshumate,
   gst_all_1,
-  darwin,
   buildPackages,
 }:
 
@@ -28,7 +27,7 @@ let
   src = fetchFromGitHub {
     owner = "paper-plane-developers";
     repo = "paper-plane";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-qcAHxNnF980BHMqLF86M06YQnEN5L/8nkyrX6HQjpBA=";
   };
 
@@ -54,6 +53,12 @@ let
       rev = "2589c3fd46925f5d57e4ec79233cd1bd0f5d0c09";
       hash = "sha256-mbhxuJjrV3nC8Ja7N0WWF9ByHovJLmoLLuuzoU4khjU=";
     };
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace td/generate/tl-parser/CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    '';
   });
   rlottie-paperplane = rlottie.overrideAttrs (prev: {
     pname = "rlottie-paperplane";
@@ -71,12 +76,9 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "gtk-rlottie-0.1.0" = "sha256-/F0VSXU0Z59QyFYXrB8NLe/Nw/uVjGY68BriOySSXyI=";
-      "origami-0.1.0" = "sha256-xh7eBjumqCOoAEvRkivs/fgvsKXt7UU67FCFt20oh5s=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-QEX7w8eMV7DJFONjq23o8eCV+lliugS0pcdufFhcZrM=";
   };
 
   nativeBuildInputs = [
@@ -93,20 +95,16 @@ stdenv.mkDerivation {
     libxml2.bin
   ];
 
-  buildInputs =
-    [
-      libshumate
-      libadwaita-paperplane
-      tdlib-paperplane
-      rlottie-paperplane
-      gst_all_1.gstreamer
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    libshumate
+    libadwaita-paperplane
+    tdlib-paperplane
+    rlottie-paperplane
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   mesonFlags = [
     # The API ID and hash provided here are for use with Paper Plane only.
@@ -122,7 +120,7 @@ stdenv.mkDerivation {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paper-plane-developers/paper-plane";
     description = "Chat over Telegram on a modern and elegant client";
     longDescription = ''
@@ -130,9 +128,9 @@ stdenv.mkDerivation {
       for its user interface and strives to meet the design principles
       of the GNOME desktop.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "paper-plane";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

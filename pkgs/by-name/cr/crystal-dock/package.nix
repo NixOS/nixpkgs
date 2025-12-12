@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crystal-dock";
-  version = "2.7";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "dangvd";
     repo = "crystal-dock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VxdVB/DLVvmHGvZ2JI/mZCCWIdopYhObJuN4MKh+l4A=";
+    hash = "sha256-XFq4T39El5MjaWRSnaimonjdj+HGOAydNmEOehgGWX4=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../src";
 
-  meta = with lib; {
+  meta = {
     description = "Dock (desktop panel) for Linux desktop";
     mainProgram = "crystal-dock";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://github.com/dangvd/crystal-dock";
-    maintainers = with maintainers; [ rafameou ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ rafameou ];
+    platforms = lib.platforms.linux;
   };
 })

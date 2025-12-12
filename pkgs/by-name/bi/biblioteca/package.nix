@@ -18,19 +18,20 @@
   wrapGAppsHook4,
   glib-networking,
   symlinkJoin,
+  nix-update-script,
   extraDocsPackage ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biblioteca";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "workbenchdev";
     repo = "Biblioteca";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zrrI3u4ukGN6eb/eK/aZG4gi/xtXciyRS+JX9Js9KEw=";
+    hash = "sha256-PRm/4t0f8AExOFXCcV7S+JIKkJgYP1gego2xTUbj7FY=";
   };
 
   patches = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    blueprint-compiler
     desktop-file-utils
     makeShellWrapper
     gjs
@@ -64,13 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
       libadwaita.devdoc
       webkitgtk.devdoc
       gobject-introspection.devdoc
-    ] ++ extraDocsPackage;
+    ]
+    ++ extraDocsPackage;
   };
 
   postPatch = ''
-    substituteInPlace src/meson.build \
-      --replace-fail "/app/bin/blueprint-compiler" "${lib.getExe blueprint-compiler}" \
-
     patchShebangs .
 
     substituteInPlace build-aux/build-index.js \
@@ -93,10 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://apps.gnome.org/Biblioteca/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Only;
     description = "Documentation viewer for GNOME";
     mainProgram = "biblioteca";

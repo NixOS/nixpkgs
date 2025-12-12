@@ -10,26 +10,21 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zSqIEtQucrrAFEY7pBJ14Cevq8xbcGOheEmEE7Jd4qk=";
+    tag = "v${version}";
+    hash = "sha256-+j7limAYKFj9DZjetXnaFKIolitRppU1QLFRB94DlgE=";
   };
-
-  pythonRelaxDeps = [ "orjson" ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -58,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autarco" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
-    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

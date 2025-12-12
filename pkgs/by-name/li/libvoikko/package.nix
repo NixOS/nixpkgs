@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvoikko";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "voikko";
     repo = "corevoikko";
-    rev = "refs/tags/rel-libvoikko-${finalAttrs.version}";
-    hash = "sha256-0MIQ54dCxyAfdgYWmmTVF+Yfa15K2sjJyP1JNxwHP2M=";
+    tag = "rel-libvoikko-${finalAttrs.version}";
+    hash = "sha256-iWBIXAJKzjSP5mEBSfI+uZl0b2wRsjrYfdX2cHF/uuk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libvoikko";
@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hfst-ospell
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://voikko.puimula.org/";
     description = "Finnish language processing library";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lurkki ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ lurkki ];
+    platforms = lib.platforms.unix;
   };
 })

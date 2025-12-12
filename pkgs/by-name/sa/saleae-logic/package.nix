@@ -6,18 +6,59 @@
 #
 # In NixOS, simply add this package to services.udev.packages.
 
-{ lib, stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
-, fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
-, freetype, libXinerama, libxcb, zlib, pciutils
-, makeDesktopItem, xkeyboardconfig, dbus, runtimeShell, libGL
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  glib,
+  libSM,
+  libICE,
+  gtk2,
+  libXext,
+  libXft,
+  fontconfig,
+  libXrender,
+  libXfixes,
+  libX11,
+  libXi,
+  libXrandr,
+  libXcursor,
+  freetype,
+  libXinerama,
+  libxcb,
+  zlib,
+  pciutils,
+  makeDesktopItem,
+  xkeyboardconfig,
+  dbus,
+  runtimeShell,
+  libGL,
 }:
 
 let
 
   libPath = lib.makeLibraryPath [
-    glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
-    libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc
-    dbus libGL
+    glib
+    libSM
+    libICE
+    gtk2
+    libXext
+    libXft
+    fontconfig
+    libXrender
+    libXfixes
+    libX11
+    libXi
+    libXrandr
+    libXcursor
+    freetype
+    libXinerama
+    libxcb
+    zlib
+    stdenv.cc.cc
+    dbus
+    libGL
   ];
 
 in
@@ -88,9 +129,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software for Saleae logic analyzers";
     homepage = "https://www.saleae.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = intersectLists platforms.x86_64 platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

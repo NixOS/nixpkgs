@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   aiofiles,
   aiohttp,
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
   python-slugify,
-  pythonOlder,
   requests,
   setuptools,
   sortedcontainers,
@@ -17,35 +15,25 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.23.0";
+  version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MWXOxE0nxBFhkAWjy7qFPhv4AO6VjGf+fAiyaWXeiX8=";
+    tag = "v${version}";
+    hash = "sha256-K8VnpoKFE2O4FuLliV2CrMQwFkCHbBmu2bFut6Ncmqw=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Fix tests with aiohttp 3.10+
-      url = "https://github.com/fronzbot/blinkpy/commit/e2c747b5ad295424b08ff4fb03204129155666fc.patch";
-      hash = "sha256-FapgAZcKBWqtAPjRl2uOFgnYPoWq6UU88XGLO7oCmDI=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "wheel~=0.40.0"' "" \
-      --replace "setuptools~=68.0" "setuptools"
+      --replace-fail "wheel~=0.40.0" wheel \
+      --replace-fail "setuptools>=68,<81" setuptools
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     python-dateutil
@@ -69,11 +57,11 @@ buildPythonPackage rec {
     "blinkpy.sync_module"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Blink Camera system";
     homepage = "https://github.com/fronzbot/blinkpy";
-    changelog = "https://github.com/fronzbot/blinkpy/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/fronzbot/blinkpy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

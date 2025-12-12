@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.34.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = version;
-    hash = "sha256-SJFQFOd9m+38TsclIs4FxAl9kejgcUG895qjy4iXKdk=";
+    hash = "sha256-JP5sSE9xWAB9yVuFh74s85zh9y4t8f+VwUVmn6iMPFI=";
   };
 
   vendorHash = null;
@@ -21,17 +22,21 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     rm $out/bin/dists
+    installShellCompletion --cmd scalingo \
+     --bash cmd/autocomplete/scripts/scalingo_complete.bash \
+     --zsh cmd/autocomplete/scripts/scalingo_complete.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for the Scalingo PaaS";
     mainProgram = "scalingo";
     homepage = "https://doc.scalingo.com/platform/cli/start";
     changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cimm ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ cimm ];
     platforms = with lib.platforms; unix;
   };
 }

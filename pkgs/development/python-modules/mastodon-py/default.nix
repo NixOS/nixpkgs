@@ -5,12 +5,13 @@
   blurhash,
   cryptography,
   decorator,
+  grapheme,
   http-ece,
   python-dateutil,
   python-magic,
   requests,
-  six,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
   requests-mock,
@@ -19,33 +20,29 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.8.1";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
+    tag = "v${version}";
+    hash = "sha256-i3HMT8cabSl664UK3eopJQ9bDBpGCgbHTvBJkgeoxd8=";
   };
 
-  postPatch = ''
-    sed -i '/addopts/d' setup.cfg
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     blurhash
     decorator
     python-dateutil
     python-magic
     requests
-    six
   ];
 
   optional-dependencies = {
     blurhash = [ blurhash ];
+    grapheme = [ grapheme ];
     webpush = [
       http-ece
       cryptography
@@ -54,26 +51,27 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     pytest-vcr
     requests-mock
-    setuptools
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests = [
-    "test_notifications_dismiss_pre_2_9_2"
-    "test_status_card_pre_2_9_2"
-    "test_stream_user_direct"
-    "test_stream_user_local"
-  ];
+  # disabledTests = [
+  #   "test_notifications_dismiss_pre_2_9_2"
+  #   "test_status_card_pre_2_9_2"
+  #   "test_stream_user_direct"
+  #   "test_stream_user_local"
+  # ];
 
   pythonImportsCheck = [ "mastodon" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.rev}/CHANGELOG.rst";
+  meta = {
+    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

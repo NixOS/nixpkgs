@@ -6,9 +6,10 @@
 
 let
   requireXcode =
-    version: sha256:
+    release: sha256:
     let
-      xip = "Xcode_" + version + ".xip";
+      xip = "Xcode_" + release + ".xip";
+      version = lib.removeSuffix "_Universal" (lib.removeSuffix "_Apple_silicon" release);
 
       unxip =
         if stdenv.buildPlatform.isDarwin then
@@ -41,12 +42,14 @@ let
           rm -rf Xcode.app
         '';
       };
-      meta = with lib; {
-        homepage = "https://developer.apple.com/downloads/";
-        description = "Apple's XCode SDK";
-        license = licenses.unfree;
-        platforms = platforms.darwin ++ platforms.linux;
-        sourceProvenance = [ sourceTypes.binaryNativeCode ];
+      meta = {
+        homepage = "https://developer.apple.com/xcode/";
+        description = "Apple's Xcode developer tools";
+        maintainers = with lib.maintainers; [ DimitarNestorov ];
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.darwin ++ lib.platforms.linux;
+        hydraPlatforms = [ ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
 
     in
@@ -54,6 +57,7 @@ let
 
 in
 lib.makeExtensible (self: {
+  inherit requireXcode;
   xcode_8_1 = requireXcode "8.1" "sha256-VuAovU/b4rcLh+xMtcsZmbTWwTk35VGfMSp+fqPbsqM=";
   xcode_8_2 = requireXcode "8.2" "sha256-ohqgGD7JEEmXEvmfn/N9Ga2lM8jNwhIuh+ky7PQPzY4=";
   xcode_9_1 = requireXcode "9.1" "sha256-LG7pVMh1rNh5uP/bASvV9sKvGDrSGWH90J4gzwcgYSk=";
@@ -100,6 +104,15 @@ lib.makeExtensible (self: {
   xcode_15_4 = requireXcode "15.4" "sha256-yeo+sf6bBIJy9/1sQiMuPEMPniwGXMB6/FXXL0UrI5U=";
   xcode_16 = requireXcode "16" "sha256-i/MMcEi5wCpe5+nGo6gUTsFFCoorORydAn7D/GClEdo=";
   xcode_16_1 = requireXcode "16.1" "sha256-yYg6NRRnYM/5X3hhVMfcXcdoiOV36fIongJNQ5nviD8=";
+  xcode_16_2 = requireXcode "16.2" "sha256-wQjNuFZu/cN82mEEQbC1MaQt39jLLDsntsbnDidJFEs=";
+  xcode_16_3 = requireXcode "16.3" "sha256-hkIlRYUc1SD2lBwhRtqBGJapUIa+tdOyPKG19Su5OUU=";
+  xcode_16_4 = requireXcode "16.4" "sha256-voCEZlKrp9NYGmXAsf1FHxO69EgWZHDIWtQZ2qEzElA=";
+  xcode_26 = requireXcode "26_Universal" "sha256-p4INqf85CSIzd7xHRCS9tCigQkOQPKnS/+D5nue3PsY=";
+  xcode_26_Apple_silicon = requireXcode "26_Apple_silicon" "sha256-dlfZ2sM6a9pUPdukoMoqvQAj7EEUyj0a/VkXKwkkFT8=";
+  xcode_26_0_1 = requireXcode "26.0.1" "sha256-PsEIjrzxgXFqCWeHs/bsvrlxy8aN899jMhesczMbPfE=";
+  xcode_26_0_1_Apple_silicon = requireXcode "26.0.1_Apple_silicon" "sha256-UBDey19uBljjRw84bY4rzxetFEkHiXLEj39Q578jYL8=";
+  xcode_26_1 = requireXcode "26.1" "sha256-SLIn1xAjaYhKGN6EEKslzmVZv+Zoq7QNGdtNreWJ5L8=";
+  xcode_26_1_Apple_silicon = requireXcode "26.1_Apple_silicon" "sha256-xFMknk3RxxJi/5IOb2mmw7vyC1xOaY5ZwCZ09AARtJU=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfst";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "http://www.openfst.org/twiki/pub/FST/FstDownload/${pname}-${version}.tar.gz";
-    hash = "sha256-B3cUFZ1c8+OKgLbGZW08zCyLi2xQu0G7ZcX+wQeWv1M=";
+    hash = "sha256-qOu7bz2S0H5nFQBYdHJRjPyHy3m5plSlqKuy0OspgBY=";
   };
 
   configureFlags = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with finite-state transducers";
     longDescription = ''
       Library for constructing, combining, optimizing, and searching weighted finite-state transducers (FSTs).
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       pattern matching, string processing, machine learning, information extraction and retrieval among others
     '';
     homepage = "https://www.openfst.org/twiki/bin/view/FST/WebHome";
-    license = licenses.asl20;
-    maintainers = [ maintainers.dfordivam ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.dfordivam ];
+    platforms = lib.platforms.unix;
   };
 }

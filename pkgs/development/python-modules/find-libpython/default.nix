@@ -3,26 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "find-libpython";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ktbarrett";
     repo = "find_libpython";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rYVGE9P5Xtm32kMoiqaZVMgnDbX3JBnI1uV80aNNOfw=";
+    tag = "v${version}";
+    hash = "sha256-6VRUkRACtZt8n2VT5MwxZ51/ep+Lt/jmEGyfI1zseJw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -31,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "find_libpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";
-    mainProgram = "find_libpython";
-    changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/v${version}";
+    changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/${src.tag}";
     homepage = "https://github.com/ktbarrett/find_libpython";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jleightcap ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jleightcap ];
+    mainProgram = "find_libpython";
   };
 }

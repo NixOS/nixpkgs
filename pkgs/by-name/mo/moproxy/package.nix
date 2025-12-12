@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Rqno+cg44IWBJbKWUP6BnxzwCjuNhFo9nBF6u2jlyA4=";
   };
 
-  cargoHash = "sha256-EunlvI7I6d93wb3hxgxsyAXkzxRlDu0fq9qqjnbzzWg=";
+  cargoHash = "sha256-SJHsXck2f9xJZ4GmOkISjdfqxlF4LCAH9WYjqSqFFkE=";
 
   preBuild =
     let
@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
       }");/' build.rs
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sorz/moproxy";
     description = "Transparent TCP to SOCKSv5/HTTP proxy on Linux written in Rust";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "moproxy";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
   };
 }

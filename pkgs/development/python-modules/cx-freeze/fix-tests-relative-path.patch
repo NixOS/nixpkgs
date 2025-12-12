@@ -1,0 +1,15 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 04400a17..1facf55d 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -46,9 +46,7 @@ class TempPackage:
+         # environment
+         self.system_path: Path = Path(os.getcwd())
+         self.system_prefix: Path = Path(sys.prefix)
+-        self.relative_site = Path(pytest.__file__).parent.parent.relative_to(
+-            self.system_prefix
+-        )
++        self.relative_site = Path(pytest.__file__).resolve().parent.parent
+ 
+         # make a temporary directory and set it as current
+         name = request.node.name

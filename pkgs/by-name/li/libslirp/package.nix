@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libslirp";
-  version = "4.8.0";
+  version = "4.9.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
-    repo = pname;
+    repo = "libslirp";
     rev = "v${version}";
-    sha256 = "sha256-t2LpOPx+S2iABQv3+xFdHj/FjWns40cNKToDKMZhAuw=";
+    sha256 = "sha256-MKP3iBExaPQryiahI1l/4bTgVht5Vu8AxaDyMotqmMo=";
   };
 
   separateDebugInfo = true;
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

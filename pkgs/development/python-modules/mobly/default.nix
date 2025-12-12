@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "mobly";
-  version = "1.12.4";
+  version = "1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
-    rev = "refs/tags/${version}";
-    hash = "sha256-77wZK5dqxXUkOgWE7NBpGJBbbtYYxRCJwPbtwLIX09I=";
+    tag = version;
+    hash = "sha256-lQyhLZFA9lad7LYKa6AP+nQonTRtiFA8Egjo0ATbLVI=";
   };
 
   build-system = [ setuptools ];
@@ -57,11 +57,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/mobly/blob/${src.rev}/CHANGELOG.md";
     description = "Automation framework for special end-to-end test cases";
     homepage = "https://github.com/google/mobly";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -29,16 +29,22 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 assert (blas.isILP64 == arpack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "octopus";
-  version = "14.1";
+  version = "16.2";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
-    rev = version;
-    hash = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
+    tag = finalAttrs.version;
+    hash = "sha256-L97igB+bdZ19zpbffHi8DVSJXKtUyDqauUB+l5zzFwQ=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+    "testsuite"
+  ];
 
   nativeBuildInputs = [
     which
@@ -63,7 +69,8 @@ stdenv.mkDerivation rec {
     spglib
     metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
-  ] ++ lib.optional enableMpi scalapack;
+  ]
+  ++ lib.optional enableMpi scalapack;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
@@ -72,11 +79,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
     (lib.cmakeBool "OCTOPUS_ScaLAPACK" enableMpi)
     (lib.cmakeBool "OCTOPUS_OpenMP" true)
+    (lib.cmakeBool "OCTOPUS_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  nativeCheckInputs = lib.optional.enableMpi mpi;
-  doCheck = false;
-  checkTarget = "check-short";
+  nativeCheckInputs = lib.optional enableMpi mpi;
+  doCheck = false; # requires installed data
 
   postPatch = ''
     patchShebangs ./
@@ -86,15 +93,20 @@ stdenv.mkDerivation rec {
     patchShebangs testsuite/oct-run_testsuite.sh
   '';
 
+  postInstall = ''
+    mkdir -p $testsuite
+    moveToOutput share/octopus/testsuite $testsuite
+  '';
+
   enableParallelBuilding = true;
 
   passthru = lib.attrsets.optionalAttrs enableMpi { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
-    maintainers = with maintainers; [ markuskowa ];
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ markuskowa ];
+    license = with lib.licenses; [
       gpl2Only
       asl20
       lgpl3Plus
@@ -102,4 +114,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

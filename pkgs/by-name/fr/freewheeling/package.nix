@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  autoreconfHook,
-  gnutls,
   freetype,
   fluidsynth,
   SDL,
@@ -18,28 +16,23 @@
   libSM,
   libsndfile,
   libogg,
-  libtool,
+  libX11,
+  nettle,
 }:
-let
-  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
-in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freewheeling";
   version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
-    rev = "v${version}";
-    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xEZBE/7nUvK2hruqP6QQzlsIDmuniPZg7JEJkCEvzvU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    libtool
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     freetype
     fluidsynth
@@ -54,20 +47,11 @@ stdenv.mkDerivation rec {
     libsndfile
     libogg
     libSM
-    (gnutls.overrideAttrs (oldAttrs: {
-      configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
-    }))
+    libX11
+    nettle
   ];
-  env.NIX_CFLAGS_COMPILE = toString (
-    makeSDLFlags [
-      SDL
-      SDL_ttf
-      SDL_gfx
-    ]
-    ++ [ "-I${libxml2.dev}/include/libxml2" ]
-  );
 
-  hardeningDisable = [ "format" ];
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev libxml2}/include/libxml2";
 
   meta = {
     description = "Live looping instrument with JACK and MIDI support";
@@ -89,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "fweelin";
   };
-}
+})

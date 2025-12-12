@@ -11,7 +11,6 @@
   fetchFromGitHub,
   isPyPy,
   libiconv,
-  libxcrypt,
   openssl,
   pkg-config,
   pretend,
@@ -19,12 +18,11 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
-  Security,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "44.0.0"; # Also update the hash in vectors.nix
+  version = "46.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,14 +30,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
-    rev = "refs/tags/${version}";
-    hash = "sha256-A+qYW8GksYk+FQG8ZJHNYrjcouE1CsVH0Lko2ahoYUI=";
+    tag = version;
+    hash = "sha256-gsEHKEYiMw2eliEpxwzFGDetOp77PivlMoBD3HBbbFA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-LJIY2O8ul36JQmhiW8VhLCQ0BaX+j+HGr3e8RUkZpc8=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-aCQzY2gBjVVwiqlqAxkH4y6yf4lqdQuSEnQSIjLPRJg=";
   };
 
   postPatch = ''
@@ -52,15 +49,15 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     pkg-config
     setuptools
-  ] ++ lib.optionals (!isPyPy) [ cffi ];
+  ]
+  ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      libiconv
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
@@ -72,9 +69,10 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ] ++ optional-dependencies.ssh;
+  ]
+  ++ optional-dependencies.ssh;
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks
@@ -85,7 +83,7 @@ buildPythonPackage rec {
     vectors = cryptography-vectors;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
@@ -93,13 +91,12 @@ buildPythonPackage rec {
       digests, and key derivation functions.
     '';
     homepage = "https://github.com/pyca/cryptography";
-    changelog =
-      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
-    license = with licenses; [
+    changelog = "https://cryptography.io/en/latest/changelog/#v" + lib.replaceString "." "-" version;
+    license = with lib.licenses; [
       asl20
       bsd3
       psfl
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

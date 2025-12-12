@@ -10,6 +10,7 @@
   makeDesktopItem,
   copyDesktopItems,
   electron,
+  imagemagick,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     nodejs
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   yarnBuildScript = "electron-builder";
@@ -53,7 +55,8 @@ stdenv.mkDerivation rec {
     cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/kuro"
 
     # icons
-    install -Dm644 ./static/Icon.png $out/share/icons/hicolor/1024x1024/apps/kuro.png
+    magick static/Icon.png -resize 512x512 kuro.png # original icon is 1024x1024, which isn't supported by hicolor
+    install -Dm444 kuro.png $out/share/icons/hicolor/512x512/apps/kuro.png
 
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/kuro" \
@@ -77,13 +80,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
-    description = "An unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
+    description = "Unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
     homepage = "https://github.com/davidsmorais/kuro";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "kuro";
-    maintainers = with maintainers; [ ChaosAttractor ];
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
     inherit (electron.meta) platforms;
   };
 }

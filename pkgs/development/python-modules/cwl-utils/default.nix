@@ -4,6 +4,7 @@
   cwl-upgrader,
   cwlformat,
   fetchFromGitHub,
+  jsonschema,
   packaging,
   pytest-mock,
   pytest-xdist,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.36";
+  version = "0.40";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-utils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZSRwkZkBZ2cM0ZBvyI628xjbiho2FuFJnCYDZl3IrHs=";
+    tag = "v${version}";
+    hash = "sha256-A9+JvtSTPfXK/FGJ8pplT06kkuatZu1fgjjmg74oTvE=";
   };
 
   build-system = [ setuptools ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cwlformat
+    jsonschema
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -60,13 +62,23 @@ buildPythonPackage rec {
     # Don't run tests which require network access
     "test_remote_packing"
     "test_remote_packing_github_soft_links"
+    "test_cwl_inputs_to_jsonschema"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Tests require podman
+    "tests/test_docker_extract.py"
+    # Tests requires singularity
+    "tests/test_js_sandbox.py"
+    # Circular dependencies
+    "tests/test_graph_split.py"
+  ];
+
+  meta = {
     description = "Utilities for CWL";
     homepage = "https://github.com/common-workflow-language/cwl-utils";
     changelog = "https://github.com/common-workflow-language/cwl-utils/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

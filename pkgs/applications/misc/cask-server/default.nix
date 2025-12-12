@@ -12,8 +12,8 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Nitrux";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "cask-server";
+    tag = "v${version}";
     sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 
@@ -22,16 +22,16 @@ mkDerivation rec {
     extra-cmake-modules
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Public server and API to interface with Cask features";
     mainProgram = "CaskServer";
     homepage = "https://github.com/Nitrux/cask-server";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl21Plus
       cc0
     ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 
 }

@@ -2,20 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "3.2.1";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9dB7HiN0GHBAYSofzSvLKRn42xgN8lTJWBu5C/kDN30=";
+    hash = "sha256-sYwHISv+rWJDRbuOHWFBzc8Vo5c2mU6guUA1rSsboXc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathvalidate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to sanitize/validate a string such as filenames/file-paths/etc";
     homepage = "https://github.com/thombashi/pathvalidate";
     changelog = "https://github.com/thombashi/pathvalidate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oxalica ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oxalica ];
   };
 }

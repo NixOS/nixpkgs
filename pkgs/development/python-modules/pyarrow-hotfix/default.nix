@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyarrow-hotfix";
-  version = "0.6";
+  version = "0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,19 +16,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pitrou";
     repo = "pyarrow-hotfix";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LlSbxIxvouzvlP6PB8J8fJaxWoRbxz4wTs7Gb5LbM4A=";
+    tag = "v${version}";
+    hash = "sha256-9K7rQUSd+at1WghTP8DlD44Op2VkvN1vlzF3ZLEIaRE=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   pythonImportsCheck = [ "pyarrow_hotfix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hotfix for the PyArrow security vulnerability CVE-2023-47248";
     homepage = "https://github.com/pitrou/pyarrow-hotfix";
     changelog = "https://github.com/pitrou/pyarrow-hotfix/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

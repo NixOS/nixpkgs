@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vstakhov";
-    repo = pname;
+    repo = "libucl";
     rev = version;
     sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
   };
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     feat: enabled: lib.strings.enableFeature enabled feat
   ) features;
 
-  meta = with lib; {
+  meta = {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jpotier ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jpotier ];
   };
 }

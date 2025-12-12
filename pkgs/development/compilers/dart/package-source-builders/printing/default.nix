@@ -11,17 +11,26 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit (src) passthru;
 
+  prePatch = ''
+    if [ -d printing ]; then pushd printing; fi
+  '';
+
   patches = [
     (replaceVars ./printing.patch {
       inherit pdfium-binaries;
     })
   ];
 
+  postPatch = ''
+    popd || true
+  '';
+
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -a ./* $out/
+    cp -r . $out
 
     runHook postInstall
   '';

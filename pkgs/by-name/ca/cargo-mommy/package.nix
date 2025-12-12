@@ -13,16 +13,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2WR6xUYL/bLgZlI4ADbPAtdLq0y4MoVP8Loxdu/58Wc=";
   };
 
-  cargoHash = "sha256-iQt6eTCcpzhFnrDkUmT4x7JX+Z7fWdW5ovbB/9Ui7Sw=";
+  cargoHash = "sha256-B0hPxw/8T5x6E0dwPIHoPChLx4K2ORvPEUDYHncZrPE=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo wrapper that encourages you after running commands";
     mainProgram = "cargo-mommy";
     homepage = "https://github.com/Gankra/cargo-mommy";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ GoldsteinE ];
+    maintainers = with lib.maintainers; [ GoldsteinE ];
   };
 }

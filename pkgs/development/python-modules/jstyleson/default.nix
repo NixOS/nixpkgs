@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "jstyleson";
   version = "0.0.2";
   format = "setuptools";
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jstyleson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to parse JSON with js-style comments";
     homepage = "https://github.com/linjackson78/jstyleson";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

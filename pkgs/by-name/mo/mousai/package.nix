@@ -15,6 +15,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   rustc,
@@ -23,18 +24,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mousai";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    hash = "sha256-lib2rPUTKudzbZQIGZxxxzvWNlbLkLdWtb9h7+C05QE=";
+    hash = "sha256-UhGqgVZ4K7+xKRGf7JYw4Mr+V+Cc3HjvGT8hDKaM6fo=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-KrOvPeT8zhxSTNDRJPrAbUnSgnIQegRmNe5TEgGE8+s=";
+    hash = "sha256-NYYVxVCONQoW+dcbwuJWzD2LAPhwOEQSgtfoY2iZi/c=";
   };
 
   nativeBuildInputs = [
@@ -63,12 +64,17 @@ stdenv.mkDerivation rec {
     libsoup_3
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Identify any songs in seconds";
     mainProgram = "mousai";
     homepage = "https://github.com/SeaDve/Mousai";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
   };
 }

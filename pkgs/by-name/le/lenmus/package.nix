@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -16,23 +17,19 @@
   wxsqlite3,
   fluidsynth,
   fontconfig,
-  darwin,
   soundfont-fluid,
   openlilylib-fonts,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
-  version = "6.0.1";
+  version = "6.0.1-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "lenmus";
     repo = "lenmus";
-    rev = "Release_${finalAttrs.version}";
-    hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
+    rev = "113787fe4d755e7e406b5ea4bd2cfb9eae0e56a3";
+    hash = "sha256-tDvSgdeFx5xEjExnDhoXgvuvk7+oEPgbt4DJajckvLc=";
   };
 
   env = {
@@ -45,32 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/fixup_bundle.*")/")/g' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      boost
-      portmidi
-      sqlite
-      freetype
-      libpng
-      pngpp
-      zlib
-      wxGTK32
-      wxsqlite3
-      fluidsynth
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    boost
+    portmidi
+    sqlite
+    freetype
+    libpng
+    pngpp
+    zlib
+    wxGTK32
+    wxsqlite3
+    fluidsynth
+    fontconfig
+  ];
 
   preConfigure = ''
     mkdir res/fonts
@@ -92,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "LenMus Phonascus is a program for learning music";
+    description = "Program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.
       It allows you to focus on specific skills and exercises, on both theory and aural training.

@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "izar";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pytm";
+    tag = "v${version}";
     sha256 = "sha256-MseV1ucDCzSM36zx04g9v5euDX0t74KqUSB4+brHzt8=";
   };
 
@@ -31,13 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic framework for threat modeling";
     homepage = "https://owasp.org/www-project-pytm/";
-    license = with licenses; [
+    license = with lib.licenses; [
       capec
       mit
     ];
-    maintainers = with maintainers; [ wamserma ];
+    maintainers = with lib.maintainers; [ wamserma ];
   };
 }

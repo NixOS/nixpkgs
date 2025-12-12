@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "14.39.0";
+  version = "14.45.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    hash = "sha256-HSieVAYuqv5zYN6CMAo86s/Df17PdIXzDIZ2pM4Sqlw=";
+    hash = "sha256-S8LtWQgzyDKr4Jnk7Qn/pfLzZYYnVfZNVqNBFyqr5cM=";
   };
 
   buildInputs = [
@@ -27,7 +27,7 @@ buildGoModule rec {
     ./remove-hardcoded-locations.patch
   ];
 
-  vendorHash = "sha256-wlxHaPstdXjMWV+qHxahAukk/Lc07kq37SlnCU3KO4o=";
+  vendorHash = "sha256-Q3U0uuO+w+0GpDc7zEoiwUYsCIpXG+LOP822KNWR9Ww=";
 
   subPackages = [
     "cmd/gitlab-shell"
@@ -42,11 +42,11 @@ buildGoModule rec {
   '';
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "SSH access and repository management app for GitLab";
     homepage = "http://www.gitlab.com/";
-    platforms = platforms.linux;
-    maintainers = teams.gitlab.members;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gitlab ];
+    license = lib.licenses.mit;
   };
 }

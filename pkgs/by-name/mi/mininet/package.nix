@@ -11,7 +11,7 @@
   inetutils,
   iperf,
   iproute2,
-  nettools,
+  net-tools,
   socat,
 }:
 
@@ -34,7 +34,7 @@ let
     socat
     # mn errors out without a telnet binary
     # pkgs.inetutils brings an undesired ifconfig into PATH see #43105
-    nettools
+    net-tools
     telnet
   ];
 
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Emulator for rapid prototyping of Software Defined Networks";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/mininet/mininet";
-    maintainers = with maintainers; [ teto ];
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "mnexec";
   };
 }

@@ -51,15 +51,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Set of themes from MATE";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       lgpl3Only
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

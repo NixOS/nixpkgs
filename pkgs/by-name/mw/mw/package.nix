@@ -6,7 +6,7 @@
 
 buildNpmPackage rec {
   pname = "mw";
-  version = "unstable-2023-08-04";
+  version = "0-unstable-2023-08-04";
 
   src = fetchFromGitHub {
     owner = "mark-when";

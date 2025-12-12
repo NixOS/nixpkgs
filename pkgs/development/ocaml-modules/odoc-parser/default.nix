@@ -6,14 +6,17 @@
   astring,
   result,
   camlp-streams,
-  version ? "2.4.2",
+  version ? if lib.versionAtLeast ocaml.version "4.08" then "3.1.0" else "2.4.4",
 }:
 
 let
   param =
     {
-      "2.4.2" = {
-        sha256 = "sha256-Vjz9uybsijDnN6nPKFoG4LuulT9I4lu7D2n3qZwrpAs=";
+      "3.1.0" = {
+        sha256 = "sha256-NVs8//STSQPLrti1HONeMz6GCZMtIwKUIAqfLUL/qRQ=";
+      };
+      "2.4.4" = {
+        sha256 = "sha256-fiU6VbXI9hD54LSJQOza8hwBVTFDr5O0DJmMMEmeUfM=";
       };
       "2.0.0" = {
         sha256 = "sha256-QHkZ+7DrlXYdb8bsZ3dijZSqGQc0O9ymeLGIC6+zOSI=";
@@ -41,8 +44,6 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
     pname = "odoc-parser";
     inherit version;
 
-    minimalOCamlVersion = "4.02";
-
     src = fetchurl {
       url =
         if lib.versionAtLeast version "2.4" then
@@ -54,13 +55,14 @@ lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_v
 
     propagatedBuildInputs = [
       astring
-      result
-    ] ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
+    ]
+    ++ lib.optional (!lib.versionAtLeast version "3.1.0") result
+    ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
 
     meta = {
       description = "Parser for Ocaml documentation comments";
       license = lib.licenses.isc;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ momeemt ];
       homepage = "https://github.com/ocaml-doc/odoc-parser";
       changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
     };

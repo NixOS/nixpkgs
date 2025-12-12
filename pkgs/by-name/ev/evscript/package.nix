@@ -11,19 +11,19 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valpackett";
-    repo = pname;
+    repo = "evscript";
     rev = version;
     hash = "sha256-lCXDDLovUb5aSOPTyVJL25v1JT1BGrrUlUR0Mu0XX4Q=";
   };
 
-  cargoHash = "sha256-KcQZnGFtev4ckhtQ7CNB773fAsExZ9EQl9e4Jf4beGo=";
+  cargoHash = "sha256-L0qwHWxMf/Nd0B2FWLIpKLgrs2LRyTOwuG/7keMI2zE=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/valpackett/evscript";
     description = "Tiny sandboxed Dyon scripting environment for evdev input devices";
     mainProgram = "evscript";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ milesbreslin ];
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ milesbreslin ];
+    platforms = lib.platforms.linux;
   };
 }

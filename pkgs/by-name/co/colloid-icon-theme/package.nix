@@ -14,7 +14,7 @@ let
   pname = "colloid-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: scheme variants"
+lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   [
     "default"
     "nord"
@@ -26,7 +26,7 @@ lib.checkListOfEnum "${pname}: scheme variants"
   ]
   schemeVariants
   lib.checkListOfEnum
-  "${pname}: color variants"
+  "colloid-icon-theme: color variants"
   [
     "default"
     "purple"
@@ -44,13 +44,13 @@ lib.checkListOfEnum "${pname}: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-10-18";
+    version = "2025-02-09";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      hash = "sha256-xpRgOt/FqZSbtOlZKlZS1ILQn6OAwqKAXX3hj41Wo+0=";
+      repo = "colloid-icon-theme";
+      tag = version;
+      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
     nativeBuildInputs = [
@@ -77,8 +77,8 @@ lib.checkListOfEnum "${pname}: scheme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + builtins.toString schemeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
+        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + toString schemeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--theme " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share
@@ -88,11 +88,11 @@ lib.checkListOfEnum "${pname}: scheme variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Colloid icon theme";
       homepage = "https://github.com/vinceliuice/colloid-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

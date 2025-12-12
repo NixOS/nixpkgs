@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "3.5.3";
+  version = "3.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aLfMDAxXCn2GRPSfQNLahwmwHTDJEmzIz5O0+E89l0c=";
+    hash = "sha256-bv/Jzpjt8jH01oP9FPcnBim/hFjGKNaiYg3tS7NPPLk=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -57,14 +57,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ shlevy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ shlevy ];
   };
 }

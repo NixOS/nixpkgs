@@ -21,15 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace Makefile.in \
-        --replace-fail 'libzakalwe.so' "libzakalwe${stdenv.hostPlatform.extensions.sharedLibrary}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Makefile.in \
-        --replace-fail '-soname' '-install_name'
-    '';
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace-fail 'libzakalwe.so' "libzakalwe${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile.in \
+      --replace-fail '-soname' '-install_name'
+  '';
 
   strictDeps = true;
 

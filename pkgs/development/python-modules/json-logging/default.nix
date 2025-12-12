@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-logging";
-  version = "1.5.0-rc0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bobbui";
     repo = "json-logging-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
+    tag = version;
+    hash = "sha256-r2ttPFvlN+hqMxBLPkr5hOz0UKNX4NRoXmLMXhTZ/VY=";
   };
 
   # The logging module introduced the `taskName` field in Python 3.12, which the tests don't expect
@@ -60,15 +60,15 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python library to emit logs in JSON format";
     longDescription = ''
       Python logging library to emit JSON log that can be easily indexed and searchable by logging
       infrastructure such as ELK, EFK, AWS Cloudwatch, GCP Stackdriver.
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
-    changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

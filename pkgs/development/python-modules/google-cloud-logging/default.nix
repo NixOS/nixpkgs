@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.11.3";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_logging";
     inherit version;
-    hash = "sha256-CnPNlBGIdTh9RTU3HZ6UJoYe3vjkT7oSYehngtW41U8=";
+    hash = "sha256-Nu/II5hQVbIDkE6D4cj5+ZmzxkJwvNo51XOGyk7/1ng=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,8 @@ buildPythonPackage rec {
     opentelemetry-api
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     django
@@ -84,11 +85,11 @@ buildPythonPackage rec {
     "google.cloud.logging_v2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

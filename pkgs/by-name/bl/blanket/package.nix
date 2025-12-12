@@ -13,17 +13,18 @@
   libadwaita,
   gobject-introspection,
   gst_all_1,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "blanket";
-    rev = version;
-    hash = "sha256-mY7c5i0me7mMbD8c6eGJeaZpR8XI5QVL4n3M+j15Z1c=";
+    tag = version;
+    hash = "sha256-LnHL/1DJXiKx9U+JkT4Wjx1vtTmKLpzZ8q6uLT5a2MY=";
   };
 
   nativeBuildInputs = [
@@ -48,13 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
-  format = "other";
-
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
-  '';
+  pyproject = false;
 
   dontWrapGApps = true;
 
@@ -62,17 +57,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Listen to different sounds";
+    changelog = "https://github.com/rafaelmardojai/blanket/releases/tag/${version}";
     homepage = "https://github.com/rafaelmardojai/blanket";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";
-    maintainers =
-      with lib.maintainers;
-      [
-        onny
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      onny
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 }

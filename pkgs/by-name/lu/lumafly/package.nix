@@ -9,7 +9,7 @@
   icoutils,
   copyDesktopItems,
   makeDesktopItem,
-  writeScript,
+  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "lumafly";
@@ -18,7 +18,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
   };
 
@@ -34,16 +34,7 @@ buildDotnetModule rec {
 
   selfContainedBuild = true;
 
-  passthru.updateScript = writeScript "update-lumafly" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell --pure -i bash -p bash nix nix-update git cacert
-    set -eo pipefail
-
-    prev_version=$(nix eval --raw -f. lumafly.version)
-    nix-update lumafly
-    [[ $(nix eval --raw -f. lumafly.version) == "$prev_version" ]] ||
-      $(nix-build . -A lumafly.fetch-deps --no-out-link)
-  '';
+  passthru.updateScript = nix-update-script { };
 
   runtimeDeps = [
     zlib
@@ -77,7 +68,7 @@ buildDotnetModule rec {
   ];
 
   meta = {
-    description = "A cross platform mod manager for Hollow Knight written in Avalonia";
+    description = "Cross platform mod manager for Hollow Knight written in Avalonia";
     homepage = "https://themulhima.github.io/Lumafly/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Lumafly";

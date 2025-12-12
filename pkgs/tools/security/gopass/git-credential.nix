@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "git-credential-gopass";
-  version = "1.15.15";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "git-credential-gopass";
     rev = "v${version}";
-    hash = "sha256-xtZAT1Lb7YJ0Hy2cMT2riVbEoWtz7lusKJ9QT4ZI6Ek=";
+    hash = "sha256-1045Ui8/WKNkAi6iSpJ1nsryA9J3U5KMAElYwN6Dho8=";
   };
 
-  vendorHash = "sha256-onpg0CRm5HSfMEejhn2ycnV1GuukX1SK4FZN/KjEiR4=";
+  vendorHash = "sha256-JDrC0h4+ltdMHOR36BDkVpcFDDaHGv6IDnW0O4QvWVI=";
 
   subPackages = [ "." ];
 
@@ -35,12 +35,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage git credentials using gopass";
     homepage = "https://github.com/gopasspw/git-credential-gopass";
     changelog = "https://github.com/gopasspw/git-credential-gopass/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ benneti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ benneti ];
     mainProgram = "git-credential-gopass";
   };
 }

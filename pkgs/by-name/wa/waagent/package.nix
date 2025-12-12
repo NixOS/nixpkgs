@@ -2,43 +2,55 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python3,
+  python312,
   bash,
-  gitUpdater,
+  openssl,
   nixosTests,
+  udevCheckHook,
 }:
 
 let
-  python = python3;
+  python = python312;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.12.0.4";
+  version = "2.15.0.1";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-L8W/ijBHkNukM2G9HBRVx2wFXzgkR8gbFBljNVPs6xA=";
+    tag = "v${version}";
+    hash = "sha256-P+jxn0W8LaTxDcvKlWjCK1Z9X1l/jf1s41bO9N34N0Q=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
     # Read-only file system: '/etc/ssh/sshd_config'
     ./dont-configure-sshd.patch
   ];
-  doCheck = false;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''
     substituteInPlace config/66-azure-storage.rules \
-      --replace-fail readlink ${coreutils}/bin/readlink \
-      --replace-fail cut ${coreutils}/bin/cut \
-      --replace-fail /bin/sh ${bash}/bin/sh
+      --replace-fail readlink '${coreutils}/bin/readlink' \
+      --replace-fail cut '${coreutils}/bin/cut' \
+      --replace-fail '/bin/sh' '${bash}/bin/sh'
     substituteInPlace config/99-azure-product-uuid.rules \
-      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    substituteInPlace azurelinuxagent/common/conf.py \
+      --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
-  propagatedBuildInputs = [ python.pkgs.distro ];
+  build-system = with python.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [ distro ];
 
   # The udev rules are placed to the wrong place.
   # Move them to their default location.
@@ -65,13 +77,8 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) waagent;
-    };
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+  passthru.tests = {
+    inherit (nixosTests) waagent;
   };
 
   meta = {

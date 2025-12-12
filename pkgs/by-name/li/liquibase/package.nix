@@ -26,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase";
-  version = "4.29.2";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HQF6IGqVqzB2pS9mBnnC2AufIXSULLBxXjXVOTHiDuk=";
+    hash = "sha256-OuEczc1MCA5CHl/QQ729Yk1W/PybKU1dnYmMuLB05Ek=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       # there’s a lot of escaping, but I’m not sure how to improve that
       cat > $out/bin/liquibase <<EOF
       #!/usr/bin/env bash
+      export LIQUIBASE_ANALYTICS_ENABLED="\''${LIQUIBASE_ANALYTICS_ENABLED:-false}"
       # taken from the executable script in the source
       CP=""
       ${addJars "$out/internal/lib"}
@@ -85,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Version Control for your database";
     mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jsoo1 ];
-    platforms = with platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jsoo1 ];
+    platforms = with lib.platforms; unix;
   };
 })

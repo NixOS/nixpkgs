@@ -19,7 +19,7 @@ let
 
     src = fetchFromGitHub {
       owner = "YomikoR";
-      repo = pname;
+      repo = "vapoursynth-editor";
       rev = lib.toLower version;
       hash = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
     };
@@ -40,36 +40,35 @@ let
 
     preConfigure = "cd pro";
 
-    preFixup =
-      ''
-        cd ../build/release*
-        mkdir -p $out/bin
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        mkdir -p $out/Applications
-        for bin in vsedit{,-job-server{,-watcher}}; do
-            mv $bin.app $out/Applications
-            makeQtWrapper $out/Applications/$bin.app/Contents/MacOS/$bin $out/bin/$bin
-            wrapQtApp $out/Applications/$bin.app/Contents/MacOS/$bin
-        done
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        for bin in vsedit{,-job-server{,-watcher}}; do
-            mv $bin $out/bin
-            wrapQtApp $out/bin/$bin
-        done
-      '';
+    preFixup = ''
+      cd ../build/release*
+      mkdir -p $out/bin
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      for bin in vsedit{,-job-server{,-watcher}}; do
+          mv $bin.app $out/Applications
+          makeQtWrapper $out/Applications/$bin.app/Contents/MacOS/$bin $out/bin/$bin
+          wrapQtApp $out/Applications/$bin.app/Contents/MacOS/$bin
+      done
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      for bin in vsedit{,-job-server{,-watcher}}; do
+          mv $bin $out/bin
+          wrapQtApp $out/bin/$bin
+      done
+    '';
 
     passthru = {
       inherit withPlugins;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Cross-platform editor for VapourSynth scripts";
       homepage = "https://github.com/YomikoR/VapourSynth-Editor";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 

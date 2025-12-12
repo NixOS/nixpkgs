@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "wheel-inspect";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "wheel-inspect";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pB9Rh+A7GlxnYuka2mTSBoxpoyYCzoaMPVgsHDlpos0=";
+    tag = "v${version}";
+    hash = "sha256-Mdw9IlY/2qDlb5FumNH+VHmg7vrUzo3vn+03QsUGgo8=";
   };
 
   pythonRelaxDeps = [
@@ -35,11 +35,9 @@ buildPythonPackage rec {
     "headerparser"
   ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     entry-points-txt
     headerparser
@@ -49,28 +47,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    setuptools
     pytestCheckHook
     pytest-cov-stub
-  ];
-
-  checkInputs = [
-    setuptools
     jsonschema
   ];
 
   pythonImportsCheck = [ "wheel_inspect" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract information from wheels";
-    mainProgram = "wheel2json";
     homepage = "https://github.com/jwodder/wheel-inspect";
-    changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ayazhafiz ];
+    changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ayazhafiz ];
+    mainProgram = "wheel2json";
   };
 }

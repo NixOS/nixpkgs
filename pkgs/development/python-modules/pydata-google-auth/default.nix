@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pydata-google-auth";
-  version = "1.8.2";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pydata-google-auth";
     owner = "pydata";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Wo+tXbzOuz/cW8GuWoSxLA/Lr2S9NMdePa8tIV39mbY=";
+    tag = version;
+    hash = "sha256-NxEpwCkjNWao2bnKOsDgw93N+cVqwM12VfoEu8CyWUU=";
   };
 
   postPatch = ''
@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydata_google_auth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helpers for authenticating to Google APIs";
     homepage = "https://github.com/pydata/pydata-google-auth";
     changelog = "https://github.com/pydata/pydata-google-auth/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

@@ -52,20 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${perl}/bin/perl"
   '';
 
-  postInstall =
-    ''
-      # Make sure that maxima can find its runtime dependencies.
-      for prog in "$out/bin/"*; do
-        wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
-      done
-      # Move emacs modules and documentation into the right place.
-      mkdir -p $out/share/emacs $out/share/doc
-      ln -s ../maxima/${finalAttrs.version}/emacs $out/share/emacs/site-lisp
-      ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
-    ''
-    + (lib.optionalString (lisp-compiler.pname == "ecl") ''
-      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
-    '');
+  postInstall = ''
+    # Make sure that maxima can find its runtime dependencies.
+    for prog in "$out/bin/"*; do
+      wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
+    done
+    # Move documentation into the right place.
+    mkdir -p $out/share/doc
+    ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
+  ''
+  + (lib.optionalString (lisp-compiler.pname == "ecl") ''
+    cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
+  '');
 
   patches = [
     # fix path to info dir (see https://trac.sagemath.org/ticket/11348)
@@ -110,10 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit lisp-compiler;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -121,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       DOE-MACSYMA and licensed under the GPL. Its abilities include
       symbolic integration, 3D plotting, and an ODE solver.
     '';
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.unix;
   };
 })

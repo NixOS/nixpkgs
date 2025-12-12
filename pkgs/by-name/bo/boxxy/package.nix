@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6pb3yyC4/kpe8S67B3pzsSu3PfQyOWpiYi0JTBQk3lU=";
   };
 
-  cargoHash = "sha256-PaH0WBBGK37T59RU4ofL0XjYX3cV5lR7WmCw+H/MeuA=";
+  cargoHash = "sha256-L6EL8iP8FnV2WDe4bkHG/P5Zz4S9TAiw3V+XQSTABrQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,15 +32,14 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };

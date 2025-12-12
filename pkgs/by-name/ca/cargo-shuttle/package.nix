@@ -5,52 +5,52 @@
   pkg-config,
   openssl,
   zlib,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-shuttle";
-  version = "0.49.0";
+  version = "0.57.3";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
-    rev = "v${version}";
-    hash = "sha256-97AiRgTPzkNsnxMTF0zleHVR6QYLyRlhguh2nz+duUM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qPevl75wmOYVhTgMiJOi+6j8LBWKzM7HPhd5mdf2B+8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-eHmNGIcSXzFdfEHKKr0R+igtZbm8bPRFg2uhzJwKDhk=";
+  cargoHash = "sha256-H2fy2NQvLQEzbQik+nrUvoYZaWQRXX6PpO9LcYfiF2I=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   cargoBuildFlags = [
     "-p"
     "cargo-shuttle"
   ];
 
-  cargoTestFlags = cargoBuildFlags ++ [
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
     # other tests are failing for different reasons
     "init::shuttle_init_tests::"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cargo command for the shuttle platform";
     mainProgram = "cargo-shuttle";
     homepage = "https://shuttle.rs";
-    changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

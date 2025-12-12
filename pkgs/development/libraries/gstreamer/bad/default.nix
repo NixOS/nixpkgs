@@ -1,132 +1,135 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, meson
-, ninja
-, gettext
-, pkg-config
-, python3
-, gst-plugins-base
-, orc
-, gstreamer
-, gobject-introspection
-, wayland-scanner
-, enableZbar ? false
-, faacSupport ? false
-, faac
-, opencvSupport ? false
-, opencv4
-, faad2
-, ldacbt
-, liblc3
-, libass
-, libkate
-, lrdf
-, ladspaH
-, lcms2
-, libnice
-, webrtc-audio-processing_1
-, lilv
-, lv2
-, serd
-, sord
-, sratom
-, libbs2b
-, libmodplug
-, libmpeg2
-, libmicrodns
-, openjpeg
-, libopus
-, librsvg
-, bluez
-, chromaprint
-, curl
-, fdk_aac
-, flite
-, gsm
-, json-glib
-, libajantv2
-, libaom
-, libdc1394
-, libde265
-, libdrm
-, libdvdnav
-, libdvdread
-, libgudev
-, qrencode
-, libsndfile
-, libusb1
-, neon
-, openal
-, openexr_3
-, openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264
-, openh264
-, libopenmpt
-, pango
-, rtmpdump
-, sbc
-, soundtouch
-, spandsp
-, srtp
-, zbar
-, wayland-protocols
-, wildmidi
-, svt-av1
-, fluidsynth
-, libva
-, libvdpau
-, wayland
-, libwebp
-, xvidcore
-, gnutls
-, mjpegtools
-, libGLU
-, libGL
-, addDriverRunpath
-, gtk3
-, libintl
-, game-music-emu
-, openssl
-, x265
-, libxml2
-, srt
-, vo-aacenc
-, libfreeaptx
-, zxing-cpp
-, usrsctp
-, VideoToolbox
-, AudioToolbox
-, AVFoundation
-, Cocoa
-, CoreMedia
-, CoreVideo
-, Foundation
-, MediaToolbox
-, enableGplPlugins ? true
-, bluezSupport ? stdenv.hostPlatform.isLinux
-# Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
-, microdnsSupport ? false
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
-, guiSupport ? true, directfb
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  replaceVars,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  python3,
+  gst-plugins-base,
+  orc,
+  gstreamer,
+  gobject-introspection,
+  wayland-scanner,
+  enableZbar ? false,
+  faacSupport ? false,
+  faac,
+  opencvSupport ? false,
+  opencv4,
+  faad2,
+  # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
+  # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
+  lcevcdecSupport ? false,
+  lcevcdec,
+  ldacbtSupport ? lib.meta.availableOn stdenv.hostPlatform ldacbt,
+  ldacbt,
+  liblc3,
+  libass,
+  lrdf,
+  ladspaH,
+  lcms2,
+  libnice,
+  webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
+  webrtc-audio-processing_1,
+  lilv,
+  lv2,
+  serd,
+  sord,
+  sratom,
+  libbs2b,
+  libmodplug,
+  libmpeg2,
+  libmicrodns,
+  openjpeg,
+  libopus,
+  librsvg,
+  bluez,
+  chromaprint,
+  curl,
+  fdk_aac,
+  flite,
+  gsm,
+  json-glib,
+  ajaSupport ? lib.meta.availableOn stdenv.hostPlatform libajantv2,
+  libajantv2,
+  libaom,
+  libdc1394,
+  libde265,
+  libdrm,
+  libdvdnav,
+  libdvdread,
+  libgudev,
+  qrencode,
+  libsndfile,
+  libusb1,
+  neon,
+  openal,
+  openexr,
+  openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264,
+  openh264,
+  libopenmpt,
+  pango,
+  rtmpdump,
+  sbc,
+  soundtouch,
+  spandsp,
+  srtp,
+  zbar,
+  wayland-protocols,
+  wildmidi,
+  svt-av1,
+  fluidsynth,
+  libva,
+  wayland,
+  libwebp,
+  gnutls,
+  mjpegtools,
+  libGL,
+  addDriverRunpath,
+  gtk3,
+  libintl,
+  game-music-emu,
+  openssl,
+  x265,
+  libxml2,
+  srt,
+  vo-aacenc,
+  libfreeaptx,
+  zxing-cpp,
+  usrsctp,
+  directoryListingUpdater,
+  enableGplPlugins ? true,
+  bluezSupport ? stdenv.hostPlatform.isLinux,
+  # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
+  microdnsSupport ? false,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  guiSupport ? true,
+  gst-plugins-bad,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.24.10";
+  version = "1.26.5";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-FwfjEDlQybrtNkqK8roEldaxE/zTbhBi3aX1grj4kE0=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
+    hash = "sha256-mJDyYvOyqVZNy2KenraX13uT0fcYl+2hqBcLfc/nMpQ=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];
@@ -140,9 +143,11 @@ stdenv.mkDerivation rec {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
-  ] ++ lib.optionals enableDocumentation [
+  ]
+  ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     wayland-scanner
   ];
 
@@ -151,11 +156,8 @@ stdenv.mkDerivation rec {
     orc
     json-glib
     lcms2
-    ldacbt
     liblc3
     libass
-    libkate
-    webrtc-audio-processing_1
     libbs2b
     libmodplug
     openjpeg
@@ -176,15 +178,13 @@ stdenv.mkDerivation rec {
     libusb1
     neon
     openal
-    openexr_3
+    openexr
     rtmpdump
     pango
     soundtouch
     srtp
     fluidsynth
-    libvdpau
     libwebp
-    xvidcore
     gnutls
     game-music-emu
     openssl
@@ -197,34 +197,45 @@ stdenv.mkDerivation rec {
     usrsctp
     wildmidi
     svt-av1
-  ] ++ lib.optionals opencvSupport [
+  ]
+  ++ lib.optionals opencvSupport [
     opencv4
-  ] ++ lib.optionals enableZbar [
+  ]
+  ++ lib.optionals enableZbar [
     zbar
-  ] ++ lib.optionals faacSupport [
+  ]
+  ++ lib.optionals faacSupport [
     faac
-  ] ++ lib.optionals enableGplPlugins [
+  ]
+  ++ lib.optionals enableGplPlugins [
     libmpeg2
     mjpegtools
     faad2
     x265
-  ] ++ lib.optionals bluezSupport [
+  ]
+  ++ lib.optionals bluezSupport [
     bluez
-  ] ++ lib.optionals microdnsSupport [
+  ]
+  ++ lib.optionals microdnsSupport [
     libmicrodns
-  ] ++ lib.optionals openh264Support [
+  ]
+  ++ lib.optionals openh264Support [
     openh264
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals ajaSupport [
+    libajantv2
+  ]
+  ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
     chromaprint
     flite
-    libajantv2
     libdrm
     libgudev
     sbc
@@ -242,37 +253,38 @@ stdenv.mkDerivation rec {
     sratom
 
     libGL
-    libGLU
-  ] ++ lib.optionals guiSupport [
+  ]
+  ++ lib.optionals guiSupport [
     gtk3
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && guiSupport) [
-    directfb
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # For unknown reasons the order is important, e.g. if
-    # VideoToolbox is last, we get:
-    #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
-    VideoToolbox
-    AudioToolbox
-    AVFoundation
-    Cocoa
-    CoreMedia
-    CoreVideo
-    Foundation
-    MediaToolbox
+  ]
+  ++ lib.optionals lcevcdecSupport [
+    lcevcdec
+  ]
+  ++ lib.optionals ldacbtSupport [
+    ldacbt
+  ]
+  ++ lib.optionals webrtcAudioProcessingSupport [
+    webrtc-audio-processing_1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
 
     "-Damfcodec=disabled" # Windows-only
+    "-Dandroidmedia=disabled" # Requires Android system.
     "-Davtp=disabled"
+    "-Dcuda-nvmm=disabled"
     "-Ddirectshow=disabled" # Windows-only
     "-Dqt6d3d11=disabled" # Windows-only
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
     "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
+    "-Dlcevcencoder=disabled" # not packaged in nixpkgs as of writing
     "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
@@ -286,9 +298,12 @@ stdenv.mkDerivation rec {
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
     "-Dmusepack=disabled"
+    "-Dnvcomp=disabled"
+    "-Dnvdswrapper=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
+    "-Dsvtjpegxs=disabled" # not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
@@ -300,20 +315,24 @@ stdenv.mkDerivation rec {
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
-    "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
+    "-Daja=${if ajaSupport then "enabled" else "disabled"}"
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
+    (lib.mesonEnable "directfb" false)
+    (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
-    "-Dnvcodec=disabled" # Linux-only
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86) [
+    "-Dnvcodec=disabled" # Linux-only, broken on non-x86
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !guiSupport) [
-    "-Ddirectfb=disabled"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Daja=disabled"
     "-Dchromaprint=disabled"
     "-Dflite=disabled"
@@ -327,28 +346,41 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled) [
-    "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
-  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+  ]
+  ++
+    lib.optionals
+      (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled)
+      [
+        "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
+      ]
+  ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
+  ]
+  ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
     "-Dgtk3=disabled" # Wayland-based GTK sink
     "-Dwayland=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+  ]
+  ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
-  ] ++ (if enableGplPlugins then [
-    "-Dgpl=enabled"
-  ] else [
-    "-Ddts=disabled"
-    "-Dfaad=disabled"
-    "-Diqa=disabled"
-    "-Dmpeg2enc=disabled"
-    "-Dmplex=disabled"
-    "-Dresindvd=disabled"
-    "-Dx265=disabled"
-  ]);
+  ]
+  ++ (
+    if enableGplPlugins then
+      [
+        "-Dgpl=enabled"
+      ]
+    else
+      [
+        "-Ddts=disabled"
+        "-Dfaad=disabled"
+        "-Diqa=disabled"
+        "-Dmpeg2enc=disabled"
+        "-Dmplex=disabled"
+        "-Dresindvd=disabled"
+        "-Dx265=disabled"
+      ]
+  );
 
   # Argument list too long
   strictDeps = true;
@@ -364,7 +396,23 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      full = gst-plugins-bad.override {
+        enableZbar = true;
+        faacSupport = true;
+        opencvSupport = true;
+      };
+
+      lgplOnly = gst-plugins-bad.override {
+        enableGplPlugins = false;
+      };
+    };
+
+    updateScript = directoryListingUpdater { };
+  };
+
+  meta = {
     description = "GStreamer Bad Plugins";
     mainProgram = "gst-transcoder-1.0";
     homepage = "https://gstreamer.freedesktop.org";
@@ -374,8 +422,8 @@ stdenv.mkDerivation rec {
       something - be it a good code review, some documentation, a set of tests,
       a real live maintainer, or some actual wide use.
     '';
-    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ ];
   };
-}
+})

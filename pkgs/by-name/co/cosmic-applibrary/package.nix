@@ -3,62 +3,67 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
+  libcosmicAppHook,
   just,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
+  nix-update-script,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-applibrary";
-  version = "0-unstable-2024-02-09";
 
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-applibrary";
+  version = "1.0.0";
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "e214e9867876c96b24568d8a45aaca2936269d9b";
-    hash = "sha256-fZxDRktiHHmj7X3e5VyJJMO081auOpSMSsBnJdhhtR8=";
+    repo = "cosmic-applibrary";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-A3OWgTgNeuNqMN4WBVJcAXogL9jHABDRIsN0QjgcPDY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WCS1jCfnanILXGLq96+FI0gM1o4FIJQtSgZg86fe86E=";
+  cargoHash = "sha256-M3zyBsNFUQ5dwzJRlaC8m6o5U4teIgwl6jTDYSqW8qw=";
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-app-library"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-app-library \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
     mainProgram = "cosmic-app-library";
   };
-}
+})

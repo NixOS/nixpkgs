@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martyanov";
     repo = "aetcd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g49ppfh8dyGpZeu/HdTDX8RAk5VTcZmqENRpNY12qkg=";
   };
 
@@ -58,11 +58,11 @@ buildPythonPackage rec {
     "tests/integration/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python asyncio-based client for etcd";
     homepage = "https://github.com/martyanov/aetcd";
     changelog = "https://github.com/martyanov/aetcd/blob/v${version}/docs/changelog.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

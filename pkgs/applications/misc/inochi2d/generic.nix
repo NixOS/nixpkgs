@@ -16,6 +16,7 @@
   zenity,
   luajit_2_1,
   libGL,
+  libX11,
 
   builderArgs,
 }:
@@ -56,6 +57,8 @@ buildDubPackage (
       dbus
       freetype
       SDL2
+      libGL
+      libX11
     ];
 
     dontUseCmakeConfigure = true;
@@ -88,6 +91,10 @@ buildDubPackage (
       # Upstream uses a cmake script to fetch the `cimgui` submodule anyway, which we can't do
       # We get around this by manually pre-fetching the submodule and copying it into the right place
       cp -r --no-preserve=all ${cimgui-src}/* "$cimgui_dir/deps/cimgui"
+
+      # bump cmake minimum version to a version supported by cmake 4
+      substituteInPlace "$cimgui_dir/deps/cimgui/CMakeLists.txt" \
+          --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
 
       # Disable the original cmake fetcher script
       substituteInPlace "$cimgui_dir/deps/CMakeLists.txt" \
@@ -128,13 +135,15 @@ buildDubPackage (
     postFixup = ''
       # Add support for `open file` dialog
       makeWrapper $out/share/${pname}/${pname} $out/bin/${pname} \
-          --prefix PATH : ${lib.makeBinPath [ zenity ]} \
-          --prefix LD_LIBRARY_PATH : ${
-            lib.makeLibraryPath [
-              libGL
-              luajit_2_1
-            ]
-          }
+        --prefix PATH : ${lib.makeBinPath [ zenity ]}
+
+      patchelf $out/share/${pname}/${pname} \
+        --add-rpath ${
+          lib.makeLibraryPath [
+            libGL
+            luajit_2_1
+          ]
+        }
     '';
 
     meta = {
@@ -142,6 +151,7 @@ buildDubPackage (
       license = lib.licenses.bsd2;
       mainProgram = pname;
       maintainers = with lib.maintainers; [ tomasajt ];
-    } // meta;
+    }
+    // meta;
   }
 )

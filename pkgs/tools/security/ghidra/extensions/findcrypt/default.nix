@@ -3,26 +3,23 @@
   fetchFromGitHub,
   buildGhidraExtension,
 }:
-let
-  version = "3.0.3";
-in
-buildGhidraExtension {
+buildGhidraExtension (finalAttrs: {
   pname = "findcrypt";
-  inherit version;
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "antoniovazquezblanco";
     repo = "GhidraFindcrypt";
-    rev = "v${version}";
-    hash = "sha256-fkCed+zlkWpf8XLC8ayxFZMMtuc96CspMC4Qq/mgF3o=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-c+7WQ7EeZm/9IyqGthTKBtm7EnNp0o7BmIM6GskTo6Y=";
   };
 
   meta = {
     description = "Ghidra analysis plugin to locate cryptographic constants";
     homepage = "https://github.com/antoniovazquezblanco/GhidraFindcrypt";
-    downloadPage = "https://github.com/antoniovazquezblanco/GhidraFindcrypt/releases/tag/v${version}";
-    changelog = "https://github.com/antoniovazquezblanco/GhidraFindcrypt/releases/tag/v${version}";
+    downloadPage = "https://github.com/antoniovazquezblanco/GhidraFindcrypt/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/antoniovazquezblanco/GhidraFindcrypt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.BonusPlay ];
   };
-}
+})

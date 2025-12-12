@@ -8,6 +8,7 @@
   xorg,
   gnugrep,
   ghostscript,
+  libnotify,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hkdb";
     repo = "Densify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-giFFy8HiSmnOqFKLyrPD1kTry8hMQxotEgD/u2FEMRY=";
   };
 
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication rec {
           ghostscript
           gnugrep
           xorg.xrandr
+          libnotify
         ]
       }"
     )

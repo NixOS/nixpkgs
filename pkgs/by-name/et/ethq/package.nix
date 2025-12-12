@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "isc-projects";
     repo = "ethq";
-    rev = "refs/tags/v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-ye5ep9EM9Sq/NqNZHENPmFZefVBx1BGrPm3YEG1NcSc=";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ethernet NIC Queue stats viewer";
     mainProgram = "ethq";
     homepage = "https://github.com/isc-projects/ethq";
-    license = licenses.mpl20;
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

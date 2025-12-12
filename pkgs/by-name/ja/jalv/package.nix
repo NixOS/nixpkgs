@@ -26,32 +26,30 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = "jalv";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MAQoc+WcuoG6Psa44VRaZ2TWB2LBpvf6EmqbUZPUf38=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (!useQt) [ wrapGAppsHook3 ]
-    ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (!useQt) [ wrapGAppsHook3 ]
+  ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      lilv
-      lv2
-      portaudio
-      serd
-      sord
-      sratom
-      suil
-    ]
-    ++ lib.optionals (!useJack) [ portaudio ]
-    ++ lib.optionals useJack [ libjack2 ]
-    ++ lib.optionals useQt [ libsForQt5.qtbase ];
+  buildInputs = [
+    lilv
+    lv2
+    portaudio
+    serd
+    sord
+    sratom
+    suil
+  ]
+  ++ lib.optionals (!useJack) [ portaudio ]
+  ++ lib.optionals useJack [ libjack2 ]
+  ++ lib.optionals useQt [ libsForQt5.qtbase ];
 
   mesonFlags = [
     (lib.mesonEnable "portaudio" (!useJack))

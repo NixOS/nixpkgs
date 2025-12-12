@@ -19,12 +19,12 @@ buildGoModule rec {
 
   ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Search github issues interactively";
     changelog = "https://github.com/gennaro-tedesco/gh-i/releases/tag/v${version}";
     homepage = "https://github.com/gennaro-tedesco/gh-i";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ phanirithvij ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gh-i";
   };
 }

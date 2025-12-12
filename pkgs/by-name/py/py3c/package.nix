@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python311,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "encukou";
-    repo = pname;
+    repo = "py3c";
     rev = "v${version}";
     sha256 = "sha256-v8+0J56sZVbGdBlOotObUa10/zFMTvfXdMYRsKhyZaY=";
   };
@@ -30,15 +30,16 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    python311
+    python3
+    python3.pkgs.distutils
   ];
 
   checkTarget = "test-python";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/encukou/py3c";
     description = "Python 2/3 compatibility layer for C extensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

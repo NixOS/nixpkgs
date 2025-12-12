@@ -49,6 +49,14 @@ stdenv.mkDerivation {
     makeWrapper "${sage-with-env}/bin/sage" "$out/bin/sage"
   '';
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # prevent warnings about assigning LC_* to "C" resulting in broken tests
+    # when run in darwin sandbox
+    LC_ALL = "en_US.UTF-8";
+  };
+
+  # allow singular tests to pass in darwin sandbox
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
   installCheckPhase = ''
     export HOME="$TMPDIR/sage-home"

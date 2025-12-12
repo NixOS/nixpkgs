@@ -2,7 +2,7 @@
   lib,
   alsa-lib,
   fetchFromGitHub,
-  gcc12Stdenv,
+  fetchpatch2,
   libGL,
   libGLU,
   mkLibretroCore,
@@ -12,14 +12,23 @@
 }:
 mkLibretroCore {
   core = "same_cdi";
-  version = "0-unstable-2023-02-28";
+  version = "0-unstable-2025-01-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "same_cdi";
-    rev = "54cf493c2dee4c46666059c452f8aaaa0bd7c8e0";
-    hash = "sha256-/+4coMzj/o82Q04Z65DQiPaykK6N56W6PRQLtyJOd8E=";
+    rev = "7ee1d8e9cb4307b7cd44ee1dd757e9b3f48f41d5";
+    hash = "sha256-EGE3NuO0gpZ8MKPypH8rFwJiv4QsdKuIyLKVuKTcvws=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/libretro/same_cdi/pull/19
+      name = "Fixes_compilation_errors_as_per_issue_9.patch";
+      url = "https://github.com/libretro/same_cdi/commit/bf3212315546cdd514118a4f3ea764fd9c401091.patch?full_index=1";
+      hash = "sha256-1vrMxnRtEWUt+6I/4PSfCPDIUAGKkXFd2UVr9473ngo=";
+    })
+  ];
 
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [
@@ -29,9 +38,6 @@ mkLibretroCore {
     portaudio
     xorg.libX11
   ];
-  # FIXME = build fail with GCC13:
-  # error = 'uint8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
-  stdenv = gcc12Stdenv;
 
   meta = {
     description = "SAME_CDI is a libretro core to play CD-i games";

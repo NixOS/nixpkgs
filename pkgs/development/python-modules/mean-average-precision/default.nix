@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bes-dev";
     repo = "mean_average_precision";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qo160L+oJsHERVOV0qdiRIZPMjvSlUmMTrAzThfrQSs=";
   };
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bes-dev/mean_average_precision";
     changelog = "https://github.com/bes-dev/mean_average_precision/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

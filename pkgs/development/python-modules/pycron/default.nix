@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pycron";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "pycron";
-    rev = "refs/tags/${version}";
-    hash = "sha256-t53u18lCk6tF4Hr/BrEM2gWG+QOFIEkjyEKNXIr3ibs=";
+    tag = version;
+    hash = "sha256-AuDqElqu/cbTASHQfWM85JHu8DvkwArZ2leMZSB+XVM=";
   };
 
   build-system = [ poetry-core ];
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycron" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple cron-like parser for Python, which determines if current datetime matches conditions";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/kipe/pycron";
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

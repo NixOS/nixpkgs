@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "appindicator-sharp";
-  version = "5a79cde93da6d68a4b1373f1ce5796c3c5fe1b37";
+  version = "0-unstable-2016-01-18";
 
   src = fetchFromGitHub {
     owner = "stsundermann";
     repo = "appindicator-sharp";
-    rev = version;
+    rev = "5a79cde93da6d68a4b1373f1ce5796c3c5fe1b37";
     sha256 = "sha256:1i0vqbp05l29f5v9ygp7flm4s05pcnn5ivl578mxmhb51s7ncw6l";
   };
 

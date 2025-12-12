@@ -8,20 +8,17 @@
   libtool,
   pkg-config,
   which,
+  gitUpdater,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "v4l2-relayd";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/v4l2-relayd";
-    rev = "refs/tags/upstream/${version}";
-    hash = "sha256-oU6naDFZ0PQVHZ3brANfMULDqYMYxeJN+MCUCvN/DpU=";
+    tag = "upstream/${finalAttrs.version}";
+    hash = "sha256-D+OWkny+TYNJt08X+nl7EYs5tp51vjvig/vuID6lkmg=";
   };
-
-  patches = [
-    ./upstream-v4l2loopback-compatibility.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -38,12 +35,16 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --prefix=$out";
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "upstream/";
+  };
+
+  meta = {
     description = "Streaming relay for v4l2loopback using GStreamer";
     mainProgram = "v4l2-relayd";
     homepage = "https://git.launchpad.net/v4l2-relayd";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ betaboon ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ betaboon ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

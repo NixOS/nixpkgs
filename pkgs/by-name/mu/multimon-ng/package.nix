@@ -7,18 +7,26 @@
   libX11,
   makeWrapper,
   sox,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "multimon-ng";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = version;
-    sha256 = "sha256-irKpVerxzjJIiLofoTdySk/PzojuVLgMq2DYF0qPaAM=";
+    sha256 = "sha256-/2NHUlAojDamNq/EVs8hoBYVikPLAFFFu/2syG4Xo4U=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/EliasOenal/multimon-ng/commit/1c111e83053e9e78ba568463cc015edadf77ed5f.diff";
+      hash = "sha256-gW9ihUn3rZcyurbu7+IhkWSotqWlJsHdeFHu12oVld4=";
+    })
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -34,8 +42,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [ sox ]}"
   '';
 
-  meta = with lib; {
-    description = "Multimon is a digital baseband audio protocol decoder";
+  meta = {
+    description = "Digital baseband audio protocol decoder";
     mainProgram = "multimon-ng";
     longDescription = ''
       multimon-ng a fork of multimon, a digital baseband audio
@@ -48,8 +56,8 @@ stdenv.mkDerivation rec {
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
     homepage = "https://github.com/EliasOenal/multimon-ng";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ markuskowa ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ markuskowa ];
   };
 }

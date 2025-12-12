@@ -8,15 +8,15 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pinsel";
-  version = "unstable-2021-09-13";
+  version = "0-unstable-2022-03-27";
 
   src = fetchFromGitHub {
     owner = "Nooo37";
-    repo = pname;
-    rev = "24b0205ca041511b3efb2a75ef296539442f9f54";
-    sha256 = "sha256-w+jiKypZODsmZq3uWGNd8PZhe1SowHj0thcQTX8WHfQ=";
+    repo = "pinsel";
+    rev = "4955b93365a1816bffbddc3d2ddfe3f4b3d60107";
+    hash = "sha256-H5DCAb8lJx2W4LNeGV+WOIiLUHsRVv1gSU2YMegkDFM=";
   };
 
   strictDeps = true;
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal screenshot annotation tool with lua config";
     homepage = "https://github.com/Nooo37/pinsel";
-    # no license
-    license = licenses.unfree;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "pinsel";
   };
 }

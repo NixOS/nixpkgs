@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HENNGE";
     repo = "arsenic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fsLo22PR9WdX2FazPgr8B8dFq6EM1LLTpRFGEm/ymCE=";
   };
 
@@ -56,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arsenic" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebDriver implementation for asyncio and asyncio-compatible frameworks";
     homepage = "https://github.com/HENNGE/arsenic/";
     changelog = "https://github.com/HENNGE/arsenic/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,7 +6,8 @@
   which is `throw`'s and `abort`'s, without error messages.
 
   If you need to test error messages or more complex evaluations, see
-  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+  `lib/tests/modules.sh`, `lib/tests/sources.sh`, `lib/tests/filesystem.sh` or
+  `lib/tests/debug.sh` as examples.
 
   To run these tests:
 
@@ -69,6 +70,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -77,6 +79,8 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsToListRecursive
+    mapAttrsToListRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -91,6 +95,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceString
     replicate
     runTests
     setFunctionArgs
@@ -112,6 +117,7 @@ let
     toIntBase10
     toShellVars
     types
+    uniqueStrings
     updateManyAttrsByPath
     versions
     xor
@@ -119,61 +125,123 @@ let
 
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
-    expected = { success = false; value = false; };
+    expected = {
+      success = false;
+      value = false;
+    };
   };
   testingEval = expr: {
     expr = (builtins.tryEval expr).success;
     expected = true;
   };
 
-  testSanitizeDerivationName = { name, expected }:
-  let
-    drv = derivation {
-      name = strings.sanitizeDerivationName name;
-      builder = "x";
-      system = "x";
+  testSanitizeDerivationName =
+    { name, expected }:
+    let
+      drv = derivation {
+        name = strings.sanitizeDerivationName name;
+        builder = "x";
+        system = "x";
+      };
+    in
+    {
+      # Evaluate the derivation so an invalid name would be caught
+      expr = builtins.seq drv.drvPath drv.name;
+      inherit expected;
     };
-  in {
-    # Evaluate the derivation so an invalid name would be caught
-    expr = builtins.seq drv.drvPath drv.name;
-    inherit expected;
-  };
 
+  dummyDerivation = derivation {
+    name = "name";
+    builder = "builder";
+    system = "system";
+  };
 in
 
 runTests {
 
-# CUSTOMIZATION
+  # CUSTOMIZATION
 
   testFunctionArgsMakeOverridable = {
-    expr = functionArgs (makeOverridable ({ a, b, c ? null}: {}));
-    expected = { a = false; b = false; c = true; };
+    expr = functionArgs (
+      makeOverridable (
+        {
+          a,
+          b,
+          c ? null,
+        }:
+        { }
+      )
+    );
+    expected = {
+      a = false;
+      b = false;
+      c = true;
+    };
   };
 
   testFunctionArgsMakeOverridableOverride = {
-    expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
-    expected = { a = false; b = false; c = true; };
+    expr =
+      functionArgs
+        (makeOverridable
+          (
+            {
+              a,
+              b,
+              c ? null,
+            }:
+            { }
+          )
+          {
+            a = 1;
+            b = 2;
+          }
+        ).override;
+    expected = {
+      a = false;
+      b = false;
+      c = true;
+    };
   };
 
   testCallPackageWithOverridePreservesArguments =
     let
-      f = { a ? 0, b }: {};
-      f' = callPackageWith { a = 1; b = 2; } f {};
-    in {
+      f =
+        {
+          a ? 0,
+          b,
+        }:
+        { };
+      f' = callPackageWith {
+        a = 1;
+        b = 2;
+      } f { };
+    in
+    {
       expr = functionArgs f'.override;
       expected = functionArgs f;
     };
 
   testCallPackagesWithOverridePreservesArguments =
     let
-      f = { a ? 0, b }: { nested = {}; };
-      f' = callPackagesWith { a = 1; b = 2; } f {};
-    in {
+      f =
+        {
+          a ? 0,
+          b,
+        }:
+        {
+          nested = { };
+        };
+      f' = callPackagesWith {
+        a = 1;
+        b = 2;
+      } f { };
+    in
+    {
       expr = functionArgs f'.nested.override;
       expected = functionArgs f;
     };
 
-# TRIVIAL
+  # TRIVIAL
 
   testId = {
     expr = id 1;
@@ -194,16 +262,19 @@ runTests {
   };
 
   testPipeEmpty = {
-    expr = pipe 2 [];
+    expr = pipe 2 [ ];
     expected = 2;
   };
 
   testPipeStrings = {
-    expr = pipe [ 3 4 ] [
-      (map toString)
-      (map (s: s + "\n"))
-      concatStrings
-    ];
+    expr =
+      pipe
+        [ 3 4 ]
+        [
+          (map toString)
+          (map (s: s + "\n"))
+          concatStrings
+        ];
     expected = ''
       3
       4
@@ -238,34 +309,61 @@ runTests {
   };
 
   testComposeExtensions = {
-    expr = let obj = makeExtensible (self: { foo = self.bar; });
-               f = self: super: { bar = false; baz = true; };
-               g = self: super: { bar = super.baz or false; };
-               f_o_g = composeExtensions f g;
-               composed = obj.extend f_o_g;
-           in composed.foo;
+    expr =
+      let
+        obj = makeExtensible (self: {
+          foo = self.bar;
+        });
+        f = self: super: {
+          bar = false;
+          baz = true;
+        };
+        g = self: super: { bar = super.baz or false; };
+        f_o_g = composeExtensions f g;
+        composed = obj.extend f_o_g;
+      in
+      composed.foo;
     expected = true;
   };
 
   testComposeManyExtensions0 = {
-    expr = let obj = makeExtensible (self: { foo = true; });
-               emptyComposition = composeManyExtensions [];
-               composed = obj.extend emptyComposition;
-           in composed.foo;
+    expr =
+      let
+        obj = makeExtensible (self: {
+          foo = true;
+        });
+        emptyComposition = composeManyExtensions [ ];
+        composed = obj.extend emptyComposition;
+      in
+      composed.foo;
     expected = true;
   };
 
   testComposeManyExtensions =
-    let f = self: super: { bar = false; baz = true; };
-        g = self: super: { bar = super.baz or false; };
-        h = self: super: { qux = super.bar or false; };
-        obj = makeExtensible (self: { foo = self.qux; });
-    in {
-    expr = let composition = composeManyExtensions [f g h];
-               composed = obj.extend composition;
-           in composed.foo;
-    expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
-  };
+    let
+      f = self: super: {
+        bar = false;
+        baz = true;
+      };
+      g = self: super: { bar = super.baz or false; };
+      h = self: super: { qux = super.bar or false; };
+      obj = makeExtensible (self: {
+        foo = self.qux;
+      });
+    in
+    {
+      expr =
+        let
+          composition = composeManyExtensions [
+            f
+            g
+            h
+          ];
+          composed = obj.extend composition;
+        in
+        composed.foo;
+      expected = (obj.extend (composeExtensions f (composeExtensions g h))).foo;
+    };
 
   testBitAnd = {
     expr = (bitAnd 3 10);
@@ -292,64 +390,121 @@ runTests {
     expected = 255;
   };
 
-  testFromHexStringSecondExample = {
-    expr = fromHexString (builtins.hashString "sha256" "test");
+  # Highest supported integer value in Nix.
+  testFromHexStringMaximum = {
+    expr = fromHexString "7fffffffffffffff";
     expected = 9223372036854775807;
   };
 
+  testFromHexStringLeadingZeroes = {
+    expr = fromHexString "00ffffffffffffff";
+    expected = 72057594037927935;
+  };
+
   testFromHexStringWithPrefix = {
-    expr = fromHexString "0Xf";
+    expr = fromHexString "0xf";
     expected = 15;
+  };
+
+  testFromHexStringMixedCase = {
+    expr = fromHexString "eEeEe";
+    expected = 978670;
   };
 
   testToBaseDigits = {
     expr = toBaseDigits 2 6;
-    expected = [ 1 1 0 ];
+    expected = [
+      1
+      1
+      0
+    ];
   };
 
   testFunctionArgsFunctor = {
     expr = functionArgs { __functor = self: { a, b }: null; };
-    expected = { a = false; b = false; };
+    expected = {
+      a = false;
+      b = false;
+    };
   };
 
   testFunctionArgsSetFunctionArgs = {
     expr = functionArgs (setFunctionArgs (args: args.x) { x = false; });
-    expected = { x = false; };
+    expected = {
+      x = false;
+    };
   };
 
-# STRINGS
+  # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
-    expr = concatMapStrings (x: x + ";") ["a" "b" "c"];
+    expr = concatMapStrings (x: x + ";") [
+      "a"
+      "b"
+      "c"
+    ];
     expected = "a;b;c;";
   };
 
   testConcatStringsSep = {
-    expr = concatStringsSep "," ["a" "b" "c"];
+    expr = concatStringsSep "," [
+      "a"
+      "b"
+      "c"
+    ];
     expected = "a,b,c";
   };
 
   testConcatMapAttrsStringSepExamples = {
-    expr = concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; };
+    expr = concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") {
+      a = "0.1.0";
+      b = "0.2.0";
+    };
     expected = "a: foo-0.1.0\nb: foo-0.2.0";
   };
 
   testConcatLines = {
-    expr = concatLines ["a" "b" "c"];
+    expr = concatLines [
+      "a"
+      "b"
+      "c"
+    ];
     expected = "a\nb\nc\n";
   };
 
   testMakeIncludePathWithPkgs = {
-    expr = (makeIncludePath [
-      # makeIncludePath preferably selects the "dev" output
-      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
-      # "out" is used if "dev" is not found
-      { out.outPath = "/out"; outPath = "/default"; }
-      # And it returns the derivation directly if there's no "out" either
-      { outPath = "/default"; }
-      # Same if the output is specified explicitly, even if there's a "dev"
-      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
-    ]);
+    expr = (
+      makeIncludePath [
+        # makeIncludePath preferably selects the "dev" output
+        {
+          dev.outPath = "/dev";
+          out.outPath = "/out";
+          outPath = "/default";
+        }
+        # "out" is used if "dev" is not found
+        {
+          out.outPath = "/out";
+          outPath = "/default";
+        }
+        # And it returns the derivation directly if there's no "out" either
+        { outPath = "/default"; }
+        # Same if the output is specified explicitly, even if there's a "dev"
+        {
+          dev.outPath = "/dev";
+          outPath = "/default";
+          outputSpecified = true;
+        }
+      ]
+    );
     expected = "/dev/include:/out/include:/default/include:/default/include";
   };
 
@@ -364,8 +519,18 @@ runTests {
   };
 
   testMakeIncludePathWithManyString = {
-    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expr = (
+      makeIncludePath [
+        "/usr"
+        "/usr/local"
+      ]
+    );
     expected = "/usr/include:/usr/local/include";
+  };
+
+  testReplaceStringString = {
+    expr = strings.replaceString "." "_" "v1.2.3";
+    expected = "v1_2_3";
   };
 
   testReplicateString = {
@@ -376,21 +541,23 @@ runTests {
   # Test various strings are trimmed correctly
   testTrimString = {
     expr =
-    let
-      testValues = f: mapAttrs (_: f) {
-        empty = "";
-        cr = "\r";
-        lf = "\n";
-        tab = "\t";
-        spaces = "   ";
-        leading = "  Hello, world";
-        trailing = "Hello, world   ";
-        mixed = " Hello, world ";
-        mixed-tabs = " \t\tHello, world \t \t ";
-        multiline = "  Hello,\n  world!  ";
-        multiline-crlf = "  Hello,\r\n  world!  ";
-      };
-    in
+      let
+        testValues =
+          f:
+          mapAttrs (_: f) {
+            empty = "";
+            cr = "\r";
+            lf = "\n";
+            tab = "\t";
+            spaces = "   ";
+            leading = "  Hello, world";
+            trailing = "Hello, world   ";
+            mixed = " Hello, world ";
+            mixed-tabs = " \t\tHello, world \t \t ";
+            multiline = "  Hello,\n  world!  ";
+            multiline-crlf = "  Hello,\r\n  world!  ";
+          };
+      in
       {
         leading = testValues (strings.trimWith { start = true; });
         trailing = testValues (strings.trimWith { end = true; });
@@ -441,12 +608,21 @@ runTests {
 
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
-    expected = [ "a" "b" "c" "d" ];
+    expected = [
+      "a"
+      "b"
+      "c"
+      "d"
+    ];
   };
 
   testSplitStringsEmpty = {
     expr = strings.splitString "." "a..b";
-    expected = [ "a" "" "b" ];
+    expected = [
+      "a"
+      ""
+      "b"
+    ];
   };
 
   testSplitStringsOne = {
@@ -461,17 +637,129 @@ runTests {
 
   testSplitStringsFirstEmpty = {
     expr = strings.splitString "/" "/a/b/c";
-    expected = [ "" "a" "b" "c" ];
+    expected = [
+      ""
+      "a"
+      "b"
+      "c"
+    ];
   };
 
   testSplitStringsLastEmpty = {
     expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
-    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+    expected = [
+      "2001"
+      "db8"
+      "0"
+      "0042"
+      ""
+      "8a2e"
+      "370"
+      ""
+    ];
   };
 
   testSplitStringsRegex = {
     expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
-    expected = [ "A" "B" ];
+    expected = [
+      "A"
+      "B"
+    ];
+  };
+
+  testSplitStringBySimpleDelimiter = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      builtins.elem curr [
+        "."
+        "-"
+      ]
+    ) false "foo.bar-baz";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByLeadingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false ".foo.bar.baz";
+    expected = [
+      ""
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByTrailingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo.bar.baz.";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+      ""
+    ];
+  };
+
+  testSplitStringByMultipleConsecutiveDelimiters = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo...bar";
+    expected = [
+      "foo"
+      ""
+      ""
+      "bar"
+    ];
+  };
+
+  testSplitStringByKeepingSplitChar = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) true "foo.bar.baz";
+    expected = [
+      "foo"
+      ".bar"
+      ".baz"
+    ];
+  };
+
+  testSplitStringByCaseTransition = {
+    expr = strings.splitStringBy (
+      prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
+    ) true "fooBarBaz";
+    expected = [
+      "foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
+  testSplitStringByEmptyString = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "";
+    expected = [ "" ];
+  };
+
+  testSplitStringByComplexPredicate = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      prev != ""
+      && curr != ""
+      && builtins.match "[0-9]" prev != null
+      && builtins.match "[a-z]" curr != null
+    ) true "123abc456def";
+    expected = [
+      "123"
+      "abc456"
+      "def"
+    ];
+  };
+
+  testSplitStringByUpperCaseStart = {
+    expr = strings.splitStringBy (prev: curr: builtins.match "[A-Z]" curr != null) true "FooBarBaz";
+    expected = [
+      ""
+      "Foo"
+      "Bar"
+      "Baz"
+    ];
   };
 
   testEscapeShellArg = {
@@ -485,7 +773,11 @@ runTests {
   };
 
   testEscapeShellArgs = {
-    expr = strings.escapeShellArgs ["one" "two three" "four'five"];
+    expr = strings.escapeShellArgs [
+      "one"
+      "two three"
+      "four'five"
+    ];
     expected = "one 'two three' 'four'\\''five'";
   };
 
@@ -495,12 +787,8 @@ runTests {
   };
 
   testSplitStringsDerivation = {
-    expr = take 3  (strings.splitString "/" (derivation {
-      name = "name";
-      builder = "builder";
-      system = "system";
-    }));
-    expected = ["" "nix" "store"];
+    expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
+    expected = strings.splitString "/" builtins.storeDir;
   };
 
   testSplitVersionSingle = {
@@ -510,12 +798,19 @@ runTests {
 
   testSplitVersionDouble = {
     expr = versions.splitVersion "1.2";
-    expected = [ "1" "2" ];
+    expected = [
+      "1"
+      "2"
+    ];
   };
 
   testSplitVersionTriple = {
     expr = versions.splitVersion "1.2.3";
-    expected = [ "1" "2" "3" ];
+    expected = [
+      "1"
+      "2"
+      "3"
+    ];
   };
 
   testPadVersionLess = {
@@ -533,21 +828,27 @@ runTests {
     expected = "1.2.3";
   };
 
-  testIsStorePath =  {
+  testIsStorePath = {
     expr =
-      let goodPath =
-            "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
-      in {
+      let
+        goodPath = "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+        goodCAPath = "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab";
+      in
+      {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
-        storePathAppendix = isStorePath
-          "${goodPath}/bin/python";
+        storePathDerivation = isStorePath dummyDerivation;
+        storePathAppendix = isStorePath "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
         asPath = isStorePath (/. + goodPath);
         otherPath = isStorePath "/something/else";
+
+        caPath = isStorePath goodCAPath;
+        caPathAppendix = isStorePath "${goodCAPath}/bin/python";
+        caAsPath = isStorePath (/. + goodCAPath);
+
         otherVals = {
-          attrset = isStorePath {};
-          list = isStorePath [];
+          attrset = isStorePath { };
+          list = isStorePath [ ];
           int = isStorePath 42;
         };
       };
@@ -557,6 +858,9 @@ runTests {
       storePathAppendix = false;
       nonAbsolute = false;
       asPath = true;
+      caPath = true;
+      caPathAppendix = false;
+      caAsPath = true;
       otherPath = false;
       otherVals = {
         attrset = false;
@@ -575,7 +879,10 @@ runTests {
     expr = ''
       ${toShellVars {
         STRing01 = "just a 'string'";
-        _array_ = [ "with" "more strings" ];
+        _array_ = [
+          "with"
+          "more strings"
+        ];
         assoc."with some" = ''
           strings
           possibly newlines
@@ -614,7 +921,7 @@ runTests {
   };
 
   testHasInfixDerivation = {
-    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expr = hasInfix "name" dummyDerivation;
     expected = true;
   };
 
@@ -665,8 +972,8 @@ runTests {
   };
 
   testEscapeC = {
-    expr = strings.escapeC [ " " ] "Hello World";
-    expected = "Hello\\x20World";
+    expr = strings.escapeC [ "\n" " " ] "Hello World\n";
+    expected = "Hello\\x20World\\x0a";
   };
 
   testEscapeURL = testAllTrue [
@@ -675,8 +982,40 @@ runTests {
     ("Hello%20World" == strings.escapeURL "Hello World")
     ("Hello%2FWorld" == strings.escapeURL "Hello/World")
     ("42%25" == strings.escapeURL "42%")
-    ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
+    (
+      "%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B"
+      == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;"
+    )
   ];
+
+  testToSentenceCase = {
+    expr = strings.toSentenceCase "hello world";
+    expected = "Hello world";
+  };
+
+  testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
+
+  testToCamelCase = {
+    expr = strings.toCamelCase "hello world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromKebab = {
+    expr = strings.toCamelCase "hello-world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromSnake = {
+    expr = strings.toCamelCase "hello_world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromPascal = {
+    expr = strings.toCamelCase "HelloWorld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
 
   testToInt = testAllTrue [
     # Naive
@@ -695,19 +1034,84 @@ runTests {
   ];
 
   testToIntFails = testAllTrue [
-    ( builtins.tryEval (toInt "") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " 1d ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " d0 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt "00") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt "01") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt "002") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " 002 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " foo123 ") == { success = false; value = false; } )
+    (
+      builtins.tryEval (toInt "") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt "123 123") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt "0 123") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " 0d ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " 1d ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " d0 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt "00") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt "01") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt "002") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " 002 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " foo ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " foo 123 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toInt " foo123 ") == {
+        success = false;
+        value = false;
+      }
+    )
   ];
 
   testToIntBase10 = testAllTrue [
@@ -741,68 +1145,167 @@ runTests {
   ];
 
   testToIntBase10Fails = testAllTrue [
-    ( builtins.tryEval (toIntBase10 "") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 "123 123") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 "0 123") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " 0d ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " 1d ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " d0 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " foo ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " foo 123 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " foo 00123 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
+    (
+      builtins.tryEval (toIntBase10 "") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 "123 123") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 "0 123") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " 0d ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " 1d ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " d0 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " foo ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " foo 123 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " foo 00123 ") == {
+        success = false;
+        value = false;
+      }
+    )
+    (
+      builtins.tryEval (toIntBase10 " foo00123 ") == {
+        success = false;
+        value = false;
+      }
+    )
   ];
 
-# LISTS
+  # LISTS
 
   testFilter = {
-    expr = filter (x: x != "a") ["a" "b" "c" "a"];
-    expected = ["b" "c"];
+    expr = filter (x: x != "a") [
+      "a"
+      "b"
+      "c"
+      "a"
+    ];
+    expected = [
+      "b"
+      "c"
+    ];
   };
 
   testIfilter0Example = {
-    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
-    expected = [ 1 3 ];
+    expr = ifilter0 (i: v: i == 0 || v > 2) [
+      1
+      2
+      3
+    ];
+    expected = [
+      1
+      3
+    ];
   };
   testIfilter0Empty = {
     expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
     expected = [ ];
   };
   testIfilter0IndexOnly = {
-    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expr = length (
+      ifilter0 (i: v: mod i 2 == 0) [
+        (throw "0")
+        (throw "1")
+        (throw "2")
+        (throw "3")
+      ]
+    );
     expected = 2;
   };
   testIfilter0All = {
-    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
-    expected = [ 10 11 12 13 14 15 ];
+    expr = ifilter0 (i: v: true) [
+      10
+      11
+      12
+      13
+      14
+      15
+    ];
+    expected = [
+      10
+      11
+      12
+      13
+      14
+      15
+    ];
   };
   testIfilter0First = {
-    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expr = ifilter0 (i: v: i == 0) [
+      10
+      11
+      12
+      13
+      14
+      15
+    ];
     expected = [ 10 ];
   };
   testIfilter0Last = {
-    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expr = ifilter0 (i: v: i == 5) [
+      10
+      11
+      12
+      13
+      14
+      15
+    ];
     expected = [ 15 ];
   };
 
-  testFold =
+  testFoldr =
     let
-      f = op: fold: fold op 0 (range 0 100);
-      # fold with associative operator
+      f = op: foldr: foldr op 0 (range 0 100);
+      # foldr with associative operator
       assoc = f builtins.add;
-      # fold with non-associative operator
+      # foldr with non-associative operator
       nonAssoc = f builtins.sub;
-    in {
+    in
+    {
       expr = {
         assocRight = assoc foldr;
-        # right fold with assoc operator is same as left fold
+        # foldr with assoc operator is same as foldl
         assocRightIsLeft = assoc foldr == assoc foldl;
         nonAssocRight = nonAssoc foldr;
         nonAssocLeft = nonAssoc foldl;
-        # with non-assoc operator the fold results are not the same
+        # with non-assoc operator the foldr results are not the same
         nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
-        # fold is an alias for foldr
-        foldIsRight = nonAssoc fold == nonAssoc foldr;
       };
       expected = {
         assocRight = 5050;
@@ -810,7 +1313,6 @@ runTests {
         nonAssocRight = 50;
         nonAssocLeft = (-5050);
         nonAssocRightIsNotLeft = true;
-        foldIsRight = true;
       };
     };
 
@@ -820,22 +1322,27 @@ runTests {
   };
 
   testFoldl'IntegerAdding = {
-    expr = foldl' (acc: el: acc + el) 0 [ 1 2 3 ];
+    expr = foldl' (acc: el: acc + el) 0 [
+      1
+      2
+      3
+    ];
     expected = 6;
   };
 
   # The accumulator isn't forced deeply
   testFoldl'NonDeep = {
-    expr = take 3 (foldl'
-      (acc: el: [ el ] ++ acc)
-      [ (abort "unevaluated list entry") ]
-      [ 1 2 3 ]);
-    expected = [ 3 2 1 ];
+    expr = take 3 (foldl' (acc: el: [ el ] ++ acc) [ (abort "unevaluated list entry") ] [ 1 2 3 ]);
+    expected = [
+      3
+      2
+      1
+    ];
   };
 
   # Compared to builtins.foldl', lib.foldl' evaluates the first accumulator strictly too
   testFoldl'StrictInitial = {
-    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
+    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [ ])).success;
     expected = false;
   };
 
@@ -847,12 +1354,232 @@ runTests {
   };
 
   testTake = testAllTrue [
-    ([] == (take 0 [  1 2 3 ]))
-    ([1] == (take 1 [  1 2 3 ]))
-    ([ 1 2 ] == (take 2 [  1 2 3 ]))
-    ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
-    ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
+    (
+      [ ] == (take 0 [
+        1
+        2
+        3
+      ])
+    )
+    (
+      [ 1 ] == (take 1 [
+        1
+        2
+        3
+      ])
+    )
+    (
+      [
+        1
+        2
+      ] == (take 2 [
+        1
+        2
+        3
+      ])
+    )
+    (
+      [
+        1
+        2
+        3
+      ] == (take 3 [
+        1
+        2
+        3
+      ])
+    )
+    (
+      [
+        1
+        2
+        3
+      ] == (take 4 [
+        1
+        2
+        3
+      ])
+    )
   ];
+
+  testTakeEnd =
+    let
+      inherit (lib) takeEnd;
+    in
+    testAllTrue [
+      (
+        takeEnd 0 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        takeEnd 1 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        takeEnd 2 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 3 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 4 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (takeEnd 0 [ ] == [ ])
+      (takeEnd 1 [ ] == [ ])
+      (
+        takeEnd (-1) [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (takeEnd (-1) [ ] == [ ])
+    ];
+
+  testDrop =
+    let
+      inherit (lib) drop;
+    in
+    testAllTrue [
+      # list index -1 is out of bounds
+      # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+      (
+        drop 0 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        drop 1 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        drop 2 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        drop 3 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        drop 4 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (drop 0 [ ] == [ ])
+      (drop 1 [ ] == [ ])
+    ];
+
+  testDropEnd =
+    let
+      inherit (lib) dropEnd;
+    in
+    testAllTrue [
+      (
+        dropEnd 0 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        dropEnd 1 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+        ]
+      )
+      (
+        dropEnd 2 [
+          1
+          2
+          3
+        ] == [ 1 ]
+      )
+      (
+        dropEnd 3 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        dropEnd 4 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (dropEnd 0 [ ] == [ ])
+      (dropEnd 1 [ ] == [ ])
+      (
+        dropEnd (-1) [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (dropEnd (-1) [ ] == [ ])
+    ];
 
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
@@ -877,7 +1604,10 @@ runTests {
 
   testListRemovePrefixExample1 = {
     expr = lists.removePrefix [ 1 2 ] [ 1 2 3 4 ];
-    expected = [ 3 4 ];
+    expected = [
+      3
+      4
+    ];
   };
   testListRemovePrefixExample2 = {
     expr = (builtins.tryEval (lists.removePrefix [ 0 1 ] [ 1 2 3 4 ])).success;
@@ -885,7 +1615,10 @@ runTests {
   };
   testListRemovePrefixEmptyPrefix = {
     expr = lists.removePrefix [ ] [ 1 2 ];
-    expected = [ 1 2 ];
+    expected = [
+      1
+      2
+    ];
   };
   testListRemovePrefixEmptyList = {
     expr = (builtins.tryEval (lists.removePrefix [ 1 2 ] [ ])).success;
@@ -893,20 +1626,43 @@ runTests {
   };
 
   testFoldAttrs = {
-    expr = foldAttrs (n: a: [n] ++ a) [] [
-    { a = 2; b = 7; }
-    { a = 3;        c = 8; }
-    ];
-    expected = { a = [ 2 3 ]; b = [7]; c = [8];};
+    expr =
+      foldAttrs (n: a: [ n ] ++ a)
+        [ ]
+        [
+          {
+            a = 2;
+            b = 7;
+          }
+          {
+            a = 3;
+            c = 8;
+          }
+        ];
+    expected = {
+      a = [
+        2
+        3
+      ];
+      b = [ 7 ];
+      c = [ 8 ];
+    };
   };
 
   testListCommonPrefixExample1 = {
     expr = lists.commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
-    expected = [ 1 2 ];
+    expected = [
+      1
+      2
+    ];
   };
   testListCommonPrefixExample2 = {
     expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ];
-    expected = [ 1 2 3 ];
+    expected = [
+      1
+      2
+      3
+    ];
   };
   testListCommonPrefixExample3 = {
     expr = lists.commonPrefix [ 1 2 3 ] [ 4 5 6 ];
@@ -918,29 +1674,52 @@ runTests {
   };
   testListCommonPrefixSame = {
     expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 ];
-    expected = [ 1 2 3 ];
+    expected = [
+      1
+      2
+      3
+    ];
   };
   testListCommonPrefixLazy = {
-    expr = lists.commonPrefix [ 1 ] [ 1 (abort "lib.lists.commonPrefix shouldn't evaluate this")];
+    expr = lists.commonPrefix [ 1 ] [ 1 (abort "lib.lists.commonPrefix shouldn't evaluate this") ];
     expected = [ 1 ];
   };
   # This would stack overflow if `commonPrefix` were implemented using recursion
   testListCommonPrefixLong =
     let
       longList = genList (n: n) 100000;
-    in {
+    in
+    {
       expr = lists.commonPrefix longList longList;
       expected = longList;
     };
 
   testSort = {
-    expr = sort builtins.lessThan [ 40 2 30 42 ];
-    expected = [2 30 40 42];
+    expr = sort builtins.lessThan [
+      40
+      2
+      30
+      42
+    ];
+    expected = [
+      2
+      30
+      40
+      42
+    ];
   };
 
   testSortOn = {
-    expr = sortOn stringLength [ "aa" "b" "cccc" ];
-    expected = [ "b" "aa" "cccc" ];
+    expr = sortOn stringLength [
+      "aa"
+      "b"
+      "cccc"
+    ];
+    expected = [
+      "b"
+      "aa"
+      "cccc"
+    ];
   };
 
   testSortOnEmpty = {
@@ -949,20 +1728,41 @@ runTests {
   };
 
   testSortOnIncomparable = {
-    expr =
-      map
-        (x: x.f x.ok)
-        (sortOn (x: x.ok) [
-          { ok = 1; f = x: x; }
-          { ok = 3; f = x: x + 3; }
-          { ok = 2; f = x: x; }
-        ]);
-    expected = [ 1 2 6 ];
+    expr = map (x: x.f x.ok) (
+      sortOn (x: x.ok) [
+        {
+          ok = 1;
+          f = x: x;
+        }
+        {
+          ok = 3;
+          f = x: x + 3;
+        }
+        {
+          ok = 2;
+          f = x: x;
+        }
+      ]
+    );
+    expected = [
+      1
+      2
+      6
+    ];
+  };
+
+  testReplaceString = {
+    expr = replaceString "world" "Nix" "Hello, world!";
+    expected = "Hello, Nix!";
   };
 
   testReplicate = {
     expr = replicate 3 "a";
-    expected = ["a" "a" "a"];
+    expected = [
+      "a"
+      "a"
+      "a"
+    ];
   };
 
   testToIntShouldConvertStringToInt = {
@@ -972,21 +1772,32 @@ runTests {
 
   testToIntShouldThrowErrorIfItCouldNotConvertToInt = {
     expr = builtins.tryEval (toInt "\"foo\"");
-    expected = { success = false; value = false; };
+    expected = {
+      success = false;
+      value = false;
+    };
   };
 
   testHasAttrByPathTrue = {
-    expr = hasAttrByPath ["a" "b"] { a = { b = "yey"; }; };
+    expr = hasAttrByPath [ "a" "b" ] {
+      a = {
+        b = "yey";
+      };
+    };
     expected = true;
   };
 
   testHasAttrByPathFalse = {
-    expr = hasAttrByPath ["a" "b"] { a = { c = "yey"; }; };
+    expr = hasAttrByPath [ "a" "b" ] {
+      a = {
+        c = "yey";
+      };
+    };
     expected = false;
   };
 
   testHasAttrByPathNonStrict = {
-    expr = hasAttrByPath [] (throw "do not use");
+    expr = hasAttrByPath [ ] (throw "do not use");
     expected = true;
   };
 
@@ -1017,31 +1828,50 @@ runTests {
 
   testLongestValidPathPrefix_two = {
     expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b = null; };
-    expected = [ "a" "b" ];
+    expected = [
+      "a"
+      "b"
+    ];
   };
 
   testLongestValidPathPrefix_three = {
     expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c = null; };
-    expected = [ "a" "b" "c" ];
+    expected = [
+      "a"
+      "b"
+      "c"
+    ];
   };
 
   testLongestValidPathPrefix_three_extra = {
     expr = attrsets.longestValidPathPrefix [ "a" "b" "c" ] { a.b.c.d = throw "nope"; };
-    expected = [ "a" "b" "c" ];
+    expected = [
+      "a"
+      "b"
+      "c"
+    ];
   };
 
   testFindFirstIndexExample1 = {
-    expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [ 1 6 4 ];
+    expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [
+      1
+      6
+      4
+    ];
     expected = 1;
   };
 
   testFindFirstIndexExample2 = {
-    expr = lists.findFirstIndex (x: x > 9) "a very specific default" [ 1 6 4 ];
+    expr = lists.findFirstIndex (x: x > 9) "a very specific default" [
+      1
+      6
+      4
+    ];
     expected = "a very specific default";
   };
 
   testFindFirstIndexEmpty = {
-    expr = lists.findFirstIndex (abort "when the list is empty, the predicate is not needed") null [];
+    expr = lists.findFirstIndex (abort "when the list is empty, the predicate is not needed") null [ ];
     expected = null;
   };
 
@@ -1051,13 +1881,23 @@ runTests {
   };
 
   testFindFirstIndexSingleDefault = {
-    expr = lists.findFirstIndex (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
+    expr = lists.findFirstIndex (x: false) null [
+      (abort "if the predicate doesn't access the value, it must not be evaluated")
+    ];
     expected = null;
   };
 
   testFindFirstIndexNone = {
-    expr = builtins.tryEval (lists.findFirstIndex (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
-    expected = { success = false; value = false; };
+    expr = builtins.tryEval (
+      lists.findFirstIndex (x: x == 2) null [
+        1
+        (throw "the last element must be evaluated when there's no match")
+      ]
+    );
+    expected = {
+      success = false;
+      value = false;
+    };
   };
 
   # Makes sure that the implementation doesn't cause a stack overflow
@@ -1067,41 +1907,159 @@ runTests {
   };
 
   testFindFirstIndexLazy = {
-    expr = lists.findFirstIndex (x: x == 1) null [ 1 (abort "list elements after the match must not be evaluated") ];
+    expr = lists.findFirstIndex (x: x == 1) null [
+      1
+      (abort "list elements after the match must not be evaluated")
+    ];
     expected = 0;
   };
 
   testFindFirstExample1 = {
-    expr = lists.findFirst (x: x > 3) 7 [ 1 6 4 ];
+    expr = lists.findFirst (x: x > 3) 7 [
+      1
+      6
+      4
+    ];
     expected = 6;
   };
 
   testFindFirstExample2 = {
-    expr = lists.findFirst (x: x > 9) 7 [ 1 6 4 ];
+    expr = lists.findFirst (x: x > 9) 7 [
+      1
+      6
+      4
+    ];
     expected = 7;
   };
 
   testAllUnique_true = {
-    expr = allUnique [ 3 2 4 1 ];
+    expr = allUnique [
+      3
+      2
+      4
+      1
+    ];
     expected = true;
   };
   testAllUnique_false = {
-    expr = allUnique [ 3 2 3 4 ];
+    expr = allUnique [
+      3
+      2
+      3
+      4
+    ];
     expected = false;
   };
 
-# ATTRSETS
+  testUniqueStrings_empty = {
+    expr = uniqueStrings [ ];
+    expected = [ ];
+  };
+  testUniqueStrings_singles = {
+    expr = uniqueStrings [
+      "all"
+      "unique"
+      "already"
+    ];
+    expected = [
+      "all"
+      "already"
+      "unique"
+    ];
+  };
+  testUniqueStrings_allDuplicates = {
+    expr = uniqueStrings [
+      "dup"
+      "dup"
+      "dup"
+    ];
+    expected = [ "dup" ];
+  };
+  testUniqueStrings_some_duplicates = {
+    expr = uniqueStrings [
+      "foo"
+      "foo"
+      "bar"
+      "bar"
+      "baz"
+    ];
+    expected = [
+      "bar"
+      "baz"
+      "foo"
+    ];
+  };
+  testUniqueStrings_unicode = {
+    expr = uniqueStrings [
+      "café"
+      "@"
+      "#"
+      "@"
+      "#"
+      "$"
+      "😎"
+      "😎"
+      "🙃"
+      ""
+      ""
+    ];
+    expected = [
+      ""
+      "#"
+      "$"
+      "@"
+      "café"
+      "😎"
+      "🙃"
+    ];
+  };
+
+  # ATTRSETS
+
+  testGenAttrs = {
+    expr = attrsets.genAttrs [ "foo" "bar" ] (name: "x_" + name);
+    expected = {
+      foo = "x_foo";
+      bar = "x_bar";
+    };
+  };
+  testGenAttrs' = {
+    expr = attrsets.genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s));
+    expected = {
+      x_foo = "y_foo";
+      x_bar = "y_bar";
+    };
+  };
+  testGenAttrs'Example2 = {
+    expr = attrsets.genAttrs' [
+      {
+        x = "foo";
+        y = "baz";
+      }
+    ] (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
+    expected = {
+      x_foo = "y_baz";
+    };
+  };
+  testGenAttrs'ConflictingName = {
+    # c.f. warning of genAttrs'
+    expr = attrsets.genAttrs' [ "foo" "bar" "baz" ] (s: nameValuePair "foo" s);
+    expected = {
+      foo = "foo";
+    };
+  };
 
   testConcatMapAttrs = {
-    expr = concatMapAttrs
-      (name: value: {
-        ${name} = value;
-        ${name + value} = value;
-      })
-      {
-        foo = "bar";
-        foobar = "baz";
-      };
+    expr =
+      concatMapAttrs
+        (name: value: {
+          ${name} = value;
+          ${name + value} = value;
+        })
+        {
+          foo = "bar";
+          foobar = "baz";
+        };
     expected = {
       foo = "bar";
       foobar = "baz";
@@ -1131,27 +2089,54 @@ runTests {
   # code from example
   testFoldlAttrs = {
     expr = {
-      example = foldlAttrs
-        (acc: name: value: {
-          sum = acc.sum + value;
-          names = acc.names ++ [ name ];
-        })
-        { sum = 0; names = [ ]; }
-        {
-          foo = 1;
-          bar = 10;
-        };
+      example =
+        foldlAttrs
+          (acc: name: value: {
+            sum = acc.sum + value;
+            names = acc.names ++ [ name ];
+          })
+          {
+            sum = 0;
+            names = [ ];
+          }
+          {
+            foo = 1;
+            bar = 10;
+          };
       # should just return the initial value
       emptySet = foldlAttrs (throw "function not needed") 123 { };
       # should just evaluate to the last value
-      valuesNotNeeded = foldlAttrs (acc: _name: _v: acc) 3 { z = throw "value z not needed"; a = throw "value a not needed"; };
+      valuesNotNeeded =
+        foldlAttrs
+          (
+            acc: _name: _v:
+            acc
+          )
+          3
+          {
+            z = throw "value z not needed";
+            a = throw "value a not needed";
+          };
       # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
-      trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
+      trivialAcc =
+        foldlAttrs
+          (
+            acc: _name: v:
+            acc * 10 + v
+          )
+          1
+          {
+            z = 1;
+            a = 2;
+          };
     };
     expected = {
       example = {
         sum = 11;
-        names = [ "bar" "foo" ];
+        names = [
+          "bar"
+          "foo"
+        ];
       };
       emptySet = 123;
       valuesNotNeeded = 3;
@@ -1159,151 +2144,304 @@ runTests {
     };
   };
 
-
   testMergeAttrsListExample1 = {
-    expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
-    expected = { a = 0; b = 1; c = 2; d = 3; };
+    expr = attrsets.mergeAttrsList [
+      {
+        a = 0;
+        b = 1;
+      }
+      {
+        c = 2;
+        d = 3;
+      }
+    ];
+    expected = {
+      a = 0;
+      b = 1;
+      c = 2;
+      d = 3;
+    };
   };
   testMergeAttrsListExample2 = {
-    expr = attrsets.mergeAttrsList [ { a = 0; } { a = 1; } ];
-    expected = { a = 1; };
+    expr = attrsets.mergeAttrsList [
+      { a = 0; }
+      { a = 1; }
+    ];
+    expected = {
+      a = 1;
+    };
   };
   testMergeAttrsListExampleMany =
     let
-      list = genList (n:
-        listToAttrs (genList (m:
-          let
-            # Integer divide n by two to create duplicate attributes
-            str = "halfn${toString (n / 2)}m${toString m}";
-          in
-          nameValuePair str str
-        ) 100)
+      list = genList (
+        n:
+        listToAttrs (
+          genList (
+            m:
+            let
+              # Integer divide n by two to create duplicate attributes
+              str = "halfn${toString (n / 2)}m${toString m}";
+            in
+            nameValuePair str str
+          ) 100
+        )
       ) 100;
-    in {
+    in
+    {
       expr = attrsets.mergeAttrsList list;
       expected = foldl' mergeAttrs { } list;
     };
 
   # code from the example
   testRecursiveUpdateUntil = {
-    expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
-      # first attribute set
-      foo.bar = 1;
-      foo.baz = 2;
-      bar = 3;
-    } {
-      #second attribute set
-      foo.bar = 1;
-      foo.quz = 2;
-      baz = 4;
-    };
+    expr =
+      recursiveUpdateUntil
+        (
+          path: l: r:
+          path == [ "foo" ]
+        )
+        {
+          # first attribute set
+          foo.bar = 1;
+          foo.baz = 2;
+          bar = 3;
+        }
+        {
+          #second attribute set
+          foo.bar = 1;
+          foo.quz = 2;
+          baz = 4;
+        };
     expected = {
       foo.bar = 1; # 'foo.*' from the second set
-      foo.quz = 2; #
-      bar = 3;     # 'bar' from the first set
-      baz = 4;     # 'baz' from the second set
+      foo.quz = 2;
+      bar = 3; # 'bar' from the first set
+      baz = 4; # 'baz' from the second set
     };
   };
 
   testMatchAttrsMatchingExact = {
-    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expr =
+      matchAttrs
+        {
+          cpu = {
+            bits = 64;
+          };
+        }
+        {
+          cpu = {
+            bits = 64;
+          };
+        };
     expected = true;
   };
 
   testMatchAttrsMismatch = {
-    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expr =
+      matchAttrs
+        {
+          cpu = {
+            bits = 128;
+          };
+        }
+        {
+          cpu = {
+            bits = 64;
+          };
+        };
     expected = false;
   };
 
   testMatchAttrsMatchingImplicit = {
-    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expr = matchAttrs { cpu = { }; } {
+      cpu = {
+        bits = 64;
+      };
+    };
     expected = true;
   };
 
   testMatchAttrsMissingAttrs = {
-    expr = matchAttrs { cpu = {}; } { };
+    expr = matchAttrs { cpu = { }; } { };
     expected = false;
   };
 
   testOverrideExistingEmpty = {
-    expr = overrideExisting {} { a = 1; };
-    expected = {};
+    expr = overrideExisting { } { a = 1; };
+    expected = { };
   };
 
   testOverrideExistingDisjoint = {
     expr = overrideExisting { b = 2; } { a = 1; };
-    expected = { b = 2; };
+    expected = {
+      b = 2;
+    };
   };
 
   testOverrideExistingOverride = {
-    expr = overrideExisting { a = 3; b = 2; } { a = 1; };
-    expected = { a = 1; b = 2; };
-  };
-
-  testListAttrsReverse = let
-    exampleAttrs = {foo=1; bar="asdf"; baz = [1 3 3 7]; fnord=null;};
-    exampleSingletonList = [{name="foo"; value=1;}];
-  in {
-    expr = {
-      isReverseToListToAttrs = builtins.listToAttrs (attrsToList exampleAttrs) == exampleAttrs;
-      isReverseToAttrsToList = attrsToList (builtins.listToAttrs exampleSingletonList) == exampleSingletonList;
-      testDuplicatePruningBehaviour = attrsToList (builtins.listToAttrs [{name="a"; value=2;} {name="a"; value=1;}]);
-    };
+    expr = overrideExisting {
+      a = 3;
+      b = 2;
+    } { a = 1; };
     expected = {
-      isReverseToAttrsToList = true;
-      isReverseToListToAttrs = true;
-      testDuplicatePruningBehaviour = [{name="a"; value=2;}];
+      a = 1;
+      b = 2;
     };
   };
 
-  testAttrsToListsCanDealWithFunctions = testingEval (
-    attrsToList { someFunc= a: a + 1;}
-  );
+  testListAttrsReverse =
+    let
+      exampleAttrs = {
+        foo = 1;
+        bar = "asdf";
+        baz = [
+          1
+          3
+          3
+          7
+        ];
+        fnord = null;
+      };
+      exampleSingletonList = [
+        {
+          name = "foo";
+          value = 1;
+        }
+      ];
+    in
+    {
+      expr = {
+        isReverseToListToAttrs = builtins.listToAttrs (attrsToList exampleAttrs) == exampleAttrs;
+        isReverseToAttrsToList =
+          attrsToList (builtins.listToAttrs exampleSingletonList) == exampleSingletonList;
+        testDuplicatePruningBehaviour = attrsToList (
+          builtins.listToAttrs [
+            {
+              name = "a";
+              value = 2;
+            }
+            {
+              name = "a";
+              value = 1;
+            }
+          ]
+        );
+      };
+      expected = {
+        isReverseToAttrsToList = true;
+        isReverseToListToAttrs = true;
+        testDuplicatePruningBehaviour = [
+          {
+            name = "a";
+            value = 2;
+          }
+        ];
+      };
+    };
 
-# FIXED-POINTS
+  testAttrsToListsCanDealWithFunctions = testingEval (attrsToList {
+    someFunc = a: a + 1;
+  });
+
+  # FIXED-POINTS
 
   testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
+    expr = fix (x: {
+      a = if x ? a then "a" else "b";
+    });
+    expected = {
+      a = "a";
+    };
   };
 
   testToExtension = {
     expr = [
-      (fix (final: { a = 0; c = final.a; }))
-      (fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; })))
-      (fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; })))
-      (fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1; })) (final: { a = 0; c = final.a; })))
+      (fix (final: {
+        a = 0;
+        c = final.a;
+      }))
+      (fix (
+        extends
+          (toExtension {
+            a = 1;
+            b = 2;
+          })
+          (final: {
+            a = 0;
+            c = final.a;
+          })
+      ))
+      (fix (
+        extends
+          (toExtension (prev: {
+            a = 1;
+            b = prev.a;
+          }))
+          (final: {
+            a = 0;
+            c = final.a;
+          })
+      ))
+      (fix (
+        extends
+          (toExtension (
+            final: prev: {
+              a = 1;
+              b = prev.a;
+              c = final.a + 1;
+            }
+          ))
+          (final: {
+            a = 0;
+            c = final.a;
+          })
+      ))
     ];
     expected = [
-      { a = 0; c = 0; }
-      { a = 1; b = 2; c = 1; }
-      { a = 1; b = 0; c = 1; }
-      { a = 1; b = 0; c = 2; }
+      {
+        a = 0;
+        c = 0;
+      }
+      {
+        a = 1;
+        b = 2;
+        c = 1;
+      }
+      {
+        a = 1;
+        b = 0;
+        c = 1;
+      }
+      {
+        a = 1;
+        b = 0;
+        c = 2;
+      }
     ];
   };
 
-# GENERATORS
-# these tests assume attributes are converted to lists
-# in alphabetical order
+  # GENERATORS
+  # these tests assume attributes are converted to lists
+  # in alphabetical order
 
   testMkKeyValueDefault = {
-    expr = generators.mkKeyValueDefault {} ":" "f:oo" "bar";
+    expr = generators.mkKeyValueDefault { } ":" "f:oo" "bar";
     expected = ''f\:oo:bar'';
   };
 
   testMkValueString = {
-    expr = let
-      vals = {
-        int = 42;
-        string = ''fo"o'';
-        bool = true;
-        bool2 = false;
-        null = null;
-        # float = 42.23; # floats are strange
-      };
-      in mapAttrs
-        (const (generators.mkValueStringDefault {}))
-        vals;
+    expr =
+      let
+        vals = {
+          int = 42;
+          string = ''fo"o'';
+          bool = true;
+          bool2 = false;
+          null = null;
+          # float = 42.23; # floats are strange
+        };
+      in
+      mapAttrs (const (generators.mkValueStringDefault { })) vals;
     expected = {
       int = "42";
       string = ''fo"o'';
@@ -1315,7 +2453,7 @@ runTests {
   };
 
   testToKeyValue = {
-    expr = generators.toKeyValue {} {
+    expr = generators.toKeyValue { } {
       key = "value";
       "other=key" = "baz";
     };
@@ -1326,12 +2464,15 @@ runTests {
   };
 
   testToINIEmpty = {
-    expr = generators.toINI {} {};
+    expr = generators.toINI { } { };
     expected = "";
   };
 
   testToINIEmptySection = {
-    expr = generators.toINI {} { foo = {}; bar = {}; };
+    expr = generators.toINI { } {
+      foo = { };
+      bar = { };
+    };
     expected = ''
       [bar]
 
@@ -1340,7 +2481,13 @@ runTests {
   };
 
   testToINIDuplicateKeys = {
-    expr = generators.toINI { listsAsDuplicateKeys = true; } { foo.bar = true; baz.qux = [ 1 false ]; };
+    expr = generators.toINI { listsAsDuplicateKeys = true; } {
+      foo.bar = true;
+      baz.qux = [
+        1
+        false
+      ];
+    };
     expected = ''
       [baz]
       qux=1
@@ -1352,7 +2499,7 @@ runTests {
   };
 
   testToINIDefaultEscapes = {
-    expr = generators.toINI {} {
+    expr = generators.toINI { } {
       "no [ and ] allowed unescaped" = {
         "and also no = in keys" = 42;
       };
@@ -1364,7 +2511,7 @@ runTests {
   };
 
   testToINIDefaultFull = {
-    expr = generators.toINI {} {
+    expr = generators.toINI { } {
       "section 1" = {
         attribute1 = 5;
         x = "Me-se JarJar Binx";
@@ -1387,14 +2534,13 @@ runTests {
   };
 
   testToINIWithGlobalSectionEmpty = {
-    expr = generators.toINIWithGlobalSection {} {
+    expr = generators.toINIWithGlobalSection { } {
       globalSection = {
       };
       sections = {
       };
     };
-    expected = ''
-    '';
+    expected = '''';
   };
 
   testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
@@ -1408,17 +2554,17 @@ runTests {
           "he\\h=he" = "this is okay";
         };
       };
-    in {
-      expr =
-        generators.toINIWithGlobalSection {} {
-            globalSection = {};
-            sections = sections;
-        };
-      expected = generators.toINI {} sections;
-  };
+    in
+    {
+      expr = generators.toINIWithGlobalSection { } {
+        globalSection = { };
+        sections = sections;
+      };
+      expected = generators.toINI { } sections;
+    };
 
   testToINIWithGlobalSectionFull = {
-    expr = generators.toINIWithGlobalSection {} {
+    expr = generators.toINIWithGlobalSection { } {
       globalSection = {
         foo = "bar";
         test = false;
@@ -1462,7 +2608,8 @@ runTests {
         integer = 38;
         name = "value";
         subsection.value = "test";
-      };};
+      };
+    };
     expected = ''
       [extra]
       ${"\t"}boolean = true
@@ -1493,73 +2640,109 @@ runTests {
 
   # right now only invocation check
   testToJSONSimple =
-    let val = {
-      foobar = [ "baz" 1 2 3 ];
-    };
-    in {
-      expr = generators.toJSON {} val;
+    let
+      val = {
+        foobar = [
+          "baz"
+          1
+          2
+          3
+        ];
+      };
+    in
+    {
+      expr = generators.toJSON { } val;
       # trivial implementation
       expected = builtins.toJSON val;
-  };
+    };
 
   # right now only invocation check
   testToYAMLSimple =
-    let val = {
-      list = [ { one = 1; } { two = 2; } ];
-      all = 42;
-    };
-    in {
-      expr = generators.toYAML {} val;
+    let
+      val = {
+        list = [
+          { one = 1; }
+          { two = 2; }
+        ];
+        all = 42;
+      };
+    in
+    {
+      expr = generators.toYAML { } val;
       # trivial implementation
       expected = builtins.toJSON val;
-  };
+    };
 
   testToPretty =
     let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
-    in {
-    expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
-      int = 42;
-      float = 0.1337;
-      bool = true;
-      emptystring = "";
-      string = "fn\${o}\"r\\d";
-      newlinestring = "\n";
-      path = /. + "/foo";
-      null_ = null;
-      function = x: x;
-      functionArgs = { arg ? 4, foo }: arg;
-      list = [ 3 4 function [ false ] ];
-      emptylist = [];
-      attrs = { foo = null; "foo b/ar" = "baz"; };
-      emptyattrs = {};
-      drv = deriv;
+      deriv = derivation {
+        name = "test";
+        builder = "/bin/sh";
+        system = "aarch64-linux";
+      };
+    in
+    {
+      expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
+        int = 42;
+        float = 0.1337;
+        bool = true;
+        emptystring = "";
+        string = "fn\${o}\"r\\d";
+        newlinestring = "\n";
+        path = /. + "/foo";
+        null_ = null;
+        function = x: x;
+        functionArgs =
+          {
+            arg ? 4,
+            foo,
+          }:
+          arg;
+        list = [
+          3
+          4
+          function
+          [ false ]
+        ];
+        emptylist = [ ];
+        attrs = {
+          foo = null;
+          "foo b/ar" = "baz";
+        };
+        emptyattrs = { };
+        drv = deriv;
+      };
+      expected = rec {
+        int = "42";
+        float = "0.1337";
+        bool = "true";
+        emptystring = ''""'';
+        string = ''"fn\''${o}\"r\\d"'';
+        newlinestring = "\"\\n\"";
+        path = "/foo";
+        null_ = "null";
+        function = "<function>";
+        functionArgs = "<function, args: {arg?, foo}>";
+        list = "[ 3 4 ${function} [ false ] ]";
+        emptylist = "[ ]";
+        attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
+        emptyattrs = "{ }";
+        drv = "<derivation ${deriv.name}>";
+      };
     };
-    expected = rec {
-      int = "42";
-      float = "0.1337";
-      bool = "true";
-      emptystring = ''""'';
-      string = ''"fn\''${o}\"r\\d"'';
-      newlinestring = "\"\\n\"";
-      path = "/foo";
-      null_ = "null";
-      function = "<function>";
-      functionArgs = "<function, args: {arg?, foo}>";
-      list = "[ 3 4 ${function} [ false ] ]";
-      emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
-      emptyattrs = "{ }";
-      drv = "<derivation ${deriv.name}>";
-    };
-  };
 
   testToPrettyLimit =
     let
       a.b = 1;
       a.c = a;
-    in {
-      expr = generators.toPretty { } (generators.withRecursion { throwOnDepthLimit = false; depthLimit = 2; } a);
+    in
+    {
+      expr = generators.toPretty { } (
+        generators.withRecursion {
+          throwOnDepthLimit = false;
+          depthLimit = 2;
+        } a
+      );
       expected = "{\n  b = 1;\n  c = {\n    b = \"<unevaluated>\";\n    c = {\n      b = \"<unevaluated>\";\n      c = \"<unevaluated>\";\n    };\n  };\n}";
     };
 
@@ -1567,31 +2750,46 @@ runTests {
     let
       a.b = 1;
       a.c = a;
-    in {
-      expr = (builtins.tryEval
-        (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
+    in
+    {
+      expr =
+        (builtins.tryEval (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a)))
+        .success;
       expected = false;
     };
 
   testWithRecursionDealsWithFunctors =
     let
       functor = {
-        __functor = self: { a, b, }: null;
+        __functor = self: { a, b }: null;
       };
       a = {
         value = "1234";
         b = functor;
         c.d = functor;
       };
-    in {
-      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+    in
+    {
+      expr = generators.toPretty { } (
+        generators.withRecursion {
+          depthLimit = 1;
+          throwOnDepthLimit = false;
+        } a
+      );
       expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
 
   testToPrettyMultiline = {
     expr = mapAttrs (const (generators.toPretty { })) {
-      list = [ 3 4 [ false ] ];
-      attrs = { foo = null; bar.foo = "baz"; };
+      list = [
+        3
+        4
+        [ false ]
+      ];
+      attrs = {
+        foo = null;
+        bar.foo = "baz";
+      };
       newlinestring = "\n";
       multilinestring = ''
         hello
@@ -1636,9 +2834,11 @@ runTests {
   };
 
   testToPrettyAllowPrettyValues = {
-    expr = generators.toPretty { allowPrettyValues = true; }
-             { __pretty = v: "«" + v + "»"; val = "foo"; };
-    expected  = "«foo»";
+    expr = generators.toPretty { allowPrettyValues = true; } {
+      __pretty = v: "«" + v + "»";
+      val = "foo";
+    };
+    expected = "«foo»";
   };
 
   testToPlistUnescaped = {
@@ -1653,15 +2853,24 @@ runTests {
           newlinestring = "\n";
           path = /. + "/foo";
           null_ = null;
-          list = [ 3 4 "test" ];
-          emptylist = [];
-          attrs = { foo = null; "foo b/ar" = "baz"; };
-          emptyattrs = {};
+          list = [
+            3
+            4
+            "test"
+          ];
+          emptylist = [ ];
+          attrs = {
+            foo = null;
+            "foo b/ar" = "baz";
+          };
+          emptyattrs = { };
           "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+    expected = {
+      value = builtins.readFile ./test-to-plist-unescaped-expected.plist;
+    };
   };
 
   testToPlistEscaped = {
@@ -1676,29 +2885,43 @@ runTests {
           newlinestring = "\n";
           path = /. + "/foo";
           null_ = null;
-          list = [ 3 4 "test" ];
-          emptylist = [];
-          attrs = { foo = null; "foo b/ar" = "baz"; };
-          emptyattrs = {};
+          list = [
+            3
+            4
+            "test"
+          ];
+          emptylist = [ ];
+          attrs = {
+            foo = null;
+            "foo b/ar" = "baz";
+          };
+          emptyattrs = { };
           "keys are <escaped>" = "and < so are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
+    expected = {
+      value = builtins.readFile ./test-to-plist-escaped-expected.plist;
+    };
   };
 
   testToLuaEmptyAttrSet = {
-    expr = generators.toLua {} {};
+    expr = generators.toLua { } { };
     expected = ''{}'';
   };
 
   testToLuaEmptyList = {
-    expr = generators.toLua {} [];
+    expr = generators.toLua { } [ ];
     expected = ''{}'';
   };
 
   testToLuaListOfVariousTypes = {
-    expr = generators.toLua {} [ null 43 3.14159 true ];
+    expr = generators.toLua { } [
+      null
+      43
+      3.14159
+      true
+    ];
     expected = ''
       {
         nil,
@@ -1709,12 +2932,12 @@ runTests {
   };
 
   testToLuaString = {
-    expr = generators.toLua {} ''double-quote (") and single quotes (')'';
+    expr = generators.toLua { } ''double-quote (") and single quotes (')'';
     expected = ''"double-quote (\") and single quotes (')"'';
   };
 
   testToLuaAttrsetWithLuaInline = {
-    expr = generators.toLua {} { x = generators.mkLuaInline ''"abc" .. "def"''; };
+    expr = generators.toLua { } { x = generators.mkLuaInline ''"abc" .. "def"''; };
     expected = ''
       {
         ["x"] = ("abc" .. "def")
@@ -1722,7 +2945,7 @@ runTests {
   };
 
   testToLuaAttrsetWithSpaceInKey = {
-    expr = generators.toLua {} { "some space and double-quote (\")" = 42; };
+    expr = generators.toLua { } { "some space and double-quote (\")" = 42; };
     expected = ''
       {
         ["some space and double-quote (\")"] = 42
@@ -1730,17 +2953,25 @@ runTests {
   };
 
   testToLuaWithoutMultiline = {
-    expr = generators.toLua { multiline = false; } [ 41 43 ];
+    expr = generators.toLua { multiline = false; } [
+      41
+      43
+    ];
     expected = ''{ 41, 43 }'';
   };
 
   testToLuaEmptyBindings = {
-    expr = generators.toLua { asBindings = true; } {};
+    expr = generators.toLua { asBindings = true; } { };
     expected = "";
   };
 
   testToLuaBindings = {
-    expr = generators.toLua { asBindings = true; } { x1 = 41; _y = { a = 43; }; };
+    expr = generators.toLua { asBindings = true; } {
+      x1 = 41;
+      _y = {
+        a = 43;
+      };
+    };
     expected = ''
       _y = {
         ["a"] = 43
@@ -1757,7 +2988,17 @@ runTests {
   };
 
   testToLuaIndentedBindings = {
-    expr = generators.toLua { asBindings = true; indent = "  "; } { x = { y = 42; }; };
+    expr =
+      generators.toLua
+        {
+          asBindings = true;
+          indent = "  ";
+        }
+        {
+          x = {
+            y = 42;
+          };
+        };
     expected = "  x = {\n    [\"y\"] = 42\n  }\n";
   };
 
@@ -1770,8 +3011,11 @@ runTests {
   );
 
   testToLuaBasicExample = {
-    expr = generators.toLua {} {
-      cmd = [ "typescript-language-server" "--stdio" ];
+    expr = generators.toLua { } {
+      cmd = [
+        "typescript-language-server"
+        "--stdio"
+      ];
       settings.workspace.library = generators.mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
     };
     expected = ''
@@ -1788,25 +3032,33 @@ runTests {
       }'';
   };
 
-# CLI
+  # CLI
 
   testToGNUCommandLine = {
-    expr = cli.toGNUCommandLine {} {
+    expr = cli.toGNUCommandLine { } {
       data = builtins.toJSON { id = 0; };
       X = "PUT";
       retry = 3;
       retry-delay = null;
-      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      url = [
+        "https://example.com/foo"
+        "https://example.com/bar"
+      ];
       silent = false;
       verbose = true;
     };
 
     expected = [
-      "-X" "PUT"
-      "--data" "{\"id\":0}"
-      "--retry" "3"
-      "--url" "https://example.com/foo"
-      "--url" "https://example.com/bar"
+      "-X"
+      "PUT"
+      "--data"
+      "{\"id\":0}"
+      "--retry"
+      "3"
+      "--url"
+      "https://example.com/foo"
+      "--url"
+      "https://example.com/bar"
       "--verbose"
     ];
   };
@@ -1817,7 +3069,10 @@ runTests {
       X = "PUT";
       retry = 3;
       retry-delay = null;
-      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      url = [
+        "https://example.com/foo"
+        "https://example.com/bar"
+      ];
       silent = false;
       verbose = true;
     };
@@ -1833,17 +3088,100 @@ runTests {
   };
 
   testToGNUCommandLineShell = {
-    expr = cli.toGNUCommandLineShell {} {
+    expr = cli.toGNUCommandLineShell { } {
       data = builtins.toJSON { id = 0; };
       X = "PUT";
       retry = 3;
       retry-delay = null;
-      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      url = [
+        "https://example.com/foo"
+        "https://example.com/bar"
+      ];
       silent = false;
       verbose = true;
     };
 
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
+  };
+
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
@@ -1876,54 +3214,219 @@ runTests {
     expected = "unknown";
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/396849
+  "test: submodule definitions aren't unchecked when evaluating submodule documentation" = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options.foo = lib.mkOption { type = lib.types.submodule submodule; };
+          };
+
+        submodule = {
+          options.bar = lib.mkOption { type = lib.types.int; };
+          config.submoduleWrong = throw "yikes";
+        };
+
+        options = (evalModules { modules = [ module ]; }).options;
+
+        renderableOpts = filter (o: !o.internal) (optionAttrSetToDocList options);
+        # Evaluate the whole docs
+      in
+      builtins.deepSeq renderableOpts
+        # Return the locations
+        (map (o: o.loc) renderableOpts);
+    expected = [
+      [
+        "_module"
+        "args"
+      ]
+      [ "foo" ]
+      [
+        "foo"
+        "bar"
+      ]
+    ];
+  };
+
   testFreeformOptions = {
     expr =
       let
-        submodule = { lib, ... }: {
-          freeformType = lib.types.attrsOf (lib.types.submodule {
-            options.bar = lib.mkOption {};
-          });
-          options.bar = lib.mkOption {};
-        };
-
-        module = { lib, ... }: {
-          options.foo = lib.mkOption {
-            type = lib.types.submodule submodule;
+        submodule =
+          { lib, ... }:
+          {
+            freeformType = lib.types.attrsOf (
+              lib.types.submodule {
+                options.bar = lib.mkOption { };
+              }
+            );
+            options.bar = lib.mkOption { };
           };
-        };
 
-        options = (evalModules {
-          modules = [ module ];
-        }).options;
+        module =
+          { lib, ... }:
+          {
+            options.foo = lib.mkOption {
+              type = lib.types.submodule submodule;
+            };
+          };
 
-        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
-      in map (o: o.loc) locs;
-    expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+        options =
+          (evalModules {
+            modules = [ module ];
+          }).options;
+
+        locs = filter (o: !o.internal) (optionAttrSetToDocList options);
+      in
+      map (o: o.loc) locs;
+    expected = [
+      [
+        "_module"
+        "args"
+      ]
+      [ "foo" ]
+      [
+        "foo"
+        "<name>"
+        "bar"
+      ]
+      [
+        "foo"
+        "bar"
+      ]
+    ];
+  };
+
+  testDocOptionVisiblity = {
+    expr =
+      let
+        submodule =
+          { lib, ... }:
+          {
+            freeformType = lib.types.attrsOf (
+              lib.types.submodule {
+                options.bar = lib.mkOption { };
+              }
+            );
+            options.foo = lib.mkOption { };
+          };
+
+        module =
+          { lib, ... }:
+          {
+            options = {
+              shallow = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "shallow";
+              };
+              transparent = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "transparent";
+              };
+              "true" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = true;
+              };
+              "false" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = false;
+              };
+              "internal" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                internal = true;
+              };
+            };
+          };
+
+        options =
+          (evalModules {
+            modules = [ module ];
+          }).options;
+      in
+      pipe options [
+        optionAttrSetToDocList
+        (filter (opt: !(builtins.elem "_module" opt.loc)))
+        (map (
+          opt:
+          nameValuePair opt.name {
+            inherit (opt) visible internal;
+          }
+        ))
+        listToAttrs
+      ];
+    expected = {
+      shallow = {
+        visible = true;
+        internal = false;
+      };
+      transparent = {
+        visible = false;
+        internal = false;
+      };
+      "transparent.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "transparent.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "true" = {
+        visible = true;
+        internal = false;
+      };
+      "true.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "true.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "false" = {
+        visible = false;
+        internal = false;
+      };
+      "internal" = {
+        visible = true;
+        internal = true;
+      };
+      "internal.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "internal.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+    };
   };
 
   testAttrsWithName = {
-    expr = let
-      eval =  evalModules {
-        modules = [
-          {
-            options = {
-              foo = lib.mkOption {
-                type = lib.types.attrsWith {
-                  placeholder = "MyCustomPlaceholder";
-                  elemType = lib.types.submodule {
-                    options.bar = lib.mkOption {
-                      type = lib.types.int;
-                      default = 42;
+    expr =
+      let
+        eval = evalModules {
+          modules = [
+            {
+              options = {
+                foo = lib.mkOption {
+                  type = lib.types.attrsWith {
+                    placeholder = "MyCustomPlaceholder";
+                    elemType = lib.types.submodule {
+                      options.bar = lib.mkOption {
+                        type = lib.types.int;
+                        default = 42;
+                      };
                     };
                   };
                 };
               };
-            };
-          }
-        ];
-      };
-      opt = eval.options.foo;
-    in
+            }
+          ];
+        };
+        opt = eval.options.foo;
+      in
       (opt.type.getSubOptions opt.loc).bar.loc;
     expected = [
       "foo"
@@ -1935,110 +3438,454 @@ runTests {
   testShowOptionWithPlaceholder = {
     # <name>, *, should not be escaped. It is used as a placeholder by convention.
     # Other symbols should be escaped. `{}`
-    expr = lib.showOption ["<name>" "<myName>" "*" "{foo}"];
+    expr = lib.showOption [
+      "<name>"
+      "<myName>"
+      "*"
+      "{foo}"
+    ];
     expected = "<name>.<myName>.*.\"{foo}\"";
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProduct {};
-    expected = [ {} ];
+    expr = cartesianProduct { };
+    expected = [ { } ];
   };
 
   testCartesianProductOfOneSet = {
-    expr = cartesianProduct { a = [ 1 2 3 ]; };
-    expected = [ { a = 1; } { a = 2; } { a = 3; } ];
+    expr = cartesianProduct {
+      a = [
+        1
+        2
+        3
+      ];
+    };
+    expected = [
+      { a = 1; }
+      { a = 2; }
+      { a = 3; }
+    ];
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProduct { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProduct {
+      a = [ 1 ];
+      b = [
+        10
+        20
+      ];
+    };
     expected = [
-      { a = 1; b = 10; }
-      { a = 1; b = 20; }
+      {
+        a = 1;
+        b = 10;
+      }
+      {
+        a = 1;
+        b = 20;
+      }
     ];
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProduct { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProduct {
+      a = [ ];
+      b = [
+        10
+        20
+      ];
+    };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
     expr = cartesianProduct {
-      a = [   1   2   3 ];
-      b = [  10  20  30 ];
-      c = [ 100 200 300 ];
+      a = [
+        1
+        2
+        3
+      ];
+      b = [
+        10
+        20
+        30
+      ];
+      c = [
+        100
+        200
+        300
+      ];
     };
     expected = [
-      { a = 1; b = 10; c = 100; }
-      { a = 1; b = 10; c = 200; }
-      { a = 1; b = 10; c = 300; }
+      {
+        a = 1;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 1; b = 20; c = 100; }
-      { a = 1; b = 20; c = 200; }
-      { a = 1; b = 20; c = 300; }
+      {
+        a = 1;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 1; b = 30; c = 100; }
-      { a = 1; b = 30; c = 200; }
-      { a = 1; b = 30; c = 300; }
+      {
+        a = 1;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 1;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 1;
+        b = 30;
+        c = 300;
+      }
 
-      { a = 2; b = 10; c = 100; }
-      { a = 2; b = 10; c = 200; }
-      { a = 2; b = 10; c = 300; }
+      {
+        a = 2;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 2; b = 20; c = 100; }
-      { a = 2; b = 20; c = 200; }
-      { a = 2; b = 20; c = 300; }
+      {
+        a = 2;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 2; b = 30; c = 100; }
-      { a = 2; b = 30; c = 200; }
-      { a = 2; b = 30; c = 300; }
+      {
+        a = 2;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 2;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 2;
+        b = 30;
+        c = 300;
+      }
 
-      { a = 3; b = 10; c = 100; }
-      { a = 3; b = 10; c = 200; }
-      { a = 3; b = 10; c = 300; }
+      {
+        a = 3;
+        b = 10;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 10;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 10;
+        c = 300;
+      }
 
-      { a = 3; b = 20; c = 100; }
-      { a = 3; b = 20; c = 200; }
-      { a = 3; b = 20; c = 300; }
+      {
+        a = 3;
+        b = 20;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 20;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 20;
+        c = 300;
+      }
 
-      { a = 3; b = 30; c = 100; }
-      { a = 3; b = 30; c = 200; }
-      { a = 3; b = 30; c = 300; }
+      {
+        a = 3;
+        b = 30;
+        c = 100;
+      }
+      {
+        a = 3;
+        b = 30;
+        c = 200;
+      }
+      {
+        a = 3;
+        b = 30;
+        c = 300;
+      }
     ];
   };
 
   testMapCartesianProductOfOneSet = {
-    expr = mapCartesianProduct ({a}: a * 2) { a = [ 1 2 3 ]; };
-    expected = [ 2 4 6 ];
+    expr = mapCartesianProduct ({ a }: a * 2) {
+      a = [
+        1
+        2
+        3
+      ];
+    };
+    expected = [
+      2
+      4
+      6
+    ];
   };
 
   testMapCartesianProductOfTwoSets = {
-    expr = mapCartesianProduct ({a,b}: a + b) { a = [ 1 ]; b = [ 10 20 ]; };
-    expected = [ 11 21 ];
+    expr = mapCartesianProduct ({ a, b }: a + b) {
+      a = [ 1 ];
+      b = [
+        10
+        20
+      ];
+    };
+    expected = [
+      11
+      21
+    ];
   };
 
   testMapCartesianProcutOfTwoSetsWithOneEmpty = {
-    expr = mapCartesianProduct (x: x.a + x.b) { a = [ ]; b = [ 10 20 ]; };
+    expr = mapCartesianProduct (x: x.a + x.b) {
+      a = [ ];
+      b = [
+        10
+        20
+      ];
+    };
     expected = [ ];
   };
 
   testMapCartesianProductOfThreeSets = {
-    expr = mapCartesianProduct ({a,b,c}: a + b + c) {
-      a = [ 1 2 3 ];
-      b = [ 10 20 30 ];
-      c = [ 100 200 300 ];
+    expr =
+      mapCartesianProduct
+        (
+          {
+            a,
+            b,
+            c,
+          }:
+          a + b + c
+        )
+        {
+          a = [
+            1
+            2
+            3
+          ];
+          b = [
+            10
+            20
+            30
+          ];
+          c = [
+            100
+            200
+            300
+          ];
+        };
+    expected = [
+      111
+      211
+      311
+      121
+      221
+      321
+      131
+      231
+      331
+      112
+      212
+      312
+      122
+      222
+      322
+      132
+      232
+      332
+      113
+      213
+      313
+      123
+      223
+      323
+      133
+      233
+      333
+    ];
+  };
+
+  testMapAttrsToListRecursive = {
+    expr = mapAttrsToListRecursive (p: v: "${concatStringsSep "." p}=${v}") {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
     };
-    expected = [ 111 211 311 121 221 321 131 231 331 112 212 312 122 222 322 132 232 332 113 213 313 123 223 323 133 233 333 ];
+    expected = [
+      "a.b=A"
+      "c.d=B"
+      "c.e.f=C"
+      "c.e.g=D"
+      "h.i.j.k=E"
+    ];
+  };
+
+  testMapAttrsToListRecursiveWithLists = {
+    expr = mapAttrsToListRecursive (p: v: v) {
+      a = [ ];
+      b = {
+        c = [ [ ] ];
+      };
+      d = {
+        e = {
+          f = [ [ [ ] ] ];
+        };
+      };
+    };
+    expected = [
+      [ ]
+      [ [ ] ]
+      [ [ [ ] ] ]
+    ];
+  };
+
+  testMapAttrsToListRecursiveCond = {
+    expr = mapAttrsToListRecursiveCond (p: as: !(as ? stop)) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          stop = null;
+          f = "C";
+          g = {
+            h = "D";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        stop = null;
+        f = "C";
+        g = {
+          h = "D";
+        };
+      }
+    ];
+  };
+
+  testMapAttrsToListRecursiveCondPath = {
+    expr = mapAttrsToListRecursiveCond (p: as: length p < 2) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        f = "C";
+        g = "D";
+      }
+      {
+        j = {
+          k = "E";
+        };
+      }
+    ];
   };
 
   # The example from the showAttrPath documentation
   testShowAttrPathExample = {
-    expr = showAttrPath [ "foo" "10" "bar" ];
+    expr = showAttrPath [
+      "foo"
+      "10"
+      "bar"
+    ];
     expected = "foo.\"10\".bar";
   };
 
   testShowAttrPathEmpty = {
-    expr = showAttrPath [];
+    expr = showAttrPath [ ];
     expected = "<root attribute path>";
   };
 
@@ -2056,41 +3903,91 @@ runTests {
   testGroupBy = {
     expr = groupBy (n: toString (mod n 5)) (range 0 16);
     expected = {
-      "0" = [ 0 5 10 15 ];
-      "1" = [ 1 6 11 16 ];
-      "2" = [ 2 7 12 ];
-      "3" = [ 3 8 13 ];
-      "4" = [ 4 9 14 ];
+      "0" = [
+        0
+        5
+        10
+        15
+      ];
+      "1" = [
+        1
+        6
+        11
+        16
+      ];
+      "2" = [
+        2
+        7
+        12
+      ];
+      "3" = [
+        3
+        8
+        13
+      ];
+      "4" = [
+        4
+        9
+        14
+      ];
     };
   };
 
   testGroupBy' = {
-    expr = groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ];
-    expected = { false = 3; true = 12; };
+    expr = groupBy' builtins.add 0 (x: boolToString (x > 2)) [
+      5
+      1
+      2
+      3
+      4
+    ];
+    expected = {
+      false = 3;
+      true = 12;
+    };
   };
 
   # The example from the updateManyAttrsByPath documentation
   testUpdateManyAttrsByPathExample = {
     expr = updateManyAttrsByPath [
       {
-        path = [ "a" "b" ];
+        path = [
+          "a"
+          "b"
+        ];
         update = old: { d = old.c; };
       }
       {
-        path = [ "a" "b" "c" ];
+        path = [
+          "a"
+          "b"
+          "c"
+        ];
         update = old: old + 1;
       }
       {
-        path = [ "x" "y" ];
+        path = [
+          "x"
+          "y"
+        ];
         update = old: "xy";
       }
     ] { a.b.c = 0; };
-    expected = { a = { b = { d = 1; }; }; x = { y = "xy"; }; };
+    expected = {
+      a = {
+        b = {
+          d = 1;
+        };
+      };
+      x = {
+        y = "xy";
+      };
+    };
   };
 
   # If there are no updates, the value is passed through
   testUpdateManyAttrsByPathNone = {
-    expr = updateManyAttrsByPath [] "something";
+    expr = updateManyAttrsByPath [ ] "something";
     expected = "something";
   };
 
@@ -2141,18 +4038,25 @@ runTests {
 
   # Deeply nested attributes can be updated without affecting others
   testUpdateManyAttrsByPathDeep = {
-    expr = updateManyAttrsByPath [
-      {
-        path = [ "a" "b" "c" ];
-        update = old: old + 1;
-      }
-    ] {
-      a.b.c = 0;
+    expr =
+      updateManyAttrsByPath
+        [
+          {
+            path = [
+              "a"
+              "b"
+              "c"
+            ];
+            update = old: old + 1;
+          }
+        ]
+        {
+          a.b.c = 0;
 
-      a.b.z = 0;
-      a.y.z = 0;
-      x.y.z = 0;
-    };
+          a.b.z = 0;
+          a.y.z = 0;
+          x.y.z = 0;
+        };
     expected = {
       a.b.c = 1;
 
@@ -2164,18 +4068,24 @@ runTests {
 
   # Nested attributes are updated first
   testUpdateManyAttrsByPathNestedBeforehand = {
-    expr = updateManyAttrsByPath [
-      {
-        path = [ "a" ];
-        update = old: old // { x = old.b; };
-      }
-      {
-        path = [ "a" "b" ];
-        update = old: old + 1;
-      }
-    ] {
-      a.b = 0;
-    };
+    expr =
+      updateManyAttrsByPath
+        [
+          {
+            path = [ "a" ];
+            update = old: old // { x = old.b; };
+          }
+          {
+            path = [
+              "a"
+              "b"
+            ];
+            update = old: old + 1;
+          }
+        ]
+        {
+          a.b = 0;
+        };
     expected = {
       a.b = 1;
       a.x = 1;
@@ -2343,86 +4253,122 @@ runTests {
     });
     # It's ok to add attribute names here when lazyDerivation is improved
     # in accordance with its inline comments.
-    expected = [ "drvPath" "meta" "name" "out" "outPath" "outputName" "outputs" "system" "type" ];
+    expected = [
+      "drvPath"
+      "meta"
+      "name"
+      "out"
+      "outPath"
+      "outputName"
+      "outputs"
+      "system"
+      "type"
+    ];
   };
 
   testLazyDerivationIsLazyInDerivationForPassthruAttr = {
-    expr = (lazyDerivation {
-      derivation = throw "not lazy enough";
-      passthru.tests = "whatever is in tests";
-    }).tests;
+    expr =
+      (lazyDerivation {
+        derivation = throw "not lazy enough";
+        passthru.tests = "whatever is in tests";
+      }).tests;
     expected = "whatever is in tests";
   };
 
   testLazyDerivationIsLazyInDerivationForPassthruAttr2 = {
     # passthru.tests is not a special case. It works for any attr.
-    expr = (lazyDerivation {
-      derivation = throw "not lazy enough";
-      passthru.foo = "whatever is in foo";
-    }).foo;
+    expr =
+      (lazyDerivation {
+        derivation = throw "not lazy enough";
+        passthru.foo = "whatever is in foo";
+      }).foo;
     expected = "whatever is in foo";
   };
 
   testLazyDerivationIsLazyInDerivationForMeta = {
-    expr = (lazyDerivation {
-      derivation = throw "not lazy enough";
-      meta = "whatever is in meta";
-    }).meta;
+    expr =
+      (lazyDerivation {
+        derivation = throw "not lazy enough";
+        meta = "whatever is in meta";
+      }).meta;
     expected = "whatever is in meta";
   };
 
-  testLazyDerivationReturnsDerivationAttrs = let
-    derivation = {
-      type = "derivation";
-      outputs = ["out"];
-      out = "test out";
-      outPath = "test outPath";
-      outputName = "out";
-      drvPath = "test drvPath";
-      name = "test name";
-      system = "test system";
-      meta = "test meta";
+  testLazyDerivationReturnsDerivationAttrs =
+    let
+      derivation = {
+        type = "derivation";
+        outputs = [ "out" ];
+        out = "test out";
+        outPath = "test outPath";
+        outputName = "out";
+        drvPath = "test drvPath";
+        name = "test name";
+        system = "test system";
+        meta = "test meta";
+      };
+    in
+    {
+      expr = lazyDerivation { inherit derivation; };
+      expected = derivation;
     };
-  in {
-    expr = lazyDerivation { inherit derivation; };
-    expected = derivation;
-  };
 
-  testOptionalDrvAttr = let
-    mkDerivation = args: derivation (args // {
-      builder = "builder";
-      system = "system";
-      __ignoreNulls = true;
-    });
-  in {
-    expr = (mkDerivation {
-      name = "foo";
-      x = optionalDrvAttr true 1;
-      y = optionalDrvAttr false 1;
-    }).drvPath;
-    expected = (mkDerivation {
-      name = "foo";
-      x = 1;
-    }).drvPath;
-  };
-
-  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
-    derivation = {
-      type = "derivation";
-      outputs = ["out" "dev"];
-      dev = "test dev";
-      out = "test out";
-      outPath = "test outPath";
-      outputName = "out";
-      drvPath = "test drvPath";
-      name = "test name";
-      system = "test system";
-      meta.position = "/hi:23";
+  testOptionalDrvAttr =
+    let
+      mkDerivation =
+        args:
+        derivation (
+          args
+          // {
+            builder = "builder";
+            system = "system";
+            __ignoreNulls = true;
+          }
+        );
+    in
+    {
+      expr =
+        (mkDerivation {
+          name = "foo";
+          x = optionalDrvAttr true 1;
+          y = optionalDrvAttr false 1;
+        }).drvPath;
+      expected =
+        (mkDerivation {
+          name = "foo";
+          x = 1;
+        }).drvPath;
     };
-  in {
-    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
-    expected = derivation;
-  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs =
+    let
+      derivation = {
+        type = "derivation";
+        outputs = [
+          "out"
+          "dev"
+        ];
+        dev = "test dev";
+        out = "test out";
+        outPath = "test outPath";
+        outputName = "out";
+        drvPath = "test drvPath";
+        name = "test name";
+        system = "test system";
+        meta.position = "/hi:23";
+      };
+    in
+    {
+      expr = lazyDerivation {
+        inherit derivation;
+        outputs = [
+          "out"
+          "dev"
+        ];
+        passthru.meta.position = "/hi:23";
+      };
+      expected = derivation;
+    };
 
   testTypeDescriptionInt = {
     expr = (with types; int).description;
@@ -2433,7 +4379,7 @@ runTests {
     expected = "positive integer, meaning >0";
   };
   testTypeDescriptionIntsPositiveOrEnumAuto = {
-    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expr = (with types; either ints.positive (enum [ "auto" ])).description;
     expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
   };
   testTypeDescriptionListOfPositive = {
@@ -2461,11 +4407,26 @@ runTests {
     expected = "string or list of boolean";
   };
   testTypeDescriptionOneOfListOfStrOrBool = {
-    expr = (with types; oneOf [ (listOf bool) str ]).description;
+    expr =
+      (
+        with types;
+        oneOf [
+          (listOf bool)
+          str
+        ]
+      ).description;
     expected = "(list of boolean) or string";
   };
   testTypeDescriptionOneOfListOfStrOrBoolOrNumber = {
-    expr = (with types; oneOf [ (listOf bool) str number ]).description;
+    expr =
+      (
+        with types;
+        oneOf [
+          (listOf bool)
+          str
+          number
+        ]
+      ).description;
     expected = "(list of boolean) or string or signed integer or floating point number";
   };
   testTypeDescriptionEitherListOfBoolOrEitherStringOrNumber = {
@@ -2488,8 +4449,39 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+  testTypeFunctionToPropagateFunctionArgs = {
+    expr = lib.functionArgs (
+      (types.functionTo types.null).merge
+        [ ]
+        [
+          {
+            value =
+              {
+                a,
+                b ? false,
+                ...
+              }:
+              null;
+          }
+          {
+            value =
+              {
+                b,
+                c ? false,
+                ...
+              }:
+              null;
+          }
+        ]
+    );
+    expected = {
+      a = false;
+      b = false;
+      c = true;
+    };
+  };
 
-# Meta
+  # Meta
   testGetExe'Output = {
     expr = getExe' {
       type = "derivation";
@@ -2509,13 +4501,9 @@ runTests {
     expected = "somelonghash/bin/mainProgram";
   };
 
-  testGetExe'FailureFirstArg = testingThrow (
-    getExe' "not a derivation" "executable"
-  );
+  testGetExe'FailureFirstArg = testingThrow (getExe' "not a derivation" "executable");
 
-  testGetExe'FailureSecondArg = testingThrow (
-    getExe' { type = "derivation"; } "dir/executable"
-  );
+  testGetExe'FailureSecondArg = testingThrow (getExe' { type = "derivation"; } "dir/executable");
 
   testGetLicenseFromSpdxIdOrExamples = {
     expr = [
@@ -2542,7 +4530,8 @@ runTests {
   };
 
   testPlatformMatchAttrs = {
-    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux")
+    .parsed;
     expected = true;
   };
 
@@ -2559,7 +4548,35 @@ runTests {
   testPackagesFromDirectoryRecursive = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory;
+      directory = ./packages-from-directory/plain;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
+  # Make sure that passing a string for the `directory` works.
+  #
+  # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
+  # See: https://github.com/NixOS/nix/issues/9428
+  testPackagesFromDirectoryRecursiveStringDirectory = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      # Do NOT remove the `builtins.toString` call here!!!
+      directory = toString ./packages-from-directory/plain;
     };
     expected = {
       a = "a";
@@ -2584,8 +4601,217 @@ runTests {
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory/c;
+      directory = ./packages-from-directory/plain/c;
     };
     expected = "c";
+  };
+
+  testMergeTypesSimple =
+    let
+      mergedType = types.mergeTypes types.str types.str;
+    in
+    {
+      expr = mergedType.name;
+      expected = "str";
+    };
+
+  testMergeTypesFail =
+    let
+      mergedType = types.mergeTypes types.str types.int;
+    in
+    {
+      expr = types.isType "merge-error" mergedType;
+      expected = true;
+    };
+
+  testMergeTypesEnum =
+    let
+      enumAB = lib.types.enum [
+        "A"
+        "B"
+      ];
+      enumXY = lib.types.enum [
+        "X"
+        "Y"
+      ];
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+    {
+      expr = {
+        checkA = merged.check "A";
+        checkB = merged.check "B";
+        checkX = merged.check "X";
+        checkY = merged.check "Y";
+        checkC = merged.check "C";
+      };
+      expected = {
+        checkA = true;
+        checkB = true;
+        checkX = true;
+        checkY = true;
+        checkC = false;
+      };
+    };
+
+  # Check that `packagesFromDirectoryRecursive` can be used to create scopes
+  # for sub-directories
+  testPackagesFromDirectoryNestedScopes =
+    let
+      inherit (lib) makeScope recurseIntoAttrs;
+      emptyScope = makeScope lib.callPackageWith (_: { });
+    in
+    {
+      expr =
+        lib.filterAttrsRecursive
+          (
+            name: value:
+            !lib.elem name [
+              "callPackage"
+              "newScope"
+              "overrideScope"
+              "packages"
+            ]
+          )
+          (packagesFromDirectoryRecursive {
+            inherit (emptyScope) callPackage newScope;
+            directory = ./packages-from-directory/scope;
+          });
+      expected = lib.recurseIntoAttrs {
+        a = "a";
+        b = "b";
+        # Note: Other files/directories in `./test-data/c/` are ignored and can be
+        # used by `package.nix`.
+        c = "c";
+        my-namespace = lib.recurseIntoAttrs {
+          d = "d";
+          e = "e";
+          f = "f";
+          my-sub-namespace = lib.recurseIntoAttrs {
+            g = "g";
+            h = "h";
+          };
+        };
+      };
+    };
+
+  testFilesystemResolveDefaultNixFile1 = {
+    expr = lib.filesystem.resolveDefaultNix ./foo.nix;
+    expected = ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2 = {
+    expr = lib.filesystem.resolveDefaultNix ./default.nix;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1 = {
+    expr = lib.filesystem.resolveDefaultNix ./.;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./foo.nix);
+    expected = toString ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./default.nix);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString2 = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./. + "/default.nix";
+  };
+
+  testFilesystemResolveDefaultNixNonExistent = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+  };
+
+  testFilesystemResolveDefaultNixNonExistentDir = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
+      pkgsBuildBuild = "dummy-build-build";
+      pkgsBuildHost = "dummy-build-host";
+      pkgsBuildTarget = "dummy-build-target";
+      pkgsHostHost = "dummy-host-host";
+      pkgsHostTarget = "dummy-host-target";
+      pkgsTargetTarget = "dummy-target-target";
+    };
+    expected = {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+  };
+
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+    expected = {
+      selfBuildBuild = "dummy-build-build";
+      selfBuildHost = "dummy-build-host";
+      selfBuildTarget = "dummy-build-target";
+      selfHostHost = "dummy-host-host";
+      selfHostTarget = "dummy-host-target";
+      selfTargetTarget = "dummy-target-target";
+    };
+  };
+
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
+      buildBuild = 1;
+      buildHost = 2;
+      buildTarget = 3;
+      hostHost = 4;
+      hostTarget = 5;
+      targetTarget = 6;
+    };
+    expected = {
+      buildBuild = 10;
+      buildHost = 20;
+      buildTarget = 30;
+      hostHost = 40;
+      hostTarget = 50;
+      targetTarget = 60;
+    };
+  };
+
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
+      buildBuild = "bb";
+      buildHost = "bh";
+      buildTarget = "bt";
+      hostHost = "hh";
+      hostTarget = "ht";
+      targetTarget = "tt";
+    };
+    expected = {
+      buildBuild = "prefix-bb";
+      buildHost = "prefix-bh";
+      buildTarget = "prefix-bt";
+      hostHost = "prefix-hh";
+      hostTarget = "prefix-ht";
+      targetTarget = "prefix-tt";
+    };
   };
 }

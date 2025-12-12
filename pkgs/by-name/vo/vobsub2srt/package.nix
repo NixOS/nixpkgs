@@ -8,7 +8,7 @@
   tesseract3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vobsub2srt";
   version = "unstable-2014-08-17";
 
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract3 ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";

@@ -1,40 +1,67 @@
 {
-  alsa-lib,
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  unzip,
+  wrapGAppsHook3,
+  makeWrapper,
+  runtimeShell,
+  gtk3,
+  xorg,
+  glib,
+  cairo,
+  pango,
+  dbus,
+  cups,
   at-spi2-atk,
   at-spi2-core,
   atk,
-  cairo,
-  cups,
-  curl,
-  dbus,
-  dpkg,
+  libdrm,
+  gdk-pixbuf,
+  nss,
+  nspr,
+  alsa-lib,
   expat,
-  fetchurl,
+  libxkbcommon,
+  libgbm,
+  vulkan-loader,
+  systemd,
+  libGL,
+  krb5,
   fontconfig,
   freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  lib,
-  libdrm,
-  libGL,
   libnotify,
   libsecret,
   libuuid,
   libxcb,
-  libxkbcommon,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  stdenv,
-  systemd,
-  wrapGAppsHook3,
-  xorg,
+  patchelf,
 }:
 
 let
-  version = "1.45.0";
+  pname = "mongodb-compass";
+  version = "1.48.2";
+
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  src = fetchurl {
+    url = "https://downloads.mongodb.com/compass/${
+      selectSystem {
+        x86_64-linux = "mongodb-compass_${version}_amd64.deb";
+        x86_64-darwin = "mongodb-compass-${version}-darwin-x64.zip";
+        aarch64-darwin = "mongodb-compass-${version}-darwin-arm64.zip";
+      }
+    }";
+    hash = selectSystem {
+      x86_64-linux = "sha256-6plLkjeFyXnYVTRY9hnnlKRRk0/pqIE7uQ/ftht6MB4=";
+      x86_64-darwin = "sha256-kVIYeo4YmEGUA+9jUMQ+tm3C504yCdFSTprUMZmXCxI=";
+      aarch64-darwin = "sha256-dJD7efN/sfLwxJz1myYneAKdnVdEcNzSth5CzcVoGsM=";
+    };
+  };
+
+  appName = "MongoDB Compass.app";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -43,7 +70,6 @@ let
     atk
     cairo
     cups
-    curl
     dbus
     expat
     fontconfig
@@ -79,33 +105,23 @@ let
     xorg.libxshmfence
     (lib.getLib stdenv.cc.cc)
   ];
-
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        hash = "sha256-p8EcsjAyzrwPfVgpmY5OlDYoikdblJDFKwtD0bCq0sA=";
-      }
-    else
-      throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
-  # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
-  # Feel free to make a PR adding support if desired
-
 in
-stdenv.mkDerivation {
-  pname = "mongodb-compass";
-  inherit version;
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version src;
 
-  inherit src;
-
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dpkg
     wrapGAppsHook3
-    gtk3
+    patchelf
   ];
-  dontUnpack = true;
 
-  buildCommand = ''
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
+
+  dontUnpack = stdenv.hostPlatform.isLinux;
+  dontFixup = stdenv.hostPlatform.isDarwin;
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin appName;
+
+  buildCommand = lib.optionalString stdenv.hostPlatform.isLinux ''
     IFS=$'\n'
 
     # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
@@ -114,7 +130,6 @@ stdenv.mkDerivation {
     mkdir -p $out
     mv usr/* $out
 
-    # cp -av $out/usr/* $out
     rm -rf $out/share/lintian
 
     # The node_modules are bringing in non-linux files/dependencies
@@ -134,16 +149,43 @@ stdenv.mkDerivation {
     wrapGAppsHook $out/bin/mongodb-compass
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Create directories for the application bundle and the launcher script.
+      mkdir -p "$out/Applications/${appName}" "$out/bin"
+
+      # Copy the unzipped app bundle into the Applications folder.
+      cp -R . "$out/Applications/${appName}"
+
+      # Create a launcher script that opens the app.
+      cat > "$out/bin/${pname}" << EOF
+      #!${runtimeShell}
+      open -na "$out/Applications/${appName}" --args "\$@"
+      EOF
+      chmod +x "$out/bin/${pname}"
+    ''}
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "GUI for MongoDB";
-    maintainers = with lib.maintainers; [
-      bryanasdev000
-      friedow
-    ];
     homepage = "https://github.com/mongodb-js/compass";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.sspl;
-    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";
+    maintainers = with lib.maintainers; [
+      friedow
+      iamanaws
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
-}
+})

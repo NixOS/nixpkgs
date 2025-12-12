@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
-    repo = pname;
+    repo = "cf-vault";
     rev = version;
     sha256 = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
   };
@@ -29,13 +29,11 @@ buildGoModule rec {
     command = "cf-vault version";
   };
 
-  meta = with lib; {
-    description = ''
-      A tool for managing your Cloudflare credentials, securely..
-    '';
+  meta = {
+    description = "Tool for managing your Cloudflare credentials, securely";
     homepage = "https://github.com/jacobbednarz/cf-vault/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "cf-vault";
   };
 }

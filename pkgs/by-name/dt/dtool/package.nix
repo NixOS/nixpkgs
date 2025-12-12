@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,21 +15,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-m4H+ANwEbK6vGW3oIVZqnqvMiAKxNJf2TLIGh/G6AU4=";
   };
 
-  cargoHash = "sha256-o5Xvc0tnoUgfp5k7EqVuEH9Zyo3C+A+mVqPhMtZCYKw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-C0H5cIMMfUPJ2iJCUs1jEu3Ln8CdDgbgstMnH/f9FRY=";
   # FIXME: remove patch when upstream version of rustc-serialize is updated
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
   checkType = "debug";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool collection to assist development written in RUST";
     homepage = "https://github.com/guoxbin/dtool";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linuxissuper ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "dtool";
   };
 }

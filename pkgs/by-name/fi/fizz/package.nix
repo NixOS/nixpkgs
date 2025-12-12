@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   openssl,
   glog,
@@ -14,7 +13,6 @@
   zstd,
   gflags,
   libevent,
-  apple-sdk_11,
   darwinMinVersionHook,
 
   folly,
@@ -28,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2024.11.18.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "bin"
@@ -39,29 +37,30 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-mNe+CHEXhkwzek9qy2l6zvPXim9tJV44s+naSm6bQ4Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MNkPf289QGZ1x6Yr2E8vnlCFan94Opjiw6RItodWGaw=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      openssl
-      glog
-      double-conversion
-      zstd
-      gflags
-      libevent
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    openssl
+    glog
+    double-conversion
+    zstd
+    gflags
+    libevent
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ];
 
   propagatedBuildInputs = [
     folly
@@ -104,18 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
 
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -129,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

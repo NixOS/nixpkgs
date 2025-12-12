@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "sanjoyg";
   domain = "dirigera_platform";
-  version = "2.6.4";
+  version = "2.6.8";
 
   src = fetchFromGitHub {
     owner = "sanjoyg";
     repo = "dirigera_platform";
     rev = version;
-    hash = "sha256-ftJUmJ5UWgm22YBfCIBAxRjG+niougw5ekrQNuSRgzI=";
+    hash = "sha256-FNcGl6INQlVP+P3qmExWLI1ALh9ZacjJAbNKRtgM3ms=";
   };
 
   postPatch = ''
@@ -24,10 +24,12 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ dirigera ];
 
-  meta = with lib; {
+  ignoreVersionRequirement = [ "dirigera" ];
+
+  meta = {
     description = "Home-assistant integration for IKEA Dirigera hub";
     homepage = "https://github.com/sanjoyg/dirigera_platform";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
   };
 }

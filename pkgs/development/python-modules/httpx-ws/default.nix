@@ -7,6 +7,7 @@
   httpcore,
   httpx,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   starlette,
   trio,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-ws";
-  version = "0.6.2";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-ws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VsIYOGNEdX4rxjEa01M77arA3ddJS3cPFxXlf13QTuE=";
+    tag = "v${version}";
+    hash = "sha256-ixaD7X6V/tUalZbYtic7D9lRqv8yGnwl+j5m832n/hQ=";
   };
 
   # we don't need to use the hatch-regex-commit plugin
@@ -33,8 +34,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'source = "regex_commit"' "" \
       --replace-fail 'commit_extra_args = ["-e"]' "" \
-      --replace-fail '"hatch-regex-commit"' "" \
-      --replace-fail 'addopts = "--cov=httpx_ws/ --cov-report=term-missing"' ""
+      --replace-fail '"hatch-regex-commit"' ""
   '';
 
   build-system = [ hatchling ];
@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     starlette
     trio
     uvicorn
@@ -60,11 +61,11 @@ buildPythonPackage rec {
     "tests/test_api.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
     changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wd";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "mfaerevaag";
     repo = "wd";
     rev = "v${version}";
-    hash = "sha256-6/3+FtHGyVmuOtmuKhboiQ40ECini/0OwvKcftIjIIM=";
+    hash = "sha256-dlpkSKdWilNnz3dpRfN+EPx/vjIZpmZ/DMzeO9sh4z0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
     installShellCompletion --zsh _wd.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Jump to custom directories in zsh";
     longDescription = ''
       `wd` (warp directory) lets you jump to custom directories in zsh, without
@@ -34,9 +34,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/mfaerevaag/wd";
     changelog = "https://github.com/mfaerevaag/wd/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.zimeg ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimeg ];
     mainProgram = "wd";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

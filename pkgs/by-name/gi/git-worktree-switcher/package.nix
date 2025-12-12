@@ -6,22 +6,24 @@
   installShellFiles,
   git,
   jq,
+  fzf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-worktree-switcher";
-  version = "0.2.4";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "mateusauler";
     repo = "git-worktree-switcher";
-    rev = "refs/tags/${finalAttrs.version}-fork";
-    hash = "sha256-N+bDsLEUM6FWhyliUav2n5hwMa5EEuVPoIK+Cja0DxA=";
+    tag = "${finalAttrs.version}-fork";
+    hash = "sha256-OXUVIL4bIqqxnLLwdO0+8gxCDMqA4TPvjIc2i8BeBmw=";
   };
 
   buildInputs = [
-    jq
+    fzf
     git
+    jq
   ];
 
   nativeBuildInputs = [
@@ -39,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp wt $out/bin
     wrapProgram $out/bin/wt --prefix PATH : ${
       lib.makeBinPath [
+        fzf
         git
         jq
       ]
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mateusauler/git-worktree-switcher";
-    description = "Switch between git worktrees with speed.";
+    description = "Switch between git worktrees with speed";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "wt";

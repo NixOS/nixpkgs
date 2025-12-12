@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wlr-layout-ui";
-  version = "1.6.14";
+  version = "1.6.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Qgg4fdxOVkADDOxmQgQFSF/wgrEQihoRNC9oXeQvaoI=";
+    tag = version;
+    hash = "sha256-CghOj5fQnuHd6PMeLOX4NKdVw7+pueZXahzYcAMwNOA=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Simple GUI to setup the screens layout on wlroots based systems";
     homepage = "https://github.com/fdev31/wlr-layout-ui/";
-    maintainers = with maintainers; [ bnlrnz ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ bnlrnz ];
+    license = lib.licenses.mit;
     mainProgram = "wlrlui";
-    platforms = subtractLists platforms.darwin platforms.unix;
+    platforms = subtractLists lib.platforms.darwin lib.platforms.unix;
   };
 }

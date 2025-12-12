@@ -34,13 +34,12 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends =
-    [
-      pkg
-      netConf
-    ]
-    ++ lib.optional config.services.saned.enable sanedConf
-    ++ config.hardware.sane.extraBackends;
+  backends = [
+    pkg
+    netConf
+  ]
+  ++ lib.optional config.services.saned.enable sanedConf
+  ++ config.hardware.sane.extraBackends;
   saneConfig = pkgs.mkSaneConfig {
     paths = backends;
     inherit (config.hardware.sane) disabledDefaultBackends;
@@ -68,12 +67,7 @@ in
       '';
     };
 
-    hardware.sane.backends-package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.sane-backends;
-      defaultText = lib.literalExpression "pkgs.sane-backends";
-      description = "Backends driver package to use.";
-    };
+    hardware.sane.backends-package = lib.mkPackageOption pkgs "sane-backends" { };
 
     hardware.sane.snapshot = lib.mkOption {
       type = lib.types.bool;
@@ -184,6 +178,12 @@ in
       environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
+      # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
+      # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
+      # does not have a real logind seat, so `uaccess` is not enough.
+      services.udev.extraRules = ''
+        ENV{DEVNAME}!="", ENV{libsane_matched}=="yes", RUN+="${pkgs.acl}/bin/setfacl -m g:scanner:rw $env{DEVNAME}"
+      '';
 
       users.groups.scanner.gid = config.ids.gids.scanner;
       networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];

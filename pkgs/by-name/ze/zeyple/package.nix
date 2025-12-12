@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "zeyple";
   version = "unstable-2021-04-10";
 
@@ -17,16 +17,26 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0r2d1drg2zvwmn3zg0qb32i9mh03r5di9q1yszx23r32rsax9mxh";
   };
 
-  propagatedBuildInputs = [ python3Packages.gpgme ];
-  installPhase = ''
-    install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
+  # SafeConfigParser was deprecated in Python 3.12: https://github.com/infertux/zeyple/issues/76
+  postPatch = ''
+    substituteInPlace zeyple/zeyple.py \
+      --replace-fail 'from configparser import SafeConfigParser' 'from configparser import ConfigParser as SafeConfigParser'
   '';
 
-  meta = with lib; {
+  propagatedBuildInputs = [ python3Packages.gpgme ];
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 zeyple/zeyple.py $out/bin/zeyple
+
+    runHook postInstall
+  '';
+
+  meta = {
     description = "Utility program to automatically encrypt outgoing emails with GPG";
     homepage = "https://infertux.com/labs/zeyple/";
-    maintainers = with maintainers; [ ettom ];
-    license = licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ ettom ];
+    license = lib.licenses.agpl3Plus;
     mainProgram = "zeyple";
   };
 }

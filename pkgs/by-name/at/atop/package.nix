@@ -16,30 +16,28 @@
 
 stdenv.mkDerivation rec {
   pname = "atop";
-  version = "2.11.0";
+  version = "2.12.1";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    hash = "sha256-m5TGZmAu//e/QC7M5wbDR/OMOctjSY+dOWJoYeVkbiA=";
+    hash = "sha256-T9vmfF36+JQFY54YWZ9OrneXgHP/pU88eMNoq1S9EvY=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals withAtopgpu [
-      python3.pkgs.wrapPython
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals withAtopgpu [
+    python3.pkgs.wrapPython
+  ];
 
-  buildInputs =
-    [
-      glib
-      zlib
-      ncurses
-    ]
-    ++ lib.optionals withAtopgpu [
-      python3
-    ];
+  buildInputs = [
+    glib
+    zlib
+    ncurses
+  ]
+  ++ lib.optionals withAtopgpu [
+    python3
+  ];
 
   pythonPath = lib.optionals withAtopgpu [
     python3.pkgs.pynvml
@@ -77,27 +75,26 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  postInstall =
-    ''
-      # Remove extra files we don't need
-      rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
-    ''
-    + (
-      if withAtopgpu then
-        ''
-          wrapPythonPrograms
-        ''
-      else
-        ''
-          rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
-        ''
-    );
+  postInstall = ''
+    # Remove extra files we don't need
+    rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
+  ''
+  + (
+    if withAtopgpu then
+      ''
+        wrapPythonPrograms
+      ''
+    else
+      ''
+        rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
+      ''
+  );
 
   passthru.tests = { inherit (nixosTests) atop; };
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+  meta = {
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
     description = "Console system performance monitor";
     longDescription = ''
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of
@@ -107,7 +104,7 @@ stdenv.mkDerivation rec {
       swap, disks and network layers, and for every active process it shows the CPU utilization,
       memory growth, disk utilization, priority, username, state, and exit code.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

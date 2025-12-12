@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "chriswalz";
-    repo = pname;
+    repo = "bit";
     rev = "v${version}";
     sha256 = "sha256-18R0JGbG5QBDghF4SyhXaKe9UY5UzF7Ap0Y061Z1SZ8=";
   };
@@ -23,11 +23,11 @@ buildGoModule rec {
   # Tests require a repository
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for git";
     homepage = "https://github.com/chriswalz/bit";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "bit";
   };
 }

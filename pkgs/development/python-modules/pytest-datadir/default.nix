@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-datadir";
-  version = "1.5.0";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gabrielcnr";
     repo = "pytest-datadir";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sRLqL+8Jf5Kz+qscuG3hClUuPA+33PQa+ob1ht/7CJE=";
+    tag = "v${version}";
+    hash = "sha256-ttzYFzePPpFY6DfMGLVImZMiehuR9IhmIFxBlgrDDmk=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_datadir" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for manipulating test data directories and files";
     homepage = "https://github.com/gabrielcnr/pytest-datadir";
-    changelog = "https://github.com/gabrielcnr/pytest-datadir/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    changelog = "https://github.com/gabrielcnr/pytest-datadir/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }

@@ -5,7 +5,7 @@
   cmake,
   unzip,
   makeWrapper,
-  boost,
+  boost183,
   llvmPackages,
   gmp,
   emacs,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost
+    boost183
     gmp
     emacs
     jre_headless
@@ -76,15 +76,26 @@ stdenv.mkDerivation rec {
     tk
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace {vm,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace vm/vm/test/gtest/{googletest,.}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace bootcompiler/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace {boosthost,opi,wish,stdlib}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Open source implementation of Oz 3";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       layus
       h7x4
     ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://mozart.github.io";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # Trace/BPT trap: 5
     broken = stdenv.hostPlatform.isDarwin;
   };

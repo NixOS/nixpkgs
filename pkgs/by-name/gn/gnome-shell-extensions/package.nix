@@ -10,25 +10,23 @@
   glib,
   gnome,
   gnome-menus,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "47.2";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3XdKApFYSRer3oi7xOzPkkQXjjwmnOBhjQSVF3wSZS0=";
+    hash = "sha256-FXDgZHhstDiXWeBIPzob29W5s48GJG600dUJKSqcamI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
-    (substituteAll {
-      src = ./fix_gtop.patch;
+    (replaceVars ./fix_gtop.patch {
       gtop_path = "${libgtop}/lib/girepository-1.0";
     })
   ];
@@ -69,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-shell-extensions"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Modify and extend GNOME Shell functionality and behavior";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 })

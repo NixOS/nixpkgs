@@ -6,25 +6,25 @@
 
 buildGoModule rec {
   pname = "aws-lambda-runtime-interface-emulator";
-  version = "1.20";
+  version = "1.30";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-runtime-interface-emulator";
     rev = "v${version}";
-    sha256 = "sha256-cpfzjXjufiCe6AJsTj08vJ719MztHwY+6fMnk8vR82k=";
+    sha256 = "sha256-2GVxcJohh+lLYdx0f4qjIRQNvwKEQNCVD6dQQwNySo8=";
   };
 
-  vendorHash = "sha256-fGoqKDBg+O4uzGmhEIROsBvDS+6zWCzsXe8U6t98bqk=";
+  vendorHash = "sha256-+7BuDaN1ns63cQOMKuRMjBo9GnLrmsubx/KppUsyheY=";
 
   # disabled because I lack the skill
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Locally test Lambda functions packaged as container images";
     mainProgram = "aws-lambda-rie";
     homepage = "https://github.com/aws/aws-lambda-runtime-interface-emulator";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

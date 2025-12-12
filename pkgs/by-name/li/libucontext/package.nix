@@ -2,26 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libucontext";
-  version = "1.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "kaniini";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-fk3ZKkp3dsyeF6SOWSccr5MkKEwS4AAuosD/h+6wjSw=";
+    repo = "libucontext";
+    rev = "libucontext-${version}";
+    hash = "sha256-MQCRRyA64MEtPoUtf1tFVbhiMDc4DlepSjMEFcb/Kh4=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/kaniini/libucontext";
     description = "ucontext implementation featuring glibc-compatible ABI";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lix ];
   };
 }

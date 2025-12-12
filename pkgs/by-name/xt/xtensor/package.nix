@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtensor";
-  version = "0.25.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
-    rev = finalAttrs.version;
-    hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
+    tag = finalAttrs.version;
+    hash = "sha256-bvy2nF368rtVwUfGgSE1Zmpcze1nPwUbskXbf8flPt4=";
   };
 
   nativeBuildInputs = [
@@ -39,17 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XTENSOR_CHECK_DIMENSION" enableBoundChecks)
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [
     doctest
   ];
   checkTarget = "xtest";
 
-  meta = with lib; {
+  meta = {
     description = "Multi-dimensional arrays with broadcasting and lazy computing";
     homepage = "https://github.com/xtensor-stack/xtensor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cpcloud ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
+    platforms = lib.platforms.all;
   };
 })

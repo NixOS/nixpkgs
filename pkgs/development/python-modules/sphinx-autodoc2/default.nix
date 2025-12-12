@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-extensions2";
     repo = "sphinx-autodoc2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Wu079THK1mHVilD2Fx9dIzuIOOYOXpo/EMxVczNutCI=";
   };
 
@@ -38,7 +38,8 @@ buildPythonPackage rec {
 
     # cli deps
     typer
-  ] ++ typer.optional-dependencies.standard;
+  ]
+  ++ typer.optional-dependencies.standard;
 
   preCheck = ''
     # make sphinx_path an alias of pathlib.Path, since sphinx_path was removed in Sphinx v7.2.0

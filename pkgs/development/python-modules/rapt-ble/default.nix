@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sairon";
     repo = "rapt-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
   };
 
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rapt_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for RAPT Pill hydrometer BLE devices";
     homepage = "https://github.com/sairon/rapt-ble";
     changelog = "https://github.com/sairon/rapt-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

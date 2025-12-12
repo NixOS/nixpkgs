@@ -6,7 +6,6 @@
   libxkbcommon,
   openssl,
   stdenv,
-  darwin,
   wayland,
 }:
 
@@ -21,34 +20,29 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9vx+bGfYuJuafZUY2ZT4SAgrNcSXuMe1kHH/lrpItvM=";
   };
 
-  cargoHash = "sha256-ZvF8X+IT7mrKaUaNS4NhYzX9P3hkhNNH/ActxG/6YZE=";
+  cargoHash = "sha256-DlYV92ZbkeUieVmyaxVuCslkwAgWrULu4HerLFXZZtE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 
   # requires internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Create `.gitignore` files using one or more templates from TopTal, GitHub or your own collection";
     homepage = "https://github.com/reemus-dev/gitnr";
     changelog = "https://github.com/reemus-dev/gitnr/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "gitnr";

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paypal";
     repo = "Checkout-Python-SDK";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-04ojNJeqVMdhnGpeCD+wzgKGLI22tVvrMW3gF/SH7KU=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
     "testOrderGetRequestTest"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/paypal/Checkout-Python-SDK/releases/tag/${version}";
     description = "Python SDK for Checkout RESTful APIs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

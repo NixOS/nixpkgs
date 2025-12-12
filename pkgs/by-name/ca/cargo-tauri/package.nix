@@ -1,59 +1,64 @@
 {
   lib,
   stdenv,
+  bzip2,
   callPackage,
   rustPlatform,
   fetchFromGitHub,
-  cargo-tauri,
-  gtk4,
   nix-update-script,
-  openssl,
   pkg-config,
-  webkitgtk_4_1,
+  testers,
+  xz,
+  zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
-  version = "2.1.1";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
-    rev = "refs/tags/tauri-v${version}";
-    hash = "sha256-HPmViOowP1xAjDJ89YS0BTjNnKI1P0L777ywkqAhhc4=";
+    tag = "tauri-cli-v${finalAttrs.version}";
+    hash = "sha256-VtZxFkxOLMNwl3A/2qoNJ/HXr5FXFKQYw+ri5Yp8eOE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "schemars_derive-0.8.21" = "sha256-AmxBKZXm2Eb+w8/hLQWTol5f22uP8UqaIh+LVLbS20g=";
-    };
-  };
+  cargoHash = "sha256-uAjEQBHDpVv73MbeoU86tObiXSUKKjImpMTLHXKMRNs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+    pkg-config
+  ];
 
   buildInputs =
-    [ openssl ]
+    # Required for tauri-macos-sign and RPM support in tauri-bundler
+    lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
+      bzip2
+      xz
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk4
-      webkitgtk_4_1
+      zstd
     ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   passthru = {
     # See ./doc/hooks/tauri.section.md
-    hook = callPackage ./hook.nix { };
+    hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
 
     tests = {
-      hook = callPackage ./test-app.nix { };
+      hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
 
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "tauri-v(.*)"
+        "tauri-cli-v(.*)"
       ];
     };
   };
@@ -61,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
-    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${version}";
+    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-cli-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -73,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-tauri";
   };
-}
+})

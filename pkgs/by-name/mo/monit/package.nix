@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
   bison,
   flex,
   zlib,
@@ -15,51 +14,44 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.34.3";
+  version = "5.35.2";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-Zp2Lld3sEk0URLpSZPZ/3q6OkOU7KSlxn0dQ/F/zumA=";
+    hash = "sha256-Tf71QynmPZdyqeHDasmbxBFzt5lj3A2CNfLDL0ueB48=";
   };
 
-  nativeBuildInputs =
-    [
-      bison
-      flex
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.DiskArbitration
-      darwin.apple_sdk.frameworks.System
-    ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
-  buildInputs =
-    [
-      zlib.dev
-      libxcrypt
-    ]
-    ++ lib.optionals useSSL [ openssl ]
-    ++ lib.optionals usePAM [ pam ];
+  buildInputs = [
+    zlib.dev
+    libxcrypt
+  ]
+  ++ lib.optionals useSSL [ openssl ]
+  ++ lib.optionals usePAM [ pam ];
 
-  configureFlags =
-    [
-      (lib.withFeature usePAM "pam")
-    ]
-    ++ (
-      if useSSL then
-        [
-          "--with-ssl-incl-dir=${openssl.dev}/include"
-          "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
-        ]
-      else
-        [
-          "--without-ssl"
-        ]
-    )
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # will need to check both these are true for musl
-      "libmonit_cv_setjmp_available=yes"
-      "libmonit_cv_vsnprintf_c99_conformant=yes"
-    ];
+  configureFlags = [
+    (lib.withFeature usePAM "pam")
+  ]
+  ++ (
+    if useSSL then
+      [
+        "--with-ssl-incl-dir=${openssl.dev}/include"
+        "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
+      ]
+    else
+      [
+        "--without-ssl"
+      ]
+  )
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # will need to check both these are true for musl
+    "libmonit_cv_setjmp_available=yes"
+    "libmonit_cv_vsnprintf_c99_conformant=yes"
+  ];
 
   meta = {
     homepage = "https://mmonit.com/monit/";

@@ -7,9 +7,9 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OpenCorsairLink";
-  version = "unstable-2019-12-23";
+  version = "0-unstable-2019-12-23";
 
   buildInputs = [ libusb1 ];
   nativeBuildInputs = [ pkg-config ];
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux and Mac OS support for the CorsairLink Devices";
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "OpenCorsairLink.elf";
   };

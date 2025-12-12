@@ -55,20 +55,21 @@
   typecode,
   typecode-libmagic,
   urlpy,
+  writableTmpDirAsHomeHook,
   xmltodict,
   zipp,
 }:
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.2.1";
+  version = "32.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o+c2aB9oAI5xyHj2xtQowSP4Wjq6RAAmasXjrzXR5ko=";
+    hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
   };
 
   dontConfigure = true;
@@ -127,32 +128,30 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ] ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
+  # Pre-genrating license index
   postInstall = ''
-    export HOME=$(mktemp -d)
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
 
-  disabledTestPaths = [
-    # Tests are outdated
-    "src/formattedcode/output_spdx.py"
-    "src/scancode/cli.py"
-  ];
-
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc-by-40
     ];

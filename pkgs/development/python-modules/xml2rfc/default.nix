@@ -24,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.24.0";
+  version = "3.31.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cymClLsXPeuWsRMbFJHO55ASzEbau++XvYoBsquDv+Y=";
+    tag = "v${version}";
+    hash = "sha256-thgLt1PHXbKxDDhqQcHUP/AZsGq/OfAOSRV9KrFmPWw=";
   };
 
   postPatch = ''
@@ -77,15 +77,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xml2rfc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool generating IETF RFCs and drafts from XML sources";
     mainProgram = "xml2rfc";
     homepage = "https://github.com/ietf-tools/xml2rfc";
-    changelog = "https://github.com/ietf-tools/xml2rfc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ietf-tools/xml2rfc/blob/${src.tag}/CHANGELOG.md";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       vcunat
       yrashk
     ];

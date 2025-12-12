@@ -1,11 +1,18 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchpatch, fetchFromGitLab
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableMinimal ? false
-, enableAppletSymlinks ? true
-# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
-# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
-, useMusl ? stdenv.hostPlatform.libc == "musl", musl
-, extraConfig ? ""
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitLab,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableMinimal ? false,
+  enableAppletSymlinks ? true,
+  # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+  # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
+  useMusl ? stdenv.hostPlatform.libc == "musl",
+  musl,
+  extraConfig ? "",
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -60,43 +67,65 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
-  hardeningDisable = [ "format" "pie" ]
-    ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [
+    "format"
+  ]
+  ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
+    # Allow BusyBox to be invoked as "<something>-busybox". This is
+    # necessary when it's run from the Nix store as <hash>-busybox during
+    # stdenv bootstrap.
     ./busybox-in-store.patch
+    # libbb: sockaddr2str: ensure only printable characters are returned for the hostname part
     (fetchurl {
       name = "CVE-2022-28391.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-libbb-sockaddr2str-ensure-only-printable-characters-.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-yviw1GV+t9tbHbY7YNxEqPi7xEreiXVqbeRyf8c6Awo=";
     })
+    # nslookup: sanitize all printed strings with printable_string
     (fetchurl {
       name = "CVE-2022-28391.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
     })
+    # shell: avoid segfault on ${0::0/0~09J}
+    # See also: https://bugs.busybox.net/show_bug.cgi?id=15216
     (fetchpatch {
-      name = "CVE-2022-48174.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15216
+      name = "CVE-2022-48174.patch";
       url = "https://git.busybox.net/busybox/patch/?id=d417193cf37ca1005830d7e16f5fa7e1d8a44209";
       hash = "sha256-mpDEwYncpU6X6tmtj9xM2KCrB/v2ys5bYxmPPrhm6es=";
     })
+    # Make sure we don't read past the end of the string in next_token()
+    # when backslash is the last character in an (invalid) regexp.
+    # See also: https://bugs.busybox.net/show_bug.cgi?id=15874
+    # This patch is also used by Alpine, see https://git.alpinelinux.org/aports/tree/main/busybox/0037-awk.c-fix-CVE-2023-42366-bug-15874.patch
     (fetchpatch {
-      name = "CVE-2023-42366.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15874
-      # This patch is also used by Alpine, see https://git.alpinelinux.org/aports/tree/main/busybox/0037-awk.c-fix-CVE-2023-42366-bug-15874.patch
+      name = "CVE-2023-42366.patch";
       url = "https://bugs.busybox.net/attachment.cgi?id=9697";
       hash = "sha256-2eYfLZLjStea9apKXogff6sCAdG9yHx0ZsgUBaGfQIA=";
     })
+    # awk: fix use after free (CVE-2023-42363)
+    # See also: https://bugs.busybox.net/show_bug.cgi?id=15865
     (fetchpatch {
-      name = "CVE-2023-42363.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15865
+      name = "CVE-2023-42363.patch";
       url = "https://git.launchpad.net/ubuntu/+source/busybox/plain/debian/patches/CVE-2023-42363.patch?id=c9d8a323b337d58e302717d41796aa0242963d5a";
       hash = "sha256-1W9Q8+yFkYQKzNTrvndie8QuaEbyAFL1ZASG2fPF+Z4=";
     })
+    # awk: fix ternary operator and precedence of =
+    # See also: https://bugs.busybox.net/show_bug.cgi?id=15871 https://bugs.busybox.net/show_bug.cgi?id=15868
     (fetchpatch {
-      name = "CVE-2023-42364_CVE-2023-42365.patch"; # https://bugs.busybox.net/show_bug.cgi?id=15871 https://bugs.busybox.net/show_bug.cgi?id=15868
+      name = "CVE-2023-42364_CVE-2023-42365.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2023-42364-CVE-2023-42365.patch?id=8a4bf5971168bf48201c05afda7bee0fbb188e13";
       hash = "sha256-nQPgT9eA1asCo38Z9X7LR9My0+Vz5YBPba3ARV3fWcc=";
     })
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+    # tar: fix TOCTOU symlink race condition
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/main/busybox/0001-tar-fix-TOCTOU-symlink-race-condition.patch?id=9e42dea5fba84a8afad1f1910b7d3884128a567e";
+      hash = "sha256-GmXQhwB1/IPVjXXpGi5RjRvuGJgIMIb7lQKB63m306g=";
+    })
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;
 
@@ -178,7 +207,10 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   enableParallelBuilding = true;
 
@@ -186,12 +218,16 @@ stdenv.mkDerivation rec {
 
   passthru.shellPath = "/bin/ash";
 
-  meta = with lib; {
+  meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ TethysSvensson qyliss ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "busybox";
+    maintainers = with lib.maintainers; [
+      TethysSvensson
+      qyliss
+    ];
+    platforms = lib.platforms.linux;
     priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

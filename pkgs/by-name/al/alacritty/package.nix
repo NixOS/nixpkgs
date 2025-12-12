@@ -22,38 +22,54 @@
   wayland,
   xdg-utils,
 
-  apple-sdk_11,
+  nix-update-script,
+  withGraphics ? false,
+  versionCheckHook,
 }:
 let
-  rpathLibs =
-    [
-      expat
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXxf86vm
-      xorg.libxcb
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    expat
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXxf86vm
+    xorg.libxcb
+    libxkbcommon
+    wayland
+  ];
 in
-rustPlatform.buildRustPackage rec {
-  pname = "alacritty";
-  version = "0.14.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
+  version = "0.16.1";
 
-  src = fetchFromGitHub {
-    owner = "alacritty";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
-  };
+  src =
+    # by default we want the official package
+    if !withGraphics then
+      fetchFromGitHub {
+        owner = "alacritty";
+        repo = "alacritty";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-IOPhnJ76kZ2djJjxJEUwWPvHDeeXbJAn1ClipTH7nWs=";
+      }
+    # optionally we want to build the sixels feature fork
+    else
+      fetchFromGitHub {
+        owner = "ayosec";
+        repo = "alacritty";
+        tag = "v${finalAttrs.version}-graphics";
+        hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
+      };
 
-  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
+  cargoHash =
+    if !withGraphics then
+      "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
+    else
+      "sha256-VR+URXqsB9zCOSow/f/aWXUlrp6j2XeK0zKESQGzMek=";
 
   nativeBuildInputs = [
     cmake
@@ -65,11 +81,7 @@ rustPlatform.buildRustPackage rec {
     scdoc
   ];
 
-  buildInputs =
-    rpathLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = rpathLibs;
 
   outputs = [
     "out"
@@ -126,18 +138,40 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
-  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
-
-  meta = with lib; {
-    description = "Cross-platform, GPU-accelerated terminal emulator";
-    homepage = "https://github.com/alacritty/alacritty";
-    license = licenses.asl20;
-    mainProgram = "alacritty";
-    maintainers = with maintainers; [
-      Br1ght0ne
-      mic92
-    ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.alacritty;
+    updateScript = nix-update-script { };
   };
-}
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
+    description = "Cross-platform, GPU-accelerated terminal emulator";
+    homepage =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty"
+      else
+        "https://github.com/ayosec/alacritty";
+    license = lib.licenses.asl20;
+    mainProgram = "alacritty";
+    maintainers =
+      with lib.maintainers;
+      if !withGraphics then
+        [
+          rvdp
+        ]
+      else
+        [
+          afh
+        ];
+    platforms = lib.platforms.unix;
+    changelog =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md"
+      else
+        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
+  };
+})

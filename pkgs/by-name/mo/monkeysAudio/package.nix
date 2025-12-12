@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "10.85";
+  version = "11.89";
   pname = "monkeys-audio";
 
   src = fetchzip {
     url = "https://monkeysaudio.com/files/MAC_${builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
-    hash = "sha256-072ZFJ+cmT9rXxQmG3tDbnxnbRmvTxbZ6JtOhONe5n0=";
+    hash = "sha256-oXMQUnmFepcaC2UjC7f2Ojd1gHc4dL5ZFnhtVdThIV8=";
     stripRoot = false;
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "APE codec and decompressor";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "mac";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 })

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.5";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-vaNXXXaGqYNmhonU+ANN857LAUgwv+PMcON+nBuUoeo=";
+    hash = "sha256-sO2U0llrDOWYYjnfoRZE+/ofg3kb+ajFmqvaweRvT7c=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for integrating Rust into an existing CMake project";
     homepage = "https://github.com/corrosion-rs/corrosion";
     changelog = "https://github.com/corrosion-rs/corrosion/blob/${src.rev}/RELEASES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

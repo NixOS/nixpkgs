@@ -9,56 +9,80 @@
   libffi,
   xar,
   versionCheckHook,
+  rev ? "unknown",
+  debug ? false,
+  checks ? true,
 }:
-
+let
+  inherit (lib.strings) optionalString;
+in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  pname = "c3c";
-  version = "0.6.5";
+
+  pname = "c3c${optionalString debug "-debug"}";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2OxUHnmFtT/TunfO+fOBOrkaHKlnqpO1wJWs79wkvAY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c3eZ4vczZnTRN87uOxJq605hsqtDN9n+yN5E1gggca0=";
   };
 
+  cmakeBuildType = if debug then "Debug" else "Release";
+
   postPatch = ''
+    substituteInPlace git_hash.cmake \
+      --replace-fail "\''${GIT_HASH}" "${rev}"
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
+      --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake ];
+  cmakeFlags = [
+    "-DC3_ENABLE_CLANGD_LSP=${if debug then "ON" else "OFF"}"
+    "-DC3_LLD_DIR=${llvmPackages.lld.lib}/lib"
+    "-DLLVM_CRT_LIBRARY_DIR=${llvmPackages.compiler-rt}/lib/darwin"
+  ];
 
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.lld
+    llvmPackages.compiler-rt
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
+  ]
+  ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = llvmPackages.stdenv.system == "x86_64-linux";
+  doCheck =
+    lib.elem llvmPackages.stdenv.system [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ]
+    && checks;
 
   checkPhase = ''
     runHook preCheck
-    ( cd ../resources/testproject; ../../build/c3c build )
-    ( cd ../test; python src/tester.py ../build/c3c test_suite )
+    ( cd ../resources/testproject; ../../build/c3c build --trust=full )
+    ( cd ../test; ../build/c3c compile-run -O1 src/test_suite_runner.c3 -- ../build/c3c test_suite )
     runHook postCheck
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      hucancode
       anas
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "c3c";
   };
 })

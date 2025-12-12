@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pgactivity";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Opus10";
+    owner = "AmbitionEng";
     repo = "django-pgactivity";
     tag = version;
-    hash = "sha256-XJDnNMhkoaRQBVsAdDqnFjOobUHi/RaMQZJnI61MuVI=";
+    hash = "sha256-e+PodpFsGxx4SE6zQD2qVDAXx44xeIdsBO7YsdbSjiU=";
   };
 
   build-system = [ poetry-core ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "View, filter, and kill Postgres queries";
-    homepage = "https://github.com/Opus10/django-pgactivity";
-    changelog = "https://github.com/Opus10/django-pgactivity/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/AmbitionEng/django-pgactivity";
+    changelog = "https://github.com/AmbitionEng/django-pgactivity/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };

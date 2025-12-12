@@ -10,18 +10,21 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ace-of-penguins";
   version = "1.4";
 
   src = fetchurl {
-    url = "http://www.delorie.com/store/ace/ace-${version}.tar.gz";
+    url = "http://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
     hash = "sha256-H+47BTOSGkKHPAYj8z2HOgZ7HuxY8scMAUSRRueaTM4=";
   };
 
   patches = [
     # Fixes a bunch of miscompilations in modern environments
     ./fixup-miscompilations.patch
+    # make-imglib.c:205:5: error: 'return' with no value, in function returning non-void [-Wreturn-mismatch]
+    # imagelib.c:109:17: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+    ./fix-gcc-14.patch
   ];
 
   nativeBuildInputs = [
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
   desktopItems =
     let
       generateItem = gameName: {
-        name = "${pname}-${gameName}";
+        name = "ace-of-penguins-${gameName}";
         exec = "${placeholder "out"}/bin/${gameName}";
         comment = "Ace of Penguins ${gameName} Card Game";
         desktopName = gameName;
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
       "thornq"
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.delorie.com/store/ace/";
     description = "Solitaire games in X11";
     longDescription = ''
@@ -73,8 +76,8 @@ stdenv.mkDerivation rec {
       minesweeper, pegged, solitaire, taipei (with editor!), and thornq (by
       Martin Thornquist).
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

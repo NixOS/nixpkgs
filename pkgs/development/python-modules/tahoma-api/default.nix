@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "philklei";
-    repo = pname;
+    repo = "tahoma-api";
     rev = "v${version}";
     hash = "sha256-YwOKSBlN4lNyS+hfdbQDUq1gc14FBof463ofxtUVLC4=";
   };
@@ -23,10 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tahoma_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interface with Tahoma REST API";
     homepage = "https://github.com/philklei/tahoma-api/";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

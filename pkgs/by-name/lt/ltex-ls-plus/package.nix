@@ -4,31 +4,36 @@
   fetchurl,
   makeBinaryWrapper,
   jre_headless,
+  jvmOptions ? [ ],
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "ltex-ls-plus";
-  version = "18.3.0";
+  version = "18.6.1";
 
   src = fetchurl {
     url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${version}/ltex-ls-plus-${version}.tar.gz";
-    sha256 = "sha256-TV8z8nYz2lFsL86yxpIWDh3hDEZn/7P0kax498oicls=";
+    sha256 = "sha256-YhuT1ZKpecysA4DuMrgko77L0t0Ve9VanXWHbX8p3qo=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      java_opts = lib.optionalString (jvmOptions != [ ]) ''--set JAVA_OPTS "${toString jvmOptions}"'';
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    cp -rfv bin/ lib/ $out
-    rm -fv $out/bin/.lsp-cli.json $out/bin/*.bat
-    for file in $out/bin/{ltex-ls-plus,ltex-cli-plus}; do
-      wrapProgram $file --set JAVA_HOME "${jre_headless}"
-    done
+      mkdir -p $out
+      cp -rfv bin/ lib/ $out
+      rm -fv $out/bin/.lsp-cli.json $out/bin/*.bat
+      for file in $out/bin/{ltex-ls-plus,ltex-cli-plus}; do
+        wrapProgram $file --set JAVA_HOME "${jre_headless}" ${java_opts}
+      done
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta =
     let

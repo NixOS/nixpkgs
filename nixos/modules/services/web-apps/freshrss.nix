@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.freshrss;
+  webserver = config.services.${cfg.webserver};
 
   extension-env = pkgs.buildEnv {
     name = "freshrss-extensions";
@@ -10,11 +16,17 @@ let
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
-    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
+  }
+  // lib.optionalAttrs (cfg.extensions != [ ]) {
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss";
   };
 in
 {
-  meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
+  meta.maintainers = with maintainers; [
+    etu
+    stunkymonkey
+    mattchrist
+  ];
 
   options.services.freshrss = {
     enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
@@ -75,7 +87,11 @@ in
 
     database = {
       type = mkOption {
-        type = types.enum [ "sqlite" "pgsql" "mysql" ];
+        type = types.enum [
+          "sqlite"
+          "pgsql"
+          "mysql"
+        ];
         default = "sqlite";
         description = "Database type.";
         example = "pgsql";
@@ -128,13 +144,28 @@ in
       example = "/mnt/freshrss";
     };
 
+    webserver = mkOption {
+      type = types.enum [
+        "nginx"
+        "caddy"
+      ];
+      default = "nginx";
+      description = ''
+        Whether to use nginx or caddy for virtual host management.
+
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
+
+        Further caddy configuration can be done by adapting `services.caddy.virtualHosts.<name>`.
+        See [](#opt-services.caddy.virtualHosts) for further information.
+      '';
+    };
+
     virtualHost = mkOption {
-      type = types.nullOr types.str;
+      type = types.str;
       default = "freshrss";
       description = ''
-        Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
-        You may need to configure the virtualhost further through services.nginx.virtualHosts.<virtualhost>,
-        for example to enable SSL.
+        Name of the caddy/nginx virtualhost to use and setup.
       '';
     };
 
@@ -154,10 +185,16 @@ in
     };
 
     authType = mkOption {
-      type = types.enum [ "form" "http_auth" "none" ];
+      type = types.enum [
+        "form"
+        "http_auth"
+        "none"
+      ];
       default = "form";
       description = "Authentication type for FreshRSS.";
     };
+
+    api.enable = mkEnableOption "API access for mobile apps and third-party clients (Google Reader API and Fever API). Users must set individual API passwords in their profile settings";
   };
 
   config =
@@ -185,7 +222,11 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+          "~@privileged"
+        ];
         UMask = "0007";
         Type = "oneshot";
         User = cfg.user;
@@ -203,15 +244,28 @@ in
           '';
         }
       ];
+
+      # Set up a Caddy virtual host.
+      services.caddy = mkIf (cfg.webserver == "caddy") {
+        enable = true;
+        virtualHosts.${cfg.virtualHost}.extraConfig = ''
+          root * ${config.services.freshrss.package}/p
+          php_fastcgi unix/${config.services.phpfpm.pools.freshrss.socket} {
+            env FRESHRSS_DATA_PATH ${config.services.freshrss.dataDir}
+          }
+          file_server
+        '';
+      };
+
       # Set up a Nginx virtual host.
-      services.nginx = mkIf (cfg.virtualHost != null) {
+      services.nginx = mkIf (cfg.webserver == "nginx") {
         enable = true;
         virtualHosts.${cfg.virtualHost} = {
           root = "${cfg.package}/p";
 
           # php files handling
           # this regex is mandatory because of the API
-          locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
+          locations."~ ^.+?\\.php(/.*)?$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
             # By default, the variable PATH_INFO is not set under PHP-FPM
@@ -236,8 +290,8 @@ in
         ${cfg.pool} = {
           user = "freshrss";
           settings = {
-            "listen.owner" = "nginx";
-            "listen.group" = "nginx";
+            "listen.owner" = webserver.user;
+            "listen.group" = webserver.group;
             "listen.mode" = "0600";
             "pm" = "dynamic";
             "pm.max_children" = 32;
@@ -266,25 +320,31 @@ in
 
       systemd.services.freshrss-config =
         let
-          settingsFlags = concatStringsSep " \\\n    "
-            (mapAttrsToList (k: v: "${k} ${toString v}") {
+          settingsFlags = concatStringsSep " \\\n    " (
+            mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default-user" = ''"${cfg.defaultUser}"'';
               "--auth-type" = ''"${cfg.authType}"'';
               "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
+              ${if cfg.api.enable then "--api-enabled" else null} = "";
               # The following attributes are optional depending on the type of
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
               ${if cfg.database.name != null then "--db-base" else null} = ''"${cfg.database.name}"'';
-              ${if cfg.database.passFile != null then "--db-password" else null} = ''"$(cat ${cfg.database.passFile})"'';
+              ${if cfg.database.passFile != null then "--db-password" else null} =
+                ''"$(cat ${cfg.database.passFile})"'';
               ${if cfg.database.user != null then "--db-user" else null} = ''"${cfg.database.user}"'';
-              ${if cfg.database.tableprefix != null then "--db-prefix" else null} = ''"${cfg.database.tableprefix}"'';
+              ${if cfg.database.tableprefix != null then "--db-prefix" else null} =
+                ''"${cfg.database.tableprefix}"'';
               # hostname:port e.g. "localhost:5432"
-              ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} = ''"${cfg.database.host}:${toString cfg.database.port}"'';
+              ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} =
+                ''"${cfg.database.host}:${toString cfg.database.port}"'';
               # socket path e.g. "/run/postgresql"
-              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} = ''"${cfg.database.host}"'';
-            });
+              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} =
+                ''"${cfg.database.host}"'';
+            }
+          );
         in
         {
           description = "Set up the state directory for FreshRSS before use";
@@ -297,7 +357,9 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
+              userScriptArgs = ''--user ${cfg.defaultUser} ${
+                optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
+              }'';
               updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/update-user.php ${userScriptArgs}
               '';

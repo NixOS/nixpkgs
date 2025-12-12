@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "3.6.0";
+  version = "4.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,11 +28,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Y0jI/06jVbivKkKd8ZXvotBBo+nvo7Wmp4VypTzDf5k=";
+    tag = "v${version}";
+    hash = "sha256-CzS6aVOFkBSJ9+0KJOaJLxK2ZiRY4OybNkCX5VdybqY=";
   };
 
   pythonRelaxDeps = [
+    "pandas"
     "pyarrow"
     "thrift"
   ];
@@ -57,15 +58,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "databricks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Databricks SQL Connector for Python";
     homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
-    changelog = "https://github.com/databricks/databricks-sql-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ harvidsen ];
+    changelog = "https://github.com/databricks/databricks-sql-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ harvidsen ];
   };
 }

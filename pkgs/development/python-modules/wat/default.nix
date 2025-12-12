@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wat";
-  version = "0.3.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "wat";
     rev = version;
-    hash = "sha256-WCMMj4KtfWOp6LsS4XHD/M/iepstVasHknEvEUTMMM8=";
+    hash = "sha256-ns5eF5jsmwCvx9jnTLG9w0ujH3cPAjzy9bRMgQHVKj4=";
   };
 
   build-system = [ setuptools ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "wat" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://igrek51.github.io/wat/";
     description = "Deep inspection of python objects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ parras ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ parras ];
   };
 }

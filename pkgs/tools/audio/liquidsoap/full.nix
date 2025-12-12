@@ -23,7 +23,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.2.5";
+  version = "2.3.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -32,12 +32,15 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o3P7oTizO2l2WkB4LormZ/Ses5jZOpgQ1r1zB1Y3Bjs=";
+    hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
   };
 
   postPatch = ''
     substituteInPlace src/lang/dune \
       --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+    # Compatibility with camlimages 5.0.5
+    substituteInPlace src/core/dune \
+      --replace-warn camlimages.all_formats camlimages.core
   '';
 
   dontConfigure = true;
@@ -88,7 +91,7 @@ stdenv.mkDerivation {
     ocamlPackages.duppy
     ocamlPackages.mm
     ocamlPackages.ocurl
-    ocamlPackages.ocaml_pcre
+    ocamlPackages.re
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
@@ -96,11 +99,14 @@ stdenv.mkDerivation {
     ocamlPackages.magic-mime
     ocamlPackages.menhir # liquidsoap-lang
     ocamlPackages.menhirLib
+    ocamlPackages.mem_usage
     ocamlPackages.metadata
     ocamlPackages.dune-build-info
     ocamlPackages.re
     ocamlPackages.sedlex # liquidsoap-lang
+    ocamlPackages.ppx_hash # liquidsoap-lang
     ocamlPackages.ppx_string
+    ocamlPackages.xml-light # liquidsoap-lang
 
     # Recommended dependencies
     ocamlPackages.ffmpeg
@@ -117,7 +123,6 @@ stdenv.mkDerivation {
     ocamlPackages.frei0r
     ocamlPackages.gd
     ocamlPackages.graphics
-    # ocamlPackages.gstreamer # Broken but advertised feature
     ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa
@@ -154,7 +159,6 @@ stdenv.mkDerivation {
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
     maintainers = with lib.maintainers; [
       dandellion
-      ehmry
     ];
     license = lib.licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [ ];

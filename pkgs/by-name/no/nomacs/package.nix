@@ -1,36 +1,54 @@
-{ lib
-, cmake
-, exiv2
-, fetchFromGitHub
-, libraw
-, libsForQt5
-, libtiff
-, opencv4
-, pkg-config
-, stdenv
+{
+  lib,
+  cmake,
+  exiv2,
+  fetchFromGitHub,
+  libraw,
+  kdePackages,
+  qt6,
+  libtiff,
+  opencv4,
+  pkg-config,
+  stdenv,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.19.1";
+  version = "3.21.1";
+  hash = "sha256-RRa19vj7iTtGzdssdtHVOsDzS4X+p1HeiZKy8EIWxq8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
     fetchSubmodules = false; # We'll use our own
-    hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
+    inherit (finalAttrs) hash;
   };
 
-  outputs = [ "out" ]
-    # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
+  plugins = fetchFromGitHub {
+    owner = "novomesk";
+    repo = "nomacs-plugins";
+    rev = "20101da282f13d3184ece873388e1c234a79b5e7";
+    hash = "sha256-gcRc4KoWJQ5BirhLuk+c+5HwBeyQtlJ3iyX492DXeVk=";
+  };
+
+  outputs = [
+    "out"
+  ]
+  # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
+  postUnpack = ''
+    rm -rf $sourceRoot/plugins
+    mkdir $sourceRoot/plugins
+    cp -r ${finalAttrs.plugins}/* $sourceRoot/plugins/
+    chmod -R +w $sourceRoot/plugins
+  '';
+
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
   ];
 
@@ -42,14 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
     # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
     (lib.getOutput "cxxdev" opencv4)
-  ] ++ (with libsForQt5; [
-    kimageformats
-    qtbase
-    qtimageformats
-    qtsvg
-    qttools
-    quazip
-  ]);
+
+    kdePackages.kimageformats
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtsvg
+    qt6.qttools
+    kdePackages.quazip
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -64,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{Applications,lib}
     mv $out/nomacs.app $out/Applications/nomacs.app
     mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
+  '';
+  # FIXME:
+  # why can't we have nomacs look in the "standard" plugin directory???
+  # None of the wrap stuff worked...
+  # Let's just instead move the plugin dir brute force
+  postFixup = ''
+    mv $out/lib/nomacs-plugins $out/bin/plugins
   '';
 
   meta = {
@@ -88,7 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ mindavi ];
-    inherit (libsForQt5.qtbase.meta) platforms;
+    maintainers = with lib.maintainers; [
+      mindavi
+      ppenguin
+    ];
+    inherit (qt6.qtbase.meta) platforms;
   };
 })

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "podhmo";
     repo = "python-node-semver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nodesemver" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
     description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

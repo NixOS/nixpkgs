@@ -14,7 +14,7 @@
   findutils,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   pname = "pdf2odt";
   version = "20220827";
 
@@ -56,11 +56,11 @@ resholve.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "PDF to ODT/ODS format converter";
     homepage = "https://github.com/gutschke/pdf2odt";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

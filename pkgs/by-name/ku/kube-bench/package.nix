@@ -2,28 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+
   installShellFiles,
+
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-bench";
-  version = "0.9.3";
+  version = "0.14.0";
+
+  __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-i0iSIK3nJ83bCuxIVxLBjJbBCpTU5TavmX2DTEJzG+Q=";
+    repo = "kube-bench";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zu1ckblQnn3Df71myPIYebIQHjMi7S3LoSbsY8RAiVQ=";
   };
 
-  vendorHash = "sha256-c4+ruUR52TcjI+Xvuv9Xt8GAyjpbEvJhqDqWSRgVGWI=";
+  vendorHash = "sha256-qRtEkYL+OgcfdYS+u2vRynr+6w6ZEEURxOXE/vCt2fM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=v${version}"
+    "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -36,20 +41,16 @@ buildGoModule rec {
       --zsh <($out/bin/kube-bench completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/kube-bench --help
-    $out/bin/kube-bench version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/kube-bench";
-    changelog = "https://github.com/aquasecurity/kube-bench/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/kube-bench/releases/tag/v${finalAttrs.version}";
     description = "Checks whether Kubernetes is deployed according to security best practices as defined in the CIS Kubernetes Benchmark";
     mainProgram = "kube-bench";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

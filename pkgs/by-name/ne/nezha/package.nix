@@ -2,25 +2,81 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  go-swag,
   versionCheckHook,
   dbip-country-lite,
+  formats,
   nix-update-script,
+  nezha-theme-admin,
+  nezha-theme-user,
+  withThemes ? [ ],
 }:
 
-buildGoModule rec {
+let
   pname = "nezha";
-  version = "0.20.13";
+  version = "1.14.10";
+
+  frontendName = lib.removePrefix "nezha-theme-";
+
+  frontend-templates =
+    let
+      mkTemplate = theme: {
+        path = "${frontendName theme.pname}-dist";
+        name = frontendName theme.pname;
+        repository = theme.meta.homepage;
+        author = theme.src.owner;
+        version = theme.version;
+        isofficial = false;
+        isadmin = false;
+      };
+    in
+    (formats.yaml { }).generate "frontend-templates.yaml" (
+      [
+        (
+          mkTemplate nezha-theme-admin
+          // {
+            name = "OfficialAdmin";
+            isadmin = true;
+            isofficial = true;
+          }
+        )
+        (
+          mkTemplate nezha-theme-user
+          // {
+            name = "Official";
+            isofficial = true;
+          }
+        )
+      ]
+      ++ map mkTemplate withThemes
+    );
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "naiba";
+    owner = "nezhahq";
     repo = "nezha";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fJvL2cESQoiW93aj2RHPyZXvP8246Mf8hIRiP/DSRRY=";
+    tag = "v${version}";
+    hash = "sha256-tgjLkNSNEQCJP1/Pcgfldl5DGQnzca6KMrqEjl45ex4=";
   };
 
-  postPatch = ''
-    cp ${dbip-country-lite.mmdb} pkg/geoip/geoip.db
-  '';
+  proxyVendor = true;
+
+  prePatch = ''
+    rm -rf cmd/dashboard/*-dist
+
+    cp ${frontend-templates} service/singleton/frontend-templates.yaml
+  ''
+  + lib.concatStringsSep "\n" (
+    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
+      [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes
+    )
+  );
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.
@@ -29,12 +85,22 @@ buildGoModule rec {
     ./dbip.patch
   ];
 
-  vendorHash = "sha256-SYefkgc0CsAEdkL7rxu9fpz7dpBnx1LwabIadUeOKco=";
+  postPatch = ''
+    cp ${dbip-country-lite.mmdb} pkg/geoip/geoip.db
+  '';
+
+  nativeBuildInputs = [ go-swag ];
+
+  # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
+  preBuild = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+  '';
+
+  vendorHash = "sha256-Q+ur9hIG0xVJHdi79K5e4sV8xuR45qp195ptEDbHAvc=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/naiba/nezha/service/singleton.Version=${version}"
+    "-X github.com/nezhahq/nezha/service/singleton.Version=${version}"
   ];
 
   checkFlags = "-skip=^TestSplitDomainSOA$";
@@ -43,18 +109,18 @@ buildGoModule rec {
     mv $out/bin/dashboard $out/bin/nezha
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
-    homepage = "https://github.com/naiba/nezha";
-    changelog = "https://github.com/naiba/nezha/releases/tag/v${version}";
+    homepage = "https://github.com/nezhahq/nezha";
+    changelog = "https://github.com/nezhahq/nezha/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";

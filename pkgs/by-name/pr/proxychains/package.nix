@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "haad";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "proxychains";
+    rev = "proxychains-${version}";
     sha256 = "083xdg6fsn8c2ns93lvy794rixxq8va6jdf99w1z0xi4j7f1nyjw";
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     "install-config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxifier for SOCKS proxies";
     homepage = "https://proxychains.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
     mainProgram = "proxychains4";
   };
 }

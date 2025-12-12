@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_18,
+  systemdLibs,
   coreutils,
   ffmpeg-headless,
   imagemagick_light,
@@ -26,29 +26,27 @@ assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage rec {
   pname = "sitespeed-io";
-  version = "34.0.1";
+  version = "38.4.1";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
-    rev = "v${version}";
-    hash = "sha256-yC/TlAJa71hbPYYuqPV+k3syGuo/VhnNjXmmxh47ySQ=";
+    tag = "v${version}";
+    hash = "sha256-7aqZ63q+17MmUjHwh5Z9yqvwRq/Av+UOswIlSA2V14E=";
   };
-
-  nodejs = nodejs_18;
-
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
 
   # Don't try to download the browser drivers
   CHROMEDRIVER_SKIP_DOWNLOAD = true;
   GECKODRIVER_SKIP_DOWNLOAD = true;
   EDGEDRIVER_SKIP_DOWNLOAD = true;
 
+  buildInputs = [
+    systemdLibs
+  ];
+
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-Q0cWxV5OOaG8Z3aM2j0HtD1e9yPFVDSRcMKBf/yscv4=";
+  npmDepsHash = "sha256-2v/3Ygy6pAyfoQKcbJphIExcU46xc9c6+yXP2JbX11Y=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
@@ -71,7 +69,7 @@ buildNpmPackage rec {
     ''
       wrapProgram $out/bin/sitespeed-io \
         --set PATH ${
-          lib.makeBinPath ([
+          lib.makeBinPath [
             (python3.withPackages (p: [
               p.numpy
               p.opencv4
@@ -82,7 +80,7 @@ buildNpmPackage rec {
             xorg.xorgserver
             procps
             coreutils
-          ])
+          ]
         } \
         ${lib.optionalString withChromium "--add-flags '${chromiumArgs}'"} \
         ${lib.optionalString withFirefox "--add-flags '${firefoxArgs}'"} \
@@ -94,11 +92,11 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misterio77 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
     mainProgram = "sitespeed-io";
   };

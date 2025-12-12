@@ -1,27 +1,31 @@
 {
-  lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  tbls,
+  lib,
+  stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.79.4";
+  version = "1.92.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
-    rev = "v${version}";
-    hash = "sha256-o/ZhXoenK3xlflRMXS9NtnW23VBiDmDPSGlHtE3cNiM=";
+    tag = "v${version}";
+    hash = "sha256-Z+X7OUT38OB7559s+bOlraL9F2qSnhpzpQTYt07DYD0=";
   };
 
-  vendorHash = "sha256-SkddF8ZxvGRQ+/tWnmlcoaTs3MRfVgQWX4MZ05nZ9XA=";
+  vendorHash = "sha256-3Y3GsVMImo0oCigAyQ2SPOucllrfkD9oj9o3ESk47eA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  excludedPackages = [ "scripts/jsonschema" ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
@@ -44,18 +48,16 @@ buildGoModule rec {
       --zsh <($out/bin/tbls completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = tbls;
-    command = "tbls version";
-    inherit version;
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  versionCheckProgramArg = "version";
+
+  meta = {
     description = "Tool to generate documentation based on a database structure";
     homepage = "https://github.com/k1LoW/tbls";
     changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "tbls";
   };
 }

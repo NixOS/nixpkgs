@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
   enableStatic ? stdenv.hostPlatform.isStatic,
   writeScript,
   testers,
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.6.3";
+  version = "5.8.1";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
-    hash = "sha256-2wWQYptvD6NudK6l+XMdxvjfBoznt7r6RTAYMqXuvDo=";
+    hash = "sha256-C1T3nfhZElBN4LFK7Hlx4/lkSRrxgS2DRHAFgHUTzZ4=";
   };
 
   strictDeps = true;
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isOpenBSD [
+    autoreconfHook
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
@@ -72,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
     description = "General-purpose data compression software, successor of LZMA";
     homepage = "https://tukaani.org/xz/";
@@ -89,12 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       create 30 % smaller output than gzip and 15 % smaller output than
       bzip2.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "liblzma" ];
   };
 })

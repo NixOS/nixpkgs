@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "sd-local";
-  version = "1.0.57";
+  version = "1.0.59";
 
   src = fetchFromGitHub {
     owner = "screwdriver-cd";
-    repo = pname;
+    repo = "sd-local";
     rev = "v${version}";
-    sha256 = "sha256-CBEdE15lAMMawTsfc45ptHsC2AbqFP6v4/nnktytwvc=";
+    sha256 = "sha256-o29VwPC03JQ2JgcZIJBARl9pEDWdE86ExEM3eB7UfDI=";
   };
 
-  vendorHash = "sha256-rAFfyMlnhDrb+f04S9+hNygXPaoG9mheQMxaJtXxBVw=";
+  vendorHash = "sha256-FVT7zylL1mbwkUH01It9a/P3rC128OnMGqoqE8RMo1k=";
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "screwdriver.cd local mode";
     mainProgram = "sd-local";
     homepage = "https://github.com/screwdriver-cd/sd-local";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ midchildan ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ midchildan ];
   };
 }

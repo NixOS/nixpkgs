@@ -12,28 +12,27 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
-    repo = pname;
+    repo = "uwufetch";
     rev = version;
     hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace uwufetch.c \
-        --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
-        --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
-        --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
-      # fix command_path for package manager (nix-store)
-      substituteInPlace fetch.c \
-        --replace "/usr/bin" "/run/current-system/sw/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Makefile \
-        --replace "local/bin" "bin" \
-        --replace "local/lib" "lib" \
-        --replace "local/include" "include" \
-        --replace "local/share" "share"
-    '';
+  postPatch = ''
+    substituteInPlace uwufetch.c \
+      --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
+    # fix command_path for package manager (nix-store)
+    substituteInPlace fetch.c \
+      --replace "/usr/bin" "/run/current-system/sw/bin"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "local/bin" "bin" \
+      --replace "local/lib" "lib" \
+      --replace "local/include" "include" \
+      --replace "local/share" "share"
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -51,12 +50,12 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ viu ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Meme system info tool for Linux";
     homepage = "https://github.com/TheDarkBug/uwufetch";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bbjubjub ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "uwufetch";
   };
 }

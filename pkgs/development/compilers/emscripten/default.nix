@@ -10,14 +10,18 @@
   llvmPackages,
   symlinkJoin,
   makeWrapper,
-  substituteAll,
+  replaceVars,
   buildNpmPackage,
   emscripten,
 }:
 
+let
+  pythonWithPsutil = python3.withPackages (ps: [ ps.psutil ]);
+in
+
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.73";
+  version = "4.0.21";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-bqxUlxpIH1IAx9RbnaMq4dZW8fy+M/Q02Q7VrW/AKNQ=";
+    npmDepsHash = "sha256-IwiH+GELJzd4rDq31arhiF5miIRLDe7nrVsM7Yg9rTg=";
 
     dontBuild = true;
 
@@ -46,19 +50,22 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
+    hash = "sha256-8lh7ZpzVnoQXOGE/xJgHSWkYXUDOOprbSGaEkyU+vKE=";
     rev = version;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+  ];
   buildInputs = [
     nodejs
-    python3
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-emulate-clang-sysroot-include-logic.patch;
+    (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
   ];
@@ -68,8 +75,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 3.1.67 requires LLVM tip-of-tree instead of LLVM 18
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 20/EXPECTED_LLVM_VERSION = 19/g" tools/shared.py
+    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -103,15 +110,30 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
-    mkdir -p $appdir/node_modules
+    mkdir -p $appdir/node_modules/.bin
     cp -r ${nodeModules}/* $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+
+    cp ${./locate_cache.sh} $appdir/locate_cache.sh
+    chmod +x $appdir/locate_cache.sh
+
+    export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
+    for b in em++ emcc; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
+    done
+    for b in em-config emar embuilder emcmake emconfigure emmake emranlib emrun emscons emsize; do
+      chmod +x $appdir/$b.py
+      makeWrapper $appdir/$b.py $out/bin/$b \
+        --set NODE_PATH ${nodeModules} \
+        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
     done
 
     # precompile libc (etc.) in all variants:
@@ -119,18 +141,7 @@ stdenv.mkDerivation rec {
     echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
       for BIND in "" "--bind"; do
-        # starting with emscripten 3.1.32+,
-        # if pthreads and relocatable are both used,
-        # _emscripten_thread_exit_joinable must be exported
-        # (see https://github.com/emscripten-core/emscripten/pull/18376)
-        # TODO: get library cache to build with both enabled and function exported
         $out/bin/emcc $LTO $BIND test.c
-        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
-        # starting with emscripten 3.1.48+,
-        # to use pthreads, _emscripten_check_mailbox must be exported
-        # (see https://github.com/emscripten-core/emscripten/pull/20604)
-        # TODO: get library cache to build with pthreads at all
-        # $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
       done
     done
     popd
@@ -138,7 +149,7 @@ stdenv.mkDerivation rec {
     export PYTHON=${python3}/bin/python
     export NODE_PATH=${nodeModules}
     pushd $appdir
-    python test/runner.py test_hello_world
+    ${pythonWithPsutil}/bin/python test/runner.py test_hello_world
     popd
 
     runHook postInstall
@@ -151,16 +162,15 @@ stdenv.mkDerivation rec {
     bintools = emscripten;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "LLVM-to-JavaScript Compiler";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       qknight
-      matthewbauer
       raitobezarius
       willcohen
     ];
-    license = licenses.ncsa;
+    license = lib.licenses.ncsa;
   };
 }

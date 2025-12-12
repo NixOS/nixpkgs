@@ -16,18 +16,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LoQTcHM6czzQ5ZwXcklFXf/7WlRsoJTF61UhQ56aleQ=";
   };
 
-  cargoHash = "sha256-yZ4UAx95f/cjeObBtzpiYtwDjgOgkKnD64yGe6ouVGw=";
+  cargoHash = "sha256-c/6tz68ZI42RgD2N4WZI3nzFo2J5gjk8UoPlelQaxIo=";
 
   passthru.tests = {
     inherit (nixosTests) nvmetcfg;
   };
 
-  meta = with lib; {
+  meta = {
     description = "NVMe-oF Target Configuration Utility for Linux";
     homepage = "https://github.com/vifino/nvmetcfg";
-    license = licenses.isc;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "nvmetcfg";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "tdfgo";
-  version = "unstable-2022-08-25";
+  version = "0-unstable-2022-08-25";
 
   src = fetchFromGitHub {
     owner = "digitallyserviced";
@@ -17,13 +17,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
 
-  meta = with lib; {
+  meta = {
     description = "TheDraw font parser and console text renderer";
     longDescription = "Supports more fonts than `tdfiglet`, and packs more features.";
     homepage = "https://github.com/digitallyserviced/tdfgo";
-    license = licenses.cc0;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ crinklywrappr ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ crinklywrappr ];
     mainProgram = "tdfgo";
   };
 }

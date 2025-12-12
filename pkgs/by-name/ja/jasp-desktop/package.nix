@@ -1,31 +1,36 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
   fetchpatch,
+
   buildEnv,
   linkFarm,
-  replaceVars,
-  R,
-  rPackages,
+
   cmake,
   ninja,
   pkg-config,
+
   boost,
+  freexl,
   libarchive,
-  readstat,
+  librdata,
   qt6,
+  R,
+  readstat,
+  rPackages,
 }:
 
 let
-  version = "0.19.1";
+  version = "0.95.0";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    rev = "v${version}";
-    hash = "sha256-SACGyNVxa6rFjloRQrEVtUgujEEF7WYL8Qhw6ZqLwdQ=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-RR7rJJb0qKqZs7K3zP6GxlDXpmSNnGQ3WDExUgm9pKQ=";
   };
 
   moduleSet = import ./modules.nix {
@@ -34,7 +39,7 @@ let
     jasp-version = version;
   };
 
-  inherit (moduleSet) engine modules;
+  inherit (moduleSet) jaspBase modules;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -42,11 +47,12 @@ let
     paths = [
       "${R}/lib/R"
       rPackages.RInside
-      engine.jaspBase # Should already be propagated from modules, but include it again, just in case
-    ] ++ lib.attrValues modules;
+      jaspBase # Should already be propagated from modules, but include it again, just in case
+    ]
+    ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules" (
+  moduleLibs = linkFarm "jasp-${version}-module-libs" (
     lib.mapAttrsToList (name: drv: {
       name = name;
       path = "${drv}/library";
@@ -58,25 +64,23 @@ stdenv.mkDerivation {
   inherit version src;
 
   patches = [
-    # remove unused cmake deps, ensure boost is dynamically linked, patch readstat path
-    (replaceVars ./cmake.patch {
-      inherit readstat;
-    })
-
     (fetchpatch {
-      name = "fix-qt-6.8-crash.patch";
-      url = "https://github.com/jasp-stats/jasp-desktop/commit/d96a35d262312f72081ac3f96ae8c2ae7c796b0.patch";
-      hash = "sha256-KcsFy1ImPTHwDKN5Umfoa9CbtQn7B3FNu/Srr0dEJGA=";
+      name = "readstat-use-find-library.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
+      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
     })
+    ./link-boost-dynamically.patch
+    ./disable-module-install-logic.patch # don't try to install modules via cmake
+    ./disable-renv-logic.patch
+    ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
   ];
 
   cmakeFlags = [
-    "-DGITHUB_PAT=dummy"
-    "-DGITHUB_PAT_DEF=dummy"
-    "-DINSTALL_R_FRAMEWORK=OFF"
-    "-DLINUX_LOCAL_BUILD=OFF"
-    "-DINSTALL_R_MODULES=OFF"
-    "-DCUSTOM_R_PATH=${customREnv}"
+    (lib.cmakeFeature "GITHUB_PAT" "dummy")
+    (lib.cmakeFeature "GITHUB_PAT_DEF" "dummy")
+    (lib.cmakeBool "LINUX_LOCAL_BUILD" false)
+    (lib.cmakeBool "INSTALL_R_MODULES" false)
+    (lib.cmakeFeature "CUSTOM_R_PATH" "${customREnv}")
   ];
 
   nativeBuildInputs = [
@@ -87,10 +91,13 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    customREnv
     boost
+    customREnv
+    freexl
     libarchive
+    librdata
     readstat
+
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtwebengine
@@ -98,23 +105,21 @@ stdenv.mkDerivation {
     qt6.qt5compat
   ];
 
+  # needed so that the linker can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''
-    # Remove unused cache locations
-    rm -r $out/lib64 $out/Modules
-
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
-        --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
+      --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
-    ln -s ${modulesDir} $out/Modules
+    ln -s ${moduleLibs} $out/Modules/module_libs
   '';
 
   passthru = {
-    inherit modules engine;
+    inherit jaspBase modules;
     env = customREnv;
   };
 

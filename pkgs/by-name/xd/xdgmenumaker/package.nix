@@ -13,13 +13,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "gapan";
-    repo = pname;
+    repo = "xdgmenumaker";
     rev = version;
-    sha256 = "uSSKiceHurk+qGVnaYa4uJEuq9FQROdhcotQxPBgPIs=";
+    sha256 = "rh1rRgbw8uqii4oN3XXNNKsWam1d8TY0qGceHERlG1k=";
   };
 
   format = "other";
@@ -59,9 +59,9 @@ python3Packages.buildPythonApplication rec {
     description = "Command line tool that generates XDG menus for several window managers";
     mainProgram = "xdgmenumaker";
     homepage = "https://github.com/gapan/xdgmenumaker";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch
-    platforms = with platforms; filter (x: !(elem x darwin)) unix;
-    maintainers = [ maintainers.romildo ];
+    platforms = with lib.platforms; filter (x: !(elem x darwin)) unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

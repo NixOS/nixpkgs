@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncmpc";
-  version = "0.51";
+  version = "0.52";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "ncmpc";
-    rev = "v${version}";
-    sha256 = "sha256-mFZ8szJT7eTPHQHxjpP5pThCcY0YERGkGR8528Xu9MA=";
+    tag = "v${version}";
+    sha256 = "sha256-j/hZdKl1LQ/yEGDUv9k5PQJ6pngAl52mVCpfacWrRw0=";
   };
 
   buildInputs = [
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/clients/ncmpc/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "ncmpc";
   };
 }

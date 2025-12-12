@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-zlib";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fvZVviKN/CL42Zmmm6k/JNdeAljRoqN63rlduNJVr98=";
+    tag = "v${version}";
+    hash = "sha256-N38eMxxovpBM3n0cb7glKyBQ9GD79uyFxq5L4pKv248=";
   };
 
   postPatch = ''
@@ -34,15 +34,15 @@ buildPythonPackage rec {
     zlib_ng = [ zlib-ng ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiohttp_fast_zlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use the fastest installed zlib compatible library with aiohttp";
     homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
     changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

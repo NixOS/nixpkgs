@@ -27,18 +27,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     validatePkgConfig
-    geos # for geos-config
   ];
 
   buildInputs = [ geos ];
 
+  configureFlags = [
+    "--with-geosconfig=${lib.getExe' (lib.getDev geos) "geos-config"}"
+  ];
+
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "RT Topology Library";
     homepage = "https://git.osgeo.org/gitea/rttopo/librttopo";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 }

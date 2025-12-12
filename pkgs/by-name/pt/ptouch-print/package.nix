@@ -13,7 +13,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ptouch-print";
   version = "1.5-unstable-2024-02-11";
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to print labels on Brother P-Touch printers on Linux";
     homepage = "https://dominic.familie-radermacher.ch/projekte/ptouch-print/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "ptouch-print";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "vg";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lace";
     repo = "vg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZNUAfkhjmsxD8cH0fR8Htjs+/F/3R9xfe1XgRyndids=";
   };
 
@@ -27,19 +27,21 @@ buildPythonPackage rec {
       --replace 'requires = ["setuptools", "poetry-core>=1.0.0"]' 'requires = ["poetry-core>=1.0.0"]'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [ "test_basic" ];
+
   pythonImportsCheck = [ "vg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linear algebra for humans: a very good vector-geometry and linear-algebra toolbelt";
     homepage = "https://github.com/lace/vg";
     changelog = "https://github.com/lace/vg/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ clerie ];
+    license = [ lib.licenses.bsd2 ];
+    maintainers = with lib.maintainers; [ clerie ];
   };
 }

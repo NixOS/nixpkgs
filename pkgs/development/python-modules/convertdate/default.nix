@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fitnr";
-    repo = pname;
+    repo = "convertdate";
     rev = "v${version}";
     hash = "sha256-iOHK3UJulXJJR50nhiVgfk3bt+CAtG3BRySJ8DkBuJE=";
   };
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "convertdate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utils for converting between date formats and calculating holidays";
     mainProgram = "censusgeocode";
     homepage = "https://github.com/fitnr/convertdate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

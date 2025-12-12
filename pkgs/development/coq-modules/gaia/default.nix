@@ -3,6 +3,7 @@
   mkCoqDerivation,
   coq,
   mathcomp,
+  stdlib,
   version ? null,
 }:
 
@@ -16,47 +17,41 @@ mkCoqDerivation {
   release."1.15".sha256 = "sha256:04zchnkvaq2mzpcilpspn5l947689gj3m0w20m0nd7w4drvlahnw";
   release."1.17".sha256 = "sha256-2VzdopXgKS/wC5Rd1/Zlr12J5bSIGINFjG1nrMjDrGE=";
   release."2.2".sha256 = "sha256-y8LlQg9d9rfPFjzS9Xu3BW/H3tPiOC+Eb/zwXJGW9d4=";
+  release."2.3".sha256 = "sha256-inWJok0F3SZpVfoyMfpRXHVHn4z2aY8JjCKKhdVTnoc=";
   releaseRev = (v: "v${v}");
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with lib.versions;
     lib.switch
-      [ coq.version mathcomp.version ]
+      [ coq.coq-version mathcomp.version ]
       [
-        {
-          cases = [
-            (range "8.16" "8.20")
-            (range "2.0" "2.2")
-          ];
-          out = "2.2";
-        }
-        {
-          cases = [
-            (range "8.10" "8.18")
-            (range "1.12.0" "1.18.0")
-          ];
-          out = "1.17";
-        }
-        {
-          cases = [
-            (range "8.10" "8.12")
-            "1.11.0"
-          ];
-          out = "1.11";
-        }
+        (case (range "8.16" "9.1") (range "2.0" "2.5") "2.3")
+        (case (range "8.16" "9.0") (range "2.0" "2.3") "2.2")
+        (case (range "8.10" "8.18") (range "1.12.0" "1.18.0") "1.17")
+        (case (range "8.10" "8.12") "1.11.0" "1.11")
       ]
       null;
 
   propagatedBuildInputs = [
-    mathcomp.ssreflect
-    mathcomp.algebra
+    mathcomp.boot
     mathcomp.fingroup
+    mathcomp.algebra
+    stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";
-    maintainers = with maintainers; [ Zimmi48 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
   };
 }

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Latrodect";
     repo = "wss-repo-vulnerability-search-manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jXTivaXHHt63u9N7w40jyLUU2kg5LxAn50PVpqwUc0M=";
   };
 
@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for vulnerability detection";
     homepage = "https://github.com/Latrodect/wss-repo-vulnerability-search-manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "serpant";
   };
 }

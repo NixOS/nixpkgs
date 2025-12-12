@@ -2,26 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkg-config,
   ncurses,
   perl,
-  apple-sdk_11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvi";
-  version = "7.6.30";
+  version = "7.7.32";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
-    rev = version;
-    hash = "sha256-P4w/PM9UmHmTzS9+WDK3x3MyZ7OoY2yO/Rx0vRMJuLI=";
+    tag = finalAttrs.version;
+    hash = "sha256-kLULaKEefMpNLANnVdWAZeH+2KY5gEWGce6vJ/R7HAI=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    ncurses
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ncurses
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -30,6 +34,12 @@ stdenv.mkDerivation rec {
     # silently fail the chown command
     "IUSGR=$(USER)"
   ];
+
+  # Don't include ncurses header, but link against ncurses
+  # openvi requires GNU ncurses symbols, but ncurses headers
+  # is incompatible with macOS wchar.h, resulting in
+  # "error: expected function body after function declarator"
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L${lib.getLib ncurses}/lib -lncursesw";
 
   enableParallelBuilding = true;
 
@@ -41,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "ovi";
   };
-}
+})

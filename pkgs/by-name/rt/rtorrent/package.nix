@@ -1,32 +1,33 @@
 {
-  lib,
-  stdenv,
-  autoconf-archive,
   autoreconfHook,
   cppunit,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
+  lib,
   libtool,
-  libtorrent,
+  libtorrent-rakshasa,
+  lua5_4_compat,
   ncurses,
+  nixosTests,
+  nix-update-script,
   openssl,
   pkg-config,
+  stdenv,
+  versionCheckHook,
+  withLua ? false,
   zlib,
-  nixosTests,
-  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "rakshasa-rtorrent";
-  version = "0.10.0-unstable-2024-12-15";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rtorrent";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "b8cb828d963719565528573123bb08b72cd50928";
-    hash = "sha256-nvyRRmZRdyRAazGAFqHDK+zME9bSkp+LwW9Na4M8+L0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zncal17A4/+WGU3L8iJVSMJtKTKNmMHCXJ2O7Za2VOE=";
   };
 
   outputs = [
@@ -34,12 +35,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  passthru = {
-    inherit libtorrent;
-  };
-
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     installShellFiles
     pkg-config
@@ -49,23 +45,18 @@ stdenv.mkDerivation rec {
     cppunit
     curl
     libtool
-    libtorrent
+    libtorrent-rakshasa
     ncurses
     openssl
     zlib
-  ];
+  ]
+  ++ lib.optionals withLua [ lua5_4_compat ];
 
   configureFlags = [
     "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
-  ];
-
-  passthru = {
-    updateScript = unstableGitUpdater { tagPrefix = "v"; };
-    tests = {
-      inherit (nixosTests) rtorrent;
-    };
-  };
+  ]
+  ++ lib.optionals withLua [ "--with-lua" ];
 
   enableParallelBuilding = true;
 
@@ -74,16 +65,26 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/rtorrent.rc-example -t $out/share/doc/rtorrent/rtorrent.rc
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
+
+  passthru = {
+    inherit libtorrent-rakshasa;
+    tests = { inherit (nixosTests) rtorrent; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
+    homepage = "https://rakshasa.github.io/rtorrent/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "rtorrent";
     maintainers = with lib.maintainers; [
       ebzzry
       codyopel
       thiagokokada
     ];
     platforms = lib.platforms.unix;
-    mainProgram = "rtorrent";
   };
-}
+})

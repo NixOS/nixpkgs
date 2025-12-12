@@ -10,23 +10,23 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2024.1224.1";
+  version = "2025.1209.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-p/1rmz+CnuVl72wOKJpHFkJv64vKRoMSV15KRUgjhu0=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
+        hash = "sha256-qzmW9STCoIoz2+UGkybvB9AE536r3VghMahPFT020to=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-jVEjqpKJsFC+rSwSNokKxYarwB4CybWSG8gdtxocFZ4=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Intel.zip";
+        hash = "sha256-421KNsV4Nb3JSjJb0OMkdAEsb/YnI/st7Vio29WAtZs=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
-        url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-9qZ5XNAII2I4PemNGrWuUCY1Syq5PH3NBc2/Jj5tcoQ=";
+        url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
+        hash = "sha256-42Fx3CxLcW97cxRXXCqPJ8NzRBnpi62IjxGLnSRkO4g=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -55,7 +55,7 @@ let
 
   passthru.updateScript = ./update.sh;
 in
-if stdenvNoCC.isDarwin then
+if stdenvNoCC.hostPlatform.isDarwin then
   stdenvNoCC.mkDerivation {
     inherit
       pname
@@ -65,11 +65,16 @@ if stdenvNoCC.isDarwin then
       passthru
       ;
 
+    nativeBuildInputs = [ makeWrapper ];
+
     installPhase = ''
       runHook preInstall
-      APP_DIR="$out/Applications"
-      mkdir -p "$APP_DIR"
-      cp -r . "$APP_DIR"
+      OSU_WRAPPER="$out/Applications/osu!.app/Contents"
+      OSU_CONTENTS="osu!.app/Contents"
+      mkdir -p "$OSU_WRAPPER/MacOS"
+      cp -r "$OSU_CONTENTS/Info.plist" "$OSU_CONTENTS/Resources" "$OSU_WRAPPER"
+      cp -r "osu!.app" "$OSU_WRAPPER/Resources/osu-wrapped.app"
+      makeWrapper "$OSU_WRAPPER/Resources/osu-wrapped.app/Contents/MacOS/osu!" "$OSU_WRAPPER/MacOS/osu!" --set OSU_EXTERNAL_UPDATE_PROVIDER 1
       runHook postInstall
     '';
   }
@@ -84,6 +89,11 @@ else
       ;
 
     extraPkgs = pkgs: with pkgs; [ icu ];
+
+    # fix OpenGL renderer on nvidia + wayland
+    extraBwrapArgs = [
+      "--ro-bind-try /etc/egl/egl_external_platform.d /etc/egl/egl_external_platform.d"
+    ];
 
     extraInstallCommands =
       let

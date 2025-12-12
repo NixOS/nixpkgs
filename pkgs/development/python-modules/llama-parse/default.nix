@@ -2,34 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  llama-index-core,
-  poetry-core,
-  pythonOlder,
+  llama-cloud-services,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.5.17";
+  version = "0.6.79";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-K6JwDKOxXoTvBy/ty7/q4vwTzntj/uIPzVJJ5vzb04E=";
+    hash = "sha256-QT2tN24GUhkKPAzjx9IIBVnufW28yBKVw5cMZvE8B7g=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  dependencies = [ llama-index-core ];
+  dependencies = [ llama-cloud-services ];
 
   pythonImportsCheck = [ "llama_parse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse files into RAG-Optimized formats";
     homepage = "https://pypi.org/project/llama-parse/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

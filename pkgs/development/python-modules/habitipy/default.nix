@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 
@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "habitipy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library for Habitica restful API";
     mainProgram = "habitipy";
     homepage = "https://github.com/ASMfreaK/habitipy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

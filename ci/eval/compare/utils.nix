@@ -11,6 +11,7 @@ rec {
     into
       {
         name = "hello";
+        packagePath = [ "hello" ];
         platform = "aarch64-linux";
       }
   */
@@ -21,7 +22,7 @@ rec {
       splittedPath = lib.splitString "." packagePlatformPath;
 
       # ["python312Packages" "numpy" "aarch64-linux"] -> ["python312Packages" "numpy"]
-      packagePath = lib.sublist 0 (lib.length splittedPath - 1) splittedPath;
+      packagePath = lib.init splittedPath;
 
       # "python312Packages.numpy"
       name = lib.concatStringsSep "." packagePath;
@@ -30,6 +31,9 @@ rec {
       null
     else
       {
+        # [ "python312Packages" "numpy" ]
+        inherit packagePath;
+
         # python312Packages.numpy
         inherit name;
 
@@ -52,17 +56,17 @@ rec {
       ]
     into
       [
-        { name = "hello"; platform = "aarch64-linux"; }
-        { name = "hello"; platform = "x86_64-linux"; }
-        { name = "hello"; platform = "aarch64-darwin"; }
-        { name = "hello"; platform = "x86_64-darwin"; }
-        { name = "bye"; platform = "aarch64-darwin"; }
-        { name = "bye"; platform = "x86_64-darwin"; }
+        { name = "hello"; platform = "aarch64-linux"; packagePath = [ "hello" ]; }
+        { name = "hello"; platform = "x86_64-linux"; packagePath = [ "hello" ]; }
+        { name = "hello"; platform = "aarch64-darwin"; packagePath = [ "hello" ]; }
+        { name = "hello"; platform = "x86_64-darwin"; packagePath = [ "hello" ]; }
+        { name = "bye"; platform = "aarch64-darwin"; packagePath = [ "hello" ]; }
+        { name = "bye"; platform = "x86_64-darwin"; packagePath = [ "hello" ]; }
       ]
   */
   convertToPackagePlatformAttrs =
     packagePlatformPaths:
-    builtins.filter (x: x != null) (builtins.map convertToPackagePlatformAttr packagePlatformPaths);
+    builtins.filter (x: x != null) (map convertToPackagePlatformAttr packagePlatformPaths);
 
   /*
     Converts a list of `packagePlatformPath`s directly to a list of (unique) package names
@@ -87,45 +91,19 @@ rec {
     let
       packagePlatformAttrs = convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths);
     in
-    uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
-
-  /*
-    Computes the key difference between two attrs
-
-    {
-      added: [ <keys only in the second object> ],
-      removed: [ <keys only in the first object> ],
-      changed: [ <keys with different values between the two objects> ],
-    }
-  */
-  diff =
-    let
-      filterKeys = cond: attrs: lib.attrNames (lib.filterAttrs cond attrs);
-    in
-    old: new: {
-      added = filterKeys (n: _: !(old ? ${n})) new;
-      removed = filterKeys (n: _: !(new ? ${n})) old;
-      changed = filterKeys (
-        n: v:
-        # Filter out attributes that don't exist anymore
-        (new ? ${n})
-
-        # Filter out attributes that are the same as the new value
-        && (v != (new.${n}))
-      ) old;
-    };
+    uniqueStrings (map (p: p.name) packagePlatformAttrs);
 
   /*
     Group a list of `packagePlatformAttr`s by platforms
 
     Turns
       [
-        { name = "hello"; platform = "aarch64-linux"; }
-        { name = "hello"; platform = "x86_64-linux"; }
-        { name = "hello"; platform = "aarch64-darwin"; }
-        { name = "hello"; platform = "x86_64-darwin"; }
-        { name = "bye"; platform = "aarch64-darwin"; }
-        { name = "bye"; platform = "x86_64-darwin"; }
+        { name = "hello"; platform = "aarch64-linux"; ... }
+        { name = "hello"; platform = "x86_64-linux"; ... }
+        { name = "hello"; platform = "aarch64-darwin"; ... }
+        { name = "hello"; platform = "x86_64-darwin"; ... }
+        { name = "bye"; platform = "aarch64-darwin"; ... }
+        { name = "bye"; platform = "x86_64-darwin"; ... }
       ]
     into
       {
@@ -145,12 +123,12 @@ rec {
 
   # Turns
   # [
-  #   { name = "hello"; platform = "aarch64-linux"; }
-  #   { name = "hello"; platform = "x86_64-linux"; }
-  #   { name = "hello"; platform = "aarch64-darwin"; }
-  #   { name = "hello"; platform = "x86_64-darwin"; }
-  #   { name = "bye"; platform = "aarch64-darwin"; }
-  #   { name = "bye"; platform = "x86_64-darwin"; }
+  #   { name = "hello"; platform = "aarch64-linux"; ... }
+  #   { name = "hello"; platform = "x86_64-linux"; ... }
+  #   { name = "hello"; platform = "aarch64-darwin"; ... }
+  #   { name = "hello"; platform = "x86_64-darwin"; ... }
+  #   { name = "bye"; platform = "aarch64-darwin"; ... }
+  #   { name = "bye"; platform = "x86_64-darwin"; ... }
   # ]
   #
   # into
@@ -173,41 +151,45 @@ rec {
     lib.genAttrs [ "linux" "darwin" ] filterKernel;
 
   /*
-    Maps an attrs of `kernel - rebuild counts` mappings to a list of labels
+    Maps an attrs of `kernel - rebuild counts` mappings to an attrs of labels
 
     Turns
       {
         linux = 56;
-        darwin = 8;
+        darwin = 1;
       }
     into
-      [
-        "10.rebuild-darwin: 1-10"
-        "10.rebuild-linux: 11-100"
-      ]
+      {
+        "10.rebuild-darwin: 1" = true;
+        "10.rebuild-darwin: 1-10" = true;
+        "10.rebuild-darwin: 11-100" = false;
+        # [...]
+        "10.rebuild-darwin: 1" = false;
+        "10.rebuild-darwin: 1-10" = false;
+        "10.rebuild-linux: 11-100" = true;
+        # [...]
+      }
   */
-  getLabels = lib.mapAttrsToList (
-    kernel: rebuildCount:
-    let
-      number =
-        if rebuildCount == 0 then
-          "0"
-        else if rebuildCount <= 10 then
-          "1-10"
-        else if rebuildCount <= 100 then
-          "11-100"
-        else if rebuildCount <= 500 then
-          "101-500"
-        else if rebuildCount <= 1000 then
-          "501-1000"
-        else if rebuildCount <= 2500 then
-          "1001-2500"
-        else if rebuildCount <= 5000 then
-          "2501-5000"
-        else
-          "5001+";
-
-    in
-    "10.rebuild-${kernel}: ${number}"
-  );
+  getLabels =
+    rebuildCountByKernel:
+    lib.mergeAttrsList (
+      lib.mapAttrsToList (
+        kernel: rebuildCount:
+        let
+          range = from: to: from <= rebuildCount && (to == null || rebuildCount <= to);
+        in
+        lib.mapAttrs' (number: lib.nameValuePair "10.rebuild-${kernel}: ${number}") {
+          "0" = range 0 0;
+          "1" = range 1 1;
+          "1-10" = range 1 10;
+          "11-100" = range 11 100;
+          "101-500" = range 101 500;
+          "501-1000" = range 501 1000;
+          "501+" = range 501 null;
+          "1001-2500" = range 1001 2500;
+          "2501-5000" = range 2501 5000;
+          "5001+" = range 5001 null;
+        }
+      ) rebuildCountByKernel
+    );
 }

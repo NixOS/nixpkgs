@@ -7,37 +7,39 @@
   pandas,
   pyarrow,
   pytestCheckHook,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "embedding-reader";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rom1504";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
+    repo = "embedding-reader";
+    tag = version;
+    hash = "sha256-D7yrvV6hDqzHaIMhCQ16DhY/8FEr3P4gcT5vV371whs=";
   };
 
   pythonRelaxDeps = [ "pyarrow" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fsspec
     numpy
     pandas
     pyarrow
+    tqdm
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "embedding_reader" ];
 
-  meta = with lib; {
+  meta = {
     description = "Efficiently read embedding in streaming from any filesystem";
     homepage = "https://github.com/rom1504/embedding-reader";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

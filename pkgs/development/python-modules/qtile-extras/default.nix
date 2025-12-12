@@ -10,24 +10,25 @@
   pulseaudio,
   pytest-asyncio,
   pytest-lazy-fixture,
+  pytest-rerunfailures,
   pytestCheckHook,
   python-dateutil,
   qtile,
   requests,
   setuptools-scm,
   xorgserver,
+  nixosTests,
 }:
-
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.29.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QkcLts2cqhA49/L9nuekf0n+ZRBxKdGL9Ql1sgtyTiw=";
+    tag = "v${version}";
+    hash = "sha256-3aN2MrD1U5iBneVbYtNeWpK+JAQunGpemDpJnDuQdVI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytest-rerunfailures
     pytestCheckHook
     python-dateutil
     qtile
@@ -84,11 +86,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtile_extras" ];
 
-  meta = with lib; {
+  passthru.tests.qtile-extras = nixosTests.qtile-extras;
+
+  meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
 }

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-A29OvGdG6PyeKMf5RarEOrfnNSmXhXri0AlECHWep6M=";
   };
 
-  cargoHash = "sha256-jZmFUvg6R15oL13OYKkirsepoJwOKCeXdKMcqhPEhNU=";
+  cargoHash = "sha256-NU5D7VMQtlOFzr+LqODvDzVw56wFClcBxKo1h8zfgfY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
     installManPage assets/jf.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to safely format and print JSON objects in the commandline";
     mainProgram = "jf";
     homepage = "https://github.com/sayanarijit/jf";
-    license = licenses.mit;
-    maintainers = [ maintainers.sayanarijit ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sayanarijit ];
   };
 }

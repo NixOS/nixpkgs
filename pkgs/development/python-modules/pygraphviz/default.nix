@@ -3,7 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   graphviz,
   coreutils,
   pkg-config,
@@ -21,14 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
-    rev = "refs/tags/pygraphviz-${version}";
+    tag = "pygraphviz-${version}";
     hash = "sha256-RyUmT2djj2GnVG82xO9HULMAJZb2LYMUGDRvCwaYBg8=";
   };
 
   patches = [
     # pygraphviz depends on graphviz executables and wc being in PATH
-    (substituteAll {
-      src = ./path.patch;
+    (replaceVars ./path.patch {
       path = lib.makeBinPath [
         graphviz
         coreutils
@@ -53,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygraphviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       dotlambda
     ];

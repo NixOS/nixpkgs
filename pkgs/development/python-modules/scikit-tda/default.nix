@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "scikit-tda";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   # tests will be included in next release
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -10,15 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pymicrobot";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "PyMicroBot";
-    inherit version;
-    hash = "sha256-8Nkkgznt4JzImJSAbdaX6znhvmgqwOIBjAXVhaMorLk=";
+    inherit pname version;
+    hash = "sha256-fRCXCT3DR42HhYom23hVcWBXFngLPn7UZmyKrjb+MNY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "microbot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with MicroBot";
     homepage = "https://github.com/spycle/pyMicroBot/";
     changelog = "https://github.com/spycle/pyMicroBot/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

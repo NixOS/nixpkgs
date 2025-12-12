@@ -26,17 +26,16 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      lv2
-      libjack2
-    ]
-    ++ (with qt5; [
-      qttools
-    ]);
+  buildInputs = [
+    alsa-lib
+    lv2
+    libjack2
+  ]
+  ++ (with qt5; [
+    qttools
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Advanced MIDI arpeggiator";
     mainProgram = "qmidiarp";
     longDescription = ''
@@ -46,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://qmidiarp.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
 }

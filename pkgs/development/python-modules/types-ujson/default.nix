@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-ujson";
-  version = "5.10.0.20240515";
+  version = "5.10.0.20250822";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zq5xJ/Da/kr13Q7PmO4T6ddZUe+WO1xam36pLg1x8Nc=";
+    pname = "types_ujson";
+    inherit version;
+    hash = "sha256-CnlVWOH3hTI3PPPwPzWx8IvGDVLZJBh7l5le41l7oAY=";
   };
 
   build-system = [ setuptools ];
@@ -22,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ujson-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for ujson";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ centromere ];
   };
 }

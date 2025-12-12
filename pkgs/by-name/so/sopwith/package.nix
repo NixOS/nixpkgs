@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sopwith";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
-    rev = "refs/tags/sdl-sopwith-${version}";
-    hash = "sha256-Ah6Nv39HkYvtD/Go37G3tHowEVGLvtueoBRpi7i9HLY=";
+    tag = "sdl-sopwith-${version}";
+    hash = "sha256-s7npLid3GYZArQmctSwOu8zeC+mSfTiiiOaOEa9dcrg=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fragglet/sdl-sopwith";
     description = "Classic biplane shoot ‘em-up game";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "sopwith";
-    maintainers = with maintainers; [ evilbulgarian ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ evilbulgarian ];
+    platforms = lib.platforms.unix;
   };
 }

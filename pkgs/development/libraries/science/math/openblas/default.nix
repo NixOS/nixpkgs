@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   which,
   # Most packages depending on openblas expect integer width to match
@@ -101,6 +102,21 @@ let
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
+    x86_64-windows = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
+      USE_OPENMP = false;
+    };
+
+    powerpc64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER4";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
     powerpc64le-linux = {
       BINARY = 64;
       TARGET = setTarget "POWER5";
@@ -116,8 +132,7 @@ let
     };
 
     loongarch64-linux = {
-      BINARY = 64;
-      TARGET = setTarget "LOONGSONGENERIC";
+      TARGET = setTarget "LA64_GENERIC";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
@@ -126,6 +141,14 @@ let
       BINARY = 64;
       TARGET = setTarget "ZARCH_GENERIC";
       DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = true;
+    };
+
+    x86_64-freebsd = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = true;
     };
   };
@@ -158,7 +181,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.28";
+  version = "0.3.30";
 
   outputs = [
     "out"
@@ -169,8 +192,21 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
+    hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
   };
+
+  patches = [
+    # Remove this once https://github.com/OpenMathLib/OpenBLAS/issues/5414 is
+    # resolved.
+    ./disable-sme-sgemm-kernel.patch
+
+    # https://github.com/OpenMathLib/OpenBLAS/issues/5460
+    (fetchpatch {
+      name = "0001-openblas-Use-generic-kernels-for-SCAL-on-POWER4-5.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/14c9dcaac70d9382de00ba4418643d9587f4950e.patch";
+      hash = "sha256-mIOqRc7tE1rV/krrAu630JwApZHdeHCdVmO5j6eDC8U=";
+    })
+  ];
 
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
@@ -185,22 +221,21 @@ stdenv.mkDerivation rec {
   # In either case, OpenBLAS must only be used by trusted code--it is
   # inherently unsuitable for security-conscious applications--so there should
   # be no objection to disabling these hardening measures.
-  hardeningDisable =
-    [
-      # don't modify or move the stack
-      "stackprotector"
-      "pic"
-      # don't alter index arithmetic
-      "strictoverflow"
-      # don't interfere with dynamic target detection
-      "relro"
-      "bindnow"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # "__builtin_clear_padding not supported for variable length aggregates"
-      # in aarch64-specific code
-      "trivialautovarinit"
-    ];
+  hardeningDisable = [
+    # don't modify or move the stack
+    "stackprotector"
+    "pic"
+    # don't alter index arithmetic
+    "strictoverflow"
+    # don't interfere with dynamic target detection
+    "relro"
+    "bindnow"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # "__builtin_clear_padding not supported for variable length aggregates"
+    # in aarch64-specific code
+    "trivialautovarinit"
+  ];
 
   nativeBuildInputs = [
     perl
@@ -254,43 +289,48 @@ stdenv.mkDerivation rec {
     })
   );
 
+  # The default "all" target unconditionally builds the "tests" target.
+  buildFlags = lib.optionals (!doCheck) [ "shared" ];
+
   doCheck = true;
   checkTarget = "tests";
 
-  postInstall =
-    ''
-          # Write pkgconfig aliases. Upstream report:
-          # https://github.com/OpenMathLib/OpenBLAS/issues/1740
-          for alias in blas cblas lapack; do
-            cat <<EOF > $out/lib/pkgconfig/$alias.pc
-      Name: $alias
-      Version: ${version}
-      Description: $alias provided by the OpenBLAS package.
-      Cflags: -I$dev/include
-      Libs: -L$out/lib -lopenblas
-      EOF
-          done
+  postInstall = ''
+        # Write pkgconfig aliases. Upstream report:
+        # https://github.com/OpenMathLib/OpenBLAS/issues/1740
+        for alias in blas cblas lapack; do
+          cat <<EOF > $out/lib/pkgconfig/$alias.pc
+    Name: $alias
+    Version: ${version}
+    Description: $alias provided by the OpenBLAS package.
+    Cflags: -I$dev/include
+    Libs: -L$out/lib -lopenblas
+    EOF
+        done
 
-          # Setup symlinks for blas / lapack
-    ''
-    + lib.optionalString enableShared ''
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
-      ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
-    ''
-    + lib.optionalString enableStatic ''
-      ln -s $out/lib/libopenblas.a $out/lib/libblas.a
-      ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
-      ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
-      ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
-    '';
+        # Setup symlinks for blas / lapack
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
+  ''
+  + lib.optionalString enableShared ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
+    ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  ''
+  + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
+  '';
 
   passthru.tests = {
     inherit (python3.pkgs) numpy scipy scikit-learn;
@@ -304,9 +344,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
     platforms = attrNames configs;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

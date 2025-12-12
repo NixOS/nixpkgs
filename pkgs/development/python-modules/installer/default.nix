@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pypa";
-    repo = pname;
+    repo = "installer";
     rev = version;
     hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
   };
@@ -50,11 +50,12 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
     changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
-    license = licenses.mit;
-    maintainers = teams.python.members ++ [ maintainers.cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.cpcloud ];
+    teams = [ lib.teams.python ];
   };
 }

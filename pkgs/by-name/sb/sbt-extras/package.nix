@@ -10,7 +10,6 @@
   common-updater-scripts,
   cacert,
   git,
-  nixfmt-classic,
   nix,
   jq,
   coreutils,
@@ -19,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "408f74841b90169a7f674955389212e2d02f7f4d";
-  version = "2024-09-28";
+  rev = "103ab5905df0d7be505e258fc600935bbb511ec9";
+  version = "2025-08-25";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "2iXNs2Ks54Gj6T6PR5AtWrmR9uUxgFScAfek2v+qdTo=";
+    sha256 = "UlxZsCi4EdcHvGwatQm1sPyamfcqJs9o8qo2HWLedQw=";
   };
 
   dontBuild = true;
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
          curl
          cacert
          git
-         nixfmt-classic
          nix
          jq
          coreutils
@@ -76,23 +74,19 @@ stdenv.mkDerivation rec {
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
      latestSha="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
     if [ ! "null" = "$latestSha" ]; then
-       nixpkgs="$(git rev-parse --show-toplevel)"
-       default_nix="$nixpkgs/pkgs/development/tools/build-managers/sbt-extras/default.nix"
        latestDate="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
        update-source-version ${pname} "$latestSha" --version-key=rev
        update-source-version ${pname} "$latestDate" --ignore-same-hash
-       nixfmt "$default_nix"
      else
        echo "${pname} is already up-to-date"
      fi
   '';
 
   meta = {
-    description = "A more featureful runner for sbt, the simple/scala/standard build tool";
+    description = "More featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      nequissimus
       puffnfresh
     ];
     mainProgram = "sbt";

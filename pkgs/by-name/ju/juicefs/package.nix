@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "juicefs";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "juicedata";
-    repo = pname;
+    repo = "juicefs";
     rev = "v${version}";
-    hash = "sha256-DQ3JdP1HKWORPkcP4HJ32eg6aaockZfG+FQhBJnZCFQ=";
+    hash = "sha256-FACkhBYlJK3NcgYliqT/18djVB7sAo53oqosdFFkAtI=";
   };
 
-  vendorHash = "sha256-fHmLTAn4W8KMtZ1Ov4gBQTUpzHqQnipGSQs5hr1MD3w=";
+  vendorHash = "sha256-LE6bpFSHhIRKaGlgn8nU8leOfcNH1ruKRv3vHZu0n/s=";
 
   excludedPackages = [ "sdk/java/libjfs" ];
 
@@ -31,10 +31,10 @@ buildGoModule rec {
     ln -s $out/bin/juicefs $out/bin/mount.juicefs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed POSIX file system built on top of Redis and S3";
     homepage = "https://www.juicefs.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }

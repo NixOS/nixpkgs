@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nucleic";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XwBvPABg4DomI5JNuqaRTINsPgjn8h67rO/ZkSRQ39o=";
+    repo = "enaml";
+    tag = version;
+    hash = "sha256-gsNJSK9QcavsiRx2n/S2bbf9ZVsqJXxBiUyBWVIZzj8=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +63,11 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative User Interfaces for Python";
     homepage = "https://github.com/nucleic/enaml";
     changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ raboof ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ raboof ];
   };
 }

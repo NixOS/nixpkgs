@@ -1,24 +1,28 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   testers,
   flyctl,
   installShellFiles,
+  git,
 }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.53";
+  version = "0.3.209";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-B6Qku84vUy2KtAWQ3mpbOd1G14xAw0FFuB02fDvFE84=";
+    leaveDotGit = true;
+    hash = "sha256-hzKKCwGTaz1MFQ1+F9piNBnaEDZJwJqoerR1c/uzSsQ=";
   };
 
-  vendorHash = "sha256-B7COrPKxTBDdFehBcNKt47I1ZslBHjWc+ibPiCpIocU=";
+  proxyVendor = true;
+  vendorHash = "sha256-ezGA1LGwQVFMzV/Ogj26pooD06O7FNTXMrYWkv6AwWM=";
 
   subPackages = [ "." ];
 
@@ -30,11 +34,17 @@ buildGoModule rec {
   ];
   tags = [ "production" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    git
+  ];
 
   patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
+    # Embed VCS Infos
+    export GOFLAGS="$GOFLAGS -buildvcs=true"
+
     GOOS= GOARCH= CGO_ENABLED=0 go generate ./...
   '';
 
@@ -53,7 +63,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd flyctl \
       --bash <($out/bin/flyctl completion bash) \
       --fish <($out/bin/flyctl completion fish) \
@@ -77,7 +87,7 @@ buildGoModule rec {
       jsierles
       techknowlogick
       RaghavSood
-      teutat3s
+      SchahinRohani
     ];
     mainProgram = "flyctl";
   };

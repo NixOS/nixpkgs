@@ -2,13 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeBinaryWrapper,
   replaceVars,
   cmake,
   openjpeg,
+  pigz,
   yaml-cpp,
   batchVersion ? false,
   withJpegLs ? true,
   withOpenJpeg ? true,
+  withPigz ? true,
   withCloudflareZlib ? true,
 }:
 
@@ -16,21 +19,21 @@ let
   cloudflareZlib = fetchFromGitHub {
     owner = "ningfei";
     repo = "zlib";
-    # HEAD revision of the gcc.amd64 branch on 2023-03-28. Reminder to update
+    # HEAD revision of the gcc.amd64 branch on 2025-10-15. Reminder to update
     # whenever bumping package version.
-    rev = "f49b13c3380cf9677ae9a93641ebc6f770899def";
-    sha256 = "sha256-8HNFUGx2uuEb8UrGUiqkN+uVDX83YIisT2uO1Z7GCxc=";
+    rev = "7d9d0b20249fd459c69e4b98bc569b7157f3018c";
+    hash = "sha256-WnD9pOnM6J3nCLBKYb28+JaIy0z/9csbn+AsyWZQnLs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.20240202";
+  version = "1.0.20250506";
   pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vJUPv/6KNCsU8UjwfktHdTlsweG7+UGgAEZeESfBkD8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KtUWrm3Nq3khDxpaQ4W57y+h/gPeEMwfzBv4XYkAhoA=";
   };
 
   patches = lib.optionals withCloudflareZlib [
@@ -39,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+  ];
+
   buildInputs =
     lib.optionals batchVersion [ yaml-cpp ]
     ++ lib.optionals withOpenJpeg [
@@ -62,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCloudflareZlib [
       "-DZLIB_IMPLEMENTATION=Cloudflare"
     ];
+
+  postInstall = lib.optionalString withPigz ''
+    wrapProgram $out/bin/dcm2niix --prefix PATH : "${lib.makeBinPath [ pigz ]}"
+  '';
 
   meta = {
     description = "DICOM to NIfTI converter";

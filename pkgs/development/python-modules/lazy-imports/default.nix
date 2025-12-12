@@ -16,7 +16,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "telekom";
     repo = "lazy-imports";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-i+VPlBoxNqk56U4oiEgS1Ayhi1t2O8PtLZ/bzEurUY8=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage {
     packaging
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool to support lazy imports";
     homepage = "https://github.com/telekom/lazy-imports";
     changelog = "https://github.com/telekom/lazy-imports/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

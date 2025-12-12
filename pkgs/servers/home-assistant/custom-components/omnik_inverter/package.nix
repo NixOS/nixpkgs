@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "robbinjanssen";
     repo = "home-assistant-omnik-inverter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O1NxT7u27xLydPqEqH72laU0tlYVrMPo0TwWIVNJ+0Q=";
   };
 
@@ -23,11 +23,11 @@ buildHomeAssistantComponent rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/robbinjanssen/home-assistant-omnik-inverter/releases/tag/v${version}";
     description = "Omnik Inverter integration will scrape data from an Omnik inverter connected to your local network";
     homepage = "https://github.com/robbinjanssen/home-assistant-omnik-inverter";
-    maintainers = with maintainers; [ _9R ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9R ];
+    license = lib.licenses.mit;
   };
 }

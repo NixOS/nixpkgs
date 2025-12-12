@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.10.7";
+  version = "1.10.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zkYv9+HarAvFcYPG+ADwmnHCp6mN3VzeyhSePqvzM44=";
+    hash = "sha256-pbz/tSCBujnfDV6aiE/G+BnZLjpCOJNDunfL+An+H0U=";
   };
 
   build-system = [ pdm-backend ];

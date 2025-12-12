@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "digimend";
-  version = "13";
+  version = "13-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
-    rev = "v${version}";
-    hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
+    rev = "f3c7c7f1179fc786a8e5aad027d4db904c31b42c";
+    hash = "sha256-5kJj3SJfzrQ3n9r1YOn5xt0KO9WcEf0YpNMjiZEYMEo=";
   };
 
   postPatch = ''
@@ -26,25 +27,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  postInstall = ''
-    # Remove module reload hack.
-    # The hid-rebind unloads and then reloads the hid-* module to ensure that
-    # the extra/ module is loaded.
-    rm -r $out/lib/udev
-  '';
-
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=${placeholder "out"}"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PuercoPop ];
+    platforms = lib.platforms.linux;
   };
 }

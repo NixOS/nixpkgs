@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Noltari";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "aioqsw";
+    tag = version;
     hash = "sha256-h/rTwMF3lc/hWwpzCvK6UMq0rjq3xkw/tEY3BqOPS2s=";
   };
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioqsw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to fetch data from QNAP QSW switches";
     homepage = "https://github.com/Noltari/aioqsw";
     changelog = "https://github.com/Noltari/aioqsw/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

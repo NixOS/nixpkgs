@@ -3,7 +3,7 @@
   lib,
   fetchzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "catamaran";
   version = "0-unstable-2024-03-02";
 
@@ -24,9 +24,9 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fonts.google.com/specimen/Catamaran";
-    description = "A stylish sans-serif Tamil and Latin typeface";
+    description = "Stylish sans-serif Tamil and Latin typeface";
     longDescription = ''
       Catamaran is a Unicode-compliant Latin and Tamil text type family designed for the digital age.
       The Tamil is monolinear and was designed alongside the sans serif Latin and Devanagari family Palanquin.
@@ -35,8 +35,8 @@ stdenvNoCC.mkDerivation rec {
       (A catamaran is a multihulled vessel consisting of two parallel hulls of equal size.
       The catamaran concept is a relative newcomer for Western boat designers, been used since time immemorial among the Dravidian people, in South India.)
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

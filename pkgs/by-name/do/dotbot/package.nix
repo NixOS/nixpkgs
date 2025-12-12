@@ -6,28 +6,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
-  version = "1.20.1";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
-    rev = "v${version}";
-    hash = "sha256-Gy+LVGG/BAqXoM6GDuKBkGKxxAkmoYtBRA33y/ihdRE=";
+    tag = "v${version}";
+    hash = "sha256-HlCq9ek/419A+bgwtbRr45Q2RqPPv38QKSV+CwzihFc=";
   };
 
   preCheck = ''
     patchShebangs bin/dotbot
   '';
 
-  patches = [
-    # ignore pytest-cache because it was not at /tmp/nix-shell and it was used by pytest itself not our program
-    ./0001-fix-build.patch
-  ];
+  build-system = with python3Packages; [ hatchling ];
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
-
-  propagatedBuildInputs = with python3Packages; [ pyyaml ];
+  dependencies = with python3Packages; [ pyyaml ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
@@ -42,7 +37,7 @@ python3Packages.buildPythonApplication rec {
       dotfiles.
     '';
     homepage = "https://github.com/anishathalye/dotbot";
-    changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/anishathalye/dotbot/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ludat ];
   };

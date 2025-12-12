@@ -21,21 +21,22 @@
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "2.2.23";
+  version = "2.2.32";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    hash = "sha256-RF0pe2G4K0uiqlOiAVESOi6bgwO0gJOh1VFkF7V3Wnc=";
+    hash = "sha256-Wxzv1iLJ+OWw+g6ndBX36AR2v9cSu2uZysegz97+XaM=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  qmakeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
-    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+  ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -69,25 +70,24 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtquickcontrols2
-      qtwebsockets
-      qtmultimedia
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-base
-      gst-libav
-      gstreamer
-    ])
-    ++ lib.optionals withVLC [ libvlc ]
-    ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
+  buildInputs = [
+    qtbase
+    qtquickcontrols2
+    qtwebsockets
+    qtmultimedia
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-base
+    gst-libav
+    gstreamer
+  ])
+  ++ lib.optionals withVLC [ libvlc ]
+  ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem rec {
       name = "AniLibria";
       desktopName = name;
       icon = "anilibria";
@@ -101,14 +101,14 @@ mkDerivation rec {
       keywords = [ "anime" ];
       exec = name;
       terminal = false;
-    }))
+    })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anilibria/anilibria-winmaclinux";
     description = "AniLibria cross platform desktop client";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     inherit (qtbase.meta) platforms;
     mainProgram = "AniLibria";
   };

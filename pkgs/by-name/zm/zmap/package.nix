@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zmap";
-  version = "4.3.1";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = pname;
+    repo = "zmap";
     rev = "v${version}";
-    sha256 = "sha256-QNOLbIDILwCNYlYrr2mET4K6x1zn8PIoXiqs/Oaj3eY=";
+    sha256 = "sha256-fHCVo8OwQUzpdDq7dMBxvK15Ojth5UmNoPTVuTGUP58=";
   };
 
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zmap.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Fast single packet network scanner designed for Internet-wide network surveys";
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ma27 ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

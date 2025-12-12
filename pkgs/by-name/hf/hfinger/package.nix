@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "hfinger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gxwirAqtY4R3KDHyNmDIknABO+SFuoDua9nm1UyXbxA=";
   };
 
@@ -38,12 +38,12 @@ python3.pkgs.buildPythonApplication rec {
     "hfinger"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fingerprinting tool for HTTP requests";
     mainProgram = "hfinger";
     homepage = "https://github.com/CERT-Polska/hfinger";
     changelog = "https://github.com/CERT-Polska/hfinger/releases/tag/v${version}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -19,7 +19,6 @@
   libxkbcommon,
   wayland,
   libdrm,
-  apple-sdk_11,
   nix-update-script,
 }:
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-qt";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
     fetchSubmodules = true;
   };
@@ -50,30 +49,26 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  buildInputs =
-    [
-      (SDL2.override { drmSupport = stdenv.hostPlatform.isLinux; })
-      SDL2_ttf
-      ffmpeg
-      libopus
-      libplacebo
-      qt6.qtdeclarative
-      qt6.qtsvg
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-      libva
-      libvdpau
-      libxkbcommon
-      qt6.qtwayland
-      wayland
-      libdrm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    SDL2
+    SDL2_ttf
+    ffmpeg
+    libopus
+    libplacebo
+    qt6.qtdeclarative
+    qt6.qtsvg
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+    libva
+    libvdpau
+    libxkbcommon
+    qt6.qtwayland
+    wayland
+    libdrm
+  ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 

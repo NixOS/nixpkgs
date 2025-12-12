@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "river-luatile";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "river-luatile";
     rev = "v${version}";
-    hash = "sha256-ZBytoj4L72TjxJ7vFivjcSO69AcdwKNbXh4rA/bn5iU=";
+    hash = "sha256-8/qHoNFoGH1nSdTwBkaQk+yyvJtrXADTA39gUAMeSv8=";
   };
 
-  cargoHash = "sha256-GcMSglLKuUD3nVj0/8Nbrk4qs5gl5PlCj7r1MYq/vQg=";
+  cargoHash = "sha256-KQO6JN+ed+gxTTBGoJYhVUrpHJkuXf1dHrUzcF5FNaY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     luajit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Write your own river layout generator in lua";
     homepage = "https://github.com/MaxVerevkin/river-luatile";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pinpox ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "river-luatile";
   };
 }

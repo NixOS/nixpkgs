@@ -1,30 +1,31 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, writeText
-, lib
-, openssl
-, cmake
-, autoconf
-, automake
-, libtool
-, pkg-config
-, bison
-, flex
-, groff
-, perl
-, python3
-, ncurses
-, time
-, upx
-, gtest
-, libffi
-, libxml2
-, zlib
-, enableTests ? true
-, buildDevTools ? true
-, compileYaraPatterns ? true
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  writeText,
+  lib,
+  openssl,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  bison,
+  flex,
+  groff,
+  perl,
+  python3,
+  ncurses,
+  time,
+  upx,
+  gtest,
+  libffi,
+  libxml2,
+  zlib,
+  enableTests ? true,
+  buildDevTools ? true,
+  compileYaraPatterns ? true,
 }:
 
 let
@@ -63,26 +64,27 @@ let
   };
 
   retdec-support-version = "2019-03-08";
-  retdec-support =
-    { rev = retdec-support-version; } // # for checking the version against the expected version
-    fetchzip {
-      url = "https://github.com/avast-tl/retdec-support/releases/download/${retdec-support-version}/retdec-support_${retdec-support-version}.tar.xz";
-      hash = "sha256-t1tx4MfLW/lwtbO5JQ1nrFBIOeMclq+0dENuXW+ahIM=";
-      stripRoot = false;
-    };
+  retdec-support = {
+    rev = retdec-support-version;
+  }
+  # for checking the version against the expected version
+  // fetchzip {
+    url = "https://github.com/avast-tl/retdec-support/releases/download/${retdec-support-version}/retdec-support_${retdec-support-version}.tar.xz";
+    hash = "sha256-t1tx4MfLW/lwtbO5JQ1nrFBIOeMclq+0dENuXW+ahIM=";
+    stripRoot = false;
+  };
 
-  check-dep = name: dep:
-    ''
-      context="$(grep ${name}_URL --after-context 1 cmake/deps.cmake)"
-      expected="$(echo "$context" | grep --only-matching '".*"')"
-      have="${dep.rev}"
+  check-dep = name: dep: ''
+    context="$(grep ${name}_URL --after-context 1 cmake/deps.cmake)"
+    expected="$(echo "$context" | grep --only-matching '".*"')"
+    have="${dep.rev}"
 
-      echo "checking ${name} dependency matches deps.cmake...";
-      if ! echo "$expected" | grep -q "$have"; then
-        printf '%s\n' "${name} version does not match!"  "  nix: $have, expected: $expected"
-        false
-      fi
-    '';
+    echo "checking ${name} dependency matches deps.cmake...";
+    if ! echo "$expected" | grep -q "$have"; then
+      printf '%s\n' "${name} version does not match!"  "  nix: $have, expected: $expected"
+      false
+    fi
+  '';
 
   deps = {
     CAPSTONE = capstone;
@@ -90,7 +92,8 @@ let
     YARA = yaracpp;
     YARAMOD = yaramod;
     SUPPORT_PKG = retdec-support;
-  } // lib.optionalAttrs enableTests {
+  }
+  // lib.optionalAttrs enableTests {
     KEYSTONE = keystone;
     # nixpkgs googletest is used
     # GOOGLETEST = googletest;
@@ -99,21 +102,18 @@ let
   # overwrite install-share.py to copy instead of download.
   # we use this so the copy happens at the right time in the build,
   # otherwise, the build process cleans the directory.
-  install-share =
-    writeText
-      "install-share.py"
-      ''
-        import os, sys, shutil, subprocess
+  install-share = writeText "install-share.py" ''
+    import os, sys, shutil, subprocess
 
-        install_path, arch_url, sha256hash_ref, version = sys.argv[1:]
-        support_dir = os.path.join(install_path, 'share', 'retdec', 'support')
+    install_path, arch_url, sha256hash_ref, version = sys.argv[1:]
+    support_dir = os.path.join(install_path, 'share', 'retdec', 'support')
 
-        assert os.path.isdir(arch_url), "nix install-share.py expects a path for support url"
+    assert os.path.isdir(arch_url), "nix install-share.py expects a path for support url"
 
-        os.makedirs(support_dir, exist_ok=True)
-        shutil.copytree(arch_url, support_dir, dirs_exist_ok=True)
-        subprocess.check_call(['chmod', '-R', 'u+w', support_dir])
-      '';
+    os.makedirs(support_dir, exist_ok=True)
+    shutil.copytree(arch_url, support_dir, dirs_exist_ok=True)
+    subprocess.check_call(['chmod', '-R', 'u+w', support_dir])
+  '';
 in
 stdenv.mkDerivation (self: {
   pname = "retdec";
@@ -129,7 +129,7 @@ stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "avast";
     repo = "retdec";
-    rev = "refs/tags/v${self.version}";
+    tag = "v${self.version}";
     sha256 = "sha256-H4e+aSgdBBbG6X6DzHGiDEIASPwBVNVsfHyeBTQLAKI=";
   };
 
@@ -160,64 +160,63 @@ stdenv.mkDerivation (self: {
     libffi
     libxml2
     zlib
-  ] ++ lib.optional self.doInstallCheck gtest;
+  ]
+  ++ lib.optional self.doInstallCheck gtest;
 
   cmakeFlags = [
     (lib.cmakeBool "RETDEC_TESTS" self.doInstallCheck) # build tests
     (lib.cmakeBool "RETDEC_DEV_TOOLS" buildDevTools) # build tools e.g. capstone2llvmir, retdectool
     (lib.cmakeBool "RETDEC_COMPILE_YARA" compileYaraPatterns) # build and install compiled patterns
-  ] ++ lib.mapAttrsToList (k: v: lib.cmakeFeature "${k}_URL" "${v}") deps;
+  ]
+  ++ lib.mapAttrsToList (k: v: lib.cmakeFeature "${k}_URL" "${v}") deps;
 
-  preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList check-dep deps)
-    +
-    ''
-      cp -v ${install-share} ./support/install-share.py
+  preConfigure = lib.concatStringsSep "\n" (lib.mapAttrsToList check-dep deps) + ''
+    cp -v ${install-share} ./support/install-share.py
 
-      # the CMakeLists assume CMAKE_INSTALL_BINDIR, etc are path components but in Nix, they are absolute.
-      # therefore, we need to remove the unnecessary CMAKE_INSTALL_PREFIX prepend.
-      substituteInPlace ./CMakeLists.txt \
-        --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_BIN_DIR} "''$"{CMAKE_INSTALL_FULL_BINDIR} \
-        --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_LIB_DIR} "''$"{CMAKE_INSTALL_FULL_LIBDIR} \
+    # the CMakeLists assume CMAKE_INSTALL_BINDIR, etc are path components but in Nix, they are absolute.
+    # therefore, we need to remove the unnecessary CMAKE_INSTALL_PREFIX prepend.
+    substituteInPlace ./CMakeLists.txt \
+      --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_BIN_DIR} "''$"{CMAKE_INSTALL_FULL_BINDIR} \
+      --replace-warn "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_LIB_DIR} "''$"{CMAKE_INSTALL_FULL_LIBDIR} \
 
-      # --replace "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_SUPPORT_DIR} "''$"{RETDEC_INSTALL_SUPPORT_DIR}
-      # note! Nix does not set CMAKE_INSTALL_DATADIR to an absolute path, so this replacement would be incorrect
+    # --replace "''$"{CMAKE_INSTALL_PREFIX}/"''$"{RETDEC_INSTALL_SUPPORT_DIR} "''$"{RETDEC_INSTALL_SUPPORT_DIR}
+    # note! Nix does not set CMAKE_INSTALL_DATADIR to an absolute path, so this replacement would be incorrect
 
-      # similarly for yaramod. here, we fix the LIBDIR to lib64. for whatever reason, only "lib64" works.
-      substituteInPlace deps/yaramod/CMakeLists.txt \
-        --replace-fail "''$"{YARAMOD_INSTALL_DIR}/"''$"{CMAKE_INSTALL_LIBDIR} "''$"{YARAMOD_INSTALL_DIR}/lib64 \
-        --replace-fail CMAKE_ARGS 'CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib64'
+    # similarly for yaramod. here, we fix the LIBDIR to lib64. for whatever reason, only "lib64" works.
+    substituteInPlace deps/yaramod/CMakeLists.txt \
+      --replace-fail "''$"{YARAMOD_INSTALL_DIR}/"''$"{CMAKE_INSTALL_LIBDIR} "''$"{YARAMOD_INSTALL_DIR}/lib64 \
+      --replace-fail CMAKE_ARGS 'CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib64'
 
-      # yara needs write permissions in the generated source directory.
-      echo ${lib.escapeShellArg ''
-        ExternalProject_Add_Step(
-          yara chmod WORKING_DIRECTORY ''${YARA_DIR}
-          DEPENDEES download COMMAND chmod -R u+w .
-        )
-      ''} >> deps/yara/CMakeLists.txt
+    # yara needs write permissions in the generated source directory.
+    echo ${lib.escapeShellArg ''
+      ExternalProject_Add_Step(
+        yara chmod WORKING_DIRECTORY ''${YARA_DIR}
+        DEPENDEES download COMMAND chmod -R u+w .
+      )
+    ''} >> deps/yara/CMakeLists.txt
 
-      # patch gtest to use the system package
-      gtest=deps/googletest/CMakeLists.txt
-      old="$(cat $gtest)"
-      (echo 'find_package(GTest REQUIRED)'; echo "$old") > $gtest
-      sed -i 's/ExternalProject_[^(]\+[(]/ set(IGNORED /g' $gtest
+    # patch gtest to use the system package
+    gtest=deps/googletest/CMakeLists.txt
+    old="$(cat $gtest)"
+    (echo 'find_package(GTest REQUIRED)'; echo "$old") > $gtest
+    sed -i 's/ExternalProject_[^(]\+[(]/ set(IGNORED /g' $gtest
 
-      substituteInPlace $gtest \
-        --replace-fail '$'{GTEST_LIB} "GTest::gtest"\
-        --replace-fail '$'{GMOCK_LIB} "GTest::gmock"\
-        --replace-fail '$'{GTEST_MAIN_LIB} "GTest::gtest_main"\
-        --replace-fail '$'{GMOCK_MAIN_LIB} "GTest::gmock_main"
+    substituteInPlace $gtest \
+      --replace-fail '$'{GTEST_LIB} "GTest::gtest"\
+      --replace-fail '$'{GMOCK_LIB} "GTest::gmock"\
+      --replace-fail '$'{GTEST_MAIN_LIB} "GTest::gtest_main"\
+      --replace-fail '$'{GMOCK_MAIN_LIB} "GTest::gmock_main"
 
-      # without git history, there is no chance these tests will pass.
-      substituteInPlace tests/utils/version_tests.cpp \
-        --replace-quiet VersionTests DISABLED_VersionTests
+    # without git history, there is no chance these tests will pass.
+    substituteInPlace tests/utils/version_tests.cpp \
+      --replace-quiet VersionTests DISABLED_VersionTests
 
-      substituteInPlace scripts/retdec-utils.py \
-        --replace-warn /usr/bin/time ${time} \
-        --replace-warn /usr/local/bin/gtime ${time}
-      substituteInPlace scripts/retdec-unpacker.py \
-        --replace-warn "'upx'" "'${upx}'"
-    '';
+    substituteInPlace scripts/retdec-utils.py \
+      --replace-warn /usr/bin/time ${time} \
+      --replace-warn /usr/local/bin/gtime ${time}
+    substituteInPlace scripts/retdec-unpacker.py \
+      --replace-warn "'upx'" "'${upx}'"
+  '';
 
   doInstallCheck = enableTests;
   installCheckPhase = ''
@@ -226,11 +225,11 @@ stdenv.mkDerivation (self: {
     rm -rf $out/bin/__pycache__
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Retargetable machine-code decompiler based on LLVM";
     homepage = "https://retdec.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ katrinafyi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ katrinafyi ];
     platforms = [ "x86_64-linux" ];
   };
 })

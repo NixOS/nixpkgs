@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
     tag = "v${version}";
-    hash = "sha256-6L+o+XM+im8qJFyd3h+b1ZxY1QSEdoXDop5en33fECI=";
+    hash = "sha256-zDv04yHYQP2ZKX9g4v7kR8l3OmAyvh7GtmmqjxPtFvI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.splunk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support Splunk for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-splunk";
     changelog = "https://github.com/SigmaHQ/pySigma-backend-splunk/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

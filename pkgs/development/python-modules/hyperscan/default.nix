@@ -3,56 +3,65 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  pdm-backend,
-  setuptools,
-  wheel,
+  symlinkJoin,
+  cmake,
+  ninja,
+  pathspec,
   pcre,
-  pkg-config,
+  scikit-build-core,
   pytestCheckHook,
   pytest-mock,
 }:
-
+let
+  lib-deps = symlinkJoin {
+    name = "hyperscan-static-deps";
+    paths = [
+      (pkgs.hyperscan.override { withStatic = true; })
+      (pcre.overrideAttrs { dontDisableStatic = 0; }).out
+    ];
+  };
+in
 buildPythonPackage rec {
   pname = "hyperscan";
-  version = "0.7.7";
+  version = "0.7.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TNiGh89SnGi0WAqfYudsj7GaVhOifi8ZcmTrMtVbk+c=";
+    tag = "v${version}";
+    hash = "sha256-gfrcUIJVtEFUvDLejaP3DyxW1kTHSOA0EwzWZggEyxA=";
   };
 
-  buildInputs = [
-    (pkgs.hyperscan.override { withStatic = true; })
-    # we need static pcre to be built, by default only shared library is built
-    (pcre.overrideAttrs { dontDisableStatic = 0; })
-  ];
+  env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
 
-  nativeBuildInputs = [
-    pkg-config
-    pdm-backend
-    setuptools
-    wheel
+  dontUseCmakeConfigure = true;
+
+  build-system = [
+    cmake
+    pathspec
+    ninja
+    scikit-build-core
   ];
 
   pythonImportsCheck = [ "hyperscan" ];
+
+  enabledTestPaths = [ "tests" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
-    changelog = "https://github.com/darvid/python-hyperscan/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/darvid/python-hyperscan/blob/${src.tag}/CHANGELOG.md";
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

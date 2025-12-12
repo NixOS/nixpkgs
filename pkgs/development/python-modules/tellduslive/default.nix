@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "tellduslive";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tellduslive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Telldus Live";
     homepage = "https://github.com/molobrakos/tellduslive";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tellduslive";
   };
 }

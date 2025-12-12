@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ducakar";
-    repo = pname;
+    repo = "openzone-cursors";
     rev = "v${version}";
     sha256 = "02c536mc17ccsrzgma366k3wlm02ivklvr30fafxl981zgghlii4";
   };
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean and sharp X11/Wayland cursor theme";
     homepage = "https://www.gnome-look.org/p/999999/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zaninime ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zaninime ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,11 @@ buildNpmPackage {
     cd frontend
   '';
 
-  npmDepsHash = "sha256-y2Mj0sJP2urTDrsVPReVFi7G9fLjuKz76vDPLvkaMFA=";
+  npmDepsHash = "sha256-IC92WESUAp+P0MbFasCTwpo0GcGoTfO8IkLbHfnrnNY=";
+
+  # Some dependencies are fetched from git repositories
+  forceGitDeps = true;
+  makeCacheWritable = true;
 
   installPhase = ''
     runHook preInstall
@@ -24,10 +28,10 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ benesim ];
   };
 }

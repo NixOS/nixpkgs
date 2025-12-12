@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.11.1";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdfarranger";
     repo = "pdfarranger";
-    rev = "refs/tags/${version}";
-    hash = "sha256-94qziqJaKW8/L/6+U1yojxdG8BmeAStn+qbfGemTrVA=";
+    tag = version;
+    hash = "sha256-of1itPubf6LBJ4rSh1bca3yoNTiz5Qt9ar9XDe4nhxI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
@@ -64,6 +64,6 @@ python3Packages.buildPythonApplication rec {
       endle
     ];
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${src.tag}";
   };
 }

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.1";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
     rev = "v${version}";
-    hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
+    hash = "sha256-6A4zpe3GvHHf235Ovr2RT/cJgj7bWasn96yqy73pVgY=";
   };
 
   propagatedBuildInputs = [
@@ -44,10 +44,10 @@ buildPythonPackage rec {
     "test_many_repeated_spaces"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

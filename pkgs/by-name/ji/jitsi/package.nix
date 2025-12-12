@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi";
-    rev = "refs/tags/${lib.versions.patch version}";
+    tag = lib.versions.patch version;
     hash = "sha256-CN4o0VfHdoUteI2wyJ2hFJ9UsQ2wWUzcvrLMbR/l36M=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     categories = [ "Chat" ];
   };
 
-  libPath = lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc # For libstdc++.
     alsa-lib
     dbus
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXScrnSaver
     xorg.libXv
-  ]);
+  ];
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
@@ -81,16 +81,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://desktop.jitsi.org/";
     description = "Open Source Video Calls and Chat";
     mainProgram = "jitsi";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.jitsi.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.jitsi ];
   };
 }

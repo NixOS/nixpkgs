@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -15,11 +16,10 @@ let
       nodes.machine =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.pg-dump-anon ];
+          environment.systemPackages = [ (pkgs.pg-dump-anon.override { postgresql = package; }) ];
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             extensions = ps: [ ps.anonymizer ];
             settings.shared_preload_libraries = [ "anon" ];
           };
@@ -28,7 +28,7 @@ let
       testScript = ''
         start_all()
         machine.wait_for_unit("multi-user.target")
-        machine.wait_for_unit("postgresql.service")
+        machine.wait_for_unit("postgresql.target")
 
         with subtest("Setup"):
             machine.succeed("sudo -u postgres psql --command 'create database demo'")
@@ -39,7 +39,7 @@ let
                   create table player(id serial, name text, points int);
                   insert into player(id,name,points) values (1,'Foo', 23);
                   insert into player(id,name,points) values (2,'Bar',42);
-                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name();';
+                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name()';
                   security label for anon on column player.points is 'MASKED WITH VALUE NULL';
                 ''}"
             )
@@ -61,7 +61,7 @@ let
                 COPY public.player ...
                 1,Shields,
                 2,Salazar,
-                \.
+                \\.
 
             in the given dump (the commas are tabs in case of pg_dump).
                   Extract the CSV lines and split by `sep`.
@@ -107,11 +107,7 @@ let
       '';
     };
 in
-lib.recurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.anonymizer.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.anonymizer.meta.broken;
+}

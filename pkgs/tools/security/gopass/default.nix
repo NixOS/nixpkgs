@@ -1,98 +1,97 @@
 {
   lib,
   stdenv,
-  makeWrapper,
+  makeBinaryWrapper,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  git,
+  gitMinimal,
   gnupg,
   xclip,
   wl-clipboard,
   passAlias ? false,
-  apple-sdk_14,
-  testers,
   nix-update-script,
-  gopass,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+let
+  wrapperPath = lib.makeBinPath (
+    [
+      gitMinimal
+      gnupg
+      xclip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wl-clipboard
+    ]
+  );
+in
+buildGoModule (finalAttrs: {
   pname = "gopass";
-  version = "1.15.15";
+  version = "1.16.0";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # For ScreenCaptureKit.h, see https://github.com/NixOS/nixpkgs/pull/358760#discussion_r1858327365
-    apple-sdk_14
+    makeBinaryWrapper
   ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass";
-    rev = "v${version}";
-    hash = "sha256-GL0vnrNz9vcdybubYIjiK0tDH3L4lNWNo+rAAWv7d8o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JBa/PhVj0cKr9Btz9KzhGgsL4APAfZ/ixHGHWzd2TfA=";
   };
 
-  vendorHash = "sha256-dDy7eQe/JtAsB+cPONiqUwcCsbisCLzY/5YQaH9w2Yg=";
+  vendorHash = "sha256-ebnnnAD7SQJrSVOPborHUWd8ThOstIgihEIUjrnCztQ=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
-  wrapperPath = lib.makeBinPath (
-    [
-      git
-      gnupg
-      xclip
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux wl-clipboard
-  );
-
-  postInstall =
-    ''
-      installManPage gopass.1
-      installShellCompletion --cmd gopass \
-        --zsh zsh.completion \
-        --bash bash.completion \
-        --fish fish.completion
-    ''
-    + lib.optionalString passAlias ''
-      ln -s $out/bin/gopass $out/bin/pass
-    '';
+  postInstall = ''
+    installManPage gopass.1
+    installShellCompletion --cmd gopass \
+      --zsh zsh.completion \
+      --bash bash.completion \
+      --fish fish.completion
+  ''
+  + lib.optionalString passAlias ''
+    ln -s $out/bin/gopass $out/bin/pass
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/gopass \
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    gitMinimal
+  ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
     inherit wrapperPath;
-
-    tests.version = testers.testVersion {
-      package = gopass;
-    };
 
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       sikmir
     ];
-    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass/blob/v${finalAttrs.version}/CHANGELOG.md";
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
@@ -105,4 +104,4 @@ buildGoModule rec {
     '';
     mainProgram = "gopass";
   };
-}
+})

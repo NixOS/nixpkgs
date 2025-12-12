@@ -19,21 +19,19 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.20.0";
+  version = "2.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
-    rev = "v${version}";
-    hash = "sha256-ccjkGQNaPRefI6+j/O+NwdBGEVNuZ5q5m1d8EAJGcbs=";
+    tag = "v${version}";
+    hash = "sha256-BA2OWzr0sH77YUkFqMsGJQppqbG3R4sQ2kepicdzejE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     googleapis-common-protos
     google-auth
     protobuf
@@ -42,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
     grpc = [
       grpcio
       grpcio-status
@@ -78,15 +77,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.api_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core Library for Google Client Libraries";
     longDescription = ''
       This library is not meant to stand-alone. Instead it defines common
       helpers used by all Google API clients.
     '';
     homepage = "https://github.com/googleapis/python-api-core";
-    changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
   };
 }

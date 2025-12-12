@@ -11,6 +11,7 @@
   allowedVersions ? "",
   ignoredVersions ? "",
   rev-prefix ? "",
+  rev-suffix ? "",
   odd-unstable ? false,
   patchlevel-unstable ? false,
   # an explicit url is needed when src.meta.homepage or src.url don't
@@ -26,6 +27,7 @@ genericUpdater {
     allowedVersions
     ignoredVersions
     rev-prefix
+    rev-suffix
     odd-unstable
     patchlevel-unstable
     ;

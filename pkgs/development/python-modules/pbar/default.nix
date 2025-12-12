@@ -13,17 +13,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darvil82";
     repo = "PBar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FsEjfusk8isOD52xkjndGQdVC8Vc7N3spLLWQTi3Svc=";
   };
 
   build-system = [ setuptools ];
   pythonImportsCheck = [ "pbar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Display customizable progress bars on the terminal easily";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://darvil82.github.io/PBar";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

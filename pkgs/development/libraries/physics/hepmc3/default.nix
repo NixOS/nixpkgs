@@ -17,20 +17,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-b4dgke3PfubQwNsE4IAFbonvwaYavmI1XZfOjnNXadY=";
+    sha256 = "sha256-CCQBYLDyjcMpOqTWHOZeLWfNWXrPb6ykOfLkZiX355M=";
   };
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
+  ]
+  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
     root_py
-  ] ++ lib.optional withPython python;
+  ]
+  ++ lib.optional withPython python;
 
   # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
   preConfigure =
@@ -40,15 +42,14 @@ stdenv.mkDerivation rec {
         MACOSX_DEPLOYMENT_TARGET=10.16
       '';
 
-  cmakeFlags =
-    [
-      "-DHEPMC3_CXX_STANDARD=17"
-      "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
-    ]
-    ++ lib.optionals withPython [
-      "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
-      "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"
-    ];
+  cmakeFlags = [
+    "-DHEPMC3_CXX_STANDARD=17"
+    "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals withPython [
+    "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
+    "-DHEPMC3_Python_SITEARCH${pythonVersion}=${placeholder "out"}/${python.sitePackages}"
+  ];
 
   postInstall = ''
     substituteInPlace "$out"/bin/HepMC3-config \
@@ -58,12 +59,12 @@ stdenv.mkDerivation rec {
 
   pythonImportsCheck = [ "pyHepMC3" ];
 
-  meta = with lib; {
+  meta = {
     description = "HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
     mainProgram = "HepMC3-config";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "http://hepmc.web.cern.ch/hepmc/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

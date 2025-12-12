@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bebleo";
     repo = "pytest-smtpd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vu2D2hfxBYxgXQ4Gjr+jFpac9fjpLL2FftBhnqrcQaA=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_smtpd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest fixture that creates an SMTP server";
     homepage = "https://github.com/bebleo/pytest-smtpd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

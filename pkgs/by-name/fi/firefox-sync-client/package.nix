@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "firefox-sync-client";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Mikescher";
     repo = "firefox-sync-client";
     rev = "v${version}";
-    hash = "sha256-Ax+v4a8bVuym1bp9dliXX85PXJk2Qlik3ME+adGiL1s=";
+    hash = "sha256-tzYuYSifV/a9SPb5KyabhQ29ByXuAgQgi3t0VMHVSH8=";
   };
 
-  vendorHash = "sha256-MYetPdnnvIBzrYrA+eM9z1P3+P5FumYKH+brvvlwkm4=";
+  vendorHash = "sha256-kDh/5SOwKPYl9sC9W17bnzG73fGI5iX6lSjcB3IjOss=";
 
   meta = {
-    description = "Commandline-utility to list/view/edit/delete entries in a firefox-sync account.";
+    description = "Commandline-utility to list/view/edit/delete entries in a firefox-sync account";
     homepage = "https://github.com/Mikescher/firefox-sync-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ambroisie ];

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "chispa";
-  version = "0.10.1";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MrPowers";
     repo = "chispa";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WPtn8YGlj67MEy2onxoU5SctQ7NcvTImaU0VgMoz2B4=";
+    tag = "v${version}";
+    hash = "sha256-M4iYKWXI0wBSHt1tWd0vGvQ6FLRRE9TB2u6sTJnkFpY=";
   };
 
   build-system = [ poetry-core ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   # pythonImportsCheck needs spark installation
 
-  meta = with lib; {
+  meta = {
     description = "PySpark test helper methods with beautiful error messages";
     homepage = "https://github.com/MrPowers/chispa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ratsclub ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ratsclub ];
   };
 }

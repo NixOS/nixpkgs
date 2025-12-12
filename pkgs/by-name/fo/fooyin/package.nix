@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   alsa-lib,
@@ -10,23 +11,25 @@
   kdsingleapplication,
   pipewire,
   taglib,
+  libebur128,
   libvgm,
   libsndfile,
   libarchive,
   libopenmpt,
   game-music-emu,
   SDL2,
+  icu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
-    rev = "v" + finalAttrs.version;
-    hash = "sha256-pkzBuJkZs76m7I/9FPt5GxGa8v2CDNR8QAHaIAuKN4w=";
+    tag = "v" + finalAttrs.version;
+    hash = "sha256-sQ1zsQ/6OHGPkofiKhusCrpW2XnO+PpMvH1M2OG5Huw=";
   };
 
   buildInputs = [
@@ -36,12 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtwayland
     taglib
     ffmpeg
+    icu
     kdsingleapplication
     # output plugins
     alsa-lib
     pipewire
     SDL2
     # input plugins
+    libebur128
     libvgm
     libsndfile
     libarchive
@@ -65,9 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.LANG = "C.UTF-8";
 
+  # Remove after next release
+  patches = [
+    (fetchpatch {
+      name = "add-missing-header.patch";
+      url = "https://github.com/fooyin/fooyin/commit/7b171c0da2b9289468696424fe51f76e1c365bb5.patch";
+      hash = "sha256-Uvggz2F6DuWYAg20qi8uHkshzCnTLrchambQ/yDyIfA=";
+    })
+  ];
+
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
+    changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     downloadPage = "https://github.com/fooyin/fooyin";
     mainProgram = "fooyin";
     license = lib.licenses.gpl3Only;

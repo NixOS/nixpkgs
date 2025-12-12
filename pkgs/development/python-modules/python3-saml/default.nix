@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onelogin";
     repo = "python3-saml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KyDGmqhg/c29FaXPKK8rWKSBP6BOCpKKpOujCavXUcc=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "onelogin.saml2" ];
 
   disabledTests = [
-    # Tests require network acces or additions files
+    # Tests require network access or additions files
     "OneLogin_Saml2_Metadata_Test"
     "OneLogin_Saml2_Response_Test"
     "OneLogin_Saml2_Utils_Test"
@@ -62,11 +62,11 @@ buildPythonPackage rec {
     "OneLogin_Saml2_Logout_Request_Test"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OneLogin's SAML Python Toolkit";
     homepage = "https://github.com/onelogin/python3-saml";
     changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${version}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

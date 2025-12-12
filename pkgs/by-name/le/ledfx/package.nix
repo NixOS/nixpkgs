@@ -1,18 +1,27 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   python3,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ledfx";
-  version = "2.0.105";
+  version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S/ZlEFgcFiLr0V7g0X0bjWU0YNVzA0JctFaJTK/QkpI=";
+  src = fetchFromGitHub {
+    owner = "LedFx";
+    repo = "LedFx";
+    tag = "v${version}";
+    hash = "sha256-N9EHK0GVohFCjEKsm3g4h+4XWfzZO1tzdd2z5IN1YjI=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"uv",' "" \
+      --replace-fail '"run",' "" \
+      --replace-fail '"ledfx",' "\"$out/bin/ledfx\","
+  '';
 
   pythonRelaxDeps = true;
 
@@ -23,53 +32,60 @@ python3.pkgs.buildPythonPackage rec {
 
   build-system = with python3.pkgs; [
     cython
-    poetry-core
+    pdm-backend
   ];
 
   dependencies = with python3.pkgs; [
+    # sorted like in pyproject.toml in upstream
+    numpy
+    cffi
     aiohttp
     aiohttp-cors
     aubio
     certifi
-    flux-led
-    python-dotenv
-    icmplib
-    mss
     multidict
-    numpy
     openrgb-python
     paho-mqtt
-    pillow
     psutil
-    pybase64
     pyserial
     pystray
-    python-mbedtls
-    python-osc
     python-rtmidi
-    # rpi-ws281x # not packaged
     requests
     sacn
-    samplerate
     sentry-sdk
-    setuptools
     sounddevice
-    stupidartnet
-    uvloop
-    vnoise
+    samplerate
+    icmplib
     voluptuous
     zeroconf
+    pillow
+    flux-led
+    python-osc
+    pybase64
+    mss
+    uvloop
+    stupidartnet
+    python-dotenv
+    vnoise
+    netifaces2
+    packaging
   ];
 
-  # Project has no tests
-  doCheck = false;
+  optional-dependencies = {
+    hue = with pyproject.pkgs; [ python-mbedtls ];
+  };
 
-  meta = with lib; {
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
-    license = licenses.gpl3Only;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.c3d2 ];
     mainProgram = "ledfx";
   };
 }

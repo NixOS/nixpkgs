@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "belane";
     repo = "CloudHunter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7iT4vr0kcNXEyJJdBbJsllIcbZRGY3T5t/FjEONkuq0=";
   };
 
@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cloud bucket scanner";
     mainProgram = "cloudhunter";
     homepage = "https://github.com/belane/CloudHunter";
     changelog = "https://github.com/belane/CloudHunter/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

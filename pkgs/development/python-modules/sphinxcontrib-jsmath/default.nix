@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
-    description = "sphinxcontrib-jsmath is a sphinx extension which renders display math in HTML via JavaScript";
+  meta = {
+    description = "Sphinx extension which renders display math in HTML via JavaScript";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-jsmath";
-    license = licenses.bsd0;
-    maintainers = teams.sphinx.members;
+    license = lib.licenses.bsd0;
+    teams = [ lib.teams.sphinx ];
   };
 }

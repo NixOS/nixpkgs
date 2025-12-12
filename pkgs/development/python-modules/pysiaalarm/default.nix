@@ -6,16 +6,17 @@
   dataclasses-json,
   pycryptodome,
   setuptools-scm,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cases,
-  pytest7CheckHook,
+  pytest-cov-stub,
+  pytestCheckHook,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,11 +28,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "==" ">="
-    substituteInPlace pytest.ini \
-      --replace "--cov pysiaalarm --cov-report term-missing" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     dataclasses-json
@@ -40,9 +39,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-cases
-    pytest7CheckHook
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -50,11 +50,11 @@ buildPythonPackage rec {
     "pysiaalarm.aio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
     changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

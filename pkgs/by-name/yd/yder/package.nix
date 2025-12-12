@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "babelouest";
-    repo = pname;
+    repo = "yder";
     rev = "v${version}";
     sha256 = "sha256-BaCF1r5mOYxj0zKc11uoKI9gVKuxWd8GaneGcV+qIFg=";
   };
@@ -38,15 +38,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_YDER_TESTING=on"
-  ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
+  ]
+  ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Logging library for C applications";
     homepage = "https://github.com/babelouest/yder";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ johnazoidberg ];
+    platforms = lib.platforms.all;
   };
 }

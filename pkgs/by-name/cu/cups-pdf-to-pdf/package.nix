@@ -7,9 +7,9 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-pdf-to-pdf";
-  version = "unstable-2021-12-22";
+  version = "0-unstable-2021-12-22";
 
   src = fetchFromGitHub {
     owner = "alexivkin";
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ cups ];
 
   postPatch = ''
-    sed -r 's|(gscall, size, ")cp |\1${coreutils}/bin/cp |' cups-pdf.c -i
+    substituteInPlace cups-pdf.c \
+      --replace-fail '"cp ' '"${lib.getExe' coreutils "cp"} '
   '';
 
   # gcc command line is taken from original cups-pdf's README file
@@ -44,11 +45,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.vmtest = nixosTests.cups-pdf;
 
-  meta = with lib; {
+  meta = {
     description = "CUPS backend that turns print jobs into searchable PDF files";
     homepage = "https://github.com/alexivkin/CUPS-PDF-to-PDF";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.yarny ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.yarny ];
     longDescription = ''
       cups-pdf is a CUPS backend that generates a PDF file for each print job and puts this file
       into a folder on the local machine such that the print job's owner can access the file.

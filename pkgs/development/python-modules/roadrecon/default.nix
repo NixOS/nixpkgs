@@ -10,7 +10,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   openpyxl,
-  pythonOlder,
   roadlib,
   setuptools,
   sqlalchemy,
@@ -18,23 +17,19 @@
 
 buildPythonPackage rec {
   pname = "roadrecon";
-  version = "1.6.0";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Rv88lbqvTJD183nLhvi2Ue1ZD1eoRW1sytJ+t85bcg=";
+    hash = "sha256-fvfwgUqVr74JdL3dteX0UXbALva3vWQWEpotk8QQAiI=";
   };
 
   pythonRelaxDeps = [ "flask" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     flask
     flask-cors
@@ -47,12 +42,15 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
+  # Module has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "roadtools.roadrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Azure AD recon";
     homepage = "https://pypi.org/project/roadrecon/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

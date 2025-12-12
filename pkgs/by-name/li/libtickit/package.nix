@@ -9,7 +9,7 @@
   unibilium,
 }:
 let
-  version = "0.4.3";
+  version = "0.4.5";
 in
 stdenv.mkDerivation {
   pname = "libtickit";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "leonerd";
     repo = "libtickit";
     rev = "v${version}";
-    hash = "sha256-QCrym8g5J1qwsFpU/PB8zZIWdM3YzOySknISSbQE4Sc=";
+    hash = "sha256-q8JMNFxmnyOiUso4nXLZjJIBFYR/EF6g45lxVeY0f1s=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal interface construction kit";
     longDescription = ''
       This library provides an abstracted mechanism for building interactive full-screen terminal
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
       input events.
     '';
     homepage = "https://www.leonerd.org.uk/code/libtickit/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onemoresuza ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onemoresuza ];
+    platforms = lib.platforms.unix;
   };
 }

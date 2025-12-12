@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cmaes";
-  version = "0.11.1";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
     repo = "cmaes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u2CgU9n8N9AMxfMBbDbnYzBMdl/IGOLTxOeh8RlnB/Y=";
+    tag = "v${version}";
+    hash = "sha256-Ev3Nes0iJIhndWfVzDVLpoV4TIFaHMOEUgPPdlyU0+s=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
     "test_cma_tell"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for CMA evolution strategy";
     homepage = "https://github.com/CyberAgentAILab/cmaes";
-    changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

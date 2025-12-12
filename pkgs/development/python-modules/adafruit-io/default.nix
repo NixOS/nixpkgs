@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OwTHMyc2ePSdYVuY1h3PY+uDBl6/7fTMXiZC3sZm8fU=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
     "tests/test_mqtt_client.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Adafruit IO";
     homepage = "https://github.com/adafruit/Adafruit_IO_Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

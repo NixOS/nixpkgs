@@ -6,6 +6,7 @@
   gnome,
   adwaita-icon-theme,
   meson,
+  mesonEmulatorHook,
   ninja,
   pkg-config,
   gtk3,
@@ -64,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
     python3
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -86,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs meson_post_install.py
   '';
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-bluetooth";
@@ -94,12 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
     mainProgram = "bluetooth-sendto";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 })

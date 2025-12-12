@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "iio-hyprland";
-  version = "0-unstable-2024-09-29";
+  version = "0-unstable-2025-10-06";
 
   src = fetchFromGitHub {
     owner = "JeanSchoeller";
     repo = "iio-hyprland";
-    rev = "bd6be6b7e0fbc8ca1a5ccbf536602838e52c347e";
-    hash = "sha256-gfH/jcrmI27OEge8OGPe7JpC0jrQJuX7v9hM/ObjjW8=";
+    rev = "801c4722ea678ddf103fc0ff4c3c0211d13ad046";
+    hash = "sha256-asLtzpUbwr+Wq2uQvITORBnrxh/mIZneYyfhdsElTeI=";
   };
 
   buildInputs = [ dbus ];

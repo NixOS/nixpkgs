@@ -4,10 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   openssl,
-  postgresql,
+  libpq,
   libiconv,
-  Security,
-  SystemConfiguration,
   protobuf,
   rustfmt,
   nixosTests,
@@ -34,13 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = pinData.serverCargoHash;
 
-  buildInputs =
-    [ postgresql ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [
+    libpq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -68,11 +65,11 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
-  meta = with lib; {
+  meta = {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo

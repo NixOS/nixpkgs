@@ -17,19 +17,43 @@
   net-snmp,
   openssl,
   pkg-config,
-  substituteAll,
+  replaceVars,
   systemd,
   udev,
   gnused,
+  withApcModbus ? false,
+  fetchFromGitHub,
 }:
+let
+  # rebuild libmodbus with downstream usb patches from
+  # https://github.com/networkupstools/libmodbus
+  # finding the docs for this was actually relatively hard
+  # so save them here for reference
+  # https://github.com/networkupstools/nut/wiki/APC-UPS-with-Modbus-protocol
+  libmodbus' = libmodbus.overrideAttrs (finalAttrs: {
+    version = "3.1.11-withUsbRTU-NUT";
+
+    src = fetchFromGitHub {
+      owner = "networkupstools";
+      repo = "libmodbus";
+      rev = "8b9bdcde6938f85415098af74b720b7ad5ed74b4";
+      hash = "sha256-ZimIVLKhVjknLNFB+1jGA9N/3YqxHfGX1+l1mpk5im4=";
+    };
+
+    buildInputs = [
+      libusb1
+    ];
+  });
+  modbus = if withApcModbus then libmodbus' else libmodbus;
+in
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.8.2";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5LSwy+fdObqQl75/fXh7sv/74132Tf9Ttf45PWWcWX0=";
+    sha256 = "sha256-1soX8LOQA7rHZJ6xerSnE+TV/KqP0a7cooNX1Z3wle0=";
   };
 
   patches = [
@@ -40,14 +64,13 @@ stdenv.mkDerivation rec {
     # trying to install directly into /etc/nut which predictably fails
     ./nutshutdown-conf-default.patch
 
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
       libgpiod = "${libgpiod_1}/lib";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
-      libmodbus = "${libmodbus}/lib";
+      libmodbus = "${modbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
   ];
@@ -60,11 +83,11 @@ stdenv.mkDerivation rec {
     avahi
     freeipmi
     libgpiod_1
-    libmodbus
     libtool
     i2c-tools
     net-snmp
     gd
+    modbus
   ];
 
   nativeBuildInputs = [
@@ -73,15 +96,22 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  doInstallCheck = true;
   configureFlags = [
     "--with-all"
     "--with-ssl"
     "--without-powerman" # Until we have it ...
+    "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
     "--with-udev-dir=$(out)/etc/udev"
-  ];
+    "--with-user=nutmon"
+    "--with-group=nutmon"
+  ]
+  ++ (lib.lists.optionals withApcModbus [
+    "--with-modbus+usb"
+  ]);
 
   enableParallelBuilding = true;
 
@@ -115,7 +145,7 @@ stdenv.mkDerivation rec {
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network UPS Tools";
     longDescription = ''
       Network UPS Tools is a collection of programs which provide a common
@@ -123,9 +153,9 @@ stdenv.mkDerivation rec {
       It uses a layered approach to connect all of the parts.
     '';
     homepage = "https://networkupstools.org/";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.pierron ];
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.pierron ];
+    license = with lib.licenses; [
       gpl1Plus
       gpl2Plus
       gpl3Plus

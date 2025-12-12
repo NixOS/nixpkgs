@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "figsoda";
-    repo = pname;
+    repo = "mmtc";
     rev = "v${version}";
     sha256 = "sha256-gs6uytX4rm2JrJ4UbtHJDg+b+Z1ZjcsuUR0b13jQIy4=";
   };
 
-  cargoHash = "sha256-7zV/AsSZHk99ROC1301nkwJ22dvh4afeCI//G1zWHu8=";
+  cargoHash = "sha256-TpAl7lMaQGSH9oMNqYIxnajsfh1HAdyU2suSFRfWYPs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
 
   GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";
     homepage = "https://github.com/figsoda/mmtc";
     changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = [ ];
     mainProgram = "mmtc";
   };
 }

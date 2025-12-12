@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmo-sigtran";
-  version = "2.0.1";
+  version = "2.1.2";
 
   # fetchFromGitea hangs
   src = fetchgit {
     url = "https://gitea.osmocom.org/osmocom/libosmo-sigtran.git";
     rev = version;
-    hash = "sha256-tNSe5FFietdjl80hhQntsdgG90CP7z7RWyTpGhsApt0=";
+    hash = "sha256-/TxD7lc/htm1c24rKfnlYxGsVpxawi3nh7m34mRRhUA=";
   };
 
   configureFlags = [ "--with-systemdsystemunitdir=$out" ];
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "SCCP + SIGTRAN (SUA/M3UA) libraries as well as OsmoSTP";
     mainProgram = "osmo-stp";
     homepage = "https://osmocom.org/projects/libosmo-sccp";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       markuskowa
     ];
   };

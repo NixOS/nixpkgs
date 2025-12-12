@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   meson,
   ninja,
@@ -48,16 +48,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "47.2";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ESM4+KmOflEl3j9XIphzU0IVt37u830/1CYvAhUcfOo=";
+    hash = "sha256-thC2kyqNZmQyvFjWx4xFaM1j1EKuc224vixMoBu8lGw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit isocodes;
     })
   ];
@@ -102,23 +101,25 @@ stdenv.mkDerivation (finalAttrs: {
     # For video screenshots
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ] ++ lib.optionals withFwupd [ fwupd ];
+  ]
+  ++ lib.optionals withFwupd [ fwupd ];
 
   mesonFlags = [
     # Requires /etc/machine-id, D-Bus system bus, etc.
     "-Dtests=false"
-  ] ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
+  ]
+  ++ lib.optionals (!withFwupd) [ "-Dfwupd=false" ];
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

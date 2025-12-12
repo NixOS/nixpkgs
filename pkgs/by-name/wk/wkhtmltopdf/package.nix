@@ -78,7 +78,8 @@ let
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_arm64.deb";
       hash = "sha256-tmBhV7J8E+BE0Ku+ZwMB+I3k4Xgq/KT5wGpYF/PgOpw=";
     };
-  } // _linuxAttrs;
+  }
+  // _linuxAttrs;
 
   linuxAttrs.x86_64-linux = rec {
     version = "0.12.6.1-3";
@@ -86,11 +87,12 @@ let
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
       hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
     };
-  } // _linuxAttrs;
+  }
+  // _linuxAttrs;
 in
 stdenv.mkDerivation (
   {
-    pname = "wkhtmltopdf";
+    name = "wkhtmltopdf";
 
     dontStrip = true;
 
@@ -100,7 +102,7 @@ stdenv.mkDerivation (
       $out/bin/wkhtmltopdf --version
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://wkhtmltopdf.org/";
       description = "Tools for rendering web pages to PDF or images (binary package)";
       longDescription = ''
@@ -111,8 +113,8 @@ stdenv.mkDerivation (
 
         There is also a C library, if you're into that kind of thing.
       '';
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [
         nbr
         kalbasit
       ];
@@ -124,5 +126,7 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
-  // lib.optionalAttrs (stdenv.hostPlatform.isLinux) linuxAttrs.${stdenv.system}
+  //
+    lib.optionalAttrs (stdenv.hostPlatform.isLinux)
+      linuxAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")
 )

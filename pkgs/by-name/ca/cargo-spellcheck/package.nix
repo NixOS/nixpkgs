@@ -2,43 +2,41 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.14.0";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "drahnr";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NrtPV2bd9BuA1nnniIcth85gJQmFGy9LHdajqmW8j4Q=";
+    repo = "cargo-spellcheck";
+    tag = "v${version}";
+    hash = "sha256-saRr1xEBefLoCgCxU/pyQOmmt/di+DOQHMoVc4LgRm0=";
   };
 
-  cargoHash = "sha256-mxx4G77ldPfVorNa1LGTcA0Idwmrcl8S/ze+UUoLHhI=";
+  cargoHash = "sha256-MGjyoHejsUd6HCoZVlw1NDG6TE9Anh05IeObHmcnwg0=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   preCheck = "HOME=$(mktemp -d)";
 
   checkFlags = [
-    "--skip checker::hunspell::tests::hunspell_binding_is_sane"
+    "--skip=checker::hunspell::tests::hunspell_binding_is_sane"
+    # requires dictionaries
+    "--skip=tests::e2e::issue_226"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks rust documentation for spelling and grammar mistakes";
     mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       newam
       matthiasbeyer
     ];

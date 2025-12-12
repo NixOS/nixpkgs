@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "packcc";
-  version = "2.0.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "arithy";
     repo = "packcc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k1C/thvr/5fYrgu/j8YN3kwXp4k26sC9AhYhYAKQuX0=";
+    hash = "sha256-fmZL34UL7epFFGo0gCsj8TcyhBt5uCfnLCLCQugXF6U=";
   };
 
   postPatch = ''
@@ -44,15 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  preCheck =
-    ''
-      # Style tests will always fail because upstream uses an older version of
-      # uncrustify.
-      rm -rf ../../tests/style.d
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
-    '';
+  preCheck = ''
+    # Style tests will always fail because upstream uses an older version of
+    # uncrustify.
+    rm -rf ../../tests/style.d
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
+    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Parser generator for C";
     longDescription = ''
       PackCC is a parser generator for C. Its main features are as follows:
@@ -72,9 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/arithy/packcc";
     changelog = "https://github.com/arithy/packcc/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
     mainProgram = "packcc";
   };
 })

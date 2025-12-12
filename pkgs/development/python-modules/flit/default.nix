@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.10.0";
+  version = "3.12.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "flit";
     rev = version;
-    hash = "sha256-4JMoK1UxYcHoSvKDF7Yn4iqMXokyCPCswQknK0a070k=";
+    hash = "sha256-oWV+KK22+iK99iCOCKCV1OCLq2Ef1bcYRKXT5GHwiL8=";
   };
 
   build-system = [ flit-core ];
@@ -61,11 +61,11 @@ buildPythonPackage rec {
     "test_symlink_module_pep621"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "Simple packaging tool for simple packages";
     mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

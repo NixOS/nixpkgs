@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abracadabra";
-  version = "2.8.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
-    rev = "v${version}";
-    hash = "sha256-bzRXGxSWoiBqvx8r2coNVPQKilOAKFoqBcB4F0uAV8g=";
+    tag = "v${version}";
+    hash = "sha256-QR3wc+eltIpmdNpyzQqJd4Zo40JVlTzRBNSr11tE0X8=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ radio application";
     homepage = "https://github.com/KejPi/AbracaDABra";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ markuskowa ];
     mainProgram = "AbracaDABra";
   };
 }

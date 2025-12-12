@@ -3,79 +3,71 @@
   gtk3,
   glib,
   dbus,
-  curl,
-  wget,
+  nodejs,
   cairo,
-  stdenv,
-  librsvg,
-  libsoup_2_4,
-  fetchzip,
-  openssl_3,
-  webkitgtk_4_0,
+  cargo-tauri,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
   gdk-pixbuf,
   pkg-config,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
+  rustPlatform,
+  fetchYarnDeps,
+  yarnConfigHook,
+  fetchFromGitHub,
+  desktop-file-utils,
 }:
-let
-  version = "8.0.0";
-in
-stdenv.mkDerivation {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "catppuccinifier-gui";
-  inherit version;
+  version = "9.1.0";
 
-  src = fetchzip {
-    url = "https://github.com/lighttigerXIV/catppuccinifier/releases/download/${version}/Catppuccinifer-Linux-${version}.zip";
-    hash = "sha256-fG6YhLsjvMUIWsOnm+GSOh6LclCAISPSRiDQdWLlAR4=";
+  src = fetchFromGitHub {
+    owner = "lighttigerXIV";
+    repo = "catppuccinifier";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-e8sLYp+0YhC/vAn4vag9UUaw3VYDRERGnLD1RuW1TXE=";
+  };
+
+  sourceRoot = finalAttrs.src.name + "/src/catppuccinifier-gui";
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  cargoHash = "sha256-BUXqPY3jNn4YB1avtCp6MFyN1KIYqT0b1H9drOmikj0=";
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/src/catppuccinifier-gui/yarn.lock";
+    hash = "sha256-UfQZf2raMrgPhUQVTAW+mA/nP1XjLKx0WBbYtdeD9kY=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
+    cargo-tauri.hook
     pkg-config
-    copyDesktopItems
+    nodejs
+    yarnConfigHook
+    wrapGAppsHook3
+    desktop-file-utils
   ];
 
   buildInputs = [
-    curl
-    wget
-    webkitgtk_4_0
+    webkitgtk_4_1
     gtk3
     cairo
     gdk-pixbuf
-    libsoup_2_4
     glib
     dbus
-    openssl_3
-    librsvg
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm555 installation-files/catppuccinifier-gui "$out/bin/catppuccinifier-gui"
-    install -Dm644 installation-files/catppuccinifier.png "$out/share/pixmaps/catppuccinifier.png"
-
-    runHook postInstall
+  postInstall = ''
+    desktop-file-edit "$out/share/applications/catppuccinifier-gui.desktop" \
+      --set-key "Categories" --set-value "Graphics" \
+      --set-key "Comment" --set-value "Apply catppuccin flavors to your wallpapers"
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      desktopName = "catppuccinifier";
-      name = "catppuccinifier";
-      exec = "catppuccinifier-gui";
-      icon = "catppuccinifier";
-      comment = "Apply catppuccin flavors to your wallpapers";
-    })
-  ];
 
   meta = {
     description = "Apply catppuccin flavors to your wallpapers";
     homepage = "https://github.com/lighttigerXIV/catppuccinifier";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "catppuccinifier-gui";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fontforge";
-    repo = pname;
+    repo = "libspiro";
     rev = version;
     sha256 = "sha256-psEF1SWkire6ngEUcMU0xnGYaT8ktqDCBlBckToGUMg=";
   };
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that simplifies the drawing of beautiful curves";
     homepage = "https://github.com/fontforge/libspiro";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.erictapen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.erictapen ];
   };
 }

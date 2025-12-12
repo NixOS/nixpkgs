@@ -16,16 +16,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wBU4CX6KGnTvrBsXvFAlRrvDqvHHbAlVkDqTCJx90G8=";
   };
 
-  cargoHash = "sha256-W5e19gzkZZjTTSZdww2x7M0LnR/gClQxMeAiDITO3HY=";
+  cargoHash = "sha256-dmRUcjlmnheCG5drEcJIZbo7haDiu7Qphs6T92V8v/o=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Layout manager for the River window manager";
     homepage = "https://github.com/pkulak/filtile";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pkulak ];
     mainProgram = "filtile";
   };

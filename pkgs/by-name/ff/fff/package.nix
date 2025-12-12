@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
-    repo = pname;
+    repo = "fff";
     rev = version;
     sha256 = "14ymdw6l6phnil0xf1frd5kgznaiwppcic0v4hb61s1zpf4wrshg";
   };
 
-  pathAdd = lib.makeSearchPath "bin" ([
+  pathAdd = lib.makeSearchPath "bin" [
     xdg-utils
     file
     coreutils
     w3m
     xdotool
-  ]);
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bashInteractive ];
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/fff" --prefix PATH : $pathAdd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fucking Fast File-Manager";
     mainProgram = "fff";
     homepage = "https://github.com/dylanaraps/fff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

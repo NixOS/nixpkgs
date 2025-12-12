@@ -72,9 +72,9 @@ in
     ];
 
     nodes.client = {
-      services.dnscrypt-proxy2.enable = true;
-      services.dnscrypt-proxy2.upstreamDefaults = false;
-      services.dnscrypt-proxy2.settings = {
+      services.dnscrypt-proxy.enable = true;
+      services.dnscrypt-proxy.upstreamDefaults = false;
+      services.dnscrypt-proxy.settings = {
         server_names = [ "server" ];
         listen_addresses = [ "[::1]:53" ];
         cache = false;
@@ -92,10 +92,11 @@ in
           almost_expiration = server.succeed("date --date '14min'").strip()
 
       with subtest("The DNSCrypt client can connect to the server"):
-          client.wait_until_succeeds("journalctl -u dnscrypt-proxy2 --grep '\[server\] OK'")
+          client.wait_until_succeeds("journalctl -u dnscrypt-proxy --grep '\\[server\\] OK'")
 
       with subtest("DNS queries over UDP are working"):
           client.wait_for_open_port(53)
+          client.wait_until_succeeds("host -U 192.168.0.1", timeout=60)
           client.succeed("host -U 192.168.0.1 | grep -qF ns.example.org")
 
       with subtest("DNS queries over TCP are working"):

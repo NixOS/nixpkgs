@@ -11,19 +11,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2.6.0";
+  version = "2.7.0";
 
   outputs = [
     "bin"
     "dev"
     "out"
-  ] ++ lib.optional enablePython "py";
+  ]
+  ++ lib.optional enablePython "py";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
+    repo = "libplist";
     rev = version;
-    hash = "sha256-hitRcOjbF+L9Og9/qajqFqOhKfRn9+iWLoCKmS9dT80=";
+    hash = "sha256-Rc1KwJR+Pb2lN8019q5ywERrR7WA2LuLRiEvNsZSxXc=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +41,12 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  configureFlags =
-    [
-      "--enable-debug"
-    ]
-    ++ lib.optionals (!enablePython) [
-      "--without-cython"
-    ];
+  configureFlags = [
+    "--enable-debug"
+  ]
+  ++ lib.optionals (!enablePython) [
+    "--without-cython"
+  ];
 
   doCheck = true;
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle Apple Property List format in binary or XML";
     homepage = "https://github.com/libimobiledevice/libplist";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "plistutil";
   };
 }

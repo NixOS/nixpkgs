@@ -11,11 +11,12 @@
 
   # checks
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "convertertools";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,13 +24,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "convertertools";
-    rev = "v${version}";
-    hash = "sha256-g4dSJjogMBC8wqvbYDjDP6YihxuG7PQn/jwrrBFOt80=";
+    tag = "v${version}";
+    hash = "sha256-Oy1Nf/mS2Lr2N7OB27QDlW+uuhafib2kolEXzXLppWU=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
 
   build-system = [
     cython
@@ -37,15 +34,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "convertertools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for converting python data types";
     homepage = "https://github.com/bluetooth-devices/convertertools";
-    changelog = "https://github.com/bluetooth-devices/convertertools/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/bluetooth-devices/convertertools/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.9.0";
+  version = "0.9.0.post0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_localserver";
     inherit version;
-    hash = "sha256-+voCggk37n050B11D9Bc6xl/xfPIlfgbysOCbbCQh+0=";
+    hash = "sha256-gDOjb7OC0rxIUPms/iw/tWVM1fDRY69tr0fykNt9X/A=";
   };
 
   build-system = [ setuptools-scm ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_localserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for the pytest testing framework to test server connections locally";
     homepage = "https://github.com/pytest-dev/pytest-localserver";
     changelog = "https://github.com/pytest-dev/pytest-localserver/blob/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

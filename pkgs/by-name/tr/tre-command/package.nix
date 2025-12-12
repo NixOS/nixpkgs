@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-JlkONhXMWLzxAf3SYoLkSvXw4bFYBnsCyyj0TUsezwg=";
   };
 
-  cargoHash = "sha256-b3fScJMG/CIkMrahbELLQp1otmT5En+p8kQsip05SOc=";
+  cargoHash = "sha256-a3k5P+i0jLqamP2CInSQjivyI/tREeJME6IqI/YiLog=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     "respect_git_ignore"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tree command, improved";
     homepage = "https://github.com/dduan/tre";
-    license = licenses.mit;
-    maintainers = [ maintainers.dduan ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dduan ];
     mainProgram = "tre";
   };
 }

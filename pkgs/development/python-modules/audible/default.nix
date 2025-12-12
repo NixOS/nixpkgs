@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ILGhjuPIxpRxu/dVDmz531FUgMWosk4P+onPJltuPIs=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "audible" ];
 
-  meta = with lib; {
+  meta = {
     description = "A(Sync) Interface for internal Audible API written in pure Python";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mkb79/Audible";
-    maintainers = with maintainers; [ jvanbruegge ];
+    maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 }

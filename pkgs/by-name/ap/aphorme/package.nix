@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Iaphetes";
     repo = "aphorme_launcher";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p1ZIMMDyQWVzoeyHb3sbeV6XQwbIDoQwJU8ynI8hGUI=";
   };
 
-  cargoHash = "sha256-aFoy5KTapx+5aIzvDwMfjxZQ6WKQtvX3h7rNX4LBeN8=";
+  cargoHash = "sha256-knxFQ9hBBc8zATwf4ntbbmT2a+33uYcqax8AAFsj/NM=";
 
   # No tests exist
   doCheck = false;

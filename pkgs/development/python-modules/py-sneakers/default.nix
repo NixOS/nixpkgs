@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_sneakers" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to emulate the Sneakers movie effect";
     mainProgram = "py-sneakers";
     homepage = "https://github.com/aenima-x/py-sneakers";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

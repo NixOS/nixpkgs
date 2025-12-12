@@ -11,28 +11,25 @@
   graphviz,
   libsodium,
   lmdb,
-  openssl,
+  krb5,
   pkg-config,
   ragel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arpa2common";
-  version = "2.6.2";
+  version = "2.6.4";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "arpa2common";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eWfWaO6URCK2FWQ+NYAoeCONkovgsVDPSRQVCGFnW3s=";
+    hash = "sha256-qqdc+eYLnYQs2Q7sk0D5Trr1GbRTmV1w4sZiVwFwfMw=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/arpa2/arpa2common/-/commit/13ea82df60b87a5367db00a8c6f3502e8ecb7298.patch";
-      hash = "sha256-V9Dhr6PeArqXnuXmFuDjcirlGl7xovq7VQZsrbbMFSk=";
-    })
-  ];
+  postPatch = ''
+    sed '1i#include <stddef.h>' -i lib/identity/identity.rl
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -46,8 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     e2fsprogs
     libsodium
     lmdb
-    openssl
     ragel
+  ];
+
+  buildInputs = [
+    krb5
   ];
 
   meta = {

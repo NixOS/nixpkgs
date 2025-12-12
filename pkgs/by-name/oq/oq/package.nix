@@ -14,7 +14,7 @@ crystal.buildCrystalPackage rec {
 
   src = fetchFromGitHub {
     owner = "Blacksmoke16";
-    repo = pname;
+    repo = "oq";
     rev = "v${version}";
     sha256 = "sha256-W0iGE1yVOphooiab689AFT3rhGGdXqEFyYIhrx11RTE=";
   };
@@ -37,12 +37,11 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : "${lib.makeBinPath [ jq ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Performant, and portable jq wrapper";
     mainProgram = "oq";
     homepage = "https://blacksmoke16.github.io/oq/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

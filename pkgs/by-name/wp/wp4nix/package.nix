@@ -35,12 +35,12 @@ buildGoModule rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Packaging helper for Wordpress themes and plugins";
     mainProgram = "wp4nix";
     homepage = "https://git.helsinki.tools/helsinki-systems/wp4nix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.unix;
   };
 }

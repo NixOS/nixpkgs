@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "spdx-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lfTgAX4Wl01xrvLA12ZUqjah7ZiLafMAU+yNNdVkRk0=";
   };
 
@@ -32,6 +32,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/bbqsrc/spdx-python";
     changelog = "https://github.com/bbqsrc/spdx-python/releases/tag/v${version}";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      adhityaravi
+      bepri
+      dstathis
+    ];
   };
 }

@@ -2,14 +2,26 @@
   lib,
   buildGoModule,
   coreutils,
-  libtensorflow,
+  python3,
   src,
   version,
   pkg-config,
   vips,
+  symlinkJoin,
 }:
 
-buildGoModule rec {
+let
+  # we need to copy these, to add the symlinks, so the linker actually finds these libraries
+  libtensorflow = symlinkJoin {
+    name = "libtensorflow";
+    paths = [ "${python3.pkgs.tensorflow-bin}/${python3.sitePackages}/tensorflow" ];
+    postBuild = ''
+      ln -s "$out/libtensorflow_cc.so.2" "$out/libtensorflow.so"
+      ln -s "$out/libtensorflow_framework.so.2" "$out/libtensorflow_framework.so"
+    '';
+  };
+in
+buildGoModule {
   inherit src version;
   pname = "photoprism-backend";
 
@@ -30,23 +42,22 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace internal/commands/passwd.go --replace '/bin/stty' "${coreutils}/bin/stty"
+    substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-6xE1j/Vh9ltE6TpBkvjK4rzLyXv8OJzy84vf9Iqw3yU=";
+  vendorHash = "sha256-yLzIjoN1csyNpounvbQ6r1nudPypwjabAbdhyjna2+s=";
 
   subPackages = [ "cmd/photoprism" ];
 
   # https://github.com/mattn/go-sqlite3/issues/822
-  CGO_CFLAGS = "-Wno-return-local-addr";
+  CGO_CFLAGS = "-Wno-return-local-addr -I${libtensorflow}/include";
 
-  # https://github.com/tensorflow/tensorflow/issues/43847
-  CGO_LDFLAGS = "-fuse-ld=gold";
+  CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ benesim ];
   };
 }

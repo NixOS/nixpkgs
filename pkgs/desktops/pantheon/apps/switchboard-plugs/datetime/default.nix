@@ -5,13 +5,14 @@
   nix-update-script,
   meson,
   ninja,
-  substituteAll,
+  replaceVars,
   pkg-config,
   vala,
   libadwaita,
   libgee,
   libical,
   granite7,
+  gettext,
   gtk4,
   libxml2,
   switchboard,
@@ -24,19 +25,19 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-datetime";
     rev = version;
     sha256 = "sha256-VOL0F0obuXVz0G5hMI/hpUf2T3H8XUw64wu4MxRi57g=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       tzdata = tzdata;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja
@@ -57,11 +58,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Switchboard Date & Time Plug";
     homepage = "https://github.com/elementary/switchboard-plug-datetime";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

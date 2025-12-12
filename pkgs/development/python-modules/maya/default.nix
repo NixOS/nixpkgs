@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timofurrer";
     repo = "maya";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "test_parse_iso8601"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Datetimes for Humans";
     homepage = "https://github.com/timofurrer/maya";
     changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

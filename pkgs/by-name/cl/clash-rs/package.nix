@@ -4,33 +4,53 @@
   rustPlatform,
   protobuf,
   versionCheckHook,
+  cmake,
+  pkg-config,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.7.3";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SJ3NhLiDA0iRgq9pKB/CeltPE2ewbY+z1NBQriebNi0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FFbRopIaAOpfb+Wbj+EUXRr89EQE108h8OMn+fpL+ew=";
   };
 
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-JYvITscH1K6xLE6XZpMrEFZWcbue7x7xuPxVQW/Vjb0=";
 
-  cargoHash = "sha256-XZd3dah6c0jg5en/7fHAXz8iSb7AMJPvPZViXHTdEbw=";
+  cargoPatches = [ ./Cargo.patch ];
+
+  patches = [
+    ./unbounded-shifts.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace clash-lib/Cargo.toml \
+      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  nativeInstallCheckInputs = [
+    protobuf
+    versionCheckHook
+  ];
 
   env = {
-    PROTOC = "${protobuf}/bin/protoc";
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "--cfg tokio_unstable";
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
-  buildFeatures = [
-    "shadowsocks"
-    "tuic"
-    "onion"
-  ];
+  buildFeatures = [ "plus" ];
 
   doCheck = false; # test failed
 
@@ -42,16 +62,19 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
     mainProgram = "clash";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ aaronjheng ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

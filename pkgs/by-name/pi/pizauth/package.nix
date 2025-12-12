@@ -3,37 +3,42 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  apple-sdk_11,
-  stdenv,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
-    rev = "refs/tags/pizauth-${version}";
-    hash = "sha256-x3LdutVrQFrkXvbGPVzBV7Y8P9okKgv2rh2YdnDXvsc=";
+    tag = "pizauth-${finalAttrs.version}";
+    hash = "sha256-KLHccRCJ19CrGKePhUgW4GhQzn+ULE861cW2ykGoaZk=";
   };
 
-  cargoHash = "sha256-moRr8usrFHE8YPQnsmeKoDZPAk94qRm9cHzHBLXtGFM=";
-
-  # pizauth cannot be built with default apple-sdk_10 on x86_64-darwin, pin to 11
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+  cargoHash = "sha256-m1kOV0b/HCSAGfbEh4GdtrlphoELe7ebG+kgKKNYihY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd pizauth \
-      --bash share/bash/completion.bash
+      --bash share/bash/completion.bash \
+      --fish share/fish/pizauth.fish
+
+    installManPage pizauth.1 pizauth.conf.5
+
+    substituteInPlace lib/systemd/user/pizauth.service \
+      --replace-fail /usr/bin/pizauth "$out/bin/pizauth"
+    install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";
     homepage = "https://github.com/ltratt/pizauth";
-    changelog = "https://github.com/ltratt/pizauth/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/ltratt/pizauth/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -41,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "pizauth";
   };
-}
+})

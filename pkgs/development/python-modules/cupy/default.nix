@@ -1,24 +1,32 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython_0,
+  cython,
   fastrlock,
   numpy,
-  wheel,
   pytestCheckHook,
   mock,
   setuptools,
   cudaPackages,
   addDriverRunpath,
-  pythonOlder,
   symlinkJoin,
-  fetchpatch
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
-  outpaths = with cudaPackages; [
+  inherit (cudaPackages) cudnn;
+
+  shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
+
+  # some packages are not available on all platforms
+  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
+  libcutensor = shouldUsePkg (cudaPackages.libcutensor or null);
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
+
+  outpaths = lib.filter (outpath: outpath != null) (
+    with cudaPackages;
+    [
       cuda_cccl # <nv/target>
       cuda_cudart
       cuda_nvcc # <crt/host_defines.h>
@@ -31,39 +39,37 @@ let
       libcurand
       libcusolver
       libcusparse
-
-      # Missing:
-      # cusparselt
-  ];
+      # NOTE: libcusparse_lt is too new for CuPy, so we must do without.
+      # libcusparse_lt
+    ]
+  );
   cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
+    name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
+    paths =
+      outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.3.0";
-  format = "setuptools";
+  version = "13.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  stdenv = cudaPackages.backendStdenv;
 
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    tag = "v${version}";
+    hash = "sha256-nU3VL0MSCN+mI5m7C5sKAjBSL6ybM6YAk5lJiIDY0ck=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      url =
-        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
-      hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
-    })
+  env.LDFLAGS = toString [
+    # Fake libcuda.so (the real one is deployed impurely)
+    "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
   ];
 
-  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
+  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
   # very short builds and a few extremely long ones, so setting both ends up
@@ -73,25 +79,28 @@ buildPythonPackage rec {
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    cython
+    fastrlock
     setuptools
-    wheel
+  ];
+
+  nativeBuildInputs = [
     addDriverRunpath
-    cython_0
-    cudaPackages.cuda_nvcc
+    cudatoolkit-joined
   ];
 
   buildInputs = [
     cudatoolkit-joined
     cudnn
-    cutensor
+    libcutensor
     nccl
   ];
 
-  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+  # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastrlock
     numpy
   ];
@@ -113,12 +122,15 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
-    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ hyphon81 ];
+    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    maintainers = with lib.maintainers; [ hyphon81 ];
   };
 }

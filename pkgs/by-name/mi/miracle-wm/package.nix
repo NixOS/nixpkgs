@@ -6,6 +6,8 @@
   nixosTests,
   boost,
   cmake,
+  coreutils,
+  dbus,
   glib,
   glm,
   gtest,
@@ -16,42 +18,43 @@
   libuuid,
   libxkbcommon,
   libgbm,
+  makeWrapper,
   mir,
   nlohmann_json,
   pcre2,
   pkg-config,
+  python3,
+  systemd,
   wayland,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.4.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IuYRgQm3DM6ZgsfRt37GCXC3hb1vGIrqw7WxYN+Bets=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RzqF3UDC4MY85ex9TOD2L0Zd7T6mgiZ+ImJuJG+xtjo=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace session/usr/local/share/wayland-sessions/miracle-wm.desktop.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/miracle-wm' 'miracle-wm'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests/)' ""
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native' \
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests/)' ""
+  '';
 
   strictDeps = true;
 
-  # Source has a path "session/usr/local/...", don't break references to that
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
   ];
 
@@ -69,20 +72,46 @@ stdenv.mkDerivation (finalAttrs: {
     mir
     nlohmann_json
     pcre2
+    (python3.withPackages (
+      ps: with ps; [
+        dbus-next
+        tenacity
+      ]
+    ))
     wayland
     yaml-cpp
   ];
 
   checkInputs = [ gtest ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
+    (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
     runHook preCheck
 
-    ./bin/miracle-wm-tests
+    export XDG_RUNTIME_DIR=$TMP
+
+    ./tests/miracle-wm-tests
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    patchShebangs $out/libexec/miracle-wm-session-setup
+    wrapProgram $out/libexec/miracle-wm-session-setup \
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          coreutils # cat
+          dbus # dbus-update-activation-environment
+          systemd # systemctl
+        ]
+      }"
   '';
 
   passthru = {

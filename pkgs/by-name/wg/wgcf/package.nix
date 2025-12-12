@@ -6,24 +6,24 @@
 
 buildGoModule rec {
   pname = "wgcf";
-  version = "2.2.23";
+  version = "2.2.29";
 
   src = fetchFromGitHub {
     owner = "ViRb3";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zASb21C3GX4wQGf5V5Y+rKwq28S3CDi0gh696lspVnM=";
+    repo = "wgcf";
+    tag = "v${version}";
+    hash = "sha256-Ak6EG24U9goQb1tOLRXI5kQen24c4KlDVDKhuTfobbo=";
   };
 
   subPackages = ".";
 
-  vendorHash = "sha256-ihcIEoVNSPJzJGeH2bRot4fldIhZ0r/yuYU6Jp9F1Eo=";
+  vendorHash = "sha256-lG0D0LJV9IMq9R8O4IuxTQeulBb4q0ToZTU+HaGmn68=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, unofficial CLI for Cloudflare Warp";
     homepage = "https://github.com/ViRb3/wgcf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yureien ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yureien ];
     mainProgram = "wgcf";
   };
 }

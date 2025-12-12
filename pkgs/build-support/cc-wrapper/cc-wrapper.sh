@@ -131,13 +131,22 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
         if [[ "$p" = -m*=native ]]; then
-            skip "$p"
+            >&2 echo "warning: Skipping impure flag $p because NIX_ENFORCE_NO_NATIVE is set"
         else
             kept+=("$p")
         fi
     done
     # Old bash empty array hack
     params=(${kept+"${kept[@]}"})
+fi
+
+# Some build systems such as Bazel and SwiftPM use `clang` instead of `clang++`,
+# which will find the libc++ headers in the sysroot for C++ files.
+if [[ "$isCxx" = 0 && "@isClang@" ]]; then
+# This duplicates the behavior of a native toolchain, which can find the
+# libc++ headers but requires `-lc++` to be specified explicitly when linking.
+    isCxx=1
+    cxxLibrary=0
 fi
 
 if [[ "$isCxx" = 1 ]]; then
@@ -232,6 +241,12 @@ if [[ "${#positionalArgs[@]}" -gt 0 ]]; then
     extraAfter+=(-- "${positionalArgs[@]}")
 fi
 
+# if a cc-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
+    compiler=@prog@
+    source @out@/nix-support/cc-wrapper-hook
+fi
+
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
@@ -243,14 +258,8 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-PATH="$path_backup"
+export PATH="$path_backup"
 # Old bash workaround, see above.
-
-# if a cc-wrapper-hook exists, run it.
-if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
-    compiler=@prog@
-    source @out@/nix-support/cc-wrapper-hook
-fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
     responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/cc-params.XXXXXX")

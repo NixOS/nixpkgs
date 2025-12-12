@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "ytt";
-  version = "0.51.1";
+  version = "0.52.1";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
     rev = "v${version}";
-    sha256 = "sha256-MVkgZDHFkjtOuBDm/VjUU2QXMR7HdcNJwqD4mMBHt48=";
+    sha256 = "sha256-fSrvsRZpXXvR6SpEigEMiP0lU5y+ddidHwtz+rmgSb4=";
   };
 
   vendorHash = null;
@@ -27,7 +28,7 @@ buildGoModule rec {
     "-X carvel.dev/ytt/pkg/version.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ytt \
       --bash <($out/bin/ytt completion bash) \
       --fish <($out/bin/ytt completion fish) \
@@ -46,12 +47,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     mainProgram = "ytt";
     homepage = "https://get-ytt.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       brodes
       techknowlogick
       gabyx

@@ -6,23 +6,23 @@
 
 buildGoModule rec {
   pname = "kubectl-tree";
-  version = "0.4.3";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
-    repo = pname;
+    repo = "kubectl-tree";
     rev = "v${version}";
-    sha256 = "sha256-J4/fiTECcTE0N2E+MPrQKE9Msvvm8DLdvLbnDUnUo74=";
+    sha256 = "sha256-o5LfWVirp6ENYxqiUSvBDenAzeIIeio2WDD9Ll7Khgk=";
   };
 
-  vendorHash = "sha256-iblEfpYOvTjd3YXQ3Mmj5XckivHoXf4336H+F7NEfBA=";
+  vendorHash = "sha256-8vfZDegdPUh7U1ApOYl3PgTPba5cIk4lwRo+5jTZU0s=";
 
-  meta = with lib; {
+  meta = {
     description = "kubectl plugin to browse Kubernetes object hierarchies as a tree";
     mainProgram = "kubectl-tree";
     homepage = "https://github.com/ahmetb/kubectl-tree";
     changelog = "https://github.com/ahmetb/kubectl-tree/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

@@ -39,11 +39,12 @@ stdenv.mkDerivation {
     mkdir -p $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/binaryanalysisplatform/bap-bindings";
     description = "C library for interacting with BAP";
-    maintainers = [ maintainers.maurer ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.maurer ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    broken = true; # Not compatible with JaneStreet libraries 0.17
   };
 }

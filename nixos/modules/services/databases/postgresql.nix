@@ -14,8 +14,11 @@ let
     const
     elem
     escapeShellArgs
+    filter
     filterAttrs
+    getAttr
     getName
+    hasPrefix
     isString
     literalExpression
     mapAttrs
@@ -31,22 +34,14 @@ let
     mkRemovedOptionModule
     mkRenamedOptionModule
     optionalString
+    pipe
+    sortProperties
     types
     versionAtLeast
     warn
     ;
 
   cfg = config.services.postgresql;
-
-  # ensure that
-  #   services.postgresql = {
-  #     enableJIT = true;
-  #     package = pkgs.postgresql_<major>;
-  #   };
-  # works.
-  basePackage = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
-
-  postgresql = if cfg.extensions == [ ] then basePackage else basePackage.withPackages cfg.extensions;
 
   toStr =
     value:
@@ -67,13 +62,13 @@ let
   );
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" { } ''
-    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    ${cfg.finalPackage}/bin/postgres -D${configFile} -C config_file >/dev/null
     touch $out
   '';
 
   groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
 
-  extensionNames = map getName postgresql.installedExtensions;
+  extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
 in
 
@@ -84,6 +79,12 @@ in
       "postgresql"
       "extraConfig"
     ] "Use services.postgresql.settings instead.")
+
+    (mkRemovedOptionModule [
+      "services"
+      "postgresql"
+      "recoveryConfig"
+    ] "PostgreSQL v12+ doesn't support recovery.conf.")
 
     (mkRenamedOptionModule
       [ "services" "postgresql" "logLinePrefix" ]
@@ -109,18 +110,137 @@ in
 
       enableJIT = mkEnableOption "JIT support";
 
-      package = mkPackageOption pkgs "postgresql" {
-        example = "postgresql_15";
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.postgresql_15";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "25.11" then
+            pkgs.postgresql_17
+          else if versionAtLeast config.system.stateVersion "24.11" then
+            pkgs.postgresql_16
+          else if versionAtLeast config.system.stateVersion "23.11" then
+            pkgs.postgresql_15
+          else
+            pkgs.postgresql_14
+        '';
+        description = ''
+          The package being used by postgresql.
+        '';
       };
 
       finalPackage = mkOption {
         type = types.package;
         readOnly = true;
-        default = postgresql;
+        default =
+          let
+            # ensure that
+            #   services.postgresql = {
+            #     enableJIT = true;
+            #     package = pkgs.postgresql_<major>;
+            #   };
+            # works.
+            withJit = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
+            withJitAndPackages = if cfg.extensions == [ ] then withJit else withJit.withPackages cfg.extensions;
+          in
+          withJitAndPackages;
         defaultText = "with config.services.postgresql; package.withPackages extensions";
         description = ''
           The postgresql package that will effectively be used in the system.
           It consists of the base package with plugins applied to it.
+        '';
+      };
+
+      systemCallFilter = mkOption {
+        type = types.attrsOf (
+          types.coercedTo types.bool (enable: { inherit enable; }) (
+            types.submodule (
+              { name, ... }:
+              {
+                options = {
+                  enable = mkEnableOption "${name} in postgresql's syscall filter";
+                  priority = mkOption {
+                    default =
+                      if hasPrefix "@" name then
+                        500
+                      else if hasPrefix "~@" name then
+                        1000
+                      else
+                        1500;
+                    defaultText = literalExpression ''
+                      if hasPrefix "@" name then 500 else if hasPrefix "~@" name then 1000 else 1500
+                    '';
+                    type = types.int;
+                    description = ''
+                      Set the priority of the system call filter setting. Later declarations
+                      override earlier ones, e.g.
+
+                      ```ini
+                      [Service]
+                      SystemCallFilter=~read write
+                      SystemCallFilter=write
+                      ```
+
+                      results in a service where _only_ `read` is not allowed.
+
+                      The ordering in the unit file is controlled by this option: the higher
+                      the number, the later it will be added to the filterset.
+
+                      By default, depending on the prefix a priority is assigned: usually, call-groups
+                      (starting with `@`) are used to allow/deny a larger set of syscalls and later
+                      on single syscalls are configured for exceptions. Hence, syscall groups
+                      and negative groups are placed before individual syscalls by default.
+                    '';
+                  };
+                };
+              }
+            )
+          )
+        );
+        defaultText = literalExpression ''
+          {
+            "@system-service" = true;
+            "~@privileged" = true;
+            "~@resources" = true;
+          }
+        '';
+        description = ''
+          Configures the syscall filter for `postgresql.service`. The keys are
+          declarations for `SystemCallFilter` as described in {manpage}`systemd.exec(5)`.
+
+          The value is a boolean: `true` adds the attribute name to the syscall filter-set,
+          `false` doesn't. This is done to allow downstream configurations to turn off
+          restrictions made here. E.g. with
+
+          ```nix
+          {
+            services.postgresql.systemCallFilter."~@resources" = false;
+          }
+          ```
+
+          it's possible to remove the restriction on `@resources` (keep in mind that
+          `@system-service` implies `@resources`).
+
+          As described in the section for [](#opt-services.postgresql.systemCallFilter._name_.priority),
+          the ordering matters. Hence, it's also possible to specify customizations with
+
+          ```nix
+          {
+            services.postgresql.systemCallFilter = {
+              "foobar" = { enable = true; priority = 23; };
+            };
+          }
+          ```
+
+          [](#opt-services.postgresql.systemCallFilter._name_.enable) is the flag whether
+          or not it will be added to the `SystemCallFilter` of `postgresql.service`.
+
+          Settings with a higher priority are added after filter settings with a lower
+          priority. Hence, syscall groups with a higher priority can discard declarations
+          with a lower priority.
+
+          By default, syscall groups (i.e. attribute names starting with `@`) are added
+          _before_ negated groups (i.e. `~@` as prefix) _before_ syscall names
+          and negations.
         '';
       };
 
@@ -169,6 +289,14 @@ in
           Defines the mapping from system users to database users.
 
           See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
+
+          There is a default map "postgres" which is used for local peer authentication
+          as the postgres superuser role.
+          For example, to allow the root user to login as the postgres superuser, add:
+
+          ```
+          postgres root postgres
+          ```
         '';
       };
 
@@ -439,7 +567,7 @@ in
             ]);
             options = {
               shared_preload_libraries = mkOption {
-                type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+                type = nullOr (coercedTo (listOf str) (concatStringsSep ",") commas);
                 default = null;
                 example = literalExpression ''[ "auto_explain" "anon" ]'';
                 description = ''
@@ -489,14 +617,6 @@ in
         '';
       };
 
-      recoveryConfig = mkOption {
-        type = types.nullOr types.lines;
-        default = null;
-        description = ''
-          Contents of the {file}`recovery.conf` file.
-        '';
-      };
-
       superUser = mkOption {
         type = types.str;
         default = "postgres";
@@ -514,6 +634,20 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    warnings = (
+      let
+        unstableState =
+          if lib.hasInfix "beta" cfg.package.version then
+            "in beta"
+          else if lib.hasInfix "rc" cfg.package.version then
+            "a release candidate"
+          else
+            null;
+      in
+      lib.optional (unstableState != null)
+        "PostgreSQL ${lib.versions.major cfg.package.version} is currently ${unstableState}, and is not advised for use in production environments."
+    );
 
     assertions = map (
       { name, ensureDBOwnership, ... }:
@@ -551,14 +685,17 @@ in
             See also https://endoflife.date/postgresql
           '';
         base =
-          if versionAtLeast config.system.stateVersion "24.11" then
+          # XXX Don't forget to keep `defaultText` of `services.postgresql.package` up to date!
+          if versionAtLeast config.system.stateVersion "25.11" then
+            pkgs.postgresql_17
+          else if versionAtLeast config.system.stateVersion "24.11" then
             pkgs.postgresql_16
           else if versionAtLeast config.system.stateVersion "23.11" then
             pkgs.postgresql_15
           else if versionAtLeast config.system.stateVersion "22.05" then
             pkgs.postgresql_14
           else if versionAtLeast config.system.stateVersion "21.11" then
-            mkWarn "13" pkgs.postgresql_13
+            mkThrow "13"
           else if versionAtLeast config.system.stateVersion "20.03" then
             mkThrow "11"
           else if versionAtLeast config.system.stateVersion "17.09" then
@@ -577,10 +714,33 @@ in
       (mkBefore "# Generated file; do not edit!")
       (mkAfter ''
         # default value of services.postgresql.authentication
+        local all postgres         peer map=postgres
         local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '')
+    ];
+
+    # The default allows to login with the same database username as the current system user.
+    # This is the default for peer authentication without a map, but needs to be made explicit
+    # once a map is used.
+    services.postgresql.identMap = mkAfter ''
+      postgres postgres postgres
+    '';
+
+    services.postgresql.systemCallFilter = mkMerge [
+      (mapAttrs (const mkDefault) {
+        "@system-service" = true;
+        "~@privileged" = true;
+        "~@resources" = true;
+      })
+      (mkIf (any extensionInstalled [ "plv8" ]) {
+        "@pkey" = true;
+      })
+      (mkIf (any extensionInstalled [ "citus" ]) {
+        "getpriority" = true;
+        "setpriority" = true;
+      })
     ];
 
     users.users.postgres = {
@@ -604,11 +764,27 @@ in
       cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
     ) configFileCheck;
 
+    systemd.targets.postgresql = {
+      description = "PostgreSQL";
+      wantedBy = [ "multi-user.target" ];
+      requires = [
+        "postgresql.service"
+        "postgresql-setup.service"
+      ];
+    };
+
     systemd.services.postgresql = {
       description = "PostgreSQL Server";
 
-      wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+
+      # To trigger the .target also on "systemctl start postgresql" as well as on
+      # restarts & stops.
+      # Please note that postgresql.service & postgresql.target binding to
+      # each other makes the Restart=always rule racy and results
+      # in sometimes the service not being restarted.
+      wants = [ "postgresql.target" ];
+      partOf = [ "postgresql.target" ];
 
       environment.PGDATA = cfg.dataDir;
 
@@ -627,54 +803,7 @@ in
         fi
 
         ln -sfn "${configFile}/postgresql.conf" "${cfg.dataDir}/postgresql.conf"
-        ${optionalString (cfg.recoveryConfig != null) ''
-          ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
-            "${cfg.dataDir}/recovery.conf"
-        ''}
       '';
-
-      # Wait for PostgreSQL to be ready to accept connections.
-      postStart =
-        ''
-          PSQL="psql --port=${builtins.toString cfg.settings.port}"
-
-          while ! $PSQL -d postgres -c "" 2> /dev/null; do
-              if ! kill -0 "$MAINPID"; then exit 1; fi
-              sleep 0.1
-          done
-
-          if test -e "${cfg.dataDir}/.first_startup"; then
-            ${optionalString (cfg.initialScript != null) ''
-              $PSQL -f "${cfg.initialScript}" -d postgres
-            ''}
-            rm -f "${cfg.dataDir}/.first_startup"
-          fi
-        ''
-        + optionalString (cfg.ensureDatabases != [ ]) ''
-          ${concatMapStrings (database: ''
-            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-          '') cfg.ensureDatabases}
-        ''
-        + ''
-          ${concatMapStrings (
-            user:
-            let
-              dbOwnershipStmt = optionalString user.ensureDBOwnership ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
-
-              filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
-
-              clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
-
-              userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
-            in
-            ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-              ${userClauses}
-
-              ${dbOwnershipStmt}
-            ''
-          ) cfg.ensureUsers}
-        '';
 
       serviceConfig = mkMerge [
         {
@@ -694,6 +823,8 @@ in
           TimeoutSec = 120;
 
           ExecStart = "${cfg.finalPackage}/bin/postgres";
+
+          Restart = "always";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -727,28 +858,107 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @resources"
-          ] ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
+          SystemCallFilter = pipe cfg.systemCallFilter [
+            (mapAttrsToList (name: v: v // { inherit name; }))
+            (filter (getAttr "enable"))
+            sortProperties
+            (map (getAttr "name"))
+          ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
-        (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+        (mkIf (cfg.dataDir != "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+          # The user provides their own data directory
           ReadWritePaths = [ cfg.dataDir ];
         })
         (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+          # Provision the default data directory
           StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
           StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
         })
       ];
 
-      unitConfig.RequiresMountsFor = "${cfg.dataDir}";
+      unitConfig =
+        let
+          inherit (config.systemd.services.postgresql.serviceConfig) TimeoutSec;
+          maxTries = 5;
+          bufferSec = 5;
+        in
+        {
+          RequiresMountsFor = "${cfg.dataDir}";
+
+          # The max. time needed to perform `maxTries` start attempts of systemd
+          # plus a bit of buffer time (bufferSec) on top.
+          StartLimitIntervalSec = TimeoutSec * maxTries + bufferSec;
+          StartLimitBurst = maxTries;
+        };
+    };
+
+    systemd.services.postgresql-setup = {
+      description = "PostgreSQL Setup Scripts";
+
+      requires = [ "postgresql.service" ];
+      after = [ "postgresql.service" ];
+
+      serviceConfig = {
+        User = "postgres";
+        Group = "postgres";
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      path = [ cfg.finalPackage ];
+      environment.PGPORT = builtins.toString cfg.settings.port;
+
+      # Wait for PostgreSQL to be ready to accept connections.
+      script = ''
+        check-connection() {
+          psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
+            SELECT pg_is_in_recovery() \gset
+            \if :pg_is_in_recovery
+            \i still-recovering
+            \endif
+          EOF
+        }
+        while ! check-connection 2> /dev/null; do
+            if ! systemctl is-active --quiet postgresql.service; then exit 1; fi
+            sleep 0.1
+        done
+
+        if test -e "${cfg.dataDir}/.first_startup"; then
+          ${optionalString (cfg.initialScript != null) ''
+            psql -f "${cfg.initialScript}" -d postgres
+          ''}
+          rm -f "${cfg.dataDir}/.first_startup"
+        fi
+      ''
+      + optionalString (cfg.ensureDatabases != [ ]) ''
+        ${concatMapStrings (database: ''
+          psql -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || psql -tAc 'CREATE DATABASE "${database}"'
+        '') cfg.ensureDatabases}
+      ''
+      + ''
+        ${concatMapStrings (
+          user:
+          let
+            dbOwnershipStmt = optionalString user.ensureDBOwnership ''psql -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
+
+            filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
+
+            clauseSqlStatements = attrValues (mapAttrs (n: v: if v then n else "no${n}") filteredClauses);
+
+            userClauses = ''psql -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
+          in
+          ''
+            psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || psql -tAc 'CREATE USER "${user.name}"'
+            ${userClauses}
+
+            ${dbOwnershipStmt}
+          ''
+        ) cfg.ensureUsers}
+      '';
     };
   };
 
   meta.doc = ./postgresql.md;
-  meta.maintainers = with lib.maintainers; [
-    thoughtpolice
-    danbst
-  ];
+  meta.maintainers = pkgs.postgresql.meta.maintainers;
 }

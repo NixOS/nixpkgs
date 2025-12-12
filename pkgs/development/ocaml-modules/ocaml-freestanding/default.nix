@@ -17,7 +17,7 @@ let
 in
 
 if lib.versionOlder ocaml.version "4.08" then
-  builtins.throw "${pname} is not available for OCaml ${ocaml.version}"
+  throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
   stdenv.mkDerivation rec {
@@ -67,10 +67,10 @@ else
     meta = with lib; {
       broken = true; # Not compatible with solo5 ≥ 0.7
       description = "Freestanding OCaml runtime";
-      license = licenses.mit;
-      maintainers = [ maintainers.sternenseemann ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sternenseemann ];
       homepage = "https://github.com/mirage/ocaml-freestanding";
-      platforms = builtins.map ({ arch, os }: "${arch}-${os}") (
+      platforms = map ({ arch, os }: "${arch}-${os}") (
         cartesianProduct {
           arch = [
             "aarch64"

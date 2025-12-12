@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "laserson";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "squarify";
+    tag = "v${version}";
     hash = "sha256-zSv+6xT9H4WyShRnwjjcNMjY19AFlQ6bw9Mh9p2rL08=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "squarify" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/laserson/squarify";
     description = "Pure Python implementation of the squarify treemap layout algorithm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

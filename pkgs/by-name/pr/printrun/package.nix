@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   glib,
@@ -9,52 +10,50 @@
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
   version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = "refs/tags/printrun-${version}";
+    tag = "printrun-${version}";
     hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pyglet >= 1.1, < 2.0" "pyglet" \
-      --replace "cairosvg >= 1.0.9, < 2.6.0" "cairosvg"
-    sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
-  '';
 
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    appdirs
+  build-system = with python3Packages; [
+    setuptools
     cython
-    dbus-python
-    numpy
-    six
-    wxpython
-    psutil
-    pyglet
-    pyopengl
-    pyserial
-    cffi
-    cairosvg
-    lxml
-    puremagic
   ];
+
+  dependencies =
+    with python3Packages;
+    [
+      pyserial
+      wxpython
+      numpy
+      pyglet
+      psutil
+      lxml
+      platformdirs
+      puremagic
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux dbus-python
+    ++ lib.optional stdenv.hostPlatform.isDarwin pyobjc-framework-Cocoa;
+
+  pythonRelaxDeps = [ "pyglet" ];
 
   # pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"
   doCheck = false;
 
-  setupPyBuildFlags = [ "-i" ];
-
   postInstall = ''
-    for f in $out/share/applications/*.desktop; do
-      sed -i -e "s|/usr/|$out/|g" "$f"
-    done
+    substituteInPlace $out/share/applications/*.desktop \
+      --replace-fail /usr/bin/ ""
+    substituteInPlace $out/share/applications/pronterface.desktop \
+      --replace-fail "Path=/usr/share/pronterface/" ""
   '';
 
   dontWrapGApps = true;
@@ -63,10 +62,10 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    changelog = "https://github.com/kliment/Printrun/releases/tag/${src.tag}";
   };
 }

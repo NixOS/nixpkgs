@@ -2,10 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   asciidoctor,
   autoreconfHook,
   pkg-config,
-  boost,
+  boost186,
   libctemplate,
   libmaxminddb,
   libpcap,
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/add-a-space-after-type-in-check-response-opt-sh.patch
+
+    # https://github.com/dns-stats/compactor/pull/91
+    ./patches/update-golden-cbor2diag-output.patch
+
+    # https://github.com/dns-stats/compactor/commit/f7deaf89f55a12c586b6662a3a7d04b10a4c7bcb
+    (fetchpatch {
+      url = "https://github.com/dns-stats/compactor/commit/f7deaf89f55a12c586b6662a3a7d04b10a4c7bcb.patch";
+      hash = "sha256-eEaVS5rfrLkRGc668PwVfb/xw3n1SoCm30xEf1NjbeY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -47,7 +57,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    boost
+    boost186
     libctemplate
     libmaxminddb
     libpcap
@@ -69,10 +79,11 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost186.out}/lib"
+    "--with-boost=${boost186.dev}"
   ];
   enableParallelBuilding = true;
+  enableParallelInstalling = false; # race conditions when installing
 
   doCheck = !stdenv.hostPlatform.isDarwin; # check-dnstap.sh failing on Darwin
   nativeCheckInputs = [
@@ -86,12 +97,12 @@ stdenv.mkDerivation rec {
     wireshark-cli
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage = "https://dns-stats.org/";
     changelog = "https://github.com/dns-stats/compactor/raw/${version}/ChangeLog.txt";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fdns ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fdns ];
+    platforms = lib.platforms.unix;
   };
 }

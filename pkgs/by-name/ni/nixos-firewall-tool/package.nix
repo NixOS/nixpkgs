@@ -1,17 +1,45 @@
-{ writeShellApplication, lib }:
+{
+  stdenvNoCC,
+  lib,
+  bash,
+  installShellFiles,
+  buildPackages,
+}:
 
-writeShellApplication {
+stdenvNoCC.mkDerivation {
   name = "nixos-firewall-tool";
 
-  text = builtins.readFile ./nixos-firewall-tool.sh;
+  src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
-  meta = with lib; {
-    description = "Temporarily manipulate the NixOS firewall";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+  strictDeps = true;
+  buildInputs = [ bash ];
+  nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [ buildPackages.shellcheck-minimal ];
+
+  postPatch = ''
+    patchShebangs --host nixos-firewall-tool
+  '';
+
+  installPhase = ''
+    installBin nixos-firewall-tool
+    installManPage nixos-firewall-tool.1
+    installShellCompletion nixos-firewall-tool.{bash,fish}
+  '';
+
+  doCheck = buildPackages.shellcheck-minimal.compiler.bootstrapAvailable;
+  checkPhase = ''
+    shellcheck nixos-firewall-tool
+  '';
+
+  meta = {
+    description = "Tool to temporarily manipulate the NixOS firewall";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       clerie
       rvfg
       garyguo
     ];
+    platforms = lib.platforms.linux;
+    mainProgram = "nixos-firewall-tool";
   };
 }

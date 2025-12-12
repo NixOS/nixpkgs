@@ -55,19 +55,19 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for binary in $out/bin/glmark2*; do
       wrapProgram $binary \
-        --set LD_LIBRARY_PATH ${libGL}/lib
+        --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL (ES) 2.0 benchmark";
     homepage = "https://github.com/glmark2/glmark2";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of
       the OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
     '';
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wmertens ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wmertens ];
   };
 }

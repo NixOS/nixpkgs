@@ -1,38 +1,37 @@
-{ lib
-, stdenv
-, cmake
-, fetchurl
-, gnumake
-, makeWrapper
-, pkg-config
-, autopanosiftc
-, boost
-, cairo
-, enblend-enfuse
-, exiv2
-, fftw
-, flann
-, gettext
-, glew
-, ilmbase
-, lcms2
-, lensfun
-, libjpeg
-, libpng
-, libtiff
-, libX11
-, libXi
-, libXmu
-, libGLU
-, libGL
-, openexr
-, panotools
-, perlPackages
-, sqlite
-, vigra
-, wrapGAppsHook3
-, wxGTK
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  gnumake,
+  makeWrapper,
+  pkg-config,
+  boost,
+  cairo,
+  enblend-enfuse,
+  exiv2,
+  fftw,
+  flann,
+  gettext,
+  glew,
+  lcms2,
+  lensfun,
+  libjpeg,
+  libpng,
+  libtiff,
+  libX11,
+  libXi,
+  libXmu,
+  libGLU,
+  libGL,
+  openexr,
+  panotools,
+  perlPackages,
+  sqlite,
+  vigra,
+  wrapGAppsHook3,
+  wxGTK,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     flann
     gettext
     glew
-    ilmbase
     lcms2
     lensfun
     libjpeg
@@ -71,30 +69,32 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 wxGTK ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxGTK
+  ];
 
   strictDeps = true;
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
-
   postInstall = ''
     for p in $out/bin/*; do
       wrapProgram "$p" \
-        --suffix PATH : ${autopanosiftc}/bin \
         --suffix PATH : ${enblend-enfuse}/bin \
         --suffix PATH : ${gnumake}/bin \
         --suffix PATH : ${perlPackages.ImageExifTool}/bin
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hugin.sourceforge.io/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

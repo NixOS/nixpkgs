@@ -1,23 +1,32 @@
 {
-  lib,
-  rustPlatform,
   fetchFromGitHub,
+  lib,
+  openssl,
+  rustPlatform,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";
-  version = "0.4.1-unstable-2024-08-20";
+  version = "0.7.1";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskchampion-sync-server";
-    rev = "af918bdf0dea7f7b6e920680c947fc37b37ffffb";
-    fetchSubmodules = false;
-    hash = "sha256-BTGD7hZysmOlsT2W+gqj8+Sj6iBN9Jwiyzq5D03PDzM=";
+    tag = "v${version}";
+    hash = "sha256-ywBmVid70ZKUkTwxORrwXPV0zur0RdHToTLTx9ynjqU=";
   };
 
-  cargoHash = "sha256-/HfkE+R8JoNGkCCNQpE/JjGSqPHvjCPnTjOFPCFfJ7A=";
+  cargoHash = "sha256-1bqZAFKQGTCGUs7EXLwAgUxQU+KmhVGFIATIOb5uOlA=";
 
-  # cargo tests fail when checkType="release" (default)
-  checkType = "debug";
+  env = {
+    # Use system openssl.
+    OPENSSL_DIR = lib.getDev openssl;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   meta = {
     description = "Sync server for Taskwarrior 3";

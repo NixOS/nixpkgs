@@ -21,17 +21,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-0.3.0" = "sha256-dxAgTGW+xxnL+vA6j2Ng02F1zt/Y5VaSxP9xg8jfMy8=";
-      "stardust-xr-0.14.1" = "sha256-fmRb46s0Ec8wnoerBh4JCv1WKz2of1YW+YGwy0Gr/yQ=";
-    };
-  };
+  cargoHash = "sha256-jCtMCZG3ku30tabTnVdGfgcLl5DoqhkJpLKPPliJgDU=";
 
   nativeBuildInputs = [
     cmake

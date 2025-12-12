@@ -18,7 +18,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.22.0";
+  version = "4.24.0";
   format = "other";
 
   outputs = [
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf";
-    rev = version;
-    hash = "sha256-I79cwK+xPmHS3z8/rKar5G5EbK6IYq0Ypq9KrShJ3sg=";
+    tag = version;
+    hash = "sha256-zzWOc2I9YW5gjsS2Umfx6GGgY4B3pdia0E2KHHtAH2s=";
   };
 
   patches = [ ./fix-python-install-dir.patch ];
@@ -92,13 +92,13 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";
     homepage = "https://github.com/rpm-software-management/dnf";
     changelog = "https://github.com/rpm-software-management/dnf/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ katexochen ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "dnf";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

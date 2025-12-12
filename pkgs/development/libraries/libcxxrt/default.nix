@@ -8,14 +8,19 @@
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
-  version = "4.0.10-unstable-2024-10-30";
+  version = "4.0.10-unstable-2025-02-25";
 
   src = fetchFromGitHub {
     owner = "libcxxrt";
     repo = "libcxxrt";
-    rev = "6f2fdfebcd6291d763de8b17740d636f01761890";
-    sha256 = "iUuIhwFg1Ys9DDoyDFTjEIlCVDdA1TACwtYXSRr5+2g=";
+    rev = "a6f71cbc3a1e1b8b9df241e081fa0ffdcde96249";
+    sha256 = "+oTjU/DgOEIwJebSVkSEt22mJSdeONozB8FfzEiESHU=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -35,11 +40,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libcxxrt/libcxxrt";
     description = "Implementation of the Code Sourcery C++ ABI";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

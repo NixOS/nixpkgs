@@ -9,7 +9,7 @@
 
   # tests
   editables,
-  git,
+  gitMinimal,
   mercurial,
   pytestCheckHook,
   setuptools,
@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.4.3";
+  version = "2.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XbHlzt00R0kB8I6nRvteAgpFlUTAvBcF5iaQD5V30ok=";
+    tag = version;
+    hash = "sha256-tXgojVE/Bh2OVeMG/P5aCK5HEeUhiypUjTrS4yOwvZU=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     editables
-    git
+    gitMinimal
     mercurial
     pytestCheckHook
     setuptools
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pdm-project/pdm-backend";
     changelog = "https://github.com/pdm-project/pdm-backend/releases/tag/${version}";
     description = "Yet another PEP 517 backend";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

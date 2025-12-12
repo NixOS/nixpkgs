@@ -20,7 +20,7 @@ let
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv "$HOME/.cache/ksycoca"*
+    rm -fv "''${XDG_CACHE_HOME:-$HOME/.cache}/ksycoca"*
   '';
 in
 {
@@ -68,13 +68,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
-        message = "Cannot enable plasma5 and plasma6 at the same time!";
-      }
-    ];
-
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =
@@ -98,6 +91,7 @@ in
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
           kio-fuse # fuse interface for KIO
+          knighttime # night mode switching daemon
           kpackage # provides kpackagetool tool
           kservice # provides kbuildsycoca6 tool
           kunifiedpush # provides a background service and a KCM
@@ -136,7 +130,6 @@ in
           breeze-icons
           breeze-gtk
           ocean-sound-theme
-          plasma-workspace-wallpapers
           pkgs.hicolor-icon-theme # fallback icons
           qqc2-breeze-style
           qqc2-desktop-style
@@ -154,37 +147,43 @@ in
           systemsettings
           kcmutils
         ];
-        optionalPackages =
-          [
-            plasma-browser-integration
-            konsole
-            (lib.getBin qttools) # Expose qdbus in PATH
-            ark
-            elisa
-            gwenview
-            okular
-            kate
-            khelpcenter
-            dolphin
-            baloo-widgets # baloo information in Dolphin
-            dolphin-plugins
-            spectacle
-            ffmpegthumbs
-            krdp
-            xwaylandvideobridge # exposes Wayland windows to X11 screen capture
-          ]
-          ++ lib.optionals config.services.flatpak.enable [
-            # Since PackageKit Nix support is not there yet,
-            # only install discover if flatpak is enabled.
-            discover
-          ];
+        optionalPackages = [
+          aurorae
+          plasma-browser-integration
+          plasma-workspace-wallpapers
+          konsole
+          kwin-x11
+          (lib.getBin qttools) # Expose qdbus in PATH
+          ark
+          elisa
+          gwenview
+          okular
+          kate
+          ktexteditor # provides elevated actions for kate
+          khelpcenter
+          dolphin
+          baloo-widgets # baloo information in Dolphin
+          dolphin-plugins
+          spectacle
+          ffmpegthumbs
+          krdp
+        ]
+        ++ lib.optionals config.hardware.sensor.iio.enable [
+          # This is required for autorotation in Plasma 6
+          qtsensors
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # Since PackageKit Nix support is not there yet,
+          # only install discover if flatpak is enabled.
+          discover
+        ];
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
-        pkgs.plasma5Packages.kwayland-integration
+        kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
@@ -207,7 +206,7 @@ in
         pkgs.obexftp
       ]
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
-      ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+      ++ lib.optional config.services.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
       ++ lib.optional config.services.printing.enable print-manager
@@ -268,6 +267,8 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
+    services.geoclue2.enable = mkDefault true;
+    services.fwupd.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [
@@ -327,9 +328,19 @@ in
           enable = true;
           package = kdePackages.kwallet-pam;
         };
+        # "kde" must not have fingerprint authentication otherwise it can block password login.
+        # See https://github.com/NixOS/nixpkgs/issues/239770 and https://invent.kde.org/plasma/kscreenlocker/-/merge_requests/163.
+        fprintAuth = false;
+        p11Auth = false;
       };
-      kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
-      kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+      kde-fingerprint = lib.mkIf config.services.fprintd.enable {
+        fprintAuth = true;
+        p11Auth = false;
+      };
+      kde-smartcard = lib.mkIf config.security.pam.p11.enable {
+        p11Auth = true;
+        fprintAuth = false;
+      };
     };
 
     security.wrappers = {
@@ -339,7 +350,34 @@ in
         capabilities = "cap_sys_nice+ep";
         source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
+
+      ksystemstats_intel_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_perfmon+ep";
+        source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
+      };
+
+      ksgrd_network_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+ep";
+        source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
+      };
     };
+
+    # Upstream recommends allowing set-timezone and set-ntp so that the KCM and
+    # the automatic timezone logic work without user interruption.
+    # However, on NixOS NTP cannot be overwritten via dbus, and timezone
+    # can only be set if `time.timeZone` is set to `null`. So, we only allow
+    # set-timezone, and we only allow it when the timezone can actually be set.
+    security.polkit.extraConfig = lib.mkIf (config.time.timeZone != null) ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.timedate1.set-timezone" && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
 
     programs.dconf.enable = true;
 

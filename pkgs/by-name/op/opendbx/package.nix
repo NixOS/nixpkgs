@@ -4,7 +4,7 @@
   fetchurl,
   readline,
   libmysqlclient,
-  postgresql,
+  libpq,
   sqlite,
 }:
 
@@ -27,10 +27,17 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
+  configureFlags = [
+    # detection fails when cross-compiling
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+    "ac_cv_func_strtod=yes"
+  ];
+
   buildInputs = [
     readline
     libmysqlclient
-    postgresql
+    libpq
     sqlite
   ];
 
@@ -39,11 +46,11 @@ stdenv.mkDerivation rec {
     "-std=c++14"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Extremely lightweight but extensible database access library written in C";
     mainProgram = "odbx-sql";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
   };
 }

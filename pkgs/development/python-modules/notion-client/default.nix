@@ -1,58 +1,52 @@
 {
   lib,
+  anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  anyio,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-vcr,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.2.1";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramnes";
     repo = "notion-sdk-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IEWFrdqrawFbuwA8bUewanmBoGWsjHJ7ucgvHQEaMcA=";
+    tag = version;
+    hash = "sha256-15IPycaLk8r0/bUphL+IDypBMhgdX1tAUS50VD3p/00=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ httpx ];
-
-  # disable coverage options as they don't provide us value, and they break the default pytestCheckHook
-  preCheck = ''
-    sed -i '/addopts/d' ./setup.cfg
-  '';
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     anyio
     pytest-asyncio
+    pytest-cov-stub
     pytest-vcr
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "notion_client" ];
 
   disabledTests = [
-    # requires network access
+    # Test requires network access
     "test_api_http_response_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the official Notion API";
     homepage = "https://github.com/ramnes/notion-sdk-py";
-    changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

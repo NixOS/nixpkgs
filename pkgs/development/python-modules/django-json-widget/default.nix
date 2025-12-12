@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-json-widget";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmrivas86";
     repo = "django-json-widget";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GY6rYY//n8kkWCJZk6OY+EOBv62ocNovNmE/ai8VCn4=";
+    tag = "v${version}";
+    hash = "sha256-11XDmSYJzrjcV3q3P0Kl2WkfoAtuPYzQt5D2ZzRTCCY=";
   };
 
   build-system = [ setuptools ];

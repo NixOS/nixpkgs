@@ -1,46 +1,39 @@
 {
   lib,
-  fetchFromGitHub,
-  flutter327,
-  webkitgtk_4_1,
-  alsa-lib,
-  libayatana-appindicator,
-  autoPatchelfHook,
-  gst_all_1,
   stdenv,
+  flutter338,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  alsa-lib,
+  gst_all_1,
+  libayatana-appindicator,
   mimalloc,
-  mpv,
   mpv-unwrapped,
+  webkitgtk_4_1,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  runCommand,
+  yq-go,
+  dart,
 }:
-flutter327.buildFlutterApplication rec {
-  pname = "kazumi";
-  version = "1.4.7";
+
+let
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-/sr2CQ9ntwfR2QCgidQE3kwBSIG+qfpSR/XhRPpmBm0=";
+    hash = "sha256-PrXgYp0WAbR/b6nSmcQDfJXkuYqtWD7QB1RIiVRFFY0=";
   };
+in
+flutter338.buildFlutterApplication {
+  pname = "kazumi";
+  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
-
-  buildInputs = [
-    webkitgtk_4_1
-    alsa-lib
-    libayatana-appindicator
-    mpv
-    gst_all_1.gstreamer
-    gst_all_1.gst-vaapi
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-  ];
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
     # unofficial media_kit_libs_linux
@@ -59,7 +52,7 @@ flutter327.buildFlutterApplication rec {
         installPhase = ''
           runHook preInstall
 
-          cp -r . $out
+          cp -r . "$out"
 
           runHook postInstall
         '';
@@ -73,46 +66,81 @@ flutter327.buildFlutterApplication rec {
         inherit (src) passthru;
 
         postPatch = ''
-          sed -i '/set(LIBMPV_ZIP_URL/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{//!d; /set(LIBMPV_ZIP_URL/d}' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_PATH "${mpv}/lib")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_UNZIP_DIR "${mpv}/lib")' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i \
+            set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_PATH "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
         '';
 
         installPhase = ''
           runHook preInstall
 
-          cp -r . $out
+          cp -r . "$out"
 
           runHook postInstall
         '';
       };
   };
 
-  gitHashes = {
-    desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
-    webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
-    media_kit = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_android_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_ios_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_linux = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_macos_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_libs_windows_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-    media_kit_video = "sha256-bWS3j4mUdMYfPhzS16z3NZxLTQDrEpDm3dtkzxcdKpQ=";
-  };
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    alsa-lib
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+    libayatana-appindicator
+    mpv-unwrapped
+    webkitgtk_4_1
+  ];
 
   postInstall = ''
-    install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
-    install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+    ln -snf ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/$pname/lib/libmpv.so.2
+    install -Dm 0644 assets/linux/io.github.Predidit.Kazumi.desktop -t $out/share/applications/
+    install -Dm 0644 assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "Watch Animes online with danmaku support";
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lonerOrz ];
     platforms = lib.platforms.linux;
   };
 }

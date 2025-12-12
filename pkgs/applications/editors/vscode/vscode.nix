@@ -1,7 +1,7 @@
 {
+  lib,
   stdenv,
   stdenvNoCC,
-  lib,
   callPackage,
   fetchurl,
   nixosTests,
@@ -34,34 +34,41 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
+  hash =
     {
-      x86_64-linux = "07bnp0ywrpcpfqmr6h3adsv1gwng4fiyf2dqpj8g4dbwkgakalzk";
-      x86_64-darwin = "1k5wmhnr8dr3f76f65agkn2igzbi40qqz3df7fai1gk1ichsw0s2";
-      aarch64-linux = "0s8s5x3vhs3rv4kj86irprzp1pprx1npyv0sbgvd821h3bh6s6k9";
-      aarch64-darwin = "1li4s74lqj5qr4w2biz29r88dx741a85v5s3mfxxqvnlhi7rkmx5";
-      armv7l-linux = "028g7f7fhvni7kn2kvpn7q1n66r03jr8maxkxihwsxr0xh6srca0";
+      x86_64-linux = "sha256-V9vnuZJaa1FiBYE6bggYgQQDQJh34BYfVRmM52eGB84=";
+      x86_64-darwin = "sha256-xBhyFJogXzo74+XTqPBJIEB6B2JTHmB/eNyT9NSBPNo=";
+      aarch64-linux = "sha256-bAuuk1V+kIRmAcvtq1KJuv2ikSIu4pCLW1NYTGlT44g=";
+      aarch64-darwin = "sha256-Nd1DiAjd4d0fZUkP/ncT7WQQIyTAgJ777AtOsoCbIYs=";
+      armv7l-linux = "sha256-V/0fQQ/yRtCVJAme/pHtcNmpvcshaM5KYtxkybIN2AM=";
     }
     .${system} or throwSystem;
-in
-callPackage ./generic.nix rec {
+
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.96.0";
-  pname = "vscode" + lib.optionalString isInsiders "-insiders";
+  version = "1.106.3";
 
   # This is used for VS Code - Remote SSH test
-  rev = "138f619c86f1199955d53b4166bef66ef252935c";
+  rev = "bf9252a2fb45be6893dd8870c0bf37e2e1766d61";
+in
+callPackage ./generic.nix {
+  pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
   shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-  inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+  inherit
+    version
+    rev
+    commandLineArgs
+    useVSCodeRipgrep
+    sourceExecutableName
+    ;
 
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
     url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-    inherit sha256;
+    inherit hash;
   };
 
   # We don't test vscode on CI, instead we test vscodium
@@ -75,7 +82,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "1kjivqnc0abrnqjn9dw2l612z7qra7y2fvxxrallsrqmqiibzcdk";
+      hash = "sha256-PpOLH4OOx3QrDULSxnUxsxuzbcdIk8FYXdLKItC5Z10=";
     };
     stdenv = stdenvNoCC;
   };
@@ -89,27 +96,27 @@ callPackage ./generic.nix rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    description = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS
-    '';
+  hasVsceSign = true;
+
+  meta = {
+    description = "Code editor developed by Microsoft";
     mainProgram = "code";
     longDescription = ''
-      Open source source code editor developed by Microsoft for Windows,
-      Linux and macOS. It includes support for debugging, embedded Git
-      control, syntax highlighting, intelligent code completion, snippets,
-      and code refactoring. It is also customizable, so users can change the
-      editor's theme, keyboard shortcuts, and preferences
+      Code editor developed by Microsoft. It includes support for debugging,
+      embedded Git control, syntax highlighting, intelligent code completion,
+      snippets, and code refactoring. It is also customizable, so users can
+      change the editor's theme, keyboard shortcuts, and preferences
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       eadwu
       synthetica
       bobby285271
       johnrtitor
+      jefflabonte
+      wetrustinprize
     ];
     platforms = [
       "x86_64-linux"

@@ -9,12 +9,22 @@ mkCoqDerivation {
   pname = "autosubst-ocaml";
   owner = "uds-psl";
 
+  release."1.1+9.0".sha256 = "sha256-fCQjmF+0ik2QdKog61VfIv5ERmw+AJO8y5+CWmDGGk0=";
+  release."1.1+8.20".sha256 = "sha256-S3uKkwbGFsvauP9lKc3UsdszHahbZQhlOOK3fCBXlSE=";
   release."1.1+8.19".sha256 = "sha256-AGbhw/6lg4GpDE6hZBhau9DLW7HVXa0UzGvJfSV8oHE=";
 
   inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.coq-version [
+      {
+        case = isEq "9.0";
+        out = "1.1+9.0";
+      }
+      {
+        case = isEq "8.20";
+        out = "1.1+8.20";
+      }
       {
         case = isEq "8.19";
         out = "1.1+8.19";
@@ -37,11 +47,11 @@ mkCoqDerivation {
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
   '';
 
-  meta = with lib; {
-    description = "An OCaml reimplementation of the Autosubst 2 code generator";
+  meta = {
+    description = "OCaml reimplementation of the Autosubst 2 code generator";
     homepage = "https://github.com/uds-psl/autosubst-ocaml";
     mainProgram = "autosubst";
-    maintainers = with maintainers; [ chen ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ chen ];
+    license = lib.licenses.mit;
   };
 }

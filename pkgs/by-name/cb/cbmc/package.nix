@@ -2,29 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
   bison,
   cadical,
-  cbmc,
   cmake,
   flex,
   makeWrapper,
   perl,
-  substituteAll,
+  replaceVars,
   cudd,
-  fetchurl,
   nix-update-script,
+  fetchpatch,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.0";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
-    rev = "refs/tags/cbmc-${finalAttrs.version}";
-    hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
+    tag = "cbmc-${finalAttrs.version}";
+    hash = "sha256-PT6AYiwkplCeyMREZnGZA0BKl4ZESRC02/9ibKg7mYU=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -47,39 +46,33 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [ cadical ];
-
-  # do not download sources
-  # link existing cadical instead
   patches = [
-    (substituteAll {
-      src = ./0001-Do-not-download-sources-in-cmake.patch;
-      inherit cudd;
+    (replaceVars ./0001-Do-not-download-sources-in-cmake.patch {
+      cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
   ];
 
-  postPatch =
-    ''
-      # fix library_check.sh interpreter error
-      patchShebangs .
+  postPatch = ''
+    # fix library_check.sh interpreter error
+    patchShebangs .
 
-      mkdir -p srccadical
-      cp -r ${finalAttrs.srccadical}/* srccadical
+    mkdir -p srccadical
+    cp -r ${finalAttrs.srccadical}/* srccadical
 
-      mkdir -p srcglucose
-      cp -r ${finalAttrs.srcglucose}/* srcglucose
-      find -exec chmod +w {} \;
+    mkdir -p srcglucose
+    cp -r ${finalAttrs.srcglucose}/* srcglucose
+    find -exec chmod +w {} \;
 
-      substituteInPlace src/solvers/CMakeLists.txt \
-       --replace-fail "@srccadical@" "$PWD/srccadical" \
-       --replace-fail "@srcglucose@" "$PWD/srcglucose"
-    ''
-    + lib.optionalString (!stdenv.cc.isGNU) ''
-      # goto-gcc rely on gcc
-      substituteInPlace "regression/CMakeLists.txt" \
-        --replace-fail "add_subdirectory(goto-gcc)" ""
-    '';
+    substituteInPlace src/solvers/CMakeLists.txt \
+     --replace-fail "@srccadical@" "$PWD/srccadical" \
+     --replace-fail "@srcglucose@" "$PWD/srcglucose"
+  ''
+  + lib.optionalString (!stdenv.cc.isGNU) ''
+    # goto-gcc rely on gcc
+    substituteInPlace "regression/CMakeLists.txt" \
+      --replace-fail "add_subdirectory(goto-gcc)" ""
+  '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH
@@ -91,13 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=maybe-uninitialized"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
+    lib.optionals stdenv.cc.isClang [
       # fix "argument unused during compilation"
       "-Wno-unused-command-line-argument"
+      # fix "variable 'plus_overflow' set but not used"
+      "-Wno-error=unused-but-set-variable"
+      # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
+      "-Wno-error=c++20-extensions"
+      # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 
@@ -105,18 +100,24 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_JBMC=OFF"
     "-Dsat_impl=cadical"
-    "-Dcadical_INCLUDE_DIR=${cadical.dev}/include"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = cbmc;
-    command = "cbmc --version";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/cbmc";
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cbmc-(.*)"
+    ];
   };
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "CBMC is a Bounded Model Checker for C and C++ programs";
+    description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dictation-toolbox";
     repo = "dragonfly";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sqEEEr5/KG3cn4rmOGJt9zMNAjeLO6h3NJgg0EyewrM=";
   };
 
@@ -77,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dragonfly" ];
 
-  meta = with lib; {
+  meta = {
     description = "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

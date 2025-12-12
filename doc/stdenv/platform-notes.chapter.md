@@ -12,6 +12,9 @@ If it does, you’re done; skip the rest of this.
 - Darwin uses Clang by default instead of GCC. Packages that refer to `$CC` or `cc` should just work in most cases.
   Some packages may hardcode `gcc` or `g++`. You can usually fix that by setting `makeFlags = [ "CC=cc" "CXX=C++" ]`.
   If that does not work, you will have to patch the build scripts yourself to use the correct compiler for Darwin.
+- Darwin uses the system libc++ by default to avoid ODR violations and potential compatibility issues from mixing LLVM libc++ with the system libc++.
+  While mixing the two usually worked, the two implementations are not guaranteed to be ABI compatible and are considered distinct by upstream.
+  See the troubleshooting guide below if you need to use newer C++ library features than those supported by the default deployment target.
 - Darwin needs an SDK to build software.
   The SDK provides a default set of frameworks and libraries to build software, most of which are specific to Darwin.
   There are multiple versions of the SDK packages in Nixpkgs, but one is included by default in the `stdenv`.
@@ -29,6 +32,31 @@ Start with writing your derivation as if everything is already set up for you (b
 If you run into issues or failures, continue reading below for how to deal with the most common issues you may encounter.
 
 ### Darwin Issue Troubleshooting {#sec-darwin-troubleshooting}
+
+#### Building a C++ package or library says that certain APIs are unavailable {#sec-darwin-libcxx-versions}
+
+While some newer APIs may be available via headers only, some require using a system libc++ with the required API support.
+When that happens, your build will fail because libc++ makes failure to use the correct deployment target an error.
+To make the newer API available, increase the deployment target to the required version.
+Note that it is possible to use libc++ from LLVM instead of increasing the deployment target, but it is not recommended.
+Doing so can cause problems when multiple libc++ implementations are linked into a binary (e.g., from dependencies).
+
+##### Using a newer deployment target {#sec-darwin-libcxx-deployment-targets}
+
+See below for how to use a newer deployment target.
+For example, `std::print` depends on features that are only available on macOS 13.3 or newer.
+To make them available, set the deployment target to 13.3 using `darwinMinVersionHook`.
+
+#### Package fails to build due to missing API availability checks {#sec-darwin-availability-checks}
+
+This is normally a bug in the package or a misconfigured deployment target.
+* If it is using an API from a newer release (e.g., from macOS 26.0 while targeting macOS 14.0), it needs to use an availability check.
+  The code should be patched to use [`__builtin_available`](https://clang.llvm.org/docs/LanguageExtensions.html#objective-c-available).
+  Note that while the linked documentation is for Objective-C, it is applicable to C and C++ except that you use `__builtin_available` in place of `@available`.
+* If the package intends to require the newer platform (i.e., it does not support running on older versions with reduced functionality), use `darwinMinVersionHook` to set the deployment target to the required version.
+  See below for how to use a newer deployment target.
+* If the package actually handles this through some other mechanism (e.g., MoltenVK relies on the running platform’s MSL version), the error can be suppressed.
+  To suppress the error, add `-Wno-error=unguarded-availability` to `env.NIX_CFLAGS_COMPILE`.
 
 #### Package requires a non-default SDK or fails to build due to missing frameworks or symbols {#sec-darwin-troubleshooting-using-sdks}
 
@@ -80,7 +108,7 @@ stdenv.mkDerivation {
 }
 ```
 
-Note: It is possible to have multiple, different instances of `darwinMinVerisonHook` in your inputs.
+Note: It is possible to have multiple, different instances of `darwinMinVersionHook` in your inputs.
 When that happens, the one with the  highest version is always used.
 
 #### Picking an SDK version {#sec-darwin-troubleshooting-picking-sdk-version}
@@ -89,13 +117,11 @@ The following is a list of Xcode versions, the SDK version in Nixpkgs, and the a
 Check your package’s documentation (platform support or installation instructions) to find which Xcode or SDK version to use.
 Generally, only the last SDK release for a major version is packaged.
 
-| Xcode version      | SDK version        | Nixpkgs attribute            |
-|--------------------|--------------------|------------------------------|
-| 12.0–12.5.1        | 11.3               | `apple-sdk_11` / `apple-sdk` |
-| 13.0–13.4.1        | 12.3               | `apple-sdk_12`               |
-| 14.0–14.3.1        | 13.3               | `apple-sdk_13`               |
-| 15.0–15.4          | 14.4               | `apple-sdk_14`               |
-| 16.0               | 15.0               | `apple-sdk_15`               |
+| Xcode version | SDK version | Nixpkgs attribute            |
+|---------------|-------------|------------------------------|
+| 15.0–15.4     | 14.4        | `apple-sdk_14` / `apple-sdk` |
+| 16.0          | 15.0        | `apple-sdk_15`               |
+| 26.0+         | 26.0+       | `apple-sdk_26`, etc          |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
@@ -104,7 +130,7 @@ The current default version of the SDK and deployment target (minimum supported 
 Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds.
 If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
-On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
+On macOS, the `darwinMinVersion` is 14.0, and the `darwinSdkVersion` is 14.4.
 
 
 #### `xcrun` cannot find a binary {#sec-darwin-troubleshooting-xcrun}
@@ -236,8 +262,8 @@ If your package is a compiler or language, and you’re not sure, ask @NixOS/dar
 
 You may see references to `darwin.apple_sdk.frameworks`.
 This is the legacy SDK pattern, and it is being phased out.
-All packages in `darwin.apple_sdk`, `darwin.apple_sdk_11_0`, and `darwin.apple_sdk_12_3` are stubs that do nothing.
-If your derivation references them, you can delete them. The default SDK should be enough to build your package.
+All packages in `darwin.apple_sdk`, `darwin.apple_sdk_11_0`, and `darwin.apple_sdk_12_3` have been removed.
+If your derivation references them, you should delete those references, as the default SDK should be enough to build your package.
 
 Note: the new SDK pattern uses the name `apple-sdk` to better align with Nixpkgs naming conventions.
 The legacy SDK pattern uses `apple_sdk`.
@@ -254,15 +280,14 @@ Some of them (such as Zig or `bindgen` for Rust) depend on it.
 #### Updating legacy SDK overrides {#sec-darwin-legacy-frameworks-overrides}
 
 The legacy SDK provided two ways of overriding the default SDK.
-These are both being phased out along with the legacy SDKs.
-They have been updated to set up the new SDK for you, but you should replace them with doing that directly.
+They have been removed along with the legacy SDKs.
 
 - `pkgs.darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the macOS 11 SDK.
   It is now the same as `callPackage`.
 - `overrideSDK` - this stdenv adapter would try to replace the frameworks used by your derivation and its transitive dependencies.
-  It now adds the `apple-sdk_12` package for `12.3` and does nothing for `11.0`.
-  If `darwinMinVersion` is specified, it will add `darwinMinVersionHook` with the specified minimum version.
-  No other SDK versions are supported.
+  It added the `apple-sdk_12` package for `12.3` and did nothing for `11.0`.
+  If `darwinMinVersion` is specified, it would add `darwinMinVersionHook` with the specified minimum version.
+  No other SDK versions were supported.
 
 ### Darwin Cross-Compilation {#sec-darwin-legacy-cross-compilation}
 

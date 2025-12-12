@@ -21,7 +21,7 @@
   alcotest-lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opium";
   minimalOCamlVersion = "4.08";
 

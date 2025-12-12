@@ -47,13 +47,17 @@ let
     );
 
   driverPaths = [
+    # opengl:
+    # NOTE: Since driverLink is just a symlink, we need to include its target as well.
     pkgs.addDriverRunpath.driverLink
+    config.systemd.tmpfiles.settings.graphics-driver."/run/opengl-driver"."L+".argument
 
     # mesa:
-    config.hardware.opengl.package
+    config.hardware.graphics.package
 
     # nvidia_x11, etc:
-  ] ++ config.hardware.opengl.extraPackages; # nvidia_x11
+  ]
+  ++ config.hardware.graphics.extraPackages; # nvidia_x11
 
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;
@@ -76,21 +80,21 @@ in
     '';
     allowedPatterns =
       with lib.types;
-      lib.mkOption rec {
+      lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
         default = { };
         defaultText = lib.literalExpression ''
           {
-            opengl.paths = config.hardware.opengl.extraPackages ++ [
-              config.hardware.opengl.package
+            opengl.paths = config.hardware.graphics.extraPackages ++ [
+              config.graphics.opengl.package
               pkgs.addDriverRunpath.driverLink
               "/dev/dri"
             ];
           }
         '';
         example.require-ipfs.paths = [ "/ipfs" ];
-        example.require-ipfs.onFeatures = [ "ifps" ];
+        example.require-ipfs.onFeatures = [ "ipfs" ];
       };
     extraWrapperArgs = lib.mkOption {
       type = with lib.types; listOf str;

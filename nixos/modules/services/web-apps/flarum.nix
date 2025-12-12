@@ -90,7 +90,7 @@ in
       description = "Home directory for writable storage";
     };
 
-    database = mkOption rec {
+    database = mkOption {
       type =
         with types;
         attrsOf (oneOf [
@@ -124,7 +124,7 @@ in
       description = ''
         Create the database and database user locally, and run installation.
 
-        WARNING: Due to https://github.com/flarum/framework/issues/4018, this option is set
+        WARNING: Due to <https://github.com/flarum/framework/issues/4018>, this option is set
         to false by default. The 'flarum install' command may delete existing database tables.
         Only set this to true if you are certain you are working with a fresh, empty database.
       '';
@@ -164,7 +164,7 @@ in
       enable = true;
       virtualHosts."${cfg.domain}" = {
         root = "${cfg.stateDir}/public";
-        locations."~ \.php$".extraConfig = ''
+        locations."~ \\.php$".extraConfig = ''
           fastcgi_pass unix:${config.services.phpfpm.pools.flarum.socket};
           fastcgi_index site.php;
         '';
@@ -196,6 +196,10 @@ in
       }
     ];
 
+    systemd.services."phpfpm-flarum" = {
+      restartTriggers = [ cfg.package ];
+    };
+
     systemd.services.flarum-install = {
       description = "Flarum installation";
       requiredBy = [ "phpfpm-flarum.service" ];
@@ -208,26 +212,25 @@ in
         Group = cfg.group;
       };
       path = [ config.services.phpfpm.phpPackage ];
-      script =
-        ''
-          mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-          mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
-          cd ${cfg.stateDir}
-          cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
-          ln -sf ${cfg.package}/share/php/flarum/vendor .
-          ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
-        ''
-        + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-          if [ ! -f config.php ]; then
-            php flarum install --file=${flarumInstallConfig}
-          fi
-        ''
-        + ''
-          if [ -f config.php ]; then
-            php flarum migrate
-            php flarum cache:clear
-          fi
-        '';
+      script = ''
+        mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
+        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+        cd ${cfg.stateDir}
+        cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
+        ln -sf ${cfg.package}/share/php/flarum/vendor .
+        ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+      ''
+      + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
+        if [ ! -f config.php ]; then
+          php flarum install --file=${flarumInstallConfig}
+        fi
+      ''
+      + ''
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
+      '';
     };
   };
 

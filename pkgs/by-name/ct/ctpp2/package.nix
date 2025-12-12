@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with lib; {
+  meta = {
     description = "High performance templating engine";
     homepage = "https://ctpp.havoc.ru/";
-    maintainers = [ maintainers.robbinch ];
-    platforms = platforms.linux;
-    license = licenses.bsd2;
+    maintainers = [ lib.maintainers.robbinch ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
   };
 }

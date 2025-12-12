@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  writableTmpDirAsHomeHook,
   libpng,
   libuuid,
   zlib,
@@ -12,17 +13,22 @@
   bash,
   fetchFromGitHub,
   which,
+  writeShellScript,
+  jq,
+  nix-update,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kent";
-  version = "468";
+  version = "488";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
-    repo = pname;
-    rev = "v${version}_base";
-    hash = "sha256-OM/noraW2X8WV5wqWEFiI5/JPOBmsp0fTeDdcZoXxAA=";
+    repo = "kent";
+    tag = "v${finalAttrs.version}_base";
+    hash = "sha256-7iapTrQBq0VvbSe+lEdf9lISRJ/uPGdnfjJiSA0NLN8=";
   };
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   buildInputs = [
     libpng
@@ -37,10 +43,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
-      --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+      --replace-fail "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
   '';
 
   buildPhase = ''
@@ -50,10 +56,9 @@ stdenv.mkDerivation rec {
     export CFLAGS="-fPIC"
     export MYSQLINC=$(mysql_config --include | sed -e 's/^-I//g')
     export MYSQLLIBS=$(mysql_config --libs)
-    export HOME=$TMPDIR
     export DESTBINDIR=$HOME/bin
 
-    mkdir -p $HOME/lib $HOME/bin/x86_64
+    mkdir -p $HOME/lib $HOME/bin/${stdenv.hostPlatform.parsed.cpu.name}
 
     cd ./src
     chmod +x ./checkUmask.sh
@@ -63,8 +68,8 @@ stdenv.mkDerivation rec {
     cd jkOwnLib
     make
 
-    cp ../lib/x86_64/jkOwnLib.a $HOME/lib
-    cp ../lib/x86_64/jkweb.a $HOME/lib
+    cp ../lib/${stdenv.hostPlatform.parsed.cpu.name}/jkOwnLib.a $HOME/lib
+    cp ../lib/${stdenv.hostPlatform.parsed.cpu.name}/jkweb.a $HOME/lib
     cp -r ../inc  $HOME/
 
     cd ../utils
@@ -79,18 +84,22 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib $out/inc
     cp $HOME/lib/jkOwnLib.a $out/lib
     cp $HOME/lib/jkweb.a $out/lib
-    cp $HOME/bin/x86_64/* $out/bin
+    cp $HOME/bin/${stdenv.hostPlatform.parsed.cpu.name}/* $out/bin
     cp -r $HOME/inc/* $out/inc/
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = writeShellScript "update-kent" ''
+    latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ucscGenomeBrowser/kent/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '(?<=v)\d+')
+    ${lib.getExe nix-update} kent --version $latestVersion
+  '';
+
+  meta = {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     homepage = "http://genome.ucsc.edu";
-    changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${version}_base";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${finalAttrs.version}_base";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
-}
+})

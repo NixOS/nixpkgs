@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     "--disable-update-desktop-database"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Printed Circuit Board editor";
-    homepage = "http://pcb.geda-project.org/";
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    homepage = "https://sourceforge.net/projects/pcb/";
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

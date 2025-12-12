@@ -15,10 +15,14 @@
   useDune = true;
 
   release."0.1.8+8.16".sha256 = "sha256-dEEAK5IXGjHB8D/fYJRQG/oCotoXJuWLxXB0GQlY2eo=";
-  release."0.2.2+8.17".sha256 = "sha256-dWPAwePbfTf2t+ydSd1Cnr2kKTDbvedmxm2+Z6F5zuM=";
-  release."0.2.2+8.18".sha256 = "sha256-0J/XaSvhnKHRlcWfG1xbUOyN4LDtK1SEahE9kpV7GK4=";
-  release."0.2.2+8.19".sha256 = "sha256-E2zO2SOU3nmTFf1yA1gefyIWTViUGNTTJ4r6fZYl6UY=";
-  release."0.2.2+8.20".sha256 = "sha256-9yHisA3YJ/KuolU53qcQAjuSIAZPY+4rnkWV9dpLc6c=";
+  release."0.2.3+8.17".sha256 = "sha256-s7GXRYxuCMXm0XpKAyEwYqolsVFcKHhM71uabqqK5BY=";
+  release."0.2.3+8.18".sha256 = "sha256-0cEuMWuNJwfiPdc0aHKk3EQbkVRIbVukS586EWSHCgo=";
+  release."0.2.3+8.19".sha256 = "sha256-0eQQheY2yjS7shifhUlVPLXvTmyvgNpx7deLWXBRTfA=";
+  release."0.2.3+8.20".sha256 = "sha256-TUVS8jkgf1MMOOx5y70OaeZkdIgdgmyGQ2/zKxeplEk=";
+  release."0.2.3+9.0".sha256 = "sha256-eZMM4gYRXQroEIKz6XlffyHNYryEF5dIeIoVbEulh6M=";
+  release."0.2.4+8.20".sha256 = "sha256-mQxh2/Cb5hZ99TtqWYLpZ/BRPrm5GRDYPDfKlCTK9N4=";
+  release."0.2.4+9.0".sha256 = "sha256-ICPdNxJODNqmUErdTkNk7s52MRuINWLbAPm0rmXFW18=";
+  release."0.2.4+9.1".sha256 = "sha256-HNHA2vbX70oZkd4QtbP28UbTRXatqxJdxw1OWDVDE8U=";
 
   inherit version;
   defaultVersion =
@@ -30,19 +34,27 @@
       }
       {
         case = isEq "8.17";
-        out = "0.2.2+8.17";
+        out = "0.2.3+8.17";
       }
       {
         case = isEq "8.18";
-        out = "0.2.2+8.18";
+        out = "0.2.3+8.18";
       }
       {
         case = isEq "8.19";
-        out = "0.2.2+8.19";
+        out = "0.2.3+8.19";
       }
       {
         case = isEq "8.20";
-        out = "0.2.2+8.20";
+        out = "0.2.4+8.20";
+      }
+      {
+        case = isEq "9.0";
+        out = "0.2.4+9.0";
+      }
+      {
+        case = isEq "9.1";
+        out = "0.2.4+9.1";
       }
     ] null;
 
@@ -63,12 +75,12 @@
     yojson
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol and VS Code Extension for Coq";
     homepage = "https://github.com/ejgallego/coq-lsp";
     changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
-    maintainers = with maintainers; [ alizter ];
-    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ alizter ];
+    license = lib.licenses.lgpl21Only;
   };
 }).overrideAttrs
   (
@@ -81,7 +93,7 @@
               camlp-streams
               serapi
             ]
-          else
+          else if o.version != null && lib.versions.isLe "0.2.3" o.version && o.version != "dev" then
             [
               cmdliner
               ppx_deriving
@@ -91,6 +103,16 @@
               ppx_compare
               ppx_hash
               sexplib
+            ]
+          else
+            [
+              cmdliner
+              ppx_deriving_yojson
+              ppx_hash
+              ppx_import
+              ppx_sexp_conv
+              sexplib
+              tyxml
             ]
         );
 

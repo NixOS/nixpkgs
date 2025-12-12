@@ -30,14 +30,16 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
-    patchShebangs bootstrap.sh
+    patchShebangs --build bootstrap.sh
     ./bootstrap.sh
   '';
 
   doCheck = true;
 
-  nativeCheckInputs = [ cunit ];
+  checkInputs = [ cunit ];
 
   outputs = [
     "bin"
@@ -47,14 +49,14 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "dCache access protocol client library";
     homepage = "https://github.com/dCache/dcap";
     changelog = "https://github.com/dCache/dcap/blob/master/ChangeLog";
-    license = licenses.lgpl2Only;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Only;
+    platforms = lib.platforms.all;
     mainProgram = "dccp";
-    maintainers = with maintainers; [ ShamrockLee ];
+    maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 }

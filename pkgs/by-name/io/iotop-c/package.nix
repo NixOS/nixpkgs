@@ -8,34 +8,35 @@
 
 stdenv.mkDerivation rec {
   pname = "iotop-c";
-  version = "1.26";
+  version = "1.30";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${version}";
-    sha256 = "sha256-m75BHvKMk9ckZ6TgT1QDfHYcEfvfEwWu0bQacnVgSmU=";
+    sha256 = "sha256-L0zChYDtlEi9tdHdNNWO0KugTorFIbYK0zDPNcLUMuo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ ncurses ];
+
   makeFlags = [
-    "DESTDIR=$(out)"
     "TARGET=iotop-c"
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   postInstall = ''
-    mv $out/usr/share/man/man8/{iotop,iotop-c}.8
-    ln -s $out/usr/sbin $out/bin
-    ln -s $out/usr/share $out/share
+    mv $out/share/man/man8/{iotop,iotop-c}.8
   '';
 
-  meta = with lib; {
-    description = "iotop identifies processes that use high amount of input/output requests on your machine";
+  meta = {
+    description = "Iotop identifies processes that use high amount of input/output requests on your machine";
     homepage = "https://github.com/Tomas-M/iotop";
-    maintainers = [ maintainers.arezvov ];
+    maintainers = [ lib.maintainers.arezvov ];
     mainProgram = "iotop-c";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

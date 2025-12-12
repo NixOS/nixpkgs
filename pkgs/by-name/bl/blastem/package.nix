@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The fast and accurate Genesis emulator";
+    description = "Fast and accurate Genesis emulator";
     homepage = "https://www.retrodev.com/blastem/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blastem";

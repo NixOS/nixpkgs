@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    dbus-glib # dbus-binding-tool
   ];
 
   buildInputs = [
@@ -67,11 +68,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/upstart
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Indicator to take menus from applications and place them in the panel";
     homepage = "https://launchpad.net/indicator-application";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
   };
 }

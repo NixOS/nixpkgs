@@ -34,22 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./darwin-getopt-path.patch {
       inherit getopt;
     })
+    ./set-correct-program-name-for-sleep.patch
   ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  extraPath = lib.makeBinPath [
-    age
-    coreutils
-    findutils
-    git
-    gnugrep
-    gnused
-    qrencode
-    tree
-    wl-clipboard
-    xclip
-  ];
+  extraPath = lib.makeBinPath (
+    [
+      age
+      coreutils
+      findutils
+      git
+      gnugrep
+      gnused
+      qrencode
+      tree
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      wl-clipboard
+      xclip
+    ]
+  );
 
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''
@@ -62,15 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://github.com/FiloSottile/passage";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       kaction
       ma27
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "passage";
 
     longDescription = ''

@@ -1,6 +1,5 @@
 {
   lib,
-  backports-datetime-fromisoformat,
   buildPythonPackage,
   charset-normalizer,
   dateparser,
@@ -9,23 +8,20 @@
   lxml,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.1";
+  version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VjOqttpbHp1wQARyHieAZie/yO74+S2mDbBXx00PKWM=";
+    tag = "v${version}";
+    hash = "sha256-ZSHQgj6zXmLdqDQWGnh2l70iXzdohsxdAIQGDSBufIA=";
   };
 
   build-system = [ setuptools ];
@@ -38,21 +34,19 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
   optional-dependencies = {
-    speed =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
-    all =
-      [
-        faust-cchardet
-        urllib3
-      ]
-      ++ lib.optionals (pythonOlder "3.11") [ backports-datetime-fromisoformat ]
-      ++ urllib3.optional-dependencies.brotli;
+    speed = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ urllib3.optional-dependencies.brotli;
+    all = [
+      faust-cchardet
+      urllib3
+    ]
+    ++ urllib3.optional-dependencies.brotli;
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -67,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "htmldate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
-    changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jokatzke ];
+    changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "htmldate";
   };
 }

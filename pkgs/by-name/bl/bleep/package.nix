@@ -16,18 +16,17 @@ let
       aarch64-darwin = "arm64-apple-darwin";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
-
   hash =
     {
-      x86_64-linux = "sha256-Y9vWtuv1eyrPmJn/XpAw4uDHxhLUdhKszwJZmMIOCqI=";
-      x86_64-darwin = "sha256-p8Y6XKHb/CmRcnQ7po3s3oUZh0f+1iIHk38sAu2qym8=";
-      aarch64-darwin = "sha256-Qfqeo5syprwtLoNdi/EwsI+EYdpKkkVlFVja8uIFDsM=";
+      x86_64-linux = "sha256-SGV0fEuwmGwpqmD42a+x0fIK50RWSHEYDesH4obgRhg=";
+      x86_64-darwin = "sha256-fOeYUchUE1Jj4xSrYjljEUpGrW8cvev7d/qywc81vFo=";
+      aarch64-darwin = "sha256-qL0hjEdfkN62NDvhlzVgW4TYWv0IReo2Fo5eVhUaOrI=";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";
-  version = "0.0.11";
+  version = "0.0.13";
 
   src = fetchzip {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${finalAttrs.version}/bleep-${platform}.tar.gz";
@@ -37,7 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenvNoCC.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ zlib ];
 
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       autoPatchelf $out
     ''
-    + ''
+    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
       export PATH=$PATH:$out/bin
       installShellCompletion --cmd bleep \
         --bash <(bleep install-tab-completions-bash --stdout) \

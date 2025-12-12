@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ember-cli";
     repo = "ember-cli";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xkMsPE+iweIV14m4kE4ytEp4uHMJW6gr+n9oJblr4VQ=";
   };
 
@@ -32,12 +32,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ember-cli/ember-cli";
-    description = "The Ember.js command line utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jfvillablanca ];
-    platforms = platforms.all;
+    description = "Ember.js command line utility";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
+    platforms = lib.platforms.all;
     mainProgram = "ember";
   };
 })

@@ -4,7 +4,6 @@
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
-  importlib-metadata,
   mock,
   pydantic,
   pytest-mock,
@@ -12,21 +11,18 @@
   pythonOlder,
   setuptools,
   setuptools-scm,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck-core";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PiQMk0lIv24S6qXMYIQR+SkSji+WA30ivWs2uPQwf2A=";
+    tag = "v${version}";
+    hash = "sha256-D17I6pncTnrRjA/vt4lt/Bfkko3Lx58Xyti3sM0sC3s=";
   };
 
   build-system = [
@@ -38,15 +34,10 @@ buildPythonPackage rec {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
   };
 
-  dependencies =
-    [
-      docutils
-      pydantic
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    docutils
+    pydantic
+  ];
 
   nativeCheckInputs = [
     mock
@@ -61,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rstcheck_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for checking syntax of reStructuredText";
     homepage = "https://github.com/rstcheck/rstcheck-core";
-    changelog = "https://github.com/rstcheck/rstcheck-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/rstcheck/rstcheck-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -24,13 +24,21 @@ To enable a Kerberos server:
         admin_server = "kerberos.example.com";
       };
     };
-  }
+  };
 
   services.kerberos-server = {
     enable = true;
     settings = {
       realms."EXAMPLE.COM" = {
-        acl = [{ principal = "adminuser"; access=  ["add" "cpw"]; }];
+        acl = [
+          {
+            principal = "adminuser";
+            access = [
+              "add"
+              "cpw"
+            ];
+          }
+        ];
       };
     };
   };
@@ -45,11 +53,11 @@ To enable a Kerberos server:
 
 ## Upstream Documentation {#module-services-kerberos-server-upstream-documentation}
 
-- MIT Kerberos homepage: https://web.mit.edu/kerberos
-- MIT Kerberos docs: https://web.mit.edu/kerberos/krb5-latest/doc/index.html
+- MIT Kerberos homepage: <https://web.mit.edu/kerberos>
+- MIT Kerberos docs: <https://web.mit.edu/kerberos/krb5-latest/doc/index.html>
 
-- Heimdal Kerberos GitHub wiki: https://github.com/heimdal/heimdal/wiki
-- Heimdal kerberos doc manpages (Debian unstable): https://manpages.debian.org/unstable/heimdal-docs/index.html
-- Heimdal Kerberos kdc manpages (Debian unstable): https://manpages.debian.org/unstable/heimdal-kdc/index.html
+- Heimdal Kerberos GitHub wiki: <https://github.com/heimdal/heimdal/wiki>
+- Heimdal kerberos doc manpages (Debian unstable): <https://manpages.debian.org/unstable/heimdal-docs/index.html>
+- Heimdal Kerberos kdc manpages (Debian unstable): <https://manpages.debian.org/unstable/heimdal-kdc/index.html>
 
 Note the version number in the URLs, it may be different for the latest version.

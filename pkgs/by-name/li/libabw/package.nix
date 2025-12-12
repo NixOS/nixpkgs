@@ -27,21 +27,23 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    boost
+  nativeBuildInputs = [
     doxygen
     gperf
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    boost
     librevenge
     libxml2
-    perl
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libabw";
     description = "Library parsing abiword documents";
-    platforms = platforms.unix;
-    license = licenses.mpl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mpl20;
   };
 }

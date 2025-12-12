@@ -16,7 +16,6 @@
   pytz,
   pyyaml,
   scales,
-  six,
   sure,
   twisted,
   setuptools,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.29.2";
+  version = "3.29.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
+    tag = version;
+    hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
   };
 
   pythonRelaxDeps = [ "geomet" ];
@@ -46,19 +45,34 @@ buildPythonPackage rec {
   buildInputs = [ libev ];
 
   dependencies = [
-    six
     geomet
   ];
+
+  optional-dependencies = {
+    cle = [ cryptography ];
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    graph = [ gremlinpython ];
+    metrics = [ scales ];
+    twisted = [ twisted ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
+
+  preBuild = ''
+    export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
@@ -86,7 +100,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl
@@ -103,15 +117,6 @@ buildPythonPackage rec {
     # time-sensitive
     "test_nts_token_performance"
   ];
-
-  optional-dependencies = {
-    cle = [ cryptography ];
-    eventlet = [ eventlet ];
-    gevent = [ gevent ];
-    graph = [ gremlinpython ];
-    metrics = [ scales ];
-    twisted = [ twisted ];
-  };
 
   meta = {
     description = "Python client driver for Apache Cassandra";

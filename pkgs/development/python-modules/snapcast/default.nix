@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.3.6";
+  version = "2.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gn+X0DZnox4mkJwDVgwNXae63iGbiqPIO15UV5pDwuY=";
+    tag = version;
+    hash = "sha256-k6U13vkeOAip94hcEjssFgvMnhpOXG87E0R2Zu1YyY4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     "est_stream_setproperty"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Control Snapcast, a multi-room synchronous audio solution";
     homepage = "https://github.com/happyleavesaoc/python-snapcast/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }
