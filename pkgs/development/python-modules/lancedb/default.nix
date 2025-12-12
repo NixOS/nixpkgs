@@ -14,40 +14,48 @@
 
   # dependencies
   deprecation,
-  overrides,
+  lance-namespace,
+  numpy,
   packaging,
   pyarrow,
   pydantic,
   tqdm,
+  pythonOlder,
+  overrides,
 
   # tests
   aiohttp,
+  boto3,
+  datafusion,
+  duckdb,
   pandas,
   polars,
   pylance,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  duckdb,
+  tantivy,
+
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.21.2";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
+    hash = "sha256-urOHHuPFce7Ms1EqjM4n72zx0APVrIQ1bLIkmrp/Dec=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+    hash = "sha256-03p1mDsE//YafUGImB9xMqqUzKlBD9LCiV1RGP2L5lw=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -62,30 +70,33 @@ buildPythonPackage rec {
     openssl
   ];
 
-  pythonRelaxDeps = [
-    # pylance is pinned to a specific release
-    "pylance"
-  ];
-
   dependencies = [
     deprecation
-    overrides
+    lance-namespace
+    numpy
     packaging
     pyarrow
     pydantic
     tqdm
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    overrides
   ];
 
   pythonImportsCheck = [ "lancedb" ];
 
   nativeCheckInputs = [
     aiohttp
+    boto3
+    datafusion
     duckdb
     pandas
     polars
     pylance
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
+    tantivy
   ];
 
   preCheck = ''
@@ -95,10 +106,6 @@ buildPythonPackage rec {
   disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
-    "test_fts_native"
-
     # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
     # https://github.com/lancedb/lancedb/issues/1539
     "test_polars"
@@ -106,6 +113,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # touch the network
+    "test_namespace_integration.py"
     "test_s3.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
