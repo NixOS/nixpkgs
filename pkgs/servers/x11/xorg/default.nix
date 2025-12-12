@@ -131,6 +131,7 @@
   xgamma,
   xgc,
   xhost,
+  xkbevd,
   xkbprint,
   xkbutils,
   xkeyboard-config,
@@ -214,6 +215,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbevd
     xkbprint
     xkbutils
     xkill
@@ -2373,42 +2375,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xkbcomp" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkbevd = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libxkbfile,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xkbevd";
-      version = "1.1.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xkbevd-1.1.6.tar.xz";
-        sha256 = "0gh73dsf4ic683k9zn2nj9bpff6dmv3gzcb3zx186mpq9kw03d6r";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libxkbfile
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })
