@@ -19,10 +19,10 @@ buildGoModule rec {
 
   meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
-    mainProgram = "alterx";
     homepage = "https://github.com/projectdiscovery/alterx";
-    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "alterx";
   };
 }
