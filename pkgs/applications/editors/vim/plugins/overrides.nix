@@ -1482,6 +1482,7 @@ assertNoAdditions {
     dependencies = with self; [
       nui-nvim
       nvim-treesitter
+      nvim-treesitter-parsers.hurl
       plenary-nvim
     ];
 
