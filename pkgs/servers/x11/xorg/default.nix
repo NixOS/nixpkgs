@@ -131,6 +131,7 @@
   xgamma,
   xgc,
   xhost,
+  xkbprint,
   xkbutils,
   xkeyboard-config,
   xkill,
@@ -213,6 +214,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbprint
     xkbutils
     xkill
     xload
@@ -2403,44 +2405,6 @@ self: with self; {
       buildInputs = [
         libX11
         libxkbfile
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkbprint = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libxkbfile,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xkbprint";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xkbprint-1.0.7.tar.xz";
-        sha256 = "1k2rm8lvc2klcdz2s3mymb9a2ahgwqwkgg67v3phv7ij6304jkqw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libxkbfile
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
