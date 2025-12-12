@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     hasCol = stdenv.hostPlatform.libc == "glibc";
 
     tests = {
-      inherit (nixosTests) pam-lastlog;
+      inherit (nixosTests) pam-lastlog util-linux;
     };
   };
 
