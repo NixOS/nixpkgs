@@ -15,6 +15,7 @@
   gfortran,
   criterion,
   mpfr,
+  enableZimpl ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     scipopt-soplex
     scipopt-papilo
-    scipopt-zimpl
     ipopt
     gmp
     readline
@@ -42,7 +42,9 @@ stdenv.mkDerivation rec {
     boost
     gfortran
     criterion
-  ];
+  ] ++ lib.optional enableZimpl scipopt-zimpl;
+
+  cmakeFlags = lib.optional (!enableZimpl) "-DZIMPL=OFF";
 
   propagatedBuildInputs = [ mpfr ];
 
