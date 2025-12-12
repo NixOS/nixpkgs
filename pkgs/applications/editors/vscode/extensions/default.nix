@@ -191,8 +191,8 @@ let
         mktplcRef = {
           name = "bookmarks";
           publisher = "alefragnani";
-          version = "13.5.0";
-          hash = "sha256-oKhd5BLa2wuGNrzW9yKsWWzaU5hNolw2pBcqPlql9Ro=";
+          version = "14.0.0";
+          hash = "sha256-7ou3kIqn3k6qLSCswCBQFClRINnEPZCg7Cs/4HTtvNY=";
         };
         meta = {
           license = lib.licenses.gpl3;
