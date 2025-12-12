@@ -5,16 +5,19 @@
   meta,
   updateScript ? null,
   binaryName ? "firefox",
+  finalBinaryName ? binaryName,
   application ? "browser",
   applicationName ? "Firefox",
   branding ? null,
   requireSigning ? true,
   allowAddonSideload ? false,
+  withWasiSysroot ? true,
   src,
   unpackPhase ? null,
   extraPatches ? [ ],
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
+  extraPreConfigure ? "",
   extraConfigureFlags ? [ ],
   extraBuildInputs ? [ ],
   extraMakeFlags ? [ ],
@@ -455,7 +458,8 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+  ''
+  + extraPreConfigure;
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
@@ -468,11 +472,11 @@ buildStdenv.mkDerivation {
     "--with-app-name=${binaryName}"
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
-    "--with-wasi-sysroot=${wasiSysRoot}"
     # for firefox, host is buildPlatform, target is hostPlatform
     "--host=${buildStdenv.buildPlatform.config}"
     "--target=${buildStdenv.hostPlatform.config}"
   ]
+  ++ lib.optional withWasiSysroot "--with-wasi-sysroot=${wasiSysRoot}"
   # LTO is done using clang and lld.
   ++ lib.optionals ltoSupport [
     "--enable-lto=cross,full" # Cross-Language LTO
@@ -694,7 +698,7 @@ buildStdenv.mkDerivation {
       bindir=$out/bin
     ''
     + ''
-      "$bindir/${binaryName}" --version
+      "$bindir/${finalBinaryName}" --version
     '';
 
   passthru = {
@@ -703,6 +707,7 @@ buildStdenv.mkDerivation {
     inherit updateScript;
     inherit alsaSupport;
     inherit binaryName;
+    inherit finalBinaryName;
     inherit requireSigning allowAddonSideload;
     inherit jackSupport;
     inherit pipewireSupport;
