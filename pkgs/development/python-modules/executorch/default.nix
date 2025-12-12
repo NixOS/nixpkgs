@@ -48,7 +48,7 @@
 }:
 buildPythonPackage rec {
   pname = "executorch";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-WirvB+Tjh7HQK3m41/5xr8VThJAk+Cw7+cQAusWUCFM=";
+    hash = "sha256-h+nmipFDO/cdPTQXrjM5EkH//wHKBAvlDIp6SBbGN/8=";
   };
   # src = /home/gaetan/nix/nixpkgs-packages/executorch;
 
