@@ -21,7 +21,6 @@
 , "node2nix"
 , "postcss"
 , "prebuild-install"
-, "purescript-language-server"
 , "purescript-psa"
 , "purs-tidy"
 , "sass"
