@@ -1136,6 +1136,8 @@ let
           inherit (pkgs) mariadb;
         };
 
+        markdown = callPackage ../development/ocaml-modules/markdown { };
+
         markup = callPackage ../development/ocaml-modules/markup { };
 
         mccs = callPackage ../development/ocaml-modules/mccs { };
