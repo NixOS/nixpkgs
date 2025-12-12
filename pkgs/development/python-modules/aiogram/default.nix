@@ -21,7 +21,6 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   redis,
   uvloop,
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   pname = "aiogram";
   version = "3.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
