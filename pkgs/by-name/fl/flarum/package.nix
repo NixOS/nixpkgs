@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerLock = ./composer.lock;
   composerStrictValidation = false;
-  vendorHash = "sha256-4wB8MRnqnruo9VXupMmAqiRSZx8F2i+8zcOphTeDp1g=";
+  vendorHash = "sha256-peQMR7+Jx+oXo0HdXOHzTYB9Fn0AkELm43fiV4ssLnI=";
 
   meta = {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";

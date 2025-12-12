@@ -5,6 +5,7 @@
   installShellFiles,
   makeBinaryWrapper,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   nix-output-monitor,
   buildPackages,
@@ -16,7 +17,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.2.0";
+  version = "4.2.0"; # Did you remove the patch below (and this comment)?
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -24,6 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-6n5SVO8zsdVTD691lri7ZcO4zpqYFU8GIvjI6dbxkA8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/nix-community/nh/commit/8bf323483166797a204579a43ed8810113eb128c.patch";
+      hash = "sha256-hg0LgDPjiPWR+1DRzqORv6QPlrds7ys4PTDXFw6PUoI=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -69,6 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
       NotAShelf
+      mdaniels5757
+      midischwarz12
       viperML
     ];
   };
