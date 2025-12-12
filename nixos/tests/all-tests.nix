@@ -1853,6 +1853,7 @@ in
   userborn-subids-immutable-etc = runTest ./userborn-subids-immutable-etc.nix;
   userborn-subids-mutable-etc = runTest ./userborn-subids-mutable-etc.nix;
   ustreamer = runTest ./ustreamer.nix;
+  util-linux = runTest ./util-linux.nix;
   utils = pkgs.callPackage ./utils { inherit runTest; };
   utmp = runTest ./utmp.nix;
   uwsgi = runTest ./uwsgi.nix;
