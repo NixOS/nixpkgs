@@ -12,13 +12,13 @@
 
 let
   pname = "daed";
-  version = "1.0.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "daed";
     tag = "v${version}";
-    hash = "sha256-WaybToEcFrKOcJ+vfCTc9uyHkTPOrcAEw9lZFEIBPgY=";
+    hash = "sha256-d8qNM9GQCzZvjH81+i28fhAt3Kyd0k5q4HlxL4js62w=";
     fetchSubmodules = true;
   };
 
@@ -28,7 +28,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version src;
       fetcherVersion = 1;
-      hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
+      hash = "sha256-kmVzgFGw0jvRn554+qKCB9VQQq+jdA7o+D/VsVapQLU=";
     };
 
     nativeBuildInputs = [
@@ -47,7 +47,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -R dist $out
+      cp -R apps/web/dist $out
 
       runHook postInstall
     '';
@@ -64,7 +64,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/wing";
 
-  vendorHash = "sha256-+uf8PJQvsJMUyQ6W+nDfdwrxBO2YRUL328ajTJpVDZk=";
+  vendorHash = "sha256-l7jgMvrbpOY2+cvnc0e5cvSgKVm4GcWC+bPbff+PE80=";
 
   proxyVendor = true;
 
