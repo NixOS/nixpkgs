@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -29,6 +30,8 @@ buildGoModule rec {
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "-version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tunneling client for Pangolin";
