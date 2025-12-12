@@ -21,7 +21,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.11";
+  version = "3.0.dev1";
   pname = "pyglet";
   pyproject = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "pyglet";
     repo = "pyglet";
     tag = "v${version}";
-    hash = "sha256-aGMEjC7Huykdwx4JW9Uoo8a7diJ85iaXM9XCbbyQXk8=";
+    hash = "sha256-9lgGji4ftYRcQK0EHR9Uxa7xJOM++DkF1uzh57sJN5M=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
