@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
+    hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
   };
 
   outputs = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
     "-Dv4l2=true"
     (lib.mesonEnable "tracing" withTracing)
     (lib.mesonEnable "qcam" withQcam)
+    "-Dlibunwind=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
