@@ -127,6 +127,7 @@
   xdriinfo,
   xev,
   xeyes,
+  xfd,
   xfontsel,
   xfsinfo,
   xgamma,
@@ -208,6 +209,7 @@ self: with self; {
     xdriinfo
     xev
     xeyes
+    xfd
     xfontsel
     xfsinfo
     xgamma
@@ -2103,60 +2105,6 @@ self: with self; {
         xorgproto
         libpciaccess
         xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfd = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxkbfile,
-      fontconfig,
-      libXaw,
-      libXft,
-      libXmu,
-      xorgproto,
-      libXrender,
-      libXt,
-      gettext,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xfd";
-      version = "1.1.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xfd-1.1.4.tar.xz";
-        sha256 = "1zbnj0z28dx2rm2h7pjwcz7z1jnl28gz0v9xn3hs2igxcvxhyiym";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        gettext
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libxkbfile
-        fontconfig
-        libXaw
-        libXft
-        libXmu
-        xorgproto
-        libXrender
-        libXt
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
