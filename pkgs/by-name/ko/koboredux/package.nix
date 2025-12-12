@@ -31,6 +31,7 @@ let
     sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
   };
 
+  # TODO: Replace this with fetchItchIo
   assets_src = requireFile {
     name = "koboredux-${version}-Linux.tar.bz2";
     sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";

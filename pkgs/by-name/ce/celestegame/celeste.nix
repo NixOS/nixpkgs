@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation {
 
   src =
     if overrideSrc == null then
+      # TODO: Replace this with fetchItchIo
       requireFile {
         name = "celeste-linux.zip";
         hash = "sha256-phNDBBHb7zwMRaBHT5D0hFEilkx9F31p6IllvLhHQb8=";
