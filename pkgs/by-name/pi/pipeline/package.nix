@@ -95,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mobile.schmidhuberj.de/pipeline";
     mainProgram = "tubefeeder";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      normalcea
+    ];
     platforms = lib.platforms.linux;
   };
 })
