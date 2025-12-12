@@ -17,13 +17,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.5.9";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jrGDgK/Z9oLSvtFfC+uIs0vj4Nku4Sp/bdR1MX/SK2E=";
+    hash = "sha256-4d1BFH0sF+qZoGhXL01huPYNg+/O8wrPxnIIJoTNauU=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
   '';
 
-  patches = [ ./0001-disable-telemetry.patch ];
+  patches = [./0001-disable-telemetry.patch];
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     description = "Warframe Market listings and transactions manager";
