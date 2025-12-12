@@ -13,15 +13,18 @@
   pkg-config,
   wrapGAppsHook4,
   glib,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
   blueprint-compiler,
   sqlite,
   clapper-unwrapped,
+  clapper-enhancers,
   gettext,
   gst_all_1,
   glib-networking,
   gnome,
+  libjxl,
+  libheif,
   webp-pixbuf-loader,
   librsvg,
   nix-update-script,
@@ -34,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-iMBdyjN6fMDOSE110tA9i6+D4UaNGG2aBoq+4s0YyJI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) src pname version;
     hash = "sha256-w+q90i6FQRPFceniUfwouU2p673O4sVnsRfowCu2fWY=";
   };
 
@@ -47,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     cargo
+    gettext
     rustPlatform.cargoSetupHook
     rustc
     pkg-config
     wrapGAppsHook4
     glib
-    appstream-glib
+    appstream
     desktop-file-utils
     blueprint-compiler
   ];
@@ -63,30 +67,36 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     sqlite
     clapper-unwrapped
-
+    clapper-enhancers
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gettext
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-vaapi
     glib-networking # For GIO_EXTRA_MODULES. Fixes "TLS support is not available"
   ];
 
-  # Pull in WebP support for YouTube avatars.
-  # In postInstall to run before gappsWrapperArgsHook.
-  postInstall = ''
-    export GDK_PIXBUF_MODULE_FILE="${
-      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-        extraLoaders = [
-          webp-pixbuf-loader
-          librsvg
-        ];
-      }
-    }"
+  preFixup = ''
+    gappsWrapperArgs+=(
+       --set GDK_PIXBUF_MODULE_FILE ${
+         gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+           extraLoaders = [
+             libjxl
+             librsvg
+             webp-pixbuf-loader
+             libheif.lib
+           ];
+         }
+       }
+       --set CLAPPER_ENHANCERS_PATH ${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}
+    )
   '';
 
-  passthru.updateScript = nix-update-script { attrPath = finalAttrs.pname; };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Watch YouTube and PeerTube videos in one place";
