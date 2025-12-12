@@ -802,9 +802,11 @@ in
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = handleTest ./k3s { };
   kafka = handleTest ./kafka { };
+  kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
+  karakeep = runTest ./web-apps/karakeep.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
@@ -939,6 +941,7 @@ in
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
+  meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
   mimir = runTest ./mimir.nix;

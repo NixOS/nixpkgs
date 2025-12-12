@@ -7447,6 +7447,12 @@
     githubId = 494483;
     name = "Michael Francis";
   };
+  edwtjo = {
+    email = "ed@cflags.cc";
+    github = "edwtjo";
+    githubId = 54799;
+    name = "Edward Tjörnhammar";
+  };
   eeedean = {
     github = "eeedean";
     githubId = 8173116;
@@ -10048,6 +10054,13 @@
     email = "dimascrazz@gmail.com";
     github = "HadziqM";
     githubId = 50319538;
+  };
+  haennetz = {
+    name = "Hännetz";
+    email = "me@haennetz.net";
+    matrix = "@me:haennetz.net";
+    github = "Haennetz";
+    githubId = 34142036;
   };
   hagl = {
     email = "harald@glie.be";
@@ -16757,12 +16770,6 @@
     githubId = 6412377;
     name = "Samuel Ruprecht";
   };
-  melling = {
-    email = "mattmelling@fastmail.com";
-    github = "mattmelling";
-    githubId = 1215331;
-    name = "Matt Melling";
-  };
   melon = {
     email = "melontime05@gmail.com";
     github = "BlaiZephyr";
@@ -17400,6 +17407,11 @@
     name = "mlvzk";
     github = "mlvzk";
     githubId = 44906333;
+  };
+  mlyxshi = {
+    name = "mlyxshi";
+    github = "mlyxshi";
+    githubId = 16594754;
   };
   mmahut = {
     email = "marek.mahut@gmail.com";

@@ -8,19 +8,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tdf";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZC7yQt2ssbRWP7EP7QBrLe8mN9Z9Va4eLivEP/78YpM=";
+    hash = "sha256-YjIMuwQkPtwlGiQ2zs3lEZi28lfn9Z5b5zOYIDFf5qw=";
   };
 
-  cargoHash = "sha256-8JGiKlVr41YbG+mI/S0xPByKa4pwAH4cDVlznRcfCxE=";
+  cargoHash = "sha256-lGbsb3hlFen0tXBVLbm8+CE5dddv6Ner4YSAvAd3/ug=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildFeatures = [
+    "epub"
+    "cbz"
+  ];
 
   buildInputs = [
     rustPlatform.bindgenHook
@@ -29,9 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Tests depend on cpuprofiler, which is not packaged in nixpkgs
   doCheck = false;
-
-  # requires nightly features (feature(portable_simd))
-  RUSTC_BOOTSTRAP = true;
 
   meta = {
     description = "Tui-based PDF viewer";

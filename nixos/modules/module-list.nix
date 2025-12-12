@@ -1248,6 +1248,7 @@
   ./services/networking/lxd-image-server.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
+  ./services/networking/meshtasticd.nix
   ./services/networking/microsocks.nix
   ./services/networking/mihomo.nix
   ./services/networking/minidlna.nix
@@ -1602,7 +1603,6 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
-  ./services/web-apps/ethercalc.nix
   ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix
   ./services/web-apps/filebrowser.nix

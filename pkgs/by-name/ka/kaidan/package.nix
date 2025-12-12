@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   nix-update-script,
+  nixosTests,
 
   # build
   cmake,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.tests.kaidan = nixosTests.kaidan;
 
   meta = {
     description = "User-friendly and modern chat app, using XMPP";

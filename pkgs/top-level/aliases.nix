@@ -557,6 +557,7 @@ mapAliases {
   eris-go = throw "'eris-go' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   eriscmd = throw "'eriscmd' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   erlang-ls = throw "'erlang-ls' has been removed as it has been archived upstream. Consider using 'erlang-language-platform' instead"; # Added 2025-10-02
+  ethercalc = throw "'ethercalc' has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs"; # Added 2025-11-28
   ethersync = warnAlias "'ethersync' has been renamed to 'teamtype'" teamtype; # Added 2025-10-31
   eww-wayland = throw "'eww-wayland' has been renamed to/replaced by 'eww'"; # Converted to throw 2025-10-27
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18

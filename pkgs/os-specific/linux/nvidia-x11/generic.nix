@@ -340,6 +340,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
     maintainers = with lib.maintainers; [
       kiskae
+      edwtjo
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
     inherit broken;

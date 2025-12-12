@@ -656,7 +656,7 @@ self: super: with self; {
 
   amarna = callPackage ../development/python-modules/amarna { };
 
-  amazon-ion = callPackage ../development/python-modules/amazon-ion { };
+  amazon-ion = callPackage ../development/python-modules/amazon-ion { inherit (pkgs) cmake; };
 
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
