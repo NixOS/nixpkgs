@@ -134,6 +134,7 @@
   xgamma,
   xgc,
   xhost,
+  xkbcomp,
   xkbevd,
   xkbprint,
   xkbutils,
@@ -221,6 +222,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xkbcomp
     xkbevd
     xkbprint
     xkbutils
@@ -2199,44 +2201,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xkbcomp = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libxkbfile,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xkbcomp";
-      version = "1.4.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xkbcomp-1.4.7.tar.xz";
-        sha256 = "0xqzz209m9i43jbyrf2lh4xdbyhzzzn9mis2f2c32kplwla82a0a";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libxkbfile
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xkbcomp" ];
         platforms = lib.platforms.unix;
       };
     })
