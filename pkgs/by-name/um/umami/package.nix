@@ -72,7 +72,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.2";
+  version = "3.0.3";
 
   nativeBuildInputs = [
     makeWrapper
@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ega3ShfZlEnoFuFSh420hB8sp2qoJuAYnzeoOdpODs=";
+    hash = "sha256-rkOD52suE6bihJqKvMdIvqHRIcWhSxXzUkCfmdNbC40=";
   };
 
   # install dev dependencies as well, for rollup
@@ -98,7 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-zHpIqhxfvJ/so7bKvrGMqVGGnquJNnSI/0q3PE+VQ1Y=";
+    hash = "sha256-eXurT8kfVJcJoFunrt7h8LKuhsIhGrYDW6shvGA6GXY=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
