@@ -261,6 +261,8 @@ let
 
         cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
 
+        cohttp-async_5_3 = cohttp-async.override { cohttp = cohttp_5_3; };
+
         cohttp-eio = callPackage ../development/ocaml-modules/cohttp/eio.nix { };
 
         cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
