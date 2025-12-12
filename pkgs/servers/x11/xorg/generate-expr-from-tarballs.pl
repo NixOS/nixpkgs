@@ -461,6 +461,7 @@ print OUT <<EOF;
   xeyes,
   xfd,
   xfontsel,
+  xfs,
   xfsinfo,
   xgamma,
   xgc,
@@ -543,6 +544,7 @@ self: with self; {
     xeyes
     xfd
     xfontsel
+    xfs
     xfsinfo
     xgamma
     xgc

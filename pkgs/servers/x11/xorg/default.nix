@@ -129,6 +129,7 @@
   xeyes,
   xfd,
   xfontsel,
+  xfs,
   xfsinfo,
   xgamma,
   xgc,
@@ -211,6 +212,7 @@ self: with self; {
     xeyes
     xfd
     xfontsel
+    xfs
     xfsinfo
     xgamma
     xgc
@@ -2105,44 +2107,6 @@ self: with self; {
         xorgproto
         libpciaccess
         xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfs = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXfont2,
-      xorgproto,
-      xtrans,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xfs";
-      version = "1.2.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xfs-1.2.2.tar.xz";
-        sha256 = "1k4f15nrgmqkvsn48hnl1j4giwxpmcpdrnq0bq7b6hg265ix82xp";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libXfont2
-        xorgproto
-        xtrans
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
