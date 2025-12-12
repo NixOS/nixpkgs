@@ -59,17 +59,6 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  addMainProgram =
-    pkg:
-    {
-      mainProgram ? pkg.pname,
-    }:
-    pkg.overrideAttrs (attrs: {
-      meta = attrs.meta // {
-        inherit mainProgram;
-      };
-    });
-
   brokenOnDarwin =
     pkg:
     pkg.overrideAttrs (attrs: {
@@ -384,8 +373,6 @@ self: super:
       })
     ];
   });
-
-  xwd = addMainProgram super.xwd { };
 }
 
 # deprecate some packages

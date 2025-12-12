@@ -166,6 +166,7 @@
   xtrans,
   xvfb,
   xvinfo,
+  xwd,
   xwininfo,
   xwud,
 }:
@@ -250,6 +251,7 @@ self: with self; {
     xtrans
     xvfb
     xvinfo
+    xwd
     xwininfo
     xwud
     ;
@@ -2195,44 +2197,6 @@ self: with self; {
         libX11
         libXt
         libXTrap
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xwd = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxkbfile,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xwd";
-      version = "1.0.9";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xwd-1.0.9.tar.xz";
-        sha256 = "0gxx3y9zlh13jgwkayxljm6i58ng8jc1xzqv2g8s7d3yjj21n4nw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libxkbfile
-        libX11
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
