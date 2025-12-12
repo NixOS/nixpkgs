@@ -124,3 +124,25 @@ jobs:
             echo "If you're having trouble, ping @NixOS/nixpkgs-vet"
             exit "$exitCode"
           fi
+
+  commits:
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+          path: trusted
+          sparse-checkout: |
+            ci/github-script
+      - name: Check commit messages
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const checkCommitMessages = require('./trusted/ci/github-script/lint-commits.js')
+
+            checkCommitMessages({
+              github,
+              context,
+              core,
+            })
