@@ -7,6 +7,7 @@
   gettext,
   wrapGAppsHook3,
   pkg-config,
+  help2man,
 
   adwaita-icon-theme,
   alsa-lib,
@@ -22,6 +23,7 @@
   pcre,
   poppler,
   portaudio,
+  qpdf,
   zlib,
   # plugins
   withLua ? true,
@@ -31,25 +33,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.2.10";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     rev = "v${version}";
-    hash = "sha256-3M7ycbwKSmu8WUqC3anAi6GLPOex7gEndw/tDv0Ri7Q=";
+    hash = "sha256-ds86+Tw3fSAUVs83g5z/7grv8HEzVKYDWUwvY6nGaug=";
   };
-
-  postPatch = ''
-    substituteInPlace src/util/Stacktrace.cpp \
-      --replace-fail "addr2line" "${binutils}/bin/addr2line"
-  '';
 
   nativeBuildInputs = [
     cmake
     gettext
     pkg-config
     wrapGAppsHook3
+    help2man
   ];
 
   buildInputs =
@@ -68,6 +66,7 @@ stdenv.mkDerivation rec {
       pcre
       poppler
       portaudio
+      qpdf
       zlib
     ]
     ++ lib.optional withLua lua5_3;
