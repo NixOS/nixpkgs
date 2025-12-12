@@ -448,6 +448,7 @@ print OUT <<EOF;
   xbitmaps,
   xcalc,
   xcb-proto,
+  xclock,
   xcmsdb,
   xcompmgr,
   xconsole,
@@ -528,6 +529,7 @@ self: with self; {
     xbacklight
     xbitmaps
     xcalc
+    xclock
     xcmsdb
     xcompmgr
     xconsole
