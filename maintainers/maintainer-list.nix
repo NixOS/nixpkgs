@@ -1140,6 +1140,13 @@
     githubId = 83360;
     name = "Aleksey Sidorov";
   };
+  aleksi = {
+    email = "ahannula4@gmail.com";
+    github = "Gskartwii";
+    githubId = 6651822;
+    name = "Aleksi Hannula";
+    matrix = "@aleksi:pikaviestin.fi";
+  };
   alemonmk = {
     email = "almk@rmntn.net";
     github = "alemonmk";
