@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   buildDunePackage,
+  ocaml,
   ppx_sexp_conv,
   base64,
   jsonm,
@@ -18,7 +19,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "cohttp";
-  version = "6.2.0";
+  version = if lib.versionAtLeast ocaml.version "4.13" then "6.2.0" else "5.3.1";
 
   minimalOCamlVersion = "4.08";
 
