@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.3.2-unstable-2025-11-10";
+  version = "1.3.2-unstable-2025-12-08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "zeekscript";
-    rev = "7f3d41b495cc87ee0db5cc90ccd0f5c9a23487df";
-    hash = "sha256-IpoDSLPDF2p/Yuijb3xtvs1zivtYrKny/pY5dRL56QA=";
+    rev = "3c29e0cd6f948faa4fd398ad4ae31a25b6905748";
+    hash = "sha256-Vjmg+u6oJFhFuaSZ/5Dhj4oy1t0MNA2VuYOxQY0oENw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
