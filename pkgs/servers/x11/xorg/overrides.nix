@@ -237,11 +237,6 @@ self: super:
       broken = true;
     };
   });
-  xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
@@ -745,4 +740,5 @@ self: super:
     The Xorg GLINT/Permedia video driver has been broken since xorg 21.
     see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
   ''; # added 2025-12-13
+  xf86videonewport = throw "The Xorg Newport video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
 }
