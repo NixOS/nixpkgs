@@ -4828,8 +4828,6 @@ with pkgs;
 
   purescript = callPackage ../development/compilers/purescript/purescript { };
 
-  purescript-psa = nodePackages.purescript-psa;
-
   purenix = haskell.lib.compose.justStaticExecutables haskellPackages.purenix;
 
   coreboot-toolchain = recurseIntoAttrs (

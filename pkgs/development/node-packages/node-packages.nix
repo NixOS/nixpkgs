@@ -21712,24 +21712,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  purescript-psa = nodeEnv.buildNodePackage {
-    name = "purescript-psa";
-    packageName = "purescript-psa";
-    version = "0.9.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/purescript-psa/-/purescript-psa-0.9.0.tgz";
-      sha512 = "yKsPiF4x/LjxOAzeUFIr/f0PtBgRK3IBwh4fNY6Ndz+p12QOEjReeJxqt5wIUo1O6RHPJLmb1Dro2xxc8I9w9w==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Error/Warning reporting frontend for psc";
-      homepage = "https://github.com/natefaubion/purescript-psa#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   purs-tidy = nodeEnv.buildNodePackage {
     name = "purs-tidy";
     packageName = "purs-tidy";
