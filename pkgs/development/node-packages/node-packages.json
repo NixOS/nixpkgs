@@ -21,7 +21,6 @@
 , "node2nix"
 , "postcss"
 , "prebuild-install"
-, "purs-tidy"
 , "sass"
 , "semver"
 , "vega-cli"

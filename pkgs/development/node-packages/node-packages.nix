@@ -21712,24 +21712,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  purs-tidy = nodeEnv.buildNodePackage {
-    name = "purs-tidy";
-    packageName = "purs-tidy";
-    version = "0.11.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/purs-tidy/-/purs-tidy-0.11.0.tgz";
-      sha512 = "HZ8AS6J7Ka2YVl6Gr/H5NV17TU10yGYUTxVwRd5tKuwsVdFZewXSzZ/HTpWrkhdR2gxSVk0BdnpJhyu//oRc+w==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Syntax tidy-upper (formatter) for PureScript";
-      homepage = "https://github.com/natefaubion/purescript-tidy#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   sass = nodeEnv.buildNodePackage {
     name = "sass";
     packageName = "sass";

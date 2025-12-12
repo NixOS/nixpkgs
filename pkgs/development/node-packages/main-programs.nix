@@ -8,5 +8,4 @@
   aws-cdk = "cdk";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  purs-tidy = "purs-tidy";
 }

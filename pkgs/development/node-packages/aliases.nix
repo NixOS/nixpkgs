@@ -291,6 +291,7 @@ mapAliases {
   pulp = throw "'pulp' has been removed because it was unmaintained upstream"; # Added 2025-12-07
   purescript-language-server = throw "'purescript-language-server' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
   purescript-psa = throw "'purescript-psa' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
+  purs-tidy = throw "'purs-tidy' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
   purty = throw "'purty' has been remved because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
