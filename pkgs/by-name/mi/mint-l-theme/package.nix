@@ -3,25 +3,23 @@
   lib,
   fetchFromGitHub,
   python3,
-  sassc,
-  sass,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-l-theme";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-theme";
     rev = version;
-    hash = "sha256-QPTU/wCOytleuiQAodGzZ1MGWD2Sk7eoeXWpi6nS5As=";
+    hash = "sha256-RdcojX+8SQDJ9LPb81iMzdoCZBpoypf/+aQcgotnVGE=";
   };
 
   nativeBuildInputs = [
     python3
-    sassc
-    sass
+    python3Packages.libsass
   ];
 
   postPatch = ''
