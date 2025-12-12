@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace-fail "-mtune=native" "-mtune=generic"
   '';
 
+  strictDeps = true;
   enableParallelBuilding = true;
 
   nativeCheckInputs = [ perl ];
