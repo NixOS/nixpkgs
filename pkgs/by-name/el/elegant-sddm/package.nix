@@ -3,18 +3,10 @@
   formats,
   stdenvNoCC,
   fetchFromGitHub,
-  libsForQt5,
-  /*
-    An example of how you can override the background with a NixOS wallpaper
-    *
-    *  environment.systemPackages = [
-    *    (pkgs.elegant-sddm.override {
-    *      themeConfig.General = {
-             background = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}";
-    *      };
-    *    })
-    *  ];
-  */
+  kdePackages,
+
+  # Override themeConfig.General.background for custom backgrounds
+  # https://wiki.nixos.org/wiki/SDDM_Themes
   themeConfig ? null,
 }:
 
@@ -24,18 +16,18 @@ in
 
 stdenvNoCC.mkDerivation {
   pname = "elegant-sddm";
-  version = "unstable-2024-02-08";
+  version = "0-unstable-2024-03-30";
 
   src = fetchFromGitHub {
-    owner = "surajmandalcell";
-    repo = "Elegant-sddm";
-    rev = "3102e880f46a1b72c929d13cd0a3fb64f973952a";
-    hash = "sha256-yn0fTYsdZZSOcaYlPCn8BUIWeFIKcTI1oioTWqjYunQ=";
+    owner = "rainD4X";
+    repo = "Elegant-sddm-qt6";
+    rev = "66952cbe32460938c0b6e8c6cf3343047af098f0";
+    hash = "sha256-l4gv1PEVWpLmzNt1c+dHTHtM5WlEsXdDgW3q8U3FMUQ=";
   };
 
   dontWrapQtApps = true;
   propagatedBuildInputs = [
-    libsForQt5.qtgraphicaleffects
+    kdePackages.qt5compat
   ];
 
   installPhase = ''
@@ -51,15 +43,9 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup = ''
-    mkdir -p $out/nix-support
-
-    echo ${libsForQt5.qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
-  '';
-
   meta = {
-    description = "Sleek and stylish SDDM theme crafted in QML";
-    homepage = "https://github.com/surajmandalcell/Elegant-sddm";
+    description = "Sleek and stylish SDDM theme crafted in QML for Qt6";
+    homepage = "https://github.com/rainD4X/Elegant-sddm-qt6";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
