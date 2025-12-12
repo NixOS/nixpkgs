@@ -71,17 +71,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # to get rid of xorgserver.dev; man is tiny
-    preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-    ];
-  });
-
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
