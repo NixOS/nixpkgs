@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.51.2";
+  version = "0.51.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab-git";
     tag = "v${version}";
-    hash = "sha256-YQWS+/GfQzkQ/n0xBq+K8lJ9tjvIRJxa3w3AzNARpDo=";
+    hash = "sha256-09R3isBjI+g3cKR6DQ6UdrRe5I7A8B9SWCMO8aWwQJ4=";
   };
 
   nativeBuildInputs = [
