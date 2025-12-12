@@ -34,10 +34,49 @@ assert (enableCrypt -> (libxcrypt != null));
 let
   crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   commonPatches = [
+    # Do not look in /usr etc. for dependencies.
     ./no-sys-dirs.patch
   ]
+
+  # Fix build on Solaris on x86_64
+  # See also:
+  # * perl tracker: https://github.com/Perl/perl5/issues/9669
+  # * netbsd tracker: https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=44999
   ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+
+  # Don't pass -no-cpp-precomp, even if it is "supported"
+  #
+  # cpp-precomp is a relic from NeXT days, when there was a separate
+  # cpp preprocessor that produced "precompiled header files" (hence
+  # cpp-precomp) - binary files containing information from .h files, that
+  # sped up the compilation slightly.
+  #
+  # However, cpp-precomp was semi-broken and didn't accept a lot of valid
+  # code, so there was a way to disable it (-no-cpp-precomp).
+  #
+  # This flag seems to have lost all relevance back in 2002 or so, when
+  # cpp-precomp stopped being used; gcc dropped it completely in 4.8 (and
+  # now errors out if you pass it), but for some reason clang still accepts
+  # it (but it's a no-op). This means that if you compile perl with clang,
+  # it will think that this flag is still supported, and it can cause issues
+  # if you compile c code from perl:
+  # https://trac.macports.org/ticket/38913
+  #
+  # More info about -no-cpp-precomp: https://www.mistys-internet.website/blog/blog/2013/10/19/no-cpp-precomp-the-compiler-flag-that-time-forgot
+  #
+  # See also: https://github.com/NixOS/nixpkgs/pull/1160
   ++ lib.optional stdenv.hostPlatform.isDarwin ./cpp-precomp.patch
+
+  # Miniperl is a "bootstrap" perl which doesn't support dynamic loading, among other things.
+  # It is used to build modules for the "final" perl.
+  #
+  # This patch enables more modules to be loaded with miniperl (mostly by
+  # removing dynamically loaded libraries and using perl builtins instead),
+  # which is needed during cross-compilation because the bootstrapping process
+  # has more stages than the default build and doesn't get to the main perl
+  # binary as early.
+  #
+  # Some more details: https://arsv.github.io/perl-cross/modules.html
   ++ lib.optional crossCompiling ./cross.patch;
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
