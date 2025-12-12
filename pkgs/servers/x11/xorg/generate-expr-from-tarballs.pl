@@ -466,6 +466,7 @@ print OUT <<EOF;
   xkbutils,
   xkeyboard-config,
   xkill,
+  xload,
   xlsatoms,
   xlsclients,
   xlsfonts,
@@ -546,6 +547,7 @@ self: with self; {
     xhost
     xkbutils
     xkill
+    xload
     xlsatoms
     xlsclients
     xlsfonts
