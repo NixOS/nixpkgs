@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "8.5.0";
+  version = "8.5.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-1/Tg1L7/6ODhSdHYiEky5E33cNC5ZTCzLNd369yTz7o=";
+    hash = "sha256-Sqs6xXnh1I8fhrxVS8p5r7PRqI5rxK0pJWhDQ2qddks=";
   };
 
   postPatch = ''
@@ -126,6 +126,7 @@ pythonPackages.buildPythonApplication rec {
       }
       ```
       Or using `pkgs.ollama-rocm` for AMD GPUs.
+      For a vendor agnostic solution, use: `pkgs.ollama-vulkan`.
     '';
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
