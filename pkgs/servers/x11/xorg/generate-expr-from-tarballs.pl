@@ -459,6 +459,7 @@ print OUT <<EOF;
   xdriinfo,
   xev,
   xeyes,
+  xfd,
   xfontsel,
   xfsinfo,
   xgamma,
@@ -539,6 +540,7 @@ self: with self; {
     xdriinfo
     xev
     xeyes
+    xfd
     xfontsel
     xfsinfo
     xgamma
