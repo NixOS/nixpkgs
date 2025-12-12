@@ -74,12 +74,12 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/xed";
 
-  meta = with lib; {
+  meta = {
     description = "Light weight text editor from Linux Mint";
     homepage = "https://github.com/linuxmint/xed";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       tu-maurice
       bobby285271
     ];

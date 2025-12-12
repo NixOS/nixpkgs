@@ -18,7 +18,6 @@
 , "gulp-cli"
 , "js-yaml"
 , "lcov-result-merger"
-, "mathjax"
 , "node2nix"
 , "postcss"
 , "prebuild-install"

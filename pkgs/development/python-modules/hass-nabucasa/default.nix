@@ -88,11 +88,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
     changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

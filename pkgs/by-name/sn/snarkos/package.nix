@@ -52,14 +52,14 @@ rustPlatform.buildRustPackage rec {
   #   "--skip=helpers::block_requests::tests::test_block_requests_case_2ca"
   # ];
 
-  meta = with lib; {
+  meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
     description = "Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.unix;
     mainProgram = "snarkos";
   };
 }

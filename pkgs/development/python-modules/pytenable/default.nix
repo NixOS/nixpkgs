@@ -95,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tenable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
     changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

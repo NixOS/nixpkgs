@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
       "--test-threads=1"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Low level tooling for WebAssembly in Rust";
     homepage = "https://github.com/bytecodealliance/wasm-tools";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ereslibre ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "wasm-tools";
   };
 }

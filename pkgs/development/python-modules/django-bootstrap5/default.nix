@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_bootstrap5" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 5 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap5";
     changelog = "https://github.com/zostera/django-bootstrap5/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ netali ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ netali ];
   };
 }

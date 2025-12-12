@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for Dolby Vision metadata parsing and writing";
     homepage = "https://crates.io/crates/dolby_vision";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

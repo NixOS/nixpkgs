@@ -41,7 +41,7 @@ rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://semgrep.dev/";
     downloadPage = "https://github.com/semgrep/semgrep/";
     changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
@@ -53,8 +53,8 @@ rec {
       uploaded. Its rules look like the code you already write; no abstract
       syntax trees, regex wrestling, or painful DSLs.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       jk
       ambroisie
     ];

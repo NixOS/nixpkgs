@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "test_fragmented_mft"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
     changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

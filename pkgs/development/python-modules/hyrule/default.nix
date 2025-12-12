@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyrule" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility library for the Hy programming language";
     homepage = "https://github.com/hylang/hyrule";
     changelog = "https://github.com/hylang/hyrule/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

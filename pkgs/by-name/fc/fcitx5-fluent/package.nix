@@ -28,11 +28,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fluent-design theme with blur effect and shadow";
     homepage = "https://github.com/Reverier-Xu/Fluent-fcitx5";
-    license = licenses.mpl20;
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

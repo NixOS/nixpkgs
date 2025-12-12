@@ -69,15 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
       --set UCM_WEB_UI "$out/ui"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
     mainProgram = "ucm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ceedubs
       sellout
       virusdave
@@ -88,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

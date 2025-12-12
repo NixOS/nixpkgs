@@ -69,7 +69,7 @@ ocamlPackages.buildDunePackage rec {
 
   passthru.tests.version = testers.testVersion { package = docfd; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
       Think interactive grep for text and other document files.
@@ -78,9 +78,9 @@ ocamlPackages.buildDunePackage rec {
       integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chewblacka ];
+    platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
 }

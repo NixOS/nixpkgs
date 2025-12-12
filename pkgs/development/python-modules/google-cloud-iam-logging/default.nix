@@ -44,11 +44,11 @@ buildPythonPackage rec {
     "google.cloud.iam_logging_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "IAM Service Logging client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam-logging";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-iam-logging-v${version}/packages/google-cloud-iam-logging/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

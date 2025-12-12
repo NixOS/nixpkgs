@@ -37,12 +37,12 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cldf/segments/blob/${src.rev}/CHANGES.md";
     description = "Unicode Standard tokenization routines and orthography profile segmentation";
     mainProgram = "segments";
     homepage = "https://github.com/cldf/segments";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

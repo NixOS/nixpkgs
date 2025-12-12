@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata";
     homepage = "https://github.com/dmachard/go-dnscollector";
     changelog = "https://github.com/dmachard/DNS-collector/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shift ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shift ];
   };
 }

@@ -66,15 +66,14 @@ stdenv.mkDerivation rec {
       -i "$dev"/lib/cmake/libdigidocpp/libdigidocpp-config.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating DigiDoc signature files";
     mainProgram = "digidoc-tool";
     homepage = "https://www.id.ee/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [
-      maintainers.flokli
-      maintainers.jagajaga
+      lib.maintainers.flokli
     ];
   };
 }

@@ -275,17 +275,17 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source electronics prototyping platform";
     mainProgram = "arduino";
     homepage = "https://www.arduino.cc/";
-    license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
-    sourceProvenance = with sourceTypes; [
+    license = if withTeensyduino then lib.licenses.unfreeRedistributable else lib.licenses.gpl2;
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       antono
       auntie
       robberer

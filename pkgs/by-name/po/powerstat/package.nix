@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Laptop power measuring tool";
     mainProgram = "powerstat";
     homepage = "https://github.com/ColinIanKing/powerstat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 }

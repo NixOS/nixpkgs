@@ -41,11 +41,11 @@ python3Packages.buildPythonApplication rec {
     git config --global pull.rebase false
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage the aggregation of git branches from different remotes to build a consolidated one";
     homepage = "https://github.com/acsone/git-aggregator";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ bbjubjub ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "gitaggregate";
   };
 }

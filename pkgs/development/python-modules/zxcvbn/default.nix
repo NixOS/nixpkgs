@@ -20,11 +20,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of Dropbox's realistic password strength estimator";
     mainProgram = "zxcvbn";
     homepage = "https://github.com/dwolfhub/zxcvbn-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

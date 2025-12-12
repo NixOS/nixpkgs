@@ -54,11 +54,11 @@ buildPythonPackage rec {
   # https://github.com/jpbede/aioelectricitymaps/pull/415
   pytestFlags = [ "--snapshot-update" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Electricity maps";
     homepage = "https://github.com/jpbede/aioelectricitymaps";
     changelog = "https://github.com/jpbede/aioelectricitymaps/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

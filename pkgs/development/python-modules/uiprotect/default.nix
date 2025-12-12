@@ -92,11 +92,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uiprotect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
     changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

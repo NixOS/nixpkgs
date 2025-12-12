@@ -33,12 +33,12 @@ let
     fetchSubmodules = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       magnetophon
       pmahoney
     ];

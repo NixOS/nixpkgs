@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Implements printing for a variety of common label and receipt printers connected via network or USB";
     mainProgram = "lprint";
     homepage = "https://github.com/michaelrsweet/lprint";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }

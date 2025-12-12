@@ -60,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cloudsplaining" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for AWS IAM security assessment";
     homepage = "https://github.com/salesforce/cloudsplaining";
     changelog = "https://github.com/salesforce/cloudsplaining/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cloudsplaining";
   };
 }

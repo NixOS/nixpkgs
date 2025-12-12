@@ -20,13 +20,13 @@ rustPlatform.buildRustPackage rec {
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo tool that detects unused dependencies in Rust projects";
     mainProgram = "cargo-machete";
     homepage = "https://github.com/bnjbvr/cargo-machete";
     changelog = "https://github.com/bnjbvr/cargo-machete/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

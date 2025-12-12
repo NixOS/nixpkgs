@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Over-engineered rewrite of pipes.sh in Rust";
     mainProgram = "pipes-rs";
     homepage = "https://github.com/lhvy/pipes-rs";
-    license = licenses.blueOak100;
-    maintainers = [ maintainers.vanilla ];
+    license = lib.licenses.blueOak100;
+    maintainers = [ lib.maintainers.vanilla ];
   };
 }

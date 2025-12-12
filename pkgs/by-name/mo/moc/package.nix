@@ -155,16 +155,15 @@ stdenv.mkDerivation {
     "--without-rcc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       aethelz
       pSub
-      jagajaga
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "mocp";
   };
 }

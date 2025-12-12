@@ -403,8 +403,6 @@ with pkgs;
     name = "die-hook";
   } ../build-support/setup-hooks/die.sh;
 
-  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
-
   devShellTools = callPackage ../build-support/dev-shell-tools { };
 
   dockerTools = callPackage ../build-support/docker {
@@ -505,8 +503,6 @@ with pkgs;
     ;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
-
-  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
 
   magika = with python3Packages; toPythonApplication magika;
 
@@ -1065,6 +1061,11 @@ with pkgs;
     }
   );
 
+  inherit (callPackages ../tools/networking/iroh/default.nix { })
+    iroh-relay
+    iroh-dns-server
+    ;
+
   inherit (callPackages ../tools/networking/ivpn/default.nix { })
     ivpn
     ivpn-service
@@ -1077,8 +1078,6 @@ with pkgs;
   makehuman = libsForQt5.callPackage ../applications/misc/makehuman { };
 
   mkosi-full = mkosi.override { withQemu = true; };
-
-  ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
@@ -1102,8 +1101,6 @@ with pkgs;
   };
 
   ufolint = with python3Packages; toPythonApplication ufolint;
-
-  veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-full = ventoy.override {
     withCryptsetup = true;
@@ -1422,8 +1419,6 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
-
   kitty = callPackage ../by-name/ki/kitty/package.nix {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -1500,8 +1495,6 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
-  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
-
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo124Module;
     pnpm = pnpm_10;
@@ -1512,6 +1505,8 @@ with pkgs;
   autoflake = with python3.pkgs; toPythonApplication autoflake;
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
+
+  azure-sdk-for-cpp = recurseIntoAttrs (callPackage ../development/libraries/azure-sdk-for-cpp { });
 
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
@@ -1631,8 +1626,6 @@ with pkgs;
   glm_1_0_1 = callPackage ../by-name/gl/glm/1_0_1.nix { };
 
   go2tv-lite = go2tv.override { withGui = false; };
-
-  guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -2314,8 +2307,6 @@ with pkgs;
     ;
   citrix_workspace = citrix_workspace_25_05_0;
 
-  cmst = libsForQt5.callPackage ../tools/networking/cmst { };
-
   colord-gtk4 = colord-gtk.override { withGtk4 = true; };
 
   connmanFull = connman.override {
@@ -2621,8 +2612,6 @@ with pkgs;
   );
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
-
-  ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
 
@@ -6496,11 +6485,11 @@ with pkgs;
 
   mkdocs = with python3Packages; toPythonApplication mkdocs;
 
-  mold-wrapped = wrapBintoolsWith {
-    bintools = mold;
+  mold = wrapBintoolsWith {
+    bintools = mold-unwrapped;
     extraBuildCommands = ''
-      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/ld.mold
-      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/mold
+      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold-unwrapped}/bin/ld.mold
+      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold-unwrapped}/bin/mold
     '';
   };
 
@@ -10665,9 +10654,10 @@ with pkgs;
   inherit (callPackage ../applications/virtualization/docker { })
     docker_25
     docker_28
+    docker_29
     ;
 
-  docker = docker_28;
+  docker = docker_29;
   docker-client = docker.override { clientOnly = true; };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -11292,7 +11282,6 @@ with pkgs;
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_31
     k3s_1_32
     k3s_1_33
     k3s_1_34
@@ -11863,8 +11852,6 @@ with pkgs;
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };
 
-  qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
-
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel { };
 
   quasselClient = quassel.override {
@@ -11956,7 +11943,6 @@ with pkgs;
       callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_31
     rke2_1_32
     rke2_1_33
     rke2_1_34
@@ -12640,8 +12626,6 @@ with pkgs;
     SDL = SDL_sixel;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
-
-  zotero_7 = pkgs.zotero;
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
     guiModule = "zest";
@@ -14171,8 +14155,6 @@ with pkgs;
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
   dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
-
-  httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
   inherit (callPackage ../applications/networking/instant-messengers/discord { })
     discord

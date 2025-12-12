@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free code coverage library for Java";
     mainProgram = "jacoco";
     homepage = "https://www.jacoco.org/jacoco";
     changelog = "https://www.jacoco.org/jacoco/trunk/doc/changes.html";
-    license = licenses.epl20;
-    platforms = platforms.all;
+    license = lib.licenses.epl20;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

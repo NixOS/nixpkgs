@@ -27,11 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwparserfromhell" ];
 
-  meta = with lib; {
+  meta = {
     description = "MWParserFromHell is a parser for MediaWiki wikicode";
     homepage = "https://mwparserfromhell.readthedocs.io/";
     changelog = "https://github.com/earwig/mwparserfromhell/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.mit;
   };
 }

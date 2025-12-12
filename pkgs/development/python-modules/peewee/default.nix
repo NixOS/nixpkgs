@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "peewee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
     changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pwiz.py";
   };

@@ -18,11 +18,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/goa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Design-based APIs and microservices in Go";
     mainProgram = "goa";
     homepage = "https://goa.design";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rushmorem ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rushmorem ];
   };
 }

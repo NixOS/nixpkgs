@@ -199,12 +199,11 @@ mkDerivation rec {
   # >9k objects, >3h build time on a normal build slot
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lsix ];
-    teams = [ teams.geospatial ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; linux;
   };
 }

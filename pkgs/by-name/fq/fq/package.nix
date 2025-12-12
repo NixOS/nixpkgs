@@ -29,11 +29,11 @@ buildGoModule rec {
 
   passthru.tests = testers.testVersion { package = fq; };
 
-  meta = with lib; {
+  meta = {
     description = "jq for binary formats";
     mainProgram = "fq";
     homepage = "https://github.com/wader/fq";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

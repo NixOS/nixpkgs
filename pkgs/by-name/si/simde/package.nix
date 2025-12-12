@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://simd-everywhere.github.io";
     description = "Implementations of SIMD instruction sets for systems which don't natively support them";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ whiteley ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ whiteley ];
     platforms = flatten (
-      with platforms;
+      with lib.platforms;
       [
         arm
         armv7

@@ -20,12 +20,12 @@ stdenv.mkDerivation {
     cp dumpnar $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stephank/dumpnar";
     description = "Minimal tool to produce a Nix NAR archive";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.stephank ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.stephank ];
     mainProgram = "dumpnar";
   };
 }

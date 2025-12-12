@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nagiosplugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python class library which helps with writing Nagios (Icinga) compatible plugins";
     homepage = "https://github.com/mpounsett/nagiosplugin";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ symphorien ];
+    license = lib.licenses.zpl21;
+    maintainers = with lib.maintainers; [ symphorien ];
   };
 }

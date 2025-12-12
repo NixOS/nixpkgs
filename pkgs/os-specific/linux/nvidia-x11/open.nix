@@ -43,10 +43,10 @@ stdenv.mkDerivation (
     installTargets = [ "modules_install" ];
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       description = "NVIDIA Linux Open GPU Kernel Module";
       homepage = "https://github.com/NVIDIA/open-gpu-kernel-modules";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl2Plus
         mit
       ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation (
         "x86_64-linux"
         "aarch64-linux"
       ];
-      maintainers = with maintainers; [ nickcao ];
+      maintainers = with lib.maintainers; [ nickcao ];
       inherit broken;
     };
   }

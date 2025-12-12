@@ -90,13 +90,13 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ecl";
     teams = [ lib.teams.lisp ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

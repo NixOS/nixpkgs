@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brottsplatskartan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API wrapper for brottsplatskartan.se";
     homepage = "https://github.com/chrillux/brottsplatskartan";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

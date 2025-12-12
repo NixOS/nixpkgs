@@ -78,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "howdoi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     changelog = "https://github.com/gleitz/howdoi/blob/v${version}/CHANGES.txt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "justnimbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for the JustNimbus API";
     homepage = "https://github.com/kvanzuijlen/justnimbus";
     changelog = "https://github.com/kvanzuijlen/justnimbus/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

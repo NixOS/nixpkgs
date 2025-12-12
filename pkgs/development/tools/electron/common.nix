@@ -322,8 +322,8 @@ in
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
-    license = licenses.mit;
-    teams = [ teams.electron ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.electron ];
     mainProgram = "electron";
     hydraPlatforms =
       lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version))

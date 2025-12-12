@@ -92,15 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.getExe nix-update)
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     mainProgram = "ecwolf";
     homepage = "https://maniacsvault.net/ecwolf/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       jayman2000
-      sander
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

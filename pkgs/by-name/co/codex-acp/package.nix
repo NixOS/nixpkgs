@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "An ACP-compatible coding agent powered by Codex";
     homepage = "https://github.com/zed-industries/codex-acp";
     changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tlvince ];
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tlvince ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     mainProgram = "codex-acp";
   };
 }

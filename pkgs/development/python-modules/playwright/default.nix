@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  auditwheel,
   buildPythonPackage,
   gitMinimal,
   greenlet,
@@ -67,8 +66,7 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ];
 
   pythonRelaxDeps = [
     "greenlet"
@@ -104,12 +102,12 @@ buildPythonPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python version of the Playwright testing and automation library";
     mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       techknowlogick
       yrd
     ];

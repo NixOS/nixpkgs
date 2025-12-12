@@ -54,11 +54,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.app.settings
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 4 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap4";
     changelog = "https://github.com/zostera/django-bootstrap4/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

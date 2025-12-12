@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     install -D -m755 examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
   '';
 
-  meta = with lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with lib.maintainers; [
       raskin
       mic92
     ];
     homepage = "https://github.com/nix-community/acpi_call";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     description = "Module allowing arbitrary ACPI calls; use case: hybrid video";
     mainProgram = "test_discrete_video_off.sh";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

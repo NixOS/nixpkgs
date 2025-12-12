@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
     package = mcomix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Comic book reader and image viewer";
     mainProgram = "mcomix";
     longDescription = ''
@@ -78,8 +78,8 @@ python3.pkgs.buildPythonApplication rec {
       (including CBR, CBZ, CB7, CBT, LHA and PDF)
     '';
     homepage = "https://sourceforge.net/projects/mcomix/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       confus
       thiagokokada
     ];

@@ -23,14 +23,14 @@ jobs:
     timeout-minutes: 2
     if: contains(github.event.comment.body, '@NixOS/nixpkgs-merge-bot merge')
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: |
             ci/github-script
 
       # Use the GitHub App to make sure the reaction happens with the same user who will later merge.
-      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_APP_ID
         id: app-token
         with:

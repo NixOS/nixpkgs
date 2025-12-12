@@ -77,11 +77,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }

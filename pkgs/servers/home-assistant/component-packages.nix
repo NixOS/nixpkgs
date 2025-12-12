@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.12.1";
+  version = "2025.12.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -2168,7 +2168,8 @@
       ];
     "google_weather" =
       ps: with ps; [
-      ]; # missing inputs: python-google-weather-api
+        python-google-weather-api
+      ];
     "google_wifi" =
       ps: with ps; [
       ];
@@ -7381,6 +7382,7 @@
     "google_tasks"
     "google_translate"
     "google_travel_time"
+    "google_weather"
     "google_wifi"
     "govee_ble"
     "govee_light_local"

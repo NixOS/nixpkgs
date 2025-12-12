@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gammu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Gammu";
     homepage = "https://github.com/gammu/python-gammu/";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

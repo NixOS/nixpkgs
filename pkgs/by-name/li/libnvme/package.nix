@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   # mocked ioctl conflicts with the musl one: https://github.com/NixOS/nixpkgs/pull/263768#issuecomment-1782877974
   doCheck = !stdenv.hostPlatform.isMusl;
 
-  meta = with lib; {
+  meta = {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = with maintainers; [ vifino ];
-    license = with licenses; [ lgpl21Plus ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ vifino ];
+    license = with lib.licenses; [ lgpl21Plus ];
+    platforms = lib.platforms.linux;
   };
 })

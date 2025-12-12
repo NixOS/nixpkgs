@@ -26,6 +26,7 @@ let
     "middleclass"
     "mini-test"
     "neorg"
+    "neorg-interim-ls"
     "neotest"
     "nui-nvim"
     "nvim-cmp"

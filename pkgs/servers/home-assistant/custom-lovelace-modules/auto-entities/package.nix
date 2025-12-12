@@ -25,11 +25,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically populate the entities-list of lovelace cards";
     homepage = "https://github.com/thomasloven/lovelace-auto-entities";
     changelog = "https://github.com/thomasloven/lovelace-auto-entities/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

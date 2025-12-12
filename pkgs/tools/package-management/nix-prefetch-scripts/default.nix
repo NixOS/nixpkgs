@@ -49,10 +49,10 @@ let
 
       preferLocalBuild = true;
 
-      meta = with lib; {
+      meta = {
         description = "Script used to obtain source hashes for fetch${tool}";
-        maintainers = with maintainers; [ bennofs ];
-        platforms = platforms.unix;
+        maintainers = with lib.maintainers; [ bennofs ];
+        platforms = lib.platforms.unix;
         mainProgram = "nix-prefetch-${tool}";
       };
     };
@@ -103,10 +103,10 @@ rec {
       nix-prefetch-pijul
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
-      maintainers = with maintainers; [ bennofs ];
-      platforms = platforms.unix;
+      maintainers = with lib.maintainers; [ bennofs ];
+      platforms = lib.platforms.unix;
     };
   };
 }

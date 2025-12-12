@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     libgbm
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sonald/blur-effect";
     description = "Off-screen image blurring utility using OpenGL ES 3.0";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # packages 'libdrm' and 'gbm' not found
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "blur_image";
   };
 }

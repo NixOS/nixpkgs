@@ -178,7 +178,7 @@ in
                 "--noise-w-scale"
                 options.noiseWidth
               ]
-              ++ lib.optionals options.zerconf.enable [
+              ++ lib.optionals options.zeroconf.enable [
                 "--zeroconf"
                 options.zeroconf.name
               ]
@@ -205,6 +205,7 @@ in
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
+              "AF_NETLINK"
               "AF_UNIX"
             ];
             RestrictNamespaces = true;

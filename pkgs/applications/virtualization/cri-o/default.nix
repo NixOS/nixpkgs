@@ -77,14 +77,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the
       Kubernetes Container Runtime Interface
     '';
-    license = licenses.asl20;
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
   };
 }

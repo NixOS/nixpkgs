@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alpinelinux/alpine-make-rootfs";
     description = "Make customized Alpine Linux rootfs (base image) for containers";
     mainProgram = "alpine-make-rootfs";
-    maintainers = with maintainers; [ danielsidhion ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ danielsidhion ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

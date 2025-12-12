@@ -116,15 +116,15 @@ python.pkgs.buildPythonApplication rec {
       ${python.interpreter} -m unittest
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rycee
       dotlambda
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

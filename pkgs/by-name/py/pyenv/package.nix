@@ -43,13 +43,12 @@ stdenv.mkDerivation rec {
     installShellCompletion completions/pyenv.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python version management";
     homepage = "https://github.com/pyenv/pyenv";
     changelog = "https://github.com/pyenv/pyenv/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tjni ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "pyenv";
   };
 }

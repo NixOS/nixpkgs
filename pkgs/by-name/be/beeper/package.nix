@@ -70,7 +70,7 @@ appimageTools.wrapAppImage {
     inherit src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
@@ -78,8 +78,8 @@ appimageTools.wrapAppImage {
       many different chat networks.
     '';
     homepage = "https://beeper.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       jshcmpbll
       zh4ngx
     ];

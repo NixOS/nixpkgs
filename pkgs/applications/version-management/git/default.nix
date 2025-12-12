@@ -561,7 +561,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       wmertens
-      globin
       kashw2
       me-and
       philiptaron

@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensor_state_data" ];
 
-  meta = with lib; {
+  meta = {
     description = "Models for storing and converting Sensor Data state";
     homepage = "https://github.com/bluetooth-devices/sensor-state-data";
     changelog = "https://github.com/Bluetooth-Devices/sensor-state-data/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

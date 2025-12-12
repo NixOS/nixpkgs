@@ -227,14 +227,13 @@ stdenv.mkDerivation rec {
     smoke-test-resolved = nixosTests.avahi-with-resolved;
   };
 
-  meta = with lib; {
+  meta = {
     description = "mDNS/DNS-SD implementation";
     homepage = "http://avahi.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lovek323
-      globin
     ];
 
     longDescription = ''

@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     cp -pr Bibata_* $out/share/icons/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translucent Varient of the Material Based Cursor";
     homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

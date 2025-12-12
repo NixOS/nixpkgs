@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sharkiq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Shark IQ robots";
     homepage = "https://github.com/JeffResc/sharkiq";
     changelog = "https://github.com/JeffResc/sharkiq/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

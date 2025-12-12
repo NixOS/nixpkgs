@@ -33,12 +33,12 @@ buildPythonPackage rec {
     "test_cpio_formats"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.util";
     changelog = "https://github.com/fox-it/dissect.util/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dump-nskeyedarchiver";
   };
 }

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "schedula";
-  version = "1.5.70";
+  version = "1.5.71";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vinci1it2000";
     repo = "schedula";
     tag = "v${version}";
-    hash = "sha256-F/mP9z+FfcOXZx8neVg5hbCNORaqwrF0jjhcs1jXFEE=";
+    hash = "sha256-Ru9GCdhfC8WU8YxVlpBqxGvoIPhfpl9Zd7cBrom4CL0=";
   };
 
   build-system = [ setuptools ];

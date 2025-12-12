@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_otp" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/django-otp/django-otp";
     changelog = "https://github.com/django-otp/django-otp/blob/${src.tag}/CHANGES.rst";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

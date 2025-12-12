@@ -35,12 +35,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gopass Summon Provider";
     homepage = "https://github.com/gopasspw/gopass-summon-provider";
     changelog = "https://github.com/gopasspw/gopass-summon-provider/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "gopass-summon-provider";
   };
 }

@@ -120,11 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests = nixosTests.mysql.mysql80;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mysql.com/";
     description = "World's most popular open source database";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

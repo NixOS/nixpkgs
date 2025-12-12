@@ -57,12 +57,12 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/textX/textX/blob/${src.tag}/CHANGELOG.md";
       description = "Domain-specific languages and parsers in Python";
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       maintainers = [ ];
     };
   };

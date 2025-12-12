@@ -50,8 +50,8 @@ buildPythonPackage rec {
     description = "Test framework for Python";
     homepage = "https://github.com/darrenburns/ward";
     changelog = "https://github.com/darrenburns/ward/releases/tag/release%2F${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ward";
     # Old requirements (cucumber-tag-expressions and rich)
     # https://github.com/darrenburns/ward/issues/380

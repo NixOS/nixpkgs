@@ -20,7 +20,7 @@
   libspectre,
   libgxps,
   webkitgtk_4_1,
-  nodePackages,
+  mathjax,
   ninja,
   djvulibre,
   backends ? [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dmathjax-directory=${nodePackages.mathjax}"
+    "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     libspectre
     libgxps
     webkitgtk_4_1
-    nodePackages.mathjax
+    mathjax
     djvulibre
   ];
 
@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
     homepage = "https://github.com/linuxmint/xreader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

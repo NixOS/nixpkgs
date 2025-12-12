@@ -36,10 +36,10 @@ buildPythonPackage rec {
     "test_unix_domain_socket"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulate a MongoDB server";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/ajdavis/mongo-mockup-db";
-    maintainers = with maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

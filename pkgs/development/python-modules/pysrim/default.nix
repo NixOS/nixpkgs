@@ -38,10 +38,10 @@ buildPythonPackage rec {
   # pythonImportsCheck does not work
   # TypeError: load() missing 1 required positional argument: 'Loader'
 
-  meta = with lib; {
+  meta = {
     description = "Srim Automation of Tasks via Python";
     homepage = "https://gitlab.com/costrouc/pysrim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

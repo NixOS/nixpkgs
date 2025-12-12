@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
     substituteInPlace waynergy.desktop --replace "Exec=/usr/bin/waynergy" "Exec=$out/bin/waynergy"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Synergy client for Wayland compositors";
     longDescription = ''
       A synergy client for Wayland compositors
     '';
     homepage = "https://github.com/r-c-f/waynergy";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ maxhero ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ maxhero ];
   };
 }

@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-VKBRgDu9xVbZrC5fadkdFjd1OETNwaxgraRnA34ETzE=";
 
-  meta = with lib; {
+  meta = {
     description = "Fetch top for gen Z with X written by bubbletea enjoyer";
     homepage = "https://github.com/ssleert/zfxtop";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wozeparrot ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wozeparrot ];
     mainProgram = "zfxtop";
   };
 }

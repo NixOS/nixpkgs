@@ -78,11 +78,11 @@ buildPythonPackage rec {
     "test/integration/*"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async persistent cache for aiohttp requests";
     homepage = "https://github.com/requests-cache/aiohttp-client-cache";
     changelog = "https://github.com/requests-cache/aiohttp-client-cache/blob/v${version}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seirl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seirl ];
   };
 }

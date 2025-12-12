@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "F5 BIG-IP iControl REST API client";
     homepage = "https://github.com/F5Networks/f5-icontrol-rest-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

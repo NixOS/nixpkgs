@@ -165,11 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit minizip;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
-    license = licenses.zlib;
-    platforms = platforms.all;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "zlib" ];
   };
 })

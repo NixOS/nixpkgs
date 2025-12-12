@@ -48,11 +48,11 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests) freshrss;
   };
 
-  meta = with lib; {
+  meta = {
     description = "FreshRSS is a free, self-hostable RSS aggregator";
     homepage = "https://www.freshrss.org/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       stunkymonkey
     ];
   };

@@ -25,11 +25,11 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Golang linter to check whether HTTP response body is closed and a re-use of TCP connection is not blocked";
     mainProgram = "bodyclose";
     homepage = "https://github.com/timakin/bodyclose";
-    license = licenses.mit;
-    maintainers = with maintainers; [ meain ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ meain ];
   };
 }

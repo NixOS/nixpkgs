@@ -63,12 +63,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hypercorn" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dgliwka ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dgliwka ];
   };
 }

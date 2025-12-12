@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     "bindir=/bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux tools to inspect the gpiochip interface";
-    maintainers = with maintainers; [ kwohlfahrt ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ kwohlfahrt ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_bcrypt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Brcrypt hashing for Flask";
     homepage = "https://github.com/maxcountryman/flask-bcrypt";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

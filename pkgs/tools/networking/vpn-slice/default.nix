@@ -51,11 +51,11 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dlenski/vpn-slice";
     description = "vpnc-script replacement for easy and secure split-tunnel VPN setup";
     mainProgram = "vpn-slice";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
   };
 }

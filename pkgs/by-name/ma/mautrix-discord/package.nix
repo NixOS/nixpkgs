@@ -37,12 +37,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Discord puppeting bridge";
     homepage = "https://github.com/mautrix/discord";
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       MoritzBoehme
       sumnerevans
     ];

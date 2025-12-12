@@ -63,13 +63,13 @@ python3Packages.buildPythonApplication rec {
     cp $src/resources/images-src/window-icon.svg $out/share/icons/hicolor/scalable/apps/friture.svg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time audio analyzer";
     mainProgram = "friture";
     homepage = "https://friture.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux; # fails on Darwin
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux; # fails on Darwin
+    maintainers = with lib.maintainers; [
       laikq
       pentane
     ];

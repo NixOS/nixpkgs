@@ -57,10 +57,10 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Platform-agnostic multi-level index";
     homepage = "https://github.com/mirage/index";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

@@ -528,16 +528,16 @@ let
     passthru.tests = callPackages ./tests.nix { inherit self; };
     passthru.lib = callPackages ./lib.nix { };
 
-    meta = with lib; {
+    meta = {
       description = "OpenAI alternative to run local LLMs, image and audio generation";
       mainProgram = "local-ai";
       homepage = "https://localai.io";
-      license = licenses.mit;
-      maintainers = with maintainers; [
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
         onny
         ck3d
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
       # Doesn't build with >buildGo123Module.
       # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
       broken = true;

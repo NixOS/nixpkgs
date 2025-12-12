@@ -95,11 +95,11 @@ buildPythonPackage rec {
     "test_global_keyprefix_transaction"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
     changelog = "https://github.com/celery/kombu/blob/v${version}/Changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brummer10/Mamba";
     description = "Virtual MIDI keyboard for Jack Audio Connection Kit";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [
       magnetophon
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

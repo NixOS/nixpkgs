@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=git::tests::test_find_matching_prerelease_without_matching_release"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       hoverbear
       cafkafk
     ];

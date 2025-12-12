@@ -319,16 +319,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       marcweber
       dotlambda
     ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 })

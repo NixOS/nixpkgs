@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CazBgtNh4Z2wlfh9q0SjLsn70zh+aEg957Zq0kh45Hc=";
 
-  meta = with lib; {
+  meta = {
     description = "Table of contents for mdbook (in sidebar)";
     mainProgram = "mdbook-pagetoc";
     homepage = "https://github.com/slowsage/mdbook-pagetoc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

@@ -60,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evohomeasync2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for connecting to Honeywell's TCC RESTful API";
     homepage = "https://github.com/zxdavb/evohome-async";
     changelog = "https://github.com/zxdavb/evohome-async/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evo-client";
   };
 }

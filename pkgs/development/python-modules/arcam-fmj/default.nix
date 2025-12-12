@@ -63,12 +63,12 @@ buildPythonPackage rec {
     "arcam.fmj.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for speaking to Arcam receivers";
     mainProgram = "arcam-fmj";
     homepage = "https://github.com/elupus/arcam_fmj";
     changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -35,11 +35,11 @@ buildPythonPackage rec {
   # Tests require actual hardware
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library for communication with Tapo Cameras";
     homepage = "https://github.com/JurajNyiri/pytapo";
     changelog = "https://github.com/JurajNyiri/pytapo/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fleaz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fleaz ];
   };
 }

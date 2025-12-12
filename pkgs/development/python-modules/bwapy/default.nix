@@ -41,11 +41,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "bwapy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ACEnglish/bwapy";
     description = "Python bindings to bwa mem aligner";
     mainProgram = "bwamempy";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

@@ -84,11 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     page = "tags?per_page=4";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for getting the ROCm release version";
     homepage = "https://github.com/ROCm/rocm-core";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

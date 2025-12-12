@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
         --prefix PATH ':' "${xauth}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://salsa.debian.org/debian/xtrace";
     description = "Tool to trace X11 protocol connections";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "xtrace";
   };
 }

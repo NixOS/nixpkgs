@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_astropy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension library for ASDF to provide support for Astropy";
     homepage = "https://github.com/astropy/asdf-astropy";
     changelog = "https://github.com/astropy/asdf-astropy/blob/${src.tag}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

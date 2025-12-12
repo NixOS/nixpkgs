@@ -271,9 +271,9 @@ stdenv.mkDerivation (finalAttrs: {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     inherit maintainers teams;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022
     # probably https://github.com/NixOS/nix/issues/13042

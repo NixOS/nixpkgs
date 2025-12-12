@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-X5VeL9oWjqoWmXQTCINvvFLdXqCyhO01ckDU7x42Teo=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/akiomik/nostui";
     description = "TUI client for Nostr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ heywoodlh ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ heywoodlh ];
+    platforms = lib.platforms.unix;
     mainProgram = "nostui";
   };
 }

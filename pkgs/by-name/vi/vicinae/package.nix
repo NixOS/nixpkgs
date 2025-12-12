@@ -20,13 +20,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.12";
+  version = "0.16.14";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GolXMuAvhWqljCdMo/9hlY0Vo52Bxx+dnLfYQWr9tk8=";
+    hash = "sha256-G9zuw0IuzOxCeAcLE+IXcsdp0vAGMXBBdlfjBISnL90=";
   };
 
   apiDeps = fetchNpmDeps {

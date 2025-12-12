@@ -34,11 +34,11 @@ buildLua {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easily create videoclips with mpv";
     homepage = "https://github.com/Ajatt-Tools/videoclip";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ BatteredBunny ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ BatteredBunny ];
   };
 }

@@ -39,10 +39,10 @@ buildLua {
       --run "mkdir -p ~/.config/mpv/cutter/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cut videos and concat them automatically";
     homepage = "https://github.com/rushmj/mpv-video-cutter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

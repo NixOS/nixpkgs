@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "summarytools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python port of the R summarytools package for summarizing dataframes";
     homepage = "https://github.com/6chaoran/jupyter-summarytools";
     changelog = "https://github.com/6chaoran/jupyter-summarytools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

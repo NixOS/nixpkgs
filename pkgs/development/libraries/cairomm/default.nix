@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "C++ bindings for the Cairo vector graphics library";
     homepage = "https://www.cairographics.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       mpl10
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

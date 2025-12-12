@@ -22,11 +22,11 @@ buildGoModule {
     libpcap
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to collect DNS traffic";
     homepage = "https://github.com/jonpulsifer/dnsmon-go";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnsmon-go";
   };
 }

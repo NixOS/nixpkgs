@@ -46,13 +46,13 @@ buildGoModule (finalAttrs: {
     command = "kompose version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help users who are familiar with docker-compose move to Kubernetes";
     mainProgram = "kompose";
     homepage = "https://kompose.io";
     changelog = "https://github.com/kubernetes/kompose/releases/tag/${finalAttrs.src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       thpham
       vdemeester
     ];

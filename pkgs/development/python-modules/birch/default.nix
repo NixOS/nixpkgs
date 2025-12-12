@@ -58,10 +58,10 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple hierarchical configuration for Python packages";
     homepage = "https://github.com/shaypal5/birch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

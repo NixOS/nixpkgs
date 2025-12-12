@@ -7,19 +7,19 @@
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "laravel";
-  version = "5.23.1";
+  version = "5.23.2";
 
   src = fetchFromGitHub {
     owner = "laravel";
     repo = "installer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PXMwWsp2dwDj67waT5FXsKMgXnbmNFhHR07Jw7ePkx8=";
+    hash = "sha256-ZGGbWRRmotqUwVICdqHRHy2wH8Nb4WRn+6Ape9kxFlY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-FxKqFjrgothuWZOJySQ+yV1ygVWrrbv3h0hXAwaqHsQ=";
+  vendorHash = "sha256-TUCv+zXE+xmdtN0vDToEqlw4+WOi+xX87IrGmUAeQkM=";
 
   # Adding npm (nodejs) and php composer to path
   postInstall = ''

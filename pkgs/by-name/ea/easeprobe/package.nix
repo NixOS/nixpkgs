@@ -29,11 +29,11 @@ buildGoModule rec {
     "-X github.com/megaease/easeprobe/pkg/version.REPO=megaease/easeprobe"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, standalone, and lightweight tool that can do health/status checking, written in Go";
     homepage = "https://github.com/megaease/easeprobe";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "easeprobe";
   };
 }

@@ -46,7 +46,6 @@ buildGoModule {
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       kashw2
     ];
   };

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-ORdDrZ61u76mz2oZyxfdf7iuo9SnuQeDxESt9lORhgQ=";
 
-  meta = with lib; {
+  meta = {
     description = "Program to retrieve the latest price for several cryptocurrencies using the CoinMarketCap API";
     homepage = "https://github.com/Nox04/crypto-tracker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tiredofit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tiredofit ];
     mainProgram = "crypto-tracker";
   };
 }

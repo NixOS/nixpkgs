@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bhipple ];
     platforms = lib.platforms.all;
   };
 })

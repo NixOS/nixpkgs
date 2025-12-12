@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylsqpack" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the ls-qpack QPACK library";
     homepage = "https://github.com/aiortc/pylsqpack";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

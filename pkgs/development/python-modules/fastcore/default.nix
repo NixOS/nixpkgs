@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.8.16";
+  version = "1.8.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "fastcore";
     tag = version;
-    hash = "sha256-l06pX1WHhPHrfNYVKIAPxrKlSaPywPhldouvTHOciMc=";
+    hash = "sha256-RugbfTqgoM+GWswxjYL3vpLdEifGCDaUI7McfQ/mpZ8=";
   };
 
   build-system = [ setuptools ];
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastcore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Fast AI";
     homepage = "https://github.com/fastai/fastcore";
     changelog = "https://github.com/fastai/fastcore/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

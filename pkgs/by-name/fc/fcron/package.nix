@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
     find -type f | xargs sed -i -e 's@^\(\s\)*chown@\1:@' -e 's@^\(\s\)*chgrp@\1:@'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command scheduler with extended capabilities over cron and anacron";
     homepage = "http://fcron.free.fr";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
 }

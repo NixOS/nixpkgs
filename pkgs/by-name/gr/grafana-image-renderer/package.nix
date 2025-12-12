@@ -19,11 +19,11 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/grafana/grafana-image-renderer";
     description = "Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     mainProgram = "grafana-image-renderer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 })

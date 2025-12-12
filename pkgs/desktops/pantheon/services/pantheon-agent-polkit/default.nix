@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "pantheon-agent-polkit";
     rev = version;
-    hash = "sha256-qqeB8SLuES/KoK7ycQ2J1YBA07HITovdnO8kSsrVcfs=";
+    hash = "sha256-tuugtrnamY9QMlF/ju5+4gwcEESFqH4jDH/kz790v5Y=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Polkit Agent for the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-agent-polkit";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

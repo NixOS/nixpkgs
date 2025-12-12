@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
     prependToVar configureFlags --mandir="$man"/share/man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Macro Implementation of SNOBOL4 in C";
     longDescription = ''
       An open source port of Macro SNOBOL4 (The original Bell Telephone Labs implementation, written in SIL macros) by Phil Budne.
       Supports full SNOBOL4 language plus SPITBOL, [Blocks](https://www.regressive.org/snobol4/blocks/) and other extensions.
     '';
     homepage = "https://www.regressive.org/snobol4/csnobol4/";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ xworld21 ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ xworld21 ];
   };
 }

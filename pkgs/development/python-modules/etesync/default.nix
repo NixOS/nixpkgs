@@ -65,10 +65,10 @@ buildPythonPackage rec {
     pytest tests/test_crypto.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.etesync.com/";
     description = "Python API to interact with an EteSync server";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ valodim ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ valodim ];
   };
 }

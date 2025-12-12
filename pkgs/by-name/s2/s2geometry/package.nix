@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     (abseil-cpp_202407.override { inherit cxxStandard; })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/s2geometry/releases/tag/v${finalAttrs.version}";
     description = "Computational geometry and spatial indexing on the sphere";
     homepage = "http://s2geometry.io/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.Thra11 ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around the libevdev C library";
     homepage = "https://gitlab.freedesktop.org/libevdev/python-libevdev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

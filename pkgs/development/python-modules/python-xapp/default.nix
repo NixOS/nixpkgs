@@ -57,11 +57,11 @@ buildPythonPackage rec {
     skipBulkUpdate = true; # This should be bumped as part of Cinnamon update.
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

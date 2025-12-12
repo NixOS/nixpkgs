@@ -46,11 +46,11 @@ buildPythonPackage rec {
     "test_vmfs_jbosf"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the VMFS file system";
     homepage = "https://github.com/fox-it/dissect.vmfs";
     changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

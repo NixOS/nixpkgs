@@ -53,9 +53,9 @@ stdenvNoCC.mkDerivation rec {
     description = "Flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
     changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${src.rev}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
-    platforms = subtractLists platforms.darwin platforms.unix;
+    platforms = subtractLists lib.platforms.darwin lib.platforms.unix;
     maintainers = [ ];
   };
 }

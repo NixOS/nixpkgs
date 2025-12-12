@@ -79,7 +79,6 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
@@ -400,7 +399,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz
@@ -495,7 +493,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      edwtjo
       leona
       theCapypara
       thiagokokada
@@ -535,7 +532,6 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
@@ -551,8 +547,6 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
-      edwtjo
-      hrdinka
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -792,7 +786,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";

@@ -6,21 +6,16 @@
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.39.4";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
-    rev = "v${version}";
-    hash = "sha256-NDNyXK4E7TkviESHLp8M+OI56ME0Hatoi9eWjX+G1zo=";
+    tag = "v${version}";
+    hash = "sha256-7g9l9SBxPY3jMS3DWZNI/fhOZN1oZo1qkUfhMfbzAaM=";
   };
 
-  postPatch = ''
-    # entirely separate package that breaks the build
-    rm -rf pkg/e2e/
-  '';
-
-  vendorHash = "sha256-Uqzul9BiXHAJ1BxlOtRS68Tg71SDva6kg3tv7c6ar2E=";
+  vendorHash = "sha256-COfB0MLBMOfTdLbpShBkMOEule/1cu6Bo5lm1ieO/nA=";
 
   ldflags = [
     "-X github.com/docker/compose/v2/internal.Version=${version}"
@@ -38,11 +33,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

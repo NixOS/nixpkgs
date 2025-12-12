@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "threadloop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to run tornado coroutines from synchronous Python";
     homepage = "https://github.com/GoodPete/threadloop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

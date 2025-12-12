@@ -34,10 +34,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Human friendly interface to Linux subsystems using Python";
     homepage = "https://github.com/tiagocoutinho/linuxpy";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ willow ];
     platforms = lib.platforms.linux;
   };

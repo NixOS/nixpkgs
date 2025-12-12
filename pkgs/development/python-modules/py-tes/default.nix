@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the GA4GH Task Execution API";
     homepage = "https://github.com/ohsu-comp-bio/py-tes";
     changelog = "https://github.com/ohsu-comp-bio/py-tes/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

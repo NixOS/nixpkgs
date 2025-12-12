@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1e6LZXf/lK7sB2CbXwOg7LOi0Q8IBQNAa4d7rX0Ej3A=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Runs a command as a Unix daemon";
     homepage = "http://software.clapper.org/daemonize/";
-    license = licenses.bsd3;
-    platforms = with platforms; linux ++ freebsd ++ darwin;
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; linux ++ freebsd ++ darwin;
     mainProgram = "daemonize";
   };
 }

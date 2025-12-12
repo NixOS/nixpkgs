@@ -54,11 +54,11 @@ buildPythonPackage rec {
       --replace-fail '$NIX_QT_PLUGIN_PATH' '${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}'
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/toruseo/UXsim/releases/tag/${src.tag}";
     description = "Vehicular traffic flow simulator in road network, written in pure Python";
     homepage = "https://github.com/toruseo/UXsim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

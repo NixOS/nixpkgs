@@ -53,11 +53,11 @@ buildPythonPackage rec {
     "google.cloud.container_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Container Engine API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-container";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${version}/packages/google-cloud-container/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for jq, the flexible JSON processor";
     homepage = "https://github.com/mwilliamson/jq.py";
     changelog = "https://github.com/mwilliamson/jq.py/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ benley ];
   };
 }

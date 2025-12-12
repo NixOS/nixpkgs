@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dtests=disabled" ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.all;
   };
 }

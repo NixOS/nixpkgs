@@ -53,13 +53,13 @@ let
           --zsh <($GOPATH/bin/kops completion zsh)
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Easiest way to get a production Kubernetes up and running";
         mainProgram = "kops";
         homepage = "https://github.com/kubernetes/kops";
         changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           offline
           zimbatm
           yurrriq

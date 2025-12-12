@@ -99,12 +99,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/pytest" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
     description = "Template Text Parser";
     mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

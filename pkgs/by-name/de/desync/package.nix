@@ -1,7 +1,9 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -17,8 +19,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-CBw5FFGQgvdYoOUZ6E1F/mxqzNKOwh2IZbsh0dAsLEE=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd desync \
+      --bash <($out/bin/desync completion bash) \
+      --fish <($out/bin/desync completion fish) \
+      --zsh <($out/bin/desync completion zsh)
+
+    mkdir -p $out/share/man/man1
+    $out/bin/desync manpage --section 1 $out/share/man/man1
+  '';
 
   meta = {
     description = "Content-addressed binary distribution system";

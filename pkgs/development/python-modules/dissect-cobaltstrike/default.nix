@@ -76,11 +76,11 @@ buildPythonPackage rec {
     "test_beacon_dump_guardrails"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
     homepage = "https://github.com/fox-it/dissect.cobaltstrike";
     changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

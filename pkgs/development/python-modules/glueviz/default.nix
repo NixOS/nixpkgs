@@ -81,10 +81,10 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://glueviz.org";
     description = "Linked Data Visualizations Across Multiple Files";
-    license = licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

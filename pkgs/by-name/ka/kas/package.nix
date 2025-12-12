@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
-  version = "5.0";
+  version = "5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = "kas";
     tag = version;
-    hash = "sha256-KSmLQBOYyuO9o3YZYPJPDPeGudtNYIC2yghAu98sf3Q=";
+    hash = "sha256-SQeoRm2bjcQmhfMUJCSxgKu7/qcIEv9ItWcLWkkNwAs=";
   };
 
   patches = [ ./pass-terminfo-env.patch ];
@@ -42,10 +42,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "kas" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/siemens/kas";
     description = "Setup tool for bitbake based projects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
   };
 }

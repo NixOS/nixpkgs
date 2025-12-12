@@ -103,12 +103,12 @@ stdenv.mkDerivation rec {
     }")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

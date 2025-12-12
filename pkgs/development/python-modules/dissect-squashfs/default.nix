@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.squashfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the SquashFS file system";
     homepage = "https://github.com/fox-it/dissect.squashfs";
     changelog = "https://github.com/fox-it/dissect.squashfs/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

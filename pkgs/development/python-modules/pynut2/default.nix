@@ -31,10 +31,10 @@ buildPythonPackage rec {
   # tests are unmaintained and broken
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "API overhaul of PyNUT, a Python library to allow communication with NUT (Network UPS Tools) servers";
     homepage = "https://github.com/mezz64/python-nut2";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = [ maintainers.luker ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = [ lib.maintainers.luker ];
   };
 }

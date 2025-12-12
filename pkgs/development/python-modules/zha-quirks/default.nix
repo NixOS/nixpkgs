@@ -57,12 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zhaquirks" ];
 
-  meta = with lib; {
+  meta = {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
     homepage = "https://github.com/dmulcahey/zha-device-handlers";
     changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

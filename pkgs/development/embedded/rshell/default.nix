@@ -21,10 +21,10 @@ buildPythonApplication rec {
     pyudev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dhylands/rshell";
     description = "Remote Shell for MicroPython";
-    license = licenses.mit;
-    maintainers = with maintainers; [ c0deaddict ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ c0deaddict ];
   };
 }

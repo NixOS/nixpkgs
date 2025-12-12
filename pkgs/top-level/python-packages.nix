@@ -656,7 +656,7 @@ self: super: with self; {
 
   amarna = callPackage ../development/python-modules/amarna { };
 
-  amazon-ion = callPackage ../development/python-modules/amazon-ion { };
+  amazon-ion = callPackage ../development/python-modules/amazon-ion { inherit (pkgs) cmake; };
 
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
@@ -5051,6 +5051,8 @@ self: super: with self; {
 
   executor = callPackage ../development/python-modules/executor { };
 
+  executorch = callPackage ../development/python-modules/executorch { };
+
   exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };
@@ -5396,6 +5398,8 @@ self: super: with self; {
 
   fitfile = callPackage ../development/python-modules/fitfile { };
 
+  fitparse = callPackage ../development/python-modules/fitparse { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
@@ -5685,6 +5689,8 @@ self: super: with self; {
 
   forecast-solar = callPackage ../development/python-modules/forecast-solar { };
 
+  formatron = callPackage ../development/python-modules/formatron { };
+
   formbox = callPackage ../development/python-modules/formbox { };
 
   formencode = callPackage ../development/python-modules/formencode { };
@@ -5742,8 +5748,6 @@ self: super: with self; {
   frilouz = callPackage ../development/python-modules/frilouz { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
-
-  froide = toPythonModule (pkgs.froide.override { python3Packages = self; });
 
   frozendict = callPackage ../development/python-modules/frozendict { };
 
@@ -5885,6 +5889,8 @@ self: super: with self; {
 
   gdsfactory = callPackage ../development/python-modules/gdsfactory { };
 
+  gdstk = callPackage ../development/python-modules/gdstk { };
+
   ge25519 = callPackage ../development/python-modules/ge25519 { };
 
   geant4 = toPythonModule (
@@ -5912,6 +5918,8 @@ self: super: with self; {
   );
 
   genanki = callPackage ../development/python-modules/genanki { };
+
+  general-sam = callPackage ../development/python-modules/general-sam { };
 
   generic = callPackage ../development/python-modules/generic { };
 
@@ -7099,6 +7107,8 @@ self: super: with self; {
 
   icalendar-compatibility = callPackage ../development/python-modules/icalendar-compatibility { };
 
+  icalendar-searcher = callPackage ../development/python-modules/icalendar-searcher { };
+
   icalevents = callPackage ../development/python-modules/icalevents { };
 
   icdiff = callPackage ../development/python-modules/icdiff { };
@@ -7955,6 +7965,8 @@ self: super: with self; {
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
+
+  kbnf = callPackage ../development/python-modules/kbnf { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
@@ -8979,6 +8991,8 @@ self: super: with self; {
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
   logbook = callPackage ../development/python-modules/logbook { };
+
+  logboth = callPackage ../development/python-modules/logboth { };
 
   logfury = callPackage ../development/python-modules/logfury { };
 
@@ -13944,11 +13958,19 @@ self: super: with self; {
 
   pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
 
+  pyobjc-framework-CoreBluetooth =
+    callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
+      { };
+
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
   pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
 
   pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
+
+  pyobjc-framework-libdispatch =
+    callPackage ../development/python-modules/pyobjc-framework-libdispatch
+      { };
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 
@@ -15156,6 +15178,8 @@ self: super: with self; {
   python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };
 
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
+
+  python-google-weather-api = callPackage ../development/python-modules/python-google-weather-api { };
 
   python-gvm = callPackage ../development/python-modules/python-gvm { };
 
@@ -16660,6 +16684,8 @@ self: super: with self; {
   salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
+
+  sam2 = callPackage ../development/python-modules/sam2 { };
 
   samarium = callPackage ../development/python-modules/samarium { };
 

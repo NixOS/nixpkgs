@@ -20,11 +20,11 @@ buildHomeAssistantComponent rec {
     websockets
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/iprak/sensi/releases/tag/v${version}";
     description = "HomeAssistant integration for Sensi thermostat";
     homepage = "https://github.com/iprak/sensi";
-    maintainers = with maintainers; [ ivan ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ivan ];
+    license = lib.licenses.mit;
   };
 }

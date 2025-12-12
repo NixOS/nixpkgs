@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_jwt_extended" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/vimalloc/flask-jwt-extended/releases/tag/${version}";
     description = "JWT extension for Flask";
     homepage = "https://flask-jwt-extended.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

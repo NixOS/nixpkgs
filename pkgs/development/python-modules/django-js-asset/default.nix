@@ -35,11 +35,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.testapp.settings
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/matthiask/django-js-asset/blob/${version}/CHANGELOG.rst";
     description = "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
-    maintainers = with maintainers; [ hexa ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ hexa ];
+    license = with lib.licenses; [ bsd3 ];
   };
 }

@@ -43,11 +43,11 @@ buildPythonPackage rec {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2 # or
       gpl2Only
     ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ sorki ];
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib

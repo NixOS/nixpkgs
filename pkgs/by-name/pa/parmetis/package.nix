@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel Graph Partitioning and Fill-reducing Matrix Ordering";
     longDescription = ''
       MPI-based parallel library that implements a variety of algorithms for
@@ -52,8 +52,8 @@ stdenv.mkDerivation {
       schemes
     '';
     homepage = "https://github.com/KarypisLab/ParMETIS";
-    platforms = platforms.all;
-    license = licenses.unfree;
-    maintainers = [ maintainers.costrouc ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

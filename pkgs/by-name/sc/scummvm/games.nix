@@ -88,10 +88,10 @@ let
           runHook postInstall
         '';
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.scummvm.org";
-          license = licenses.free; # refer to the readme for exact wording
-          maintainers = with maintainers; [ peterhoeg ];
+          license = lib.licenses.free; # refer to the readme for exact wording
+          maintainers = with lib.maintainers; [ peterhoeg ];
           inherit description;
           inherit (scummvm.meta) platforms;
         };

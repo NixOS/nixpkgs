@@ -46,11 +46,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "quantulum3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for unit extraction - fork of quantulum for python3";
     mainProgram = "quantulum3-training";
     homepage = "https://github.com/nielstron/quantulum3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }
