@@ -50,5 +50,7 @@ toPythonModule (
     pythonImportsCheck = [
       "aligator"
     ];
+
+    __darwinAllowLocalNetworking = true;
   })
 )
