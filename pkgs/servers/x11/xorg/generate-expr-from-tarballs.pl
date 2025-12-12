@@ -499,6 +499,7 @@ print OUT <<EOF;
   xtrans,
   xvfb,
   xvinfo,
+  xwd,
   xwininfo,
   xwud,
 }:
@@ -584,6 +585,7 @@ self: with self; {
     xtrans
     xvfb
     xvinfo
+    xwd
     xwininfo
     xwud
     ;
