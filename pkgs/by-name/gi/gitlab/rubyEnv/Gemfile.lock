@@ -761,7 +761,7 @@ GEM
       mime-types
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
-    gitlab-glfm-markdown (0.0.38)
+    gitlab-glfm-markdown (0.0.39)
       rb_sys (~> 0.9.109)
     gitlab-kas-grpc (18.5.0.pre.rc4)
       grpc (~> 1.0)
@@ -818,8 +818,8 @@ GEM
       omniauth (>= 1.3, < 3)
       pyu-ruby-sasl (>= 0.0.3.3, < 0.1)
       rubyntlm (~> 0.5)
-    gitlab_quality-test_tooling (2.26.0)
-      activesupport (>= 7.0, < 7.3)
+    gitlab_quality-test_tooling (3.1.0)
+      activesupport (>= 7.0)
       amatch (~> 0.4.1)
       fog-google (~> 1.24, >= 1.24.1)
       gitlab (>= 4.19, < 7.0)
@@ -2188,7 +2188,7 @@ DEPENDENCIES
   gitlab-duo-workflow-service-client (~> 0.6)!
   gitlab-experiment (~> 1.0.0)
   gitlab-fog-azure-rm (~> 2.4.0)
-  gitlab-glfm-markdown (~> 0.0.38)
+  gitlab-glfm-markdown (~> 0.0.39)
   gitlab-grape-openapi!
   gitlab-housekeeper!
   gitlab-http!
@@ -2211,7 +2211,7 @@ DEPENDENCIES
   gitlab-utils!
   gitlab_chronic_duration (~> 0.12)
   gitlab_omniauth-ldap (~> 2.3.0)
-  gitlab_quality-test_tooling (~> 2.26.0)
+  gitlab_quality-test_tooling (~> 3.1.0)
   gon (~> 6.5.0)
   google-apis-androidpublisher_v3 (~> 0.86.0)
   google-apis-cloudbilling_v1 (~> 0.22.0)
