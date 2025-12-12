@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-awscrt";
-  version = "0.29.2";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_awscrt";
     inherit version;
-    hash = "sha256-QeAeFNZGh3vTEOfjxJ/xk/g2FIC5Vo6XsWOXdQCbvvo=";
+    hash = "sha256-Ni/Y9errz82SLLn9gnT7N131UDGfeAMe43eerAuezHk=";
   };
 
   build-system = [ setuptools ];

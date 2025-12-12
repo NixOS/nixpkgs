@@ -13417,6 +13417,11 @@
     github = "katrinafyi";
     githubId = 39479354;
   };
+  kaweees = {
+    github = "kaweees";
+    githubId = 49963287;
+    name = "Miguel Villa Floran";
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
