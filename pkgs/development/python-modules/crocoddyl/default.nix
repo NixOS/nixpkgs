@@ -50,5 +50,7 @@ toPythonModule (
     pythonImportsCheck = [
       "crocoddyl"
     ];
+
+    __darwinAllowLocalNetworking = true;
   })
 )
