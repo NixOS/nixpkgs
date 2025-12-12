@@ -29,7 +29,6 @@
   python3,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
-  guile ? null,
   hostCpuOnly ? false,
   enableSim ? false,
   safePaths ? [
@@ -94,7 +93,6 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     xz
-    guile
     sourceHighlight
   ]
   ++ lib.optional pythonSupport python3
