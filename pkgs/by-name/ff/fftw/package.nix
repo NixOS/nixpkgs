@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://fftw.org/fftw-${finalAttrs.version}.tar.gz"
       "ftp://ftp.fftw.org/pub/fftw/fftw-${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
+    hash = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
   };
 
   patches = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fftw builds with -mtune=native by default
   postPatch = ''
-    substituteInPlace configure --replace "-mtune=native" "-mtune=generic"
+    substituteInPlace configure --replace-fail "-mtune=native" "-mtune=generic"
   '';
 
   enableParallelBuilding = true;
