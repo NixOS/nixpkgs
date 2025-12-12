@@ -232,11 +232,6 @@ self: super:
       broken = true;
     };
   });
-  xf86videoglide = super.xf86videoglide.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
   xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
@@ -754,4 +749,5 @@ self: super:
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+  xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
 }
