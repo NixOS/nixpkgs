@@ -91,6 +91,10 @@ stdenv.mkDerivation rec {
       url = "https://download.strongswan.org/security/CVE-2025-62291/strongswan-4.4.0-6.0.2_eap_mschapv2_failure_request_len.patch";
       hash = "sha256-9aUGGTeSrI9Ji8MfnsVZ6KrGMOB/5RuWZ/WQhY5E4+c=";
     })
+    (fetchurl {
+      url = "https://download.strongswan.org/security/CVE-2025-9615/strongswan-5.9.12-6.0.3_nm_credential_access.patch";
+      hash = "sha256-AeVb5j0AKwApGzdfkPJFfxNdoHq3GRNZfOuontCLY64=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
