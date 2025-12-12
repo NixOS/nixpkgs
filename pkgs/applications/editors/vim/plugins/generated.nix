@@ -7873,6 +7873,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lsp-format-modifications-nvim = buildVimPlugin {
+    pname = "lsp-format-modifications.nvim";
+    version = "2025-07-05";
+    src = fetchFromGitHub {
+      owner = "joechrisellis";
+      repo = "lsp-format-modifications.nvim";
+      rev = "fd2b0de0afa42bea1d310af8337a4a95ebd27260";
+      sha256 = "1wmahg6dmjv1m64pr65fg912ma6dcnsnb34cdpk40jmdc6szl7pz";
+    };
+    meta.homepage = "https://github.com/joechrisellis/lsp-format-modifications.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lsp-format-nvim = buildVimPlugin {
     pname = "lsp-format.nvim";
     version = "2025-05-08";
