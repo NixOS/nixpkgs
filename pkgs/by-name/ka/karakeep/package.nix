@@ -7,6 +7,7 @@
   testers,
   nodejs,
   node-gyp,
+  gnutar,
   inter,
   python3,
   srcOnly,
@@ -18,21 +19,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.27.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
+    hash = "sha256-mOIX9pNVESRPD2Jjdr014NyYO/3rSvYpr4RP34RKE8c=";
   };
 
   patches = [
     ./patches/use-local-font.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
+
   postPatch = ''
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
+
+    substituteInPlace apps/cli/src/commands/dump.ts \
+      --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
   '';
 
   nativeBuildInputs = [
@@ -41,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp
     pnpm.configHook
   ];
+
+  buildInputs = [
+    gnutar
+  ];
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version;
 
@@ -54,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 1;
-    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
+    hash = "sha256-rFMLmqPEvP6Vn7VNmE2tGsnv9YPMaL1aktwTsnjv5+M=";
   };
   buildPhase = ''
     runHook preBuild
@@ -139,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
-        version = "0.25.0";
+        version = "0.27.1";
       };
     };
     updateScript = nix-update-script { };

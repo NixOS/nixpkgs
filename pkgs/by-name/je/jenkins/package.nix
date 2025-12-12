@@ -81,6 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       earldouglas
+      felixsinger
     ];
     changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";

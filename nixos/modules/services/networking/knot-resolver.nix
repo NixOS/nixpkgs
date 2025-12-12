@@ -36,7 +36,7 @@ in
         If you want to use knot-resolver 5, please use services.kresd.
       '';
     };
-    package = lib.mkPackageOption pkgs "knot-resolver_6" {
+    package = lib.mkPackageOption pkgs "knot-resolver-manager_6.knot-resolver" {
       example = "knot-resolver_6.override { extraFeatures = true; }";
     };
     managerPackage = lib.mkPackageOption pkgs "knot-resolver-manager_6" { };
