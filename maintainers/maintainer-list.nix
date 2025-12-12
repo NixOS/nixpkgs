@@ -23854,7 +23854,7 @@
   };
   shikanime = {
     name = "William Phetsinorath";
-    email = "deva.shikanime@protonmail.com";
+    email = "william.phetsinorath@shikanime.studio";
     github = "shikanime";
     githubId = 22115108;
   };
