@@ -95,6 +95,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
-    platforms = [ "x86_64-linux" ];
   };
 }

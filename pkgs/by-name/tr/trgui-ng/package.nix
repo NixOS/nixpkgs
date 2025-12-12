@@ -15,13 +15,13 @@
   webkitgtk_4_1,
 }:
 let
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "openscopeproject";
     repo = "TrguiNG";
     tag = "v${version}";
-    hash = "sha256-N049HA+X9DcXyhmFbnxjfbQoKlf3dA73c1IOYFrDgwc=";
+    hash = "sha256-IcOkKYxkU7c+sIPcig10sR1L66xb7oYim7KALWsz9rQ=";
   };
 
   meta = {
@@ -34,7 +34,7 @@ let
   frontend = buildNpmPackage (finalAttrs: {
     pname = "TrguiNG-frontend";
     inherit version src;
-    npmDepsHash = "sha256-Ql1/itjEfvYigUzEZDWsGgJj7oZ1p6Bo00eLHRVHi4c=";
+    npmDepsHash = "sha256-5ev3Aj1fIy/qvw543OwdGTTWmdqbpobJdTGlX5B2VD0=";
 
     npmBuildScript = "webpack-prod";
 
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "TrguiNG";
   inherit version src;
 
-  cargoHash = "sha256-YGBLAO8lFvbowbT3yt2m/OQrpGzWghtyyZQJeYVQijA=";
+  cargoHash = "sha256-coyKwBz26Ohl/+gJS8X+kTYOhaQ1pfY7/rbupF+CaUY=";
 
   postPatch = ''
     cp ${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb src-tauri/dbip.mmdb
