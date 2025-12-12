@@ -1792,6 +1792,10 @@ assertNoAdditions {
     };
   });
 
+  lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   lspcontainers-nvim = super.lspcontainers-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };

@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.0-beta.9";
+  version = "1.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-4rNHZcAq/LafUPywZ9XdpXr9wVFOBWkUvnCFwT+3lFA=";
+    hash = "sha256-T4uFt0Z7SEdsmr2HQvxGeo+b9+BdshNUUKYMfRhXLSk=";
   };
 
-  cargoHash = "sha256-0PsiB/xvePSi5o1eRUgCq02UAGzuBQEe8+LlFJi5814=";
+  cargoHash = "sha256-99MGWfZrDOav77SRI7c5V21JTfkq7ejC7x+ZiQ5J0Yw=";
 
   separateDebugInfo = true;
   strictDeps = true;
@@ -79,10 +79,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

@@ -13,11 +13,11 @@
 
 let
   pname = "mes";
-  version = "0.25";
+  version = "0.27.1";
 
   src = fetchurl {
     url = "mirror://gnu/mes/mes-${version}.tar.gz";
-    hash = "sha256-MlJQs1Z+2SA7pwFhyDWvAQeec+vtl7S1u3fKUAuCiUA=";
+    hash = "sha256-GDpA6kfqSfih470bnRLmdjdNZNY7x557wa59Zz398l0=";
   };
 
   nyacc = callPackage ./nyacc.nix { inherit nyacc; };
@@ -28,6 +28,7 @@ let
   '';
 
   sources = (import ./sources.nix).x86.linux.mescc;
+
   inherit (sources)
     libc_mini_SOURCES
     libmescc_SOURCES
@@ -43,7 +44,9 @@ let
     homepage = "https://www.gnu.org/software/mes";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.minimal-bootstrap ];
-    platforms = [ "i686-linux" ];
+    platforms = [
+      "i686-linux"
+    ];
   };
 
   srcPost =
@@ -69,8 +72,9 @@ let
         cp ${config_h} include/mes/config.h
 
         mkdir include/arch
-        cp include/linux/x86/syscall.h include/arch/syscall.h
         cp include/linux/x86/kernel-stat.h include/arch/kernel-stat.h
+        cp include/linux/x86/signal.h include/arch/signal.h
+        cp include/linux/x86/syscall.h include/arch/syscall.h
 
         # Remove pregenerated files
         rm mes/module/mes/psyntax.pp mes/module/mes/psyntax.pp.header
@@ -81,9 +85,9 @@ let
 
         # Remove environment impurities
         __GUILE_LOAD_PATH="\"''${MES_PREFIX}/mes/module:''${MES_PREFIX}/module:${nyacc.guilePath}\""
-        boot0_scm=mes/module/mes/boot-0.scm
+        guile_module_scm=mes/module/mes/guile-module.mes
         guile_mes=mes/module/mes/guile.mes
-        replace --file ''${boot0_scm} --output ''${boot0_scm} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
+        replace --file ''${guile_module_scm} --output ''${guile_module_scm} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
         replace --file ''${guile_mes} --output ''${guile_mes} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
 
         module_mescc_scm=module/mescc/mescc.scm
@@ -127,7 +131,6 @@ let
     "-e"
     "main"
     "${srcPost.bin}/bin/mescc.scm"
-    "--"
     "-D"
     "HAVE_CONFIG_H=1"
     "-I"

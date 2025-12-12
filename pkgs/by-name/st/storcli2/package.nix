@@ -62,6 +62,7 @@ stdenvNoCC.mkDerivation (
       description = "Storage Command Line Tool";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;
+      maintainers = with lib.maintainers; [ edwtjo ];
       mainProgram = "storcli2";
       platforms = [
         "x86_64-linux"

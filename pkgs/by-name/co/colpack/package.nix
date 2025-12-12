@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

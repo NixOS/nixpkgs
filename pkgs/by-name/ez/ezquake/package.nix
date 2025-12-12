@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     mainProgram = "ezquake";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }
