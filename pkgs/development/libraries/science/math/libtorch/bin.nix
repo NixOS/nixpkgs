@@ -12,6 +12,7 @@
   fixDarwinDylibNames,
 
   cudaSupport ? config.cudaSupport,
+  cudaPackages_13,
 }:
 
 let
@@ -63,7 +64,14 @@ stdenv.mkDerivation {
 
   postFixup =
     let
-      rpath = lib.makeLibraryPath [ stdenv.cc.cc ];
+      rpath = lib.makeLibraryPath (
+        [ stdenv.cc.cc ]
+        ++ lib.optionals cudaSupport [
+          cudaPackages_13.libcufft
+          cudaPackages_13.libcusparse
+          cudaPackages_13.libcurand
+        ]
+      );
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
       find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
