@@ -263,13 +263,6 @@ self: super:
     };
   });
 
-  xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
-    configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
-    meta = attrs.meta // {
-      mainProgram = "xkbcomp";
-    };
-  });
-
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
