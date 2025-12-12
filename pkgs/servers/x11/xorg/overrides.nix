@@ -464,7 +464,6 @@ self: super:
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
-  xload = addMainProgram super.xload { };
 
   xwd = addMainProgram super.xwd { };
 }
