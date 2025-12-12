@@ -78,12 +78,12 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
-              cp -R ext/glfm_markdown $out
+              cp -R ext/gitlab_glfm_markdown $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-f2a6/xPNGfiT4bbKAlHYYcqc0PkEkW+cpH7QbJMCY7c=";
+          hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
         };
 
         dontBuild = false;
@@ -104,7 +104,6 @@ let
         '';
 
         postInstall = ''
-          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
           find $out -type f -name .rustc_info.json -delete
         '';
       };

@@ -903,7 +903,6 @@ dont-distribute-packages:
  - eventful-sql-common
  - eventful-sqlite
  - eventful-test-helpers
- - eventlog-live-otelcol
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -1215,7 +1214,6 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
- - grapesy
  - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
