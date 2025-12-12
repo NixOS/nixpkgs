@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.17";
+  version = "1.8.18";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
-    hash = "sha256-eAiCtSJUqLASapxnYCyq1UCiGz6QmKQum7Vs3MoU1s8=";
+    hash = "sha256-8e8t3CegWjg48nkUkrPpAPtQCO09zWe1+iRfs84kuP8=";
   };
 
   patches = [
