@@ -18,16 +18,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-5Xr6mwPtsqEliKeKv2rhhp6JC7u3coP4nnhIxGMqccU=";
 
-  postPatch = ''
-    substituteInPlace main.go \
-      --replace-fail "version_replaceme" "${version}"
-  '';
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X=main.newtVersion=${version}"
   ];
 
   doInstallCheck = true;
