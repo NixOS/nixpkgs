@@ -338,8 +338,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xclock = addMainProgram super.xclock { };
-
   xinit =
     (super.xinit.override {
       stdenv = if isDarwin then clangStdenv else stdenv;

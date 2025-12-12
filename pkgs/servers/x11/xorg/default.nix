@@ -116,6 +116,7 @@
   xbitmaps,
   xcalc,
   xcb-proto,
+  xclock,
   xcmsdb,
   xcompmgr,
   xconsole,
@@ -197,6 +198,7 @@ self: with self; {
     xbacklight
     xbitmaps
     xcalc
+    xclock
     xcmsdb
     xcompmgr
     xconsole
@@ -359,58 +361,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xclock = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libXaw,
-      libXft,
-      libxkbfile,
-      libXmu,
-      xorgproto,
-      libXrender,
-      libXt,
-      wrapWithXFileSearchPathHook,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xclock";
-      version = "1.1.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xclock-1.1.1.tar.xz";
-        sha256 = "0b3l1zwz2b1cn46f8pd480b835j9anadf929vqpll107iyzylz6z";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        wrapWithXFileSearchPathHook
-      ];
-      buildInputs = [
-        libX11
-        libXaw
-        libXft
-        libxkbfile
-        libXmu
-        xorgproto
-        libXrender
-        libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
         platforms = lib.platforms.unix;
       };
     })
