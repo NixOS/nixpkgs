@@ -9,12 +9,8 @@
   libiconv,
   cargo,
   gcc,
-  mold,
   rustc,
   nix-update-script,
-
-  # On non-darwin, `mold` is the default linker, but it's broken on Darwin.
-  withMold ? with stdenv.hostPlatform; isUnix && !isDarwin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -69,14 +65,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrap = exe: ''
         wrapProgram $out/bin/${exe} \
           --prefix PATH : ${
-            lib.makeBinPath (
-              [
-                cargo
-                gcc
-                rustc
-              ]
-              ++ lib.optional withMold mold
-            )
+            lib.makeBinPath [
+              cargo
+              gcc
+              rustc
+            ]
           } \
           --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
       '';
