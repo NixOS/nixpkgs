@@ -71,15 +71,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
-    };
-  });
-
   xf86inputkeyboard = super.xf86inputkeyboard.overrideAttrs (attrs: {
     meta = attrs.meta // {
       platforms = lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;

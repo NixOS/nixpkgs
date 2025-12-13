@@ -129,6 +129,7 @@
   xev,
   xeyes,
   xf86-input-evdev,
+  xf86-input-joystick,
   xf86-input-mouse,
   xf86-input-synaptics,
   xf86-input-vmmouse,
@@ -348,6 +349,7 @@ self: with self; {
   xcbutilwm = libxcb-wm;
   xcursorthemes = xcursor-themes;
   xf86inputevdev = xf86-input-evdev;
+  xf86inputjoystick = xf86-input-joystick;
   xf86inputmouse = xf86-input-mouse;
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
@@ -357,42 +359,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputjoystick = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-joystick";
-      version = "1.6.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.4.tar.xz";
-        sha256 = "1lnc6cvrg81chb2hj3jphgx7crr4ab8wn60mn8f9nsdwza2w8plh";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-joystick" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputkeyboard = callPackage (
