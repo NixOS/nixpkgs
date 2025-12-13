@@ -13,7 +13,7 @@
   clang,
   libclang,
   rocksdb,
-  # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
+  # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/cargo-install-all.sh#L84
   solanaPkgs ? [
     "cargo-build-sbf"
     "cargo-test-sbf"
@@ -24,10 +24,11 @@
     "agave-install"
     "solana-keygen"
     "agave-ledger-tool"
-    "solana-log-analyzer"
+    "solana-dos"
     "solana-net-shaper"
     "agave-validator"
     "solana-test-validator"
+    "agave-watchtower"
   ]
   ++ [
     # XXX: Ensure `solana-genesis` is built LAST!
@@ -36,8 +37,8 @@
   ],
 }:
 let
-  version = "2.3.13";
-  hash = "sha256-RSucqvbshaaby4fALhAQJtZztwsRdA+X7yRnoBxQvsg=";
+  version = "3.0.12";
+  hash = "sha256-Zubu7cTSJrJFSuguCo3msdas/QshFpo1+T6DVQyqrhY=";
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
@@ -50,11 +51,11 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  cargoHash = "sha256-yTS++bUu+4wmbXXZkU4eDq4sGNzls1euptJoY6OYZOM=";
+  cargoHash = "sha256-qnZbFkyzE2hdy/ynZQZmCs5kCeTUMci9f/pVKID/mRQ=";
 
   strictDeps = true;
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
-  RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code";
+  RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code -Aunused_parens";
   LIBCLANG_PATH = "${libclang.lib}/lib";
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC
@@ -108,17 +109,17 @@ rustPlatform.buildRustPackage rec {
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
-  meta = {
+  meta = with lib; {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces";
     homepage = "https://solana.com";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
+    license = licenses.asl20;
+    maintainers = with maintainers; [
       netfox
       happysalada
       aikooo7
       JacoMalan1
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 
   passthru.updateScript = nix-update-script { };
