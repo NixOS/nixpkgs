@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  protobuf_25,
+  protobuf,
   zlib,
   buildPackages,
 }:
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    protobuf_25
+    protobuf
     zlib
   ];
 
-  env.PROTOC = lib.getExe buildPackages.protobuf_25;
+  env.PROTOC = lib.getExe buildPackages.protobuf;
 
   meta = {
     homepage = "https://github.com/protobuf-c/protobuf-c/";
