@@ -286,15 +286,6 @@ self: super:
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
-  xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
-
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = isDarwin;
@@ -750,4 +741,8 @@ self: super:
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
   xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
+  xf86videoglint = throw ''
+    The Xorg GLINT/Permedia video driver has been broken since xorg 21.
+    see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
+  ''; # added 2025-12-13
 }

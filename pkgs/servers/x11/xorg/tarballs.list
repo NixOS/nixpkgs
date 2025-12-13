@@ -31,7 +31,6 @@ mirror://xorg/individual/driver/xf86-video-cirrus-1.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-dummy-0.4.1.tar.xz
 mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz
 mirror://xorg/individual/driver/xf86-video-geode-2.18.1.tar.xz
-mirror://xorg/individual/driver/xf86-video-glint-1.2.9.tar.bz2
 mirror://xorg/individual/driver/xf86-video-i128-1.4.1.tar.xz
 mirror://xorg/individual/driver/xf86-video-i740-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2
