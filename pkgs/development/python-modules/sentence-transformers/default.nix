@@ -8,17 +8,22 @@
   setuptools,
 
   # dependencies
-  accelerate,
-  datasets,
   huggingface-hub,
-  optimum,
-  pillow,
   scikit-learn,
   scipy,
   torch,
   tqdm,
   transformers,
   typing-extensions,
+
+  # optional-dependencies
+  # image
+  pillow,
+  # train
+  accelerate,
+  datasets,
+  # onnx
+  optimum-onnx,
 
   # tests
   pytestCheckHook,
@@ -27,21 +32,20 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "5.1.2";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${version}";
-    hash = "sha256-FNJ4mWBcgy3J8ZJtHt+uBgNmvMnqphj+sLMmBvgdB1k=";
+    hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
-    pillow
     scikit-learn
     scipy
     torch
@@ -51,12 +55,15 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    image = [
+      pillow
+    ];
     train = [
       accelerate
       datasets
     ];
-    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
-    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+    onnx = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime-gpu;
     # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
   };
 
