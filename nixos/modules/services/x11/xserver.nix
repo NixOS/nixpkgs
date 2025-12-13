@@ -365,7 +365,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExpression "[ pkgs.xf86_input_wacom ]";
+        example = literalExpression "[ pkgs.xf86-input-wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
