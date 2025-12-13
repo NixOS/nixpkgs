@@ -13,7 +13,7 @@ buildNpmPackage {
     cd frontend
   '';
 
-  npmDepsHash = "sha256-IC92WESUAp+P0MbFasCTwpo0GcGoTfO8IkLbHfnrnNY=";
+  npmDepsHash = "sha256-RjPTtIm1BhyeQLUN9mWI+sXakNju4up0FbrdwZzkTS0=";
 
   # Some dependencies are fetched from git repositories
   forceGitDeps = true;

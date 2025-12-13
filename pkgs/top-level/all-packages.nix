@@ -3990,8 +3990,6 @@ with pkgs;
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
 
-  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
-
   uftraceFull = uftrace.override {
     withLuaJIT = true;
     withPython = true;
