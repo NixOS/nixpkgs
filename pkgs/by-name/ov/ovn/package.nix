@@ -154,6 +154,18 @@ stdenv.mkDerivation (finalAttrs: {
     touch $OVS_RESOLV_CONF
   '';
 
+  checkPhase = ''
+    runHook preCheck
+
+    if ! make check; then
+      echo "Some tests failed. Collecting logs for analysis..."
+      find tests/testsuite.dir -type f -exec echo "==== Contents of {} ====" \; -exec cat {} \;
+      exit 1
+    fi
+
+    runHook postCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
