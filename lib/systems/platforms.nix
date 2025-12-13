@@ -22,6 +22,10 @@ rec {
     linux-kernel.autoModules = false;
   };
 
+  ##
+  ## POWER
+  ##
+
   powernv = {
     linux-kernel = {
       name = "PowerNV";
@@ -39,6 +43,16 @@ rec {
         ATA_SFF y
         VIRTIO_MENU y
       '';
+    };
+  };
+
+  ppc64 = {
+    linux-kernel = {
+      name = "powerpc64";
+
+      baseConfig = "ppc64_defconfig";
+      target = "vmlinux";
+      autoModules = true;
     };
   };
 
@@ -628,8 +642,8 @@ rec {
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
-      powernv
+    else if platform.isPower64 then
+      if platform.isLittleEndian then powernv else ppc64
 
     else if platform.isLoongArch64 then
       loongarch64-multiplatform
