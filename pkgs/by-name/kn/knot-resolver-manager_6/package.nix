@@ -1,15 +1,15 @@
 {
+  lib,
   knot-resolver_6,
   python3Packages,
-  extraFeatures ? false,
+  extraFeatures ? false, # catch-all if defaults aren't enough
 }:
 let
-  knot-resolver = knot-resolver_6.override { inherit extraFeatures; };
+  kresd = knot-resolver_6.finalPackage; # TODO: does the finalPackage help us?
 in
 python3Packages.buildPythonPackage {
   pname = "knot-resolver-manager_6";
-  inherit (knot-resolver) version;
-  inherit (knot-resolver.unwrapped) src;
+  inherit (kresd) version src;
   pyproject = true;
 
   patches = [
@@ -20,10 +20,8 @@ python3Packages.buildPythonPackage {
   ];
 
   # Propagate meson config from the C part to the python part.
-  # But the install-time etc differs from a sensible run-time etc.
   postPatch = ''
-    substitute '${knot-resolver.unwrapped.config_py}'/knot_resolver/constants.py ./python/knot_resolver/constants.py \
-      --replace-fail '${knot-resolver.unwrapped.out}/sbin' '${knot-resolver}/bin'
+    cp '${kresd.config_py}'/knot_resolver/constants.py ./python/knot_resolver/
   ''
   # On non-Linux let's simplify construction of the knot-resolver command line,
   # as it would break because of nixpkgs-specific wrapping of python packages.
@@ -46,6 +44,34 @@ python3Packages.buildPythonPackage {
     supervisor
     typing-extensions
   ];
+
+  # set up (additional) Lua dependencies
+  buildInputs =
+    with kresd.lua;
+    lib.optionals extraFeatures [
+      # For http module, prefill module, trust anchor bootstrap.
+      # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
+      http
+      # used by policy.slice_randomize_psl()
+      psl
+    ];
+  makeWrapperArgs = [
+    "--set"
+    "LUA_PATH"
+    ''"$LUA_PATH"''
+    "--set"
+    "LUA_CPATH"
+    ''"$LUA_CPATH"''
+  ];
+  # basic test that the wrapping works
+  postCheck = lib.optionalString extraFeatures ''
+    makeWrapper '${kresd}/bin/kresd' ./kresd \
+      --set LUA_PATH  "$LUA_PATH" \
+      --set LUA_CPATH "$LUA_CPATH"
+    echo "Checking that 'http' module loads, i.e. lua search paths work:"
+    echo "modules.load('http')" > test-http.lua
+    echo -e 'quit()' | env -i ./kresd -a 127.0.0.1#53535 -c test-http.lua
+  '';
 
   doCheck = python3Packages.stdenv.isLinux; # maybe in future
   nativeCheckInputs = with python3Packages; [
@@ -78,10 +104,11 @@ python3Packages.buildPythonPackage {
   ];
 
   passthru = {
-    inherit knot-resolver;
+    inherit kresd;
   };
 
-  meta = knot-resolver.meta // {
+  meta = kresd.meta // {
     mainProgram = "knot-resolver";
+    inherit (kresd.meta) description; # explicit to make e.g. `nix edit` point here
   };
 }
