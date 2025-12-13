@@ -463,6 +463,7 @@ print OUT <<EOF;
   xf86-input-evdev,
   xf86-input-joystick,
   xf86-input-keyboard,
+  xf86-input-libinput,
   xf86-input-mouse,
   xf86-input-synaptics,
   xf86-input-vmmouse,
@@ -684,6 +685,7 @@ self: with self; {
   xf86inputevdev = xf86-input-evdev;
   xf86inputjoystick = xf86-input-joystick;
   xf86inputkeyboard = xf86-input-keyboard;
+  xf86inputlibinput = xf86-input-libinput;
   xf86inputmouse = xf86-input-mouse;
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;

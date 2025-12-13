@@ -71,16 +71,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-    ];
-  });
-
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {

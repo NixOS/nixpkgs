@@ -131,6 +131,7 @@
   xf86-input-evdev,
   xf86-input-joystick,
   xf86-input-keyboard,
+  xf86-input-libinput,
   xf86-input-mouse,
   xf86-input-synaptics,
   xf86-input-vmmouse,
@@ -352,6 +353,7 @@ self: with self; {
   xf86inputevdev = xf86-input-evdev;
   xf86inputjoystick = xf86-input-joystick;
   xf86inputkeyboard = xf86-input-keyboard;
+  xf86inputlibinput = xf86-input-libinput;
   xf86inputmouse = xf86-input-mouse;
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
@@ -361,44 +363,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputlibinput = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libinput,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-libinput";
-      version = "1.5.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-libinput-1.5.0.tar.xz";
-        sha256 = "1rl06l0gdqmc4v08mya93m74ana76b7s3fzkmq8ylm3535gw6915";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libinput
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-libinput" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoamdgpu = callPackage (
