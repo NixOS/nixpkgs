@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.42.2";
+  version = "0.41.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
