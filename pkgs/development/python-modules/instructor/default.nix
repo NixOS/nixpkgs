@@ -83,6 +83,7 @@ buildPythonPackage rec {
     "successfully"
     "test_mode_functions_deprecation_warning"
     "test_partial"
+    "test_provider_invalid_type_raises_error"
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
