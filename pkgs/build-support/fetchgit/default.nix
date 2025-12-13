@@ -138,8 +138,6 @@ lib.makeOverridable (
 
         derivationArgs
         // {
-          __structuredAttrs = true;
-
           inherit name;
 
           builder = ./builder.sh;
@@ -245,11 +243,7 @@ lib.makeOverridable (
               "FETCHGIT_HTTP_PROXIES"
             ];
 
-          outputChecks.out = {
-            ${if allowedRequisites != null then "allowedRequisites" else null} = allowedRequisites;
-          };
-
-          inherit preferLocalBuild meta;
+          inherit preferLocalBuild meta allowedRequisites;
 
           passthru = {
             gitRepoUrl = url;
