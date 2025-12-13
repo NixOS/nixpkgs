@@ -9,6 +9,7 @@
   rustPlatform,
   protobuf,
   cacert,
+  nixosTests,
 }:
 
 let
@@ -89,6 +90,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=app::put_prelookup_gating_test"
     "--skip=two_embedded_servers_isolate_auth_and_data_planes"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) rustfs;
+  };
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";
