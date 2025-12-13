@@ -355,6 +355,13 @@ let
           })).stdenv;
         expected = pkgs.clangStdenv;
       };
+      overridePythonAttrs-override-clangStdenv-deprecated-nested = {
+        expr =
+          (package-stub-gcc.overridePythonAttrs {
+            stdenv = pkgs.clangStdenv;
+          }).stdenv;
+        expected = pkgs.clangStdenv;
+      };
 
       overridePythonAttrs = {
         expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
