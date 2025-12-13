@@ -13417,6 +13417,11 @@
     github = "katrinafyi";
     githubId = 39479354;
   };
+  kaweees = {
+    github = "kaweees";
+    githubId = 49963287;
+    name = "Miguel Villa Floran";
+  };
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
@@ -15183,6 +15188,12 @@
     github = "lostnet";
     githubId = 1422781;
     name = "Will Young";
+  };
+  loucass003 = {
+    name = "Lucas Lelievre";
+    email = "loucass003@gmail.com";
+    github = "loucass003";
+    githubId = 3948904;
   };
   louis-thevenet = {
     name = "Louis Thevenet";

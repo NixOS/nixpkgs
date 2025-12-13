@@ -13959,8 +13959,6 @@ with pkgs;
 
   nixos-artwork = recurseIntoAttrs (callPackage ../data/misc/nixos-artwork { });
 
-  nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
-
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (
