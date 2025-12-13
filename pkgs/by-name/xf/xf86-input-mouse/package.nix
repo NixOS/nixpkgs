@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-input-mouse";
-  version = "1.9.5";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "driver";
     repo = "xf86-input-mouse";
     tag = "xf86-input-mouse-${finalAttrs.version}";
-    hash = "sha256-vxdzLn9sclIYmPKw7vRa4oQJYmQV98WMfIjkMRosr/w=";
+    hash = "sha256-qPP0u7k1g30vw4A1c0fuVbQ9HHovTqWy8OAQ8uMGGg0=";
   };
 
   strictDeps = true;
@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    util-macros
     xorgproto
     xorg-server
   ];
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     pkgConfigModules = [ "xorg-mouse" ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
+    # platforms according to the readme
+    platforms = with lib.platforms; freebsd ++ netbsd ++ openbsd ++ illumos;
   };
 })
