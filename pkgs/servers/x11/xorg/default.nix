@@ -128,6 +128,7 @@
   xev,
   xeyes,
   xf86-input-mouse,
+  xf86-input-synaptics,
   xfd,
   xfontsel,
   xfs,
@@ -334,6 +335,7 @@ self: with self; {
   xcbutilwm = libxcb-wm;
   xcursorthemes = xcursor-themes;
   xf86inputmouse = xf86-input-mouse;
+  xf86inputsynaptics = xf86-input-synaptics;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -527,50 +529,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xorg-libinput" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputsynaptics = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libevdev,
-      libX11,
-      libXi,
-      xorgserver,
-      libXtst,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-synaptics";
-      version = "1.10.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.10.0.tar.xz";
-        sha256 = "1hmm3g6ab4bs4hm6kmv508fdc8kr2blzb1vsz1lhipcf0vdnmhp0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libevdev
-        libX11
-        libXi
-        xorgserver
-        libXtst
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-synaptics" ];
         platforms = lib.platforms.unix;
       };
     })

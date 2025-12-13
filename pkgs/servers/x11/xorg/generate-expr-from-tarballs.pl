@@ -460,6 +460,7 @@ print OUT <<EOF;
   xev,
   xeyes,
   xf86-input-mouse,
+  xf86-input-synaptics,
   xfd,
   xfontsel,
   xfs,
@@ -666,6 +667,7 @@ self: with self; {
   xcbutilwm = libxcb-wm;
   xcursorthemes = xcursor-themes;
   xf86inputmouse = xf86-input-mouse;
+  xf86inputsynaptics = xf86-input-synaptics;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
