@@ -13,7 +13,7 @@
   qt6,
   pcre,
   boost,
-  catch2_3,
+  catch2,
   fmt,
   microsoft-gsl,
   range-v3,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qt5compat
     pcre
     boost
-    catch2_3
+    catch2
     fmt
     microsoft-gsl
     range-v3
