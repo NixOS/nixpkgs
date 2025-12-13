@@ -97,6 +97,9 @@ optionals noSysDirs (
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+# c++tools: Don't check --enable-default-pie.
+# --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
+++ optional atLeast14 ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
