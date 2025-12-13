@@ -6790,6 +6790,8 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
+  apophenia = callPackage ../development/libraries/apophenia { };
+
   appstream = callPackage ../development/libraries/appstream { };
 
   argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
