@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-H46wFDSxG5Fg9HuJOLulBXoXR+osf4gJEa+ZMUMWT5Q=";
+    hash = "sha256-wItKDLAJHIyxUUaLIFM+sNYWtXKWC4P6GkCKn2Wh2JA=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 1;
-    hash = "sha256-QEOGL/FK0Vq8opPu7NeTTrk/rwWlMgisx+A7edMN9fw=";
+    hash = "sha256-WXsS5/J08n/dWV5MbyX4vK7j1mfiUoLdzwmzyqoX3FA=";
   };
 
   preBuild = ''

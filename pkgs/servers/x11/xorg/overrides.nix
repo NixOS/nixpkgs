@@ -221,55 +221,33 @@ self: super:
   xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
-  # Obsolete drivers that don't compile anymore.
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
+
   xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videoglide = super.xf86videoglide.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videotga = super.xf86videotga.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
-    };
-  });
-  xf86videovoodoo = super.xf86videovoodoo.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
-  xf86videowsfb = super.xf86videowsfb.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
+      platforms = lib.platforms.linux;
     };
   });
 
@@ -289,15 +267,6 @@ self: super:
     ];
     # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  });
-
-  xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
-    meta = attrs.meta // {
-      broken = true;
-    };
   });
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
@@ -512,4 +481,12 @@ self: super:
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+  xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
+  xf86videoglint = throw ''
+    The Xorg GLINT/Permedia video driver has been broken since xorg 21.
+    see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
+  ''; # added 2025-12-13
+  xf86videonewport = throw "The Xorg Newport video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videotga = throw "The Xorg TGA (aka DEC 21030) video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videowsfb = throw "The Xorg BSD wsdisplay framebuffer video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
 }

@@ -28,6 +28,8 @@
   libngspice,
   withScripting ? true,
   python3,
+  withJava ? false,
+  jre,
   addons ? [ ],
   debug ? false,
   sanitizeAddress ? false,
@@ -204,6 +206,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ] ++ optionals withScripting [ python.pkgs.wrapPython ];
 
+  buildInputs = optionals withJava [ jre ];
+
   # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
   # but it's used to find both the templates and the symbol/footprint library tables
   # https://gitlab.com/kicad/code/kicad/-/issues/14792
@@ -285,6 +289,7 @@ stdenv.mkDerivation rec {
         tool:
         "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
         + optionalString withScripting " --set PYTHONPATH \"$program_PYTHONPATH\""
+        + optionalString withJava " --set JAVA_HOME \"${jre}\""
       ) tools)
 
       # link in the CLI utils

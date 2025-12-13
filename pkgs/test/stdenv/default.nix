@@ -219,6 +219,22 @@ let
         touch $out
       '';
     };
+
+  testInputDerivationDep = stdenv.mkDerivation {
+    name = "test-input-derivation-dependency";
+    buildCommand = "touch $out";
+  };
+  testInputDerivation =
+    attrs:
+    (stdenv.mkDerivation (
+      attrs
+      // {
+        buildInputs = [ testInputDerivationDep ];
+      }
+    )).inputDerivation
+    // {
+      meta = { };
+    };
 in
 
 {
@@ -358,6 +374,55 @@ in
         grep ${inputDerivation.dep2} graph
         touch $out
       '';
+
+  test-inputDerivation-structured = testInputDerivation {
+    name = "test-inDrv-structured";
+    __structuredAttrs = true;
+  };
+
+  test-inputDerivation-allowedReferences = testInputDerivation {
+    name = "test-inDrv-allowedReferences";
+    allowedReferences = [ ];
+  };
+
+  test-inputDerivation-disallowedReferences = testInputDerivation {
+    name = "test-inDrv-disallowedReferences";
+    disallowedReferences = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-allowedRequisites = testInputDerivation {
+    name = "test-inDrv-allowedRequisites";
+    allowedRequisites = [ ];
+  };
+
+  test-inputDerivation-disallowedRequisites = testInputDerivation {
+    name = "test-inDrv-disallowedRequisites";
+    disallowedRequisites = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-structured-allowedReferences = testInputDerivation {
+    name = "test-inDrv-structured-allowedReferences";
+    __structuredAttrs = true;
+    outputChecks.out.allowedReferences = [ ];
+  };
+
+  test-inputDerivation-structured-disallowedReferences = testInputDerivation {
+    name = "test-inDrv-structured-disallowedReferences";
+    __structuredAttrs = true;
+    outputChecks.out.disallowedReferences = [ "${testInputDerivationDep}" ];
+  };
+
+  test-inputDerivation-structured-allowedRequisites = testInputDerivation {
+    name = "test-inDrv-structured-allowedRequisites";
+    __structuredAttrs = true;
+    outputChecks.out.allowedRequisites = [ ];
+  };
+
+  test-inputDerivation-structured-disallowedRequisites = testInputDerivation {
+    name = "test-inDrv-structured-disallowedRequisites";
+    __structuredAttrs = true;
+    outputChecks.out.disallowedRequisites = [ "${testInputDerivationDep}" ];
+  };
 
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
