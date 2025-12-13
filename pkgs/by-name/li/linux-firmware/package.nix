@@ -5,6 +5,7 @@
   python3,
   rdfind,
   which,
+  parallel,
   writeShellScriptBin,
 }:
 let
@@ -40,6 +41,7 @@ stdenvNoCC.mkDerivation rec {
     python3
     rdfind
     which
+    parallel
   ];
 
   installTargets = [
@@ -47,6 +49,7 @@ stdenvNoCC.mkDerivation rec {
     "dedup"
   ];
   makeFlags = [ "DESTDIR=$(out)" ];
+  enableParallelBuilding = true;
 
   # Firmware blobs do not need fixing and should not be modified
   dontFixup = true;
