@@ -462,6 +462,7 @@ print OUT <<EOF;
   xf86-input-mouse,
   xf86-input-synaptics,
   xf86-input-vmmouse,
+  xf86-input-void,
   xfd,
   xfontsel,
   xfs,
@@ -670,6 +671,7 @@ self: with self; {
   xf86inputmouse = xf86-input-mouse;
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
+  xf86inputvoid = xf86-input-void;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
