@@ -1,6 +1,9 @@
 source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
 
+# Export SSL_CERT_FILE so curl can see it
+export SSL_CERT_FILE="$SSL_CERT_FILE"
+
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for
