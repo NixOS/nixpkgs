@@ -13,6 +13,7 @@
   gawk,
   gitMinimal,
   git-lfs,
+  gnugrep,
   gnused,
   jq,
   mercurial,
@@ -35,7 +36,7 @@ let
       installPhase = ''
         install -vD ${src} $out/bin/$name;
         wrapProgram $out/bin/$name \
-          --prefix PATH : ${lib.makeBinPath ( deps ++ [ coreutils ])} \
+          --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils ])} \
           --set HOME /homeless-shelter
       '';
 
@@ -75,6 +76,7 @@ rec {
     mercurial
   ];
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [
+    gnugrep
     gnused
     subversion
   ];
