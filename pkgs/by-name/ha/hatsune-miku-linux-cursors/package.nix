@@ -1,7 +1,7 @@
 { lib, stdenvNoCC, fetchurl, nix-update-script, }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "hatsune-miku-cursors";
+  pname = "hatsune-miku-windows-linux-cursors";
   version = "1.2.6";
 
   src = fetchurl {
