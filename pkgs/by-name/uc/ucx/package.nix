@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openucx";
     repo = "ucx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-goANgYuMO1yColKOrqoBOj+yh68OSW7O8Ppng/pd4b0=";
+    hash = "sha256-54yLejOFdCa2KYstZuo+hZ5lSQR8WTZMa7lS0prc5NY=";
   };
 
   outputs = [
