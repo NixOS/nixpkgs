@@ -145,12 +145,12 @@ in
     with subtest("lomiri music plays music"):
         machine.succeed("xdotool mousemove 30 720 click 1") # Skip intro
         machine.sleep(2)
-        machine.wait_for_text("Albums")
+        machine.wait_for_window("Albums")
         machine.succeed("xdotool mousemove 25 45 click 1") # Open categories
         machine.sleep(2)
         machine.succeed("xdotool mousemove 25 240 click 1") # Switch to Tracks category
         machine.sleep(2)
-        machine.wait_for_text("Tracks") # Written in larger text now, easier for OCR
+        machine.wait_for_window("Tracks")
         machine.screenshot("lomiri-music_listing")
 
         # Ensure pause colours isn't present already
@@ -192,7 +192,7 @@ in
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
-        machine.wait_for_text("Titel")
+        machine.wait_for_window("Titel")
         machine.screenshot("lomiri-music_localised")
   '';
 }
