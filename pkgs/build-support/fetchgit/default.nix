@@ -2,7 +2,6 @@
   config,
   lib,
   stdenvNoCC,
-  writeText,
   git,
   git-lfs,
   cacert,
