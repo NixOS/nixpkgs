@@ -293,6 +293,14 @@ rec {
     ];
   };
 
+  idea = buildIdea {
+    pname = "idea";
+    extraBuildInputs = [
+      lldb
+      musl
+    ];
+  };
+
   mps = mkJetBrainsProduct { pname = "mps"; };
 
   phpstorm = mkJetBrainsProduct {

@@ -90,6 +90,18 @@
       "homepage": "https://www.jetbrains.com/idea/"
     }
   },
+  "idea": {
+    "product": "IntelliJ IDEA",
+    "productShort": "IDEA",
+    "wmClass": "jetbrains-idea",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Unified Java, Kotlin, Groovy and Scala IDE from JetBrains",
+      "maintainers": [ ],
+      "longDescription": "IntelliJ IDEA is a powerful IDE for JVM languages. It provides intelligent coding assistance, refactoring, debugging, and integration with build tools, version control systems, and application servers. Starting with version 2025.3, JetBrains offers a unified release combining features from both Community and Ultimate editions.",
+      "homepage": "https://www.jetbrains.com/idea/"
+    }
+  },
   "mps": {
     "product": "MPS",
     "wmClass": "jetbrains-MPS",
