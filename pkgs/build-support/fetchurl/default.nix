@@ -339,7 +339,7 @@ lib.extendMkDerivation {
         else
           ''
             ${netrcPhase}
-            curlOpts="$curlOpts --netrc-file $PWD/netrc"
+            curlOpts+=(--netrc-file "$PWD/netrc")
           '';
 
       inherit meta;
