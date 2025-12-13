@@ -1,21 +1,20 @@
 commit c534a831c2f7186ebabe4e17f1e1df6d11ebff89
-Author: Samuel Rounce <me@samuelrounce.co.uk>
+From: Andreas Rammhold <andreas@rammhold.de>
 Date:   Thu Sep 5 22:17:21 2024 +0100
+Subject: [PATCH] NIXOS: don't ignore PYTHONPATH
 
-    [PATCH] NIXOS: don't ignore PYTHONPATH
-    
-    On NixOS or rather within nixpkgs we provide the runtime Python
-    packages via the PYTHONPATH environment variable. FreeCAD tries its
-    best to ignore Python environment variables that are being inherited
-    from the environment. For Python versions >=3.11 it also tries to
-    initialize the interpreter config without any environmental data. We
-    have to initialize the configuration *with* the information from the
-    environment for our packaging to work.
-    
-    Upstream has purposely isolated the environments AFAIK and thus
-    shouldn't accept this patch (as is). What they might accept (once
-    support for older Python versions has been dropped) is removing the
-    PYTHONPATH specific putenv calls.
+On NixOS or rather within nixpkgs we provide the runtime Python
+packages via the PYTHONPATH environment variable. FreeCAD tries its
+best to ignore Python environment variables that are being inherited
+from the environment. For Python versions >=3.11 it also tries to
+initialize the interpreter config without any environmental data. We
+have to initialize the configuration *with* the information from the
+environment for our packaging to work.
+
+Upstream has purposely isolated the environments AFAIK and thus
+shouldn't accept this patch (as is). What they might accept (once
+support for older Python versions has been dropped) is removing the
+PYTHONPATH specific putenv calls.
 ---
  src/Base/Interpreter.cpp | 1 +
  src/Main/MainGui.cpp     | 3 ---
