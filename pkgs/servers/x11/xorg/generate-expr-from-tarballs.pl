@@ -462,6 +462,7 @@ print OUT <<EOF;
   xf86-input-evdev,
   xf86-input-joystick,
   xf86-input-vmmouse,
+  xf86-input-void,
   xfd,
   xfontsel,
   xfs,
@@ -660,6 +661,7 @@ self: with self; {
   xf86inputevdev = xf86-input-evdev;
   xf86inputjoystick = xf86-input-joystick;
   xf86inputvmmouse = xf86-input-vmmouse;
+  xf86inputvoid = xf86-input-void;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
