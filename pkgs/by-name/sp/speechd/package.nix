@@ -154,8 +154,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description =
-      "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
+      "Common high-level interface to speech synthesis"
+      + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
+    changelog = "https://github.com/brailcom/speechd/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
