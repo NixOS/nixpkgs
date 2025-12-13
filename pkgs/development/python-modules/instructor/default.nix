@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${version}";
-    hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
+    hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
   };
 
   build-system = [ hatchling ];
