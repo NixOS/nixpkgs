@@ -691,7 +691,6 @@ in
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
     systemd.services.dovecot = {
-      aliases = [ "dovecot2.service" ];
       description = "Dovecot IMAP/POP3 server";
       documentation = [
         "man:dovecot(1)"
