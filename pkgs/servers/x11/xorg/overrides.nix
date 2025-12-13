@@ -147,21 +147,6 @@ self: super:
     ];
   });
 
-  xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--sysconfdir=${placeholder "out"}/etc"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
-    ];
-
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
   xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
