@@ -338,42 +338,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xinit =
-    (super.xinit.override {
-      stdenv = if isDarwin then clangStdenv else stdenv;
-    }).overrideAttrs
-      (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ lib.optional isDarwin bootstrap_cmds;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
-        configureFlags = [
-          "--with-xserver=${xorg.xorgserver.out}/bin/X"
-        ]
-        ++ lib.optionals isDarwin [
-          "--with-bundle-id-prefix=org.nixos.xquartz"
-          "--with-launchdaemons-dir=\${out}/LaunchDaemons"
-          "--with-launchagents-dir=\${out}/LaunchAgents"
-        ];
-        postPatch = ''
-          # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
-          substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
-        '';
-        propagatedBuildInputs =
-          attrs.propagatedBuildInputs or [ ]
-          ++ [ xorg.xauth ]
-          ++ lib.optionals isDarwin [
-            xorg.libX11
-            xorg.xorgproto
-          ];
-        postFixup = ''
-          sed -i $out/bin/startx \
-            -e '/^sysserverrc=/ s:=.*:=/etc/X11/xinit/xserverrc:' \
-            -e '/^sysclientrc=/ s:=.*:=/etc/X11/xinit/xinitrc:'
-        '';
-        meta = attrs.meta // {
-          mainProgram = "xinit";
-        };
-      });
-
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
     name = "xf86-video-intel-2024-05-06";
