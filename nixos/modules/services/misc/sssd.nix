@@ -208,7 +208,6 @@ in
         description = "SSSD Kerberos Cache Manager";
         requires = [ "sssd-kcm.socket" ];
         serviceConfig = {
-          ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm";
           CapabilityBoundingSet = [
             "CAP_IPC_LOCK"
