@@ -239,12 +239,13 @@ self: super:
     };
   });
 
-  # Obsolete drivers that don't compile anymore.
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
+
+  # Obsolete drivers that don't compile anymore.
   xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
