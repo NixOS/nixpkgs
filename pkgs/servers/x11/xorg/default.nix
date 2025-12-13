@@ -128,6 +128,7 @@
   xev,
   xeyes,
   xf86-input-evdev,
+  xf86-input-joystick,
   xfd,
   xfontsel,
   xfs,
@@ -324,6 +325,7 @@ self: with self; {
   xcbutilwm = libxcb-wm;
   xcursorthemes = xcursor-themes;
   xf86inputevdev = xf86-input-evdev;
+  xf86inputjoystick = xf86-input-joystick;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -365,42 +367,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtrap" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputjoystick = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-joystick";
-      version = "1.6.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.4.tar.xz";
-        sha256 = "1lnc6cvrg81chb2hj3jphgx7crr4ab8wn60mn8f9nsdwza2w8plh";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xorg-joystick" ];
         platforms = lib.platforms.unix;
       };
     })
