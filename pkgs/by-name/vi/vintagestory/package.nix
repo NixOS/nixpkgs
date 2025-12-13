@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.vintagestory.at/";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       artturin
       gigglesquid
