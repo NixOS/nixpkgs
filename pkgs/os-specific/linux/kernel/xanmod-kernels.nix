@@ -15,8 +15,8 @@ let
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.12.61";
-      hash = "sha256-7m4Ehmy463rQK265fEvTMjndqZXs+PJ35HE+tZVKgGQ=";
+      version = "6.12.62";
+      hash = "sha256-NAcE8ml7HDhpLNDKZEKlEFwdylRiFte+Gi+uxnlyVHQ=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
