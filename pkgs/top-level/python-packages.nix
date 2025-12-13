@@ -20268,8 +20268,6 @@ self: super: with self; {
 
   vulture = callPackage ../development/python-modules/vulture { };
 
-  vxi11 = callPackage ../development/python-modules/vxi11 { };
-
   vyper = callPackage ../development/compilers/vyper { };
 
   w1thermsensor = callPackage ../development/python-modules/w1thermsensor { };
