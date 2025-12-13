@@ -1,25 +1,30 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchgit,
   rtl-sdr,
   libxml2,
+  git,
   pkg-config,
   netcat,
   jq,
   unixtools,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wmbusmeters";
   version = "1.19.0";
 
-  src = fetchFromGitHub {
-    owner = "wmbusmeters";
-    repo = "wmbusmeters";
+  # fetchFromGitHub does not support leaveDotGit
+  src = fetchgit {
+    url = "https://github.com/wmbusmeters/wmbusmeters";
     tag = version;
-    hash = "sha256-Y/xHw++llHw3iIImXllJg7QqU0Ngj0MLJyyqE1dBNjA=";
+    hash = "sha256-JMDwK+4pEMpl8DGitsytLooxwz82KFO0kbduRtToAV8=";
+
+    # need to fetch revision from git
+    leaveDotGit = true;
   };
 
   buildInputs = [
@@ -28,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    git
     pkg-config
     libxml2.dev
   ];
@@ -39,9 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   # avoid reading the version from git to avoid fetching all tags
-  # TODO read COMMIT_HASH
   makeFlags = [
-    "COMMIT_HASH="
     "TAG=${version}"
     "BRANCH="
     "CHANGES="
