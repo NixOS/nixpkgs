@@ -147,17 +147,6 @@ self: super:
     ];
   });
 
-  xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # *.pc pulls xorgserver.dev
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-    ];
-  });
-
   xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
     configureFlags = [
       "--sysconfdir=${placeholder "out"}/etc"
