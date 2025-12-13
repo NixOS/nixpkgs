@@ -196,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     capnproto
     editline
-    libsodium
     openssl
     sqlite
     xz
