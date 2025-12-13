@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wmbusmeters";
     repo = "wmbusmeters";
-
-    # need to store rev as COMMIT_HASH later
-    rev = "41dc2d47fda72e78964b9283c99a0c98492360ba";
+    tag = version;
     hash = "sha256-Y/xHw++llHw3iIImXllJg7QqU0Ngj0MLJyyqE1dBNjA=";
   };
 
@@ -41,8 +39,9 @@ stdenv.mkDerivation rec {
   ];
 
   # avoid reading the version from git to avoid fetching all tags
+  # TODO read COMMIT_HASH
   makeFlags = [
-    "COMMIT_HASH=${src.rev}"
+    "COMMIT_HASH="
     "TAG=${version}"
     "BRANCH="
     "CHANGES="
@@ -74,6 +73,8 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Read the wired or wireless mbus protocol to acquire utility meter readings.";
