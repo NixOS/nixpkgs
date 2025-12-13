@@ -130,6 +130,7 @@
   xeyes,
   xf86-input-evdev,
   xf86-input-joystick,
+  xf86-input-keyboard,
   xf86-input-mouse,
   xf86-input-synaptics,
   xf86-input-vmmouse,
@@ -350,6 +351,7 @@ self: with self; {
   xcursorthemes = xcursor-themes;
   xf86inputevdev = xf86-input-evdev;
   xf86inputjoystick = xf86-input-joystick;
+  xf86inputkeyboard = xf86-input-keyboard;
   xf86inputmouse = xf86-input-mouse;
   xf86inputsynaptics = xf86-input-synaptics;
   xf86inputvmmouse = xf86-input-vmmouse;
@@ -359,42 +361,6 @@ self: with self; {
   xorgdocs = xorg-docs;
   xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86inputkeyboard = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-input-keyboard";
-      version = "2.1.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-input-keyboard-2.1.0.tar.xz";
-        sha256 = "0mvwxrnkq0lzhjr894p420zxffdn34nc2scinmp7qd1hikr51kkp";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage (

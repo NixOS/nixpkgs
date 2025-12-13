@@ -71,12 +71,6 @@ self: super:
 {
   mkfontdir = xorg.mkfontscale;
 
-  xf86inputkeyboard = super.xf86inputkeyboard.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      platforms = lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
-    };
-  });
-
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [
       "out"
