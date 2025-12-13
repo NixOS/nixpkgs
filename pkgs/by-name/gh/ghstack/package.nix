@@ -38,7 +38,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Submit stacked diffs to GitHub on the command line";
     homepage = "https://github.com/ezyang/ghstack";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ munksgaard ];
+    maintainers = with lib.maintainers; [
+      munksgaard
+      shikanime
+    ];
     mainProgram = "ghstack";
   };
 }
