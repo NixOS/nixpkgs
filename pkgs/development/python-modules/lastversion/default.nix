@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # nativeBuildInputs
   setuptools,
   # nativeCheckInputs
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "lastversion";
   version = "3.5.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dvershinin";
