@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "collectd";
-  meta = { };
+  meta.maintainers = pkgs.cloudlog.meta.maintainers;
 
   nodes.machine =
     { pkgs, lib, ... }:
