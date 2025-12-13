@@ -608,7 +608,9 @@ self: super: with self; {
 
   alibabacloud-credentials = callPackage ../development/python-modules/alibabacloud-credentials { };
 
-  alibabacloud-credentials-api = callPackage ../development/python-modules/alibabacloud-credentials-api { };
+  alibabacloud-credentials-api =
+    callPackage ../development/python-modules/alibabacloud-credentials-api
+      { };
 
   alibabacloud-endpoint-util =
     callPackage ../development/python-modules/alibabacloud-endpoint-util
