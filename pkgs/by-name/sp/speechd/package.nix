@@ -34,9 +34,6 @@
   libsOnly ? false,
 }:
 
-let
-  inherit (python3Packages) python pyxdg wrapPython;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
   version = "0.12.1";
@@ -67,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     itstool
     texinfo
-    wrapPython
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -76,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libao
     libpulseaudio
-    python
+    python3Packages.python
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemdMinimal # libsystemd
@@ -97,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pythonPath = [
-    pyxdg
+    python3Packages.pyxdg
   ];
 
   configureFlags = [
