@@ -209,7 +209,7 @@ in
         requires = [ "sssd-kcm.socket" ];
         serviceConfig = {
           ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
-          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm";
           CapabilityBoundingSet = [
             "CAP_IPC_LOCK"
             "CAP_CHOWN"
