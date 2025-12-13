@@ -251,13 +251,6 @@ self: super:
     };
   });
 
-  # Obsolete drivers that don't compile anymore.
-  xf86videovoodoo = super.xf86videovoodoo.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
-
   xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
   });
