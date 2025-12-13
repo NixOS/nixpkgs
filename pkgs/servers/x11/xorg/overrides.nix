@@ -242,11 +242,6 @@ self: super:
       broken = true;
     };
   });
-  xf86videotga = super.xf86videotga.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
   xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
@@ -741,4 +736,5 @@ self: super:
     see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
   ''; # added 2025-12-13
   xf86videonewport = throw "The Xorg Newport video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videotga = throw "The Xorg TGA (aka DEC 21030) video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
 }
