@@ -135,6 +135,7 @@
   xgc,
   xhost,
   xinit,
+  xinput,
   xkbcomp,
   xkbevd,
   xkbprint,
@@ -224,6 +225,7 @@ self: with self; {
     xgc
     xhost
     xinit
+    xinput
     xkbcomp
     xkbevd
     xkbprint
@@ -2303,50 +2305,6 @@ self: with self; {
       buildInputs = [
         xorgserver
         xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xinput = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      libXi,
-      libXinerama,
-      libXrandr,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xinput";
-      version = "1.6.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xinput-1.6.4.tar.xz";
-        sha256 = "1j2pf28c54apr56v1fmvprp657n6x4sdrv8f24rx3138cl6x015d";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-        libXi
-        libXinerama
-        libXrandr
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

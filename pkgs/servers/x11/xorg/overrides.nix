@@ -409,8 +409,6 @@ self: super:
     ];
   });
 
-  xinput = addMainProgram super.xinput { };
-
   xwd = addMainProgram super.xwd { };
 }
 
