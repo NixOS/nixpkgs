@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
+  env.KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
+
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
   strictDeps = true;
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://sourceforge.net/projects/libtirpc/";
