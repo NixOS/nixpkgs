@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  mecab-ipadic,
   libiconv,
+  callPackage,
+  fetchFromGitHub,
 }:
 
 let
-  mecab-base = import ./base.nix { inherit fetchurl libiconv; };
+  mecab-base = import ./base.nix { inherit fetchFromGitHub libiconv; };
+  mecab-ipadic = callPackage ./ipadic.nix { };
 in
 stdenv.mkDerivation (
   finalAttrs:
