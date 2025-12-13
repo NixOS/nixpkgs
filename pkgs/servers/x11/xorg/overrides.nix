@@ -122,15 +122,6 @@ self: super:
     ];
   });
 
-  xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
-    };
-  });
-
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
