@@ -8,6 +8,7 @@
   nodejs,
   rustPlatform,
   protobuf,
+  nixosTests,
 }:
 
 let
@@ -83,6 +84,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=admin::handlers::site_replication::tests::test_site_replication_peer_client_cache_hit_returns_cached_ready_client"
     "--skip=admin::handlers::site_replication::tests::test_site_replication_peer_client_rebuilds_when_generation_changes"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) rustfs;
+  };
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";
