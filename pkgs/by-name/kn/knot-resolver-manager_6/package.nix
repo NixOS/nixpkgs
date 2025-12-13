@@ -23,7 +23,6 @@ python3Packages.buildPythonPackage {
   # But the install-time etc differs from a sensible run-time etc.
   postPatch = ''
     substitute '${knot-resolver.unwrapped.config_py}'/knot_resolver/constants.py ./python/knot_resolver/constants.py \
-      --replace-fail '${knot-resolver.unwrapped.out}/etc' '/etc' \
       --replace-fail '${knot-resolver.unwrapped.out}/sbin' '${knot-resolver}/bin'
   ''
   # On non-Linux let's simplify construction of the knot-resolver command line,

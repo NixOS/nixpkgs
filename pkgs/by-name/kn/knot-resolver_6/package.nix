@@ -56,20 +56,12 @@ let
         excludes = [ "NEWS" ];
         hash = "sha256-3w33v8UfhGdA50BlkfHpQLFxg+5ELk0lp7RzgvkSzK8=";
       })
+      # Install-time paths sometimes differ from run-time paths in nixpkgs.
+      ./paths.patch
     ];
 
-    # Path fixups for the NixOS service.
     # systemd Exec* options are difficult to override in NixOS *if present*, so we drop them.
     postPatch = ''
-      patch meson.build <<EOF
-      @@ -50,2 +50,3 @@
-      -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
-      -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
-      +systemd_work_dir  = '/var/lib/knot-resolver'
-      +systemd_cache_dir = '/var/cache/knot-resolver'
-      +run_dir = '/run/knot-resolver'
-      EOF
-
       sed -e '/^ExecStart=/d' -e '/^ExecReload=/d' \
         -i systemd/knot-resolver.service.in
     ''
