@@ -2,6 +2,7 @@
   lib,
   fetchFromGitLab,
   cpio,
+  cups,
   ddcutil,
   easyeffects,
   gjs,
@@ -168,6 +169,14 @@ lib.trivial.pipe super [
       ];
     }
   ))
+
+  (patchExtension "printers@linux-man.org" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/printers_at_linux-man.org.patch {
+        inherit cups;
+      })
+    ];
+  }))
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
