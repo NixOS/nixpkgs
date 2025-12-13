@@ -10,7 +10,7 @@
   fetchzip,
   replaceVars,
   runCommand,
-
+  which,
   ant,
   cacert,
   cmake,
@@ -217,6 +217,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # fix hardcoded paths to /usr/bin/which
+    substituteInPlace \
+    src/node/desktop/src/main/detect-r.ts \
+    src/node/desktop/src/main/gwt-callback.ts \
+    src/cpp/session/modules/clang/CodeCompletion.cpp \
+    src/cpp/core/system/PosixSystemTests.cpp \
+    --replace-fail "/usr/bin/which" "${lib.getExe which}"
+
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
       --replace-fail "\''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
