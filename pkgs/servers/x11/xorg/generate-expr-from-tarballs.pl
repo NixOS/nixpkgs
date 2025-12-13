@@ -461,6 +461,7 @@ print OUT <<EOF;
   xeyes,
   xf86-input-evdev,
   xf86-input-joystick,
+  xf86-input-vmmouse,
   xfd,
   xfontsel,
   xfs,
@@ -658,6 +659,7 @@ self: with self; {
   xcursorthemes = xcursor-themes;
   xf86inputevdev = xf86-input-evdev;
   xf86inputjoystick = xf86-input-joystick;
+  xf86inputvmmouse = xf86-input-vmmouse;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
