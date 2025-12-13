@@ -26,7 +26,7 @@ let
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-/I6kYm/j2hO2OAZaWVIRYI1ejBTGMI3PzTjRLcmwziQ=";
+    hash = "sha256-N163rC8kErZresODLV8bNOp/lZR+I/s9ddC/nZrzH5c=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -148,26 +148,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-XGQIHkRfCSdEnZlhodN38BKZGkgOPuUnxveG4yX0rMw=";
-    vendorHash = "sha256-0i+eHVBwYvEKf4kXfyOuN/gEkDk2/5s7+3HQjYCtI94=";
+    sourceHash = "sha256-OXcBpnHOLuIP6kR676NMIkqaP+kQXsvacFFKrsnTMAQ=";
+    vendorHash = "sha256-sK/H9VxL7kCrROqr5zJUcn7NfPh7ZpsJ/0TQeEWKnm8=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-87VmiafluGem4p5hRP+UmPuSJeXdXjZkubWzqhXtyJg=";
-    vendorHash = "sha256-/qSXvt8oQ0C3V49an7TNUw0bcNVnXd5Qmz5oCRp+KTE=";
+    sourceHash = "sha256-tkuWU1Wx5lQey57euRww4QHsL16oayYWw395sVujbdA=";
+    vendorHash = "sha256-bsDOxrupB4XzVhGU7zbHHeEG5lxHBqWij6pcfjsgP7Y=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-B5NbbQBIz3RZ/+jSxNhuY+zpfhHlg26cvUlMqlYXtq0=";
-    vendorHash = "sha256-2dGNrsskrCh76bTMuPYcRH+bMl/sE+KVn2mOqcF2PeI=";
+    sourceHash = "sha256-kO5xLaw7/eXimkPbxSqr/csh/omUlsrKG/5O27VlY5c=";
+    vendorHash = "sha256-h0IA7iaS+LOkYJAsghwOtUeEL6GWNtpGc6xDKT21Q9I=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-c83fzhC4XbvRHZ3XwXQgwsyW1TDiDs0T/bX3h53n2RE=";
-    vendorHash = "sha256-QVNQFsaACvlByQWwpl2emSIrL+how78WtU51YJ2AvAU=";
+    sourceHash = "sha256-d2R3DWh13gXtzm0mBMfnMUV+t8qVLiccQQ/W3yGyd4Q=";
+    vendorHash = "sha256-zTThbJFoqZ4hecQ5DBwdnjEngU8N/V9YfVjxt2LW8PM=";
   };
 }
