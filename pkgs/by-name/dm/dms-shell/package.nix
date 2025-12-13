@@ -7,68 +7,96 @@
   procps,
   nix-update-script,
   bashNonInteractive,
+  fprintd,
+  kdePackages,
+  qt6,
 }:
 
-buildGoModule (finalAttrs: {
-  pname = "dms-shell";
-  version = "0.6.2";
+buildGoModule (
+  finalAttrs:
+  let
+    qmlPkgs = with kdePackages; [
+      kirigami.unwrapped
+      sonnet
+      qtmultimedia
+    ];
 
-  src = fetchFromGitHub {
-    owner = "AvengeMedia";
-    repo = "DankMaterialShell";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-dLbiTWsKoF0if/Wqet/+L90ILdAaBqp+REGOou8uH3k=";
-  };
+    qmlImportPath = lib.concatStringsSep ":" (map (o: "${o}/${qt6.qtbase.qtQmlPrefix}") qmlPkgs);
+    qtPluginPath = lib.concatStringsSep ":" (map (o: "${o}/${qt6.qtbase.qtPluginPrefix}") qmlPkgs);
+  in
+  {
+    pname = "dms-shell";
+    version = "1.0.2";
 
-  sourceRoot = "${finalAttrs.src.name}/core";
+    src = fetchFromGitHub {
+      owner = "AvengeMedia";
+      repo = "DankMaterialShell";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-rWjWYu5rs3ZOJ4YJpvIscBZSYu74thJHc0VYyYKJTUc=";
+    };
 
-  vendorHash = "sha256-nc4CvEPfJ6l16/zmhnXr1jqpi6BeSXd3g/51djbEfpQ=";
+    sourceRoot = "${finalAttrs.src.name}/core";
 
-  ldflags = [
-    "-w"
-    "-s"
-    "-X main.Version=${finalAttrs.version}"
-  ];
+    vendorHash = "sha256-2PCqiW4frxME8IlmwWH5ktznhd/G1bah5Ae4dp0HPTQ=";
 
-  subPackages = [ "cmd/dms" ];
+    ldflags = [
+      "-s"
+      "-w"
+      "-X main.Version=${finalAttrs.version}"
+    ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
-  ];
+    subPackages = [ "cmd/dms" ];
 
-  postInstall = ''
-    mkdir -p $out/share/quickshell
-    cp -r ${finalAttrs.src}/quickshell $out/share/quickshell/dms
+    nativeBuildInputs = [
+      installShellFiles
+      makeWrapper
+    ];
 
-    wrapProgram $out/bin/dms --add-flags "-c $out/share/quickshell/dms"
+    postInstall = ''
+      mkdir -p $out/share/quickshell/dms
+      cp -r ${finalAttrs.src}/quickshell/. $out/share/quickshell/dms/
 
-    install -Dm644 ${finalAttrs.src}/quickshell/assets/systemd/dms.service \
-      $out/lib/systemd/user/dms.service
-    substituteInPlace $out/lib/systemd/user/dms.service \
-      --replace-fail /usr/bin/dms $out/bin/dms \
-      --replace-fail /usr/bin/pkill ${procps}/bin/pkill
+      install -D ${finalAttrs.src}/assets/dms-open.desktop \
+        $out/share/applications/dms-open.desktop
+      install -D ${finalAttrs.src}/core/assets/danklogo.svg \
+        $out/share/hicolor/scalable/apps/danklogo.svg
 
-    substituteInPlace $out/share/quickshell/dms/Modules/Greetd/assets/dms-greeter \
-      --replace-fail /bin/bash ${bashNonInteractive}/bin/bash
+      wrapProgram $out/bin/dms \
+        --add-flags "-c $out/share/quickshell/dms" \
+        --prefix "NIXPKGS_QT6_QML_IMPORT_PATH" ":" "${qmlImportPath}" \
+        --prefix "QT_PLUGIN_PATH" ":" "${qtPluginPath}"
 
-    installShellCompletion --cmd dms \
-      --bash <($out/bin/dms completion bash) \
-      --fish <($out/bin/dms completion fish) \
-      --zsh <($out/bin/dms completion zsh)
-  '';
+      install -Dm644 ${finalAttrs.src}/assets/systemd/dms.service \
+        $out/lib/systemd/user/dms.service
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+      substituteInPlace $out/lib/systemd/user/dms.service \
+        --replace-fail /usr/bin/dms $out/bin/dms \
+        --replace-fail /usr/bin/pkill ${procps}/bin/pkill
 
-  meta = {
-    description = "Desktop shell for wayland compositors built with Quickshell & GO";
-    homepage = "https://danklinux.com";
-    changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    teams = [ lib.teams.danklinux ];
-    mainProgram = "dms";
-    platforms = lib.platforms.linux;
-  };
-})
+      substituteInPlace $out/share/quickshell/dms/Modules/Greetd/assets/dms-greeter \
+        --replace-fail /bin/bash ${bashNonInteractive}/bin/bash
+
+      substituteInPlace $out/share/quickshell/dms/assets/pam/fprint \
+        --replace-fail pam_fprintd.so ${fprintd}/lib/security/pam_fprintd.so
+
+      installShellCompletion --cmd dms \
+        --bash <($out/bin/dms completion bash) \
+        --fish <($out/bin/dms completion fish) \
+        --zsh <($out/bin/dms completion zsh)
+    '';
+
+    passthru = {
+      updateScript = nix-update-script { };
+    };
+
+    meta = {
+      description = "DankMaterialShell - Desktop shell for wayland compositors built with Quickshell & GO";
+      homepage = "https://danklinux.com";
+      changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
+      license = lib.licenses.mit;
+      teams = [ lib.teams.danklinux ];
+      mainProgram = "dms";
+      platforms = lib.platforms.linux;
+    };
+  }
+)
