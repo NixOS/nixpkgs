@@ -59,10 +59,6 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  malloc0ReturnsNullCrossFlag = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
-
   addMainProgram =
     pkg:
     {
@@ -115,64 +111,12 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
-  xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xdpyinfo";
-    };
-  });
-
-  xdm = super.xdm.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libxcrypt ];
-    configureFlags =
-      attrs.configureFlags or [ ]
-      ++ [
-        "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-      ]
-      ++
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-          # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
-          [
-            "ac_cv_file__dev_urandom=true"
-            "ac_cv_file__dev_random=true"
-          ];
-    meta = attrs.meta // {
-      mainProgram = "xdm";
-    };
-  });
-
-  xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # to get rid of xorgserver.dev; man is tiny
-    preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    configureFlags = [
-      "--with-sdkdir=${placeholder "dev"}/include/xorg"
-    ];
-  });
-
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
     meta = attrs.meta // {
       broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
-    };
-  });
-
-  xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    configureFlags = [
-      "--with-sdkdir=${placeholder "out"}/include/xorg"
-    ];
-    meta = attrs.meta // {
-      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
     };
   });
 
@@ -203,22 +147,6 @@ self: super:
     ];
   });
 
-  xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
-    configureFlags = [
-      "--sysconfdir=${placeholder "out"}/etc"
-      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
-    ];
-
-    meta = attrs.meta // {
-      platforms = [
-        "i686-linux"
-        "x86_64-linux"
-      ];
-    };
-  });
-
-  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
   # Obsolete drivers that don't compile anymore.
@@ -405,8 +333,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xclock = addMainProgram super.xclock { };
-
   xinit =
     (super.xinit.override {
       stdenv = if isDarwin then clangStdenv else stdenv;
@@ -490,8 +416,6 @@ self: super:
     ];
   });
 
-  xfd = addMainProgram super.xfd { };
-  xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
