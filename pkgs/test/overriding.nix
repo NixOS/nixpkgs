@@ -292,14 +292,107 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
+      package-stub = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+        }
+      ) { };
+
+      package-stub-gcc = package-stub.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.gccStdenv;
+        };
       });
+      package-stub-clang = package-stub-gcc.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.clangStdenv;
+        };
+      });
+      package-stub-libcxx = package-stub-clang.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.libcxxStdenv;
+        };
+      });
+
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (previousAttrs: {
+          overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+        });
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
     in
     {
+      buildPythonPackage-override-gccStdenv = {
+        expr = package-stub-gcc.stdenv;
+        expected = pkgs.gccStdenv;
+      };
+      buildPythonPackage-override-clangStdenv = {
+        expr = package-stub-clang.stdenv;
+        expected = pkgs.clangStdenv;
+      };
+      buildPythonPackage-override-libcxxStdenv = {
+        expr = package-stub-libcxx.stdenv;
+        expected = pkgs.libcxxStdenv;
+      };
+      overridePythonAttrs-stdenv-deprecated = {
+        expr =
+          (package-stub.overridePythonAttrs (_: {
+            stdenv = pkgs.clangStdenv;
+          })).stdenv;
+        expected = pkgs.clangStdenv;
+      };
+
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
+        expected = 1;
+      };
+      overridePythonAttrs-nested = {
+        expr = (applyOverridePythonAttrs (applyOverridePythonAttrs package-stub)).overridePythonAttrsFlag;
+        expected = 2;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = {
+          inherit (applyOverridePythonAttrs (overrideAttrsFooBar package-stub))
+            FOO
+            BAR
+            ;
+        };
+        expected = {
+          FOO = "a";
+          BAR = "a";
+        };
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = (applyOverridePythonAttrs (overrideAttrsFooBar package-stub)) ? overridePythonAttrsFlag;
         expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr = overrideAttrsFooBar (applyOverridePythonAttrs package-stub);
+        expected = applyOverridePythonAttrs (overrideAttrsFooBar package-stub);
+      };
+      chain-of-overrides = rec {
+        expr = lib.pipe package-stub [
+          (p: p.overrideAttrs { inherit (expected) a; })
+          (p: p.overridePythonAttrs { inherit (expected) b; })
+          (p: p.overrideAttrs { inherit (expected) c; })
+          (p: p.overridePythonAttrs { inherit (expected) d; })
+          (builtins.intersectAttrs expected)
+        ];
+        expected = lib.genAttrs [ "a" "b" "c" "d" ] lib.id;
       };
     };
 
