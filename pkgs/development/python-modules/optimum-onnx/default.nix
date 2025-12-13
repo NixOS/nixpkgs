@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "optimum-onnx";
-  version = "0.0.2";
+  version = "0.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum-onnx";
     tag = "v${version}";
-    hash = "sha256-wT3yqS64LMuq76Yxs6V6nHfD8vgSfPoJm3hbW7E2zpk=";
+    hash = "sha256-IFXtKkJwmrcdjfXE2YccbRylU723fTG70Z6c9fIL5mE=";
   };
 
   build-system = [
