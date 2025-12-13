@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  catch2_3,
+  catch2,
   asio,
   python3,
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
   checkInputs = [
-    catch2_3
+    catch2
   ];
 
   meta = {

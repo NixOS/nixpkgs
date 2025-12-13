@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  catch2_3,
+  catch2,
   cmake,
   ninja,
   fmt,
@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     mimalloc
     # though only used in tests, cmake will complain its absence when configuring
-    catch2_3
+    catch2
   ];
 
   # TODO: a mysterious linker error occurs when building the unittests on darwin.
-  # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
+  # The error occurs when using catch2 (2.3) in nixpkgs, not when fetching catch2 (2.3) using CMake
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {

@@ -5,7 +5,7 @@
   fetchpatch,
   cmake,
   fmt,
-  catch2_3,
+  catch2,
   staticBuild ? stdenv.hostPlatform.isStatic,
 
   # passthru
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   # Required to build tests, even if they aren't executed
-  buildInputs = [ catch2_3 ];
+  buildInputs = [ catch2 ];
   propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [

@@ -7,7 +7,7 @@
   copyDesktopItems,
   cmake,
   pkg-config,
-  catch2_3,
+  catch2,
   ncurses,
   kdePackages,
   kissfftFloat,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qwt
     kdePackages.qscintilla
     kissfftFloat
-    catch2_3
+    catch2
     crossguid
     reproc
     platform-folders

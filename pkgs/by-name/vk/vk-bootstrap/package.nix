@@ -10,17 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vk-bootstrap";
-  version = "0.7";
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.4.334";
 
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
-    rev = "v${version}";
-    hash = "sha256-X3ANqfplrCF1R494+H5/plcwMH7rbW6zpLA4MZrYaoE=";
+    tag = "v${version}";
+    hash = "sha256-tUh6FTGdIye250Xk6iwsTGEGFh7PYIQPJgmAGxID+1U=";
   };
 
   postPatch = ''
@@ -30,7 +26,13 @@ stdenv.mkDerivation rec {
     sed -i 's=Catch2==g' tests/CMakeLists.txt
   '';
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     vulkan-headers
     glfw
@@ -41,11 +43,11 @@ stdenv.mkDerivation rec {
     "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${vulkan-headers}/include"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Bootstrapping Library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.all;
   };
 }

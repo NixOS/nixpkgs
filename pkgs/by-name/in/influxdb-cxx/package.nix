@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   boost,
-  catch2_3,
+  catch2,
   libcpr_1_10_5,
   trompeloeil,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcpr_1_10_5
   ]
   ++ lib.optionals finalAttrs.finalPackage.doCheck [
-    catch2_3
+    catch2
     trompeloeil
   ];
 

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  catch2_3,
+  catch2,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeCheckInputs = [
-    catch2_3
+    catch2
   ];
 
   doCheck = true;
