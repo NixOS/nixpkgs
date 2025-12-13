@@ -3,7 +3,7 @@
   stdenv,
   makeWrapper,
   buildEnv,
-  bash,
+  bashNonInteractive,
   breezy,
   cacert,
   coreutils,
@@ -28,7 +28,7 @@ let
 
       strictDeps = true;
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ bash ];
+      buildInputs = [ bashNonInteractive ];
 
       dontUnpack = true;
 
