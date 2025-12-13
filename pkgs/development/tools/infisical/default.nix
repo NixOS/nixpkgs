@@ -21,7 +21,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.41.90";
+  version = "0.43.22";
 
   # the platform-specific, statically linked binary
   src =
@@ -37,9 +37,9 @@ let
         }
         ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-      name = "infisical_${version}_${suffix}.tar.gz";
+      name = "cli_${version}_${suffix}.tar.gz";
       hash = buildHashes."${stdenv.hostPlatform.system}";
-      url = "https://github.com/Infisical/infisical/releases/download/infisical-cli%2Fv${version}/${name}";
+      url = "https://github.com/Infisical/cli/releases/download/v${version}/${name}";
     in
     fetchurl { inherit name url hash; };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       Sync secrets across your team/infrastructure and prevent secret leaks.
     '';
     homepage = "https://infisical.com";
-    changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
+    changelog = "https://github.com/infisical/cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "infisical";
     maintainers = with lib.maintainers; [ hausken ];
