@@ -466,6 +466,7 @@ print OUT <<EOF;
   xgamma,
   xgc,
   xhost,
+  xinit,
   xkbcomp,
   xkbevd,
   xkbprint,
@@ -554,6 +555,7 @@ self: with self; {
     xgamma
     xgc
     xhost
+    xinit
     xkbcomp
     xkbevd
     xkbprint
