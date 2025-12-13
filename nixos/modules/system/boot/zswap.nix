@@ -4,8 +4,9 @@
 # - https://docs.kernel.org/admin-guide/mm/zswap.html
 # - https://www.kernel.org/doc/html/v6.1/admin-guide/mm/zswap.html
 #
-# IMPORTANT: When modifying this file, ensure that activationScripts implementation
-# remains consistent with config implementation (kernel parameters and sysfs settings)
+# IMPORTANT: When modifying this file, ensure that boot.kernel.sysfs configuration
+# remains consistent with kernel parameters configuration. The sysfs settings provide
+# runtime management while kernel parameters ensure early-boot availability.
 
 { config, lib, ... }:
 
@@ -110,7 +111,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    # 1. Core configuration: kernel parameters
+    # 1. Core configuration: kernel parameters for early boot
     boot.kernelParams = [
       "zswap.enabled=1"
       "zswap.compressor=${cfg.compressor}"
@@ -127,56 +128,15 @@ in
       cfg.zpool
     ];
 
-    # 3. Activation scripts for runtime configuration and rebuild handling
-    system.activationScripts.zswap-stop = {
-      supportsDryActivation = true;
-      deps = [ "specialfs" ];
-      text = ''
-        # Stop zswap during system rebuild to prevent state conflicts
-        # This script runs before the new configuration is activated
-        if [ -f /sys/module/zswap/parameters/enabled ]; then
-          current_enabled=$(cat /sys/module/zswap/parameters/enabled)
-          if [ "$current_enabled" = "Y" ] || [ "$current_enabled" = "1" ]; then
-            echo "Stopping zswap for system rebuild..."
-            # Disable zswap to clear any existing state
-            echo N > /sys/module/zswap/parameters/enabled 2>/dev/null || true
-            # Wait a moment for the disable to take effect
-            sleep 1
-          fi
-        fi
-      '';
-    };
-
-    system.activationScripts.zswap-start = {
-      supportsDryActivation = true;
-      deps = [
-        "zswap-stop"
-        "filesystems"
-      ];
-      text = ''
-        # Start zswap with the configured parameters
-        # This script runs after the new configuration is activated
-        if [ -f /sys/module/zswap/parameters/enabled ]; then
-          echo "Starting zswap with configured parameters..."
-
-          # Configure zswap parameters via sysfs
-          # Note: These may already be set via kernel parameters, but we set them
-          # here to ensure they're correct even if the kernel parameters change
-          echo ${cfg.compressor} > /sys/module/zswap/parameters/compressor 2>/dev/null || true
-          echo ${cfg.zpool} > /sys/module/zswap/parameters/zpool 2>/dev/null || true
-          echo ${toString cfg.maxPoolPercent} > /sys/module/zswap/parameters/max_pool_percent 2>/dev/null || true
-          echo ${toString cfg.acceptThresholdPercent} > /sys/module/zswap/parameters/accept_threshold_percent 2>/dev/null || true
-          echo Y > /sys/module/zswap/parameters/same_filled_pages_enabled 2>/dev/null || true
-          echo Y > /sys/module/zswap/parameters/writeback 2>/dev/null || true
-
-          # Enable zswap
-          echo Y > /sys/module/zswap/parameters/enabled 2>/dev/null || true
-
-          echo "Zswap enabled with compressor=${cfg.compressor}, zpool=${cfg.zpool}, max_pool_percent=${toString cfg.maxPoolPercent}%, accept_threshold_percent=${toString cfg.acceptThresholdPercent}%"
-        else
-          echo "Warning: zswap sysfs interface not available. Check kernel configuration."
-        fi
-      '';
+    # 3. Runtime configuration using boot.kernel.sysfs
+    # This ensures zswap parameters are properly set and maintained during system rebuilds
+    boot.kernel.sysfs.module.zswap.parameters = {
+      enabled = true;
+      compressor = cfg.compressor;
+      zpool = cfg.zpool;
+      max_pool_percent = cfg.maxPoolPercent;
+      accept_threshold_percent = cfg.acceptThresholdPercent;
+      shrinker_enabled = true;
     };
 
     assertions = [
