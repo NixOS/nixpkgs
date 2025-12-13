@@ -1,91 +1,151 @@
 {
-  lib,
-  azure-storage-blob,
   buildPythonPackage,
-  fetchpatch,
   fetchFromGitHub,
-  flask,
-  flask-mongoengine,
-  flask-sqlalchemy,
-  geoalchemy2,
-  mongoengine,
-  pillow,
-  psycopg2,
-  pymongo,
-  pytestCheckHook,
+  flit-core,
+  lib,
   pythonOlder,
-  setuptools,
-  shapely,
-  sqlalchemy,
-  wtf-peewee,
+  # dependencies
+  flask,
+  jinja2,
+  markupsafe,
+  werkzeug,
   wtforms,
+  typing-extensions,
+  # optional dependencies
+  # sqlalchemy
+  flask-sqlalchemy,
+  sqlalchemy,
+  # sqlalchemy-with-utils
+  arrow,
+  colour,
+  email-validator,
+  sqlalchemy-citext,
+  sqlalchemy-utils,
+  # geoalchemy
+  geoalchemy2,
+  shapely,
+  # pymongo
+  pymongo,
+  # mongoengine
+  mongoengine,
+  # peewee
+  peewee,
+  wtf-peewee,
+  # s3
+  boto3,
+  # azure-blob-storage
+  azure-storage-blob,
+  # images
+  pillow,
+  # export
+  tablib,
+  # rediscli
+  redis,
+  # translation
+  flask-babel,
+  # checks
+  beautifulsoup4,
+  moto,
+  psycopg2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "1.6.1";
+  version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
     tag = "v${version}";
-    hash = "sha256-L8Q9uPpoen6ZvuF2bithCMSgc6X5khD1EqH2FJPspZc=";
+    hash = "sha256-HjK+ddMtT8QJ/KSFj9v28jflf2f6M+Gx1rJjCdWUUFM=";
   };
 
-  patches = [
-    # https://github.com/flask-admin/flask-admin/pull/2374
-    (fetchpatch {
-      name = "pillow-10-compatibility.patch";
-      url = "https://github.com/flask-admin/flask-admin/commit/96b92deef8b087e86a9dc3e84381d254ea5c0342.patch";
-      hash = "sha256-iR5kxyeZaEyved5InZuPmcglTD77zW18/eSHGwOuW40=";
-    })
-  ];
-
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     flask
+    jinja2
+    markupsafe
+    werkzeug
     wtforms
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
   ];
 
   optional-dependencies = {
-    azure = [ azure-storage-blob ];
+    sqlalchemy = [
+      flask-sqlalchemy
+      sqlalchemy
+    ];
+    sqlalchemy-with-utils = optional-dependencies.sqlalchemy ++ [
+      arrow
+      colour
+      email-validator
+      sqlalchemy-citext
+      sqlalchemy-utils
+    ];
+    geoalchemy = optional-dependencies.sqlalchemy ++ [
+      geoalchemy2
+      shapely
+    ];
+    pymongo = [ pymongo ];
+    mongoengine = [ mongoengine ];
+    peewee = [
+      peewee
+      wtf-peewee
+    ];
+    s3 = [ boto3 ];
+    azure-blob-storage = [ azure-storage-blob ];
+    images = [ pillow ];
+    export = [ tablib ];
+    rediscli = [ redis ];
+    translation = [ flask-babel ];
+    all = lib.flatten [
+      optional-dependencies.sqlalchemy
+      optional-dependencies.sqlalchemy-with-utils
+      optional-dependencies.geoalchemy
+      optional-dependencies.pymongo
+      optional-dependencies.mongoengine
+      optional-dependencies.peewee
+      optional-dependencies.s3
+      optional-dependencies.azure-blob-storage
+      optional-dependencies.images
+      optional-dependencies.export
+      optional-dependencies.rediscli
+      optional-dependencies.translation
+    ];
   };
 
   nativeCheckInputs = [
-    pillow
-    mongoengine
-    pymongo
-    wtf-peewee
-    sqlalchemy
-    flask-mongoengine
-    flask-sqlalchemy
-    # flask-babelex # broken and removed
-    shapely
-    geoalchemy2
+    beautifulsoup4
+    moto
     psycopg2
     pytestCheckHook
+  ]
+  ++ lib.flatten [
+    optional-dependencies.sqlalchemy-with-utils
+    optional-dependencies.mongoengine
+    optional-dependencies.peewee
+    optional-dependencies.images
+    optional-dependencies.export
+    optional-dependencies.translation
+    flask.optional-dependencies.async
   ];
 
   disabledTestPaths = [
-    # depends on flask-babelex
-    "flask_admin/tests/sqla/test_basic.py"
-    "flask_admin/tests/sqla/test_form_rules.py"
-    "flask_admin/tests/sqla/test_multi_pk.py"
-    "flask_admin/tests/sqla/test_postgres.py"
-    "flask_admin/tests/sqla/test_translation.py"
-    # broken
-    "flask_admin/tests/sqla/test_inlineform.py"
-    "flask_admin/tests/test_model.py"
-    "flask_admin/tests/fileadmin/test_fileadmin.py"
     # requires database
     "flask_admin/tests/geoa/test_basic.py"
     "flask_admin/tests/pymongo/test_basic.py"
     "flask_admin/tests/mongoengine/test_basic.py"
     "flask_admin/tests/peeweemodel/test_basic.py"
+    "flask_admin/tests/sqla/test_postgres.py"
+    # requires internet
+    "flask_admin/tests/fileadmin/test_fileadmin_azure.py"
   ];
 
   pythonImportsCheck = [ "flask_admin" ];

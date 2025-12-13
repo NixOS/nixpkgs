@@ -15189,6 +15189,12 @@
     githubId = 1422781;
     name = "Will Young";
   };
+  loucass003 = {
+    name = "Lucas Lelievre";
+    email = "loucass003@gmail.com";
+    github = "loucass003";
+    githubId = 3948904;
+  };
   louis-thevenet = {
     name = "Louis Thevenet";
     github = "louis-thevenet";

@@ -34,7 +34,6 @@
   mount,
   ncurses,
   nixos-install-tools,
-  nixos-rebuild,
   procps,
   ps,
   # known consumers
@@ -296,7 +295,6 @@ rec {
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
           nixos-install-tools
-          nixos-rebuild
         ];
         interpreter = "none";
         execer = [
@@ -323,7 +321,6 @@ rec {
         ''
         + lib.optionalString stdenv.hostPlatform.isLinux ''
           nixos-generate-config fake args
-          nixos-rebuild fake args
         ''
       );
 
