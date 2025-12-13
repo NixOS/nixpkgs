@@ -6,9 +6,11 @@
 
   # build-system
   cython,
-  gdal,
   numpy,
   setuptools,
+
+  # non-Python dependencies
+  gdal-cpp,
 
   # dependencies
   affine,
@@ -53,9 +55,16 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    gdal
     numpy
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    gdal-cpp # for gdal-config
+  ];
+
+  buildInputs = [
+    gdal-cpp
   ];
 
   pythonRelaxDeps = [
