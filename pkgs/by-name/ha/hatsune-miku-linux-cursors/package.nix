@@ -34,5 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/supermariofps/hatsune-miku-windows-linux-cursors";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.civilterrorist ];
   };
 })
