@@ -12180,16 +12180,19 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  inherit
-    ({
-      timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { };
-      timeshift = callPackage ../applications/backup/timeshift { grubPackage = grub2; };
-      timeshift-minimal = callPackage ../applications/backup/timeshift/minimal.nix { };
-    })
-    timeshift-unwrapped
-    timeshift
-    timeshift-minimal
-    ;
+  timeshift-minimal = callPackage ../by-name/ti/timeshift/package.nix { };
+  timeshift = callPackage ../by-name/ti/timeshift/package.nix {
+    runtimeDeps = [
+      btrfs-progs
+      coreutils
+      cron
+      debianutils
+      grub2
+      psmisc
+      rsync
+      util-linux
+    ];
+  };
 
   tipp10 = qt6.callPackage ../applications/misc/tipp10 { };
 

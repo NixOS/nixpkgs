@@ -1,22 +1,23 @@
 {
-  stdenvNoCC,
   lib,
+  stdenvNoCC,
+  timeshift-unwrapped,
   wrapGAppsHook3,
   gdk-pixbuf,
   librsvg,
-  xorg,
+  lndir,
   shared-mime-info,
+  runtimeDeps ? [ ],
 }:
-
-timeshift-unwrapped: runtimeDeps:
 stdenvNoCC.mkDerivation {
-  inherit (timeshift-unwrapped) pname version outputs;
+  pname = "timeshift";
+  inherit (timeshift-unwrapped) version outputs;
 
   dontUnpack = true;
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    xorg.lndir
+    lndir
   ];
 
   installPhase = ''
@@ -56,5 +57,39 @@ stdenvNoCC.mkDerivation {
     chmod +x "$out/bin/timeshift-launcher"
   '';
 
-  inherit (timeshift-unwrapped) meta;
+  meta =
+    let
+      minimal = runtimeDeps == [ ];
+      runtimeDepsStr = lib.pipe runtimeDeps [
+        (lib.map lib.getName)
+        lib.reverseList
+        (
+          p:
+          lib.pipe p [
+            lib.tail
+            lib.reverseList
+            (lib.concatStringsSep ", ")
+          ]
+          + " and "
+          + lib.head p
+        )
+      ];
+    in
+    timeshift-unwrapped.meta
+    // {
+      description =
+        timeshift-unwrapped.meta.description + lib.optionalString minimal " (without runtime dependencies)";
+
+      longDescription =
+        timeshift-unwrapped.meta.longDescription
+        + "This package is a wrapped version of timeshift-unwrapped with"
+        + lib.optionalString minimal "out"
+        + " command line utility runtime dependencies"
+        + lib.optionalString (!minimal) " from ${runtimeDepsStr}"
+        + "."
+        + lib.optionalString (!minimal) ''
+
+          If you want to use the commands provided by the system, use timeshift-minimal instead.
+        '';
+    };
 }
