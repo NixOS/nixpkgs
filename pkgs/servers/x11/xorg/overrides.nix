@@ -221,12 +221,13 @@ self: super:
   xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
-  # Obsolete drivers that don't compile anymore.
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
+
+  # Obsolete drivers that don't compile anymore.
   xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
