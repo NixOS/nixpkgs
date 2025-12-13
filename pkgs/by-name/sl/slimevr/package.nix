@@ -21,26 +21,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.17.0";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     tag = "v${version}";
-    hash = "sha256-/7SQstUWnQcdzRZjY64PL2gfdstUqXhDmwUkCd6bhY4=";
+    hash = "sha256-vU/dcKRlNsixr3TaCrqNkCd2ewAb38fLymb+ZslAum4=";
     # solarxr
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  cargoHash = "sha256-E825/tkIGphqSPHplDglQPHxPaz8+ZAICuQ/eYZuez4=";
+  cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
     fetcherVersion = 1;
-    hash = "sha256-EeIwEej2WiD2HGbZTgNoJTDL0t9H3mJ3+8qrPvgn8vY=";
+    hash = "sha256-ExjEAr38GX2iZThVj3C3N/9mPgf0Bs7J5OAwtDdmn6I=";
   };
 
   nativeBuildInputs = [
@@ -144,7 +144,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       gale-username
-      imurx
+      loucass003
     ];
     platforms = with lib.platforms; darwin ++ linux;
     broken = stdenv.hostPlatform.isDarwin;

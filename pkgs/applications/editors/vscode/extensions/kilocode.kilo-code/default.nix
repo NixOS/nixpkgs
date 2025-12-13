@@ -60,14 +60,6 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
 
   src = vsix;
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    unzip $src
-
-    runHook postUnpack
-  '';
-
   passthru = {
     vsix = finalAttrs.src;
     updateScript = nix-update-script {
