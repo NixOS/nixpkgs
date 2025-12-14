@@ -95,4 +95,6 @@ in
     };
     users.groups.rtkit = { };
   };
+
+  meta = { inherit (pkgs.rtkit.meta) maintainers; };
 }
