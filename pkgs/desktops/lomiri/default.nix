@@ -25,6 +25,7 @@ let
       #### Development tools / libraries
       cmake-extras = callPackage ./development/cmake-extras { };
       deviceinfo = callPackage ./development/deviceinfo { };
+      lomiri-api = callPackage ./development/lomiri-api { };
 
       #### QML / QML-related
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
@@ -56,7 +57,6 @@ let
       gmenuharness = callPackage ./development/gmenuharness { };
       gsettings-qt = callPackage ./development/gsettings-qt { };
       libusermetrics = callPackage ./development/libusermetrics { };
-      lomiri-api = callPackage ./development/lomiri-api { };
       lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
       qtmir = callPackage ./development/qtmir { };
       trust-store = callPackage ./development/trust-store { };
