@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "istat-menus";
-  version = "7.10.4";
+  version = "7.20";
 
   src = fetchurl {
     url = "https://cdn.istatmenus.app/files/istatmenus${lib.versions.major finalAttrs.version}/versions/iStatMenus${finalAttrs.version}.zip";
-    hash = "sha256-9fw0J492ywzuKXGR47WAjL6IROCRByCn7KsbQecUU+w=";
+    hash = "sha256-oJApYp7ejtcMrm7CyeohV/euXYkJJ0yCRBW2i5AgcEE=";
   };
 
   sourceRoot = ".";
@@ -45,13 +45,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://bjango.com/mac/istatmenus/versionhistory/";
-    description = "iStat Menus is set of nine separate and highly configurable menu items that let you know exactly what's going on inside your Mac";
+    description = "Set of nine separate and highly configurable menu items that let you know exactly what's going on inside your Mac";
     homepage = "https://bjango.com/mac/istatmenus/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [
-      FlameFlag
-      iedame
-    ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
