@@ -12,7 +12,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://grammalecte.net/grammalecte/zip/Grammalecte-fr-v${version}.zip";
+    url = "http://grammalecte.net:8080/zip/Grammalecte-fr-v${version}.zip";
     sha256 = "076jv3ywdgqqzg92bfbagc7ypy08xjq5zn4vgna6j9350fkfqhzn";
   };
 
@@ -32,6 +32,8 @@ buildPythonPackage rec {
     description = "Open source grammar and typographic corrector for the French language";
     homepage = "https://grammalecte.net";
     license = lib.licenses.gpl3Only;
+    # https no longer works -- certs expired
+    insecure = true;
     maintainers = with lib.maintainers; [ apeyroux ];
   };
 }
