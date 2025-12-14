@@ -24,7 +24,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "canonica";
+    owner = "canonical";
     repo = "pylxd";
     tag = version;
     hash = "sha256-Q4GMz7HFpJNPYlYgLhE0a7mVCwNpdbw4XVcUGQ2gUJ0=";
