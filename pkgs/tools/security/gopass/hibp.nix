@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   gopass,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -32,7 +34,18 @@ buildGoModule (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/gopass-hibp \
-      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+      --prefix PATH : "${gopass.wrapperPath}"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+    gopass
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  preVersionCheck = ''
+    gopass setup --name "user" --email "user@localhost"
   '';
 
   __darwinAllowLocalNetworking = true;
