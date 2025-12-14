@@ -4,9 +4,11 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   jq,
   gnupg,
   gopass,
+  versionCheckHook,
 }:
 
 let
@@ -39,6 +41,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   ldflags = [
@@ -50,7 +53,6 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     # Generate native messaging manifests for Chrome and Firefox.
-    export HOME=$(mktemp -d)
     ${gnupg}/bin/gpg --batch --passphrase "" --quick-generate-key "user <user@localhost>"
     ${gopass}/bin/gopass setup --name "user" --email "user@localhost"
 
@@ -92,6 +94,12 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/gopass-jsonapi \
       --prefix PATH : "${gopass.wrapperPath}"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Enables communication with gopass via JSON messages";
