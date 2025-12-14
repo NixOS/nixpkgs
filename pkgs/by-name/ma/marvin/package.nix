@@ -9,21 +9,38 @@
   gnugrep,
   gnused,
   openjdk17,
+  freetype,
+  fontconfig,
+  libXi,
+  libX11,
+  libXext,
+  libXtst,
+  libXrender,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
   version = "25.3.5";
 
   src = fetchurl {
-    name = "marvin-${version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${version}.deb";
+    name = "marvin-${finalAttrs.version}.deb";
+    url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
     hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
   };
 
   nativeBuildInputs = [
     dpkg
     makeWrapper
+  ];
+
+  buildInputs = [
+    freetype
+    fontconfig
+    libXi
+    libX11
+    libXext
+    libXtst
+    libXrender
   ];
 
   unpackPhase = ''
@@ -34,6 +51,7 @@ stdenv.mkDerivation rec {
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
@@ -72,4 +90,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
   };
-}
+})

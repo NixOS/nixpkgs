@@ -27876,6 +27876,11 @@
     github = "wamserma";
     githubId = 60148;
   };
+  wariuccio = {
+    name = "Wariuccio";
+    github = "wariuccio";
+    githubId = 191101255;
+  };
   water-sucks = {
     email = "varun@snare.dev";
     name = "Varun Narravula";

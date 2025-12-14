@@ -9580,6 +9580,8 @@ self: super: with self; {
 
   minidump = callPackage ../development/python-modules/minidump { };
 
+  miniflux = callPackage ../development/python-modules/miniflux { };
+
   miniful = callPackage ../development/python-modules/miniful { };
 
   minify-html = callPackage ../development/python-modules/minify-html { };
@@ -18409,6 +18411,8 @@ self: super: with self; {
   tami4edgeapi = callPackage ../development/python-modules/tami4edgeapi { };
 
   tank-utility = callPackage ../development/python-modules/tank-utility { };
+
+  tantivy = callPackage ../development/python-modules/tantivy { };
 
   tappy = callPackage ../development/python-modules/tappy { };
 
