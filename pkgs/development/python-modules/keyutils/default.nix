@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   cython,
-  fetchFromGitHub,
+  fetchPypi,
   keyutils,
   pytestCheckHook,
 }:
@@ -13,12 +13,15 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # github version comes bundled with tests
-  src = fetchFromGitHub {
-    owner = "sassoftware";
-    repo = "python-keyutils";
-    rev = version;
-    sha256 = "0pfqfr5xqgsqkxzrmj8xl2glyl4nbq0irs0k6ik7iy3gd3mxf5g1";
+  # but github version now 404s
+  # use pypi instead and disable tests (tests are missing)
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qc+6zDOlraFlUx/y1uEkHsk6nwyrxjIF1v9z+O/zN1I=";
   };
+
+  doCheck = false;
+  pythonImportsCheck = [ "keyutils" ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner"' ""
