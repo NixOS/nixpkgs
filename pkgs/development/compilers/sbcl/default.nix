@@ -315,13 +315,13 @@ stdenv.mkDerivation (self: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = lib.licenses.publicDomain; # and FreeBSD
     mainProgram = "sbcl";
     teams = [ lib.teams.lisp ];
-    platforms = attrNames bootstrapBinaries ++ [
+    platforms = lib.attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
       "x86_64-darwin"

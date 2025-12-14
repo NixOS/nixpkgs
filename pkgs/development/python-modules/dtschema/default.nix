@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dtschema" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
       ||
 
         # see https://github.com/devicetree-org/dt-schema/issues/108
-        versionAtLeast jsonschema.version "4.18"
+        lib.versionAtLeast jsonschema.version "4.18"
     );
   };
 }

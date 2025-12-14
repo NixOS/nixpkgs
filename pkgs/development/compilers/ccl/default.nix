@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     # assembler failures during build, x86_64-darwin broken since 2020-10-14
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
@@ -116,6 +116,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     mainProgram = "ccl";
     teams = [ lib.teams.lisp ];
-    platforms = attrNames options;
+    platforms = lib.attrNames options;
   };
 }

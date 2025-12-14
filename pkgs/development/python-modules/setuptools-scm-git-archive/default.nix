@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_scm_git_archive" ];
 
-  meta = with lib; {
+  meta = {
     description = "setuptools_scm plugin for git archives";
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
     license = lib.licenses.mit;
     maintainers = [ ];
     # https://github.com/Changaco/setuptools_scm_git_archive/pull/22
-    broken = versionAtLeast setuptools-scm.version "8";
+    broken = lib.versionAtLeast setuptools-scm.version "8";
   };
 }
