@@ -12,7 +12,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   urllib3,
 }:
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "qdrant-client";
   version = "1.16.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qdrant";
