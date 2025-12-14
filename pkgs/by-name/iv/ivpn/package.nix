@@ -5,20 +5,16 @@
   wirelesstools,
   nix-update-script,
 }:
-
-let
-  version = "3.15.0";
-in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ivpn";
-  inherit version;
+  version = "3.15.0";
 
   buildInputs = [ wirelesstools ];
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
   };
 
@@ -30,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ivpn/desktop-app/daemon/version._version=${version}"
+    "-X github.com/ivpn/desktop-app/daemon/version._version=${finalAttrs.version}"
     "-X github.com/ivpn/desktop-app/daemon/version._time=1970-01-01"
   ];
 
@@ -43,7 +39,7 @@ buildGoModule rec {
   meta = {
     description = "Official IVPN Desktop app";
     homepage = "https://www.ivpn.net/apps";
-    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
+    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       urandom
@@ -51,4 +47,4 @@ buildGoModule rec {
     ];
     mainProgram = "ivpn";
   };
-}
+})
