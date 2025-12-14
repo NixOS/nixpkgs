@@ -1822,6 +1822,7 @@
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/nimdow.nix
   ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/oxwm.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
