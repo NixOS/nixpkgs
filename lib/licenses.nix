@@ -1542,6 +1542,11 @@ lib.mapAttrs mkLicense (
       fullName = "X11 License";
     };
 
+    x11BsdClause = {
+      fullName = "X11 License with third BSD clause";
+      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-geode/-/blob/d147c3f1b6907ae9db6f12853cedd450537d99d2/COPYING";
+    };
+
     x11NoPermitPersons = {
       spdxId = "X11-no-permit-persons";
       fullName = "X11 no permit persons clause";
