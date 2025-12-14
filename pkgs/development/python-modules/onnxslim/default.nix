@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build-system
   setuptools,
@@ -18,11 +18,12 @@ buildPythonPackage rec {
   version = "0.1.78";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "inisis";
-    repo = "OnnxSlim";
-    tag = "v${version}";
-    hash = "sha256-xLT00z9zeO4o5JN9W+5AfpANjc2+qAtFNnncLJptCoA=";
+  # moving to pypi due to missing github release
+  # move back to github when upgrading
+  src = fetchPypi {
+    inherit version;
+    pname = "onnxslim";
+    hash = "sha256-uOGdOyOKbB0/CdEhBjrS4BbtfIUjZkiwHOKAtSV56is=";
   };
 
   build-system = [
