@@ -72,21 +72,10 @@ let
     {
       typeName,
     }:
-    let
-      baseType = oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ];
-      valueType = nullOr baseType // {
-        description = "${typeName} value";
-      };
-    in
-    valueType;
+    types.json
+    // {
+      description = "${typeName} value";
+    };
 
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)

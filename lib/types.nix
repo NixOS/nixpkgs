@@ -1436,6 +1436,23 @@ let
           };
         };
 
+      json =
+        let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            (attrsOf valueType)
+            (listOf valueType)
+          ]);
+        in
+        valueType
+        // {
+          description = "JSON value";
+        };
+
       # Either value of type `t1` or `t2`.
       either =
         t1: t2:
