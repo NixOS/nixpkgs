@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   django,
   fetchPypi,
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   # This dosn't work either because of the same exception as above
   # pythonImportsCheck = [ "leaflet" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Allows you to use Leaflet in your Django projects";
     homepage = "https://github.com/makinacorpus/django-leaflet";
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }
