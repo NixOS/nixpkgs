@@ -37,7 +37,7 @@
   microsoft-gsl,
   nlohmann_json,
   xar,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
 let
@@ -57,6 +57,7 @@ let
           python3
           qt5.wrapQtAppsHook
           qt5.qttools
+          makeBinaryWrapper
         ]
         ++ (overrides.nativeBuildInputs or [ ]);
 
@@ -107,9 +108,6 @@ let
       platforms = lib.platforms.darwin;
       nativeBuildInputs = [
         qt5.qttools
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        makeWrapper
       ];
 
       buildInputs = [
@@ -173,11 +171,11 @@ let
         mv $out/Mumble.app $out/Applications/Mumble.app
 
         # ensure that the app can be started from the shell
-        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+        makeBinaryWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
       '';
 
       postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-        wrapProgram $out/bin/mumble \
+        wrapProgramBinary $out/bin/mumble \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath (
               lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire
