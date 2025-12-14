@@ -136,6 +136,7 @@
   xf86-video-geode,
   xf86-video-nouveau,
   xf86-video-s3virge,
+  xf86-video-v4l,
   xfd,
   xfontsel,
   xfs,
@@ -350,6 +351,7 @@ self: with self; {
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
   xf86videos3virge = xf86-video-s3virge;
+  xf86videov4l = xf86-video-v4l;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -1626,42 +1628,6 @@ self: with self; {
       buildInputs = [
         xorgproto
         libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videov4l = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-v4l";
-      version = "0.3.0";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-v4l-0.3.0.tar.bz2";
-        sha256 = "084x4p4avy72mgm2vnnvkicw3419i6pp3wxik8zqh7gmq4xv5z75";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
         xorgserver
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

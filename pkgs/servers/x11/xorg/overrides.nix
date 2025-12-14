@@ -126,12 +126,6 @@ self: super:
     };
   });
 
-  xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      platforms = lib.platforms.linux;
-    };
-  });
-
   xf86videoomap = super.xf86videoomap.overrideAttrs (attrs: {
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=format-overflow" ];
   });
