@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   defusedxml,
   requests,
   sphinx,
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe";
     repo = "pdfservices-python-sdk";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-m2k+IS+M8UrdrpLnk2OwRolAVq73StMY1WnxzOujBIM=";
   };
 
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
