@@ -10778,7 +10778,7 @@ self: super: with self; {
 
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
-  nifty8 = callPackage ../development/python-modules/nifty8 { };
+  nifty = callPackage ../development/python-modules/nifty { };
 
   nikola = callPackage ../development/python-modules/nikola { };
 
