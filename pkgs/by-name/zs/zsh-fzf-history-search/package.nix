@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -26,6 +27,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Simple zsh plugin that replaces Ctrl+R with an fzf-driven select which includes date/times";
