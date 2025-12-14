@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   influxdb-client,
@@ -27,6 +28,8 @@ buildPythonPackage rec {
     hash = "sha256-rn1qe0RwYuUR23CgzOOeiwe1wuFihnhQ9a6ALgSP/cQ=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -51,6 +54,13 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "powerapi" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_puller"
+    "TestDispatcher"
+    "TestK8sProcessor"
+    "TestPusher"
+  ];
 
   meta = {
     description = "Python framework for building software-defined power meters";
