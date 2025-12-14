@@ -1629,6 +1629,7 @@
   ./services/web-apps/goatcounter.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
+  ./services/web-apps/goupile.nix
   ./services/web-apps/grav.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/guacamole-client.nix
