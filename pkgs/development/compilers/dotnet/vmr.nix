@@ -134,11 +134,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "10") [
-      # https://github.com/dotnet/source-build/issues/5410
-      ./fix-prep-script.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
     ]
