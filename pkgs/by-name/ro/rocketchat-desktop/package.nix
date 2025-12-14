@@ -102,12 +102,12 @@ stdenv.mkDerivation rec {
         "Network"
         "InstantMessaging"
       ];
-      name = pname;
+      name = "rocketchat-desktop";
       desktopName = "Rocket.Chat";
       genericName = "Rocket.Chat";
       comment = "Official Desktop Client for Rocket.Chat";
-      icon = pname;
-      exec = meta.mainProgram;
+      icon = "rocketchat-desktop";
+      exec = "rocketchat-desktop";
       terminal = false;
       startupWMClass = "Rocket.Chat";
       mimeTypes = [ "x-scheme-handler/rocketchat" ];
@@ -119,16 +119,16 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out/share/applications
 
-    cp -a dist/*-unpacked/resources $out/share/${pname}
+    cp -a dist/*-unpacked/resources $out/share/rocketchat-desktop
 
     for icon in build/icons/*.png
     do
-      install -Dm644 $icon $out/share/icons/hicolor/$(basename ''${icon%.png})/apps/${pname}.png
+      install -Dm644 $icon $out/share/icons/hicolor/$(basename ''${icon%.png})/apps/rocketchat-desktop.png
     done
 
-    makeWrapper '${lib.getExe electron}' $out/bin/${meta.mainProgram} \
+    makeWrapper '${lib.getExe electron}' $out/bin/rocketchat-desktop \
       --set-default ELECTRON_IS_DEV 0 \
-      --add-flags $out/share/${pname}/app.asar \
+      --add-flags $out/share/rocketchat-desktop/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
