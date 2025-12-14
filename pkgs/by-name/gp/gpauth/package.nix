@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       binary-eater
+      booxter
       m1dugh
     ];
     platforms = with lib.platforms; linux ++ darwin;
