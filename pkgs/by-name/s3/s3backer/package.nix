@@ -14,10 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.1.6";
 
   src = fetchFromGitHub {
-    hash = "sha256-bSqkgNZFevtxyaJwoVRcWWO6ZA/Ekbp2gwSJNBmjHwI=";
-    tag = finalAttrs.version;
-    repo = "s3backer";
     owner = "archiecobbs";
+    repo = "s3backer";
+    tag = finalAttrs.version;
+    hash = "sha256-bSqkgNZFevtxyaJwoVRcWWO6ZA/Ekbp2gwSJNBmjHwI=";
   };
 
   nativeBuildInputs = [
