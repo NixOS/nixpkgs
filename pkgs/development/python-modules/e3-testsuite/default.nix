@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   e3-core,
-  fetchFromGitHub,
+  fetchPypi,
   pythonOlder,
   setuptools,
 }:
@@ -14,11 +14,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "AdaCore";
-    repo = "e3-testsuite";
-    tag = "v${version}";
-    hash = "sha256-qG8SHwogBle3demgFJCqcfCh5ktLvOqh2XSwxPCANFk=";
+  src = fetchPypi {
+    inherit version;
+    pname = "e3_testsuite";
+    hash = "sha256-Vu43fIl2ZhmvtwPXPM3GIYojtgwv33zh/3tKNvlUw/Q=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Generic testsuite framework in Python";
-    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${src.tag}";
+    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${version}";
     homepage = "https://github.com/AdaCore/e3-testsuite/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ heijligen ];
