@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${
       if stdenv.hostPlatform.isDarwin then "${tradcpp}/bin/cpp" else "gcc"
     }\"'";
+    inherit tradcpp;
   };
 
   preInstall = ''
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${xorg-cf-files}/lib/X11/config/* $out/lib/X11/config
   '';
 
-  inherit tradcpp xorg-cf-files;
+  inherit xorg-cf-files;
   setupHook = ./setup-hook.sh;
 
   passthru = {
