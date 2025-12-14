@@ -7,6 +7,7 @@
 let
   kresd = knot-resolver_6.finalPackage; # TODO: does the finalPackage help us?
 in
+assert lib.versionAtLeast kresd.version "6.0.0";
 python3Packages.buildPythonPackage {
   pname = "knot-resolver-manager_6";
   inherit (kresd) version src;
