@@ -65,11 +65,12 @@
 
   gnome-remote-desktop,
   remmina,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.18.0";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
@@ -213,9 +214,11 @@ stdenv.mkDerivation (finalAttrs: {
       --set SDL_VIDEODRIVER wayland
   '';
 
-  passthru.tests = {
-    inherit remmina;
-    inherit gnome-remote-desktop;
+  passthru = {
+    tests = {
+      inherit gnome-remote-desktop remmina;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
