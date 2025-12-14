@@ -13483,6 +13483,13 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  kecrily = {
+    name = "Percy Ma";
+    email = "kecrily@gmail.com";
+    github = "kecrily";
+    githubId = 45708948;
+    keys = [ { fingerprint = "6492 E006 8606 4BD8 561B  ADBD A254 7DFF 0237 D6EC"; } ];
+  };
   keegancsmith = {
     email = "keegan.csmith@gmail.com";
     name = "Keegan Carruthers-Smith";
