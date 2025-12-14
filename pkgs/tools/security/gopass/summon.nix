@@ -1,19 +1,19 @@
 {
   lib,
-  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
   gopass,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopass-summon-provider";
   version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-summon-provider";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j3N/snUCsw/NlMQO9CoVRf6JCG48DEHqrJnZ7wiVUPk=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   postFixup = ''
@@ -38,9 +38,9 @@ buildGoModule rec {
   meta = {
     description = "Gopass Summon Provider";
     homepage = "https://github.com/gopasspw/gopass-summon-provider";
-    changelog = "https://github.com/gopasspw/gopass-summon-provider/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass-summon-provider/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "gopass-summon-provider";
   };
-}
+})
