@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
@@ -10,18 +10,19 @@
 
   pandoc,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "typ2docx";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sghng";
-    repo = pname;
+    repo = "typ2docx";
     tag = "v${version}";
     hash = "sha256-8Jb13qiS+dpyfJS4m2T6STzORs1VzRKwC8GGgEwiVtU=";
   };
 
+  # use `v${version}` for update script
   lockFile = fetchurl {
     url = "https://github.com/sghng/typ2docx/releases/download/v${version}/Cargo.lock";
     hash = "sha256-irWv7+uqNyyq42JVLSy9WQz78ynYVsYuQ8fk5nardWw=";
@@ -42,9 +43,11 @@ python3.pkgs.buildPythonApplication rec {
     # TODO: remove when https://github.com/NixOS/nixpkgs/pull/454434 is merged into master
     substituteInPlace main.py \
       --replace-fail "] = []," "] = None,"
-    substituteInPlace pyproject.toml \
-      --replace-fail "click>=8.3" "click"
   '';
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/454434 is merged into master
+  pythonRelaxDeps = [
+    "click"
+  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -52,11 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     uv-build
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     pdf2docx
     pdfservices-sdk
     pypdf
@@ -80,10 +83,12 @@ python3.pkgs.buildPythonApplication rec {
     "$PYTHONPATH"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "A bespoke (and esoteric) but effective solution for converting Typst project to DOCX";
+    description = "Convert Math-Rich Typst Project to Microsoft Word Format";
     homepage = "https://github.com/sghng/typ2docx";
-    changelog = "https://github.com/sghng/typ2docx/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sghng/typ2docx/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hhr2020 ];
     mainProgram = "typ2docx";
