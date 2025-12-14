@@ -482,6 +482,15 @@ with haskellLib;
     })
   ] super.lukko;
 
+  # We need https://github.com/commercialhaskell/rio/pull/271 which
+  # e.g. breaks stack https://github.com/commercialhaskell/stack/issues/6824
+  rio = overrideCabal {
+    version = "0.1.24.0";
+    sha256 = "sha256-yeMJDszBnrTowTSgGXI3xjXGILOt8xYyIdy53bFn2b8=";
+    revision = null;
+    editedCabalFile = null;
+  } super.rio;
+
   # Relax version constraints (network < 3.2, text < 2.1)
   # https://github.com/essandess/adblock2privoxy/pull/43
   adblock2privoxy = doJailbreak super.adblock2privoxy;
