@@ -94,7 +94,7 @@ lib.makeOverridable (
               cat > private-token <<EOF
               PRIVATE-TOKEN: ''$${varBase}PASSWORD
               EOF
-              curlOpts="$curlOpts --header @./private-token"
+              curlOpts+=(--header @./private-token)
             ''
         );
         netrcImpureEnvVars = [

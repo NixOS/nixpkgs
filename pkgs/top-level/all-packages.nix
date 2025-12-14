@@ -8120,8 +8120,6 @@ with pkgs;
     physfs
     ;
 
-  pingvin-share = callPackage ../servers/web-apps/pingvin-share { };
-
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
     wine-staging = pkgsi686Linux.wine-staging;

@@ -1906,7 +1906,7 @@ builtins.intersectAttrs super {
     addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (old: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1914,8 +1914,8 @@ builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/typography"
         ];
         # Added a shim for the `tailwindcss` CLI entry point
-        nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (oa.postInstall or "") + ''
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (old.postInstall or "") + ''
           nodePath=""
           for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"

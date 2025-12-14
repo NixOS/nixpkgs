@@ -27,13 +27,13 @@
     "vendorHash": null
   },
   "aiven_aiven": {
-    "hash": "sha256-WcozZUc2z1V8wxRSgoU20Zwolpr12a+dSjXmEKKHnp4=",
+    "hash": "sha256-cr/Z1sMm2TcO1GbOLTdMJ9JOly5kYrDxwbYgQVPFJ9M=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.47.0",
+    "rev": "v4.48.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-G83ixFWqkVlbm8mTEC1fIvnuUUZ2InPdWqQbbgJG7UY="
+    "vendorHash": "sha256-ki9PKr+1++mDQoclXSYOagMTzPJnXew1/TiciEjR3B4="
   },
   "akamai_akamai": {
     "hash": "sha256-HjrBPaLYeJ8/9gmdn+BGHtu5dmyT5MeTsIBgzS0X0gY=",
@@ -91,11 +91,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "baidubce_baiducloud": {
-    "hash": "sha256-YgHhxjnfk9Gjj7FKJmu2V4otA2CoXL6lUlzxDwY8LF8=",
+    "hash": "sha256-BNpBNBxRSKgxwvgIY289MLUf0Eui5/ccY97sAouHjbc=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.15",
+    "rev": "v1.22.16",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -570,13 +570,13 @@
     "vendorHash": "sha256-4Nx3iDeuXfzC6DOAr2fSdnaMt5txLR0EEhmLnWryX4g="
   },
   "hashicorp_google-beta": {
-    "hash": "sha256-ZcSd232jOol7fVsPFHaKq1+0Mzg/FwiTF1zoM5nJUxE=",
+    "hash": "sha256-NHnKafm46W/owbugb/TTxZS/hKjSPpEt7WdRmxTCWVw=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v7.12.0",
+    "rev": "v7.13.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-JDFKEn011onzch07tLu/kVbiCwXPqwomFA/X5fbQ3bc="
+    "vendorHash": "sha256-nfFfXnFBaCWiGryTigB/dTxFvclKJ7ocVcV7rbnBMWI="
   },
   "hashicorp_helm": {
     "hash": "sha256-S4Fe65f+gEWWxRMC+/i93dwwe7QigPccx4wiqNBpcL8=",
@@ -1147,13 +1147,13 @@
     "vendorHash": null
   },
   "sacloud_sakuracloud": {
-    "hash": "sha256-DQLchjPM3XIhVDD6fLFp5l3ZCnHU/P3wtUGy2XAp0M0=",
+    "hash": "sha256-ROHs74PqYJMXJBp8jqOGUm0QqzkGgi07GT0RMkW5zp0=",
     "homepage": "https://registry.terraform.io/providers/sacloud/sakuracloud",
     "owner": "sacloud",
     "repo": "terraform-provider-sakuracloud",
-    "rev": "v2.32.0",
+    "rev": "v2.33.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-zSzRVv7m+WxRqEpAhSOHATTh35dHnuFg6W5/PKaoTSI="
+    "vendorHash": "sha256-K2zPe5wrUsIj1LocudoYWSJ11FPrQ87XLnLeGdNpWAg="
   },
   "sap-cloud-infrastructure_sci": {
     "hash": "sha256-m3degJZruqRkA/lSnNQrLfJIlpl5k8qCpbyIcsyV5/U=",
