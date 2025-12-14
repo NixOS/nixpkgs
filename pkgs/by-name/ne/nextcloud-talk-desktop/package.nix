@@ -20,6 +20,7 @@
   libGL,
   libglvnd,
   systemd,
+  patchelf,
   nix-update-script,
 }:
 
@@ -100,6 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp $icon $out/share/icons/hicolor/512x512/apps/nextcloud-talk-desktop.png
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    ${lib.getExe patchelf} --add-needed libGL.so.1 --add-needed libEGL.so.1 \
+      "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk"
   '';
 
   passthru.updateScript = nix-update-script { };

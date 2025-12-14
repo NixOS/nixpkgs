@@ -26,9 +26,57 @@ import ../make-test-python.nix (
       pkgs.runCommand "k3s-test-chart.tgz"
         {
           nativeBuildInputs = [ pkgs.kubernetes-helm ];
+          chart = builtins.toJSON {
+            name = "k3s-test-chart";
+            version = "0.1.0";
+          };
+          values = builtins.toJSON {
+            restartPolicy = "Never";
+            runCommand = "";
+            image = {
+              repository = "foo";
+              tag = "1.0.0";
+            };
+          };
+          job = builtins.toJSON {
+            apiVersion = "batch/v1";
+            kind = "Job";
+            metadata = {
+              name = "{{ .Release.Name }}";
+              namespace = "{{ .Release.Namespace }}";
+            };
+            spec = {
+              template = {
+                spec = {
+                  containers = [
+                    {
+                      name = "test";
+                      image = "{{ .Values.image.repository }}:{{ .Values.image.tag }}";
+                      command = [ "sh" ];
+                      args = [
+                        "-c"
+                        "{{ .Values.runCommand }}"
+                      ];
+                    }
+                  ];
+                  restartPolicy = "{{ .Values.restartPolicy }}";
+                };
+              };
+            };
+          };
+          passAsFile = [
+            "values"
+            "chart"
+            "job"
+          ];
         }
         ''
-          helm package ${./k3s-test-chart}
+          mkdir -p chart/templates
+          cp "$chartPath" chart/Chart.yaml
+          cp "$valuesPath" chart/values.yaml
+          cp "$jobPath" chart/templates/job.json
+
+          helm package chart
           mv ./*.tgz $out
         '';
     # The common Helm chart that is used in this test
