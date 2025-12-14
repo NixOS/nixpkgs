@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-yate";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eventphone";
     repo = "python-yate";
     tag = "v${version}";
-    hash = "sha256-AdnlNsEOFuzuGTBmfV9zKyv2iFHEJ4eLMrC6SHHf7m0=";
+    hash = "sha256-/tlDme4RmO9XH5PNTvK2yVzbF+iDNeCY21nArq6NU+g=";
   };
 
   propagatedBuildInputs = [
