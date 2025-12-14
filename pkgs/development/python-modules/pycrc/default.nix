@@ -10,13 +10,13 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    pname = "PyCRC";
+    pname = "pythoncrc";
     inherit version;
-    sha256 = "d3b0e788b501f48ae2ff6eeb34652343c9095e4356a65df217ed29b51e4045b6";
+    hash = "sha256-qqSVNyKM56ATP8YX54AxLX6x4fT4LPRDZbatJw0kTaM=";
   };
 
   meta = {
-    homepage = "https://github.com/cristianav/PyCRC";
+    homepage = "https://pypi.org/project/pythoncrc";
     description = "Python libraries for CRC calculations (it supports CRC-16, CRC-32, CRC-CCITT, etc)";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ guibou ];
