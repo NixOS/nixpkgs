@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${xorg-cf-files}/lib/X11/config/* $out/lib/X11/config
   '';
 
-  inherit xorg-cf-files;
   setupHook = ./setup-hook.sh;
 
   passthru = {
