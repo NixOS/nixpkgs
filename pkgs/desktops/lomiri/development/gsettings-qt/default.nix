@@ -7,11 +7,15 @@
   cmake,
   cmake-extras,
   glib,
+  libglvnd,
   pkg-config,
   qtbase,
   qtdeclarative,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsettings-qt";
   version = "1.1.0";
@@ -39,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cmake-extras
     glib
+  ]
+  ++ lib.optionals withQt6 [
+    libglvnd
   ];
 
   # Library
@@ -60,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace GSettings/CMakeLists.txt \
         --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+    ''
+    # Need QtQuick.Window in QML2_IMPORT_PATH
+    + ''
+      substituteInPlace tests/CMakeLists.txt \
+        --replace-fail 'QML2_IMPORT_PATH=' 'QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}:'
     '';
 
   preBuild =
@@ -69,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
@@ -96,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "gsettings-qt"
+      ("gsettings-qt" + lib.optionalString withQt6 "6")
     ];
   };
 })
