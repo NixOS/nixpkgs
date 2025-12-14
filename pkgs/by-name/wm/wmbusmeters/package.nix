@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp build/wmbusmeters $out/bin
+    cp build/wmbusmetersd $out/bin
 
     mkdir -p $out/man/man1
     gzip -v9 -n -c wmbusmeters.1 > $out/man/man1/wmbusmeters.1.gz
