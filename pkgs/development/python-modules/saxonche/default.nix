@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]);
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     zlib
