@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "tybug";
+    owner = "Liam-DeVoe";
     repo = "ossapi";
     tag = "v${version}";
     hash = "sha256-sLzw/0RsA0PGxxQeVz4TGIpTMMlrZ0i4ZGolrz5S16E=";
