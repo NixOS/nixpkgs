@@ -1542,7 +1542,7 @@ let
     in
     mkAliasIfDef option (wrap (mkMerge defsWithPrio));
 
-  mkAliasIfDef = option: mkIf (isOption option && option.isDefined);
+  mkAliasIfDef = option: mkIf option.isDefined;
 
   /**
     Compatibility.
