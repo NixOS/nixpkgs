@@ -33,6 +33,11 @@ let
       };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
+
+      #### Services
+      lomiri-download-manager = callPackage ./services/lomiri-download-manager {
+        withDocumentation = !useQt6;
+      };
     }
     // lib.optionalAttrs (!useQt6) {
       #### Core Apps
@@ -75,7 +80,6 @@ let
       biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
-      lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
