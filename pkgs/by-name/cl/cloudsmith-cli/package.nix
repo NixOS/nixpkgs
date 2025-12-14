@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "1.8.7";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
     tag = "v${version}";
-    hash = "sha256-xUaa1B6f6W0Q/9q8sztFoCxEaxqXajImROC1sJb0Zdk=";
+    hash = "sha256-VfP7Bu8+F1bHiwceI9s+vHq76wEkG6+hJZe5jZgVm90=";
   };
 
   postPatch = ''
