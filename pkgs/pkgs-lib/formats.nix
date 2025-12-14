@@ -63,7 +63,6 @@ let
 
     Parameters:
     - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
-    - nullable: Whether the structured value type allows `null` values.
 
     Returns a type suitable for structured data formats that supports:
     - Basic types: boolean, integer, float, string, path
@@ -72,7 +71,6 @@ let
   mkStructuredType =
     {
       typeName,
-      nullable ? true,
     }:
     let
       baseType = oneOf [
@@ -84,7 +82,7 @@ let
         (attrsOf valueType)
         (listOf valueType)
       ];
-      valueType = (if nullable then nullOr baseType else baseType) // {
+      valueType = nullOr baseType // {
         description = "${typeName} value";
       };
     in
