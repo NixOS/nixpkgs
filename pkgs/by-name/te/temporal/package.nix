@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "temporal";
   version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
   };
 
@@ -71,9 +71,9 @@ buildGoModule rec {
   meta = {
     description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
-    changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
+    changelog = "https://github.com/temporalio/temporal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "temporal-server";
   };
-}
+})
