@@ -1,19 +1,19 @@
 {
   lib,
-  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
   gopass,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopass-hibp";
   version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-hibp";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BlZxXN14bOO7LMdjS/ooqVKmRZQTpNYlYp4A4rTew4Q=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   postFixup = ''
@@ -40,9 +40,9 @@ buildGoModule rec {
   meta = {
     description = "Gopass haveibeenpwnd.com integration";
     homepage = "https://github.com/gopasspw/gopass-hibp";
-    changelog = "https://github.com/gopasspw/gopass-hibp/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass-hibp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "gopass-hibp";
   };
-}
+})
