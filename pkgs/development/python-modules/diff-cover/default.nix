@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "9.7.2";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-hyyCDS7L95xh1Sx9xwQZAV4KuSiViVZseR3ScPwMbjs=";
+    hash = "sha256-kurQJnJgVb9MGpDNf/g1RASdRnhA4HxmKJpDURJtviU=";
   };
 
   build-system = [ poetry-core ];
