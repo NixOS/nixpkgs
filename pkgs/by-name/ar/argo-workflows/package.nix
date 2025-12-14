@@ -9,18 +9,24 @@
 
 buildGoModule rec {
   pname = "argo-workflows";
-  version = "3.6.10";
+  version = "3.7.6";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     tag = "v${version}";
-    hash = "sha256-TM/eK8biMxKV4SFJ1Lys+NPPeaHVjbBo83k2RH1Xi40=";
+    hash = "sha256-CeSXWtbwXnxATeLpiKdnxxWJhbMYkpAwjOAWq3ct+LQ=";
   };
 
-  vendorHash = "sha256-Y/2+ykzcJdA5uwP1v9Z1wZtF3hBV2x7XZc7+FhPJP64=";
+  vendorHash = "sha256-ePEAtQ3VnuhEoWgTSC3dMzu7/+fAAgDtnPRPvU2tAF0=";
 
   doCheck = false;
+
+  preBuild = ''
+    # Create placeholder file for UI's go:embed directive
+    mkdir -p ui/dist/app
+    touch ui/dist/app/index.html
+  '';
 
   subPackages = [
     "cmd/argo"
