@@ -98,31 +98,23 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pyxdg
   ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    # Audio method falls back from left to right.
-    "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ]
-  ++ lib.optionals withPulse [
-    "--with-pulse"
-  ]
-  ++ lib.optionals withAlsa [
-    "--with-alsa"
-  ]
-  ++ lib.optionals withLibao [
-    "--with-libao"
-  ]
-  ++ lib.optionals withOss [
-    "--with-oss"
-  ]
-  ++ lib.optionals withEspeak [
-    "--with-espeak-ng"
-  ]
-  ++ lib.optionals withPico [
-    "--with-pico"
-  ];
+  configureFlags =
+    let
+      inherit (lib) withFeature;
+    in
+    [
+      "--sysconfdir=/etc"
+      # Audio method falls back from left to right.
+      "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      (withFeature withPulse "pulse")
+      (withFeature withLibao "libao")
+      (withFeature withAlsa "alsa")
+      (withFeature withOss "oss")
+      (withFeature withEspeak "espeak-ng")
+      (withFeature withPico "pico")
+    ];
 
   postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${svox}/share/pico/lang"
