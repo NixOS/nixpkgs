@@ -18408,6 +18408,8 @@ self: super: with self; {
 
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
+  tantivy = callPackage ../development/python-modules/tantivy { };
+
   tappy = callPackage ../development/python-modules/tappy { };
 
   tapsaff = callPackage ../development/python-modules/tapsaff { };
