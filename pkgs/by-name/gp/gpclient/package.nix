@@ -3,7 +3,9 @@
   glib-networking,
   gpauth,
   makeWrapper,
-  openconnect,
+  autoconf,
+  automake,
+  libtool,
   openssl,
   perl,
   pkg-config,
@@ -13,6 +15,10 @@
   cairo,
   atk,
   gtk3,
+  libxml2,
+  p11-kit,
+  lz4,
+  gnutls,
 }:
 
 rustPlatform.buildRustPackage {
@@ -31,10 +37,14 @@ rustPlatform.buildRustPackage {
     perl
     makeWrapper
     pkg-config
+
+    # used to build vendored openconnect
+    autoconf
+    automake
+    libtool
   ];
   buildInputs = [
     gpauth
-    openconnect
     openssl
     glib-networking
     glib
@@ -42,12 +52,18 @@ rustPlatform.buildRustPackage {
     cairo
     atk
     gtk3
+
+    # used for vendored openconnect
+    libxml2
+    lz4
+    p11-kit
+    gnutls
   ];
 
   preConfigure = ''
-    substituteInPlace crates/gpapi/src/lib.rs \
+    substituteInPlace crates/common/src/constants.rs \
       --replace-fail /usr/bin/gpauth ${gpauth}/bin/gpauth
-    substituteInPlace crates/common/src/vpn_utils.rs \
+    substituteInPlace crates/openconnect/src/vpn_utils.rs \
       --replace-fail /usr/sbin/vpnc-script ${vpnc-scripts}/bin/vpnc-script
   '';
 
