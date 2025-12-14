@@ -4,7 +4,6 @@
 # depend on a dependency marked as broken.
 dont-distribute-packages:
 
- - 4Blocks
  - a50
  - abcBridge
  - AbortT-monadstf
@@ -162,6 +161,7 @@ dont-distribute-packages:
  - aura
  - authoring
  - AutoForms
+ - automaton_1_6
  - autonix-deps-kf5
  - avers
  - avers-api
@@ -1362,6 +1362,8 @@ dont-distribute-packages:
  - haskell-ftp
  - haskell-lsp
  - haskell-lsp-client
+ - haskell-opentimestamps
+ - haskell-opentimestamps-client
  - haskell-pdf-presenter
  - haskell-platform-test
  - haskell-reflect
@@ -1526,7 +1528,6 @@ dont-distribute-packages:
  - hgeometry-ipe
  - hgeometry-svg
  - hgithub
- - hgraph
  - hiccup
  - hie-core
  - hierarchical-clustering-diagrams
@@ -1711,7 +1712,6 @@ dont-distribute-packages:
  - hsyslog-tcp
  - HTab
  - html-kure
- - html2hamlet
  - htoml-parse
  - htsn-import
  - http-client-auth
@@ -2015,7 +2015,6 @@ dont-distribute-packages:
  - LambdaShell
  - lambdaya-bus
  - lambdiff
- - lame-tester
  - landlock
  - lang
  - language-ats
@@ -2075,7 +2074,6 @@ dont-distribute-packages:
  - libmolude
  - libraft
  - librarian
- - librato
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2573,7 +2571,6 @@ dont-distribute-packages:
  - partage
  - partial-semigroup-test
  - passman-cli
- - pathfindingcore
  - patterns
  - paypal-rest-client
  - pcap-enumerator
@@ -2606,7 +2603,7 @@ dont-distribute-packages:
  - persistent-hssqlppp
  - persistent-iproute
  - persistent-map
- - persistent-postgresql_2_14_0_0
+ - persistent-postgresql_2_14_2_0
  - persistent-protobuf
  - persona-idp
  - peyotls
@@ -2811,6 +2808,7 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
+ - quic-simple
  - quick-process
  - quickcheck-poly
  - quickcheck-regex
@@ -3917,3 +3915,4 @@ dont-distribute-packages:
  - zoovisitor
  - zuramaru
  - zwirn
+ - _4Blocks
