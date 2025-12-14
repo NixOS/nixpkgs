@@ -18,7 +18,7 @@ mkCoqDerivation {
         out = "1.4-coq${coq.coq-version}";
       }
     ] null;
-  release."1.4-coq8.19".sha256 = "sha256-G9eK0eLyECdT20/yf8yyz7M8Xq2WnHHaHpxVGP0yTtU=";
+  release."1.4-coq8.19".hash = "sha256-G9eK0eLyECdT20/yf8yyz7M8Xq2WnHHaHpxVGP0yTtU=";
   releaseRev = v: "v${v}";
   mlPlugin = true;
   propagatedBuildInputs = [ unicoq ];

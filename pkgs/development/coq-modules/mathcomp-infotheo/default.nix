@@ -46,18 +46,18 @@
         (case (range "8.15" "8.16") (range "0.5.4" "0.6.5") "0.5.1")
       ]
       null;
-  release."0.9.6".sha256 = "sha256-7gwtqTzMMEhUDz2XdxamAqjSdST0HrbWJHQ/YTDRR5E=";
-  release."0.9.4".sha256 = "sha256-btHOBNMdXvlG2jxC04+4qmIjeyuaqtyugm2Ruj3lQr8=";
-  release."0.9.3".sha256 = "sha256-8+cnVKNAvZ3MVV3BpS8UmCIxJphsQRBv3swek1eEBjE=";
-  release."0.9.1".sha256 = "sha256-WI20HxMHr1ZUwOGPIUl+nRI8TxVUa2+F1xcGjRDHO9g=";
-  release."0.7.7".sha256 = "sha256-kEbpMl7U+I2kvqi1VrjhIVFkZFO6h0tTHEUZRbHYG7E=";
-  release."0.7.5".sha256 = "sha256-pzPo+Acjx3vlyqOkSZQ8uT2BDLSTfbAnRm39e+/CqE0=";
-  release."0.7.3".sha256 = "sha256-7+qPtE1KfDmo9ZsQtWMzoR2MYnFpTjFHK/yZYVm+GxA=";
-  release."0.7.2".sha256 = "sha256-dekrdVmuTcqXXmKhIb831EKtMhbPrXHJZhzmGb9rdRo=";
-  release."0.7.1".sha256 = "sha256-/4Elb35SmscG6EjEcHYDo+AmWrpBUlygZL0WhaD+fcY=";
-  release."0.6.1".sha256 = "sha256-tFB5lrwRPIlHkP+ebgcJwu03Cc9yVaOINOAo8Bf2LT4=";
-  release."0.5.1".sha256 = "sha256-yBBl5l+V+dggsg5KM59Yo9CULKog/xxE8vrW+ZRnX7Y=";
-  release."0.5.2".sha256 = "sha256-8WAnAV53c0pMTdwj8XcUDUkLZbpUgIQbEOgOb63uHQA=";
+  release."0.9.6".hash = "sha256-7gwtqTzMMEhUDz2XdxamAqjSdST0HrbWJHQ/YTDRR5E=";
+  release."0.9.4".hash = "sha256-btHOBNMdXvlG2jxC04+4qmIjeyuaqtyugm2Ruj3lQr8=";
+  release."0.9.3".hash = "sha256-8+cnVKNAvZ3MVV3BpS8UmCIxJphsQRBv3swek1eEBjE=";
+  release."0.9.1".hash = "sha256-WI20HxMHr1ZUwOGPIUl+nRI8TxVUa2+F1xcGjRDHO9g=";
+  release."0.7.7".hash = "sha256-kEbpMl7U+I2kvqi1VrjhIVFkZFO6h0tTHEUZRbHYG7E=";
+  release."0.7.5".hash = "sha256-pzPo+Acjx3vlyqOkSZQ8uT2BDLSTfbAnRm39e+/CqE0=";
+  release."0.7.3".hash = "sha256-7+qPtE1KfDmo9ZsQtWMzoR2MYnFpTjFHK/yZYVm+GxA=";
+  release."0.7.2".hash = "sha256-dekrdVmuTcqXXmKhIb831EKtMhbPrXHJZhzmGb9rdRo=";
+  release."0.7.1".hash = "sha256-/4Elb35SmscG6EjEcHYDo+AmWrpBUlygZL0WhaD+fcY=";
+  release."0.6.1".hash = "sha256-tFB5lrwRPIlHkP+ebgcJwu03Cc9yVaOINOAo8Bf2LT4=";
+  release."0.5.1".hash = "sha256-yBBl5l+V+dggsg5KM59Yo9CULKog/xxE8vrW+ZRnX7Y=";
+  release."0.5.2".hash = "sha256-8WAnAV53c0pMTdwj8XcUDUkLZbpUgIQbEOgOb63uHQA=";
 
   propagatedBuildInputs = [ mathcomp-analysis-stdlib ];
 

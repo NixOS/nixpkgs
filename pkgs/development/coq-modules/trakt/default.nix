@@ -11,10 +11,10 @@ mkCoqDerivation {
   pname = "trakt";
   owner = "ecranceMERCE";
 
-  release."1.0".sha256 = "sha256-Qhw5fWFYxUFO2kIWWz/og+4fuy9aYG27szfNk3IglhY=";
-  release."1.1".sha256 = "sha256-JmrtM9WcT8Bfy0WZCw8xdubuMomyXmfLXJwpnCNrvsg=";
-  release."1.2".sha256 = "sha256-YQRtK2MjjsMlytdu9iutUDKhwOo4yWrSwhyBb2zNHoE=";
-  release."1.2+8.13".sha256 = "sha256-hozms4sPSMr4lFkJ20x+uW9Wqt067bifnPQxdGyKhQQ=";
+  release."1.0".hash = "sha256-Qhw5fWFYxUFO2kIWWz/og+4fuy9aYG27szfNk3IglhY=";
+  release."1.1".hash = "sha256-JmrtM9WcT8Bfy0WZCw8xdubuMomyXmfLXJwpnCNrvsg=";
+  release."1.2".hash = "sha256-YQRtK2MjjsMlytdu9iutUDKhwOo4yWrSwhyBb2zNHoE=";
+  release."1.2+8.13".hash = "sha256-hozms4sPSMr4lFkJ20x+uW9Wqt067bifnPQxdGyKhQQ=";
 
   inherit version;
   defaultVersion =

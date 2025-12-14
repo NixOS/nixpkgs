@@ -48,13 +48,13 @@
 
   releaseRev = v: "v${v}";
 
-  release."0.3.0".sha256 = "sha256-ioPqavLOc8ZEzroalLR4dpqDbnOyzzOmWSF9+J1yPdQ=";
-  release."0.2.4".sha256 = "sha256-uglr47aDgSkKi2JyVyN+2BrokZISZUAE8OUylGjy7ds=";
-  release."0.2.3".sha256 = "sha256-Y3dmNIF36IuIgrVILteofOv8e5awKfq93S4YN7enswI=";
-  release."0.2.2".sha256 = "sha256-tBF8equJd6hKZojpe+v9h6Tg9xEnMTVFgOYK7ZnMfxk=";
-  release."0.2.1".sha256 = "sha256-X00q5QFxdcGWeNqOV/PLTOqQyyfqFEinbGUTO7q8bC4=";
-  release."0.2.0".sha256 = "sha256-GDkWH0LUsW165vAUoYC5of9ndr0MbfBtmrPhsJVXi3o=";
-  release."0.1.0".sha256 = "sha256-Yj+k+mBsudi3d6bRVlZLyM4UqQnzAX5tHvxtKoIuNTE=";
+  release."0.3.0".hash = "sha256-ioPqavLOc8ZEzroalLR4dpqDbnOyzzOmWSF9+J1yPdQ=";
+  release."0.2.4".hash = "sha256-uglr47aDgSkKi2JyVyN+2BrokZISZUAE8OUylGjy7ds=";
+  release."0.2.3".hash = "sha256-Y3dmNIF36IuIgrVILteofOv8e5awKfq93S4YN7enswI=";
+  release."0.2.2".hash = "sha256-tBF8equJd6hKZojpe+v9h6Tg9xEnMTVFgOYK7ZnMfxk=";
+  release."0.2.1".hash = "sha256-X00q5QFxdcGWeNqOV/PLTOqQyyfqFEinbGUTO7q8bC4=";
+  release."0.2.0".hash = "sha256-GDkWH0LUsW165vAUoYC5of9ndr0MbfBtmrPhsJVXi3o=";
+  release."0.1.0".hash = "sha256-Yj+k+mBsudi3d6bRVlZLyM4UqQnzAX5tHvxtKoIuNTE=";
 
   propagatedBuildInputs = [
     equations

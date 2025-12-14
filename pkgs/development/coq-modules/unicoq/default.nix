@@ -17,7 +17,7 @@ mkCoqDerivation {
         out = "1.6-${coq.coq-version}";
       }
     ] null;
-  release."1.6-8.19".sha256 = "sha256-fDk60B8AzJwiemxHGgWjNu6PTu6NcJoI9uK7Ww2AT14=";
+  release."1.6-8.19".hash = "sha256-fDk60B8AzJwiemxHGgWjNu6PTu6NcJoI9uK7Ww2AT14=";
   releaseRev = v: "v${v}";
   mlPlugin = true;
   meta = {

@@ -18,7 +18,7 @@ mkCoqDerivation {
         out = "2023-08-14";
       }
     ] null;
-  release."2023-08-14".sha256 = "sha256-gu9qOdHO0qJ2B9Y9Vf66q08iNJcfuECJO66fizFB08g=";
+  release."2023-08-14".hash = "sha256-gu9qOdHO0qJ2B9Y9Vf66q08iNJcfuECJO66fizFB08g=";
   release."2023-08-14".rev = "ca1871dd33649f27257a0fbf94076acc80ecffbc";
   propagatedBuildInputs = [ iris ];
   meta = {

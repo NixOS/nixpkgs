@@ -30,9 +30,9 @@
     ] null;
 
   releaseRev = v: "v${v}";
-  release."0.0.7".sha256 = "sha256-A5QDQscZ9BUxxcGTI2RDYOKTZoCYexJQuGNl9i+Wt/g=";
-  release."0.0.6".sha256 = "sha256-c/ddrj0ahuaj9Zu7YBqK7Q0ur+LK7Fgaa//nxQpQcm4=";
-  release."0.0.5".sha256 = "sha256-vkZIAAr82GNuCGlCVRgSCj/nqIdD8FITBiX1a8fybqw=";
+  release."0.0.7".hash = "sha256-A5QDQscZ9BUxxcGTI2RDYOKTZoCYexJQuGNl9i+Wt/g=";
+  release."0.0.6".hash = "sha256-c/ddrj0ahuaj9Zu7YBqK7Q0ur+LK7Fgaa//nxQpQcm4=";
+  release."0.0.5".hash = "sha256-vkZIAAr82GNuCGlCVRgSCj/nqIdD8FITBiX1a8fybqw=";
 
   nativeBuildInputs = [ findutils ];
 

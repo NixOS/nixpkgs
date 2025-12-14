@@ -17,7 +17,7 @@ mkCoqDerivation rec {
 
   release."master" = {
     rev = "c26ce64d6ad1a1c3cafee38ab4889ad3b68a5c33";
-    sha256 = "sha256-4Q0z/KUHrJZKeKJDqa9mkxfy9LrGh2xPt561muUFYAY=";
+    hash = "sha256-4Q0z/KUHrJZKeKJDqa9mkxfy9LrGh2xPt561muUFYAY=";
   };
   namePrefix = [ ];
 
