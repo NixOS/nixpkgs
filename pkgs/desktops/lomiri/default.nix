@@ -28,6 +28,10 @@ let
       lomiri-api = callPackage ./development/lomiri-api { };
 
       #### QML / QML-related
+      lomiri-action-api = callPackage ./qml/lomiri-action-api {
+        # The dependency target "qmldoc" of target "doc" does not exist.
+        withDocumentation = !useQt6;
+      };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
     }
@@ -63,7 +67,6 @@ let
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
-      lomiri-action-api = callPackage ./qml/lomiri-action-api { };
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
