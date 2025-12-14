@@ -133,6 +133,7 @@
   xf86-input-vmmouse,
   xf86-input-void,
   xf86-video-ark,
+  xf86-video-geode,
   xfd,
   xfontsel,
   xfs,
@@ -344,6 +345,7 @@ self: with self; {
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
   xf86videoark = xf86-video-ark;
+  xf86videogeode = xf86-video-geode;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -838,44 +840,6 @@ self: with self; {
       src = fetchurl {
         url = "mirror://xorg/individual/driver/xf86-video-fbdev-0.5.1.tar.xz";
         sha256 = "11zk8whari4m99ad3w30xwcjkgya4xbcpmg8710q14phkbxw0aww";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videogeode = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-geode";
-      version = "2.18.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-geode-2.18.1.tar.xz";
-        sha256 = "0a8c6g3ndzf76rrrm3dwzmndcdy4y2qfai4324sdkmi8k9szicjr";
       };
       hardeningDisable = [
         "bindnow"

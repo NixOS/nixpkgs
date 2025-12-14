@@ -465,6 +465,7 @@ print OUT <<EOF;
   xf86-input-vmmouse,
   xf86-input-void,
   xf86-video-ark,
+  xf86-video-geode,
   xfd,
   xfontsel,
   xfs,
@@ -676,6 +677,7 @@ self: with self; {
   xf86inputvmmouse = xf86-input-vmmouse;
   xf86inputvoid = xf86-input-void;
   xf86videoark = xf86-video-ark;
+  xf86videogeode = xf86-video-geode;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;

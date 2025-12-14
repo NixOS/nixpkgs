@@ -120,12 +120,6 @@ self: super:
 
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
-  xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
   xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: {
     meta = attrs.meta // {
       badPlatforms = lib.platforms.aarch64;
