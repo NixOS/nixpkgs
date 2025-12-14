@@ -36,13 +36,13 @@
 }:
 
 let
-  version = "8.1.1";
+  version = "8.1.2b1";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     tag = version;
-    hash = "sha256-vTJGe6OGFM+q9+iovsQMPwkrHNg2l4pw9BFEtSA/vmA=";
+    hash = "sha256-BVc8QdNUJMFaniSp1V+DQZXjksbAUuPbAi8E8m1jKEE=";
   };
 
   paaCerts = stdenvNoCC.mkDerivation rec {
