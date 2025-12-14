@@ -16,8 +16,8 @@ buildPythonPackage {
   # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "dorianbrown";
-    repo = "rank_bm25";
-    tag = version;
+    repo = "rank-bm25";
+    rev = version;
     hash = "sha256-+BxQBflMm2AvCLAFFj52Jpkqn+KErwYXU1wztintgOg=";
   };
 

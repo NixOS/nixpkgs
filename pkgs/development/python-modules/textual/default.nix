@@ -15,16 +15,7 @@
 
   # optional-dependencies
   tree-sitter,
-  tree-sitter-c-sharp,
-  tree-sitter-html,
-  tree-sitter-javascript,
-  tree-sitter-make,
-  tree-sitter-markdown,
-  tree-sitter-python,
-  tree-sitter-rust,
-  tree-sitter-sql,
-  tree-sitter-yaml,
-  tree-sitter-zeek,
+  tree-sitter-languages,
 
   # tests
   jinja2,
@@ -33,6 +24,8 @@
   pytestCheckHook,
   syrupy,
   time-machine,
+  tree-sitter-markdown,
+  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
@@ -65,17 +58,8 @@ buildPythonPackage rec {
   optional-dependencies = {
     syntax = [
       tree-sitter
-      tree-sitter-c-sharp
-      tree-sitter-html
-      tree-sitter-javascript
-      tree-sitter-make
-      tree-sitter-markdown
-      tree-sitter-python
-      tree-sitter-rust
-      tree-sitter-sql
-      tree-sitter-yaml
-      tree-sitter-zeek
-    ];
+    ]
+    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [

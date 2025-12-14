@@ -2,7 +2,6 @@
   lib,
   kaem,
   mes-libc,
-  buildPlatform,
 }:
 
 rec {
@@ -15,14 +14,6 @@ rec {
       version,
       src,
       libtccOptions,
-      libtccSources ? [
-        "${src}/lib/libtcc1.c"
-        "${src}/lib/va_list.c"
-      ],
-      libtccObjects ? [
-        "libtcc1.o"
-        "va_list.o"
-      ],
     }:
     let
 
@@ -34,18 +25,15 @@ rec {
       '';
 
       library =
-        let
-          compileCmd = options: source: "${tcc}/bin/tcc ${options} -c ${source}";
-        in
-        libName: options: sources: objs:
-        kaem.runCommand "${libName}.a" { } ''
-          ${lib.strings.concatMapStringsSep "\n" (compileCmd options) sources}
-          ${tcc}/bin/tcc -ar cr ''${out} ${lib.strings.concatStringsSep " " objs}
+        lib: options: source:
+        kaem.runCommand "${lib}.a" { } ''
+          ${tcc}/bin/tcc ${options} -c -o ${lib}.o ${source}
+          ${tcc}/bin/tcc -ar cr ''${out} ${lib}.o
         '';
 
-      libtcc1 = library "libtcc1" libtccOptions libtccSources libtccObjects;
-      libc = library "libc" mes-libc.CFLAGS [ "${mes-libc}/lib/libc.c" ] [ "libc.o" ];
-      libgetopt = library "libgetopt" mes-libc.CFLAGS [ "${mes-libc}/lib/libgetopt.c" ] [ "libgetopt.o" ];
+      libtcc1 = library "libtcc1" libtccOptions "${src}/lib/libtcc1.c";
+      libc = library "libc" mes-libc.CFLAGS "${mes-libc}/lib/libc.c";
+      libgetopt = library "libgetopt" mes-libc.CFLAGS "${mes-libc}/lib/libgetopt.c";
     in
     kaem.runCommand "${pname}-libs-${version}" { } ''
       mkdir -p ''${out}/lib
@@ -64,30 +52,16 @@ rec {
       src,
       prev,
       buildOptions,
-      libtccSources ? [
-        "${src}/lib/libtcc1.c"
-        "${src}/lib/va_list.c"
-      ],
-      libtccObjects ? [
-        "libtcc1.o"
-        "va_list.o"
-      ],
       libtccBuildOptions,
       meta,
     }:
     let
-      tccTarget =
-        {
-          i686-linux = "I386";
-          x86_64-linux = "X86_64";
-        }
-        .${buildPlatform.system};
       options = lib.strings.concatStringsSep " " buildOptions;
       libtccOptions = lib.strings.concatStringsSep " " (
         [
           "-c"
           "-D"
-          "TCC_TARGET_${tccTarget}=1"
+          "TCC_TARGET_I386=1"
         ]
         ++ libtccBuildOptions
       );
@@ -123,20 +97,20 @@ rec {
               ${options} \
               -I . \
               -I ${src} \
-              -D TCC_TARGET_${tccTarget}=1 \
+              -D TCC_TARGET_I386=1 \
               -D CONFIG_TCCDIR=\"\" \
               -D CONFIG_SYSROOT=\"\" \
               -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
               -D CONFIG_TCC_ELFINTERP=\"\" \
               -D CONFIG_TCC_LIBPATHS=\"{B}\" \
-              -D CONFIG_TCC_SYSINCLUDEPATHS=\"${src}/include:${mes-libc}/include\" \
+              -D CONFIG_TCC_SYSINCLUDEPATHS=\"${mes-libc}/include\" \
               -D TCC_LIBGCC=\"libc.a\" \
               -D TCC_LIBTCC1=\"libtcc1.a\" \
               -D CONFIG_TCCBOOT=1 \
               -D CONFIG_TCC_STATIC=1 \
               -D CONFIG_USE_LIBGCC=1 \
               -D TCC_MES_LIBC=1 \
-              -D TCC_VERSION=\"0.9.28-${version}\" \
+              -D TCC_VERSION=\"${version}\" \
               -D ONE_SOURCE=1 \
               ${src}/tcc.c
           '';
@@ -146,8 +120,6 @@ rec {
           version
           src
           libtccOptions
-          libtccSources
-          libtccObjects
           ;
         tcc = compiler;
       };

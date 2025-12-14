@@ -49,10 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
-
-    # https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/22
-    substituteInPlace src/libusermetricsoutput/GSettingsColorThemeProvider.h \
-      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
   '';
 
   strictDeps = true;

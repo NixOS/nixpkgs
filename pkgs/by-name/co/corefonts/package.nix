@@ -66,15 +66,13 @@ stdenv.mkDerivation {
   pname = "corefonts";
   version = "1";
 
-  env.exes = toString (
-    map (
-      { name, hash }:
-      fetchurl {
-        url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
-        inherit hash;
-      }
-    ) fonts
-  );
+  exes = map (
+    { name, hash }:
+    fetchurl {
+      url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
+      inherit hash;
+    }
+  ) fonts;
 
   nativeBuildInputs = [ cabextract ];
 
@@ -138,8 +136,6 @@ stdenv.mkDerivation {
         --subst-var-by fontname "''${name//-/ }"
     done
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://corefonts.sourceforge.net/";

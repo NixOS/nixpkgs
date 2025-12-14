@@ -4,22 +4,23 @@
   fetchurl,
   unzip,
 }:
-let
-  pname = "meslo-lg";
+
+stdenv.mkDerivation rec {
   version = "1.2.1";
+
+  pname = "meslo-lg";
 
   meslo-lg = fetchurl {
     url = "https://raw.githubusercontent.com/andreberg/Meslo-Font/09a431d546d211130352c28eb0466e5d7d5aeaf0/dist/v${version}/Meslo%20LG%20v${version}.zip";
+    name = "${pname}-${version}";
     sha256 = "1l08mxlzaz3i5bamnfr49s2k4k23vdm64b8nz2ha33ysimkbgg6h";
   };
 
   meslo-lg-dz = fetchurl {
     url = "https://raw.githubusercontent.com/andreberg/Meslo-Font/09a431d546d211130352c28eb0466e5d7d5aeaf0/dist/v${version}/Meslo%20LG%20DZ%20v${version}.zip";
+    name = "${pname}-${version}-dz";
     sha256 = "0lnbkrvcpgz9chnvix79j6fiz36wj6n46brb7b1746182rl1l875";
   };
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   nativeBuildInputs = [ unzip ];
 

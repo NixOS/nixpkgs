@@ -13,7 +13,6 @@
   libmicrohttpd,
   gnutls,
   libtasn1,
-  libtool,
   libxml2,
   p11-kit,
   vim,
@@ -24,13 +23,13 @@
 
 let
 
-  version = "2.81.10";
+  version = "2.79.3";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-xmaZY1jFIZQjWlQkJ+uHC4tY4pFPLJ+fKSbktIZkBFI=";
+    hash = "sha256-Rn+Cjpk4vttxARrkDSnpKdBdSRtgElsit8zu1BA8Jd4=";
     fetchSubmodules = true;
   };
 
@@ -60,7 +59,6 @@ let
         makeWrapper
         pkg-config
         cmake
-        libtool
         vim
         which
       ];
@@ -83,27 +81,12 @@ let
         # include llvm-config in path
         export PATH="${lib.getDev llvm_18}/bin:$PATH"
         cd build
-
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # Darwin cannot use 'libtool -static'
-          echo "Disabling static LLVM build on Darwin"
-          # Replace the whole static target with a no-op
-          printf 'all:\n\t@echo "Static LLVM build disabled on Darwin"\n' > Make.llvm.static
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
         substituteInPlace Make.llvm.static \
-          --replace-fail 'mkdir -p $@ && cd $@ && ar -x ../../$<' \
-                        'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
+          --replace 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
         substituteInPlace Make.llvm.static \
-          --replace-fail 'rm -rf $(TMP)' ' ' \
-          --replace-fail " ar " " ${stdenv.cc.targetPrefix}ar "
-        sed -i \
-          's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@' \
-          Make.llvm.static
-      ''
-      + ''
-
+          --replace 'rm -rf $(TMP)' ' ' \
+          --replace-fail "ar" "${stdenv.cc.targetPrefix}ar"
+        sed -i 's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@'  Make.llvm.static
         cd ..
         shopt -s globstar
         for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine architecture/autodiff/autodiff.sh source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
@@ -133,7 +116,7 @@ let
         # not used as an executable, so patch 'uname' usage directly
         # rather than use makeWrapper.
         substituteInPlace "$out"/bin/faustoptflags \
-          --replace-fail uname "${coreutils}/bin/uname"
+          --replace uname "${coreutils}/bin/uname"
 
         # wrapper for scripts that don't need faust.wrap*
         for script in "$out"/bin/faust2*; do
@@ -197,7 +180,7 @@ let
         # 'faustoptflags' to absolute paths.
         for script in "$out"/bin/*; do
           substituteInPlace "$script" \
-            --replace-quiet " error " "echo"
+            --replace " error " "echo"
         done
       '';
 

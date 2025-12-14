@@ -67,19 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.3.6";
+  version = "1.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-J1IhFF8HPpWfYmIaU1mot1dcuGyQm+IfE7goThaC9F0=";
+    hash = "sha256-pIVoPW7Sdc3XN66SuA6IILQkhoNwqy/X4OWgW08CC58=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-hjN+pHMTWin6oXpy3PiH9rrRfM4P/KJ2VyenJHkWAkI=";
+    hash = "sha256-3cY9d28dE7Ndh0o1MiBLSwRggkjjnXRcnmsvC2t5S7A=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -216,9 +216,6 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
-
-    # https://github.com/chroma-core/chroma/issues/6029
-    "test_embedding_function_config_roundtrip"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
@@ -239,10 +236,6 @@ buildPythonPackage rec {
 
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
-
-    # pytest can't tell which test_schema.py to load
-    # https://github.com/chroma-core/chroma/issues/6031
-    "chromadb/test/property/test_schema.py"
   ];
 
   __darwinAllowLocalNetworking = true;

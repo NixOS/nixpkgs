@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       cmacrae
       lnl7
+      periklis
       khaneliman
     ];
     platforms = lib.platforms.darwin;

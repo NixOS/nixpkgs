@@ -6,44 +6,37 @@
   installShellFiles,
   buildkit,
   cni-plugins,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
   extraPackages ? [ ],
-  nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "nerdctl";
-  version = "2.2.0";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "nerdctl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-M3np4NfzEfMt4ii7Fdbdt+y1K7lSTWrqA9Bl+zpzxog=";
+    rev = "v${version}";
+    hash = "sha256-GHFs8QvLcXu+DZ851TCLI7EVc9wMS5fRC4TYBXzyv3Q=";
   };
 
-  vendorHash = "sha256-cnusyughQitdvYhHtuvCGS9/LdI/ku7DETBdAWttKsY=";
+  vendorHash = "sha256-5LRsT04T/CKv+YHaiM2g6giimWWXyzPju3iZuj2DfAY=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-    writableTmpDirAsHomeHook
   ];
 
   ldflags =
     let
-      t = "github.com/containerd/nerdctl/v${lib.versions.major finalAttrs.version}/pkg/version";
+      t = "github.com/containerd/nerdctl/pkg/version";
     in
     [
       "-s"
       "-w"
-      "-X ${t}.Version=v${finalAttrs.version}"
+      "-X ${t}.Version=v${version}"
       "-X ${t}.Revision=<unknown>"
     ];
-
-  # testing framework which we don't need and can't be build as it is an extra go application
-  excludedPackages = [ "mod/tigron" ];
 
   # Many checks require a containerd socket and running nerdctl after it's built
   doCheck = false;
@@ -60,21 +53,16 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    writableTmpDirAsHomeHook
-    versionCheckHook
-  ];
-  versionCheckKeepEnvironment = [ "HOME" ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
-    };
-  };
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/nerdctl --help
+    $out/bin/nerdctl --version | grep "nerdctl version ${version}"
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "https://github.com/containerd/nerdctl/";
-    changelog = "https://github.com/containerd/nerdctl/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/containerd/nerdctl/releases/tag/v${version}";
     description = "Docker-compatible CLI for containerd";
     mainProgram = "nerdctl";
     license = lib.licenses.asl20;
@@ -84,4 +72,4 @@ buildGoModule (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

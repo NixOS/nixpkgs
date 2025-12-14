@@ -28,14 +28,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.6.4";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fBkokokyCJcwYRgdrtWQEqW1rcdlmVQu1OrMJeKA8Sc=";
+    hash = "sha256-WLzt/Ox6GrfWD0/l8/Ksc2ptg5LZSOXXnlsSnenfZtI=";
   };
+
+  patches = [
+    # https://github.com/musescore/MuseScore/pull/30422
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/bda5eac091bca1db15fbe9546b2d71b7e8a126c8.patch";
+      hash = "sha256-MTSFxmwBWaOXipeUqIFKP4Oek087oqW2MQvltV9vAgA=";
+    })
+    # https://github.com/musescore/MuseScore/pull/30691
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/840f8b7ded19cdc5d2dc78d32e396494aaf8c4c0.patch";
+      hash = "sha256-MfHLFQbgvgNTd5G3mxCMlS7bF8LrNWMLZUQ+A21l/RM=";
+    })
+  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
@@ -159,7 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       vandenoever
       doronbehar
-      sarunint
     ];
     mainProgram = "mscore";
     platforms = lib.platforms.unix;

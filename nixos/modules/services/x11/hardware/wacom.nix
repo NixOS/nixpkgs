@@ -39,14 +39,14 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.xf86-input-wacom ]; # provides xsetwacom
+    environment.systemPackages = [ pkgs.xf86_input_wacom ]; # provides xsetwacom
 
-    services.xserver.modules = [ pkgs.xf86-input-wacom ];
+    services.xserver.modules = [ pkgs.xf86_input_wacom ];
 
-    services.udev.packages = [ pkgs.xf86-input-wacom ];
+    services.udev.packages = [ pkgs.xf86_input_wacom ];
 
     environment.etc."X11/xorg.conf.d/70-wacom.conf".source =
-      "${pkgs.xf86-input-wacom}/share/X11/xorg.conf.d/70-wacom.conf";
+      "${pkgs.xf86_input_wacom}/share/X11/xorg.conf.d/70-wacom.conf";
 
   };
 

@@ -55,7 +55,7 @@
         machine.sleep(2)
 
         # Still on main page
-        machine.succeed("xdotool mousemove 500 740 click 1")
+        machine.succeed("xdotool mousemove 500 720 click 1")
         machine.sleep(2)
         machine.wait_for_text(r"(Date|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|All day|Name|Details|More)")
         machine.screenshot("lomiri-calendar_newevent")

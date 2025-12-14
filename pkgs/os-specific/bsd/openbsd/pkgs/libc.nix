@@ -13,7 +13,8 @@
   version,
 }:
 
-symlinkJoin {
+symlinkJoin rec {
+  name = "${pname}-${version}";
   pname = "libc-openbsd";
   inherit version;
 

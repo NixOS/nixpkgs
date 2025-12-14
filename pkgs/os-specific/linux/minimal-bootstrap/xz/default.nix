@@ -62,10 +62,6 @@ bash.runCommand "${pname}-${version}"
     export CC="tcc -B ${tinycc.libs}/lib"
     export AR="tcc -ar"
     export LD=tcc
-    # With a lower max_cmd_len (which is mistakenly detected by the
-    # configure script), libtool invokes ar in append mode. This is not
-    # supported by tinycc.
-    export lt_cv_sys_max_cmd_len=32768
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

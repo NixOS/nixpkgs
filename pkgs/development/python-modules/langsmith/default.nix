@@ -13,7 +13,6 @@
   pydantic,
   requests,
   requests-toolbelt,
-  uuid-utils,
   zstandard,
 
   # tests
@@ -32,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.4.58";
+  version = "0.4.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-2Cxb7zQDUqAfzR59oVx7r33R88ISTmOSLsoU3Wf9HSQ=";
+    hash = "sha256-LOqSXL261+7xWRS8WI+uY3Ij4NemnIyfp3r+XJdmD+U=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -54,7 +53,6 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
-    uuid-utils
     zstandard
   ];
 

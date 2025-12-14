@@ -75,7 +75,7 @@ lib.makeScope
 
       gawk-mes = callPackage ./gawk/mes.nix {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
         gnused = gnused-mes;
       };
 
@@ -171,7 +171,7 @@ lib.makeScope
 
       heirloom = callPackage ./heirloom {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
       };
 
       heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
@@ -183,14 +183,9 @@ lib.makeScope
       mes = callPackage ./mes { };
       mes-libc = callPackage ./mes/libc.nix { };
 
-      musl11-intermediate = callPackage ./musl/1.1.nix {
-        bash = bash_2_05;
-        tinycc = tinycc-mes;
-        gnused = gnused-mes;
-      };
       musl11 = callPackage ./musl/1.1.nix {
         bash = bash_2_05;
-        tinycc = tinycc-musl-intermediate;
+        tinycc = tinycc-mes;
         gnused = gnused-mes;
       };
 
@@ -210,18 +205,10 @@ lib.makeScope
 
       tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
       tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
-      tinycc-musl-intermediate = lib.recurseIntoAttrs (
-        callPackage ./tinycc/musl.nix {
-          bash = bash_2_05;
-          musl = musl11-intermediate;
-          tinycc = tinycc-mes;
-        }
-      );
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
           musl = musl11;
-          tinycc = tinycc-musl-intermediate;
         }
       );
 

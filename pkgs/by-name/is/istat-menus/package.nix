@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "istat-menus";
-  version = "7.20";
+  version = "7.10.4";
 
   src = fetchurl {
     url = "https://cdn.istatmenus.app/files/istatmenus${lib.versions.major finalAttrs.version}/versions/iStatMenus${finalAttrs.version}.zip";
-    hash = "sha256-oJApYp7ejtcMrm7CyeohV/euXYkJJ0yCRBW2i5AgcEE=";
+    hash = "sha256-9fw0J492ywzuKXGR47WAjL6IROCRByCn7KsbQecUU+w=";
   };
 
   sourceRoot = ".";

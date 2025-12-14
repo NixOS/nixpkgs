@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "Embedded DHCPv6-client for OpenWrt";
     homepage = "https://openwrt.org/packages/pkgdata/odhcp6c";
     license = lib.licenses.gpl2Only;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
   };
 }

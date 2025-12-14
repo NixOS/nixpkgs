@@ -6,6 +6,7 @@
 }:
 
 bundlerEnv rec {
+  name = "${pname}-${version}";
   pname = "html-proofer";
   version = (import ./gemset.nix).html-proofer.version;
 

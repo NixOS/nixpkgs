@@ -57,11 +57,6 @@ buildPythonPackage rec {
   disabledTests = [
     # attempts to access network
     "test_s3_info"
-
-    # AssertionError: assert {'blocksize':... 'blosc', ...} == {'blocksize':... 'blosc', ...}
-    # comp {'id': 'blosc', 'cname': 'lz4', 'clevel': 5, 'shuffle': 1, 'blocksize': 0}
-    "test_default_compression"
-    "test_write_image_compressed"
   ];
 
   disabledTestPaths = [

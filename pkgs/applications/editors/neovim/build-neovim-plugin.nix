@@ -24,10 +24,10 @@ let
     else
       luaAttr;
 
-  luaDrv = originalLuaDrv.overrideAttrs (old: {
-    version = attrs.version or old.version;
+  luaDrv = originalLuaDrv.overrideAttrs (oa: {
+    version = attrs.version or oa.version;
     __intentionallyOverridingVersion = true;
-    rockspecVersion = old.rockspecVersion;
+    rockspecVersion = oa.rockspecVersion;
 
     extraConfig = ''
       -- to create a flat hierarchy
@@ -37,13 +37,13 @@ let
 
   finalDrv = toVimPlugin (
     luaDrv.overrideAttrs (
-      old:
+      oa:
       attrs
       // {
-        nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+        nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [
           lua.pkgs.luarocksMoveDataFolder
         ];
-        version = "${originalLuaDrv.version}-unstable-${old.version}";
+        version = "${originalLuaDrv.version}-unstable-${oa.version}";
         __intentionallyOverridingVersion = true;
       }
     )

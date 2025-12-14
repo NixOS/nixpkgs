@@ -14,9 +14,7 @@
   lark,
   numpy,
   pymongo,
-  pymongo-search-utils,
 
-  # test
   freezegun,
   httpx,
   langchain-community,
@@ -35,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.9.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${version}";
-    hash = "sha256-g2FEowzGvP7a/zx/qn8EUxj5s6j/miMlzkRJEE64G0k=";
+    hash = "sha256-TpEiTQe4nZEhb7yWdm73oKaHGr58Ej3cNeD1sP5pAxA=";
   };
 
   sourceRoot = "${src.name}/libs/langchain-mongodb";
@@ -63,7 +61,6 @@ buildPythonPackage rec {
     langchain-text-splitters
     numpy
     pymongo
-    pymongo-search-utils
   ];
 
   nativeCheckInputs = [

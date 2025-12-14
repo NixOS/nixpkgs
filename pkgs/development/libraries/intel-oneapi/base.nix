@@ -56,7 +56,7 @@
   libffi,
   stdenv,
 }:
-intel-oneapi.mkIntelOneApi (finalAttrs: {
+intel-oneapi.mkIntelOneApi (fa: {
   pname = "intel-oneapi-base-toolkit";
 
   src = fetchurl {
@@ -176,7 +176,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
-    inherit (finalAttrs) pname;
+    inherit (fa) pname;
     file = "base.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=offline";
   };

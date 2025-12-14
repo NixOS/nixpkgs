@@ -5,9 +5,10 @@
   fira-sans,
 }:
 
-symlinkJoin {
+symlinkJoin rec {
   pname = "fira";
   inherit (fira-sans) version;
+  name = "${pname}-${version}";
 
   paths = [
     fira-mono

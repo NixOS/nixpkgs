@@ -56,6 +56,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
+      periklis
       zaninime
       Chili-Man
       saschagrunert

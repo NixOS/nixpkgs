@@ -194,7 +194,7 @@ let
     }:
     mkDict rec {
       inherit src srcFileName dictFileName;
-      version = "2020.12.07";
+      version = "2018.04.16";
       pname = "hunspell-dict-${shortName}-wordlist";
       srcReadmeFile = "README_" + srcFileName + ".txt";
       readmeFile = "README_" + dictFileName + ".txt";
@@ -376,8 +376,8 @@ rec {
     srcFileName = "en_US";
     dictFileName = "en_US";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2020.12.07.zip";
-      hash = "sha256-YWNIrWRacW2RyKZkUGXnEPFendo//vYM337IpOJ5da8=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip";
+      sha256 = "18hbncvqnckzqarrmnzk58plymjqyi93k4qj98fac5mr71jbmzaf";
     };
   };
 
@@ -388,8 +388,8 @@ rec {
     srcFileName = "en_US-large";
     dictFileName = "en_US";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2020.12.07.zip";
-      hash = "sha256-WpNhcxL/t8zMVMj9ij5nEusOnNSmnx01i4LrTTUgcrc=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2018.04.16.zip";
+      sha256 = "1xm9jgqbivp5cb78ykjxg47vzq1yqj82l7r4q5cjpivrv99s49qc";
     };
   };
 
@@ -400,8 +400,8 @@ rec {
     srcFileName = "en_CA";
     dictFileName = "en_CA";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2020.12.07.zip";
-      hash = "sha256-/2uR5O12g0jGGufDJuhIBZgQ+kOl1gHfaz9FrZwO9b8=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip";
+      sha256 = "06yf3s7y1215jmikbs18cn4j8a13csp4763w3jfgah8zlim6vc47";
     };
   };
 
@@ -412,8 +412,8 @@ rec {
     srcFileName = "en_CA-large";
     dictFileName = "en_CA";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2020.12.07.zip";
-      hash = "sha256-RjRIkIb2QDeveqpLyo1s4X90QrZiYylW5d1MCU+Hvuo=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2018.04.16.zip";
+      sha256 = "1200xxyvv6ni8nk52v3059c367817vnrkm0cdh38rhiigb5flfha";
     };
   };
 
@@ -424,8 +424,8 @@ rec {
     srcFileName = "en_AU";
     dictFileName = "en_AU";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2020.12.07/hunspell-en_AU-2020.12.07.zip";
-      hash = "sha256-3CBVfEiuGXl4Tnn65vll6ZnI2y6aD4RjSOcAV/znglQ=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip";
+      sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
     };
   };
 
@@ -436,8 +436,8 @@ rec {
     srcFileName = "en_AU-large";
     dictFileName = "en_AU";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2020.12.07.zip";
-      hash = "sha256-SW5HeuewGMe+Ng5gqqL5jn8cl8eJLfk7JFcRJCTGHjE=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2018.04.16.zip";
+      sha256 = "14l1w4dpk0k1js2wwq5ilfil89ni8cigph95n1rh6xi4lzxj7h6g";
     };
   };
 
@@ -448,8 +448,8 @@ rec {
     srcFileName = "en_GB-ise";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2020.12.07.zip";
-      hash = "sha256-LO1LLsnRiMO1QNu3W1FD9luZDa8XQ3dYcm/x+rXwGtM=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2018.04.16.zip";
+      sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
     };
   };
 
@@ -460,8 +460,8 @@ rec {
     srcFileName = "en_GB-ize";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2020.12.07.zip";
-      hash = "sha256-hpt0nsmAW4fNBfQzB/IJmGUTMbWqWwRQZBOvDC3y8jE=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2018.04.16.zip";
+      sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
     };
   };
 
@@ -472,8 +472,8 @@ rec {
     srcFileName = "en_GB-large";
     dictFileName = "en_GB";
     src = fetchurl {
-      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2020.12.07.zip";
-      hash = "sha256-+GvrdyKMc3yMaUaP/E6gZ1EocieIabmKXT7BjxJRB70=";
+      url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2018.04.16.zip";
+      sha256 = "1y4d7x5vvi1qh1s3i09m0vvqrpdzzqhsdngr8nsh7hc5bnlm37mi";
     };
   };
 

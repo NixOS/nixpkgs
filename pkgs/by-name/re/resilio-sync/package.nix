@@ -3,24 +3,23 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  installShellFiles,
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "3.1.1.1075";
+  version = "3.0.2.1058";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/x64/0/resilio-sync_x64.tar.gz";
-        hash = "sha256-FgRMK5dOxkbaXyi0BPYQZK0tR/ZZuuUGAciwThqICBk=";
+        url = "https://download-cdn.resilio.com/${version}/linux/x64/0/resilio-sync_x64.tar.gz";
+        hash = "sha256-jdkxSN/JscL2hxIWuShNKyUk28d453LPDM/+FtzquGQ=";
       };
 
       aarch64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
-        hash = "sha256-P3gUwj3Vr9qn9S6iqlgGfZpK7x5u4U96b886JCE3CYY=";
+        url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
+        hash = "sha256-iczg1jEy+49QczKxc0/UZJ8LPaCHsXKmSrudVb3RWZ8=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    installShellFiles
   ];
 
   buildInputs = [
@@ -39,11 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHook preInstall
-
-    installBin rslsync
-
-    runHook postInstall
+    install -D rslsync "$out/bin/rslsync"
   '';
 
   meta = {
@@ -58,4 +52,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "rslsync";
   };
-})
+}

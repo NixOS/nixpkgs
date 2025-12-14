@@ -64,18 +64,6 @@
       DISPLAY = lib.strings.optionalString enableXWayland (
         if enableAutologin then "DISPLAY=:0" else "DISPLAY=:1"
       );
-      emptyPDF = config.node.pkgs.stdenvNoCC.mkDerivation {
-        name = "empty-pdf";
-        dontUnpack = true;
-        nativeBuildInputs = [ config.node.pkgs.imagemagick ];
-        buildPhase = ''
-          magick xc:none -page Letter empty.pdf
-        '';
-        installPhase = ''
-          mkdir $out
-          mv empty.pdf $out/empty.pdf
-        '';
-      };
     in
     ''
       #testName: ${testName}
@@ -119,7 +107,6 @@
           gui_apps_to_launch['cosmic-edit'] = 'com.system76.CosmicEdit'
           gui_apps_to_launch['cosmic-files'] = 'com.system76.CosmicFiles'
           gui_apps_to_launch['cosmic-player'] = 'com.system76.CosmicPlayer'
-          gui_apps_to_launch['cosmic-reader'] = 'com.system76.CosmicReader'
           gui_apps_to_launch['cosmic-settings'] = 'com.system76.CosmicSettings'
           gui_apps_to_launch['cosmic-store'] = 'com.system76.CosmicStore'
           gui_apps_to_launch['cosmic-term'] = 'com.system76.CosmicTerm'
@@ -127,16 +114,10 @@
           for gui_app, app_id in gui_apps_to_launch.items():
               # Don't fail the test if binary is absent
               if machine.execute(f"su - ${user.name} -c 'command -v {gui_app}'", timeout=5)[0] == 0:
-                  match gui_app:
-                      case 'cosmic-reader':
-                          opt_arg = '${emptyPDF}/empty.pdf'
-                      case _:
-                          opt_arg = ""
-
-                  machine.succeed(f"su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} ${DISPLAY} {gui_app} {opt_arg} >&2 &'", timeout=5)
+                  machine.succeed(f"su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} ${DISPLAY} {gui_app} >&2 &'", timeout=5)
                   # Nix builds the following non-commented expression to the following:
                   #                              `su - alice -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/1000 lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' `
-                  machine.wait_until_succeeds(f''''su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' '''', timeout=60)
+                  machine.wait_until_succeeds(f''''su - ${user.name} -c 'WAYLAND_DISPLAY=wayland-1 XDG_RUNTIME_DIR=/run/user/${toString user.uid} lswt --json | jq ".toplevels" | grep "^    \\"app-id\\": \\"{app_id}\\"$"' '''', timeout=30)
                   machine.succeed(f"pkill {gui_app}", timeout=5)
 
       machine.succeed("echo 'test completed succeessfully' > /${testName}", timeout=5)

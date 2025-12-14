@@ -26,7 +26,6 @@
   libglvnd,
   libkrb5,
   openssl,
-  webkitgtk_4_1,
 
   # Populate passthru.tests
   tests,
@@ -235,7 +234,6 @@ stdenv.mkDerivation (
       nss
       nspr
       systemdLibs
-      webkitgtk_4_1
       xorg.libxkbfile
     ];
 

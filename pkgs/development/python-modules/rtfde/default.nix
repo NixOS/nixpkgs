@@ -6,19 +6,22 @@
   lxml,
   oletools,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rtfde";
-  version = "0.1.2.2";
+  version = "0.1.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "seamustuohy";
     repo = "RTFDE";
     tag = version;
-    hash = "sha256-1yjxp6N07I9kwFRtgsLo9UPSG4FU+ic1tNm6U/xWk74=";
+    hash = "sha256-dtPWgtOYpGaNRmIE7WNGJd/GWB2hQXsFJDDSHIcIjY4=";
   };
 
   build-system = [ setuptools ];

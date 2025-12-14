@@ -61,7 +61,7 @@ let
     in
     stdenv.mkDerivation (
       {
-        inherit pname version;
+        name = "${pname}-${version}";
 
         nativeBuildInputs = [ unzip ];
 

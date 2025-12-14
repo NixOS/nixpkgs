@@ -549,6 +549,7 @@ stdenv.mkDerivation (
         maintainers = with lib.maintainers; [
           qknight
           ttuegel
+          periklis
           bkchr
         ];
         pkgConfigModules = [

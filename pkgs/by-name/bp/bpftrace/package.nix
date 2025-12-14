@@ -23,14 +23,23 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.24.2";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-LkiHwmKU+TOtn6mDvlqIKvSOQaU320aVQOkcElzB7gM=";
+    hash = "sha256-Wt1MXKOg48477HMszq1GAjs+ZELbfAfp+P2AYa+dg+Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "attach_tracepoint_with_enums.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/4714.patch";
+      includes = [ "src/ast/passes/clang_parser.cpp" ];
+      hash = "sha256-xk+/eBNJJJSUqNTs0HFr0BAaqRB5B7CNWRSmnoBMTs0=";
+    })
+  ];
 
   buildInputs = with llvmPackages; [
     llvm

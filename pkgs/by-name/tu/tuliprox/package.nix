@@ -7,7 +7,7 @@
   ffmpeg,
   which,
   rustc,
-  wasm-bindgen-cli_0_2_105,
+  wasm-bindgen-cli_0_2_104,
   trunk,
   binaryen,
   dart-sass,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     ffmpeg
     which
-    wasm-bindgen-cli_0_2_105
+    wasm-bindgen-cli_0_2_104
     trunk
     rustc.llvmPackages.lld
     binaryen
@@ -55,9 +55,6 @@ rustPlatform.buildRustPackage rec {
     trunk build --offline --frozen --release
     popd
   '';
-
-  # Tests don't compile in 3.2.0
-  doCheck = lib.versionAtLeast version "3.2.1";
 
   checkFlags = [
     "--skip=processing::parser::xmltv::tests::normalize"

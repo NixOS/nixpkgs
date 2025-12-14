@@ -57,9 +57,9 @@ in
             lomiri-thumbnailer
             # To check if playback actually works, or is broken due to missing codecs, we need to make the app's icons more OCR-able
             (lib.meta.hiPrio (
-              suru-icon-theme.overrideAttrs (old: {
+              suru-icon-theme.overrideAttrs (oa: {
                 # Colour the background in special colours, which we can OCR for
-                postPatch = (old.postPatch or "") + ''
+                postPatch = (oa.postPatch or "") + ''
                   substituteInPlace suru/actions/scalable/media-playback-pause.svg \
                     --replace-fail 'fill:none' 'fill:${ocrPauseColor}'
 

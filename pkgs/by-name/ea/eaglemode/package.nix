@@ -12,7 +12,7 @@
   pkg-config,
   librsvg,
   glib,
-  gtk3,
+  gtk2,
   libXext,
   libXxf86vm,
   poppler,
@@ -32,22 +32,18 @@
   extraRuntimeDeps ? [ ],
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "eaglemode";
-  version = "0.96.3";
+  version = "0.96.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/eaglemode/eaglemode-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-AHeupgEnyQylRWFDrPeo4b0mNONqG+6QwWnRpYknqOQ=";
+    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    hash = "sha256:1al5n2mcjp0hmsvi4hsdmzd7i0id5i3255xplk0il1nmzydh312a";
   };
 
   # Fixes "Error: No time zones found." on the clock
   postPatch = ''
-    substituteInPlace src/emClock/emTimeZonesModel.cpp \
-      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-
-    substituteInPlace makers/emPdf.maker.pm \
-      --replace-fail gtk+-2.0 gtk+-3.0
+    substituteInPlace src/emClock/emTimeZonesModel.cpp --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   nativeBuildInputs = [
@@ -65,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     librsvg
     glib
-    gtk3
+    gtk2
     libXxf86vm
     libXext
     poppler
@@ -113,18 +109,18 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/eaglemode --set EM_DIR "$out" --prefix LD_LIBRARY_PATH : "$out/lib" --prefix PATH : "${runtimeDeps}"
       for i in 32 48 96; do
         mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-        ln -s $out/res/icons/eaglemode$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/eaglemode.png
+        ln -s $out/res/icons/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
       done
       runHook postInstall
     '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = "eaglemode";
-      exec = "eaglemode";
-      icon = "eaglemode";
+      name = pname;
+      exec = pname;
+      icon = pname;
       desktopName = "Eagle Mode";
-      genericName = "Zoomable User Interface";
+      genericName = meta.description;
       categories = [
         "Game"
         "Graphics"
@@ -136,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://eaglemode.sourceforge.net/download.html";
-    extraRegex = "(?!.*(x86_64|setup64|livecd|amd64)).*";
+    extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
   };
 
   meta = {
@@ -149,4 +145,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

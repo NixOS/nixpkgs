@@ -85,7 +85,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.modules = [ pkgs.xf86-input-cmt ];
+    services.xserver.modules = [ pkgs.xf86_input_cmt ];
 
     environment.etc = {
       "${etcPath}/40-touchpad-cmt.conf" = {

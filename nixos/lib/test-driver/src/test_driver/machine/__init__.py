@@ -790,6 +790,9 @@ class Machine:
     def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         return self.systemctl(f"stop {jobname}", user)
 
+    def wait_for_job(self, jobname: str) -> None:
+        self.wait_for_unit(jobname)
+
     def connect(self) -> None:
         def shell_ready(timeout_secs: int) -> bool:
             """We sent some data from the backdoor service running on the guest

@@ -56,7 +56,7 @@ To switch to a different NixOS channel, do
 ```
 
 (Be sure to include the `nixos` parameter at the end.) For instance, to
-use the NixOS 25.11 stable channel:
+use the NixOS 25.05 stable channel:
 
 ```ShellSession
 # nix-channel --add https://channels.nixos.org/nixos-25.11 nixos

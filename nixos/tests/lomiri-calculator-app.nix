@@ -39,7 +39,7 @@
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
-        machine.wait_for_window("Calculator")
+        machine.wait_for_text("Calculator")
         machine.screenshot("lomiri-calculator")
 
     with subtest("lomiri calculator works"):
@@ -63,7 +63,7 @@
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
-        machine.wait_for_window("Rechner")
+        machine.wait_for_text("Rechner")
         machine.screenshot("lomiri-calculator_localised")
 
     # History of previous run should have loaded

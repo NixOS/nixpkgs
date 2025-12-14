@@ -10,19 +10,18 @@
   fetchFromGitHub,
   protobuf,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "1.2.7";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
     tag = "v${version}";
-    hash = "sha256-wZS/o795v5luHdSKBDnEgPeX8HQdN190UQspXJV/dQE=";
+    hash = "sha256-7Diq7xT8tPO4fXp7qsFXWtWExqm2vctoOtPvlCuWOKg=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +34,6 @@ buildPythonPackage rec {
     bleak-retry-connector
     cryptography
     protobuf
-    typing-extensions
   ];
 
   # Module has no tests

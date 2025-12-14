@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libpcap,
 }:
 
 buildGoModule rec {
@@ -16,8 +15,6 @@ buildGoModule rec {
     sha256 = "sha256-Ui3Vm9Q6VJXW9hGDFCuOCUmoSO8SE5ufRYq0niY6ojo=";
   };
   vendorHash = "sha256-8KxY3KYcaaZZjk+IIKdu8tzGhgGUlJ5nyMMSKhe41kg=";
-
-  buildInputs = [ libpcap ];
 
   doCheck = false; # Tests require a network connection.
 

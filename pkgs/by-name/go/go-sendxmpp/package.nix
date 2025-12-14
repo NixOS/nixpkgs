@@ -2,27 +2,25 @@
   buildGoModule,
   fetchFromGitLab,
   lib,
-  nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "go-sendxmpp";
-  version = "0.15.3";
+  version = "0.15.1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "mdosch";
     repo = "go-sendxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l8eEgwpXhblFDZm1V1/U2NxywivQtHzbXLPNFACJx1M=";
+    hash = "sha256-dXSja3k7Gb9fzP3TrQqB9KRVO90i967eVaLldwhBnvQ=";
   };
 
-  vendorHash = "sha256-FJjC2WU1DTP8Frk2cj9Adduxv49d9uyt4G8BotzWsYU=";
+  vendorHash = "sha256-fnaOgc8RPDQnxTWOLQx1kw0+qj1iaff+UkjnoJYdEG4=";
 
   passthru = {
-    tests = { inherit (nixosTests) ejabberd prosody; };
     updateScript = nix-update-script { };
   };
 

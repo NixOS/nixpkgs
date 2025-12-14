@@ -5,25 +5,22 @@
   lib,
   libglvnd,
   mesa,
-  libX11,
-  libXrandr,
   libpng,
   libjpeg,
   wayland,
   wayland-scanner,
-  wayland-protocols,
   versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finallAttrs: {
   pname = "neowall";
-  version = "0.4.3";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "1ay1";
     repo = "neowall";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Wt9sNuUO2IIXlQAanDsWNjbqAaUH/jCzPoQYokl36OU=";
+    tag = "v${finallAttrs.version}";
+    hash = "sha256-q/M79ol4l4YIsewP50/6I2C5zKmF1Bc4mgIC896qxPY=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayland
-    wayland-protocols
     mesa
-    libX11
-    libXrandr
     libglvnd
     libpng
     libjpeg
@@ -51,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   meta = {
-    changelog = "https://github.com/1ay1/neowall/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/1ay1/neowall/releases/tag/${finallAttrs.src.tag}";
     description = "GPU shader wallpapers for Wayland";
     homepage = "https://github.com/1ay1/neowall";
     license = lib.licenses.mit;

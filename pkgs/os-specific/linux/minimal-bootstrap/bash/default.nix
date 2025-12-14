@@ -19,11 +19,11 @@
 }:
 let
   pname = "bash";
-  version = "5.2.37";
+  version = "5.2.15";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
-    hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
+    sha256 = "132qng0jy600mv1fs95ylnlisx2wavkkgpb19c6kmz7lnmjhjwhk";
   };
 
   patches = [

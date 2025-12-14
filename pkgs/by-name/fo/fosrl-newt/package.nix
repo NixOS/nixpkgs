@@ -3,35 +3,36 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "newt";
-  version = "1.7.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "newt";
     tag = version;
-    hash = "sha256-R6X9DOu1iGS/a4d5kmKoBZI0L5k7S0w3SHHFQnQH/ho=";
+    hash = "sha256-svMAMPK8f5cwIPzr0+WdoWzHDV1jtuO1Lm2oZIVHE6k=";
   };
 
-  vendorHash = "sha256-5Xr6mwPtsqEliKeKv2rhhp6JC7u3coP4nnhIxGMqccU=";
+  vendorHash = "sha256-wNdZEfPx12T0jvCEDkz04X8N6t/pNIOXWFSTHteeZYs=";
+
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail "version_replaceme" "${version}"
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.newtVersion=${version}"
   ];
 
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "-version" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tunneling client for Pangolin";
@@ -42,7 +43,6 @@ buildGoModule rec {
       fab
       jackr
       sigmasquadron
-      water-sucks
     ];
     mainProgram = "newt";
   };

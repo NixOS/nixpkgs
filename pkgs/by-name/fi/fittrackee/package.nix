@@ -22,15 +22,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.poetry-core
   ];
 
-  # The upstream project changed the behavior of the CLI when --set-admin and --set-role are used together.
-  # Previously, it would raise an error, but now it issues a deprecation warning.
-  # This patch updates the test assertion to expect the new deprecation warning message.
-  # See upstream commit 6eda1b6119b3e41bdf8896e74b4a07d3c9e97609.
-  postPatch = ''
-    substituteInPlace fittrackee/tests/users/test_users_commands.py \
-      --replace '"--set-admin and --set-role can not be used together."' '"WARNING: --set-admin is deprecated. Please use --set-role option instead."'
-  '';
-
   pythonRelaxDeps = [
     "authlib"
     "fitdecode"
@@ -42,7 +33,6 @@ python3Packages.buildPythonApplication rec {
     "pyopenssl"
     "pytz"
     "sqlalchemy"
-    "xmltodict"
   ];
 
   dependencies =

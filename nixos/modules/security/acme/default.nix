@@ -211,8 +211,7 @@ let
           ${toString acmeServer} ${toString data.dnsProvider}
           ${toString data.ocspMustStaple} ${data.keyType}
         ''
-        + lib.optionalString (data.csr != null) " - ${data.csr}"
-        + lib.optionalString (data.profile != null) " - ${data.profile}";
+        + (lib.optionalString (data.csr != null) (" - " + data.csr));
       certDir = mkHash hashData;
       # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
       domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
@@ -285,7 +284,6 @@ let
         commonOpts
         ++ [ "run" ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
-        ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRunFlags
       );
       renewOpts = lib.escapeShellArgs (
@@ -295,7 +293,6 @@ let
           "--no-random-sleep"
         ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
-        ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRenewFlags
       );
 
@@ -799,14 +796,6 @@ let
 
             - <https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/>
             - <https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html>
-          '';
-        };
-
-        profile = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          inherit (defaultAndText "profile" null) default defaultText;
-          description = ''
-            The certificate profile to choose if the CA offers multiple profiles.
           '';
         };
 

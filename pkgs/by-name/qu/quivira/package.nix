@@ -4,7 +4,7 @@ let
   version = "4.1";
 in
 fetchurl {
-  inherit pname version;
+  name = "${pname}-${version}";
   url = "http://www.quivira-font.com/files/Quivira.otf";
 
   # Download the source file to a temporary directory so that $out can be a

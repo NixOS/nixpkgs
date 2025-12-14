@@ -2,31 +2,26 @@
   lib,
   fetchurl,
   bash,
-  tinycc,
+  tinycc-bootstrappable,
   musl,
   gnupatch,
   gnutar,
   gzip,
-  buildPlatform,
 }:
 let
   pname = "tinycc-musl";
-  version = "unstable-2025-12-03";
-  rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
+  # next commit introduces use of realpath (unsupported in mes-libc)
+  version = "unstable-2023-07-31";
+  rev = "fd6d2180c5c801bb0b4c5dde27d61503059fc97d";
 
   src = fetchurl {
     url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+    hash = "sha256-R81SNbEmh4s9FNQxCWZwUiMCYRkkwOHAdRf0aMnnRiA=";
   };
 
-  tccTarget =
-    {
-      i686-linux = "I386";
-      x86_64-linux = "X86_64";
-    }
-    .${buildPlatform.system};
-
   patches = [
+    ./ignore-duplicate-symbols.patch
+    ./ignore-static-inside-array.patch
     ./static-link.patch
   ];
 
@@ -35,10 +30,7 @@ let
     homepage = "https://repo.or.cz/w/tinycc.git";
     license = lib.licenses.lgpl21Only;
     teams = [ lib.teams.minimal-bootstrap ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = [ "i686-linux" ];
   };
 
   tinycc-musl =
@@ -47,7 +39,7 @@ let
         inherit pname version meta;
 
         nativeBuildInputs = [
-          tinycc.compiler
+          tinycc-bootstrappable.compiler
           gnupatch
           gnutar
           gzip
@@ -60,10 +52,6 @@ let
 
         # Patch
         ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-        replace --file i386-asm.c --output i386-asm.c --match-on "switch(size)" --replace-with "if (reg >= 8) { cstr_printf(add_str, \"%%r%d%c\", reg, (size == 1) ? 'b' : ((size == 2) ? 'w' : ((size == 4) ? 'd' : ' '))); return; } switch(size)"
-
-        # If performing ptr + (-1) for example, the offset should be ptrdiff_t and not size_t
-        replace --file tccgen.c --output tccgen.c --match-on "vpush_type_size(pointed_type(&vtop[-1].type), &align);" --replace-with "vpush_type_size(pointed_type(&vtop[-1].type), &align); if (!(vtop[-1].type.t & VT_UNSIGNED)) gen_cast_s(VT_PTRDIFF_T);"
 
         # Configure
         touch config.h
@@ -74,7 +62,7 @@ let
         ln -s ${musl}/lib/libtcc1.a ./libtcc1.a
 
         tcc \
-          -B ${tinycc.libs}/lib \
+          -B ${tinycc-bootstrappable.libs}/lib \
           -DC2STR \
           -o c2str \
           conftest.c
@@ -83,7 +71,7 @@ let
         tcc -v \
           -static \
           -o tcc-musl \
-          -D TCC_TARGET_${tccTarget}=1 \
+          -D TCC_TARGET_I386=1 \
           -D CONFIG_TCCDIR=\"\" \
           -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
           -D CONFIG_TCC_ELFINTERP=\"/musl/loader\" \
@@ -98,9 +86,8 @@ let
           -D TCC_MUSL=1 \
           -D CONFIG_TCC_PREDEFS=1 \
           -D CONFIG_TCC_SEMLOCK=0 \
-          -D CONFIG_TCC_BACKTRACE=0 \
           -B . \
-          -B ${tinycc.libs}/lib \
+          -B ${tinycc-bootstrappable.libs}/lib \
           tcc.c
         # libtcc1.a
         rm -f libtcc1.a
@@ -112,7 +99,7 @@ let
           -v \
           -static \
           -o tcc-musl \
-          -D TCC_TARGET_${tccTarget}=1 \
+          -D TCC_TARGET_I386=1 \
           -D CONFIG_TCCDIR=\"\" \
           -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
           -D CONFIG_TCC_ELFINTERP=\"/musl/loader\" \
@@ -127,7 +114,6 @@ let
           -D TCC_MUSL=1 \
           -D CONFIG_TCC_PREDEFS=1 \
           -D CONFIG_TCC_SEMLOCK=0 \
-          -D CONFIG_TCC_BACKTRACE=0 \
           -B . \
           -B ${musl}/lib \
           tcc.c

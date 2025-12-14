@@ -7,7 +7,6 @@
   gjs,
   glib,
   gnome-menus,
-  gtk3,
   nautilus,
   gobject-introspection,
   hddtemp,
@@ -82,20 +81,6 @@ lib.trivial.pipe super [
       patchShebangs "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
-  }))
-
-  (patchExtension "ding@rastersoft.com" (old: {
-    nativeBuildInputs = [ wrapGAppsHook3 ];
-    patches = [
-      (replaceVars ./extensionOverridesPatches/ding_at_rastersoft.com.patch {
-        inherit gjs;
-        util_linux = util-linux;
-        xdg_utils = xdg-utils;
-        gtk3_gsettings_path = glib.getSchemaPath gtk3;
-        nautilus_gsettings_path = glib.getSchemaPath nautilus;
-        typelib_path = "${gtk3}/lib/girepository-1.0";
-      })
-    ];
   }))
 
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {

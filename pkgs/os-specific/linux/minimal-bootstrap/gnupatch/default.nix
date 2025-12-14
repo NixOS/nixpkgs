@@ -38,7 +38,6 @@ let
     "-DSTDC_HEADERS"
     "-DHAVE_STRING_H"
     "-DHAVE_STDLIB_H"
-    "-DHAVE_VPRINTF"
   ];
 
   # Maintenance note: List of sources from Makefile.in

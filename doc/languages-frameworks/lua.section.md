@@ -103,7 +103,7 @@ final: prev: {
   lua = prev.lua.override {
     packageOverrides = luaself: luaprev: {
 
-      luarocks-nix = luaprev.luarocks-nix.overrideAttrs (old: {
+      luarocks-nix = luaprev.luarocks-nix.overrideAttrs (oa: {
         pname = "luarocks-nix";
         src = /home/my_luarocks/repository;
       });

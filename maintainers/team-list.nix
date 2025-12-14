@@ -251,15 +251,6 @@ with lib.maintainers;
     shortName = "Cyberus Technology employees";
   };
 
-  danklinux = {
-    members = [
-      luckshiba
-      marcusramberg
-    ];
-    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
-    shortName = "Dank Linux";
-  };
-
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -671,12 +662,10 @@ with lib.maintainers;
   minimal-bootstrap = {
     members = [
       alejandrosame
-      aleksi
       artturin
       emilytrau
       ericson2314
       jk
-      pyrox0
       siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";

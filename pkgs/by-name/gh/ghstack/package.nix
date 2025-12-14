@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghstack";
-  version = "0.13.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ezyang";
     repo = "ghstack";
     tag = version;
-    hash = "sha256-cRdwX5BVdpGjLPR0tpFYo62HYu/lmUzJE+vyxI9A4O8=";
+    hash = "sha256-pLKwDezkwGrqYgP4WnIl5nAam6bMNO6BK+xbxhp7Aq8=";
   };
 
   postPatch = ''

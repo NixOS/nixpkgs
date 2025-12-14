@@ -58,8 +58,8 @@ buildPythonPackage rec {
     # Forge look and feel of multi-output derivation as best as we can.
     #
     # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
-    pname = "${pname}-doc";
-    inherit src version;
+    name = "${pname}-${version}-doc";
+    inherit src pname version;
 
     patches = [
       # Fix import of "sphinxcontrib-log-cabinet"

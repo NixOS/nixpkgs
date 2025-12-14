@@ -27,7 +27,6 @@
   libuuid,
   libxkbcommon,
   libgbm,
-  muparser,
   pango,
   pciutils,
   pkgconf,
@@ -63,7 +62,8 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
-    cmakeBool
+    mesonBool
+    mesonEnable
     ;
   inherit (lib.trivial)
     importJSON
@@ -109,16 +109,14 @@ customStdenv.mkDerivation (finalAttrs: {
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
   '';
 
-  # variables used by CMake, and shown in `hyprctl version`
-  env = {
-    GIT_BRANCH = info.branch;
-    GIT_COMMITS = info.commit_hash;
-    GIT_COMMIT_DATE = info.date;
-    GIT_DIRTY = "clean";
-    GIT_COMMIT_HASH = info.commit_hash;
-    GIT_COMMIT_MESSAGE = info.commit_message;
-    GIT_TAG = info.tag;
-  };
+  # variables used by generateVersion.sh script, and shown in `hyprctl version`
+  BRANCH = info.branch;
+  COMMITS = info.commit_hash;
+  DATE = info.date;
+  DIRTY = "";
+  HASH = info.commit_hash;
+  MESSAGE = info.commit_message;
+  TAG = info.tag;
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -128,13 +126,12 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     makeWrapper
-    cmake
-    # meson + ninja are used to build the hyprland-protocols submodule
     meson
     ninja
     pkg-config
     wayland-scanner
     # for udis86
+    cmake
     python3
   ];
 
@@ -160,7 +157,6 @@ customStdenv.mkDerivation (finalAttrs: {
       libuuid
       libxkbcommon
       libgbm
-      muparser
       pango
       pciutils
       re2
@@ -181,20 +177,24 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+  mesonBuildType = if debug then "debug" else "release";
 
   dontStrip = debug;
   strictDeps = true;
 
-  cmakeFlags = mapAttrsToList cmakeBool {
-    "NO_XWAYLAND" = !enableXWayland;
-    "NO_SYSTEMD" = !withSystemd;
-    "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
-    "NO_UWSM" = true;
-    "NO_HYPRPM" = true;
-    "TRACY_ENABLE" = false;
-    "BUILD_HYPRTESTER" = true;
-  };
+  mesonFlags = concatLists [
+    (mapAttrsToList mesonEnable {
+      "xwayland" = enableXWayland;
+      "systemd" = withSystemd;
+      "uwsm" = false;
+      "hyprpm" = false;
+    })
+    (mapAttrsToList mesonBool {
+      # PCH provides no benefits when building with Nix
+      "b_pch" = false;
+      "tracy_enable" = false;
+    })
+  ];
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''

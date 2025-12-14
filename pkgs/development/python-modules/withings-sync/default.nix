@@ -3,35 +3,38 @@
   buildPythonPackage,
   fetchFromGitHub,
   garth,
-  importlib-resources,
   lxml,
-  poetry-core,
   python-dotenv,
+  pythonOlder,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "5.3.0";
+  version = "4.2.7";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
     tag = "v${version}";
-    hash = "sha256-Q9zOXQIdl4jpCK6a5Xp4kZK67MqudX0thDAkRmdL3AQ=";
+    hash = "sha256-ySl2nRR8t7c3NhjgjSzLQ+hcJuh+kx5aoaVPJF56HR0=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
+    substituteInPlace setup.py \
       --replace-fail "1.0.0.dev1" "${version}"
   '';
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = true;
+
+  build-system = [ setuptools ];
 
   dependencies = [
     garth
-    importlib-resources
     lxml
     python-dotenv
     requests
@@ -42,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     description = "Synchronisation of Withings weight";
     homepage = "https://github.com/jaroslawhartman/withings-sync";
-    changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/${src.tag}";
+    changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "withings-sync";

@@ -26,7 +26,7 @@
   level-zero,
   libffi,
 }:
-intel-oneapi.mkIntelOneApi (finalAttrs: {
+intel-oneapi.mkIntelOneApi (fa: {
   pname = "intel-oneapi-hpc-toolkit";
 
   src = fetchurl {
@@ -62,7 +62,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
-    inherit (finalAttrs) pname;
+    inherit (fa) pname;
     file = "hpc.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/hpc-toolkit-download.html?packages=hpc-toolkit&hpc-toolkit-os=linux&hpc-toolkit-lin=offline";
   };

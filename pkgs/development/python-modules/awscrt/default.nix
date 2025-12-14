@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.30.0";
+  version = "0.29.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4aEzQw5xEW6cDxAbDREif0e3xWGtUwP1rwD2wzoW84I=";
+    hash = "sha256-x42BsTCNQv2h6yHSf88mV5E3uCEEPlKFUPLPxsCauf8=";
   };
 
   build-system = [ setuptools ];

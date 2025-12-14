@@ -17,10 +17,6 @@ let
   unwrapped = mkKdeDerivation {
     pname = "kirigami";
 
-    patches = [
-      ./rb-templates.patch
-    ];
-
     extraNativeBuildInputs = [
       qtsvg
       qttools

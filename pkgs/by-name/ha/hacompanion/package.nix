@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "hacompanion";
-  version = "1.0.24";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "tobias-kuendig";
     repo = "hacompanion";
     rev = "v${version}";
-    hash = "sha256-Lzy25tay8PJvEtZURLec5366nWJElI8D7oDckZmIEoU=";
+    hash = "sha256-C86XRgNwR0VD0Dph4D7ysB9ul6fBw1MTK++ODsJrE8k=";
   };
 
   vendorHash = "sha256-y2eSuMCDZTGdCs70zYdA8NKbuPPN5xmnRfMNK+AE/q8=";

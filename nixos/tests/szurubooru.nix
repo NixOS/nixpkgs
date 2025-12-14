@@ -26,7 +26,6 @@ import ./make-test-python.nix (
 
           server = {
             port = 6666;
-            host = "127.0.0.1";
             settings = {
               domain = "http://127.0.0.1";
               secretFile = pkgs.writeText "secret" "secret";

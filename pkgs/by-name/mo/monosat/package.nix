@@ -45,12 +45,8 @@ let
   '';
 
   core = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      src
-      patches
-      ;
+    name = "${pname}-${version}";
+    inherit src patches;
     postPatch = commonPostPatch + ''
       substituteInPlace CMakeLists.txt \
         --replace-fail "cmake_minimum_required(VERSION 3.02)" "cmake_minimum_required(VERSION 3.10)"

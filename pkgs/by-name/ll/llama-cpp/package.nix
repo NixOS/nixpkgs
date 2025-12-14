@@ -3,7 +3,6 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
-  installShellFiles,
   nix-update-script,
   stdenv,
 
@@ -90,7 +89,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    installShellFiles
     ninja
     pkg-config
   ]
@@ -153,10 +151,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
-
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 

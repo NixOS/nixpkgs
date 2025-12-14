@@ -4,35 +4,41 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  fuse3,
+  fuse,
   curl,
   expat,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "s3backer";
-  version = "2.1.6";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
-    owner = "archiecobbs";
+    sha256 = "sha256-QOTQsU2R68217eO2+2yZhBWtjAdkHuVRbCGv1JD0YLQ=";
+    rev = version;
     repo = "s3backer";
-    tag = finalAttrs.version;
-    hash = "sha256-bSqkgNZFevtxyaJwoVRcWWO6ZA/Ekbp2gwSJNBmjHwI=";
+    owner = "archiecobbs";
   };
+
+  patches = [
+    # from upstream, after latest release
+    # https://github.com/archiecobbs/s3backer/commit/303a669356fa7cd6bc95ac7076ce51b1cab3970a
+    ./fix-darwin-builds.patch
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
   buildInputs = [
-    fuse3
+    fuse
     curl
     expat
   ];
 
   # AC_CHECK_DECLS doesn't work with clang
   postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace configure.ac --replace-fail \
+    substituteInPlace configure.ac --replace \
       'AC_CHECK_DECLS(fdatasync)' ""
   '';
 
@@ -43,4 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "s3backer";
   };
-})
+}

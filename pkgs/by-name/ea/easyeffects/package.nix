@@ -14,7 +14,8 @@
   ladspaH,
   libbs2b,
   libebur128,
-  libmysofa,
+  libportal-qt6,
+  libsamplerate,
   libsigcxx30,
   libsndfile,
   lilv,
@@ -42,9 +43,11 @@ let
   inherit (qt6)
     qtbase
     qtgraphs
+    qtwebengine
     wrapQtAppsHook
     ;
   inherit (kdePackages)
+    appstream-qt
     breeze
     breeze-icons
     extra-cmake-modules
@@ -59,13 +62,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "8.0.8";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-Pw9rMYHrRBSttdtElWDH1YOF0tNWgb2zBzJBI9jJe4Q=";
+    hash = "sha256-5UPwCdpFU1SiD9nlQd99lAK7QdC9jcizj5X3BhBYJ4U=";
   };
 
   patches = [ ./qmlmodule-fix.patch ];
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
+    appstream-qt
     breeze
     breeze-icons
     deepfilternet
@@ -99,7 +103,8 @@ stdenv.mkDerivation rec {
     qqc2-desktop-style
     libbs2b
     libebur128
-    libmysofa
+    libportal-qt6
+    libsamplerate
     libsigcxx30
     libsndfile
     lilv
@@ -108,6 +113,7 @@ stdenv.mkDerivation rec {
     pipewire
     qtbase
     qtgraphs
+    qtwebengine
     rnnoise
     rubberband
     soundtouch
@@ -148,7 +154,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo

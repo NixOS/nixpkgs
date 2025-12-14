@@ -5,8 +5,6 @@
   nixosTests,
   fetchPypi,
   python3,
-  ffmpeg_4-full,
-  szurubooru,
 }:
 
 let
@@ -54,6 +52,7 @@ python.pkgs.buildPythonApplication {
 
   nativeBuildInputs = with python.pkgs; [ setuptools ];
   propagatedBuildInputs = with python.pkgs; [
+    alembic
     certifi
     coloredlogs
     legacy-cgi
@@ -69,30 +68,12 @@ python.pkgs.buildPythonApplication {
     yt-dlp
   ];
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg_4-full ]}"
-  ];
-
   postInstall = ''
     mkdir $out/bin
     install -m0755 $src/szuru-admin $out/bin/szuru-admin
   '';
 
   passthru.tests.szurubooru = nixosTests.szurubooru;
-
-  # Database migration. Needs the szurubooru server in its environment for the
-  # migration to complete successfully.
-  passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
-      szurubooru.server
-    ];
-  });
-  # Waitress is used to run the serer.
-  passthru.waitress = python.pkgs.waitress.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
-      szurubooru.server
-    ];
-  });
 
   meta = {
     description = "Server of szurubooru, an image board engine for small and medium communities";

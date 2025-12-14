@@ -606,24 +606,6 @@ self: super: with self; {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
-  alibabacloud-credentials = callPackage ../development/python-modules/alibabacloud-credentials { };
-
-  alibabacloud-credentials-api =
-    callPackage ../development/python-modules/alibabacloud-credentials-api
-      { };
-
-  alibabacloud-endpoint-util =
-    callPackage ../development/python-modules/alibabacloud-endpoint-util
-      { };
-
-  alibabacloud-gateway-spi = callPackage ../development/python-modules/alibabacloud-gateway-spi { };
-
-  alibabacloud-openapi-util = callPackage ../development/python-modules/alibabacloud-openapi-util { };
-
-  alibabacloud-tea = callPackage ../development/python-modules/alibabacloud-tea { };
-
-  alibabacloud-tea-util = callPackage ../development/python-modules/alibabacloud-tea-util { };
-
   aligator = callPackage ../development/python-modules/aligator { inherit (pkgs) aligator; };
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
@@ -6462,7 +6444,7 @@ self: super: with self; {
 
   granian = callPackage ../development/python-modules/granian { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal graphviz; };
+  graph-tool = callPackage ../development/python-modules/graph-tool { inherit (pkgs) cgal; };
 
   grapheme = callPackage ../development/python-modules/grapheme { };
 
@@ -9596,8 +9578,6 @@ self: super: with self; {
 
   minidump = callPackage ../development/python-modules/minidump { };
 
-  miniflux = callPackage ../development/python-modules/miniflux { };
-
   miniful = callPackage ../development/python-modules/miniful { };
 
   minify-html = callPackage ../development/python-modules/minify-html { };
@@ -11890,18 +11870,6 @@ self: super: with self; {
 
   peacasso = callPackage ../development/python-modules/peacasso { };
 
-  peakrdl = callPackage ../development/python-modules/peakrdl { };
-
-  peakrdl-cheader = callPackage ../development/python-modules/peakrdl-cheader { };
-
-  peakrdl-ipxact = callPackage ../development/python-modules/peakrdl-ipxact { };
-
-  peakrdl-markdown = callPackage ../development/python-modules/peakrdl-markdown { };
-
-  peakrdl-regblock = callPackage ../development/python-modules/peakrdl-regblock { };
-
-  peakrdl-rust = callPackage ../development/python-modules/peakrdl-rust { };
-
   peakutils = callPackage ../development/python-modules/peakutils { };
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
@@ -12753,8 +12721,6 @@ self: super: with self; {
   py-machineid = callPackage ../development/python-modules/py-machineid { };
 
   py-madvr2 = callPackage ../development/python-modules/py-madvr2 { };
-
-  py-markdown-table = callPackage ../development/python-modules/py-markdown-table { };
 
   py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
 
@@ -13865,8 +13831,6 @@ self: super: with self; {
   pymongo = callPackage ../development/python-modules/pymongo { };
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
-
-  pymongo-search-utils = callPackage ../development/python-modules/pymongo-search-utils { };
 
   pymonoprice = callPackage ../development/python-modules/pymonoprice { };
 
@@ -15959,7 +15923,7 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
-  qtile = callPackage ../development/python-modules/qtile { wlroots = pkgs.wlroots_0_19; };
+  qtile = callPackage ../development/python-modules/qtile { wlroots = pkgs.wlroots_0_17; };
 
   qtile-bonsai = callPackage ../development/python-modules/qtile-bonsai { };
 
@@ -18375,8 +18339,6 @@ self: super: with self; {
 
   systemdunitparser = callPackage ../development/python-modules/systemdunitparser { };
 
-  systemrdl-compiler = callPackage ../development/python-modules/systemrdl-compiler { };
-
   sysv-ipc = callPackage ../development/python-modules/sysv-ipc { };
 
   t61codec = callPackage ../development/python-modules/t61codec { };
@@ -18425,8 +18387,6 @@ self: super: with self; {
   tami4edgeapi = callPackage ../development/python-modules/tami4edgeapi { };
 
   tank-utility = callPackage ../development/python-modules/tank-utility { };
-
-  tantivy = callPackage ../development/python-modules/tantivy { };
 
   tappy = callPackage ../development/python-modules/tappy { };
 
@@ -20085,8 +20045,6 @@ self: super: with self; {
 
   utitools = callPackage ../development/python-modules/utitools { };
 
-  uuid-utils = callPackage ../development/python-modules/uuid-utils { };
-
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 
   uv = callPackage ../development/python-modules/uv { inherit (pkgs) uv; };
@@ -20301,6 +20259,8 @@ self: super: with self; {
   vultr = callPackage ../development/python-modules/vultr { };
 
   vulture = callPackage ../development/python-modules/vulture { };
+
+  vxi11 = callPackage ../development/python-modules/vxi11 { };
 
   vyper = callPackage ../development/compilers/vyper { };
 

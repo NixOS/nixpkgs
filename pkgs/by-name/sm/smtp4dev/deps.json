@@ -51,13 +51,13 @@
   },
   {
     "pname": "FSharp.Core",
-    "version": "8.0.301",
-    "hash": "sha256-LyP+zHxXFNksSQ/ExQ9CGkQYGvld8W6JNmxMg6lTRCs="
+    "version": "8.0.200",
+    "hash": "sha256-wjYiedFiqOTKaM4mF6uT9kc/yKDJ78mqfw9qLoBFHOw="
   },
   {
     "pname": "Html2Markdown",
-    "version": "6.2.5.7",
-    "hash": "sha256-9uoXng20APzOMAE1iuJ/I4mb3YE5IDhWTv1eMAMVeRE="
+    "version": "6.1.0.2",
+    "hash": "sha256-r8tXLN6rkOCW+Tae+etAgP3MGkW8mQFQetR1ual6trM="
   },
   {
     "pname": "HtmlAgilityPack",
@@ -70,19 +70,14 @@
     "hash": "sha256-EXvojddPu+9JKgOG9NSQgUTfWq1RpOYw7adxDPKDJ6o="
   },
   {
-    "pname": "JetBrains.Annotations",
-    "version": "2024.2.0",
-    "hash": "sha256-OgtW4wIqo5d3q6NSiYrUm4KkUdUHEWFyvlbtoQJjDwU="
-  },
-  {
     "pname": "Jint",
     "version": "3.0.1",
     "hash": "sha256-oOq7ze1QFYHK/9zNDF7ClbWZaW4A/478M4yQ/LQnUJ8="
   },
   {
     "pname": "Linq.Expression.Optimizer",
-    "version": "1.0.34",
-    "hash": "sha256-CrDmtcpwFDZ/mAj/urtLWXM1ZDTr/msjZPT48YZGleI="
+    "version": "1.0.29",
+    "hash": "sha256-F0ZvZ6hbdnjkuNuSoFzSjYUgG/hEHuG7o8wExDS1LLo="
   },
   {
     "pname": "LinqKit",
@@ -1051,8 +1046,8 @@
   },
   {
     "pname": "Serilog.Sinks.Console",
-    "version": "6.1.1",
-    "hash": "sha256-CfIg4Us4kSMQAn6rU2rsAeE22g6MpFiZdhoZWySpZeY="
+    "version": "6.0.0",
+    "hash": "sha256-QH8ykDkLssJ99Fgl+ZBFBr+RQRl0wRTkeccQuuGLyro="
   },
   {
     "pname": "Serilog.Sinks.Debug",
@@ -1066,8 +1061,8 @@
   },
   {
     "pname": "Serilog.Sinks.File",
-    "version": "7.0.0",
-    "hash": "sha256-LxZYUoUPkCjIIVarJilnXnqQiMrFNJtoRilmzTNtUjo="
+    "version": "6.0.0",
+    "hash": "sha256-KQmlUpG9ovRpNqKhKe6rz3XMLUjkBqjyQhEm2hV5Sow="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
@@ -1426,8 +1421,8 @@
   },
   {
     "pname": "System.Linq.Dynamic.Core",
-    "version": "1.7.1",
-    "hash": "sha256-IOBL8cg9TektJlinbpb9w4scifbFcNiZ7D66NDXthxw="
+    "version": "1.6.4",
+    "hash": "sha256-Mpp+3UYARo+Hnh3ybtHtdN0LI5HQV07CBZP7jRnVk10="
   },
   {
     "pname": "System.Linq.Expressions",
@@ -1501,8 +1496,8 @@
   },
   {
     "pname": "System.Reactive",
-    "version": "6.1.0",
-    "hash": "sha256-zACYoZmKxHo0qKY8FOVa7jIsw7dN7WjdXdRRV95qY2Y="
+    "version": "6.0.1",
+    "hash": "sha256-Lo5UMqp8DsbVSUxa2UpClR1GoYzqQQcSxkfyFqB/d4Q="
   },
   {
     "pname": "System.Reflection",

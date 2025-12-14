@@ -8,6 +8,7 @@
 let
   pname = "cables";
   version = "0.8.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/cables-gl/cables_electron/releases/download/v${version}/cables-${version}-linux-x64.AppImage";
@@ -17,7 +18,7 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/cables-${version}.desktop --replace 'Exec=AppRun' 'Exec=cables'
+      substituteInPlace $out/${pname}-${version}.desktop --replace 'Exec=AppRun' 'Exec=cables'
     '';
   };
 
@@ -26,8 +27,8 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/cables-${version}.desktop $out/share/applications/cables.desktop
-    install -m 444 -D ${appimageContents}/cables-${version}.png $out/share/icons/hicolor/512x512/apps/cables.png
+    install -m 444 -D ${appimageContents}/${name}.desktop $out/share/applications/cables.desktop
+    install -m 444 -D ${appimageContents}/${name}.png $out/share/icons/hicolor/512x512/apps/cables.png
   '';
 
   meta = {

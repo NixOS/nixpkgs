@@ -7,7 +7,6 @@
 
 let
   cfg = config.services.vaultwarden;
-
   user = config.users.users.vaultwarden.name;
   group = config.users.groups.vaultwarden.name;
 
@@ -116,7 +115,21 @@ in
           DOMAIN = "https://bitwarden.example.com";
           SIGNUPS_ALLOWED = false;
 
-          # Vaultwarden recommends running behind a reverse proxy, the configureNginx option can be used for that.
+          # Vaultwarden currently recommends running behind a reverse proxy
+          # (nginx or similar) for TLS termination, see
+          # https://github.com/dani-garcia/vaultwarden/wiki/Hardening-Guide#reverse-proxying
+          # > you should avoid enabling HTTPS via vaultwarden's built-in Rocket TLS support,
+          # > especially if your instance is publicly accessible.
+          #
+          # A suitable NixOS nginx reverse proxy example config might be:
+          #
+          #     services.nginx.virtualHosts."bitwarden.example.com" = {
+          #       enableACME = true;
+          #       forceSSL = true;
+          #       locations."/" = {
+          #         proxyPass = "http://127.0.0.1:''${toString config.services.vaultwarden.config.ROCKET_PORT}";
+          #       };
+          #     };
           ROCKET_ADDRESS = "127.0.0.1";
           ROCKET_PORT = 8222;
 
@@ -158,24 +171,6 @@ in
       '';
     };
 
-    configureNginx = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to configure nginx to serve VaultWarden.";
-    };
-
-    configurePostgres = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to configure a local PostgreSQL server.";
-    };
-
-    domain = lib.mkOption {
-      type = with lib.types; nullOr str;
-      default = null;
-      description = "The domain under which VaultWarden will be reachable.";
-    };
-
     environmentFile = lib.mkOption {
       type = with lib.types; coercedTo path lib.singleton (listOf path);
       default = [ ];
@@ -215,153 +210,100 @@ in
         assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
         message = "Backup directory can not be in ${dataDir}";
       }
-      {
-        assertion = cfg.configureNginx -> cfg.domain != null;
-        message = "Setting services.vaultwarden.configureNginx to true requires configuring services.vaultwarden.domain!";
-      }
     ];
 
-    services = {
-      nginx = lib.mkIf cfg.configureNginx {
-        enable = true;
-        upstreams.vaultwarden.servers."127.0.0.1:${toString cfg.config.ROCKET_PORT}" = { };
-        virtualHosts.${cfg.domain} = {
-          forceSSL = true;
-          locations = {
-            "/".proxyPass = "http://vaultwarden";
-            "= /notifications/anonymous-hub" = {
-              proxyPass = "http://vaultwarden";
-              proxyWebsockets = true;
-            };
-            "= /notifications/hub" = {
-              proxyPass = "http://vaultwarden";
-              proxyWebsockets = true;
-            };
-          };
-        };
-      };
+    users.users.vaultwarden = {
+      inherit group;
+      isSystemUser = true;
+    };
+    users.groups.vaultwarden = { };
 
-      postgresql = lib.mkIf cfg.configurePostgres {
-        enable = true;
-        ensureDatabases = [ "vaultwarden" ];
-        ensureUsers = [
-          {
-            name = "vaultwarden";
-            ensureDBOwnership = true;
-          }
+    systemd.services.vaultwarden = {
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      path = with pkgs; [ openssl ];
+      serviceConfig = {
+        User = user;
+        Group = group;
+        EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
+        ExecStart = lib.getExe vaultwarden;
+        LimitNOFILE = "1048576";
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = !useSendmail;
+        PrivateDevices = !useSendmail;
+        PrivateTmp = true;
+        PrivateUsers = !useSendmail;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
         ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        inherit StateDirectory;
+        StateDirectoryMode = "0700";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+        ]
+        ++ lib.optionals (!useSendmail) [
+          "~@privileged"
+        ];
+        Restart = "always";
+        UMask = "0077";
       };
-
-      vaultwarden.config = lib.mkMerge [
-        {
-          DATABASE_URL = lib.mkIf cfg.configurePostgres "postgresql:///vaultwarden?host=/run/postgresql";
-          DOMAIN = lib.mkIf (cfg.domain != null) "https://${cfg.domain}";
-        }
-        (lib.mkIf cfg.configureNginx {
-          ENABLE_WEBSOCKET = true;
-          ROCKET_ADDRESS = "127.0.0.1";
-          ROCKET_PORT = lib.mkDefault 8222;
-        })
-      ];
+      wantedBy = [ "multi-user.target" ];
     };
 
-    systemd = {
-      services.vaultwarden = {
-        after = [ "network-online.target" ] ++ lib.optional cfg.configurePostgres "postgresql.target";
-        requires = lib.mkIf cfg.configurePostgres [ "postgresql.target" ];
-        wants = [ "network-online.target" ];
-        path = with pkgs; [ openssl ];
-        serviceConfig = {
-          User = user;
-          Group = group;
-          EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
-          ExecStart = lib.getExe vaultwarden;
-          LimitNOFILE = "1048576";
-          CapabilityBoundingSet = [ "" ];
-          DeviceAllow = [ "" ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = !useSendmail;
-          PrivateDevices = !useSendmail;
-          PrivateTmp = true;
-          PrivateUsers = !useSendmail;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "noaccess";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          inherit StateDirectory;
-          StateDirectoryMode = "0700";
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-          ]
-          ++ lib.optionals (!useSendmail) [
-            "~@privileged"
-          ];
-          Restart = "always";
-          UMask = "0077";
-        };
-        wantedBy = [ "multi-user.target" ];
+    systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
+      description = "Backup vaultwarden";
+      environment = {
+        DATA_FOLDER = dataDir;
+        BACKUP_FOLDER = cfg.backupDir;
       };
-
-      services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-        description = "Backup vaultwarden";
-        environment = {
-          DATA_FOLDER = dataDir;
-          BACKUP_FOLDER = cfg.backupDir;
-        };
-        path = with pkgs; [ sqlite ];
-        # if both services are started at the same time, vaultwarden fails with "database is locked"
-        before = [ "vaultwarden.service" ];
-        serviceConfig = {
-          SyslogIdentifier = "backup-vaultwarden";
-          Type = "oneshot";
-          User = lib.mkDefault user;
-          Group = lib.mkDefault group;
-          ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
-        };
-        wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ sqlite ];
+      # if both services are started at the same time, vaultwarden fails with "database is locked"
+      before = [ "vaultwarden.service" ];
+      serviceConfig = {
+        SyslogIdentifier = "backup-vaultwarden";
+        Type = "oneshot";
+        User = lib.mkDefault user;
+        Group = lib.mkDefault group;
+        ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
       };
-
-      timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
-        description = "Backup vaultwarden on time";
-        timerConfig = {
-          OnCalendar = lib.mkDefault "23:00";
-          Persistent = "true";
-          Unit = "backup-vaultwarden.service";
-        };
-        wantedBy = [ "multi-user.target" ];
-      };
-
-      tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
-        "10-vaultwarden".${cfg.backupDir}.d = {
-          inherit user group;
-          mode = "0770";
-        };
-      };
+      wantedBy = [ "multi-user.target" ];
     };
 
-    users = {
-      groups.vaultwarden = { };
-      users.vaultwarden = {
-        inherit group;
-        isSystemUser = true;
+    systemd.timers.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
+      description = "Backup vaultwarden on time";
+      timerConfig = {
+        OnCalendar = lib.mkDefault "23:00";
+        Persistent = "true";
+        Unit = "backup-vaultwarden.service";
+      };
+      wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.tmpfiles.settings = lib.mkIf (cfg.backupDir != null) {
+      "10-vaultwarden".${cfg.backupDir}.d = {
+        inherit user group;
+        mode = "0770";
       };
     };
   };

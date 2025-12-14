@@ -18,8 +18,8 @@ let
   };
 
   deps = stdenv.mkDerivation {
-    pname = "deps-${pname}";
-    inherit src version;
+    name = "${pname}-${version}-deps";
+    inherit src;
 
     nativeBuildInputs = [
       jdk

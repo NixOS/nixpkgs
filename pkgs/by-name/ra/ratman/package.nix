@@ -46,8 +46,7 @@ rustPlatform.buildRustPackage rec {
     sourceRoot = "${src.name}/ratman/dashboard";
 
     npmDeps = fetchNpmDeps {
-      pname = "npm-deps-${pname}";
-      inherit version;
+      name = "${pname}-${version}-npm-deps";
       src = "${src}/ratman/dashboard";
       hash = "sha256-47L4V/Vf8DK3q63MYw3x22+rzIN3UPD0N/REmXh5h3w=";
     };

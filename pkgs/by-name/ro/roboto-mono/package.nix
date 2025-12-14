@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://fonts.google.com/specimen/Roboto+Mono";
+    homepage = "https://www.google.com/fonts/specimen/Roboto+Mono";
     description = "Google Roboto Mono fonts";
     longDescription = ''
       Roboto Mono is a monospaced addition to the Roboto type family. Like

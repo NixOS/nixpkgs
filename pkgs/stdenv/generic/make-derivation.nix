@@ -860,21 +860,10 @@ let
       # for a fixed-output derivation, the corresponding inputDerivation should
       # *not* be fixed-output. To achieve this we simply delete the attributes that
       # would make it fixed-output.
-      fixedOutputRelatedAttrs = [
+      deleteFixedOutputRelatedAttrs = lib.flip removeAttrs [
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
-      ];
-
-      # inputDerivation produces the inputs; not the outputs, so any
-      # restrictions on what used to be the outputs don't serve a purpose
-      # anymore.
-      outputCheckAttrs = [
-        "allowedReferences"
-        "allowedRequisites"
-        "disallowedReferences"
-        "disallowedRequisites"
-        "outputChecks"
       ];
 
     in
@@ -887,10 +876,10 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
-          removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs)
+          deleteFixedOutputRelatedAttrs derivationArg
           // {
             # Add a name in case the original drv didn't have one
-            name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
+            name = derivationArg.name or "inputDerivation";
             # This always only has one output
             outputs = [ "out" ];
 
@@ -922,6 +911,25 @@ let
               ''
             ];
           }
+          // (
+            let
+              sharedOutputChecks = {
+                # inputDerivation produces the inputs; not the outputs, so any
+                # restrictions on what used to be the outputs don't serve a purpose
+                # anymore.
+                allowedReferences = null;
+                allowedRequisites = null;
+                disallowedReferences = [ ];
+                disallowedRequisites = [ ];
+              };
+            in
+            if __structuredAttrs then
+              {
+                outputChecks.out = sharedOutputChecks;
+              }
+            else
+              sharedOutputChecks
+          )
         );
 
         inherit passthru overrideAttrs;

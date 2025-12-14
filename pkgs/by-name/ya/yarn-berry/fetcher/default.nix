@@ -27,8 +27,8 @@ let
           # Known good version: 1.3.1
           zlib = zlib;
         }).overrideAttrs
-          (old: {
-            patches = (old.patches or [ ]) ++ [
+          (oA: {
+            patches = (oA.patches or [ ]) ++ [
               (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
             ];
           });
@@ -50,8 +50,8 @@ let
             withZlibCompat = true;
           };
         }).overrideAttrs
-          (old: {
-            patches = (old.patches or [ ]) ++ [
+          (oA: {
+            patches = (oA.patches or [ ]) ++ [
               (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
             ];
           });

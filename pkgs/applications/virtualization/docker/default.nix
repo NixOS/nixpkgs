@@ -69,6 +69,7 @@ let
         maintainers = with lib.maintainers; [
           offline
           vdemeester
+          periklis
           teutat3s
         ];
       };
@@ -258,9 +259,10 @@ let
         ++ lib.optionals sbomSupport [ docker-sbom ]
         ++ lib.optionals initSupport [ docker-init ];
 
-      dockerCliPluginsDirs = lib.strings.concatStringsSep ":" (
-        map (p: "${p}/libexec/docker/cli-plugins") plugins
-      );
+      pluginsRef = symlinkJoin {
+        name = "docker-plugins";
+        paths = plugins;
+      };
     in
     buildGoModule (
       {
@@ -275,10 +277,6 @@ let
           rev = cliRev;
           hash = cliHash;
         };
-
-        patches = [
-          ./cli-system-plugin-dir-from-env.patch
-        ];
 
         vendorHash = null;
 
@@ -301,6 +299,10 @@ let
         postPatch = ''
           patchShebangs man scripts/build/
           substituteInPlace ./scripts/build/.variables --replace-fail "set -eu" ""
+        ''
+        + lib.optionalString (plugins != [ ]) ''
+          substituteInPlace ./cli-plugins/manager/manager_unix.go --replace-fail /usr/libexec/docker/cli-plugins \
+              "${pluginsRef}/libexec/docker/cli-plugins"
         '';
 
         # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
@@ -329,8 +331,7 @@ let
           install -Dm755 ./build/docker $out/libexec/docker/docker
 
           makeWrapper $out/libexec/docker/docker $out/bin/docker \
-            --prefix PATH : "$out/libexec/docker:$extraPath" \
-            --prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"
+            --prefix PATH : "$out/libexec/docker:$extraPath"
         ''
         + lib.optionalString (!clientOnly) ''
           # symlink docker daemon to docker cli derivation

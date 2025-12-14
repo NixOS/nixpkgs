@@ -10,6 +10,7 @@
   pytest-mock,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
   requests,
   requests-mock,
   responses,
@@ -19,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.19";
+  version = "2.2.18";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
     tag = "v${version}";
-    hash = "sha256-3eQtGCIKtjpDWfyrIEPZnA6xLMNl0cg61wh0nuwNwh4=";
+    hash = "sha256-fHqDXqhjqfj8VBb7Od7wuUXAEHQBXwm5LAUPLM0oN2Q=";
   };
 
   build-system = [ poetry-core ];

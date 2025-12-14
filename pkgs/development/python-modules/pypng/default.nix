@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "drj11";
     repo = "pypng";
     tag = "pypng-${version}";
-    hash = "sha256-xNUI3yGfwmaccCxgljIZzgJ6YgNxcuOzCXDE7RFJP2I=";
+    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
   };
 
   build-system = [ setuptools ];

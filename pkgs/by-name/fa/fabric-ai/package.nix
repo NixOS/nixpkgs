@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
   nix-update-script,
 }:
 
@@ -26,15 +25,6 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = ''
-    installShellCompletion \
-      --bash ./completions/fabric.bash \
-      --zsh ./completions/_fabric \
-      --fish ./completions/fabric.fish
-  '';
 
   passthru.updateScript = nix-update-script { };
 
