@@ -25,6 +25,9 @@ let
       #### Development tools / libraries
       cmake-extras = callPackage ./development/cmake-extras { };
       deviceinfo = callPackage ./development/deviceinfo { };
+
+      #### QML / QML-related
+      lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
     }
     // lib.optionalAttrs (!useQt6) {
       #### Core Apps
@@ -64,7 +67,6 @@ let
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
-      lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
       #### Services
