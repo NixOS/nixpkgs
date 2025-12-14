@@ -29,13 +29,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlcompressor";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLCompressor";
     tag = "${finalAttrs.version}";
-    hash = "sha256-0Z29+jLtAtThFaVVqvuqUJkj1VRI69WOvIbEfE45db4=";
+    hash = "sha256-G7tgRenRB6aYpi+BSiQzwSsekvCw4JPUuy1iXVj7HN0=";
     fetchSubmodules = true;
   };
 
