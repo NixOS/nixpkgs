@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
+    set -x
+
     # Test basic functionality
     $out/bin/jmeter --version 2>&1 | grep -q "${finalAttrs.version}"
 
