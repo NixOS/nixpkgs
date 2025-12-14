@@ -35,7 +35,7 @@
   python3,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
-  hostCpuOnly ? false,
+  targetCpuOnly ? false,
   enableSim ? false,
   enableUbsan ? false,
   safePaths ? [
@@ -60,7 +60,7 @@ let
   targetPrefix = optionalString (
     stdenv.targetPlatform != stdenv.hostPlatform
   ) "${stdenv.targetPlatform.config}-";
-  pname = targetPrefix + "gdb" + optionalString hostCpuOnly "-host-cpu-only";
+  pname = targetPrefix + "gdb" + optionalString targetCpuOnly "-target-cpu-only";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,9 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./debug-info-from-env.patch
   ]
-  ++ optionals stdenv.hostPlatform.isDarwin [
-    ./darwin-target-match.patch
-  ];
+  ++ optionals stdenv.hostPlatform.isDarwin [ ./darwin-target-match.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -185,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
       !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isLoongArch64
     ) "inprocess-agent")
   ]
-  ++ optional (!hostCpuOnly) "--enable-targets=all"
+  ++ optional (!targetCpuOnly) "--enable-targets=all"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
   ++ optional (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
