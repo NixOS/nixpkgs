@@ -22,14 +22,18 @@
   properties-cpp,
   qtbase,
   qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
+  qtfeedback ? null,
+  qtgraphicaleffects ? null,
   qttools,
   validatePkgConfig,
   wrapGAppsHook3,
   xvfb-run,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
   version = "2.2.1";
@@ -44,8 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-    "doc"
     "examples"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
   ];
 
   postPatch = ''
@@ -63,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/54
     substituteInPlace src/com/lomiri/content/service/registry.h \
       --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
+  ''
+  # Need QtQuick.Window on QML2_IMPORT_PATH
+  + ''
+    substituteInPlace tests/qml6-tests/CMakeLists.txt \
+      --replace-fail 'QML2_IMPORT_PATH=' 'QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}:'
   '';
 
   strictDeps = true;
@@ -72,9 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     qtdeclarative # qmlplugindump
-    qttools # qdoc
     validatePkgConfig
     wrapGAppsHook3
+  ]
+  ++ lib.optionals withDocumentation [
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -106,11 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "ENABLE_DOC" true)
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
-    (lib.cmakeBool "ENABLE_WERROR" true)
+    (lib.cmakeBool "ENABLE_DOC" withDocumentation)
+    # in case something still depends on it
+    # no longer available in the Qt6 build
+    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
+    (lib.cmakeBool "ENABLE_WERROR" (!withQt6)) # Known issues on Qt6
   ];
 
   preBuild =
@@ -122,12 +137,16 @@ stdenv.mkDerivation (finalAttrs: {
       # Executes qmlplugindump
       export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
       export QML2_IMPORT_PATH=${
-        listToQtVar [
-          qtdeclarative
-          lomiri-ui-toolkit
-          qtfeedback
-          qtgraphicaleffects
-        ] qtbase.qtQmlPrefix
+        listToQtVar (
+          [
+            qtdeclarative
+            lomiri-ui-toolkit
+          ]
+          ++ lib.optionals (!withQt6) [
+            qtfeedback
+            qtgraphicaleffects
+          ]
+        ) qtbase.qtQmlPrefix
       }
     '';
 
@@ -177,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "liblomiri-content-hub"
+      ("liblomiri-content-hub" + lib.optionalString withQt6 "-qt6")
       "liblomiri-content-hub-glib"
     ];
   };
