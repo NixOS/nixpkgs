@@ -14,11 +14,10 @@
 #     will be read-only and nix can only store stuff into this path by using the
 #     `NIX_DAEMON` env. variable which lets it communicate through the
 #     mounted daemon socket.
-#   - Since the `/nix/store` path of the job container is mounted over from the
-#     volume of `nix-daemon-container`, everything in that folder is lost.
-#     We make sure the shared `/nix/store` has all bootstrap tools and currently we also
-#     add these to the job images to make the symlinks in `/bin/...`
-#     (TODO: since we only need the symlinks -> that could be optimized maybe).
+
+#   - The `bootstrapPkgs` derivation is copied into the job containers
+#     but without the Nix store paths cause they get provided by the
+#     `nix-daemon-store` volume.
 #
 # - The `podman-daemon-socket` volume gets mounted to the job container
 #   enabling it to use `podman`.
@@ -26,33 +25,31 @@
 #   Its a dedicated podman service `podmanDaemonContainer`
 #   running as `--privileged`
 #   [non-rootless container](https://rootlesscontaine.rs/#what-are-rootless-containers-and-what-are-not).
-#   (TODO: This podman instance could be maybe run as rootless
+#   (TODO: This podman daemon instance could be maybe run as rootless
 #   container under a user `ci` and a separated Gitlab Runner could
 #   run over this socket, effectively run only rootless containers.)
 #
-# - There is also a prebuild script which is started on every job.
+# - There is also a job runner prebuild script which is started on every job.
 #   See `scripts/prebuild.nix` to setup some missing stuff.
 #
 # Debugging on the VM:
-# - You can use `journalclt -u gitlab-runner.service`.
-# - Also inside `~/custodian` (clone this repo there)
-#   you can run `cd tools/nix/vm && just vm::status`
-#   to get some information about the
-#   running stuff.
-# - You can clean all logs with `journalctl --vacuum-time=1s`
-# - Also you can run `btop` on the machine to inspect the performance.
 #
-# TODO: use `.execConfig` on `gitlab-runner.service` created
-#       to set `.execConfig.User = 'ci'`
-#       and see if we can start it with out requiring root.
+# - You can use `journalclt -u gitlab-runner.service`.
+#
+# - To run a job container use:
+#   ```bash
+#      podman run --rm -it
+#      --volumes-from 'nix-daemon-container'
+#      -v "podman-daemon-socket:/run/podman"
+#      "local/alpine" \
+#      bash -c "export CI_PIPkELINE_ID=123456 && gitlab-runner-prebuild-script; echo hello"
+#   ```
 {
   lib,
   pkgs,
   ...
 }:
 let
-  fs = lib.fileset;
-
   nixRepo = pkgs.fetchFromGitHub {
     owner = "NixOS";
     repo = "nix";
@@ -80,29 +77,24 @@ let
   };
 
   # This derivation will contain a folder `/etc`
-  # If its added to `contents` all files in the
-  # derivation will be symlinked in `/`.
-  auxRootFiles = fs.toSource {
-    root = ./root;
-    fileset = ./root/etc;
-  };
-
+  auxRootFiles = pkgs.callPackage ./root { };
   preBuildScript = pkgs.callPackage ./scripts/prebuild.nix { };
 
   bootstrapPkgs = [
-    pkgs.just
-    pkgs.cachix
     pkgs.nix
     pkgs.cacert
     (lib.hiPrio pkgs.coreutils)
-    pkgs.findutils
-    (lib.hiPrio pkgs.git)
+    (lib.hiPrio pkgs.findutils)
     pkgs.openssh
     pkgs.bash
+    (lib.hiPrio pkgs.git)
+    pkgs.cachix
 
+    pkgs.just
     pkgs.podman # For nested containers.
 
     preBuildScript
+    auxRootFiles
   ];
 
   toEnvList = envs: lib.mapAttrsToList (k: v: "${k}=${v}") envs;
@@ -117,11 +109,6 @@ let
 
     # You can add here a user with uid,gid,uname,gname etc.
     # We are using root.
-
-    # The Nix store needs all packages which we have as content
-    # packages in the base images.
-    # The Nix store is mounted into the base image.
-    extraPkgs = bootstrapPkgs;
 
     nixConf = {
       cores = "0";
@@ -139,7 +126,7 @@ let
     name = "local/nix-daemon";
     tag = "latest";
 
-    contents = [ auxRootFiles ];
+    contents = bootstrapPkgs;
 
     config = {
       Volumes = {
@@ -149,7 +136,7 @@ let
       };
       Labels = noPruneLabels;
     };
-    maxLayers = 5;
+    maxLayers = 4;
   };
 
   # This is the podman daemon image which enables
@@ -186,8 +173,10 @@ let
       name = imageNames.nix;
       tag = "latest";
 
-      # Stuff gets mounted into the container here.
-      contents = bootstrapPkgs ++ [ auxRootFiles ];
+      contents = bootstrapPkgs;
+      # No store paths are copied into. We provide them by mounting the
+      # /nix/store.
+      includeStorePaths = false;
 
       config = {
         Labels = noPruneLabels;
@@ -216,10 +205,10 @@ let
         name = imageNames.alpine;
         tag = "latest";
 
-        # We need these packages in the container, to create the symlinks in `/bin/...`.
-        # TODO: How to only keep the symlink and strip everything from /nix/store
-        # because it anyway gets overmounted.
-        contents = bootstrapPkgs ++ [ auxRootFiles ];
+        contents = bootstrapPkgs;
+        # No store paths are copied into. We provide them by mounting the
+        # /nix/store.
+        includeStorePaths = false;
 
         config = {
           Labels = noPruneLabels;
@@ -251,10 +240,10 @@ let
         name = imageNames.ubuntu;
         tag = "latest";
 
-        # We need these packages in the container, to create the symlinks
-        # TODO: How to only keep the symlink and strip everything from /nix/store
-        # because it anyway gets overmounted.
-        contents = bootstrapPkgs ++ [ auxRootFiles ];
+        contents = bootstrapPkgs;
+        # No store paths are copied into. We provide them by mounting the
+        # /nix/store.
+        includeStorePaths = false;
 
         config = {
           Labels = noPruneLabels;
@@ -270,7 +259,6 @@ let
     imageFile = nixDaemonImage;
     image = "local/nix-daemon:latest";
 
-    # NOTE: These volumes overmount what is in the job images.
     volumes = [
       "nix-daemon-store:/nix/store"
       "nix-daemon-db:/nix/var/nix/db"
