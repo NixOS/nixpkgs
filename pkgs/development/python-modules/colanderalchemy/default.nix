@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "colanderclchemy";
+  pname = "ColanderAlchemy";
   version = "0.3.4";
   format = "setuptools";
 
