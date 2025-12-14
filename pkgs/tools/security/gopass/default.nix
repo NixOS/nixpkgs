@@ -90,6 +90,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       rvolosatovs
       sikmir
+      yzx9
     ];
     changelog = "https://github.com/gopasspw/gopass/blob/v${finalAttrs.version}/CHANGELOG.md";
 
