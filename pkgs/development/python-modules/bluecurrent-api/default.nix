@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluecurrent";
     repo = "HomeAssistantAPI";
-    tag = "v${version}";
+    tag = "v.${version}";
     hash = "sha256-px4kZOvMUP5aGOQ1uxWnY6w77Woie/hVVdyylW8uSX4=";
   };
 
