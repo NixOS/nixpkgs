@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   libxml2,
   libpeas,
   glib,
@@ -13,6 +12,7 @@
   xapp-symbolic-icons,
   pkg-config,
   python3,
+  python3Packages,
   meson,
   ninja,
   versionCheckHook,
@@ -23,25 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.8.5";
+  version = "3.8.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    hash = "sha256-iPD9SawHA0bwnZvC+IyMq9cFE1YOYLISehUJjTXiqGw=";
+    hash = "sha256-CeKgJg9pyQdnpatdlgqviLnzNv9JCVDm+bFv56trrT8=";
   };
 
   patches = [
     # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
     # but that requires the install_dir is an absolute path.
     ./correct-gir-lib-path.patch
-
-    # Switch to girepository-2.0
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/xed/raw/6c1a775158f166a3bc5759a6c7bd57bab8f2771a/f/libpeas_libgirepository2.patch";
-      hash = "sha256-wGbmS33YHMiSfd3S0fQRhL6tT536kto69MSgPkY2QIs=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -62,6 +56,7 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
+    python3Packages.pygobject3
     xapp
   ];
 
