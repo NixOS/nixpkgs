@@ -16,6 +16,11 @@ let
       inherit (self) callPackage;
     in
     {
+      #### Core Apps
+      morph-browser = callPackage ./applications/morph-browser {
+        withDocumentation = !useQt6;
+      };
+
       #### Data
       lomiri-schemas = callPackage ./data/lomiri-schemas { };
       lomiri-sounds = callPackage ./data/lomiri-sounds { };
@@ -59,7 +64,6 @@ let
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
-      morph-browser = callPackage ./applications/morph-browser { };
       teleports = callPackage ./applications/teleports { };
 
       #### Data
