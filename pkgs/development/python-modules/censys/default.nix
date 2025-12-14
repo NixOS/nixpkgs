@@ -10,7 +10,6 @@
   pytest-mock,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   responses,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "censys";
   version = "2.2.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "censys";
