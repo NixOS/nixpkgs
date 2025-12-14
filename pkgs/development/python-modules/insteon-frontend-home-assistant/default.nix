@@ -14,8 +14,9 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NZwnx8tlXnsVCk4nvNjOg3cjSr2CnjqWcZG7xFTC2wA=";
+    inherit pname;
+    version = "0.5.0.post1";
+    hash = "sha256-tU4AcmYVaJ3qgiM/44SDRuoRJMFDQoN5FovrnDj2ZJA";
   };
 
   nativeBuildInputs = [ setuptools ];
