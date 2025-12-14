@@ -1,4 +1,5 @@
 {
+  autoPatchelfHook,
   fetchFromGitHub,
   fetchurl,
   stdenv,
@@ -17,6 +18,7 @@
 
   nss,
   nspr,
+  libGL,
   libX11,
   libXdamage,
   boost,
@@ -79,11 +81,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "bb9fb310ed7f3abf858faf248c53bbb707be21f7";
+  rev = "6f9ab690b28a1262f82e6f869c310bdf1d0697ac";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
   # Run `git rev-list --count HEAD`
-  version = "1083";
+  version = "1086";
 
   nativeBuildInputs = [
     cmake
@@ -95,9 +97,11 @@ stdenv.mkDerivation rec {
     ninja
     strip-nondeterminism
     stripJavaArchivesHook
+    autoPatchelfHook
   ];
   buildInputs = [
     boost
+    libGL
     libX11
     libXdamage
     nss
@@ -109,7 +113,7 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-BHmGEhfkrUWDfrUFR8d5AgIq8qkAr+blX9n7ZVg8mtc=";
+    hash = "sha256-w5t1M66KW5cUbNTpAc4ksGd+414EJsXwbq1UP1COFsw=";
   };
 
   # Find the hash in tools/buildtools/linux64/clang-format.sha1
@@ -154,7 +158,6 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
-    "unpacked"
   ];
 
   postBuild = ''
@@ -162,14 +165,12 @@ stdenv.mkDerivation rec {
     ../tools/compile.sh ${platform} Release
   '';
 
-  # N.B. For new versions, manually synchronize the following
-  # definitions with jb/tools/common/create_modules.sh to include
-  # newly added modules
   installPhase = ''
     runHook preInstall
 
     export JCEF_ROOT_DIR=$(realpath ..)
     export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
+    export OUT_REMOTE_DIR=$JCEF_ROOT_DIR/jcef_build/remote/${buildType}
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
     export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
     export OUT_CLS_DIR=$(realpath ../out/${platform})
@@ -177,66 +178,14 @@ stdenv.mkDerivation rec {
     export OS=linux
     export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
-    mkdir -p $unpacked/{jogl,gluegen,jcef}
+    bash "$JB_TOOLS_DIR"/common/create_modules.sh
 
-    function extract_jar {
-      __jar=$1
-      __dst_dir=$2
-      __content_dir="''${3:-.}"
-      __tmp=.tmp_extract_jar
-      rm -rf "$__tmp" && mkdir "$__tmp"
-      (
-        cd "$__tmp" || exit 1
-        jar -xf "$__jar"
-      )
-      rm -rf "$__tmp/META-INF"
-      rm -rf "$__dst_dir" && mkdir "$__dst_dir"
-      if [ -z "$__content_dir" ]
-      then
-          cp -R "$__tmp"/* "$__dst_dir"
-      else
-          cp -R "$__tmp"/"$__content_dir"/* "$__dst_dir"
-      fi
-      rm -rf $__tmp
-    }
-
-    cd $unpacked/gluegen
-    cp "$JOGAMP_DIR"/gluegen-rt.jar .
-    cp "$JB_TOOLS_DIR"/common/gluegen-module-info.java module-info.java
-    javac --patch-module gluegen.rt=gluegen-rt.jar module-info.java
-    jar uf gluegen-rt.jar module-info.class
-    rm module-info.class module-info.java
-    mkdir lib
-  ''
-  # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
-  + lib.optionalString (platform != "linuxarm64") ''
-    extract_jar "$JOGAMP_DIR"/gluegen-rt-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-  ''
-  + ''
-
-    cd ../jogl
-    cp "$JOGAMP_DIR"/gluegen-rt.jar .
-    cp "$JOGAMP_DIR"/jogl-all.jar .
-    cp "$JB_TOOLS_OS_DIR"/jogl-module-info.java module-info.java
-    javac --module-path . --patch-module jogl.all=jogl-all.jar module-info.java
-    jar uf jogl-all.jar module-info.class
-    rm module-info.class module-info.java
-    mkdir lib
-  ''
-  # see https://github.com/JetBrains/jcef/commit/f3b787e3326c1915d663abded7f055c0866f32ec
-  + lib.optionalString (platform != "linuxarm64") ''
-    extract_jar "$JOGAMP_DIR"/jogl-all-natives-"$OS"-"$DEPS_ARCH".jar lib natives/"$OS"-"$DEPS_ARCH"
-  ''
-  + ''
-
-    cd ../jcef
-    cp "$OUT_CLS_DIR"/jcef.jar .
-    mkdir lib
-    cp -R "$OUT_NATIVE_DIR"/* lib
-
-    mkdir -p $out/jmods
+    mkdir -p $out
 
     bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out
+
+    cp -r $JCEF_ROOT_DIR/jmods/ $out
+    cp -r $JCEF_ROOT_DIR/cef_server/ $out
 
     runHook postInstall
   '';
@@ -244,13 +193,6 @@ stdenv.mkDerivation rec {
   dontStrip = debugBuild;
 
   postFixup = ''
-    cd $unpacked/gluegen
-    jmod create --class-path gluegen-rt.jar --libs lib $out/jmods/gluegen.rt.jmod
-    cd ../jogl
-    jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
-    cd ../jcef
-    jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
-
     # stripJavaArchivesHook gets rid of jar file timestamps, but not of jmod file timestamps
     # We have to manually call strip-nondeterminism to do this for jmod files too
     find $out -name "*.jmod" -exec strip-nondeterminism --type jmod {} +
