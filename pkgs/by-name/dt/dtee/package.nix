@@ -2,7 +2,6 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  pkgs,
   stdenv,
   # nativeBuildInputs
   gettext,

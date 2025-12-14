@@ -1,5 +1,4 @@
 {
-  lib,
   sonar-scanner-cli,
   jre_minimal,
   jdk_headless,

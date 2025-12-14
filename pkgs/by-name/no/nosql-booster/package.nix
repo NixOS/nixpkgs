@@ -1,6 +1,5 @@
 {
   lib,
-  platforms,
   appimageTools,
   fetchurl,
 }:

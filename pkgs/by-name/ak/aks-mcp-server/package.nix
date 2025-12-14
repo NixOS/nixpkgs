@@ -6,7 +6,6 @@
   makeBinaryWrapper,
   azure-cli,
   kubectl,
-  stdenv,
 }:
 
 buildGoModule (finalAttrs: {

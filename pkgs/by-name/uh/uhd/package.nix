@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  substitute,
-  fetchpatch,
   fetchurl,
   fetchFromGitHub,
   cmake,

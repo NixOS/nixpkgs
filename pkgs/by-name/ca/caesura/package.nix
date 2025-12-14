@@ -10,7 +10,6 @@
   lame,
   makeBinaryWrapper,
   sox,
-  writableTmpDirAsHomeHook,
 }:
 let
   runtimeDeps = [
