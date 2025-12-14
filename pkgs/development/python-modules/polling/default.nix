@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  pytest,
+  fetchPypi,
   setuptools,
   wheel,
   mock,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,11 +13,10 @@ buildPythonPackage rec {
   version = "0.3.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "justiniso";
-    repo = "polling";
-    rev = "v${version}";
-    hash = "sha256-Qy2QxCWzAjZMJ6yxZiDT/80I2+rLimoG8/SYxq960Tk=";
+  src = fetchPypi {
+    inherit version;
+    pname = "polling";
+    hash = "sha256-wPH4BIQ/544J9vxt5vuLEfc74KzOnN4mKxjkp61ABaY=";
   };
 
   nativeBuildInputs = [
@@ -25,12 +24,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  pythonImportsCheck = [ "polling" ];
-
-  nativeCheckInputs = [
+  propagatedBuildInputs = [
     mock
-    pytestCheckHook
+    pytest
   ];
+
+  pythonImportsCheck = [ "polling" ];
 
   meta = {
     description = "Powerful polling utility in Python";
