@@ -28,6 +28,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "-p"
     "g3proxy"
+    "-p"
+    "g3proxy-ctl"
+    "-p"
+    "g3proxy-lua"
+    "-p"
+    "g3proxy-ftp"
+    "-p"
+    "g3mkcert"
+    "-p"
+    "g3fcgen"
+    "-p"
+    "g3iploc"
+    "-p"
+    "g3statsd"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
