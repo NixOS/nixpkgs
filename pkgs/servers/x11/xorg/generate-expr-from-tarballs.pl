@@ -466,6 +466,7 @@ print OUT <<EOF;
   xf86-input-void,
   xf86-video-ark,
   xf86-video-geode,
+  xf86-video-nouveau,
   xfd,
   xfontsel,
   xfs,
@@ -678,6 +679,7 @@ self: with self; {
   xf86inputvoid = xf86-input-void;
   xf86videoark = xf86-video-ark;
   xf86videogeode = xf86-video-geode;
+  xf86videonouveau = xf86-video-nouveau;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;

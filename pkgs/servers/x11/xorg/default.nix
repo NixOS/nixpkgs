@@ -134,6 +134,7 @@
   xf86-input-void,
   xf86-video-ark,
   xf86-video-geode,
+  xf86-video-nouveau,
   xfd,
   xfontsel,
   xfs,
@@ -346,6 +347,7 @@ self: with self; {
   xf86inputvoid = xf86-input-void;
   xf86videoark = xf86-video-ark;
   xf86videogeode = xf86-video-geode;
+  xf86videonouveau = xf86-video-nouveau;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -1073,48 +1075,6 @@ self: with self; {
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         xorgproto
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videonouveau = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libdrm,
-      udev,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-nouveau";
-      version = "3ee7cbca8f9144a3bb5be7f71ce70558f548d268";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/3ee7cbca8f9144a3bb5be7f71ce70558f548d268/xf86-video-nouveau-3ee7cbca8f9144a3bb5be7f71ce70558f548d268.tar.bz2";
-        sha256 = "0rhs3z274jdzd82pcsl25xn8hmw6i4cxs2kwfnphpfhxbbkiq7wl";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libdrm
-        udev
         libpciaccess
         xorgserver
       ];
