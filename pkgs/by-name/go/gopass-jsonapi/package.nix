@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   makeWrapper,
   buildGoModule,
   fetchFromGitHub,
@@ -11,7 +10,6 @@
 }:
 
 let
-
   # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/internal/jsonapi/manifest/manifest_path_linux.go
   manifestPaths = {
     firefox = "$out/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json";
@@ -22,16 +20,15 @@ let
     iridium = "$out/etc/iridium-browser/native-messaging-hosts/com.justwatch.gopass.json";
     slimjet = "$out/etc/opt/slimjet/native-messaging-hosts/com.justwatch.gopass.json";
   };
-
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopass-jsonapi";
   version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JN/SC7lvPVTONNbOUmgu//xK/GaR5Tljxn99Zb1J/kQ=";
   };
 
@@ -47,8 +44,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   postInstall = ''
@@ -64,7 +61,7 @@ buildGoModule rec {
       in
       # The options after `--print=false` are of no effect, but if missing
       # `gopass-jsonapi configure` will ask for them. (`--libpath` and `--global`
-      # are overriden by `--manifest-path`. `--libpath` is only used to
+      # are overridden by `--manifest-path`. `--libpath` is only used to
       # compute Firefox's global manifest path. See
       # https://github.com/gopasspw/gopass-jsonapi/blob/v1.16.0/setup_others.go#L33-L46)
       #
@@ -99,7 +96,7 @@ buildGoModule rec {
   meta = {
     description = "Enables communication with gopass via JSON messages";
     homepage = "https://github.com/gopasspw/gopass-jsonapi";
-    changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       maxhbr
@@ -107,4 +104,4 @@ buildGoModule rec {
     ];
     mainProgram = "gopass-jsonapi";
   };
-}
+})
