@@ -1,19 +1,19 @@
 {
   lib,
-  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
   gopass,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-credential-gopass";
   version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "git-credential-gopass";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IEur3Sw2zRYJxlwAhgpb2OnBt+FcC+OdeT7M/LzJwoY=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
   ];
 
   postFixup = ''
@@ -38,9 +38,9 @@ buildGoModule rec {
   meta = {
     description = "Manage git credentials using gopass";
     homepage = "https://github.com/gopasspw/git-credential-gopass";
-    changelog = "https://github.com/gopasspw/git-credential-gopass/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gopasspw/git-credential-gopass/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benneti ];
     mainProgram = "git-credential-gopass";
   };
-}
+})
