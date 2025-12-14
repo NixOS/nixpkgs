@@ -1,0 +1,118 @@
+diff --git a/app/scripts/fetch_xulrunner b/app/scripts/fetch_xulrunner
+index 0d871782c3..bea85feae9 100755
+--- a/app/scripts/fetch_xulrunner
++++ b/app/scripts/fetch_xulrunner
+@@ -422,73 +422,11 @@ cd xulrunner
+ 
+ if [ $BUILD_MAC == 1 ]; then
+ 	GECKO_VERSION="$GECKO_VERSION_MAC"
+-	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
+-	rm -rf Firefox.app
+ 	
+-	if [ -e "Firefox $GECKO_VERSION.app.zip" ]; then
+-		echo "Using Firefox $GECKO_VERSION.app.zip"
+-		unzip "Firefox $GECKO_VERSION.app.zip"
+-	else
+-		curl -o Firefox.dmg "$DOWNLOAD_URL/mac/en-US/Firefox%20$GECKO_VERSION.dmg"
+-		set +e
+-		hdiutil detach -quiet /Volumes/Firefox 2>/dev/null
+-		set -e
+-		hdiutil attach -quiet Firefox.dmg
+-		cp -a /Volumes/Firefox/Firefox.app .
+-		hdiutil detach -quiet /Volumes/Firefox
+-	fi
+-	
+-	# Download custom components (e.g., XUL), as an xz-compressed tarball of the MacOS folder with
+-	# custom files in it
+-	echo
+-	rm -rf MacOS
+-	if [ -n "$custom_components_hash_mac" ]; then
+-		if [ -e "Firefox $GECKO_VERSION MacOS.zip" ]; then
+-			echo "Using Firefox $GECKO_VERSION MacOS.zip"
+-			unzip "Firefox $GECKO_VERSION MacOS.zip"
+-		else
+-			echo "Downloading custom Firefox components"
+-			echo
+-			curl -o MacOS.tar.xz "${custom_components_url}mac/$custom_components_hash_mac.tar.xz"
+-			
+-			# Verify hash
+-			if [[ "`uname`" = "Darwin" ]]; then
+-				shasum=shasum
+-			else
+-				shasum=sha256sum
+-			fi
+-			echo
+-			echo "$custom_components_hash_mac  MacOS.tar.xz" | $shasum -c -
+-			echo
+-			
+-			tar xvf MacOS.tar.xz
+-		fi
+-		echo
+-	fi
+-	
+-	pushd Firefox.app/Contents/Resources
++	pushd firefox
+ 	modify_omni mac
+ 	popd
+ 	
+-	# Replace "FirefoxCP" with "ZoteroCP" for subprocesses ("Isolated Web Content", "Socket Process", "Web Content", etc.)
+-	info_plist=Firefox.app/Contents/MacOS/plugin-container.app/Contents/Resources/English.lproj/InfoPlist.strings
+-	from=$(get_utf16_chars "FirefoxCP")
+-	to=$(get_utf16_chars "ZoteroCP")
+-	perl -pi -e "s/$from/$to/" $info_plist
+-	# Check for UTF-16 "ZoteroCP"
+-	if ! grep -a -q "Z.o.t.e.r.o.C.P." $info_plist; then
+-		echo '"ZoteroCP" not found in InfoPlist.strings after replacement'
+-		exit 1
+-	fi
+-	
+-	if [ ! -e "Firefox $GECKO_VERSION.app.zip" ]; then
+-		rm "Firefox.dmg"
+-	fi
+-	
+-	#if [ ! -e "Firefox $GECKO_VERSION MacOS.zip" ]; then
+-	#	rm "MacOS.zip"
+-	#fi
+-	echo $("$SCRIPT_DIR/xulrunner_hash" -p m) > hash-mac
+ fi
+ 
+ if [ $BUILD_WIN == 1 ]; then
+@@ -563,36 +501,9 @@ fi
+ 
+ if [ $BUILD_LINUX == 1 ]; then
+ 	GECKO_VERSION="$GECKO_VERSION_LINUX"
+-	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
+-
+-
+-	# Include 32-bit build if not in CI
+-	if [[ "${CI:-}" = "1" ]] || [[ "${SKIP_32:-}" = "1" ]]; then
+-		arches="x86_64"
+-	else
+-		arches="i686 x86_64"
+-	fi
+-	for arch in $arches; do
+-		xdir="firefox-$arch"
+-		rm -rf $xdir
+-		
+-		archived_file="firefox-$GECKO_VERSION-$arch.tar.bz2"
+-		if [ -e "$archived_file" ]; then
+-			echo "Using $archived_file"
+-			cp "$archived_file" "firefox-$GECKO_VERSION.tar.bz2"
+-		else
+-			curl -O "$DOWNLOAD_URL/linux-$arch/en-US/firefox-$GECKO_VERSION.tar.bz2"
+-		fi
+-
+-		tar xvf firefox-$GECKO_VERSION.tar.bz2
+-		mv firefox firefox-$arch
+-
+-		pushd firefox-$arch
+-		modify_omni $arch
++		pushd firefox
++		modify_omni linux
+ 		popd
+-		echo $($SCRIPT_DIR/xulrunner_hash -p l) > hash-linux
+-		rm "firefox-$GECKO_VERSION.tar.bz2"
+-	done
+ fi
+ 
+ echo Done

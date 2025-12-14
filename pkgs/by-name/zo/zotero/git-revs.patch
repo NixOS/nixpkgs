@@ -1,0 +1,17 @@
+diff --git a/js-build/build.js b/js-build/build.js
+index 5e920db6d8..befe280606 100644
+--- a/js-build/build.js
++++ b/js-build/build.js
+@@ -36,9 +36,9 @@ if (require.main === module) {
+ 				...scssFiles.map(scf => getSass(scf, { ignore: ignoreMask }, signatures)),
+ 				getSymlinks(symlinks, { nodir: true, ignore: ignoreMask }, signatures),
+ 				getSymlinks(symlinkDirs, { ignore: ignoreMask }, signatures),
+-				getPDFReader(signatures),
+-				getPDFWorker(signatures),
+-				getZoteroNoteEditor(signatures)
++				//getPDFReader(signatures),
++				//getPDFWorker(signatures),
++				//getZoteroNoteEditor(signatures)
+ 			]);
+ 
+ 			await writeSignatures(signatures);
