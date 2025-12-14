@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       (withFeature withAlsa "alsa")
       (withFeature withOss "oss")
       (withFeature withEspeak "espeak-ng")
+      (withFeature withFlite "flite")
       (withFeature withPico "pico")
     ];
 
