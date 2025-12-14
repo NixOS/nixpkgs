@@ -790,6 +790,7 @@ in
   iscsi-root = runTest ./iscsi-root.nix;
   isolate = runTest ./isolate.nix;
   isso = runTest ./isso.nix;
+  it-tools = import ./it-tools { inherit recurseIntoAttrs runTest; };
   jackett = runTest ./jackett.nix;
   jellyfin = runTest ./jellyfin.nix;
   jellyseerr = runTest ./jellyseerr.nix;
