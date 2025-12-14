@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${picotts}/share/pico/lang"
+    substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${picotts}/share/pico/lang"
   '';
 
   installFlags = [
