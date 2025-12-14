@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # propagates
   paypalhttp,
@@ -16,11 +16,10 @@ buildPythonPackage rec {
   version = "1.0.1";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "paypal";
-    repo = "Checkout-Python-SDK";
-    tag = version;
-    hash = "sha256-04ojNJeqVMdhnGpeCD+wzgKGLI22tVvrMW3gF/SH7KU=";
+  src = fetchPypi {
+    inherit version;
+    pname = "paypal-checkout-serversdk";
+    hash = "sha256-gPYrotn+IrWMLOHzEBRqz2A3CISTOY26ixu2e0k67l4=";
   };
 
   postPatch = ''
@@ -30,17 +29,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ paypalhttp ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    responses
-  ];
-
-  disabledTests = [
-    # network tests
-    "testOrdersPatchTest"
-    "testOrdersCreateTest"
-    "testOrderGetRequestTest"
-  ];
+  # test_harness.py is missing
+  doInstallCheck = false;
 
   meta = {
     changelog = "https://github.com/paypal/Checkout-Python-SDK/releases/tag/${version}";
