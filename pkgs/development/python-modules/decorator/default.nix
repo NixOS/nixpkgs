@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [ "tests/test.py " ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   meta = {
     changelog = "https://github.com/micheles/decorator/blob/${src.tag}/CHANGES.md";
