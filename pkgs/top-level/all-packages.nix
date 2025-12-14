@@ -1147,22 +1147,6 @@ with pkgs;
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 
-  git = callPackage ../applications/version-management/git {
-    perlLibs = [
-      perlPackages.LWP
-      perlPackages.URI
-      perlPackages.TermReadKey
-    ];
-    smtpPerlLibs = [
-      perlPackages.libnet
-      perlPackages.NetSMTPSSL
-      perlPackages.IOSocketSSL
-      perlPackages.NetSSLeay
-      perlPackages.AuthenSASL
-      perlPackages.DigestHMAC
-    ];
-  };
-
   # The full-featured Git.
   gitFull = git.override {
     svnSupport = stdenv.buildPlatform == stdenv.hostPlatform;
@@ -2062,7 +2046,7 @@ with pkgs;
 
   intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
 
-  jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player { };
+  jellyfin-media-player = kdePackages.callPackage ../applications/video/jellyfin-media-player { };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
@@ -7249,8 +7233,6 @@ with pkgs;
   goocanvas = callPackage ../development/libraries/goocanvas { };
   goocanvas2 = callPackage ../development/libraries/goocanvas/2.x.nix { };
   goocanvas3 = callPackage ../development/libraries/goocanvas/3.x.nix { };
-
-  gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer { });
 

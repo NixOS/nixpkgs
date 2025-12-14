@@ -31,8 +31,6 @@
   libiconvReal,
   svnSupport ? false,
   subversionClient,
-  perlLibs,
-  smtpPerlLibs,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
@@ -69,6 +67,19 @@ let
     FCGI
     FCGIProcManager
     HTMLTagCloud
+  ];
+  perlLibs = with perlPackages; [
+    LWP
+    URI
+    TermReadKey
+  ];
+  smtpPerlLibs = with perlPackages; [
+    libnet
+    NetSMTPSSL
+    IOSocketSSL
+    NetSSLeay
+    AuthenSASL
+    DigestHMAC
   ];
 in
 

@@ -27,7 +27,6 @@ let
   ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
-    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 

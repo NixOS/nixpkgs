@@ -21,11 +21,10 @@ let
     pulseaudio
   ];
   pname = "pulseaudio-ctl";
-
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.70";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "graysky2";

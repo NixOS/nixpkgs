@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://www.hyperrealm.com/${pname}/${pname}-${version}.tar.gz";
