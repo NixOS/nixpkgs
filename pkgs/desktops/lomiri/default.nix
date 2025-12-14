@@ -38,6 +38,10 @@ let
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
       #### Services
+      lomiri-content-hub = callPackage ./services/lomiri-content-hub {
+        # Check for working qdoc: not found
+        withDocumentation = !useQt6;
+      };
       lomiri-download-manager = callPackage ./services/lomiri-download-manager {
         # Check for working qdoc: not found
         withDocumentation = !useQt6;
@@ -80,7 +84,6 @@ let
 
       #### Services
       biometryd = callPackage ./services/biometryd { };
-      lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
