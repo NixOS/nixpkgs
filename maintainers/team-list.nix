@@ -251,6 +251,15 @@ with lib.maintainers;
     shortName = "Cyberus Technology employees";
   };
 
+  danklinux = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
+    shortName = "Dank Linux";
+  };
+
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;

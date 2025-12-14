@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitLab,
   lib,
+  nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
@@ -21,6 +22,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-FJjC2WU1DTP8Frk2cj9Adduxv49d9uyt4G8BotzWsYU=";
 
   passthru = {
+    tests = { inherit (nixosTests) ejabberd prosody; };
     updateScript = nix-update-script { };
   };
 
