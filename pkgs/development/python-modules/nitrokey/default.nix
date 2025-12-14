@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   poetry-core,
   cryptography,
@@ -25,7 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-m351pDLMuZaddbUqJz5r/ljz/vVq+RBDGk4xskc3HCk=";
   };
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "hidapi"
+  ];
 
   build-system = [ poetry-core ];
 
