@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "zsh-fzf-history-search";
-  version = "0-unstable-2024-05-15";
+  version = "0-unstable-2025-11-08";
 
   src = fetchFromGitHub {
     owner = "joshskidmore";
     repo = "zsh-fzf-history-search";
-    rev = "d5a9730b5b4cb0b39959f7f1044f9c52743832ba";
-    hash = "sha256-tQqIlkgIWPEdomofPlmWNEz/oNFA1qasILk4R5RWobY=";
+    rev = "35df458f7d9478fa88c74af762dcd296cdfd485d";
+    hash = "sha256-6UWmfFQ9JVyg653bPQCB5M4jJAJO+V85rU7zP4cs1VI=";
   };
 
   dontConfigure = true;
