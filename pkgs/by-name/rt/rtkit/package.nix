@@ -63,9 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Daemon that hands out real-time priority to processes";
     mainProgram = "rtkitctl";
     license = with lib.licenses; [
-      gpl3
-      bsd0
-    ]; # lib is bsd license
+      gpl3Plus
+      mit
+    ];
     platforms = lib.platforms.linux;
   };
 })
