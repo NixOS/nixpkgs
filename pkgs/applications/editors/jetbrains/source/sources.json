@@ -1,11 +1,11 @@
 {
   "idea-oss": {
-    "version": "2025.1.1.1",
-    "buildNumber": "251.25410.129",
+    "version": "2025.3",
+    "buildNumber": "253.28294.334",
     "buildType": "idea",
-    "ideaHash": "sha256-9YatnO+9Pcrlx7EXmq4wMVdeR3DzJF2fsQOvRWH11tk=",
-    "androidHash": "sha256-ueMdEkXt/x5WIex163iwTlOm5bvZNluNO7SNxs+bPYs=",
-    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
+    "ideaHash": "sha256-VX3pv/mfaurhW5sVPHKifY94BscAeqKt4kbXt7AeSHw=",
+    "androidHash": "sha256-gvZTszYWUFQm88fciRND/LAdD6t/SNSSEDxmJNTcRSU=",
+    "jpsHash": "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=",
     "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "idea_maven_artefacts.json",
     "repositories": [
@@ -17,20 +17,22 @@
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/kpm/public",
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ki/maven",
-      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev"
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/amper/amper",
+      "https://packages.jetbrains.team/maven/p/kt/bootstrap"
     ],
     "kotlin-jps-plugin": {
-      "version": "2.1.10",
-      "hash": "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4="
+      "version": "2.2.20",
+      "hash": "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ="
     }
   },
   "pycharm-oss": {
-    "version": "2025.1.1.1",
-    "buildNumber": "251.25410.159",
+    "version": "2025.3",
+    "buildNumber": "253.28294.336",
     "buildType": "pycharm",
-    "ideaHash": "sha256-0VHoFk9/xKei4jvkEvl+9KiJwCoVPKh7g5EBSXQ+Ios=",
-    "androidHash": "sha256-af1RJeU7BJTtYTvZRNcH77/Tn4j4lLsRRJUGS80rM4U=",
-    "jpsHash": "sha256-aOYCwDSso0X/7f5tWfP+veoQhCvd6tEDk9lq4YX/cb0=",
+    "ideaHash": "sha256-ui6oICJbtfyIMT4y8rZvX14/RwTZGIqZTKAHtvk3uBA=",
+    "androidHash": "sha256-gvZTszYWUFQm88fciRND/LAdD6t/SNSSEDxmJNTcRSU=",
+    "jpsHash": "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=",
     "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "pycharm_maven_artefacts.json",
     "repositories": [
@@ -42,11 +44,13 @@
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/grazi/grazie-platform-public",
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/kpm/public",
       "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/ki/maven",
-      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev"
+      "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/public/p/compose/dev",
+      "https://cache-redirector.jetbrains.com/packages.jetbrains.team/maven/p/amper/amper",
+      "https://packages.jetbrains.team/maven/p/kt/bootstrap"
     ],
     "kotlin-jps-plugin": {
-      "version": "2.1.10",
-      "hash": "sha256-Bu5eCHxls6EoIgzadiEY31plAcxZ6DA2a10CXAtPqV4="
+      "version": "2.2.20",
+      "hash": "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ="
     }
   }
 }
