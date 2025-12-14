@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libiconv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -43,6 +44,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Lightweight lossless file minifier/optimizer";
