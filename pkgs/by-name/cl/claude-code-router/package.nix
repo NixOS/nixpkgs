@@ -4,30 +4,31 @@
   fetchFromGitHub,
   lib,
   makeBinaryWrapper,
-  nodejs_24,
-  pnpm_9,
+  nodejs_20,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
 let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_24; };
-  pnpm' = pnpm_9.override { nodejs = nodejs_24; };
+  nodejs = nodejs_20;
+  buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
+  pnpm' = pnpm_10.override { inherit nodejs; };
 in
 buildNpmPackage' (finalAttrs: {
   pname = "claude-code-router";
-  version = "1.0.64";
+  version = "1.0.73";
 
   src = fetchFromGitHub {
     owner = "musistudio";
     repo = "claude-code-router";
-    rev = "1a4462a92362e8c41d4539dc1a79fb85fccf9559";
-    hash = "sha256-q818e8PcKjdBqYk6WfGLKQ8pybXWVxmNV8KX7GjEQq0=";
+    rev = "a7e20325dbb2a8827db0c9ee12924bdecfa19fd9";
+    hash = "sha256-E5m5DiuCaZy8ac4bejpnyooaJ+YKc0ZqMIOhI2aOclk=";
   };
 
   postPatch = ''
     substituteInPlace src/cli.ts \
-      --replace-fail '"node"' '"${lib.getExe nodejs_24}"'
+      --replace-fail '"node"' '"${lib.getExe nodejs}"'
   '';
 
   npmDeps = null;
@@ -35,7 +36,7 @@ buildNpmPackage' (finalAttrs: {
     inherit (finalAttrs) pname src;
     pnpm = pnpm';
     fetcherVersion = 2;
-    hash = "sha256-BLPGTbDvvI40kuXfE/p3+s9hkE0reXr7OJA6UGXN4ys=";
+    hash = "sha256-xvbw0+w6LxiQj2CpF+diVTsoKrxT8HXub1ASrGrlXR4=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +64,7 @@ buildNpmPackage' (finalAttrs: {
     cp ${finalAttrs.passthru.ui}/index.html $out/lib/claude-code-router/dist/
 
     mkdir -p $out/bin
-    makeBinaryWrapper ${lib.getExe nodejs_24} $out/bin/ccr \
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/ccr \
       --add-flags "$out/lib/claude-code-router/dist/cli.js"
 
     runHook postInstall
@@ -84,7 +85,7 @@ buildNpmPackage' (finalAttrs: {
       inherit (finalAttrs') pname src sourceRoot;
       pnpm = pnpm';
       fetcherVersion = 2;
-      hash = "sha256-ZjYLUec9EADQmKfju8hMbq0y4f1TDVwjbe3yw8Gh4Ac=";
+      hash = "sha256-YtOcuqhJLJYg0C8J0/THA7UfKMVHE8oN5BcJQ2zSpWQ=";
     };
 
     nativeBuildInputs = [
