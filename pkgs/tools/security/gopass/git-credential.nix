@@ -3,7 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   gopass,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -21,7 +23,10 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-s"
@@ -32,7 +37,17 @@ buildGoModule (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/git-credential-gopass \
-      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+      --prefix PATH : "${gopass.wrapperPath}"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    gopass
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  preVersionCheck = ''
+    gopass setup --name "user" --email "user@localhost"
   '';
 
   meta = {
