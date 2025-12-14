@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -12,22 +12,17 @@
   systemd,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtkit";
-  version = "0.13";
+  version = "0.14";
 
-  src = fetchFromGitHub {
-    owner = "heftig";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "pipewire";
     repo = "rtkit";
-    rev = "c295fa849f52b487be6433e69e08b46251950399";
-    sha256 = "0yfsgi3pvg6dkizrww1jxpkvcbhzyw9110n1dypmzq0c5hlzjxcd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y952SHbUWIjg1BKqenHABVWm0S5d/sBac1zRp9BpXB8=";
   };
-
-  patches = [
-    ./meson-actual-use-systemd_systemunitdir.patch
-    ./meson-fix-librt-find_library-check.patch
-    ./rtkit-daemon-dont-log-debug-messages-by-default.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -35,6 +30,7 @@ stdenv.mkDerivation {
     pkg-config
     unixtools.xxd
   ];
+
   buildInputs = [
     dbus
     libcap
@@ -52,8 +48,14 @@ stdenv.mkDerivation {
     "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "sysusersdir = '''" \
+      "sysusersdir = '${placeholder "out"}/lib/sysusers.d'"
+  '';
+
   meta = {
-    homepage = "https://github.com/heftig/rtkit";
+    homepage = "https://github.com/pipewire/rtkit";
     description = "Daemon that hands out real-time priority to processes";
     mainProgram = "rtkitctl";
     license = with lib.licenses; [
@@ -62,4 +64,4 @@ stdenv.mkDerivation {
     ]; # lib is bsd license
     platforms = lib.platforms.linux;
   };
-}
+})
