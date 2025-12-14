@@ -4,7 +4,6 @@
   fetchgit,
   rtl-sdr,
   libxml2,
-  git,
   pkg-config,
   netcat,
   jq,
@@ -21,10 +20,16 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/wmbusmeters/wmbusmeters";
     tag = version;
-    hash = "sha256-JMDwK+4pEMpl8DGitsytLooxwz82KFO0kbduRtToAV8=";
+    hash = "sha256-e0clXik/jwUkiOhU+puhkvCVFhS2EYagly10Rzw+qTs=";
 
     # need to fetch revision from git
     leaveDotGit = true;
+    postFetch = ''
+      # avoid having the whole .git-folder
+      substituteInPlace $out/Makefile --replace-fail "COMMIT_HASH?=\$(shell \$(SUPRE) git log --pretty=format:'%H' -n 1 \$(SUPOST))" "COMMIT_HASH:=$(git -C $out log --pretty=format:'%H' -n 1)"
+
+      rm -rf $out/.git
+    '';
   };
 
   buildInputs = [
@@ -33,7 +38,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    git
     pkg-config
     libxml2.dev
   ];
