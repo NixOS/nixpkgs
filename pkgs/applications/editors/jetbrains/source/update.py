@@ -1,8 +1,9 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict nurl
 import os
 import subprocess
 import pprint
+import pathlib
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump, loads
@@ -80,6 +81,32 @@ def prefetch_android(variant: str, buildNumber: str) -> str:
     return convert_hash_to_sri(prefetch.stdout.strip())
 
 
+def generate_restarter_hash(nixpkgs_path: str, root_path: str) -> str:
+    print("* Generating restarter Cargo hash...")
+    root_name = pathlib.Path(root_path).name
+    output = subprocess.run(["nurl", "--expr", f'''
+        (import {nixpkgs_path} {{}}).rustPlatform.buildRustPackage {{
+            name = "restarter";
+            src = {root_path};
+            sourceRoot = "{root_name}/native/restarter";
+            cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        }}
+    '''], capture_output=True, check=True, text=True)
+    return output.stdout.strip()
+
+
+def generate_jps_hash(nixpkgs_path: str, root_path: str) -> str:
+    print("* Generating jps repo hash...")
+    jps_repo_nix = pathlib.Path(__file__).parent.joinpath("jps_repo.nix").resolve()
+    output = subprocess.run(["nurl", "--expr", f'''
+        (import {nixpkgs_path} {{}}).callPackage {jps_repo_nix} {{
+            jbr = (import {nixpkgs_path} {{}}).jetbrains.jdk-no-jcef;
+            src = {root_path};
+            jpsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        }}
+    '''], capture_output=True, check=True, text=True)
+    return output.stdout.strip()
+
 def get_args() -> (str, str):
     parser = ArgumentParser(
         description="Updates the IDEA / PyCharm source build infomations"
@@ -96,6 +123,10 @@ def main():
     idea_data = versions['x86_64-linux']['idea']
     pycharm_data = versions['x86_64-linux']['pycharm']
 
+    #                                     source<jetbr.<editr.<applc.<pkgs  <nixpkgs
+    nixpkgs_path = pathlib.Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
+    assert nixpkgs_path.joinpath("pkgs").is_dir(), f"nixpkgs_path ({nixpkgs_path}) doesn't seem to point to the root of the repo, please check if things were moved."
+
     result = { 'idea-oss': {}, 'pycharm-oss': {} }
     result['idea-oss']['version'] = idea_data['version']
     result['idea-oss']['buildNumber'] = idea_data['build_number']
@@ -106,8 +137,8 @@ def main():
     print('Fetching IDEA info...')
     result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-oss']['buildNumber'])
     result['idea-oss']['androidHash'] = prefetch_android('idea', result['idea-oss']['buildNumber'])
-    result['idea-oss']['jpsHash'] = ''
-    result['idea-oss']['restarterHash'] = ''
+    result['idea-oss']['jpsHash'] = generate_jps_hash(nixpkgs_path, ideaOutPath)
+    result['idea-oss']['restarterHash'] = generate_restarter_hash(nixpkgs_path, ideaOutPath)
     result['idea-oss']['mvnDeps'] = 'idea_maven_artefacts.json'
     result['idea-oss']['repositories'] = jar_repositories(ideaOutPath)
     result['idea-oss']['kotlin-jps-plugin'] = {}
@@ -117,8 +148,8 @@ def main():
     print('Fetching PyCharm info...')
     result['pycharm-oss']['ideaHash'], pycharmOutPath = prefetch_intellij_community('pycharm', result['pycharm-oss']['buildNumber'])
     result['pycharm-oss']['androidHash'] = prefetch_android('pycharm', result['pycharm-oss']['buildNumber'])
-    result['pycharm-oss']['jpsHash'] = ''
-    result['pycharm-oss']['restarterHash'] = ''
+    result['pycharm-oss']['jpsHash'] = generate_jps_hash(nixpkgs_path, pycharmOutPath)
+    result['pycharm-oss']['restarterHash'] = generate_restarter_hash(nixpkgs_path, pycharmOutPath)
     result['pycharm-oss']['mvnDeps'] = 'pycharm_maven_artefacts.json'
     result['pycharm-oss']['repositories'] = jar_repositories(pycharmOutPath)
     result['pycharm-oss']['kotlin-jps-plugin'] = {}
