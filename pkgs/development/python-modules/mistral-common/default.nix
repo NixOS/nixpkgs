@@ -14,6 +14,7 @@
   pydantic,
   pydantic-extra-types,
   requests,
+  sentencepiece,
   tiktoken,
   typing-extensions,
 
@@ -25,7 +26,6 @@
   pycountry,
   pydantic-settings,
   pytestCheckHook,
-  sentencepiece,
   soundfile,
   soxr,
   uvicorn,
@@ -53,6 +53,7 @@ buildPythonPackage rec {
     pydantic
     pydantic-extra-types
     requests
+    sentencepiece
     tiktoken
     typing-extensions
   ];
@@ -96,8 +97,7 @@ buildPythonPackage rec {
     soundfile
     soxr
     uvicorn
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ];
 
   disabledTests = [
     # Require internet
