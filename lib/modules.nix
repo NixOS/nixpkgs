@@ -1542,7 +1542,9 @@ let
     in
     mkIf option.isDefined (wrap (mkMerge defsWithPrio));
 
-  mkAliasIfDef = option: mkIf option.isDefined;
+  mkAliasIfDef =
+    lib.warn "Usage of 'mkAliasIfDef' has been deprecated. Use 'mkIf option.isDefined' instead."
+      (option: mkIf option.isDefined);
 
   /**
     Compatibility.
