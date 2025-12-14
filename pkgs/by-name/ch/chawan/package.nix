@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y1z1MlwbKGpvtgt4OZtfvxvsOSE6RhnsWUeaRvu7etU=";
+    hash = "sha256-JPFQsu5vLSesgpbX79Z5e0GGFIsC4PUJuZQS8a5Oq2c=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString (
