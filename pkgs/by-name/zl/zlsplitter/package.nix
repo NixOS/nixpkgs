@@ -87,6 +87,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # set the version for in the settings screen.
+    (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];
 
   installPhase = ''
