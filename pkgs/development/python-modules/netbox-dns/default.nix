@@ -31,6 +31,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/peteeckel/netbox-plugin-dns/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ felbinger ];
+    teams = with lib.teams; [ secshell ];
   };
 }

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -33,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-S/idjDdcRvqZqKmflkYJyQckz4/9k/8JY6eRDACk9Ag=";
+    hash = "sha256-L0CX383AMu8XlNbGL01VvBxvawJwAWHhTh3ak0sjo20=";
   };
 
   outputs = [
@@ -47,15 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "examples"
-  ];
-
-  patches = [
-    # Remove when version > 2.1.0
-    (fetchpatch {
-      name = "0001-lomiri-content-hub-treewide-Add-missing-LDM-include-dirs.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
-      hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
-    })
   ];
 
   postPatch = ''
@@ -116,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   preBuild =

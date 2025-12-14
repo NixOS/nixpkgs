@@ -3330,16 +3330,6 @@ with pkgs;
 
   marimo = with python3Packages; toPythonApplication marimo;
 
-  mecab =
-    let
-      mecab-nodic = callPackage ../tools/text/mecab/nodic.nix { };
-    in
-    callPackage ../tools/text/mecab {
-      mecab-ipadic = callPackage ../tools/text/mecab/ipadic.nix {
-        inherit mecab-nodic;
-      };
-    };
-
   mbutil = python310Packages.callPackage ../applications/misc/mbutil { };
 
   mcstatus = with python3Packages; toPythonApplication mcstatus;
@@ -4005,8 +3995,6 @@ with pkgs;
   twitch-chat-downloader =
     python3Packages.callPackage ../applications/misc/twitch-chat-downloader
       { };
-
-  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
   uftraceFull = uftrace.override {
     withLuaJIT = true;
@@ -8140,8 +8128,6 @@ with pkgs;
     physfs_2
     physfs
     ;
-
-  pingvin-share = callPackage ../servers/web-apps/pingvin-share { };
 
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;

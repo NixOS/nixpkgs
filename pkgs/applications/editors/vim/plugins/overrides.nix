@@ -1292,7 +1292,7 @@ assertNoAdditions {
     '';
   };
 
-  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (oa: {
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (old: {
     # add this to your lua config to prevent the plugin from trying to write in the
     # nix store:
     # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
@@ -1301,7 +1301,7 @@ assertNoAdditions {
       gawk
     ];
     dependencies = [ self.fzf-vim ];
-    passthru = oa.passthru // {
+    passthru = old.passthru // {
 
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
@@ -3140,8 +3140,8 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  rocks-nvim = super.rocks-nvim.overrideAttrs (oa: {
-    passthru = oa.passthru // {
+  rocks-nvim = super.rocks-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
       initLua = ''
         vim.g.rocks_nvim = {
           luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
@@ -3291,7 +3291,7 @@ assertNoAdditions {
   };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (
-    oa:
+    old:
     let
       libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
     in
@@ -3301,7 +3301,7 @@ assertNoAdditions {
           --replace-fail "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or '${lib.escapeShellArg libsqlite}'"
       '';
 
-      passthru = oa.passthru // {
+      passthru = old.passthru // {
         initLua = ''vim.g.sqlite_clib_path = "${libsqlite}"'';
       };
 
@@ -3692,7 +3692,7 @@ assertNoAdditions {
         sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
       };
     in
-    super.unicode-vim.overrideAttrs (oa: {
+    super.unicode-vim.overrideAttrs (old: {
       # redirect to /dev/null else changes terminal color
       buildPhase = ''
         cp "${unicode-data}" autoload/unicode/UnicodeData.txt
@@ -3700,8 +3700,7 @@ assertNoAdditions {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
 
-      passthru = oa.passthru // {
-
+      passthru = old.passthru // {
         initLua = ''vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"'';
       };
     });

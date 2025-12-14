@@ -165,7 +165,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.27.1";
+    version = "0.28";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -176,7 +176,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-HWzuPhI+oiCKBeiHK7x9Sc54ZB88Py60FzprMLlZGrY=";
+      hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
