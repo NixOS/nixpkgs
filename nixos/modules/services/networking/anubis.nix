@@ -204,7 +204,7 @@ let
     options = {
       # see other options above
       BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}.sock";
+        default = "${runtimeDirectoryPrefix name}anubis.sock";
         description = ''
           The address that Anubis listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for syntax.
           Use the prefix "${runtimeDirectoryPrefix "<name>"}". The prefix "/run/anubis" is deprecated.
@@ -215,7 +215,7 @@ let
         type = types.str;
       };
       METRICS_BIND = lib.mkOption {
-        default = "/run/anubis/${instanceName name}-metrics.sock";
+        default = "${runtimeDirectoryPrefix name}anubis-metrics.sock";
         description = ''
           The address Anubis' metrics server listens to. See Go's [`net.Listen`](https://pkg.go.dev/net#Listen) for
           syntax.
