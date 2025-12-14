@@ -16,23 +16,34 @@
   glib,
   dotconf,
   libsndfile,
-  runtimeShell,
+
   withLibao ? true,
   libao,
+
+  withPipewire ? true,
+  pipewire,
+
   withPulse ? false,
   libpulseaudio,
+
   withAlsa ? false,
   alsa-lib,
+
   withOss ? false,
+
   withFlite ? true,
   flite,
+
   withEspeak ? true,
   espeak,
   sonic,
   pcaudiolib,
   mbrola,
+
   withPico ? true,
   svox,
+  runtimeShell,
+
   libsOnly ? false,
 }:
 
@@ -85,6 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemdMinimal # libsystemd
   ]
+  ++ lib.optionals withPipewire [
+    pipewire
+  ]
   ++ lib.optionals withAlsa [
     alsa-lib
   ]
@@ -111,9 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--sysconfdir=/etc"
       # Audio method falls back from left to right.
-      "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+      "--with-default-audio-method=\"libao,pulse,pipewire,alsa,oss\""
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
       "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      (withFeature withPipewire "pipewire")
       (withFeature withPulse "pulse")
       (withFeature withLibao "libao")
       (withFeature withAlsa "alsa")
