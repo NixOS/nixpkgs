@@ -126,12 +126,6 @@ self: super:
     };
   });
 
-  xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      badPlatforms = lib.platforms.aarch64;
-    };
-  });
-
   xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
     meta = attrs.meta // {
       platforms = lib.platforms.linux;

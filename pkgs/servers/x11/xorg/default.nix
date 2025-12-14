@@ -135,6 +135,7 @@
   xf86-video-ark,
   xf86-video-geode,
   xf86-video-nouveau,
+  xf86-video-s3virge,
   xfd,
   xfontsel,
   xfs,
@@ -348,6 +349,7 @@ self: with self; {
   xf86videoark = xf86-video-ark;
   xf86videogeode = xf86-video-geode;
   xf86videonouveau = xf86-video-nouveau;
+  xf86videos3virge = xf86-video-s3virge;
   xkeyboardconfig = xkeyboard-config;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
@@ -1281,44 +1283,6 @@ self: with self; {
       buildInputs = [
         xorgproto
         libdrm
-        libpciaccess
-        xorgserver
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videos3virge = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libpciaccess,
-      xorgserver,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xf86-video-s3virge";
-      version = "1.11.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/driver/xf86-video-s3virge-1.11.1.tar.xz";
-        sha256 = "1qzfcq3rlpfdb6qxz8hrp9py1q11vyzl4iqxip1vpgfnfn83vl6f";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
         libpciaccess
         xorgserver
       ];
