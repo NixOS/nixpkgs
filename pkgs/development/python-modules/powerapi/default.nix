@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   pyzmq,
   setproctitle,
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "powerapi";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "powerapi-ng";
@@ -58,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework for building software-defined power meters";
     homepage = "https://github.com/powerapi-ng/powerapi";
-    changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/v${version}";
+    changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
