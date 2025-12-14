@@ -24,12 +24,12 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 ## How to update stuff:
  - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Run ./source/update.py ./source/sources.json ./bin/versions.json. This will update the source version to the version of their corresponding binary packages.
+   - Run ./source/update.py ./source/sources.json. This will update the source version to the latest available version.
    - Run these commands respectively:
      - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
      - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
    - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
-   - Fill out `restarterHash` and `jpsHash` in `./source/sources.json` and make sure the Kotlin version used is correct.
+   - Make sure the Kotlin version used is correct.
    - Do a test build
    - If it succeeds, make a commit
    - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
