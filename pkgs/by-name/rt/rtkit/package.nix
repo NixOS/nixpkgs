@@ -10,6 +10,7 @@
   libcap,
   polkit,
   systemd,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "sysusersdir = '''" \
       "sysusersdir = '${placeholder "out"}/lib/sysusers.d'"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/pipewire/rtkit";
