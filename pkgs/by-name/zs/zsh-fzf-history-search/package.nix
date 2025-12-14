@@ -35,6 +35,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/joshskidmore/zsh-fzf-history-search";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.Gliczy ];
   };
 }
