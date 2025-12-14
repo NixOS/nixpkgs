@@ -7,6 +7,7 @@
   perl,
   webkitgtk_4_1,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
