@@ -13,13 +13,6 @@ let
     url = "mirror://gnu/grep/grep-${version}.tar.gz";
     sha256 = "05iayw5sfclc476vpviz67hdy03na0pz2kb5csa50232nfx34853";
   };
-
-  # Thanks to the live-bootstrap project!
-  # See https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/grep-2.4
-  makefile = fetchurl {
-    url = "https://github.com/fosslinux/live-bootstrap/raw/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/grep-2.4/mk/main.mk";
-    sha256 = "08an9ljlqry3p15w28hahm6swnd3jxizsd2188przvvsj093j91k";
-  };
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -54,7 +47,7 @@ bash.runCommand "${pname}-${version}"
     cd grep-${version}
 
     # Configure
-    cp ${makefile} Makefile
+    cp ${./main.mk} Makefile
 
     # Build
     make CC="tcc -B ${tinycc.libs}/lib"

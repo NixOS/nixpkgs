@@ -1140,6 +1140,13 @@
     githubId = 83360;
     name = "Aleksey Sidorov";
   };
+  aleksi = {
+    email = "ahannula4@gmail.com";
+    github = "Gskartwii";
+    githubId = 6651822;
+    name = "Aleksi Hannula";
+    matrix = "@aleksi:pikaviestin.fi";
+  };
   alemonmk = {
     email = "almk@rmntn.net";
     github = "alemonmk";
@@ -4525,6 +4532,12 @@
     github = "charlieshanley";
     githubId = 8228888;
     name = "Charlie Hanley";
+  };
+  channinghe = {
+    email = "channinghey@gmail.com";
+    github = "ChanningHe";
+    githubId = 52875777;
+    name = "Channing He";
   };
   chaoflow = {
     email = "flo@chaoflow.net";
@@ -11181,6 +11194,11 @@
     github = "imurx";
     githubId = 3698237;
     name = "ImUrX";
+  };
+  Inarizxc = {
+    name = "Inarizxc";
+    github = "Inarizxc";
+    githubId = 128096405;
   };
   inclyc = {
     email = "i@lyc.dev";
@@ -20258,12 +20276,6 @@
     github = "peret";
     githubId = 617977;
   };
-  periklis = {
-    email = "theopompos@gmail.com";
-    github = "periklis";
-    githubId = 152312;
-    name = "Periklis Tsirakidis";
-  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
@@ -24889,6 +24901,12 @@
     githubId = 2060836;
     name = "Casey Stark";
   };
+  starryreverie = {
+    email = "starryreverie@proton.me";
+    github = "StarryReverie";
+    githubId = 42143810;
+    name = "Justin Chen";
+  };
   starsep = {
     email = "nix@starsep.com";
     github = "starsep";
@@ -26650,6 +26668,12 @@
     githubId = 6740669;
     name = "Tom Smeets";
   };
+  tonybanters = {
+    email = "tony@tonybtw.com";
+    github = "tonybanters";
+    githubId = 27378358;
+    name = "tony";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
@@ -27868,6 +27892,11 @@
     email = "github-dev@mail2013.wamser.eu";
     github = "wamserma";
     githubId = 60148;
+  };
+  wariuccio = {
+    name = "Wariuccio";
+    github = "wariuccio";
+    githubId = 191101255;
   };
   water-sucks = {
     email = "varun@snare.dev";
