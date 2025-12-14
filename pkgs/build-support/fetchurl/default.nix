@@ -284,7 +284,7 @@ lib.extendMkDerivation {
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
-      SSL_CERT_FILE =
+      env.SSL_CERT_FILE =
         if
           (
             hash_.outputHash == ""
@@ -339,7 +339,7 @@ lib.extendMkDerivation {
         else
           ''
             ${netrcPhase}
-            curlOpts="$curlOpts --netrc-file $PWD/netrc"
+            curlOpts+=(--netrc-file "$PWD/netrc")
           '';
 
       inherit meta;

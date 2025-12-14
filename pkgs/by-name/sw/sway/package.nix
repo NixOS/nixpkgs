@@ -28,7 +28,7 @@ let
   inherit (lib.meta) getExe;
   inherit (lib.strings) concatMapStrings optionalString;
 
-  sway = sway-unwrapped.overrideAttrs (oa: {
+  sway = sway-unwrapped.overrideAttrs (old: {
     inherit isNixOS enableXWayland;
   });
   baseWrapper = writeShellScriptBin sway.meta.mainProgram ''
