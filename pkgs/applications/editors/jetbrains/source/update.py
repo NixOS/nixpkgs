@@ -1,13 +1,20 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3 python3.pkgs.xmltodict nurl
+#! nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.xmltodict python3.pkgs.requests nurl
 import os
 import subprocess
 import pprint
 import pathlib
+import requests
+import json
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump, loads
 from sys import stdout
+from packaging import version
+
+UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
+IDES_FILE_PATH = pathlib.Path(__file__).parent.joinpath("..").joinpath("ides.json").resolve()
+
 
 def convert_hash_to_sri(base32: str) -> str:
     result = subprocess.run(["nix-hash", "--to-sri", "--type", "sha256", base32], capture_output=True, check=True, text=True)
@@ -18,6 +25,38 @@ def ensure_is_list(x):
     if type(x) != list:
         return [x]
     return x
+
+
+def one_or_more(x):
+    return x if isinstance(x, list) else [x]
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def download_channels():
+    print(f"Checking for updates from {UPDATES_URL}")
+    updates_response = requests.get(UPDATES_URL)
+    updates_response.raise_for_status()
+    root = parse(updates_response.text)
+    products = root["products"]["product"]
+    return {
+        channel["@name"]: channel
+        for product in products
+        if "channel" in product
+        for channel in one_or_more(product["channel"])
+    }
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def build_version(build):
+    build_number = build["@fullNumber"] if "@fullNumber" in build else build["@number"]
+    return version.parse(build_number)
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def latest_build(channel):
+    builds = one_or_more(channel["build"])
+    latest = max(builds, key=build_version)
+    return latest
 
 
 def jar_repositories(root_path: str) -> list[str]:
@@ -107,32 +146,55 @@ def generate_jps_hash(nixpkgs_path: str, root_path: str) -> str:
     '''], capture_output=True, check=True, text=True)
     return output.stdout.strip()
 
-def get_args() -> (str, str):
+
+def get_args() -> str:
     parser = ArgumentParser(
         description="Updates the IDEA / PyCharm source build infomations"
     )
     parser.add_argument("out", help="File to output json to")
-    parser.add_argument("path", help="Path to the bin/versions.json file")
     args = parser.parse_args()
-    return args.path, args.out
+    return args.out
+
+
+# TODO: Code duplication to update_bin.py - eventually refactor or merge scripts
+def get_latest_versions(channels: dict, ides: dict, name: str) -> (str, str):
+    update_channel = ides[name]['updateChannel']
+    print(f"Fetching latest {name} (channel: {update_channel}) release...")
+    channel = channels[update_channel]
+
+    build = latest_build(channel)
+    new_version = build["@version"]
+    new_build_number = ""
+    if "@fullNumber" not in build:
+        new_build_number = build["@number"]
+    else:
+        new_build_number = build["@fullNumber"]
+    version_number = new_version.split(' ')[0]
+
+    print(f"* Version: {version_number} - Build: {new_build_number}")
+    return version_number, new_build_number
 
 
 def main():
-    versions_path, out = get_args()
-    versions = loads(open(versions_path).read())
-    idea_data = versions['x86_64-linux']['idea']
-    pycharm_data = versions['x86_64-linux']['pycharm']
+    out = get_args()
 
     #                                     source<jetbr.<editr.<applc.<pkgs  <nixpkgs
     nixpkgs_path = pathlib.Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
     assert nixpkgs_path.joinpath("pkgs").is_dir(), f"nixpkgs_path ({nixpkgs_path}) doesn't seem to point to the root of the repo, please check if things were moved."
 
+    channels = download_channels()
+    with open(IDES_FILE_PATH, "r") as ides_file:
+        ides = json.load(ides_file)
+
+    idea_version, idea_build = get_latest_versions(channels, ides, 'idea-oss')
+    pycharm_version, pycharm_build = get_latest_versions(channels, ides, 'pycharm-oss')
+
     result = { 'idea-oss': {}, 'pycharm-oss': {} }
-    result['idea-oss']['version'] = idea_data['version']
-    result['idea-oss']['buildNumber'] = idea_data['build_number']
+    result['idea-oss']['version'] = idea_version
+    result['idea-oss']['buildNumber'] = idea_build
     result['idea-oss']['buildType'] = 'idea'
-    result['pycharm-oss']['version'] = pycharm_data['version']
-    result['pycharm-oss']['buildNumber'] = pycharm_data['build_number']
+    result['pycharm-oss']['version'] = pycharm_version
+    result['pycharm-oss']['buildNumber'] = pycharm_build
     result['pycharm-oss']['buildType'] = 'pycharm'
     print('Fetching IDEA info...')
     result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-oss']['buildNumber'])
