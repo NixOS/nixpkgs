@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/cnats/cnats-config.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  '';
+
   meta = {
     description = "C API for the NATS messaging system";
     homepage = "https://github.com/nats-io/nats.c";
