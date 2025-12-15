@@ -1,6 +1,16 @@
 source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
 
+# Normalize `curlOpts` as a string.
+# If defined as a list (deprecated), it would be a bash array.
+if [[ "$(declare -p curlOpts 2&>/dev/null || true)" =~ ^"declare -a" ]]; then
+    unset _temp
+    _temp="${curlOpts[*]}"
+    unset curlOpts
+    curlOpts=$_temp
+    unset _temp
+fi
+
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for
