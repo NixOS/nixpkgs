@@ -50,7 +50,7 @@ let
 
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
+    hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
   };
 
   # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.

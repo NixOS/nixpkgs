@@ -28,8 +28,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     includedir=$out/include
 
     Name: raygui
-    Description: ${finalAttrs.meta.description}
-    URL: ${finalAttrs.meta.homepage}
+    Description: Simple and easy-to-use immediate-mode gui library
+    URL: https://github.com/raysan5/raygui
     Version: ${finalAttrs.version}
     Cflags: -I"{includedir}"
     EOF

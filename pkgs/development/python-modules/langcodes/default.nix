@@ -42,9 +42,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langcodes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
     homepage = "https://github.com/georgkrause/langcodes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

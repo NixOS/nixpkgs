@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tsidp";
-  version = "0.0.6";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tsidp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qOZJkCVAgR6xXZryysyFbf/P8zrLhe2iHYWFlIadiBM=";
+    hash = "sha256-ClN3aZ0mLmb4UPSW+oQSrKPar56wbHp+NXOzGA6GpCQ=";
   };
 
   vendorHash = "sha256-iBy+osK+2LdkTzXhrkSaB6nWpUCpr8VkxJTtcfVCFuw=";

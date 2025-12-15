@@ -18,13 +18,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildah";
-  version = "1.42.1";
+  version = "1.42.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ABZe+Ei30o7vy156Fiux9r+B5PBSW8ECYpdwnwCn66k=";
+    hash = "sha256-YWyA2wTIlJNwuqcPHOBFZ2wr46Z0I83FWRew/FC3Wxs=";
   };
 
   outputs = [

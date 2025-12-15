@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "botocore-stubs";
-  version = "1.40.76";
+  version = "1.42.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit version;
-    hash = "sha256-Jh1R5xoWSpOr+calx3nFZk0wfsRFDekXrZy+fCl4IiM=";
+    hash = "sha256-kv3SodkRNVFm2j4w6bubGAP34srsDZE/X606kgNSzm0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "botocore-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations and code completion for botocore";
     homepage = "https://pypi.org/project/botocore-stubs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

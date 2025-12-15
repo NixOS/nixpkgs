@@ -39,10 +39,10 @@ buildPythonPackage rec {
     "test_matches_section__with_bad_arg"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Add support for commands that use configuration files to Click";
     homepage = "https://github.com/click-contrib/click-configfile";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inscriptis" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTML to text converter";
     mainProgram = "inscript.py";
     homepage = "https://github.com/weblyzard/inscriptis";
     changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

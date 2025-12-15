@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ typst ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "typst-live";
   };

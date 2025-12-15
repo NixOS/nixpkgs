@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     inherit (wireguard-tools) tests;
   };
 
-  meta = with lib; {
+  meta = {
     inherit (wireguard-tools.meta) homepage license maintainers;
     description = "Kernel module for the WireGuard secure network tunnel";
     longDescription = ''
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
       (as WireGuard was merged into the Linux kernel for 5.6)
     '';
     downloadPage = "https://git.zx2c4.com/wireguard-linux-compat/refs/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

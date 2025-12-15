@@ -24,7 +24,7 @@
 
 let
   pname = "ansible";
-  version = "12.2.0";
+  version = "13.0.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BWPf0z69KMr2zNx6bSKn/a+9nJxC/vyuUXlhalOjUhE=";
+    hash = "sha256-/Q9KKcPndhcBG5jYDkV5wx4dWPQJKNPo/V5DRpZnZ5c=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -90,13 +90,13 @@ buildPythonPackage {
   # difficult to test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Radically simple IT automation";
     mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       HarisDotParis
       robsliwi
     ];

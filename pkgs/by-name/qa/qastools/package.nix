@@ -33,14 +33,13 @@ stdenv.mkDerivation rec {
     qttools
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Collection of desktop applications for ALSA configuration";
     homepage = "https://gitlab.com/sebholt/qastools";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       avnik
-      orivej
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

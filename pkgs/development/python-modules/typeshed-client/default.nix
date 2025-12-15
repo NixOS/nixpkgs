@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from typeshed and other typing stubs";
     homepage = "https://github.com/JelleZijlstra/typeshed_client";
     changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

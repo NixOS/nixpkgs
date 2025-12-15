@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqltrie" ];
 
-  meta = with lib; {
+  meta = {
     description = "DVC's data management subsystem";
     homepage = "https://github.com/iterative/sqltrie";
     changelog = "https://github.com/iterative/sqltrie/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

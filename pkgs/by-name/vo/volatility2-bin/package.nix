@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://volatilityfoundation.org/";
     mainProgram = "volatility2";
     description = "Advanced memory forensics framework";

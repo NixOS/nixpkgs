@@ -36,13 +36,13 @@ buildPythonPackage rec {
     "test_000_check_incref"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/SEKOIA-IO/py-radix";
-    license = with licenses; [
+    license = with lib.licenses; [
       isc
       bsdOriginal
     ];
-    teams = [ teams.wdz ];
+    teams = [ lib.teams.wdz ];
   };
 }

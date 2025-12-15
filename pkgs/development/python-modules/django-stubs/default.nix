@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # AttributeError: module 'django.contrib.auth.forms' has no attribute 'SetUnusablePasswordMixin'
@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Django";
     homepage = "https://github.com/typeddjango/django-stubs";
     changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

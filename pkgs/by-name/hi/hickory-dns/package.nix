@@ -5,6 +5,7 @@
   pkg-config,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,11 +27,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tests expect internet connectivity to query real nameservers like 8.8.8.8
   doCheck = false;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust based DNS client, server, and resolver";
     homepage = "https://hickory-dns.org/";
+    changelog = "https://github.com/hickory-dns/hickory-dns/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ colinsane ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

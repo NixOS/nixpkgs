@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) doas; };
 
-  meta = with lib; {
+  meta = {
     description = "Executes the given command as another user";
     mainProgram = "doas";
     homepage = "https://github.com/Duncaen/OpenDoas";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
 }

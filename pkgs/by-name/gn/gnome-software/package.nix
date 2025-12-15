@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "49.1";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Sd/sp3kogBdW0MU4bB0gRUygd2AKXR7WbsRu4zoyxm0=";
+    hash = "sha256-thC2kyqNZmQyvFjWx4xFaM1j1EKuc224vixMoBu8lGw=";
   };
 
   patches = [
@@ -114,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
     homepage = "https://apps.gnome.org/Software/";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

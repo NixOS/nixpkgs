@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "3.11.0";
+  version = "3.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     tag = "v${version}";
-    hash = "sha256-L4NTURGmRlM2ZY11NvP36EoImPu1ncb+CBFCeuCC+eQ=";
+    hash = "sha256-n+DSBzb3XXzMEqx8ApFLymU1/IPZTcEFgRarvmYkZVY=";
   };
 
   nativeBuildInputs = [
@@ -82,11 +82,11 @@ buildPythonPackage rec {
 
   passthru.c-blosc2 = c-blosc2;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the extremely fast Blosc2 compression library";
     homepage = "https://github.com/Blosc/python-blosc2";
     changelog = "https://github.com/Blosc/python-blosc2/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

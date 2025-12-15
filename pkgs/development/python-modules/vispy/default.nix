@@ -71,11 +71,11 @@ buildPythonPackage rec {
     "vispy.visuals"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive scientific visualization in Python";
     homepage = "https://vispy.org/index.html";
     changelog = "https://github.com/vispy/vispy/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ goertzenator ];
   };
 }

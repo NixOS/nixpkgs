@@ -364,13 +364,13 @@
 
 buildPythonPackage rec {
   pname = "types-aiobotocore";
-  version = "2.25.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_aiobotocore";
     inherit version;
-    hash = "sha256-ayRYrBwJmd4LpKHc+/O8DVx8ouoMcvZzKr5n0I6/AkA=";
+    hash = "sha256-i5mMof92tnZ72hgKk7C1D8j24V5HzcmYZ6XvRMnXM1Q=";
   };
 
   build-system = [ setuptools ];
@@ -1107,10 +1107,10 @@ buildPythonPackage rec {
   # Package has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
     homepage = "https://pypi.org/project/types-aiobotocore/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

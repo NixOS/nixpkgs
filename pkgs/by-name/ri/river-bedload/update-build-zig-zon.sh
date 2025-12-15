@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash jq zon2nix
+#!nix-shell -i bash -p bash jq zon2nix wget
 
 commit=$(nix-instantiate --eval -A river-bedload.src.rev | jq --raw-output)
 

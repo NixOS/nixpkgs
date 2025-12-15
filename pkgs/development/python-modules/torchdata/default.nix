@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -52,6 +53,11 @@ buildPythonPackage rec {
     parameterized
     pytest-xdist
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: DataLoader timed out after 5 seconds
+    "test_ind_worker_queue"
   ];
 
   meta = {

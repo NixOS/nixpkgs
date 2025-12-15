@@ -2,7 +2,17 @@
   fetchFromGitHub,
   nix-update-script,
   renode,
+  lib,
 }:
+let
+  normalizedVersion =
+    v:
+    let
+      parts = lib.splitString "-" v;
+      result = builtins.head parts;
+    in
+    result;
+in
 renode.overrideAttrs (old: rec {
   pname = "renode-unstable";
   version = "1.16.0-unstable-2025-08-08";
@@ -16,9 +26,9 @@ renode.overrideAttrs (old: rec {
   };
 
   prePatch = ''
-    substituteInPlace tools/building/createAssemblyInfo.sh \
-      --replace CURRENT_INFORMATIONAL_VERSION="`git rev-parse --short=8 HEAD`" \
-      CURRENT_INFORMATIONAL_VERSION="${builtins.substring 0 8 src.rev}"
+    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${normalizedVersion version}.0")/g' src/Renode/Properties/AssemblyInfo.template
+    sed -i 's/AssemblyInformationalVersion("%INFORMATIONAL_VERSION%")/AssemblyInformationalVersion("${src.rev}")/g' src/Renode/Properties/AssemblyInfo.template
+    mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
   '';
 
   passthru = old.passthru // {

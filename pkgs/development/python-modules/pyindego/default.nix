@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyIndego" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for Bosch API for lawnmowers";
     homepage = "https://github.com/sander1988/pyIndego";
     changelog = "https://github.com/sander1988/pyIndego/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

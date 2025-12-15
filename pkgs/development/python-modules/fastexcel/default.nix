@@ -20,19 +20,19 @@
 
 buildPythonPackage rec {
   pname = "fastexcel";
-  version = "0.17.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ToucanToco";
     repo = "fastexcel";
     tag = "v${version}";
-    hash = "sha256-MwwcxCnBDN5bK+Yv4LTdGCEFA/QbFE3tI9nN3dx1rrY=";
+    hash = "sha256-d55KHkY6kMuEcX1ApHZZbwnyjEObfPpMrxR+cQshi24=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-X8qBIFCFq+7t5EtskVej+RcX1Egl2iGo4Ntqe3JsQvU=";
+    hash = "sha256-ja8hYSq2BiajV/ZlN8EJEFypKzbv80w8iKij3yZst3M=";
   };
 
   nativeBuildInputs = [

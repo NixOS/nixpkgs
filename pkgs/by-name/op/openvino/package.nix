@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_MODULE_PATH:PATH=${placeholder "out"}/lib/cmake"
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
     "-DOpenCV_DIR=${lib.getLib opencv}/lib/cmake/opencv4/"
-    "-DCMAKE_PREFIX_PATH=${lib.getLib protobuf}"
+    "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
@@ -142,8 +142,7 @@ stdenv.mkDerivation rec {
     # system libs
     (cmakeBool "ENABLE_SYSTEM_FLATBUFFERS" true)
     (cmakeBool "ENABLE_SYSTEM_OPENCL" true)
-    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" true)
-    (cmakeBool "Protobuf_USE_STATIC_LIBS" false)
+    (cmakeBool "ENABLE_SYSTEM_PROTOBUF" false)
     (cmakeBool "ENABLE_SYSTEM_PUGIXML" true)
     (cmakeBool "ENABLE_SYSTEM_SNAPPY" true)
     (cmakeBool "ENABLE_SYSTEM_TBB" true)
@@ -164,7 +163,6 @@ stdenv.mkDerivation rec {
     libxml2
     ocl-icd
     opencv
-    protobuf
     pugixml
     snappy
     onetbb
@@ -188,7 +186,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
@@ -199,8 +197,8 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 }

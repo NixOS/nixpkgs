@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${i3}/bin"
   '');
 
-  meta = with lib; {
+  meta = {
     homepage = "https://polybar.github.io/";
     changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
     description = "Fast and easy-to-use tool for creating status bars";
@@ -113,13 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
       status bars for their desktop environment, without the need of
       having a black belt in shell scripting.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       afldcr
-      Br1ght0ne
       moni
     ];
     mainProgram = "polybar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

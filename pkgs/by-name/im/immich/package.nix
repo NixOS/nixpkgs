@@ -12,8 +12,10 @@
   # build-time deps
   pkg-config,
   makeWrapper,
+  binaryen,
   curl,
   cacert,
+  extism-js,
   unzip,
   # runtime deps
   cairo,
@@ -111,20 +113,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.2.3";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OoToTRDPXWOa7d1j1xvkZt+vKWBX4eHDiIsFs3bIlvw=";
+    hash = "sha256-K/E5bQraTlvNx1Cd0bKyY6ZhesafGccqVZ9Mu6Q0pZ0=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     pname = "immich";
     inherit (finalAttrs) version src;
     fetcherVersion = 2;
-    hash = "sha256-igkO0ID0/9uPtFAXL2v5bcFbCpZK2lcYEctWBKtFKdU=";
+    hash = "sha256-i0JHKjsQcdDUrDLK0hJGOvVRh/aOyvms/k+6WEPbyh8=";
   };
 
   postPatch = ''
@@ -195,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     \) -exec rm -r {} +
 
     mkdir -p "$packageOut/build"
+    ln -s '${finalAttrs.passthru.plugins}' "$packageOut/build/corePlugin"
     ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
@@ -226,6 +229,37 @@ stdenv.mkDerivation (finalAttrs: {
 
     machine-learning = immich-machine-learning.override {
       immich = finalAttrs.finalPackage;
+    };
+
+    plugins = stdenv.mkDerivation {
+      pname = "immich-plugins";
+      inherit (finalAttrs) version src pnpmDeps;
+
+      nativeBuildInputs = [
+        binaryen
+        extism-js
+        nodejs
+        pnpm
+        pnpm.configHook
+      ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        pnpm --filter plugins build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        cd plugins
+        mkdir $out
+        cp -r dist manifest.json $out
+
+        runHook postInstall
+      '';
     };
 
     web = stdenv.mkDerivation {

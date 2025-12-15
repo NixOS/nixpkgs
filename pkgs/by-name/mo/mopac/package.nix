@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Semiempirical quantum chemistry";
     homepage = "https://github.com/openmopac/mopac";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

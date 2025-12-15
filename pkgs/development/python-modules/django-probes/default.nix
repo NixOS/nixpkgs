@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "django-probes";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "painless-software";
     repo = "django-probes";
     rev = version;
-    hash = "sha256-n3GI7fNxZkR0ZrI843q0EjkSfSK4LpUox09FFpigJY8=";
+    hash = "sha256-opto5AAUPhEsWbYh7nItUw7qNoUfOFFZ7tw5agWGBSg=";
   };
 
   build-system = [

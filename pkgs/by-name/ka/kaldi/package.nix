@@ -93,11 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -29,4 +29,4 @@ flutter pub get
 yq . pubspec.lock >"$PACKAGE_DIR/pubspec.lock.json"
 popd
 rm -rf "$source"
-./update-gitHashes.py
+$(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json

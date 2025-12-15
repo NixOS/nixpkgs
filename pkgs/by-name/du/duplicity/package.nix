@@ -22,14 +22,14 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.5.1";
+    version = "3.0.6.3";
     format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-fL4rvXcLKfEXuy5LKpFjFu+P3be7/T342+BgeO/dfp8=";
+      hash = "sha256-WY2pQlWlqdsFGONUBdAoJM1sNr+Hu496pThhn8IKSXE=";
     };
 
     patches = [
@@ -84,6 +84,7 @@ let
         pygobject3
         fasteners
         paramiko
+        pexpect
         # Currently marked as broken.
         # pydrive2
       ]
@@ -160,13 +161,13 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
       description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
       homepage = "https://duplicity.gitlab.io/duplicity-web/";
-      license = licenses.gpl2Plus;
+      license = lib.licenses.gpl2Plus;
       mainProgram = "duplicity";
-      maintainers = with maintainers; [ corngood ];
+      maintainers = with lib.maintainers; [ corngood ];
     };
   };
 

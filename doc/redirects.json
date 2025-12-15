@@ -298,6 +298,30 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-nixpkgs-release-26.05": [
+    "release-notes.html#sec-nixpkgs-release-26.05"
+  ],
+  "sec-nixpkgs-release-26.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.05-highlights"
+  ],
+  "sec-nixpkgs-release-26.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib"
+  ],
+  "sec-nixpkgs-release-26.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.05-notable-changes"
+  ],
   "sec-nixpkgs-release-25.11": [
     "release-notes.html#sec-nixpkgs-release-25.11"
   ],
@@ -3400,15 +3424,6 @@
   ],
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
-  ],
-  "javascript-packages-nixpkgs": [
-    "index.html#javascript-packages-nixpkgs"
-  ],
-  "javascript-adding-or-updating-packages": [
-    "index.html#javascript-adding-or-updating-packages"
-  ],
-  "javascript-git-error": [
-    "index.html#javascript-git-error"
   ],
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"

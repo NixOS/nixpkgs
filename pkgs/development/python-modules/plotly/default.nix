@@ -90,7 +90,7 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions

@@ -75,12 +75,12 @@ stdenv.mkDerivation rec {
     url = "https://bitbucket.org/c0-lang/c0.git";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small safe subset of the C programming language, augmented with contracts";
     homepage = "https://c0.cs.cmu.edu/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # line 1: ../../bin/wrappergen: cannot execute: required file not found
     # make[2]: *** [../../lib.mk:83:
     broken = stdenv.hostPlatform.isLinux;

@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FFbRopIaAOpfb+Wbj+EUXRr89EQE108h8OMn+fpL+ew=";
+    hash = "sha256-MVj+GcSt0Q9bWLz7MpCIj9MtnHh/GRB3p+DapMPLxeY=";
   };
 
-  cargoHash = "sha256-JYvITscH1K6xLE6XZpMrEFZWcbue7x7xuPxVQW/Vjb0=";
+  cargoHash = "sha256-Ikur9G6oSdKbK7gdZozBkplUjPfSjIABTVHjX7UPPvc=";
 
   cargoPatches = [ ./Cargo.patch ];
 

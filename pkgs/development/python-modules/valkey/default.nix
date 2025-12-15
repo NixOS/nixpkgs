@@ -74,7 +74,7 @@ buildPythonPackage rec {
     ujson
     uvloop
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestMarks = [
     "onlycluster"

@@ -26,6 +26,8 @@ let
     env = {
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
+      # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
     };
   };
 in

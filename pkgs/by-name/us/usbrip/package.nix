@@ -38,12 +38,12 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "usbrip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to track the history of USB events";
     mainProgram = "usbrip";
     homepage = "https://github.com/snovvcrash/usbrip";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 }

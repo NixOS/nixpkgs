@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ephem" ];
 
-  meta = with lib; {
+  meta = {
     description = "Compute positions of the planets and stars";
     homepage = "https://github.com/brandon-rhodes/pyephem";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chrisrosset ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chrisrosset ];
   };
 }

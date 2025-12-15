@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "db_dtypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
     changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

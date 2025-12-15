@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Layout manager for the River window manager";
     homepage = "https://github.com/pkulak/filtile";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pkulak ];
     mainProgram = "filtile";
   };

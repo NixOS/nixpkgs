@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "health_check" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/KristianOellegaard/django-health-check";
     changelog = "https://github.com/revsys/django-health-check/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

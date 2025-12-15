@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   fixup-yarn-lock,
-  nodejs,
+  node-gyp-build,
   nodejs-slim,
   matrix-sdk-crypto-nodejs,
   nixosTests,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     fixup-yarn-lock
     nodejs-slim
     yarn
-    nodejs.pkgs.node-gyp-build
+    node-gyp-build
   ];
 
   configurePhase = ''

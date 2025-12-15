@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_subtests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

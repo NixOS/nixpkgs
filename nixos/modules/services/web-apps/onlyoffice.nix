@@ -30,6 +30,10 @@ in
         ```
         set $secure_link_secret "changeme";
         ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
       '';
     };
 

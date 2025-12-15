@@ -30,13 +30,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Default fallback theme used by implementations of the icon theme specification";
     homepage = "https://www.freedesktop.org/wiki/Software/icon-theme/";
     changelog = "https://gitlab.freedesktop.org/xdg/default-icon-theme/-/blob/${finalAttrs.src.rev}/NEWS";
-    platforms = platforms.unix;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
     pkgConfigModules = [ "default-icon-theme" ];
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

@@ -11,7 +11,6 @@
   pytest-cov-stub,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typer,
   uvicorn,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aiohomeconnect";
-  version = "0.23.1";
+  version = "0.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${version}";
-    hash = "sha256-66VT0+eHJ0Z1Q3aYNmBs1DRmaQBCUbVk3XrfJzGFj5E=";
+    hash = "sha256-mFUSrkVziN+A980w24ZupGLld5g4YG/6A4qa+Cpwe4Y=";
   };
 
   build-system = [ setuptools ];
@@ -54,7 +51,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiohomeconnect" ];
 

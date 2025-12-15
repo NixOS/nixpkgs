@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Alternative for S/KEY's 'key' command";
     longDescription = ''
       Donkey is an alternative for S/KEY's "key" command.  The new feature that
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       The name "Donkey" is an acronym of "Don't Key".
     '';
     homepage = "https://devel.ringlet.net/security/donkey";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raboof ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raboof ];
+    platforms = lib.platforms.all;
   };
 })

@@ -26,23 +26,23 @@
   },
   {
     "pname": "Microsoft.ComponentDetection.Common",
-    "version": "5.2.27",
-    "hash": "sha256-GJ6Aluv8yM2un91SFjEQLP1hqdsCfV/ef+GNw7XJVRM="
+    "version": "6.0.0",
+    "hash": "sha256-F01KCIqxFa4049bzvKGh59kpdk5UykSFFKaHEPQGVY4="
   },
   {
     "pname": "Microsoft.ComponentDetection.Contracts",
-    "version": "5.2.27",
-    "hash": "sha256-9VcdMKAzvw63QuDpF/UJV64pDBc/1OHORQIfiaD73Bg="
+    "version": "6.0.0",
+    "hash": "sha256-yRmgJVLDDMGlq550sqve7f+0/iwwHCT/GMb0/6837Y4="
   },
   {
     "pname": "Microsoft.ComponentDetection.Detectors",
-    "version": "5.2.27",
-    "hash": "sha256-fUDPlEBAQz6wEh0f5t5bGI6vY8N5Bds920nZzcedbRQ="
+    "version": "6.0.0",
+    "hash": "sha256-JeXHB0XY003CpFDmgRzdgGRTcqFABywvEoxXHvlo8b0="
   },
   {
     "pname": "Microsoft.ComponentDetection.Orchestrator",
-    "version": "5.2.27",
-    "hash": "sha256-2I0UQ/Wajd1p09OWudm7XuPb8Qq6ZTBSLHCIepk0nw0="
+    "version": "6.0.0",
+    "hash": "sha256-+rSRgh0V5WEtZ/SqRGvPI9J4k1hPGczBwJfxx5mmWg0="
   },
   {
     "pname": "Microsoft.CSharp",
@@ -1091,8 +1091,8 @@
   },
   {
     "pname": "System.Threading.Channels",
-    "version": "9.0.8",
-    "hash": "sha256-2gKEpEc10gRfKvPSbxb//Oa5JRm5whWcXu1SqpNnoC0="
+    "version": "9.0.10",
+    "hash": "sha256-1SSATu8rInAryjFE98mInmAfrPQ48KixeqqAjn4xp64="
   },
   {
     "pname": "System.Threading.Tasks",

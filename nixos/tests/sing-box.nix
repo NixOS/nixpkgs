@@ -139,7 +139,6 @@ in
 
         services.nginx = {
           enable = true;
-          package = pkgs.nginxQuic;
 
           virtualHosts."${target_host}" = {
             onlySSL = true;

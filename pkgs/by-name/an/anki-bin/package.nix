@@ -54,7 +54,7 @@ let
     '';
   };
 
-  meta = with lib; {
+  meta = {
     inherit (anki.meta)
       license
       homepage
@@ -67,7 +67,7 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mahmoudk1000
       cything
     ];

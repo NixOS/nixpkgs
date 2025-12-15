@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upscaled version of scientifica";
     homepage = "https://github.com/oppiliappan/curie";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
   };
 }

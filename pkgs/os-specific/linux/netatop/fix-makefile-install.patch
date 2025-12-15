@@ -1,0 +1,23 @@
+diff --color -ruN netatop-3.2.2.orig/Makefile netatop-3.2.2/Makefile
+--- netatop-3.2.2.orig/Makefile	2025-11-07 13:09:10.106363095 -0500
++++ netatop-3.2.2/Makefile	2025-11-07 16:25:35.251434714 -0500
+@@ -20,14 +20,12 @@
+ 
+ 
+ install:		netatop.ko netatopd
+-			cd /usr/src; dkms add -m netatop -v $(CURVERS)
+-			dkms build   -m netatop -v $(CURVERS)
+-			dkms install -m netatop -v $(CURVERS)
++			install -m 0644 netatop.ko -Dt $(out)/lib/modules/$(KMODDIRVERSION)/extra
+ 			#
+-			install netatopd -t /usr/sbin
+-			install -m 0644 netatop.service -t /lib/systemd/system
+-			install man/netatop.4 -t /usr/share/man/man4
+-			install man/netatopd.8 -t /usr/share/man/man8
++			install netatopd -Dt $(out)/sbin
++			install -m 0644 netatop.service -Dt $(out)/lib/systemd/system
++			install man/netatop.4 -Dt $(out)/share/man/man4
++			install man/netatopd.8 -Dt $(out)/share/man/man8
+ 
+ clean:
+ 			rm -f *.o *.ko

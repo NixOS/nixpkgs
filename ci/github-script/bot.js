@@ -46,7 +46,7 @@ module.exports = async ({ github, context, core, dry }) => {
           name: 'maintainers',
         })
       ).data.artifacts[0]
-      if (!artifact) continue
+      if (!artifact || artifact.expired) continue
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
@@ -145,12 +145,26 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
+    //
+    // NOTE (2025-12-15): Temporarily skipping mergeability checks here
+    // on GitHub’s request to measure the impact of the resulting ref
+    // writes on their internal metrics; merge conflicts resulting from
+    // changes to target branches will not have labels applied for the
+    // duration. The label should still be updated on pushes.
+    //
+    // TODO: Restore mergeability checks in some form after a few days
+    // or when we hear back from GitHub.
     const pull_request = (
       await github.rest.pulls.get({
         ...context.repo,
         pull_number,
+        // Undocumented parameter (as of 2025-12-15), added by GitHub
+        // for us; stability unclear.
+        skip_mergeability_checks: true,
       })
     ).data
+
+    log('author', pull_request.user?.login)
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
@@ -607,7 +621,7 @@ module.exports = async ({ github, context, core, dry }) => {
         ).data.artifacts[0]
 
         // If the artifact is not available, the next iteration starts at the beginning.
-        if (artifact) {
+        if (artifact && !artifact.expired) {
           stats.artifacts++
 
           const { downloadPath } = await artifactClient.downloadArtifact(

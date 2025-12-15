@@ -130,11 +130,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use local storage management for Linux";
     homepage = "https://stratis-storage.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -20,11 +20,11 @@ let
     ${lib.optionalString (cfg.username != "") "login=${cfg.username}"}
     ${
       if cfg.protocol == "nsupdate" then
-        "/run/${RuntimeDirectory}/ddclient.key"
+        "password=/run/${RuntimeDirectory}/ddclient.key"
       else if (cfg.passwordFile != null) then
         "password=@password_placeholder@"
       else if (cfg.secretsFile != null) then
-        "@secrets_placeholder@"
+        "password=@secrets_placeholder@"
       else
         ""
     }

@@ -11,23 +11,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.1.1";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SL4UBDoD0pvpCKokQvKLAcS9cQJaFiA+IjswFARswdM=";
+    hash = "sha256-PT3oCNPRvEroyVNiICeO0hSHDzKUC6KcP9HnIw1kMQE=";
   };
 
-  cargoHash = "sha256-lo9JpsHkvyrEqFnIiGlU2o4rREeQeqWpe9WMwisvw+4=";
+  cargoHash = "sha256-lDOH4Ceap69fX6VWbgQoQfmYWZI+jPE0LJiXmqrTRn8=";
+
+  buildAndTestSubdir = "angrr";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postBuild = ''
+    mkdir --parents build/{man-pages,shell-completions}
+    cargo xtask man-pages --out build/man-pages
+    cargo xtask shell-completions --out build/shell-completions
+  '';
+  postInstall = ''
+    install -m400 -D ./direnv/angrr.sh $out/share/direnv/lib/angrr.sh
+    installManPage build/man-pages/*
     installShellCompletion --cmd angrr \
-      --bash <($out/bin/angrr completion bash) \
-      --fish <($out/bin/angrr completion fish) \
-      --zsh  <($out/bin/angrr completion zsh)
+      --bash build/shell-completions/angrr.bash \
+      --fish build/shell-completions/angrr.fish \
+      --zsh  build/shell-completions/_angrr
   '';
 
   passthru = {
@@ -41,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Tool for auto Nix GC roots retention";
+    description = "Temporary GC Roots Cleaner";
     homepage = "https://github.com/linyinfeng/angrr";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ yinfeng ];

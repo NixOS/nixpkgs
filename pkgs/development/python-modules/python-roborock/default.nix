@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "3.8.0";
+  version = "3.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-Ts1X07eTv4KXv344F3fGazHlDx6XXGQfdmxb+gd/0qc=";
+    hash = "sha256-fg5dWPW3z7PxFdLIVRvmnOS0FndAm5gMyUFZPXjEn00=";
   };
 
   pythonRelaxDeps = [ "pycryptodome" ];
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "roborock" ];
 

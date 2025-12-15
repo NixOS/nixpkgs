@@ -39,12 +39,12 @@ buildPythonPackage rec {
   # Tests are not shipped
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "ONVIF Client Implementation in Python";
     homepage = "https://github.com/hunterjm/python-onvif-zeep-async";
     changelog = "https://github.com/openvideolibs/python-onvif-zeep-async/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "onvif-cli";
   };
 }

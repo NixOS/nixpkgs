@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   makeWrapper,
   nixosTests,
@@ -42,14 +41,14 @@ let
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
   prisma-engines' = prisma-engines.overrideAttrs (old: rec {
-    version = "6.18.0";
+    version = "6.19.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
       rev = version;
-      hash = "sha256-p198o8ON5mGPCxK+gE0mW+JVyQlNsCsqwa8D4MNBkpA=";
+      hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
     };
-    cargoHash = "sha256-bNl04GoxLX+B8dPgqWL/VarreBVebjwNDwQjtQcJnsg=";
+    cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
@@ -58,22 +57,22 @@ let
     };
   });
   prisma' = (prisma.override { prisma-engines = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "6.18.0";
+    version = "6.19.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
       rev = version;
-      hash = "sha256-+WRWa59HlHN2CsYZfr/ptdW3iOuOPfDil8sLR5dWRA4=";
+      hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
     };
     pnpmDeps = old.pnpmDeps.override {
       inherit src version;
-      hash = "sha256-Et1UiZO2zyw9FHW0OuYK7AMfhIy5j7Q7GDQjaL6gjyg=";
+      hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
     };
   });
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.0.0";
+  version = "3.0.3";
 
   nativeBuildInputs = [
     makeWrapper
@@ -85,29 +84,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z8YsHTx5k+imeuVALF6Lx+Ksho35+r7tWo863zqUFzI=";
+    hash = "sha256-rkOD52suE6bihJqKvMdIvqHRIcWhSxXzUkCfmdNbC40=";
   };
-
-  patches = [
-    # Fix tests on v3.0.0. Remove on the next version.
-    (fetchpatch {
-      url = "https://github.com/umami-software/umami/commit/6135ef9dd218186ed663f89a511fa66bfecc6aec.patch";
-      hash = "sha256-uakKh8M8oC0fqQyPhosefg05+atRU3SVi7Y/xgIWq8M=";
-    })
-  ];
-
-  # install dev dependencies as well, for rollup
-  pnpmInstallFlags = [ "--prod=false" ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
-      pnpmInstallFlags
       version
       src
       ;
+    # prevent downloading dependencies for windows
+    # which bloat derivation size and fail to build on hydra
+    # https://github.com/NixOS/nixpkgs/pull/467820#issuecomment-3624054271
+    pnpmInstallFlags = [
+      "--force=false"
+      "--os=linux"
+      "--os=darwin"
+      "--cpu=x64"
+      "--cpu=arm64"
+    ];
     fetcherVersion = 2;
-    hash = "sha256-0E2grcK8n4Xi30eCAVQtmWSQna0B1A/lctP+rEzxQ3A=";
+    hash = "sha256-bqeJ0wzCtnuR6V67Qe1N9UcaHPLziuBhsn7eN8JVJbQ=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -117,6 +114,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.COLLECT_API_ENDPOINT = collectApiEndpoint;
   env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
   env.BASE_PATH = basePath;
+
+  # Needs to be non-empty during build
+  env.DATABASE_URL = "postgresql://";
 
   # Allow prisma-cli to find prisma-engines without having to download them
   # Only needed at build time for `prisma generate`.
@@ -188,7 +188,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/umami-software/umami/releases/tag/v${finalAttrs.version}";
     description = "Simple, easy to use, self-hosted web analytics solution";
     homepage = "https://umami.is/";
@@ -198,6 +198,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "umami-server";
-    maintainers = with maintainers; [ diogotcorreia ];
+    maintainers = with lib.maintainers; [ diogotcorreia ];
   };
 })

@@ -201,6 +201,7 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
+  ./programs/dsearch.nix
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
   ./programs/environment.nix
@@ -340,6 +341,7 @@
   ./programs/vivid.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
+  ./programs/wayland/dms-shell.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
@@ -409,6 +411,7 @@
   ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
   ./services/admin/docuum.nix
+  ./services/admin/komodo-periphery.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/pgadmin.nix
@@ -605,6 +608,7 @@
   ./services/development/zammad.nix
   ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/default.nix
+  ./services/display-managers/dms-greeter.nix
   ./services/display-managers/gdm.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/lemurs.nix
@@ -648,6 +652,7 @@
   ./services/hardware/buffyboard.nix
   ./services/hardware/ddccontrol.nix
   ./services/hardware/deepcool-digital-linux.nix
+  ./services/hardware/dell-bios-fan-control.nix
   ./services/hardware/display.nix
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
@@ -913,7 +918,6 @@
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
-  ./services/misc/preload.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radicle.nix
@@ -928,6 +932,7 @@
   ./services/misc/rmfakecloud.nix
   ./services/misc/rshim.nix
   ./services/misc/rsync.nix
+  ./services/misc/rumno.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/servarr/lidarr.nix
@@ -1123,6 +1128,7 @@
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/clatd.nix
+  ./services/networking/cloudflare-ddns.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflare-warp.nix
   ./services/networking/cloudflared.nix
@@ -1228,6 +1234,7 @@
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kismet.nix
+  ./services/networking/knot-resolver.nix
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
@@ -1242,6 +1249,7 @@
   ./services/networking/lxd-image-server.nix
   ./services/networking/magic-wormhole-mailbox-server.nix
   ./services/networking/matterbridge.nix
+  ./services/networking/meshtasticd.nix
   ./services/networking/microsocks.nix
   ./services/networking/mihomo.nix
   ./services/networking/minidlna.nix
@@ -1399,6 +1407,7 @@
   ./services/networking/trickster.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
+  ./services/networking/udp-over-tcp.nix
   ./services/networking/umurmur.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -1516,6 +1525,7 @@
   ./services/system/earlyoom.nix
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
+  ./services/system/nix-daemon-firewall.nix
   ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
   ./services/system/nvme-rs.nix
@@ -1594,7 +1604,6 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
-  ./services/web-apps/ethercalc.nix
   ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix
   ./services/web-apps/filebrowser.nix
@@ -1628,8 +1637,10 @@
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ifm.nix
+  ./services/web-apps/immich-kiosk.nix
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
+  ./services/web-apps/immichframe.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
@@ -1645,6 +1656,7 @@
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-meet.nix
   ./services/web-apps/lemmy.nix
+  ./services/web-apps/librechat.nix
   ./services/web-apps/librespeed.nix
   ./services/web-apps/libretranslate.nix
   ./services/web-apps/limesurvey.nix
@@ -1694,7 +1706,6 @@
   ./services/web-apps/phylactery.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/pihole-web.nix
-  ./services/web-apps/pingvin-share.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
@@ -1727,6 +1738,8 @@
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/trilium.nix
+  ./services/web-apps/tt-rss.nix
+  ./services/web-apps/tuliprox.nix
   ./services/web-apps/umami.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
@@ -1809,6 +1822,7 @@
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/nimdow.nix
   ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/oxwm.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
@@ -1944,7 +1958,6 @@
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
-  ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
   ./virtualisation/oci-options.nix

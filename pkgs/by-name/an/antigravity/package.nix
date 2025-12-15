@@ -4,6 +4,7 @@
   callPackage,
   vscode-generic,
   fetchurl,
+  jq,
   buildFHSEnv,
   writeShellScript,
   coreutils,
@@ -13,33 +14,23 @@
 
 let
   inherit (stdenv) hostPlatform;
-
-  sources =
-    (lib.importJSON ./sources.json)."${hostPlatform.system}"
+  information = (lib.importJSON ./information.json);
+  source =
+    information.sources."${hostPlatform.system}"
       or (throw "antigravity: unsupported system ${hostPlatform.system}");
-
-  version = "1.11.3";
-  vscodeVersion = "1.104.0";
 in
-callPackage vscode-generic {
-  inherit
-    commandLineArgs
-    useVSCodeRipgrep
-    version
-    vscodeVersion
-    ;
-
+(callPackage vscode-generic {
+  inherit commandLineArgs useVSCodeRipgrep;
+  inherit (information) version vscodeVersion;
   pname = "antigravity";
 
   executableName = "antigravity";
-  longName = "Google Antigravity";
+  longName = "Antigravity";
   shortName = "Antigravity";
   libraryName = "antigravity";
   iconName = "antigravity";
 
-  src = fetchurl {
-    inherit (sources) url hash;
-  };
+  src = fetchurl { inherit (source) url sha256; };
 
   sourceRoot = if hostPlatform.isDarwin then "Antigravity.app" else "Antigravity";
 
@@ -67,9 +58,7 @@ callPackage vscode-generic {
     );
 
   tests = { };
-  updateScript = ./update.sh;
-
-  dontFixup = hostPlatform.isDarwin;
+  updateScript = ./update.js;
 
   meta = {
     mainProgram = "antigravity";
@@ -90,4 +79,15 @@ callPackage vscode-generic {
       Zaczero
     ];
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    # Disable update checks
+    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ jq ];
+    postPatch = (oldAttrs.postPatch or "") + ''
+      productJson="${
+        if stdenv.hostPlatform.isDarwin then "Contents/Resources" else "resources"
+      }/app/product.json"
+      data=$(jq 'del(.updateUrl)' "$productJson")
+      echo "$data" > "$productJson"
+    '';
+  })

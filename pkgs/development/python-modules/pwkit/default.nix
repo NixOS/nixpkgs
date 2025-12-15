@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous science/astronomy tools";
     homepage = "https://github.com/pkgw/pwkit/";
     changelog = "https://github.com/pkgw/pwkit/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

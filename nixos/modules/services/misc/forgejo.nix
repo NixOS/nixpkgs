@@ -340,7 +340,7 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
+              PROTOCOL = "sendmail";
               FROM = "do-not-reply@example.org";
               SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
@@ -849,9 +849,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [
-    bendlas
-    emilylange
-    pyrox0
-  ];
+  meta.maintainers = lib.teams.forgejo.members;
 }

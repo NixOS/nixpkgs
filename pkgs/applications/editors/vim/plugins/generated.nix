@@ -9,7 +9,7 @@
 final: prev: {
   BetterLua-vim = buildVimPlugin {
     pname = "BetterLua.vim";
-    version = "2020-08-14";
+    version = "0-unstable-2020-08-14";
     src = fetchFromGitHub {
       owner = "euclidianAce";
       repo = "BetterLua.vim";
@@ -22,7 +22,7 @@ final: prev: {
 
   BufOnly-vim = buildVimPlugin {
     pname = "BufOnly.vim";
-    version = "2010-10-18";
+    version = "0.1-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "BufOnly.vim";
@@ -35,7 +35,7 @@ final: prev: {
 
   ChatGPT-nvim = buildVimPlugin {
     pname = "ChatGPT.nvim";
-    version = "2024-10-12";
+    version = "0.1.1-alpha-unstable-2024-10-12";
     src = fetchFromGitHub {
       owner = "jackMort";
       repo = "ChatGPT.nvim";
@@ -48,7 +48,7 @@ final: prev: {
 
   CheckAttach = buildVimPlugin {
     pname = "CheckAttach";
-    version = "2024-03-07";
+    version = "0.17-unstable-2024-03-07";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "CheckAttach";
@@ -61,7 +61,7 @@ final: prev: {
 
   Colour-Sampler-Pack = buildVimPlugin {
     pname = "Colour-Sampler-Pack";
-    version = "2012-11-30";
+    version = "2012.10.28-unstable-2012-11-30";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Colour-Sampler-Pack";
@@ -74,12 +74,12 @@ final: prev: {
 
   CopilotChat-nvim = buildVimPlugin {
     pname = "CopilotChat.nvim";
-    version = "2025-11-03";
+    version = "4.7.4-unstable-2025-11-20";
     src = fetchFromGitHub {
       owner = "CopilotC-Nvim";
       repo = "CopilotChat.nvim";
-      rev = "db56110b19c702053e86d54b48d8d570c59d0b6b";
-      sha256 = "1k980vbvdyaam9q6bp9wng7v5774rqn2lapns43fnxrmf9whnc0q";
+      rev = "df5376c132382dd47e3e552612940cbf25b3580c";
+      sha256 = "198rpnsd7m074gfhbn647s2q50s81vj5yli2al9h488hz10r0027";
     };
     meta.homepage = "https://github.com/CopilotC-Nvim/CopilotChat.nvim/";
     meta.hydraPlatforms = [ ];
@@ -87,12 +87,12 @@ final: prev: {
 
   Coqtail = buildVimPlugin {
     pname = "Coqtail";
-    version = "2025-08-03";
+    version = "1.8.0-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "whonore";
       repo = "Coqtail";
-      rev = "b12c31e8aa8d0f3bddd9a804b315a0de0823b989";
-      sha256 = "1lns9vrchs6prdxpxz998z94fsy99k5a7yd3wl2kmywx3pk1d6b4";
+      rev = "a25018e4f371016aefea267038ac5d083b615da9";
+      sha256 = "0jns8fwkhn88cgc1nz1gcwal4nprdzzawmgmm6c0m96r8a37rvrr";
     };
     meta.homepage = "https://github.com/whonore/Coqtail/";
     meta.hydraPlatforms = [ ];
@@ -100,7 +100,7 @@ final: prev: {
 
   DoxygenToolkit-vim = buildVimPlugin {
     pname = "DoxygenToolkit.vim";
-    version = "2010-11-06";
+    version = "0.2.13-unstable-2010-11-06";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "DoxygenToolkit.vim";
@@ -113,7 +113,7 @@ final: prev: {
 
   FTerm-nvim = buildVimPlugin {
     pname = "FTerm.nvim";
-    version = "2022-11-13";
+    version = "0-unstable-2022-11-13";
     src = fetchFromGitHub {
       owner = "numToStr";
       repo = "FTerm.nvim";
@@ -126,7 +126,7 @@ final: prev: {
 
   FixCursorHold-nvim = buildVimPlugin {
     pname = "FixCursorHold.nvim";
-    version = "2023-02-13";
+    version = "0-unstable-2023-02-13";
     src = fetchFromGitHub {
       owner = "antoinemadec";
       repo = "FixCursorHold.nvim";
@@ -139,7 +139,7 @@ final: prev: {
 
   GPTModels-nvim = buildVimPlugin {
     pname = "GPTModels.nvim";
-    version = "2025-06-26";
+    version = "0-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "Aaronik";
       repo = "GPTModels.nvim";
@@ -152,7 +152,7 @@ final: prev: {
 
   Improved-AnsiEsc = buildVimPlugin {
     pname = "Improved-AnsiEsc";
-    version = "2015-08-26";
+    version = "13.2-unstable-2015-08-26";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Improved-AnsiEsc";
@@ -165,7 +165,7 @@ final: prev: {
 
   Ionide-vim = buildVimPlugin {
     pname = "Ionide-vim";
-    version = "2025-05-11";
+    version = "0-unstable-2025-05-11";
     src = fetchFromGitHub {
       owner = "ionide";
       repo = "Ionide-vim";
@@ -178,7 +178,7 @@ final: prev: {
 
   Jenkinsfile-vim-syntax = buildVimPlugin {
     pname = "Jenkinsfile-vim-syntax";
-    version = "2021-01-26";
+    version = "0-unstable-2021-01-26";
     src = fetchFromGitHub {
       owner = "martinda";
       repo = "Jenkinsfile-vim-syntax";
@@ -191,7 +191,7 @@ final: prev: {
 
   LanguageTool-nvim = buildVimPlugin {
     pname = "LanguageTool.nvim";
-    version = "2020-10-19";
+    version = "1.0-unstable-2020-10-19";
     src = fetchFromGitHub {
       owner = "vigoux";
       repo = "LanguageTool.nvim";
@@ -204,12 +204,12 @@ final: prev: {
 
   LazyVim = buildVimPlugin {
     pname = "LazyVim";
-    version = "2025-11-06";
+    version = "15.13.0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "a507822c0f67df661d1411f9274a65ca9cc832f5";
-      sha256 = "16xzmyz7l64q2hfimvfqi8cwysw6vci919dmn5n7ydws6h5pijag";
+      rev = "c64a61734fc9d45470a72603395c02137802bc6f";
+      sha256 = "0krwss7gfssvgsk9gg7qzspcq2q8rp2f284i93ragl3ymxlsmqlx";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
     meta.hydraPlatforms = [ ];
@@ -217,12 +217,12 @@ final: prev: {
 
   LeaderF = buildVimPlugin {
     pname = "LeaderF";
-    version = "2025-11-06";
+    version = "1.25-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "Yggdroot";
       repo = "LeaderF";
-      rev = "682e251efc9c4e0545d1f6bbc8c8639b198ecb1b";
-      sha256 = "1hxy2rcx17kjxpi2yh1p1hy4q9g7yap3kwqsyc4gys0hzmjv3n6a";
+      rev = "9dc2086f87c0e9ec0acc2bd0054d5dd464d93847";
+      sha256 = "122cgb36s6imhyga2wz1m53cayzklqbnh54w0x04xk961spk62xv";
     };
     meta.homepage = "https://github.com/Yggdroot/LeaderF/";
     meta.hydraPlatforms = [ ];
@@ -230,7 +230,7 @@ final: prev: {
 
   LibDeflate-nvim = buildVimPlugin {
     pname = "LibDeflate.nvim";
-    version = "2025-06-16";
+    version = "0-unstable-2025-06-16";
     src = fetchFromGitHub {
       owner = "goropikari";
       repo = "LibDeflate.nvim";
@@ -243,7 +243,7 @@ final: prev: {
 
   LuaSnip-snippets-nvim = buildVimPlugin {
     pname = "LuaSnip-snippets.nvim";
-    version = "2022-03-17";
+    version = "0-unstable-2022-03-17";
     src = fetchFromGitHub {
       owner = "molleweide";
       repo = "LuaSnip-snippets.nvim";
@@ -256,7 +256,7 @@ final: prev: {
 
   MatchTagAlways = buildVimPlugin {
     pname = "MatchTagAlways";
-    version = "2017-05-20";
+    version = "0-unstable-2017-05-20";
     src = fetchFromGitHub {
       owner = "Valloric";
       repo = "MatchTagAlways";
@@ -269,7 +269,7 @@ final: prev: {
 
   Navigator-nvim = buildVimPlugin {
     pname = "Navigator.nvim";
-    version = "2023-02-02";
+    version = "0.6-unstable-2023-02-02";
     src = fetchFromGitHub {
       owner = "numToStr";
       repo = "Navigator.nvim";
@@ -282,7 +282,7 @@ final: prev: {
 
   NeoSolarized = buildVimPlugin {
     pname = "NeoSolarized";
-    version = "2020-08-07";
+    version = "0-unstable-2020-08-07";
     src = fetchFromGitHub {
       owner = "overcache";
       repo = "NeoSolarized";
@@ -295,7 +295,7 @@ final: prev: {
 
   NotebookNavigator-nvim = buildVimPlugin {
     pname = "NotebookNavigator.nvim";
-    version = "2024-05-23";
+    version = "0-unstable-2024-05-23";
     src = fetchFromGitHub {
       owner = "GCBallesteros";
       repo = "NotebookNavigator.nvim";
@@ -308,7 +308,7 @@ final: prev: {
 
   NrrwRgn = buildVimPlugin {
     pname = "NrrwRgn";
-    version = "2025-11-05";
+    version = "0.34-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "NrrwRgn";
@@ -321,7 +321,7 @@ final: prev: {
 
   Otree-nvim = buildVimPlugin {
     pname = "Otree.nvim";
-    version = "2025-09-18";
+    version = "0-unstable-2025-09-18";
     src = fetchFromGitHub {
       owner = "Eutrius";
       repo = "Otree.nvim";
@@ -334,7 +334,7 @@ final: prev: {
 
   PreserveNoEOL = buildVimPlugin {
     pname = "PreserveNoEOL";
-    version = "2013-06-14";
+    version = "1.01-unstable-2013-06-14";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "PreserveNoEOL";
@@ -347,7 +347,7 @@ final: prev: {
 
   Preview-nvim = buildVimPlugin {
     pname = "Preview.nvim";
-    version = "2024-06-01";
+    version = "0-unstable-2024-06-01";
     src = fetchFromGitHub {
       owner = "henriklovhaug";
       repo = "Preview.nvim";
@@ -360,7 +360,7 @@ final: prev: {
 
   QFEnter = buildVimPlugin {
     pname = "QFEnter";
-    version = "2024-05-05";
+    version = "2.4.3-unstable-2024-05-05";
     src = fetchFromGitHub {
       owner = "yssl";
       repo = "QFEnter";
@@ -373,7 +373,7 @@ final: prev: {
 
   Recover-vim = buildVimPlugin {
     pname = "Recover.vim";
-    version = "2022-09-07";
+    version = "0-unstable-2022-09-07";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "Recover.vim";
@@ -386,7 +386,7 @@ final: prev: {
 
   Rename = buildVimPlugin {
     pname = "Rename";
-    version = "2011-08-31";
+    version = "0.3-unstable-2011-08-31";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Rename";
@@ -399,7 +399,7 @@ final: prev: {
 
   ReplaceWithRegister = buildVimPlugin {
     pname = "ReplaceWithRegister";
-    version = "2014-10-31";
+    version = "1.42-unstable-2014-10-31";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "ReplaceWithRegister";
@@ -412,12 +412,12 @@ final: prev: {
 
   SchemaStore-nvim = buildVimPlugin {
     pname = "SchemaStore.nvim";
-    version = "2025-11-06";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "b0o";
       repo = "SchemaStore.nvim";
-      rev = "976b31e094615b2c27009561b3c67a37c87c93c2";
-      sha256 = "1j51wbimw7fx30sx8rpc78aqx7j582lhywgb4vzd2d0r3irj3v10";
+      rev = "48dba219db5d45baad6f7491e754706f74d12676";
+      sha256 = "1f50slgjvz5pv4vkq1s0g8sbiwpgn81lnm92c4ppx49lvz6j6xxx";
     };
     meta.homepage = "https://github.com/b0o/SchemaStore.nvim/";
     meta.hydraPlatforms = [ ];
@@ -425,7 +425,7 @@ final: prev: {
 
   Shade-nvim = buildVimPlugin {
     pname = "Shade.nvim";
-    version = "2022-02-01";
+    version = "0-unstable-2022-02-01";
     src = fetchFromGitHub {
       owner = "sunjon";
       repo = "Shade.nvim";
@@ -438,7 +438,7 @@ final: prev: {
 
   ShowMultiBase = buildVimPlugin {
     pname = "ShowMultiBase";
-    version = "2010-10-18";
+    version = "1.0-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "ShowMultiBase";
@@ -451,7 +451,7 @@ final: prev: {
 
   SimpylFold = buildVimPlugin {
     pname = "SimpylFold";
-    version = "2022-05-02";
+    version = "2.0-unstable-2022-05-02";
     src = fetchFromGitHub {
       owner = "tmhedberg";
       repo = "SimpylFold";
@@ -464,7 +464,7 @@ final: prev: {
 
   SmartCase = buildVimPlugin {
     pname = "SmartCase";
-    version = "2010-10-18";
+    version = "1.0.2-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "SmartCase";
@@ -477,7 +477,7 @@ final: prev: {
 
   SpaceCamp = buildVimPlugin {
     pname = "SpaceCamp";
-    version = "2023-08-25";
+    version = "0-unstable-2023-08-25";
     src = fetchFromGitHub {
       owner = "jaredgorski";
       repo = "SpaceCamp";
@@ -490,7 +490,7 @@ final: prev: {
 
   SudoEdit-vim = buildVimPlugin {
     pname = "SudoEdit.vim";
-    version = "2023-04-25";
+    version = "0-unstable-2023-04-25";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "SudoEdit.vim";
@@ -503,7 +503,7 @@ final: prev: {
 
   VimCompletesMe = buildVimPlugin {
     pname = "VimCompletesMe";
-    version = "2015-04-20";
+    version = "1.2.1-unstable-2015-04-20";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "VimCompletesMe";
@@ -516,7 +516,7 @@ final: prev: {
 
   VimOrganizer = buildVimPlugin {
     pname = "VimOrganizer";
-    version = "2020-12-15";
+    version = "0-unstable-2020-12-15";
     src = fetchFromGitHub {
       owner = "hsitz";
       repo = "VimOrganizer";
@@ -529,7 +529,7 @@ final: prev: {
 
   Vundle-vim = buildVimPlugin {
     pname = "Vundle.vim";
-    version = "2024-07-30";
+    version = "0.10.2-unstable-2024-07-30";
     src = fetchFromGitHub {
       owner = "VundleVim";
       repo = "Vundle.vim";
@@ -542,7 +542,7 @@ final: prev: {
 
   YUNOcommit-vim = buildVimPlugin {
     pname = "YUNOcommit.vim";
-    version = "2014-11-26";
+    version = "0-unstable-2014-11-26";
     src = fetchFromGitHub {
       owner = "esneider";
       repo = "YUNOcommit.vim";
@@ -555,7 +555,7 @@ final: prev: {
 
   YankAssassin-vim = buildVimPlugin {
     pname = "YankAssassin.vim";
-    version = "2022-03-11";
+    version = "0-unstable-2022-03-11";
     src = fetchFromGitHub {
       owner = "svban";
       repo = "YankAssassin.vim";
@@ -568,7 +568,7 @@ final: prev: {
 
   YankRing-vim = buildVimPlugin {
     pname = "YankRing.vim";
-    version = "2015-07-29";
+    version = "19.0-unstable-2015-07-29";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "YankRing.vim";
@@ -581,12 +581,12 @@ final: prev: {
 
   YouCompleteMe = buildVimPlugin {
     pname = "YouCompleteMe";
-    version = "2025-10-16";
+    version = "0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "ycm-core";
       repo = "YouCompleteMe";
-      rev = "b07b6f138ffa32362a928d6a7981c2a2bf2ac96f";
-      sha256 = "0743w1c41nl6nlzz4ccj7n1zfsbxjhaazv6jishcjhhhzyvnal06";
+      rev = "d11e24d618f672333d788ec6c582c8f25b0b0092";
+      sha256 = "09rxl7hxfylfr6zr5in7bcivnvyvjmjlabw3ganisd24y5y8058y";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/ycm-core/YouCompleteMe/";
@@ -595,7 +595,7 @@ final: prev: {
 
   a-vim = buildVimPlugin {
     pname = "a.vim";
-    version = "2010-11-06";
+    version = "2.18-unstable-2010-11-06";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "a.vim";
@@ -608,7 +608,7 @@ final: prev: {
 
   accent-vim = buildVimPlugin {
     pname = "accent.vim";
-    version = "2025-01-29";
+    version = "0-unstable-2025-01-29";
     src = fetchFromGitHub {
       owner = "Alligator";
       repo = "accent.vim";
@@ -621,7 +621,7 @@ final: prev: {
 
   ack-vim = buildVimPlugin {
     pname = "ack.vim";
-    version = "2018-02-27";
+    version = "1.0.9-unstable-2018-02-27";
     src = fetchFromGitHub {
       owner = "mileszs";
       repo = "ack.vim";
@@ -634,7 +634,7 @@ final: prev: {
 
   acp = buildVimPlugin {
     pname = "acp";
-    version = "2013-02-05";
+    version = "0-unstable-2013-02-05";
     src = fetchFromGitHub {
       owner = "eikenb";
       repo = "acp";
@@ -647,7 +647,7 @@ final: prev: {
 
   actions-preview-nvim = buildVimPlugin {
     pname = "actions-preview.nvim";
-    version = "2025-10-03";
+    version = "0-unstable-2025-10-03";
     src = fetchFromGitHub {
       owner = "aznhe21";
       repo = "actions-preview.nvim";
@@ -660,12 +660,12 @@ final: prev: {
 
   advanced-git-search-nvim = buildVimPlugin {
     pname = "advanced-git-search.nvim";
-    version = "2025-10-31";
+    version = "1.2.0-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "aaronhallaert";
       repo = "advanced-git-search.nvim";
-      rev = "e6d0fa39c7b058b4f3019912c3e26f854c4e36af";
-      sha256 = "0knc41f4yzahzxqq112lgwism2jlm2sz58pian03lxkjgnvrylwb";
+      rev = "cead1214709226bdef89093f0c58964fb65c81e8";
+      sha256 = "0fgfxnj0cy4qhqgnmmpr8pk0vcrrvvipjmvcajilw9g4mjqgn3vr";
     };
     meta.homepage = "https://github.com/aaronhallaert/advanced-git-search.nvim/";
     meta.hydraPlatforms = [ ];
@@ -673,7 +673,7 @@ final: prev: {
 
   adwaita-nvim = buildVimPlugin {
     pname = "adwaita.nvim";
-    version = "2025-07-03";
+    version = "0-unstable-2025-07-03";
     src = fetchFromGitHub {
       owner = "Mofiqul";
       repo = "adwaita.nvim";
@@ -686,12 +686,12 @@ final: prev: {
 
   aerial-nvim = buildVimPlugin {
     pname = "aerial.nvim";
-    version = "2025-09-27";
+    version = "2.6.1-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "aerial.nvim";
-      rev = "5e687b5a14004fa2dd9eccbee042b96869fe1557";
-      sha256 = "10y8kbiigh9j3wpigb800wg287xllg76kk7k8rv9a64mhrfm2v7w";
+      rev = "8bb8697d180681746da41bef5c8691d04443af36";
+      sha256 = "1vqklpfzkxfb9i6fqz93fak5mf3w9r97j6czfmh75iqdrkl701vl";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/aerial.nvim/";
@@ -700,7 +700,7 @@ final: prev: {
 
   ag-nvim = buildVimPlugin {
     pname = "ag.nvim";
-    version = "2021-07-15";
+    version = "0-unstable-2021-07-15";
     src = fetchFromGitHub {
       owner = "Numkil";
       repo = "ag.nvim";
@@ -713,7 +713,7 @@ final: prev: {
 
   agda-vim = buildVimPlugin {
     pname = "agda-vim";
-    version = "2021-10-28";
+    version = "0-unstable-2021-10-28";
     src = fetchFromGitHub {
       owner = "derekelkins";
       repo = "agda-vim";
@@ -726,12 +726,12 @@ final: prev: {
 
   agitator-nvim = buildVimPlugin {
     pname = "agitator.nvim";
-    version = "2025-10-12";
+    version = "0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "emmanueltouzery";
       repo = "agitator.nvim";
-      rev = "54cbe5cff6216321d9aac6d54341f5112350e746";
-      sha256 = "0zgswaqs9k9hy4h98swqv485y1p3j8shz88ydfgi4svxi05gkx7m";
+      rev = "f562043b2c0a0a753c1a15200c5b8468f9933c96";
+      sha256 = "0ncprhnmqxi8nhqlhg89p2w00ag3hd3q96dr6nsm031da8gqimd1";
     };
     meta.homepage = "https://github.com/emmanueltouzery/agitator.nvim/";
     meta.hydraPlatforms = [ ];
@@ -739,7 +739,7 @@ final: prev: {
 
   ai-vim = buildVimPlugin {
     pname = "ai.vim";
-    version = "2023-10-03";
+    version = "0-unstable-2023-10-03";
     src = fetchFromGitHub {
       owner = "aduros";
       repo = "ai.vim";
@@ -752,7 +752,7 @@ final: prev: {
 
   aider-nvim = buildVimPlugin {
     pname = "aider.nvim";
-    version = "2025-04-17";
+    version = "0.7.0-unstable-2025-04-17";
     src = fetchFromGitHub {
       owner = "joshuavial";
       repo = "aider.nvim";
@@ -765,7 +765,7 @@ final: prev: {
 
   alchemist-vim = buildVimPlugin {
     pname = "alchemist.vim";
-    version = "2023-09-01";
+    version = "3.5.0-unstable-2023-09-01";
     src = fetchFromGitHub {
       owner = "slashmili";
       repo = "alchemist.vim";
@@ -778,12 +778,12 @@ final: prev: {
 
   ale = buildVimPlugin {
     pname = "ale";
-    version = "2025-10-28";
+    version = "4.0.0-unstable-2025-11-22";
     src = fetchFromGitHub {
       owner = "dense-analysis";
       repo = "ale";
-      rev = "b9d7f56471084e7ac8070c90315170ef703217ff";
-      sha256 = "18ld6cai28xgf084ar77j1nm6ym50yk18365h1scfn4mg9vjbxqn";
+      rev = "ca1da76d5e91e42f676654905c0c7b6d074b8068";
+      sha256 = "0rpjdl6s19bmvd3xxqzx5ygh8mz3ym4a9i4lwm5nyab9w7l0hckp";
     };
     meta.homepage = "https://github.com/dense-analysis/ale/";
     meta.hydraPlatforms = [ ];
@@ -791,7 +791,7 @@ final: prev: {
 
   align = buildVimPlugin {
     pname = "align";
-    version = "2012-08-08";
+    version = "37-43-unstable-2012-08-08";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "align";
@@ -804,7 +804,7 @@ final: prev: {
 
   align-nvim = buildVimPlugin {
     pname = "align.nvim";
-    version = "2024-04-10";
+    version = "0-unstable-2024-04-10";
     src = fetchFromGitHub {
       owner = "Vonr";
       repo = "align.nvim";
@@ -817,7 +817,7 @@ final: prev: {
 
   alpha-nvim = buildVimPlugin {
     pname = "alpha-nvim";
-    version = "2025-10-28";
+    version = "0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "goolord";
       repo = "alpha-nvim";
@@ -830,12 +830,12 @@ final: prev: {
 
   amp-nvim = buildVimPlugin {
     pname = "amp.nvim";
-    version = "2025-10-23";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "sourcegraph";
       repo = "amp.nvim";
-      rev = "621f1ca375fc2887d30a4ac32a8b6c582d28f9c0";
-      sha256 = "09f3md3khk5ccvhf897ddp387qjkvwwz5d9wjvlafb06cdixlagz";
+      rev = "3b9ad5ef0328de1b35cc9bfa723a37db5daf9434";
+      sha256 = "0z36prifgz9yac1kvcpfi4gwxf822aw9srq3chdjhmp9d3gn5ybz";
     };
     meta.homepage = "https://github.com/sourcegraph/amp.nvim/";
     meta.hydraPlatforms = [ ];
@@ -843,7 +843,7 @@ final: prev: {
 
   animation-nvim = buildVimPlugin {
     pname = "animation.nvim";
-    version = "2022-09-18";
+    version = "0-unstable-2022-09-18";
     src = fetchFromGitHub {
       owner = "anuvyklack";
       repo = "animation.nvim";
@@ -856,7 +856,7 @@ final: prev: {
 
   aniseed = buildVimPlugin {
     pname = "aniseed";
-    version = "2025-06-12";
+    version = "3.33.0-unstable-2025-06-12";
     src = fetchFromGitHub {
       owner = "Olical";
       repo = "aniseed";
@@ -869,7 +869,7 @@ final: prev: {
 
   ansible-vim = buildVimPlugin {
     pname = "ansible-vim";
-    version = "2025-09-27";
+    version = "3.4-unstable-2025-09-27";
     src = fetchFromGitHub {
       owner = "pearofducks";
       repo = "ansible-vim";
@@ -882,7 +882,7 @@ final: prev: {
 
   antonys-macro-repeater = buildVimPlugin {
     pname = "antonys-macro-repeater";
-    version = "2017-09-10";
+    version = "0-unstable-2017-09-10";
     src = fetchFromGitHub {
       owner = "ckarnell";
       repo = "antonys-macro-repeater";
@@ -895,7 +895,7 @@ final: prev: {
 
   arcanist-vim = buildVimPlugin {
     pname = "arcanist.vim";
-    version = "2016-05-27";
+    version = "0-unstable-2016-05-27";
     src = fetchFromGitHub {
       owner = "solarnz";
       repo = "arcanist.vim";
@@ -908,7 +908,7 @@ final: prev: {
 
   argtextobj-vim = buildVimPlugin {
     pname = "argtextobj.vim";
-    version = "2010-10-18";
+    version = "1.1.1-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "argtextobj.vim";
@@ -921,7 +921,7 @@ final: prev: {
 
   arrow-nvim = buildVimPlugin {
     pname = "arrow.nvim";
-    version = "2025-03-31";
+    version = "0-unstable-2025-03-31";
     src = fetchFromGitHub {
       owner = "otavioschwanck";
       repo = "arrow.nvim";
@@ -934,7 +934,7 @@ final: prev: {
 
   arshlib-nvim = buildVimPlugin {
     pname = "arshlib.nvim";
-    version = "2024-05-18";
+    version = "2.0.1-unstable-2024-05-18";
     src = fetchFromGitHub {
       owner = "arsham";
       repo = "arshlib.nvim";
@@ -947,7 +947,7 @@ final: prev: {
 
   astrocore = buildVimPlugin {
     pname = "astrocore";
-    version = "2025-06-06";
+    version = "2.0.5-unstable-2025-06-06";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astrocore";
@@ -960,7 +960,7 @@ final: prev: {
 
   astrolsp = buildVimPlugin {
     pname = "astrolsp";
-    version = "2025-09-25";
+    version = "3.2.1-unstable-2025-09-25";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astrolsp";
@@ -973,7 +973,7 @@ final: prev: {
 
   astrotheme = buildVimPlugin {
     pname = "astrotheme";
-    version = "2025-09-15";
+    version = "4.10.0-unstable-2025-09-15";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astrotheme";
@@ -986,7 +986,7 @@ final: prev: {
 
   astroui = buildVimPlugin {
     pname = "astroui";
-    version = "2025-07-23";
+    version = "3.1.5-unstable-2025-07-23";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astroui";
@@ -999,7 +999,7 @@ final: prev: {
 
   async-vim = buildVimPlugin {
     pname = "async.vim";
-    version = "2022-04-04";
+    version = "0-unstable-2022-04-04";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "async.vim";
@@ -1012,7 +1012,7 @@ final: prev: {
 
   asyncomplete-buffer-vim = buildVimPlugin {
     pname = "asyncomplete-buffer.vim";
-    version = "2023-12-03";
+    version = "0-unstable-2023-12-03";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-buffer.vim";
@@ -1025,7 +1025,7 @@ final: prev: {
 
   asyncomplete-file-vim = buildVimPlugin {
     pname = "asyncomplete-file.vim";
-    version = "2022-07-11";
+    version = "0-unstable-2022-07-11";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-file.vim";
@@ -1038,12 +1038,12 @@ final: prev: {
 
   asyncomplete-lsp-vim = buildVimPlugin {
     pname = "asyncomplete-lsp.vim";
-    version = "2025-10-28";
+    version = "0-unstable-2025-11-27";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-lsp.vim";
-      rev = "d5d91e1ad70edb00368c11d3e81008835ac14dd1";
-      sha256 = "0fp7vv5qh4mpg9plrzax3iy8jy6g815vpjlg83f0nqvcky8k3bk7";
+      rev = "63a9d75101c3133c3ed36a21f9e6b359e4e16150";
+      sha256 = "1j2k1hv26b7h7fmvdw726l2fvyla7g03gp7ysw71k1km942mlxv2";
     };
     meta.homepage = "https://github.com/prabirshrestha/asyncomplete-lsp.vim/";
     meta.hydraPlatforms = [ ];
@@ -1051,7 +1051,7 @@ final: prev: {
 
   asyncomplete-omni-vim = buildVimPlugin {
     pname = "asyncomplete-omni.vim";
-    version = "2018-04-04";
+    version = "0-unstable-2018-04-04";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-omni.vim";
@@ -1064,7 +1064,7 @@ final: prev: {
 
   asyncomplete-tags-vim = buildVimPlugin {
     pname = "asyncomplete-tags.vim";
-    version = "2023-12-03";
+    version = "0-unstable-2023-12-03";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-tags.vim";
@@ -1077,7 +1077,7 @@ final: prev: {
 
   asyncomplete-ultisnips-vim = buildVimPlugin {
     pname = "asyncomplete-ultisnips.vim";
-    version = "2023-01-13";
+    version = "0-unstable-2023-01-13";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete-ultisnips.vim";
@@ -1090,7 +1090,7 @@ final: prev: {
 
   asyncomplete-vim = buildVimPlugin {
     pname = "asyncomplete.vim";
-    version = "2025-10-18";
+    version = "2.1.0-unstable-2025-10-18";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "asyncomplete.vim";
@@ -1103,11 +1103,11 @@ final: prev: {
 
   asyncrun-vim = buildVimPlugin {
     pname = "asyncrun.vim";
-    version = "2025-03-24";
+    version = "2.13.4-unstable-2025-11-20";
     src = fetchFromGitHub {
       owner = "skywind3000";
       repo = "asyncrun.vim";
-      rev = "e17c49c67d1dd847cd1d7d6077a7168816f546cc";
+      rev = "98d3c0fdeb983f0ef62fe3a49da440f6d2c045ce";
       sha256 = "1ky0y5wf5ir0awm6jmnq0d374za4l89jbg4cjzcznv8a798h75bh";
     };
     meta.homepage = "https://github.com/skywind3000/asyncrun.vim/";
@@ -1116,7 +1116,7 @@ final: prev: {
 
   asynctasks-vim = buildVimPlugin {
     pname = "asynctasks.vim";
-    version = "2025-09-26";
+    version = "0-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "skywind3000";
       repo = "asynctasks.vim";
@@ -1129,7 +1129,7 @@ final: prev: {
 
   ats-vim = buildVimPlugin {
     pname = "ats-vim";
-    version = "2020-09-04";
+    version = "0.1-unstable-2020-09-04";
     src = fetchFromGitHub {
       owner = "vmchale";
       repo = "ats-vim";
@@ -1142,12 +1142,12 @@ final: prev: {
 
   augment-vim = buildVimPlugin {
     pname = "augment.vim";
-    version = "2025-10-21";
+    version = "0.43.0-unstable-2025-12-03";
     src = fetchFromGitHub {
       owner = "augmentcode";
       repo = "augment.vim";
-      rev = "96e8d6d16268e9fc2b0b1cc98ec754effa24690e";
-      sha256 = "0fkdyr8ak3j7jkccgcndzjkfxgx8mwjhb082lxw12sdaq9amgi6m";
+      rev = "2a02b3fbfce61c50e42d877a68c1240d96907779";
+      sha256 = "0vr2xhkp00lr8c0vdlcv8a4qni584gyc5xlhc6jpyjf9vnyhb8nq";
     };
     meta.homepage = "https://github.com/augmentcode/augment.vim/";
     meta.hydraPlatforms = [ ];
@@ -1155,7 +1155,7 @@ final: prev: {
 
   aurora = buildVimPlugin {
     pname = "aurora";
-    version = "2025-04-07";
+    version = "0-unstable-2025-04-07";
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "aurora";
@@ -1168,7 +1168,7 @@ final: prev: {
 
   auto-fix-return-nvim = buildVimPlugin {
     pname = "auto-fix-return.nvim";
-    version = "2025-10-22";
+    version = "0.2.2-unstable-2025-10-22";
     src = fetchFromGitHub {
       owner = "Jay-Madden";
       repo = "auto-fix-return.nvim";
@@ -1181,7 +1181,7 @@ final: prev: {
 
   auto-git-diff = buildVimPlugin {
     pname = "auto-git-diff";
-    version = "2022-10-29";
+    version = "0-unstable-2022-10-29";
     src = fetchFromGitHub {
       owner = "hotwatermorning";
       repo = "auto-git-diff";
@@ -1194,7 +1194,7 @@ final: prev: {
 
   auto-hlsearch-nvim = buildVimPlugin {
     pname = "auto-hlsearch.nvim";
-    version = "2024-08-23";
+    version = "1.1.0-unstable-2024-08-23";
     src = fetchFromGitHub {
       owner = "asiryk";
       repo = "auto-hlsearch.nvim";
@@ -1207,7 +1207,7 @@ final: prev: {
 
   auto-pairs = buildVimPlugin {
     pname = "auto-pairs";
-    version = "2019-02-27";
+    version = "2.0.0-unstable-2019-02-27";
     src = fetchFromGitHub {
       owner = "jiangmiao";
       repo = "auto-pairs";
@@ -1220,7 +1220,7 @@ final: prev: {
 
   auto-save-nvim = buildVimPlugin {
     pname = "auto-save.nvim";
-    version = "2025-05-24";
+    version = "1.0.0-unstable-2025-05-24";
     src = fetchFromGitHub {
       owner = "okuuva";
       repo = "auto-save.nvim";
@@ -1233,7 +1233,7 @@ final: prev: {
 
   auto-session = buildVimPlugin {
     pname = "auto-session";
-    version = "2025-10-30";
+    version = "0-unstable-2025-10-30";
     src = fetchFromGitHub {
       owner = "rmagatti";
       repo = "auto-session";
@@ -1246,7 +1246,7 @@ final: prev: {
 
   autoclose-nvim = buildVimPlugin {
     pname = "autoclose.nvim";
-    version = "2025-07-21";
+    version = "0-unstable-2025-07-21";
     src = fetchFromGitHub {
       owner = "m4xshen";
       repo = "autoclose.nvim";
@@ -1259,7 +1259,7 @@ final: prev: {
 
   autolist-nvim = buildVimPlugin {
     pname = "autolist.nvim";
-    version = "2023-07-07";
+    version = "3.0.1-unstable-2023-07-07";
     src = fetchFromGitHub {
       owner = "gaoDean";
       repo = "autolist.nvim";
@@ -1272,7 +1272,7 @@ final: prev: {
 
   autoload_cscope-vim = buildVimPlugin {
     pname = "autoload_cscope.vim";
-    version = "2011-01-28";
+    version = "0.5-unstable-2011-01-28";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "autoload_cscope.vim";
@@ -1285,7 +1285,7 @@ final: prev: {
 
   autosave-nvim = buildVimPlugin {
     pname = "autosave.nvim";
-    version = "2022-10-13";
+    version = "0-unstable-2022-10-13";
     src = fetchFromGitHub {
       owner = "nullishamy";
       repo = "autosave.nvim";
@@ -1298,7 +1298,7 @@ final: prev: {
 
   aw-watcher-nvim = buildVimPlugin {
     pname = "aw-watcher.nvim";
-    version = "2025-07-28";
+    version = "0-unstable-2025-07-28";
     src = fetchFromGitHub {
       owner = "lowitea";
       repo = "aw-watcher.nvim";
@@ -1311,7 +1311,7 @@ final: prev: {
 
   aw-watcher-vim = buildVimPlugin {
     pname = "aw-watcher-vim";
-    version = "2023-10-09";
+    version = "0-unstable-2023-10-09";
     src = fetchFromGitHub {
       owner = "ActivityWatch";
       repo = "aw-watcher-vim";
@@ -1324,7 +1324,7 @@ final: prev: {
 
   awesome-vim-colorschemes = buildVimPlugin {
     pname = "awesome-vim-colorschemes";
-    version = "2024-05-18";
+    version = "0-unstable-2024-05-18";
     src = fetchFromGitHub {
       owner = "rafi";
       repo = "awesome-vim-colorschemes";
@@ -1337,7 +1337,7 @@ final: prev: {
 
   aylin-vim = buildVimPlugin {
     pname = "aylin.vim";
-    version = "2022-08-13";
+    version = "0-unstable-2022-08-13";
     src = fetchFromGitHub {
       owner = "AhmedAbdulrahman";
       repo = "aylin.vim";
@@ -1350,7 +1350,7 @@ final: prev: {
 
   ayu-vim = buildVimPlugin {
     pname = "ayu-vim";
-    version = "2024-07-15";
+    version = "0-unstable-2024-07-15";
     src = fetchFromGitHub {
       owner = "ayu-theme";
       repo = "ayu-vim";
@@ -1363,7 +1363,7 @@ final: prev: {
 
   b64-nvim = buildVimPlugin {
     pname = "b64.nvim";
-    version = "2025-07-07";
+    version = "0-unstable-2025-07-07";
     src = fetchFromGitHub {
       owner = "taybart";
       repo = "b64.nvim";
@@ -1376,7 +1376,7 @@ final: prev: {
 
   baleia-nvim = buildVimPlugin {
     pname = "baleia.nvim";
-    version = "2024-07-24";
+    version = "1.4.0-unstable-2024-07-24";
     src = fetchFromGitHub {
       owner = "m00qek";
       repo = "baleia.nvim";
@@ -1390,12 +1390,12 @@ final: prev: {
 
   bamboo-nvim = buildVimPlugin {
     pname = "bamboo.nvim";
-    version = "2025-09-20";
+    version = "0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "ribru17";
       repo = "bamboo.nvim";
-      rev = "6ec224a4fcf0970fce262fc5bb51048721d464f6";
-      sha256 = "01xxy7p8bpwlyb23k1a46wxmaqalaipd11d7r56j6v0z5jjns230";
+      rev = "1309bc88bffcf1bedc3e84e7fa9004de93da774a";
+      sha256 = "000bz7z7ghwaav2vbdynzp1h3rg0dy62wdp8g631b5hk1x1apljz";
     };
     meta.homepage = "https://github.com/ribru17/bamboo.nvim/";
     meta.hydraPlatforms = [ ];
@@ -1403,12 +1403,12 @@ final: prev: {
 
   barbar-nvim = buildVimPlugin {
     pname = "barbar.nvim";
-    version = "2025-10-20";
+    version = "1.9.1-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "romgrk";
       repo = "barbar.nvim";
-      rev = "fb4369940a07dda35fa4d7f54cf4a36aa00440e6";
-      sha256 = "0pnryr8m5dj1h0ki11b2mzq9wkcd8lg0l0w4pkyrd51a3dfa6wv1";
+      rev = "539d73def39c9172b4d4d769f14090e08f37b29d";
+      sha256 = "03ricz5qqrrnvplyg36gac255al6jjwycs1yfqsxrmiz6mwjl6my";
     };
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
     meta.hydraPlatforms = [ ];
@@ -1416,7 +1416,7 @@ final: prev: {
 
   barbecue-nvim = buildVimPlugin {
     pname = "barbecue.nvim";
-    version = "2024-08-20";
+    version = "1.2.0-unstable-2024-08-20";
     src = fetchFromGitHub {
       owner = "utilyre";
       repo = "barbecue.nvim";
@@ -1429,12 +1429,12 @@ final: prev: {
 
   base16-nvim = buildVimPlugin {
     pname = "base16-nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "base16-nvim";
-      rev = "658bc3da344aa5e37efe10ec3ae4309a8035d102";
-      sha256 = "1gig4zqzm70msvl9achzr1gn90rmb670znc39jp7n66n45ifiq8j";
+      rev = "e05bcb99951d8ae4ecbf4ae053922fd2be6263a5";
+      sha256 = "165bsz0gq6fn4jj99vjpqg0pzk2p72w8pviwjz2dl1yjcijkh1nz";
     };
     meta.homepage = "https://github.com/RRethy/base16-nvim/";
     meta.hydraPlatforms = [ ];
@@ -1442,7 +1442,7 @@ final: prev: {
 
   base16-vim = buildVimPlugin {
     pname = "base16-vim";
-    version = "2022-09-20";
+    version = "0-unstable-2022-09-20";
     src = fetchFromGitHub {
       owner = "chriskempson";
       repo = "base16-vim";
@@ -1455,7 +1455,7 @@ final: prev: {
 
   base46 = buildVimPlugin {
     pname = "base46";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "nvchad";
       repo = "base46";
@@ -1468,7 +1468,7 @@ final: prev: {
 
   bat-vim = buildVimPlugin {
     pname = "bat.vim";
-    version = "2022-11-14";
+    version = "0-unstable-2022-11-14";
     src = fetchFromGitHub {
       owner = "jamespwilliams";
       repo = "bat.vim";
@@ -1481,7 +1481,7 @@ final: prev: {
 
   bats-vim = buildVimPlugin {
     pname = "bats.vim";
-    version = "2013-07-03";
+    version = "0.1.0-unstable-2013-07-03";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "bats.vim";
@@ -1494,7 +1494,7 @@ final: prev: {
 
   bclose-vim = buildVimPlugin {
     pname = "bclose.vim";
-    version = "2018-10-10";
+    version = "0-unstable-2018-10-10";
     src = fetchFromGitHub {
       owner = "rbgrouleff";
       repo = "bclose.vim";
@@ -1507,7 +1507,7 @@ final: prev: {
 
   better-escape-nvim = buildVimPlugin {
     pname = "better-escape.nvim";
-    version = "2025-04-29";
+    version = "2.3.3-unstable-2025-04-29";
     src = fetchFromGitHub {
       owner = "max397574";
       repo = "better-escape.nvim";
@@ -1520,7 +1520,7 @@ final: prev: {
 
   bigfile-nvim = buildVimPlugin {
     pname = "bigfile.nvim";
-    version = "2023-11-06";
+    version = "0-unstable-2023-11-06";
     src = fetchFromGitHub {
       owner = "LunarVim";
       repo = "bigfile.nvim";
@@ -1533,7 +1533,7 @@ final: prev: {
 
   blame-nvim = buildVimPlugin {
     pname = "blame.nvim";
-    version = "2025-10-21";
+    version = "0-unstable-2025-10-21";
     src = fetchFromGitHub {
       owner = "FabijanZulj";
       repo = "blame.nvim";
@@ -1546,7 +1546,7 @@ final: prev: {
 
   blamer-nvim = buildVimPlugin {
     pname = "blamer.nvim";
-    version = "2023-09-19";
+    version = "1.3.0-unstable-2023-09-19";
     src = fetchFromGitHub {
       owner = "APZelos";
       repo = "blamer.nvim";
@@ -1559,7 +1559,7 @@ final: prev: {
 
   blink-cmp-avante = buildVimPlugin {
     pname = "blink-cmp-avante";
-    version = "2025-07-24";
+    version = "0.1.0-unstable-2025-07-24";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-avante";
@@ -1572,12 +1572,12 @@ final: prev: {
 
   blink-cmp-conventional-commits = buildVimPlugin {
     pname = "blink-cmp-conventional-commits";
-    version = "2025-11-04";
+    version = "0-unstable-2025-11-28";
     src = fetchFromGitHub {
       owner = "disrupted";
       repo = "blink-cmp-conventional-commits";
-      rev = "c6eea4ecb755dffb7b57f42a1259447de7984974";
-      sha256 = "1d4mqmk342pq8isaixwvyppbv1g5ddc2a448ifa8yp4vgc7lk95d";
+      rev = "a636d365bf80dbfdde049494e91d71ec51e11a15";
+      sha256 = "0dd3svfjj6hfhinm3dq8m036npd8njipnqli56cv7psf0kkbkbgz";
     };
     meta.homepage = "https://github.com/disrupted/blink-cmp-conventional-commits/";
     meta.hydraPlatforms = [ ];
@@ -1585,7 +1585,7 @@ final: prev: {
 
   blink-cmp-copilot = buildVimPlugin {
     pname = "blink-cmp-copilot";
-    version = "2025-02-21";
+    version = "0-unstable-2025-02-21";
     src = fetchFromGitHub {
       owner = "giuxtaposition";
       repo = "blink-cmp-copilot";
@@ -1598,7 +1598,7 @@ final: prev: {
 
   blink-cmp-dictionary = buildVimPlugin {
     pname = "blink-cmp-dictionary";
-    version = "2025-10-23";
+    version = "2.0.0-unstable-2025-10-23";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-dictionary";
@@ -1611,7 +1611,7 @@ final: prev: {
 
   blink-cmp-env = buildVimPlugin {
     pname = "blink-cmp-env";
-    version = "2025-09-13";
+    version = "0-unstable-2025-09-13";
     src = fetchFromGitHub {
       owner = "bydlw98";
       repo = "blink-cmp-env";
@@ -1624,7 +1624,7 @@ final: prev: {
 
   blink-cmp-git = buildVimPlugin {
     pname = "blink-cmp-git";
-    version = "2025-10-09";
+    version = "3.0.0-unstable-2025-10-09";
     src = fetchFromGitHub {
       owner = "Kaiser-Yang";
       repo = "blink-cmp-git";
@@ -1637,7 +1637,7 @@ final: prev: {
 
   blink-cmp-latex = buildVimPlugin {
     pname = "blink-cmp-latex";
-    version = "2025-05-30";
+    version = "0-unstable-2025-05-30";
     src = fetchFromGitHub {
       owner = "erooke";
       repo = "blink-cmp-latex";
@@ -1650,7 +1650,7 @@ final: prev: {
 
   blink-cmp-npm-nvim = buildVimPlugin {
     pname = "blink-cmp-npm.nvim";
-    version = "2025-05-18";
+    version = "0.3.0-unstable-2025-05-18";
     src = fetchFromGitHub {
       owner = "alexandre-abrioux";
       repo = "blink-cmp-npm.nvim";
@@ -1663,7 +1663,7 @@ final: prev: {
 
   blink-cmp-spell = buildVimPlugin {
     pname = "blink-cmp-spell";
-    version = "2025-06-07";
+    version = "0-unstable-2025-06-07";
     src = fetchFromGitHub {
       owner = "ribru17";
       repo = "blink-cmp-spell";
@@ -1676,7 +1676,7 @@ final: prev: {
 
   blink-cmp-tmux = buildVimPlugin {
     pname = "blink-cmp-tmux";
-    version = "2025-05-23";
+    version = "0-unstable-2025-05-23";
     src = fetchFromGitHub {
       owner = "mgalliou";
       repo = "blink-cmp-tmux";
@@ -1689,7 +1689,7 @@ final: prev: {
 
   blink-cmp-words = buildVimPlugin {
     pname = "blink-cmp-words";
-    version = "2025-08-06";
+    version = "1.0.0-unstable-2025-08-06";
     src = fetchFromGitHub {
       owner = "archie-judd";
       repo = "blink-cmp-words";
@@ -1702,7 +1702,7 @@ final: prev: {
 
   blink-cmp-yanky = buildVimPlugin {
     pname = "blink-cmp-yanky";
-    version = "2025-06-24";
+    version = "0-unstable-2025-06-24";
     src = fetchFromGitHub {
       owner = "marcoSven";
       repo = "blink-cmp-yanky";
@@ -1715,7 +1715,7 @@ final: prev: {
 
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
-    version = "2025-05-28";
+    version = "2.5.0-unstable-2025-05-28";
     src = fetchFromGitHub {
       owner = "Saghen";
       repo = "blink.compat";
@@ -1728,7 +1728,7 @@ final: prev: {
 
   blink-copilot = buildVimPlugin {
     pname = "blink-copilot";
-    version = "2025-10-29";
+    version = "1.4.1-unstable-2025-10-29";
     src = fetchFromGitHub {
       owner = "fang2hou";
       repo = "blink-copilot";
@@ -1741,7 +1741,7 @@ final: prev: {
 
   blink-emoji-nvim = buildVimPlugin {
     pname = "blink-emoji.nvim";
-    version = "2025-10-22";
+    version = "0-unstable-2025-10-22";
     src = fetchFromGitHub {
       owner = "moyiz";
       repo = "blink-emoji.nvim";
@@ -1754,12 +1754,12 @@ final: prev: {
 
   blink-indent = buildVimPlugin {
     pname = "blink.indent";
-    version = "2025-11-07";
+    version = "2.1.0-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "Saghen";
       repo = "blink.indent";
-      rev = "a8feeeae8510d16f26afbb5c81f2ad1ccea38d62";
-      sha256 = "1qm8h8yfkwf79hnfwn18qmk3546qzr3b9qzr6038lnbf54gzvkff";
+      rev = "93ff30292d34116444ff9db5264f6ccd34f3f71f";
+      sha256 = "1bzsaarf1wn5lcbm4yywpplwx63lij3cm628y9kzafz1mw08kw38";
     };
     meta.homepage = "https://github.com/Saghen/blink.indent/";
     meta.hydraPlatforms = [ ];
@@ -1767,12 +1767,12 @@ final: prev: {
 
   blink-nerdfont-nvim = buildVimPlugin {
     pname = "blink-nerdfont.nvim";
-    version = "2025-02-06";
+    version = "0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "MahanRahmati";
       repo = "blink-nerdfont.nvim";
-      rev = "2f3cedda78dcf4ef547128ce7f72f7b80e25501d";
-      sha256 = "17cab659iiv6l67xjwk5kj624nhxmmng7xjbgimr4v86yhmirk4m";
+      rev = "e5034457a0a3f3444c0a48af8f5d7db0ad02a204";
+      sha256 = "080ijc38g46kxjh894zmns86qj2rsafb3fh77d8y2h0mbmvqvh7s";
     };
     meta.homepage = "https://github.com/MahanRahmati/blink-nerdfont.nvim/";
     meta.hydraPlatforms = [ ];
@@ -1780,12 +1780,12 @@ final: prev: {
 
   blink-ripgrep-nvim = buildVimPlugin {
     pname = "blink-ripgrep.nvim";
-    version = "2025-11-06";
+    version = "2.2.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "blink-ripgrep.nvim";
-      rev = "b0d25f47c3b50ccb4dbb26945f5e19d535701187";
-      sha256 = "1l96lg8qz6givg9l78bgdlxxnjj7nf9lz7c5s7clrvwcya1hhypq";
+      rev = "1452099314b50bf0e0cc98d5d288fdbff17b41b6";
+      sha256 = "13amz3csznz6pb2jxbzgbiizl9f44mc4gdzbvf4ypnp3nx89j3r3";
     };
     meta.homepage = "https://github.com/mikavilpas/blink-ripgrep.nvim/";
     meta.hydraPlatforms = [ ];
@@ -1793,7 +1793,7 @@ final: prev: {
 
   bloat-nvim = buildVimPlugin {
     pname = "bloat.nvim";
-    version = "2025-04-30";
+    version = "2025.04.30-unstable-2025-04-30";
     src = fetchFromGitHub {
       owner = "dundalek";
       repo = "bloat.nvim";
@@ -1806,7 +1806,7 @@ final: prev: {
 
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
-    version = "2023-10-10";
+    version = "0-unstable-2023-10-10";
     src = fetchFromGitHub {
       owner = "HampusHauffman";
       repo = "block.nvim";
@@ -1819,7 +1819,7 @@ final: prev: {
 
   bluloco-nvim = buildVimPlugin {
     pname = "bluloco.nvim";
-    version = "2025-06-11";
+    version = "1.4.0-unstable-2025-06-11";
     src = fetchFromGitHub {
       owner = "uloco";
       repo = "bluloco.nvim";
@@ -1832,7 +1832,7 @@ final: prev: {
 
   boo-colorscheme-nvim = buildVimPlugin {
     pname = "boo-colorscheme-nvim";
-    version = "2025-05-20";
+    version = "0.5.2-unstable-2025-05-20";
     src = fetchFromGitHub {
       owner = "rockerBOO";
       repo = "boo-colorscheme-nvim";
@@ -1845,7 +1845,7 @@ final: prev: {
 
   boole-nvim = buildVimPlugin {
     pname = "boole.nvim";
-    version = "2023-07-08";
+    version = "3.0.1-unstable-2023-07-08";
     src = fetchFromGitHub {
       owner = "nat-418";
       repo = "boole.nvim";
@@ -1858,7 +1858,7 @@ final: prev: {
 
   bracey-vim = buildVimPlugin {
     pname = "bracey.vim";
-    version = "2021-08-20";
+    version = "0-unstable-2021-08-20";
     src = fetchFromGitHub {
       owner = "turbio";
       repo = "bracey.vim";
@@ -1871,7 +1871,7 @@ final: prev: {
 
   brainfuck-vim = buildVimPlugin {
     pname = "brainfuck-vim";
-    version = "2021-01-28";
+    version = "0-unstable-2021-01-28";
     src = fetchFromGitHub {
       owner = "fruit-in";
       repo = "brainfuck-vim";
@@ -1884,7 +1884,7 @@ final: prev: {
 
   bufdelete-nvim = buildVimPlugin {
     pname = "bufdelete.nvim";
-    version = "2024-02-24";
+    version = "0-unstable-2024-02-24";
     src = fetchFromGitHub {
       owner = "famiu";
       repo = "bufdelete.nvim";
@@ -1897,7 +1897,7 @@ final: prev: {
 
   bufexplorer = buildVimPlugin {
     pname = "bufexplorer";
-    version = "2025-08-19";
+    version = "7.13.0-unstable-2025-08-19";
     src = fetchFromGitHub {
       owner = "jlanzarotta";
       repo = "bufexplorer";
@@ -1910,7 +1910,7 @@ final: prev: {
 
   bufferize-vim = buildVimPlugin {
     pname = "bufferize.vim";
-    version = "2023-02-25";
+    version = "0.1.0-unstable-2023-02-25";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "bufferize.vim";
@@ -1923,7 +1923,7 @@ final: prev: {
 
   bufferline-nvim = buildVimPlugin {
     pname = "bufferline.nvim";
-    version = "2025-01-14";
+    version = "4.9.1-unstable-2025-01-14";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "bufferline.nvim";
@@ -1936,7 +1936,7 @@ final: prev: {
 
   bufjump-nvim = buildVimPlugin {
     pname = "bufjump.nvim";
-    version = "2024-05-04";
+    version = "0-unstable-2024-05-04";
     src = fetchFromGitHub {
       owner = "kwkarlwang";
       repo = "bufjump.nvim";
@@ -1949,7 +1949,7 @@ final: prev: {
 
   bufresize-nvim = buildVimPlugin {
     pname = "bufresize.nvim";
-    version = "2022-03-21";
+    version = "0-unstable-2022-03-21";
     src = fetchFromGitHub {
       owner = "kwkarlwang";
       repo = "bufresize.nvim";
@@ -1962,12 +1962,12 @@ final: prev: {
 
   bullets-vim = buildVimPlugin {
     pname = "bullets.vim";
-    version = "2025-05-24";
+    version = "2.0.0-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "bullets-vim";
       repo = "bullets.vim";
-      rev = "1c13e510e11d08b0259e8e627f128359c5521962";
-      sha256 = "067pyk59y9yid58wjwwv6mgghcas8yl86bj121l3z6zdlv6c214m";
+      rev = "89294b8930e660936374fb763ac48a1ac51dd29c";
+      sha256 = "1iaakbys15aamhkd1r6skybz7pm2z897dc9hf6p5mkfdrmribpf3";
     };
     meta.homepage = "https://github.com/bullets-vim/bullets.vim/";
     meta.hydraPlatforms = [ ];
@@ -1975,7 +1975,7 @@ final: prev: {
 
   calendar-vim = buildVimPlugin {
     pname = "calendar.vim";
-    version = "2025-03-07";
+    version = "0-unstable-2025-03-07";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "calendar.vim";
@@ -1988,7 +1988,7 @@ final: prev: {
 
   camelcasemotion = buildVimPlugin {
     pname = "camelcasemotion";
-    version = "2025-08-19";
+    version = "0-unstable-2025-08-19";
     src = fetchFromGitHub {
       owner = "bkad";
       repo = "camelcasemotion";
@@ -2001,12 +2001,12 @@ final: prev: {
 
   catppuccin-nvim = buildVimPlugin {
     pname = "catppuccin-nvim";
-    version = "2025-11-01";
+    version = "1.11.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "nvim";
-      rev = "234fc048de931a0e42ebcad675bf6559d75e23df";
-      sha256 = "0m6lg9fifx6izj6572jp0a5klmdly019hg2parvlqfyxwlksxlsq";
+      rev = "ce8d176faa4643e026e597ae3c31db59b63cef09";
+      sha256 = "1qm6kdi5cl2b0aywligd976q5bfpllya4pmq69p0q1sycwcajqph";
     };
     meta.homepage = "https://github.com/catppuccin/nvim/";
     meta.hydraPlatforms = [ ];
@@ -2014,7 +2014,7 @@ final: prev: {
 
   catppuccin-vim = buildVimPlugin {
     pname = "catppuccin-vim";
-    version = "2025-08-11";
+    version = "0-unstable-2025-08-11";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "vim";
@@ -2027,7 +2027,7 @@ final: prev: {
 
   caw-vim = buildVimPlugin {
     pname = "caw.vim";
-    version = "2023-03-16";
+    version = "1.1.1-unstable-2023-03-16";
     src = fetchFromGitHub {
       owner = "tyru";
       repo = "caw.vim";
@@ -2040,7 +2040,7 @@ final: prev: {
 
   ccc-nvim = buildVimPlugin {
     pname = "ccc.nvim";
-    version = "2025-05-06";
+    version = "2.0.3-unstable-2025-05-06";
     src = fetchFromGitHub {
       owner = "uga-rosa";
       repo = "ccc.nvim";
@@ -2053,7 +2053,7 @@ final: prev: {
 
   cellular-automaton-nvim = buildVimPlugin {
     pname = "cellular-automaton.nvim";
-    version = "2025-01-31";
+    version = "0-unstable-2025-01-31";
     src = fetchFromGitHub {
       owner = "Eandrju";
       repo = "cellular-automaton.nvim";
@@ -2066,7 +2066,7 @@ final: prev: {
 
   chadtree = buildVimPlugin {
     pname = "chadtree";
-    version = "2025-09-21";
+    version = "0-unstable-2025-09-21";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "chadtree";
@@ -2079,7 +2079,7 @@ final: prev: {
 
   changeColorScheme-vim = buildVimPlugin {
     pname = "changeColorScheme.vim";
-    version = "2010-10-18";
+    version = "0.12-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "changeColorScheme.vim";
@@ -2092,7 +2092,7 @@ final: prev: {
 
   cheatsheet-nvim = buildVimPlugin {
     pname = "cheatsheet.nvim";
-    version = "2021-12-23";
+    version = "0-unstable-2021-12-23";
     src = fetchFromGitHub {
       owner = "sudormrfbin";
       repo = "cheatsheet.nvim";
@@ -2105,12 +2105,12 @@ final: prev: {
 
   checkmate-nvim = buildVimPlugin {
     pname = "checkmate.nvim";
-    version = "2025-10-26";
+    version = "0.12.0-unstable-2025-11-15";
     src = fetchFromGitHub {
       owner = "bngarren";
       repo = "checkmate.nvim";
-      rev = "ebc9cbc305865e7f4952cd938d83fd992206245f";
-      sha256 = "0q9gssx8237lvhfr1f4zzvgalv5abggwv24sqd6m65lji9kfs8jd";
+      rev = "fc8edd6ecf8e4095ef878780e4bed83cc5c56c14";
+      sha256 = "0wvcimgscgxr1wsr9vxn2gkzkzlwdvnnxh53sp9fx3qkv5d79mdj";
     };
     meta.homepage = "https://github.com/bngarren/checkmate.nvim/";
     meta.hydraPlatforms = [ ];
@@ -2118,7 +2118,7 @@ final: prev: {
 
   ci_dark = buildVimPlugin {
     pname = "ci_dark";
-    version = "2022-03-27";
+    version = "0-unstable-2022-03-27";
     src = fetchFromGitHub {
       owner = "yunlingz";
       repo = "ci_dark";
@@ -2131,7 +2131,7 @@ final: prev: {
 
   cinnamon-nvim = buildVimPlugin {
     pname = "cinnamon.nvim";
-    version = "2024-08-07";
+    version = "1.2.5-unstable-2024-08-07";
     src = fetchFromGitHub {
       owner = "declancm";
       repo = "cinnamon.nvim";
@@ -2144,7 +2144,7 @@ final: prev: {
 
   circles-nvim = buildVimPlugin {
     pname = "circles.nvim";
-    version = "2023-04-08";
+    version = "2.0.1-unstable-2023-04-08";
     src = fetchFromGitHub {
       owner = "projekt0n";
       repo = "circles.nvim";
@@ -2157,7 +2157,7 @@ final: prev: {
 
   citruszest-nvim = buildVimPlugin {
     pname = "citruszest.nvim";
-    version = "2025-06-16";
+    version = "0-unstable-2025-06-16";
     src = fetchFromGitHub {
       owner = "zootedb0t";
       repo = "citruszest.nvim";
@@ -2170,7 +2170,7 @@ final: prev: {
 
   clang_complete = buildVimPlugin {
     pname = "clang_complete";
-    version = "2023-11-05";
+    version = "1.8-unstable-2023-11-05";
     src = fetchFromGitHub {
       owner = "xavierd";
       repo = "clang_complete";
@@ -2183,7 +2183,7 @@ final: prev: {
 
   claude-code-nvim = buildVimPlugin {
     pname = "claude-code.nvim";
-    version = "2025-07-02";
+    version = "0.4.3-unstable-2025-07-02";
     src = fetchFromGitHub {
       owner = "greggh";
       repo = "claude-code.nvim";
@@ -2196,7 +2196,7 @@ final: prev: {
 
   claude-fzf-history-nvim = buildVimPlugin {
     pname = "claude-fzf-history.nvim";
-    version = "2025-09-06";
+    version = "0-unstable-2025-09-06";
     src = fetchFromGitHub {
       owner = "pittcat";
       repo = "claude-fzf-history.nvim";
@@ -2209,7 +2209,7 @@ final: prev: {
 
   claude-fzf-nvim = buildVimPlugin {
     pname = "claude-fzf.nvim";
-    version = "2025-09-05";
+    version = "0-unstable-2025-09-05";
     src = fetchFromGitHub {
       owner = "pittcat";
       repo = "claude-fzf.nvim";
@@ -2222,12 +2222,12 @@ final: prev: {
 
   claudecode-nvim = buildVimPlugin {
     pname = "claudecode.nvim";
-    version = "2025-10-19";
+    version = "0.3.0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "coder";
       repo = "claudecode.nvim";
-      rev = "1552086ebcce9f4a2ea3b9793018a884d6b60169";
-      sha256 = "02wf8g35y40f9xsc8ncnj11r18w35dp6a3cjnax54v9n2karz2ax";
+      rev = "6091df0e8edcdc92526cec23bbb42f63c0bb5ff2";
+      sha256 = "0d50y9qbcj779hymbkzlfg6si8704qrc0gcpj2f2vx739qh9hr1y";
     };
     meta.homepage = "https://github.com/coder/claudecode.nvim/";
     meta.hydraPlatforms = [ ];
@@ -2235,7 +2235,7 @@ final: prev: {
 
   clever-f-vim = buildVimPlugin {
     pname = "clever-f.vim";
-    version = "2022-10-15";
+    version = "0-unstable-2022-10-15";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "clever-f.vim";
@@ -2248,7 +2248,7 @@ final: prev: {
 
   clighter8 = buildVimPlugin {
     pname = "clighter8";
-    version = "2018-07-25";
+    version = "0-unstable-2018-07-25";
     src = fetchFromGitHub {
       owner = "bbchung";
       repo = "clighter8";
@@ -2261,7 +2261,7 @@ final: prev: {
 
   clipboard-image-nvim = buildVimPlugin {
     pname = "clipboard-image.nvim";
-    version = "2022-11-10";
+    version = "0-unstable-2022-11-10";
     src = fetchFromGitHub {
       owner = "ekickx";
       repo = "clipboard-image.nvim";
@@ -2274,7 +2274,7 @@ final: prev: {
 
   cloak-nvim = buildVimPlugin {
     pname = "cloak.nvim";
-    version = "2024-06-12";
+    version = "0-unstable-2024-06-12";
     src = fetchFromGitHub {
       owner = "laytan";
       repo = "cloak.nvim";
@@ -2287,7 +2287,7 @@ final: prev: {
 
   close-buffers-vim = buildVimPlugin {
     pname = "close-buffers.vim";
-    version = "2024-06-29";
+    version = "0-unstable-2024-06-29";
     src = fetchFromGitHub {
       owner = "asheq";
       repo = "close-buffers.vim";
@@ -2300,12 +2300,12 @@ final: prev: {
 
   cmake-tools-nvim = buildVimPlugin {
     pname = "cmake-tools.nvim";
-    version = "2025-08-29";
+    version = "0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "Civitasv";
       repo = "cmake-tools.nvim";
-      rev = "88e07c6bff838a5bda2f461e9c1122b79ff0829f";
-      sha256 = "0m0xhkjqnfxm9l0kvpr2dnr4in35rifibygnrg08005g5yi5k0ji";
+      rev = "02d109f18ccbfc527d70f14fefa226d20c014924";
+      sha256 = "1rxcm2p0gqx5227szb4zqp3srpzihgxzglq643060p6qzrh9ax5j";
     };
     meta.homepage = "https://github.com/Civitasv/cmake-tools.nvim/";
     meta.hydraPlatforms = [ ];
@@ -2313,7 +2313,7 @@ final: prev: {
 
   cmd-parser-nvim = buildVimPlugin {
     pname = "cmd-parser.nvim";
-    version = "2022-02-23";
+    version = "0-unstable-2022-02-23";
     src = fetchFromGitHub {
       owner = "winston0410";
       repo = "cmd-parser.nvim";
@@ -2326,7 +2326,7 @@ final: prev: {
 
   cmdalias-vim = buildVimPlugin {
     pname = "cmdalias.vim";
-    version = "2010-10-18";
+    version = "3.0-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "cmdalias.vim";
@@ -2339,7 +2339,7 @@ final: prev: {
 
   cmp-ai = buildVimPlugin {
     pname = "cmp-ai";
-    version = "2025-04-21";
+    version = "0-unstable-2025-04-21";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "cmp-ai";
@@ -2352,12 +2352,12 @@ final: prev: {
 
   cmp-beancount = buildVimPlugin {
     pname = "cmp-beancount";
-    version = "2024-07-16";
+    version = "0-unstable-2025-11-26";
     src = fetchFromGitHub {
       owner = "crispgm";
       repo = "cmp-beancount";
-      rev = "29e23297c06b9d69771e4b14e0fb3b9d583a150e";
-      sha256 = "12vh55n94klk2jc31mpgb1lap5ki4767lwrgv5zib4vs9y597pn8";
+      rev = "86ad0f85d9497ae0c01fe2f604d17a400963af95";
+      sha256 = "14xaaxfvgxb5mmj8qcwwpc0xgnihmh7xg7n9p7svbsm282mwcjkb";
     };
     meta.homepage = "https://github.com/crispgm/cmp-beancount/";
     meta.hydraPlatforms = [ ];
@@ -2365,7 +2365,7 @@ final: prev: {
 
   cmp-buffer = buildVimPlugin {
     pname = "cmp-buffer";
-    version = "2025-04-01";
+    version = "0-unstable-2025-04-01";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-buffer";
@@ -2378,7 +2378,7 @@ final: prev: {
 
   cmp-calc = buildVimPlugin {
     pname = "cmp-calc";
-    version = "2024-05-18";
+    version = "0-unstable-2024-05-18";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-calc";
@@ -2391,7 +2391,7 @@ final: prev: {
 
   cmp-clippy = buildVimPlugin {
     pname = "cmp-clippy";
-    version = "2023-02-08";
+    version = "0-unstable-2023-02-08";
     src = fetchFromGitHub {
       owner = "vappolinario";
       repo = "cmp-clippy";
@@ -2404,7 +2404,7 @@ final: prev: {
 
   cmp-cmdline = buildVimPlugin {
     pname = "cmp-cmdline";
-    version = "2025-05-18";
+    version = "0-unstable-2025-05-18";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-cmdline";
@@ -2417,7 +2417,7 @@ final: prev: {
 
   cmp-cmdline-history = buildVimPlugin {
     pname = "cmp-cmdline-history";
-    version = "2022-05-04";
+    version = "0-unstable-2022-05-04";
     src = fetchFromGitHub {
       owner = "dmitmel";
       repo = "cmp-cmdline-history";
@@ -2430,7 +2430,7 @@ final: prev: {
 
   cmp-conjure = buildVimPlugin {
     pname = "cmp-conjure";
-    version = "2024-01-02";
+    version = "0-unstable-2024-01-02";
     src = fetchFromGitHub {
       owner = "PaterJason";
       repo = "cmp-conjure";
@@ -2443,7 +2443,7 @@ final: prev: {
 
   cmp-conventionalcommits = buildVimPlugin {
     pname = "cmp-conventionalcommits";
-    version = "2022-10-16";
+    version = "0-unstable-2022-10-16";
     src = fetchFromGitHub {
       owner = "davidsierradz";
       repo = "cmp-conventionalcommits";
@@ -2456,7 +2456,7 @@ final: prev: {
 
   cmp-copilot = buildVimPlugin {
     pname = "cmp-copilot";
-    version = "2022-04-11";
+    version = "0-unstable-2022-04-11";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-copilot";
@@ -2469,7 +2469,7 @@ final: prev: {
 
   cmp-ctags = buildVimPlugin {
     pname = "cmp-ctags";
-    version = "2023-05-16";
+    version = "0-unstable-2023-05-16";
     src = fetchFromGitHub {
       owner = "delphinus";
       repo = "cmp-ctags";
@@ -2482,7 +2482,7 @@ final: prev: {
 
   cmp-dap = buildVimPlugin {
     pname = "cmp-dap";
-    version = "2023-12-10";
+    version = "0-unstable-2023-12-10";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "cmp-dap";
@@ -2495,7 +2495,7 @@ final: prev: {
 
   cmp-dictionary = buildVimPlugin {
     pname = "cmp-dictionary";
-    version = "2025-03-27";
+    version = "3.0.2-unstable-2025-03-27";
     src = fetchFromGitHub {
       owner = "uga-rosa";
       repo = "cmp-dictionary";
@@ -2508,7 +2508,7 @@ final: prev: {
 
   cmp-digraphs = buildVimPlugin {
     pname = "cmp-digraphs";
-    version = "2021-12-13";
+    version = "0-unstable-2021-12-13";
     src = fetchFromGitHub {
       owner = "dmitmel";
       repo = "cmp-digraphs";
@@ -2521,7 +2521,7 @@ final: prev: {
 
   cmp-dotenv = buildVimPlugin {
     pname = "cmp-dotenv";
-    version = "2024-06-05";
+    version = "0-unstable-2024-06-05";
     src = fetchFromGitHub {
       owner = "SergioRibera";
       repo = "cmp-dotenv";
@@ -2534,7 +2534,7 @@ final: prev: {
 
   cmp-emoji = buildVimPlugin {
     pname = "cmp-emoji";
-    version = "2024-03-19";
+    version = "0-unstable-2024-03-19";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-emoji";
@@ -2547,7 +2547,7 @@ final: prev: {
 
   cmp-fish = buildVimPlugin {
     pname = "cmp-fish";
-    version = "2024-06-17";
+    version = "0-unstable-2024-06-17";
     src = fetchFromGitHub {
       owner = "mtoohey31";
       repo = "cmp-fish";
@@ -2560,7 +2560,7 @@ final: prev: {
 
   cmp-fuzzy-buffer = buildVimPlugin {
     pname = "cmp-fuzzy-buffer";
-    version = "2023-04-02";
+    version = "0-unstable-2023-04-02";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "cmp-fuzzy-buffer";
@@ -2573,7 +2573,7 @@ final: prev: {
 
   cmp-fuzzy-path = buildVimPlugin {
     pname = "cmp-fuzzy-path";
-    version = "2024-01-17";
+    version = "0-unstable-2024-01-17";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "cmp-fuzzy-path";
@@ -2586,7 +2586,7 @@ final: prev: {
 
   cmp-git = buildVimPlugin {
     pname = "cmp-git";
-    version = "2025-04-30";
+    version = "0-unstable-2025-04-30";
     src = fetchFromGitHub {
       owner = "petertriho";
       repo = "cmp-git";
@@ -2599,7 +2599,7 @@ final: prev: {
 
   cmp-greek = buildVimPlugin {
     pname = "cmp-greek";
-    version = "2022-01-10";
+    version = "0-unstable-2022-01-10";
     src = fetchFromGitHub {
       owner = "max397574";
       repo = "cmp-greek";
@@ -2612,7 +2612,7 @@ final: prev: {
 
   cmp-latex-symbols = buildVimPlugin {
     pname = "cmp-latex-symbols";
-    version = "2025-01-10";
+    version = "0-unstable-2025-01-10";
     src = fetchFromGitHub {
       owner = "kdheepak";
       repo = "cmp-latex-symbols";
@@ -2625,7 +2625,7 @@ final: prev: {
 
   cmp-look = buildVimPlugin {
     pname = "cmp-look";
-    version = "2023-12-24";
+    version = "0-unstable-2023-12-24";
     src = fetchFromGitHub {
       owner = "octaltree";
       repo = "cmp-look";
@@ -2638,7 +2638,7 @@ final: prev: {
 
   cmp-neosnippet = buildVimPlugin {
     pname = "cmp-neosnippet";
-    version = "2022-01-06";
+    version = "0-unstable-2022-01-06";
     src = fetchFromGitHub {
       owner = "notomo";
       repo = "cmp-neosnippet";
@@ -2651,7 +2651,7 @@ final: prev: {
 
   cmp-nixpkgs-maintainers = buildVimPlugin {
     pname = "cmp-nixpkgs-maintainers";
-    version = "2025-03-29";
+    version = "0-unstable-2025-03-29";
     src = fetchFromGitHub {
       owner = "GaetanLepage";
       repo = "cmp-nixpkgs-maintainers";
@@ -2664,7 +2664,7 @@ final: prev: {
 
   cmp-npm = buildVimPlugin {
     pname = "cmp-npm";
-    version = "2023-06-12";
+    version = "0-unstable-2023-06-12";
     src = fetchFromGitHub {
       owner = "David-Kunz";
       repo = "cmp-npm";
@@ -2677,12 +2677,12 @@ final: prev: {
 
   cmp-nvim-lsp = buildVimPlugin {
     pname = "cmp-nvim-lsp";
-    version = "2025-08-13";
+    version = "0-unstable-2025-11-13";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-nvim-lsp";
-      rev = "bd5a7d6db125d4654b50eeae9f5217f24bb22fd3";
-      sha256 = "0yqcnpb6qkjyw1fk4zk66q2c9schxvascxqzk3mi7i7n0ykyjnjz";
+      rev = "cbc7b02bb99fae35cb42f514762b89b5126651ef";
+      sha256 = "156xwf7dkn9jpj1z5scw5dmnwbmibgrldpsxwfb0qq891dy5v1h9";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp/";
     meta.hydraPlatforms = [ ];
@@ -2690,7 +2690,7 @@ final: prev: {
 
   cmp-nvim-lsp-document-symbol = buildVimPlugin {
     pname = "cmp-nvim-lsp-document-symbol";
-    version = "2024-05-29";
+    version = "0-unstable-2024-05-29";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-nvim-lsp-document-symbol";
@@ -2703,12 +2703,12 @@ final: prev: {
 
   cmp-nvim-lsp-signature-help = buildVimPlugin {
     pname = "cmp-nvim-lsp-signature-help";
-    version = "2024-05-17";
+    version = "0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-nvim-lsp-signature-help";
-      rev = "031e6ba70b0ad5eee49fd2120ff7a2e325b17fa7";
-      sha256 = "08ipis3agyiaiqn91lq6imsnwyhqpadah7aj1v47v12ycy923cxl";
+      rev = "fd3e882e56956675c620898bf1ffcf4fcbe7ec84";
+      sha256 = "0sh0hfjsn602nfszb4wwp7cjcgdzrbwk5508r9dvc9zykk3mm2c0";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/";
     meta.hydraPlatforms = [ ];
@@ -2716,12 +2716,12 @@ final: prev: {
 
   cmp-nvim-lua = buildVimPlugin {
     pname = "cmp-nvim-lua";
-    version = "2023-04-14";
+    version = "0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-nvim-lua";
-      rev = "f12408bdb54c39c23e67cab726264c10db33ada8";
-      sha256 = "18qqcqjyxrmzvpj7m7wyjx1313h66vg8992n6y9lwawmb4mwxrg9";
+      rev = "e3a22cb071eb9d6508a156306b102c45cd2d573d";
+      sha256 = "08cyysinakpj89wv7w0x5wm71yh96ff7l7qflv4vcfms62sg4jbr";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
     meta.hydraPlatforms = [ ];
@@ -2729,7 +2729,7 @@ final: prev: {
 
   cmp-nvim-tags = buildVimPlugin {
     pname = "cmp-nvim-tags";
-    version = "2024-06-05";
+    version = "0-unstable-2024-06-05";
     src = fetchFromGitHub {
       owner = "quangnguyen30192";
       repo = "cmp-nvim-tags";
@@ -2742,7 +2742,7 @@ final: prev: {
 
   cmp-nvim-ultisnips = buildVimPlugin {
     pname = "cmp-nvim-ultisnips";
-    version = "2024-08-02";
+    version = "1.0.0-unstable-2024-08-02";
     src = fetchFromGitHub {
       owner = "quangnguyen30192";
       repo = "cmp-nvim-ultisnips";
@@ -2755,7 +2755,7 @@ final: prev: {
 
   cmp-omni = buildVimPlugin {
     pname = "cmp-omni";
-    version = "2023-09-24";
+    version = "0-unstable-2023-09-24";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-omni";
@@ -2768,7 +2768,7 @@ final: prev: {
 
   cmp-pandoc-nvim = buildVimPlugin {
     pname = "cmp-pandoc.nvim";
-    version = "2023-03-03";
+    version = "1.1.0-unstable-2023-03-03";
     src = fetchFromGitHub {
       owner = "aspeddro";
       repo = "cmp-pandoc.nvim";
@@ -2781,7 +2781,7 @@ final: prev: {
 
   cmp-pandoc-references = buildVimPlugin {
     pname = "cmp-pandoc-references";
-    version = "2025-04-01";
+    version = "0-unstable-2025-04-01";
     src = fetchFromGitHub {
       owner = "jmbuhr";
       repo = "cmp-pandoc-references";
@@ -2794,7 +2794,7 @@ final: prev: {
 
   cmp-path = buildVimPlugin {
     pname = "cmp-path";
-    version = "2025-07-30";
+    version = "0-unstable-2025-07-30";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-path";
@@ -2807,7 +2807,7 @@ final: prev: {
 
   cmp-rg = buildVimPlugin {
     pname = "cmp-rg";
-    version = "2024-11-12";
+    version = "1.3.11-unstable-2024-11-12";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "cmp-rg";
@@ -2820,7 +2820,7 @@ final: prev: {
 
   cmp-snippy = buildVimPlugin {
     pname = "cmp-snippy";
-    version = "2023-10-12";
+    version = "0-unstable-2023-10-12";
     src = fetchFromGitHub {
       owner = "dcampos";
       repo = "cmp-snippy";
@@ -2833,7 +2833,7 @@ final: prev: {
 
   cmp-spell = buildVimPlugin {
     pname = "cmp-spell";
-    version = "2024-05-07";
+    version = "0-unstable-2024-05-07";
     src = fetchFromGitHub {
       owner = "f3fora";
       repo = "cmp-spell";
@@ -2846,7 +2846,7 @@ final: prev: {
 
   cmp-tabby = buildVimPlugin {
     pname = "cmp-tabby";
-    version = "2023-11-21";
+    version = "0-unstable-2023-11-21";
     src = fetchFromGitHub {
       owner = "nzlov";
       repo = "cmp-tabby";
@@ -2859,7 +2859,7 @@ final: prev: {
 
   cmp-tabnine = buildVimPlugin {
     pname = "cmp-tabnine";
-    version = "2024-09-12";
+    version = "0-unstable-2024-09-12";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "cmp-tabnine";
@@ -2872,7 +2872,7 @@ final: prev: {
 
   cmp-tmux = buildVimPlugin {
     pname = "cmp-tmux";
-    version = "2024-02-29";
+    version = "0-unstable-2024-02-29";
     src = fetchFromGitHub {
       owner = "andersevenrud";
       repo = "cmp-tmux";
@@ -2885,7 +2885,7 @@ final: prev: {
 
   cmp-treesitter = buildVimPlugin {
     pname = "cmp-treesitter";
-    version = "2024-05-13";
+    version = "0-unstable-2024-05-13";
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "cmp-treesitter";
@@ -2898,7 +2898,7 @@ final: prev: {
 
   cmp-under-comparator = buildVimPlugin {
     pname = "cmp-under-comparator";
-    version = "2021-11-11";
+    version = "1.0.1-unstable-2021-11-11";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "cmp-under-comparator";
@@ -2911,7 +2911,7 @@ final: prev: {
 
   cmp-vim-lsp = buildVimPlugin {
     pname = "cmp-vim-lsp";
-    version = "2021-10-26";
+    version = "0-unstable-2021-10-26";
     src = fetchFromGitHub {
       owner = "dmitmel";
       repo = "cmp-vim-lsp";
@@ -2924,7 +2924,7 @@ final: prev: {
 
   cmp-vimtex = buildVimPlugin {
     pname = "cmp-vimtex";
-    version = "2024-08-06";
+    version = "0-unstable-2024-08-06";
     src = fetchFromGitHub {
       owner = "micangl";
       repo = "cmp-vimtex";
@@ -2937,7 +2937,7 @@ final: prev: {
 
   cmp-vimwiki-tags = buildVimPlugin {
     pname = "cmp-vimwiki-tags";
-    version = "2022-04-25";
+    version = "0-unstable-2022-04-25";
     src = fetchFromGitHub {
       owner = "pontusk";
       repo = "cmp-vimwiki-tags";
@@ -2950,7 +2950,7 @@ final: prev: {
 
   cmp-vsnip = buildVimPlugin {
     pname = "cmp-vsnip";
-    version = "2022-11-22";
+    version = "0-unstable-2022-11-22";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "cmp-vsnip";
@@ -2963,7 +2963,7 @@ final: prev: {
 
   cmp-zsh = buildVimPlugin {
     pname = "cmp-zsh";
-    version = "2022-10-03";
+    version = "0-unstable-2022-10-03";
     src = fetchFromGitHub {
       owner = "tamago324";
       repo = "cmp-zsh";
@@ -2976,7 +2976,7 @@ final: prev: {
 
   cmp_luasnip = buildVimPlugin {
     pname = "cmp_luasnip";
-    version = "2024-11-04";
+    version = "0-unstable-2024-11-04";
     src = fetchFromGitHub {
       owner = "saadparwaiz1";
       repo = "cmp_luasnip";
@@ -2989,7 +2989,7 @@ final: prev: {
 
   cmp_yanky = buildVimPlugin {
     pname = "cmp_yanky";
-    version = "2025-10-20";
+    version = "0-unstable-2025-10-20";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "cmp_yanky";
@@ -3002,7 +3002,7 @@ final: prev: {
 
   cobalt2-nvim = buildVimPlugin {
     pname = "cobalt2.nvim";
-    version = "2025-09-06";
+    version = "0-unstable-2025-09-06";
     src = fetchFromGitHub {
       owner = "lalitmee";
       repo = "cobalt2.nvim";
@@ -3015,7 +3015,7 @@ final: prev: {
 
   coc-clap = buildVimPlugin {
     pname = "coc-clap";
-    version = "2021-09-18";
+    version = "0-unstable-2021-09-18";
     src = fetchFromGitHub {
       owner = "vn-ki";
       repo = "coc-clap";
@@ -3028,7 +3028,7 @@ final: prev: {
 
   coc-denite = buildVimPlugin {
     pname = "coc-denite";
-    version = "2021-02-24";
+    version = "0-unstable-2021-02-24";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-denite";
@@ -3041,7 +3041,7 @@ final: prev: {
 
   coc-fzf = buildVimPlugin {
     pname = "coc-fzf";
-    version = "2024-04-24";
+    version = "0-unstable-2024-04-24";
     src = fetchFromGitHub {
       owner = "antoinemadec";
       repo = "coc-fzf";
@@ -3054,7 +3054,7 @@ final: prev: {
 
   coc-lua = buildVimPlugin {
     pname = "coc-lua";
-    version = "2023-12-08";
+    version = "2.0.6-unstable-2023-12-08";
     src = fetchFromGitHub {
       owner = "josa42";
       repo = "coc-lua";
@@ -3067,7 +3067,7 @@ final: prev: {
 
   coc-neco = buildVimPlugin {
     pname = "coc-neco";
-    version = "2020-04-07";
+    version = "0-unstable-2020-04-07";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-neco";
@@ -3080,12 +3080,12 @@ final: prev: {
 
   coc-nvim = buildVimPlugin {
     pname = "coc.nvim";
-    version = "2025-11-04";
+    version = "0.0.82-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "2af9b441cb55ec4e2c54dace3f5fa8d581f2c884";
-      sha256 = "0zqx11054x5rrkjdwd5dzg00xjs9xhwbjf2qp7v6zy8nvy9hxscq";
+      rev = "930b865b6e1489a6eb0241a43e680cc04d4fa046";
+      sha256 = "1xvp2qlafwla4krbxrjpqknk7pz7fz4032pzfbj8jvx4k52ghbay";
     };
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3093,7 +3093,7 @@ final: prev: {
 
   coc-svelte = buildVimPlugin {
     pname = "coc-svelte";
-    version = "2023-10-08";
+    version = "0.0.1-unstable-2023-10-08";
     src = fetchFromGitHub {
       owner = "coc-extensions";
       repo = "coc-svelte";
@@ -3106,7 +3106,7 @@ final: prev: {
 
   coc-tailwindcss = buildVimPlugin {
     pname = "coc-tailwindcss";
-    version = "2020-08-19";
+    version = "0-unstable-2020-08-19";
     src = fetchFromGitHub {
       owner = "iamcco";
       repo = "coc-tailwindcss";
@@ -3119,7 +3119,7 @@ final: prev: {
 
   coconut-vim = buildVimPlugin {
     pname = "coconut.vim";
-    version = "2017-10-10";
+    version = "0-unstable-2017-10-10";
     src = fetchFromGitHub {
       owner = "manicmaniac";
       repo = "coconut.vim";
@@ -3132,12 +3132,12 @@ final: prev: {
 
   codecompanion-history-nvim = buildVimPlugin {
     pname = "codecompanion-history.nvim";
-    version = "2025-09-07";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "ravitemer";
       repo = "codecompanion-history.nvim";
-      rev = "eb99d256352144cf3b6a1c45608ec25544a0813d";
-      sha256 = "0vni57hp5pbp1i5kxp1vixnqp8ql671gficl8s2jc0cmnd6885nj";
+      rev = "8c6ca9f998aeef89f3543343070f8562bf911fb4";
+      sha256 = "0jvd3rdwpxgfnmbdj0hgyn96zvgvc6m52rgsbm77x5nyskis1gmp";
     };
     meta.homepage = "https://github.com/ravitemer/codecompanion-history.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3145,7 +3145,7 @@ final: prev: {
 
   codecompanion-lualine-nvim = buildVimPlugin {
     pname = "codecompanion-lualine.nvim";
-    version = "2025-07-12";
+    version = "0.1.7-unstable-2025-07-12";
     src = fetchFromGitHub {
       owner = "franco-ruggeri";
       repo = "codecompanion-lualine.nvim";
@@ -3158,12 +3158,12 @@ final: prev: {
 
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
-    version = "2025-11-07";
+    version = "18.1.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "codecompanion.nvim";
-      rev = "3e02000a14847aa49a90c297633d4be2f03702bc";
-      sha256 = "13bi04ryra8inzfaagh1l0vyh2x5zmxwxnww4pmax29z8cw7887j";
+      rev = "e8b225e6a322b0bd1ae269d8032117a5500c27d8";
+      sha256 = "0cb23p5w26k5hwlxjkwj9a3ljq1w2lz0pxj4w7n4r361yvv5flsc";
     };
     meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3171,7 +3171,7 @@ final: prev: {
 
   codecompanion-spinner-nvim = buildVimPlugin {
     pname = "codecompanion-spinner.nvim";
-    version = "2025-09-11";
+    version = "0.2.3-unstable-2025-09-11";
     src = fetchFromGitHub {
       owner = "franco-ruggeri";
       repo = "codecompanion-spinner.nvim";
@@ -3184,7 +3184,7 @@ final: prev: {
 
   codewindow-nvim = buildVimPlugin {
     pname = "codewindow.nvim";
-    version = "2025-05-22";
+    version = "0-unstable-2025-05-22";
     src = fetchFromGitHub {
       owner = "gorbit99";
       repo = "codewindow.nvim";
@@ -3197,7 +3197,7 @@ final: prev: {
 
   codi-vim = buildVimPlugin {
     pname = "codi.vim";
-    version = "2023-02-28";
+    version = "0-unstable-2023-02-28";
     src = fetchFromGitHub {
       owner = "metakirby5";
       repo = "codi.vim";
@@ -3210,7 +3210,7 @@ final: prev: {
 
   colibri-vim = buildVimPlugin {
     pname = "colibri.vim";
-    version = "2019-06-15";
+    version = "0-unstable-2019-06-15";
     src = fetchFromGitHub {
       owner = "archseer";
       repo = "colibri.vim";
@@ -3223,7 +3223,7 @@ final: prev: {
 
   colorbuddy-nvim = buildVimPlugin {
     pname = "colorbuddy.nvim";
-    version = "2024-05-08";
+    version = "1.0.0-unstable-2024-05-08";
     src = fetchFromGitHub {
       owner = "tjdevries";
       repo = "colorbuddy.nvim";
@@ -3236,12 +3236,12 @@ final: prev: {
 
   colorful-menu-nvim = buildVimPlugin {
     pname = "colorful-menu.nvim";
-    version = "2025-09-24";
+    version = "0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "xzbdmw";
       repo = "colorful-menu.nvim";
-      rev = "d5b97d247528be308b6b69d96b5950a30e470f3d";
-      sha256 = "1j1nbkjrcys0zjbhzxxgxdcaf9pk2wx9k0xkcp808rwd8ym641ha";
+      rev = "b51a659459df8d078201aefc995db8175ed55e84";
+      sha256 = "18y5mzjqs43hcf9n2mjzqq159lnyxyihw3b606nqmc4na90bpdl6";
     };
     meta.homepage = "https://github.com/xzbdmw/colorful-menu.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3249,7 +3249,7 @@ final: prev: {
 
   colorful-winsep-nvim = buildVimPlugin {
     pname = "colorful-winsep.nvim";
-    version = "2025-09-30";
+    version = "0-unstable-2025-09-30";
     src = fetchFromGitHub {
       owner = "nvim-zh";
       repo = "colorful-winsep.nvim";
@@ -3262,7 +3262,7 @@ final: prev: {
 
   colorizer = buildVimPlugin {
     pname = "colorizer";
-    version = "2022-01-03";
+    version = "1.4.1-unstable-2022-01-03";
     src = fetchFromGitHub {
       owner = "lilydjwg";
       repo = "colorizer";
@@ -3275,7 +3275,7 @@ final: prev: {
 
   com-cloudedmountain-ide-neovim = buildVimPlugin {
     pname = "com.cloudedmountain.ide.neovim";
-    version = "2023-09-25";
+    version = "0.0.1-unstable-2023-09-25";
     src = fetchFromGitHub {
       owner = "Domeee";
       repo = "com.cloudedmountain.ide.neovim";
@@ -3288,12 +3288,12 @@ final: prev: {
 
   comfy-line-numbers-nvim = buildVimPlugin {
     pname = "comfy-line-numbers.nvim";
-    version = "2025-08-02";
+    version = "0-unstable-2025-11-08";
     src = fetchFromGitHub {
       owner = "mluders";
       repo = "comfy-line-numbers.nvim";
-      rev = "31e2f9287b4491ad72defb9e0185eb2739983799";
-      sha256 = "16cwrw7wz71g68kh7nj16xlidxdhgibbrg2rd75aij4452gisvl8";
+      rev = "3c51fa4104b97ddaccb66a6b34552e3eafd5b645";
+      sha256 = "0254f2k1nl0wbpvs8lmxr9bi25478m8p4rz5ww7vw50mhibkddvy";
     };
     meta.homepage = "https://github.com/mluders/comfy-line-numbers.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3301,7 +3301,7 @@ final: prev: {
 
   command-t = buildVimPlugin {
     pname = "command-t";
-    version = "2025-08-08";
+    version = "8.0-unstable-2025-08-08";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "command-t";
@@ -3314,7 +3314,7 @@ final: prev: {
 
   commasemi-nvim = buildVimPlugin {
     pname = "commasemi.nvim";
-    version = "2025-03-06";
+    version = "0-unstable-2025-03-06";
     src = fetchFromGitHub {
       owner = "saifulapm";
       repo = "commasemi.nvim";
@@ -3327,7 +3327,7 @@ final: prev: {
 
   comment-box-nvim = buildVimPlugin {
     pname = "comment-box.nvim";
-    version = "2024-02-03";
+    version = "1.0.2-unstable-2024-02-03";
     src = fetchFromGitHub {
       owner = "LudoPinelli";
       repo = "comment-box.nvim";
@@ -3340,7 +3340,7 @@ final: prev: {
 
   comment-nvim = buildVimPlugin {
     pname = "comment.nvim";
-    version = "2024-06-09";
+    version = "0.8.0-unstable-2024-06-09";
     src = fetchFromGitHub {
       owner = "numtostr";
       repo = "comment.nvim";
@@ -3353,7 +3353,7 @@ final: prev: {
 
   committia-vim = buildVimPlugin {
     pname = "committia.vim";
-    version = "2024-11-03";
+    version = "0-unstable-2024-11-03";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "committia.vim";
@@ -3366,7 +3366,7 @@ final: prev: {
 
   competitest-nvim = buildVimPlugin {
     pname = "competitest.nvim";
-    version = "2025-05-13";
+    version = "0-unstable-2025-05-13";
     src = fetchFromGitHub {
       owner = "xeluxee";
       repo = "competitest.nvim";
@@ -3379,12 +3379,12 @@ final: prev: {
 
   compiler-explorer-nvim = buildVimPlugin {
     pname = "compiler-explorer.nvim";
-    version = "2023-05-29";
+    version = "0-unstable-2025-11-13";
     src = fetchFromGitHub {
       owner = "krady21";
       repo = "compiler-explorer.nvim";
-      rev = "ee8e7a2808bdad67cd2acb61b5c9ffa7735c7ec9";
-      sha256 = "14gb8s8j745mzbal8b7r5ziaipi1hwz25f8s66l3634bwkych4r0";
+      rev = "3f1d95509b66803c79b4ef3ab1e51e5bc53f4ca2";
+      sha256 = "0jfvxn807adn0gkkq71lsw0xa4mzs2vw7aqg25z4pifjij18c3zf";
     };
     meta.homepage = "https://github.com/krady21/compiler-explorer.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3392,7 +3392,7 @@ final: prev: {
 
   compiler-nvim = buildVimPlugin {
     pname = "compiler.nvim";
-    version = "2025-08-14";
+    version = "3.3.9-unstable-2025-08-14";
     src = fetchFromGitHub {
       owner = "Zeioth";
       repo = "compiler.nvim";
@@ -3405,7 +3405,7 @@ final: prev: {
 
   completion-buffers = buildVimPlugin {
     pname = "completion-buffers";
-    version = "2021-01-17";
+    version = "0-unstable-2021-01-17";
     src = fetchFromGitHub {
       owner = "steelsojka";
       repo = "completion-buffers";
@@ -3418,7 +3418,7 @@ final: prev: {
 
   completion-nvim = buildVimPlugin {
     pname = "completion-nvim";
-    version = "2021-10-12";
+    version = "0-unstable-2021-10-12";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "completion-nvim";
@@ -3431,7 +3431,7 @@ final: prev: {
 
   completion-tabnine = buildVimPlugin {
     pname = "completion-tabnine";
-    version = "2021-09-27";
+    version = "0-unstable-2021-09-27";
     src = fetchFromGitHub {
       owner = "aca";
       repo = "completion-tabnine";
@@ -3444,7 +3444,7 @@ final: prev: {
 
   completion-treesitter = buildVimPlugin {
     pname = "completion-treesitter";
-    version = "2020-06-26";
+    version = "0.1-unstable-2020-06-26";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "completion-treesitter";
@@ -3457,7 +3457,7 @@ final: prev: {
 
   concealedyank-vim = buildVimPlugin {
     pname = "concealedyank.vim";
-    version = "2013-03-24";
+    version = "0-unstable-2013-03-24";
     src = fetchFromGitHub {
       owner = "chikatoike";
       repo = "concealedyank.vim";
@@ -3470,7 +3470,7 @@ final: prev: {
 
   conflict-marker-vim = buildVimPlugin {
     pname = "conflict-marker.vim";
-    version = "2024-05-20";
+    version = "0-unstable-2024-05-20";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "conflict-marker.vim";
@@ -3483,12 +3483,12 @@ final: prev: {
 
   conform-nvim = buildVimPlugin {
     pname = "conform.nvim";
-    version = "2025-11-05";
+    version = "9.1.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "conform.nvim";
-      rev = "cde4da5c1083d3527776fee69536107d98dae6c9";
-      sha256 = "0109c6y5kfckys2ikn6lv1m5zkmv7f4jy0l64nw3gr1wja1zr5vl";
+      rev = "9b8fa5e0b78168f68bee9bf886dc20f287c61e02";
+      sha256 = "0q46mz6qybdj2zp8539apxzs6qd9mpnw7xzc0frki34j2jqhqwg2";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/conform.nvim/";
@@ -3497,12 +3497,12 @@ final: prev: {
 
   conjure = buildVimPlugin {
     pname = "conjure";
-    version = "2025-11-02";
+    version = "4.57.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "Olical";
       repo = "conjure";
-      rev = "dab027e0cb710beb070424a117b9065279f6083d";
-      sha256 = "0ra30mszsp4w128066isqxc4glc587gyd5sz76v0p0yh21l1kg9c";
+      rev = "f92b09ede8e88d6e24231001940008ced62f9304";
+      sha256 = "08f6vh3fcv3i2i3czr4x0611m80clvfn5kgkzi5v44kc1ryfm3yk";
     };
     meta.homepage = "https://github.com/Olical/conjure/";
     meta.hydraPlatforms = [ ];
@@ -3510,7 +3510,7 @@ final: prev: {
 
   context-vim = buildVimPlugin {
     pname = "context.vim";
-    version = "2024-07-19";
+    version = "0-unstable-2024-07-19";
     src = fetchFromGitHub {
       owner = "wellle";
       repo = "context.vim";
@@ -3523,7 +3523,7 @@ final: prev: {
 
   context_filetype-vim = buildVimPlugin {
     pname = "context_filetype.vim";
-    version = "2025-03-11";
+    version = "1.0-unstable-2025-03-11";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "context_filetype.vim";
@@ -3536,7 +3536,7 @@ final: prev: {
 
   contextfiles-nvim = buildVimPlugin {
     pname = "contextfiles.nvim";
-    version = "2025-08-24";
+    version = "0-unstable-2025-08-24";
     src = fetchFromGitHub {
       owner = "banjo";
       repo = "contextfiles.nvim";
@@ -3549,7 +3549,7 @@ final: prev: {
 
   copilot-cmp = buildVimPlugin {
     pname = "copilot-cmp";
-    version = "2024-12-11";
+    version = "0-unstable-2024-12-11";
     src = fetchFromGitHub {
       owner = "zbirenbaum";
       repo = "copilot-cmp";
@@ -3562,12 +3562,12 @@ final: prev: {
 
   copilot-lsp = buildVimPlugin {
     pname = "copilot-lsp";
-    version = "2025-09-27";
+    version = "0-unstable-2025-11-10";
     src = fetchFromGitHub {
       owner = "copilotlsp-nvim";
       repo = "copilot-lsp";
-      rev = "a80e0c17e7366614d39506825f49a25d285fead9";
-      sha256 = "0h3w04f2m2bfgd2dk8m3q9p8xv7x8wpgy47vdq2fzix6jpppmj1i";
+      rev = "884034b23c3716d55b417984ad092dc2b011115b";
+      sha256 = "0dhx4smhkbpwq464442pzcfahlaqp4y2k9wz183r9j1cpi1z5pw3";
     };
     meta.homepage = "https://github.com/copilotlsp-nvim/copilot-lsp/";
     meta.hydraPlatforms = [ ];
@@ -3575,12 +3575,12 @@ final: prev: {
 
   copilot-lua = buildVimPlugin {
     pname = "copilot.lua";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "zbirenbaum";
       repo = "copilot.lua";
-      rev = "5bde2cfe01f049f522eeb8b52c5c723407db8bdf";
-      sha256 = "09dwpn5siysyi86v49y9rb9sk3ghg9l4ws280wwd8r91j82xmipz";
+      rev = "508d8b00390ff3046323f61187a57069910c6e17";
+      sha256 = "0zbih58mc3aiabxn85b4ffgmmn2q4p3lb8hi8c6nb6ds7c183w5l";
     };
     meta.homepage = "https://github.com/zbirenbaum/copilot.lua/";
     meta.hydraPlatforms = [ ];
@@ -3588,7 +3588,7 @@ final: prev: {
 
   copilot-lualine = buildVimPlugin {
     pname = "copilot-lualine";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "AndreM222";
       repo = "copilot-lualine";
@@ -3601,12 +3601,12 @@ final: prev: {
 
   copilot-vim = buildVimPlugin {
     pname = "copilot.vim";
-    version = "2025-10-01";
+    version = "1.57.0-unstable-2025-11-20";
     src = fetchFromGitHub {
       owner = "github";
       repo = "copilot.vim";
-      rev = "da369d90cfd6c396b1d0ec259836a1c7222fb2ea";
-      sha256 = "0pwaw4izic1zajx586vxjn8yslabd2hq42wy1i7px3fj6g2v5gvl";
+      rev = "f89e977c87180519ba3b942200e3d05b17b1e2fc";
+      sha256 = "0894mjyjjqgb9x1yyhshl8vj85lyxmv4jc8caxpi2brmaqsc83in";
     };
     meta.homepage = "https://github.com/github/copilot.vim/";
     meta.hydraPlatforms = [ ];
@@ -3614,7 +3614,7 @@ final: prev: {
 
   coq-artifacts = buildVimPlugin {
     pname = "coq.artifacts";
-    version = "2025-01-20";
+    version = "0-unstable-2025-01-20";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "coq.artifacts";
@@ -3627,7 +3627,7 @@ final: prev: {
 
   coq-lsp-nvim = buildVimPlugin {
     pname = "coq-lsp.nvim";
-    version = "2025-09-26";
+    version = "0-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "tomtomjhj";
       repo = "coq-lsp.nvim";
@@ -3640,7 +3640,7 @@ final: prev: {
 
   coq-thirdparty = buildVimPlugin {
     pname = "coq.thirdparty";
-    version = "2025-10-29";
+    version = "0-unstable-2025-10-29";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "coq.thirdparty";
@@ -3653,7 +3653,7 @@ final: prev: {
 
   coq-vim = buildVimPlugin {
     pname = "coq.vim";
-    version = "2013-01-16";
+    version = "0-unstable-2013-01-16";
     src = fetchFromGitHub {
       owner = "jvoorhis";
       repo = "coq.vim";
@@ -3666,12 +3666,12 @@ final: prev: {
 
   coq_nvim = buildVimPlugin {
     pname = "coq_nvim";
-    version = "2025-10-11";
+    version = "0-unstable-2025-11-22";
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "coq_nvim";
-      rev = "a63d28a9aa59c20a503ce38608fb6bc7cb3842f4";
-      sha256 = "1rwhmdy8frm6y7ww21ccknf65d5p6f54sspwgb3616dwk4qcwwmm";
+      rev = "d8b71757358038fa151fb45c493c3a1e8c3629a3";
+      sha256 = "096zvnfcpfciqvnab89frxmg5dhid2nh21j4vn6wypzyyzd9f7hg";
     };
     meta.homepage = "https://github.com/ms-jpq/coq_nvim/";
     meta.hydraPlatforms = [ ];
@@ -3679,7 +3679,7 @@ final: prev: {
 
   cornelis = buildVimPlugin {
     pname = "cornelis";
-    version = "2025-11-03";
+    version = "2.8.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "agda";
       repo = "cornelis";
@@ -3692,7 +3692,7 @@ final: prev: {
 
   cosco-vim = buildVimPlugin {
     pname = "cosco.vim";
-    version = "2018-08-07";
+    version = "0.10.0-unstable-2018-08-07";
     src = fetchFromGitHub {
       owner = "lfilho";
       repo = "cosco.vim";
@@ -3705,7 +3705,7 @@ final: prev: {
 
   cpsm = buildVimPlugin {
     pname = "cpsm";
-    version = "2024-03-06";
+    version = "0-unstable-2024-03-06";
     src = fetchFromGitHub {
       owner = "nixprime";
       repo = "cpsm";
@@ -3718,7 +3718,7 @@ final: prev: {
 
   crates-nvim = buildVimPlugin {
     pname = "crates.nvim";
-    version = "2025-08-23";
+    version = "0.7.1-unstable-2025-08-23";
     src = fetchFromGitHub {
       owner = "saecki";
       repo = "crates.nvim";
@@ -3731,7 +3731,7 @@ final: prev: {
 
   csapprox = buildVimPlugin {
     pname = "csapprox";
-    version = "2013-07-27";
+    version = "4.00-unstable-2013-07-27";
     src = fetchFromGitHub {
       owner = "godlygeek";
       repo = "csapprox";
@@ -3744,7 +3744,7 @@ final: prev: {
 
   csharpls-extended-lsp-nvim = buildVimPlugin {
     pname = "csharpls-extended-lsp.nvim";
-    version = "2025-09-10";
+    version = "0.3.0-unstable-2025-09-10";
     src = fetchFromGitHub {
       owner = "Decodetalkers";
       repo = "csharpls-extended-lsp.nvim";
@@ -3757,7 +3757,7 @@ final: prev: {
 
   cspell-nvim = buildVimPlugin {
     pname = "cspell.nvim";
-    version = "2025-07-30";
+    version = "0-unstable-2025-07-30";
     src = fetchFromGitHub {
       owner = "davidmh";
       repo = "cspell.nvim";
@@ -3770,7 +3770,7 @@ final: prev: {
 
   csv-vim = buildVimPlugin {
     pname = "csv.vim";
-    version = "2025-09-22";
+    version = "0-unstable-2025-09-22";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "csv.vim";
@@ -3783,12 +3783,12 @@ final: prev: {
 
   csvview-nvim = buildVimPlugin {
     pname = "csvview.nvim";
-    version = "2025-09-15";
+    version = "1.3.0-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "hat0uma";
       repo = "csvview.nvim";
-      rev = "bbab4c2f808fd8e11ec8dfdd128251aadba566a1";
-      sha256 = "0vm69f078dsyp10wrcjafhf8y34wh4xmyp6kjw2fq1mpwkwdibl3";
+      rev = "860bd8c4edacf709391058e337445217d995dd69";
+      sha256 = "1q7f3vyb0b5m5affncxwirj48p5f3mfk5vknvqs95lqb0rg7g9gq";
     };
     meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3796,7 +3796,7 @@ final: prev: {
 
   ctags-lsp-nvim = buildVimPlugin {
     pname = "ctags-lsp.nvim";
-    version = "2025-09-19";
+    version = "0-unstable-2025-09-19";
     src = fetchFromGitHub {
       owner = "netmute";
       repo = "ctags-lsp.nvim";
@@ -3809,7 +3809,7 @@ final: prev: {
 
   ctrlp-cmatcher = buildVimPlugin {
     pname = "ctrlp-cmatcher";
-    version = "2015-10-15";
+    version = "0-unstable-2015-10-15";
     src = fetchFromGitHub {
       owner = "JazzCore";
       repo = "ctrlp-cmatcher";
@@ -3822,7 +3822,7 @@ final: prev: {
 
   ctrlp-py-matcher = buildVimPlugin {
     pname = "ctrlp-py-matcher";
-    version = "2021-09-20";
+    version = "1.1.0-unstable-2021-09-20";
     src = fetchFromGitHub {
       owner = "FelikZ";
       repo = "ctrlp-py-matcher";
@@ -3835,7 +3835,7 @@ final: prev: {
 
   ctrlp-vim = buildVimPlugin {
     pname = "ctrlp.vim";
-    version = "2025-10-15";
+    version = "1.81-unstable-2025-10-15";
     src = fetchFromGitHub {
       owner = "ctrlpvim";
       repo = "ctrlp.vim";
@@ -3848,7 +3848,7 @@ final: prev: {
 
   ctrlp-z = buildVimPlugin {
     pname = "ctrlp-z";
-    version = "2015-10-17";
+    version = "0-unstable-2015-10-17";
     src = fetchFromGitHub {
       owner = "amiorin";
       repo = "ctrlp-z";
@@ -3861,7 +3861,7 @@ final: prev: {
 
   cutlass-nvim = buildVimPlugin {
     pname = "cutlass.nvim";
-    version = "2025-10-23";
+    version = "1.0.1-unstable-2025-10-23";
     src = fetchFromGitHub {
       owner = "gbprod";
       repo = "cutlass.nvim";
@@ -3874,12 +3874,12 @@ final: prev: {
 
   cyberdream-nvim = buildVimPlugin {
     pname = "cyberdream.nvim";
-    version = "2025-09-28";
+    version = "5.3.0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "scottmckendry";
       repo = "cyberdream.nvim";
-      rev = "eba11f590026e74915e13d12a53cdbdc9b98d9f9";
-      sha256 = "1mwklwpj25parnapav1ivl7n86pw0v0m6cj5yqdsp0sv8hyzf9vp";
+      rev = "a43b45423e8494898c353c0604e0b2e4e99bd056";
+      sha256 = "0j93wjc1wlh77bgqxbp0c1hgnbshjb9q8dyii0rd9d3a32ng5x0k";
     };
     meta.homepage = "https://github.com/scottmckendry/cyberdream.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3887,7 +3887,7 @@ final: prev: {
 
   cybu-nvim = buildVimPlugin {
     pname = "cybu.nvim";
-    version = "2025-07-24";
+    version = "1.0-unstable-2025-07-24";
     src = fetchFromGitHub {
       owner = "ghillb";
       repo = "cybu.nvim";
@@ -3900,7 +3900,7 @@ final: prev: {
 
   dailies-nvim = buildVimPlugin {
     pname = "dailies.nvim";
-    version = "2025-04-21";
+    version = "0-unstable-2025-04-21";
     src = fetchFromGitHub {
       owner = "JachymPutta";
       repo = "dailies.nvim";
@@ -3913,12 +3913,12 @@ final: prev: {
 
   darcubox-nvim = buildVimPlugin {
     pname = "darcubox-nvim";
-    version = "2025-08-15";
+    version = "0-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "Koalhack";
       repo = "darcubox-nvim";
-      rev = "5e102a1f2a997842e1a6361499991160cb2c3606";
-      sha256 = "0qgw5rlkp2pa8nw4hqrb1imx9195s8h7vlzm8xixcza9rky3pwzm";
+      rev = "4945a37ac2ff5a286a4234756710f13c1572d6cc";
+      sha256 = "14kn2wp1vmxfmmlcw0vrws8vajzkjl92mkrkwmwa7gzncwxfj4r8";
     };
     meta.homepage = "https://github.com/Koalhack/darcubox-nvim/";
     meta.hydraPlatforms = [ ];
@@ -3926,7 +3926,7 @@ final: prev: {
 
   darkearth-nvim = buildVimPlugin {
     pname = "darkearth-nvim";
-    version = "2025-08-20";
+    version = "2.1.0-unstable-2025-08-20";
     src = fetchFromGitHub {
       owner = "ptdewey";
       repo = "darkearth-nvim";
@@ -3939,12 +3939,12 @@ final: prev: {
 
   dart-nvim = buildVimPlugin {
     pname = "dart.nvim";
-    version = "2025-11-01";
+    version = "0.1.4-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "iofq";
       repo = "dart.nvim";
-      rev = "8822aabbfef95eda2b22a8f7ee08912c762ef941";
-      sha256 = "1rmh2ql1xx4s212mcmmgv63abagl2z20k2njin9c7y5kcdppcdh0";
+      rev = "205f809fbb27d56aff22756a97b5ba6f0c7243c3";
+      sha256 = "019n7356f6jazkks7qgbmsvh82nh9kjqng1isyv3ijyv17ikgdll";
     };
     meta.homepage = "https://github.com/iofq/dart.nvim/";
     meta.hydraPlatforms = [ ];
@@ -3952,7 +3952,7 @@ final: prev: {
 
   dart-vim-plugin = buildVimPlugin {
     pname = "dart-vim-plugin";
-    version = "2024-07-02";
+    version = "0.1.0-unstable-2024-07-02";
     src = fetchFromGitHub {
       owner = "dart-lang";
       repo = "dart-vim-plugin";
@@ -3965,20 +3965,20 @@ final: prev: {
 
   dash-vim = buildVimPlugin {
     pname = "dash.vim";
-    version = "2017-09-12";
+    version = "1.1.1-unstable-2017-09-12";
     src = fetchFromGitHub {
-      owner = "rizzatti";
+      owner = "joseotaviorf";
       repo = "dash.vim";
       rev = "25b17d9488454a1fcdbb2cbe829a23226f95e3c2";
       sha256 = "1pzc6bzmh38ivmcn37hgjaq21zc692smwfb39chh8hj853il183c";
     };
-    meta.homepage = "https://github.com/rizzatti/dash.vim/";
+    meta.homepage = "https://github.com/joseotaviorf/dash.vim/";
     meta.hydraPlatforms = [ ];
   };
 
   dashboard-nvim = buildVimPlugin {
     pname = "dashboard-nvim";
-    version = "2025-08-31";
+    version = "0-unstable-2025-08-31";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "dashboard-nvim";
@@ -3991,7 +3991,7 @@ final: prev: {
 
   ddc-filter-matcher_head = buildVimPlugin {
     pname = "ddc-filter-matcher_head";
-    version = "2025-09-02";
+    version = "0-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-filter-matcher_head";
@@ -4004,7 +4004,7 @@ final: prev: {
 
   ddc-filter-sorter_rank = buildVimPlugin {
     pname = "ddc-filter-sorter_rank";
-    version = "2025-09-02";
+    version = "0-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-filter-sorter_rank";
@@ -4017,12 +4017,12 @@ final: prev: {
 
   ddc-fuzzy = buildVimPlugin {
     pname = "ddc-fuzzy";
-    version = "2025-02-01";
+    version = "0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "tani";
       repo = "ddc-fuzzy";
-      rev = "d6cc18a47e9e12f4ed941b6023e7978a4461c692";
-      sha256 = "0gxg0dbc6bs8js528q7s62xndwhra7gkyxivw0qb6vbm8hzygwnj";
+      rev = "095bc2c1dd1fb9ee4d35a2dbd3094f7346ac9594";
+      sha256 = "1fgp4k3974jvh0zw3fmjj6hkah7dsdyp9ip87zli58blkqbq371l";
     };
     meta.homepage = "https://github.com/tani/ddc-fuzzy/";
     meta.hydraPlatforms = [ ];
@@ -4030,7 +4030,7 @@ final: prev: {
 
   ddc-source-around = buildVimPlugin {
     pname = "ddc-source-around";
-    version = "2025-09-03";
+    version = "0-unstable-2025-09-03";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-source-around";
@@ -4043,7 +4043,7 @@ final: prev: {
 
   ddc-source-file = buildVimPlugin {
     pname = "ddc-source-file";
-    version = "2025-09-03";
+    version = "0-unstable-2025-09-03";
     src = fetchFromGitHub {
       owner = "LumaKernel";
       repo = "ddc-source-file";
@@ -4056,7 +4056,7 @@ final: prev: {
 
   ddc-source-lsp = buildVimPlugin {
     pname = "ddc-source-lsp";
-    version = "2025-09-13";
+    version = "1.2.0-unstable-2025-09-13";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-source-lsp";
@@ -4069,7 +4069,7 @@ final: prev: {
 
   ddc-ui-native = buildVimPlugin {
     pname = "ddc-ui-native";
-    version = "2025-08-30";
+    version = "0-unstable-2025-08-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-ui-native";
@@ -4082,7 +4082,7 @@ final: prev: {
 
   ddc-ui-pum = buildVimPlugin {
     pname = "ddc-ui-pum";
-    version = "2025-08-26";
+    version = "0-unstable-2025-08-26";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc-ui-pum";
@@ -4095,12 +4095,12 @@ final: prev: {
 
   ddc-vim = buildVimPlugin {
     pname = "ddc.vim";
-    version = "2025-10-12";
+    version = "10.1.0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "ddc.vim";
-      rev = "4f553b7f4e968971461820d05d3ff1601f9d7ab4";
-      sha256 = "1772cr1di0nf8knssd2sfdzhnnsvalqrvpa31js5xcfyqj8aaqfx";
+      rev = "ef527ad60b199b11d022a648a24ab6d424227943";
+      sha256 = "0q6i01brag1najr13kynz9dr8md2dwhyfmlxa5vgjp3bfrxb37hs";
     };
     meta.homepage = "https://github.com/Shougo/ddc.vim/";
     meta.hydraPlatforms = [ ];
@@ -4108,7 +4108,7 @@ final: prev: {
 
   debugmaster-nvim = buildVimPlugin {
     pname = "debugmaster.nvim";
-    version = "2025-07-16";
+    version = "0-unstable-2025-07-16";
     src = fetchFromGitHub {
       owner = "miroshQa";
       repo = "debugmaster.nvim";
@@ -4121,12 +4121,12 @@ final: prev: {
 
   debugprint-nvim = buildVimPlugin {
     pname = "debugprint.nvim";
-    version = "2025-11-06";
+    version = "7.0.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "andrewferrier";
       repo = "debugprint.nvim";
-      rev = "6b21243add2195e0918e062d6be86ad1d01e6d66";
-      sha256 = "0pvyhgw520843lz5gmi1z1lc7lzs621wpzlxs8mn8qr8nq0djz0w";
+      rev = "25bc7c2b1703050d14cfb2560974a8426febe08d";
+      sha256 = "11svy8n869ylwrzjylsfqsx5h2vqk83gbb1y4v8g1czhs8m04y6w";
     };
     meta.homepage = "https://github.com/andrewferrier/debugprint.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4134,7 +4134,7 @@ final: prev: {
 
   deepwhite-nvim = buildVimPlugin {
     pname = "deepwhite.nvim";
-    version = "2024-09-30";
+    version = "0-unstable-2024-09-30";
     src = fetchFromGitHub {
       owner = "Verf";
       repo = "deepwhite.nvim";
@@ -4147,7 +4147,7 @@ final: prev: {
 
   defx-git = buildVimPlugin {
     pname = "defx-git";
-    version = "2021-01-01";
+    version = "0-unstable-2021-01-01";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "defx-git";
@@ -4160,7 +4160,7 @@ final: prev: {
 
   defx-icons = buildVimPlugin {
     pname = "defx-icons";
-    version = "2021-08-21";
+    version = "0-unstable-2021-08-21";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "defx-icons";
@@ -4173,7 +4173,7 @@ final: prev: {
 
   defx-nvim = buildVimPlugin {
     pname = "defx.nvim";
-    version = "2024-03-12";
+    version = "1.5-unstable-2024-03-12";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "defx.nvim";
@@ -4186,7 +4186,7 @@ final: prev: {
 
   delimitMate = buildVimPlugin {
     pname = "delimitMate";
-    version = "2024-08-06";
+    version = "2.7-unstable-2024-08-06";
     src = fetchFromGitHub {
       owner = "Raimondi";
       repo = "delimitMate";
@@ -4199,12 +4199,12 @@ final: prev: {
 
   demicolon-nvim = buildVimPlugin {
     pname = "demicolon.nvim";
-    version = "2025-10-07";
+    version = "2.0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "mawkler";
       repo = "demicolon.nvim";
-      rev = "36f9ddaf8d45f84644344cb057a115c425bcb5cc";
-      sha256 = "01l0y2xfm64rj9pcq3w4ydkgbshq3cd28vhxi79c88b0h72zzvfc";
+      rev = "f17afaeba2b0d8484f4e7b00594761ccd043e154";
+      sha256 = "169ynrdhnp3qzaby8l2ylgiv0czm5a8qc5n8bjsbxsrwg9njgdxb";
     };
     meta.homepage = "https://github.com/mawkler/demicolon.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4212,7 +4212,7 @@ final: prev: {
 
   denite-extra = buildVimPlugin {
     pname = "denite-extra";
-    version = "2019-03-29";
+    version = "0-unstable-2019-03-29";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "denite-extra";
@@ -4225,7 +4225,7 @@ final: prev: {
 
   denite-git = buildVimPlugin {
     pname = "denite-git";
-    version = "2021-01-25";
+    version = "0-unstable-2021-01-25";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "denite-git";
@@ -4238,7 +4238,7 @@ final: prev: {
 
   denite-nvim = buildVimPlugin {
     pname = "denite.nvim";
-    version = "2024-03-12";
+    version = "3.3-unstable-2024-03-12";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
@@ -4251,7 +4251,7 @@ final: prev: {
 
   denops-vim = buildVimPlugin {
     pname = "denops.vim";
-    version = "2025-10-26";
+    version = "8.0.1-unstable-2025-10-26";
     src = fetchFromGitHub {
       owner = "vim-denops";
       repo = "denops.vim";
@@ -4264,7 +4264,7 @@ final: prev: {
 
   deol-nvim = buildVimPlugin {
     pname = "deol.nvim";
-    version = "2025-09-08";
+    version = "2.0-unstable-2025-09-08";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deol.nvim";
@@ -4277,7 +4277,7 @@ final: prev: {
 
   deoplete-clang = buildVimPlugin {
     pname = "deoplete-clang";
-    version = "2019-11-10";
+    version = "0-unstable-2019-11-10";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-clang";
@@ -4291,7 +4291,7 @@ final: prev: {
 
   deoplete-dictionary = buildVimPlugin {
     pname = "deoplete-dictionary";
-    version = "2019-04-16";
+    version = "0-unstable-2019-04-16";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-dictionary";
@@ -4304,7 +4304,7 @@ final: prev: {
 
   deoplete-fish = buildVimPlugin {
     pname = "deoplete-fish";
-    version = "2020-04-04";
+    version = "0-unstable-2020-04-04";
     src = fetchFromGitHub {
       owner = "ponko2";
       repo = "deoplete-fish";
@@ -4317,7 +4317,7 @@ final: prev: {
 
   deoplete-github = buildVimPlugin {
     pname = "deoplete-github";
-    version = "2018-03-04";
+    version = "0-unstable-2018-03-04";
     src = fetchFromGitHub {
       owner = "SevereOverfl0w";
       repo = "deoplete-github";
@@ -4330,7 +4330,7 @@ final: prev: {
 
   deoplete-go = buildVimPlugin {
     pname = "deoplete-go";
-    version = "2021-03-30";
+    version = "0-unstable-2021-03-30";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-go";
@@ -4344,7 +4344,7 @@ final: prev: {
 
   deoplete-greek = buildVimPlugin {
     pname = "deoplete-greek";
-    version = "2019-12-23";
+    version = "0-unstable-2019-12-23";
     src = fetchFromGitHub {
       owner = "Inazuma110";
       repo = "deoplete-greek";
@@ -4357,7 +4357,7 @@ final: prev: {
 
   deoplete-jedi = buildVimPlugin {
     pname = "deoplete-jedi";
-    version = "2022-11-15";
+    version = "0-unstable-2022-11-15";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-jedi";
@@ -4370,7 +4370,7 @@ final: prev: {
 
   deoplete-julia = buildVimPlugin {
     pname = "deoplete-julia";
-    version = "2018-06-11";
+    version = "0.1.1-unstable-2018-06-11";
     src = fetchFromGitHub {
       owner = "JuliaEditorSupport";
       repo = "deoplete-julia";
@@ -4383,7 +4383,7 @@ final: prev: {
 
   deoplete-khard = buildVimPlugin {
     pname = "deoplete-khard";
-    version = "2020-09-18";
+    version = "0-unstable-2020-09-18";
     src = fetchFromGitHub {
       owner = "nicoe";
       repo = "deoplete-khard";
@@ -4396,7 +4396,7 @@ final: prev: {
 
   deoplete-lsp = buildVimPlugin {
     pname = "deoplete-lsp";
-    version = "2025-08-15";
+    version = "0-unstable-2025-08-15";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-lsp";
@@ -4409,7 +4409,7 @@ final: prev: {
 
   deoplete-notmuch = buildVimPlugin {
     pname = "deoplete-notmuch";
-    version = "2018-12-11";
+    version = "0-unstable-2018-12-11";
     src = fetchFromGitHub {
       owner = "Valodim";
       repo = "deoplete-notmuch";
@@ -4422,7 +4422,7 @@ final: prev: {
 
   deoplete-nvim = buildVimPlugin {
     pname = "deoplete.nvim";
-    version = "2024-06-05";
+    version = "6.1-unstable-2024-06-05";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
@@ -4435,7 +4435,7 @@ final: prev: {
 
   deoplete-phpactor = buildVimPlugin {
     pname = "deoplete-phpactor";
-    version = "2020-09-12";
+    version = "0-unstable-2020-09-12";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "deoplete-phpactor";
@@ -4448,7 +4448,7 @@ final: prev: {
 
   deoplete-rust = buildVimPlugin {
     pname = "deoplete-rust";
-    version = "2017-07-18";
+    version = "0-unstable-2017-07-18";
     src = fetchFromGitHub {
       owner = "sebastianmarkow";
       repo = "deoplete-rust";
@@ -4461,7 +4461,7 @@ final: prev: {
 
   deoplete-tabnine = buildVimPlugin {
     pname = "deoplete-tabnine";
-    version = "2023-08-06";
+    version = "0-unstable-2023-08-06";
     src = fetchFromGitHub {
       owner = "tbodt";
       repo = "deoplete-tabnine";
@@ -4474,7 +4474,7 @@ final: prev: {
 
   deoplete-ternjs = buildVimPlugin {
     pname = "deoplete-ternjs";
-    version = "2019-12-19";
+    version = "0-unstable-2019-12-19";
     src = fetchFromGitHub {
       owner = "carlitux";
       repo = "deoplete-ternjs";
@@ -4487,7 +4487,7 @@ final: prev: {
 
   deoplete-vim-lsp = buildVimPlugin {
     pname = "deoplete-vim-lsp";
-    version = "2021-02-22";
+    version = "0-unstable-2021-02-22";
     src = fetchFromGitHub {
       owner = "lighttiger2505";
       repo = "deoplete-vim-lsp";
@@ -4500,7 +4500,7 @@ final: prev: {
 
   deoplete-zsh = buildVimPlugin {
     pname = "deoplete-zsh";
-    version = "2019-11-10";
+    version = "0-unstable-2019-11-10";
     src = fetchFromGitHub {
       owner = "deoplete-plugins";
       repo = "deoplete-zsh";
@@ -4513,7 +4513,7 @@ final: prev: {
 
   devdocs-nvim = buildVimPlugin {
     pname = "devdocs.nvim";
-    version = "2025-10-16";
+    version = "0.2-unstable-2025-10-16";
     src = fetchFromGitHub {
       owner = "maskudo";
       repo = "devdocs.nvim";
@@ -4526,7 +4526,7 @@ final: prev: {
 
   devdocs-vim = buildVimPlugin {
     pname = "devdocs.vim";
-    version = "2018-08-27";
+    version = "0-unstable-2018-08-27";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "devdocs.vim";
@@ -4539,7 +4539,7 @@ final: prev: {
 
   dhall-vim = buildVimPlugin {
     pname = "dhall-vim";
-    version = "2024-05-18";
+    version = "0-unstable-2024-05-18";
     src = fetchFromGitHub {
       owner = "vmchale";
       repo = "dhall-vim";
@@ -4552,7 +4552,7 @@ final: prev: {
 
   diagflow-nvim = buildVimPlugin {
     pname = "diagflow.nvim";
-    version = "2025-03-04";
+    version = "0-unstable-2025-03-04";
     src = fetchFromGitHub {
       owner = "dgagn";
       repo = "diagflow.nvim";
@@ -4565,7 +4565,7 @@ final: prev: {
 
   diaglist-nvim = buildVimPlugin {
     pname = "diaglist.nvim";
-    version = "2025-09-17";
+    version = "0-unstable-2025-09-17";
     src = fetchFromGitHub {
       owner = "onsails";
       repo = "diaglist.nvim";
@@ -4578,7 +4578,7 @@ final: prev: {
 
   diagnostic-nvim = buildVimPlugin {
     pname = "diagnostic-nvim";
-    version = "2020-11-13";
+    version = "0-unstable-2020-11-13";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "diagnostic-nvim";
@@ -4591,7 +4591,7 @@ final: prev: {
 
   diagram-nvim = buildVimPlugin {
     pname = "diagram.nvim";
-    version = "2025-09-05";
+    version = "0-unstable-2025-09-05";
     src = fetchFromGitHub {
       owner = "3rd";
       repo = "diagram.nvim";
@@ -4604,12 +4604,12 @@ final: prev: {
 
   dial-nvim = buildVimPlugin {
     pname = "dial.nvim";
-    version = "2025-08-31";
+    version = "0.5.1-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "monaqa";
       repo = "dial.nvim";
-      rev = "f0404ec1f83a03f2c3457e60087c6331d1cbb83f";
-      sha256 = "1vjfzfgbq80sj4z9h7wk1qg04wp1f4lpd6d90wr6yq80ncag0qka";
+      rev = "f97c0c7fa7d5111bc04a91d0f693900fb2d95861";
+      sha256 = "1hklblvfa8yhpr2lmyjmgfpgj1ricx20m9jyqahxfnp2llagwzvl";
     };
     meta.homepage = "https://github.com/monaqa/dial.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4617,7 +4617,7 @@ final: prev: {
 
   diffview-nvim = buildVimPlugin {
     pname = "diffview.nvim";
-    version = "2024-06-13";
+    version = "0-unstable-2024-06-13";
     src = fetchFromGitHub {
       owner = "sindrets";
       repo = "diffview.nvim";
@@ -4630,7 +4630,7 @@ final: prev: {
 
   dirbuf-nvim = buildVimPlugin {
     pname = "dirbuf.nvim";
-    version = "2022-08-28";
+    version = "0-unstable-2022-08-28";
     src = fetchFromGitHub {
       owner = "elihunter173";
       repo = "dirbuf.nvim";
@@ -4643,7 +4643,7 @@ final: prev: {
 
   direnv-vim = buildVimPlugin {
     pname = "direnv.vim";
-    version = "2023-12-02";
+    version = "0-unstable-2023-12-02";
     src = fetchFromGitHub {
       owner = "direnv";
       repo = "direnv.vim";
@@ -4656,7 +4656,7 @@ final: prev: {
 
   distant-nvim = buildVimPlugin {
     pname = "distant.nvim";
-    version = "2024-10-17";
+    version = "0.1.2-unstable-2024-10-17";
     src = fetchFromGitHub {
       owner = "chipsenkbeil";
       repo = "distant.nvim";
@@ -4669,7 +4669,7 @@ final: prev: {
 
   doki-theme-vim = buildVimPlugin {
     pname = "doki-theme-vim";
-    version = "2023-01-07";
+    version = "88.1-1.0.0-unstable-2023-01-07";
     src = fetchFromGitHub {
       owner = "doki-theme";
       repo = "doki-theme-vim";
@@ -4682,7 +4682,7 @@ final: prev: {
 
   doom-one-nvim = buildVimPlugin {
     pname = "doom-one.nvim";
-    version = "2025-06-28";
+    version = "0-unstable-2025-06-28";
     src = fetchFromGitHub {
       owner = "NTBBloodbath";
       repo = "doom-one.nvim";
@@ -4695,7 +4695,7 @@ final: prev: {
 
   dotnet-nvim = buildVimPlugin {
     pname = "dotnet.nvim";
-    version = "2024-10-21";
+    version = "0.1.0-unstable-2024-10-21";
     src = fetchFromGitHub {
       owner = "MoaidHathot";
       repo = "dotnet.nvim";
@@ -4708,7 +4708,7 @@ final: prev: {
 
   dracula-nvim = buildVimPlugin {
     pname = "dracula.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "Mofiqul";
       repo = "dracula.nvim";
@@ -4721,7 +4721,7 @@ final: prev: {
 
   dracula-vim = buildVimPlugin {
     pname = "dracula-vim";
-    version = "2025-03-27";
+    version = "2.0.0-unstable-2025-03-27";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "vim";
@@ -4734,7 +4734,7 @@ final: prev: {
 
   dressing-nvim = buildVimPlugin {
     pname = "dressing.nvim";
-    version = "2025-02-12";
+    version = "3.1.1-unstable-2025-02-12";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "dressing.nvim";
@@ -4747,7 +4747,7 @@ final: prev: {
 
   dropbar-nvim = buildVimPlugin {
     pname = "dropbar.nvim";
-    version = "2025-10-05";
+    version = "14.2.1-unstable-2025-10-05";
     src = fetchFromGitHub {
       owner = "Bekaboo";
       repo = "dropbar.nvim";
@@ -4760,7 +4760,7 @@ final: prev: {
 
   earthly-vim = buildVimPlugin {
     pname = "earthly.vim";
-    version = "2024-04-02";
+    version = "0-unstable-2024-04-02";
     src = fetchFromGitHub {
       owner = "earthly";
       repo = "earthly.vim";
@@ -4773,12 +4773,12 @@ final: prev: {
 
   easy-dotnet-nvim = buildVimPlugin {
     pname = "easy-dotnet.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "GustavEikaas";
       repo = "easy-dotnet.nvim";
-      rev = "e9cf21828228b30bc3c59957c0a1e7898d473767";
-      sha256 = "1nx1ciz5ig9l8dw3dzgs4awlszlwi31ab91ikywjblm2xh7ymb0m";
+      rev = "05be49f6ff760fb1a5a9ff4ef4532265b692d3ee";
+      sha256 = "1c5srrkxnkrqfddzz0kdcl7bd3146fr48p4v2h4zls4aij6nd3rk";
     };
     meta.homepage = "https://github.com/GustavEikaas/easy-dotnet.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4786,7 +4786,7 @@ final: prev: {
 
   echodoc-vim = buildVimPlugin {
     pname = "echodoc.vim";
-    version = "2022-11-27";
+    version = "0-unstable-2022-11-27";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "echodoc.vim";
@@ -4799,12 +4799,12 @@ final: prev: {
 
   ecolog-nvim = buildVimPlugin {
     pname = "ecolog.nvim";
-    version = "2025-10-30";
+    version = "0.9.0-unstable-2025-12-10";
     src = fetchFromGitHub {
       owner = "ph1losof";
       repo = "ecolog.nvim";
-      rev = "e4b2644a02d0b1c97a548ed93df6db13df90781f";
-      sha256 = "07a1d8gzd8bwzsadzy0lnb78w61qbicz2dndj1fhlnkdlyzhmsz5";
+      rev = "0053fb4f597d4f734b0ce0f84edc2e7a288bfc57";
+      sha256 = "1wxkrgar1nsdr8dcc34xwwph4krz9x6cgmxk1vbi6bqj2cfwkqz8";
     };
     meta.homepage = "https://github.com/ph1losof/ecolog.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4812,12 +4812,12 @@ final: prev: {
 
   edge = buildVimPlugin {
     pname = "edge";
-    version = "2025-11-07";
+    version = "0.2.3-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "edge";
-      rev = "4145071bb0ea909511fa9a444eec80367b11296f";
-      sha256 = "09d64sbjsbl6lb42glni789scggz6h0smy7jm5rpq1h23k0iarsf";
+      rev = "b7dfb8e3c42a9393b68e284eac9b7a5973f24fe1";
+      sha256 = "16gvgqm0cfa8y9ba357rl30g3jqlrabb1lb3qq6pqf0w3b4xibxn";
     };
     meta.homepage = "https://github.com/sainnhe/edge/";
     meta.hydraPlatforms = [ ];
@@ -4825,7 +4825,7 @@ final: prev: {
 
   edgedb-vim = buildVimPlugin {
     pname = "edgedb-vim";
-    version = "2023-05-26";
+    version = "0-unstable-2023-05-26";
     src = fetchFromGitHub {
       owner = "geldata";
       repo = "edgedb-vim";
@@ -4838,7 +4838,7 @@ final: prev: {
 
   edgy-nvim = buildVimPlugin {
     pname = "edgy.nvim";
-    version = "2025-10-28";
+    version = "1.10.2-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "edgy.nvim";
@@ -4851,7 +4851,7 @@ final: prev: {
 
   editorconfig-nvim = buildVimPlugin {
     pname = "editorconfig.nvim";
-    version = "2025-03-12";
+    version = "1.4.0-unstable-2025-03-12";
     src = fetchFromGitHub {
       owner = "gpanders";
       repo = "editorconfig.nvim";
@@ -4864,7 +4864,7 @@ final: prev: {
 
   editorconfig-vim = buildVimPlugin {
     pname = "editorconfig-vim";
-    version = "2025-11-04";
+    version = "1.2.1-unstable-2025-11-04";
     src = fetchFromGitHub {
       owner = "editorconfig";
       repo = "editorconfig-vim";
@@ -4878,12 +4878,12 @@ final: prev: {
 
   efmls-configs-nvim = buildVimPlugin {
     pname = "efmls-configs-nvim";
-    version = "2025-11-03";
+    version = "1.10.1-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "creativenull";
       repo = "efmls-configs-nvim";
-      rev = "11cc7a346f86b587a42a0348b41aa7c143e4ba1b";
-      sha256 = "1a740iqsc7l0cncg923g4h24lcg6rxziznx7yfzbczfgi9cqq9bw";
+      rev = "b175e35c5ea133e5bee42d90f91ce8419b4436a3";
+      sha256 = "0b6iwxww2czylk44y2rc7xr0xma3s5zvaalvnvpm7xq51wd132sz";
     };
     meta.homepage = "https://github.com/creativenull/efmls-configs-nvim/";
     meta.hydraPlatforms = [ ];
@@ -4891,12 +4891,12 @@ final: prev: {
 
   elixir-tools-nvim = buildVimPlugin {
     pname = "elixir-tools.nvim";
-    version = "2025-10-14";
+    version = "0.18.0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "elixir-tools";
       repo = "elixir-tools.nvim";
-      rev = "b51b48edc668924a6b2f6610f9a0aff34741d20e";
-      sha256 = "16wr6k9kc536k1yhp718msim3ygr22zm5ckv680jrz4s8qq5460l";
+      rev = "26aba63a5850bec6a2eff97a1aed859f29003ea9";
+      sha256 = "1lvfwqvqpnm6hzlmgnaar0ql797z7ggc7qqj7lpqrxc4ggw8f44k";
     };
     meta.homepage = "https://github.com/elixir-tools/elixir-tools.nvim/";
     meta.hydraPlatforms = [ ];
@@ -4904,7 +4904,7 @@ final: prev: {
 
   elm-vim = buildVimPlugin {
     pname = "elm-vim";
-    version = "2020-09-23";
+    version = "0-unstable-2020-09-23";
     src = fetchFromGitHub {
       owner = "elmcast";
       repo = "elm-vim";
@@ -4917,7 +4917,7 @@ final: prev: {
 
   elvish-vim = buildVimPlugin {
     pname = "elvish.vim";
-    version = "2022-04-04";
+    version = "0-unstable-2022-04-04";
     src = fetchFromGitHub {
       owner = "dmix";
       repo = "elvish.vim";
@@ -4930,7 +4930,7 @@ final: prev: {
 
   embark-vim = buildVimPlugin {
     pname = "embark-vim";
-    version = "2025-10-07";
+    version = "0-unstable-2025-10-07";
     src = fetchFromGitHub {
       owner = "embark-theme";
       repo = "vim";
@@ -4943,7 +4943,7 @@ final: prev: {
 
   emmet-vim = buildVimPlugin {
     pname = "emmet-vim";
-    version = "2025-07-15";
+    version = "0-unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "emmet-vim";
@@ -4957,7 +4957,7 @@ final: prev: {
 
   emodeline = buildVimPlugin {
     pname = "emodeline";
-    version = "2010-10-18";
+    version = "0.1-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "emodeline";
@@ -4970,7 +4970,7 @@ final: prev: {
 
   endec-nvim = buildVimPlugin {
     pname = "endec.nvim";
-    version = "2025-04-07";
+    version = "0-unstable-2025-04-07";
     src = fetchFromGitHub {
       owner = "ovk";
       repo = "endec.nvim";
@@ -4983,7 +4983,7 @@ final: prev: {
 
   errormarker-vim = buildVimPlugin {
     pname = "errormarker.vim";
-    version = "2015-01-26";
+    version = "0.2-unstable-2015-01-26";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "errormarker.vim";
@@ -4996,7 +4996,7 @@ final: prev: {
 
   eva01-vim = buildVimPlugin {
     pname = "eva01.vim";
-    version = "2025-03-31";
+    version = "1.1.1-unstable-2025-03-31";
     src = fetchFromGitHub {
       owner = "hachy";
       repo = "eva01.vim";
@@ -5009,12 +5009,12 @@ final: prev: {
 
   everforest = buildVimPlugin {
     pname = "everforest";
-    version = "2025-11-07";
+    version = "0.3.0-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "everforest";
-      rev = "17f101d7de851a7d3d705c22bc7c1760bce3cf6e";
-      sha256 = "03qwxhpx895vipqq6j85xp0j1il6xbsl9pvyn96x3yqmpyw1s7dc";
+      rev = "b10ed9a8b37d6b7448908be98ff8f58f550adc48";
+      sha256 = "1j46jqkjd4qqh53h9hm1jn6fnw2rgvcf8ibcdcbpm5xhf4rn6sfs";
     };
     meta.homepage = "https://github.com/sainnhe/everforest/";
     meta.hydraPlatforms = [ ];
@@ -5022,7 +5022,7 @@ final: prev: {
 
   executor-nvim = buildVimPlugin {
     pname = "executor.nvim";
-    version = "2025-08-15";
+    version = "0-unstable-2025-08-15";
     src = fetchFromGitHub {
       owner = "google";
       repo = "executor.nvim";
@@ -5035,7 +5035,7 @@ final: prev: {
 
   eyeliner-nvim = buildVimPlugin {
     pname = "eyeliner.nvim";
-    version = "2024-09-27";
+    version = "0.2.0-unstable-2024-09-27";
     src = fetchFromGitHub {
       owner = "jinh0";
       repo = "eyeliner.nvim";
@@ -5048,7 +5048,7 @@ final: prev: {
 
   falcon = buildVimPlugin {
     pname = "falcon";
-    version = "2025-04-28";
+    version = "2.1.3-unstable-2025-04-28";
     src = fetchFromGitHub {
       owner = "fenetikm";
       repo = "falcon";
@@ -5061,7 +5061,7 @@ final: prev: {
 
   famous-quotes-nvim = buildVimPlugin {
     pname = "famous-quotes.nvim";
-    version = "2025-07-01";
+    version = "0.1-unstable-2025-07-01";
     src = fetchFromGitHub {
       owner = "mahyarmirrashed";
       repo = "famous-quotes.nvim";
@@ -5074,7 +5074,7 @@ final: prev: {
 
   far-vim = buildVimPlugin {
     pname = "far.vim";
-    version = "2024-05-14";
+    version = "0-unstable-2024-05-14";
     src = fetchFromGitHub {
       owner = "brooth";
       repo = "far.vim";
@@ -5087,7 +5087,7 @@ final: prev: {
 
   fastaction-nvim = buildVimPlugin {
     pname = "fastaction.nvim";
-    version = "2025-08-25";
+    version = "2.0.1-unstable-2025-08-25";
     src = fetchFromGitHub {
       owner = "Chaitanyabsprip";
       repo = "fastaction.nvim";
@@ -5100,7 +5100,7 @@ final: prev: {
 
   faster-nvim = buildVimPlugin {
     pname = "faster.nvim";
-    version = "2025-09-09";
+    version = "0.1.0-unstable-2025-09-09";
     src = fetchFromGitHub {
       owner = "pteroctopus";
       repo = "faster.nvim";
@@ -5113,7 +5113,7 @@ final: prev: {
 
   fastfold = buildVimPlugin {
     pname = "fastfold";
-    version = "2025-06-04";
+    version = "5.3-unstable-2025-06-04";
     src = fetchFromGitHub {
       owner = "konfekt";
       repo = "fastfold";
@@ -5126,7 +5126,7 @@ final: prev: {
 
   faust-nvim = buildVimPlugin {
     pname = "faust-nvim";
-    version = "2022-06-01";
+    version = "0-unstable-2022-06-01";
     src = fetchFromGitHub {
       owner = "madskjeldgaard";
       repo = "faust-nvim";
@@ -5139,7 +5139,7 @@ final: prev: {
 
   fcitx-vim = buildVimPlugin {
     pname = "fcitx.vim";
-    version = "2024-04-21";
+    version = "1.2.6-unstable-2024-04-21";
     src = fetchFromGitHub {
       owner = "lilydjwg";
       repo = "fcitx.vim";
@@ -5152,7 +5152,7 @@ final: prev: {
 
   fennel-vim = buildVimPlugin {
     pname = "fennel.vim";
-    version = "2025-04-01";
+    version = "0-unstable-2025-04-01";
     src = fetchFromGitHub {
       owner = "micampe";
       repo = "fennel.vim";
@@ -5165,7 +5165,7 @@ final: prev: {
 
   ferret = buildVimPlugin {
     pname = "ferret";
-    version = "2025-02-19";
+    version = "5.1-unstable-2025-02-19";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "ferret";
@@ -5178,7 +5178,7 @@ final: prev: {
 
   file-line = buildVimPlugin {
     pname = "file-line";
-    version = "2016-10-21";
+    version = "1.0-unstable-2016-10-21";
     src = fetchFromGitHub {
       owner = "bogado";
       repo = "file-line";
@@ -5191,7 +5191,7 @@ final: prev: {
 
   fileline-nvim = buildVimPlugin {
     pname = "fileline.nvim";
-    version = "2024-03-28";
+    version = "0-unstable-2024-03-28";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "fileline.nvim";
@@ -5204,7 +5204,7 @@ final: prev: {
 
   fine-cmdline-nvim = buildVimPlugin {
     pname = "fine-cmdline.nvim";
-    version = "2025-06-15";
+    version = "0-unstable-2025-06-15";
     src = fetchFromGitHub {
       owner = "VonHeikemen";
       repo = "fine-cmdline.nvim";
@@ -5217,7 +5217,7 @@ final: prev: {
 
   firenvim = buildVimPlugin {
     pname = "firenvim";
-    version = "2025-09-30";
+    version = "0.2.16-unstable-2025-09-30";
     src = fetchFromGitHub {
       owner = "glacambre";
       repo = "firenvim";
@@ -5230,7 +5230,7 @@ final: prev: {
 
   flake8-vim = buildVimPlugin {
     pname = "flake8-vim";
-    version = "2020-10-20";
+    version = "0.5-unstable-2020-10-20";
     src = fetchFromGitHub {
       owner = "andviro";
       repo = "flake8-vim";
@@ -5244,7 +5244,7 @@ final: prev: {
 
   flash-nvim = buildVimPlugin {
     pname = "flash.nvim";
-    version = "2025-10-28";
+    version = "2.1.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "flash.nvim";
@@ -5257,7 +5257,7 @@ final: prev: {
 
   flatten-nvim = buildVimPlugin {
     pname = "flatten.nvim";
-    version = "2025-05-27";
+    version = "0.5.1-unstable-2025-05-27";
     src = fetchFromGitHub {
       owner = "willothy";
       repo = "flatten.nvim";
@@ -5270,7 +5270,7 @@ final: prev: {
 
   fleet-theme-nvim = buildVimPlugin {
     pname = "fleet-theme-nvim";
-    version = "2025-05-18";
+    version = "0-unstable-2025-05-18";
     src = fetchFromGitHub {
       owner = "felipeagc";
       repo = "fleet-theme-nvim";
@@ -5283,7 +5283,7 @@ final: prev: {
 
   flit-nvim = buildVimPlugin {
     pname = "flit.nvim";
-    version = "2025-10-09";
+    version = "0-unstable-2025-10-09";
     src = fetchFromGitHub {
       owner = "ggandor";
       repo = "flit.nvim";
@@ -5296,7 +5296,7 @@ final: prev: {
 
   float-preview-nvim = buildVimPlugin {
     pname = "float-preview.nvim";
-    version = "2023-07-04";
+    version = "0-unstable-2023-07-04";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "float-preview.nvim";
@@ -5309,12 +5309,12 @@ final: prev: {
 
   floaterm = buildVimPlugin {
     pname = "floaterm";
-    version = "2025-09-23";
+    version = "0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "floaterm";
-      rev = "34e14f0b5e2687fd31a93fe75982ec84e5145856";
-      sha256 = "0g0wf1f049sayj9d11xjjz37ssvp7g9q39b5dwimf3i6fn80b42k";
+      rev = "fc2efaf25eeefcb33177d5807c0c745e125cf293";
+      sha256 = "1ycvb1qwb0hby2ad8hr81x01cppn76gdly2a4m26dlv9ibiw8f4i";
     };
     meta.homepage = "https://github.com/nvzone/floaterm/";
     meta.hydraPlatforms = [ ];
@@ -5322,7 +5322,7 @@ final: prev: {
 
   floating-input-nvim = buildVimPlugin {
     pname = "floating-input.nvim";
-    version = "2025-05-28";
+    version = "0-unstable-2025-05-28";
     src = fetchFromGitHub {
       owner = "liangxianzhe";
       repo = "floating-input.nvim";
@@ -5335,7 +5335,7 @@ final: prev: {
 
   floobits-neovim = buildVimPlugin {
     pname = "floobits-neovim";
-    version = "2021-10-18";
+    version = "3.4.4-unstable-2021-10-18";
     src = fetchFromGitHub {
       owner = "floobits";
       repo = "floobits-neovim";
@@ -5348,12 +5348,12 @@ final: prev: {
 
   flutter-tools-nvim = buildVimPlugin {
     pname = "flutter-tools.nvim";
-    version = "2025-10-20";
+    version = "1.14.0-unstable-2025-12-04";
     src = fetchFromGitHub {
       owner = "nvim-flutter";
       repo = "flutter-tools.nvim";
-      rev = "69db9cdac65ce536e20a8fc9a83002f007cc049c";
-      sha256 = "0nnvvqdamdi11jr6dkdm5anhv50fi7gfiyw10xd78182xjfmzlz8";
+      rev = "539e84f5a652d96917f0afc1341c20f0d59dd789";
+      sha256 = "1aq95fajv6abcsgn8khk5yrr2f6xab1xiypz2rfkihddmqba9dys";
     };
     meta.homepage = "https://github.com/nvim-flutter/flutter-tools.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5361,12 +5361,12 @@ final: prev: {
 
   focus-nvim = buildVimPlugin {
     pname = "focus.nvim";
-    version = "2025-04-27";
+    version = "1.0.2-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "nvim-focus";
       repo = "focus.nvim";
-      rev = "5500e1a9e926eec5a361d910679282fd723c0a96";
-      sha256 = "00y7mqv5m4835c9kbkbnwh9ggs2jw7mcdfjpbd3wh2gw7bqga043";
+      rev = "26a755c363284547196ceb258a83f92608d7979b";
+      sha256 = "0mbxlvd43jax03j8bywz93hnnvlab8gk672nvplzf20syk75v927";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-focus/focus.nvim/";
@@ -5375,7 +5375,7 @@ final: prev: {
 
   fold-preview-nvim = buildVimPlugin {
     pname = "fold-preview.nvim";
-    version = "2023-01-27";
+    version = "0-unstable-2023-01-27";
     src = fetchFromGitHub {
       owner = "anuvyklack";
       repo = "fold-preview.nvim";
@@ -5388,7 +5388,7 @@ final: prev: {
 
   follow-md-links-nvim = buildVimPlugin {
     pname = "follow-md-links.nvim";
-    version = "2025-09-01";
+    version = "0-unstable-2025-09-01";
     src = fetchFromGitHub {
       owner = "jghauser";
       repo = "follow-md-links.nvim";
@@ -5401,7 +5401,7 @@ final: prev: {
 
   formatter-nvim = buildVimPlugin {
     pname = "formatter.nvim";
-    version = "2025-05-29";
+    version = "0-unstable-2025-05-29";
     src = fetchFromGitHub {
       owner = "mhartington";
       repo = "formatter.nvim";
@@ -5414,7 +5414,7 @@ final: prev: {
 
   forms = buildVimPlugin {
     pname = "forms";
-    version = "2012-11-28";
+    version = "0-unstable-2012-11-28";
     src = fetchFromGitHub {
       owner = "megaannum";
       repo = "forms";
@@ -5427,12 +5427,12 @@ final: prev: {
 
   fortune-nvim = buildVimPlugin {
     pname = "fortune.nvim";
-    version = "2025-10-21";
+    version = "1.7.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "rubiin";
       repo = "fortune.nvim";
-      rev = "4df0e988dc3b9badcad98f4a9cbd340324d61269";
-      sha256 = "0capain2pz50aqkrzhkhl74mx3j7ywak2i91mhcnzghfqx61csj1";
+      rev = "1f559ff20b295b083c73c96bf935cad12c72ddca";
+      sha256 = "0bzkpf8gd1sy828a7dn2jrgwbs8r2f9wdk4lyj1x9iwmddz87cmc";
     };
     meta.homepage = "https://github.com/rubiin/fortune.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5440,7 +5440,7 @@ final: prev: {
 
   freeze-nvim = buildVimPlugin {
     pname = "freeze.nvim";
-    version = "2025-03-25";
+    version = "0-unstable-2025-03-25";
     src = fetchFromGitHub {
       owner = "charm-and-friends";
       repo = "freeze.nvim";
@@ -5453,7 +5453,7 @@ final: prev: {
 
   friendly-snippets = buildVimPlugin {
     pname = "friendly-snippets";
-    version = "2025-04-29";
+    version = "0-unstable-2025-04-29";
     src = fetchFromGitHub {
       owner = "rafamadriz";
       repo = "friendly-snippets";
@@ -5466,7 +5466,7 @@ final: prev: {
 
   fugit2-nvim = buildVimPlugin {
     pname = "fugit2.nvim";
-    version = "2025-09-02";
+    version = "0.2.1-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "SuperBo";
       repo = "fugit2.nvim";
@@ -5479,7 +5479,7 @@ final: prev: {
 
   fugitive-gitlab-vim = buildVimPlugin {
     pname = "fugitive-gitlab.vim";
-    version = "2024-11-13";
+    version = "0-unstable-2024-11-13";
     src = fetchFromGitHub {
       owner = "shumphrey";
       repo = "fugitive-gitlab.vim";
@@ -5492,7 +5492,7 @@ final: prev: {
 
   futhark-vim = buildVimPlugin {
     pname = "futhark-vim";
-    version = "2021-08-24";
+    version = "0-unstable-2021-08-24";
     src = fetchFromGitHub {
       owner = "BeneCollyridam";
       repo = "futhark-vim";
@@ -5505,7 +5505,7 @@ final: prev: {
 
   fuzzy-nvim = buildVimPlugin {
     pname = "fuzzy.nvim";
-    version = "2024-05-19";
+    version = "0-unstable-2024-05-19";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "fuzzy.nvim";
@@ -5518,7 +5518,7 @@ final: prev: {
 
   fwatch-nvim = buildVimPlugin {
     pname = "fwatch.nvim";
-    version = "2022-07-04";
+    version = "0-unstable-2022-07-04";
     src = fetchFromGitHub {
       owner = "rktjmp";
       repo = "fwatch.nvim";
@@ -5531,12 +5531,12 @@ final: prev: {
 
   fyler-nvim = buildVimPlugin {
     pname = "fyler.nvim";
-    version = "2025-10-01";
+    version = "2.0.0-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "A7Lavinraj";
       repo = "fyler.nvim";
-      rev = "5e24ff1c46528d8dc2e61c22cc21fb590f626e1e";
-      sha256 = "15cxkdcqwra5sm822ahgwpz4l076lww17y1w2hwrxc02lcaarhyp";
+      rev = "bb8b9f30c652c948d35211958b0deec3496bcc08";
+      sha256 = "0vpcw9277s7qyhry6xfg1qg20x03cc1lhqzks3n3c0c8k1sgb9q9";
     };
     meta.homepage = "https://github.com/A7Lavinraj/fyler.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5544,7 +5544,7 @@ final: prev: {
 
   fzf-checkout-vim = buildVimPlugin {
     pname = "fzf-checkout.vim";
-    version = "2023-10-05";
+    version = "0-unstable-2023-10-05";
     src = fetchFromGitHub {
       owner = "stsewd";
       repo = "fzf-checkout.vim";
@@ -5557,7 +5557,7 @@ final: prev: {
 
   fzf-hoogle-vim = buildVimPlugin {
     pname = "fzf-hoogle.vim";
-    version = "2022-05-01";
+    version = "2.3.0-unstable-2022-05-01";
     src = fetchFromGitHub {
       owner = "monkoose";
       repo = "fzf-hoogle.vim";
@@ -5570,7 +5570,7 @@ final: prev: {
 
   fzf-lsp-nvim = buildVimPlugin {
     pname = "fzf-lsp.nvim";
-    version = "2023-02-02";
+    version = "0-unstable-2023-02-02";
     src = fetchFromGitHub {
       owner = "gfanto";
       repo = "fzf-lsp.nvim";
@@ -5583,12 +5583,12 @@ final: prev: {
 
   fzf-vim = buildVimPlugin {
     pname = "fzf.vim";
-    version = "2025-09-03";
+    version = "0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "fzf.vim";
-      rev = "879db51d0965515cdaef9b7f6bdeb91c65d2829e";
-      sha256 = "0s889l2vcq2mw6x2iiqx8kmma97k3zx2yazwpbdca93z9dsnk7k9";
+      rev = "ddc14a6a5471147e2a38e6b32a7268282f669b0a";
+      sha256 = "07n3g0gggpi3mpfikflr5vsmc63bkrzcv296xinhap3pivcryn4s";
     };
     meta.homepage = "https://github.com/junegunn/fzf.vim/";
     meta.hydraPlatforms = [ ];
@@ -5596,7 +5596,7 @@ final: prev: {
 
   galaxyline-nvim = buildVimPlugin {
     pname = "galaxyline.nvim";
-    version = "2022-01-21";
+    version = "0-unstable-2022-01-21";
     src = fetchFromGitHub {
       owner = "NTBBloodbath";
       repo = "galaxyline.nvim";
@@ -5609,7 +5609,7 @@ final: prev: {
 
   gbprod-nord = buildVimPlugin {
     pname = "gbprod-nord";
-    version = "2025-10-15";
+    version = "1.1.0-unstable-2025-10-15";
     src = fetchFromGitHub {
       owner = "gbprod";
       repo = "nord.nvim";
@@ -5622,12 +5622,12 @@ final: prev: {
 
   gdscript-extended-lsp-nvim = buildVimPlugin {
     pname = "gdscript-extended-lsp.nvim";
-    version = "2025-10-28";
+    version = "0.2-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "Teatek";
       repo = "gdscript-extended-lsp.nvim";
-      rev = "27eab5f4979b759368a7760d6955fb93f147e97e";
-      sha256 = "1jilxsz49w720ai41zksvap6bsib347bz9xh0x8b0izcpmsdjc80";
+      rev = "8f3fd6794748ab04d5ff173918e0ec716c2619db";
+      sha256 = "0z1501x1ihx1f9nbg29j7a8lny8ly9xaaxdz2fw2hmjiw20nkkzj";
     };
     meta.homepage = "https://github.com/Teatek/gdscript-extended-lsp.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5635,7 +5635,7 @@ final: prev: {
 
   gen-nvim = buildVimPlugin {
     pname = "gen.nvim";
-    version = "2025-05-03";
+    version = "0-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "David-Kunz";
       repo = "gen.nvim";
@@ -5648,7 +5648,7 @@ final: prev: {
 
   gen_tags-vim = buildVimPlugin {
     pname = "gen_tags.vim";
-    version = "2023-03-06";
+    version = "1.0-unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "jsfaint";
       repo = "gen_tags.vim";
@@ -5661,7 +5661,7 @@ final: prev: {
 
   gentoo-syntax = buildVimPlugin {
     pname = "gentoo-syntax";
-    version = "2025-06-26";
+    version = "16-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "gentoo";
       repo = "gentoo-syntax";
@@ -5674,7 +5674,7 @@ final: prev: {
 
   gh-nvim = buildVimPlugin {
     pname = "gh.nvim";
-    version = "2025-01-21";
+    version = "0-unstable-2025-01-21";
     src = fetchFromGitHub {
       owner = "ldelossa";
       repo = "gh.nvim";
@@ -5687,7 +5687,7 @@ final: prev: {
 
   ghcid = buildVimPlugin {
     pname = "ghcid";
-    version = "2023-10-15";
+    version = "0.8.9-unstable-2023-10-15";
     src = fetchFromGitHub {
       owner = "ndmitchell";
       repo = "ghcid";
@@ -5700,7 +5700,7 @@ final: prev: {
 
   ghcmod-vim = buildVimPlugin {
     pname = "ghcmod-vim";
-    version = "2016-06-19";
+    version = "1.3.1-unstable-2016-06-19";
     src = fetchFromGitHub {
       owner = "eagletmt";
       repo = "ghcmod-vim";
@@ -5713,7 +5713,7 @@ final: prev: {
 
   git-blame-nvim = buildVimPlugin {
     pname = "git-blame.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "f-person";
       repo = "git-blame.nvim";
@@ -5726,7 +5726,7 @@ final: prev: {
 
   git-conflict-nvim = buildVimPlugin {
     pname = "git-conflict.nvim";
-    version = "2024-12-27";
+    version = "2.1.0-unstable-2024-12-27";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "git-conflict.nvim";
@@ -5739,7 +5739,7 @@ final: prev: {
 
   git-dashboard-nvim = buildVimPlugin {
     pname = "git-dashboard-nvim";
-    version = "2025-01-02";
+    version = "0.0.8-alpha-unstable-2025-01-02";
     src = fetchFromGitHub {
       owner = "juansalvatore";
       repo = "git-dashboard-nvim";
@@ -5752,7 +5752,7 @@ final: prev: {
 
   git-messenger-vim = buildVimPlugin {
     pname = "git-messenger.vim";
-    version = "2025-05-30";
+    version = "0-unstable-2025-05-30";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "git-messenger.vim";
@@ -5765,7 +5765,7 @@ final: prev: {
 
   git-prompt-string-lualine-nvim = buildVimPlugin {
     pname = "git-prompt-string-lualine.nvim";
-    version = "2024-04-22";
+    version = "1.0.2-unstable-2024-04-22";
     src = fetchFromGitHub {
       owner = "mikesmithgh";
       repo = "git-prompt-string-lualine.nvim";
@@ -5778,7 +5778,7 @@ final: prev: {
 
   git-worktree-nvim = buildVimPlugin {
     pname = "git-worktree.nvim";
-    version = "2025-02-15";
+    version = "2.1.0-unstable-2025-02-15";
     src = fetchFromGitHub {
       owner = "polarmutex";
       repo = "git-worktree.nvim";
@@ -5791,7 +5791,7 @@ final: prev: {
 
   github-nvim-theme = buildVimPlugin {
     pname = "github-nvim-theme";
-    version = "2024-12-31";
+    version = "1.1.2-unstable-2024-12-31";
     src = fetchFromGitHub {
       owner = "projekt0n";
       repo = "github-nvim-theme";
@@ -5804,7 +5804,7 @@ final: prev: {
 
   gitignore-nvim = buildVimPlugin {
     pname = "gitignore.nvim";
-    version = "2025-05-30";
+    version = "0-unstable-2025-05-30";
     src = fetchFromGitHub {
       owner = "wintermute-cell";
       repo = "gitignore.nvim";
@@ -5817,7 +5817,7 @@ final: prev: {
 
   gitignore-vim = buildVimPlugin {
     pname = "gitignore.vim";
-    version = "2014-03-16";
+    version = "1.05-unstable-2014-03-16";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "gitignore.vim";
@@ -5830,7 +5830,7 @@ final: prev: {
 
   gitlinker-nvim = buildVimPlugin {
     pname = "gitlinker.nvim";
-    version = "2023-02-03";
+    version = "0-unstable-2023-02-03";
     src = fetchFromGitHub {
       owner = "ruifm";
       repo = "gitlinker.nvim";
@@ -5843,12 +5843,12 @@ final: prev: {
 
   gitportal-nvim = buildVimPlugin {
     pname = "gitportal.nvim";
-    version = "2025-11-11";
+    version = "0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "trevorhauter";
       repo = "gitportal.nvim";
-      rev = "3abb1b87a48a8c07f042eb8c570dfe325ebf8702";
-      sha256 = "04f8yls7498v8ccs472zl1phr1c5p5nf37r05dpv4kr1wqlkmdq4";
+      rev = "2420f27c6269184f13d018f347f36eb120403110";
+      sha256 = "1lx0rxfxc3wzamlxjgi128cs8aw2p02ysmcgv7346kjppvrk6nwz";
     };
     meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5856,7 +5856,7 @@ final: prev: {
 
   gitv = buildVimPlugin {
     pname = "gitv";
-    version = "2019-08-22";
+    version = "1.4-rc1-unstable-2019-08-22";
     src = fetchFromGitHub {
       owner = "gregsexton";
       repo = "gitv";
@@ -5869,7 +5869,7 @@ final: prev: {
 
   glance-nvim = buildVimPlugin {
     pname = "glance.nvim";
-    version = "2025-06-16";
+    version = "0-unstable-2025-06-16";
     src = fetchFromGitHub {
       owner = "DNLHC";
       repo = "glance.nvim";
@@ -5882,7 +5882,7 @@ final: prev: {
 
   glow-nvim = buildVimPlugin {
     pname = "glow.nvim";
-    version = "2025-03-21";
+    version = "0.2.0-unstable-2025-03-21";
     src = fetchFromGitHub {
       owner = "ellisonleao";
       repo = "glow.nvim";
@@ -5895,12 +5895,12 @@ final: prev: {
 
   go-nvim = buildVimPlugin {
     pname = "go.nvim";
-    version = "2025-11-07";
+    version = "0.10.4-unstable-2025-12-01";
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "go.nvim";
-      rev = "81bb94c1d21648245eb14c69461f5c7f8c705752";
-      sha256 = "04xqsp0xp941yrskbdw3l003b9l81ar1c3vfjp0xbpwp6sgnz7as";
+      rev = "41a18f0c05534c375bafec7ed05cdb409c4abcc6";
+      sha256 = "1kmaly8qprf3rrqavjwsaw11bwfgahgww288xkjcfxlkjkpcbkcm";
     };
     meta.homepage = "https://github.com/ray-x/go.nvim/";
     meta.hydraPlatforms = [ ];
@@ -5908,7 +5908,7 @@ final: prev: {
 
   godbolt-nvim = buildVimPlugin {
     pname = "godbolt.nvim";
-    version = "2025-04-21";
+    version = "2022-09-11-unstable-2025-04-21";
     src = fetchFromGitHub {
       owner = "p00f";
       repo = "godbolt.nvim";
@@ -5921,7 +5921,7 @@ final: prev: {
 
   golden-ratio = buildVimPlugin {
     pname = "golden-ratio";
-    version = "2022-06-28";
+    version = "0.0.3-unstable-2022-06-28";
     src = fetchFromGitHub {
       owner = "roman";
       repo = "golden-ratio";
@@ -5934,7 +5934,7 @@ final: prev: {
 
   gotests-vim = buildVimPlugin {
     pname = "gotests-vim";
-    version = "2022-07-12";
+    version = "0-unstable-2022-07-12";
     src = fetchFromGitHub {
       owner = "buoto";
       repo = "gotests-vim";
@@ -5947,7 +5947,7 @@ final: prev: {
 
   goto-preview = buildVimPlugin {
     pname = "goto-preview";
-    version = "2025-09-08";
+    version = "1.1.0-unstable-2025-09-08";
     src = fetchFromGitHub {
       owner = "rmagatti";
       repo = "goto-preview";
@@ -5960,7 +5960,7 @@ final: prev: {
 
   goyo-vim = buildVimPlugin {
     pname = "goyo.vim";
-    version = "2023-03-04";
+    version = "1.6.0-unstable-2023-03-04";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "goyo.vim";
@@ -5973,7 +5973,7 @@ final: prev: {
 
   grammar-guard-nvim = buildVimPlugin {
     pname = "grammar-guard.nvim";
-    version = "2023-08-12";
+    version = "0-unstable-2023-08-12";
     src = fetchFromGitHub {
       owner = "brymer-meneses";
       repo = "grammar-guard.nvim";
@@ -5986,7 +5986,7 @@ final: prev: {
 
   graphviz-vim = buildVimPlugin {
     pname = "graphviz.vim";
-    version = "2023-12-30";
+    version = "0-unstable-2023-12-30";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "graphviz.vim";
@@ -5999,7 +5999,7 @@ final: prev: {
 
   grapple-nvim = buildVimPlugin {
     pname = "grapple.nvim";
-    version = "2024-09-29";
+    version = "0.30.0-unstable-2024-09-29";
     src = fetchFromGitHub {
       owner = "cbochs";
       repo = "grapple.nvim";
@@ -6012,7 +6012,7 @@ final: prev: {
 
   gruber-darker-nvim = buildVimPlugin {
     pname = "gruber-darker.nvim";
-    version = "2025-10-28";
+    version = "0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "blazkowolf";
       repo = "gruber-darker.nvim";
@@ -6025,7 +6025,7 @@ final: prev: {
 
   gruvbox = buildVimPlugin {
     pname = "gruvbox";
-    version = "2025-04-20";
+    version = "3.0.1-rc.0-unstable-2025-04-20";
     src = fetchFromGitHub {
       owner = "morhetz";
       repo = "gruvbox";
@@ -6036,9 +6036,22 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gruvbox-alabaster-nvim = buildVimPlugin {
+    pname = "gruvbox-alabaster.nvim";
+    version = "2025-12-08";
+    src = fetchFromGitHub {
+      owner = "Xoconoch";
+      repo = "gruvbox-alabaster.nvim";
+      rev = "246822279aa2c23b9374c5aee8ee71dbc06d26e6";
+      sha256 = "0l5r429al3m6l65lvq6mlvbgpga8081swpigixhbm5sw728npfhz";
+    };
+    meta.homepage = "https://github.com/Xoconoch/gruvbox-alabaster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gruvbox-baby = buildVimPlugin {
     pname = "gruvbox-baby";
-    version = "2024-01-25";
+    version = "0.1.8-unstable-2024-01-25";
     src = fetchFromGitHub {
       owner = "luisiacc";
       repo = "gruvbox-baby";
@@ -6051,7 +6064,7 @@ final: prev: {
 
   gruvbox-community = buildVimPlugin {
     pname = "gruvbox-community";
-    version = "2025-05-10";
+    version = "3.6.1-unstable-2025-05-10";
     src = fetchFromGitHub {
       owner = "gruvbox-community";
       repo = "gruvbox";
@@ -6064,7 +6077,7 @@ final: prev: {
 
   gruvbox-flat-nvim = buildVimPlugin {
     pname = "gruvbox-flat.nvim";
-    version = "2023-05-27";
+    version = "0-unstable-2023-05-27";
     src = fetchFromGitHub {
       owner = "eddyekofo94";
       repo = "gruvbox-flat.nvim";
@@ -6077,12 +6090,12 @@ final: prev: {
 
   gruvbox-material = buildVimPlugin {
     pname = "gruvbox-material";
-    version = "2025-11-07";
+    version = "1.2.5-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "gruvbox-material";
-      rev = "4bfc6983abc249c5943a60d8eb3980a3c2ababe1";
-      sha256 = "1s9kh1d8hbmdwsclb098lcr0rh5cj24wb5yrv217idn3bxypxf7z";
+      rev = "cc47341018320a2c82262958a1af889e5eeacd6e";
+      sha256 = "10da4c86rfcwm77bfn1xpd4i4plafk5phv77vq9mmv46bvclvll0";
     };
     meta.homepage = "https://github.com/sainnhe/gruvbox-material/";
     meta.hydraPlatforms = [ ];
@@ -6090,12 +6103,12 @@ final: prev: {
 
   gruvbox-material-nvim = buildVimPlugin {
     pname = "gruvbox-material.nvim";
-    version = "2025-08-13";
+    version = "1.7.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "f4z3r";
       repo = "gruvbox-material.nvim";
-      rev = "f68f34617d45dff5a10f83d71e4db3201252518e";
-      sha256 = "1qwxwmzaq57z0g0z6k56hkk873g5bsb7mzlqg8hq6bv1ki7sr3pa";
+      rev = "c99bcdc568844356dac05ec476097eea703a1f39";
+      sha256 = "05gf9fgakakg3bhgi0261q13b7jzjfp5xj9sanc9yi1swnipb50d";
     };
     meta.homepage = "https://github.com/f4z3r/gruvbox-material.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6103,7 +6116,7 @@ final: prev: {
 
   gruvbox-nvim = buildVimPlugin {
     pname = "gruvbox.nvim";
-    version = "2025-09-04";
+    version = "2.0.0-unstable-2025-09-04";
     src = fetchFromGitHub {
       owner = "ellisonleao";
       repo = "gruvbox.nvim";
@@ -6116,7 +6129,7 @@ final: prev: {
 
   guard-collection = buildVimPlugin {
     pname = "guard-collection";
-    version = "2025-10-25";
+    version = "0-unstable-2025-10-25";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "guard-collection";
@@ -6129,12 +6142,12 @@ final: prev: {
 
   guard-nvim = buildVimPlugin {
     pname = "guard.nvim";
-    version = "2025-11-07";
+    version = "2.6.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "guard.nvim";
-      rev = "8c1f379640628ccb119cf77e0c7950dd222aaf79";
-      sha256 = "196fm6v41mgxasyqkj3q1jrw0iwl30l138cvfzbm5wrd6rignnws";
+      rev = "047555e4e319efb6064a014ae5b98c80280a00d0";
+      sha256 = "1wkw3w0d5y2llr2wvfk05wvh6g5prp9sjqqbzgfpljx407vyg95g";
     };
     meta.homepage = "https://github.com/nvimdev/guard.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6142,7 +6155,7 @@ final: prev: {
 
   guess-indent-nvim = buildVimPlugin {
     pname = "guess-indent.nvim";
-    version = "2025-03-25";
+    version = "0-unstable-2025-03-25";
     src = fetchFromGitHub {
       owner = "nmac427";
       repo = "guess-indent.nvim";
@@ -6155,7 +6168,7 @@ final: prev: {
 
   gundo-vim = buildVimPlugin {
     pname = "gundo.vim";
-    version = "2021-02-21";
+    version = "2.6.2-unstable-2021-02-21";
     src = fetchFromGitHub {
       owner = "sjl";
       repo = "gundo.vim";
@@ -6168,7 +6181,7 @@ final: prev: {
 
   gv-vim = buildVimPlugin {
     pname = "gv.vim";
-    version = "2023-12-10";
+    version = "0-unstable-2023-12-10";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "gv.vim";
@@ -6181,7 +6194,7 @@ final: prev: {
 
   gx-nvim = buildVimPlugin {
     pname = "gx.nvim";
-    version = "2025-09-26";
+    version = "0.8.0-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "chrishrb";
       repo = "gx.nvim";
@@ -6195,7 +6208,7 @@ final: prev: {
 
   hardhat-nvim = buildVimPlugin {
     pname = "hardhat.nvim";
-    version = "2025-01-13";
+    version = "0.1.0-unstable-2025-01-13";
     src = fetchFromGitHub {
       owner = "TheSnakeWitcher";
       repo = "hardhat.nvim";
@@ -6208,7 +6221,7 @@ final: prev: {
 
   hardtime-nvim = buildVimPlugin {
     pname = "hardtime.nvim";
-    version = "2025-09-13";
+    version = "1.2.0-unstable-2025-09-13";
     src = fetchFromGitHub {
       owner = "m4xshen";
       repo = "hardtime.nvim";
@@ -6221,7 +6234,7 @@ final: prev: {
 
   harpoon = buildVimPlugin {
     pname = "harpoon";
-    version = "2024-08-29";
+    version = "0-unstable-2024-08-29";
     src = fetchFromGitHub {
       owner = "ThePrimeagen";
       repo = "harpoon";
@@ -6234,7 +6247,7 @@ final: prev: {
 
   harpoon2 = buildVimPlugin {
     pname = "harpoon2";
-    version = "2025-10-31";
+    version = "0-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "ThePrimeagen";
       repo = "harpoon";
@@ -6247,7 +6260,7 @@ final: prev: {
 
   haskell-scope-highlighting-nvim = buildVimPlugin {
     pname = "haskell-scope-highlighting.nvim";
-    version = "2025-10-30";
+    version = "0-unstable-2025-10-30";
     src = fetchFromGitHub {
       owner = "kiyoon";
       repo = "haskell-scope-highlighting.nvim";
@@ -6260,12 +6273,12 @@ final: prev: {
 
   haskell-snippets-nvim = buildVimPlugin {
     pname = "haskell-snippets.nvim";
-    version = "2025-10-06";
+    version = "1.5.0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "mrcjkb";
       repo = "haskell-snippets.nvim";
-      rev = "06be2f61d2970a90e8c4db16ab8cd450233db5c1";
-      sha256 = "1948l3pmy7pghl7kgfyqgvqyir6bywhwrmi3hk17qvvjav85a2s7";
+      rev = "cbe4e20fccb2e527d370765c8248205b31571037";
+      sha256 = "0mzwn4qsszvywy0jigjljvwp2jh5v70pvm5jvqskk2aybfqvayxn";
     };
     meta.homepage = "https://github.com/mrcjkb/haskell-snippets.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6273,7 +6286,7 @@ final: prev: {
 
   haskell-vim = buildVimPlugin {
     pname = "haskell-vim";
-    version = "2021-01-19";
+    version = "0-unstable-2021-01-19";
     src = fetchFromGitHub {
       owner = "neovimhaskell";
       repo = "haskell-vim";
@@ -6286,7 +6299,7 @@ final: prev: {
 
   haskell-with-unicode-vim = buildVimPlugin {
     pname = "haskell-with-unicode.vim";
-    version = "2022-09-11";
+    version = "0-unstable-2022-09-11";
     src = fetchFromGitHub {
       owner = "wenzel-hoffman";
       repo = "haskell-with-unicode.vim";
@@ -6299,7 +6312,7 @@ final: prev: {
 
   hasksyn = buildVimPlugin {
     pname = "hasksyn";
-    version = "2014-09-04";
+    version = "0-unstable-2014-09-04";
     src = fetchFromGitHub {
       owner = "travitch";
       repo = "hasksyn";
@@ -6312,7 +6325,7 @@ final: prev: {
 
   headhunter-nvim = buildVimPlugin {
     pname = "headhunter.nvim";
-    version = "2025-10-21";
+    version = "1.3.0-unstable-2025-10-21";
     src = fetchFromGitHub {
       owner = "StackInTheWild";
       repo = "headhunter.nvim";
@@ -6325,7 +6338,7 @@ final: prev: {
 
   headlines-nvim = buildVimPlugin {
     pname = "headlines.nvim";
-    version = "2024-09-13";
+    version = "5.0.0-unstable-2024-09-13";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "headlines.nvim";
@@ -6338,7 +6351,7 @@ final: prev: {
 
   heirline-nvim = buildVimPlugin {
     pname = "heirline.nvim";
-    version = "2025-05-23";
+    version = "1.0.8-unstable-2025-05-23";
     src = fetchFromGitHub {
       owner = "rebelot";
       repo = "heirline.nvim";
@@ -6351,7 +6364,7 @@ final: prev: {
 
   helm-ls-nvim = buildVimPlugin {
     pname = "helm-ls.nvim";
-    version = "2025-10-31";
+    version = "0-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "qvalentin";
       repo = "helm-ls.nvim";
@@ -6364,7 +6377,7 @@ final: prev: {
 
   helpview-nvim = buildVimPlugin {
     pname = "helpview.nvim";
-    version = "2025-09-26";
+    version = "2.1.2-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "helpview.nvim";
@@ -6378,7 +6391,7 @@ final: prev: {
 
   hex-nvim = buildVimPlugin {
     pname = "hex.nvim";
-    version = "2025-07-27";
+    version = "0-unstable-2025-07-27";
     src = fetchFromGitHub {
       owner = "RaafatTurki";
       repo = "hex.nvim";
@@ -6391,7 +6404,7 @@ final: prev: {
 
   hiPairs = buildVimPlugin {
     pname = "hiPairs";
-    version = "2020-12-10";
+    version = "0-unstable-2020-12-10";
     src = fetchFromGitHub {
       owner = "Yggdroot";
       repo = "hiPairs";
@@ -6404,7 +6417,7 @@ final: prev: {
 
   highlight-undo-nvim = buildVimPlugin {
     pname = "highlight-undo.nvim";
-    version = "2025-06-26";
+    version = "0-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "tzachar";
       repo = "highlight-undo.nvim";
@@ -6417,7 +6430,7 @@ final: prev: {
 
   himalaya-vim = buildVimPlugin {
     pname = "himalaya-vim";
-    version = "2025-01-11";
+    version = "0-unstable-2025-01-11";
     src = fetchFromGitHub {
       owner = "pimalaya";
       repo = "himalaya-vim";
@@ -6430,7 +6443,7 @@ final: prev: {
 
   hlargs-nvim = buildVimPlugin {
     pname = "hlargs.nvim";
-    version = "2025-09-23";
+    version = "0-unstable-2025-09-23";
     src = fetchFromGitHub {
       owner = "m-demare";
       repo = "hlargs.nvim";
@@ -6443,12 +6456,12 @@ final: prev: {
 
   hlchunk-nvim = buildVimPlugin {
     pname = "hlchunk.nvim";
-    version = "2025-10-08";
+    version = "1.3.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "shellRaining";
       repo = "hlchunk.nvim";
-      rev = "937135185f99a30cb1413fff76a5c971f250b1a7";
-      sha256 = "0zqrm6fccbgcawxxxidkr7zhl91n3r0b01g7g42al5pmyc1v998y";
+      rev = "3bc2bd7aef28fbed6643534a0fdd0f19966544bc";
+      sha256 = "1ps23aqprr3j3fdlknlhmqgb0z7ybd90w9hnby77fldcxv8667yw";
     };
     meta.homepage = "https://github.com/shellRaining/hlchunk.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6456,7 +6469,7 @@ final: prev: {
 
   hlint-refactor-vim = buildVimPlugin {
     pname = "hlint-refactor-vim";
-    version = "2015-12-05";
+    version = "0-unstable-2015-12-05";
     src = fetchFromGitHub {
       owner = "mpickering";
       repo = "hlint-refactor-vim";
@@ -6469,7 +6482,7 @@ final: prev: {
 
   hmts-nvim = buildVimPlugin {
     pname = "hmts.nvim";
-    version = "2025-06-11";
+    version = "1.3.0-unstable-2025-06-11";
     src = fetchFromGitHub {
       owner = "calops";
       repo = "hmts.nvim";
@@ -6482,7 +6495,7 @@ final: prev: {
 
   hologram-nvim = buildVimPlugin {
     pname = "hologram.nvim";
-    version = "2022-10-09";
+    version = "0-unstable-2022-10-09";
     src = fetchFromGitHub {
       owner = "edluffy";
       repo = "hologram.nvim";
@@ -6495,7 +6508,7 @@ final: prev: {
 
   hoon-vim = buildVimPlugin {
     pname = "hoon.vim";
-    version = "2023-05-04";
+    version = "0-unstable-2023-05-04";
     src = fetchFromGitHub {
       owner = "urbit";
       repo = "hoon.vim";
@@ -6508,7 +6521,7 @@ final: prev: {
 
   hop-nvim = buildVimPlugin {
     pname = "hop.nvim";
-    version = "2025-08-22";
+    version = "2.7.2-unstable-2025-08-22";
     src = fetchFromGitHub {
       owner = "smoka7";
       repo = "hop.nvim";
@@ -6521,7 +6534,7 @@ final: prev: {
 
   hotpot-nvim = buildVimPlugin {
     pname = "hotpot.nvim";
-    version = "2025-07-15";
+    version = "0.14.8-unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "rktjmp";
       repo = "hotpot.nvim";
@@ -6534,7 +6547,7 @@ final: prev: {
 
   houdini-nvim = buildVimPlugin {
     pname = "houdini.nvim";
-    version = "2024-07-05";
+    version = "0.7-unstable-2024-07-05";
     src = fetchFromGitHub {
       owner = "TheBlob42";
       repo = "houdini.nvim";
@@ -6547,7 +6560,7 @@ final: prev: {
 
   hover-nvim = buildVimPlugin {
     pname = "hover.nvim";
-    version = "2025-10-04";
+    version = "0-unstable-2025-10-04";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "hover.nvim";
@@ -6560,7 +6573,7 @@ final: prev: {
 
   html5-vim = buildVimPlugin {
     pname = "html5.vim";
-    version = "2024-03-20";
+    version = "0.27-unstable-2024-03-20";
     src = fetchFromGitHub {
       owner = "othree";
       repo = "html5.vim";
@@ -6573,12 +6586,12 @@ final: prev: {
 
   hunk-nvim = buildVimPlugin {
     pname = "hunk.nvim";
-    version = "2025-09-20";
+    version = "1.9.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "julienvincent";
       repo = "hunk.nvim";
-      rev = "c21f15dbe78ddf23a4e1528a9a5370958c28b608";
-      sha256 = "1yifb94kdx9dhk478j9cf7npzpi5iafh35ys2pl5y0jkb6rkg9n5";
+      rev = "029566b4414f79508e6763a80ab6c7eda4a6dd97";
+      sha256 = "1vfl1kpcjkxjnv73gfj9i80pjvfgn9fh9d9r1da1cxi0i3s87yhs";
     };
     meta.homepage = "https://github.com/julienvincent/hunk.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6586,7 +6599,7 @@ final: prev: {
 
   hurl-nvim = buildVimPlugin {
     pname = "hurl.nvim";
-    version = "2025-09-16";
+    version = "0-unstable-2025-09-16";
     src = fetchFromGitHub {
       owner = "jellydn";
       repo = "hurl.nvim";
@@ -6599,7 +6612,7 @@ final: prev: {
 
   hydra-nvim = buildVimPlugin {
     pname = "hydra.nvim";
-    version = "2025-05-03";
+    version = "1.0.3-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "nvimtools";
       repo = "hydra.nvim";
@@ -6612,7 +6625,7 @@ final: prev: {
 
   i3config-vim = buildVimPlugin {
     pname = "i3config.vim";
-    version = "2021-06-23";
+    version = "0.5.0-unstable-2021-06-23";
     src = fetchFromGitHub {
       owner = "mboughaba";
       repo = "i3config.vim";
@@ -6625,7 +6638,7 @@ final: prev: {
 
   iceberg-vim = buildVimPlugin {
     pname = "iceberg.vim";
-    version = "2024-06-19";
+    version = "1.0-unstable-2024-06-19";
     src = fetchFromGitHub {
       owner = "cocopon";
       repo = "iceberg.vim";
@@ -6638,7 +6651,7 @@ final: prev: {
 
   idris-vim = buildVimPlugin {
     pname = "idris-vim";
-    version = "2017-12-04";
+    version = "0-unstable-2017-12-04";
     src = fetchFromGitHub {
       owner = "idris-hackers";
       repo = "idris-vim";
@@ -6651,7 +6664,7 @@ final: prev: {
 
   idris2-nvim = buildVimPlugin {
     pname = "idris2-nvim";
-    version = "2025-10-13";
+    version = "0-unstable-2025-10-13";
     src = fetchFromGitHub {
       owner = "idris-community";
       repo = "idris2-nvim";
@@ -6664,7 +6677,7 @@ final: prev: {
 
   idris2-vim = buildVimPlugin {
     pname = "idris2-vim";
-    version = "2020-11-26";
+    version = "0-unstable-2020-11-26";
     src = fetchFromGitHub {
       owner = "edwinb";
       repo = "idris2-vim";
@@ -6677,12 +6690,12 @@ final: prev: {
 
   img-clip-nvim = buildVimPlugin {
     pname = "img-clip.nvim";
-    version = "2025-10-11";
+    version = "0.6.0-unstable-2025-12-04";
     src = fetchFromGitHub {
       owner = "HakonHarnes";
       repo = "img-clip.nvim";
-      rev = "e7e29f0d07110405adecd576b602306a7edd507a";
-      sha256 = "0jfbshjmzqjpnfdzsd5zd2si1c7gax2g2x5lwg8rsj5cacp0zbnb";
+      rev = "93fcf50924108262caec66b900077987dfcb7c7f";
+      sha256 = "1pb8hgvlqh27gmd0zf8pcji1rjlr04apx263qa633qy3b6lqnv4k";
     };
     meta.homepage = "https://github.com/HakonHarnes/img-clip.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6690,7 +6703,7 @@ final: prev: {
 
   impatient-nvim = buildVimPlugin {
     pname = "impatient.nvim";
-    version = "2023-05-05";
+    version = "0.2-unstable-2023-05-05";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "impatient.nvim";
@@ -6703,7 +6716,7 @@ final: prev: {
 
   improved-search-nvim = buildVimPlugin {
     pname = "improved-search.nvim";
-    version = "2023-12-21";
+    version = "0-unstable-2023-12-21";
     src = fetchFromGitHub {
       owner = "backdround";
       repo = "improved-search.nvim";
@@ -6716,7 +6729,7 @@ final: prev: {
 
   inc-rename-nvim = buildVimPlugin {
     pname = "inc-rename.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "smjonas";
       repo = "inc-rename.nvim";
@@ -6729,12 +6742,12 @@ final: prev: {
 
   incline-nvim = buildVimPlugin {
     pname = "incline.nvim";
-    version = "2025-06-05";
+    version = "0.1.0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "b0o";
       repo = "incline.nvim";
-      rev = "0fd2d5a27504dba7fdc507a53275f22c081fe640";
-      sha256 = "19x35z2sj3hl3icrxzbs67xhxgq9d237vhgzqrz8ppdc74p8wgaz";
+      rev = "6a3b0635bcd2490dbb1fa124217d41bf69ca0fa2";
+      sha256 = "1zgk9grklfk9dimc00mwgvxym4ir9wzxhhzwknqgq3mm36g2v0z1";
     };
     meta.homepage = "https://github.com/b0o/incline.nvim/";
     meta.hydraPlatforms = [ ];
@@ -6742,7 +6755,7 @@ final: prev: {
 
   increment-activator = buildVimPlugin {
     pname = "increment-activator";
-    version = "2024-03-20";
+    version = "0.1.0-unstable-2024-03-20";
     src = fetchFromGitHub {
       owner = "nishigori";
       repo = "increment-activator";
@@ -6755,7 +6768,7 @@ final: prev: {
 
   incsearch-easymotion-vim = buildVimPlugin {
     pname = "incsearch-easymotion.vim";
-    version = "2016-01-18";
+    version = "0-unstable-2016-01-18";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "incsearch-easymotion.vim";
@@ -6768,7 +6781,7 @@ final: prev: {
 
   incsearch-vim = buildVimPlugin {
     pname = "incsearch.vim";
-    version = "2022-05-13";
+    version = "2.0.1-unstable-2022-05-13";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "incsearch.vim";
@@ -6781,7 +6794,7 @@ final: prev: {
 
   indent-blankline-nvim = buildVimPlugin {
     pname = "indent-blankline.nvim";
-    version = "2025-03-17";
+    version = "3.9.0-unstable-2025-03-17";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "indent-blankline.nvim";
@@ -6794,12 +6807,12 @@ final: prev: {
 
   indent-o-matic = buildVimPlugin {
     pname = "indent-o-matic";
-    version = "2023-06-03";
+    version = "0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "Darazaki";
       repo = "indent-o-matic";
-      rev = "4d11e98f523d3c4500b1dc33f0d1a248a4f69719";
-      sha256 = "1s2hxq3jlx6mdvq5d6zdzrp6p8fc1vvkg2px95d0qw2ryqw4rixi";
+      rev = "764da1f30b5bb4a49035c3abc9a586322296b812";
+      sha256 = "0ikvs9n0ddwxr72lza1jbv5vvvar0wbd9xv094mh6zgzjlzqnzgg";
     };
     meta.homepage = "https://github.com/Darazaki/indent-o-matic/";
     meta.hydraPlatforms = [ ];
@@ -6807,7 +6820,7 @@ final: prev: {
 
   indent-tools-nvim = buildVimPlugin {
     pname = "indent-tools.nvim";
-    version = "2023-10-28";
+    version = "0.5.1-unstable-2023-10-28";
     src = fetchFromGitHub {
       owner = "arsham";
       repo = "indent-tools.nvim";
@@ -6820,7 +6833,7 @@ final: prev: {
 
   indentLine = buildVimPlugin {
     pname = "indentLine";
-    version = "2023-07-14";
+    version = "2.0-unstable-2023-07-14";
     src = fetchFromGitHub {
       owner = "Yggdroot";
       repo = "indentLine";
@@ -6833,7 +6846,7 @@ final: prev: {
 
   inkpot = buildVimPlugin {
     pname = "inkpot";
-    version = "2013-02-10";
+    version = "0-unstable-2013-02-10";
     src = fetchFromGitHub {
       owner = "ciaranm";
       repo = "inkpot";
@@ -6846,7 +6859,7 @@ final: prev: {
 
   instant-nvim = buildVimPlugin {
     pname = "instant.nvim";
-    version = "2022-06-25";
+    version = "0-unstable-2022-06-25";
     src = fetchFromGitHub {
       owner = "jbyuki";
       repo = "instant.nvim";
@@ -6859,7 +6872,7 @@ final: prev: {
 
   intellitab-nvim = buildVimPlugin {
     pname = "intellitab.nvim";
-    version = "2025-03-18";
+    version = "1.0-unstable-2025-03-18";
     src = fetchFromGitHub {
       owner = "pta2002";
       repo = "intellitab.nvim";
@@ -6872,7 +6885,7 @@ final: prev: {
 
   intero-neovim = buildVimPlugin {
     pname = "intero-neovim";
-    version = "2019-11-15";
+    version = "1.0.1-unstable-2019-11-15";
     src = fetchFromGitHub {
       owner = "parsonsmatt";
       repo = "intero-neovim";
@@ -6885,7 +6898,7 @@ final: prev: {
 
   investigate-vim = buildVimPlugin {
     pname = "investigate.vim";
-    version = "2024-02-26";
+    version = "1.2.0-unstable-2024-02-26";
     src = fetchFromGitHub {
       owner = "keith";
       repo = "investigate.vim";
@@ -6898,7 +6911,7 @@ final: prev: {
 
   iosvkem = buildVimPlugin {
     pname = "iosvkem";
-    version = "2021-03-26";
+    version = "0-unstable-2021-03-26";
     src = fetchFromGitHub {
       owner = "neutaaaaan";
       repo = "iosvkem";
@@ -6911,7 +6924,7 @@ final: prev: {
 
   ir_black = buildVimPlugin {
     pname = "ir_black";
-    version = "2012-03-05";
+    version = "0-unstable-2012-03-05";
     src = fetchFromGitHub {
       owner = "twerth";
       repo = "ir_black";
@@ -6924,7 +6937,7 @@ final: prev: {
 
   iron-nvim = buildVimPlugin {
     pname = "iron.nvim";
-    version = "2025-09-28";
+    version = "0-unstable-2025-09-28";
     src = fetchFromGitHub {
       owner = "Vigemus";
       repo = "iron.nvim";
@@ -6937,7 +6950,7 @@ final: prev: {
 
   is-vim = buildVimPlugin {
     pname = "is.vim";
-    version = "2020-10-27";
+    version = "0-unstable-2020-10-27";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "is.vim";
@@ -6950,7 +6963,7 @@ final: prev: {
 
   jdaddy-vim = buildVimPlugin {
     pname = "jdaddy.vim";
-    version = "2014-02-22";
+    version = "1.0-unstable-2014-02-22";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "jdaddy.vim";
@@ -6963,7 +6976,7 @@ final: prev: {
 
   jdd-nvim = buildVimPlugin {
     pname = "jdd.nvim";
-    version = "2025-07-04";
+    version = "0.2.0-unstable-2025-07-04";
     src = fetchFromGitHub {
       owner = "mahyarmirrashed";
       repo = "jdd.nvim";
@@ -6976,12 +6989,12 @@ final: prev: {
 
   jedi-vim = buildVimPlugin {
     pname = "jedi-vim";
-    version = "2025-09-19";
+    version = "0.11.2-unstable-2025-12-03";
     src = fetchFromGitHub {
       owner = "davidhalter";
       repo = "jedi-vim";
-      rev = "c3f9b751f30f62824c755efdaf1823cc0c7e3dfb";
-      sha256 = "1348qvl92gi3gc15l6x3p5pbz5a27d8smsvx89c23vh1dybh4hx4";
+      rev = "eebf7d286375a3aa8acaef63be1a9c92d3b73171";
+      sha256 = "0sfg2xwdbi16v064fsz1y0l9k0gwcc9wyvql989bzkpgi8v4vrp0";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/davidhalter/jedi-vim/";
@@ -6990,7 +7003,7 @@ final: prev: {
 
   jellybeans-nvim = buildVimPlugin {
     pname = "jellybeans-nvim";
-    version = "2025-01-15";
+    version = "0-unstable-2025-01-15";
     src = fetchFromGitHub {
       owner = "metalelf0";
       repo = "jellybeans-nvim";
@@ -7003,7 +7016,7 @@ final: prev: {
 
   jellybeans-vim = buildVimPlugin {
     pname = "jellybeans.vim";
-    version = "2019-06-22";
+    version = "1.7-unstable-2019-06-22";
     src = fetchFromGitHub {
       owner = "nanotech";
       repo = "jellybeans.vim";
@@ -7016,7 +7029,7 @@ final: prev: {
 
   jinja-vim = buildVimPlugin {
     pname = "jinja.vim";
-    version = "2025-08-19";
+    version = "0-unstable-2025-08-19";
     src = fetchFromGitHub {
       owner = "HiPhish";
       repo = "jinja.vim";
@@ -7029,7 +7042,7 @@ final: prev: {
 
   jq-vim = buildVimPlugin {
     pname = "jq.vim";
-    version = "2024-11-19";
+    version = "1.0.3-unstable-2024-11-19";
     src = fetchFromGitHub {
       owner = "vito-c";
       repo = "jq.vim";
@@ -7042,7 +7055,7 @@ final: prev: {
 
   jsonc-vim = buildVimPlugin {
     pname = "jsonc.vim";
-    version = "2022-10-31";
+    version = "0-unstable-2022-10-31";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "jsonc.vim";
@@ -7055,12 +7068,12 @@ final: prev: {
 
   jule-nvim = buildVimPlugin {
     pname = "jule.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-15";
     src = fetchFromGitHub {
       owner = "julelang";
       repo = "jule.nvim";
-      rev = "bf12f77901595b4ceea5de96e1aad6c353057411";
-      sha256 = "1ap5hkbxqiwbdkpcgf9hymgcx0zcy9irz0i4m3lx2827614ab12k";
+      rev = "eeedcd740989921e3d449da4befb567fca31406b";
+      sha256 = "1i8nq6k3q39ljr4x8rz3hny36qnbiznd3s82a79vmygmzwjv9ysl";
     };
     meta.homepage = "https://github.com/julelang/jule.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7068,12 +7081,12 @@ final: prev: {
 
   julia-vim = buildVimPlugin {
     pname = "julia-vim";
-    version = "2024-05-25";
+    version = "1.0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "JuliaEditorSupport";
       repo = "julia-vim";
-      rev = "7946ce330b6287c9293aece5b14feafa1125779e";
-      sha256 = "0j80pvv3k21zqx0bik257xmmj4a7cjx3d1fp787k1gksr7zcxpby";
+      rev = "50efcc1c54079ed7f596fab0daeac354c252670e";
+      sha256 = "0q8pv1bwjd1nrvx9g37lrclb7109ixb63i3d8bkwppckkirpyppx";
     };
     meta.homepage = "https://github.com/JuliaEditorSupport/julia-vim/";
     meta.hydraPlatforms = [ ];
@@ -7081,7 +7094,7 @@ final: prev: {
 
   jupytext-nvim = buildVimPlugin {
     pname = "jupytext.nvim";
-    version = "2024-04-05";
+    version = "0-unstable-2024-04-05";
     src = fetchFromGitHub {
       owner = "GCBallesteros";
       repo = "jupytext.nvim";
@@ -7094,7 +7107,7 @@ final: prev: {
 
   kanagawa-nvim = buildVimPlugin {
     pname = "kanagawa.nvim";
-    version = "2025-10-15";
+    version = "0-unstable-2025-10-15";
     src = fetchFromGitHub {
       owner = "rebelot";
       repo = "kanagawa.nvim";
@@ -7107,12 +7120,12 @@ final: prev: {
 
   kanagawa-paper-nvim = buildVimPlugin {
     pname = "kanagawa-paper.nvim";
-    version = "2025-11-04";
+    version = "3.1-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "thesimonho";
       repo = "kanagawa-paper.nvim";
-      rev = "8423e164a0fd2d1117a2e18c229cfd9e0635c82d";
-      sha256 = "1zvg0sfq4prfwnczvizsl00qpipjhwi970q45ry9w3j02blv042i";
+      rev = "075c35ea22ddb65399f80e81285558aea53542bb";
+      sha256 = "08ha1qzgqc3vw9hmsqcg85ckyvba7r236a7iasbbjswwi1ymh96j";
     };
     meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7120,7 +7133,7 @@ final: prev: {
 
   kanso-nvim = buildVimPlugin {
     pname = "kanso.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "webhooked";
       repo = "kanso.nvim";
@@ -7133,7 +7146,7 @@ final: prev: {
 
   kdl-vim = buildVimPlugin {
     pname = "kdl.vim";
-    version = "2023-02-20";
+    version = "0-unstable-2023-02-20";
     src = fetchFromGitHub {
       owner = "imsnif";
       repo = "kdl.vim";
@@ -7146,7 +7159,7 @@ final: prev: {
 
   keymap-layer-nvim = buildVimPlugin {
     pname = "keymap-layer.nvim";
-    version = "2022-07-16";
+    version = "0-unstable-2022-07-16";
     src = fetchFromGitHub {
       owner = "anuvyklack";
       repo = "keymap-layer.nvim";
@@ -7159,7 +7172,7 @@ final: prev: {
 
   kitty-scrollback-nvim = buildVimPlugin {
     pname = "kitty-scrollback.nvim";
-    version = "2025-06-26";
+    version = "6.3.0-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "mikesmithgh";
       repo = "kitty-scrollback.nvim";
@@ -7172,7 +7185,7 @@ final: prev: {
 
   kiwi-nvim = buildVimPlugin {
     pname = "kiwi.nvim";
-    version = "2025-07-07";
+    version = "0-unstable-2025-07-07";
     src = fetchFromGitHub {
       owner = "serenevoid";
       repo = "kiwi.nvim";
@@ -7185,7 +7198,7 @@ final: prev: {
 
   kmonad-vim = buildVimPlugin {
     pname = "kmonad-vim";
-    version = "2022-03-20";
+    version = "1.0.0-unstable-2022-03-20";
     src = fetchFromGitHub {
       owner = "kmonad";
       repo = "kmonad-vim";
@@ -7198,7 +7211,7 @@ final: prev: {
 
   knap = buildVimPlugin {
     pname = "knap";
-    version = "2024-10-22";
+    version = "0-unstable-2024-10-22";
     src = fetchFromGitHub {
       owner = "frabjous";
       repo = "knap";
@@ -7211,7 +7224,7 @@ final: prev: {
 
   kommentary = buildVimPlugin {
     pname = "kommentary";
-    version = "2023-11-29";
+    version = "1.0-unstable-2023-11-29";
     src = fetchFromGitHub {
       owner = "b3nj5m1n";
       repo = "kommentary";
@@ -7224,7 +7237,7 @@ final: prev: {
 
   kotlin-vim = buildVimPlugin {
     pname = "kotlin-vim";
-    version = "2022-12-30";
+    version = "0-unstable-2022-12-30";
     src = fetchFromGitHub {
       owner = "udalov";
       repo = "kotlin-vim";
@@ -7237,12 +7250,12 @@ final: prev: {
 
   kulala-nvim = buildVimPlugin {
     pname = "kulala.nvim";
-    version = "2025-11-03";
+    version = "5.3.3-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "mistweaverco";
       repo = "kulala.nvim";
-      rev = "c328aeb219c4b77106917dd2698c90ea9657281b";
-      sha256 = "1hzy2mvvlh5gmya88inymsjxm7n52siaz3cg9jjn130jhr76mmsg";
+      rev = "b36aff673915391e415d4acc7c90ca6ca6891750";
+      sha256 = "18xi8lp76kzk22m13dm51nghmysqvjx7l8ijqf59m35112yc2q80";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
@@ -7251,7 +7264,7 @@ final: prev: {
 
   lackluster-nvim = buildVimPlugin {
     pname = "lackluster.nvim";
-    version = "2025-10-06";
+    version = "0-unstable-2025-10-06";
     src = fetchFromGitHub {
       owner = "slugbyte";
       repo = "lackluster.nvim";
@@ -7264,7 +7277,7 @@ final: prev: {
 
   lalrpop-vim = buildVimPlugin {
     pname = "lalrpop.vim";
-    version = "2017-11-22";
+    version = "0-unstable-2017-11-22";
     src = fetchFromGitHub {
       owner = "qnighy";
       repo = "lalrpop.vim";
@@ -7277,7 +7290,7 @@ final: prev: {
 
   langmapper-nvim = buildVimPlugin {
     pname = "langmapper.nvim";
-    version = "2025-05-05";
+    version = "0-unstable-2025-05-05";
     src = fetchFromGitHub {
       owner = "Wansmer";
       repo = "langmapper.nvim";
@@ -7290,7 +7303,7 @@ final: prev: {
 
   last256 = buildVimPlugin {
     pname = "last256";
-    version = "2020-12-09";
+    version = "0-unstable-2020-12-09";
     src = fetchFromGitHub {
       owner = "sk1418";
       repo = "last256";
@@ -7303,7 +7316,7 @@ final: prev: {
 
   latex-box = buildVimPlugin {
     pname = "latex-box";
-    version = "2015-06-01";
+    version = "0.9.5@1-unstable-2015-06-01";
     src = fetchFromGitHub {
       owner = "latex-box-team";
       repo = "latex-box";
@@ -7316,7 +7329,7 @@ final: prev: {
 
   lazy-lsp-nvim = buildVimPlugin {
     pname = "lazy-lsp.nvim";
-    version = "2025-10-23";
+    version = "2025.10.15-unstable-2025-10-23";
     src = fetchFromGitHub {
       owner = "dundalek";
       repo = "lazy-lsp.nvim";
@@ -7329,7 +7342,7 @@ final: prev: {
 
   lazy-nvim = buildVimPlugin {
     pname = "lazy.nvim";
-    version = "2025-11-06";
+    version = "11.17.5-unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lazy.nvim";
@@ -7342,7 +7355,7 @@ final: prev: {
 
   lazydev-nvim = buildVimPlugin {
     pname = "lazydev.nvim";
-    version = "2025-11-06";
+    version = "1.10.0-unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lazydev.nvim";
@@ -7355,7 +7368,7 @@ final: prev: {
 
   lazydocker-nvim = buildVimPlugin {
     pname = "lazydocker.nvim";
-    version = "2025-08-24";
+    version = "2.3.0-unstable-2025-08-24";
     src = fetchFromGitHub {
       owner = "crnvl96";
       repo = "lazydocker.nvim";
@@ -7368,7 +7381,7 @@ final: prev: {
 
   lazygit-nvim = buildVimPlugin {
     pname = "lazygit.nvim";
-    version = "2025-09-11";
+    version = "0-unstable-2025-09-11";
     src = fetchFromGitHub {
       owner = "kdheepak";
       repo = "lazygit.nvim";
@@ -7381,7 +7394,7 @@ final: prev: {
 
   lazyjj-nvim = buildVimPlugin {
     pname = "lazyjj.nvim";
-    version = "2024-11-28";
+    version = "0-unstable-2024-11-28";
     src = fetchFromGitHub {
       owner = "swaits";
       repo = "lazyjj.nvim";
@@ -7394,12 +7407,12 @@ final: prev: {
 
   lean-nvim = buildVimPlugin {
     pname = "lean.nvim";
-    version = "2025-11-05";
+    version = "2025.10.1-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "Julian";
       repo = "lean.nvim";
-      rev = "892a95683a8b037620235d330c6b83b9d617b332";
-      sha256 = "1rql217zwx5x4651ascy3ywkq369km190jrz9ad54vs2vicaqyq0";
+      rev = "dc5daebd094fbb40c4c3f235eb045987874da02a";
+      sha256 = "03945jas9ppf4k2xbgcm89hsg5khq5n9v0s6n9aam97x7h882xzw";
     };
     meta.homepage = "https://github.com/Julian/lean.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7407,7 +7420,7 @@ final: prev: {
 
   lean-vim = buildVimPlugin {
     pname = "lean.vim";
-    version = "2021-09-29";
+    version = "0-unstable-2021-09-29";
     src = fetchFromGitHub {
       owner = "leanprover";
       repo = "lean.vim";
@@ -7420,7 +7433,7 @@ final: prev: {
 
   leap-ast-nvim = buildVimPlugin {
     pname = "leap-ast.nvim";
-    version = "2022-10-10";
+    version = "0-unstable-2022-10-10";
     src = fetchFromGitHub {
       owner = "ggandor";
       repo = "leap-ast.nvim";
@@ -7433,12 +7446,12 @@ final: prev: {
 
   leap-nvim = buildVimPlugin {
     pname = "leap.nvim";
-    version = "2025-10-31";
+    version = "0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "ggandor";
       repo = "leap.nvim";
-      rev = "673517c316a0808a2f6948ed863e18c6cc03da21";
-      sha256 = "1zsr8c9zkbrb5gikijq0ag0496rpj4win5bdjizm8d73p1hfrrxc";
+      rev = "f19d43590c4b6d31188ee1ea2954d2b7558a9e11";
+      sha256 = "061ybi0w9v0w0raxkrv17ydrwbngzsl6kcjz17a8prlrd9lbrhdv";
     };
     meta.homepage = "https://github.com/ggandor/leap.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7446,7 +7459,7 @@ final: prev: {
 
   leetcode-nvim = buildVimPlugin {
     pname = "leetcode.nvim";
-    version = "2025-09-21";
+    version = "0.3.1-unstable-2025-09-21";
     src = fetchFromGitHub {
       owner = "kawre";
       repo = "leetcode.nvim";
@@ -7459,7 +7472,7 @@ final: prev: {
 
   legendary-nvim = buildVimPlugin {
     pname = "legendary.nvim";
-    version = "2025-03-20";
+    version = "2.13.13-unstable-2025-03-20";
     src = fetchFromGitHub {
       owner = "mrjones2014";
       repo = "legendary.nvim";
@@ -7472,7 +7485,7 @@ final: prev: {
 
   lens-vim = buildVimPlugin {
     pname = "lens.vim";
-    version = "2021-05-30";
+    version = "0-unstable-2021-05-30";
     src = fetchFromGitHub {
       owner = "camspiers";
       repo = "lens.vim";
@@ -7485,7 +7498,7 @@ final: prev: {
 
   lensline-nvim = buildVimPlugin {
     pname = "lensline.nvim";
-    version = "2025-10-26";
+    version = "2.0.0-unstable-2025-10-26";
     src = fetchFromGitHub {
       owner = "oribarilan";
       repo = "lensline.nvim";
@@ -7498,7 +7511,7 @@ final: prev: {
 
   lessspace-vim = buildVimPlugin {
     pname = "lessspace.vim";
-    version = "2023-02-13";
+    version = "0-unstable-2023-02-13";
     src = fetchFromGitHub {
       owner = "thirtythreeforty";
       repo = "lessspace.vim";
@@ -7511,7 +7524,7 @@ final: prev: {
 
   lexima-vim = buildVimPlugin {
     pname = "lexima.vim";
-    version = "2025-05-15";
+    version = "2.1.0-unstable-2025-05-15";
     src = fetchFromGitHub {
       owner = "cohama";
       repo = "lexima.vim";
@@ -7524,7 +7537,7 @@ final: prev: {
 
   lf-nvim = buildVimPlugin {
     pname = "lf.nvim";
-    version = "2023-10-03";
+    version = "0-unstable-2023-10-03";
     src = fetchFromGitHub {
       owner = "lmburns";
       repo = "lf.nvim";
@@ -7537,7 +7550,7 @@ final: prev: {
 
   lf-vim = buildVimPlugin {
     pname = "lf.vim";
-    version = "2024-03-18";
+    version = "1.4-unstable-2024-03-18";
     src = fetchFromGitHub {
       owner = "ptzz";
       repo = "lf.vim";
@@ -7550,7 +7563,7 @@ final: prev: {
 
   lh-brackets = buildVimPlugin {
     pname = "lh-brackets";
-    version = "2024-08-29";
+    version = "3.6.0-unstable-2024-08-29";
     src = fetchFromGitHub {
       owner = "LucHermitte";
       repo = "lh-brackets";
@@ -7563,7 +7576,7 @@ final: prev: {
 
   lh-vim-lib = buildVimPlugin {
     pname = "lh-vim-lib";
-    version = "2025-09-10";
+    version = "5.4.0-unstable-2025-09-10";
     src = fetchFromGitHub {
       owner = "LucHermitte";
       repo = "lh-vim-lib";
@@ -7576,7 +7589,7 @@ final: prev: {
 
   lightline-ale = buildVimPlugin {
     pname = "lightline-ale";
-    version = "2021-06-09";
+    version = "0-unstable-2021-06-09";
     src = fetchFromGitHub {
       owner = "max-baz";
       repo = "lightline-ale";
@@ -7589,7 +7602,7 @@ final: prev: {
 
   lightline-bufferline = buildVimPlugin {
     pname = "lightline-bufferline";
-    version = "2023-11-26";
+    version = "0-unstable-2023-11-26";
     src = fetchFromGitHub {
       owner = "mengelbrecht";
       repo = "lightline-bufferline";
@@ -7602,7 +7615,7 @@ final: prev: {
 
   lightline-gruvbox-vim = buildVimPlugin {
     pname = "lightline-gruvbox.vim";
-    version = "2023-04-02";
+    version = "0-unstable-2023-04-02";
     src = fetchFromGitHub {
       owner = "shinchu";
       repo = "lightline-gruvbox.vim";
@@ -7615,7 +7628,7 @@ final: prev: {
 
   lightline-lsp = buildVimPlugin {
     pname = "lightline-lsp";
-    version = "2023-03-15";
+    version = "0-unstable-2023-03-15";
     src = fetchFromGitHub {
       owner = "spywhere";
       repo = "lightline-lsp";
@@ -7628,7 +7641,7 @@ final: prev: {
 
   lightline-vim = buildVimPlugin {
     pname = "lightline.vim";
-    version = "2024-12-30";
+    version = "0-unstable-2024-12-30";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "lightline.vim";
@@ -7641,7 +7654,7 @@ final: prev: {
 
   lightspeed-nvim = buildVimPlugin {
     pname = "lightspeed.nvim";
-    version = "2023-12-01";
+    version = "0-unstable-2023-12-01";
     src = fetchFromGitHub {
       owner = "ggandor";
       repo = "lightspeed.nvim";
@@ -7654,7 +7667,7 @@ final: prev: {
 
   lightswitch-nvim = buildVimPlugin {
     pname = "lightswitch.nvim";
-    version = "2025-06-29";
+    version = "0-unstable-2025-06-29";
     src = fetchFromGitHub {
       owner = "markgandolfo";
       repo = "lightswitch.nvim";
@@ -7667,7 +7680,7 @@ final: prev: {
 
   limelight-vim = buildVimPlugin {
     pname = "limelight.vim";
-    version = "2024-09-12";
+    version = "0-unstable-2024-09-12";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "limelight.vim";
@@ -7680,12 +7693,12 @@ final: prev: {
 
   linediff-vim = buildVimPlugin {
     pname = "linediff.vim";
-    version = "2024-04-22";
+    version = "0.3.0-unstable-2025-11-28";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "linediff.vim";
-      rev = "ddae71ef5f94775d101c1c70032ebe8799f32745";
-      sha256 = "01dshpxm1svfhw9l447mz224qbvlbvywd7ai4wxwyjzgkhp36937";
+      rev = "29fa617fc10307a1e0ae82a8761114e465d17b06";
+      sha256 = "08j35wazl1x6xplwkdd2304h4szanlywl4sgn1cd1wzymnprcxg7";
     };
     meta.homepage = "https://github.com/AndrewRadev/linediff.vim/";
     meta.hydraPlatforms = [ ];
@@ -7693,7 +7706,7 @@ final: prev: {
 
   lingua-franca-vim = buildVimPlugin {
     pname = "lingua-franca.vim";
-    version = "2021-09-05";
+    version = "0-unstable-2021-09-05";
     src = fetchFromGitHub {
       owner = "lf-lang";
       repo = "lingua-franca.vim";
@@ -7706,7 +7719,7 @@ final: prev: {
 
   lir-nvim = buildVimPlugin {
     pname = "lir.nvim";
-    version = "2024-05-26";
+    version = "0-unstable-2024-05-26";
     src = fetchFromGitHub {
       owner = "tamago324";
       repo = "lir.nvim";
@@ -7719,7 +7732,7 @@ final: prev: {
 
   lispdocs-nvim = buildVimPlugin {
     pname = "lispdocs.nvim";
-    version = "2022-07-05";
+    version = "0-unstable-2022-07-05";
     src = fetchFromGitHub {
       owner = "kkharji";
       repo = "lispdocs.nvim";
@@ -7732,7 +7745,7 @@ final: prev: {
 
   litee-calltree-nvim = buildVimPlugin {
     pname = "litee-calltree.nvim";
-    version = "2024-10-02";
+    version = "0-unstable-2024-10-02";
     src = fetchFromGitHub {
       owner = "ldelossa";
       repo = "litee-calltree.nvim";
@@ -7745,7 +7758,7 @@ final: prev: {
 
   litee-filetree-nvim = buildVimPlugin {
     pname = "litee-filetree.nvim";
-    version = "2022-09-27";
+    version = "0-unstable-2022-09-27";
     src = fetchFromGitHub {
       owner = "ldelossa";
       repo = "litee-filetree.nvim";
@@ -7758,7 +7771,7 @@ final: prev: {
 
   litee-nvim = buildVimPlugin {
     pname = "litee.nvim";
-    version = "2024-06-06";
+    version = "0.0.7-unstable-2024-06-06";
     src = fetchFromGitHub {
       owner = "ldelossa";
       repo = "litee.nvim";
@@ -7771,7 +7784,7 @@ final: prev: {
 
   litee-symboltree-nvim = buildVimPlugin {
     pname = "litee-symboltree.nvim";
-    version = "2022-09-28";
+    version = "0-unstable-2022-09-28";
     src = fetchFromGitHub {
       owner = "ldelossa";
       repo = "litee-symboltree.nvim";
@@ -7784,7 +7797,7 @@ final: prev: {
 
   live-command-nvim = buildVimPlugin {
     pname = "live-command.nvim";
-    version = "2025-09-28";
+    version = "2.2.0-unstable-2025-09-28";
     src = fetchFromGitHub {
       owner = "smjonas";
       repo = "live-command.nvim";
@@ -7797,12 +7810,12 @@ final: prev: {
 
   live-preview-nvim = buildVimPlugin {
     pname = "live-preview.nvim";
-    version = "2025-10-19";
+    version = "0.9.5-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "brianhuster";
       repo = "live-preview.nvim";
-      rev = "a1bb1b3a851df5276e53908276f5ae1d724d4812";
-      sha256 = "0mwjvqizm6rjpi33pxb5lpq0ag67kdfnqb5aalb7sz03rhs1k81y";
+      rev = "3e0eb9ea48a6cf8b091c0031830721eeff0efe19";
+      sha256 = "1sycn0l1vsp6k1capj51mswa88m27ikswv037xff3zvl15xif3v4";
     };
     meta.homepage = "https://github.com/brianhuster/live-preview.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7810,7 +7823,7 @@ final: prev: {
 
   live-rename-nvim = buildVimPlugin {
     pname = "live-rename.nvim";
-    version = "2025-08-28";
+    version = "0-unstable-2025-08-28";
     src = fetchFromGitHub {
       owner = "saecki";
       repo = "live-rename.nvim";
@@ -7823,7 +7836,7 @@ final: prev: {
 
   live-share-nvim = buildVimPlugin {
     pname = "live-share.nvim";
-    version = "2025-05-03";
+    version = "1.0.0-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "azratul";
       repo = "live-share.nvim";
@@ -7836,7 +7849,7 @@ final: prev: {
 
   llama-vim = buildVimPlugin {
     pname = "llama.vim";
-    version = "2025-10-28";
+    version = "0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "ggml-org";
       repo = "llama.vim";
@@ -7849,7 +7862,7 @@ final: prev: {
 
   llm-nvim = buildVimPlugin {
     pname = "llm.nvim";
-    version = "2025-01-09";
+    version = "0-unstable-2025-01-09";
     src = fetchFromGitHub {
       owner = "huggingface";
       repo = "llm.nvim";
@@ -7862,7 +7875,7 @@ final: prev: {
 
   lsp-colors-nvim = buildVimPlugin {
     pname = "lsp-colors.nvim";
-    version = "2023-02-27";
+    version = "1.0.0-unstable-2023-02-27";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lsp-colors.nvim";
@@ -7873,9 +7886,22 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  lsp-format-modifications-nvim = buildVimPlugin {
+    pname = "lsp-format-modifications.nvim";
+    version = "0-unstable-2025-07-05";
+    src = fetchFromGitHub {
+      owner = "joechrisellis";
+      repo = "lsp-format-modifications.nvim";
+      rev = "fd2b0de0afa42bea1d310af8337a4a95ebd27260";
+      sha256 = "1wmahg6dmjv1m64pr65fg912ma6dcnsnb34cdpk40jmdc6szl7pz";
+    };
+    meta.homepage = "https://github.com/joechrisellis/lsp-format-modifications.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   lsp-format-nvim = buildVimPlugin {
     pname = "lsp-format.nvim";
-    version = "2025-05-08";
+    version = "2.7.2-unstable-2025-05-08";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "lsp-format.nvim";
@@ -7888,7 +7914,7 @@ final: prev: {
 
   lsp-inlayhints-nvim = buildVimPlugin {
     pname = "lsp-inlayhints.nvim";
-    version = "2023-06-08";
+    version = "0-unstable-2023-06-08";
     src = fetchFromGitHub {
       owner = "lvimuser";
       repo = "lsp-inlayhints.nvim";
@@ -7901,7 +7927,7 @@ final: prev: {
 
   lsp-overloads-nvim = buildVimPlugin {
     pname = "lsp-overloads.nvim";
-    version = "2025-10-17";
+    version = "1.5.0-unstable-2025-10-17";
     src = fetchFromGitHub {
       owner = "Issafalcon";
       repo = "lsp-overloads.nvim";
@@ -7914,7 +7940,7 @@ final: prev: {
 
   lsp-rooter-nvim = buildVimPlugin {
     pname = "lsp-rooter.nvim";
-    version = "2021-08-13";
+    version = "0-unstable-2021-08-13";
     src = fetchFromGitHub {
       owner = "ahmedkhalf";
       repo = "lsp-rooter.nvim";
@@ -7927,7 +7953,7 @@ final: prev: {
 
   lsp-status-nvim = buildVimPlugin {
     pname = "lsp-status.nvim";
-    version = "2022-08-03";
+    version = "0-unstable-2022-08-03";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "lsp-status.nvim";
@@ -7940,7 +7966,7 @@ final: prev: {
 
   lsp-zero-nvim = buildVimPlugin {
     pname = "lsp-zero.nvim";
-    version = "2025-04-10";
+    version = "0-unstable-2025-04-10";
     src = fetchFromGitHub {
       owner = "VonHeikemen";
       repo = "lsp-zero.nvim";
@@ -7953,7 +7979,7 @@ final: prev: {
 
   lsp_extensions-nvim = buildVimPlugin {
     pname = "lsp_extensions.nvim";
-    version = "2022-07-07";
+    version = "0-unstable-2022-07-07";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "lsp_extensions.nvim";
@@ -7966,12 +7992,12 @@ final: prev: {
 
   lsp_signature-nvim = buildVimPlugin {
     pname = "lsp_signature.nvim";
-    version = "2025-11-06";
+    version = "0.3.1-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "lsp_signature.nvim";
-      rev = "1e56259e00c70959a1b3fba908b8583722fb96bf";
-      sha256 = "13zaqnjqfiq9vqan3sm8x7nqwr49nwbnxnfdyxy0smaf30cmhf3c";
+      rev = "7d3bb0a641f516f1c7fd2e47852580dadbd7a430";
+      sha256 = "14zdxn9as1d8xqgc3jjm8imgskj5d2hwvffk7ln34i2clwnlrk2d";
     };
     meta.homepage = "https://github.com/ray-x/lsp_signature.nvim/";
     meta.hydraPlatforms = [ ];
@@ -7979,7 +8005,7 @@ final: prev: {
 
   lspcontainers-nvim = buildVimPlugin {
     pname = "lspcontainers.nvim";
-    version = "2025-07-17";
+    version = "0-unstable-2025-07-17";
     src = fetchFromGitHub {
       owner = "lspcontainers";
       repo = "lspcontainers.nvim";
@@ -7992,7 +8018,7 @@ final: prev: {
 
   lspecho-nvim = buildVimPlugin {
     pname = "lspecho.nvim";
-    version = "2025-03-13";
+    version = "0-unstable-2025-03-13";
     src = fetchFromGitHub {
       owner = "deathbeam";
       repo = "lspecho.nvim";
@@ -8005,7 +8031,7 @@ final: prev: {
 
   lspkind-nvim = buildVimPlugin {
     pname = "lspkind.nvim";
-    version = "2025-09-18";
+    version = "0-unstable-2025-09-18";
     src = fetchFromGitHub {
       owner = "onsails";
       repo = "lspkind.nvim";
@@ -8018,7 +8044,7 @@ final: prev: {
 
   lspsaga-nvim = buildVimPlugin {
     pname = "lspsaga.nvim";
-    version = "2025-06-25";
+    version = "0-unstable-2025-06-25";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "lspsaga.nvim";
@@ -8031,7 +8057,7 @@ final: prev: {
 
   ltex_extra-nvim = buildVimPlugin {
     pname = "ltex_extra.nvim";
-    version = "2025-11-01";
+    version = "0.2.2-unstable-2025-11-01";
     src = fetchFromGitHub {
       owner = "barreiroleo";
       repo = "ltex_extra.nvim";
@@ -8044,7 +8070,7 @@ final: prev: {
 
   lua-async = buildVimPlugin {
     pname = "lua-async";
-    version = "2024-03-31";
+    version = "1.1.0-unstable-2024-03-31";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "lua-async";
@@ -8057,7 +8083,7 @@ final: prev: {
 
   lualine-lsp-progress = buildVimPlugin {
     pname = "lualine-lsp-progress";
-    version = "2021-10-23";
+    version = "0-unstable-2021-10-23";
     src = fetchFromGitHub {
       owner = "arkav";
       repo = "lualine-lsp-progress";
@@ -8070,7 +8096,7 @@ final: prev: {
 
   luasnip-latex-snippets-nvim = buildVimPlugin {
     pname = "luasnip-latex-snippets.nvim";
-    version = "2025-04-22";
+    version = "1.0.1-unstable-2025-04-22";
     src = fetchFromGitHub {
       owner = "evesdropper";
       repo = "luasnip-latex-snippets.nvim";
@@ -8083,7 +8109,7 @@ final: prev: {
 
   luatab-nvim = buildVimPlugin {
     pname = "luatab.nvim";
-    version = "2025-03-21";
+    version = "0-unstable-2025-03-21";
     src = fetchFromGitHub {
       owner = "alvarosevilla95";
       repo = "luatab.nvim";
@@ -8096,12 +8122,12 @@ final: prev: {
 
   luau-lsp-nvim = buildVimPlugin {
     pname = "luau-lsp.nvim";
-    version = "2025-10-02";
+    version = "1.6.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "lopi-py";
       repo = "luau-lsp.nvim";
-      rev = "42cd51e1a824074feb909ac2f79301b3eac46aab";
-      sha256 = "1bjldwfl8i3wqs0hzpglshjr1cqbhs4mdpwag7wfmrpllch0lcff";
+      rev = "0ff33e81b6b6e207fce9accd79142631615d0a8d";
+      sha256 = "14krf74ippmmybi0vbgm14ipryibcvpg4bvr5pfslr20rpwp3q98";
     };
     meta.homepage = "https://github.com/lopi-py/luau-lsp.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8109,7 +8135,7 @@ final: prev: {
 
   lushtags = buildVimPlugin {
     pname = "lushtags";
-    version = "2017-04-19";
+    version = "0.0.1-unstable-2017-04-19";
     src = fetchFromGitHub {
       owner = "mkasa";
       repo = "lushtags";
@@ -8122,7 +8148,7 @@ final: prev: {
 
   luvit-meta = buildVimPlugin {
     pname = "luvit-meta";
-    version = "2025-09-22";
+    version = "0-unstable-2025-09-22";
     src = fetchFromGitHub {
       owner = "Bilal2453";
       repo = "luvit-meta";
@@ -8135,7 +8161,7 @@ final: prev: {
 
   magma-nvim = buildVimPlugin {
     pname = "magma-nvim";
-    version = "2023-07-08";
+    version = "0-unstable-2023-07-08";
     src = fetchFromGitHub {
       owner = "dccsillag";
       repo = "magma-nvim";
@@ -8148,7 +8174,7 @@ final: prev: {
 
   maple-nvim = buildVimPlugin {
     pname = "maple.nvim";
-    version = "2025-11-04";
+    version = "0.1.3-unstable-2025-11-04";
     src = fetchFromGitHub {
       owner = "forest-nvim";
       repo = "maple.nvim";
@@ -8161,12 +8187,12 @@ final: prev: {
 
   mark-radar-nvim = buildVimPlugin {
     pname = "mark-radar.nvim";
-    version = "2024-06-04";
+    version = "0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "winston0410";
       repo = "mark-radar.nvim";
-      rev = "94dd7092cf930087f9342874a56de7d6324a13b8";
-      sha256 = "0s5bzfrcd7mi3csvcwbpdzvw9b378z5jfivjfrg1z6hpwqm8m5n7";
+      rev = "5d837402cedfa0cf7cd035ed46d6029f0a737902";
+      sha256 = "1ap0bgwx8q8msq1p3r81bn98xb0p52xb08lbziklpr6g8x421g0a";
     };
     meta.homepage = "https://github.com/winston0410/mark-radar.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8174,7 +8200,7 @@ final: prev: {
 
   markdoc-nvim = buildVimPlugin {
     pname = "markdoc.nvim";
-    version = "2025-11-14";
+    version = "1.1.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "markdoc.nvim";
@@ -8187,12 +8213,12 @@ final: prev: {
 
   markdown-nvim = buildVimPlugin {
     pname = "markdown.nvim";
-    version = "2025-10-03";
+    version = "0-unstable-2025-12-10";
     src = fetchFromGitHub {
       owner = "tadmccorkle";
       repo = "markdown.nvim";
-      rev = "34bb88989ace6c678abd947662668994219996e0";
-      sha256 = "0r7vlcbr76slmcrri6v805dgmxrsj7h2m89xq1i0z0jzbinmksph";
+      rev = "602a9d7cdbb9e0c22fc9f08c577deaa2450e4458";
+      sha256 = "08iw0c34ha3x61x6d3xp59grhljk0vxi5j6z46q1g0mgfg8bmxgg";
     };
     meta.homepage = "https://github.com/tadmccorkle/markdown.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8200,7 +8226,7 @@ final: prev: {
 
   markdown-preview-nvim = buildVimPlugin {
     pname = "markdown-preview.nvim";
-    version = "2023-10-17";
+    version = "0.0.10-unstable-2023-10-17";
     src = fetchFromGitHub {
       owner = "iamcco";
       repo = "markdown-preview.nvim";
@@ -8213,7 +8239,7 @@ final: prev: {
 
   markid = buildVimPlugin {
     pname = "markid";
-    version = "2023-10-18";
+    version = "0-unstable-2023-10-18";
     src = fetchFromGitHub {
       owner = "David-Kunz";
       repo = "markid";
@@ -8226,7 +8252,7 @@ final: prev: {
 
   marks-nvim = buildVimPlugin {
     pname = "marks.nvim";
-    version = "2025-05-13";
+    version = "0-unstable-2025-05-13";
     src = fetchFromGitHub {
       owner = "chentoast";
       repo = "marks.nvim";
@@ -8239,12 +8265,12 @@ final: prev: {
 
   markview-nvim = buildVimPlugin {
     pname = "markview.nvim";
-    version = "2025-11-06";
+    version = "27.0.0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "markview.nvim";
-      rev = "5529dc4af26bbf00bf4ddcac797f8116baf6571e";
-      sha256 = "02rrrn1p71pcabfz4i9q59g295k69gxxm2clga2m4rdv92xjnzr7";
+      rev = "0a5033326f703d99a8788e2d47753d6298195e8a";
+      sha256 = "0vl1jhf7rks1hh0fmd58n31rikday1pf310ffn1frd8syrsmp6ay";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/OXY2DEV/markview.nvim/";
@@ -8253,12 +8279,12 @@ final: prev: {
 
   mason-lspconfig-nvim = buildVimPlugin {
     pname = "mason-lspconfig.nvim";
-    version = "2025-10-31";
+    version = "2.1.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "mason-org";
       repo = "mason-lspconfig.nvim";
-      rev = "d7b5feb6e769e995f7fcf44d92f49f811c51d10c";
-      sha256 = "1249asya0kkrql0hw0zxdw8lkvm997kskwn3mk4vjj9vvsfpp903";
+      rev = "3b3571b4dadbcb464804466e9872e7246c316af7";
+      sha256 = "16d2341h88l81v30sgmzll13cnhm9vh9n4i103ljf8b40r99sf7z";
     };
     meta.homepage = "https://github.com/mason-org/mason-lspconfig.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8266,7 +8292,7 @@ final: prev: {
 
   mason-null-ls-nvim = buildVimPlugin {
     pname = "mason-null-ls.nvim";
-    version = "2025-11-05";
+    version = "2.6.0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "jay-babu";
       repo = "mason-null-ls.nvim";
@@ -8279,12 +8305,12 @@ final: prev: {
 
   mason-nvim = buildVimPlugin {
     pname = "mason.nvim";
-    version = "2025-10-01";
+    version = "2.1.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "mason-org";
       repo = "mason.nvim";
-      rev = "ad7146aa61dcaeb54fa900144d768f040090bff0";
-      sha256 = "18jk42g24cz9z1ia35519898937d1679qq04cj8gvcsp22psxndh";
+      rev = "57e5a8addb8c71fb063ee4acda466c7cf6ad2800";
+      sha256 = "072maw042q7xqd997xpf2z3g48wcm5lf5f9nv04rgn151wl8mik9";
     };
     meta.homepage = "https://github.com/mason-org/mason.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8292,7 +8318,7 @@ final: prev: {
 
   mason-nvim-dap-nvim = buildVimPlugin {
     pname = "mason-nvim-dap.nvim";
-    version = "2025-10-20";
+    version = "2.5.2-unstable-2025-10-20";
     src = fetchFromGitHub {
       owner = "jay-babu";
       repo = "mason-nvim-dap.nvim";
@@ -8305,7 +8331,7 @@ final: prev: {
 
   mason-tool-installer-nvim = buildVimPlugin {
     pname = "mason-tool-installer.nvim";
-    version = "2025-06-26";
+    version = "0-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "WhoIsSethDaniel";
       repo = "mason-tool-installer.nvim";
@@ -8318,7 +8344,7 @@ final: prev: {
 
   matchit-zip = buildVimPlugin {
     pname = "matchit.zip";
-    version = "2010-10-18";
+    version = "1.13.2-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "matchit.zip";
@@ -8331,7 +8357,7 @@ final: prev: {
 
   material-nvim = buildVimPlugin {
     pname = "material.nvim";
-    version = "2025-10-18";
+    version = "0-unstable-2025-10-18";
     src = fetchFromGitHub {
       owner = "marko-cerovac";
       repo = "material.nvim";
@@ -8344,7 +8370,7 @@ final: prev: {
 
   material-vim = buildVimPlugin {
     pname = "material.vim";
-    version = "2025-07-23";
+    version = "0-unstable-2025-07-23";
     src = fetchFromGitHub {
       owner = "kaicataldo";
       repo = "material.vim";
@@ -8357,7 +8383,7 @@ final: prev: {
 
   mattn-calendar-vim = buildVimPlugin {
     pname = "mattn-calendar-vim";
-    version = "2022-02-10";
+    version = "0-unstable-2022-02-10";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "calendar-vim";
@@ -8370,7 +8396,7 @@ final: prev: {
 
   mayansmoke = buildVimPlugin {
     pname = "mayansmoke";
-    version = "2010-10-18";
+    version = "2.0-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "mayansmoke";
@@ -8383,7 +8409,7 @@ final: prev: {
 
   mediawiki-vim = buildVimPlugin {
     pname = "mediawiki.vim";
-    version = "2015-11-15";
+    version = "0.2-unstable-2015-11-15";
     src = fetchFromGitHub {
       owner = "chikamichi";
       repo = "mediawiki.vim";
@@ -8396,7 +8422,7 @@ final: prev: {
 
   melange-nvim = buildVimPlugin {
     pname = "melange-nvim";
-    version = "2025-06-16";
+    version = "2025-07-10-unstable-2025-06-16";
     src = fetchFromGitHub {
       owner = "savq";
       repo = "melange-nvim";
@@ -8409,7 +8435,7 @@ final: prev: {
 
   messenger-nvim = buildVimPlugin {
     pname = "messenger.nvim";
-    version = "2024-07-18";
+    version = "0-unstable-2024-07-18";
     src = fetchFromGitHub {
       owner = "lsig";
       repo = "messenger.nvim";
@@ -8422,7 +8448,7 @@ final: prev: {
 
   miasma-nvim = buildVimPlugin {
     pname = "miasma.nvim";
-    version = "2025-07-12";
+    version = "0-unstable-2025-07-12";
     src = fetchFromGitHub {
       owner = "xero";
       repo = "miasma.nvim";
@@ -8435,7 +8461,7 @@ final: prev: {
 
   midnight-nvim = buildVimPlugin {
     pname = "midnight.nvim";
-    version = "2024-11-01";
+    version = "0.1-unstable-2024-11-01";
     src = fetchFromGitHub {
       owner = "dasupradyumna";
       repo = "midnight.nvim";
@@ -8448,7 +8474,7 @@ final: prev: {
 
   mind-nvim = buildVimPlugin {
     pname = "mind.nvim";
-    version = "2023-03-22";
+    version = "2.2.1-unstable-2023-03-22";
     src = fetchFromGitHub {
       owner = "hadronized";
       repo = "mind.nvim";
@@ -8461,12 +8487,12 @@ final: prev: {
 
   mini-ai = buildVimPlugin {
     pname = "mini.ai";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-20";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.ai";
-      rev = "0d3c9cf22e37b86b7a0dfbe7ef129ee7a5f4f93c";
-      sha256 = "1sapda1s8ddkx54cd9f4fmyzq3k2p32wql20a8v67mm2gniaxbdg";
+      rev = "bfb26d9072670c3aaefab0f53024b2f3729c8083";
+      sha256 = "1czb3winsw5yyhrrz1mvc30krk86jy3rpmmjhz3rqpwhj23ni7ga";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.ai/";
     meta.hydraPlatforms = [ ];
@@ -8474,7 +8500,7 @@ final: prev: {
 
   mini-align = buildVimPlugin {
     pname = "mini.align";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.align";
@@ -8487,7 +8513,7 @@ final: prev: {
 
   mini-animate = buildVimPlugin {
     pname = "mini.animate";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.animate";
@@ -8500,12 +8526,12 @@ final: prev: {
 
   mini-base16 = buildVimPlugin {
     pname = "mini.base16";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.base16";
-      rev = "67638505e36a8ffe335655af2fe104138f60ab3d";
-      sha256 = "0p9qy5f3j2vdnggfhfiz80ivr8bpkglsdip5hsk1q3m33y4x462x";
+      rev = "91c852a07a4907895cba714fab337aedb6bd9d87";
+      sha256 = "10d59zvxzk0pf0zgqnhhgkbdnw5907lclnxnji8w6p080d1z9i53";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.base16/";
     meta.hydraPlatforms = [ ];
@@ -8513,7 +8539,7 @@ final: prev: {
 
   mini-basics = buildVimPlugin {
     pname = "mini.basics";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.basics";
@@ -8526,7 +8552,7 @@ final: prev: {
 
   mini-bracketed = buildVimPlugin {
     pname = "mini.bracketed";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.bracketed";
@@ -8539,7 +8565,7 @@ final: prev: {
 
   mini-bufremove = buildVimPlugin {
     pname = "mini.bufremove";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.bufremove";
@@ -8552,20 +8578,33 @@ final: prev: {
 
   mini-clue = buildVimPlugin {
     pname = "mini.clue";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.clue";
-      rev = "e806253398f631c0c05a3cfe54fe479477ef9f4d";
-      sha256 = "1hh8mmb3aarn67c409jhv9bfdwqhnmrdgayngwysn5d2px7mqjx1";
+      rev = "d96fef9db8fcb38c058f2edb2eeb69cb8b2d462a";
+      sha256 = "0yl0p4i599cwp8i2h466qyvqjv4vg8vdcpy0g87r8wkp46344460";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.clue/";
     meta.hydraPlatforms = [ ];
   };
 
+  mini-cmdline = buildVimPlugin {
+    pname = "mini.cmdline";
+    version = "0-unstable-2025-12-11";
+    src = fetchFromGitHub {
+      owner = "nvim-mini";
+      repo = "mini.cmdline";
+      rev = "2dfa134199ba80aa4a55bc2601ad533e045d426e";
+      sha256 = "0xwzyf1kvzik9k50fb93d80wv8rd9py3h0qx23gsgz36lynhbi2p";
+    };
+    meta.homepage = "https://github.com/nvim-mini/mini.cmdline/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-colors = buildVimPlugin {
     pname = "mini.colors";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.colors";
@@ -8578,7 +8617,7 @@ final: prev: {
 
   mini-comment = buildVimPlugin {
     pname = "mini.comment";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.comment";
@@ -8591,12 +8630,12 @@ final: prev: {
 
   mini-completion = buildVimPlugin {
     pname = "mini.completion";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.completion";
-      rev = "581934b58ff25cec7f68a3dfee66c9d1c42faf8e";
-      sha256 = "1spk0143n84l4382xc3ny6nw7qp9b6kdaj52svxzh82av0r030xy";
+      rev = "7c5edfc0e479dd4edd898cc9ddd1920d8c1ce420";
+      sha256 = "0d3pxaa8zdwg7vay9z4f23wh9ii98ifcpjywzn0wqykr9dir74qi";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.completion/";
     meta.hydraPlatforms = [ ];
@@ -8604,7 +8643,7 @@ final: prev: {
 
   mini-cursorword = buildVimPlugin {
     pname = "mini.cursorword";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.cursorword";
@@ -8617,7 +8656,7 @@ final: prev: {
 
   mini-deps = buildVimPlugin {
     pname = "mini.deps";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.deps";
@@ -8630,7 +8669,7 @@ final: prev: {
 
   mini-diff = buildVimPlugin {
     pname = "mini.diff";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.diff";
@@ -8643,7 +8682,7 @@ final: prev: {
 
   mini-doc = buildVimPlugin {
     pname = "mini.doc";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.doc";
@@ -8656,12 +8695,12 @@ final: prev: {
 
   mini-extra = buildVimPlugin {
     pname = "mini.extra";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.extra";
-      rev = "7a5231ff48e715daad4fe94448de0639bc227fdb";
-      sha256 = "0h40hawk4lfl9v80hkk458cbjlpjc68li95ikq7pccg0kdylgl2p";
+      rev = "31f82562238a4fadd30997757ead6c7f1770e7ea";
+      sha256 = "0s2gl2pc214v5pp8vcxc39fp66y9asky74qj91z0acr3f6ghs46y";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.extra/";
     meta.hydraPlatforms = [ ];
@@ -8669,12 +8708,12 @@ final: prev: {
 
   mini-files = buildVimPlugin {
     pname = "mini.files";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.files";
-      rev = "dce9a4e4f14b3bf469e83c78aef393a090f4d057";
-      sha256 = "1rmazylfy7j54ii3b6shrrd4g66r37hr2x0qdn670bhvrm3m6kg4";
+      rev = "22c64f010eef047ed270e29e7cc266cd4740787e";
+      sha256 = "1dnxl12w5ggr8g1217c4zrnj8991mp68fq04n4ys34nk12vx8j0n";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.files/";
     meta.hydraPlatforms = [ ];
@@ -8682,7 +8721,7 @@ final: prev: {
 
   mini-fuzzy = buildVimPlugin {
     pname = "mini.fuzzy";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.fuzzy";
@@ -8695,7 +8734,7 @@ final: prev: {
 
   mini-git = buildVimPlugin {
     pname = "mini-git";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini-git";
@@ -8708,7 +8747,7 @@ final: prev: {
 
   mini-hipatterns = buildVimPlugin {
     pname = "mini.hipatterns";
-    version = "2025-11-07";
+    version = "0.16.0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.hipatterns";
@@ -8721,12 +8760,12 @@ final: prev: {
 
   mini-hues = buildVimPlugin {
     pname = "mini.hues";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.hues";
-      rev = "83ad0612688241c5088fb1738a33a0503586d4be";
-      sha256 = "1dhl6d25ia6mf6lzvq2v74a0lizsxvxic23536cxmb3ygqis150p";
+      rev = "8fb10472cc40a1aad428a82a90270c0e87981fe7";
+      sha256 = "1wmdx4y171p2qdnl7xl42hr0rdf52ijnbc0kdrj7i3jqppk72q6r";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.hues/";
     meta.hydraPlatforms = [ ];
@@ -8734,7 +8773,7 @@ final: prev: {
 
   mini-icons = buildVimPlugin {
     pname = "mini.icons";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.icons";
@@ -8747,7 +8786,7 @@ final: prev: {
 
   mini-indentscope = buildVimPlugin {
     pname = "mini.indentscope";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.indentscope";
@@ -8760,7 +8799,7 @@ final: prev: {
 
   mini-jump = buildVimPlugin {
     pname = "mini.jump";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.jump";
@@ -8773,7 +8812,7 @@ final: prev: {
 
   mini-jump2d = buildVimPlugin {
     pname = "mini.jump2d";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.jump2d";
@@ -8786,7 +8825,7 @@ final: prev: {
 
   mini-keymap = buildVimPlugin {
     pname = "mini.keymap";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.keymap";
@@ -8799,7 +8838,7 @@ final: prev: {
 
   mini-map = buildVimPlugin {
     pname = "mini.map";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.map";
@@ -8812,12 +8851,12 @@ final: prev: {
 
   mini-misc = buildVimPlugin {
     pname = "mini.misc";
-    version = "2025-11-06";
+    version = "0.16.0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.misc";
-      rev = "61f29f871c34cbc221666384723e4523907323e3";
-      sha256 = "1i12n7n11f0jhbc86scamnvvlgyh7z6cvrrw8ryihqb0rzzsbhr9";
+      rev = "97f62a3e2a159fba6fb29a60b7fe64c7ca9d4ece";
+      sha256 = "06nwddqcgays56kf24z2910rhphainki2idghbivlsqz5jjnay3v";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.misc/";
     meta.hydraPlatforms = [ ];
@@ -8825,7 +8864,7 @@ final: prev: {
 
   mini-move = buildVimPlugin {
     pname = "mini.move";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.move";
@@ -8838,12 +8877,12 @@ final: prev: {
 
   mini-notify = buildVimPlugin {
     pname = "mini.notify";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.notify";
-      rev = "895630bc03d461609cbf64329203e7e007bb0db0";
-      sha256 = "1r1395hpxscyhawxm7l1s8w7ijixficlqqicxh2m4xxqc5n09vv2";
+      rev = "29ec27f60bf4b63e447c851d9061c434d80795a6";
+      sha256 = "13wvfk4br4nmk3y6g3kkgcy56g4x2xlafdcyn6gf7ak79sgmxlii";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.notify/";
     meta.hydraPlatforms = [ ];
@@ -8851,12 +8890,12 @@ final: prev: {
 
   mini-nvim = buildVimPlugin {
     pname = "mini.nvim";
-    version = "2025-11-07";
+    version = "0.16.0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.nvim";
-      rev = "42dbeaafb081a569b060b3b11101ca676a8f1193";
-      sha256 = "0yiydhkiwa4iw1w7sxsddc484af30590rmz06kbc0nj8lg679fnb";
+      rev = "6bd3a01aaf7d248aea1b78aacdd5d44bffa002c1";
+      sha256 = "04g73qdxyvh58y9i8m97zcjd0vaz5yyhqylp8sw3xywnnbmfasyh";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.nvim/";
     meta.hydraPlatforms = [ ];
@@ -8864,12 +8903,12 @@ final: prev: {
 
   mini-operators = buildVimPlugin {
     pname = "mini.operators";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.operators";
-      rev = "0670bfbfe492f630e37f240dbc31bdc652292e4e";
-      sha256 = "1c5p7hvxbbyqwa5dmg53i3pzni3da1d53x492pk8kv7qzzq4fhm5";
+      rev = "6df2fd410afd55ebd87757345031fc0af0c95068";
+      sha256 = "0ipyj72k4l38aqkhm0wyfvckmnwsnbagymsyz1akcm1jhd3g84gl";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.operators/";
     meta.hydraPlatforms = [ ];
@@ -8877,12 +8916,12 @@ final: prev: {
 
   mini-pairs = buildVimPlugin {
     pname = "mini.pairs";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.pairs";
-      rev = "b316e68f2d242d5bd010deaab645daa27ed86297";
-      sha256 = "1x1a8z0r083mq529n4ryqa2s0vjzzjhmgl0j9l2ja3j09lwbv429";
+      rev = "d5a29b6254dad07757832db505ea5aeab9aad43a";
+      sha256 = "1jas75bavf76c7y92pqi5dgvxskpwkqs51jcskfhrpj52d36ih7g";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.pairs/";
     meta.hydraPlatforms = [ ];
@@ -8890,12 +8929,12 @@ final: prev: {
 
   mini-pick = buildVimPlugin {
     pname = "mini.pick";
-    version = "2025-11-04";
+    version = "0.16.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.pick";
-      rev = "08a72201bd71d2ee2b2572e810cf09f0bc55a3cd";
-      sha256 = "0gkxl63xgv59nr828mk0hzr8mh3dvjwfib7vm96fq8kkrs938i01";
+      rev = "6b7974543b17cf2e294993fc3d8545a342258232";
+      sha256 = "1hsm3na5q3npclabl716lpmdmwd964r8vc73j2m7hbj61v9623fx";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.pick/";
     meta.hydraPlatforms = [ ];
@@ -8903,7 +8942,7 @@ final: prev: {
 
   mini-sessions = buildVimPlugin {
     pname = "mini.sessions";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.sessions";
@@ -8916,12 +8955,12 @@ final: prev: {
 
   mini-snippets = buildVimPlugin {
     pname = "mini.snippets";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.snippets";
-      rev = "66c041fb00ec007b7a7044751c7d3792d0e028a8";
-      sha256 = "01iqls99by2s8nsm1l7hi075m1b5wz22vwl5c48wk6hdavd77acr";
+      rev = "b4065ca6b33e4df2897672d3bb760cfc93f4390a";
+      sha256 = "1cj5g7arc2q82pffqd9658jynbjgm7i8szfyvmvb8crvk1ycmf3f";
     };
     meta.homepage = "https://github.com/nvim-mini/mini.snippets/";
     meta.hydraPlatforms = [ ];
@@ -8929,7 +8968,7 @@ final: prev: {
 
   mini-splitjoin = buildVimPlugin {
     pname = "mini.splitjoin";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.splitjoin";
@@ -8942,7 +8981,7 @@ final: prev: {
 
   mini-starter = buildVimPlugin {
     pname = "mini.starter";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.starter";
@@ -8955,7 +8994,7 @@ final: prev: {
 
   mini-statusline = buildVimPlugin {
     pname = "mini.statusline";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.statusline";
@@ -8968,7 +9007,7 @@ final: prev: {
 
   mini-surround = buildVimPlugin {
     pname = "mini.surround";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.surround";
@@ -8981,7 +9020,7 @@ final: prev: {
 
   mini-tabline = buildVimPlugin {
     pname = "mini.tabline";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.tabline";
@@ -8994,7 +9033,7 @@ final: prev: {
 
   mini-trailspace = buildVimPlugin {
     pname = "mini.trailspace";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.trailspace";
@@ -9007,7 +9046,7 @@ final: prev: {
 
   mini-visits = buildVimPlugin {
     pname = "mini.visits";
-    version = "2025-11-03";
+    version = "0.16.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "nvim-mini";
       repo = "mini.visits";
@@ -9020,7 +9059,7 @@ final: prev: {
 
   minimap-vim = buildVimPlugin {
     pname = "minimap.vim";
-    version = "2025-01-26";
+    version = "0-unstable-2025-01-26";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "minimap.vim";
@@ -9033,12 +9072,12 @@ final: prev: {
 
   minuet-ai-nvim = buildVimPlugin {
     pname = "minuet-ai.nvim";
-    version = "2025-10-23";
+    version = "0.8.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "milanglacier";
       repo = "minuet-ai.nvim";
-      rev = "5d565cb23e0b365af14f9e9a2a45b2b46e7c4f3e";
-      sha256 = "0mb7lqy3h7hnm035lclsh205nv92bg0d2ql06xhi02x10c807mn4";
+      rev = "7522a2cfed5797974c72d3f10f48c51e0a6778e3";
+      sha256 = "00s9ap0802pcqid8m3vccq83d9apblmm65hkm9gnp0bbhdvf0419";
     };
     meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
     meta.hydraPlatforms = [ ];
@@ -9046,7 +9085,7 @@ final: prev: {
 
   mkdir-nvim = buildVimPlugin {
     pname = "mkdir.nvim";
-    version = "2022-07-23";
+    version = "0-unstable-2022-07-23";
     src = fetchFromGitHub {
       owner = "jghauser";
       repo = "mkdir.nvim";
@@ -9059,7 +9098,7 @@ final: prev: {
 
   mkdnflow-nvim = buildVimPlugin {
     pname = "mkdnflow.nvim";
-    version = "2024-08-25";
+    version = "1.2.4-unstable-2024-08-25";
     src = fetchFromGitHub {
       owner = "jakewvincent";
       repo = "mkdnflow.nvim";
@@ -9072,7 +9111,7 @@ final: prev: {
 
   mkdx = buildVimPlugin {
     pname = "mkdx";
-    version = "2023-10-16";
+    version = "1.10.0-unstable-2023-10-16";
     src = fetchFromGitHub {
       owner = "SidOfc";
       repo = "mkdx";
@@ -9085,7 +9124,7 @@ final: prev: {
 
   modicator-nvim = buildVimPlugin {
     pname = "modicator.nvim";
-    version = "2025-10-24";
+    version = "0-unstable-2025-10-24";
     src = fetchFromGitHub {
       owner = "mawkler";
       repo = "modicator.nvim";
@@ -9098,7 +9137,7 @@ final: prev: {
 
   modus-themes-nvim = buildVimPlugin {
     pname = "modus-themes.nvim";
-    version = "2025-10-05";
+    version = "1.4.2-unstable-2025-10-05";
     src = fetchFromGitHub {
       owner = "miikanissi";
       repo = "modus-themes.nvim";
@@ -9111,7 +9150,7 @@ final: prev: {
 
   molokai = buildVimPlugin {
     pname = "molokai";
-    version = "2015-11-11";
+    version = "0-unstable-2015-11-11";
     src = fetchFromGitHub {
       owner = "tomasr";
       repo = "molokai";
@@ -9124,7 +9163,7 @@ final: prev: {
 
   molten-nvim = buildVimPlugin {
     pname = "molten-nvim";
-    version = "2025-11-05";
+    version = "1.9.2-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "benlubas";
       repo = "molten-nvim";
@@ -9137,7 +9176,7 @@ final: prev: {
 
   monaspace-nvim = buildVimPlugin {
     pname = "monaspace.nvim";
-    version = "2025-02-12";
+    version = "0-unstable-2025-02-12";
     src = fetchFromGitHub {
       owner = "jackplus-xyz";
       repo = "monaspace.nvim";
@@ -9150,7 +9189,7 @@ final: prev: {
 
   monokai-pro-nvim = buildVimPlugin {
     pname = "monokai-pro.nvim";
-    version = "2025-08-03";
+    version = "1.26.1-unstable-2025-08-03";
     src = fetchFromGitHub {
       owner = "loctvl842";
       repo = "monokai-pro.nvim";
@@ -9163,7 +9202,7 @@ final: prev: {
 
   moonlight-nvim = buildVimPlugin {
     pname = "moonlight.nvim";
-    version = "2021-05-16";
+    version = "0-unstable-2021-05-16";
     src = fetchFromGitHub {
       owner = "shaunsingh";
       repo = "moonlight.nvim";
@@ -9176,7 +9215,7 @@ final: prev: {
 
   moonscript-vim = buildVimPlugin {
     pname = "moonscript-vim";
-    version = "2016-11-22";
+    version = "0-unstable-2016-11-22";
     src = fetchFromGitHub {
       owner = "leafo";
       repo = "moonscript-vim";
@@ -9189,7 +9228,7 @@ final: prev: {
 
   mru = buildVimPlugin {
     pname = "mru";
-    version = "2024-12-29";
+    version = "3.11-unstable-2024-12-29";
     src = fetchFromGitHub {
       owner = "yegappan";
       repo = "mru";
@@ -9202,12 +9241,12 @@ final: prev: {
 
   multicursor-nvim = buildVimPlugin {
     pname = "multicursor.nvim";
-    version = "2025-09-27";
+    version = "0-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "jake-stewart";
       repo = "multicursor.nvim";
-      rev = "0c6ceae228bf209e8b8717df9de500770c4e7022";
-      sha256 = "1ih0i1lv1dp0yj5krxfizv7pi355xyhsslb7mybqfplqa70185j2";
+      rev = "a0ea3303a6c4b233cf3272fb1e358d4c842e5260";
+      sha256 = "1yw17ahwyqirygh69hfc00q790ywwxrz0pc5xwr3s811yp51j12f";
     };
     meta.homepage = "https://github.com/jake-stewart/multicursor.nvim/";
     meta.hydraPlatforms = [ ];
@@ -9215,7 +9254,7 @@ final: prev: {
 
   multicursors-nvim = buildVimPlugin {
     pname = "multicursors.nvim";
-    version = "2025-02-26";
+    version = "2.0.0-unstable-2025-02-26";
     src = fetchFromGitHub {
       owner = "smoka7";
       repo = "multicursors.nvim";
@@ -9228,7 +9267,7 @@ final: prev: {
 
   muren-nvim = buildVimPlugin {
     pname = "muren.nvim";
-    version = "2025-02-09";
+    version = "0-unstable-2025-02-09";
     src = fetchFromGitHub {
       owner = "AckslD";
       repo = "muren.nvim";
@@ -9241,7 +9280,7 @@ final: prev: {
 
   nabla-nvim = buildVimPlugin {
     pname = "nabla.nvim";
-    version = "2025-04-21";
+    version = "0-unstable-2025-04-21";
     src = fetchFromGitHub {
       owner = "jbyuki";
       repo = "nabla.nvim";
@@ -9254,7 +9293,7 @@ final: prev: {
 
   ncm2 = buildVimPlugin {
     pname = "ncm2";
-    version = "2025-06-07";
+    version = "0-unstable-2025-06-07";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2";
@@ -9267,7 +9306,7 @@ final: prev: {
 
   ncm2-bufword = buildVimPlugin {
     pname = "ncm2-bufword";
-    version = "2019-01-19";
+    version = "0-unstable-2019-01-19";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-bufword";
@@ -9280,7 +9319,7 @@ final: prev: {
 
   ncm2-cssomni = buildVimPlugin {
     pname = "ncm2-cssomni";
-    version = "2018-07-09";
+    version = "0-unstable-2018-07-09";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-cssomni";
@@ -9293,7 +9332,7 @@ final: prev: {
 
   ncm2-dictionary = buildVimPlugin {
     pname = "ncm2-dictionary";
-    version = "2018-11-15";
+    version = "0-unstable-2018-11-15";
     src = fetchFromGitHub {
       owner = "yuki-yano";
       repo = "ncm2-dictionary";
@@ -9306,7 +9345,7 @@ final: prev: {
 
   ncm2-github = buildVimPlugin {
     pname = "ncm2-github";
-    version = "2018-08-01";
+    version = "0-unstable-2018-08-01";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-github";
@@ -9319,7 +9358,7 @@ final: prev: {
 
   ncm2-html-subscope = buildVimPlugin {
     pname = "ncm2-html-subscope";
-    version = "2018-07-01";
+    version = "0-unstable-2018-07-01";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-html-subscope";
@@ -9332,7 +9371,7 @@ final: prev: {
 
   ncm2-jedi = buildVimPlugin {
     pname = "ncm2-jedi";
-    version = "2025-03-10";
+    version = "0-unstable-2025-03-10";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-jedi";
@@ -9345,7 +9384,7 @@ final: prev: {
 
   ncm2-markdown-subscope = buildVimPlugin {
     pname = "ncm2-markdown-subscope";
-    version = "2020-03-09";
+    version = "0-unstable-2020-03-09";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-markdown-subscope";
@@ -9358,7 +9397,7 @@ final: prev: {
 
   ncm2-neoinclude = buildVimPlugin {
     pname = "ncm2-neoinclude";
-    version = "2020-07-19";
+    version = "0-unstable-2020-07-19";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-neoinclude";
@@ -9371,7 +9410,7 @@ final: prev: {
 
   ncm2-neosnippet = buildVimPlugin {
     pname = "ncm2-neosnippet";
-    version = "2021-10-08";
+    version = "0-unstable-2021-10-08";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-neosnippet";
@@ -9384,7 +9423,7 @@ final: prev: {
 
   ncm2-path = buildVimPlugin {
     pname = "ncm2-path";
-    version = "2019-02-20";
+    version = "0-unstable-2019-02-20";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-path";
@@ -9397,7 +9436,7 @@ final: prev: {
 
   ncm2-syntax = buildVimPlugin {
     pname = "ncm2-syntax";
-    version = "2020-07-19";
+    version = "0-unstable-2020-07-19";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-syntax";
@@ -9410,7 +9449,7 @@ final: prev: {
 
   ncm2-tagprefix = buildVimPlugin {
     pname = "ncm2-tagprefix";
-    version = "2018-11-08";
+    version = "0-unstable-2018-11-08";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-tagprefix";
@@ -9423,7 +9462,7 @@ final: prev: {
 
   ncm2-tmux = buildVimPlugin {
     pname = "ncm2-tmux";
-    version = "2019-01-11";
+    version = "0-unstable-2019-01-11";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-tmux";
@@ -9436,7 +9475,7 @@ final: prev: {
 
   ncm2-ultisnips = buildVimPlugin {
     pname = "ncm2-ultisnips";
-    version = "2019-01-26";
+    version = "0-unstable-2019-01-26";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-ultisnips";
@@ -9449,7 +9488,7 @@ final: prev: {
 
   ncm2-vim = buildVimPlugin {
     pname = "ncm2-vim";
-    version = "2020-07-19";
+    version = "0-unstable-2020-07-19";
     src = fetchFromGitHub {
       owner = "ncm2";
       repo = "ncm2-vim";
@@ -9462,7 +9501,7 @@ final: prev: {
 
   neco-ghc = buildVimPlugin {
     pname = "neco-ghc";
-    version = "2021-02-22";
+    version = "0-unstable-2021-02-22";
     src = fetchFromGitHub {
       owner = "eagletmt";
       repo = "neco-ghc";
@@ -9475,7 +9514,7 @@ final: prev: {
 
   neco-look = buildVimPlugin {
     pname = "neco-look";
-    version = "2021-07-26";
+    version = "1.2-unstable-2021-07-26";
     src = fetchFromGitHub {
       owner = "ujihisa";
       repo = "neco-look";
@@ -9488,7 +9527,7 @@ final: prev: {
 
   neco-syntax = buildVimPlugin {
     pname = "neco-syntax";
-    version = "2020-09-13";
+    version = "0-unstable-2020-09-13";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neco-syntax";
@@ -9501,7 +9540,7 @@ final: prev: {
 
   neco-vim = buildVimPlugin {
     pname = "neco-vim";
-    version = "2025-03-06";
+    version = "0-unstable-2025-03-06";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neco-vim";
@@ -9514,12 +9553,12 @@ final: prev: {
 
   neo-tree-nvim = buildVimPlugin {
     pname = "neo-tree.nvim";
-    version = "2025-11-04";
+    version = "3.38.0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "nvim-neo-tree";
       repo = "neo-tree.nvim";
-      rev = "f3df514fff2bdd4318127c40470984137f87b62e";
-      sha256 = "1yic7slj074qb3mwgv7cra8d70xcdrhizvyd9nszb0q0brg02c79";
+      rev = "7a6f14c6edde0921333005cd738309b70138964b";
+      sha256 = "02pjsnk3iqflb0vv9skk4bzcf29ns8nigkjs78paaqd8ih2l2r0r";
     };
     meta.homepage = "https://github.com/nvim-neo-tree/neo-tree.nvim/";
     meta.hydraPlatforms = [ ];
@@ -9527,7 +9566,7 @@ final: prev: {
 
   neocomplete-vim = buildVimPlugin {
     pname = "neocomplete.vim";
-    version = "2023-05-18";
+    version = "0-unstable-2023-05-18";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neocomplete.vim";
@@ -9540,12 +9579,12 @@ final: prev: {
 
   neoconf-nvim = buildVimPlugin {
     pname = "neoconf.nvim";
-    version = "2025-11-07";
+    version = "1.4.0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "neoconf.nvim";
-      rev = "d66e4a13013cf68d7a3fdcdcf3d98d69b266e4f7";
-      sha256 = "049garf306h03hy50c58dic51zq7lrzgjsi76rz524mr0pan2gb4";
+      rev = "795ff56ad739f1e484909b908f909130cc2dbebe";
+      sha256 = "0m4sh5nrm707n3r2783vab52nx1p2p5xrilkc5w0fskrby23yc7p";
     };
     meta.homepage = "https://github.com/folke/neoconf.nvim/";
     meta.hydraPlatforms = [ ];
@@ -9553,7 +9592,7 @@ final: prev: {
 
   neocord = buildVimPlugin {
     pname = "neocord";
-    version = "2025-05-29";
+    version = "0-unstable-2025-05-29";
     src = fetchFromGitHub {
       owner = "IogaMaster";
       repo = "neocord";
@@ -9566,7 +9605,7 @@ final: prev: {
 
   neodark-vim = buildVimPlugin {
     pname = "neodark.vim";
-    version = "2024-01-12";
+    version = "3.1.0-unstable-2024-01-12";
     src = fetchFromGitHub {
       owner = "KeitaNakamura";
       repo = "neodark.vim";
@@ -9579,7 +9618,7 @@ final: prev: {
 
   neodev-nvim = buildVimPlugin {
     pname = "neodev.nvim";
-    version = "2024-07-06";
+    version = "3.0.0-unstable-2024-07-06";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "neodev.nvim";
@@ -9592,7 +9631,7 @@ final: prev: {
 
   neoformat = buildVimPlugin {
     pname = "neoformat";
-    version = "2025-07-29";
+    version = "0.4.0-unstable-2025-07-29";
     src = fetchFromGitHub {
       owner = "sbdchd";
       repo = "neoformat";
@@ -9605,7 +9644,7 @@ final: prev: {
 
   neogen = buildVimPlugin {
     pname = "neogen";
-    version = "2025-05-03";
+    version = "2.20.0-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "danymat";
       repo = "neogen";
@@ -9618,12 +9657,12 @@ final: prev: {
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2025-11-04";
+    version = "3.0.0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "d2a2ae4415872fbddb2441920ab109ee52fd4916";
-      sha256 = "0ha5mz49gw5ck7ddb63raqg8874kavb82846lx66y0sw4y00wbl6";
+      rev = "d8bf9102692250193b855acd9025a826f1af2729";
+      sha256 = "0ga1s57aj7gyamh9bb9fivjsx5sjwik12jaq9rshlwcygkcdw6h4";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
     meta.hydraPlatforms = [ ];
@@ -9631,7 +9670,7 @@ final: prev: {
 
   neoinclude-vim = buildVimPlugin {
     pname = "neoinclude.vim";
-    version = "2020-09-13";
+    version = "0-unstable-2020-09-13";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neoinclude.vim";
@@ -9644,7 +9683,7 @@ final: prev: {
 
   neomake = buildVimPlugin {
     pname = "neomake";
-    version = "2023-02-20";
+    version = "0-unstable-2023-02-20";
     src = fetchFromGitHub {
       owner = "neomake";
       repo = "neomake";
@@ -9657,12 +9696,12 @@ final: prev: {
 
   neomodern-nvim = buildVimPlugin {
     pname = "neomodern.nvim";
-    version = "2025-05-26";
+    version = "1.0.4-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "casedami";
       repo = "neomodern.nvim";
-      rev = "6fb1f29c092996fd3cef915a92b48992e0ba71d4";
-      sha256 = "04yg1hd2dc0is305yd18rim4ldjmg3gxwiyqbx7h2kpm24krf6z7";
+      rev = "e9a25f8955a2cc92f24091fc366752cd09694209";
+      sha256 = "02fw62h4q13qdc38i1l5qpzvch0xs2asnwgl7m5hw15pkmn2f5dp";
     };
     meta.homepage = "https://github.com/casedami/neomodern.nvim/";
     meta.hydraPlatforms = [ ];
@@ -9670,7 +9709,7 @@ final: prev: {
 
   neomru-vim = buildVimPlugin {
     pname = "neomru.vim";
-    version = "2020-02-05";
+    version = "0-unstable-2020-02-05";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neomru.vim";
@@ -9683,7 +9722,7 @@ final: prev: {
 
   neomutt-vim = buildVimPlugin {
     pname = "neomutt.vim";
-    version = "2024-10-13";
+    version = "20220408-unstable-2024-10-13";
     src = fetchFromGitHub {
       owner = "neomutt";
       repo = "neomutt.vim";
@@ -9696,7 +9735,7 @@ final: prev: {
 
   neon = buildVimPlugin {
     pname = "neon";
-    version = "2022-11-27";
+    version = "0-unstable-2022-11-27";
     src = fetchFromGitHub {
       owner = "rafamadriz";
       repo = "neon";
@@ -9709,7 +9748,7 @@ final: prev: {
 
   neorepl-nvim = buildVimPlugin {
     pname = "neorepl.nvim";
-    version = "2024-06-02";
+    version = "0-unstable-2024-06-02";
     src = fetchFromGitHub {
       owner = "ii14";
       repo = "neorepl.nvim";
@@ -9722,7 +9761,7 @@ final: prev: {
 
   neorg-telescope = buildVimPlugin {
     pname = "neorg-telescope";
-    version = "2025-04-17";
+    version = "1.2.3-unstable-2025-04-17";
     src = fetchFromGitHub {
       owner = "nvim-neorg";
       repo = "neorg-telescope";
@@ -9735,7 +9774,7 @@ final: prev: {
 
   neoscroll-nvim = buildVimPlugin {
     pname = "neoscroll.nvim";
-    version = "2024-12-06";
+    version = "0.2.0-unstable-2024-12-06";
     src = fetchFromGitHub {
       owner = "karb94";
       repo = "neoscroll.nvim";
@@ -9748,7 +9787,7 @@ final: prev: {
 
   neosnippet-snippets = buildVimPlugin {
     pname = "neosnippet-snippets";
-    version = "2022-04-01";
+    version = "0-unstable-2022-04-01";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet-snippets";
@@ -9761,7 +9800,7 @@ final: prev: {
 
   neosnippet-vim = buildVimPlugin {
     pname = "neosnippet.vim";
-    version = "2023-07-23";
+    version = "0-unstable-2023-07-23";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neosnippet.vim";
@@ -9774,7 +9813,7 @@ final: prev: {
 
   neoterm = buildVimPlugin {
     pname = "neoterm";
-    version = "2023-03-09";
+    version = "0-unstable-2023-03-09";
     src = fetchFromGitHub {
       owner = "kassio";
       repo = "neoterm";
@@ -9787,7 +9826,7 @@ final: prev: {
 
   neotest-bash = buildVimPlugin {
     pname = "neotest-bash";
-    version = "2025-10-11";
+    version = "0-unstable-2025-10-11";
     src = fetchFromGitHub {
       owner = "rcasia";
       repo = "neotest-bash";
@@ -9801,7 +9840,7 @@ final: prev: {
 
   neotest-ctest = buildVimPlugin {
     pname = "neotest-ctest";
-    version = "2025-08-28";
+    version = "0.2.0-unstable-2025-08-28";
     src = fetchFromGitHub {
       owner = "orjangj";
       repo = "neotest-ctest";
@@ -9814,7 +9853,7 @@ final: prev: {
 
   neotest-dart = buildVimPlugin {
     pname = "neotest-dart";
-    version = "2025-06-03";
+    version = "0-unstable-2025-06-03";
     src = fetchFromGitHub {
       owner = "sidlatau";
       repo = "neotest-dart";
@@ -9827,7 +9866,7 @@ final: prev: {
 
   neotest-deno = buildVimPlugin {
     pname = "neotest-deno";
-    version = "2022-12-09";
+    version = "0-unstable-2022-12-09";
     src = fetchFromGitHub {
       owner = "MarkEmmons";
       repo = "neotest-deno";
@@ -9840,7 +9879,7 @@ final: prev: {
 
   neotest-dotnet = buildVimPlugin {
     pname = "neotest-dotnet";
-    version = "2025-09-08";
+    version = "1.7.0-unstable-2025-09-08";
     src = fetchFromGitHub {
       owner = "Issafalcon";
       repo = "neotest-dotnet";
@@ -9853,7 +9892,7 @@ final: prev: {
 
   neotest-elixir = buildVimPlugin {
     pname = "neotest-elixir";
-    version = "2025-01-19";
+    version = "0-unstable-2025-01-19";
     src = fetchFromGitHub {
       owner = "jfpedroza";
       repo = "neotest-elixir";
@@ -9867,7 +9906,7 @@ final: prev: {
 
   neotest-foundry = buildVimPlugin {
     pname = "neotest-foundry";
-    version = "2025-05-28";
+    version = "0-unstable-2025-05-28";
     src = fetchFromGitHub {
       owner = "llllvvuu";
       repo = "neotest-foundry";
@@ -9880,7 +9919,7 @@ final: prev: {
 
   neotest-go = buildVimPlugin {
     pname = "neotest-go";
-    version = "2025-10-31";
+    version = "0-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "nvim-neotest";
       repo = "neotest-go";
@@ -9893,12 +9932,12 @@ final: prev: {
 
   neotest-golang = buildVimPlugin {
     pname = "neotest-golang";
-    version = "2025-11-03";
+    version = "2.6.0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "fredrikaverpil";
       repo = "neotest-golang";
-      rev = "2806bc07066a734d6ed94d45d2d2557a0e2195d8";
-      sha256 = "044q6vpjm9hd6qxh3ynqmbr3vi4lr9crg21v2cby4fgcbyjs2jxd";
+      rev = "37e400cfe9d193e508b1a512e96cbef83b08deb6";
+      sha256 = "05749a7xpfrngn8qbpw4dbghqq1z5zrlnx0bgq5wc1ssn8jv5238";
     };
     meta.homepage = "https://github.com/fredrikaverpil/neotest-golang/";
     meta.hydraPlatforms = [ ];
@@ -9906,7 +9945,7 @@ final: prev: {
 
   neotest-gradle = buildVimPlugin {
     pname = "neotest-gradle";
-    version = "2025-09-12";
+    version = "0-unstable-2025-09-12";
     src = fetchFromGitHub {
       owner = "weilbith";
       repo = "neotest-gradle";
@@ -9919,7 +9958,7 @@ final: prev: {
 
   neotest-gtest = buildVimPlugin {
     pname = "neotest-gtest";
-    version = "2025-09-26";
+    version = "0-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "alfaix";
       repo = "neotest-gtest";
@@ -9933,12 +9972,12 @@ final: prev: {
 
   neotest-haskell = buildVimPlugin {
     pname = "neotest-haskell";
-    version = "2025-11-02";
+    version = "3.0.1-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "MrcJkb";
       repo = "neotest-haskell";
-      rev = "1e93a6f35e6409751acf99c34461c1bd2b8edc57";
-      sha256 = "1cnypjsbg5h66c7nqd7f6c2drkbm7i8hxs3rckhfzka28gmkgdxg";
+      rev = "9ae47ca15ecb2f49b88a04a5541f74ee970a2e0e";
+      sha256 = "1mh8vlydzzrx4qq6dar2d1za345grv31f369frqjgx9i1cqal52j";
     };
     meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
     meta.hydraPlatforms = [ ];
@@ -9946,12 +9985,12 @@ final: prev: {
 
   neotest-java = buildVimPlugin {
     pname = "neotest-java";
-    version = "2025-10-25";
+    version = "0.22.7-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "rcasia";
       repo = "neotest-java";
-      rev = "fbdf5c3208007ccef1a8941e1229fc5f872c760e";
-      sha256 = "12v734jk1sybzpl4584bbpb4vkr9fm2dqs1lyhmvnqrwm6mn2mrv";
+      rev = "bf3f0f9dc972e36c86798208c205c6a575b72f4b";
+      sha256 = "1h1kqi25yj81gh4yzn7vyhfl50glm9xfmm4p4gxbnn2f52xmkh91";
     };
     meta.homepage = "https://github.com/rcasia/neotest-java/";
     meta.hydraPlatforms = [ ];
@@ -9959,12 +9998,12 @@ final: prev: {
 
   neotest-jest = buildVimPlugin {
     pname = "neotest-jest";
-    version = "2025-10-24";
+    version = "0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "nvim-neotest";
       repo = "neotest-jest";
-      rev = "5dc15386a2b04080fd24901eb2450aaf787bd172";
-      sha256 = "0fyw2nvljs0d6x98cnsr5bwgxxxmncddp2dlsbqprxfy867qdnzc";
+      rev = "a36df9109c75bd1ae46b7bad274615dbbe6e4dcd";
+      sha256 = "1vvfff9vx20cipflv3b8kf84hblas4fmkj4ikzxrbxvip035ffv7";
     };
     meta.homepage = "https://github.com/nvim-neotest/neotest-jest/";
     meta.hydraPlatforms = [ ];
@@ -9972,7 +10011,7 @@ final: prev: {
 
   neotest-minitest = buildVimPlugin {
     pname = "neotest-minitest";
-    version = "2025-08-16";
+    version = "0-unstable-2025-08-16";
     src = fetchFromGitHub {
       owner = "zidhuss";
       repo = "neotest-minitest";
@@ -9985,7 +10024,7 @@ final: prev: {
 
   neotest-mocha = buildVimPlugin {
     pname = "neotest-mocha";
-    version = "2025-10-20";
+    version = "0-unstable-2025-10-20";
     src = fetchFromGitHub {
       owner = "adrigzr";
       repo = "neotest-mocha";
@@ -9998,7 +10037,7 @@ final: prev: {
 
   neotest-pest = buildVimPlugin {
     pname = "neotest-pest";
-    version = "2024-02-16";
+    version = "0-unstable-2024-02-16";
     src = fetchFromGitHub {
       owner = "theutz";
       repo = "neotest-pest";
@@ -10011,12 +10050,12 @@ final: prev: {
 
   neotest-phpunit = buildVimPlugin {
     pname = "neotest-phpunit";
-    version = "2025-10-12";
+    version = "0-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "neotest-phpunit";
-      rev = "eb2f3d1e1b07cfaa59d4da9edde0cef1c84e4958";
-      sha256 = "0sr4dv35gj6grxvz3abjrbxad6x8k19bryndkbabwb3r9s5p383k";
+      rev = "2761ae9e9a385e491a9731f8c52824e1be64a68f";
+      sha256 = "17va0nbngk0mgd5whcvwqny3fn8qb7m876c1xn6rd1jpx340b80k";
     };
     meta.homepage = "https://github.com/olimorris/neotest-phpunit/";
     meta.hydraPlatforms = [ ];
@@ -10024,7 +10063,7 @@ final: prev: {
 
   neotest-playwright = buildVimPlugin {
     pname = "neotest-playwright";
-    version = "2024-07-08";
+    version = "0-unstable-2024-07-08";
     src = fetchFromGitHub {
       owner = "thenbe";
       repo = "neotest-playwright";
@@ -10037,7 +10076,7 @@ final: prev: {
 
   neotest-plenary = buildVimPlugin {
     pname = "neotest-plenary";
-    version = "2024-09-15";
+    version = "0-unstable-2024-09-15";
     src = fetchFromGitHub {
       owner = "nvim-neotest";
       repo = "neotest-plenary";
@@ -10050,7 +10089,7 @@ final: prev: {
 
   neotest-python = buildVimPlugin {
     pname = "neotest-python";
-    version = "2025-10-13";
+    version = "0-unstable-2025-10-13";
     src = fetchFromGitHub {
       owner = "nvim-neotest";
       repo = "neotest-python";
@@ -10063,7 +10102,7 @@ final: prev: {
 
   neotest-rspec = buildVimPlugin {
     pname = "neotest-rspec";
-    version = "2025-09-14";
+    version = "0-unstable-2025-09-14";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "neotest-rspec";
@@ -10076,7 +10115,7 @@ final: prev: {
 
   neotest-rust = buildVimPlugin {
     pname = "neotest-rust";
-    version = "2025-08-19";
+    version = "0-unstable-2025-08-19";
     src = fetchFromGitHub {
       owner = "rouge8";
       repo = "neotest-rust";
@@ -10089,7 +10128,7 @@ final: prev: {
 
   neotest-scala = buildVimPlugin {
     pname = "neotest-scala";
-    version = "2022-10-15";
+    version = "0-unstable-2022-10-15";
     src = fetchFromGitHub {
       owner = "stevanmilic";
       repo = "neotest-scala";
@@ -10102,7 +10141,7 @@ final: prev: {
 
   neotest-testthat = buildVimPlugin {
     pname = "neotest-testthat";
-    version = "2022-07-04";
+    version = "0-unstable-2022-07-04";
     src = fetchFromGitHub {
       owner = "shunsambongi";
       repo = "neotest-testthat";
@@ -10115,12 +10154,12 @@ final: prev: {
 
   neotest-vitest = buildVimPlugin {
     pname = "neotest-vitest";
-    version = "2025-09-12";
+    version = "0.2.0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "marilari88";
       repo = "neotest-vitest";
-      rev = "f5560d7048e514d8da92a9e1e1f1c6d84dd9096f";
-      sha256 = "0qw16l6s7kihylsrlksplbcysxd74zcbf92kb2kz2md4wwfsbxgh";
+      rev = "8bc784d319889a39c7ed8045ff7b0f12770c7b54";
+      sha256 = "01d304iprsfjfplr0s5vwwg1lcyrks039qfzzbpba3sdcxdq8r3i";
     };
     meta.homepage = "https://github.com/marilari88/neotest-vitest/";
     meta.hydraPlatforms = [ ];
@@ -10128,7 +10167,7 @@ final: prev: {
 
   neotest-zig = buildVimPlugin {
     pname = "neotest-zig";
-    version = "2025-03-16";
+    version = "1.4.0-unstable-2025-03-16";
     src = fetchFromGitHub {
       owner = "lawrence-laz";
       repo = "neotest-zig";
@@ -10141,7 +10180,7 @@ final: prev: {
 
   neovim-ayu = buildVimPlugin {
     pname = "neovim-ayu";
-    version = "2025-10-21";
+    version = "0-unstable-2025-10-21";
     src = fetchFromGitHub {
       owner = "Shatur";
       repo = "neovim-ayu";
@@ -10154,7 +10193,7 @@ final: prev: {
 
   neovim-fuzzy = buildVimPlugin {
     pname = "neovim-fuzzy";
-    version = "2023-11-25";
+    version = "0-unstable-2023-11-25";
     src = fetchFromGitHub {
       owner = "cloudhead";
       repo = "neovim-fuzzy";
@@ -10167,7 +10206,7 @@ final: prev: {
 
   neovim-sensible = buildVimPlugin {
     pname = "neovim-sensible";
-    version = "2017-09-20";
+    version = "0-unstable-2017-09-20";
     src = fetchFromGitHub {
       owner = "jeffkreeftmeijer";
       repo = "neovim-sensible";
@@ -10178,9 +10217,22 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  neovim-tips = buildVimPlugin {
+    pname = "neovim-tips";
+    version = "0.8.1-unstable-2025-12-08";
+    src = fetchFromGitHub {
+      owner = "saxon1964";
+      repo = "neovim-tips";
+      rev = "7ab9c2eb7a4a183f8f24cea97c4ab7a25d72e3c5";
+      sha256 = "0vpxdkwmfxqz6l6i69yvkymbz456vi5s1lp4gppfx8s443gqwqil";
+    };
+    meta.homepage = "https://github.com/saxon1964/neovim-tips/";
+    meta.hydraPlatforms = [ ];
+  };
+
   neovim-trunk = buildVimPlugin {
     pname = "neovim-trunk";
-    version = "2025-07-23";
+    version = "0.1.4-unstable-2025-07-23";
     src = fetchFromGitHub {
       owner = "trunk-io";
       repo = "neovim-trunk";
@@ -10193,7 +10245,7 @@ final: prev: {
 
   neoyank-vim = buildVimPlugin {
     pname = "neoyank.vim";
-    version = "2020-12-20";
+    version = "0-unstable-2020-12-20";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "neoyank.vim";
@@ -10206,12 +10258,12 @@ final: prev: {
 
   nerdcommenter = buildVimPlugin {
     pname = "nerdcommenter";
-    version = "2025-04-30";
+    version = "2.7.0-unstable-2025-11-19";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "nerdcommenter";
-      rev = "02a3b6455fa07b61b9440a78732f1e9b7876c991";
-      sha256 = "0sx0xbn6qwm6pj3w9ny9f2ksjxwwlchbkxypk842q21dr146shlb";
+      rev = "a462bbda1e26f44fb3d3eb9d9d1c6a07aa98e665";
+      sha256 = "0c8cv3wk1lc1f11cksn6j8shwq2j48dnwf4b8dakx6ccy8vxchjr";
     };
     meta.homepage = "https://github.com/preservim/nerdcommenter/";
     meta.hydraPlatforms = [ ];
@@ -10219,7 +10271,7 @@ final: prev: {
 
   nerdtree = buildVimPlugin {
     pname = "nerdtree";
-    version = "2025-09-26";
+    version = "7.1.3-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "nerdtree";
@@ -10232,7 +10284,7 @@ final: prev: {
 
   nerdtree-git-plugin = buildVimPlugin {
     pname = "nerdtree-git-plugin";
-    version = "2021-08-18";
+    version = "0-unstable-2021-08-18";
     src = fetchFromGitHub {
       owner = "Xuyuanp";
       repo = "nerdtree-git-plugin";
@@ -10245,12 +10297,12 @@ final: prev: {
 
   nerdy-nvim = buildVimPlugin {
     pname = "nerdy.nvim";
-    version = "2025-10-16";
+    version = "1.6-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "2KAbhishek";
       repo = "nerdy.nvim";
-      rev = "f6ba335405d3070f90aea5e35eca4a08dec3851f";
-      sha256 = "04w9ipwijy5dng96az3l4jvs3qs5cnclalhljfq6rv0dh5jsa6z4";
+      rev = "23cfd42ba5ae9e97c180a4ef7f7effd14e6d79b7";
+      sha256 = "1qag4ij3kjncxgszhhsz30qz13nqmi6skj5n4slw3gczr93b0n8s";
     };
     meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
     meta.hydraPlatforms = [ ];
@@ -10258,7 +10310,7 @@ final: prev: {
 
   netman-nvim = buildVimPlugin {
     pname = "netman.nvim";
-    version = "2025-09-13";
+    version = "1.15-unstable-2025-09-13";
     src = fetchFromGitHub {
       owner = "miversen33";
       repo = "netman.nvim";
@@ -10271,7 +10323,7 @@ final: prev: {
 
   netrw-nvim = buildVimPlugin {
     pname = "netrw.nvim";
-    version = "2024-07-23";
+    version = "0-unstable-2024-07-23";
     src = fetchFromGitHub {
       owner = "prichrd";
       repo = "netrw.nvim";
@@ -10284,7 +10336,7 @@ final: prev: {
 
   neuron-vim = buildVimPlugin {
     pname = "neuron.vim";
-    version = "2023-07-06";
+    version = "1.0-unstable-2023-07-06";
     src = fetchFromGitHub {
       owner = "fiatjaf";
       repo = "neuron.vim";
@@ -10297,7 +10349,7 @@ final: prev: {
 
   nfnl = buildVimPlugin {
     pname = "nfnl";
-    version = "2025-11-02";
+    version = "1.3.0-unstable-2025-11-02";
     src = fetchFromGitHub {
       owner = "Olical";
       repo = "nfnl";
@@ -10310,7 +10362,7 @@ final: prev: {
 
   ng-nvim = buildVimPlugin {
     pname = "ng.nvim";
-    version = "2025-04-21";
+    version = "0-unstable-2025-04-21";
     src = fetchFromGitHub {
       owner = "joeveiga";
       repo = "ng.nvim";
@@ -10323,7 +10375,7 @@ final: prev: {
 
   nginx-vim = buildVimPlugin {
     pname = "nginx.vim";
-    version = "2023-11-26";
+    version = "1.1.0-unstable-2023-11-26";
     src = fetchFromGitHub {
       owner = "chr4";
       repo = "nginx.vim";
@@ -10336,7 +10388,7 @@ final: prev: {
 
   night-owl-nvim = buildVimPlugin {
     pname = "night-owl.nvim";
-    version = "2024-09-12";
+    version = "0.5-beta-unstable-2024-09-12";
     src = fetchFromGitHub {
       owner = "oxfist";
       repo = "night-owl.nvim";
@@ -10349,12 +10401,12 @@ final: prev: {
 
   nightfly = buildVimPlugin {
     pname = "nightfly";
-    version = "2025-10-23";
+    version = "0-unstable-2025-11-30";
     src = fetchFromGitHub {
       owner = "bluz71";
       repo = "vim-nightfly-colors";
-      rev = "2a92a9291a461d99c01b4cdcc8fa41ec17a2209d";
-      sha256 = "0p3wqwna2bv4c76iwgydcqrm39p1qm5zpgbyfsp0w9ycz9xhg78m";
+      rev = "35b7292334eba451f9f94252c7df1509570f864b";
+      sha256 = "1xxjz5sz0mc6xfmljxmry39gwzp3gra1xx2dxv90ynzg7v6sbywb";
     };
     meta.homepage = "https://github.com/bluz71/vim-nightfly-colors/";
     meta.hydraPlatforms = [ ];
@@ -10362,7 +10414,7 @@ final: prev: {
 
   nightfox-nvim = buildVimPlugin {
     pname = "nightfox.nvim";
-    version = "2025-02-09";
+    version = "3.10.0-unstable-2025-02-09";
     src = fetchFromGitHub {
       owner = "EdenEast";
       repo = "nightfox.nvim";
@@ -10375,7 +10427,7 @@ final: prev: {
 
   nightly-nvim = buildVimPlugin {
     pname = "nightly.nvim";
-    version = "2024-03-30";
+    version = "0-unstable-2024-03-30";
     src = fetchFromGitHub {
       owner = "Alexis12119";
       repo = "nightly.nvim";
@@ -10388,7 +10440,7 @@ final: prev: {
 
   nim-vim = buildVimPlugin {
     pname = "nim.vim";
-    version = "2021-11-11";
+    version = "1.1-unstable-2021-11-11";
     src = fetchFromGitHub {
       owner = "zah";
       repo = "nim.vim";
@@ -10401,7 +10453,7 @@ final: prev: {
 
   nix-develop-nvim = buildVimPlugin {
     pname = "nix-develop.nvim";
-    version = "2023-07-23";
+    version = "0-unstable-2023-07-23";
     src = fetchFromGitHub {
       owner = "figsoda";
       repo = "nix-develop.nvim";
@@ -10414,12 +10466,12 @@ final: prev: {
 
   nlsp-settings-nvim = buildVimPlugin {
     pname = "nlsp-settings.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "tamago324";
       repo = "nlsp-settings.nvim";
-      rev = "7d9a0496806cb206249eeb194b842865259d4e2c";
-      sha256 = "0nqw5snbjabh8w4ks8mh1plwd58r943b5kmsylkf9q8jfbx9p6zv";
+      rev = "090e0d85f573ff22483d1d57608ce732c9a4329f";
+      sha256 = "1f47q0jivgbg0n6hp491hsxhppm7jvm34br2bfz2xhzv0v7ghjr9";
     };
     meta.homepage = "https://github.com/tamago324/nlsp-settings.nvim/";
     meta.hydraPlatforms = [ ];
@@ -10427,7 +10479,7 @@ final: prev: {
 
   nnn-vim = buildVimPlugin {
     pname = "nnn.vim";
-    version = "2023-05-23";
+    version = "3.6-unstable-2023-05-23";
     src = fetchFromGitHub {
       owner = "mcchrish";
       repo = "nnn.vim";
@@ -10440,7 +10492,7 @@ final: prev: {
 
   no-clown-fiesta-nvim = buildVimPlugin {
     pname = "no-clown-fiesta.nvim";
-    version = "2025-09-29";
+    version = "0-unstable-2025-09-29";
     src = fetchFromGitHub {
       owner = "aktersnurra";
       repo = "no-clown-fiesta.nvim";
@@ -10453,12 +10505,12 @@ final: prev: {
 
   no-neck-pain-nvim = buildVimPlugin {
     pname = "no-neck-pain.nvim";
-    version = "2025-10-03";
+    version = "2.5.2-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "shortcuts";
       repo = "no-neck-pain.nvim";
-      rev = "c3d96b648501554c9a87530b2ff86c721cddd5c1";
-      sha256 = "1sg85wcb82wq8pdaq2qxg29rzfb82w3114ffj6z9nsr87zlxzaw1";
+      rev = "718f30f547ca36bb4d0619e8ea11f5af4ee813cc";
+      sha256 = "011i30xjvn9al5cc81ri4vscdni07asqg722vc43imqn2q472lbz";
     };
     meta.homepage = "https://github.com/shortcuts/no-neck-pain.nvim/";
     meta.hydraPlatforms = [ ];
@@ -10466,7 +10518,7 @@ final: prev: {
 
   noctis-nvim = buildVimPlugin {
     pname = "noctis.nvim";
-    version = "2022-09-30";
+    version = "0-unstable-2022-09-30";
     src = fetchFromGitHub {
       owner = "kartikp10";
       repo = "noctis.nvim";
@@ -10479,7 +10531,7 @@ final: prev: {
 
   noice-nvim = buildVimPlugin {
     pname = "noice.nvim";
-    version = "2025-11-03";
+    version = "4.10.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "noice.nvim";
@@ -10492,12 +10544,12 @@ final: prev: {
 
   none-ls-nvim = buildVimPlugin {
     pname = "none-ls.nvim";
-    version = "2025-11-06";
+    version = "0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "nvimtools";
       repo = "none-ls.nvim";
-      rev = "550197530c12b4838d685cf4e0d5eb4cca8d52c7";
-      sha256 = "1cqxacz6mz52qqflzh1p4fw2pm7vgpnw200c3z1xi9ysrr0k2pb9";
+      rev = "5abf61927023ea83031753504adb19630ba80eef";
+      sha256 = "1cs0dqyykrfjr3vl7z715f8j2wk83ix07fr1kd3vxz074qw36z4l";
     };
     meta.homepage = "https://github.com/nvimtools/none-ls.nvim/";
     meta.hydraPlatforms = [ ];
@@ -10505,7 +10557,7 @@ final: prev: {
 
   nord-nvim = buildVimPlugin {
     pname = "nord.nvim";
-    version = "2023-12-20";
+    version = "0-unstable-2023-12-20";
     src = fetchFromGitHub {
       owner = "shaunsingh";
       repo = "nord.nvim";
@@ -10518,7 +10570,7 @@ final: prev: {
 
   nord-vim = buildVimPlugin {
     pname = "nord-vim";
-    version = "2023-05-03";
+    version = "0.19.0-unstable-2023-05-03";
     src = fetchFromGitHub {
       owner = "nordtheme";
       repo = "vim";
@@ -10531,7 +10583,7 @@ final: prev: {
 
   nordic-nvim = buildVimPlugin {
     pname = "nordic.nvim";
-    version = "2024-06-16";
+    version = "0-unstable-2024-06-16";
     src = fetchFromGitHub {
       owner = "andersevenrud";
       repo = "nordic.nvim";
@@ -10544,7 +10596,7 @@ final: prev: {
 
   notifier-nvim = buildVimPlugin {
     pname = "notifier.nvim";
-    version = "2023-06-09";
+    version = "0-unstable-2023-06-09";
     src = fetchFromGitHub {
       owner = "vigoux";
       repo = "notifier.nvim";
@@ -10557,7 +10609,7 @@ final: prev: {
 
   nterm-nvim = buildVimPlugin {
     pname = "nterm.nvim";
-    version = "2022-05-10";
+    version = "0-unstable-2022-05-10";
     src = fetchFromGitHub {
       owner = "jlesquembre";
       repo = "nterm.nvim";
@@ -10570,7 +10622,7 @@ final: prev: {
 
   null-ls-nvim = buildVimPlugin {
     pname = "null-ls.nvim";
-    version = "2023-08-12";
+    version = "0-unstable-2023-08-12";
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "null-ls.nvim";
@@ -10583,12 +10635,12 @@ final: prev: {
 
   numb-nvim = buildVimPlugin {
     pname = "numb.nvim";
-    version = "2025-01-13";
+    version = "0-unstable-2025-11-12";
     src = fetchFromGitHub {
       owner = "nacro90";
       repo = "numb.nvim";
-      rev = "7f564e638d3ba367abf1ec91181965b9882dd509";
-      sha256 = "10ig2ryx66i2aylhcnhj2dl807f8aiahw2bqzx3dgsnf77rqsmj3";
+      rev = "8164fd3d4d0c3ad2b1b111e9a63a59178981b743";
+      sha256 = "17h8sf8fkq6lsm8wprw032yc2bjm1kpffplr2pmgaj5h62rdfasp";
     };
     meta.homepage = "https://github.com/nacro90/numb.nvim/";
     meta.hydraPlatforms = [ ];
@@ -10596,12 +10648,12 @@ final: prev: {
 
   nvchad = buildVimPlugin {
     pname = "nvchad";
-    version = "2025-11-06";
+    version = "2.5-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "nvchad";
       repo = "nvchad";
-      rev = "eb209a4a82aecabe609d8206b865e00a760fb644";
-      sha256 = "0acqyswcyw2606n4msk5anxqkzggqvsckvbkxdqdx562mqczyysz";
+      rev = "30e75dbbdf33f393430d6e7612dd32ef84e2a710";
+      sha256 = "0fy1fhgw0kqwh2m4z90xl4fpv6sbqb7nxrwbhhjig3272raczhwd";
     };
     meta.homepage = "https://github.com/nvchad/nvchad/";
     meta.hydraPlatforms = [ ];
@@ -10609,7 +10661,7 @@ final: prev: {
 
   nvchad-ui = buildVimPlugin {
     pname = "nvchad-ui";
-    version = "2025-10-25";
+    version = "0-unstable-2025-10-25";
     src = fetchFromGitHub {
       owner = "nvchad";
       repo = "ui";
@@ -10622,7 +10674,7 @@ final: prev: {
 
   nvcode-color-schemes-vim = buildVimPlugin {
     pname = "nvcode-color-schemes.vim";
-    version = "2021-07-03";
+    version = "0-unstable-2021-07-03";
     src = fetchFromGitHub {
       owner = "ChristianChiarulli";
       repo = "nvcode-color-schemes.vim";
@@ -10635,7 +10687,7 @@ final: prev: {
 
   nvim-FeMaco-lua = buildVimPlugin {
     pname = "nvim-FeMaco.lua";
-    version = "2024-04-21";
+    version = "0-unstable-2024-04-21";
     src = fetchFromGitHub {
       owner = "AckslD";
       repo = "nvim-FeMaco.lua";
@@ -10648,7 +10700,7 @@ final: prev: {
 
   nvim-ale-diagnostic = buildVimPlugin {
     pname = "nvim-ale-diagnostic";
-    version = "2021-11-06";
+    version = "0-unstable-2021-11-06";
     src = fetchFromGitHub {
       owner = "nathanmsmith";
       repo = "nvim-ale-diagnostic";
@@ -10661,12 +10713,12 @@ final: prev: {
 
   nvim-autopairs = buildVimPlugin {
     pname = "nvim-autopairs";
-    version = "2025-10-12";
+    version = "0.10.0-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "windwp";
       repo = "nvim-autopairs";
-      rev = "7a2c97cccd60abc559344042fefb1d5a85b3e33b";
-      sha256 = "1paswbxyhfz86y0sq2jig4mgnpi6hi0qnb9lf1rwqn5plgb204ki";
+      rev = "d9e44e54384e5b0f3536339c65484f2e41b528e3";
+      sha256 = "1g8cv6xixnbmlj7a86xar1168g6n0l9n4lj8p8xn63iskzrjjx00";
     };
     meta.homepage = "https://github.com/windwp/nvim-autopairs/";
     meta.hydraPlatforms = [ ];
@@ -10674,7 +10726,7 @@ final: prev: {
 
   nvim-bacon = buildVimPlugin {
     pname = "nvim-bacon";
-    version = "2025-01-20";
+    version = "0-unstable-2025-01-20";
     src = fetchFromGitHub {
       owner = "Canop";
       repo = "nvim-bacon";
@@ -10687,7 +10739,7 @@ final: prev: {
 
   nvim-biscuits = buildVimPlugin {
     pname = "nvim-biscuits";
-    version = "2025-10-08";
+    version = "0-unstable-2025-10-08";
     src = fetchFromGitHub {
       owner = "code-biscuits";
       repo = "nvim-biscuits";
@@ -10700,12 +10752,12 @@ final: prev: {
 
   nvim-bqf = buildVimPlugin {
     pname = "nvim-bqf";
-    version = "2025-10-06";
+    version = "1.1.1-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "kevinhwang91";
       repo = "nvim-bqf";
-      rev = "a77b17e39b1b707b6feee86a36c83703c1534c08";
-      sha256 = "0pbjm18ykzsjmqdzw6qps5gsnw6b2868fhc8v16ks5185pp6ns5r";
+      rev = "ba2b365969d7c2c6301d48e13aeee59568765529";
+      sha256 = "0lz3m6v8dckqliw2fcgag2h1wrkaxdfqid6b0qw46ynz20kp77d4";
     };
     meta.homepage = "https://github.com/kevinhwang91/nvim-bqf/";
     meta.hydraPlatforms = [ ];
@@ -10713,7 +10765,7 @@ final: prev: {
 
   nvim-bufdel = buildVimPlugin {
     pname = "nvim-bufdel";
-    version = "2023-04-13";
+    version = "0-unstable-2023-04-13";
     src = fetchFromGitHub {
       owner = "ojroques";
       repo = "nvim-bufdel";
@@ -10726,7 +10778,7 @@ final: prev: {
 
   nvim-cm-racer = buildVimPlugin {
     pname = "nvim-cm-racer";
-    version = "2017-07-27";
+    version = "0-unstable-2017-07-27";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-cm-racer";
@@ -10739,7 +10791,7 @@ final: prev: {
 
   nvim-code-action-menu = buildVimPlugin {
     pname = "nvim-code-action-menu";
-    version = "2023-12-11";
+    version = "0-unstable-2023-12-11";
     src = fetchFromGitHub {
       owner = "weilbith";
       repo = "nvim-code-action-menu";
@@ -10752,7 +10804,7 @@ final: prev: {
 
   nvim-cokeline = buildVimPlugin {
     pname = "nvim-cokeline";
-    version = "2025-01-24";
+    version = "0.4.0-unstable-2025-01-24";
     src = fetchFromGitHub {
       owner = "willothy";
       repo = "nvim-cokeline";
@@ -10765,7 +10817,7 @@ final: prev: {
 
   nvim-colorizer-lua = buildVimPlugin {
     pname = "nvim-colorizer.lua";
-    version = "2025-11-02";
+    version = "0-unstable-2025-11-02";
     src = fetchFromGitHub {
       owner = "catgoose";
       repo = "nvim-colorizer.lua";
@@ -10778,7 +10830,7 @@ final: prev: {
 
   nvim-comment = buildVimPlugin {
     pname = "nvim-comment";
-    version = "2022-08-09";
+    version = "0-unstable-2022-08-09";
     src = fetchFromGitHub {
       owner = "terrortylor";
       repo = "nvim-comment";
@@ -10791,7 +10843,7 @@ final: prev: {
 
   nvim-completion-manager = buildVimPlugin {
     pname = "nvim-completion-manager";
-    version = "2018-07-27";
+    version = "0-unstable-2018-07-27";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-completion-manager";
@@ -10804,7 +10856,7 @@ final: prev: {
 
   nvim-config-local = buildVimPlugin {
     pname = "nvim-config-local";
-    version = "2025-01-21";
+    version = "3.0.0-unstable-2025-01-21";
     src = fetchFromGitHub {
       owner = "klen";
       repo = "nvim-config-local";
@@ -10817,7 +10869,7 @@ final: prev: {
 
   nvim-coverage = buildVimPlugin {
     pname = "nvim-coverage";
-    version = "2024-12-18";
+    version = "0-unstable-2024-12-18";
     src = fetchFromGitHub {
       owner = "andythigpen";
       repo = "nvim-coverage";
@@ -10830,7 +10882,7 @@ final: prev: {
 
   nvim-cursorline = buildVimPlugin {
     pname = "nvim-cursorline";
-    version = "2022-04-15";
+    version = "0-unstable-2022-04-15";
     src = fetchFromGitHub {
       owner = "ya2s";
       repo = "nvim-cursorline";
@@ -10843,12 +10895,12 @@ final: prev: {
 
   nvim-dap = buildVimPlugin {
     pname = "nvim-dap";
-    version = "2025-10-17";
+    version = "0.10.0-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "mfussenegger";
       repo = "nvim-dap";
-      rev = "e97dc47e134ffb33da008658fecfae8f8547c528";
-      sha256 = "1prkp8p1kkzgsrs5pwj4xbcdj3ncfhalhp5q332vci4qlk8qyb6a";
+      rev = "5860c7c501eb428d3137ee22c522828d20cca0b3";
+      sha256 = "1pnh4hxhcrr5qkfpx9kwf9r4jfi55g7081d5pcch5swljjv9wysr";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
     meta.hydraPlatforms = [ ];
@@ -10856,7 +10908,7 @@ final: prev: {
 
   nvim-dap-cortex-debug = buildVimPlugin {
     pname = "nvim-dap-cortex-debug";
-    version = "2025-02-13";
+    version = "0-unstable-2025-02-13";
     src = fetchFromGitHub {
       owner = "jedrzejboczar";
       repo = "nvim-dap-cortex-debug";
@@ -10869,7 +10921,7 @@ final: prev: {
 
   nvim-dap-go = buildVimPlugin {
     pname = "nvim-dap-go";
-    version = "2025-07-11";
+    version = "0-unstable-2025-07-11";
     src = fetchFromGitHub {
       owner = "leoluz";
       repo = "nvim-dap-go";
@@ -10882,7 +10934,7 @@ final: prev: {
 
   nvim-dap-lldb = buildVimPlugin {
     pname = "nvim-dap-lldb";
-    version = "2025-05-09";
+    version = "2.0.1-unstable-2025-05-09";
     src = fetchFromGitHub {
       owner = "julianolf";
       repo = "nvim-dap-lldb";
@@ -10895,7 +10947,7 @@ final: prev: {
 
   nvim-dap-python = buildVimPlugin {
     pname = "nvim-dap-python";
-    version = "2025-10-04";
+    version = "0-unstable-2025-10-04";
     src = fetchFromGitHub {
       owner = "mfussenegger";
       repo = "nvim-dap-python";
@@ -10908,7 +10960,7 @@ final: prev: {
 
   nvim-dap-rego = buildVimPlugin {
     pname = "nvim-dap-rego";
-    version = "2025-06-18";
+    version = "0-unstable-2025-06-18";
     src = fetchFromGitHub {
       owner = "rinx";
       repo = "nvim-dap-rego";
@@ -10921,7 +10973,7 @@ final: prev: {
 
   nvim-dap-rr = buildVimPlugin {
     pname = "nvim-dap-rr";
-    version = "2025-03-20";
+    version = "0.1.1-unstable-2025-03-20";
     src = fetchFromGitHub {
       owner = "jonboh";
       repo = "nvim-dap-rr";
@@ -10934,7 +10986,7 @@ final: prev: {
 
   nvim-dap-ui = buildVimPlugin {
     pname = "nvim-dap-ui";
-    version = "2025-07-09";
+    version = "4.0.0-unstable-2025-07-09";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "nvim-dap-ui";
@@ -10947,12 +10999,12 @@ final: prev: {
 
   nvim-dap-view = buildVimPlugin {
     pname = "nvim-dap-view";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "igorlfs";
       repo = "nvim-dap-view";
-      rev = "170560c18866c0ecd7ba290d9246cae42ddee906";
-      sha256 = "0cmrrdj9hbg97ysfyd6kh8v2cn19vq90rn09m1w7pqfrpal2bk2m";
+      rev = "25ffcf3a6d8d44b6275dac9d5ff9b1f9485907d9";
+      sha256 = "1bhmig6gwk2ai7fwdq0gs9yhj27dhklvl0flfm1agv919ripvym7";
     };
     meta.homepage = "https://github.com/igorlfs/nvim-dap-view/";
     meta.hydraPlatforms = [ ];
@@ -10960,7 +11012,7 @@ final: prev: {
 
   nvim-dap-virtual-text = buildVimPlugin {
     pname = "nvim-dap-virtual-text";
-    version = "2025-05-25";
+    version = "0-unstable-2025-05-25";
     src = fetchFromGitHub {
       owner = "theHamsta";
       repo = "nvim-dap-virtual-text";
@@ -10973,7 +11025,7 @@ final: prev: {
 
   nvim-dap-vscode-js = buildVimPlugin {
     pname = "nvim-dap-vscode-js";
-    version = "2023-03-06";
+    version = "1.1.0-unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "mxsdev";
       repo = "nvim-dap-vscode-js";
@@ -10986,7 +11038,7 @@ final: prev: {
 
   nvim-docs-view = buildVimPlugin {
     pname = "nvim-docs-view";
-    version = "2025-08-12";
+    version = "0-unstable-2025-08-12";
     src = fetchFromGitHub {
       owner = "amrbashir";
       repo = "nvim-docs-view";
@@ -10999,12 +11051,12 @@ final: prev: {
 
   nvim-early-retirement = buildVimPlugin {
     pname = "nvim-early-retirement";
-    version = "2025-10-13";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-early-retirement";
-      rev = "9109589b542773c9ad2a34067a085874f255577b";
-      sha256 = "1nk4bs6kjwki4zby0q6zclwxgkp9bmz5i9ww90fsw61q8zll7niy";
+      rev = "5163af2a7dd73a1239eeccc78ba4fc4c6166a4da";
+      sha256 = "0pbq6a31r4k1x81rbhd13bif3wh2ca5im3j4nhik21dblpn2qxfd";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-early-retirement/";
     meta.hydraPlatforms = [ ];
@@ -11012,7 +11064,7 @@ final: prev: {
 
   nvim-expand-expr = buildVimPlugin {
     pname = "nvim-expand-expr";
-    version = "2021-08-14";
+    version = "0-unstable-2021-08-14";
     src = fetchFromGitHub {
       owner = "allendang";
       repo = "nvim-expand-expr";
@@ -11025,7 +11077,7 @@ final: prev: {
 
   nvim-fzf = buildVimPlugin {
     pname = "nvim-fzf";
-    version = "2024-10-21";
+    version = "0-unstable-2024-10-21";
     src = fetchFromGitHub {
       owner = "vijaymarupudi";
       repo = "nvim-fzf";
@@ -11038,7 +11090,7 @@ final: prev: {
 
   nvim-fzf-commands = buildVimPlugin {
     pname = "nvim-fzf-commands";
-    version = "2022-12-20";
+    version = "0-unstable-2022-12-20";
     src = fetchFromGitHub {
       owner = "vijaymarupudi";
       repo = "nvim-fzf-commands";
@@ -11051,7 +11103,7 @@ final: prev: {
 
   nvim-gdb = buildVimPlugin {
     pname = "nvim-gdb";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "sakhnik";
       repo = "nvim-gdb";
@@ -11064,12 +11116,12 @@ final: prev: {
 
   nvim-genghis = buildVimPlugin {
     pname = "nvim-genghis";
-    version = "2025-10-13";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-genghis";
-      rev = "b9487d6c4ccdecf3c7cd4e3e7107b42c65e20106";
-      sha256 = "09shwasz5k50fg16issqj5i3hzjqraxjca03p42vd35dwmr7a4a3";
+      rev = "4ea1bd29f002dac83a0c3c21f7fa3cdef1976f08";
+      sha256 = "1z2p05vjnwq9sqy1skhzx8x0w0xhjf662nmqx4xaw2fhp5ca7k1f";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-genghis/";
     meta.hydraPlatforms = [ ];
@@ -11077,7 +11129,7 @@ final: prev: {
 
   nvim-gomove = buildVimPlugin {
     pname = "nvim-gomove";
-    version = "2022-07-19";
+    version = "0-unstable-2022-07-19";
     src = fetchFromGitHub {
       owner = "booperlv";
       repo = "nvim-gomove";
@@ -11090,7 +11142,7 @@ final: prev: {
 
   nvim-gps = buildVimPlugin {
     pname = "nvim-gps";
-    version = "2022-07-05";
+    version = "0-unstable-2022-07-05";
     src = fetchFromGitHub {
       owner = "smiteshp";
       repo = "nvim-gps";
@@ -11103,7 +11155,7 @@ final: prev: {
 
   nvim-highlight-colors = buildVimPlugin {
     pname = "nvim-highlight-colors";
-    version = "2025-09-06";
+    version = "0-unstable-2025-09-06";
     src = fetchFromGitHub {
       owner = "brenoprata10";
       repo = "nvim-highlight-colors";
@@ -11116,12 +11168,12 @@ final: prev: {
 
   nvim-highlite = buildVimPlugin {
     pname = "nvim-highlite";
-    version = "2025-09-01";
+    version = "4.21.0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "Iron-E";
       repo = "nvim-highlite";
-      rev = "4cad5aefc1f9ab7c5b23b43a4a9c71e4e197fc9b";
-      sha256 = "06wcsczn2qn46qgpdwgpaf3nvprr1nwi310imwprhlq7z6vzqk4a";
+      rev = "06abec2f8cd73c2f31858dd7b0408a2ce0abb809";
+      sha256 = "0xzg8dnwp8r9vxkbbd126cfrz1xqxqcnpjadcc5v1s81wwfrb3av";
     };
     meta.homepage = "https://github.com/Iron-E/nvim-highlite/";
     meta.hydraPlatforms = [ ];
@@ -11129,12 +11181,12 @@ final: prev: {
 
   nvim-hlslens = buildVimPlugin {
     pname = "nvim-hlslens";
-    version = "2025-09-12";
+    version = "1.1.0-unstable-2025-11-13";
     src = fetchFromGitHub {
       owner = "kevinhwang91";
       repo = "nvim-hlslens";
-      rev = "6d42444785ea0d41555d033485910c5e78916f3b";
-      sha256 = "1hd6fy2svgwxh6wb79a578gg2dhngi8frfpgkznrbdsa33gwhdgj";
+      rev = "425405475300d64de07dec3af60b1f1d31d49230";
+      sha256 = "14v53qhczblv6ii595akqm4z7mp8dy04pql5x8xxvb4l6rk580q2";
     };
     meta.homepage = "https://github.com/kevinhwang91/nvim-hlslens/";
     meta.hydraPlatforms = [ ];
@@ -11142,7 +11194,7 @@ final: prev: {
 
   nvim-hs-vim = buildVimPlugin {
     pname = "nvim-hs.vim";
-    version = "2022-01-30";
+    version = "0-unstable-2022-01-30";
     src = fetchFromGitHub {
       owner = "neovimhaskell";
       repo = "nvim-hs.vim";
@@ -11155,12 +11207,12 @@ final: prev: {
 
   nvim-impairative = buildVimPlugin {
     pname = "nvim-impairative";
-    version = "2024-11-20";
+    version = "0.6.0-unstable-2025-11-30";
     src = fetchFromGitHub {
       owner = "idanarye";
       repo = "nvim-impairative";
-      rev = "f591e206e377c90e419ae24edb4fd81a22b6f1d5";
-      sha256 = "0z4vlzb42j1263vnxxk3vka8wg0ggn3xkr42gmrw7dviz88l9x04";
+      rev = "71825e2e0ba38b9740b7f6fcaf65c607377aaa3c";
+      sha256 = "1f9la132m0zh34jncl8pqf0hi94izfw6na65cgy33hpykyrgfpf6";
     };
     meta.homepage = "https://github.com/idanarye/nvim-impairative/";
     meta.hydraPlatforms = [ ];
@@ -11168,12 +11220,12 @@ final: prev: {
 
   nvim-java = buildVimPlugin {
     pname = "nvim-java";
-    version = "2025-08-06";
+    version = "4.0.4-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "nvim-java";
-      rev = "3d56b7461facb42f135e25b2636bf220a7f0ed42";
-      sha256 = "11yxzx2i24xvn690vnf53q5sz4ls71mf790lzlcs4sndjv80g892";
+      rev = "d196b25eda89ae957110f2966d1753889dc197b2";
+      sha256 = "078wz6yykfp5k7w1rxcazcjhg87zi4q7k43421lgx1b8259qcs7k";
     };
     meta.homepage = "https://github.com/nvim-java/nvim-java/";
     meta.hydraPlatforms = [ ];
@@ -11181,7 +11233,7 @@ final: prev: {
 
   nvim-java-core = buildVimPlugin {
     pname = "nvim-java-core";
-    version = "2025-08-06";
+    version = "2.0.0-unstable-2025-08-06";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "nvim-java-core";
@@ -11194,7 +11246,7 @@ final: prev: {
 
   nvim-java-dap = buildVimPlugin {
     pname = "nvim-java-dap";
-    version = "2024-07-25";
+    version = "1.0.0-unstable-2024-07-25";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "nvim-java-dap";
@@ -11207,7 +11259,7 @@ final: prev: {
 
   nvim-java-refactor = buildVimPlugin {
     pname = "nvim-java-refactor";
-    version = "2025-01-26";
+    version = "1.8.0-unstable-2025-01-26";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "nvim-java-refactor";
@@ -11220,7 +11272,7 @@ final: prev: {
 
   nvim-java-test = buildVimPlugin {
     pname = "nvim-java-test";
-    version = "2024-07-19";
+    version = "1.0.1-unstable-2024-07-19";
     src = fetchFromGitHub {
       owner = "nvim-java";
       repo = "nvim-java-test";
@@ -11233,12 +11285,12 @@ final: prev: {
 
   nvim-jdtls = buildVimPlugin {
     pname = "nvim-jdtls";
-    version = "2025-11-01";
+    version = "0.2.0-unstable-2025-12-04";
     src = fetchFromGitHub {
       owner = "mfussenegger";
       repo = "nvim-jdtls";
-      rev = "38d265ee4d45da73a083ca83e41de7d37567be5c";
-      sha256 = "0g7vagxilq1fygrc62zashdkv25aask1akpm2rvmdkga6gpf4dki";
+      rev = "f73731b543f5971e0da9665eb1d7ceffe1fde71f";
+      sha256 = "17al7y7ff4bw4zfajrybmk0626ng6vv3mwgbcd9lrvz0ap0an6gp";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-jdtls/";
     meta.hydraPlatforms = [ ];
@@ -11246,7 +11298,7 @@ final: prev: {
 
   nvim-jqx = buildVimPlugin {
     pname = "nvim-jqx";
-    version = "2024-05-31";
+    version = "0.1.4-unstable-2024-05-31";
     src = fetchFromGitHub {
       owner = "gennaro-tedesco";
       repo = "nvim-jqx";
@@ -11259,12 +11311,12 @@ final: prev: {
 
   nvim-k8s-crd = buildVimPlugin {
     pname = "nvim-k8s-crd";
-    version = "2025-05-26";
+    version = "0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "anasinnyk";
       repo = "nvim-k8s-crd";
-      rev = "d57f9c6b0ad1e8ab894f2afd6db90c948ca51a8c";
-      sha256 = "1gx80lclc8jh2k288hswz8b03zlamkb5z8zdl03nchxrm6xr5x05";
+      rev = "c87cfdccfea006b6c0b2304220904402f4c95ca3";
+      sha256 = "07h2lcbbv208fbg4vw99kkcs37kj58l0km0r119x1sj0m6bdxy5n";
     };
     meta.homepage = "https://github.com/anasinnyk/nvim-k8s-crd/";
     meta.hydraPlatforms = [ ];
@@ -11272,7 +11324,7 @@ final: prev: {
 
   nvim-lastplace = buildVimPlugin {
     pname = "nvim-lastplace";
-    version = "2023-07-27";
+    version = "0-unstable-2023-07-27";
     src = fetchFromGitHub {
       owner = "ethanholz";
       repo = "nvim-lastplace";
@@ -11285,7 +11337,7 @@ final: prev: {
 
   nvim-lightbulb = buildVimPlugin {
     pname = "nvim-lightbulb";
-    version = "2025-03-29";
+    version = "1.0.0-unstable-2025-03-29";
     src = fetchFromGitHub {
       owner = "kosayoda";
       repo = "nvim-lightbulb";
@@ -11298,7 +11350,7 @@ final: prev: {
 
   nvim-lightline-lsp = buildVimPlugin {
     pname = "nvim-lightline-lsp";
-    version = "2025-11-03";
+    version = "0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "josa42";
       repo = "nvim-lightline-lsp";
@@ -11311,12 +11363,12 @@ final: prev: {
 
   nvim-lilypond-suite = buildVimPlugin {
     pname = "nvim-lilypond-suite";
-    version = "2025-10-23";
+    version = "0-unstable-2025-11-28";
     src = fetchFromGitHub {
       owner = "martineausimon";
       repo = "nvim-lilypond-suite";
-      rev = "d26c1fd42060fa9a5d076a78b478b0fc3825974a";
-      sha256 = "1cx2jwb4smrf42crhbq94nsa0vy0ms43xwl10kkanc78vz5ap10i";
+      rev = "a1a313fd6028a196cc9aaa8c8501838fe8cc8e2a";
+      sha256 = "0b2mamhkd0ynn62lkf9ic4xdjq76b023gk9y45xw37ka1qvzy4v5";
     };
     meta.homepage = "https://github.com/martineausimon/nvim-lilypond-suite/";
     meta.hydraPlatforms = [ ];
@@ -11324,12 +11376,12 @@ final: prev: {
 
   nvim-lint = buildVimPlugin {
     pname = "nvim-lint";
-    version = "2025-11-06";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "mfussenegger";
       repo = "nvim-lint";
-      rev = "8b349e822a36e9480aed96c6dd2f757f80524a35";
-      sha256 = "0g1g6ry3h2xn5ps5kvjgzar3cipgy4l0yfjcpk85b86f4x69662d";
+      rev = "ae64d6466ed92b68353122d920e314ff2c8dd0a8";
+      sha256 = "15yvrqn1lz7y10jnh0lig2b1bfhsyg8zajy9xyk1fin9d2632x4i";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-lint/";
     meta.hydraPlatforms = [ ];
@@ -11337,7 +11389,7 @@ final: prev: {
 
   nvim-lsp-file-operations = buildVimPlugin {
     pname = "nvim-lsp-file-operations";
-    version = "2024-10-24";
+    version = "0-unstable-2024-10-24";
     src = fetchFromGitHub {
       owner = "antosha417";
       repo = "nvim-lsp-file-operations";
@@ -11350,7 +11402,7 @@ final: prev: {
 
   nvim-lsp-notify = buildVimPlugin {
     pname = "nvim-lsp-notify";
-    version = "2023-12-07";
+    version = "1.0.0-unstable-2023-12-07";
     src = fetchFromGitHub {
       owner = "mrded";
       repo = "nvim-lsp-notify";
@@ -11363,7 +11415,7 @@ final: prev: {
 
   nvim-lsp-ts-utils = buildVimPlugin {
     pname = "nvim-lsp-ts-utils";
-    version = "2022-07-17";
+    version = "0-unstable-2022-07-17";
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "nvim-lsp-ts-utils";
@@ -11376,12 +11428,12 @@ final: prev: {
 
   nvim-lspconfig = buildVimPlugin {
     pname = "nvim-lspconfig";
-    version = "2025-11-03";
+    version = "2.5.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "2010fc6ec03e2da552b4886fceb2f7bc0fc2e9c0";
-      sha256 = "1lb85magzq9kghp9xkcxr0lnz975qkfvczk5i4d1q2i7yxzfns9l";
+      rev = "f3979663c9c8cd9ad258344b9cfb5ad83cff61c1";
+      sha256 = "10mx12jzr9dx7i8257dzqprx69xd8hnz6js4k2pkfvxvr1swi7rk";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
     meta.hydraPlatforms = [ ];
@@ -11389,7 +11441,7 @@ final: prev: {
 
   nvim-lsputils = buildVimPlugin {
     pname = "nvim-lsputils";
-    version = "2022-01-29";
+    version = "0-unstable-2022-01-29";
     src = fetchFromGitHub {
       owner = "RishabhRD";
       repo = "nvim-lsputils";
@@ -11402,7 +11454,7 @@ final: prev: {
 
   nvim-lua-gf = buildVimPlugin {
     pname = "nvim-lua-gf";
-    version = "2022-07-31";
+    version = "0-unstable-2022-07-31";
     src = fetchFromGitHub {
       owner = "sam4llis";
       repo = "nvim-lua-gf";
@@ -11415,7 +11467,7 @@ final: prev: {
 
   nvim-luadev = buildVimPlugin {
     pname = "nvim-luadev";
-    version = "2023-03-13";
+    version = "0-unstable-2023-03-13";
     src = fetchFromGitHub {
       owner = "bfredl";
       repo = "nvim-luadev";
@@ -11428,7 +11480,7 @@ final: prev: {
 
   nvim-luapad = buildVimPlugin {
     pname = "nvim-luapad";
-    version = "2024-05-26";
+    version = "0.3.1-unstable-2024-05-26";
     src = fetchFromGitHub {
       owner = "rafcamlet";
       repo = "nvim-luapad";
@@ -11441,7 +11493,7 @@ final: prev: {
 
   nvim-metals = buildVimPlugin {
     pname = "nvim-metals";
-    version = "2025-10-05";
+    version = "0.10.x-unstable-2025-10-05";
     src = fetchFromGitHub {
       owner = "scalameta";
       repo = "nvim-metals";
@@ -11454,7 +11506,7 @@ final: prev: {
 
   nvim-moonwalk = buildVimPlugin {
     pname = "nvim-moonwalk";
-    version = "2022-04-12";
+    version = "0-unstable-2022-04-12";
     src = fetchFromGitHub {
       owner = "gpanders";
       repo = "nvim-moonwalk";
@@ -11467,7 +11519,7 @@ final: prev: {
 
   nvim-navbuddy = buildVimPlugin {
     pname = "nvim-navbuddy";
-    version = "2025-05-01";
+    version = "0-unstable-2025-05-01";
     src = fetchFromGitHub {
       owner = "SmiteshP";
       repo = "nvim-navbuddy";
@@ -11480,12 +11532,12 @@ final: prev: {
 
   nvim-navic = buildVimPlugin {
     pname = "nvim-navic";
-    version = "2025-10-14";
+    version = "0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "smiteshp";
       repo = "nvim-navic";
-      rev = "099b4c8cdc3e9ea026ea6b2a0d315e2d28362242";
-      sha256 = "0ghr4p4qjy8q6qc249mwws8ndq2xdyqjcp2myazdbdm709xgapi6";
+      rev = "7d914a39a1ef8f4e22c2c4381abeef7c556f5a13";
+      sha256 = "10rmihaynvz3id43qlbdk256bxzn3rd10svpw28h8bjciq4ylww4";
     };
     meta.homepage = "https://github.com/smiteshp/nvim-navic/";
     meta.hydraPlatforms = [ ];
@@ -11493,7 +11545,7 @@ final: prev: {
 
   nvim-neoclip-lua = buildVimPlugin {
     pname = "nvim-neoclip.lua";
-    version = "2025-02-09";
+    version = "0-unstable-2025-02-09";
     src = fetchFromGitHub {
       owner = "AckslD";
       repo = "nvim-neoclip.lua";
@@ -11506,7 +11558,7 @@ final: prev: {
 
   nvim-nonicons = buildVimPlugin {
     pname = "nvim-nonicons";
-    version = "2023-02-04";
+    version = "0-unstable-2023-02-04";
     src = fetchFromGitHub {
       owner = "ya2s";
       repo = "nvim-nonicons";
@@ -11519,7 +11571,7 @@ final: prev: {
 
   nvim-notify = buildVimPlugin {
     pname = "nvim-notify";
-    version = "2025-09-06";
+    version = "3.15.0-unstable-2025-09-06";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "nvim-notify";
@@ -11532,7 +11584,7 @@ final: prev: {
 
   nvim-nu = buildVimPlugin {
     pname = "nvim-nu";
-    version = "2024-12-10";
+    version = "0-unstable-2024-12-10";
     src = fetchFromGitHub {
       owner = "LhKipp";
       repo = "nvim-nu";
@@ -11545,12 +11597,12 @@ final: prev: {
 
   nvim-numbertoggle = buildVimPlugin {
     pname = "nvim-numbertoggle";
-    version = "2025-10-13";
+    version = "0-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "sitiom";
       repo = "nvim-numbertoggle";
-      rev = "923f9709989605fe2bc4b9de8a3625fa808f5cd6";
-      sha256 = "104l9pmq5gxa4y5xly382fbbq87zk5xd0dg0ijvqbmmm5lnjc8va";
+      rev = "796af12a1e2aed6faba9be08e6fb5d472bab29de";
+      sha256 = "08f26451ybk4iq8fwciv5djfdb2qndm8a4zgijj2iyjd6jhm03r3";
     };
     meta.homepage = "https://github.com/sitiom/nvim-numbertoggle/";
     meta.hydraPlatforms = [ ];
@@ -11558,12 +11610,12 @@ final: prev: {
 
   nvim-origami = buildVimPlugin {
     pname = "nvim-origami";
-    version = "2025-10-22";
+    version = "1.9-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-origami";
-      rev = "d42d11008a32f5f8c92bca6fd63f6782f197d114";
-      sha256 = "06c086h6214c65g83z4ixvg1ifqsv8h56pcw5l9vwqfn413x02kw";
+      rev = "ad252be766e7d07e0f1998d84deadb972736db08";
+      sha256 = "0akxq75rqnl8hy069zpmznqig9crw4y28xcmsxabj1559d9wdyfg";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-origami/";
     meta.hydraPlatforms = [ ];
@@ -11571,7 +11623,7 @@ final: prev: {
 
   nvim-osc52 = buildVimPlugin {
     pname = "nvim-osc52";
-    version = "2024-05-24";
+    version = "0-unstable-2024-05-24";
     src = fetchFromGitHub {
       owner = "ojroques";
       repo = "nvim-osc52";
@@ -11584,7 +11636,7 @@ final: prev: {
 
   nvim-paredit = buildVimPlugin {
     pname = "nvim-paredit";
-    version = "2025-08-22";
+    version = "1.2.0-unstable-2025-08-22";
     src = fetchFromGitHub {
       owner = "julienvincent";
       repo = "nvim-paredit";
@@ -11597,7 +11649,7 @@ final: prev: {
 
   nvim-parinfer = buildVimPlugin {
     pname = "nvim-parinfer";
-    version = "2025-10-01";
+    version = "1.2.0-unstable-2025-10-01";
     src = fetchFromGitHub {
       owner = "gpanders";
       repo = "nvim-parinfer";
@@ -11610,7 +11662,7 @@ final: prev: {
 
   nvim-peekup = buildVimPlugin {
     pname = "nvim-peekup";
-    version = "2023-02-23";
+    version = "0.1.1-unstable-2023-02-23";
     src = fetchFromGitHub {
       owner = "gennaro-tedesco";
       repo = "nvim-peekup";
@@ -11623,7 +11675,7 @@ final: prev: {
 
   nvim-pqf = buildVimPlugin {
     pname = "nvim-pqf";
-    version = "2024-05-20";
+    version = "0-unstable-2024-05-20";
     src = fetchFromGitHub {
       owner = "yorickpeterse";
       repo = "nvim-pqf";
@@ -11636,7 +11688,7 @@ final: prev: {
 
   nvim-remote-containers = buildVimPlugin {
     pname = "nvim-remote-containers";
-    version = "2023-12-22";
+    version = "0-unstable-2023-12-22";
     src = fetchFromGitHub {
       owner = "jamestthompson3";
       repo = "nvim-remote-containers";
@@ -11649,7 +11701,7 @@ final: prev: {
 
   nvim-rename-state = buildVimPlugin {
     pname = "nvim-rename-state";
-    version = "2024-06-02";
+    version = "2.0.0-unstable-2024-06-02";
     src = fetchFromGitHub {
       owner = "olrtg";
       repo = "nvim-rename-state";
@@ -11662,12 +11714,12 @@ final: prev: {
 
   nvim-rg = buildVimPlugin {
     pname = "nvim-rg";
-    version = "2025-02-09";
+    version = "0-unstable-2025-11-18";
     src = fetchFromGitHub {
       owner = "duane9";
       repo = "nvim-rg";
-      rev = "38b221cefbfb57547c0c6952a1e049d840b2fdfb";
-      sha256 = "1wbgayyasli57p11751hackcmqcbaisca0kxbm24r67h3137yi23";
+      rev = "27c9ca583d05a73048186dc3048b26428ef21753";
+      sha256 = "1hapch6xmc8m59x7zn9cqbydd4r1i7xx1x8hnl0c278d2xcx87wv";
     };
     meta.homepage = "https://github.com/duane9/nvim-rg/";
     meta.hydraPlatforms = [ ];
@@ -11675,12 +11727,12 @@ final: prev: {
 
   nvim-rip-substitute = buildVimPlugin {
     pname = "nvim-rip-substitute";
-    version = "2025-10-13";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-rip-substitute";
-      rev = "cb41b3f155399597327c39b5d700f7c41f4c6121";
-      sha256 = "1r9dfq1gir035266s97b3h8f8y16gmsggk6h985vzkwpl1vglbjw";
+      rev = "2bb104d735c7ea7e3b555112c40c1824a626e15b";
+      sha256 = "09rkslaqf2h2fl3s5i921giskp6hfrgxqyimh89idha5hf0zkvyj";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-rip-substitute/";
     meta.hydraPlatforms = [ ];
@@ -11688,12 +11740,12 @@ final: prev: {
 
   nvim-scissors = buildVimPlugin {
     pname = "nvim-scissors";
-    version = "2025-10-13";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-scissors";
-      rev = "9b4fc66427568b2139480fcc645dd7bb91884ade";
-      sha256 = "022hq99if908prjghm6wzjpj6dl3fkppggwxanc6z88rswzi4kyc";
+      rev = "30db53ee8f7c1dc22fc569b9fa5de94ab120631b";
+      sha256 = "1fynvm0xxsvc2sjm782p7bwd19fgp39h3jqjywi0qkb3zmrk2jwq";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-scissors/";
     meta.hydraPlatforms = [ ];
@@ -11701,12 +11753,12 @@ final: prev: {
 
   nvim-scrollbar = buildVimPlugin {
     pname = "nvim-scrollbar";
-    version = "2025-05-26";
+    version = "0-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "petertriho";
       repo = "nvim-scrollbar";
-      rev = "5b103ef0fd2e8b9b4be3878ed38d224522192c6c";
-      sha256 = "1bh34njkvlbkjzy62w48rzjmliaj6lczgxxkks455r0w7yvfklv7";
+      rev = "f8e87b96cd6362ef8579be456afee3b38fd7e2a8";
+      sha256 = "0kg66m49xpp0mnxr2w65ilybwkqlsfwl2zpsgv5d4dg8p6khks43";
     };
     meta.homepage = "https://github.com/petertriho/nvim-scrollbar/";
     meta.hydraPlatforms = [ ];
@@ -11714,7 +11766,7 @@ final: prev: {
 
   nvim-scrollview = buildVimPlugin {
     pname = "nvim-scrollview";
-    version = "2025-10-02";
+    version = "6.2.2-unstable-2025-10-02";
     src = fetchFromGitHub {
       owner = "dstein64";
       repo = "nvim-scrollview";
@@ -11727,7 +11779,7 @@ final: prev: {
 
   nvim-search-and-replace = buildVimPlugin {
     pname = "nvim-search-and-replace";
-    version = "2022-09-06";
+    version = "0-unstable-2022-09-06";
     src = fetchFromGitHub {
       owner = "s1n7ax";
       repo = "nvim-search-and-replace";
@@ -11740,7 +11792,7 @@ final: prev: {
 
   nvim-snippets = buildVimPlugin {
     pname = "nvim-snippets";
-    version = "2024-07-10";
+    version = "1.0.0-unstable-2024-07-10";
     src = fetchFromGitHub {
       owner = "garymjr";
       repo = "nvim-snippets";
@@ -11753,7 +11805,7 @@ final: prev: {
 
   nvim-snippy = buildVimPlugin {
     pname = "nvim-snippy";
-    version = "2025-09-21";
+    version = "1.1.0-unstable-2025-09-21";
     src = fetchFromGitHub {
       owner = "dcampos";
       repo = "nvim-snippy";
@@ -11766,7 +11818,7 @@ final: prev: {
 
   nvim-solarized-lua = buildVimPlugin {
     pname = "nvim-solarized-lua";
-    version = "2024-03-04";
+    version = "0-unstable-2024-03-04";
     src = fetchFromGitHub {
       owner = "ishan9299";
       repo = "nvim-solarized-lua";
@@ -11779,7 +11831,7 @@ final: prev: {
 
   nvim-sops = buildVimPlugin {
     pname = "nvim-sops";
-    version = "2023-07-31";
+    version = "0-unstable-2023-07-31";
     src = fetchFromGitHub {
       owner = "lucidph3nx";
       repo = "nvim-sops";
@@ -11792,12 +11844,12 @@ final: prev: {
 
   nvim-spider = buildVimPlugin {
     pname = "nvim-spider";
-    version = "2025-11-04";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-spider";
-      rev = "80fdcc53e236b23f2c71d628ea5121e6d782f898";
-      sha256 = "0xqlsivw49aki1ymy6jc6yar4kw8rs8wb45p7kmlvs3wn86akjbp";
+      rev = "0fec9c501a083c2a0822d89e25a520476ab9e6bd";
+      sha256 = "1maiqz20bhd58gypabv1cd381k7bld583g6lzsxqb966wk2mli1l";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-spider/";
     meta.hydraPlatforms = [ ];
@@ -11805,12 +11857,12 @@ final: prev: {
 
   nvim-surround = buildVimPlugin {
     pname = "nvim-surround";
-    version = "2025-10-25";
+    version = "3.1.8-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "kylechui";
       repo = "nvim-surround";
-      rev = "fcfa7e02323d57bfacc3a141f8a74498e1522064";
-      sha256 = "0jnrxsiyid1g63px4rmjs4kbzgjpqw636fffkigvhb813nl0vw0i";
+      rev = "1098d7b3c34adcfa7feb3289ee434529abd4afd1";
+      sha256 = "15ynh9rfhvg46z1a7aynpmm5nh01ydyhhryf39v0w4qyclypsci3";
     };
     meta.homepage = "https://github.com/kylechui/nvim-surround/";
     meta.hydraPlatforms = [ ];
@@ -11818,7 +11870,7 @@ final: prev: {
 
   nvim-teal-maker = buildVimPlugin {
     pname = "nvim-teal-maker";
-    version = "2022-04-09";
+    version = "0-unstable-2022-04-09";
     src = fetchFromGitHub {
       owner = "svermeulen";
       repo = "nvim-teal-maker";
@@ -11831,7 +11883,7 @@ final: prev: {
 
   nvim-terminal-lua = buildVimPlugin {
     pname = "nvim-terminal.lua";
-    version = "2019-10-17";
+    version = "0-unstable-2019-10-17";
     src = fetchFromGitHub {
       owner = "norcalli";
       repo = "nvim-terminal.lua";
@@ -11844,7 +11896,7 @@ final: prev: {
 
   nvim-test = buildVimPlugin {
     pname = "nvim-test";
-    version = "2023-05-02";
+    version = "1.4.1-unstable-2023-05-02";
     src = fetchFromGitHub {
       owner = "klen";
       repo = "nvim-test";
@@ -11857,12 +11909,12 @@ final: prev: {
 
   nvim-tinygit = buildVimPlugin {
     pname = "nvim-tinygit";
-    version = "2025-10-30";
+    version = "1.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-tinygit";
-      rev = "a2910ba000901071cbcf347d4dd5c4a9c63fd510";
-      sha256 = "02sbv5c95c214gafhq3xb747hrf6ssfbkjjn3vlp142g5615bzmd";
+      rev = "804869f758fad4c6343e4c0321346f1b5064e07e";
+      sha256 = "19m694vcjnhwbk1fw4i3flzkjz298jfm9vzmvj3ff0jy01h2y0ax";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-tinygit/";
     meta.hydraPlatforms = [ ];
@@ -11870,12 +11922,12 @@ final: prev: {
 
   nvim-tree-lua = buildVimPlugin {
     pname = "nvim-tree.lua";
-    version = "2025-10-20";
+    version = "1.14.0-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "nvim-tree";
       repo = "nvim-tree.lua";
-      rev = "64e2192f5250796aa4a7f33c6ad888515af50640";
-      sha256 = "1m2a9r2wnxj0ck8gridwhn8qgy8bdzm2nymn5sy59z4pmbzjj9a0";
+      rev = "eb33612bff2fb31f54946fb5dcadc89e905e81ec";
+      sha256 = "09xiph5m5a6vay10shzy48a5k5scxhhhk3f0nxfq4c10m9c9f836";
     };
     meta.homepage = "https://github.com/nvim-tree/nvim-tree.lua/";
     meta.hydraPlatforms = [ ];
@@ -11883,7 +11935,7 @@ final: prev: {
 
   nvim-treesitter = buildVimPlugin {
     pname = "nvim-treesitter";
-    version = "2025-05-24";
+    version = "0.10.0-unstable-2025-05-24";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
@@ -11896,12 +11948,12 @@ final: prev: {
 
   nvim-treesitter-context = buildVimPlugin {
     pname = "nvim-treesitter-context";
-    version = "2025-10-21";
+    version = "1.0.0-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-context";
-      rev = "ec308c7827b5f8cb2dd0ad303a059c945dd21969";
-      sha256 = "1x2q0y644n7pf6xzfwsayg5cy8kpihln955pggq8445c2avnrmj1";
+      rev = "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a";
+      sha256 = "0dmcpn7l1f4bxvfa4li9sw8k1a5gh0r9zslflb5yrnax1ww71nyw";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-context/";
     meta.hydraPlatforms = [ ];
@@ -11909,7 +11961,7 @@ final: prev: {
 
   nvim-treesitter-endwise = buildVimPlugin {
     pname = "nvim-treesitter-endwise";
-    version = "2025-08-15";
+    version = "0-unstable-2025-08-15";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "nvim-treesitter-endwise";
@@ -11922,7 +11974,7 @@ final: prev: {
 
   nvim-treesitter-pairs = buildVimPlugin {
     pname = "nvim-treesitter-pairs";
-    version = "2023-07-23";
+    version = "0-unstable-2023-07-23";
     src = fetchFromGitHub {
       owner = "theHamsta";
       repo = "nvim-treesitter-pairs";
@@ -11935,7 +11987,7 @@ final: prev: {
 
   nvim-treesitter-pyfold = buildVimPlugin {
     pname = "nvim-treesitter-pyfold";
-    version = "2023-04-11";
+    version = "0-unstable-2023-04-11";
     src = fetchFromGitHub {
       owner = "eddiebergman";
       repo = "nvim-treesitter-pyfold";
@@ -11948,12 +12000,12 @@ final: prev: {
 
   nvim-treesitter-refactor = buildVimPlugin {
     pname = "nvim-treesitter-refactor";
-    version = "2024-09-14";
+    version = "0-unstable-2025-11-28";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-refactor";
-      rev = "d8b74fa87afc6a1e97b18da23e762efb032dc270";
-      sha256 = "0n5aygram7wfmhsy3sb68g4adpkx6z1z31cl0780zbdgs5k3785b";
+      rev = "9cc0d22becf72e18808208cd0ce85032a2b19c6f";
+      sha256 = "1p7bk6jk9ywb4586170lshr8npizq8nlwl1kw3qf3gfg2i457f26";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-refactor/";
     meta.hydraPlatforms = [ ];
@@ -11961,7 +12013,7 @@ final: prev: {
 
   nvim-treesitter-sexp = buildVimPlugin {
     pname = "nvim-treesitter-sexp";
-    version = "2024-06-07";
+    version = "0-unstable-2024-06-07";
     src = fetchFromGitHub {
       owner = "PaterJason";
       repo = "nvim-treesitter-sexp";
@@ -11974,7 +12026,7 @@ final: prev: {
 
   nvim-treesitter-textobjects = buildVimPlugin {
     pname = "nvim-treesitter-textobjects";
-    version = "2025-10-31";
+    version = "0-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-textobjects";
@@ -11987,7 +12039,7 @@ final: prev: {
 
   nvim-treesitter-textsubjects = buildVimPlugin {
     pname = "nvim-treesitter-textsubjects";
-    version = "2025-08-14";
+    version = "0-unstable-2025-08-14";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "nvim-treesitter-textsubjects";
@@ -12000,7 +12052,7 @@ final: prev: {
 
   nvim-trevJ-lua = buildVimPlugin {
     pname = "nvim-trevJ.lua";
-    version = "2025-07-21";
+    version = "0-unstable-2025-07-21";
     src = fetchFromGitHub {
       owner = "AckslD";
       repo = "nvim-trevJ.lua";
@@ -12013,7 +12065,7 @@ final: prev: {
 
   nvim-ts-autotag = buildVimPlugin {
     pname = "nvim-ts-autotag";
-    version = "2025-09-10";
+    version = "0-unstable-2025-09-10";
     src = fetchFromGitHub {
       owner = "windwp";
       repo = "nvim-ts-autotag";
@@ -12026,7 +12078,7 @@ final: prev: {
 
   nvim-ts-context-commentstring = buildVimPlugin {
     pname = "nvim-ts-context-commentstring";
-    version = "2024-12-07";
+    version = "0-unstable-2024-12-07";
     src = fetchFromGitHub {
       owner = "joosepalviste";
       repo = "nvim-ts-context-commentstring";
@@ -12039,7 +12091,7 @@ final: prev: {
 
   nvim-ufo = buildVimPlugin {
     pname = "nvim-ufo";
-    version = "2025-10-06";
+    version = "1.5.0-unstable-2025-10-06";
     src = fetchFromGitHub {
       owner = "kevinhwang91";
       repo = "nvim-ufo";
@@ -12052,7 +12104,7 @@ final: prev: {
 
   nvim-unception = buildVimPlugin {
     pname = "nvim-unception";
-    version = "2025-04-04";
+    version = "1.0.0-unstable-2025-04-04";
     src = fetchFromGitHub {
       owner = "samjwill";
       repo = "nvim-unception";
@@ -12065,12 +12117,12 @@ final: prev: {
 
   nvim-unity = buildVimPlugin {
     pname = "nvim-unity";
-    version = "2025-11-04";
+    version = "1.0.0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "apyra";
       repo = "nvim-unity";
-      rev = "624b0532bc6971c06eb9ba162c7afef29bb6e87a";
-      sha256 = "1gjmcbn7vk2j4r79mvdqw8c9p8fq86chr8vlf3x0nfjy6cr46wiy";
+      rev = "21de20d7dc19fe02dd5359815f22005985128b2c";
+      sha256 = "01r4k5jv6yngjf9x16kzq1lraaqhw0s1clasm6zfah7m8chjycfd";
     };
     meta.homepage = "https://github.com/apyra/nvim-unity/";
     meta.hydraPlatforms = [ ];
@@ -12078,12 +12130,12 @@ final: prev: {
 
   nvim-various-textobjs = buildVimPlugin {
     pname = "nvim-various-textobjs";
-    version = "2025-10-13";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chrisgrieser";
       repo = "nvim-various-textobjs";
-      rev = "aede1580da8e2f9157b538e25a4f4823c59e7633";
-      sha256 = "0191m787m5m72cim8hp4p8qqj36s5ics9d11ryfry55034aahdqz";
+      rev = "648e1bb27cf13e86640ffeadbafb98c395a18658";
+      sha256 = "0i396nlrhz9grcgczfi3zvgfi7418w1d6yfklrjhbkk5b4lyk7nr";
     };
     meta.homepage = "https://github.com/chrisgrieser/nvim-various-textobjs/";
     meta.hydraPlatforms = [ ];
@@ -12091,7 +12143,7 @@ final: prev: {
 
   nvim-vtsls = buildVimPlugin {
     pname = "nvim-vtsls";
-    version = "2025-07-16";
+    version = "0-unstable-2025-07-16";
     src = fetchFromGitHub {
       owner = "yioneko";
       repo = "nvim-vtsls";
@@ -12104,7 +12156,7 @@ final: prev: {
 
   nvim-whichkey-setup-lua = buildVimPlugin {
     pname = "nvim-whichkey-setup.lua";
-    version = "2021-04-16";
+    version = "0-unstable-2021-04-16";
     src = fetchFromGitHub {
       owner = "AckslD";
       repo = "nvim-whichkey-setup.lua";
@@ -12117,7 +12169,7 @@ final: prev: {
 
   nvim-window-picker = buildVimPlugin {
     pname = "nvim-window-picker";
-    version = "2025-02-26";
+    version = "2.4.0-unstable-2025-02-26";
     src = fetchFromGitHub {
       owner = "s1n7ax";
       repo = "nvim-window-picker";
@@ -12130,7 +12182,7 @@ final: prev: {
 
   nvim-yarp = buildVimPlugin {
     pname = "nvim-yarp";
-    version = "2022-06-08";
+    version = "0-unstable-2022-06-08";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "nvim-yarp";
@@ -12143,7 +12195,7 @@ final: prev: {
 
   nvim_context_vt = buildVimPlugin {
     pname = "nvim_context_vt";
-    version = "2025-09-17";
+    version = "0-unstable-2025-09-17";
     src = fetchFromGitHub {
       owner = "andersevenrud";
       repo = "nvim_context_vt";
@@ -12156,7 +12208,7 @@ final: prev: {
 
   nvimdev-nvim = buildVimPlugin {
     pname = "nvimdev.nvim";
-    version = "2023-09-05";
+    version = "0-unstable-2023-09-05";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvimdev.nvim";
@@ -12169,7 +12221,7 @@ final: prev: {
 
   nvterm = buildVimPlugin {
     pname = "nvterm";
-    version = "2024-03-09";
+    version = "0-unstable-2024-03-09";
     src = fetchFromGitHub {
       owner = "zbirenbaum";
       repo = "nvterm";
@@ -12182,7 +12234,7 @@ final: prev: {
 
   nvzone-menu = buildVimPlugin {
     pname = "nvzone-menu";
-    version = "2025-06-01";
+    version = "0-unstable-2025-06-01";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "menu";
@@ -12195,7 +12247,7 @@ final: prev: {
 
   nvzone-minty = buildVimPlugin {
     pname = "nvzone-minty";
-    version = "2025-02-28";
+    version = "0-unstable-2025-02-28";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "minty";
@@ -12208,12 +12260,12 @@ final: prev: {
 
   nvzone-typr = buildVimPlugin {
     pname = "nvzone-typr";
-    version = "2025-06-12";
+    version = "0-unstable-2025-11-09";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "typr";
-      rev = "bdd9ef7143702851edd1dac85101e0a537056d2f";
-      sha256 = "0shikbdl2c82ql5wv0g7dcij6gb0kagywxwh3cy2jn0swqyfpf2h";
+      rev = "584e4ef34dea25a4035627794322f315b22d1253";
+      sha256 = "14gz9y1nsnpzaf847vgnddlldfkgz46b8lmp8rkmd6jivp7jin9w";
     };
     meta.homepage = "https://github.com/nvzone/typr/";
     meta.hydraPlatforms = [ ];
@@ -12221,7 +12273,7 @@ final: prev: {
 
   nvzone-volt = buildVimPlugin {
     pname = "nvzone-volt";
-    version = "2025-09-13";
+    version = "0-unstable-2025-09-13";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "volt";
@@ -12234,12 +12286,12 @@ final: prev: {
 
   obsidian-nvim = buildVimPlugin {
     pname = "obsidian.nvim";
-    version = "2025-11-06";
+    version = "3.14.7-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "obsidian-nvim";
       repo = "obsidian.nvim";
-      rev = "fcb33fb2ffccc8107b3d5ebbf93df4e0824ac8ce";
-      sha256 = "0cf9bibysjz14i990iqkzwb6zzf23z4pi6y37qxqb4xd9mxsa7x7";
+      rev = "414490f5d9e293e3c4c383c73d90232f29fdd969";
+      sha256 = "1x5rww9avxlhc2bjw1hkpqhbq1f7b1bz25xqiwqzjmfvxwywfgc1";
     };
     meta.homepage = "https://github.com/obsidian-nvim/obsidian.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12247,7 +12299,7 @@ final: prev: {
 
   oceanic-material = buildVimPlugin {
     pname = "oceanic-material";
-    version = "2023-06-22";
+    version = "0-unstable-2023-06-22";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "oceanic-material";
@@ -12260,7 +12312,7 @@ final: prev: {
 
   oceanic-next = buildVimPlugin {
     pname = "oceanic-next";
-    version = "2023-05-01";
+    version = "0-unstable-2023-05-01";
     src = fetchFromGitHub {
       owner = "mhartington";
       repo = "oceanic-next";
@@ -12273,12 +12325,12 @@ final: prev: {
 
   octo-nvim = buildVimPlugin {
     pname = "octo.nvim";
-    version = "2025-11-04";
+    version = "0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "pwntester";
       repo = "octo.nvim";
-      rev = "13ba3e8651ee02c52cb3e60ce78aff68acec97ea";
-      sha256 = "1av3z2n1w8p7pwp8c5dmpk02s8bk7l1k9zjbl1ik7s9j6ndpnvv8";
+      rev = "1cefac4317530784bd829abe21d433e2f879a98b";
+      sha256 = "1w4n0i0bc6xyc6zlz30d3bdqj4sdiggky317f2a268x4f7v1hi0b";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12286,7 +12338,7 @@ final: prev: {
 
   oil-git-nvim = buildVimPlugin {
     pname = "oil-git.nvim";
-    version = "2025-09-03";
+    version = "0-unstable-2025-09-03";
     src = fetchFromGitHub {
       owner = "benomahony";
       repo = "oil-git.nvim";
@@ -12299,7 +12351,7 @@ final: prev: {
 
   oil-git-status-nvim = buildVimPlugin {
     pname = "oil-git-status.nvim";
-    version = "2025-04-03";
+    version = "0-unstable-2025-04-03";
     src = fetchFromGitHub {
       owner = "refractalize";
       repo = "oil-git-status.nvim";
@@ -12310,14 +12362,27 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  oil-lsp-diagnostics-nvim = buildVimPlugin {
+    pname = "oil-lsp-diagnostics.nvim";
+    version = "0-unstable-2025-01-22";
+    src = fetchFromGitHub {
+      owner = "JezerM";
+      repo = "oil-lsp-diagnostics.nvim";
+      rev = "e04e3c387262b958fee75382f8ff66eae9d037f4";
+      sha256 = "1l87cs6ffd1rlsw7sb9cimnqa2zlm1q5rf5ihbfp1wf8gn8fxj0k";
+    };
+    meta.homepage = "https://github.com/JezerM/oil-lsp-diagnostics.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   oklch-color-picker-nvim = buildVimPlugin {
     pname = "oklch-color-picker.nvim";
-    version = "2025-11-01";
+    version = "3.8.0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "eero-lehtinen";
       repo = "oklch-color-picker.nvim";
-      rev = "5ecc00741f6b7159af2d468c14e87a17715ab4c4";
-      sha256 = "1g4akgw13d17akd9xdmv9908l6j80w5idqd7621adfxmfa2h3cv7";
+      rev = "0c3c07a08c0f9c9272298d55a21e7a8829afe62d";
+      sha256 = "03vxmqnaa5f7wb8h02jlfz21x49m0jiaybv559h3p5qn64f58xpc";
     };
     meta.homepage = "https://github.com/eero-lehtinen/oklch-color-picker.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12325,7 +12390,7 @@ final: prev: {
 
   ollama-nvim = buildVimPlugin {
     pname = "ollama.nvim";
-    version = "2024-06-09";
+    version = "0-unstable-2024-06-09";
     src = fetchFromGitHub {
       owner = "nomnivore";
       repo = "ollama.nvim";
@@ -12338,7 +12403,7 @@ final: prev: {
 
   omni-vim = buildVimPlugin {
     pname = "omni.vim";
-    version = "2022-06-17";
+    version = "0-unstable-2022-06-17";
     src = fetchFromGitHub {
       owner = "yonlu";
       repo = "omni.vim";
@@ -12351,7 +12416,7 @@ final: prev: {
 
   omnisharp-extended-lsp-nvim = buildVimPlugin {
     pname = "omnisharp-extended-lsp.nvim";
-    version = "2025-10-07";
+    version = "0-unstable-2025-10-07";
     src = fetchFromGitHub {
       owner = "Hoffs";
       repo = "omnisharp-extended-lsp.nvim";
@@ -12364,7 +12429,7 @@ final: prev: {
 
   one-nvim = buildVimPlugin {
     pname = "one-nvim";
-    version = "2021-06-10";
+    version = "0-unstable-2021-06-10";
     src = fetchFromGitHub {
       owner = "Th3Whit3Wolf";
       repo = "one-nvim";
@@ -12377,12 +12442,12 @@ final: prev: {
 
   one-small-step-for-vimkind = buildVimPlugin {
     pname = "one-small-step-for-vimkind";
-    version = "2025-10-14";
+    version = "0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "jbyuki";
       repo = "one-small-step-for-vimkind";
-      rev = "8fdbb4ed7bd20f92d3c1344b1e619af9017c743d";
-      sha256 = "19fvx2v69psp5mwv6c8bbr2rir8njz8wgvm4kszghqa7p30jbva5";
+      rev = "87eeca2bd4d90a94eed1ef0dbc66885117e7bacb";
+      sha256 = "06qcqv3k7hzk3azlgw07v5xwzsm19dm6wvrxrv5gd5cxhxjwi7zz";
     };
     meta.homepage = "https://github.com/jbyuki/one-small-step-for-vimkind/";
     meta.hydraPlatforms = [ ];
@@ -12390,12 +12455,12 @@ final: prev: {
 
   onedark-nvim = buildVimPlugin {
     pname = "onedark.nvim";
-    version = "2025-11-07";
+    version = "1.0.3-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "navarasu";
       repo = "onedark.nvim";
-      rev = "918e89e6993b2901eea47b9f4eb666d53c2542a6";
-      sha256 = "164a8qamldk098x28wq8z87vkg3m6gi8pscvn3ccbyf9b5rplr07";
+      rev = "213c23ae45a04797572242568d5d51937181792d";
+      sha256 = "1fqf0sg9dd7mviyb28652jzrnxjw5gllrcp5am41h939jvk7kfl7";
     };
     meta.homepage = "https://github.com/navarasu/onedark.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12403,7 +12468,7 @@ final: prev: {
 
   onedark-vim = buildVimPlugin {
     pname = "onedark.vim";
-    version = "2025-09-02";
+    version = "0-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "joshdick";
       repo = "onedark.vim";
@@ -12416,7 +12481,7 @@ final: prev: {
 
   onedarker-nvim = buildVimPlugin {
     pname = "onedarker.nvim";
-    version = "2022-10-10";
+    version = "0-unstable-2022-10-10";
     src = fetchFromGitHub {
       owner = "LunarVim";
       repo = "onedarker.nvim";
@@ -12429,12 +12494,12 @@ final: prev: {
 
   onedarkpro-nvim = buildVimPlugin {
     pname = "onedarkpro.nvim";
-    version = "2025-09-30";
+    version = "2.25.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "onedarkpro.nvim";
-      rev = "eeac8847a46a02c4de4e887c4c6d34b282060b5d";
-      sha256 = "1656gvx1ypzfdgrkkw5hh73mjwdcslyid4jm7sxhp6v10a66imkk";
+      rev = "6b12e00bf5e509e1278a84e2aecf918ca6be9aea";
+      sha256 = "0xjlrfsf3bx475ppljb45vx6pins3164n020kaz9x9s4dqnr9lm5";
     };
     meta.homepage = "https://github.com/olimorris/onedarkpro.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12442,7 +12507,7 @@ final: prev: {
 
   onehalf = buildVimPlugin {
     pname = "onehalf";
-    version = "2022-08-02";
+    version = "0.1.3-unstable-2022-08-02";
     src = fetchFromGitHub {
       owner = "sonph";
       repo = "onehalf";
@@ -12455,7 +12520,7 @@ final: prev: {
 
   onenord-nvim = buildVimPlugin {
     pname = "onenord.nvim";
-    version = "2025-09-01";
+    version = "0.7.0-unstable-2025-09-01";
     src = fetchFromGitHub {
       owner = "rmehri01";
       repo = "onenord.nvim";
@@ -12468,7 +12533,7 @@ final: prev: {
 
   open-browser-github-vim = buildVimPlugin {
     pname = "open-browser-github.vim";
-    version = "2021-03-21";
+    version = "1.0.0-unstable-2021-03-21";
     src = fetchFromGitHub {
       owner = "tyru";
       repo = "open-browser-github.vim";
@@ -12481,7 +12546,7 @@ final: prev: {
 
   open-browser-vim = buildVimPlugin {
     pname = "open-browser.vim";
-    version = "2022-10-08";
+    version = "2.0.0-unstable-2022-10-08";
     src = fetchFromGitHub {
       owner = "tyru";
       repo = "open-browser.vim";
@@ -12494,12 +12559,12 @@ final: prev: {
 
   opencode-nvim = buildVimPlugin {
     pname = "opencode.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "NickvanDyke";
       repo = "opencode.nvim";
-      rev = "87cda19e743c0475f94bb5970dfe0d2816792c68";
-      sha256 = "03izfimswsdy5g7qlx3s0g25yn3yashnmz73a2miiz0r03645p6f";
+      rev = "aba9e8c64cdb074d3d481e3a0101f6113061bef3";
+      sha256 = "0jd7abbicv4b844p7r68p0h0l8kg47f4jbk5fsgzcf4pl4kj467s";
     };
     meta.homepage = "https://github.com/NickvanDyke/opencode.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12507,7 +12572,7 @@ final: prev: {
 
   openingh-nvim = buildVimPlugin {
     pname = "openingh.nvim";
-    version = "2025-05-01";
+    version = "1.013-unstable-2025-05-01";
     src = fetchFromGitHub {
       owner = "Almo7aya";
       repo = "openingh.nvim";
@@ -12520,7 +12585,7 @@ final: prev: {
 
   openscad-nvim = buildVimPlugin {
     pname = "openscad.nvim";
-    version = "2025-09-25";
+    version = "0-unstable-2025-09-25";
     src = fetchFromGitHub {
       owner = "salkin-mada";
       repo = "openscad.nvim";
@@ -12533,12 +12598,12 @@ final: prev: {
 
   org-roam-nvim = buildVimPlugin {
     pname = "org-roam.nvim";
-    version = "2025-11-06";
+    version = "0.2.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "chipsenkbeil";
       repo = "org-roam.nvim";
-      rev = "57ebbd05ef143b0ad09e6fae3cd3b8b584b3e5a6";
-      sha256 = "04z86r6v0qg5jj1swrjki6bn8cnd2yfmxfj8b6hzs1xm5hhzjn69";
+      rev = "74276a94e9e4af463e7ba35c22259eeced9c90f9";
+      sha256 = "1spdcrg6n68kglwbx61a4r1prx4vdzz9m309y5mia572mljbhfk7";
     };
     meta.homepage = "https://github.com/chipsenkbeil/org-roam.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12546,7 +12611,7 @@ final: prev: {
 
   other-nvim = buildVimPlugin {
     pname = "other.nvim";
-    version = "2025-05-09";
+    version = "0-unstable-2025-05-09";
     src = fetchFromGitHub {
       owner = "rgroli";
       repo = "other.nvim";
@@ -12559,12 +12624,12 @@ final: prev: {
 
   otter-nvim = buildVimPlugin {
     pname = "otter.nvim";
-    version = "2025-10-07";
+    version = "2.13.4-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "jmbuhr";
       repo = "otter.nvim";
-      rev = "fc0aa35b1985077d11a20ddf4006bf40f2cd7397";
-      sha256 = "010yfxip47mrg01zbmfy9pqhs3yncrj6qp0dz35wi3zw3xpl3vxh";
+      rev = "b36e1a40617e35779d2097fc9b9fd701acd4f5e8";
+      sha256 = "1sqm621v1k359c26sz5q3icvxm0m2ajh6piggypf0x48kr2hkbd5";
     };
     meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12572,7 +12637,7 @@ final: prev: {
 
   outline-nvim = buildVimPlugin {
     pname = "outline.nvim";
-    version = "2025-09-07";
+    version = "1.1.0-unstable-2025-09-07";
     src = fetchFromGitHub {
       owner = "hedyhli";
       repo = "outline.nvim";
@@ -12585,12 +12650,12 @@ final: prev: {
 
   overseer-nvim = buildVimPlugin {
     pname = "overseer.nvim";
-    version = "2025-10-19";
+    version = "2.0.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "overseer.nvim";
-      rev = "c77c78b35d0b4d244e1cd77c25ec93a16fbbfc94";
-      sha256 = "1s74d640v3a0rvi3m9c197zabvjis41j7077bhbrf74j39xgvnz3";
+      rev = "afbac6c612b12772591640d801fad65423af02b9";
+      sha256 = "07cp28z7zg55dsha1hd3pyk1rxghg7q8yczwr1wj0gvygbdy4355";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/stevearc/overseer.nvim/";
@@ -12599,7 +12664,7 @@ final: prev: {
 
   oxocarbon-nvim = buildVimPlugin {
     pname = "oxocarbon.nvim";
-    version = "2025-09-05";
+    version = "0-unstable-2025-09-05";
     src = fetchFromGitHub {
       owner = "nyoom-engineering";
       repo = "oxocarbon.nvim";
@@ -12612,12 +12677,12 @@ final: prev: {
 
   package-info-nvim = buildVimPlugin {
     pname = "package-info.nvim";
-    version = "2025-09-21";
+    version = "2.0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "vuki656";
       repo = "package-info.nvim";
-      rev = "a1de9eb91fa52ab8361f0c05032673670a3d10ff";
-      sha256 = "1gjsy8l0786jc7idlvypasipgkxnmx9jxpmm1yr2hli9pdi8lba5";
+      rev = "0826010a13967bee4f74337e74d36e9bfa8ff2a7";
+      sha256 = "0a5jvvi2j21vhp2yrs599jrgfpv2hccv9m4f51csqb5sixjif2ab";
     };
     meta.homepage = "https://github.com/vuki656/package-info.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12625,7 +12690,7 @@ final: prev: {
 
   packer-nvim = buildVimPlugin {
     pname = "packer.nvim";
-    version = "2023-08-24";
+    version = "0-unstable-2023-08-24";
     src = fetchFromGitHub {
       owner = "wbthomason";
       repo = "packer.nvim";
@@ -12638,7 +12703,7 @@ final: prev: {
 
   palenight-vim = buildVimPlugin {
     pname = "palenight.vim";
-    version = "2023-04-27";
+    version = "0-unstable-2023-04-27";
     src = fetchFromGitHub {
       owner = "drewtempelmeyer";
       repo = "palenight.vim";
@@ -12651,7 +12716,7 @@ final: prev: {
 
   palenightfall-nvim = buildVimPlugin {
     pname = "palenightfall.nvim";
-    version = "2023-10-05";
+    version = "0-unstable-2023-10-05";
     src = fetchFromGitHub {
       owner = "JoosepAlviste";
       repo = "palenightfall.nvim";
@@ -12664,7 +12729,7 @@ final: prev: {
 
   palette-nvim = buildVimPlugin {
     pname = "palette.nvim";
-    version = "2023-10-02";
+    version = "0-unstable-2023-10-02";
     src = fetchFromGitHub {
       owner = "roobert";
       repo = "palette.nvim";
@@ -12677,7 +12742,7 @@ final: prev: {
 
   papercolor-theme = buildVimPlugin {
     pname = "papercolor-theme";
-    version = "2024-03-12";
+    version = "1.0-unstable-2024-03-12";
     src = fetchFromGitHub {
       owner = "NLKNguyen";
       repo = "papercolor-theme";
@@ -12690,12 +12755,12 @@ final: prev: {
 
   papercolor-theme-slim = buildVimPlugin {
     pname = "papercolor-theme-slim";
-    version = "2025-09-15";
+    version = "1.0.0-unstable-2025-11-09";
     src = fetchFromGitHub {
       owner = "pappasam";
       repo = "papercolor-theme-slim";
-      rev = "b961e14625fea44e6cc6f0d928af6e3523061dd5";
-      sha256 = "1zwkkykpf5zbypazqczslxg2ysragisxbs424kpk7x4cqqdvl044";
+      rev = "b6ad29263346aca63b3358aef8ef9b7460f61e28";
+      sha256 = "1qvdxx6wic4wz22m55c87bppv1ygi881kbzxaysvygb0wj2dca3j";
     };
     meta.homepage = "https://github.com/pappasam/papercolor-theme-slim/";
     meta.hydraPlatforms = [ ];
@@ -12703,7 +12768,7 @@ final: prev: {
 
   parpar-nvim = buildVimPlugin {
     pname = "parpar.nvim";
-    version = "2023-09-12";
+    version = "0-unstable-2023-09-12";
     src = fetchFromGitHub {
       owner = "dundalek";
       repo = "parpar.nvim";
@@ -12716,12 +12781,12 @@ final: prev: {
 
   parrot-nvim = buildVimPlugin {
     pname = "parrot.nvim";
-    version = "2025-11-06";
+    version = "2.5.1-unstable-2025-11-17";
     src = fetchFromGitHub {
       owner = "frankroeder";
       repo = "parrot.nvim";
-      rev = "ccb35e9fea98c1cc14ef5f8e8d0829bfbd1c103e";
-      sha256 = "0hmhkksmw0n7823r8ammymcqjnxj2cnjjlhjdrsbpxsnaz9mk9ka";
+      rev = "5d7e72bdc3efe2638e1bd94ff55028ecc40edd7a";
+      sha256 = "1s0lppapcgjzhi47dfa2yd4863az6z2jwm90i8f8xg3l44hmjg5b";
     };
     meta.homepage = "https://github.com/frankroeder/parrot.nvim/";
     meta.hydraPlatforms = [ ];
@@ -12729,7 +12794,7 @@ final: prev: {
 
   patterns-nvim = buildVimPlugin {
     pname = "patterns.nvim";
-    version = "2025-09-16";
+    version = "2.1.1-unstable-2025-09-16";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "patterns.nvim";
@@ -12742,7 +12807,7 @@ final: prev: {
 
   pckr-nvim = buildVimPlugin {
     pname = "pckr.nvim";
-    version = "2025-09-25";
+    version = "1.1.2-unstable-2025-09-25";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "pckr.nvim";
@@ -12755,7 +12820,7 @@ final: prev: {
 
   pear-tree = buildVimPlugin {
     pname = "pear-tree";
-    version = "2024-11-29";
+    version = "0-unstable-2024-11-29";
     src = fetchFromGitHub {
       owner = "tmsvg";
       repo = "pear-tree";
@@ -12768,7 +12833,7 @@ final: prev: {
 
   pears-nvim = buildVimPlugin {
     pname = "pears.nvim";
-    version = "2021-05-27";
+    version = "0-unstable-2021-05-27";
     src = fetchFromGitHub {
       owner = "steelsojka";
       repo = "pears.nvim";
@@ -12781,7 +12846,7 @@ final: prev: {
 
   peek-nvim = buildVimPlugin {
     pname = "peek.nvim";
-    version = "2024-04-09";
+    version = "0-unstable-2024-04-09";
     src = fetchFromGitHub {
       owner = "toppair";
       repo = "peek.nvim";
@@ -12794,7 +12859,7 @@ final: prev: {
 
   perfanno-nvim = buildVimPlugin {
     pname = "perfanno.nvim";
-    version = "2024-12-28";
+    version = "0-unstable-2024-12-28";
     src = fetchFromGitHub {
       owner = "t-troebst";
       repo = "perfanno.nvim";
@@ -12807,7 +12872,7 @@ final: prev: {
 
   persisted-nvim = buildVimPlugin {
     pname = "persisted.nvim";
-    version = "2025-08-16";
+    version = "2.1.1-unstable-2025-08-16";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "persisted.nvim";
@@ -12820,7 +12885,7 @@ final: prev: {
 
   persistence-nvim = buildVimPlugin {
     pname = "persistence.nvim";
-    version = "2025-10-28";
+    version = "3.1.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "persistence.nvim";
@@ -12833,7 +12898,7 @@ final: prev: {
 
   persistent-breakpoints-nvim = buildVimPlugin {
     pname = "persistent-breakpoints.nvim";
-    version = "2025-03-22";
+    version = "0-unstable-2025-03-22";
     src = fetchFromGitHub {
       owner = "Weissle";
       repo = "persistent-breakpoints.nvim";
@@ -12846,7 +12911,7 @@ final: prev: {
 
   pest-vim = buildVimPlugin {
     pname = "pest.vim";
-    version = "2024-04-25";
+    version = "0-unstable-2024-04-25";
     src = fetchFromGitHub {
       owner = "pest-parser";
       repo = "pest.vim";
@@ -12859,7 +12924,7 @@ final: prev: {
 
   pgsql-vim = buildVimPlugin {
     pname = "pgsql.vim";
-    version = "2021-12-08";
+    version = "2.3.1-unstable-2021-12-08";
     src = fetchFromGitHub {
       owner = "lifepillar";
       repo = "pgsql.vim";
@@ -12872,7 +12937,7 @@ final: prev: {
 
   phha-zenburn = buildVimPlugin {
     pname = "phha-zenburn";
-    version = "2024-01-31";
+    version = "0-unstable-2024-01-31";
     src = fetchFromGitHub {
       owner = "phha";
       repo = "zenburn.nvim";
@@ -12885,7 +12950,7 @@ final: prev: {
 
   pig-vim = buildVimPlugin {
     pname = "pig.vim";
-    version = "2017-06-08";
+    version = "0-unstable-2017-06-08";
     src = fetchFromGitHub {
       owner = "motus";
       repo = "pig.vim";
@@ -12898,7 +12963,7 @@ final: prev: {
 
   plantuml-nvim = buildVimPlugin {
     pname = "plantuml.nvim";
-    version = "2025-06-16";
+    version = "0-unstable-2025-06-16";
     src = fetchFromGitHub {
       owner = "goropikari";
       repo = "plantuml.nvim";
@@ -12911,7 +12976,7 @@ final: prev: {
 
   plantuml-previewer-vim = buildVimPlugin {
     pname = "plantuml-previewer.vim";
-    version = "2024-10-28";
+    version = "1.5.1-unstable-2024-10-28";
     src = fetchFromGitHub {
       owner = "weirongxu";
       repo = "plantuml-previewer.vim";
@@ -12924,7 +12989,7 @@ final: prev: {
 
   plantuml-syntax = buildVimPlugin {
     pname = "plantuml-syntax";
-    version = "2024-08-25";
+    version = "0.2.0-unstable-2024-08-25";
     src = fetchFromGitHub {
       owner = "aklt";
       repo = "plantuml-syntax";
@@ -12937,7 +13002,7 @@ final: prev: {
 
   playground = buildVimPlugin {
     pname = "playground";
-    version = "2023-09-15";
+    version = "0-unstable-2023-09-15";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "playground";
@@ -12950,7 +13015,7 @@ final: prev: {
 
   poimandres-nvim = buildVimPlugin {
     pname = "poimandres.nvim";
-    version = "2024-10-19";
+    version = "0.6.0-unstable-2024-10-19";
     src = fetchFromGitHub {
       owner = "olivercederborg";
       repo = "poimandres.nvim";
@@ -12963,7 +13028,7 @@ final: prev: {
 
   pomo-nvim = buildVimPlugin {
     pname = "pomo.nvim";
-    version = "2024-07-30";
+    version = "0.7.0-unstable-2024-07-30";
     src = fetchFromGitHub {
       owner = "epwalsh";
       repo = "pomo.nvim";
@@ -12976,7 +13041,7 @@ final: prev: {
 
   pony-vim-syntax = buildVimPlugin {
     pname = "pony-vim-syntax";
-    version = "2017-09-26";
+    version = "0-unstable-2017-09-26";
     src = fetchFromGitHub {
       owner = "dleonard0";
       repo = "pony-vim-syntax";
@@ -12989,7 +13054,7 @@ final: prev: {
 
   popfix = buildVimPlugin {
     pname = "popfix";
-    version = "2022-07-04";
+    version = "0-unstable-2022-07-04";
     src = fetchFromGitHub {
       owner = "RishabhRD";
       repo = "popfix";
@@ -13003,7 +13068,7 @@ final: prev: {
 
   popup-nvim = buildVimPlugin {
     pname = "popup.nvim";
-    version = "2021-11-18";
+    version = "0-unstable-2021-11-18";
     src = fetchFromGitHub {
       owner = "nvim-lua";
       repo = "popup.nvim";
@@ -13016,7 +13081,7 @@ final: prev: {
 
   precognition-nvim = buildVimPlugin {
     pname = "precognition.nvim";
-    version = "2025-08-14";
+    version = "1.1.0-unstable-2025-08-14";
     src = fetchFromGitHub {
       owner = "tris203";
       repo = "precognition.nvim";
@@ -13029,7 +13094,7 @@ final: prev: {
 
   presence-nvim = buildVimPlugin {
     pname = "presence.nvim";
-    version = "2023-01-29";
+    version = "0-unstable-2023-01-29";
     src = fetchFromGitHub {
       owner = "andweeb";
       repo = "presence.nvim";
@@ -13042,7 +13107,7 @@ final: prev: {
 
   presenting-vim = buildVimPlugin {
     pname = "presenting.vim";
-    version = "2023-12-30";
+    version = "0.1.0-unstable-2023-12-30";
     src = fetchFromGitHub {
       owner = "sotte";
       repo = "presenting.vim";
@@ -13055,7 +13120,7 @@ final: prev: {
 
   preto = buildVimPlugin {
     pname = "preto";
-    version = "2023-02-10";
+    version = "0-unstable-2023-02-10";
     src = fetchFromGitHub {
       owner = "ewilazarus";
       repo = "preto";
@@ -13068,7 +13133,7 @@ final: prev: {
 
   pretty-fold-nvim = buildVimPlugin {
     pname = "pretty-fold.nvim";
-    version = "2022-07-20";
+    version = "3.0-unstable-2022-07-20";
     src = fetchFromGitHub {
       owner = "anuvyklack";
       repo = "pretty-fold.nvim";
@@ -13081,7 +13146,7 @@ final: prev: {
 
   prev_indent = buildVimPlugin {
     pname = "prev_indent";
-    version = "2014-03-08";
+    version = "0.3-unstable-2014-03-08";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "prev_indent";
@@ -13094,12 +13159,12 @@ final: prev: {
 
   project-nvim = buildVimPlugin {
     pname = "project.nvim";
-    version = "2025-11-01";
+    version = "0.1.12-1-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "project.nvim";
-      rev = "deaec4c3606ade11f6ae89b4e9576065b3140d0e";
-      sha256 = "00iml75wgf05iy9cc8arxcsbbdzq218ryg23xkpf2x7jdc3810sm";
+      rev = "6ebdb8e7d59c991f23b6a4ae04f0f4e16b00b347";
+      sha256 = "1swbc78np6km85l01pdfgynl0n1ij6xr898mxymsjhpzr1x3h9wa";
     };
     meta.homepage = "https://github.com/DrKJeff16/project.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13107,7 +13172,7 @@ final: prev: {
 
   projections-nvim = buildVimPlugin {
     pname = "projections.nvim";
-    version = "2023-06-29";
+    version = "0-unstable-2023-06-29";
     src = fetchFromGitHub {
       owner = "GnikDroy";
       repo = "projections.nvim";
@@ -13120,7 +13185,7 @@ final: prev: {
 
   promise-async = buildVimPlugin {
     pname = "promise-async";
-    version = "2024-08-04";
+    version = "1.0.0-unstable-2024-08-04";
     src = fetchFromGitHub {
       owner = "kevinhwang91";
       repo = "promise-async";
@@ -13133,7 +13198,7 @@ final: prev: {
 
   psc-ide-vim = buildVimPlugin {
     pname = "psc-ide-vim";
-    version = "2021-05-31";
+    version = "0.8.2-unstable-2021-05-31";
     src = fetchFromGitHub {
       owner = "frigoeu";
       repo = "psc-ide-vim";
@@ -13146,12 +13211,12 @@ final: prev: {
 
   pum-vim = buildVimPlugin {
     pname = "pum.vim";
-    version = "2025-10-16";
+    version = "2.0-unstable-2025-11-10";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "pum.vim";
-      rev = "08734d52b03c354151dda3bb75a37a0ee39bbe7e";
-      sha256 = "1ri0chivm5fv7hgdljd5dls60kf1xhckg66lk5h4b3qkxpksmr2s";
+      rev = "fed31b9f117e4c10332c30108152a935496bc3b5";
+      sha256 = "1iyvqc3lzyxa1ap657bb8fvzchdw6xwg4zx2qpgkx5jpi2mjzrc4";
     };
     meta.homepage = "https://github.com/Shougo/pum.vim/";
     meta.hydraPlatforms = [ ];
@@ -13159,7 +13224,7 @@ final: prev: {
 
   purescript-vim = buildVimPlugin {
     pname = "purescript-vim";
-    version = "2023-02-06";
+    version = "1.0.0-unstable-2023-02-06";
     src = fetchFromGitHub {
       owner = "purescript-contrib";
       repo = "purescript-vim";
@@ -13172,12 +13237,12 @@ final: prev: {
 
   python-mode = buildVimPlugin {
     pname = "python-mode";
-    version = "2025-07-12";
+    version = "0.14.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "python-mode";
       repo = "python-mode";
-      rev = "2db3b9ea1051b00ca32f12310d500a55b924c7f2";
-      sha256 = "1vlsqjszpqya8hmys94zr9cla39slsiivnx9k2va1l039fzrm1xs";
+      rev = "7dd171f1340ac60dd18efe393014289072cbb814";
+      sha256 = "19fh7kmws8xiirj65k9qmpb1bl1r1cppp056mdbcppljil30fr4x";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/python-mode/python-mode/";
@@ -13186,7 +13251,7 @@ final: prev: {
 
   python-syntax = buildVimPlugin {
     pname = "python-syntax";
-    version = "2020-12-14";
+    version = "0-unstable-2020-12-14";
     src = fetchFromGitHub {
       owner = "vim-python";
       repo = "python-syntax";
@@ -13199,7 +13264,7 @@ final: prev: {
 
   pywal-nvim = buildVimPlugin {
     pname = "pywal.nvim";
-    version = "2022-11-03";
+    version = "0-unstable-2022-11-03";
     src = fetchFromGitHub {
       owner = "AlphaTechnolog";
       repo = "pywal.nvim";
@@ -13212,7 +13277,7 @@ final: prev: {
 
   qmk-nvim = buildVimPlugin {
     pname = "qmk.nvim";
-    version = "2025-06-22";
+    version = "1.0.0-unstable-2025-06-22";
     src = fetchFromGitHub {
       owner = "codethread";
       repo = "qmk.nvim";
@@ -13225,7 +13290,7 @@ final: prev: {
 
   quarto-nvim = buildVimPlugin {
     pname = "quarto-nvim";
-    version = "2025-08-23";
+    version = "1.2.5-unstable-2025-08-23";
     src = fetchFromGitHub {
       owner = "quarto-dev";
       repo = "quarto-nvim";
@@ -13238,7 +13303,7 @@ final: prev: {
 
   quick-scope = buildVimPlugin {
     pname = "quick-scope";
-    version = "2025-06-26";
+    version = "2.7.1-unstable-2025-06-26";
     src = fetchFromGitHub {
       owner = "unblevable";
       repo = "quick-scope";
@@ -13251,12 +13316,12 @@ final: prev: {
 
   quicker-nvim = buildVimPlugin {
     pname = "quicker.nvim";
-    version = "2025-09-27";
+    version = "1.4.0-unstable-2025-11-25";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "quicker.nvim";
-      rev = "12a2291869a326424b1cbee937f4f80334433012";
-      sha256 = "0fvh90gspipyx28ya5y0zd5lg09j0ic72bf5pyb263g1nawx6dxd";
+      rev = "9983d4b28881e1df626e3682167b45c284d4da8c";
+      sha256 = "0gmmgjsqpby0r4jjlh7rmbjc4drcgs7plp1g835fhq4fgbmjwj61";
     };
     meta.homepage = "https://github.com/stevearc/quicker.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13264,7 +13329,7 @@ final: prev: {
 
   quickfix-reflector-vim = buildVimPlugin {
     pname = "quickfix-reflector.vim";
-    version = "2022-02-02";
+    version = "0.1-unstable-2022-02-02";
     src = fetchFromGitHub {
       owner = "stefandtw";
       repo = "quickfix-reflector.vim";
@@ -13277,7 +13342,7 @@ final: prev: {
 
   quickfixstatus = buildVimPlugin {
     pname = "quickfixstatus";
-    version = "2011-09-03";
+    version = "0-unstable-2011-09-03";
     src = fetchFromGitHub {
       owner = "dannyob";
       repo = "quickfixstatus";
@@ -13290,7 +13355,7 @@ final: prev: {
 
   quickmath-nvim = buildVimPlugin {
     pname = "quickmath.nvim";
-    version = "2024-02-12";
+    version = "0-unstable-2024-02-12";
     src = fetchFromGitHub {
       owner = "jbyuki";
       repo = "quickmath.nvim";
@@ -13303,7 +13368,7 @@ final: prev: {
 
   rainbow = buildVimPlugin {
     pname = "rainbow";
-    version = "2024-07-27";
+    version = "3.3.1-unstable-2024-07-27";
     src = fetchFromGitHub {
       owner = "luochen1990";
       repo = "rainbow";
@@ -13316,7 +13381,7 @@ final: prev: {
 
   rainbow_csv = buildVimPlugin {
     pname = "rainbow_csv";
-    version = "2024-07-05";
+    version = "4.3.0-unstable-2024-07-05";
     src = fetchFromGitHub {
       owner = "mechatroner";
       repo = "rainbow_csv";
@@ -13329,7 +13394,7 @@ final: prev: {
 
   rainbow_parentheses-vim = buildVimPlugin {
     pname = "rainbow_parentheses.vim";
-    version = "2013-03-05";
+    version = "0-unstable-2013-03-05";
     src = fetchFromGitHub {
       owner = "kien";
       repo = "rainbow_parentheses.vim";
@@ -13342,7 +13407,7 @@ final: prev: {
 
   random-vim = buildVimPlugin {
     pname = "random.vim";
-    version = "2010-10-18";
+    version = "1.3-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "random.vim";
@@ -13355,12 +13420,12 @@ final: prev: {
 
   range-highlight-nvim = buildVimPlugin {
     pname = "range-highlight.nvim";
-    version = "2025-06-20";
+    version = "1.0.2-unstable-2025-12-10";
     src = fetchFromGitHub {
       owner = "winston0410";
       repo = "range-highlight.nvim";
-      rev = "f54aec737f138e52c187a8bea77b41347fd86f12";
-      sha256 = "0pva6pc6crnvf6iz7rg0qgfp6gjrj33pn2z92q6abfq19mw9mmyb";
+      rev = "097103da6550c2a34c029971c3d7da63d3fef320";
+      sha256 = "0ra5sszlvs0sc9fd801ls109i7jx2ammcg16f0hjagrnp357cz89";
     };
     meta.homepage = "https://github.com/winston0410/range-highlight.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13368,7 +13433,7 @@ final: prev: {
 
   ranger-nvim = buildVimPlugin {
     pname = "ranger.nvim";
-    version = "2024-11-18";
+    version = "0-unstable-2024-11-18";
     src = fetchFromGitHub {
       owner = "kelly-lin";
       repo = "ranger.nvim";
@@ -13381,7 +13446,7 @@ final: prev: {
 
   ranger-vim = buildVimPlugin {
     pname = "ranger.vim";
-    version = "2021-12-13";
+    version = "0-unstable-2021-12-13";
     src = fetchFromGitHub {
       owner = "rafaqz";
       repo = "ranger.vim";
@@ -13394,7 +13459,7 @@ final: prev: {
 
   rcshell-vim = buildVimPlugin {
     pname = "rcshell.vim";
-    version = "2014-12-29";
+    version = "20091226-unstable-2014-12-29";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "rcshell.vim";
@@ -13407,7 +13472,7 @@ final: prev: {
 
   readline-vim = buildVimPlugin {
     pname = "readline.vim";
-    version = "2023-03-09";
+    version = "0-unstable-2023-03-09";
     src = fetchFromGitHub {
       owner = "ryvnf";
       repo = "readline.vim";
@@ -13420,7 +13485,7 @@ final: prev: {
 
   refactoring-nvim = buildVimPlugin {
     pname = "refactoring.nvim";
-    version = "2025-10-21";
+    version = "0-unstable-2025-10-21";
     src = fetchFromGitHub {
       owner = "theprimeagen";
       repo = "refactoring.nvim";
@@ -13433,7 +13498,7 @@ final: prev: {
 
   refjump-nvim = buildVimPlugin {
     pname = "refjump.nvim";
-    version = "2025-04-04";
+    version = "0-unstable-2025-04-04";
     src = fetchFromGitHub {
       owner = "mawkler";
       repo = "refjump.nvim";
@@ -13446,7 +13511,7 @@ final: prev: {
 
   registers-nvim = buildVimPlugin {
     pname = "registers.nvim";
-    version = "2024-11-05";
+    version = "2.3.0-unstable-2024-11-05";
     src = fetchFromGitHub {
       owner = "tversteeg";
       repo = "registers.nvim";
@@ -13459,7 +13524,7 @@ final: prev: {
 
   remember-nvim = buildVimPlugin {
     pname = "remember.nvim";
-    version = "2024-06-13";
+    version = "1.4.1-unstable-2024-06-13";
     src = fetchFromGitHub {
       owner = "vladdoster";
       repo = "remember.nvim";
@@ -13472,7 +13537,7 @@ final: prev: {
 
   remote-nvim-nvim = buildVimPlugin {
     pname = "remote-nvim.nvim";
-    version = "2025-08-22";
+    version = "0.3.12-unstable-2025-08-22";
     src = fetchFromGitHub {
       owner = "amitds1997";
       repo = "remote-nvim.nvim";
@@ -13485,7 +13550,7 @@ final: prev: {
 
   remote-sshfs-nvim = buildVimPlugin {
     pname = "remote-sshfs.nvim";
-    version = "2025-09-30";
+    version = "0.7.2-unstable-2025-09-30";
     src = fetchFromGitHub {
       owner = "nosduco";
       repo = "remote-sshfs.nvim";
@@ -13498,7 +13563,7 @@ final: prev: {
 
   renamer-nvim = buildVimPlugin {
     pname = "renamer.nvim";
-    version = "2022-08-29";
+    version = "5.1.0-unstable-2022-08-29";
     src = fetchFromGitHub {
       owner = "filipdutescu";
       repo = "renamer.nvim";
@@ -13511,12 +13576,12 @@ final: prev: {
 
   render-markdown-nvim = buildVimPlugin {
     pname = "render-markdown.nvim";
-    version = "2025-11-05";
+    version = "8.10.0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "MeanderingProgrammer";
       repo = "render-markdown.nvim";
-      rev = "060c911c62f995a9db4467dde6fafd699cf94d55";
-      sha256 = "195gj8saaqb2mw8qnry9cix8wn34bkz8ifvwfa2lzp9f1mzb6ri7";
+      rev = "7a43c8b444fa15b7736b34b248addb951126f723";
+      sha256 = "0rlrs4chcd1r0rn4kaj5gp5cw9d3nn6nzsnn9asncfis84mrf1fd";
     };
     meta.homepage = "https://github.com/MeanderingProgrammer/render-markdown.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13524,7 +13589,7 @@ final: prev: {
 
   replacer-nvim = buildVimPlugin {
     pname = "replacer.nvim";
-    version = "2023-07-29";
+    version = "0-unstable-2023-07-29";
     src = fetchFromGitHub {
       owner = "gabrielpoca";
       repo = "replacer.nvim";
@@ -13537,7 +13602,7 @@ final: prev: {
 
   repolink-nvim = buildVimPlugin {
     pname = "repolink.nvim";
-    version = "2023-12-08";
+    version = "0-unstable-2023-12-08";
     src = fetchFromGitHub {
       owner = "9seconds";
       repo = "repolink.nvim";
@@ -13550,7 +13615,7 @@ final: prev: {
 
   resession-nvim = buildVimPlugin {
     pname = "resession.nvim";
-    version = "2025-11-05";
+    version = "1.2.1-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "stevearc";
       repo = "resession.nvim";
@@ -13564,7 +13629,7 @@ final: prev: {
 
   restore-view-vim = buildVimPlugin {
     pname = "restore-view-vim";
-    version = "2014-11-21";
+    version = "1.3-unstable-2014-11-21";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "restore_view.vim";
@@ -13577,7 +13642,7 @@ final: prev: {
 
   riv-vim = buildVimPlugin {
     pname = "riv.vim";
-    version = "2024-03-19";
+    version = "0-unstable-2024-03-19";
     src = fetchFromGitHub {
       owner = "gu-fan";
       repo = "riv.vim";
@@ -13590,7 +13655,7 @@ final: prev: {
 
   rnvimr = buildVimPlugin {
     pname = "rnvimr";
-    version = "2025-08-03";
+    version = "0.5.0-unstable-2025-08-03";
     src = fetchFromGitHub {
       owner = "kevinhwang91";
       repo = "rnvimr";
@@ -13603,7 +13668,7 @@ final: prev: {
 
   robotframework-vim = buildVimPlugin {
     pname = "robotframework-vim";
-    version = "2017-04-14";
+    version = "0-unstable-2017-04-14";
     src = fetchFromGitHub {
       owner = "mfukar";
       repo = "robotframework-vim";
@@ -13616,7 +13681,7 @@ final: prev: {
 
   ron-vim = buildVimPlugin {
     pname = "ron.vim";
-    version = "2022-08-19";
+    version = "0-unstable-2022-08-19";
     src = fetchFromGitHub {
       owner = "ron-rs";
       repo = "ron.vim";
@@ -13629,12 +13694,12 @@ final: prev: {
 
   rose-pine = buildVimPlugin {
     pname = "rose-pine";
-    version = "2025-11-05";
+    version = "3.0.2-unstable-2025-11-12";
     src = fetchFromGitHub {
       owner = "rose-pine";
       repo = "neovim";
-      rev = "eb3ff49a4f2b4e8b06d27de529e44fa52a60ab8a";
-      sha256 = "110q4l61alp7jq8mv0zpcj655f04lkv6753f59rj4qdydrlgwi5z";
+      rev = "cf2a288696b03d0934da713d66c6d71557b5c997";
+      sha256 = "0vy4g5y0ii433lgmab9nswy8mp4gfw5k5hyy3jph2pvnpccaq05g";
     };
     meta.homepage = "https://github.com/rose-pine/neovim/";
     meta.hydraPlatforms = [ ];
@@ -13642,12 +13707,12 @@ final: prev: {
 
   roslyn-nvim = buildVimPlugin {
     pname = "roslyn.nvim";
-    version = "2025-10-22";
+    version = "0-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "seblyng";
       repo = "roslyn.nvim";
-      rev = "7ba2dd0a5628c5ad3d8cc5a22e66ece3efc371bc";
-      sha256 = "0l7szb2f1f1mdbrbdm5wldh7xkn7mmwjmaphpa2k141kanfikp7q";
+      rev = "548d98036ac7f0a11f60e699aa020639fff1c57b";
+      sha256 = "1qlbc08dhlg5vky3lcc2xmg3rm1v2mzh84qiyh5j5q68qdcszidk";
     };
     meta.homepage = "https://github.com/seblyng/roslyn.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13655,7 +13720,7 @@ final: prev: {
 
   rspec-vim = buildVimPlugin {
     pname = "rspec.vim";
-    version = "2020-08-20";
+    version = "0.1.0-unstable-2020-08-20";
     src = fetchFromGitHub {
       owner = "keith";
       repo = "rspec.vim";
@@ -13668,7 +13733,7 @@ final: prev: {
 
   rtorrent-syntax-file = buildVimPlugin {
     pname = "rtorrent-syntax-file";
-    version = "2016-03-19";
+    version = "0.1-unstable-2016-03-19";
     src = fetchFromGitHub {
       owner = "ccarpita";
       repo = "rtorrent-syntax-file";
@@ -13681,7 +13746,7 @@ final: prev: {
 
   rust-tools-nvim = buildVimPlugin {
     pname = "rust-tools.nvim";
-    version = "2024-01-03";
+    version = "0-unstable-2024-01-03";
     src = fetchFromGitHub {
       owner = "simrat39";
       repo = "rust-tools.nvim";
@@ -13694,7 +13759,7 @@ final: prev: {
 
   rust-vim = buildVimPlugin {
     pname = "rust.vim";
-    version = "2022-11-27";
+    version = "0-unstable-2022-11-27";
     src = fetchFromGitHub {
       owner = "rust-lang";
       repo = "rust.vim";
@@ -13707,12 +13772,12 @@ final: prev: {
 
   rzls-nvim = buildVimPlugin {
     pname = "rzls.nvim";
-    version = "2025-10-21";
+    version = "0-unstable-2025-12-04";
     src = fetchFromGitHub {
       owner = "tris203";
       repo = "rzls.nvim";
-      rev = "bbfe0f5429cc74ca53815875faf4710c2a54f01b";
-      sha256 = "0bgcpqcqx520fyhqzn9xqr1z4bpipw0wp2wbcwcw5y3gjsnc0dkp";
+      rev = "2c754a8002af71c8679ed171bf715c562737a38c";
+      sha256 = "0izz5jksfcvd19j6rd5r9rz4jxb7v94rwb8qlwcawqijadrk180x";
     };
     meta.homepage = "https://github.com/tris203/rzls.nvim/";
     meta.hydraPlatforms = [ ];
@@ -13720,7 +13785,7 @@ final: prev: {
 
   sad-vim = buildVimPlugin {
     pname = "sad.vim";
-    version = "2019-02-18";
+    version = "0-unstable-2019-02-18";
     src = fetchFromGitHub {
       owner = "hauleth";
       repo = "sad.vim";
@@ -13733,7 +13798,7 @@ final: prev: {
 
   salt-vim = buildVimPlugin {
     pname = "salt-vim";
-    version = "2017-07-01";
+    version = "0-unstable-2017-07-01";
     src = fetchFromGitHub {
       owner = "vmware-archive";
       repo = "salt-vim";
@@ -13746,7 +13811,7 @@ final: prev: {
 
   samodostal-image-nvim = buildVimPlugin {
     pname = "samodostal-image-nvim";
-    version = "2024-01-07";
+    version = "1.0-unstable-2024-01-07";
     src = fetchFromGitHub {
       owner = "samodostal";
       repo = "image.nvim";
@@ -13759,7 +13824,7 @@ final: prev: {
 
   satellite-nvim = buildVimPlugin {
     pname = "satellite.nvim";
-    version = "2025-09-18";
+    version = "1.0.0-unstable-2025-09-18";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "satellite.nvim";
@@ -13772,7 +13837,7 @@ final: prev: {
 
   schema-companion-nvim = buildVimPlugin {
     pname = "schema-companion.nvim";
-    version = "2025-10-26";
+    version = "0-unstable-2025-10-26";
     src = fetchFromGitHub {
       owner = "cenk1cenk2";
       repo = "schema-companion.nvim";
@@ -13785,7 +13850,7 @@ final: prev: {
 
   scnvim = buildVimPlugin {
     pname = "scnvim";
-    version = "2025-10-02";
+    version = "0-unstable-2025-10-02";
     src = fetchFromGitHub {
       owner = "davidgranstrom";
       repo = "scnvim";
@@ -13798,7 +13863,7 @@ final: prev: {
 
   scope-nvim = buildVimPlugin {
     pname = "scope.nvim";
-    version = "2025-10-15";
+    version = "0-unstable-2025-10-15";
     src = fetchFromGitHub {
       owner = "tiagovla";
       repo = "scope.nvim";
@@ -13811,7 +13876,7 @@ final: prev: {
 
   scretch-nvim = buildVimPlugin {
     pname = "scretch.nvim";
-    version = "2025-09-11";
+    version = "1.2.3-unstable-2025-09-11";
     src = fetchFromGitHub {
       owner = "0xJohnnyboy";
       repo = "scretch.nvim";
@@ -13824,7 +13889,7 @@ final: prev: {
 
   scrollbar-nvim = buildVimPlugin {
     pname = "scrollbar.nvim";
-    version = "2025-03-23";
+    version = "0.4.0-unstable-2025-03-23";
     src = fetchFromGitHub {
       owner = "Xuyuanp";
       repo = "scrollbar.nvim";
@@ -13837,7 +13902,7 @@ final: prev: {
 
   scss-syntax-vim = buildVimPlugin {
     pname = "scss-syntax.vim";
-    version = "2024-10-10";
+    version = "0-unstable-2024-10-10";
     src = fetchFromGitHub {
       owner = "cakebaker";
       repo = "scss-syntax.vim";
@@ -13850,7 +13915,7 @@ final: prev: {
 
   search-and-replace-nvim = buildVimPlugin {
     pname = "search-and-replace.nvim";
-    version = "2025-07-04";
+    version = "0.1-unstable-2025-07-04";
     src = fetchFromGitHub {
       owner = "mahyarmirrashed";
       repo = "search-and-replace.nvim";
@@ -13863,7 +13928,7 @@ final: prev: {
 
   searchbox-nvim = buildVimPlugin {
     pname = "searchbox.nvim";
-    version = "2025-01-09";
+    version = "0-unstable-2025-01-09";
     src = fetchFromGitHub {
       owner = "VonHeikemen";
       repo = "searchbox.nvim";
@@ -13876,7 +13941,7 @@ final: prev: {
 
   securemodelines = buildVimPlugin {
     pname = "securemodelines";
-    version = "2019-02-09";
+    version = "0-unstable-2019-02-09";
     src = fetchFromGitHub {
       owner = "RobertAudi";
       repo = "securemodelines";
@@ -13889,7 +13954,7 @@ final: prev: {
 
   self = buildVimPlugin {
     pname = "self";
-    version = "2014-05-28";
+    version = "0-unstable-2014-05-28";
     src = fetchFromGitHub {
       owner = "megaannum";
       repo = "self";
@@ -13902,7 +13967,7 @@ final: prev: {
 
   semantic-highlight-vim = buildVimPlugin {
     pname = "semantic-highlight.vim";
-    version = "2020-09-11";
+    version = "0-unstable-2020-09-11";
     src = fetchFromGitHub {
       owner = "jaxbot";
       repo = "semantic-highlight.vim";
@@ -13915,7 +13980,7 @@ final: prev: {
 
   semshi = buildVimPlugin {
     pname = "semshi";
-    version = "2021-07-24";
+    version = "0-unstable-2021-07-24";
     src = fetchFromGitHub {
       owner = "numirias";
       repo = "semshi";
@@ -13928,7 +13993,7 @@ final: prev: {
 
   seoul256-vim = buildVimPlugin {
     pname = "seoul256.vim";
-    version = "2025-07-02";
+    version = "0-unstable-2025-07-02";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "seoul256.vim";
@@ -13941,7 +14006,7 @@ final: prev: {
 
   shabadou-vim = buildVimPlugin {
     pname = "shabadou.vim";
-    version = "2016-07-19";
+    version = "0-unstable-2016-07-19";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "shabadou.vim";
@@ -13954,7 +14019,7 @@ final: prev: {
 
   showkeys = buildVimPlugin {
     pname = "showkeys";
-    version = "2025-05-24";
+    version = "0-unstable-2025-05-24";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "showkeys";
@@ -13967,7 +14032,7 @@ final: prev: {
 
   sidekick-nvim = buildVimPlugin {
     pname = "sidekick.nvim";
-    version = "2025-10-31";
+    version = "2.1.0-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "sidekick.nvim";
@@ -13980,7 +14045,7 @@ final: prev: {
 
   sideways-vim = buildVimPlugin {
     pname = "sideways.vim";
-    version = "2025-07-28";
+    version = "0.4.0-unstable-2025-07-28";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "sideways.vim";
@@ -13994,7 +14059,7 @@ final: prev: {
 
   skim-vim = buildVimPlugin {
     pname = "skim.vim";
-    version = "2023-05-25";
+    version = "0-unstable-2023-05-25";
     src = fetchFromGitHub {
       owner = "skim-rs";
       repo = "skim.vim";
@@ -14007,7 +14072,7 @@ final: prev: {
 
   sky-color-clock-vim = buildVimPlugin {
     pname = "sky-color-clock.vim";
-    version = "2018-11-03";
+    version = "0-unstable-2018-11-03";
     src = fetchFromGitHub {
       owner = "mopp";
       repo = "sky-color-clock.vim";
@@ -14020,7 +14085,7 @@ final: prev: {
 
   slimv = buildVimPlugin {
     pname = "slimv";
-    version = "2025-10-11";
+    version = "0.9.13-unstable-2025-10-11";
     src = fetchFromGitHub {
       owner = "kovisoft";
       repo = "slimv";
@@ -14033,12 +14098,12 @@ final: prev: {
 
   smart-open-nvim = buildVimPlugin {
     pname = "smart-open.nvim";
-    version = "2025-02-18";
+    version = "0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "danielfalk";
       repo = "smart-open.nvim";
-      rev = "560d8f16e17977c8303db6f9660db58a4415ca41";
-      sha256 = "05dc4fa1819vfh7c6wcprc659589x5lphq7y2v6nkmbyacjfvgz5";
+      rev = "7763800068bef69334870c10cb595d49ce27580a";
+      sha256 = "127ahwi9wkj2f07q3wfn749yd5v389l49jwczfmnsfckp20zx2wz";
     };
     meta.homepage = "https://github.com/danielfalk/smart-open.nvim/";
     meta.hydraPlatforms = [ ];
@@ -14046,12 +14111,12 @@ final: prev: {
 
   smart-splits-nvim = buildVimPlugin {
     pname = "smart-splits.nvim";
-    version = "2025-10-31";
+    version = "2.0.5-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "mrjones2014";
       repo = "smart-splits.nvim";
-      rev = "1611946e397a8b42807a9ad527088bf7ebc9ce33";
-      sha256 = "1k5nppad6f3rbl26c4p48zl0xxxryw5ykx44s11b86z9hf478wgg";
+      rev = "3ee3d37d82ee6b7813a8de2087e8020c0811b701";
+      sha256 = "1jpqy48zxaavvqiqc176nc1hmp6f0hpgn884d4jr03ax5sjm0lgg";
     };
     meta.homepage = "https://github.com/mrjones2014/smart-splits.nvim/";
     meta.hydraPlatforms = [ ];
@@ -14059,7 +14124,7 @@ final: prev: {
 
   smartcolumn-nvim = buildVimPlugin {
     pname = "smartcolumn.nvim";
-    version = "2025-07-21";
+    version = "1.1.1-unstable-2025-07-21";
     src = fetchFromGitHub {
       owner = "m4xshen";
       repo = "smartcolumn.nvim";
@@ -14072,7 +14137,7 @@ final: prev: {
 
   smartpairs-vim = buildVimPlugin {
     pname = "smartpairs.vim";
-    version = "2018-01-01";
+    version = "0-unstable-2018-01-01";
     src = fetchFromGitHub {
       owner = "gorkunov";
       repo = "smartpairs.vim";
@@ -14085,7 +14150,7 @@ final: prev: {
 
   smartyank-nvim = buildVimPlugin {
     pname = "smartyank.nvim";
-    version = "2025-04-27";
+    version = "0-unstable-2025-04-27";
     src = fetchFromGitHub {
       owner = "ibhagwan";
       repo = "smartyank.nvim";
@@ -14098,12 +14163,12 @@ final: prev: {
 
   smear-cursor-nvim = buildVimPlugin {
     pname = "smear-cursor.nvim";
-    version = "2025-10-01";
+    version = "0.6.0-unstable-2025-11-27";
     src = fetchFromGitHub {
       owner = "sphamba";
       repo = "smear-cursor.nvim";
-      rev = "abfa5835920b1d76c0e24e1465a618ad914be90a";
-      sha256 = "19g14k43rsm8i8wvra111nnv7i6nqxscbvrxhb4svcg1jh9aqvsz";
+      rev = "c85bdbb25db096fbcf616bc4e1357bd61fe2c199";
+      sha256 = "1fsd7wz7bls623a60ia0j1ssw6wi4vrf9xzq41zl3m6540bgsgjk";
     };
     meta.homepage = "https://github.com/sphamba/smear-cursor.nvim/";
     meta.hydraPlatforms = [ ];
@@ -14111,12 +14176,12 @@ final: prev: {
 
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
-    version = "2025-11-07";
+    version = "2.30.0-unstable-2025-11-18";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "snacks.nvim";
-      rev = "9a15b317495cda991d3b4990f18aed47a9a9a891";
-      sha256 = "0m2aj9lqz88r93gyn5gchaarpxfkwwnnfbf0x4d79icl9gcv9ivv";
+      rev = "fe7cfe9800a182274d0f868a74b7263b8c0c020b";
+      sha256 = "18x8m1fhq9kjch1jmzax3nd0h8j5kgd5ykj8bg366h5x1mi9s5xx";
     };
     meta.homepage = "https://github.com/folke/snacks.nvim/";
     meta.hydraPlatforms = [ ];
@@ -14124,7 +14189,7 @@ final: prev: {
 
   snap = buildVimPlugin {
     pname = "snap";
-    version = "2025-03-06";
+    version = "0-unstable-2025-03-06";
     src = fetchFromGitHub {
       owner = "camspiers";
       repo = "snap";
@@ -14137,7 +14202,7 @@ final: prev: {
 
   snipe-nvim = buildVimPlugin {
     pname = "snipe.nvim";
-    version = "2025-09-18";
+    version = "0-unstable-2025-09-18";
     src = fetchFromGitHub {
       owner = "leath-dub";
       repo = "snipe.nvim";
@@ -14150,7 +14215,7 @@ final: prev: {
 
   snippets-nvim = buildVimPlugin {
     pname = "snippets.nvim";
-    version = "2020-09-09";
+    version = "0-unstable-2020-09-09";
     src = fetchFromGitHub {
       owner = "norcalli";
       repo = "snippets.nvim";
@@ -14163,7 +14228,7 @@ final: prev: {
 
   solarized-nvim = buildVimPlugin {
     pname = "solarized.nvim";
-    version = "2023-02-09";
+    version = "0-unstable-2023-02-09";
     src = fetchFromGitHub {
       owner = "shaunsingh";
       repo = "solarized.nvim";
@@ -14176,7 +14241,7 @@ final: prev: {
 
   solarized-osaka-nvim = buildVimPlugin {
     pname = "solarized-osaka.nvim";
-    version = "2025-04-19";
+    version = "0-unstable-2025-04-19";
     src = fetchFromGitHub {
       owner = "craftzdog";
       repo = "solarized-osaka.nvim";
@@ -14189,12 +14254,12 @@ final: prev: {
 
   sonokai = buildVimPlugin {
     pname = "sonokai";
-    version = "2025-11-07";
+    version = "0.3.3-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "sonokai";
-      rev = "ec07018013b4683cf33f80ee4bdf3eca2621da33";
-      sha256 = "13cs2bydz4gwdxpid8ikxijz794n59mvzpmlv6g1zcli7n9h36rl";
+      rev = "a796676c1347ef2316c9b9d209ad52af6b6bbb51";
+      sha256 = "0jaqzzyf515iyas827bjw6r9yiva0ca5hp3g3jgrm6zvwsxy4134";
     };
     meta.homepage = "https://github.com/sainnhe/sonokai/";
     meta.hydraPlatforms = [ ];
@@ -14202,7 +14267,7 @@ final: prev: {
 
   sort-nvim = buildVimPlugin {
     pname = "sort.nvim";
-    version = "2025-08-25";
+    version = "2.2.0-unstable-2025-08-25";
     src = fetchFromGitHub {
       owner = "sQVe";
       repo = "sort.nvim";
@@ -14215,7 +14280,7 @@ final: prev: {
 
   sourcemap-vim = buildVimPlugin {
     pname = "sourcemap.vim";
-    version = "2012-09-19";
+    version = "0-unstable-2012-09-19";
     src = fetchFromGitHub {
       owner = "chikatoike";
       repo = "sourcemap.vim";
@@ -14228,7 +14293,7 @@ final: prev: {
 
   space-vim = buildVimPlugin {
     pname = "space-vim";
-    version = "2024-11-14";
+    version = "0.9.0-unstable-2024-11-14";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "space-vim";
@@ -14241,7 +14306,7 @@ final: prev: {
 
   spaceman-nvim = buildVimPlugin {
     pname = "spaceman.nvim";
-    version = "2024-12-23";
+    version = "0.1.0-unstable-2024-12-23";
     src = fetchFromGitHub {
       owner = "FireIsGood";
       repo = "spaceman.nvim";
@@ -14254,7 +14319,7 @@ final: prev: {
 
   specs-nvim = buildVimPlugin {
     pname = "specs.nvim";
-    version = "2025-01-18";
+    version = "0-unstable-2025-01-18";
     src = fetchFromGitHub {
       owner = "cxwx";
       repo = "specs.nvim";
@@ -14267,7 +14332,7 @@ final: prev: {
 
   spellsitter-nvim = buildVimPlugin {
     pname = "spellsitter.nvim";
-    version = "2022-09-06";
+    version = "0-unstable-2022-09-06";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "spellsitter.nvim";
@@ -14280,7 +14345,7 @@ final: prev: {
 
   spellwarn-nvim = buildVimPlugin {
     pname = "spellwarn.nvim";
-    version = "2025-09-08";
+    version = "0-unstable-2025-09-08";
     src = fetchFromGitHub {
       owner = "ravibrock";
       repo = "spellwarn.nvim";
@@ -14293,12 +14358,12 @@ final: prev: {
 
   sphinx-nvim = buildVimPlugin {
     pname = "sphinx.nvim";
-    version = "2024-10-30";
+    version = "0-unstable-2025-11-22";
     src = fetchFromGitHub {
       owner = "stsewd";
       repo = "sphinx.nvim";
-      rev = "0dae62f4c4a747fda12b85cfed409af4e4cdef83";
-      sha256 = "1zsn7xi3lcm558jgnifigr4l515a3c2ywk50v93svpw7qaggyhx9";
+      rev = "c949f58d0ad6b2a98e31ae877aedbca8620731bb";
+      sha256 = "1vxyqczj1fh2080m254bf18c2hlifc6b663n6bxg14gj1bwg21qv";
     };
     meta.homepage = "https://github.com/stsewd/sphinx.nvim/";
     meta.hydraPlatforms = [ ];
@@ -14306,7 +14371,7 @@ final: prev: {
 
   splice-vim = buildVimPlugin {
     pname = "splice.vim";
-    version = "2020-01-15";
+    version = "1.1.0-unstable-2020-01-15";
     src = fetchFromGitHub {
       owner = "sjl";
       repo = "splice.vim";
@@ -14319,7 +14384,7 @@ final: prev: {
 
   split-term-vim = buildVimPlugin {
     pname = "split-term.vim";
-    version = "2018-09-30";
+    version = "1.0.3-unstable-2018-09-30";
     src = fetchFromGitHub {
       owner = "vimlab";
       repo = "split-term.vim";
@@ -14332,12 +14397,12 @@ final: prev: {
 
   splitjoin-vim = buildVimPlugin {
     pname = "splitjoin.vim";
-    version = "2025-11-07";
+    version = "1.2.0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "splitjoin.vim";
-      rev = "937f216a565ffd3345760b95bc6a0378234a76d0";
-      sha256 = "019lm4g94q020c7kpi8qacxnpvx0b5cc2a7vqfmvbzyd8ag5ardf";
+      rev = "9ce4fb4f0538cff02a57a393057b7ab371324483";
+      sha256 = "0sqf44dmzvhwdh1mf74gvpvfjvg0ca13pdbcbvxlwhjhmhjrkmpp";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
@@ -14346,7 +14411,7 @@ final: prev: {
 
   sqlite-lua = buildVimPlugin {
     pname = "sqlite.lua";
-    version = "2025-03-14";
+    version = "1.2.2-unstable-2025-03-14";
     src = fetchFromGitHub {
       owner = "kkharji";
       repo = "sqlite.lua";
@@ -14359,12 +14424,12 @@ final: prev: {
 
   srcery-vim = buildVimPlugin {
     pname = "srcery-vim";
-    version = "2025-09-04";
+    version = "2.1.0-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "srcery-colors";
       repo = "srcery-vim";
-      rev = "3eaa685c0f425d1d414a87655776e8e1e9a00fda";
-      sha256 = "18cs84ymkqjsc1phr7q8lzbxpzcz1ymyrr8fpsix1sq9az156a4l";
+      rev = "38f52babe0fa2b11719b51eb045a85244d6d7883";
+      sha256 = "0618qr2d7l3g7pzjwgpvrcz8pbhab0rrw6fmwn443w3680c7lws6";
     };
     meta.homepage = "https://github.com/srcery-colors/srcery-vim/";
     meta.hydraPlatforms = [ ];
@@ -14372,7 +14437,7 @@ final: prev: {
 
   sslsecure-vim = buildVimPlugin {
     pname = "sslsecure.vim";
-    version = "2017-07-27";
+    version = "1.1.1-unstable-2017-07-27";
     src = fetchFromGitHub {
       owner = "chr4";
       repo = "sslsecure.vim";
@@ -14385,7 +14450,7 @@ final: prev: {
 
   ssr-nvim = buildVimPlugin {
     pname = "ssr.nvim";
-    version = "2024-09-07";
+    version = "0-unstable-2024-09-07";
     src = fetchFromGitHub {
       owner = "cshuaimin";
       repo = "ssr.nvim";
@@ -14398,7 +14463,7 @@ final: prev: {
 
   stabilize-nvim = buildVimPlugin {
     pname = "stabilize.nvim";
-    version = "2023-04-14";
+    version = "0-unstable-2023-04-14";
     src = fetchFromGitHub {
       owner = "luukvbaal";
       repo = "stabilize.nvim";
@@ -14411,7 +14476,7 @@ final: prev: {
 
   staline-nvim = buildVimPlugin {
     pname = "staline.nvim";
-    version = "2024-06-02";
+    version = "0-unstable-2024-06-02";
     src = fetchFromGitHub {
       owner = "tamton-aquib";
       repo = "staline.nvim";
@@ -14424,7 +14489,7 @@ final: prev: {
 
   stan-vim = buildVimPlugin {
     pname = "stan-vim";
-    version = "2023-12-13";
+    version = "1.2.0-unstable-2023-12-13";
     src = fetchFromGitHub {
       owner = "eigenfoo";
       repo = "stan-vim";
@@ -14437,7 +14502,7 @@ final: prev: {
 
   starrynight = buildVimPlugin {
     pname = "starrynight";
-    version = "2021-09-09";
+    version = "0-unstable-2021-09-09";
     src = fetchFromGitHub {
       owner = "josegamez82";
       repo = "starrynight";
@@ -14450,7 +14515,7 @@ final: prev: {
 
   starsearch-vim = buildVimPlugin {
     pname = "starsearch.vim";
-    version = "2014-09-21";
+    version = "0-unstable-2014-09-21";
     src = fetchFromGitHub {
       owner = "darfink";
       repo = "starsearch.vim";
@@ -14463,7 +14528,7 @@ final: prev: {
 
   startup-nvim = buildVimPlugin {
     pname = "startup.nvim";
-    version = "2024-10-30";
+    version = "0.1-beta-unstable-2024-10-30";
     src = fetchFromGitHub {
       owner = "max397574";
       repo = "startup.nvim";
@@ -14476,7 +14541,7 @@ final: prev: {
 
   statuscol-nvim = buildVimPlugin {
     pname = "statuscol.nvim";
-    version = "2025-06-02";
+    version = "0-unstable-2025-06-02";
     src = fetchFromGitHub {
       owner = "luukvbaal";
       repo = "statuscol.nvim";
@@ -14489,7 +14554,7 @@ final: prev: {
 
   stay-centered-nvim = buildVimPlugin {
     pname = "stay-centered.nvim";
-    version = "2024-11-12";
+    version = "0-unstable-2024-11-12";
     src = fetchFromGitHub {
       owner = "arnamak";
       repo = "stay-centered.nvim";
@@ -14502,7 +14567,7 @@ final: prev: {
 
   stringbreaker-nvim = buildVimPlugin {
     pname = "stringbreaker.nvim";
-    version = "2025-09-24";
+    version = "0-unstable-2025-09-24";
     src = fetchFromGitHub {
       owner = "duqcyxwd";
       repo = "stringbreaker.nvim";
@@ -14515,7 +14580,7 @@ final: prev: {
 
   styler-nvim = buildVimPlugin {
     pname = "styler.nvim";
-    version = "2025-10-28";
+    version = "1.0.1-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "styler.nvim";
@@ -14528,7 +14593,7 @@ final: prev: {
 
   stylish-nvim = buildVimPlugin {
     pname = "stylish.nvim";
-    version = "2022-02-01";
+    version = "0-unstable-2022-02-01";
     src = fetchFromGitHub {
       owner = "teto";
       repo = "stylish.nvim";
@@ -14541,7 +14606,7 @@ final: prev: {
 
   substitute-nvim = buildVimPlugin {
     pname = "substitute.nvim";
-    version = "2025-03-21";
+    version = "2.0.0-unstable-2025-03-21";
     src = fetchFromGitHub {
       owner = "gbprod";
       repo = "substitute.nvim";
@@ -14554,7 +14619,7 @@ final: prev: {
 
   substrata-nvim = buildVimPlugin {
     pname = "substrata.nvim";
-    version = "2022-10-07";
+    version = "0-unstable-2022-10-07";
     src = fetchFromGitHub {
       owner = "kvrohit";
       repo = "substrata.nvim";
@@ -14567,7 +14632,7 @@ final: prev: {
 
   supermaven-nvim = buildVimPlugin {
     pname = "supermaven-nvim";
-    version = "2024-10-07";
+    version = "0-unstable-2024-10-07";
     src = fetchFromGitHub {
       owner = "supermaven-inc";
       repo = "supermaven-nvim";
@@ -14580,7 +14645,7 @@ final: prev: {
 
   supertab = buildVimPlugin {
     pname = "supertab";
-    version = "2025-04-26";
+    version = "2.1-unstable-2025-04-26";
     src = fetchFromGitHub {
       owner = "ervandew";
       repo = "supertab";
@@ -14593,7 +14658,7 @@ final: prev: {
 
   surround-nvim = buildVimPlugin {
     pname = "surround.nvim";
-    version = "2022-10-10";
+    version = "0-unstable-2022-10-10";
     src = fetchFromGitHub {
       owner = "ur4ltz";
       repo = "surround.nvim";
@@ -14606,7 +14671,7 @@ final: prev: {
 
   sved = buildVimPlugin {
     pname = "sved";
-    version = "2024-06-18";
+    version = "1.0-unstable-2024-06-18";
     src = fetchFromGitHub {
       owner = "peterbjorgensen";
       repo = "sved";
@@ -14619,7 +14684,7 @@ final: prev: {
 
   swayconfig-vim = buildVimPlugin {
     pname = "swayconfig.vim";
-    version = "2023-08-26";
+    version = "0.13.0-unstable-2023-08-26";
     src = fetchFromGitHub {
       owner = "jamespeapen";
       repo = "swayconfig.vim";
@@ -14632,7 +14697,7 @@ final: prev: {
 
   swift-vim = buildVimPlugin {
     pname = "swift.vim";
-    version = "2025-09-02";
+    version = "0-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "keith";
       repo = "swift.vim";
@@ -14645,12 +14710,12 @@ final: prev: {
 
   switch-vim = buildVimPlugin {
     pname = "switch.vim";
-    version = "2025-07-19";
+    version = "0.3.0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "switch.vim";
-      rev = "4017a58f7ed8a2d76a288e36130affe8eb55e83a";
-      sha256 = "0qfcxwv206r7fz5snnzmhhafdgqq6q50sk2wk9cc484w3grx16im";
+      rev = "0fe38fd3fa6433101f4e173f681bb134e175c022";
+      sha256 = "11lh737scy3izrpcljs65w1dssr6q1jj1973vm674l8ls7qzcn1c";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/switch.vim/";
@@ -14659,7 +14724,7 @@ final: prev: {
 
   symbol-usage-nvim = buildVimPlugin {
     pname = "symbol-usage.nvim";
-    version = "2025-05-03";
+    version = "0-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "Wansmer";
       repo = "symbol-usage.nvim";
@@ -14672,7 +14737,7 @@ final: prev: {
 
   symbols-outline-nvim = buildVimPlugin {
     pname = "symbols-outline.nvim";
-    version = "2024-01-03";
+    version = "0-unstable-2024-01-03";
     src = fetchFromGitHub {
       owner = "simrat39";
       repo = "symbols-outline.nvim";
@@ -14685,7 +14750,7 @@ final: prev: {
 
   syntastic = buildVimPlugin {
     pname = "syntastic";
-    version = "2022-07-10";
+    version = "3.10.0-unstable-2022-07-10";
     src = fetchFromGitHub {
       owner = "vim-syntastic";
       repo = "syntastic";
@@ -14698,7 +14763,7 @@ final: prev: {
 
   syntax-tree-surfer = buildVimPlugin {
     pname = "syntax-tree-surfer";
-    version = "2023-10-06";
+    version = "0-unstable-2023-10-06";
     src = fetchFromGitHub {
       owner = "ziontee113";
       repo = "syntax-tree-surfer";
@@ -14711,7 +14776,7 @@ final: prev: {
 
   tabby-nvim = buildVimPlugin {
     pname = "tabby.nvim";
-    version = "2025-05-23";
+    version = "2.8.0-unstable-2025-05-23";
     src = fetchFromGitHub {
       owner = "nanozuki";
       repo = "tabby.nvim";
@@ -14724,7 +14789,7 @@ final: prev: {
 
   tabline-nvim = buildVimPlugin {
     pname = "tabline.nvim";
-    version = "2023-07-24";
+    version = "0-unstable-2023-07-24";
     src = fetchFromGitHub {
       owner = "kdheepak";
       repo = "tabline.nvim";
@@ -14737,7 +14802,7 @@ final: prev: {
 
   tabmerge = buildVimPlugin {
     pname = "tabmerge";
-    version = "2010-10-18";
+    version = "0.3-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "tabmerge";
@@ -14750,7 +14815,7 @@ final: prev: {
 
   tabnine-vim = buildVimPlugin {
     pname = "tabnine-vim";
-    version = "2023-01-01";
+    version = "2.10.0-unstable-2023-01-01";
     src = fetchFromGitHub {
       owner = "codota";
       repo = "tabnine-vim";
@@ -14764,7 +14829,7 @@ final: prev: {
 
   taboo-vim = buildVimPlugin {
     pname = "taboo.vim";
-    version = "2024-10-17";
+    version = "0-unstable-2024-10-17";
     src = fetchFromGitHub {
       owner = "gcmt";
       repo = "taboo.vim";
@@ -14777,7 +14842,7 @@ final: prev: {
 
   tabout-nvim = buildVimPlugin {
     pname = "tabout.nvim";
-    version = "2024-12-10";
+    version = "0-unstable-2024-12-10";
     src = fetchFromGitHub {
       owner = "abecodes";
       repo = "tabout.nvim";
@@ -14790,7 +14855,7 @@ final: prev: {
 
   tabpagebuffer-vim = buildVimPlugin {
     pname = "tabpagebuffer.vim";
-    version = "2014-09-30";
+    version = "0-unstable-2014-09-30";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "tabpagebuffer.vim";
@@ -14803,7 +14868,7 @@ final: prev: {
 
   tabular = buildVimPlugin {
     pname = "tabular";
-    version = "2024-07-03";
+    version = "1.0.0-unstable-2024-07-03";
     src = fetchFromGitHub {
       owner = "godlygeek";
       repo = "tabular";
@@ -14816,7 +14881,7 @@ final: prev: {
 
   tagalong-vim = buildVimPlugin {
     pname = "tagalong.vim";
-    version = "2023-09-07";
+    version = "0.2.2-unstable-2023-09-07";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "tagalong.vim";
@@ -14829,7 +14894,7 @@ final: prev: {
 
   tagbar = buildVimPlugin {
     pname = "tagbar";
-    version = "2025-10-02";
+    version = "3.1.1-unstable-2025-10-02";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "tagbar";
@@ -14842,7 +14907,7 @@ final: prev: {
 
   taglist-vim = buildVimPlugin {
     pname = "taglist.vim";
-    version = "2010-10-18";
+    version = "4.5-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "taglist.vim";
@@ -14855,7 +14920,7 @@ final: prev: {
 
   tailwind-tools-nvim = buildVimPlugin {
     pname = "tailwind-tools.nvim";
-    version = "2025-05-23";
+    version = "0.3.2-unstable-2025-05-23";
     src = fetchFromGitHub {
       owner = "luckasRanarison";
       repo = "tailwind-tools.nvim";
@@ -14868,7 +14933,7 @@ final: prev: {
 
   tailwindcss-colors-nvim = buildVimPlugin {
     pname = "tailwindcss-colors.nvim";
-    version = "2021-12-24";
+    version = "0-unstable-2021-12-24";
     src = fetchFromGitHub {
       owner = "themaxmarchuk";
       repo = "tailwindcss-colors.nvim";
@@ -14881,7 +14946,7 @@ final: prev: {
 
   tardis-nvim = buildVimPlugin {
     pname = "tardis.nvim";
-    version = "2025-08-30";
+    version = "0-unstable-2025-08-30";
     src = fetchFromGitHub {
       owner = "fredehoey";
       repo = "tardis.nvim";
@@ -14894,7 +14959,7 @@ final: prev: {
 
   targets-vim = buildVimPlugin {
     pname = "targets.vim";
-    version = "2024-07-10";
+    version = "0.5.0-unstable-2024-07-10";
     src = fetchFromGitHub {
       owner = "wellle";
       repo = "targets.vim";
@@ -14907,7 +14972,7 @@ final: prev: {
 
   taskwiki = buildVimPlugin {
     pname = "taskwiki";
-    version = "2025-06-14";
+    version = "1.0.0-unstable-2025-06-14";
     src = fetchFromGitHub {
       owner = "tbabej";
       repo = "taskwiki";
@@ -14920,7 +14985,7 @@ final: prev: {
 
   tcomment_vim = buildVimPlugin {
     pname = "tcomment_vim";
-    version = "2024-03-25";
+    version = "4.00-unstable-2024-03-25";
     src = fetchFromGitHub {
       owner = "tomtom";
       repo = "tcomment_vim";
@@ -14933,12 +14998,12 @@ final: prev: {
 
   telekasten-nvim = buildVimPlugin {
     pname = "telekasten.nvim";
-    version = "2025-09-28";
+    version = "0-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "nvim-telekasten";
       repo = "telekasten.nvim";
-      rev = "2b6fc5d961b8accd0a37f80da8bb5717949ea9cd";
-      sha256 = "162pqvwj40amxzx5i4cipmmni0w8jxarhm9y596syqi9zy7lbggj";
+      rev = "b4672bacb9ab08a48a696d41f0a2f107d3d2ede3";
+      sha256 = "1dkqqgqbcdcjbrr9jh3vxmqs5l58pjkwx43m5pmph8si42wbi3va";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/nvim-telekasten/telekasten.nvim/";
@@ -14947,7 +15012,7 @@ final: prev: {
 
   telescope-asynctasks-nvim = buildVimPlugin {
     pname = "telescope-asynctasks.nvim";
-    version = "2022-04-09";
+    version = "0-unstable-2022-04-09";
     src = fetchFromGitHub {
       owner = "GustavoKatel";
       repo = "telescope-asynctasks.nvim";
@@ -14960,7 +15025,7 @@ final: prev: {
 
   telescope-cheat-nvim = buildVimPlugin {
     pname = "telescope-cheat.nvim";
-    version = "2023-11-24";
+    version = "0-unstable-2023-11-24";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-cheat.nvim";
@@ -14973,7 +15038,7 @@ final: prev: {
 
   telescope-coc-nvim = buildVimPlugin {
     pname = "telescope-coc.nvim";
-    version = "2025-07-29";
+    version = "0-unstable-2025-07-29";
     src = fetchFromGitHub {
       owner = "fannheyward";
       repo = "telescope-coc.nvim";
@@ -14986,7 +15051,7 @@ final: prev: {
 
   telescope-dap-nvim = buildVimPlugin {
     pname = "telescope-dap.nvim";
-    version = "2024-11-04";
+    version = "0-unstable-2024-11-04";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-dap.nvim";
@@ -14999,7 +15064,7 @@ final: prev: {
 
   telescope-emoji-nvim = buildVimPlugin {
     pname = "telescope-emoji.nvim";
-    version = "2022-12-08";
+    version = "0-unstable-2022-12-08";
     src = fetchFromGitHub {
       owner = "xiyaowong";
       repo = "telescope-emoji.nvim";
@@ -15012,7 +15077,7 @@ final: prev: {
 
   telescope-file-browser-nvim = buildVimPlugin {
     pname = "telescope-file-browser.nvim";
-    version = "2025-08-05";
+    version = "0-unstable-2025-08-05";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-file-browser.nvim";
@@ -15025,12 +15090,12 @@ final: prev: {
 
   telescope-frecency-nvim = buildVimPlugin {
     pname = "telescope-frecency.nvim";
-    version = "2025-10-07";
+    version = "1.2.2-unstable-2025-11-08";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-frecency.nvim";
-      rev = "463e356293b71fd0df601fc52054bd788b7c4010";
-      sha256 = "0cn0v4z9bd2i75gdb9aad79lw7dlycrk8gb4ymllnv79ami3rh1k";
+      rev = "fc6418bf663a182b72427487246b870f2ddbbbe2";
+      sha256 = "1j3p414r4jgk7wxjn989ybcp3avcljjd8c23wvjn6db3zjs86d49";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-frecency.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15038,7 +15103,7 @@ final: prev: {
 
   telescope-fzf-native-nvim = buildVimPlugin {
     pname = "telescope-fzf-native.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-fzf-native.nvim";
@@ -15051,7 +15116,7 @@ final: prev: {
 
   telescope-fzf-writer-nvim = buildVimPlugin {
     pname = "telescope-fzf-writer.nvim";
-    version = "2021-04-16";
+    version = "0-unstable-2021-04-16";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-fzf-writer.nvim";
@@ -15064,7 +15129,7 @@ final: prev: {
 
   telescope-fzy-native-nvim = buildVimPlugin {
     pname = "telescope-fzy-native.nvim";
-    version = "2022-09-11";
+    version = "0-unstable-2022-09-11";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-fzy-native.nvim";
@@ -15078,7 +15143,7 @@ final: prev: {
 
   telescope-git-conflicts-nvim = buildVimPlugin {
     pname = "telescope-git-conflicts.nvim";
-    version = "2024-01-14";
+    version = "0-unstable-2024-01-14";
     src = fetchFromGitHub {
       owner = "Snikimonkd";
       repo = "telescope-git-conflicts.nvim";
@@ -15091,7 +15156,7 @@ final: prev: {
 
   telescope-github-nvim = buildVimPlugin {
     pname = "telescope-github.nvim";
-    version = "2022-04-22";
+    version = "0-unstable-2022-04-22";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-github.nvim";
@@ -15104,7 +15169,7 @@ final: prev: {
 
   telescope-glyph-nvim = buildVimPlugin {
     pname = "telescope-glyph.nvim";
-    version = "2022-08-22";
+    version = "0-unstable-2022-08-22";
     src = fetchFromGitHub {
       owner = "alduraibi";
       repo = "telescope-glyph.nvim";
@@ -15117,7 +15182,7 @@ final: prev: {
 
   telescope-live-grep-args-nvim = buildVimPlugin {
     pname = "telescope-live-grep-args.nvim";
-    version = "2025-02-24";
+    version = "1.1.0-unstable-2025-02-24";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-live-grep-args.nvim";
@@ -15130,7 +15195,7 @@ final: prev: {
 
   telescope-lsp-handlers-nvim = buildVimPlugin {
     pname = "telescope-lsp-handlers.nvim";
-    version = "2023-03-04";
+    version = "0-unstable-2023-03-04";
     src = fetchFromGitHub {
       owner = "gbrlsnchs";
       repo = "telescope-lsp-handlers.nvim";
@@ -15143,7 +15208,7 @@ final: prev: {
 
   telescope-media-files-nvim = buildVimPlugin {
     pname = "telescope-media-files.nvim";
-    version = "2023-02-19";
+    version = "0-unstable-2023-02-19";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-media-files.nvim";
@@ -15156,7 +15221,7 @@ final: prev: {
 
   telescope-project-nvim = buildVimPlugin {
     pname = "telescope-project.nvim";
-    version = "2025-04-23";
+    version = "0-unstable-2025-04-23";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-project.nvim";
@@ -15169,7 +15234,7 @@ final: prev: {
 
   telescope-sg = buildVimPlugin {
     pname = "telescope-sg";
-    version = "2025-06-10";
+    version = "0-unstable-2025-06-10";
     src = fetchFromGitHub {
       owner = "Marskey";
       repo = "telescope-sg";
@@ -15182,7 +15247,7 @@ final: prev: {
 
   telescope-smart-history-nvim = buildVimPlugin {
     pname = "telescope-smart-history.nvim";
-    version = "2022-12-15";
+    version = "0-unstable-2022-12-15";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-smart-history.nvim";
@@ -15195,7 +15260,7 @@ final: prev: {
 
   telescope-symbols-nvim = buildVimPlugin {
     pname = "telescope-symbols.nvim";
-    version = "2023-11-24";
+    version = "0-unstable-2023-11-24";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-symbols.nvim";
@@ -15208,7 +15273,7 @@ final: prev: {
 
   telescope-ui-select-nvim = buildVimPlugin {
     pname = "telescope-ui-select.nvim";
-    version = "2023-12-04";
+    version = "0-unstable-2023-12-04";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-ui-select.nvim";
@@ -15221,7 +15286,7 @@ final: prev: {
 
   telescope-ultisnips-nvim = buildVimPlugin {
     pname = "telescope-ultisnips.nvim";
-    version = "2024-02-09";
+    version = "0-unstable-2024-02-09";
     src = fetchFromGitHub {
       owner = "fhill2";
       repo = "telescope-ultisnips.nvim";
@@ -15234,7 +15299,7 @@ final: prev: {
 
   telescope-undo-nvim = buildVimPlugin {
     pname = "telescope-undo.nvim";
-    version = "2025-01-31";
+    version = "0-unstable-2025-01-31";
     src = fetchFromGitHub {
       owner = "debugloop";
       repo = "telescope-undo.nvim";
@@ -15247,7 +15312,7 @@ final: prev: {
 
   telescope-vim-bookmarks-nvim = buildVimPlugin {
     pname = "telescope-vim-bookmarks.nvim";
-    version = "2024-04-02";
+    version = "0-unstable-2024-04-02";
     src = fetchFromGitHub {
       owner = "tom-anders";
       repo = "telescope-vim-bookmarks.nvim";
@@ -15260,7 +15325,7 @@ final: prev: {
 
   telescope-z-nvim = buildVimPlugin {
     pname = "telescope-z.nvim";
-    version = "2023-08-17";
+    version = "0-unstable-2023-08-17";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope-z.nvim";
@@ -15273,7 +15338,7 @@ final: prev: {
 
   telescope-zf-native-nvim = buildVimPlugin {
     pname = "telescope-zf-native.nvim";
-    version = "2024-09-15";
+    version = "1.0.0-unstable-2024-09-15";
     src = fetchFromGitHub {
       owner = "natecraddock";
       repo = "telescope-zf-native.nvim";
@@ -15287,7 +15352,7 @@ final: prev: {
 
   telescope-zoxide = buildVimPlugin {
     pname = "telescope-zoxide";
-    version = "2024-08-28";
+    version = "2.1-unstable-2024-08-28";
     src = fetchFromGitHub {
       owner = "jvgrootveld";
       repo = "telescope-zoxide";
@@ -15300,7 +15365,7 @@ final: prev: {
 
   telescope_hoogle = buildVimPlugin {
     pname = "telescope_hoogle";
-    version = "2025-10-13";
+    version = "0-unstable-2025-10-13";
     src = fetchFromGitHub {
       owner = "luc-tielen";
       repo = "telescope_hoogle";
@@ -15313,7 +15378,7 @@ final: prev: {
 
   templ-vim = buildVimPlugin {
     pname = "templ.vim";
-    version = "2025-05-07";
+    version = "0.0.1-unstable-2025-05-07";
     src = fetchFromGitHub {
       owner = "joerdav";
       repo = "templ.vim";
@@ -15326,7 +15391,7 @@ final: prev: {
 
   template-string-nvim = buildVimPlugin {
     pname = "template-string.nvim";
-    version = "2025-01-06";
+    version = "0-unstable-2025-01-06";
     src = fetchFromGitHub {
       owner = "axelvc";
       repo = "template-string.nvim";
@@ -15339,7 +15404,7 @@ final: prev: {
 
   tender-vim = buildVimPlugin {
     pname = "tender.vim";
-    version = "2025-06-29";
+    version = "0-unstable-2025-06-29";
     src = fetchFromGitHub {
       owner = "jacoborus";
       repo = "tender.vim";
@@ -15352,7 +15417,7 @@ final: prev: {
 
   term-edit-nvim = buildVimPlugin {
     pname = "term-edit.nvim";
-    version = "2024-10-17";
+    version = "1.4.0-unstable-2024-10-17";
     src = fetchFromGitHub {
       owner = "chomosuke";
       repo = "term-edit.nvim";
@@ -15365,7 +15430,7 @@ final: prev: {
 
   terminal-nvim = buildVimPlugin {
     pname = "terminal.nvim";
-    version = "2025-10-01";
+    version = "0-unstable-2025-10-01";
     src = fetchFromGitHub {
       owner = "rebelot";
       repo = "terminal.nvim";
@@ -15378,7 +15443,7 @@ final: prev: {
 
   terminus = buildVimPlugin {
     pname = "terminus";
-    version = "2024-07-30";
+    version = "1.3-unstable-2024-07-30";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "terminus";
@@ -15391,7 +15456,7 @@ final: prev: {
 
   termwrapper-nvim = buildVimPlugin {
     pname = "termwrapper.nvim";
-    version = "2021-03-28";
+    version = "0-unstable-2021-03-28";
     src = fetchFromGitHub {
       owner = "oberblastmeister";
       repo = "termwrapper.nvim";
@@ -15404,7 +15469,7 @@ final: prev: {
 
   tern_for_vim = buildVimPlugin {
     pname = "tern_for_vim";
-    version = "2019-01-23";
+    version = "0.5.0-unstable-2019-01-23";
     src = fetchFromGitHub {
       owner = "ternjs";
       repo = "tern_for_vim";
@@ -15417,7 +15482,7 @@ final: prev: {
 
   tex-conceal-vim = buildVimPlugin {
     pname = "tex-conceal.vim";
-    version = "2022-01-15";
+    version = "0-unstable-2022-01-15";
     src = fetchFromGitHub {
       owner = "KeitaNakamura";
       repo = "tex-conceal.vim";
@@ -15430,7 +15495,7 @@ final: prev: {
 
   texpresso-vim = buildVimPlugin {
     pname = "texpresso.vim";
-    version = "2025-08-20";
+    version = "0-unstable-2025-08-20";
     src = fetchFromGitHub {
       owner = "let-def";
       repo = "texpresso.vim";
@@ -15443,7 +15508,7 @@ final: prev: {
 
   text-case-nvim = buildVimPlugin {
     pname = "text-case.nvim";
-    version = "2024-08-02";
+    version = "1.2.0-unstable-2024-08-02";
     src = fetchFromGitHub {
       owner = "johmsalas";
       repo = "text-case.nvim";
@@ -15456,7 +15521,7 @@ final: prev: {
 
   thanks-nvim = buildVimPlugin {
     pname = "thanks.nvim";
-    version = "2025-03-08";
+    version = "0-unstable-2025-03-08";
     src = fetchFromGitHub {
       owner = "jsongerber";
       repo = "thanks.nvim";
@@ -15469,7 +15534,7 @@ final: prev: {
 
   themed-tabs-nvim = buildVimPlugin {
     pname = "themed-tabs.nvim";
-    version = "2024-12-08";
+    version = "0-unstable-2024-12-08";
     src = fetchFromGitHub {
       owner = "vhsconnect";
       repo = "themed-tabs.nvim";
@@ -15482,7 +15547,7 @@ final: prev: {
 
   themery-nvim = buildVimPlugin {
     pname = "themery.nvim";
-    version = "2025-01-01";
+    version = "2.0.1-unstable-2025-01-01";
     src = fetchFromGitHub {
       owner = "zaldih";
       repo = "themery.nvim";
@@ -15495,7 +15560,7 @@ final: prev: {
 
   thesaurus_query-vim = buildVimPlugin {
     pname = "thesaurus_query.vim";
-    version = "2022-12-11";
+    version = "0.7.0-unstable-2022-12-11";
     src = fetchFromGitHub {
       owner = "ron89";
       repo = "thesaurus_query.vim";
@@ -15508,7 +15573,7 @@ final: prev: {
 
   thumbnail-vim = buildVimPlugin {
     pname = "thumbnail.vim";
-    version = "2022-03-21";
+    version = "0.8-unstable-2022-03-21";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "thumbnail.vim";
@@ -15521,7 +15586,7 @@ final: prev: {
 
   timerly = buildVimPlugin {
     pname = "timerly";
-    version = "2025-08-16";
+    version = "0-unstable-2025-08-16";
     src = fetchFromGitHub {
       owner = "nvzone";
       repo = "timerly";
@@ -15534,7 +15599,7 @@ final: prev: {
 
   timestamp-vim = buildVimPlugin {
     pname = "timestamp.vim";
-    version = "2010-11-06";
+    version = "1.21-unstable-2010-11-06";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "timestamp.vim";
@@ -15547,7 +15612,7 @@ final: prev: {
 
   tint-nvim = buildVimPlugin {
     pname = "tint.nvim";
-    version = "2024-11-07";
+    version = "0-unstable-2024-11-07";
     src = fetchFromGitHub {
       owner = "levouh";
       repo = "tint.nvim";
@@ -15560,12 +15625,12 @@ final: prev: {
 
   tinted-nvim = buildVimPlugin {
     pname = "tinted-nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "tinted-theming";
       repo = "tinted-nvim";
-      rev = "6e4ec620befb7c9dd7ff26b092f33fc560cc1d73";
-      sha256 = "0fvvqb89mlg2k56h92v5igl0ha4j8rh036ib1j6s6ilxilv4z39i";
+      rev = "0347c54827694e85f4880233eefd71be3978e439";
+      sha256 = "0ajp6liqkq22428cz1kr5zb3pnx2z8006gkmgn450yi2c51y4pmv";
     };
     meta.homepage = "https://github.com/tinted-theming/tinted-nvim/";
     meta.hydraPlatforms = [ ];
@@ -15573,12 +15638,12 @@ final: prev: {
 
   tinted-vim = buildVimPlugin {
     pname = "tinted-vim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "tinted-theming";
       repo = "tinted-vim";
-      rev = "bb2a3347ae5631db596ae134945032cfcb56268b";
-      sha256 = "1ik70p4ax9yafn30pp8xyqvsfqzlvwhg63q4mip7lf620apg2g9x";
+      rev = "f049680fbfa212084d8ac2fda37f340b99b16070";
+      sha256 = "0niha9db7ajd8bwc2l5p2pi42wyy45gaxj2zzigl48x32qkcp4pq";
     };
     meta.homepage = "https://github.com/tinted-theming/tinted-vim/";
     meta.hydraPlatforms = [ ];
@@ -15586,7 +15651,7 @@ final: prev: {
 
   tiny-devicons-auto-colors-nvim = buildVimPlugin {
     pname = "tiny-devicons-auto-colors.nvim";
-    version = "2025-01-03";
+    version = "0-unstable-2025-01-03";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-devicons-auto-colors.nvim";
@@ -15599,12 +15664,12 @@ final: prev: {
 
   tiny-glimmer-nvim = buildVimPlugin {
     pname = "tiny-glimmer.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-22";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-glimmer.nvim";
-      rev = "73b17b8a41ac7a61bfdcbe1cd3743c29d28d376e";
-      sha256 = "0yli2ffppi01r85nhm23f8iddqmanipg4xaq555bx46271iy90xx";
+      rev = "e83bab26665c2dd4153b8a24e172e674e7c6dee7";
+      sha256 = "02m8d4pjih039y9bash3s932pyfb71p8czkn0gfcwircdbi87m71";
     };
     meta.homepage = "https://github.com/rachartier/tiny-glimmer.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15612,12 +15677,12 @@ final: prev: {
 
   tiny-inline-diagnostic-nvim = buildVimPlugin {
     pname = "tiny-inline-diagnostic.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-12-13";
     src = fetchFromGitHub {
       owner = "rachartier";
       repo = "tiny-inline-diagnostic.nvim";
-      rev = "63dd87d195f28e01732e121c5ddfc0a74ccff54a";
-      sha256 = "08fcrccm1afpzbrkwy7q9nrs0l63jq9frprd0mr1d5vkq7ciy875";
+      rev = "d9d12d4bfb9a4c5b8b8bdf7f612551df6972946c";
+      sha256 = "04cardxb04jf5sk461yf71jdr0ysj6d27106gcjcwm7pvv6b2kbb";
     };
     meta.homepage = "https://github.com/rachartier/tiny-inline-diagnostic.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15625,7 +15690,7 @@ final: prev: {
 
   tinykeymap = buildVimPlugin {
     pname = "tinykeymap";
-    version = "2024-02-17";
+    version = "0.06-unstable-2024-02-17";
     src = fetchFromGitHub {
       owner = "tomtom";
       repo = "tinykeymap_vim";
@@ -15638,7 +15703,7 @@ final: prev: {
 
   tlib_vim = buildVimPlugin {
     pname = "tlib_vim";
-    version = "2022-07-22";
+    version = "1.28-unstable-2022-07-22";
     src = fetchFromGitHub {
       owner = "tomtom";
       repo = "tlib_vim";
@@ -15651,7 +15716,7 @@ final: prev: {
 
   tmux-complete-vim = buildVimPlugin {
     pname = "tmux-complete.vim";
-    version = "2021-03-26";
+    version = "0.1.4-unstable-2021-03-26";
     src = fetchFromGitHub {
       owner = "wellle";
       repo = "tmux-complete.vim";
@@ -15664,7 +15729,7 @@ final: prev: {
 
   tmux-nvim = buildVimPlugin {
     pname = "tmux.nvim";
-    version = "2025-03-19";
+    version = "0-unstable-2025-03-19";
     src = fetchFromGitHub {
       owner = "aserowy";
       repo = "tmux.nvim";
@@ -15677,7 +15742,7 @@ final: prev: {
 
   tmuxline-vim = buildVimPlugin {
     pname = "tmuxline.vim";
-    version = "2021-07-20";
+    version = "1.0-unstable-2021-07-20";
     src = fetchFromGitHub {
       owner = "edkolev";
       repo = "tmuxline.vim";
@@ -15690,12 +15755,12 @@ final: prev: {
 
   todo-comments-nvim = buildVimPlugin {
     pname = "todo-comments.nvim";
-    version = "2025-10-28";
+    version = "1.5.0-unstable-2025-11-10";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "todo-comments.nvim";
-      rev = "411503d3bedeff88484de572f2509c248e499b38";
-      sha256 = "1cvijn65ashf7vlcl47b6f56gjkjdkxzag34w4lljg0q5bzyfkjl";
+      rev = "31e3c38ce9b29781e4422fc0322eb0a21f4e8668";
+      sha256 = "091893pjvhs1qwcnd6ksa5mngzr0n9z9lkyg7c97ic0hzi2qhrsl";
     };
     meta.homepage = "https://github.com/folke/todo-comments.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15703,7 +15768,7 @@ final: prev: {
 
   todo-txt-vim = buildVimPlugin {
     pname = "todo.txt-vim";
-    version = "2024-03-27";
+    version = "0-unstable-2024-03-27";
     src = fetchFromGitHub {
       owner = "freitass";
       repo = "todo.txt-vim";
@@ -15717,7 +15782,7 @@ final: prev: {
 
   toggleterm-nvim = buildVimPlugin {
     pname = "toggleterm.nvim";
-    version = "2025-03-09";
+    version = "2.13.1-unstable-2025-03-09";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "toggleterm.nvim";
@@ -15730,7 +15795,7 @@ final: prev: {
 
   tokyonight-nvim = buildVimPlugin {
     pname = "tokyonight.nvim";
-    version = "2025-11-05";
+    version = "4.14.1-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "tokyonight.nvim";
@@ -15743,7 +15808,7 @@ final: prev: {
 
   traces-vim = buildVimPlugin {
     pname = "traces.vim";
-    version = "2025-01-25";
+    version = "1.1.0-unstable-2025-01-25";
     src = fetchFromGitHub {
       owner = "markonm";
       repo = "traces.vim";
@@ -15756,7 +15821,7 @@ final: prev: {
 
   trailblazer-nvim = buildVimPlugin {
     pname = "trailblazer.nvim";
-    version = "2025-02-04";
+    version = "0-unstable-2025-02-04";
     src = fetchFromGitHub {
       owner = "LeonHeidelbach";
       repo = "trailblazer.nvim";
@@ -15770,7 +15835,7 @@ final: prev: {
 
   train-nvim = buildVimPlugin {
     pname = "train.nvim";
-    version = "2023-07-31";
+    version = "0-unstable-2023-07-31";
     src = fetchFromGitHub {
       owner = "tjdevries";
       repo = "train.nvim";
@@ -15783,7 +15848,7 @@ final: prev: {
 
   transparent-nvim = buildVimPlugin {
     pname = "transparent.nvim";
-    version = "2025-06-22";
+    version = "0-unstable-2025-06-22";
     src = fetchFromGitHub {
       owner = "xiyaowong";
       repo = "transparent.nvim";
@@ -15796,12 +15861,12 @@ final: prev: {
 
   treesj = buildVimPlugin {
     pname = "treesj";
-    version = "2025-09-15";
+    version = "0-unstable-2025-12-08";
     src = fetchFromGitHub {
       owner = "Wansmer";
       repo = "treesj";
-      rev = "4770492244ccecdc9b01e0e81fa8f2f6b4a23841";
-      sha256 = "06c8ld7kj4qrphsp2x71qcxjfvxkfbhnx6i7hv8vga71xka4gjjw";
+      rev = "186084dee5e9c8eec40f6e39481c723dd567cb05";
+      sha256 = "1rq8i8901j03mki778z7nsw9f79cpmmwqx6pjkdj9nb6db57njsn";
     };
     meta.homepage = "https://github.com/Wansmer/treesj/";
     meta.hydraPlatforms = [ ];
@@ -15809,12 +15874,12 @@ final: prev: {
 
   treewalker-nvim = buildVimPlugin {
     pname = "treewalker.nvim";
-    version = "2025-11-01";
+    version = "0-unstable-2025-12-10";
     src = fetchFromGitHub {
       owner = "aaronik";
       repo = "treewalker.nvim";
-      rev = "6b436021ccea7c3fde67cb42febfd4335ce3c73c";
-      sha256 = "1411yy2zy6sr39g0gn01sckn48zjwqghwbjvd1bs7ksvj09a5v42";
+      rev = "c1028cb50ba61ac21c712fa1a8b7a121cf256512";
+      sha256 = "119h5gaiicvnzxnsr812y4nqvhxdy746pjwii2rncyhzd9bddja3";
     };
     meta.homepage = "https://github.com/aaronik/treewalker.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15822,7 +15887,7 @@ final: prev: {
 
   tremor-vim = buildVimPlugin {
     pname = "tremor-vim";
-    version = "2021-09-07";
+    version = "0-unstable-2021-09-07";
     src = fetchFromGitHub {
       owner = "tremor-rs";
       repo = "tremor-vim";
@@ -15835,7 +15900,7 @@ final: prev: {
 
   trim-nvim = buildVimPlugin {
     pname = "trim.nvim";
-    version = "2024-12-26";
+    version = "0.10.2-unstable-2024-12-26";
     src = fetchFromGitHub {
       owner = "cappyzawa";
       repo = "trim.nvim";
@@ -15848,7 +15913,7 @@ final: prev: {
 
   triptych-nvim = buildVimPlugin {
     pname = "triptych.nvim";
-    version = "2025-08-22";
+    version = "0-unstable-2025-08-22";
     src = fetchFromGitHub {
       owner = "simonmclean";
       repo = "triptych.nvim";
@@ -15862,7 +15927,7 @@ final: prev: {
 
   trouble-nvim = buildVimPlugin {
     pname = "trouble.nvim";
-    version = "2025-10-31";
+    version = "3.7.1-unstable-2025-10-31";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "trouble.nvim";
@@ -15875,7 +15940,7 @@ final: prev: {
 
   true-zen-nvim = buildVimPlugin {
     pname = "true-zen.nvim";
-    version = "2023-06-09";
+    version = "0-unstable-2023-06-09";
     src = fetchFromGitHub {
       owner = "Pocco81";
       repo = "true-zen.nvim";
@@ -15888,7 +15953,7 @@ final: prev: {
 
   trust-vim = buildVimPlugin {
     pname = "trust.vim";
-    version = "2022-04-14";
+    version = "0.1.1-unstable-2022-04-14";
     src = fetchFromGitHub {
       owner = "tesaguri";
       repo = "trust.vim";
@@ -15901,7 +15966,7 @@ final: prev: {
 
   ts-autotag-nvim = buildVimPlugin {
     pname = "ts-autotag.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "tronikelis";
       repo = "ts-autotag.nvim";
@@ -15914,7 +15979,7 @@ final: prev: {
 
   ts-comments-nvim = buildVimPlugin {
     pname = "ts-comments.nvim";
-    version = "2025-10-28";
+    version = "1.5.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "ts-comments.nvim";
@@ -15927,12 +15992,12 @@ final: prev: {
 
   tsc-nvim = buildVimPlugin {
     pname = "tsc.nvim";
-    version = "2025-05-25";
+    version = "2.9.0-unstable-2025-11-12";
     src = fetchFromGitHub {
       owner = "dmmulroy";
       repo = "tsc.nvim";
-      rev = "8c1b4ec6a48d038a79ced8674cb15e7db6dd8ef0";
-      sha256 = "00irwjlm3r741i06w6qd6pmgqcs5zh1faz2fnqvlzgm7pyb4qz50";
+      rev = "e4773833726beec2e8a8e11f0b21613b5472b97b";
+      sha256 = "07lswanahg4j533lp8cwb3100hpcg8kdvzfq9apf3259lyn8rj27";
     };
     meta.homepage = "https://github.com/dmmulroy/tsc.nvim/";
     meta.hydraPlatforms = [ ];
@@ -15940,7 +16005,7 @@ final: prev: {
 
   tslime-vim = buildVimPlugin {
     pname = "tslime.vim";
-    version = "2020-09-09";
+    version = "0-unstable-2020-09-09";
     src = fetchFromGitHub {
       owner = "jgdavey";
       repo = "tslime.vim";
@@ -15953,7 +16018,7 @@ final: prev: {
 
   tssorter-nvim = buildVimPlugin {
     pname = "tssorter.nvim";
-    version = "2024-08-16";
+    version = "0-unstable-2024-08-16";
     src = fetchFromGitHub {
       owner = "mtrajano";
       repo = "tssorter.nvim";
@@ -15966,7 +16031,7 @@ final: prev: {
 
   tsuquyomi = buildVimPlugin {
     pname = "tsuquyomi";
-    version = "2023-10-03";
+    version = "0.8.0-unstable-2023-10-03";
     src = fetchFromGitHub {
       owner = "Quramy";
       repo = "tsuquyomi";
@@ -15977,9 +16042,22 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  tv-nvim = buildVimPlugin {
+    pname = "tv.nvim";
+    version = "0-unstable-2025-12-06";
+    src = fetchFromGitHub {
+      owner = "alexpasmantier";
+      repo = "tv.nvim";
+      rev = "176c97ce7e18b1a5acd473b320d03773901a8f75";
+      sha256 = "1838rmg32nm34fmwsgv79nnclsnyf27jay4x2ijjik6cnph1s6rf";
+    };
+    meta.homepage = "https://github.com/alexpasmantier/tv.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   twilight-nvim = buildVimPlugin {
     pname = "twilight.nvim";
-    version = "2025-10-28";
+    version = "1.0.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "twilight.nvim";
@@ -15992,7 +16070,7 @@ final: prev: {
 
   typescript-nvim = buildVimPlugin {
     pname = "typescript.nvim";
-    version = "2023-08-12";
+    version = "0-unstable-2023-08-12";
     src = fetchFromGitHub {
       owner = "jose-elias-alvarez";
       repo = "typescript.nvim";
@@ -16005,12 +16083,12 @@ final: prev: {
 
   typescript-tools-nvim = buildVimPlugin {
     pname = "typescript-tools.nvim";
-    version = "2025-11-07";
+    version = "0-unstable-2025-11-18";
     src = fetchFromGitHub {
       owner = "pmizio";
       repo = "typescript-tools.nvim";
-      rev = "db26c05e267239581c89f5c825fdb8c3cf6da0c5";
-      sha256 = "1pacl309w06qr70077c1vg2xgk2jx57f75c0nvw5mr1zvhgh2wca";
+      rev = "c2f5910074103705661e9651aa841e0d7eea9932";
+      sha256 = "0h4v876rfgliynwshpbv2mdrxmimymr07z0j31ggdv9b8p0n5kh8";
     };
     meta.homepage = "https://github.com/pmizio/typescript-tools.nvim/";
     meta.hydraPlatforms = [ ];
@@ -16018,7 +16096,7 @@ final: prev: {
 
   typescript-vim = buildVimPlugin {
     pname = "typescript-vim";
-    version = "2025-01-15";
+    version = "0-unstable-2025-01-15";
     src = fetchFromGitHub {
       owner = "leafgarland";
       repo = "typescript-vim";
@@ -16031,7 +16109,7 @@ final: prev: {
 
   typst-conceal-vim = buildVimPlugin {
     pname = "typst-conceal.vim";
-    version = "2023-10-13";
+    version = "0-unstable-2023-10-13";
     src = fetchFromGitHub {
       owner = "MrPicklePinosaur";
       repo = "typst-conceal.vim";
@@ -16044,12 +16122,12 @@ final: prev: {
 
   typst-preview-nvim = buildVimPlugin {
     pname = "typst-preview.nvim";
-    version = "2025-10-29";
+    version = "1.4.0-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "chomosuke";
       repo = "typst-preview.nvim";
-      rev = "64469f832c4d214683c12e0fceba98055cb1ce3b";
-      sha256 = "13340nd2rvvh3s9nyrg0kp72pxy6dpsh6nbh3zpqd7simlz1ys44";
+      rev = "291972a39db85c5d2e76249748aba4206dfd3bc2";
+      sha256 = "1m59bwpl81r2484phv5gq7bgzscggmir2j399af36h974jg3bzvd";
     };
     meta.homepage = "https://github.com/chomosuke/typst-preview.nvim/";
     meta.hydraPlatforms = [ ];
@@ -16057,7 +16135,7 @@ final: prev: {
 
   typst-vim = buildVimPlugin {
     pname = "typst.vim";
-    version = "2025-10-30";
+    version = "0-unstable-2025-10-30";
     src = fetchFromGitHub {
       owner = "kaarmu";
       repo = "typst.vim";
@@ -16070,7 +16148,7 @@ final: prev: {
 
   typstwatch-nvim = buildVimPlugin {
     pname = "typstwatch.nvim";
-    version = "2025-08-20";
+    version = "0-unstable-2025-08-20";
     src = fetchFromGitHub {
       owner = "J0schu";
       repo = "typstwatch.nvim";
@@ -16083,7 +16161,7 @@ final: prev: {
 
   ultimate-autopair-nvim = buildVimPlugin {
     pname = "ultimate-autopair.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "altermo";
       repo = "ultimate-autopair.nvim";
@@ -16096,7 +16174,7 @@ final: prev: {
 
   ultisnips = buildVimPlugin {
     pname = "ultisnips";
-    version = "2025-06-05";
+    version = "3.2-unstable-2025-06-05";
     src = fetchFromGitHub {
       owner = "SirVer";
       repo = "ultisnips";
@@ -16109,7 +16187,7 @@ final: prev: {
 
   undotree = buildVimPlugin {
     pname = "undotree";
-    version = "2025-09-29";
+    version = "0-unstable-2025-09-29";
     src = fetchFromGitHub {
       owner = "mbbill";
       repo = "undotree";
@@ -16122,7 +16200,7 @@ final: prev: {
 
   unicode-vim = buildVimPlugin {
     pname = "unicode.vim";
-    version = "2025-09-22";
+    version = "21-unstable-2025-09-22";
     src = fetchFromGitHub {
       owner = "chrisbra";
       repo = "unicode.vim";
@@ -16135,7 +16213,7 @@ final: prev: {
 
   unified-nvim = buildVimPlugin {
     pname = "unified.nvim";
-    version = "2025-11-06";
+    version = "0.0.2-unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "axkirillov";
       repo = "unified.nvim";
@@ -16148,7 +16226,7 @@ final: prev: {
 
   unimpaired-nvim = buildVimPlugin {
     pname = "unimpaired.nvim";
-    version = "2025-10-16";
+    version = "0.4.0-unstable-2025-10-16";
     src = fetchFromGitHub {
       owner = "tummetott";
       repo = "unimpaired.nvim";
@@ -16161,7 +16239,7 @@ final: prev: {
 
   unimpaired-which-key-nvim = buildVimPlugin {
     pname = "unimpaired-which-key.nvim";
-    version = "2024-08-16";
+    version = "2.0-unstable-2024-08-16";
     src = fetchFromGitHub {
       owner = "afreakk";
       repo = "unimpaired-which-key.nvim";
@@ -16174,12 +16252,12 @@ final: prev: {
 
   unison = buildVimPlugin {
     pname = "unison";
-    version = "2025-11-07";
+    version = "0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "unisonweb";
       repo = "unison";
-      rev = "6bb338e7b9a905a5c2750f28a5e46fb08e653d8c";
-      sha256 = "0fwxyn6vy0apy6shai7yrlmlrb38yzpr1ry9ylgmnynhyfzi87kb";
+      rev = "51ef936619de19b5ccbc6ce2c9d67ff073d471ae";
+      sha256 = "1pj5rc00v0i4xbryyn8g3s7dlzhdbdyvayz50xq6vnr4bly4abrv";
     };
     meta.homepage = "https://github.com/unisonweb/unison/";
     meta.hydraPlatforms = [ ];
@@ -16187,7 +16265,7 @@ final: prev: {
 
   unite-vim = buildVimPlugin {
     pname = "unite.vim";
-    version = "2023-05-18";
+    version = "0-unstable-2023-05-18";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "unite.vim";
@@ -16200,7 +16278,7 @@ final: prev: {
 
   url-open = buildVimPlugin {
     pname = "url-open";
-    version = "2025-10-29";
+    version = "1.7.1-unstable-2025-10-29";
     src = fetchFromGitHub {
       owner = "sontungexpt";
       repo = "url-open";
@@ -16213,12 +16291,12 @@ final: prev: {
 
   urlview-nvim = buildVimPlugin {
     pname = "urlview.nvim";
-    version = "2024-06-04";
+    version = "0.6-compat-unstable-2025-11-30";
     src = fetchFromGitHub {
       owner = "axieax";
       repo = "urlview.nvim";
-      rev = "c07733179e27c225ac3c58c3951701ee10b2dbde";
-      sha256 = "1qbqn9h7602dw8vgj5m1i45g679n8j82h38hl0ab9lhxxykf2cys";
+      rev = "813736e6891b8dccca58aa3baaeabef032f44525";
+      sha256 = "15vji1dyfi5srv0dc69cjaxdg4krkf9f5292hw2crmgb1vrnll7b";
     };
     meta.homepage = "https://github.com/axieax/urlview.nvim/";
     meta.hydraPlatforms = [ ];
@@ -16226,7 +16304,7 @@ final: prev: {
 
   utl-vim = buildVimPlugin {
     pname = "utl.vim";
-    version = "2010-10-18";
+    version = "2.0-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "utl.vim";
@@ -16239,12 +16317,12 @@ final: prev: {
 
   uv-nvim = buildVimPlugin {
     pname = "uv.nvim";
-    version = "2025-09-08";
+    version = "0-unstable-2025-11-13";
     src = fetchFromGitHub {
       owner = "benomahony";
       repo = "uv.nvim";
-      rev = "be4a7d47a976249282bb2f71fc773ac2f5325973";
-      sha256 = "1ivkmqbmz9sjfdsjqz1gk4qy1hk1hmh4103jzsnsbcalm68vrxa5";
+      rev = "b565e03a573ee2f6493d0516b7854b9142855a6a";
+      sha256 = "12gxv07zb707b3xlnm4csnfilnrkq051xry4kmn1d4hh5mm0zccn";
     };
     meta.homepage = "https://github.com/benomahony/uv.nvim/";
     meta.hydraPlatforms = [ ];
@@ -16252,7 +16330,7 @@ final: prev: {
 
   vCoolor-vim = buildVimPlugin {
     pname = "vCoolor.vim";
-    version = "2020-10-14";
+    version = "1.2-unstable-2020-10-14";
     src = fetchFromGitHub {
       owner = "KabbAmine";
       repo = "vCoolor.vim";
@@ -16265,7 +16343,7 @@ final: prev: {
 
   vader-vim = buildVimPlugin {
     pname = "vader.vim";
-    version = "2024-04-30";
+    version = "0.3.0-unstable-2024-04-30";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vader.vim";
@@ -16278,7 +16356,7 @@ final: prev: {
 
   vague-nvim = buildVimPlugin {
     pname = "vague.nvim";
-    version = "2025-11-03";
+    version = "1.5.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "vague-theme";
       repo = "vague.nvim";
@@ -16291,7 +16369,7 @@ final: prev: {
 
   venn-nvim = buildVimPlugin {
     pname = "venn.nvim";
-    version = "2024-05-03";
+    version = "0-unstable-2024-05-03";
     src = fetchFromGitHub {
       owner = "jbyuki";
       repo = "venn.nvim";
@@ -16304,12 +16382,12 @@ final: prev: {
 
   venv-selector-nvim = buildVimPlugin {
     pname = "venv-selector.nvim";
-    version = "2025-11-05";
+    version = "0-unstable-2025-11-15";
     src = fetchFromGitHub {
       owner = "linux-cultist";
       repo = "venv-selector.nvim";
-      rev = "1ef6564d0bd0d9c4194711cfb696357a6119abd7";
-      sha256 = "1v8b9j4ysyiyjv7qy37sja4mmywfzil082llrjkw86lwglrjipja";
+      rev = "58bae72c84b9f7f864c879ec1896e384296f9ffb";
+      sha256 = "03kfl4xwcclxk9gzi42zx29nl8brfcrjyhbwqkf7rc7yqrhyjipv";
     };
     meta.homepage = "https://github.com/linux-cultist/venv-selector.nvim/";
     meta.hydraPlatforms = [ ];
@@ -16317,7 +16395,7 @@ final: prev: {
 
   verilog_systemverilog-vim = buildVimPlugin {
     pname = "verilog_systemverilog.vim";
-    version = "2024-10-13";
+    version = "3.0-unstable-2024-10-13";
     src = fetchFromGitHub {
       owner = "vhda";
       repo = "verilog_systemverilog.vim";
@@ -16330,7 +16408,7 @@ final: prev: {
 
   vifm-vim = buildVimPlugin {
     pname = "vifm.vim";
-    version = "2025-09-28";
+    version = "0.14-unstable-2025-09-28";
     src = fetchFromGitHub {
       owner = "vifm";
       repo = "vifm.vim";
@@ -16343,7 +16421,7 @@ final: prev: {
 
   vim-CtrlXA = buildVimPlugin {
     pname = "vim-CtrlXA";
-    version = "2025-10-11";
+    version = "1.13-unstable-2025-10-11";
     src = fetchFromGitHub {
       owner = "Konfekt";
       repo = "vim-CtrlXA";
@@ -16356,7 +16434,7 @@ final: prev: {
 
   vim-DetectSpellLang = buildVimPlugin {
     pname = "vim-DetectSpellLang";
-    version = "2024-07-09";
+    version = "2.2-unstable-2024-07-09";
     src = fetchFromGitHub {
       owner = "konfekt";
       repo = "vim-DetectSpellLang";
@@ -16369,7 +16447,7 @@ final: prev: {
 
   vim-LanguageTool = buildVimPlugin {
     pname = "vim-LanguageTool";
-    version = "2024-09-08";
+    version = "0-unstable-2024-09-08";
     src = fetchFromGitHub {
       owner = "dpelle";
       repo = "vim-LanguageTool";
@@ -16382,7 +16460,7 @@ final: prev: {
 
   vim-ReplaceWithRegister = buildVimPlugin {
     pname = "vim-ReplaceWithRegister";
-    version = "2025-05-03";
+    version = "1.44-unstable-2025-05-03";
     src = fetchFromGitHub {
       owner = "inkarkat";
       repo = "vim-ReplaceWithRegister";
@@ -16395,7 +16473,7 @@ final: prev: {
 
   vim-ReplaceWithSameIndentRegister = buildVimPlugin {
     pname = "vim-ReplaceWithSameIndentRegister";
-    version = "2020-06-17";
+    version = "1.01-unstable-2020-06-17";
     src = fetchFromGitHub {
       owner = "inkarkat";
       repo = "vim-ReplaceWithSameIndentRegister";
@@ -16408,7 +16486,7 @@ final: prev: {
 
   vim-SyntaxRange = buildVimPlugin {
     pname = "vim-SyntaxRange";
-    version = "2024-11-13";
+    version = "1.04-unstable-2024-11-13";
     src = fetchFromGitHub {
       owner = "inkarkat";
       repo = "vim-SyntaxRange";
@@ -16421,7 +16499,7 @@ final: prev: {
 
   vim-abolish = buildVimPlugin {
     pname = "vim-abolish";
-    version = "2023-09-29";
+    version = "1.2-unstable-2023-09-29";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-abolish";
@@ -16434,7 +16512,7 @@ final: prev: {
 
   vim-addon-actions = buildVimPlugin {
     pname = "vim-addon-actions";
-    version = "2023-02-15";
+    version = "0-unstable-2023-02-15";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-actions";
@@ -16447,7 +16525,7 @@ final: prev: {
 
   vim-addon-async = buildVimPlugin {
     pname = "vim-addon-async";
-    version = "2017-03-20";
+    version = "0-unstable-2017-03-20";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-async";
@@ -16460,7 +16538,7 @@ final: prev: {
 
   vim-addon-background-cmd = buildVimPlugin {
     pname = "vim-addon-background-cmd";
-    version = "2015-12-11";
+    version = "0-unstable-2015-12-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-background-cmd";
@@ -16473,7 +16551,7 @@ final: prev: {
 
   vim-addon-commenting = buildVimPlugin {
     pname = "vim-addon-commenting";
-    version = "2013-06-10";
+    version = "1.0-unstable-2013-06-10";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-commenting";
@@ -16486,7 +16564,7 @@ final: prev: {
 
   vim-addon-completion = buildVimPlugin {
     pname = "vim-addon-completion";
-    version = "2015-02-10";
+    version = "0-unstable-2015-02-10";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-completion";
@@ -16499,7 +16577,7 @@ final: prev: {
 
   vim-addon-errorformats = buildVimPlugin {
     pname = "vim-addon-errorformats";
-    version = "2024-03-27";
+    version = "0-unstable-2024-03-27";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-errorformats";
@@ -16512,7 +16590,7 @@ final: prev: {
 
   vim-addon-goto-thing-at-cursor = buildVimPlugin {
     pname = "vim-addon-goto-thing-at-cursor";
-    version = "2020-02-07";
+    version = "0-unstable-2020-02-07";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-goto-thing-at-cursor";
@@ -16525,7 +16603,7 @@ final: prev: {
 
   vim-addon-local-vimrc = buildVimPlugin {
     pname = "vim-addon-local-vimrc";
-    version = "2024-07-14";
+    version = "0-unstable-2024-07-14";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-local-vimrc";
@@ -16538,7 +16616,7 @@ final: prev: {
 
   vim-addon-manager = buildVimPlugin {
     pname = "vim-addon-manager";
-    version = "2024-08-29";
+    version = "0-unstable-2024-08-29";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-manager";
@@ -16551,7 +16629,7 @@ final: prev: {
 
   vim-addon-mru = buildVimPlugin {
     pname = "vim-addon-mru";
-    version = "2024-08-15";
+    version = "0-unstable-2024-08-15";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-mru";
@@ -16564,7 +16642,7 @@ final: prev: {
 
   vim-addon-mw-utils = buildVimPlugin {
     pname = "vim-addon-mw-utils";
-    version = "2020-02-07";
+    version = "0-unstable-2020-02-07";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-mw-utils";
@@ -16577,7 +16655,7 @@ final: prev: {
 
   vim-addon-nix = buildVimPlugin {
     pname = "vim-addon-nix";
-    version = "2017-09-11";
+    version = "0-unstable-2017-09-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-nix";
@@ -16590,7 +16668,7 @@ final: prev: {
 
   vim-addon-other = buildVimPlugin {
     pname = "vim-addon-other";
-    version = "2021-10-06";
+    version = "0-unstable-2021-10-06";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-other";
@@ -16603,7 +16681,7 @@ final: prev: {
 
   vim-addon-php-manual = buildVimPlugin {
     pname = "vim-addon-php-manual";
-    version = "2015-01-01";
+    version = "0-unstable-2015-01-01";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-php-manual";
@@ -16616,7 +16694,7 @@ final: prev: {
 
   vim-addon-signs = buildVimPlugin {
     pname = "vim-addon-signs";
-    version = "2013-04-19";
+    version = "0-unstable-2013-04-19";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-signs";
@@ -16629,7 +16707,7 @@ final: prev: {
 
   vim-addon-sql = buildVimPlugin {
     pname = "vim-addon-sql";
-    version = "2017-02-11";
+    version = "0-unstable-2017-02-11";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-sql";
@@ -16642,7 +16720,7 @@ final: prev: {
 
   vim-addon-syntax-checker = buildVimPlugin {
     pname = "vim-addon-syntax-checker";
-    version = "2017-06-26";
+    version = "1.2.0-unstable-2017-06-26";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-syntax-checker";
@@ -16655,7 +16733,7 @@ final: prev: {
 
   vim-addon-toggle-buffer = buildVimPlugin {
     pname = "vim-addon-toggle-buffer";
-    version = "2024-08-08";
+    version = "0-unstable-2024-08-08";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-toggle-buffer";
@@ -16668,7 +16746,7 @@ final: prev: {
 
   vim-addon-xdebug = buildVimPlugin {
     pname = "vim-addon-xdebug";
-    version = "2014-08-29";
+    version = "0-unstable-2014-08-29";
     src = fetchFromGitHub {
       owner = "MarcWeber";
       repo = "vim-addon-xdebug";
@@ -16681,7 +16759,7 @@ final: prev: {
 
   vim-advanced-sorters = buildVimPlugin {
     pname = "vim-advanced-sorters";
-    version = "2024-11-10";
+    version = "1.31-unstable-2024-11-10";
     src = fetchFromGitHub {
       owner = "inkarkat";
       repo = "vim-AdvancedSorters";
@@ -16694,7 +16772,7 @@ final: prev: {
 
   vim-after-object = buildVimPlugin {
     pname = "vim-after-object";
-    version = "2018-09-17";
+    version = "0-unstable-2018-09-17";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-after-object";
@@ -16707,7 +16785,7 @@ final: prev: {
 
   vim-afterglow = buildVimPlugin {
     pname = "vim-afterglow";
-    version = "2024-03-31";
+    version = "0.7-unstable-2024-03-31";
     src = fetchFromGitHub {
       owner = "danilo-augusto";
       repo = "vim-afterglow";
@@ -16720,7 +16798,7 @@ final: prev: {
 
   vim-agda = buildVimPlugin {
     pname = "vim-agda";
-    version = "2024-05-17";
+    version = "2022-09-16-unstable-2024-05-17";
     src = fetchFromGitHub {
       owner = "msuperdock";
       repo = "vim-agda";
@@ -16733,12 +16811,12 @@ final: prev: {
 
   vim-airline = buildVimPlugin {
     pname = "vim-airline";
-    version = "2025-11-04";
+    version = "0.11-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
-      rev = "6b51799f26c5fe262ebb04742ce7cdb011082ed7";
-      sha256 = "05cdf3nrphy6mczkvmr62dllb0vn28b68yzi9k4msnw8iw6jyfa3";
+      rev = "499ae85357db811108ba1c52aa161fb09c462572";
+      sha256 = "0ymkb6w2cbxwf7ipfqfigcl623b88c0b0fn2vicgmns03bcy79r2";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline/";
     meta.hydraPlatforms = [ ];
@@ -16746,7 +16824,7 @@ final: prev: {
 
   vim-airline-clock = buildVimPlugin {
     pname = "vim-airline-clock";
-    version = "2021-04-14";
+    version = "0-unstable-2021-04-14";
     src = fetchFromGitHub {
       owner = "enricobacis";
       repo = "vim-airline-clock";
@@ -16759,7 +16837,7 @@ final: prev: {
 
   vim-airline-themes = buildVimPlugin {
     pname = "vim-airline-themes";
-    version = "2025-09-22";
+    version = "0-unstable-2025-09-22";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline-themes";
@@ -16772,7 +16850,7 @@ final: prev: {
 
   vim-alias = buildVimPlugin {
     pname = "vim-alias";
-    version = "2024-02-29";
+    version = "1.7-unstable-2024-02-29";
     src = fetchFromGitHub {
       owner = "Konfekt";
       repo = "vim-alias";
@@ -16785,7 +16863,7 @@ final: prev: {
 
   vim-android = buildVimPlugin {
     pname = "vim-android";
-    version = "2025-05-31";
+    version = "0-unstable-2025-05-31";
     src = fetchFromGitHub {
       owner = "hsanson";
       repo = "vim-android";
@@ -16798,7 +16876,7 @@ final: prev: {
 
   vim-anzu = buildVimPlugin {
     pname = "vim-anzu";
-    version = "2025-07-05";
+    version = "0-unstable-2025-07-05";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-anzu";
@@ -16811,7 +16889,7 @@ final: prev: {
 
   vim-apathy = buildVimPlugin {
     pname = "vim-apathy";
-    version = "2021-11-22";
+    version = "0-unstable-2021-11-22";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-apathy";
@@ -16824,7 +16902,7 @@ final: prev: {
 
   vim-apm = buildVimPlugin {
     pname = "vim-apm";
-    version = "2025-08-08";
+    version = "0-unstable-2025-08-08";
     src = fetchFromGitHub {
       owner = "ThePrimeagen";
       repo = "vim-apm";
@@ -16837,7 +16915,7 @@ final: prev: {
 
   vim-argumentative = buildVimPlugin {
     pname = "vim-argumentative";
-    version = "2014-11-24";
+    version = "1.0-unstable-2014-11-24";
     src = fetchFromGitHub {
       owner = "PeterRincker";
       repo = "vim-argumentative";
@@ -16850,7 +16928,7 @@ final: prev: {
 
   vim-argwrap = buildVimPlugin {
     pname = "vim-argwrap";
-    version = "2025-11-04";
+    version = "0-unstable-2025-11-04";
     src = fetchFromGitHub {
       owner = "FooSoft";
       repo = "vim-argwrap";
@@ -16863,7 +16941,7 @@ final: prev: {
 
   vim-asterisk = buildVimPlugin {
     pname = "vim-asterisk";
-    version = "2020-02-03";
+    version = "1.0.0-unstable-2020-02-03";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "vim-asterisk";
@@ -16876,7 +16954,7 @@ final: prev: {
 
   vim-astro = buildVimPlugin {
     pname = "vim-astro";
-    version = "2023-10-21";
+    version = "0-unstable-2023-10-21";
     src = fetchFromGitHub {
       owner = "wuelnerdotexe";
       repo = "vim-astro";
@@ -16889,7 +16967,7 @@ final: prev: {
 
   vim-asymptote = buildVimPlugin {
     pname = "vim-asymptote";
-    version = "2014-06-26";
+    version = "0-unstable-2014-06-26";
     src = fetchFromGitHub {
       owner = "hura";
       repo = "vim-asymptote";
@@ -16902,7 +16980,7 @@ final: prev: {
 
   vim-auto-save = buildVimPlugin {
     pname = "vim-auto-save";
-    version = "2022-08-08";
+    version = "0-unstable-2022-08-08";
     src = fetchFromGitHub {
       owner = "907th";
       repo = "vim-auto-save";
@@ -16915,7 +16993,7 @@ final: prev: {
 
   vim-autoformat = buildVimPlugin {
     pname = "vim-autoformat";
-    version = "2025-09-08";
+    version = "0-unstable-2025-09-08";
     src = fetchFromGitHub {
       owner = "vim-autoformat";
       repo = "vim-autoformat";
@@ -16928,7 +17006,7 @@ final: prev: {
 
   vim-automkdir = buildVimPlugin {
     pname = "vim-automkdir";
-    version = "2016-01-17";
+    version = "0-unstable-2016-01-17";
     src = fetchFromGitHub {
       owner = "benizi";
       repo = "vim-automkdir";
@@ -16941,7 +17019,7 @@ final: prev: {
 
   vim-autosource = buildVimPlugin {
     pname = "vim-autosource";
-    version = "2025-09-17";
+    version = "1.0.0-unstable-2025-09-17";
     src = fetchFromGitHub {
       owner = "jenterkin";
       repo = "vim-autosource";
@@ -16954,7 +17032,7 @@ final: prev: {
 
   vim-autoswap = buildVimPlugin {
     pname = "vim-autoswap";
-    version = "2019-01-09";
+    version = "0.3-unstable-2019-01-09";
     src = fetchFromGitHub {
       owner = "gioele";
       repo = "vim-autoswap";
@@ -16967,7 +17045,7 @@ final: prev: {
 
   vim-bazel = buildVimPlugin {
     pname = "vim-bazel";
-    version = "2022-04-09";
+    version = "0-unstable-2022-04-09";
     src = fetchFromGitHub {
       owner = "bazelbuild";
       repo = "vim-bazel";
@@ -16980,7 +17058,7 @@ final: prev: {
 
   vim-bbye = buildVimPlugin {
     pname = "vim-bbye";
-    version = "2018-03-03";
+    version = "1.0.1-unstable-2018-03-03";
     src = fetchFromGitHub {
       owner = "moll";
       repo = "vim-bbye";
@@ -16993,7 +17071,7 @@ final: prev: {
 
   vim-be-good = buildVimPlugin {
     pname = "vim-be-good";
-    version = "2024-12-05";
+    version = "0-unstable-2024-12-05";
     src = fetchFromGitHub {
       owner = "ThePrimeagen";
       repo = "vim-be-good";
@@ -17006,7 +17084,7 @@ final: prev: {
 
   vim-beancount = buildVimPlugin {
     pname = "vim-beancount";
-    version = "2024-11-25";
+    version = "0-unstable-2024-11-25";
     src = fetchFromGitHub {
       owner = "nathangrigg";
       repo = "vim-beancount";
@@ -17019,7 +17097,7 @@ final: prev: {
 
   vim-bepoptimist = buildVimPlugin {
     pname = "vim-bepoptimist";
-    version = "2022-06-24";
+    version = "2.1.0-unstable-2022-06-24";
     src = fetchFromGitHub {
       owner = "sheoak";
       repo = "vim-bepoptimist";
@@ -17032,7 +17110,7 @@ final: prev: {
 
   vim-better-whitespace = buildVimPlugin {
     pname = "vim-better-whitespace";
-    version = "2025-05-12";
+    version = "0-unstable-2025-05-12";
     src = fetchFromGitHub {
       owner = "ntpeters";
       repo = "vim-better-whitespace";
@@ -17045,7 +17123,7 @@ final: prev: {
 
   vim-bookmarks = buildVimPlugin {
     pname = "vim-bookmarks";
-    version = "2021-08-22";
+    version = "1.3.0-unstable-2021-08-22";
     src = fetchFromGitHub {
       owner = "MattesGroeger";
       repo = "vim-bookmarks";
@@ -17058,7 +17136,7 @@ final: prev: {
 
   vim-boxdraw = buildVimPlugin {
     pname = "vim-boxdraw";
-    version = "2021-01-28";
+    version = "0-unstable-2021-01-28";
     src = fetchFromGitHub {
       owner = "gyim";
       repo = "vim-boxdraw";
@@ -17071,7 +17149,7 @@ final: prev: {
 
   vim-bracketed-paste = buildVimPlugin {
     pname = "vim-bracketed-paste";
-    version = "2024-03-06";
+    version = "0-unstable-2024-03-06";
     src = fetchFromGitHub {
       owner = "ConradIrwin";
       repo = "vim-bracketed-paste";
@@ -17084,7 +17162,7 @@ final: prev: {
 
   vim-bsv = buildVimPlugin {
     pname = "vim-bsv";
-    version = "2020-11-08";
+    version = "0-unstable-2020-11-08";
     src = fetchFromGitHub {
       owner = "mtikekar";
       repo = "vim-bsv";
@@ -17097,7 +17175,7 @@ final: prev: {
 
   vim-buffergator = buildVimPlugin {
     pname = "vim-buffergator";
-    version = "2021-11-28";
+    version = "2.4.1-unstable-2021-11-28";
     src = fetchFromGitHub {
       owner = "jeetsukumaran";
       repo = "vim-buffergator";
@@ -17110,7 +17188,7 @@ final: prev: {
 
   vim-bufferline = buildVimPlugin {
     pname = "vim-bufferline";
-    version = "2016-02-09";
+    version = "0.3-unstable-2016-02-09";
     src = fetchFromGitHub {
       owner = "bling";
       repo = "vim-bufferline";
@@ -17123,7 +17201,7 @@ final: prev: {
 
   vim-bufkill = buildVimPlugin {
     pname = "vim-bufkill";
-    version = "2022-04-19";
+    version = "0-unstable-2022-04-19";
     src = fetchFromGitHub {
       owner = "qpkorr";
       repo = "vim-bufkill";
@@ -17136,12 +17214,12 @@ final: prev: {
 
   vim-buftabline = buildVimPlugin {
     pname = "vim-buftabline";
-    version = "2020-12-13";
+    version = "0-unstable-2025-12-11";
     src = fetchFromGitHub {
       owner = "ap";
       repo = "vim-buftabline";
-      rev = "73b9ef5dcb6cdf6488bc88adb382f20bc3e3262a";
-      sha256 = "1vs4km7fb3di02p0771x42y2bsn1hi4q6iwlbrj0imacd9affv5y";
+      rev = "6cdb6ae69a0dbccbed5683adfe79be810df6d661";
+      sha256 = "0767ljqhm6m4nfr0qnwzwjk8rd5dzh09l4aqb53y6vdwdnbyzcm9";
     };
     meta.homepage = "https://github.com/ap/vim-buftabline/";
     meta.hydraPlatforms = [ ];
@@ -17149,7 +17227,7 @@ final: prev: {
 
   vim-caddyfile = buildVimPlugin {
     pname = "vim-caddyfile";
-    version = "2025-07-22";
+    version = "0-unstable-2025-07-22";
     src = fetchFromGitHub {
       owner = "isobit";
       repo = "vim-caddyfile";
@@ -17162,7 +17240,7 @@ final: prev: {
 
   vim-capslock = buildVimPlugin {
     pname = "vim-capslock";
-    version = "2023-04-26";
+    version = "0-unstable-2023-04-26";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-capslock";
@@ -17175,7 +17253,7 @@ final: prev: {
 
   vim-carbon-now-sh = buildVimPlugin {
     pname = "vim-carbon-now-sh";
-    version = "2022-08-11";
+    version = "0-unstable-2022-08-11";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "vim-carbon-now-sh";
@@ -17188,7 +17266,7 @@ final: prev: {
 
   vim-ccls = buildVimPlugin {
     pname = "vim-ccls";
-    version = "2022-04-23";
+    version = "0-unstable-2022-04-23";
     src = fetchFromGitHub {
       owner = "m-pilia";
       repo = "vim-ccls";
@@ -17201,7 +17279,7 @@ final: prev: {
 
   vim-characterize = buildVimPlugin {
     pname = "vim-characterize";
-    version = "2024-11-14";
+    version = "1.1-unstable-2024-11-14";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-characterize";
@@ -17214,7 +17292,7 @@ final: prev: {
 
   vim-choosewin = buildVimPlugin {
     pname = "vim-choosewin";
-    version = "2021-04-22";
+    version = "1.5-unstable-2021-04-22";
     src = fetchFromGitHub {
       owner = "t9md";
       repo = "vim-choosewin";
@@ -17227,7 +17305,7 @@ final: prev: {
 
   vim-clang-format = buildVimPlugin {
     pname = "vim-clang-format";
-    version = "2021-12-04";
+    version = "0-unstable-2021-12-04";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-clang-format";
@@ -17240,7 +17318,7 @@ final: prev: {
 
   vim-classpath = buildVimPlugin {
     pname = "vim-classpath";
-    version = "2020-04-07";
+    version = "0-unstable-2020-04-07";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-classpath";
@@ -17253,7 +17331,7 @@ final: prev: {
 
   vim-clojure-highlight = buildVimPlugin {
     pname = "vim-clojure-highlight";
-    version = "2015-07-05";
+    version = "0-unstable-2015-07-05";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "vim-clojure-highlight";
@@ -17266,7 +17344,7 @@ final: prev: {
 
   vim-clojure-static = buildVimPlugin {
     pname = "vim-clojure-static";
-    version = "2017-10-23";
+    version = "0-unstable-2017-10-23";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "vim-clojure-static";
@@ -17279,7 +17357,7 @@ final: prev: {
 
   vim-closer = buildVimPlugin {
     pname = "vim-closer";
-    version = "2022-11-01";
+    version = "0.2.0-unstable-2022-11-01";
     src = fetchFromGitHub {
       owner = "rstacruz";
       repo = "vim-closer";
@@ -17292,7 +17370,7 @@ final: prev: {
 
   vim-closetag = buildVimPlugin {
     pname = "vim-closetag";
-    version = "2022-05-22";
+    version = "0-unstable-2022-05-22";
     src = fetchFromGitHub {
       owner = "alvan";
       repo = "vim-closetag";
@@ -17305,7 +17383,7 @@ final: prev: {
 
   vim-cmake = buildVimPlugin {
     pname = "vim-cmake";
-    version = "2021-06-25";
+    version = "0-unstable-2021-06-25";
     src = fetchFromGitHub {
       owner = "vhdirk";
       repo = "vim-cmake";
@@ -17318,7 +17396,7 @@ final: prev: {
 
   vim-code-dark = buildVimPlugin {
     pname = "vim-code-dark";
-    version = "2024-05-21";
+    version = "0-unstable-2024-05-21";
     src = fetchFromGitHub {
       owner = "tomasiser";
       repo = "vim-code-dark";
@@ -17331,7 +17409,7 @@ final: prev: {
 
   vim-codefmt = buildVimPlugin {
     pname = "vim-codefmt";
-    version = "2024-08-31";
+    version = "0-unstable-2024-08-31";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-codefmt";
@@ -17344,7 +17422,7 @@ final: prev: {
 
   vim-coffee-script = buildVimPlugin {
     pname = "vim-coffee-script";
-    version = "2020-12-20";
+    version = "003-unstable-2020-12-20";
     src = fetchFromGitHub {
       owner = "kchmck";
       repo = "vim-coffee-script";
@@ -17357,7 +17435,7 @@ final: prev: {
 
   vim-colemak = buildVimPlugin {
     pname = "vim-colemak";
-    version = "2016-10-16";
+    version = "0-unstable-2016-10-16";
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "vim-colemak";
@@ -17370,7 +17448,7 @@ final: prev: {
 
   vim-colors-solarized = buildVimPlugin {
     pname = "vim-colors-solarized";
-    version = "2011-05-09";
+    version = "0-unstable-2011-05-09";
     src = fetchFromGitHub {
       owner = "altercation";
       repo = "vim-colors-solarized";
@@ -17383,7 +17461,7 @@ final: prev: {
 
   vim-colorschemes = buildVimPlugin {
     pname = "vim-colorschemes";
-    version = "2020-05-15";
+    version = "0-unstable-2020-05-15";
     src = fetchFromGitHub {
       owner = "flazz";
       repo = "vim-colorschemes";
@@ -17396,7 +17474,7 @@ final: prev: {
 
   vim-colorstepper = buildVimPlugin {
     pname = "vim-colorstepper";
-    version = "2016-01-28";
+    version = "0-unstable-2016-01-28";
     src = fetchFromGitHub {
       owner = "jonbri";
       repo = "vim-colorstepper";
@@ -17409,7 +17487,7 @@ final: prev: {
 
   vim-commentary = buildVimPlugin {
     pname = "vim-commentary";
-    version = "2024-10-22";
+    version = "1.3-unstable-2024-10-22";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-commentary";
@@ -17422,7 +17500,7 @@ final: prev: {
 
   vim-concourse = buildVimPlugin {
     pname = "vim-concourse";
-    version = "2016-11-21";
+    version = "0-unstable-2016-11-21";
     src = fetchFromGitHub {
       owner = "luan";
       repo = "vim-concourse";
@@ -17435,7 +17513,7 @@ final: prev: {
 
   vim-cool = buildVimPlugin {
     pname = "vim-cool";
-    version = "2025-02-19";
+    version = "0-unstable-2025-02-19";
     src = fetchFromGitHub {
       owner = "romainl";
       repo = "vim-cool";
@@ -17448,7 +17526,7 @@ final: prev: {
 
   vim-cpp-enhanced-highlight = buildVimPlugin {
     pname = "vim-cpp-enhanced-highlight";
-    version = "2021-04-19";
+    version = "0.1-unstable-2021-04-19";
     src = fetchFromGitHub {
       owner = "octol";
       repo = "vim-cpp-enhanced-highlight";
@@ -17461,7 +17539,7 @@ final: prev: {
 
   vim-crates = buildVimPlugin {
     pname = "vim-crates";
-    version = "2021-05-07";
+    version = "0-unstable-2021-05-07";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-crates";
@@ -17474,7 +17552,7 @@ final: prev: {
 
   vim-crystal = buildVimPlugin {
     pname = "vim-crystal";
-    version = "2023-03-15";
+    version = "0-unstable-2023-03-15";
     src = fetchFromGitHub {
       owner = "vim-crystal";
       repo = "vim-crystal";
@@ -17487,7 +17565,7 @@ final: prev: {
 
   vim-csharp = buildVimPlugin {
     pname = "vim-csharp";
-    version = "2017-03-29";
+    version = "0-unstable-2017-03-29";
     src = fetchFromGitHub {
       owner = "OrangeT";
       repo = "vim-csharp";
@@ -17500,7 +17578,7 @@ final: prev: {
 
   vim-css-color = buildVimPlugin {
     pname = "vim-css-color";
-    version = "2024-10-18";
+    version = "0-unstable-2024-10-18";
     src = fetchFromGitHub {
       owner = "ap";
       repo = "vim-css-color";
@@ -17513,7 +17591,7 @@ final: prev: {
 
   vim-cue = buildVimPlugin {
     pname = "vim-cue";
-    version = "2025-09-02";
+    version = "0-unstable-2025-09-02";
     src = fetchFromGitHub {
       owner = "cue-lang";
       repo = "vim-cue";
@@ -17526,7 +17604,7 @@ final: prev: {
 
   vim-cursorword = buildVimPlugin {
     pname = "vim-cursorword";
-    version = "2022-11-17";
+    version = "0.8-unstable-2022-11-17";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "vim-cursorword";
@@ -17539,7 +17617,7 @@ final: prev: {
 
   vim-cute-python = buildVimPlugin {
     pname = "vim-cute-python";
-    version = "2020-11-17";
+    version = "0-unstable-2020-11-17";
     src = fetchFromGitHub {
       owner = "ehamberg";
       repo = "vim-cute-python";
@@ -17552,7 +17630,7 @@ final: prev: {
 
   vim-dadbod = buildVimPlugin {
     pname = "vim-dadbod";
-    version = "2025-05-11";
+    version = "1.4-unstable-2025-05-11";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dadbod";
@@ -17565,7 +17643,7 @@ final: prev: {
 
   vim-dadbod-completion = buildVimPlugin {
     pname = "vim-dadbod-completion";
-    version = "2025-03-19";
+    version = "0-unstable-2025-03-19";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "vim-dadbod-completion";
@@ -17578,12 +17656,12 @@ final: prev: {
 
   vim-dadbod-ui = buildVimPlugin {
     pname = "vim-dadbod-ui";
-    version = "2025-10-31";
+    version = "0-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "vim-dadbod-ui";
-      rev = "236179fd6bdc2aabeb1326d428e6b29d41044d8e";
-      sha256 = "1gsg1nmsxzmv0hga68xg9j1v4qsknrgw8hhsp0flr167gmcy15w0";
+      rev = "48c4f271da13d380592f4907e2d1d5558044e4e5";
+      sha256 = "0jir3fwbgpab92j7aj9yhdnxcah1dy7kg4lmpqbid1zzw7h4qbyi";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-dadbod-ui/";
     meta.hydraPlatforms = [ ];
@@ -17591,7 +17669,7 @@ final: prev: {
 
   vim-dasht = buildVimPlugin {
     pname = "vim-dasht";
-    version = "2023-01-31";
+    version = "0-unstable-2023-01-31";
     src = fetchFromGitHub {
       owner = "sunaku";
       repo = "vim-dasht";
@@ -17604,7 +17682,7 @@ final: prev: {
 
   vim-deus = buildVimPlugin {
     pname = "vim-deus";
-    version = "2021-03-28";
+    version = "0-unstable-2021-03-28";
     src = fetchFromGitHub {
       owner = "ajmwagar";
       repo = "vim-deus";
@@ -17617,7 +17695,7 @@ final: prev: {
 
   vim-devicons = buildVimPlugin {
     pname = "vim-devicons";
-    version = "2022-10-01";
+    version = "0.11.0-unstable-2022-10-01";
     src = fetchFromGitHub {
       owner = "ryanoasis";
       repo = "vim-devicons";
@@ -17630,12 +17708,12 @@ final: prev: {
 
   vim-dim = buildVimPlugin {
     pname = "vim-dim";
-    version = "2021-01-29";
+    version = "1.2.0-unstable-2025-11-20";
     src = fetchFromGitHub {
       owner = "jeffkreeftmeijer";
       repo = "vim-dim";
-      rev = "8320a40f12cf89295afc4f13eb10159f29c43777";
-      sha256 = "0mnwr4kxhng4mzds8l72s5km1qww4bifn5pds68c7zzyyy17ffxh";
+      rev = "2b560e3810d56546b1ccfcc977eb9890d50fe574";
+      sha256 = "1m0rwi5cmwg0sxnairpsd5ylnsywf49m8aqnxf138rgk5my5p6rk";
     };
     meta.homepage = "https://github.com/jeffkreeftmeijer/vim-dim/";
     meta.hydraPlatforms = [ ];
@@ -17643,7 +17721,7 @@ final: prev: {
 
   vim-diminactive = buildVimPlugin {
     pname = "vim-diminactive";
-    version = "2017-08-27";
+    version = "0-unstable-2017-08-27";
     src = fetchFromGitHub {
       owner = "blueyed";
       repo = "vim-diminactive";
@@ -17656,7 +17734,7 @@ final: prev: {
 
   vim-dirdiff = buildVimPlugin {
     pname = "vim-dirdiff";
-    version = "2021-06-03";
+    version = "1.1.7-unstable-2021-06-03";
     src = fetchFromGitHub {
       owner = "will133";
       repo = "vim-dirdiff";
@@ -17669,12 +17747,12 @@ final: prev: {
 
   vim-dirvish = buildVimPlugin {
     pname = "vim-dirvish";
-    version = "2025-02-06";
+    version = "1.0-unstable-2025-11-14";
     src = fetchFromGitHub {
       owner = "justinmk";
       repo = "vim-dirvish";
-      rev = "5d1d1ef45c6161af14c7d3d3097057e8fb5ac257";
-      sha256 = "1ylxx3dypym7b2mb1hyfg4g8g74yrn5zgfn6sr9p2h2jb0583qhz";
+      rev = "6be56227a4207c93cd8b607f52f567a1e13dddb1";
+      sha256 = "0dhqp91ywwfx5ir4k76v55x16pqgqz0fafyhcpch34x9lbk0hv6v";
     };
     meta.homepage = "https://github.com/justinmk/vim-dirvish/";
     meta.hydraPlatforms = [ ];
@@ -17682,7 +17760,7 @@ final: prev: {
 
   vim-dirvish-git = buildVimPlugin {
     pname = "vim-dirvish-git";
-    version = "2021-05-22";
+    version = "0-unstable-2021-05-22";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "vim-dirvish-git";
@@ -17695,7 +17773,7 @@ final: prev: {
 
   vim-dispatch = buildVimPlugin {
     pname = "vim-dispatch";
-    version = "2024-09-02";
+    version = "1.8-unstable-2024-09-02";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dispatch";
@@ -17708,7 +17786,7 @@ final: prev: {
 
   vim-dispatch-neovim = buildVimPlugin {
     pname = "vim-dispatch-neovim";
-    version = "2017-01-18";
+    version = "0-unstable-2017-01-18";
     src = fetchFromGitHub {
       owner = "radenling";
       repo = "vim-dispatch-neovim";
@@ -17721,7 +17799,7 @@ final: prev: {
 
   vim-docbk = buildVimPlugin {
     pname = "vim-docbk";
-    version = "2015-04-01";
+    version = "1.2.1-unstable-2015-04-01";
     src = fetchFromGitHub {
       owner = "jhradilek";
       repo = "vim-docbk";
@@ -17734,7 +17812,7 @@ final: prev: {
 
   vim-docbk-snippets = buildVimPlugin {
     pname = "vim-docbk-snippets";
-    version = "2023-09-29";
+    version = "0-unstable-2023-09-29";
     src = fetchFromGitHub {
       owner = "jhradilek";
       repo = "vim-snippets";
@@ -17747,7 +17825,7 @@ final: prev: {
 
   vim-dotenv = buildVimPlugin {
     pname = "vim-dotenv";
-    version = "2022-05-15";
+    version = "1.0-unstable-2022-05-15";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-dotenv";
@@ -17760,7 +17838,7 @@ final: prev: {
 
   vim-easy-align = buildVimPlugin {
     pname = "vim-easy-align";
-    version = "2024-04-13";
+    version = "2.10.0-unstable-2024-04-13";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-easy-align";
@@ -17773,7 +17851,7 @@ final: prev: {
 
   vim-easyescape = buildVimPlugin {
     pname = "vim-easyescape";
-    version = "2020-11-22";
+    version = "0-unstable-2020-11-22";
     src = fetchFromGitHub {
       owner = "zhou13";
       repo = "vim-easyescape";
@@ -17786,7 +17864,7 @@ final: prev: {
 
   vim-easygit = buildVimPlugin {
     pname = "vim-easygit";
-    version = "2018-07-08";
+    version = "0.5.0-unstable-2018-07-08";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "vim-easygit";
@@ -17799,7 +17877,7 @@ final: prev: {
 
   vim-easymotion = buildVimPlugin {
     pname = "vim-easymotion";
-    version = "2022-04-04";
+    version = "3.0.1-unstable-2022-04-04";
     src = fetchFromGitHub {
       owner = "easymotion";
       repo = "vim-easymotion";
@@ -17812,7 +17890,7 @@ final: prev: {
 
   vim-easytags = buildVimPlugin {
     pname = "vim-easytags";
-    version = "2015-07-01";
+    version = "3.11-unstable-2015-07-01";
     src = fetchFromGitHub {
       owner = "xolox";
       repo = "vim-easytags";
@@ -17825,7 +17903,7 @@ final: prev: {
 
   vim-eighties = buildVimPlugin {
     pname = "vim-eighties";
-    version = "2016-12-15";
+    version = "1.0.8-unstable-2016-12-15";
     src = fetchFromGitHub {
       owner = "justincampbell";
       repo = "vim-eighties";
@@ -17838,7 +17916,7 @@ final: prev: {
 
   vim-elixir = buildVimPlugin {
     pname = "vim-elixir";
-    version = "2025-08-02";
+    version = "0-unstable-2025-08-02";
     src = fetchFromGitHub {
       owner = "elixir-editors";
       repo = "vim-elixir";
@@ -17851,7 +17929,7 @@ final: prev: {
 
   vim-elm-syntax = buildVimPlugin {
     pname = "vim-elm-syntax";
-    version = "2021-01-09";
+    version = "0-unstable-2021-01-09";
     src = fetchFromGitHub {
       owner = "andys8";
       repo = "vim-elm-syntax";
@@ -17864,7 +17942,7 @@ final: prev: {
 
   vim-emacs-bindings = buildVimPlugin {
     pname = "vim-emacs-bindings";
-    version = "2016-10-07";
+    version = "0-unstable-2016-10-07";
     src = fetchFromGitHub {
       owner = "kentarosasaki";
       repo = "vim-emacs-bindings";
@@ -17877,7 +17955,7 @@ final: prev: {
 
   vim-emoji = buildVimPlugin {
     pname = "vim-emoji";
-    version = "2018-01-30";
+    version = "0-unstable-2018-01-30";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-emoji";
@@ -17890,7 +17968,7 @@ final: prev: {
 
   vim-endwise = buildVimPlugin {
     pname = "vim-endwise";
-    version = "2025-11-05";
+    version = "1.3-unstable-2025-11-05";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-endwise";
@@ -17903,7 +17981,7 @@ final: prev: {
 
   vim-enmasse = buildVimPlugin {
     pname = "vim-enmasse";
-    version = "2018-04-03";
+    version = "1.1.1-unstable-2018-04-03";
     src = fetchFromGitHub {
       owner = "Olical";
       repo = "vim-enmasse";
@@ -17916,7 +17994,7 @@ final: prev: {
 
   vim-erlang-compiler = buildVimPlugin {
     pname = "vim-erlang-compiler";
-    version = "2021-06-20";
+    version = "0-unstable-2021-06-20";
     src = fetchFromGitHub {
       owner = "vim-erlang";
       repo = "vim-erlang-compiler";
@@ -17929,7 +18007,7 @@ final: prev: {
 
   vim-erlang-omnicomplete = buildVimPlugin {
     pname = "vim-erlang-omnicomplete";
-    version = "2021-07-03";
+    version = "0-unstable-2021-07-03";
     src = fetchFromGitHub {
       owner = "vim-erlang";
       repo = "vim-erlang-omnicomplete";
@@ -17942,7 +18020,7 @@ final: prev: {
 
   vim-erlang-runtime = buildVimPlugin {
     pname = "vim-erlang-runtime";
-    version = "2025-07-11";
+    version = "0-unstable-2025-07-11";
     src = fetchFromGitHub {
       owner = "vim-erlang";
       repo = "vim-erlang-runtime";
@@ -17955,7 +18033,7 @@ final: prev: {
 
   vim-erlang-tags = buildVimPlugin {
     pname = "vim-erlang-tags";
-    version = "2025-06-19";
+    version = "0-unstable-2025-06-19";
     src = fetchFromGitHub {
       owner = "vim-erlang";
       repo = "vim-erlang-tags";
@@ -17968,7 +18046,7 @@ final: prev: {
 
   vim-eunuch = buildVimPlugin {
     pname = "vim-eunuch";
-    version = "2024-12-29";
+    version = "0-unstable-2024-12-29";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-eunuch";
@@ -17981,7 +18059,7 @@ final: prev: {
 
   vim-exchange = buildVimPlugin {
     pname = "vim-exchange";
-    version = "2024-01-21";
+    version = "0-unstable-2024-01-21";
     src = fetchFromGitHub {
       owner = "tommcdo";
       repo = "vim-exchange";
@@ -17994,7 +18072,7 @@ final: prev: {
 
   vim-expand-region = buildVimPlugin {
     pname = "vim-expand-region";
-    version = "2013-08-19";
+    version = "1.2-unstable-2013-08-19";
     src = fetchFromGitHub {
       owner = "terryma";
       repo = "vim-expand-region";
@@ -18007,7 +18085,7 @@ final: prev: {
 
   vim-extradite = buildVimPlugin {
     pname = "vim-extradite";
-    version = "2022-04-15";
+    version = "0-unstable-2022-04-15";
     src = fetchFromGitHub {
       owner = "int3";
       repo = "vim-extradite";
@@ -18020,12 +18098,12 @@ final: prev: {
 
   vim-fern = buildVimPlugin {
     pname = "vim-fern";
-    version = "2025-10-20";
+    version = "1.58.0-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-fern";
-      rev = "cb60188e312e2218f78a760f38164bbe51932c0d";
-      sha256 = "1mba9g53bpl5y7zhgym5p3gpdknwzfi052mwf26xx9lavgprm4rb";
+      rev = "d0b5befc0321126384981d6cf3c1b561014c65a2";
+      sha256 = "1bwsx4gwmqpv1l6wjffa8c5mzpsr4is2v7k7ppss248jnk23hrzy";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-fern/";
     meta.hydraPlatforms = [ ];
@@ -18033,12 +18111,12 @@ final: prev: {
 
   vim-fetch = buildVimPlugin {
     pname = "vim-fetch";
-    version = "2024-07-26";
+    version = "3.0.0-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "wsdjeg";
       repo = "vim-fetch";
-      rev = "db3fd95eb0cf7e7e9effa1338b286db33e4a36c1";
-      sha256 = "1br13ih1ybx5dnj8aax6lf0s970vy43s9swwrxqn411ihcrclqz6";
+      rev = "f25458bb4b4ba5efd323b76756df0c2ab82e7ed0";
+      sha256 = "0dyrlq30syykdcpq2jh9va5ffmziby56ckwwf1g53xxsgf04lwk1";
     };
     meta.homepage = "https://github.com/wsdjeg/vim-fetch/";
     meta.hydraPlatforms = [ ];
@@ -18046,7 +18124,7 @@ final: prev: {
 
   vim-figlet = buildVimPlugin {
     pname = "vim-figlet";
-    version = "2022-12-08";
+    version = "3.1-unstable-2022-12-08";
     src = fetchFromGitHub {
       owner = "fadein";
       repo = "vim-figlet";
@@ -18059,7 +18137,7 @@ final: prev: {
 
   vim-fireplace = buildVimPlugin {
     pname = "vim-fireplace";
-    version = "2024-11-01";
+    version = "2.1-unstable-2024-11-01";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fireplace";
@@ -18072,7 +18150,7 @@ final: prev: {
 
   vim-fish = buildVimPlugin {
     pname = "vim-fish";
-    version = "2017-11-22";
+    version = "0-unstable-2017-11-22";
     src = fetchFromGitHub {
       owner = "dag";
       repo = "vim-fish";
@@ -18085,7 +18163,7 @@ final: prev: {
 
   vim-flagship = buildVimPlugin {
     pname = "vim-flagship";
-    version = "2025-05-10";
+    version = "1.1-unstable-2025-05-10";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-flagship";
@@ -18098,7 +18176,7 @@ final: prev: {
 
   vim-flake8 = buildVimPlugin {
     pname = "vim-flake8";
-    version = "2023-10-04";
+    version = "1.7-unstable-2023-10-04";
     src = fetchFromGitHub {
       owner = "nvie";
       repo = "vim-flake8";
@@ -18111,7 +18189,7 @@ final: prev: {
 
   vim-flatbuffers = buildVimPlugin {
     pname = "vim-flatbuffers";
-    version = "2018-10-11";
+    version = "0-unstable-2018-10-11";
     src = fetchFromGitHub {
       owner = "dcharbon";
       repo = "vim-flatbuffers";
@@ -18124,12 +18202,12 @@ final: prev: {
 
   vim-floaterm = buildVimPlugin {
     pname = "vim-floaterm";
-    version = "2025-10-26";
+    version = "0-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "voldikss";
       repo = "vim-floaterm";
-      rev = "a720490bd9dc02c5492e800aa08d4802f22b01f8";
-      sha256 = "0im1nf4pnrldzrycrx12nv5qzas7i01m7iizmq6yqlxpnrqrjw4c";
+      rev = "a11b930f55324e9b05e2ef16511fe713f1b456a7";
+      sha256 = "0i3wi5bds3x9fym4bkkx2avym0jbchbi9b43xllmjbpy930dldaf";
     };
     meta.homepage = "https://github.com/voldikss/vim-floaterm/";
     meta.hydraPlatforms = [ ];
@@ -18137,7 +18215,7 @@ final: prev: {
 
   vim-flog = buildVimPlugin {
     pname = "vim-flog";
-    version = "2025-03-19";
+    version = "3.0.0-unstable-2025-03-19";
     src = fetchFromGitHub {
       owner = "rbong";
       repo = "vim-flog";
@@ -18150,7 +18228,7 @@ final: prev: {
 
   vim-flutter = buildVimPlugin {
     pname = "vim-flutter";
-    version = "2025-09-12";
+    version = "0-unstable-2025-09-12";
     src = fetchFromGitHub {
       owner = "thosakwe";
       repo = "vim-flutter";
@@ -18163,7 +18241,7 @@ final: prev: {
 
   vim-fold-cycle = buildVimPlugin {
     pname = "vim-fold-cycle";
-    version = "2020-05-11";
+    version = "0-unstable-2020-05-11";
     src = fetchFromGitHub {
       owner = "arecarn";
       repo = "vim-fold-cycle";
@@ -18176,7 +18254,7 @@ final: prev: {
 
   vim-foldsearch = buildVimPlugin {
     pname = "vim-foldsearch";
-    version = "2024-05-15";
+    version = "1.3.2-unstable-2024-05-15";
     src = fetchFromGitHub {
       owner = "embear";
       repo = "vim-foldsearch";
@@ -18189,7 +18267,7 @@ final: prev: {
 
   vim-ft-diff_fold = buildVimPlugin {
     pname = "vim-ft-diff_fold";
-    version = "2013-02-10";
+    version = "0.2.0-unstable-2013-02-10";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-ft-diff_fold";
@@ -18202,7 +18280,7 @@ final: prev: {
 
   vim-fubitive = buildVimPlugin {
     pname = "vim-fubitive";
-    version = "2023-08-16";
+    version = "0-unstable-2023-08-16";
     src = fetchFromGitHub {
       owner = "tommcdo";
       repo = "vim-fubitive";
@@ -18215,7 +18293,7 @@ final: prev: {
 
   vim-fugitive = buildVimPlugin {
     pname = "vim-fugitive";
-    version = "2025-07-15";
+    version = "3.7-unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fugitive";
@@ -18228,7 +18306,7 @@ final: prev: {
 
   vim-fzf-coauthorship = buildVimPlugin {
     pname = "vim-fzf-coauthorship";
-    version = "2021-07-14";
+    version = "0-unstable-2021-07-14";
     src = fetchFromGitHub {
       owner = "maxjacobson";
       repo = "vim-fzf-coauthorship";
@@ -18241,7 +18319,7 @@ final: prev: {
 
   vim-gas = buildVimPlugin {
     pname = "vim-gas";
-    version = "2023-12-28";
+    version = "0-unstable-2023-12-28";
     src = fetchFromGitHub {
       owner = "HealsCodes";
       repo = "vim-gas";
@@ -18254,7 +18332,7 @@ final: prev: {
 
   vim-gh-line = buildVimPlugin {
     pname = "vim-gh-line";
-    version = "2024-02-19";
+    version = "0-unstable-2024-02-19";
     src = fetchFromGitHub {
       owner = "ruanyl";
       repo = "vim-gh-line";
@@ -18267,7 +18345,7 @@ final: prev: {
 
   vim-ghost = buildVimPlugin {
     pname = "vim-ghost";
-    version = "2021-09-26";
+    version = "0-unstable-2021-09-26";
     src = fetchFromGitHub {
       owner = "raghur";
       repo = "vim-ghost";
@@ -18280,7 +18358,7 @@ final: prev: {
 
   vim-gina = buildVimPlugin {
     pname = "vim-gina";
-    version = "2022-03-30";
+    version = "1.2.2-unstable-2022-03-30";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-gina";
@@ -18293,7 +18371,7 @@ final: prev: {
 
   vim-gist = buildVimPlugin {
     pname = "vim-gist";
-    version = "2022-10-09";
+    version = "7.3-unstable-2022-10-09";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "vim-gist";
@@ -18306,7 +18384,7 @@ final: prev: {
 
   vim-gista = buildVimPlugin {
     pname = "vim-gista";
-    version = "2020-09-19";
+    version = "2.5.0-unstable-2020-09-19";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-gista";
@@ -18319,7 +18397,7 @@ final: prev: {
 
   vim-git = buildVimPlugin {
     pname = "vim-git";
-    version = "2024-10-03";
+    version = "0-unstable-2024-10-03";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-git";
@@ -18332,7 +18410,7 @@ final: prev: {
 
   vim-gitbranch = buildVimPlugin {
     pname = "vim-gitbranch";
-    version = "2021-08-20";
+    version = "0-unstable-2021-08-20";
     src = fetchFromGitHub {
       owner = "itchyny";
       repo = "vim-gitbranch";
@@ -18345,12 +18423,12 @@ final: prev: {
 
   vim-gitgutter = buildVimPlugin {
     pname = "vim-gitgutter";
-    version = "2025-08-29";
+    version = "0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "airblade";
       repo = "vim-gitgutter";
-      rev = "488c0555e47e2aabe273c635f7dd233e985311a6";
-      sha256 = "0h010qpqphkrh42r6p0avf5wplfdddc9vk4aq2xsnv5zn56nkbqj";
+      rev = "0acb772e76064cc406664ab595b58b3fac76488a";
+      sha256 = "0kc77m06qknxbw980c46lw1cm66zs9vkcm3rq94p016qbxjj72xd";
     };
     meta.homepage = "https://github.com/airblade/vim-gitgutter/";
     meta.hydraPlatforms = [ ];
@@ -18358,7 +18436,7 @@ final: prev: {
 
   vim-github-dashboard = buildVimPlugin {
     pname = "vim-github-dashboard";
-    version = "2022-01-27";
+    version = "0-unstable-2022-01-27";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-github-dashboard";
@@ -18371,7 +18449,7 @@ final: prev: {
 
   vim-glsl = buildVimPlugin {
     pname = "vim-glsl";
-    version = "2024-06-15";
+    version = "0-unstable-2024-06-15";
     src = fetchFromGitHub {
       owner = "tikhomirov";
       repo = "vim-glsl";
@@ -18384,7 +18462,7 @@ final: prev: {
 
   vim-gnupg = buildVimPlugin {
     pname = "vim-gnupg";
-    version = "2022-05-19";
+    version = "2.7.1-unstable-2022-05-19";
     src = fetchFromGitHub {
       owner = "jamessan";
       repo = "vim-gnupg";
@@ -18397,12 +18475,12 @@ final: prev: {
 
   vim-go = buildVimPlugin {
     pname = "vim-go";
-    version = "2025-08-30";
+    version = "1.29-unstable-2025-11-11";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "06ac99359b0b1a7de1e213447d92fd0a46cb4cd0";
-      sha256 = "19pd4kzbb1ykm4ynaxb1lqxgc95kql4a111k95vc2glx8kbq9gn6";
+      rev = "dc07b9082fecd47f8ebef5f2684758e570f66377";
+      sha256 = "00hag4k6x6h9av2rfbz4h654gz1kaqxkkrsi0x96qjlzsbvayzdy";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
     meta.hydraPlatforms = [ ];
@@ -18410,7 +18488,7 @@ final: prev: {
 
   vim-godot = buildVimPlugin {
     pname = "vim-godot";
-    version = "2024-11-12";
+    version = "0-unstable-2024-11-12";
     src = fetchFromGitHub {
       owner = "habamax";
       repo = "vim-godot";
@@ -18423,7 +18501,7 @@ final: prev: {
 
   vim-grammarous = buildVimPlugin {
     pname = "vim-grammarous";
-    version = "2020-11-30";
+    version = "0-unstable-2020-11-30";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-grammarous";
@@ -18436,12 +18514,12 @@ final: prev: {
 
   vim-graphql = buildVimPlugin {
     pname = "vim-graphql";
-    version = "2025-09-17";
+    version = "1.6-unstable-2025-11-29";
     src = fetchFromGitHub {
       owner = "jparise";
       repo = "vim-graphql";
-      rev = "6108ce33b6059bb3849880fc7e245c2cb81f10e1";
-      sha256 = "19bva5hb3f42nmlfnqcng017l33w7icmy22529y9mfazn16vvrj1";
+      rev = "0eef7d76750aa80507a3df60dabb4c66b6fbc70c";
+      sha256 = "0fk9nn29jfkd7d3ccp0jk4iadjy5azsx0ni6mwqqsm42pgvmphwc";
     };
     meta.homepage = "https://github.com/jparise/vim-graphql/";
     meta.hydraPlatforms = [ ];
@@ -18449,7 +18527,7 @@ final: prev: {
 
   vim-grepper = buildVimPlugin {
     pname = "vim-grepper";
-    version = "2025-02-18";
+    version = "0-unstable-2025-02-18";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-grepper";
@@ -18462,7 +18540,7 @@ final: prev: {
 
   vim-gruvbox8 = buildVimPlugin {
     pname = "vim-gruvbox8";
-    version = "2025-06-04";
+    version = "0.4.2-unstable-2025-06-04";
     src = fetchFromGitHub {
       owner = "lifepillar";
       repo = "vim-gruvbox8";
@@ -18475,7 +18553,7 @@ final: prev: {
 
   vim-gui-position = buildVimPlugin {
     pname = "vim-gui-position";
-    version = "2019-06-06";
+    version = "1.0.1-unstable-2019-06-06";
     src = fetchFromGitHub {
       owner = "brennanfee";
       repo = "vim-gui-position";
@@ -18488,7 +18566,7 @@ final: prev: {
 
   vim-gutentags = buildVimPlugin {
     pname = "vim-gutentags";
-    version = "2023-04-14";
+    version = "1.0.0-unstable-2023-04-14";
     src = fetchFromGitHub {
       owner = "ludovicchabant";
       repo = "vim-gutentags";
@@ -18501,7 +18579,7 @@ final: prev: {
 
   vim-habamax = buildVimPlugin {
     pname = "vim-habamax";
-    version = "2025-10-22";
+    version = "0-unstable-2025-10-22";
     src = fetchFromGitHub {
       owner = "habamax";
       repo = "vim-habamax";
@@ -18514,7 +18592,7 @@ final: prev: {
 
   vim-hardtime = buildVimPlugin {
     pname = "vim-hardtime";
-    version = "2022-05-06";
+    version = "0-unstable-2022-05-06";
     src = fetchFromGitHub {
       owner = "takac";
       repo = "vim-hardtime";
@@ -18527,7 +18605,7 @@ final: prev: {
 
   vim-haskell-module-name = buildVimPlugin {
     pname = "vim-haskell-module-name";
-    version = "2020-01-20";
+    version = "0-unstable-2020-01-20";
     src = fetchFromGitHub {
       owner = "chkno";
       repo = "vim-haskell-module-name";
@@ -18540,7 +18618,7 @@ final: prev: {
 
   vim-haskellConcealPlus = buildVimPlugin {
     pname = "vim-haskellConcealPlus";
-    version = "2020-01-21";
+    version = "0-unstable-2020-01-21";
     src = fetchFromGitHub {
       owner = "enomsg";
       repo = "vim-haskellConcealPlus";
@@ -18553,7 +18631,7 @@ final: prev: {
 
   vim-haskellconceal = buildVimPlugin {
     pname = "vim-haskellconceal";
-    version = "2017-06-15";
+    version = "0-unstable-2017-06-15";
     src = fetchFromGitHub {
       owner = "twinside";
       repo = "vim-haskellconceal";
@@ -18566,7 +18644,7 @@ final: prev: {
 
   vim-hcl = buildVimPlugin {
     pname = "vim-hcl";
-    version = "2025-01-10";
+    version = "0-unstable-2025-01-10";
     src = fetchFromGitHub {
       owner = "jvirtanen";
       repo = "vim-hcl";
@@ -18579,7 +18657,7 @@ final: prev: {
 
   vim-hdevtools = buildVimPlugin {
     pname = "vim-hdevtools";
-    version = "2018-11-19";
+    version = "0-unstable-2018-11-19";
     src = fetchFromGitHub {
       owner = "bitc";
       repo = "vim-hdevtools";
@@ -18592,7 +18670,7 @@ final: prev: {
 
   vim-helm = buildVimPlugin {
     pname = "vim-helm";
-    version = "2025-09-27";
+    version = "0-unstable-2025-09-27";
     src = fetchFromGitHub {
       owner = "towolf";
       repo = "vim-helm";
@@ -18605,7 +18683,7 @@ final: prev: {
 
   vim-hexokinase = buildVimPlugin {
     pname = "vim-hexokinase";
-    version = "2021-04-25";
+    version = "0-unstable-2021-04-25";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "vim-hexokinase";
@@ -18619,7 +18697,7 @@ final: prev: {
 
   vim-hier = buildVimPlugin {
     pname = "vim-hier";
-    version = "2025-09-05";
+    version = "1.3-unstable-2025-09-05";
     src = fetchFromGitHub {
       owner = "jceb";
       repo = "vim-hier";
@@ -18632,7 +18710,7 @@ final: prev: {
 
   vim-highlightedyank = buildVimPlugin {
     pname = "vim-highlightedyank";
-    version = "2024-12-31";
+    version = "0-unstable-2024-12-31";
     src = fetchFromGitHub {
       owner = "machakann";
       repo = "vim-highlightedyank";
@@ -18645,7 +18723,7 @@ final: prev: {
 
   vim-hindent = buildVimPlugin {
     pname = "vim-hindent";
-    version = "2018-07-31";
+    version = "0-unstable-2018-07-31";
     src = fetchFromGitHub {
       owner = "alx741";
       repo = "vim-hindent";
@@ -18658,7 +18736,7 @@ final: prev: {
 
   vim-hocon = buildVimPlugin {
     pname = "vim-hocon";
-    version = "2017-09-08";
+    version = "0-unstable-2017-09-08";
     src = fetchFromGitHub {
       owner = "GEverding";
       repo = "vim-hocon";
@@ -18671,7 +18749,7 @@ final: prev: {
 
   vim-hoogle = buildVimPlugin {
     pname = "vim-hoogle";
-    version = "2018-03-04";
+    version = "0-unstable-2018-03-04";
     src = fetchFromGitHub {
       owner = "Twinside";
       repo = "vim-hoogle";
@@ -18684,7 +18762,7 @@ final: prev: {
 
   vim-horizon = buildVimPlugin {
     pname = "vim-horizon";
-    version = "2025-04-17";
+    version = "0-unstable-2025-04-17";
     src = fetchFromGitHub {
       owner = "ntk148v";
       repo = "vim-horizon";
@@ -18697,7 +18775,7 @@ final: prev: {
 
   vim-html-template-literals = buildVimPlugin {
     pname = "vim-html-template-literals";
-    version = "2024-09-13";
+    version = "0.2.0-unstable-2024-09-13";
     src = fetchFromGitHub {
       owner = "jonsmithers";
       repo = "vim-html-template-literals";
@@ -18710,7 +18788,7 @@ final: prev: {
 
   vim-humanoid-colorscheme = buildVimPlugin {
     pname = "vim-humanoid-colorscheme";
-    version = "2024-11-03";
+    version = "0.2-unstable-2024-11-03";
     src = fetchFromGitHub {
       owner = "humanoid-colors";
       repo = "vim-humanoid-colorscheme";
@@ -18723,7 +18801,7 @@ final: prev: {
 
   vim-husk = buildVimPlugin {
     pname = "vim-husk";
-    version = "2015-11-29";
+    version = "0.6.0-unstable-2015-11-29";
     src = fetchFromGitHub {
       owner = "vim-utils";
       repo = "vim-husk";
@@ -18736,12 +18814,12 @@ final: prev: {
 
   vim-hy = buildVimPlugin {
     pname = "vim-hy";
-    version = "2024-10-06";
+    version = "0-unstable-2025-12-06";
     src = fetchFromGitHub {
       owner = "hylang";
       repo = "vim-hy";
-      rev = "ab1699bfa636e7355ac0030189331251c49c7d61";
-      sha256 = "09v83a6ybj73043acpm2nps5s56sqg2pz456b4qgz2r7zjlgx5r9";
+      rev = "0bb9d63fc346fc8fa50afdfc4437d73ed9a53354";
+      sha256 = "04azpvwq10mbwyyci9wip7km2lx62kaazpc77wrr3bvwsk5mpgh0";
     };
     meta.homepage = "https://github.com/hylang/vim-hy/";
     meta.hydraPlatforms = [ ];
@@ -18749,7 +18827,7 @@ final: prev: {
 
   vim-hybrid = buildVimPlugin {
     pname = "vim-hybrid";
-    version = "2016-01-05";
+    version = "0-unstable-2016-01-05";
     src = fetchFromGitHub {
       owner = "w0ng";
       repo = "vim-hybrid";
@@ -18762,7 +18840,7 @@ final: prev: {
 
   vim-hybrid-material = buildVimPlugin {
     pname = "vim-hybrid-material";
-    version = "2020-06-16";
+    version = "0-unstable-2020-06-16";
     src = fetchFromGitHub {
       owner = "kristijanhusak";
       repo = "vim-hybrid-material";
@@ -18775,7 +18853,7 @@ final: prev: {
 
   vim-iced-coffee-script = buildVimPlugin {
     pname = "vim-iced-coffee-script";
-    version = "2013-12-26";
+    version = "0-unstable-2013-12-26";
     src = fetchFromGitHub {
       owner = "noc7c9";
       repo = "vim-iced-coffee-script";
@@ -18788,7 +18866,7 @@ final: prev: {
 
   vim-illuminate = buildVimPlugin {
     pname = "vim-illuminate";
-    version = "2025-05-24";
+    version = "0-unstable-2025-05-24";
     src = fetchFromGitHub {
       owner = "RRethy";
       repo = "vim-illuminate";
@@ -18801,7 +18879,7 @@ final: prev: {
 
   vim-indent-guides = buildVimPlugin {
     pname = "vim-indent-guides";
-    version = "2023-03-18";
+    version = "1.6-unstable-2023-03-18";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vim-indent-guides";
@@ -18814,7 +18892,7 @@ final: prev: {
 
   vim-indent-object = buildVimPlugin {
     pname = "vim-indent-object";
-    version = "2024-01-21";
+    version = "1.1.2-unstable-2024-01-21";
     src = fetchFromGitHub {
       owner = "michaeljsmith";
       repo = "vim-indent-object";
@@ -18827,7 +18905,7 @@ final: prev: {
 
   vim-indentwise = buildVimPlugin {
     pname = "vim-indentwise";
-    version = "2015-06-07";
+    version = "1.0.0-unstable-2015-06-07";
     src = fetchFromGitHub {
       owner = "jeetsukumaran";
       repo = "vim-indentwise";
@@ -18840,7 +18918,7 @@ final: prev: {
 
   vim-indexed-search = buildVimPlugin {
     pname = "vim-indexed-search";
-    version = "2021-12-13";
+    version = "0-unstable-2021-12-13";
     src = fetchFromGitHub {
       owner = "henrik";
       repo = "vim-indexed-search";
@@ -18853,7 +18931,7 @@ final: prev: {
 
   vim-ipython = buildVimPlugin {
     pname = "vim-ipython";
-    version = "2015-06-23";
+    version = "0-unstable-2015-06-23";
     src = fetchFromGitHub {
       owner = "ivanov";
       repo = "vim-ipython";
@@ -18866,7 +18944,7 @@ final: prev: {
 
   vim-isort = buildVimPlugin {
     pname = "vim-isort";
-    version = "2025-09-25";
+    version = "0-unstable-2025-09-25";
     src = fetchFromGitHub {
       owner = "fisadev";
       repo = "vim-isort";
@@ -18879,7 +18957,7 @@ final: prev: {
 
   vim-jack-in = buildVimPlugin {
     pname = "vim-jack-in";
-    version = "2025-01-27";
+    version = "0-unstable-2025-01-27";
     src = fetchFromGitHub {
       owner = "clojure-vim";
       repo = "vim-jack-in";
@@ -18892,7 +18970,7 @@ final: prev: {
 
   vim-janah = buildVimPlugin {
     pname = "vim-janah";
-    version = "2018-10-01";
+    version = "0-unstable-2018-10-01";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-janah";
@@ -18905,7 +18983,7 @@ final: prev: {
 
   vim-javacomplete2 = buildVimPlugin {
     pname = "vim-javacomplete2";
-    version = "2022-06-05";
+    version = "2.4.4-unstable-2022-06-05";
     src = fetchFromGitHub {
       owner = "artur-shaik";
       repo = "vim-javacomplete2";
@@ -18918,7 +18996,7 @@ final: prev: {
 
   vim-javascript = buildVimPlugin {
     pname = "vim-javascript";
-    version = "2025-03-21";
+    version = "1.2.5.1-unstable-2025-03-21";
     src = fetchFromGitHub {
       owner = "pangloss";
       repo = "vim-javascript";
@@ -18931,7 +19009,7 @@ final: prev: {
 
   vim-javascript-syntax = buildVimPlugin {
     pname = "vim-javascript-syntax";
-    version = "2020-09-27";
+    version = "0.8.2-unstable-2020-09-27";
     src = fetchFromGitHub {
       owner = "jelera";
       repo = "vim-javascript-syntax";
@@ -18944,7 +19022,7 @@ final: prev: {
 
   vim-jdaddy = buildVimPlugin {
     pname = "vim-jdaddy";
-    version = "2022-03-26";
+    version = "0-unstable-2022-03-26";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-jdaddy";
@@ -18957,7 +19035,7 @@ final: prev: {
 
   vim-jetpack = buildVimPlugin {
     pname = "vim-jetpack";
-    version = "2025-02-20";
+    version = "0-unstable-2025-02-20";
     src = fetchFromGitHub {
       owner = "tani";
       repo = "vim-jetpack";
@@ -18970,7 +19048,7 @@ final: prev: {
 
   vim-jinja = buildVimPlugin {
     pname = "vim-jinja";
-    version = "2021-08-26";
+    version = "0-unstable-2021-08-26";
     src = fetchFromGitHub {
       owner = "lepture";
       repo = "vim-jinja";
@@ -18983,7 +19061,7 @@ final: prev: {
 
   vim-jinja-languages = buildVimPlugin {
     pname = "vim-jinja-languages";
-    version = "2022-04-04";
+    version = "0-unstable-2022-04-04";
     src = fetchFromGitHub {
       owner = "seirl";
       repo = "vim-jinja-languages";
@@ -18996,7 +19074,7 @@ final: prev: {
 
   vim-jjdescription = buildVimPlugin {
     pname = "vim-jjdescription";
-    version = "2025-05-08";
+    version = "0-unstable-2025-05-08";
     src = fetchFromGitHub {
       owner = "avm99963";
       repo = "vim-jjdescription";
@@ -19009,7 +19087,7 @@ final: prev: {
 
   vim-jsbeautify = buildVimPlugin {
     pname = "vim-jsbeautify";
-    version = "2020-12-11";
+    version = "1.0.1-unstable-2020-12-11";
     src = fetchFromGitHub {
       owner = "maksimr";
       repo = "vim-jsbeautify";
@@ -19023,7 +19101,7 @@ final: prev: {
 
   vim-jsdoc = buildVimPlugin {
     pname = "vim-jsdoc";
-    version = "2023-05-23";
+    version = "2.2.1-unstable-2023-05-23";
     src = fetchFromGitHub {
       owner = "heavenshell";
       repo = "vim-jsdoc";
@@ -19036,7 +19114,7 @@ final: prev: {
 
   vim-json = buildVimPlugin {
     pname = "vim-json";
-    version = "2018-01-10";
+    version = "0-unstable-2018-01-10";
     src = fetchFromGitHub {
       owner = "elzr";
       repo = "vim-json";
@@ -19049,7 +19127,7 @@ final: prev: {
 
   vim-jsonnet = buildVimPlugin {
     pname = "vim-jsonnet";
-    version = "2023-02-20";
+    version = "0-unstable-2023-02-20";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-jsonnet";
@@ -19062,7 +19140,7 @@ final: prev: {
 
   vim-jsonpath = buildVimPlugin {
     pname = "vim-jsonpath";
-    version = "2020-06-16";
+    version = "0.5.2-unstable-2020-06-16";
     src = fetchFromGitHub {
       owner = "mogelbrod";
       repo = "vim-jsonpath";
@@ -19075,7 +19153,7 @@ final: prev: {
 
   vim-jsx-pretty = buildVimPlugin {
     pname = "vim-jsx-pretty";
-    version = "2021-01-12";
+    version = "3.0.0-unstable-2021-01-12";
     src = fetchFromGitHub {
       owner = "MaxMEllon";
       repo = "vim-jsx-pretty";
@@ -19088,7 +19166,7 @@ final: prev: {
 
   vim-jsx-typescript = buildVimPlugin {
     pname = "vim-jsx-typescript";
-    version = "2020-12-03";
+    version = "0-unstable-2020-12-03";
     src = fetchFromGitHub {
       owner = "peitalin";
       repo = "vim-jsx-typescript";
@@ -19101,7 +19179,7 @@ final: prev: {
 
   vim-julia-cell = buildVimPlugin {
     pname = "vim-julia-cell";
-    version = "2020-08-04";
+    version = "0-unstable-2020-08-04";
     src = fetchFromGitHub {
       owner = "mroavi";
       repo = "vim-julia-cell";
@@ -19114,12 +19192,12 @@ final: prev: {
 
   vim-just = buildVimPlugin {
     pname = "vim-just";
-    version = "2025-10-21";
+    version = "0-unstable-2025-12-10";
     src = fetchFromGitHub {
       owner = "NoahTheDuke";
       repo = "vim-just";
-      rev = "c13e317dda76ea01c2521cbed2a5c552a96951bd";
-      sha256 = "0c3ywicf0c4z2r633flz9is73008phzcfs5bp2iv3gk6cr7i51m1";
+      rev = "11b0f3177e2854cafa0c4baef5329e7d0f0dccbd";
+      sha256 = "04y6pi8bm729ngbh7rfmwiqjh53xc5s8n8dbdij246mq3vxvq9cw";
     };
     meta.homepage = "https://github.com/NoahTheDuke/vim-just/";
     meta.hydraPlatforms = [ ];
@@ -19127,7 +19205,7 @@ final: prev: {
 
   vim-kitty-navigator = buildVimPlugin {
     pname = "vim-kitty-navigator";
-    version = "2024-12-06";
+    version = "0-unstable-2024-12-06";
     src = fetchFromGitHub {
       owner = "knubie";
       repo = "vim-kitty-navigator";
@@ -19140,7 +19218,7 @@ final: prev: {
 
   vim-lark-syntax = buildVimPlugin {
     pname = "vim-lark-syntax";
-    version = "2023-10-10";
+    version = "0-unstable-2023-10-10";
     src = fetchFromGitHub {
       owner = "lark-parser";
       repo = "vim-lark-syntax";
@@ -19153,7 +19231,7 @@ final: prev: {
 
   vim-lastplace = buildVimPlugin {
     pname = "vim-lastplace";
-    version = "2024-05-18";
+    version = "4.5.0-unstable-2024-05-18";
     src = fetchFromGitHub {
       owner = "farmergreg";
       repo = "vim-lastplace";
@@ -19166,7 +19244,7 @@ final: prev: {
 
   vim-latex-live-preview = buildVimPlugin {
     pname = "vim-latex-live-preview";
-    version = "2025-11-03";
+    version = "0.1.0-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "xuhdev";
       repo = "vim-latex-live-preview";
@@ -19179,7 +19257,7 @@ final: prev: {
 
   vim-lawrencium = buildVimPlugin {
     pname = "vim-lawrencium";
-    version = "2024-04-10";
+    version = "0.3.1-unstable-2024-04-10";
     src = fetchFromGitHub {
       owner = "ludovicchabant";
       repo = "vim-lawrencium";
@@ -19192,7 +19270,7 @@ final: prev: {
 
   vim-leader-guide = buildVimPlugin {
     pname = "vim-leader-guide";
-    version = "2018-10-06";
+    version = "0-unstable-2018-10-06";
     src = fetchFromGitHub {
       owner = "hecal3";
       repo = "vim-leader-guide";
@@ -19205,7 +19283,7 @@ final: prev: {
 
   vim-lean = buildVimPlugin {
     pname = "vim-lean";
-    version = "2017-07-29";
+    version = "0-unstable-2017-07-29";
     src = fetchFromGitHub {
       owner = "mk12";
       repo = "vim-lean";
@@ -19218,12 +19296,12 @@ final: prev: {
 
   vim-ledger = buildVimPlugin {
     pname = "vim-ledger";
-    version = "2025-10-25";
+    version = "1.2.0-unstable-2025-11-18";
     src = fetchFromGitHub {
       owner = "ledger";
       repo = "vim-ledger";
-      rev = "225969f63ddaa6104fd4234d6bc17dd37deea567";
-      sha256 = "1fqv9cg769cysblfbgr3kpiz4ggxsr20s07kr671sxz9hz2srfy1";
+      rev = "73ddd3ab85569e520677eb0657896286c15f2a06";
+      sha256 = "0lifybwyrpslyah614vnddnp952g58mdf0kyvjw48rpb9jndpqr8";
     };
     meta.homepage = "https://github.com/ledger/vim-ledger/";
     meta.hydraPlatforms = [ ];
@@ -19231,7 +19309,7 @@ final: prev: {
 
   vim-lexical = buildVimPlugin {
     pname = "vim-lexical";
-    version = "2022-02-11";
+    version = "1.1-unstable-2022-02-11";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vim-lexical";
@@ -19244,7 +19322,7 @@ final: prev: {
 
   vim-lfe = buildVimPlugin {
     pname = "vim-lfe";
-    version = "2018-04-30";
+    version = "0-unstable-2018-04-30";
     src = fetchFromGitHub {
       owner = "lfe-support";
       repo = "vim-lfe";
@@ -19257,7 +19335,7 @@ final: prev: {
 
   vim-lightline-coc = buildVimPlugin {
     pname = "vim-lightline-coc";
-    version = "2021-03-03";
+    version = "0-unstable-2021-03-03";
     src = fetchFromGitHub {
       owner = "josa42";
       repo = "vim-lightline-coc";
@@ -19270,7 +19348,7 @@ final: prev: {
 
   vim-lion = buildVimPlugin {
     pname = "vim-lion";
-    version = "2020-07-18";
+    version = "0-unstable-2020-07-18";
     src = fetchFromGitHub {
       owner = "tommcdo";
       repo = "vim-lion";
@@ -19283,7 +19361,7 @@ final: prev: {
 
   vim-liquid = buildVimPlugin {
     pname = "vim-liquid";
-    version = "2025-07-12";
+    version = "0-unstable-2025-07-12";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-liquid";
@@ -19296,7 +19374,7 @@ final: prev: {
 
   vim-llvm = buildVimPlugin {
     pname = "vim-llvm";
-    version = "2024-09-19";
+    version = "0-unstable-2024-09-19";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-llvm";
@@ -19309,7 +19387,7 @@ final: prev: {
 
   vim-localvimrc = buildVimPlugin {
     pname = "vim-localvimrc";
-    version = "2024-10-25";
+    version = "3.2.0-unstable-2024-10-25";
     src = fetchFromGitHub {
       owner = "embear";
       repo = "vim-localvimrc";
@@ -19322,7 +19400,7 @@ final: prev: {
 
   vim-logreview = buildVimPlugin {
     pname = "vim-logreview";
-    version = "2022-02-28";
+    version = "1.1-unstable-2022-02-28";
     src = fetchFromGitHub {
       owner = "andreshazard";
       repo = "vim-logreview";
@@ -19335,7 +19413,7 @@ final: prev: {
 
   vim-loves-dafny = buildVimPlugin {
     pname = "vim-loves-dafny";
-    version = "2018-09-25";
+    version = "0-unstable-2018-09-25";
     src = fetchFromGitHub {
       owner = "mlr-msft";
       repo = "vim-loves-dafny";
@@ -19348,7 +19426,7 @@ final: prev: {
 
   vim-lsc = buildVimPlugin {
     pname = "vim-lsc";
-    version = "2023-08-04";
+    version = "0.4.0-unstable-2023-08-04";
     src = fetchFromGitHub {
       owner = "natebosch";
       repo = "vim-lsc";
@@ -19361,12 +19439,12 @@ final: prev: {
 
   vim-lsp = buildVimPlugin {
     pname = "vim-lsp";
-    version = "2025-11-03";
+    version = "0.1.4-unstable-2025-11-16";
     src = fetchFromGitHub {
       owner = "prabirshrestha";
       repo = "vim-lsp";
-      rev = "c0de72708afe7b90f54bd085933bf8b7eb9971a1";
-      sha256 = "1mj1kjfqa1v3rpr21mpvv6png3vk35jbchcyld3amz90l79hwhm9";
+      rev = "cb3406a591cd1ceb50e6926a9aac63c11becc100";
+      sha256 = "04vghcjzz66yb8dfjs2s1802fz7c91bw1s8dni4f7zh7wfppa9gv";
     };
     meta.homepage = "https://github.com/prabirshrestha/vim-lsp/";
     meta.hydraPlatforms = [ ];
@@ -19374,7 +19452,7 @@ final: prev: {
 
   vim-lsp-ale = buildVimPlugin {
     pname = "vim-lsp-ale";
-    version = "2021-12-28";
+    version = "0-unstable-2021-12-28";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-lsp-ale";
@@ -19387,7 +19465,7 @@ final: prev: {
 
   vim-lsp-cxx-highlight = buildVimPlugin {
     pname = "vim-lsp-cxx-highlight";
-    version = "2024-09-24";
+    version = "0-unstable-2024-09-24";
     src = fetchFromGitHub {
       owner = "jackguo380";
       repo = "vim-lsp-cxx-highlight";
@@ -19400,12 +19478,12 @@ final: prev: {
 
   vim-lsp-settings = buildVimPlugin {
     pname = "vim-lsp-settings";
-    version = "2025-11-05";
+    version = "0.0.1-unstable-2025-12-12";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "vim-lsp-settings";
-      rev = "19aef037e198fa5694b98a052f23e285bf113550";
-      sha256 = "0qbaspslipdkb7vflwd9qc50jl4qvsg4d8zjnkhm173dgq63czxc";
+      rev = "3b95615e4c7c78e739285b49ce89b2d2c4bf3928";
+      sha256 = "0rwq0ahd0a8m2sj4ck84vkicq8a4y4id8zq29p2z5bp608pfn4gf";
     };
     meta.homepage = "https://github.com/mattn/vim-lsp-settings/";
     meta.hydraPlatforms = [ ];
@@ -19413,7 +19491,7 @@ final: prev: {
 
   vim-lsp-snippets = buildVimPlugin {
     pname = "vim-lsp-snippets";
-    version = "2020-01-15";
+    version = "0-unstable-2020-01-15";
     src = fetchFromGitHub {
       owner = "thomasfaingnaert";
       repo = "vim-lsp-snippets";
@@ -19426,7 +19504,7 @@ final: prev: {
 
   vim-lsp-ultisnips = buildVimPlugin {
     pname = "vim-lsp-ultisnips";
-    version = "2023-04-07";
+    version = "0-unstable-2023-04-07";
     src = fetchFromGitHub {
       owner = "thomasfaingnaert";
       repo = "vim-lsp-ultisnips";
@@ -19439,7 +19517,7 @@ final: prev: {
 
   vim-lua = buildVimPlugin {
     pname = "vim-lua";
-    version = "2020-08-05";
+    version = "0-unstable-2020-08-05";
     src = fetchFromGitHub {
       owner = "tbastos";
       repo = "vim-lua";
@@ -19452,7 +19530,7 @@ final: prev: {
 
   vim-maktaba = buildVimPlugin {
     pname = "vim-maktaba";
-    version = "2023-03-21";
+    version = "1.14.0-unstable-2023-03-21";
     src = fetchFromGitHub {
       owner = "google";
       repo = "vim-maktaba";
@@ -19465,7 +19543,7 @@ final: prev: {
 
   vim-manpager = buildVimPlugin {
     pname = "vim-manpager";
-    version = "2022-07-23";
+    version = "0-unstable-2022-07-23";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-manpager";
@@ -19478,7 +19556,7 @@ final: prev: {
 
   vim-markbar = buildVimPlugin {
     pname = "vim-markbar";
-    version = "2024-05-10";
+    version = "0-unstable-2024-05-10";
     src = fetchFromGitHub {
       owner = "Yilin-Yang";
       repo = "vim-markbar";
@@ -19491,7 +19569,7 @@ final: prev: {
 
   vim-markdown = buildVimPlugin {
     pname = "vim-markdown";
-    version = "2025-10-23";
+    version = "2.0.0-unstable-2025-10-23";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vim-markdown";
@@ -19504,7 +19582,7 @@ final: prev: {
 
   vim-markdown-toc = buildVimPlugin {
     pname = "vim-markdown-toc";
-    version = "2025-10-09";
+    version = "1.5.0-unstable-2025-10-09";
     src = fetchFromGitHub {
       owner = "mzlogin";
       repo = "vim-markdown-toc";
@@ -19517,7 +19595,7 @@ final: prev: {
 
   vim-matchtag = buildVimPlugin {
     pname = "vim-matchtag";
-    version = "2024-10-21";
+    version = "0-unstable-2024-10-21";
     src = fetchFromGitHub {
       owner = "leafOfTree";
       repo = "vim-matchtag";
@@ -19530,7 +19608,7 @@ final: prev: {
 
   vim-matchup = buildVimPlugin {
     pname = "vim-matchup";
-    version = "2025-11-06";
+    version = "0.8.0-unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "andymass";
       repo = "vim-matchup";
@@ -19543,7 +19621,7 @@ final: prev: {
 
   vim-mediawiki-editor = buildVimPlugin {
     pname = "vim-mediawiki-editor";
-    version = "2022-10-29";
+    version = "0-unstable-2022-10-29";
     src = fetchFromGitHub {
       owner = "aquach";
       repo = "vim-mediawiki-editor";
@@ -19556,7 +19634,7 @@ final: prev: {
 
   vim-mergetool = buildVimPlugin {
     pname = "vim-mergetool";
-    version = "2019-06-22";
+    version = "0-unstable-2019-06-22";
     src = fetchFromGitHub {
       owner = "samoshkin";
       repo = "vim-mergetool";
@@ -19569,7 +19647,7 @@ final: prev: {
 
   vim-merginal = buildVimPlugin {
     pname = "vim-merginal";
-    version = "2024-10-14";
+    version = "2.2.3-unstable-2024-10-14";
     src = fetchFromGitHub {
       owner = "idanarye";
       repo = "vim-merginal";
@@ -19582,7 +19660,7 @@ final: prev: {
 
   vim-metamath = buildVimPlugin {
     pname = "vim-metamath";
-    version = "2017-02-10";
+    version = "1.0.1-unstable-2017-02-10";
     src = fetchFromGitHub {
       owner = "david-a-wheeler";
       repo = "vim-metamath";
@@ -19595,7 +19673,7 @@ final: prev: {
 
   vim-misc = buildVimPlugin {
     pname = "vim-misc";
-    version = "2015-05-21";
+    version = "1.17.6-unstable-2015-05-21";
     src = fetchFromGitHub {
       owner = "xolox";
       repo = "vim-misc";
@@ -19608,7 +19686,7 @@ final: prev: {
 
   vim-molokai-delroth = buildVimPlugin {
     pname = "vim-molokai-delroth";
-    version = "2023-05-30";
+    version = "0-unstable-2023-05-30";
     src = fetchFromGitHub {
       owner = "delroth";
       repo = "vim-molokai-delroth";
@@ -19621,7 +19699,7 @@ final: prev: {
 
   vim-monokai = buildVimPlugin {
     pname = "vim-monokai";
-    version = "2025-01-26";
+    version = "2.0-unstable-2025-01-26";
     src = fetchFromGitHub {
       owner = "crusoexia";
       repo = "vim-monokai";
@@ -19634,7 +19712,7 @@ final: prev: {
 
   vim-monokai-pro = buildVimPlugin {
     pname = "vim-monokai-pro";
-    version = "2022-06-25";
+    version = "0-unstable-2022-06-25";
     src = fetchFromGitHub {
       owner = "phanviet";
       repo = "vim-monokai-pro";
@@ -19647,7 +19725,7 @@ final: prev: {
 
   vim-monokai-tasty = buildVimPlugin {
     pname = "vim-monokai-tasty";
-    version = "2025-10-09";
+    version = "0-unstable-2025-10-09";
     src = fetchFromGitHub {
       owner = "patstockwell";
       repo = "vim-monokai-tasty";
@@ -19660,12 +19738,12 @@ final: prev: {
 
   vim-moonfly-colors = buildVimPlugin {
     pname = "vim-moonfly-colors";
-    version = "2025-10-23";
+    version = "0-unstable-2025-11-30";
     src = fetchFromGitHub {
       owner = "bluz71";
       repo = "vim-moonfly-colors";
-      rev = "ef85b89739bee184e204c89bc06280d62bd84039";
-      sha256 = "1jgyn9pg0ikvf92nva8irybnnxgca1bsqvqczgbhicc2b251wvjm";
+      rev = "1ad5a8d40176a8749f0c77b8875225d9d299a438";
+      sha256 = "0w42ap8z9zvcrh8almxg8m99nbgj5vxnag0sb81hm72za083acwb";
     };
     meta.homepage = "https://github.com/bluz71/vim-moonfly-colors/";
     meta.hydraPlatforms = [ ];
@@ -19673,7 +19751,7 @@ final: prev: {
 
   vim-move = buildVimPlugin {
     pname = "vim-move";
-    version = "2025-09-03";
+    version = "1.4-unstable-2025-09-03";
     src = fetchFromGitHub {
       owner = "matze";
       repo = "vim-move";
@@ -19686,7 +19764,7 @@ final: prev: {
 
   vim-mucomplete = buildVimPlugin {
     pname = "vim-mucomplete";
-    version = "2025-10-15";
+    version = "1.5.0-unstable-2025-10-15";
     src = fetchFromGitHub {
       owner = "lifepillar";
       repo = "vim-mucomplete";
@@ -19699,7 +19777,7 @@ final: prev: {
 
   vim-multiple-cursors = buildVimPlugin {
     pname = "vim-multiple-cursors";
-    version = "2020-07-30";
+    version = "2.2-unstable-2020-07-30";
     src = fetchFromGitHub {
       owner = "terryma";
       repo = "vim-multiple-cursors";
@@ -19712,7 +19790,7 @@ final: prev: {
 
   vim-mundo = buildVimPlugin {
     pname = "vim-mundo";
-    version = "2023-12-15";
+    version = "3.1.0-1-unstable-2023-12-15";
     src = fetchFromGitHub {
       owner = "simnalamburt";
       repo = "vim-mundo";
@@ -19725,7 +19803,7 @@ final: prev: {
 
   vim-mustache-handlebars = buildVimPlugin {
     pname = "vim-mustache-handlebars";
-    version = "2021-11-30";
+    version = "0-unstable-2021-11-30";
     src = fetchFromGitHub {
       owner = "mustache";
       repo = "vim-mustache-handlebars";
@@ -19738,7 +19816,7 @@ final: prev: {
 
   vim-nerdtree-syntax-highlight = buildVimPlugin {
     pname = "vim-nerdtree-syntax-highlight";
-    version = "2023-07-07";
+    version = "0.1.5-unstable-2023-07-07";
     src = fetchFromGitHub {
       owner = "tiagofumo";
       repo = "vim-nerdtree-syntax-highlight";
@@ -19751,7 +19829,7 @@ final: prev: {
 
   vim-nerdtree-tabs = buildVimPlugin {
     pname = "vim-nerdtree-tabs";
-    version = "2018-12-21";
+    version = "1.4.7-unstable-2018-12-21";
     src = fetchFromGitHub {
       owner = "jistr";
       repo = "vim-nerdtree-tabs";
@@ -19764,7 +19842,7 @@ final: prev: {
 
   vim-nftables = buildVimPlugin {
     pname = "vim-nftables";
-    version = "2020-06-29";
+    version = "0-unstable-2020-06-29";
     src = fetchFromGitHub {
       owner = "nfnty";
       repo = "vim-nftables";
@@ -19777,7 +19855,7 @@ final: prev: {
 
   vim-niceblock = buildVimPlugin {
     pname = "vim-niceblock";
-    version = "2018-09-06";
+    version = "0.2.0-unstable-2018-09-06";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-niceblock";
@@ -19790,7 +19868,7 @@ final: prev: {
 
   vim-nickel = buildVimPlugin {
     pname = "vim-nickel";
-    version = "2023-09-26";
+    version = "0-unstable-2023-09-26";
     src = fetchFromGitHub {
       owner = "nickel-lang";
       repo = "vim-nickel";
@@ -19803,7 +19881,7 @@ final: prev: {
 
   vim-ninja-feet = buildVimPlugin {
     pname = "vim-ninja-feet";
-    version = "2024-01-21";
+    version = "0-unstable-2024-01-21";
     src = fetchFromGitHub {
       owner = "tommcdo";
       repo = "vim-ninja-feet";
@@ -19816,7 +19894,7 @@ final: prev: {
 
   vim-nix = buildVimPlugin {
     pname = "vim-nix";
-    version = "2025-02-01";
+    version = "0-unstable-2025-02-01";
     src = fetchFromGitHub {
       owner = "LnL7";
       repo = "vim-nix";
@@ -19829,7 +19907,7 @@ final: prev: {
 
   vim-nixhash = buildVimPlugin {
     pname = "vim-nixhash";
-    version = "2025-01-02";
+    version = "0-unstable-2025-01-02";
     src = fetchFromGitHub {
       owner = "symphorien";
       repo = "vim-nixhash";
@@ -19842,7 +19920,7 @@ final: prev: {
 
   vim-noctu = buildVimPlugin {
     pname = "vim-noctu";
-    version = "2015-06-27";
+    version = "0-unstable-2015-06-27";
     src = fetchFromGitHub {
       owner = "noahfrederick";
       repo = "vim-noctu";
@@ -19855,7 +19933,7 @@ final: prev: {
 
   vim-nong-theme = buildVimPlugin {
     pname = "vim-nong-theme";
-    version = "2020-12-16";
+    version = "0-unstable-2020-12-16";
     src = fetchFromGitHub {
       owner = "fruit-in";
       repo = "vim-nong-theme";
@@ -19868,7 +19946,7 @@ final: prev: {
 
   vim-numbertoggle = buildVimPlugin {
     pname = "vim-numbertoggle";
-    version = "2021-07-14";
+    version = "2.1.2-unstable-2021-07-14";
     src = fetchFromGitHub {
       owner = "jeffkreeftmeijer";
       repo = "vim-numbertoggle";
@@ -19881,7 +19959,7 @@ final: prev: {
 
   vim-obsession = buildVimPlugin {
     pname = "vim-obsession";
-    version = "2024-10-28";
+    version = "0-unstable-2024-10-28";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-obsession";
@@ -19894,7 +19972,7 @@ final: prev: {
 
   vim-ocaml = buildVimPlugin {
     pname = "vim-ocaml";
-    version = "2025-07-25";
+    version = "0-unstable-2025-07-25";
     src = fetchFromGitHub {
       owner = "ocaml";
       repo = "vim-ocaml";
@@ -19907,7 +19985,7 @@ final: prev: {
 
   vim-one = buildVimPlugin {
     pname = "vim-one";
-    version = "2020-12-14";
+    version = "1.0.0-unstable-2020-12-14";
     src = fetchFromGitHub {
       owner = "rakr";
       repo = "vim-one";
@@ -19920,7 +19998,7 @@ final: prev: {
 
   vim-opencl = buildVimPlugin {
     pname = "vim-opencl";
-    version = "2018-06-13";
+    version = "1.1-unstable-2018-06-13";
     src = fetchFromGitHub {
       owner = "petRUShka";
       repo = "vim-opencl";
@@ -19933,7 +20011,7 @@ final: prev: {
 
   vim-openscad = buildVimPlugin {
     pname = "vim-openscad";
-    version = "2022-07-26";
+    version = "0-unstable-2022-07-26";
     src = fetchFromGitHub {
       owner = "sirtaj";
       repo = "vim-openscad";
@@ -19946,7 +20024,7 @@ final: prev: {
 
   vim-operator-replace = buildVimPlugin {
     pname = "vim-operator-replace";
-    version = "2015-02-24";
+    version = "0.0.5-unstable-2015-02-24";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-operator-replace";
@@ -19959,7 +20037,7 @@ final: prev: {
 
   vim-operator-surround = buildVimPlugin {
     pname = "vim-operator-surround";
-    version = "2018-11-01";
+    version = "0-unstable-2018-11-01";
     src = fetchFromGitHub {
       owner = "rhysd";
       repo = "vim-operator-surround";
@@ -19972,7 +20050,7 @@ final: prev: {
 
   vim-operator-user = buildVimPlugin {
     pname = "vim-operator-user";
-    version = "2015-02-17";
+    version = "0.1.0-unstable-2015-02-17";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-operator-user";
@@ -19985,12 +20063,12 @@ final: prev: {
 
   vim-orgmode = buildVimPlugin {
     pname = "vim-orgmode";
-    version = "2023-11-12";
+    version = "0.6.0-unstable-2025-11-19";
     src = fetchFromGitHub {
       owner = "jceb";
       repo = "vim-orgmode";
-      rev = "83982349e45e6d27d186ad82050f86c3233a16f0";
-      sha256 = "1gw9x3lf379kpscb47vg14cmfspcj04kif6q38xvd5szkw8mq50f";
+      rev = "d457e50a45e1f327f03a6d923870021dd7c0a3db";
+      sha256 = "0nylry39gp9y1s0xypawzhzr2irzn9lm43cyxm7ch7pgx9qls4lm";
     };
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
     meta.hydraPlatforms = [ ];
@@ -19998,7 +20076,7 @@ final: prev: {
 
   vim-ormolu = buildVimPlugin {
     pname = "vim-ormolu";
-    version = "2020-11-25";
+    version = "0-unstable-2020-11-25";
     src = fetchFromGitHub {
       owner = "sdiehl";
       repo = "vim-ormolu";
@@ -20011,7 +20089,7 @@ final: prev: {
 
   vim-osc52 = buildVimPlugin {
     pname = "vim-osc52";
-    version = "2020-09-19";
+    version = "0-unstable-2020-09-19";
     src = fetchFromGitHub {
       owner = "fcpg";
       repo = "vim-osc52";
@@ -20024,7 +20102,7 @@ final: prev: {
 
   vim-oscyank = buildVimPlugin {
     pname = "vim-oscyank";
-    version = "2025-04-11";
+    version = "2.0.0-unstable-2025-04-11";
     src = fetchFromGitHub {
       owner = "ojroques";
       repo = "vim-oscyank";
@@ -20037,7 +20115,7 @@ final: prev: {
 
   vim-over = buildVimPlugin {
     pname = "vim-over";
-    version = "2020-01-26";
+    version = "0-unstable-2020-01-26";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-over";
@@ -20050,7 +20128,7 @@ final: prev: {
 
   vim-packer = buildVimPlugin {
     pname = "vim-packer";
-    version = "2018-11-11";
+    version = "0-unstable-2018-11-11";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-packer";
@@ -20063,7 +20141,7 @@ final: prev: {
 
   vim-pager = buildVimPlugin {
     pname = "vim-pager";
-    version = "2015-08-26";
+    version = "0-unstable-2015-08-26";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-pager";
@@ -20076,7 +20154,7 @@ final: prev: {
 
   vim-pandoc = buildVimPlugin {
     pname = "vim-pandoc";
-    version = "2025-11-07";
+    version = "2.0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc";
@@ -20089,7 +20167,7 @@ final: prev: {
 
   vim-pandoc-after = buildVimPlugin {
     pname = "vim-pandoc-after";
-    version = "2019-04-29";
+    version = "0-unstable-2019-04-29";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc-after";
@@ -20102,7 +20180,7 @@ final: prev: {
 
   vim-pandoc-syntax = buildVimPlugin {
     pname = "vim-pandoc-syntax";
-    version = "2025-09-22";
+    version = "0-unstable-2025-09-22";
     src = fetchFromGitHub {
       owner = "vim-pandoc";
       repo = "vim-pandoc-syntax";
@@ -20115,7 +20193,7 @@ final: prev: {
 
   vim-paper = buildVimPlugin {
     pname = "vim-paper";
-    version = "2025-02-15";
+    version = "0-unstable-2025-02-15";
     src = fetchFromGitHub {
       owner = "yorickpeterse";
       repo = "vim-paper";
@@ -20128,7 +20206,7 @@ final: prev: {
 
   vim-parinfer = buildVimPlugin {
     pname = "vim-parinfer";
-    version = "2022-11-29";
+    version = "1.0.0-unstable-2022-11-29";
     src = fetchFromGitHub {
       owner = "bhurlow";
       repo = "vim-parinfer";
@@ -20141,7 +20219,7 @@ final: prev: {
 
   vim-pasta = buildVimPlugin {
     pname = "vim-pasta";
-    version = "2023-08-12";
+    version = "0.1-unstable-2023-08-12";
     src = fetchFromGitHub {
       owner = "ku1ik";
       repo = "vim-pasta";
@@ -20154,7 +20232,7 @@ final: prev: {
 
   vim-pathogen = buildVimPlugin {
     pname = "vim-pathogen";
-    version = "2022-08-24";
+    version = "2.4-unstable-2022-08-24";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-pathogen";
@@ -20167,7 +20245,7 @@ final: prev: {
 
   vim-peekaboo = buildVimPlugin {
     pname = "vim-peekaboo";
-    version = "2025-08-19";
+    version = "0.1.0-unstable-2025-08-19";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-peekaboo";
@@ -20180,7 +20258,7 @@ final: prev: {
 
   vim-pencil = buildVimPlugin {
     pname = "vim-pencil";
-    version = "2023-04-03";
+    version = "1.6.1-unstable-2023-04-03";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vim-pencil";
@@ -20193,7 +20271,7 @@ final: prev: {
 
   vim-pets = buildVimPlugin {
     pname = "vim-pets";
-    version = "2024-09-23";
+    version = "0-unstable-2024-09-23";
     src = fetchFromGitHub {
       owner = "MeF0504";
       repo = "vim-pets";
@@ -20206,7 +20284,7 @@ final: prev: {
 
   vim-phabricator = buildVimPlugin {
     pname = "vim-phabricator";
-    version = "2021-11-06";
+    version = "1.2-unstable-2021-11-06";
     src = fetchFromGitHub {
       owner = "jparise";
       repo = "vim-phabricator";
@@ -20219,7 +20297,7 @@ final: prev: {
 
   vim-pico8-syntax = buildVimPlugin {
     pname = "vim-pico8-syntax";
-    version = "2016-10-30";
+    version = "0-unstable-2016-10-30";
     src = fetchFromGitHub {
       owner = "justinj";
       repo = "vim-pico8-syntax";
@@ -20232,7 +20310,7 @@ final: prev: {
 
   vim-plug = buildVimPlugin {
     pname = "vim-plug";
-    version = "2025-11-06";
+    version = "0.14.0-unstable-2025-11-06";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-plug";
@@ -20245,7 +20323,7 @@ final: prev: {
 
   vim-plugin-AnsiEsc = buildVimPlugin {
     pname = "vim-plugin-AnsiEsc";
-    version = "2019-04-07";
+    version = "13.3-unstable-2019-04-07";
     src = fetchFromGitHub {
       owner = "powerman";
       repo = "vim-plugin-AnsiEsc";
@@ -20258,7 +20336,7 @@ final: prev: {
 
   vim-pluto = buildVimPlugin {
     pname = "vim-pluto";
-    version = "2022-02-01";
+    version = "0.3.0-unstable-2022-02-01";
     src = fetchFromGitHub {
       owner = "hasundue";
       repo = "vim-pluto";
@@ -20271,7 +20349,7 @@ final: prev: {
 
   vim-polyglot = buildVimPlugin {
     pname = "vim-polyglot";
-    version = "2025-08-27";
+    version = "4.17.1-unstable-2025-08-27";
     src = fetchFromGitHub {
       owner = "sheerun";
       repo = "vim-polyglot";
@@ -20284,7 +20362,7 @@ final: prev: {
 
   vim-pony = buildVimPlugin {
     pname = "vim-pony";
-    version = "2018-06-24";
+    version = "0.1.0-unstable-2018-06-24";
     src = fetchFromGitHub {
       owner = "jmcomets";
       repo = "vim-pony";
@@ -20297,7 +20375,7 @@ final: prev: {
 
   vim-poweryank = buildVimPlugin {
     pname = "vim-poweryank";
-    version = "2017-08-13";
+    version = "0-unstable-2017-08-13";
     src = fetchFromGitHub {
       owner = "haya14busa";
       repo = "vim-poweryank";
@@ -20310,7 +20388,7 @@ final: prev: {
 
   vim-prettier = buildVimPlugin {
     pname = "vim-prettier";
-    version = "2023-10-10";
+    version = "1.0.0-unstable-2023-10-10";
     src = fetchFromGitHub {
       owner = "prettier";
       repo = "vim-prettier";
@@ -20323,7 +20401,7 @@ final: prev: {
 
   vim-prettyprint = buildVimPlugin {
     pname = "vim-prettyprint";
-    version = "2016-07-16";
+    version = "0.3.4-unstable-2016-07-16";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-prettyprint";
@@ -20336,7 +20414,7 @@ final: prev: {
 
   vim-printer = buildVimPlugin {
     pname = "vim-printer";
-    version = "2024-01-24";
+    version = "0-unstable-2024-01-24";
     src = fetchFromGitHub {
       owner = "meain";
       repo = "vim-printer";
@@ -20349,7 +20427,7 @@ final: prev: {
 
   vim-prisma = buildVimPlugin {
     pname = "vim-prisma";
-    version = "2023-01-24";
+    version = "0-unstable-2023-01-24";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "vim-prisma";
@@ -20362,7 +20440,7 @@ final: prev: {
 
   vim-projectionist = buildVimPlugin {
     pname = "vim-projectionist";
-    version = "2024-12-21";
+    version = "1.3-unstable-2024-12-21";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-projectionist";
@@ -20375,7 +20453,7 @@ final: prev: {
 
   vim-prosession = buildVimPlugin {
     pname = "vim-prosession";
-    version = "2025-08-22";
+    version = "0.7.5-unstable-2025-08-22";
     src = fetchFromGitHub {
       owner = "dhruvasagar";
       repo = "vim-prosession";
@@ -20388,7 +20466,7 @@ final: prev: {
 
   vim-protobuf = buildVimPlugin {
     pname = "vim-protobuf";
-    version = "2017-12-26";
+    version = "0-unstable-2017-12-26";
     src = fetchFromGitHub {
       owner = "uarun";
       repo = "vim-protobuf";
@@ -20401,7 +20479,7 @@ final: prev: {
 
   vim-ps1 = buildVimPlugin {
     pname = "vim-ps1";
-    version = "2024-03-06";
+    version = "2.81-unstable-2024-03-06";
     src = fetchFromGitHub {
       owner = "PProvost";
       repo = "vim-ps1";
@@ -20414,7 +20492,7 @@ final: prev: {
 
   vim-pug = buildVimPlugin {
     pname = "vim-pug";
-    version = "2019-09-23";
+    version = "0-unstable-2019-09-23";
     src = fetchFromGitHub {
       owner = "digitaltoad";
       repo = "vim-pug";
@@ -20427,7 +20505,7 @@ final: prev: {
 
   vim-puppet = buildVimPlugin {
     pname = "vim-puppet";
-    version = "2024-09-15";
+    version = "1.0.0-unstable-2024-09-15";
     src = fetchFromGitHub {
       owner = "rodjek";
       repo = "vim-puppet";
@@ -20440,7 +20518,7 @@ final: prev: {
 
   vim-python-pep8-indent = buildVimPlugin {
     pname = "vim-python-pep8-indent";
-    version = "2020-03-20";
+    version = "0-unstable-2020-03-20";
     src = fetchFromGitHub {
       owner = "Vimjas";
       repo = "vim-python-pep8-indent";
@@ -20453,7 +20531,7 @@ final: prev: {
 
   vim-qf = buildVimPlugin {
     pname = "vim-qf";
-    version = "2025-05-18";
+    version = "0.2.0-unstable-2025-05-18";
     src = fetchFromGitHub {
       owner = "romainl";
       repo = "vim-qf";
@@ -20466,7 +20544,7 @@ final: prev: {
 
   vim-qlist = buildVimPlugin {
     pname = "vim-qlist";
-    version = "2019-07-18";
+    version = "0.0.3-unstable-2019-07-18";
     src = fetchFromGitHub {
       owner = "romainl";
       repo = "vim-qlist";
@@ -20479,7 +20557,7 @@ final: prev: {
 
   vim-qml = buildVimPlugin {
     pname = "vim-qml";
-    version = "2023-09-11";
+    version = "0-unstable-2023-09-11";
     src = fetchFromGitHub {
       owner = "peterhoeg";
       repo = "vim-qml";
@@ -20492,7 +20570,7 @@ final: prev: {
 
   vim-quickrun = buildVimPlugin {
     pname = "vim-quickrun";
-    version = "2024-07-12";
+    version = "0.9.0-unstable-2024-07-12";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-quickrun";
@@ -20505,7 +20583,7 @@ final: prev: {
 
   vim-racer = buildVimPlugin {
     pname = "vim-racer";
-    version = "2021-04-04";
+    version = "1.0-unstable-2021-04-04";
     src = fetchFromGitHub {
       owner = "racer-rust";
       repo = "vim-racer";
@@ -20518,7 +20596,7 @@ final: prev: {
 
   vim-racket = buildVimPlugin {
     pname = "vim-racket";
-    version = "2022-12-30";
+    version = "0-unstable-2022-12-30";
     src = fetchFromGitHub {
       owner = "wlangstroth";
       repo = "vim-racket";
@@ -20531,7 +20609,7 @@ final: prev: {
 
   vim-ragtag = buildVimPlugin {
     pname = "vim-ragtag";
-    version = "2022-03-21";
+    version = "2.0-unstable-2022-03-21";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-ragtag";
@@ -20544,7 +20622,7 @@ final: prev: {
 
   vim-rails = buildVimPlugin {
     pname = "vim-rails";
-    version = "2025-02-19";
+    version = "5.4-unstable-2025-02-19";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-rails";
@@ -20557,7 +20635,7 @@ final: prev: {
 
   vim-reasonml = buildVimPlugin {
     pname = "vim-reasonml";
-    version = "2020-07-16";
+    version = "0-unstable-2020-07-16";
     src = fetchFromGitHub {
       owner = "jordwalke";
       repo = "vim-reasonml";
@@ -20570,7 +20648,7 @@ final: prev: {
 
   vim-repeat = buildVimPlugin {
     pname = "vim-repeat";
-    version = "2024-07-08";
+    version = "1.2-unstable-2024-07-08";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-repeat";
@@ -20583,7 +20661,7 @@ final: prev: {
 
   vim-rhai = buildVimPlugin {
     pname = "vim-rhai";
-    version = "2022-07-16";
+    version = "0-unstable-2022-07-16";
     src = fetchFromGitHub {
       owner = "rhaiscript";
       repo = "vim-rhai";
@@ -20596,7 +20674,7 @@ final: prev: {
 
   vim-rhubarb = buildVimPlugin {
     pname = "vim-rhubarb";
-    version = "2025-06-27";
+    version = "0-unstable-2025-06-27";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-rhubarb";
@@ -20609,7 +20687,7 @@ final: prev: {
 
   vim-rooter = buildVimPlugin {
     pname = "vim-rooter";
-    version = "2024-09-25";
+    version = "0-unstable-2024-09-25";
     src = fetchFromGitHub {
       owner = "airblade";
       repo = "vim-rooter";
@@ -20622,7 +20700,7 @@ final: prev: {
 
   vim-rsi = buildVimPlugin {
     pname = "vim-rsi";
-    version = "2023-04-30";
+    version = "0-unstable-2023-04-30";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-rsi";
@@ -20635,7 +20713,7 @@ final: prev: {
 
   vim-ruby = buildVimPlugin {
     pname = "vim-ruby";
-    version = "2025-04-28";
+    version = "0-unstable-2025-04-28";
     src = fetchFromGitHub {
       owner = "vim-ruby";
       repo = "vim-ruby";
@@ -20648,7 +20726,7 @@ final: prev: {
 
   vim-salve = buildVimPlugin {
     pname = "vim-salve";
-    version = "2024-07-07";
+    version = "0-unstable-2024-07-07";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-salve";
@@ -20661,7 +20739,7 @@ final: prev: {
 
   vim-sandwich = buildVimPlugin {
     pname = "vim-sandwich";
-    version = "2024-03-20";
+    version = "1.0.0-unstable-2024-03-20";
     src = fetchFromGitHub {
       owner = "machakann";
       repo = "vim-sandwich";
@@ -20674,7 +20752,7 @@ final: prev: {
 
   vim-sayonara = buildVimPlugin {
     pname = "vim-sayonara";
-    version = "2021-08-12";
+    version = "0-unstable-2021-08-12";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-sayonara";
@@ -20687,7 +20765,7 @@ final: prev: {
 
   vim-scala = buildVimPlugin {
     pname = "vim-scala";
-    version = "2021-08-11";
+    version = "0-unstable-2021-08-11";
     src = fetchFromGitHub {
       owner = "derekwyatt";
       repo = "vim-scala";
@@ -20700,7 +20778,7 @@ final: prev: {
 
   vim-scouter = buildVimPlugin {
     pname = "vim-scouter";
-    version = "2014-08-10";
+    version = "0.1.3-unstable-2014-08-10";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-scouter";
@@ -20713,12 +20791,12 @@ final: prev: {
 
   vim-scriptease = buildVimPlugin {
     pname = "vim-scriptease";
-    version = "2023-11-13";
+    version = "1.1-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-scriptease";
-      rev = "cdb5981d47ac98221a408ae2e7cae66524d9e872";
-      sha256 = "1f5y96lkbj8zfm6lc3izynb4dz914vli2yqpn1gw9y3llj43n5bn";
+      rev = "4cc639dd70061bb1489f4d3655861ebd9bc896fa";
+      sha256 = "027ann2z6afl5f790jkcn80h2rrwj22pv54wwfnlyrry8bd0lx8d";
     };
     meta.homepage = "https://github.com/tpope/vim-scriptease/";
     meta.hydraPlatforms = [ ];
@@ -20726,7 +20804,7 @@ final: prev: {
 
   vim-search-pulse = buildVimPlugin {
     pname = "vim-search-pulse";
-    version = "2024-06-07";
+    version = "0-unstable-2024-06-07";
     src = fetchFromGitHub {
       owner = "inside";
       repo = "vim-search-pulse";
@@ -20739,7 +20817,7 @@ final: prev: {
 
   vim-sensible = buildVimPlugin {
     pname = "vim-sensible";
-    version = "2024-06-08";
+    version = "2.0-unstable-2024-06-08";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sensible";
@@ -20752,7 +20830,7 @@ final: prev: {
 
   vim-sentence-chopper = buildVimPlugin {
     pname = "vim-sentence-chopper";
-    version = "2025-11-03";
+    version = "1.5-unstable-2025-11-03";
     src = fetchFromGitHub {
       owner = "Konfekt";
       repo = "vim-sentence-chopper";
@@ -20765,12 +20843,12 @@ final: prev: {
 
   vim-sexp = buildVimPlugin {
     pname = "vim-sexp";
-    version = "2025-10-26";
+    version = "0-unstable-2025-11-23";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "vim-sexp";
-      rev = "d8df22690b146ce07fdaf49940e3214def76a69c";
-      sha256 = "19g7jymp3qmh9mx1kpj9yksykm4lhrsdpbvkzpw4sfhhw2mzxk4c";
+      rev = "f5bd4cb2535969fe4741b24fa5f51690521dbaf0";
+      sha256 = "19h6bvzs1f12s6h7zyhxqpismickqhchv0lg77ly6js7gghgrppr";
     };
     meta.homepage = "https://github.com/guns/vim-sexp/";
     meta.hydraPlatforms = [ ];
@@ -20778,7 +20856,7 @@ final: prev: {
 
   vim-sexp-mappings-for-regular-people = buildVimPlugin {
     pname = "vim-sexp-mappings-for-regular-people";
-    version = "2025-08-16";
+    version = "0-unstable-2025-08-16";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sexp-mappings-for-regular-people";
@@ -20791,7 +20869,7 @@ final: prev: {
 
   vim-shellcheck = buildVimPlugin {
     pname = "vim-shellcheck";
-    version = "2025-07-06";
+    version = "1.2.0-unstable-2025-07-06";
     src = fetchFromGitHub {
       owner = "itspriddle";
       repo = "vim-shellcheck";
@@ -20804,7 +20882,7 @@ final: prev: {
 
   vim-signature = buildVimPlugin {
     pname = "vim-signature";
-    version = "2018-07-06";
+    version = "0-unstable-2018-07-06";
     src = fetchFromGitHub {
       owner = "kshenoy";
       repo = "vim-signature";
@@ -20817,7 +20895,7 @@ final: prev: {
 
   vim-signify = buildVimPlugin {
     pname = "vim-signify";
-    version = "2025-08-31";
+    version = "0-unstable-2025-08-31";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-signify";
@@ -20830,7 +20908,7 @@ final: prev: {
 
   vim-sile = buildVimPlugin {
     pname = "vim-sile";
-    version = "2025-10-09";
+    version = "0-unstable-2025-10-09";
     src = fetchFromGitHub {
       owner = "sile-typesetter";
       repo = "vim-sile";
@@ -20843,7 +20921,7 @@ final: prev: {
 
   vim-simpledb = buildVimPlugin {
     pname = "vim-simpledb";
-    version = "2020-10-02";
+    version = "0-unstable-2020-10-02";
     src = fetchFromGitHub {
       owner = "ivalkeen";
       repo = "vim-simpledb";
@@ -20856,7 +20934,7 @@ final: prev: {
 
   vim-slash = buildVimPlugin {
     pname = "vim-slash";
-    version = "2019-08-28";
+    version = "0-unstable-2019-08-28";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-slash";
@@ -20869,7 +20947,7 @@ final: prev: {
 
   vim-sleuth = buildVimPlugin {
     pname = "vim-sleuth";
-    version = "2024-09-19";
+    version = "2.0-unstable-2024-09-19";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-sleuth";
@@ -20882,12 +20960,12 @@ final: prev: {
 
   vim-slime = buildVimPlugin {
     pname = "vim-slime";
-    version = "2025-08-25";
+    version = "0-unstable-2025-12-03";
     src = fetchFromGitHub {
       owner = "jpalardy";
       repo = "vim-slime";
-      rev = "67b24bf93cff3ac39db94694a7aefcdb3f44b927";
-      sha256 = "1x2z8arn6zkmilq75qs3l66qdvgay28zi85q0i1q0zxl365nhl16";
+      rev = "3fb77a9d1d3dd3abfbdbd4840eb20947f39f688b";
+      sha256 = "0kbqxgvfzf2jd6skhxrhc8jshbl8m1h9f0h59w4h2z3v55j8562r";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
     meta.hydraPlatforms = [ ];
@@ -20895,7 +20973,7 @@ final: prev: {
 
   vim-smali = buildVimPlugin {
     pname = "vim-smali";
-    version = "2015-11-05";
+    version = "0-unstable-2015-11-05";
     src = fetchFromGitHub {
       owner = "mzlogin";
       repo = "vim-smali";
@@ -20908,7 +20986,7 @@ final: prev: {
 
   vim-smalls = buildVimPlugin {
     pname = "vim-smalls";
-    version = "2015-05-02";
+    version = "0.9-unstable-2015-05-02";
     src = fetchFromGitHub {
       owner = "t9md";
       repo = "vim-smalls";
@@ -20921,7 +20999,7 @@ final: prev: {
 
   vim-smartbd = buildVimPlugin {
     pname = "vim-smartbd";
-    version = "2015-12-20";
+    version = "0-unstable-2015-12-20";
     src = fetchFromGitHub {
       owner = "Industrial";
       repo = "vim-smartbd";
@@ -20934,7 +21012,7 @@ final: prev: {
 
   vim-smartbw = buildVimPlugin {
     pname = "vim-smartbw";
-    version = "2015-12-20";
+    version = "0-unstable-2015-12-20";
     src = fetchFromGitHub {
       owner = "Industrial";
       repo = "vim-smartbw";
@@ -20947,7 +21025,7 @@ final: prev: {
 
   vim-smoothie = buildVimPlugin {
     pname = "vim-smoothie";
-    version = "2022-06-10";
+    version = "0-unstable-2022-06-10";
     src = fetchFromGitHub {
       owner = "psliwka";
       repo = "vim-smoothie";
@@ -20960,7 +21038,7 @@ final: prev: {
 
   vim-smt2 = buildVimPlugin {
     pname = "vim-smt2";
-    version = "2025-10-17";
+    version = "0-unstable-2025-10-17";
     src = fetchFromGitHub {
       owner = "bohlender";
       repo = "vim-smt2";
@@ -20973,12 +21051,12 @@ final: prev: {
 
   vim-sneak = buildVimPlugin {
     pname = "vim-sneak";
-    version = "2025-02-03";
+    version = "1.11.0-unstable-2025-12-05";
     src = fetchFromGitHub {
       owner = "justinmk";
       repo = "vim-sneak";
-      rev = "18b1faf020e6a66c1ce09b3ff5e6b6feb182973b";
-      sha256 = "1ajpr5klhbljr23qr76ghfvhn8pr65llrqpflhazmmx5gprsks9h";
+      rev = "feea86adcfbf8e6b5e71fdd5f4f5736fd8819fdb";
+      sha256 = "1x68j3kd53xsdnw414m6i5a147njkjghh2mfd7bs216xf31ahh2n";
     };
     meta.homepage = "https://github.com/justinmk/vim-sneak/";
     meta.hydraPlatforms = [ ];
@@ -20986,7 +21064,7 @@ final: prev: {
 
   vim-snipmate = buildVimPlugin {
     pname = "vim-snipmate";
-    version = "2025-05-14";
+    version = "0.90-unstable-2025-05-14";
     src = fetchFromGitHub {
       owner = "garbas";
       repo = "vim-snipmate";
@@ -20999,7 +21077,7 @@ final: prev: {
 
   vim-snippets = buildVimPlugin {
     pname = "vim-snippets";
-    version = "2025-10-28";
+    version = "1.0.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "honza";
       repo = "vim-snippets";
@@ -21012,12 +21090,12 @@ final: prev: {
 
   vim-solarized8 = buildVimPlugin {
     pname = "vim-solarized8";
-    version = "2025-06-02";
+    version = "1.6.3-unstable-2025-11-18";
     src = fetchFromGitHub {
       owner = "lifepillar";
       repo = "vim-solarized8";
-      rev = "2f31fc2239c965d7dd9754ba8160582c99211e12";
-      sha256 = "0s02xs7asba82ibzj03s68869jc767r5aihcji00gr5f7gkmsha3";
+      rev = "19fd5a93162e1014e8ea8c0fedce26392e63f7ae";
+      sha256 = "06p9j5mm4b5z3h7ri9ldhazpvp74cgr8vawc888yxaz18h721ad5";
     };
     meta.homepage = "https://github.com/lifepillar/vim-solarized8/";
     meta.hydraPlatforms = [ ];
@@ -21025,7 +21103,7 @@ final: prev: {
 
   vim-solidity = buildVimPlugin {
     pname = "vim-solidity";
-    version = "2018-04-17";
+    version = "0-unstable-2018-04-17";
     src = fetchFromGitHub {
       owner = "tomlion";
       repo = "vim-solidity";
@@ -21038,7 +21116,7 @@ final: prev: {
 
   vim-sort-motion = buildVimPlugin {
     pname = "vim-sort-motion";
-    version = "2021-03-07";
+    version = "0-unstable-2021-03-07";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-sort-motion";
@@ -21051,7 +21129,7 @@ final: prev: {
 
   vim-speeddating = buildVimPlugin {
     pname = "vim-speeddating";
-    version = "2024-08-14";
+    version = "20151024-unstable-2024-08-14";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-speeddating";
@@ -21064,12 +21142,12 @@ final: prev: {
 
   vim-spirv = buildVimPlugin {
     pname = "vim-spirv";
-    version = "2025-10-30";
+    version = "0.5.2-unstable-2025-11-13";
     src = fetchFromGitHub {
       owner = "kbenzie";
       repo = "vim-spirv";
-      rev = "449ad78bdbb5d860a53988e0ca29c6d7912fa070";
-      sha256 = "0zwl80y68aki3zky2j2sw785hfw5d4i25vg5a3nlp8s62k2s6ykf";
+      rev = "457da57f5f557457abbff291506d3e2a0b6f955f";
+      sha256 = "1gg1zzralpl05fqib2m0m5d34jpkgab0p2w8mkmcs3hv23d05bnp";
     };
     meta.homepage = "https://github.com/kbenzie/vim-spirv/";
     meta.hydraPlatforms = [ ];
@@ -21077,7 +21155,7 @@ final: prev: {
 
   vim-splunk = buildVimPlugin {
     pname = "vim-splunk";
-    version = "2025-08-25";
+    version = "0-unstable-2025-08-25";
     src = fetchFromGitHub {
       owner = "yorokobi";
       repo = "vim-splunk";
@@ -21090,7 +21168,7 @@ final: prev: {
 
   vim-startify = buildVimPlugin {
     pname = "vim-startify";
-    version = "2023-09-20";
+    version = "1.1-unstable-2023-09-20";
     src = fetchFromGitHub {
       owner = "mhinz";
       repo = "vim-startify";
@@ -21103,7 +21181,7 @@ final: prev: {
 
   vim-startuptime = buildVimPlugin {
     pname = "vim-startuptime";
-    version = "2025-02-18";
+    version = "4.5.0-unstable-2025-02-18";
     src = fetchFromGitHub {
       owner = "dstein64";
       repo = "vim-startuptime";
@@ -21116,7 +21194,7 @@ final: prev: {
 
   vim-strip-trailing-whitespace = buildVimPlugin {
     pname = "vim-strip-trailing-whitespace";
-    version = "2022-02-01";
+    version = "1.0-unstable-2022-02-01";
     src = fetchFromGitHub {
       owner = "axelf4";
       repo = "vim-strip-trailing-whitespace";
@@ -21129,7 +21207,7 @@ final: prev: {
 
   vim-stylish-haskell = buildVimPlugin {
     pname = "vim-stylish-haskell";
-    version = "2022-08-08";
+    version = "0-unstable-2022-08-08";
     src = fetchFromGitHub {
       owner = "nbouscal";
       repo = "vim-stylish-haskell";
@@ -21142,7 +21220,7 @@ final: prev: {
 
   vim-stylishask = buildVimPlugin {
     pname = "vim-stylishask";
-    version = "2021-09-10";
+    version = "0-unstable-2021-09-10";
     src = fetchFromGitHub {
       owner = "alx741";
       repo = "vim-stylishask";
@@ -21155,7 +21233,7 @@ final: prev: {
 
   vim-substrata = buildVimPlugin {
     pname = "vim-substrata";
-    version = "2021-03-23";
+    version = "0-unstable-2021-03-23";
     src = fetchFromGitHub {
       owner = "lunacookies";
       repo = "vim-substrata";
@@ -21168,7 +21246,7 @@ final: prev: {
 
   vim-subversive = buildVimPlugin {
     pname = "vim-subversive";
-    version = "2024-01-02";
+    version = "1.0-unstable-2024-01-02";
     src = fetchFromGitHub {
       owner = "svermeulen";
       repo = "vim-subversive";
@@ -21181,7 +21259,7 @@ final: prev: {
 
   vim-suda = buildVimPlugin {
     pname = "vim-suda";
-    version = "2025-10-29";
+    version = "1.2.4-unstable-2025-10-29";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-suda";
@@ -21194,7 +21272,7 @@ final: prev: {
 
   vim-surround = buildVimPlugin {
     pname = "vim-surround";
-    version = "2022-10-25";
+    version = "2.2-unstable-2022-10-25";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-surround";
@@ -21207,7 +21285,7 @@ final: prev: {
 
   vim-svelte = buildVimPlugin {
     pname = "vim-svelte";
-    version = "2025-05-30";
+    version = "0-unstable-2025-05-30";
     src = fetchFromGitHub {
       owner = "evanleck";
       repo = "vim-svelte";
@@ -21220,7 +21298,7 @@ final: prev: {
 
   vim-swap = buildVimPlugin {
     pname = "vim-swap";
-    version = "2021-08-08";
+    version = "0-unstable-2021-08-08";
     src = fetchFromGitHub {
       owner = "machakann";
       repo = "vim-swap";
@@ -21233,7 +21311,7 @@ final: prev: {
 
   vim-tabby = buildVimPlugin {
     pname = "vim-tabby";
-    version = "2025-01-13";
+    version = "2.0.2-unstable-2025-01-13";
     src = fetchFromGitHub {
       owner = "TabbyML";
       repo = "vim-tabby";
@@ -21246,12 +21324,12 @@ final: prev: {
 
   vim-table-mode = buildVimPlugin {
     pname = "vim-table-mode";
-    version = "2025-09-01";
+    version = "4.8.1-unstable-2025-11-22";
     src = fetchFromGitHub {
       owner = "dhruvasagar";
       repo = "vim-table-mode";
-      rev = "e156dbbedce0bbf61c0919db7678fa246fabd616";
-      sha256 = "1y2ryzqak1i3y36kz10f0r0c527i4kchnls4mksm1r74dmasjk98";
+      rev = "bb025308a45c67c7c8f0763ba37bc2ee3f534df0";
+      sha256 = "0mkq8v8l9zbl2l12whzsnbz3fmg7ssqk4qb2syw8hxw1j9sb8wm0";
     };
     meta.homepage = "https://github.com/dhruvasagar/vim-table-mode/";
     meta.hydraPlatforms = [ ];
@@ -21259,7 +21337,7 @@ final: prev: {
 
   vim-tabpagecd = buildVimPlugin {
     pname = "vim-tabpagecd";
-    version = "2021-09-23";
+    version = "0.0.2-unstable-2021-09-23";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-tabpagecd";
@@ -21272,7 +21350,7 @@ final: prev: {
 
   vim-tbone = buildVimPlugin {
     pname = "vim-tbone";
-    version = "2023-03-31";
+    version = "1.1-unstable-2023-03-31";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-tbone";
@@ -21285,7 +21363,7 @@ final: prev: {
 
   vim-teal = buildVimPlugin {
     pname = "vim-teal";
-    version = "2025-09-19";
+    version = "0-unstable-2025-09-19";
     src = fetchFromGitHub {
       owner = "teal-language";
       repo = "vim-teal";
@@ -21298,7 +21376,7 @@ final: prev: {
 
   vim-terminator = buildVimPlugin {
     pname = "vim-terminator";
-    version = "2022-04-15";
+    version = "0-unstable-2022-04-15";
     src = fetchFromGitHub {
       owner = "erietz";
       repo = "vim-terminator";
@@ -21311,7 +21389,7 @@ final: prev: {
 
   vim-terraform = buildVimPlugin {
     pname = "vim-terraform";
-    version = "2025-05-24";
+    version = "0-unstable-2025-05-24";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-terraform";
@@ -21324,7 +21402,7 @@ final: prev: {
 
   vim-terraform-completion = buildVimPlugin {
     pname = "vim-terraform-completion";
-    version = "2021-04-11";
+    version = "0.0.1-unstable-2021-04-11";
     src = fetchFromGitHub {
       owner = "juliosueiras";
       repo = "vim-terraform-completion";
@@ -21338,12 +21416,12 @@ final: prev: {
 
   vim-test = buildVimPlugin {
     pname = "vim-test";
-    version = "2025-10-14";
+    version = "2.1.0-unstable-2025-12-01";
     src = fetchFromGitHub {
       owner = "vim-test";
       repo = "vim-test";
-      rev = "2c264d2a5dddb3a7ec927e4359a2b619a8c13a8c";
-      sha256 = "0y91q6rdwll52hh66ca8z6ljafm1nb8db3dgxx5w30haq4qdimv2";
+      rev = "1eeb12774a0f251571700ccf68da27789b2f0852";
+      sha256 = "1jl0b6amvwy8alrm4m2q347nkjr9y4yn9843pz3wnfi0wihh73mh";
     };
     meta.homepage = "https://github.com/vim-test/vim-test/";
     meta.hydraPlatforms = [ ];
@@ -21351,7 +21429,7 @@ final: prev: {
 
   vim-textobj-comment = buildVimPlugin {
     pname = "vim-textobj-comment";
-    version = "2014-04-11";
+    version = "1.0.0-unstable-2014-04-11";
     src = fetchFromGitHub {
       owner = "glts";
       repo = "vim-textobj-comment";
@@ -21364,7 +21442,7 @@ final: prev: {
 
   vim-textobj-entire = buildVimPlugin {
     pname = "vim-textobj-entire";
-    version = "2018-01-19";
+    version = "0.0.4-unstable-2018-01-19";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-textobj-entire";
@@ -21377,7 +21455,7 @@ final: prev: {
 
   vim-textobj-function = buildVimPlugin {
     pname = "vim-textobj-function";
-    version = "2014-05-03";
+    version = "0.4.0-unstable-2014-05-03";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-textobj-function";
@@ -21390,7 +21468,7 @@ final: prev: {
 
   vim-textobj-haskell = buildVimPlugin {
     pname = "vim-textobj-haskell";
-    version = "2014-10-27";
+    version = "0-unstable-2014-10-27";
     src = fetchFromGitHub {
       owner = "gibiansky";
       repo = "vim-textobj-haskell";
@@ -21403,7 +21481,7 @@ final: prev: {
 
   vim-textobj-line = buildVimPlugin {
     pname = "vim-textobj-line";
-    version = "2021-09-27";
+    version = "0.0.2-unstable-2021-09-27";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-textobj-line";
@@ -21416,7 +21494,7 @@ final: prev: {
 
   vim-textobj-multiblock = buildVimPlugin {
     pname = "vim-textobj-multiblock";
-    version = "2014-06-02";
+    version = "0-unstable-2014-06-02";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-textobj-multiblock";
@@ -21429,7 +21507,7 @@ final: prev: {
 
   vim-textobj-user = buildVimPlugin {
     pname = "vim-textobj-user";
-    version = "2020-02-21";
+    version = "0.7.6-unstable-2020-02-21";
     src = fetchFromGitHub {
       owner = "kana";
       repo = "vim-textobj-user";
@@ -21442,7 +21520,7 @@ final: prev: {
 
   vim-textobj-variable-segment = buildVimPlugin {
     pname = "vim-textobj-variable-segment";
-    version = "2024-09-06";
+    version = "0-unstable-2024-09-06";
     src = fetchFromGitHub {
       owner = "Julian";
       repo = "vim-textobj-variable-segment";
@@ -21455,7 +21533,7 @@ final: prev: {
 
   vim-themis = buildVimPlugin {
     pname = "vim-themis";
-    version = "2025-08-29";
+    version = "1.7.0-unstable-2025-08-29";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-themis";
@@ -21468,7 +21546,7 @@ final: prev: {
 
   vim-tmux = buildVimPlugin {
     pname = "vim-tmux";
-    version = "2021-10-04";
+    version = "3.0.0-unstable-2021-10-04";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux";
@@ -21481,7 +21559,7 @@ final: prev: {
 
   vim-tmux-clipboard = buildVimPlugin {
     pname = "vim-tmux-clipboard";
-    version = "2023-04-24";
+    version = "0-unstable-2023-04-24";
     src = fetchFromGitHub {
       owner = "roxma";
       repo = "vim-tmux-clipboard";
@@ -21494,7 +21572,7 @@ final: prev: {
 
   vim-tmux-focus-events = buildVimPlugin {
     pname = "vim-tmux-focus-events";
-    version = "2021-04-27";
+    version = "1.0.0-unstable-2021-04-27";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux-focus-events";
@@ -21507,7 +21585,7 @@ final: prev: {
 
   vim-tmux-navigator = buildVimPlugin {
     pname = "vim-tmux-navigator";
-    version = "2025-07-15";
+    version = "1.0-unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
@@ -21520,7 +21598,7 @@ final: prev: {
 
   vim-togglelist = buildVimPlugin {
     pname = "vim-togglelist";
-    version = "2021-12-08";
+    version = "0-unstable-2021-12-08";
     src = fetchFromGitHub {
       owner = "milkypostman";
       repo = "vim-togglelist";
@@ -21533,7 +21611,7 @@ final: prev: {
 
   vim-toml = buildVimPlugin {
     pname = "vim-toml";
-    version = "2025-05-02";
+    version = "0-unstable-2025-05-02";
     src = fetchFromGitHub {
       owner = "cespare";
       repo = "vim-toml";
@@ -21546,7 +21624,7 @@ final: prev: {
 
   vim-tpipeline = buildVimPlugin {
     pname = "vim-tpipeline";
-    version = "2025-10-13";
+    version = "1.0-unstable-2025-10-13";
     src = fetchFromGitHub {
       owner = "vimpostor";
       repo = "vim-tpipeline";
@@ -21559,7 +21637,7 @@ final: prev: {
 
   vim-trailing-whitespace = buildVimPlugin {
     pname = "vim-trailing-whitespace";
-    version = "2023-02-28";
+    version = "1.0-unstable-2023-02-28";
     src = fetchFromGitHub {
       owner = "bronson";
       repo = "vim-trailing-whitespace";
@@ -21572,7 +21650,7 @@ final: prev: {
 
   vim-tridactyl = buildVimPlugin {
     pname = "vim-tridactyl";
-    version = "2022-11-30";
+    version = "0-unstable-2022-11-30";
     src = fetchFromGitHub {
       owner = "tridactyl";
       repo = "vim-tridactyl";
@@ -21585,7 +21663,7 @@ final: prev: {
 
   vim-tsx = buildVimPlugin {
     pname = "vim-tsx";
-    version = "2017-03-16";
+    version = "0-unstable-2017-03-16";
     src = fetchFromGitHub {
       owner = "ianks";
       repo = "vim-tsx";
@@ -21598,7 +21676,7 @@ final: prev: {
 
   vim-twig = buildVimPlugin {
     pname = "vim-twig";
-    version = "2018-05-23";
+    version = "0-unstable-2018-05-23";
     src = fetchFromGitHub {
       owner = "lumiliet";
       repo = "vim-twig";
@@ -21611,7 +21689,7 @@ final: prev: {
 
   vim-twiggy = buildVimPlugin {
     pname = "vim-twiggy";
-    version = "2022-01-10";
+    version = "0.4-unstable-2022-01-10";
     src = fetchFromGitHub {
       owner = "sodapopcan";
       repo = "vim-twiggy";
@@ -21624,7 +21702,7 @@ final: prev: {
 
   vim-ultest = buildVimPlugin {
     pname = "vim-ultest";
-    version = "2023-02-09";
+    version = "4.1.1-unstable-2023-02-09";
     src = fetchFromGitHub {
       owner = "rcarriga";
       repo = "vim-ultest";
@@ -21637,7 +21715,7 @@ final: prev: {
 
   vim-unicoder = buildVimPlugin {
     pname = "vim-unicoder";
-    version = "2019-04-16";
+    version = "0-unstable-2019-04-16";
     src = fetchFromGitHub {
       owner = "arthurxavierx";
       repo = "vim-unicoder";
@@ -21650,7 +21728,7 @@ final: prev: {
 
   vim-unimpaired = buildVimPlugin {
     pname = "vim-unimpaired";
-    version = "2025-08-16";
+    version = "2.1-unstable-2025-08-16";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-unimpaired";
@@ -21663,7 +21741,7 @@ final: prev: {
 
   vim-vagrant = buildVimPlugin {
     pname = "vim-vagrant";
-    version = "2018-11-11";
+    version = "0-unstable-2018-11-11";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-vagrant";
@@ -21676,7 +21754,7 @@ final: prev: {
 
   vim-vinegar = buildVimPlugin {
     pname = "vim-vinegar";
-    version = "2022-01-11";
+    version = "1.0-unstable-2022-01-11";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-vinegar";
@@ -21689,7 +21767,7 @@ final: prev: {
 
   vim-visual-increment = buildVimPlugin {
     pname = "vim-visual-increment";
-    version = "2020-05-03";
+    version = "0-unstable-2020-05-03";
     src = fetchFromGitHub {
       owner = "triglav";
       repo = "vim-visual-increment";
@@ -21702,7 +21780,7 @@ final: prev: {
 
   vim-visual-multi = buildVimPlugin {
     pname = "vim-visual-multi";
-    version = "2024-09-01";
+    version = "0.5.8-unstable-2024-09-01";
     src = fetchFromGitHub {
       owner = "mg979";
       repo = "vim-visual-multi";
@@ -21715,7 +21793,7 @@ final: prev: {
 
   vim-visual-star-search = buildVimPlugin {
     pname = "vim-visual-star-search";
-    version = "2021-07-14";
+    version = "0.2-unstable-2021-07-14";
     src = fetchFromGitHub {
       owner = "bronson";
       repo = "vim-visual-star-search";
@@ -21728,7 +21806,7 @@ final: prev: {
 
   vim-visualstar = buildVimPlugin {
     pname = "vim-visualstar";
-    version = "2015-08-27";
+    version = "0.5.0-unstable-2015-08-27";
     src = fetchFromGitHub {
       owner = "thinca";
       repo = "vim-visualstar";
@@ -21741,7 +21819,7 @@ final: prev: {
 
   vim-vp4 = buildVimPlugin {
     pname = "vim-vp4";
-    version = "2024-10-11";
+    version = "0-unstable-2024-10-11";
     src = fetchFromGitHub {
       owner = "ngemily";
       repo = "vim-vp4";
@@ -21754,7 +21832,7 @@ final: prev: {
 
   vim-vsnip = buildVimPlugin {
     pname = "vim-vsnip";
-    version = "2025-10-05";
+    version = "0-unstable-2025-10-05";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "vim-vsnip";
@@ -21767,7 +21845,7 @@ final: prev: {
 
   vim-vsnip-integ = buildVimPlugin {
     pname = "vim-vsnip-integ";
-    version = "2025-09-14";
+    version = "0-unstable-2025-09-14";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "vim-vsnip-integ";
@@ -21780,7 +21858,7 @@ final: prev: {
 
   vim-vue = buildVimPlugin {
     pname = "vim-vue";
-    version = "2024-03-30";
+    version = "0-unstable-2024-03-30";
     src = fetchFromGitHub {
       owner = "posva";
       repo = "vim-vue";
@@ -21793,7 +21871,7 @@ final: prev: {
 
   vim-vue-plugin = buildVimPlugin {
     pname = "vim-vue-plugin";
-    version = "2023-10-05";
+    version = "2021_03_29-unstable-2023-10-05";
     src = fetchFromGitHub {
       owner = "leafOfTree";
       repo = "vim-vue-plugin";
@@ -21806,7 +21884,7 @@ final: prev: {
 
   vim-wakatime = buildVimPlugin {
     pname = "vim-wakatime";
-    version = "2025-08-31";
+    version = "11.3.0-unstable-2025-08-31";
     src = fetchFromGitHub {
       owner = "wakatime";
       repo = "vim-wakatime";
@@ -21819,7 +21897,7 @@ final: prev: {
 
   vim-watchdogs = buildVimPlugin {
     pname = "vim-watchdogs";
-    version = "2019-09-09";
+    version = "0-unstable-2019-09-09";
     src = fetchFromGitHub {
       owner = "osyo-manga";
       repo = "vim-watchdogs";
@@ -21832,12 +21910,12 @@ final: prev: {
 
   vim-wayland-clipboard = buildVimPlugin {
     pname = "vim-wayland-clipboard";
-    version = "2025-11-02";
+    version = "0.2.1-unstable-2025-11-29";
     src = fetchFromGitHub {
       owner = "jasonccox";
       repo = "vim-wayland-clipboard";
-      rev = "dc37e83e7484fa2085cdaf37f84408e12006165a";
-      sha256 = "1gkhlb93w68cgrwydb5wby1zzczapzqidapk8q842bxadaypkdll";
+      rev = "4d86e39267d979b12df4321e9c93d3100d9db033";
+      sha256 = "192557r8qh8n7ajgqslxxh345v1wz7x42byrp6qikm1s4l3fd6lg";
     };
     meta.homepage = "https://github.com/jasonccox/vim-wayland-clipboard/";
     meta.hydraPlatforms = [ ];
@@ -21845,7 +21923,7 @@ final: prev: {
 
   vim-which-key = buildVimPlugin {
     pname = "vim-which-key";
-    version = "2024-12-03";
+    version = "0-unstable-2024-12-03";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vim-which-key";
@@ -21858,7 +21936,7 @@ final: prev: {
 
   vim-windowswap = buildVimPlugin {
     pname = "vim-windowswap";
-    version = "2018-05-16";
+    version = "0-unstable-2018-05-16";
     src = fetchFromGitHub {
       owner = "wesQ3";
       repo = "vim-windowswap";
@@ -21871,7 +21949,7 @@ final: prev: {
 
   vim-wordmotion = buildVimPlugin {
     pname = "vim-wordmotion";
-    version = "2023-02-26";
+    version = "0-unstable-2023-02-26";
     src = fetchFromGitHub {
       owner = "chaoren";
       repo = "vim-wordmotion";
@@ -21884,7 +21962,7 @@ final: prev: {
 
   vim-wordy = buildVimPlugin {
     pname = "vim-wordy";
-    version = "2022-02-13";
+    version = "1.2-unstable-2022-02-13";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vim-wordy";
@@ -21897,7 +21975,7 @@ final: prev: {
 
   vim-xdebug = buildVimPlugin {
     pname = "vim-xdebug";
-    version = "2012-08-15";
+    version = "0-unstable-2012-08-15";
     src = fetchFromGitHub {
       owner = "joonty";
       repo = "vim-xdebug";
@@ -21910,7 +21988,7 @@ final: prev: {
 
   vim-xkbswitch = buildVimPlugin {
     pname = "vim-xkbswitch";
-    version = "2024-09-17";
+    version = "0.20-unstable-2024-09-17";
     src = fetchFromGitHub {
       owner = "lyokha";
       repo = "vim-xkbswitch";
@@ -21923,7 +22001,7 @@ final: prev: {
 
   vim-xtabline = buildVimPlugin {
     pname = "vim-xtabline";
-    version = "2022-02-03";
+    version = "0.5.0-unstable-2022-02-03";
     src = fetchFromGitHub {
       owner = "mg979";
       repo = "vim-xtabline";
@@ -21936,7 +22014,7 @@ final: prev: {
 
   vim-yaml = buildVimPlugin {
     pname = "vim-yaml";
-    version = "2021-01-14";
+    version = "0-unstable-2021-01-14";
     src = fetchFromGitHub {
       owner = "stephpy";
       repo = "vim-yaml";
@@ -21949,7 +22027,7 @@ final: prev: {
 
   vim-yapf = buildVimPlugin {
     pname = "vim-yapf";
-    version = "2018-10-04";
+    version = "1.0.7-unstable-2018-10-04";
     src = fetchFromGitHub {
       owner = "simonrw";
       repo = "vim-yapf";
@@ -21962,12 +22040,12 @@ final: prev: {
 
   vim-zettel = buildVimPlugin {
     pname = "vim-zettel";
-    version = "2025-08-16";
+    version = "0-unstable-2025-11-19";
     src = fetchFromGitHub {
       owner = "michal-h21";
       repo = "vim-zettel";
-      rev = "b4fd4d1537b1475bdbe32bb27253f4eca6737ae3";
-      sha256 = "1k6z3vq5ikvqhv0spq9fc1738smd7d99bia1dm72ih1a2ccr97as";
+      rev = "554d16bf65b04ae86b92db08a44b4fbcbc31023f";
+      sha256 = "1ipdj78xlj94f4ynnxc71mwhaxkxxvsqx8ngvam9s6nc9ydjjcvp";
     };
     meta.homepage = "https://github.com/michal-h21/vim-zettel/";
     meta.hydraPlatforms = [ ];
@@ -21975,7 +22053,7 @@ final: prev: {
 
   vim-zscript = buildVimPlugin {
     pname = "vim-zscript";
-    version = "2023-10-02";
+    version = "0-unstable-2023-10-02";
     src = fetchFromGitHub {
       owner = "marrub--";
       repo = "vim-zscript";
@@ -21988,7 +22066,7 @@ final: prev: {
 
   vim2hs = buildVimPlugin {
     pname = "vim2hs";
-    version = "2014-04-16";
+    version = "0-unstable-2014-04-16";
     src = fetchFromGitHub {
       owner = "dag";
       repo = "vim2hs";
@@ -22001,7 +22079,7 @@ final: prev: {
 
   vim9-stargate = buildVimPlugin {
     pname = "vim9-stargate";
-    version = "2024-01-17";
+    version = "0-unstable-2024-01-17";
     src = fetchFromGitHub {
       owner = "monkoose";
       repo = "vim9-stargate";
@@ -22014,7 +22092,7 @@ final: prev: {
 
   vim_current_word = buildVimPlugin {
     pname = "vim_current_word";
-    version = "2023-11-09";
+    version = "0-unstable-2023-11-09";
     src = fetchFromGitHub {
       owner = "dominikduda";
       repo = "vim_current_word";
@@ -22027,7 +22105,7 @@ final: prev: {
 
   vimacs = buildVimPlugin {
     pname = "vimacs";
-    version = "2016-03-24";
+    version = "0.96-unstable-2016-03-24";
     src = fetchFromGitHub {
       owner = "andrep";
       repo = "vimacs";
@@ -22040,12 +22118,12 @@ final: prev: {
 
   vimade = buildVimPlugin {
     pname = "vimade";
-    version = "2025-11-04";
+    version = "2.5.1-unstable-2025-11-09";
     src = fetchFromGitHub {
       owner = "TaDaa";
       repo = "vimade";
-      rev = "bf0a44e2f1e985a1c3e70043891377d46125a8ab";
-      sha256 = "0b063sw12vv011l5021dc9fpfay8y1cc61lmxd4ig11lv6lcds5p";
+      rev = "266cb28a451448754eb8ae2a2a46d6ae526b33f8";
+      sha256 = "0jcwlc4rk6cfx2dsk81zkijhgsb8l70qjs1wnig39rdvhkygs7hx";
     };
     meta.homepage = "https://github.com/TaDaa/vimade/";
     meta.hydraPlatforms = [ ];
@@ -22053,7 +22131,7 @@ final: prev: {
 
   vimagit = buildVimPlugin {
     pname = "vimagit";
-    version = "2024-03-28";
+    version = "1.8.0-unstable-2024-03-28";
     src = fetchFromGitHub {
       owner = "jreybert";
       repo = "vimagit";
@@ -22066,7 +22144,7 @@ final: prev: {
 
   vimelette = buildVimPlugin {
     pname = "vimelette";
-    version = "2019-05-02";
+    version = "0-unstable-2019-05-02";
     src = fetchFromGitHub {
       owner = "gotcha";
       repo = "vimelette";
@@ -22079,7 +22157,7 @@ final: prev: {
 
   vimfiler-vim = buildVimPlugin {
     pname = "vimfiler.vim";
-    version = "2024-05-20";
+    version = "0-unstable-2024-05-20";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "vimfiler.vim";
@@ -22092,7 +22170,7 @@ final: prev: {
 
   vimoutliner = buildVimPlugin {
     pname = "vimoutliner";
-    version = "2023-08-29";
+    version = "0.5.0-unstable-2023-08-29";
     src = fetchFromGitHub {
       owner = "vimoutliner";
       repo = "vimoutliner";
@@ -22105,7 +22183,7 @@ final: prev: {
 
   vimpreviewpandoc = buildVimPlugin {
     pname = "vimpreviewpandoc";
-    version = "2025-09-26";
+    version = "0-unstable-2025-09-26";
     src = fetchFromGitHub {
       owner = "tex";
       repo = "vimpreviewpandoc";
@@ -22118,7 +22196,7 @@ final: prev: {
 
   vimproc-vim = buildVimPlugin {
     pname = "vimproc.vim";
-    version = "2024-09-04";
+    version = "0-unstable-2024-09-04";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "vimproc.vim";
@@ -22131,7 +22209,7 @@ final: prev: {
 
   vimsence = buildVimPlugin {
     pname = "vimsence";
-    version = "2021-05-01";
+    version = "0-unstable-2021-05-01";
     src = fetchFromGitHub {
       owner = "vimsence";
       repo = "vimsence";
@@ -22144,7 +22222,7 @@ final: prev: {
 
   vimshell-vim = buildVimPlugin {
     pname = "vimshell.vim";
-    version = "2025-07-09";
+    version = "0-unstable-2025-07-09";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "vimshell.vim";
@@ -22157,7 +22235,7 @@ final: prev: {
 
   vimspector = buildVimPlugin {
     pname = "vimspector";
-    version = "2025-10-17";
+    version = "8968291813-unstable-2025-10-17";
     src = fetchFromGitHub {
       owner = "puremourning";
       repo = "vimspector";
@@ -22171,12 +22249,12 @@ final: prev: {
 
   vimtex = buildVimPlugin {
     pname = "vimtex";
-    version = "2025-10-13";
+    version = "2.17-unstable-2025-12-07";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "vimtex";
-      rev = "be9deac3a23eeb145ccf11dd09080795838496ce";
-      sha256 = "1v65l6bqm8xm21nvyqnanrq0q1i85khvxxzgv5qv9n8cdi10f7jg";
+      rev = "6e1229e23c3bbe93487ef62458b1241a2d8ff6af";
+      sha256 = "0f3va5iw6b2sfjhsb191n3lx551inf72r744xfail845mk5lkp77";
     };
     meta.homepage = "https://github.com/lervag/vimtex/";
     meta.hydraPlatforms = [ ];
@@ -22184,7 +22262,7 @@ final: prev: {
 
   vimux = buildVimPlugin {
     pname = "vimux";
-    version = "2025-11-07";
+    version = "1.1.0-unstable-2025-11-07";
     src = fetchFromGitHub {
       owner = "preservim";
       repo = "vimux";
@@ -22197,7 +22275,7 @@ final: prev: {
 
   vimwiki = buildVimPlugin {
     pname = "vimwiki";
-    version = "2024-10-14";
+    version = "2024.01.24-unstable-2024-10-14";
     src = fetchFromGitHub {
       owner = "vimwiki";
       repo = "vimwiki";
@@ -22210,7 +22288,7 @@ final: prev: {
 
   virt-column-nvim = buildVimPlugin {
     pname = "virt-column.nvim";
-    version = "2024-11-12";
+    version = "2.0.3-unstable-2024-11-12";
     src = fetchFromGitHub {
       owner = "lukas-reineke";
       repo = "virt-column.nvim";
@@ -22223,7 +22301,7 @@ final: prev: {
 
   virtual-types-nvim = buildVimPlugin {
     pname = "virtual-types.nvim";
-    version = "2023-04-07";
+    version = "0-unstable-2023-04-07";
     src = fetchFromGitHub {
       owner = "jubnzv";
       repo = "virtual-types.nvim";
@@ -22236,7 +22314,7 @@ final: prev: {
 
   vis = buildVimPlugin {
     pname = "vis";
-    version = "2013-04-26";
+    version = "20-unstable-2013-04-26";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "vis";
@@ -22249,7 +22327,7 @@ final: prev: {
 
   vissort-vim = buildVimPlugin {
     pname = "vissort.vim";
-    version = "2025-03-29";
+    version = "0-unstable-2025-03-29";
     src = fetchFromGitHub {
       owner = "navicore";
       repo = "vissort.vim";
@@ -22262,7 +22340,7 @@ final: prev: {
 
   vista-vim = buildVimPlugin {
     pname = "vista.vim";
-    version = "2024-12-11";
+    version = "0-unstable-2024-12-11";
     src = fetchFromGitHub {
       owner = "liuchengxu";
       repo = "vista.vim";
@@ -22275,12 +22353,12 @@ final: prev: {
 
   visual-whitespace-nvim = buildVimPlugin {
     pname = "visual-whitespace.nvim";
-    version = "2025-07-06";
+    version = "0-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "mcauley-penney";
       repo = "visual-whitespace.nvim";
-      rev = "77bd21fb442cf2b97d7224f8269c053e9def9cb9";
-      sha256 = "0s2irfh105x31j5575rbdb84pfppixadlkzp5ylyhgw0cys8p0g9";
+      rev = "2c2de32bb97620bcf4b3b78879c185315ee971dc";
+      sha256 = "0c2vhvqdsb66crxjzcixzl0dn7g1bl6rpbqkhnx8v0sk2hvydy0v";
     };
     meta.homepage = "https://github.com/mcauley-penney/visual-whitespace.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22288,7 +22366,7 @@ final: prev: {
 
   vs-tasks-nvim = buildVimPlugin {
     pname = "vs-tasks.nvim";
-    version = "2025-10-27";
+    version = "0-unstable-2025-10-27";
     src = fetchFromGitHub {
       owner = "EthanJWright";
       repo = "vs-tasks.nvim";
@@ -22299,14 +22377,27 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vscode-diff-nvim = buildVimPlugin {
+    pname = "vscode-diff.nvim";
+    version = "2.0.0-next.9-unstable-2025-12-06";
+    src = fetchFromGitHub {
+      owner = "esmuellert";
+      repo = "vscode-diff.nvim";
+      rev = "1610dbfeda57b003e666f93e88df5b33cd8c721b";
+      sha256 = "09nmfq8vckipajihp18kb1w5z98g8h26zpfvjgglmmzdg00567s6";
+    };
+    meta.homepage = "https://github.com/esmuellert/vscode-diff.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vscode-nvim = buildVimPlugin {
     pname = "vscode.nvim";
-    version = "2025-08-06";
+    version = "0-unstable-2025-12-03";
     src = fetchFromGitHub {
       owner = "Mofiqul";
       repo = "vscode.nvim";
-      rev = "cb9df0873c10a21d05362455ae3bb355eadcef6b";
-      sha256 = "1m5r8w0rm531wkmappbk6487k7fgfkgdpp6hplph6gwsn0688wp0";
+      rev = "aa1102a7e15195c9cca22730b09224a7f7745ba8";
+      sha256 = "0q1vnzrdxhfajzjwmv73srz6mdlrk17px5ncrk4z72iff6a56sb0";
     };
     meta.homepage = "https://github.com/Mofiqul/vscode.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22314,7 +22405,7 @@ final: prev: {
 
   wal-vim = buildVimPlugin {
     pname = "wal.vim";
-    version = "2020-11-08";
+    version = "0-unstable-2020-11-08";
     src = fetchFromGitHub {
       owner = "dylanaraps";
       repo = "wal.vim";
@@ -22327,7 +22418,7 @@ final: prev: {
 
   webapi-vim = buildVimPlugin {
     pname = "webapi-vim";
-    version = "2022-11-23";
+    version = "0.3-unstable-2022-11-23";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "webapi-vim";
@@ -22340,7 +22431,7 @@ final: prev: {
 
   wezterm-nvim = buildVimPlugin {
     pname = "wezterm.nvim";
-    version = "2024-09-26";
+    version = "0.5.0-unstable-2024-09-26";
     src = fetchFromGitHub {
       owner = "willothy";
       repo = "wezterm.nvim";
@@ -22353,7 +22444,7 @@ final: prev: {
 
   wgsl-vim = buildVimPlugin {
     pname = "wgsl.vim";
-    version = "2025-01-07";
+    version = "0-unstable-2025-01-07";
     src = fetchFromGitHub {
       owner = "DingDean";
       repo = "wgsl.vim";
@@ -22364,9 +22455,22 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  whatif-vim = buildVimPlugin {
+    pname = "whatif.vim";
+    version = "0-unstable-2022-06-19";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "whatif.vim";
+      rev = "3c675fc637837a17a3243f851ce03442b20c2b42";
+      sha256 = "0gva0qhns68bafrvzszljvgz7808bmnvaa44bvllv3vb4iw6jjj8";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/whatif.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   which-key-nvim = buildVimPlugin {
     pname = "which-key.nvim";
-    version = "2025-10-28";
+    version = "3.17.0-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "which-key.nvim";
@@ -22379,7 +22483,7 @@ final: prev: {
 
   whichpy-nvim = buildVimPlugin {
     pname = "whichpy.nvim";
-    version = "2025-05-13";
+    version = "0-unstable-2025-05-13";
     src = fetchFromGitHub {
       owner = "neolooong";
       repo = "whichpy.nvim";
@@ -22392,7 +22496,7 @@ final: prev: {
 
   whitespace-nvim = buildVimPlugin {
     pname = "whitespace.nvim";
-    version = "2025-03-14";
+    version = "0.4.2-unstable-2025-03-14";
     src = fetchFromGitHub {
       owner = "johnfrankmorgan";
       repo = "whitespace.nvim";
@@ -22405,12 +22509,12 @@ final: prev: {
 
   wiki-ft-vim = buildVimPlugin {
     pname = "wiki-ft.vim";
-    version = "2024-05-08";
+    version = "0-unstable-2025-11-15";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "wiki-ft.vim";
-      rev = "10e3aa7ee58ae5351fc9ba0d692877a34cc99f08";
-      sha256 = "1cnqczi4pkfvd3q85qjmg6jd0kjn6l5lna2mlwfj15h528mkxjaw";
+      rev = "6f4e716077791f3490d98e76ffda7378dd3907e3";
+      sha256 = "1qssgqfhgfj010cmhkl4giziz1nm93vlj1ml6s3f0f5bkx5azccc";
     };
     meta.homepage = "https://github.com/lervag/wiki-ft.vim/";
     meta.hydraPlatforms = [ ];
@@ -22418,12 +22522,12 @@ final: prev: {
 
   wiki-vim = buildVimPlugin {
     pname = "wiki.vim";
-    version = "2025-10-30";
+    version = "0.11-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "lervag";
       repo = "wiki.vim";
-      rev = "44b8a6cc97bcb1e647c20874334a28460de71d45";
-      sha256 = "0kkjlwqgjvrngmq6vi0ms18yy1naxvvk1lqgzk5vmkpx43a9rda6";
+      rev = "257d610c6a2403fb2dcec9e8c05c54e60a58ed41";
+      sha256 = "0asrifikdz56ngfjlx4f7mc525jqjch0scd3yzh0cyblxsdpkwxk";
     };
     meta.homepage = "https://github.com/lervag/wiki.vim/";
     meta.hydraPlatforms = [ ];
@@ -22431,7 +22535,7 @@ final: prev: {
 
   wilder-nvim = buildVimPlugin {
     pname = "wilder.nvim";
-    version = "2022-08-13";
+    version = "0-unstable-2022-08-13";
     src = fetchFromGitHub {
       owner = "gelguy";
       repo = "wilder.nvim";
@@ -22444,7 +22548,7 @@ final: prev: {
 
   wildfire-vim = buildVimPlugin {
     pname = "wildfire.vim";
-    version = "2023-07-22";
+    version = "2.0-unstable-2023-07-22";
     src = fetchFromGitHub {
       owner = "gcmt";
       repo = "wildfire.vim";
@@ -22457,7 +22561,7 @@ final: prev: {
 
   winbar-nvim = buildVimPlugin {
     pname = "winbar.nvim";
-    version = "2022-07-18";
+    version = "0-unstable-2022-07-18";
     src = fetchFromGitHub {
       owner = "fgheng";
       repo = "winbar.nvim";
@@ -22470,7 +22574,7 @@ final: prev: {
 
   windows-nvim = buildVimPlugin {
     pname = "windows.nvim";
-    version = "2023-01-16";
+    version = "0-unstable-2023-01-16";
     src = fetchFromGitHub {
       owner = "anuvyklack";
       repo = "windows.nvim";
@@ -22483,7 +22587,7 @@ final: prev: {
 
   windsurf-nvim = buildVimPlugin {
     pname = "windsurf.nvim";
-    version = "2025-04-30";
+    version = "0-unstable-2025-04-30";
     src = fetchFromGitHub {
       owner = "Exafunction";
       repo = "windsurf.nvim";
@@ -22496,7 +22600,7 @@ final: prev: {
 
   windsurf-vim = buildVimPlugin {
     pname = "windsurf.vim";
-    version = "2025-07-30";
+    version = "1.20.8-unstable-2025-07-30";
     src = fetchFromGitHub {
       owner = "Exafunction";
       repo = "windsurf.vim";
@@ -22509,7 +22613,7 @@ final: prev: {
 
   winshift-nvim = buildVimPlugin {
     pname = "winshift.nvim";
-    version = "2022-09-06";
+    version = "0-unstable-2022-09-06";
     src = fetchFromGitHub {
       owner = "sindrets";
       repo = "winshift.nvim";
@@ -22522,7 +22626,7 @@ final: prev: {
 
   wmgraphviz-vim = buildVimPlugin {
     pname = "wmgraphviz.vim";
-    version = "2018-04-26";
+    version = "1.2-unstable-2018-04-26";
     src = fetchFromGitHub {
       owner = "wannesm";
       repo = "wmgraphviz.vim";
@@ -22535,7 +22639,7 @@ final: prev: {
 
   wombat256-vim = buildVimPlugin {
     pname = "wombat256.vim";
-    version = "2010-10-18";
+    version = "2.0-unstable-2010-10-18";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "wombat256.vim";
@@ -22548,7 +22652,7 @@ final: prev: {
 
   workflowish = buildVimPlugin {
     pname = "workflowish";
-    version = "2015-12-03";
+    version = "0.0.2-unstable-2015-12-03";
     src = fetchFromGitHub {
       owner = "lukaszkorecki";
       repo = "workflowish";
@@ -22561,7 +22665,7 @@ final: prev: {
 
   workspaces-nvim = buildVimPlugin {
     pname = "workspaces.nvim";
-    version = "2024-10-08";
+    version = "1.0-unstable-2024-10-08";
     src = fetchFromGitHub {
       owner = "natecraddock";
       repo = "workspaces.nvim";
@@ -22574,7 +22678,7 @@ final: prev: {
 
   wrapping-nvim = buildVimPlugin {
     pname = "wrapping.nvim";
-    version = "2025-09-07";
+    version = "2.0.0-unstable-2025-09-07";
     src = fetchFromGitHub {
       owner = "andrewferrier";
       repo = "wrapping.nvim";
@@ -22587,7 +22691,7 @@ final: prev: {
 
   wstrip-vim = buildVimPlugin {
     pname = "wstrip.vim";
-    version = "2021-03-14";
+    version = "0-unstable-2021-03-14";
     src = fetchFromGitHub {
       owner = "tweekmonster";
       repo = "wstrip.vim";
@@ -22600,12 +22704,12 @@ final: prev: {
 
   wtf-nvim = buildVimPlugin {
     pname = "wtf.nvim";
-    version = "2025-11-03";
+    version = "0-unstable-2025-12-01";
     src = fetchFromGitHub {
       owner = "piersolenski";
       repo = "wtf.nvim";
-      rev = "0b46f96e07d1eaf9b495027be4caa1fab2ffe295";
-      sha256 = "0jz309cxyqv1i2pq123h18pnid14yxlrjqdvhyzwfhafjh8pzjs9";
+      rev = "a50e7ae1eafe0a7c1b2871ac4185cad33bc94393";
+      sha256 = "1bh1laywx7zihn2b9zhkwvn2f12h16hg7hckr9f0n2vhf9y1ipc1";
     };
     meta.homepage = "https://github.com/piersolenski/wtf.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22613,7 +22717,7 @@ final: prev: {
 
   xeno-nvim = buildVimPlugin {
     pname = "xeno.nvim";
-    version = "2025-10-23";
+    version = "0-unstable-2025-10-23";
     src = fetchFromGitHub {
       owner = "kyza0d";
       repo = "xeno.nvim";
@@ -22626,12 +22730,12 @@ final: prev: {
 
   xmake-nvim = buildVimPlugin {
     pname = "xmake.nvim";
-    version = "2025-04-28";
+    version = "3.1.2-unstable-2025-11-10";
     src = fetchFromGitHub {
       owner = "Mythos-404";
       repo = "xmake.nvim";
-      rev = "ae9bb3ec97cd27cd95f616687096e529363aa80b";
-      sha256 = "0jd1pv6a3888phhr3wj44hqgh1vvjma7b79z1hpi0wz5s9w7zmpf";
+      rev = "6a46d0b405525178b907f9a89e8a5b887f5c9cb5";
+      sha256 = "0wxx8rs7wx32qh1xgz74py5d9agdbvravmkj03l89s1jpzicj0lk";
     };
     meta.homepage = "https://github.com/Mythos-404/xmake.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22639,7 +22743,7 @@ final: prev: {
 
   xptemplate = buildVimPlugin {
     pname = "xptemplate";
-    version = "2022-09-08";
+    version = "0.4.10-unstable-2022-09-08";
     src = fetchFromGitHub {
       owner = "drmingdrmer";
       repo = "xptemplate";
@@ -22652,7 +22756,7 @@ final: prev: {
 
   xterm-color-table-vim = buildVimPlugin {
     pname = "xterm-color-table.vim";
-    version = "2022-11-21";
+    version = "0-unstable-2022-11-21";
     src = fetchFromGitHub {
       owner = "guns";
       repo = "xterm-color-table.vim";
@@ -22665,7 +22769,7 @@ final: prev: {
 
   yaml-companion-nvim = buildVimPlugin {
     pname = "yaml-companion.nvim";
-    version = "2024-07-14";
+    version = "0.1.3-unstable-2024-07-14";
     src = fetchFromGitHub {
       owner = "someone-stole-my-name";
       repo = "yaml-companion.nvim";
@@ -22678,7 +22782,7 @@ final: prev: {
 
   yaml-schema-detect-nvim = buildVimPlugin {
     pname = "yaml-schema-detect.nvim";
-    version = "2025-09-25";
+    version = "0-unstable-2025-09-25";
     src = fetchFromGitHub {
       owner = "cwrau";
       repo = "yaml-schema-detect.nvim";
@@ -22691,12 +22795,12 @@ final: prev: {
 
   yanky-nvim = buildVimPlugin {
     pname = "yanky.nvim";
-    version = "2025-04-14";
+    version = "2.0.0-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "gbprod";
       repo = "yanky.nvim";
-      rev = "04775cc6e10ef038c397c407bc17f00a2f52b378";
-      sha256 = "024dw52ji4691ndkaz3k12fx6qyvhdpd2r69r9d2isy81fbs2fjm";
+      rev = "04fc42b94305d94948c9c197f679336668af3292";
+      sha256 = "19fl642mbf4x5apw29g0kd83bnf6410yvd7iss4dmxsfa1mrmh5h";
     };
     meta.homepage = "https://github.com/gbprod/yanky.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22704,12 +22808,12 @@ final: prev: {
 
   yats-vim = buildVimPlugin {
     pname = "yats.vim";
-    version = "2025-08-17";
+    version = "0-unstable-2025-12-09";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
       repo = "yats.vim";
-      rev = "9507e827a1bfa9d136ca8f6539814a9597c13b29";
-      sha256 = "1l96vszc6mxrjyfh4cnv7b79jvnnypi995cz4qq5n0l8ldwhqr6b";
+      rev = "2d9b95b91b9f72bb1769951841b32d2a879d3cd7";
+      sha256 = "1awx5j3bcl9lmgxdrwiky92ily23bqq5ghb7ss6ckfbhlmvp9vsy";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
@@ -22718,12 +22822,12 @@ final: prev: {
 
   yazi-nvim = buildVimPlugin {
     pname = "yazi.nvim";
-    version = "2025-11-07";
+    version = "13.1.0-unstable-2025-12-15";
     src = fetchFromGitHub {
       owner = "mikavilpas";
       repo = "yazi.nvim";
-      rev = "667028e28f03286aaf6aaca3d63653ff731a3381";
-      sha256 = "0jpdhbqqh79csa00bhw1532qlck5xnij8n2z724z5d2k5ng9fqa7";
+      rev = "4bdbbd763bd5dbf5eefe778024fd5b10728feb05";
+      sha256 = "1prz29m1d94dz610g66clnkfapvq8hi2c1i7rjgxgflsdl7ha0d4";
     };
     meta.homepage = "https://github.com/mikavilpas/yazi.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22731,7 +22835,7 @@ final: prev: {
 
   yescapsquit-vim = buildVimPlugin {
     pname = "yescapsquit.vim";
-    version = "2022-08-31";
+    version = "0.1-unstable-2022-08-31";
     src = fetchFromGitHub {
       owner = "lucasew";
       repo = "yescapsquit.vim";
@@ -22744,7 +22848,7 @@ final: prev: {
 
   yuck-vim = buildVimPlugin {
     pname = "yuck.vim";
-    version = "2022-10-29";
+    version = "0-unstable-2022-10-29";
     src = fetchFromGitHub {
       owner = "elkowar";
       repo = "yuck.vim";
@@ -22757,7 +22861,7 @@ final: prev: {
 
   zarchive-vim-fsharp = buildVimPlugin {
     pname = "zarchive-vim-fsharp";
-    version = "2018-11-13";
+    version = "0-unstable-2018-11-13";
     src = fetchFromGitHub {
       owner = "fsharp";
       repo = "zarchive-vim-fsharp";
@@ -22770,7 +22874,7 @@ final: prev: {
 
   zeavim-vim = buildVimPlugin {
     pname = "zeavim.vim";
-    version = "2019-06-07";
+    version = "2.3.1-unstable-2019-06-07";
     src = fetchFromGitHub {
       owner = "KabbAmine";
       repo = "zeavim.vim";
@@ -22783,7 +22887,7 @@ final: prev: {
 
   zellij-nav-nvim = buildVimPlugin {
     pname = "zellij-nav.nvim";
-    version = "2025-01-22";
+    version = "0-unstable-2025-01-22";
     src = fetchFromGitHub {
       owner = "swaits";
       repo = "zellij-nav.nvim";
@@ -22796,7 +22900,7 @@ final: prev: {
 
   zellij-nvim = buildVimPlugin {
     pname = "zellij.nvim";
-    version = "2024-05-03";
+    version = "0-unstable-2024-05-03";
     src = fetchFromGitHub {
       owner = "Lilja";
       repo = "zellij.nvim";
@@ -22809,7 +22913,7 @@ final: prev: {
 
   zen-mode-nvim = buildVimPlugin {
     pname = "zen-mode.nvim";
-    version = "2025-10-28";
+    version = "1.4.1-unstable-2025-10-28";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "zen-mode.nvim";
@@ -22822,12 +22926,12 @@ final: prev: {
 
   zenbones-nvim = buildVimPlugin {
     pname = "zenbones.nvim";
-    version = "2025-09-04";
+    version = "4.10.0-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "zenbones-theme";
       repo = "zenbones.nvim";
-      rev = "a934bc07d2ed4a98b74526c172d7f043736d8935";
-      sha256 = "0vhmz4d74q287asz9fhcjf6vajh1d89przn93p90yxx3jh339bcj";
+      rev = "4635a3f46d1066975d1074cd9f61f93cb1e32f64";
+      sha256 = "0g94c15xi71zqqsfrahyn6w1dp7wcywb6l6q434gds3y31a59dh1";
     };
     meta.homepage = "https://github.com/zenbones-theme/zenbones.nvim/";
     meta.hydraPlatforms = [ ];
@@ -22835,7 +22939,7 @@ final: prev: {
 
   zenburn = buildVimPlugin {
     pname = "zenburn";
-    version = "2022-08-13";
+    version = "2.29-unstable-2022-08-13";
     src = fetchFromGitHub {
       owner = "jnurmine";
       repo = "zenburn";
@@ -22848,7 +22952,7 @@ final: prev: {
 
   zephyr-nvim = buildVimPlugin {
     pname = "zephyr-nvim";
-    version = "2022-12-31";
+    version = "0-unstable-2022-12-31";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "zephyr-nvim";
@@ -22859,27 +22963,14 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  zig-vim = buildVimPlugin {
-    pname = "zig.vim";
-    version = "2025-09-11";
-    src = fetchFromGitHub {
-      owner = "ziglang";
-      repo = "zig.vim";
-      rev = "0c100863c7901a79d9c4b7a2092e335cc09337cc";
-      sha256 = "1b5pp7ygwx2ydj2g1l6qdm48arpm9g9xyjbqpfhbcy6wxvkn6178";
-    };
-    meta.homepage = "https://github.com/ziglang/zig.vim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   zk-nvim = buildVimPlugin {
     pname = "zk-nvim";
-    version = "2025-10-12";
+    version = "0.4.6-unstable-2025-11-24";
     src = fetchFromGitHub {
       owner = "zk-org";
       repo = "zk-nvim";
-      rev = "575c3e8242d925c87e9a11fd7d304bc223d2f096";
-      sha256 = "17hm22xzz9wpks9m4i63in08dxsjy24rl463l730vv690sbrl0wr";
+      rev = "8df80d0dc2d66e53b08740361a600746a6e4edcf";
+      sha256 = "0yw764jlxw5ziiik99xdj7wrs8j5hg11pm3if08icfl4fa31zn4i";
     };
     meta.homepage = "https://github.com/zk-org/zk-nvim/";
     meta.hydraPlatforms = [ ];
@@ -22887,7 +22978,7 @@ final: prev: {
 
   zoomwintab-vim = buildVimPlugin {
     pname = "zoomwintab.vim";
-    version = "2023-12-05";
+    version = "0-unstable-2023-12-05";
     src = fetchFromGitHub {
       owner = "troydm";
       repo = "zoomwintab.vim";
@@ -22900,12 +22991,12 @@ final: prev: {
 
   zotcite = buildVimPlugin {
     pname = "zotcite";
-    version = "2025-11-04";
+    version = "0-unstable-2025-12-14";
     src = fetchFromGitHub {
       owner = "jalvesaq";
       repo = "zotcite";
-      rev = "11b0678865c2c0c6c0bc4054996b565c2cda4f75";
-      sha256 = "0ilf4n2wnja6li72ph2rs90w8hs54vys4kcicfh3cqx2038xp1c1";
+      rev = "46920219393cdbb71673396f2bd55e2ff05b1fbe";
+      sha256 = "11llk0w47pgsa11m39zd840z89gw46i20zvd99l1yapz784wplng";
     };
     meta.homepage = "https://github.com/jalvesaq/zotcite/";
     meta.hydraPlatforms = [ ];
@@ -22913,7 +23004,7 @@ final: prev: {
 
   zoxide-vim = buildVimPlugin {
     pname = "zoxide.vim";
-    version = "2025-08-25";
+    version = "0-unstable-2025-08-25";
     src = fetchFromGitHub {
       owner = "nanotee";
       repo = "zoxide.vim";

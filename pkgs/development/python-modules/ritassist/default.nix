@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ritassist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to access RitAssist and FleetGO API";
     homepage = "https://github.com/depl0y/ritassist-py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

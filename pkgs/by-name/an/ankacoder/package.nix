@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Anka/Coder fonts";
     homepage = "https://code.google.com/archive/p/anka-coder-fonts";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.91.2";
+  version = "1.92.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     tag = "v${version}";
-    hash = "sha256-iL8d8fvc0zawe5UyeOwp5cfnE1K58IY39RSzq/jCc4c=";
+    hash = "sha256-Z+X7OUT38OB7559s+bOlraL9F2qSnhpzpQTYt07DYD0=";
   };
 
-  vendorHash = "sha256-HE3/h77APsNRitAAo4R/5tWrX36IPcJRAUFv6M6P6x4=";
+  vendorHash = "sha256-3Y3GsVMImo0oCigAyQ2SPOucllrfkD9oj9o3ESk47eA=";
 
   excludedPackages = [ "scripts/jsonschema" ];
 

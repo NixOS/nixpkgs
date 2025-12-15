@@ -24,17 +24,18 @@
   cinnamon-desktop,
   yelp-tools,
   xapp,
+  xapp-symbolic-icons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.4.12";
+  version = "3.4.14";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xviewer";
     rev = version;
-    hash = "sha256-WvA8T6r9DtlpOZLMEOILO6/0Am3bhCLM8FnwXvALjS8=";
+    hash = "sha256-2UWe9c9JkNhJyukDp+NTG/bvbMuwSyLBkk2wWvPbxRk=";
   };
 
   nativeBuildInputs = [
@@ -77,13 +78,19 @@ stdenv.mkDerivation rec {
       --replace-fail "g_irepository_require" "gi_repository_require"
   '';
 
-  meta = with lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tu-maurice ];
+    teams = [ lib.teams.cinnamon ];
   };
 }

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   desktop-file-utils,
+  glycin-loaders,
   gobject-introspection,
   meson,
   ninja,
@@ -10,13 +11,13 @@
   wrapGAppsHook4,
   vala,
   evolution-data-server-gtk4,
-  gdk-pixbuf,
   glib,
   glib-networking,
   gnutls,
   gst_all_1,
   json-glib,
   libadwaita,
+  libglycin,
   libpeas2,
   libphonenumber,
   libportal-gtk4,
@@ -52,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     evolution-data-server-gtk4
-    gdk-pixbuf
     glib
     glib-networking
     gnutls
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     json-glib
     libadwaita
+    libglycin
     libpeas2
     libphonenumber
     libportal-gtk4
@@ -68,9 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "plugin_bluez" true)
-  ];
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qt5reactor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twisted Qt Integration";
     homepage = "https://github.com/twisted/qt5reactor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

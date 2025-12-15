@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests.prometheus-exporters) sabnzbd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for sabnzbd";
     homepage = "https://github.com/msroest/sabnzbd_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fugi ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fugi ];
+    platforms = lib.platforms.all;
     mainProgram = "sabnzbd_exporter.py";
   };
 }

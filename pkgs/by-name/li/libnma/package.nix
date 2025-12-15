@@ -112,11 +112,11 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libnma";
     description = "NetworkManager UI utilities (libnm version)";
-    license = licenses.gpl2Plus; # Mix of GPL and LPGL 2+
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus; # Mix of GPL and LPGL 2+
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

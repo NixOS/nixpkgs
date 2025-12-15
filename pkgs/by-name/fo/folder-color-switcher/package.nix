@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation {
   pname = "folder-color-switcher";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "folder-color-switcher";
     # They don't really do tags, this is just a named commit.
-    rev = "d135f29d688d89a0e7b48acec9e08738c7976ee1";
-    hash = "sha256-3EFnQxTYcJLGjfAzZNS7pgVDUwuU3juOAwUyaKOHemI=";
+    rev = "fefe156e336d2a0bbfe1ca61cf4e6873c74ae405";
+    hash = "sha256-KL3ipzZiHEj+jwAmbIOCeSBOwm3bMpJf4PVhGS+Xx24=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,11 @@ stdenvNoCC.mkDerivation {
   # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
   passthru.nemoPythonExtensionDeps = [ python3.pkgs.pycairo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/folder-color-switcher";
     description = "Change folder colors for Nemo and Caja";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

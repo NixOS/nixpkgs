@@ -38,13 +38,12 @@ buildGoModule rec {
     package = lazydocker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       das-g
-      Br1ght0ne
     ];
     mainProgram = "lazydocker";
   };

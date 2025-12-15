@@ -14,8 +14,7 @@
   ladspaH,
   libbs2b,
   libebur128,
-  libportal-qt6,
-  libsamplerate,
+  libmysofa,
   libsigcxx30,
   libsndfile,
   lilv,
@@ -36,17 +35,17 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
+  wrapGAppsNoGuiHook,
 }:
 
 let
   inherit (qt6)
     qtbase
     qtgraphs
-    qtwebengine
     wrapQtAppsHook
     ;
   inherit (kdePackages)
-    appstream-qt
+    breeze
     breeze-icons
     extra-cmake-modules
     kcolorscheme
@@ -60,13 +59,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "8.0.3";
+  version = "8.0.8";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-N1VxA68IzNPZcDodoFTdQ0zpS5hCrHyLjP8Y/bqO/JA=";
+    hash = "sha256-Pw9rMYHrRBSttdtElWDH1YOF0tNWgb2zBzJBI9jJe4Q=";
   };
 
   patches = [ ./qmlmodule-fix.patch ];
@@ -77,11 +76,14 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkg-config
+    wrapGAppsNoGuiHook
     wrapQtAppsHook
   ];
 
+  dontWrapGApps = true;
+
   buildInputs = [
-    appstream-qt
+    breeze
     breeze-icons
     deepfilternet
     fftw
@@ -97,8 +99,7 @@ stdenv.mkDerivation rec {
     qqc2-desktop-style
     libbs2b
     libebur128
-    libportal-qt6
-    libsamplerate
+    libmysofa
     libsigcxx30
     libsndfile
     lilv
@@ -107,7 +108,6 @@ stdenv.mkDerivation rec {
     pipewire
     qtbase
     qtgraphs
-    qtwebengine
     rnnoise
     rubberband
     soundtouch
@@ -133,6 +133,7 @@ stdenv.mkDerivation rec {
     in
     ''
       qtWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
         --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
@@ -147,7 +148,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo

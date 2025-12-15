@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     tag = version;
-    hash = "sha256-V884jv7bleDMsuZDkodyeNBhStIoNPNxfT6mz1YjHXE=";
+    hash = "sha256-qod76RSsCO9NvjnYTLRW6P1UyR1K6Uu9fEjU2WgHUWk=";
   };
 
   strictDeps = true;
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GTK notification server for Pantheon";
     homepage = "https://github.com/elementary/notifications";
-    license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.elementary.notifications";
   };
 }

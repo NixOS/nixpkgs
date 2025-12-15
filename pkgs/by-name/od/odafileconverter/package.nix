@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "For converting between different versions of .dwg and .dxf";
     homepage = "https://www.opendesign.com/guestfiles/oda_file_converter";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       nagisa
       konradmalik
     ];

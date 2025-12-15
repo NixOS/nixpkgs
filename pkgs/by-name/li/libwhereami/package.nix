@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     leatherman
   ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Library to report hypervisor information from inside a VM";
-    license = licenses.asl20;
-    maintainers = [ maintainers.womfoo ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.womfoo ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

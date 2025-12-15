@@ -15,10 +15,10 @@ buildFishPlugin {
     sha256 = "04xvikyrdm6yxh588vbpwvm04fas76pa7sigsaqrip7yh021xxab";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fish function to mock the behaviour of commands";
     homepage = "https://github.com/IlanCosman/clownfish";
-    license = licenses.mit;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

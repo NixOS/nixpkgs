@@ -7,6 +7,7 @@
   yarnConfigHook,
   yarnBuildHook,
   npmHooks,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "get-graphql-schema";
@@ -30,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmInstallHook
     nodejs
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fetch and print the GraphQL schema from a GraphQL HTTP endpoint";

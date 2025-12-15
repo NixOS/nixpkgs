@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_plus" ];
 
-  meta = with lib; {
+  meta = {
     description = "pytest-plus adds new features to pytest";
     homepage = "https://github.com/pytest-dev/pytest-plus";
     changelog = "https://github.com/pytest-dev/pytest-plus/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ robsliwi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ robsliwi ];
   };
 }

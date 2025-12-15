@@ -45,8 +45,10 @@
   async-timeout,
   hf-transfer,
   jsonref,
+  meson,
   ninja,
   # nixl,
+  pybind11,
   typer,
   vllm,
   # observability
@@ -72,7 +74,7 @@
 
 let
   pname = "ray";
-  version = "2.51.1";
+  version = "2.52.1";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -92,22 +94,22 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-iiH1kUuqPe78tPpfOHjgO1icGQuGT+G4Dm3Ay/uiYAQ=";
-          cp311 = "sha256-3TUwENJUi8NF5GxFeV9wKRu0YMI2qmozk7UanNhhtW8=";
-          cp312 = "sha256-Tnhtp4Ys9zZkl30CEqUF1tWlhb6t9j59weHBKSWb7iA=";
-          cp313 = "sha256-Jl7Nb9bUppWwnGhuF9WPygwJ5xmMBzYornv0l0sD6co=";
+          cp310 = "sha256-s/nmG3mfs8yP1wd6PS62dt3+99tkT2tqK2V8XDIUzxk=";
+          cp311 = "sha256-paPCaNRQYMUM0CmXnsxfHqrsBAsZ+ojdT+npJ9Gf8T4=";
+          cp312 = "sha256-hDwBCK1yu3/Gwjoi4p5gmVRqXqrTrWdceKFG2QgPbsY=";
+          cp313 = "sha256-u+SSx4CjmmS9PQdmytENVM8SIi34jSh+wtjy1S3jfHk=";
         };
         aarch64-linux = {
-          cp310 = "sha256-Nv61GfMcUtO0281o/7K6+TGVzuwG6nEeIVWQlrq5X+0=";
-          cp311 = "sha256-0tfIr0VEH/ULwAI1LTHgr+xchd1Qdb9ScCcXiTFJe84=";
-          cp312 = "sha256-C+2UCHErrRUR5laDpFUwL4jZTl5ctqWMxKFUth2KC0o=";
-          cp313 = "sha256-PyvSrPm39HOMF9CFksqq0m6vt6T8OArZq0LV8KePc60=";
+          cp310 = "sha256-Zb9GH9/k/6ZnxG+UVfh0CyrWwfpHG0YdX1z2t7rxd7U=";
+          cp311 = "sha256-K1fvJyoqCg265tGNcKpUHqtiC0/jtE1QRm06UzwW+dk=";
+          cp312 = "sha256-COuPX9VSkrpr7jY6MkkRNqXlSvVOAH+B4GA5hvvqQaQ=";
+          cp313 = "sha256-44Jq605Dmd4MaIW9i+fOL2KfoAEPABPxGD4HJrPSXkA=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-6M4hjIXp9AQ8NxNvyQtBNDvbhE/NyVIPIcAA0djUn4k=";
-          cp311 = "sha256-vYIR/AM74bzpwDnkdOl6kHe+WTAgl4/c+6HXcL3EC6U=";
-          cp312 = "sha256-74R7AlynWLruRXGhygAdlziXytdy+OldfzA9JMOLZJ4=";
-          cp313 = "sha256-2BVHiGQ1FC29eb/x1OTt9Xil8g47EbvUztSc+vvTfSc=";
+          cp310 = "sha256-mTGUqL5wVA4PgZhiAxu/GaZEAfvmwxtCBl/TE7pGbTQ=";
+          cp311 = "sha256-9Z47LRoUZqwHePLG+snMtfMBB9d+Pd3R1gFnJI0mhHQ=";
+          cp312 = "sha256-aDFZL+3woSIBb12rS2fYX6PU2zsh9YjRiDS1wDE5bRw=";
+          cp313 = "sha256-tbwpVIq7Cgp66eb/OwzMooJO2vARpDNuFaMnk9V0+/0=";
         };
       };
     in
@@ -185,13 +187,16 @@ buildPythonPackage rec {
         hf-transfer
         jsonref
         jsonschema
+        meson
         ninja
         # nixl
+        pybind11
         typer
         vllm
       ]
       ++ self.data
       ++ self.serve
+      ++ vllm.optional-dependencies.audio
     );
     observability = [
       memray

@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6TdPYN42PMOE5zL8nBRVdndjWhvU+7y0yNWtJybvkf0=";
 
-  meta = with lib; {
+  meta = {
     description = "GTK viewer for the output of `nix store --query --tree`";
     mainProgram = "nix-query-tree-viewer";
     homepage = "https://github.com/cdepillabout/nix-query-tree-viewer";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ cdepillabout ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ cdepillabout ];
+    platforms = lib.platforms.unix;
   };
 }

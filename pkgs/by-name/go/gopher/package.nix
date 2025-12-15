@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "export LIBS=-lncurses";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://gopher.quux.org:70/devel/gopher";
     description = "Ncurses gopher client";
-    platforms = platforms.linux; # clang doesn't like local regex.h
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ sternenseemann ];
+    platforms = lib.platforms.linux; # clang doesn't like local regex.h
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

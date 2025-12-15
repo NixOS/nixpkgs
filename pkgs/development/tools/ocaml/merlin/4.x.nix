@@ -3,7 +3,7 @@
   replaceVars,
   fetchurl,
   ocaml,
-  dune_3,
+  dune,
   buildDunePackage,
   yojson,
   csexp,
@@ -69,7 +69,7 @@ buildDunePackage {
     [
       (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
         dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-        dune = "${dune_3}/bin/dune";
+        dune = "${dune}/bin/dune";
       })
     ];
 
@@ -95,14 +95,14 @@ buildDunePackage {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ocamlmerlin";
     maintainers = [
-      maintainers.vbgl
-      maintainers.sternenseemann
+      lib.maintainers.vbgl
+      lib.maintainers.sternenseemann
     ];
   };
 }

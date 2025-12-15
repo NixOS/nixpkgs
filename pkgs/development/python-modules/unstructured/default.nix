@@ -116,7 +116,7 @@
   grpcio,
 }:
 let
-  version = "0.18.20";
+  version = "0.18.22";
 in
 buildPythonPackage rec {
   pname = "unstructured";
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-BeoIjFhLu/EM0iAErW3eST5/D+TBuAOZ4lDPTXEqpzc=";
+    hash = "sha256-m5sBFra/7qjJ/mBq+r7HA+ZURGpiaK1FzR9crL16jtQ=";
   };
 
   build-system = [ setuptools ];
@@ -274,12 +274,12 @@ buildPythonPackage rec {
     grpcio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
     changelog = "https://github.com/Unstructured-IO/unstructured/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -11,7 +11,7 @@
 
 let
   vsix = stdenv.mkDerivation (finalAttrs: {
-    name = "gitlens-${finalAttrs.version}.zip";
+    name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
     version = "17.7.1";
 

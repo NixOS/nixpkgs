@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LUASTATUS : $out/bin/luastatus
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Universal status bar content generator";
     homepage = "https://github.com/shdown/luastatus";
     changelog = "https://github.com/shdown/luastatus/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.linux;
   };
 })

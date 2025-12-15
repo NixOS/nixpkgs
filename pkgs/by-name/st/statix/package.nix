@@ -4,9 +4,11 @@
   fetchFromGitHub,
   withJson ? true,
   stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "statix";
   # also update version of the vim plugin in
   # pkgs/applications/editors/vim/plugins/overrides.nix
@@ -16,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oppiliappan";
     repo = "statix";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-bMs3XMiGP6sXCqdjna4xoV6CANOIWuISSzCaL5LYY4c=";
   };
 
@@ -27,13 +29,20 @@ rustPlatform.buildRustPackage rec {
   # tests are failing on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.update-script = nix-update-script { };
+
+  meta = {
     description = "Lints and suggestions for the nix programming language";
     homepage = "https://github.com/oppiliappan/statix";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "statix";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nerdypepper
+      progrm_jarvis
     ];
   };
-}
+})

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typescript-language-server";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "typescript-language-server";
     repo = "typescript-language-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8UDPeW8Bb6Or+G28GI+fprUtqnDGKTqeWskpn9i0HCA=";
+    hash = "sha256-qKw/AQ6SbodCDJsBJhlHc/w5qFtyhQQv7jFsJiuJtGE=";
   };
 
   patches = [

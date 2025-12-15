@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pytestCheckHook
     rich
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies)
+  ++ lib.concatAttrValues optional-dependencies
   ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
@@ -87,11 +87,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydantic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
     changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

@@ -32,11 +32,11 @@ buildPecl rec {
 
   sourceRoot = "${src.name}/build/phalcon";
 
-  meta = with lib; {
+  meta = {
     description = "Phalcon is a full stack PHP framework offering low resource consumption and high performance";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://phalcon.io";
-    maintainers = [ maintainers.krzaczek ];
-    teams = [ teams.php ];
+    maintainers = [ lib.maintainers.krzaczek ];
+    teams = [ lib.teams.php ];
   };
 }

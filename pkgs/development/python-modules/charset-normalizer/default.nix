@@ -39,12 +39,12 @@ buildPythonPackage rec {
     inherit aiohttp requests;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module for encoding and language detection";
     mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
     changelog = "https://github.com/jawah/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

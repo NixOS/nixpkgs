@@ -18,23 +18,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
     tag = finalAttrs.version;
-    hash = "sha256-6n/NIUstXODq1fGPF6ioXOWR39kTlzKWdAdW1LbnFy0=";
+    hash = "sha256-JKU2lm5wco9aC2cu3lgJ9OfGAzKQO/wQXFPEdb9Uz3Y=";
   };
 
   strictDeps = true;
-
-  postPatch = ''
-    # CMake 4 compat
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/commit/cb81d853ce6dd3bb11030f5a23b6a13f926779a1 in release
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'VERSION 3.5' 'VERSION 3.10'
-  '';
 
   nativeBuildInputs = [
     cmake

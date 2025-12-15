@@ -4,7 +4,6 @@
   blueprint-compiler,
   desktop-file-utils,
   fetchurl,
-  fetchpatch,
   glib,
   gnome,
   gobject-introspection,
@@ -20,22 +19,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "49.0";
+  version = "49.1";
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/showtime/${lib.versions.major version}/showtime-${version}.tar.xz";
-    hash = "sha256-Wryvl6telTADgoKEhYjozmwmFztzA+9nVr69sLIO05g=";
+    hash = "sha256-iu+7DiAJx6HNRKuAGwbKN19+loPwKaBS64b7Qzp4U5M=";
   };
-
-  patches = [
-    # Fix startup crash when missing state directory.
-    # https://gitlab.gnome.org/GNOME/showtime/-/merge_requests/80
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/showtime/-/commit/a5d57a6b023664c9dc5aeb55a3467a8b56e1b7bc.patch";
-      hash = "sha256-IUkopJ3J381+9MnvaItx7dn9NAVrqO9y4LjgPh8MU/M=";
-    })
-  ];
 
   strictDeps = true;
 

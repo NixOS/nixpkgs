@@ -61,14 +61,14 @@ let
 
   linuxDrv = llvmPackages.stdenv.mkDerivation (finalAttrs: {
     pname = "duckstation";
-    version = "0.1-10091";
+    version = "0.1-10339";
 
     src = fetchFromGitHub {
       owner = "stenzek";
       repo = "duckstation";
       tag = "v${finalAttrs.version}";
       deepClone = true;
-      hash = "sha256-z6hpjMkz7zlt/NUzGl+Px058O99bfDCXV1l5lBqC6vw=";
+      hash = "sha256-U/RYyXazuu5qTMC+q4r8oGJN0vMaVBONRk0STcSJl9A=";
 
       postFetch = ''
         cd $out

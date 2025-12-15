@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # won't run in sandbox
   disabledTestPaths = [
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "channels" ];
 
-  meta = with lib; {
+  meta = {
     description = "Brings event-driven capabilities to Django with a channel system";
     homepage = "https://github.com/django/channels";
     changelog = "https://github.com/django/channels/blob/${src.tag}/CHANGELOG.txt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

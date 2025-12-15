@@ -78,6 +78,9 @@ let
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
   latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
+  latestSdkVersion = pkgs.lib.foldl' (
+    s: x: if pkgs.lib.strings.compareVersions x s > 0 then x else s
+  ) "0" androidComposition.platformVersionStrings;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
@@ -123,8 +126,8 @@ pkgs.mkShell rec {
 
           packages=(
             "build-tools" "cmdline-tools" \
-            "platform-tools" "platforms;android-${toString latestSdk}" \
-            "system-images;android-${toString latestSdk};google_apis;x86_64"
+            "platform-tools" "platforms;android-${toString latestSdkVersion}" \
+            "system-images;android-${toString latestSdkVersion};google_apis;x86_64"
           )
           ${pkgs.lib.optionalString emulatorSupported ''packages+=("emulator")''}
 
@@ -184,7 +187,7 @@ pkgs.mkShell rec {
             mkdir -p $ANDROID_USER_HOME
 
             avdmanager delete avd -n testAVD || true
-            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdk};google_apis;x86_64'
+            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdkVersion};google_apis;x86_64'
             result=$(avdmanager list avd)
 
             if [[ ! $result =~ "Name: testAVD" ]]; then

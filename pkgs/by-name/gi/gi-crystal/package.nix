@@ -39,10 +39,10 @@ crystal.buildCrystalPackage rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GI Crystal is a binding generator used to generate Crystal bindings for GObject based libraries using GObject Introspection";
     homepage = "https://github.com/hugopl/gi-crystal";
     mainProgram = "gi-crystal";
-    maintainers = with maintainers; [ sund3RRR ];
+    maintainers = with lib.maintainers; [ sund3RRR ];
   };
 }

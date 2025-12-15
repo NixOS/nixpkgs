@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/gedit";
     description = "Former GNOME text editor";
-    maintainers = with maintainers; [ bobby285271 ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "gedit";
   };
 }

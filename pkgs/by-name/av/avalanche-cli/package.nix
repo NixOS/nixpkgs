@@ -14,13 +14,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "avalanche-cli";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanche-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4JHRfSop3JZ4ejAt5cnLHLkbXMRRiLwHRi9vBS46Wmo=";
+    hash = "sha256-jNDzN2kWjnY9yQaGjhIEvpoc+k1Q1tnDQkQtZvxBTSw=";
   };
 
   proxyVendor = true;

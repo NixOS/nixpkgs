@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "empty_files" ];
 
-  meta = with lib; {
+  meta = {
     description = "Null Object pattern for files";
     homepage = "https://github.com/approvals/EmptyFiles.Python";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

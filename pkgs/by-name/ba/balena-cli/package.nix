@@ -3,51 +3,59 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_latest,
   versionCheckHook,
   node-gyp,
   python3,
   udev,
-  cctools,
+  xcbuild,
 }:
 
 let
   buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_20;
+    nodejs = nodejs_latest;
   };
   node-gyp' = node-gyp.override {
-    nodejs = nodejs_20;
+    nodejs = nodejs_latest;
   };
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "22.4.13";
+  version = "23.2.10";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-nke7EQscVPu1A/d4DKi7pSb6/MQgeFtG+zhMZT+bhWk=";
+    hash = "sha256-pmzXrywlNU8/jevBo/cyym6vA6/XrNc5vz66BwkLd5o=";
   };
 
-  npmDepsHash = "sha256-GQXbXkOt8nkOB2OeEcKsp1yJd5lXS+KKout/5ffLgD0=";
+  npmDepsHash = "sha256-a3AU4UIlXRswBPya+e2AY3Yv21A2AQoWfGAJ7iDz740=";
 
   makeCacheWritable = true;
 
   nativeBuildInputs = [
     node-gyp'
     python3
-    versionCheckHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
+    xcbuild
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 
-  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # Disabled on Darwin due to:
+  #
+  # https://github.com/NixOS/nix/issues/5748
+  #
+  # No matter whether $TMP and $HOME point to real writable directories, the
+  # Darwin sandbox tries to use /var/empty and fails.
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
 
   meta = {

@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C99 HTML parsing algorithm";
     homepage = "https://codeberg.org/gumbo-parser/gumbo-parser";
-    maintainers = [ maintainers.nico202 ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.asl20;
+    maintainers = [ lib.maintainers.nico202 ];
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.asl20;
   };
 }

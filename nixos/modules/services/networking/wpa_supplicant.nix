@@ -183,8 +183,10 @@ let
         }
 
         # finally start daemon
+        # shellcheck disable=SC2086
         exec wpa_supplicant $args
       '';
+      enableStrictShellChecks = true;
     };
 
   systemctl = "/run/current-system/systemd/bin/systemctl";

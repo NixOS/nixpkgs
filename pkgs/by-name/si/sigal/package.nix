@@ -51,12 +51,12 @@ python3.pkgs.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet another simple static gallery generator";
     mainProgram = "sigal";
     homepage = "http://sigal.saimon.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

@@ -71,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geoarrow.pyarrow" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyArrow implementation of geospatial data types";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
     teams = [ lib.teams.geospatial ];

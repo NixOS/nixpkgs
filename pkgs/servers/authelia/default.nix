@@ -89,7 +89,7 @@ buildGoModule rec {
     tests = { inherit (nixosTests) authelia; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.authelia.com/";
     changelog = "https://github.com/authelia/authelia/releases/tag/v${version}";
     description = "Single Sign-On Multi-Factor portal for web apps";
@@ -101,8 +101,8 @@ buildGoModule rec {
       should either be allowed or redirected to Authelia's portal for
       authentication.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       dit7ya
       nicomem

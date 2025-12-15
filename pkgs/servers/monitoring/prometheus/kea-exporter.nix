@@ -35,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) kea;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/mweinelt/kea-exporter/blob/v${version}/HISTORY";
     description = "Export Kea Metrics in the Prometheus Exposition Format";
     mainProgram = "kea-exporter";
     homepage = "https://github.com/mweinelt/kea-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

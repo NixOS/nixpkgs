@@ -30,12 +30,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) script; };
 
-  meta = with lib; {
+  meta = {
     description = "Shell script prometheus exporter";
     mainProgram = "script_exporter";
     homepage = "https://github.com/ricoberger/script_exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
 }

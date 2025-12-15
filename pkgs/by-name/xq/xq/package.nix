@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-q8kVyj31Ne8ddMm2Q3Z/VB10SCxrq/65PH08mmtFCu4=";
 
-  meta = with lib; {
+  meta = {
     description = "Pure rust implementation of jq";
     homepage = "https://github.com/MiSawa/xq";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "xq";
   };
 }

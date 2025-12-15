@@ -11,6 +11,17 @@
       system.etc.overlay.enable = true;
       system.etc.overlay.mutable = false;
 
+      environment.etc = {
+        modetest = {
+          text = "foo";
+          mode = "300";
+        };
+        modetest2 = {
+          text = "foo";
+          mode = "0300";
+        };
+      };
+
       # Prerequisites
       systemd.sysusers.enable = true;
       users.mutableUsers = false;
@@ -48,6 +59,10 @@
 
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
+
+      with subtest("modes work correctly"):
+        machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -q 'regular file'")
+        machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -q 'regular file'")
 
       with subtest("direct symlinks point to the target without indirection"):
         assert machine.succeed("readlink -n /etc/localtime") == "/etc/zoneinfo/Utc"

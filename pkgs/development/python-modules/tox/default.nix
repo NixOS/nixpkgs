@@ -66,12 +66,12 @@ buildPythonPackage rec {
     version = testers.testVersion { package = tox; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/tox-dev/tox/releases/tag/${src.tag}";
     description = "Generic virtualenv management and test command line tool";
     mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

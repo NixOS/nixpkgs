@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Image viewing and cataloging program for the MATE desktop";
     mainProgram = "eom";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

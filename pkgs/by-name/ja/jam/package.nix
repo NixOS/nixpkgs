@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jam";
     maintainers = with lib.maintainers; [
       impl
-      orivej
     ];
     platforms = lib.platforms.unix;
   };

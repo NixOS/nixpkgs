@@ -26,7 +26,7 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for
@@ -34,6 +34,6 @@ buildPythonPackage rec {
       content for output generation on the web.
     '';
     homepage = "https://genshi.edgewall.org/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

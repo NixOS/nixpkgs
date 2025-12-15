@@ -12,6 +12,7 @@
   runCommand,
   sideswap,
   yq,
+  dart,
 }:
 
 let
@@ -31,7 +32,7 @@ flutter332.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   # Provide OpenGL and libsideswap_client.so for the Flutter application.
   extraWrapProgramArgs = ''
@@ -87,19 +88,35 @@ flutter332.buildFlutterApplication rec {
     # Usage: nix-shell maintainers/scripts/update.nix --argstr package sideswap
     updateScript = _experimental-update-script-combinators.sequence [
       # Update sideswap to new release.
-      (gitUpdater { rev-prefix = "v"; })
+      (
+        (gitUpdater { rev-prefix = "v"; })
+        // {
+          supportedFeatures = [ ];
+        }
+      )
 
       # Update pubspec.lock.json file and related gitHashes attribute.
-      (_experimental-update-script-combinators.copyAttrOutputToFile "sideswap.pubspecSource" ./pubspec.lock.json)
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "sideswap.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
 
       # Update libsideswap-client sub-package.
       {
         command = [ ./update-libsideswap-client.sh ];
-        supportedFeatures = [ "silent" ];
+        supportedFeatures = [ ];
       }
     ];
   };

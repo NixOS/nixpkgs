@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   pkg-config,
   pixman,
@@ -8,15 +8,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nuJoIbG1DeXaoj9LtSRqfCBzM0dJ2uzTwQgO5B2Kj/8=";
+    hash = "sha256-rGbEMhTTyTzw4iyz45lch5kXseqnqcEpmrHdy+zHsfo=";
   };
 
   nativeBuildInputs = [

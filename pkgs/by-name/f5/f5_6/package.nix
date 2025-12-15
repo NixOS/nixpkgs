@@ -26,13 +26,13 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/f5_6/";
     description = "Weighted decorative font";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

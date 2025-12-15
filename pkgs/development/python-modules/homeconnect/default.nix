@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homeconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the BSH Home Connect REST API";
     homepage = "https://github.com/DavidMStraub/homeconnect";
     changelog = "https://github.com/DavidMStraub/homeconnect/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

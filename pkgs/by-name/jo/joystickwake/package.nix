@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     ln -s $out/${python3.sitePackages}/etc $out/etc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Joystick-aware screen waker";
     mainProgram = "joystickwake";
     longDescription = ''
@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication rec {
       This program works around the problem by temporarily disabling screen blankers when joystick activity is detected.
     '';
     homepage = "https://github.com/foresto/joystickwake";
-    maintainers = with maintainers; [ bertof ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bertof ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

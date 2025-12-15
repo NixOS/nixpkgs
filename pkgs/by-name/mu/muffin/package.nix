@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   cairo,
   cinnamon-desktop,
@@ -44,7 +43,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.4.1";
+  version = "6.6.0";
 
   outputs = [
     "out"
@@ -56,19 +55,12 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = "muffin";
     rev = version;
-    hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
+    hash = "sha256-yGbnqIKw+Ouk1onr2H+KckO/YQob1N1beLmfqQhOheU=";
   };
 
   patches = [
     (replaceVars ./fix-paths.patch {
       inherit zenity;
-    })
-
-    # Fix Qt apps crashing on wayland
-    # https://github.com/linuxmint/muffin/pull/739
-    (fetchpatch {
-      url = "https://github.com/linuxmint/muffin/commit/760e2a3046e13610c4fda1291a9a28e589d2bd93.patch";
-      hash = "sha256-D0u8UxW5USzMW9KlP3Y4XCWxrQ1ySufDv+eCbrAP71c=";
     })
   ];
 
@@ -119,7 +111,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # Based on Mint's debian/rules.
-    "-Degl_device=true"
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
   ];
@@ -128,12 +119,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

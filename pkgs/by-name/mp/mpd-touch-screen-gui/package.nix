@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Small MPD client that let's you view covers and has controls suitable for small touchscreens";
     homepage = "https://github.com/muesli4/mpd-touch-screen-gui";
     # See: https://github.com/muesli4/mpd-touch-screen-gui/tree/master/LICENSES
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.all;
   };
 })

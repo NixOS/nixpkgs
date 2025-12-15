@@ -86,11 +86,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "bite";
   };
 }

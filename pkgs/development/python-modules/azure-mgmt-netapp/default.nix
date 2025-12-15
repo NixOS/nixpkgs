@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
-  version = "14.0.0";
+  version = "14.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_netapp";
     inherit version;
-    hash = "sha256-ykYLisZMhwPUnos5pJzgbxZsqF6R6IcQRAyMSF+96G4=";
+    hash = "sha256-P5ZE9oPOO8oLorpyPTdsc7/f4QMQxsl8PoA1Eag/5ng=";
   };
 
   build-system = [ setuptools ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
     "azure.mgmt.netapp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure NetApp Files Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-netapp_${version}/sdk/netapp/azure-mgmt-netapp/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-pydantic-field";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
     tag = "v${version}";
-    hash = "sha256-A3P8s6XiMWE3Ob/w/PDiO7ppJG6ACXSX/fAEYCWper4=";
+    hash = "sha256-AyI58ij6bMs0i1bwgpBTpEqjYxVo0qC6xBz43iJiHrc=";
   };
 
   build-system = [ setuptools ];
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings.django_test_settings
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/surenkov/django-pydantic-field/releases/tag/${src.tag}";
     description = "Django JSONField with Pydantic models as a Schema";
     homepage = "https://github.com/surenkov/django-pydantic-field";
     maintainers = with lib.maintainers; [ kiara ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-cov-stub
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiojobs" ];
 

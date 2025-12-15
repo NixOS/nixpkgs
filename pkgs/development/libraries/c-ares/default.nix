@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libcares.pc --replace-fail \''${prefix}/ ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
     changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

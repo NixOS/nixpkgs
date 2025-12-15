@@ -3,24 +3,33 @@
   backendStdenv,
   buildRedist,
   cuda_cudart,
-  cudnn,
-  cuda_nvrtc,
+  cudaAtLeast,
+  cudaMajorMinorVersion,
   lib,
   libcudla, # only for Jetson
   patchelf,
 }:
 let
-  inherit (_cuda.lib) majorMinorPatch;
-  inherit (backendStdenv) hasJetsonCudaCapability;
-  inherit (lib.attrsets) getLib;
+  inherit (backendStdenv) cudaCapabilities hostRedistSystem;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep;
 in
 buildRedist (
   finalAttrs:
   let
-    majorMinorPatchVersion = majorMinorPatch finalAttrs.version;
     majorVersion = lib.versions.major finalAttrs.version;
+
+    tensorrtAtLeast = lib.versionAtLeast finalAttrs.version;
+    tensorrtOlder = lib.versionOlder finalAttrs.version;
+
+    # Create variables and use logical OR to allow short-circuiting.
+    tensorrtAtLeast105 = tensorrtAtLeast "10.5.0";
+    tensorrtAtLeast100 = tensorrtAtLeast105 || tensorrtAtLeast "10.0.0";
+
+    allCCNewerThan75 = lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities;
+    allCCNewerThan70 = allCCNewerThan75 || lib.all (lib.flip lib.versionAtLeast "7.0") cudaCapabilities;
+
+    cudaCapabilitiesJSON = builtins.toJSON cudaCapabilities;
   in
   {
     redistName = "tensorrt";
@@ -32,7 +41,12 @@ buildRedist (
       "dev"
       "include"
       "lib"
+    ]
+    # From 10.14.1, TensorRT samples are distributed through the TensorRT GitHub repository.
+    ++ optionals (tensorrtOlder "10.14.1") [
       "samples"
+    ]
+    ++ [
       "static"
       # "stubs" removed in postInstall
     ];
@@ -42,8 +56,6 @@ buildRedist (
     nativeBuildInputs = [ patchelf ];
 
     buildInputs = [
-      (getLib cudnn)
-      (getLib cuda_nvrtc)
       cuda_cudart
     ]
     ++ optionals libcudla.meta.available [ libcudla ];
@@ -62,38 +74,44 @@ buildRedist (
       ''
         for dir in bin lib; do
           [[ -L "$dir" ]] || continue
-          nixLog "replacing symlink $NIX_BUILD_TOP/$sourceRoot/$dir with $NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
-          rm --verbose "$NIX_BUILD_TOP/$sourceRoot/$dir"
-          mv --verbose --no-clobber "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir" "$NIX_BUILD_TOP/$sourceRoot/$dir"
+          nixLog "replacing symlink $PWD/$dir with $PWD/targets/${targetString}/$dir"
+          rm --verbose "$PWD/$dir"
+          mv --verbose --no-clobber "$PWD/targets/${targetString}/$dir" "$PWD/$dir"
         done
         unset -v dir
       ''
       # Remove symlinks if they exist
       + ''
         for dir in include samples; do
-          if [[ -L "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir" ]]; then
-            nixLog "removing symlink $NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
-            rm --verbose "$NIX_BUILD_TOP/$sourceRoot/targets/${targetString}/$dir"
+          if [[ -L "$PWD/targets/${targetString}/$dir" ]]; then
+            nixLog "removing symlink $PWD/targets/${targetString}/$dir"
+            rm --verbose "$PWD/targets/${targetString}/$dir"
           fi
         done
         unset -v dir
 
-        if [[ -d "$NIX_BUILD_TOP/$sourceRoot/targets" ]]; then
+        if [[ -d "$PWD/targets" ]]; then
           nixLog "removing targets directory"
-          rm --recursive --verbose "$NIX_BUILD_TOP/$sourceRoot/targets" || {
-            nixErrorLog "could not delete $NIX_BUILD_TOP/$sourceRoot/targets: $(ls -laR "$NIX_BUILD_TOP/$sourceRoot/targets")"
+          rm --recursive --verbose "$PWD/targets" || {
+            nixErrorLog "could not delete $PWD/targets: $(ls -laR "$PWD/targets")"
             exit 1
           }
         fi
       '';
 
-    autoPatchelfIgnoreMissingDeps = optionals hasJetsonCudaCapability [
-      "libnvdla_compiler.so"
-    ];
+    autoPatchelfIgnoreMissingDeps =
+      optionals (hostRedistSystem == "linux-aarch64") [
+        "libnvdla_compiler.so"
+      ]
+      ++ optionals (tensorrtAtLeast "10.13.3") [
+        "libcuda.so.1"
+      ];
 
     # Create a symlink for the Onnx header files in include/onnx
     # NOTE(@connorbaker): This is shared with the tensorrt-oss package, with the `out` output swapped with `include`.
     # When updating one, check if the other should be updated.
+    # TODO(@connorbaker): It seems like recent versions of TensorRT have separate libs for separate capabilities;
+    # we should remove libraries older than those necessary to support requested capabilities.
     postInstall = ''
       mkdir "''${!outputInclude:?}/include/onnx"
       pushd "''${!outputInclude:?}/include" >/dev/null
@@ -102,6 +120,7 @@ buildRedist (
       popd >/dev/null
     ''
     # Move the python directory, which contains header files, to the include output.
+    # NOTE: Python wheels should be built from source using the TensorRT GitHub repo.
     + ''
       nixLog "moving python directory to include output"
       moveToOutput python "''${!outputInclude:?}"
@@ -115,10 +134,11 @@ buildRedist (
     ''
     # Remove the Windows library used for cross-compilation if it exists.
     + ''
-      if [[ -e "''${!outputLib:?}/lib/libnvinfer_builder_resource_win.so.${majorMinorPatchVersion}" ]]; then
-        nixLog "removing Windows library"
-        rm --verbose "''${!outputLib:?}/lib/libnvinfer_builder_resource_win.so.${majorMinorPatchVersion}"
-      fi
+      nixLog "removing any Windows libraries"
+      for winLib in "''${!outputLib:?}/lib/"*_win*; do
+        rm --verbose "$winLib"
+      done
+      unset -v winLib
     ''
     # Remove the stub libraries.
     + ''
@@ -137,10 +157,35 @@ buildRedist (
         --add-needed libnvinfer_plugin.so.${majorVersion}
     '';
 
-    passthru = {
-      # The CUDNN used with TensorRT.
-      inherit cudnn;
-    };
+    # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
+    platformAssertions = [
+      {
+        message =
+          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+          + " support CUDA compute capabilities 7.0 and newer (found ${cudaCapabilitiesJSON})";
+        assertion = tensorrtAtLeast100 -> allCCNewerThan70;
+      }
+      {
+        message =
+          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+          + " support only CUDA compute capability 8.7 (Jetson Orin) for pre-Thor Jetson devices"
+          + " (found ${cudaCapabilitiesJSON})";
+        assertion =
+          tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaCapabilities == [ "8.7" ];
+      }
+      {
+        message =
+          "tensorrt releases since 10.0.0 (found ${finalAttrs.version})"
+          + " support CUDA 12.4 and newer for pre-Thor Jetson devices (found ${cudaMajorMinorVersion})";
+        assertion = tensorrtAtLeast100 && hostRedistSystem == "linux-aarch64" -> cudaAtLeast "12.4";
+      }
+      {
+        message =
+          "tensorrt releases since 10.5.0 (found ${finalAttrs.version})"
+          + " support CUDA compute capabilities 7.5 and newer (found ${cudaCapabilitiesJSON})";
+        assertion = tensorrtAtLeast105 -> allCCNewerThan75;
+      }
+    ];
 
     meta = {
       description = "SDK that facilitates high-performance machine learning inference";

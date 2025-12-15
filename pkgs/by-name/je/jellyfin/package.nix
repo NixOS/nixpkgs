@@ -13,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.11.3"; # ensure that jellyfin-web has matching version
+  version = "10.11.4"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    hash = "sha256-xNQe0hjY1BjC1D+hYTj1Gv2jCpwhWJv9dlvY6K9jkSk=";
+    hash = "sha256-Hs7G8igW7TJBTYuv83AhN/YhpLcO5pwuU5vYwDUEsUQ=";
   };
 
   propagatedBuildInputs = [ sqlite ];
@@ -49,12 +49,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Free Software Media System";
     homepage = "https://jellyfin.org/";
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       minijackson
       purcell

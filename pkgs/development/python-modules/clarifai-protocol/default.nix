@@ -51,7 +51,7 @@ buildPythonPackage rec {
     platform = systemToPlatform.${stdenv.hostPlatform.system} or (throw "unsupported system");
     hash =
       if stdenv.hostPlatform.isDarwin then
-        hashes."${pythonVersionNoDot}-darwin"
+        hashes."${pythonVersionNoDot}-darwin" or (throw "unsupported system/python version combination")
       else
         hashes."${pythonVersionNoDot}-${stdenv.hostPlatform.system}"
           or (throw "unsupported system/python version combination");

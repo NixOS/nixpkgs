@@ -52,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -62,7 +62,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
         with:
           # Sandbox is disabled on MacOS by default.
           extra_nix_config: sandbox = true
@@ -108,7 +108,7 @@ jobs:
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
           contains(fromJSON(inputs.baseBranch).type, 'primary')
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}nixos-manual-${{ matrix.name }}
           path: nixos-manual

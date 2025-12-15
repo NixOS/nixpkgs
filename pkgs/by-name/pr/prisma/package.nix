@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma";
-  version = "6.18.0";
+  version = "6.19.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     rev = finalAttrs.version;
-    hash = "sha256-+WRWa59HlHN2CsYZfr/ptdW3iOuOPfDil8sLR5dWRA4=";
+    hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-Et1UiZO2zyw9FHW0OuYK7AMfhIy5j7Q7GDQjaL6gjyg=";
+    hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
   };
 
   patchPhase = ''
@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     cli = callPackage ./test-cli.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation ORM for Node.js and TypeScript";
     homepage = "https://www.prisma.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aqrln ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aqrln ];
     mainProgram = "prisma";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

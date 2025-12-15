@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python utilities for working with Redis";
     homepage = "https://github.com/coleifer/walrus";
     changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

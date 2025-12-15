@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "local-content-share";
-  version = "35";
+  version = "36";
 
   src = fetchFromGitHub {
     owner = "Tanq16";
     repo = "local-content-share";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pFYkq1QqGugOVT0uMPC11ChXtxMwGv4JZKGWIqK7y3s=";
+    hash = "sha256-FINKuRzpAwFV2F5FFrM0B3z7sx3PG+Ql8dETwykgyu4=";
   };
 
   vendorHash = null;

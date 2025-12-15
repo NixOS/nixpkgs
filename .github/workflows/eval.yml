@@ -33,11 +33,11 @@ defaults:
 jobs:
   versions:
     if: inputs.testVersions
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.versions.outputs.versions }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           path: trusted
@@ -45,7 +45,7 @@ jobs:
             ci/supportedVersions.nix
 
       - name: Check out the PR at the test merge commit
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           ref: ${{ inputs.mergedSha }}
@@ -54,7 +54,7 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - name: Load supported versions
         id: versions
@@ -89,7 +89,7 @@ jobs:
           sudo mkswap /swap
           sudo swapon /swap
 
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -100,7 +100,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         continue-on-error: true
@@ -158,7 +158,7 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
@@ -171,7 +171,7 @@ jobs:
       statuses: write
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -189,7 +189,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - name: Combine all output paths and eval stats
         run: |
@@ -198,7 +198,7 @@ jobs:
             --out-link combined
 
       - name: Upload the maintainer list
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}maintainers
           path: combined/maintainers.json
@@ -219,7 +219,7 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
@@ -257,7 +257,7 @@ jobs:
 
   # Creates a matrix of Eval performance for various versions and systems.
   report:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions
@@ -342,7 +342,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -352,7 +352,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
 
       - name: Run misc eval tasks in parallel
         run: |

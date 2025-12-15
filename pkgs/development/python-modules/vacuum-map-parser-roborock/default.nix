@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vacuum_map_parser_roborock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Functionalities for Roborock vacuum map parsing";
     homepage = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-roborock";
     changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-roborock/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ jamiemagee ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
   };
 }

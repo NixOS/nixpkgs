@@ -334,15 +334,15 @@ stdenv.mkDerivation (
       tests.netdata = nixosTests.netdata;
     };
 
-    meta = with lib; {
+    meta = {
       broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
       description = "Real-time performance monitoring tool";
       homepage = "https://www.netdata.cloud/";
-      changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-      license = [ licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ licenses.ncul1 ];
+      changelog = "https://github.com/netdata/netdata/releases/tag/v${finalAttrs.version}";
+      license = [ lib.licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ lib.licenses.ncul1 ];
       mainProgram = "netdata";
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         mkg20001
         rhoriguchi
       ];

@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
-    license = licenses.asl20;
-    maintainers = [ maintainers.georgewhewell ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.georgewhewell ];
+    platforms = lib.platforms.all;
   };
 }

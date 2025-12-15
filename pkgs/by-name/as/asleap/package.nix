@@ -5,6 +5,7 @@
   openssl,
   libpcap,
   libxcrypt,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -33,11 +34,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=zack/no-external-crypto" ];
+  };
+
   meta = {
     homepage = "https://github.com/zackw/asleap";
     description = "Recovers weak LEAP and PPTP passwords";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pyrox0 ];
+    mainProgram = "asleap";
     platforms = lib.platforms.linux;
   };
 }

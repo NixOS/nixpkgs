@@ -166,7 +166,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     let

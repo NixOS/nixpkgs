@@ -68,13 +68,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fun way to learn how to play the piano";
     homepage = "https://synthesiagame.com/";
     downloadPage = "https://synthesiagame.com/download";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ners ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ ners ];
     platforms = wineWowPackages.stable.meta.platforms;
   };
 }

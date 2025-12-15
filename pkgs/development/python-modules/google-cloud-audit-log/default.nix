@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.audit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Audit Protos";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-audit-log";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-audit-log-v${version}/packages/google-cloud-audit-log/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

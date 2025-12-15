@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioskybell" ];
 
-  meta = with lib; {
+  meta = {
     description = "API client for Skybell doorbells";
     homepage = "https://github.com/tkdrob/aioskybell";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "C library for accessing Japanese CD-ROM books";
     longDescription = ''
       The EB library is a library for accessing CD-ROM books, which are a
       common way to distribute electronic dictionaries in Japan.  It supports
       the EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

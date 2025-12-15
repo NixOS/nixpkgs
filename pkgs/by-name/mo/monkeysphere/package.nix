@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''
@@ -134,8 +134,8 @@ stdenv.mkDerivation rec {
       TLS/SSL communications through the normal use of tools you are
       familiar with, such as your web browser0 or secure shell.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

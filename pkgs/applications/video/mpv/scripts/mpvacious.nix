@@ -37,10 +37,10 @@ buildLua rec {
 
   passthru.scriptName = "mpvacious";
 
-  meta = with lib; {
+  meta = {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";
     homepage = "https://github.com/Ajatt-Tools/mpvacious";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kmicklas ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kmicklas ];
   };
 }

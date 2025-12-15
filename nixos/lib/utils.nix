@@ -533,6 +533,14 @@ let
         units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
       };
     };
+
+    /*
+      Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
+      - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
+      and
+      - https://github.com/qemu/qemu/blob/master/scripts/qemu-binfmt-conf.sh
+    */
+    binfmtMagics = import ./binfmt-magics.nix;
   };
 in
 utils

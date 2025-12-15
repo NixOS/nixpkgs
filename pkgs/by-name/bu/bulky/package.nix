@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bulk rename app";
     mainProgram = "bulky";
     homepage = "https://github.com/linuxmint/bulky";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

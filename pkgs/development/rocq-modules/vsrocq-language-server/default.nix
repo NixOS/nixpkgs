@@ -70,8 +70,8 @@ ocamlPackages.buildDunePackage {
     {
       description = "Language server for the vsrocq vscode/codium extension";
       homepage = "https://github.com/rocq-prover/vsrocq";
-      maintainers = with maintainers; [ cohencyril ];
-      license = licenses.mit;
+      maintainers = with lib.maintainers; [ cohencyril ];
+      license = lib.licenses.mit;
     }
     // optionalAttrs (fetched.broken or false) {
       rocqFilter = true;

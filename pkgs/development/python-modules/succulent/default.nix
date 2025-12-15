@@ -9,33 +9,31 @@
   pyyaml,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
     tag = version;
-    hash = "sha256-3cqU1iYxvMyx0hCVl6r4RZARpsWNckXZgeBNq0kokuw=";
+    hash = "sha256-e2F2g8NfMyAfiHPUq8KRs99pu7yEZTpWraxhsAZXE4Q=";
   };
 
   pythonRelaxDeps = [
     "flask"
+    "lxml"
     "numpy"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     lxml
     numpy
@@ -47,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "succulent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collect POST requests";
     homepage = "https://github.com/firefly-cpp/succulent";
-    changelog = "https://github.com/firefly-cpp/succulent/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    changelog = "https://github.com/firefly-cpp/succulent/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
 }

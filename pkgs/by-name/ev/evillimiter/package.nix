@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool that monitors, analyzes and limits the bandwidth";
     longDescription = ''
       A tool to monitor, analyze and limit the bandwidth (upload/download) of
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
       bandwidth of hosts on the network.
     '';
     homepage = "https://github.com/bitbrute/evillimiter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evillimiter";
   };
 }

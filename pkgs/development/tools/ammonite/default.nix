@@ -72,7 +72,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -81,10 +81,9 @@ let
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
-        license = licenses.mit;
-        maintainers = [ maintainers.nequissimus ];
+        license = lib.licenses.mit;
         mainProgram = "amm";
-        platforms = platforms.all;
+        platforms = lib.platforms.all;
       };
     };
 in

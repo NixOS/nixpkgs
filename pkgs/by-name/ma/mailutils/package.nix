@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus # tools
     ];
 
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";

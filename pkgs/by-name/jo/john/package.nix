@@ -139,7 +139,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/openwall/john/";
     maintainers = with lib.maintainers; [
       offline
-      matthewbauer
       cherrykitten
     ];
     platforms = lib.platforms.unix;

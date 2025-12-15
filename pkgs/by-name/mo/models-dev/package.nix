@@ -2,18 +2,19 @@
   lib,
   stdenvNoCC,
   bun,
+  fetchgit,
   fetchFromGitHub,
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2025-11-20";
+  version = "0-unstable-2025-12-11";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "5389818cb714afeeca30ceef3c012498bba7f709";
-    hash = "sha256-ld/bWHJPGoDO7lyXnmGCzSt1f3A/JA8azJcj0C5HT8E=";
+    rev = "0c66fc84a2deb49500b9bb67e37d87428f544119";
+    hash = "sha256-HAGUVpdW0gLXCo3jCU7pnjvh1cTp8xnU59MXgCwQkGs=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -51,13 +52,8 @@ let
     installPhase = ''
       runHook preInstall
 
-      # Copy node_modules directories
-      while IFS= read -r dir; do
-        rel="''${dir#./}"
-        dest="$out/$rel"
-        mkdir -p "$(dirname "$dest")"
-        cp -R "$dir" "$dest"
-      done < <(find . -type d -name node_modules -prune)
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
       runHook postInstall
     '';

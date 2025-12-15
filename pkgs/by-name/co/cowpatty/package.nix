@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
     installManPage genpmk.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline dictionary attack against WPA/WPA2 networks";
     homepage = "https://github.com/joswr1ght/cowpatty";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       nico202
       fab
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

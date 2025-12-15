@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frelatage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Greybox and Coverage-based library to fuzz Python applications";
     homepage = "https://github.com/Rog3rSm1th/frelatage";
     changelog = "https://github.com/Rog3rSm1th/frelatage/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

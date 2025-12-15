@@ -35,11 +35,11 @@ buildGoModule rec {
       --zsh <($out/bin/pinniped completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to securely log in to your Kubernetes clusters";
     mainProgram = "pinniped";
     homepage = "https://pinniped.dev/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bpaulin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bpaulin ];
   };
 }

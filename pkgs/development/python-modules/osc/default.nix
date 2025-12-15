@@ -8,6 +8,7 @@
   rpm,
   urllib3,
   keyring,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     urllib3
     cryptography
     keyring
+    ruamel-yaml
   ];
 
   postInstall = ''
@@ -47,14 +49,14 @@ buildPythonPackage rec {
 
   preCheck = "HOME=$TOP/tmp";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/openSUSE/osc";
     description = "Opensuse-commander with svn like handling";
     mainProgram = "osc";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       peti
       saschagrunert
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

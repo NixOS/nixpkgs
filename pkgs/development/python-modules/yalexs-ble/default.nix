@@ -12,21 +12,18 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "3.2.0";
+  version = "3.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs-ble";
     tag = "v${version}";
-    hash = "sha256-bmzRvfOwAb2dr2bBfBE/4SuPB15qBpLelmxI15jhgrQ=";
+    hash = "sha256-p2S+OWUg4zMa3C6YXrtLMmy2O8rywuCiJsSzpf+ItsE=";
   };
 
   build-system = [ poetry-core ];
@@ -48,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yalexs_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/bdraco/yalexs-ble";
     changelog = "https://github.com/bdraco/yalexs-ble/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

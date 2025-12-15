@@ -6,7 +6,7 @@ set -eu -o pipefail
 PACKAGE_DIR=$(realpath "$(dirname "$0")")
 
 # Update version, src and npm deps
-nix-update "$UPDATE_NIX_ATTR_PATH" --version-regex "v(.*)"
+nix-update "$UPDATE_NIX_ATTR_PATH" --version=unstable
 
 # Update elm deps
 cp "$(nix-build -A "$UPDATE_NIX_ATTR_PATH".src)/generator/elm.json" elm.json

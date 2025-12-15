@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/joshuto completions fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ranger-like terminal file manager written in Rust";
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       totoroot
       xrelkd
     ];

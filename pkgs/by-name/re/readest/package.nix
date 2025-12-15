@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.92";
+  version = "0.9.95";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cXUhDnYjYOD69ESIRii25PXaOTiA5uhoATQiuWLEsu0=";
+    hash = "sha256-0fWxmip7Emu4z4v5VyV0nW9Dj1JvOOLJub1szboawP8=";
     fetchSubmodules = true;
   };
 
@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-z7eOiaNXUb2wb014MOGAejZc2fgoMTavhJsNQaygFzc=";
+    hash = "sha256-hYwkPqePFPEdqZ3w0mNvNEypsVL1PKv29LFk7b11zkg=";
   };
 
   pnpmRoot = "../..";
 
-  cargoHash = "sha256-nNMD2LnMDz91kI2QniD+zD/Ug9BSVjTIiuxWdz8UxL0=";
+  cargoHash = "sha256-PbWjDvxbbiiKy1UeJx7cUawGampbL5t/Bhb13tirhGc=";
 
   cargoRoot = "../..";
 
@@ -85,7 +85,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    pnpm setup-pdfjs
+    # set up pdfjs and simplecc
+    pnpm setup-vendors
   '';
 
   preFixup = ''

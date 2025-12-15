@@ -1,0 +1,34 @@
+diff --git a/tests/test_main.py b/tests/test_main.py
+index ec6453e..a219750 100644
+--- a/tests/test_main.py
++++ b/tests/test_main.py
+@@ -5,16 +5,11 @@ import pathlib
+ import pytest
+ 
+ import trio
+-import black
+ from shrinkray.__main__ import interrupt_wait_and_kill, main
+ from click.testing import CliRunner
+ from attrs import define
+ 
+ 
+-def format(s):
+-    return black.format_str(s, mode=black.Mode()).strip()
+-
+-
+ async def test_kill_process():
+     async with trio.open_nursery() as nursery:
+         kwargs = dict(
+@@ -100,10 +95,8 @@ except AssertionError:
+     assert not b.exists()
+     assert c.exists()
+ 
+-    # TODO: Remove calls to format when formatting is implemented properly for
+-    # directories.
+-    assert format(a.read_text()) == "x = 0"
+-    assert format(c.read_text()) == "from a import x\n\nassert x"
++    assert a.read_text() == "x=0"
++    assert c.read_text() == "from\ta\timport\tx\nassert\tx"
+ 
+ 
+ def test_gives_informative_error_when_script_does_not_work_outside_current_directory(

@@ -347,10 +347,10 @@ def update_plugins():
                              rev = "replace-with-git-rev";
                              sha256 = "replace-with-sha256";
                            }};
-                           meta = with lib; {{
+                           meta = {{
                              homepage = "";
-                             maintainers = with maintainers; [ ];
-                             license = licenses.mit; # change to the correct license!
+                             maintainers = with lib.maintainers; [ ];
+                             license = lib.licenses.mit; # change to the correct license!
                              description = "";
                            }};
                          }}"""))

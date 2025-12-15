@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication {
     install -D -T -m 755 src/pdf_quench.py $out/bin/pdf-quench
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxerwang/pdf-quench";
     description = "Visual tool for cropping pdf files";
     mainProgram = "pdf-quench";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ flokli ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

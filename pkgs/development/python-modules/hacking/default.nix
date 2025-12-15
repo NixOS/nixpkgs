@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hacking" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Hacking Guideline Enforcement";
     homepage = "https://github.com/openstack/hacking";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

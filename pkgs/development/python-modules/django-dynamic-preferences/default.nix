@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS = "tests.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic global and instance settings for your django project";
     changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
     homepage = "https://github.com/agateblue/django-dynamic-preferences";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

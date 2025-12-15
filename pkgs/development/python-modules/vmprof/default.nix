@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vmprof" ];
 
-  meta = with lib; {
+  meta = {
     description = "Vmprof client";
     mainProgram = "vmprofshow";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://vmprof.readthedocs.org/";
   };
 }

@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     libxcrypt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Support to authenticate against PostgreSQL for PAM-enabled appliations";
     homepage = "https://github.com/pam-pgsql/pam-pgsql";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

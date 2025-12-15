@@ -259,11 +259,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
-    license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = if withSvmLight then lib.licenses.unfree else lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       edwtjo
       smancill
     ];

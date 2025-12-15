@@ -27,11 +27,11 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zraorg/ZRA";
     description = "Library for ZStandard random access";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

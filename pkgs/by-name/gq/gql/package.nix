@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
     changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gitql";
   };

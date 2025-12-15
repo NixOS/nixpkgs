@@ -323,6 +323,21 @@ self: super:
       '';
     }) super.di-core;
 
+    # Template Haskell on Darwin fails to load an available symbol in these
+    # transitive dependencies since GHC 9.10.3.
+    # See issue https://github.com/NixOS/nixpkgs/issues/461651
+    hercules-ci-agent = overrideCabal (old: {
+      preBuild = ''
+        DYLD_INSERT_LIBRARIES="''${DYLD_INSERT_LIBRARIES:+$DYLD_INSERT_LIBRARIES:}$(pkg-config --variable=libdir nix-store)/libnixstore.dylib:$(pkg-config --variable=libdir nix-util)/libnixutil.dylib"
+        export DYLD_INSERT_LIBRARIES
+        echo "DYLD_INSERT_LIBRARIES=$DYLD_INSERT_LIBRARIES"
+      ''
+      + (old.preBuild or "");
+    }) super.hercules-ci-agent;
+
+    # https://github.com/NixOS/nixpkgs/issues/461651
+    cachix = dontCheck super.cachix;
+
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
     servant-auth-server = dontCheck super.servant-auth-server;

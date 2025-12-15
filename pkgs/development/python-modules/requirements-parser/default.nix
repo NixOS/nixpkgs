@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requirements" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pip requirements file parser";
     homepage = "https://github.com/davidfischer/requirements-parser";
     changelog = "https://github.com/madpah/requirements-parser/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

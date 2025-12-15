@@ -62,11 +62,11 @@ buildPythonPackage rec {
   #   "influxdb_client_3"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module that provides a simple and convenient way to interact with InfluxDB 3.0";
     homepage = "https://github.com/InfluxCommunity/influxdb3-python";
     changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

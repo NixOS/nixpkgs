@@ -52,13 +52,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
-  version = "11.1.1";
+  version = "11.2.0";
 
   src = fetchFromGitHub {
     owner = "odamex";
     repo = "odamex";
     tag = finalAttrs.version;
-    hash = "sha256-UUUavIaU65vU80Bp2cVjHg8IubpA6qMqZmDYvTDjfEw=";
+    hash = "sha256-f9st852Sqmdmb/qNP1ioBY9MApt9Ruw8dBjkkyGM5Qs=";
     fetchSubmodules = true;
   };
 

@@ -10,6 +10,9 @@
   lzip,
   patch,
 
+  # nativeBuildInputs
+  installShellFiles,
+
   # tests
   addBinToPathHook,
   gitMinimal,
@@ -43,7 +46,6 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ (with python3Packages; [
     click
-    dulwich
     grpcio
     jinja2
     markupsafe
@@ -52,14 +54,16 @@ python3Packages.buildPythonApplication rec {
     protobuf
     psutil
     pyroaring
-    requests
     ruamel-yaml
     ruamel-yaml-clib
-    tomlkit
     ujson
   ])
   ++ lib.optionals enableBuildstreamPlugins [
     python3Packages.buildstream-plugins
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   buildInputs = [
@@ -85,9 +89,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # ValueError: Unexpected comparison between all and ''
-    "test_help"
-
     # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
     "test_source_mirror_plugin"
 
@@ -109,6 +110,12 @@ python3Packages.buildPythonApplication rec {
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tmp/popen-gw1/test_report_when_cascache_exit0/buildbox-casd'
     "tests/internals/cascache.py"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd bst \
+      --bash src/buildstream/data/bst \
+      --zsh src/buildstream/data/zsh/_bst
+  '';
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
   versionCheckProgramArg = "--version";

@@ -39,10 +39,10 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";
     homepage = "https://github.com/mk-fg/python-pulse-control";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

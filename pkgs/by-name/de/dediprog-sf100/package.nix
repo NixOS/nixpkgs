@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DediProgSW";
     repo = "SF100Linux";
-    rev = "V${finalAttrs.dediprogVersion}";
+    tag = "V${finalAttrs.dediprogVersion}";
     hash = finalAttrs.dediprogHash;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   udevRules = pkgs.writeText "dediprog.rules" ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev"
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev", TAG+="uaccess"
   '';
 
   installPhase = ''
@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
       thillux
       felixsinger
     ];
+    mainProgram = "dpcmd";
   };
 })

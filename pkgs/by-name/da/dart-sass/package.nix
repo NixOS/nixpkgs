@@ -23,13 +23,13 @@ let
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.94.2";
+  version = "1.95.0";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = "dart-sass";
     tag = version;
-    hash = "sha256-/ygA4Ymo7n3JWCv/qxkQs6JWoIhMIwHjKCqk4KyKOMw=";
+    hash = "sha256-riN4Tlf8XknoDA3/8rb4kDU2ybqsytDHeWgR2fPeYac=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

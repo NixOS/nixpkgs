@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
     "GNATCOLL_SQLITE=external"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GNAT Components Collection - Database packages";
     homepage = "https://github.com/AdaCore/gnatcoll-db";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.all;
   };
 }

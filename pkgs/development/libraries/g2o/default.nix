@@ -61,16 +61,16 @@ mkDerivation rec {
     "-DDISABLE_SSE4_A=${if stdenv.hostPlatform.sse4_aSupport then "OFF" else "ON"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General Framework for Graph Optimization";
     homepage = "https://github.com/RainerKuemmerle/g2o";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       lgpl3
       gpl3
     ];
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
     # fatal error: 'qglviewer.h' file not found
     broken = stdenv.hostPlatform.isDarwin;
   };

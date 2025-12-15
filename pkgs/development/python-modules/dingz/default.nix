@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dingz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for interacting with Dingz devices";
     mainProgram = "dingz";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     sha256 = "14p61xk7jankp6gc26xciag9fnvm7r9vcbhclcy23f4ghf4q4sj1";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lesfurets/git-octopus";
     description = "Continuous merge workflow";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

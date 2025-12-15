@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.hydrogen-music.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

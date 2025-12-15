@@ -6,17 +6,17 @@
 }:
 
 let
-  version = "3.5.3";
+  version = "3.5.4";
 
   # Maven builds are hard to get right
   core_jar = fetchurl {
     url = "https://repo1.maven.org/maven2/com/google/zxing/core/${version}/core-${version}.jar";
-    hash = "sha256-jYBkwWNv2u9xid2QVcfVmVColAoS8ik5VkRuw8EJ/YI=";
+    hash = "sha256-cd5diTQbX89d2J2n9E6E2CXQ4ITN8+x3yaviaw8M6xM=";
   };
 
   javase_jar = fetchurl {
     url = "https://repo1.maven.org/maven2/com/google/zxing/javase/${version}/javase-${version}.jar";
-    hash = "sha256-1leVt4nvrIohVssqS2SNIOWL/gNhMWW7Xc5ocOzveY4=";
+    hash = "sha256-GWaDH0c9cv93IFeEGasRP2QXqXI0oXENK8zGUPWuDBI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {

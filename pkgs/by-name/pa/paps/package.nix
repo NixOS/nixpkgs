@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  fmt,
+  fmt_11,
   glib,
   pango,
   versionCheckHook,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    fmt
+    fmt_11
     glib
     pango
   ];

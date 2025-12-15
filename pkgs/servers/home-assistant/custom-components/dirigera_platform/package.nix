@@ -26,10 +26,10 @@ buildHomeAssistantComponent rec {
 
   ignoreVersionRequirement = [ "dirigera" ];
 
-  meta = with lib; {
+  meta = {
     description = "Home-assistant integration for IKEA Dirigera hub";
     homepage = "https://github.com/sanjoyg/dirigera_platform";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.mit;
   };
 }

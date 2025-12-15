@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  asio,
+  asio_1_32_0,
   glib,
   jsoncpp,
   libcap_ng,
@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    asio
+    # Depends on io_service
+    asio_1_32_0
     glib
     jsoncpp
     libcap_ng
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "bash-completion" "enabled")
     (lib.mesonOption "test_programs" "disabled")
     (lib.mesonOption "unit_tests" "disabled")
-    (lib.mesonOption "asio_path" "${asio}")
+    (lib.mesonOption "asio_path" "${asio_1_32_0}")
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
