@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   lib,
-  fetchFromGitHub,
+  fetchPypi,
   click,
   six,
   tqdm,
@@ -14,11 +14,13 @@ buildPythonPackage rec {
   version = "0.0.35";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "alvations";
-    repo = "sacremoses";
-    rev = version;
-    sha256 = "1gzr56w8yx82mn08wax5m0xyg15ym4ri5l80gmagp8r53443j770";
+  # pypi does not include tests
+  # new source is https://github.com/hplt-project/sacremoses
+  # but lacks release 0.0.35
+  src = fetchPypi {
+    inherit version;
+    pname = "sacremoses";
+    hash = "sha256-HoTalcvb/Iu8FIwP61pHN8XZdXBxt56MESnkSUEOQQo=";
   };
 
   propagatedBuildInputs = [
@@ -28,14 +30,10 @@ buildPythonPackage rec {
     joblib
   ];
 
-  nativeCheckInputs = [ pytest ];
-  # ignore tests which call to remote host
-  checkPhase = ''
-    pytest -k 'not truecase'
-  '';
+  doInstallCheck = false;
 
   meta = {
-    homepage = "https://github.com/alvations/sacremoses";
+    homepage = "https://github.com/hplt-project/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     mainProgram = "sacremoses";
     license = lib.licenses.lgpl21Plus;
