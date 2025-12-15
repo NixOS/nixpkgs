@@ -121,7 +121,7 @@ buildPythonPackage rec {
     "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
@@ -132,7 +132,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyca/cryptography";
     changelog =
-      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
+      "https://cryptography.io/en/latest/changelog/#v" + lib.replaceStrings [ "." ] [ "-" ] version;
     license = with lib.licenses; [
       asl20
       bsd3

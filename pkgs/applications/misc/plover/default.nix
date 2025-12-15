@@ -16,7 +16,7 @@
       version = "4.0.2";
       format = "setuptools";
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "OpenSteno Plover stenography software";
         maintainers = with lib.maintainers; [

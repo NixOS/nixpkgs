@@ -47,13 +47,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "steamship" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fastest way to add language AI to your product";
     homepage = "https://www.steamship.com/";
     changelog = "https://github.com/steamship-core/python-client/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     # https://github.com/steamship-core/python-client/issues/503
-    broken = versionAtLeast pydantic.version "2";
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

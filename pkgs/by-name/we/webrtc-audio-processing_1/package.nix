@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-msse2";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = lib.licenses.bsd3;
     platforms =
-      intersectLists
+      lib.intersectLists
         # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
         (lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.windows)
         # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h

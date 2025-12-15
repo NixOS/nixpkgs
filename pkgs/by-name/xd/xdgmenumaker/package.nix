@@ -55,13 +55,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool that generates XDG menus for several window managers";
     mainProgram = "xdgmenumaker";
     homepage = "https://github.com/gapan/xdgmenumaker";
     license = lib.licenses.gpl3Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch
-    platforms = with lib.platforms; filter (x: !(elem x darwin)) unix;
+    platforms = with lib.platforms; lib.filter (x: !(lib.elem x darwin)) unix;
     maintainers = [ lib.maintainers.romildo ];
   };
 }

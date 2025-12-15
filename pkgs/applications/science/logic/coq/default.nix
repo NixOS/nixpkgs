@@ -13,6 +13,7 @@
   writeText,
   pkg-config,
   gnumake42,
+  dune,
   customOCamlPackages ? null,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
@@ -130,7 +131,7 @@ let
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
-  ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
+  ++ lib.optional (coqAtLeast "8.14") dune;
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
