@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "repo2docker";
     tag = version;
-    hash = "sha256-vqLZbqshEl3xC5hcE4OkWfZpPSlSfv70oygEYPFqyFE=";
+    hash = "sha256-dUsNNls91H2lHI0OYS90B6hvhabifRHJxAtb7SxK68k=";
   };
 
   nativeBuildInputs = [ setuptools ];
