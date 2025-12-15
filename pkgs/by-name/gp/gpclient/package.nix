@@ -1,6 +1,8 @@
 {
+  lib,
   rustPlatform,
   glib-networking,
+  stdenv,
   gpauth,
   makeWrapper,
   autoconf,
@@ -69,7 +71,7 @@ rustPlatform.buildRustPackage {
       --replace-fail /usr/bin/gpclient gpclient
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/share/applications
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
   '';
