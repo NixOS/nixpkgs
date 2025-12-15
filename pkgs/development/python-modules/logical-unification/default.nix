@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "unification";
     tag = "v${version}";
-    hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
+    hash = "sha256-chfgfnscwRcryIO5KLeBmG4YJ71d6TT51DjiuujsWxQ=";
   };
 
   propagatedBuildInputs = [
