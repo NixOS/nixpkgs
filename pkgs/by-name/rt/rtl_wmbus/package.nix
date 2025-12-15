@@ -7,13 +7,14 @@
 }:
 
 stdenv.mkDerivation rec {
+  release_tag = "d2be82c";
   pname = "rtl-wmbus";
-  version = "d2be82c";
+  version = "0-${release_tag}";
 
   src = fetchFromGitHub {
     owner = "xaelsouth";
     repo = "rtl-wmbus";
-    tag = version;
+    tag = release_tag;
     hash = "sha256-TbNOvEyG0vNG68UpKRwJYDcUiDWTujneSD0Vx/4eFrA=";
 
     # need to fetch revision from git
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # avoid reading the version from git to avoid fetching all tags
   makeFlags = [
-    "TAG=${version}"
+    "TAG=${release_tag}"
     "BRANCH="
     "CHANGES="
   ];
