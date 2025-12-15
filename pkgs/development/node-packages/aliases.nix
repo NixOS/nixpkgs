@@ -283,6 +283,7 @@ mapAliases {
   inherit (pkgs) pnpm; # added 2024-06-26
   poor-mans-t-sql-formatter-cli = throw "'poor-mans-t-sql-formatter-cli' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
+  prebuild-install = throw "prebuild-install was removed because it appeared to be unmaintained upstream. See upstream's recommendations for alternatives here: https://github.com/prebuild/prebuild-install#note"; # Added 2025-12-14
   inherit (pkgs) prettier; # added 2025-05-31
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
