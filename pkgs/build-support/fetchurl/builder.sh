@@ -23,6 +23,14 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
+# NOTE:
+# `netrcPhase` should not attempt to access builder.sh implementation details (e.g., the `${curl[@]}` array),
+# The implementation detail could change in any Nixpkgs revision, including backports.
+if [[ -n "${netrcPhase-}" ]]; then
+    runPhase netrcPhase
+    curl+=(--netrc-file "$PWD/netrc")
+fi
+
 curl+=("${curlOptsList[@]}")
 
 curl+=(
@@ -32,7 +40,6 @@ curl+=(
 
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
-
 
 tryDownload() {
     local url="$1"
