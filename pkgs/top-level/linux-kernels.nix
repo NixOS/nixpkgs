@@ -15,6 +15,7 @@
 # When adding a kernel:
 # - Update packageAliases.linux_latest to the latest version
 # - Update linux_latest_hardened when the patches become available
+# - If an LTS kernel, update linux_<version>_hardened and linux_rt_<version> to latest LTS and add throw aliases
 
 let
   inherit (lib) recurseIntoAttrs dontRecurseIntoAttrs;
@@ -75,6 +76,48 @@ let
       ];
       isHardened = true;
     };
+
+  realtimeKernelFor =
+    kernel': overrides:
+    let
+      kernel = kernel'.override overrides;
+      version = kernel.version;
+    in
+    kernel.override {
+      argsOverride = {
+        pname = "linux-rt";
+      };
+      structuredExtraConfig =
+        with lib.kernel;
+        (
+          {
+            # Enable expert mode (required by PREEMPT_RT, see kernel/Kconfig.preempt)
+            EXPERT = yes;
+            # Enable PREEMPT_RT
+            PREEMPT_RT = yes;
+          }
+          // (lib.optionalAttrs (lib.versionAtLeast version "6.12" && lib.versionOlder version "6.13") {
+            # Fix error: option not set correctly: PREEMPT_VOLUNTARY (wanted 'y', got 'n').
+            PREEMPT_VOLUNTARY = lib.mkForce no; # PREEMPT_RT and PREEMPT_VOLUNTARY are incompatible
+          })
+          // (lib.optionalAttrs (lib.versionAtLeast version "6.13") {
+            # Fix error: option not set correctly: PREEMPT (wanted 'n', got 'y').
+            PREEMPT = lib.mkForce yes;
+            # Fix error: error: unused option: PREEMPT_VOLUNTARY
+            PREEMPT_VOLUNTARY = lib.mkForce unset;
+          })
+          // (lib.optionalAttrs (lib.versionAtLeast version "6.12") {
+            # i915 GVT is incompatible with PREEMPT_RT
+            # https://lists.freedesktop.org/archives/intel-gfx/2022-February/289691.html
+            DRM_I915_GVT = lib.mkForce unset;
+            DRM_I915_GVT_KVMGT = lib.mkForce unset;
+          })
+          // (lib.optionalAttrs (lib.versionOlder version "6.12") {
+            # Fix error: unused option: RT_GROUP_SCHED.
+            RT_GROUP_SCHED = lib.mkForce (option no); # Removed by sched-disable-rt-group-sched-on-rt.patch.
+          })
+        );
+    };
 in
 {
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
@@ -132,27 +175,11 @@ in
           ];
         };
 
-        linux_rt_5_10 = callPackage ../os-specific/linux/kernel/linux-rt-5.10.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
-          ];
-        };
-
         linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "5.15";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_rt_5_15 = callPackage ../os-specific/linux/kernel/linux-rt-5.15.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
           ];
         };
 
@@ -164,27 +191,11 @@ in
           ];
         };
 
-        linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
-          ];
-        };
-
         linux_6_6 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.6";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_rt_6_6 = callPackage ../os-specific/linux/kernel/linux-rt-6.6.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            kernelPatches.export-rt-sched-migrate
           ];
         };
 
@@ -276,6 +287,12 @@ in
           ];
         };
 
+        linux_rt_6_12 = realtimeKernelFor kernels.linux_6_12 { };
+
+        linux_rt = realtimeKernelFor packageAliases.linux_default.kernel { };
+
+        linux_rt_latest = realtimeKernelFor packageAliases.linux_latest.kernel { };
+
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
         linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
@@ -298,6 +315,11 @@ in
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_6_6_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
+
+        linux_rt_5_10 = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+        linux_rt_5_15_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+        linux_rt_6_1_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+        linux_rt_6_6_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
 
         linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4_hardened = throw "linux_5_4_hardened was removed because it was broken";
@@ -747,10 +769,9 @@ in
 
   rtPackages = {
     # realtime kernel packages
-    linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
-    linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
-    linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
-    linux_rt_6_6 = packagesFor kernels.linux_rt_6_6;
+    linux_rt_6_12 = packagesFor kernels.linux_rt_6_12;
+    linux_rt = packagesFor kernels.linux_rt;
+    linux_rt_latest = packagesFor kernels.linux_rt_latest;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
@@ -807,11 +828,15 @@ in
     linux_default = packages.linux_6_12;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_18;
-    linux_rt_default = packages.linux_rt_5_15;
-    linux_rt_latest = packages.linux_rt_6_6;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
+    linux_rt_default = throw "'packageAliases.linux_rt_default' has been moved to 'packages.linux_rt'";
+    linux_rt_latest = throw "'packageAliases.linux_rt_latest' has been moved to 'packages.linux_rt_latest'";
+    linux_rt_5_10 = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+    linux_rt_5_15_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+    linux_rt_6_1_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
+    linux_rt_6_6_hardened = throw "linux_rt on nixpkgs only contains latest stable and latest LTS";
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/build.nix { };
