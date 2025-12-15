@@ -30,6 +30,24 @@
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/messagepack.annotations/2.5.198/messagepack.annotations.2.5.198.nupkg"
   },
   {
+    "pname": "Microsoft.AspNetCore.App.Runtime.linux-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-SbQQp69fu2EMlx+8NGMFGcJzry/O4qtD8eYfPIt8Yu8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.linux-arm64/10.0.1/microsoft.aspnetcore.app.runtime.linux-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.AspNetCore.App.Runtime.osx-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-RxHiasO6qXhzQHnkge74S/HgDsngfl/lT9TvsAs86gE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.osx-arm64/10.0.1/microsoft.aspnetcore.app.runtime.osx-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.AspNetCore.App.Runtime.osx-x64",
+    "version": "10.0.1",
+    "hash": "sha256-UYNf+L88DU28/gSFS53SQRZqXxjH6FAVMaqJQsH60sw=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.aspnetcore.app.runtime.osx-x64/10.0.1/microsoft.aspnetcore.app.runtime.osx-x64.10.0.1.nupkg"
+  },
+  {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "9.0.0",
     "hash": "sha256-BsXNOWEgfFq3Yz7VTtK6m/ov4/erRqyBzieWSIpmc1U=",
@@ -127,9 +145,9 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "11.0.0-beta.25578.1",
-    "hash": "sha256-c8IWX17rJM4aOxvPEbMUDzeLR6kEwWWTstm4waw3d80=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25578.1/microsoft.dotnet.arcade.sdk.11.0.0-beta.25578.1.nupkg"
+    "version": "11.0.0-beta.25603.2",
+    "hash": "sha256-xXwq/ffFnDXjMnrzKUAT3Du31tKso7aNW4VBvABHX4M=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25603.2/microsoft.dotnet.arcade.sdk.11.0.0-beta.25603.2.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.FileBasedPrograms",
@@ -139,9 +157,9 @@
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "11.0.0-beta.25578.1",
-    "hash": "sha256-EPo2bgR7oW/a8htIps64UrAPuoyyuIYYG54cZRoknUY=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25578.1/microsoft.dotnet.xlifftasks.11.0.0-beta.25578.1.nupkg"
+    "version": "11.0.0-beta.25603.2",
+    "hash": "sha256-qLUHUextwX33sSm4oK0N4qpbGEZpz6qOw5kabpJ9Xkk=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25603.2/microsoft.dotnet.xlifftasks.11.0.0-beta.25603.2.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -232,6 +250,42 @@
     "version": "17.6.3",
     "hash": "sha256-H2Qw8x47WyFOd/VmgRmGMc+uXySgUv68UISgK8Frsjw=",
     "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.net.stringtools/17.6.3/microsoft.net.stringtools.17.6.3.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Host.linux-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-EFhDb8pDC+OMpD1hKZv2L4bue/9teeaWQKnp3dD0AKc=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-arm64/10.0.1/microsoft.netcore.app.host.linux-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Host.osx-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-rgKbfbi/ZaDrHiVdjICKKzulkoTp5Li9WjFEs+AScR0=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.osx-arm64/10.0.1/microsoft.netcore.app.host.osx-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Host.osx-x64",
+    "version": "10.0.1",
+    "hash": "sha256-F6fTjDGUHO4ihJ5b6JBumY+WJk1XoCydUgOztLGMCrY=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.osx-x64/10.0.1/microsoft.netcore.app.host.osx-x64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Runtime.linux-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-UZas8ZqNiJ6w+F3wuKe1eioga4bgP/KUO9CXKEor2io=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.linux-arm64/10.0.1/microsoft.netcore.app.runtime.linux-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Runtime.osx-arm64",
+    "version": "10.0.1",
+    "hash": "sha256-HyLYdc1mCFznXeAGyPeIgIc8+oCuMaFWVSRHF3HfQe4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.osx-arm64/10.0.1/microsoft.netcore.app.runtime.osx-arm64.10.0.1.nupkg"
+  },
+  {
+    "pname": "Microsoft.NETCore.App.Runtime.osx-x64",
+    "version": "10.0.1",
+    "hash": "sha256-k8C+k+8AWbZ4sI2YfW+C+ZrIOEJJPuLK6yrmSIIzBE8=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.runtime.osx-x64/10.0.1/microsoft.netcore.app.runtime.osx-x64.10.0.1.nupkg"
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
