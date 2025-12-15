@@ -7,7 +7,6 @@ final: prev:
 let
   nodePackageNames = [
     # # keep-sorted start case=no
-    "coc-go"
     "coc-tsserver"
     # keep-sorted end
   ];

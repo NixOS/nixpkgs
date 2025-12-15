@@ -9,7 +9,6 @@
 , "aws-cdk"
 , "browserify"
 , "browser-sync"
-, "coc-go"
 , "coc-tsserver"
 , "dotenv-vault"
 , "elasticdump"

@@ -20587,31 +20587,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-go = nodeEnv.buildNodePackage {
-    name = "coc-go";
-    packageName = "coc-go";
-    version = "1.3.35";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-go/-/coc-go-1.3.35.tgz";
-      sha512 = "1XHfCsUe8Xcb8EJb0kCXIuCFc7EfNFM4qziZhk/1LcKS9oMWrUCxQqPpYSdpd1XAatTad1KeuRFigPv6aaijiQ==";
-    };
-    dependencies = [
-      sources."isexe-3.1.1"
-      sources."tslib-2.8.1"
-      sources."vscode-languageserver-textdocument-1.0.12"
-      sources."vscode-uri-3.1.0"
-      sources."which-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "gopls extension for coc";
-      homepage = "https://github.com/josa42/coc-go#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-tsserver = nodeEnv.buildNodePackage {
     name = "coc-tsserver";
     packageName = "coc-tsserver";
