@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "datavaluepeople";
     repo = "kotsu";
     rev = "v${version}";
-    hash = "sha256-V5OkgiLUTRNbNt6m94+aYUZd9Nw+/60LfhrqqdFhiUw=";
+    hash = "sha256-dgAO/owdRjhlTcL9wlRI3z/BVK6avb2bu3/nruu2B4E=";
   };
 
   propagatedBuildInputs = [
