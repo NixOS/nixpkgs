@@ -8,6 +8,7 @@
 buildEnv {
   inherit (typst) version;
   pname = typst.pname + "-env";
+  name = typst.pname + "-env-" + typst.version;
 
   paths = [ typst ] ++ lib.concatMap (p: [ p ] ++ p.propagatedBuildInputs) typstPackages;
 
