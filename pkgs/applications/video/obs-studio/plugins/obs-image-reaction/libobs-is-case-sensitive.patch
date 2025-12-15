@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 76f9381..c38375f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,7 +15,7 @@ if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+     add_definitions(-DUNIX=1)
+ endif ()
+ 
+-find_package(LibObs REQUIRED)
++find_package(LibObs REQUIRED NAMES LibObs libobs libobsConfig)
+ 
+ set(image-reaction_SOURCES image-reaction.c)
+ 
