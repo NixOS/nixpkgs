@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, stdenv }:
 
 rec {
   mlton20130715 = callPackage ./20130715.nix { };
@@ -19,6 +19,15 @@ rec {
     version = "20210117";
     rev = "on-20210117-release";
     sha256 = "sha256-rqL8lnzVVR+5Hc7sWXK8dCXN92dU76qSoii3/4StODM=";
+  };
+
+  mlton20241230 = callPackage ./from-git-source.nix {
+    mltonBootstrap = mlton20210117Binary;
+    version = "20241230";
+    rev = "on-20241230-release";
+    sha256 = "sha256-gJUzav2xH8C4Vy5FuqN73Z6lPMSPQgJApF8LgsJXRWo=";
+    # https://github.com/MLton/mlton/issues/631
+    doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin);
   };
 
   mltonHEAD = callPackage ./from-git-source.nix {
