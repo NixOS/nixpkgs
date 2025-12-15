@@ -21658,60 +21658,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  prebuild-install = nodeEnv.buildNodePackage {
-    name = "prebuild-install";
-    packageName = "prebuild-install";
-    version = "7.1.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prebuild-install/-/prebuild-install-7.1.3.tgz";
-      sha512 = "8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==";
-    };
-    dependencies = [
-      sources."base64-js-1.5.1"
-      sources."bl-4.1.0"
-      sources."buffer-5.7.1"
-      sources."chownr-1.1.4"
-      sources."decompress-response-6.0.0"
-      sources."deep-extend-0.6.0"
-      sources."detect-libc-2.0.3"
-      sources."end-of-stream-1.4.4"
-      sources."expand-template-2.0.3"
-      sources."fs-constants-1.0.0"
-      sources."github-from-package-0.0.0"
-      sources."ieee754-1.2.1"
-      sources."inherits-2.0.4"
-      sources."ini-1.3.8"
-      sources."mimic-response-3.1.0"
-      sources."minimist-1.2.8"
-      sources."mkdirp-classic-0.5.3"
-      sources."napi-build-utils-2.0.0"
-      sources."node-abi-3.74.0"
-      sources."once-1.4.0"
-      sources."pump-3.0.2"
-      sources."rc-1.2.8"
-      sources."readable-stream-3.6.2"
-      sources."safe-buffer-5.2.1"
-      sources."semver-7.7.1"
-      sources."simple-concat-1.0.1"
-      sources."simple-get-4.0.1"
-      sources."string_decoder-1.3.0"
-      sources."strip-json-comments-2.0.1"
-      sources."tar-fs-2.1.2"
-      sources."tar-stream-2.2.0"
-      sources."tunnel-agent-0.6.0"
-      sources."util-deprecate-1.0.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A command line tool to easily install prebuilt binaries for multiple version of node/iojs on a specific platform";
-      homepage = "https://github.com/prebuild/prebuild-install";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   sass = nodeEnv.buildNodePackage {
     name = "sass";
     packageName = "sass";
