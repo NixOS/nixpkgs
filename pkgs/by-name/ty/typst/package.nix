@@ -71,8 +71,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     packages = callPackage ./typst-packages.nix { };
-    wrapper = callPackage ./wrapper.nix { };
-    withPackages = ps: finalAttrs.passthru.wrapper { packages = ps; };
+    wrapper = callPackage ./wrapper.nix {
+      typstPackages = finalAttrs.passthru.packages;
+      typst = finalAttrs.finalPackage;
+    };
+    withPackages =
+      f:
+      finalAttrs.passthru.wrapper {
+        packages = f;
+      };
   };
 
   meta = {
