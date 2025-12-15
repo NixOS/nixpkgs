@@ -20,7 +20,6 @@
 , "lcov-result-merger"
 , "node2nix"
 , "postcss"
-, "prebuild-install"
 , "sass"
 , "semver"
 , "vega-cli"
