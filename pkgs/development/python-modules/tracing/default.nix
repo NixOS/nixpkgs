@@ -11,8 +11,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchurl {
-    url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
-    sha256 = "1l4ybj5rvrrcxf8csyq7qx52izybd502pmx70zxp46gxqm60d2l0";
+    url = "https://debian.mcc.ac.uk/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
+    hash = "sha256-Mx8pvaE/HgLYfjcX9BeiRqUKdHNRjt57ZC/Zm35vhW4";
   };
 
   buildInputs = [ sphinx ];
