@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/polkit-org/polkit/commit/55ee1b70456eca8281dda9612c485c619122f202.patch";
       hash = "sha256-XOsDyYFBDWxs0PGAgqm3OSUycKR8fYa2ySZqBl8EX7E=";
     })
+
+    (fetchpatch {
+      name = "dbusmock-0.37.patch";
+      url = "https://github.com/polkit-org/polkit/commit/690e6972ffe30473dacbfaa81158f5507cef99f6.patch";
+      hash = "sha256-0LhwJLfohqVkCT1fIDRe97+vPbo4sej0YRBFTfKKTH4=";
+    })
   ];
 
   depsBuildBuild = [
