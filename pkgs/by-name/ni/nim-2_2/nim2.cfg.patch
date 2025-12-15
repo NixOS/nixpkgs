@@ -1,0 +1,41 @@
+diff --git a/config/nim.cfg b/config/nim.cfg
+index 1470de780..8a12f741a 100644
+--- a/config/nim.cfg
++++ b/config/nim.cfg
+@@ -9,8 +9,6 @@
+ # Environment variables can be accessed like so:
+ #  gcc.path %= "$CC_PATH"
+
+-cc = gcc
+-
+ # additional options always passed to the compiler:
+ --parallel_build: "0" # 0 to auto-detect number of processors
+
+@@ -22,27 +20,6 @@ cc = gcc
+
+ threads:on
+
+-# Examples of how to setup a cross-compiler:
+-# Nim can target architectures and OSes different than the local host
+-# Syntax: <arch>.<os>.gcc.exe = "<compiler executable>"
+-#         <arch>.<os>.gcc.linkerexe = "<linker executable>"
+-
+-# ARM e.g. Raspberry Pi 2: gcc-arm-linux-gnueabihf package on Debian/Ubuntu
+-arm.linux.gcc.exe = "arm-linux-gnueabihf-gcc"
+-arm.linux.gcc.linkerexe = "arm-linux-gnueabihf-gcc"
+-# ARM64/aarch64 e.g. Raspberry Pi 3: gcc-aarch64-linux-gnu package on Debian/Ubuntu
+-arm64.linux.gcc.exe = "aarch64-linux-gnu-gcc"
+-arm64.linux.gcc.linkerexe = "aarch64-linux-gnu-gcc"
+-# RISC-V: gcc-riscv64-linux-gnu package on Debian/Ubuntu
+-riscv32.linux.gcc.exe = "riscv64-linux-gnu-gcc"
+-riscv32.linux.gcc.linkerexe = "riscv64-linux-gnu-gcc"
+-riscv64.linux.gcc.exe = "riscv64-linux-gnu-gcc"
+-riscv64.linux.gcc.linkerexe = "riscv64-linux-gnu-gcc"
+-
+-# For OpenWRT, you will also need to adjust PATH to point to your toolchain.
+-mips.linux.gcc.exe = "mips-openwrt-linux-gcc"
+-mips.linux.gcc.linkerexe = "mips-openwrt-linux-gcc"
+-
+
+ path="$lib/deprecated/core"
+ path="$lib/deprecated/pure"

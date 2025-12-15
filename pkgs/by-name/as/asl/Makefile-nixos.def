@@ -1,0 +1,31 @@
+# -------------------------------------------------------------------------
+# choose your compiler (must be ANSI-compliant!) and linker command, plus
+# any additionally needed flags
+
+OBJDIR = .objdir/
+CC = cc
+CFLAGS = -g -fomit-frame-pointer -Wall
+HOST_OBJEXTENSION = .o
+LD = $(CC)
+LDFLAGS =
+HOST_EXEXTENSION =
+
+# no cross build
+
+TARG_OBJDIR = $(OBJDIR)
+TARG_CC = $(CC)
+TARG_CFLAGS = $(CFLAGS)
+TARG_OBJEXTENSION = $(HOST_OBJEXTENSION)
+TARG_LD = $(LD)
+TARG_LDFLAGS = $(LDFLAGS)
+TARG_EXEXTENSION = $(HOST_EXEXTENSION)
+
+# -------------------------------------------------------------------------
+# directories where binaries, includes, and manpages should go during
+# installation
+
+BINDIR = @bindir@
+INCDIR = @incdir@
+MANDIR = @mandir@
+LIBDIR = @libdir@
+DOCDIR = @docdir@

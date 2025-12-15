@@ -1,0 +1,16 @@
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index 71a110a7b..e69880d46 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -38,11 +38,6 @@ if(NOT WIN32)
+   # find the correct file.
+   set(DESKTOP_ANSEL_BINARY "ansel")
+   set(DESKTOP_ANSEL_ICON "ansel")
+-  if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-    set(DESKTOP_ANSEL_BINARY "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/ansel")
+-    # `hicolor` is always available.
+-    set(DESKTOP_ANSEL_ICON "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/ansel.svg")
+-  endif()
+ 
+   # Append supported MIME types dynamically.
+   if("avif" IN_LIST DT_SUPPORTED_EXTENSIONS)

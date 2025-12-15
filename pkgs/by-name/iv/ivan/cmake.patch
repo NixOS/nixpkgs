@@ -1,0 +1,19 @@
+From bbfcbd7c039ddcfc3f419a4a45eee0076696fd39 Mon Sep 17 00:00:00 2001
+From: ryfactor <6005108+ryfactor@users.noreply.github.com>
+Date: Fri, 13 Jun 2025 11:00:58 +1200
+Subject: [PATCH] Update CMake min version to 3.5
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e2358bad4..95db47bc7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12.2)
++cmake_minimum_required(VERSION 3.5)
+ project(ivan CXX C)
+ 
+ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")

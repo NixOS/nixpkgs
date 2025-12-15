@@ -1,0 +1,130 @@
+diff --git a/applets/devicenotifier/devicemessagemonitor_p.cpp b/applets/devicenotifier/devicemessagemonitor_p.cpp
+index 173fec78c1..0519424f71 100644
+--- a/applets/devicenotifier/devicemessagemonitor_p.cpp
++++ b/applets/devicenotifier/devicemessagemonitor_p.cpp
+@@ -118,7 +118,7 @@ void DeviceMessageMonitor::queryBlockingApps(const QString &devicePath)
+         Q_EMIT blockingAppsReady(blockApps);
+         p->deleteLater();
+     });
+-    p->start(QStringLiteral("lsof"), {QStringLiteral("-t"), devicePath});
++    p->start(QStringLiteral("@lsof@"), {QStringLiteral("-t"), devicePath});
+     //    p.start(QStringLiteral("fuser"), {QStringLiteral("-m"), devicePath});
+ }
+ 
+diff --git a/kcms/fonts/fontinit.cpp b/kcms/fonts/fontinit.cpp
+index e27e21a7bd..abbf7f32e1 100644
+--- a/kcms/fonts/fontinit.cpp
++++ b/kcms/fonts/fontinit.cpp
+@@ -27,7 +27,7 @@ Q_DECL_EXPORT void kcminit()
+ 
+     const QByteArray input = "Xft.dpi: " + QByteArray::number(dpi);
+     QProcess p;
+-    p.start(QStringLiteral("xrdb"), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
++    p.start(QStringLiteral("@xrdb@"), {QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp")});
+     p.setProcessChannelMode(QProcess::ForwardedChannels);
+     p.write(input);
+     p.closeWriteChannel();
+diff --git a/kcms/fonts/fonts.cpp b/kcms/fonts/fonts.cpp
+index da28f13837..4af78b7850 100644
+--- a/kcms/fonts/fonts.cpp
++++ b/kcms/fonts/fonts.cpp
+@@ -137,7 +137,7 @@ void KFonts::save()
+     if (fontsAASettings()->forceFontDPI() == 0 && forceFontDPIChanged && KWindowSystem::isPlatformX11()) {
+         QProcess proc;
+         proc.setProcessChannelMode(QProcess::ForwardedChannels);
+-        proc.start(u"xrdb"_s, QStringList{u"-quiet"_s, u"-remove"_s, u"-nocpp"_s});
++        proc.start(u"@xrdb@"_s, QStringList{u"-quiet"_s, u"-remove"_s, u"-nocpp"_s});
+         if (proc.waitForStarted()) {
+             proc.write("Xft.dpi\n");
+             proc.closeWriteChannel();
+diff --git a/kcms/kfontinst/kcmfontinst/FcQuery.cpp b/kcms/kfontinst/kcmfontinst/FcQuery.cpp
+index e4d1ad4311..d45bdfad98 100644
+--- a/kcms/kfontinst/kcmfontinst/FcQuery.cpp
++++ b/kcms/kfontinst/kcmfontinst/FcQuery.cpp
+@@ -46,7 +46,7 @@ void CFcQuery::run(const QString &query)
+     connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(procExited()));
+     connect(m_proc, &QProcess::readyReadStandardOutput, this, &CFcQuery::data);
+ 
+-    m_proc->start(u"fc-match"_s, args);
++    m_proc->start(u"@fcMatch@"_s, args);
+ }
+ 
+ void CFcQuery::procExited()
+diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
+index 53f77d0a18..680e81b6e4 100644
+--- a/kcms/krdb/krdb.cpp
++++ b/kcms/krdb/krdb.cpp
+@@ -425,7 +425,7 @@ void runRdb(unsigned int flags)
+             contents += "Xft.dpi: "_L1 + QString::number(dpi) + u'\n';
+         else {
+             KProcess queryProc;
+-            queryProc << QStringLiteral("xrdb") << QStringLiteral("-query");
++            queryProc << QStringLiteral("@xrdb@") << QStringLiteral("-query");
+             queryProc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+             queryProc.start();
+             if (queryProc.waitForFinished()) {
+@@ -445,7 +445,7 @@ void runRdb(unsigned int flags)
+                 }
+ 
+                 KProcess loadProc;
+-                loadProc << QStringLiteral("xrdb") << QStringLiteral("-quiet") << QStringLiteral("-load") << QStringLiteral("-nocpp");
++                loadProc << QStringLiteral("@xrdb@") << QStringLiteral("-quiet") << QStringLiteral("-load") << QStringLiteral("-nocpp");
+                 loadProc.start();
+                 if (loadProc.waitForStarted()) {
+                     loadProc.write(db);
+@@ -463,9 +463,9 @@ void runRdb(unsigned int flags)
+ 
+     KProcess proc;
+ #ifndef NDEBUG
+-    proc << QStringLiteral("xrdb") << QStringLiteral("-merge") << tmpFile.fileName();
++    proc << QStringLiteral("@xrdb@") << QStringLiteral("-merge") << tmpFile.fileName();
+ #else
+-    proc << u"xrdb"_s << u"-quiet"_s << u"-merge"_s << tmpFile.fileName();
++    proc << u"@xrdb@"_s << u"-quiet"_s << u"-merge"_s << tmpFile.fileName();
+ #endif
+     proc.execute();
+ 
+diff --git a/ksmserver/plasma-restoresession.service.in b/ksmserver/plasma-restoresession.service.in
+index 2c52a4b87d..fd7fdc8ac1 100644
+--- a/ksmserver/plasma-restoresession.service.in
++++ b/ksmserver/plasma-restoresession.service.in
+@@ -5,5 +5,5 @@ RefuseManualStart=yes
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=-@QtBinariesDir@/qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.restoreSession
++ExecStart=-@qdbus@ org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.restoreSession
+ Slice=session.slice
+diff --git a/startkde/kcminit/plasma-kcminit-phase1.service.in b/startkde/kcminit/plasma-kcminit-phase1.service.in
+index 7218628ce9..9126475ea4 100644
+--- a/startkde/kcminit/plasma-kcminit-phase1.service.in
++++ b/startkde/kcminit/plasma-kcminit-phase1.service.in
+@@ -6,5 +6,5 @@ PartOf=graphical-session.target
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=@QtBinariesDir@/qdbus org.kde.kcminit /kcminit org.kde.KCMInit.runPhase1
++ExecStart=@qdbus@ org.kde.kcminit /kcminit org.kde.KCMInit.runPhase1
+ Slice=session.slice
+diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
+index b8474dd34f..7d0616e116 100644
+--- a/startkde/startplasma.cpp
++++ b/startkde/startplasma.cpp
+@@ -57,7 +57,7 @@ void sigtermHandler(int signalNumber)
+ void messageBox(const QString &text)
+ {
+     out << text;
+-    runSync(QStringLiteral("xmessage"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
++    runSync(QStringLiteral("@xmessage@"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
+ }
+ 
+ QStringList allServices(const QLatin1String &prefix)
+@@ -508,7 +508,7 @@ QProcess *setupKSplash()
+         if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
+             p = new QProcess;
+             p->setProcessChannelMode(QProcess::ForwardedChannels);
+-            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
++            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
+         }
+     }
+     return p;

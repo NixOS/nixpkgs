@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d362165d..7e3dfd09 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,45 +23,6 @@ if(DEFINED ENV{VULKAN_SDK})
+ 	endif()
+ endif()
+ 
+-# Git is used for git-describe based version generation if we have it
+-find_package(Git)
+-
+-#Set up versioning (with a dummy string for now if Git isn't present)
+-if(Git_FOUND)
+-	execute_process(
+-		COMMAND ${GIT_EXECUTABLE} describe --always --tags
+-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-		OUTPUT_VARIABLE NGSCOPECLIENT_VERSION
+-		OUTPUT_STRIP_TRAILING_WHITESPACE)
+-	message("Git reports scopehal-apps version ${NGSCOPECLIENT_VERSION}")
+-
+-
+-	execute_process(
+-		COMMAND ${GIT_EXECUTABLE} describe --always --tags --long
+-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-		OUTPUT_VARIABLE NGSCOPECLIENT_VERSION_LONG
+-		OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-	# TODO: if/when we have a point release, make MSI version 10x+9
+-	# ex: 0.1.2-rc2 is 0.1.22
+-	# ex: 0.1.2 is 0.1.29
+-
+-	# Ugly string parsing to make windows build happy
+-	# First path: release candidate tags
+-	if(NGSCOPECLIENT_VERSION_LONG MATCHES "v([0-9]*).([0-9]*)-rc([0-9])-([0-9]*)")
+-		set(MSI_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.${CMAKE_MATCH_3}.${CMAKE_MATCH_4}")
+-
+-	# Release tags
+-	elseif(NGSCOPECLIENT_VERSION_LONG MATCHES "v([0-9]*).([0-9]*)-([0-9]*)")
+-		set(MSI_VERSION "${CMAKE_MATCH_1}.${CMAKE_MATCH_2}.9.${CMAKE_MATCH_3}")
+-	endif()
+-
+-else()
+-	set(NGSCOPECLIENT_VERSION "unknown")
+-	set(MSI_VERSION "0.1")
+-	message("Git not detected, scopehal-apps version unknown")
+-endif()
+-
+ set(PROJECT_VERSION "${NGSCOPECLIENT_VERSION}")
+ 
+ include(CTest)

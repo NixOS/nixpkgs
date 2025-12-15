@@ -1,0 +1,11 @@
+{
+  "version": "9.0",
+  "full": {
+    "filename": "racket-9.0-src.tgz",
+    "sha256": "a05f54103789477da8e6facabb777049477c4c3998c5865c0d7ce285d3577411"
+  },
+  "minimal": {
+    "filename": "racket-minimal-9.0-src.tgz",
+    "sha256": "2c9dc012acbd980e10c60db5071e1e4597e6d12469832a80a44beab2b62ec3fe"
+  }
+}

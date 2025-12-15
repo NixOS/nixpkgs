@@ -1,0 +1,35 @@
+diff --git a/gnome-session/budgie-session.in b/gnome-session/budgie-session.in
+index 8a91e061..3e2ef031 100755
+--- a/gnome-session/budgie-session.in
++++ b/gnome-session/budgie-session.in
+@@ -7,13 +7,15 @@ if [ "x$XDG_SESSION_TYPE" = "xwayland" ] &&
+    ! (echo "$SHELL" | grep -q "false") &&
+    ! (echo "$SHELL" | grep -q "nologin"); then
+   if [ "$1" != '-l' ]; then
+-    exec bash -c "exec -l '$SHELL' -c '$0 -l $*'"
++    # Make sure the shell actually sets up the environment.
++    unset __NIXOS_SET_ENVIRONMENT_DONE
++    exec @bash@ -c "exec -l '$SHELL' -c '$0 -l $*'"
+   else
+     shift
+   fi
+ fi
+ 
+-SETTING=$(G_MESSAGES_DEBUG='' gsettings get org.gnome.system.locale region)
++SETTING=$(G_MESSAGES_DEBUG='' @gsettings@ get org.gnome.system.locale region)
+ REGION=${SETTING#\'}
+ REGION=${REGION%\'}
+ 
+diff --git a/gnome-session/main.c b/gnome-session/main.c
+index 327c7c7f..301ec7ee 100644
+--- a/gnome-session/main.c
++++ b/gnome-session/main.c
+@@ -219,7 +219,7 @@ require_dbus_session (int      argc,
+         }
+         new_argv[i + 2] = NULL;
+         
+-        if (!execvp ("dbus-launch", new_argv)) {
++        if (!execvp ("@dbusLaunch@", new_argv)) {
+                 g_set_error (error, 
+                              G_SPAWN_ERROR,
+                              G_SPAWN_ERROR_FAILED,

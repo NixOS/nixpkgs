@@ -1,0 +1,65 @@
+diff --git a/Src/CommandLine/CommandLine.csproj b/Src/CommandLine/CommandLine.csproj
+index 2b6a4fe..5eee8c7 100644
+--- a/Src/CommandLine/CommandLine.csproj
++++ b/Src/CommandLine/CommandLine.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <Platforms>AnyCPU;x64</Platforms>
+   </PropertyGroup>
+ 
+diff --git a/Src/Core/Core.csproj b/Src/Core/Core.csproj
+index 8e79a00..db64e3a 100644
+--- a/Src/Core/Core.csproj
++++ b/Src/Core/Core.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Library</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ApplicationIcon />
+     <StartupObject />
+     <Platforms>AnyCPU;x64</Platforms>
+diff --git a/Src/Extensions/FormulaCodeGeneratorTask/FormulaCodeGeneratorTaskDotNet.csproj b/Src/Extensions/FormulaCodeGeneratorTask/FormulaCodeGeneratorTaskDotNet.csproj
+index daa042d..9290c12 100644
+--- a/Src/Extensions/FormulaCodeGeneratorTask/FormulaCodeGeneratorTaskDotNet.csproj
++++ b/Src/Extensions/FormulaCodeGeneratorTask/FormulaCodeGeneratorTaskDotNet.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Library</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <Platforms>AnyCPU;x64</Platforms>
+   </PropertyGroup>
+ 
+diff --git a/Src/Kernel/InteractiveKernel/InteractiveKernel.csproj b/Src/Kernel/InteractiveKernel/InteractiveKernel.csproj
+index ed3cde5..6c669cd 100644
+--- a/Src/Kernel/InteractiveKernel/InteractiveKernel.csproj
++++ b/Src/Kernel/InteractiveKernel/InteractiveKernel.csproj
+@@ -17,7 +17,7 @@
+     </ItemGroup>
+     <PropertyGroup>
+         <OutputType>Exe</OutputType>
+-        <TargetFramework>net6.0</TargetFramework>
++        <TargetFramework>net8.0</TargetFramework>
+         <Nullable>enable</Nullable>
+         <ToolCommandName>dotnet-formula</ToolCommandName>
+         <AssemblyName>Microsoft.Jupyter.VUISIS.Formula</AssemblyName>
+diff --git a/Src/Tests/Tests.csproj b/Src/Tests/Tests.csproj
+index 8828a49..eebe401 100644
+--- a/Src/Tests/Tests.csproj
++++ b/Src/Tests/Tests.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+     <PropertyGroup>
+-        <TargetFramework>net6.0</TargetFramework>
++        <TargetFramework>net8.0</TargetFramework>
+ 
+         <IsPackable>false</IsPackable>
+     </PropertyGroup>

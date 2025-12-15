@@ -1,0 +1,76 @@
+diff --git a/src/python/omorfi/entryguessing/gradation.py b/src/python/omorfi/entryguessing/gradation.py
+index 7d3ed8cb..825d7ead 100755
+--- a/src/python/omorfi/entryguessing/gradation.py
++++ b/src/python/omorfi/entryguessing/gradation.py
+@@ -17,8 +17,8 @@
+ #   You should have received a copy of the GNU General Public License
+ #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-from .omorfi.error_logging import fail_guess_because
+-from .omorfi.string_mangling import replace_rightmost, replace_rightmosts
++from omorfi.error_logging import fail_guess_because
++from omorfi.string_manglers import replace_rightmost, replace_rightmosts
+ 
+ 
+ def gradation_make_morphophonemes(wordmap):
+diff --git a/src/python/omorfi/entryguessing/guess_new_class.py b/src/python/omorfi/entryguessing/guess_new_class.py
+index 1884716b..3a781bfc 100755
+--- a/src/python/omorfi/entryguessing/guess_new_class.py
++++ b/src/python/omorfi/entryguessing/guess_new_class.py
+@@ -17,8 +17,8 @@
+ #   You should have received a copy of the GNU General Public License
+ #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-from .error_logging import fail_guess_because
+-from .string_manglers import three_syllable
++from omorfi.error_logging import fail_guess_because
++from omorfi.string_manglers import three_syllable
+ 
+ 
+ def guess_new_class(wordmap):
+diff --git a/src/python/omorfi/entryguessing/plurale_tantum.py b/src/python/omorfi/entryguessing/plurale_tantum.py
+index a8af81fb..95fc4b7b 100755
+--- a/src/python/omorfi/entryguessing/plurale_tantum.py
++++ b/src/python/omorfi/entryguessing/plurale_tantum.py
+@@ -17,8 +17,8 @@
+ #   You should have received a copy of the GNU General Public License
+ #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-from .error_logging import fail_guess_because
+-from .omorfi.string_manglers import replace_rightmost, replace_rightmosts
++from omorfi.error_logging import fail_guess_because
++from omorfi.string_manglers import replace_rightmost, replace_rightmosts
+ 
+ 
+ def plurale_tantum_get_singular_stem(wordmap):
+diff --git a/src/python/omorfi/formats/experimental_xml_formatter.py b/src/python/omorfi/formats/experimental_xml_formatter.py
+index abccbff5..11b0f518 100755
+--- a/src/python/omorfi/formats/experimental_xml_formatter.py
++++ b/src/python/omorfi/formats/experimental_xml_formatter.py
+@@ -19,9 +19,9 @@
+ 
+ from xml.sax.saxutils import escape as xml_escape
+ 
+-from ftb3_formatter import Ftb3Formatter
++from .ftb3_formatter import Ftb3Formatter
+ 
+-from .settings import version_id_easter_egg
++from omorfi.settings import version_id_easter_egg
+ 
+ 
+ def make_xmlid(s):
+diff --git a/src/python/omorfi/formats/lexc_formatter.py b/src/python/omorfi/formats/lexc_formatter.py
+index 4ec616b7..b146129f 100755
+--- a/src/python/omorfi/formats/lexc_formatter.py
++++ b/src/python/omorfi/formats/lexc_formatter.py
+@@ -19,8 +19,8 @@
+ 
+ # functions for formatting the database data to lexc
+ 
+-from .settings import deriv_boundary, morph_boundary, newword_boundary, optional_hyphen, stub_boundary, word_boundary
+-from .string_manglers import lexc_escape
++from omorfi.settings import deriv_boundary, morph_boundary, newword_boundary, optional_hyphen, stub_boundary, word_boundary
++from omorfi.string_manglers import lexc_escape
+ 
+ 
+ def format_copyright_lexc():

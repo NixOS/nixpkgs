@@ -1,0 +1,45 @@
+**/deps.nix linguist-generated
+**/deps.json linguist-generated
+**/deps.toml linguist-generated
+**/node-packages.nix linguist-generated
+
+pkgs/applications/editors/emacs-modes/*-generated.nix linguist-generated
+pkgs/development/r-modules/*-packages.nix linguist-generated
+pkgs/development/haskell-modules/hackage-packages.nix linguist-generated
+pkgs/development/beam-modules/hex-packages.nix linguist-generated
+
+doc/** linguist-documentation
+doc/default.nix linguist-documentation=false
+
+nixos/doc/** linguist-documentation
+nixos/doc/default.nix linguist-documentation=false
+
+nixos/modules/module-list.nix merge=union
+# pkgs/top-level/all-packages.nix merge=union
+
+ci/OWNERS linguist-language=CODEOWNERS
+
+# Avoid munging line endings when using Git for Windows, and instead keep files
+# using LF line endings.  This particularly affects scripts committed in the
+# nixpkgs repository.
+#
+# - `text` without `=auto` would mean "Git should always munge line endings on
+#   this file so there will never be a CRLF in the repository, and the line
+#   endings in the working directory should respect the local Git
+#   configuration."
+# - `text=auto` means "Git should try to work out if this file is a text file.
+#   If it is, it should do the line-ending munging as for `text`, and if it
+#   isn't, it should leave the file alone."
+# - `eol=lf` means "Ignore any local configuration about how line
+#   endings normally work on this platform. This file should always and only
+#   have LF line endings in the repo (so if there's a CR in the repo, it's
+#   meant to be there in addition to any end-of-line mark), and the selected
+#   attribute is how the file should appear in the working directory."
+#
+# See https://github.com/NixOS/nixpkgs/issues/423762 for historical context.
+* text=auto eol=lf
+
+# Don't force LF line endings for diff/patch files, as they might be correctly
+# patching CRLF line endings from an upstream source package.
+*.diff !text !eol
+*.patch !text !eol

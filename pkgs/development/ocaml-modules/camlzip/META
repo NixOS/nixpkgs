@@ -1,0 +1,6 @@
+version="@VERSION@"
+description="reading and writing ZIP, JAR and GZIP files"
+requires="unix"
+archive(byte)="zip.cma"
+archive(native)="zip.cmxa"
+linkopts = ""

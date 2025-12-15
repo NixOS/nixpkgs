@@ -1,0 +1,185 @@
+#!/bin/sh
+set -eu
+
+quiet=
+name="fetchdarcs"
+repository=
+tag=
+context=
+darcs_hash=
+exp_hash=
+
+usage() {
+	echo "Usage: nix-prefetch-darcs [options] [REPOSITORY] [FILENAME [EXPECTED-HASH]]"
+	echo
+	echo "Options:"
+	echo "	--quiet               Suppress most error messages."
+	echo "	--name <NAME>         Symbolic store path name to use for the result."
+	echo "	--repo <REPOSITORY>   URL for the Darcs repository."
+	echo "	--tag <REGEXP>        Clone specified by tag matching a regular expression."
+	echo "	--context <FILENAME>  Clone specified by context file."
+	echo "	--darcs-hash <HASH>   Clone specified by hash. WARN: hash order is fickle by design."
+	echo "	--hash <HASH>         Expected hash."
+	echo "	--help                Show this help message."
+}
+
+# Argument parsing
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--quiet)
+		  quiet=1; shift 1 ;;
+		--name)
+			name="$2"; shift 2 ;;
+		--repo)
+			repository="$2"; shift 2 ;;
+		--tag)
+			tag="$2"; shift 2 ;;
+		--context)
+			context="$2"; shift 2 ;;
+		--darcs-hash)
+			darcs_hash="$2"; shift 2 ;;
+		--hash)
+			exp_hash="$2"; shift 2 ;;
+		--help)
+			usage; exit 0 ;;
+		*)
+			# Positional arguments
+			if [ -z "$repository" ]; then
+				repository="$1"
+				shift
+			elif [ -z "$context" ]; then
+				context="$1"
+				shift
+			elif [ -z "$exp_hash" ]; then
+				exp_hash="$1"
+				shift
+			else
+				echo "Error: Too many arguments" >&2
+				usage
+				exit 1
+			fi
+			;;
+	esac
+done
+
+if [ -z "$repository" ]; then
+	echo "Error: URL for repository is required." >&2
+	echo >&2
+	usage
+	exit 1
+fi
+
+state_flag_count=0
+[ -n "$tag" ] && state_flag_count=$(( state_flag_count + 1 ))
+[ -n "$context" ] && state_flag_count=$(( state_flag_count + 1 ))
+[ -n "$darcs_hash" ] && state_flag_count=$(( state_flag_count + 1 ))
+
+if [ "$state_flag_count" -gt 1 ]; then
+	echo "Error: no more than 1 of --tag, --context, --darcs-hash flags can be set. $state_flag_count were set." >&2
+	echo >&2
+	usage
+	exit 1
+elif [ -n "$context" ]; then
+	if [ ! -s "$context" ]; then
+		echo "Error: context file must be readable & non-empty @ “$context”" >&2
+		echo >&2
+		usage
+		exit 1
+	else
+		context="$(realpath "$context")"
+	fi
+fi
+
+weak_hash=
+hash=
+hash_algo="${NIX_HASH_ALGO:-"sha256"}"
+hash_format="${hashFormat:-"--base32"}"
+final_path=
+final_context=
+
+# If the hash was given, a file with that hash may already be in the
+# store.
+if [ -n "$exp_hash" ]; then
+	final_path=$(nix-store --print-fixed-path --recursive "$hash_algo" "$exp_hash" "$name")
+	if ! nix-store --check-validity "$final_path" 2> /dev/null; then
+		final_path=""
+	fi
+	hash="$exp_hash"
+fi
+
+# If we don’t know the hash or a path with that hash doesn’t exist,
+# download the file and add it to the store.
+if [ -z "$final_path" ]; then
+	tmp_clone="$(realpath ${quiet:+--quiet} "$(mktemp ${quiet:+--quiet} -d --tmpdir darcs-clone-tmp-XXXXXXXX)")"
+	trap "rm -rf \"$tmp_clone\"" EXIT
+
+	clone_args="--lazy"
+	if [ -n "$quiet" ]; then
+		clone_args="$clone_args --quiet"
+	fi
+	if [ -n "$tag" ]; then
+		clone_args="$clone_args --tag=$tag"
+	elif [ -n "$context" ]; then
+		clone_args="$clone_args --context=$context"
+	elif [ -n "$darcs_hash" ]; then
+		clone_args="$clone_args --to-hash=$darcs_hash"
+	fi
+
+	cd "$tmp_clone"
+	# Do not print Darcs progress to stdout (else stdout isn’t parsable JSON)
+	if [ -t 1 ]; then
+		darcs clone $clone_args "$repository" "$name" >/dev/tty
+	else
+		darcs clone $clone_args "$repository" "$name" >/dev/null
+	fi
+	# Will put the current Darcs context into the store.
+	new_context="$tmp_clone/${name}-context.txt"
+	darcs log --repodir="$tmp_clone/$name" --context > "$new_context"
+	final_context="$(nix-store --add-fixed "$hash_algo" "$new_context")"
+	# Darcs has a weak hash using the XOR of the patch hashes which is useful
+	# for other scripts
+	# https://darcs.net/Internals/Hashes
+	weak_hash="$(darcs show repo --repodir="$tmp_clone/$name" | awk '/^[[:space:]]*Weak Hash:/ { sub(/^[[:space:]]*Weak Hash:[[:space:]]*/, "", $0); printf $0 }')"
+	date="$(darcs log --repodir="$tmp_clone/$name" --max-count 1 | awk '/^Date:/ { sub(/^Date:[[:space:]]*/, "", $0); printf $0 }')"
+	date="$(date -u -d "$date" "+%Y-%m-%dT%H:%M:%SZ")"
+	rm -rf "$tmp_clone/$name/_darcs"
+
+	hash="$(nix-hash --type "$hash_algo" "$hash_format" "$tmp_clone/$name")"
+	final_path=$(nix-store --add-fixed --recursive "$hash_algo" "$tmp_clone/$name")
+
+	if [ -n "$exp_hash" ] && [ "$exp_hash" != "$hash" ]; then
+		echo "Hash mismatch for “$repository”" >&2
+		echo "Expected: $exp_hash" >&2
+		echo "Got:      $hash" >&2
+		exit 1
+	fi
+fi
+
+json_escape() {
+	printf '%s' "$1" | jq -Rs .
+}
+
+cat <<EOF
+{
+	"repository": $(json_escape "$repository"),
+EOF
+if [ -n "$tag" ]; then cat <<EOF
+	"tag": $(json_escape "$tag"),
+EOF
+elif [ -n "$darcs_hash" ]; then cat <<EOF
+	"darcs-hash": $(json_escape "$darcs_hash"),
+EOF
+fi; if [ -n "$weak_hash" ]; then cat <<EOF
+	"weak-hash": $(json_escape "$weak_hash"),
+EOF
+fi; if [ -s "$final_context" ]; then cat <<EOF
+	"context": $(json_escape "$final_context"),
+EOF
+fi; cat <<EOF
+	"date": "$date",
+	"path": "$final_path",
+	$(json_escape "$hash_algo"): $(json_escape "$hash"),
+	"hash": "$(nix-hash --to-sri --type "$hash_algo" "$hash")"
+}
+EOF
+# vim: noet ci pi sts=0

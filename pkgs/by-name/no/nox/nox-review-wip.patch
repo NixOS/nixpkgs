@@ -1,0 +1,11 @@
+--- a/nox/review.py	2017-09-23 04:04:37.322484753 +0200
++++ a/nox/review.py	2017-09-23 04:18:31.582692181 +0200
+@@ -84,7 +84,7 @@
+     ctx.obj['dry_run'] = dry_run
+ 
+ 
+-@cli.command(short_help='difference between working tree and a commit')
++@cli.command('wip', short_help='difference between working tree and a commit')
+ @click.option('--against', default='HEAD')
+ @click.pass_context
+ @setup_nixpkgs_config

@@ -1,0 +1,85 @@
+diff --git a/Makefile b/Makefile
+index a6a140f..fb9a8b9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -518,7 +518,7 @@ src/po/%.po: _build/toppler.pot
+ # TODO dist and windist..
+ 
+ .PHONY: install
+-install: toppler.dat toppler $(TRANSLATIONFILES_INST)
++install: toppler $(TRANSLATIONFILES_INST)
+ 	$(INSTALL) -m755 -d $(DESTDIR)$(PKGDATADIR)
+ 	$(INSTALL) -m755 -d $(DESTDIR)$(BINDIR)
+ 	$(INSTALL) -m755 -d $(DESTDIR)$(MANDIR)/man6
+diff --git a/src/decl.cc b/src/decl.cc
+index f80f83e..8a7bbd9 100644
+--- a/src/decl.cc
++++ b/src/decl.cc
+@@ -22,6 +22,7 @@
+ #include <SDL.h>
+ 
+ #include <cstdlib>
++#include <algorithm>
+ #include <cstring>
+ #include <sys/stat.h>
+ #include <unistd.h>
+diff --git a/src/keyb.cc b/src/keyb.cc
+index c3c13df..7d37847 100644
+--- a/src/keyb.cc
++++ b/src/keyb.cc
+@@ -156,7 +156,7 @@ static void handleEvents(void) {
+       mouse_button = e.button.button;
+       break;
+     case SDL_QUIT:
+-      fprintf(stderr, _("Wheee!!\n").c_str());
++      fprintf(stderr, "%s", _("Wheee!!\n").c_str());
+       exit(0);
+       break;
+ 
+diff --git a/src/level.cc b/src/level.cc
+index e1e2bb8..ac2faf3 100644
+--- a/src/level.cc
++++ b/src/level.cc
+@@ -27,6 +27,7 @@
+ #endif
+ 
+ #include "decl.h"
++#include <algorithm>
+ 
+ #ifdef _WIN32
+ #include <direct.h>
+diff --git a/src/main.cc b/src/main.cc
+index 522d041..ffc8e40 100644
+--- a/src/main.cc
++++ b/src/main.cc
+@@ -46,7 +46,7 @@ static bool parse_arguments(int argc, char *argv[]) {
+       if (parm >= '0' && parm <= '9') {
+         printf(_("Debug level is now %c.\n").c_str(), parm);
+         config.debug_level(parm - '0');
+-      } else printf(_("Illegal debug level value, using default.\n").c_str());
++      } else printf("%s", _("Illegal debug level value, using default.\n").c_str());
+     } else {
+       printhelp();
+       return false;
+@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
+     atexit(QuitFunction);
+     srand(time(0));
+     startgame();
+-    printf(_("Thanks for playing!\n").c_str());
++    printf("%s", _("Thanks for playing!\n").c_str());
+     SDL_ShowCursor(mouse);
+     SDL_Quit();
+   }
+diff --git a/src/screen.cc b/src/screen.cc
+index eb18543..ce23571 100644
+--- a/src/screen.cc
++++ b/src/screen.cc
+@@ -30,6 +30,8 @@
+ #include "keyb.h"
+ #include "configuration.h"
+ 
++#include <algorithm>
++
+ static SDL_Surface *display = nullptr;
+ static SDL_Window *sdlWindow = nullptr;
+ static SDL_Renderer *sdlRenderer = nullptr;

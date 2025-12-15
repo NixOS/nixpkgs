@@ -1,0 +1,136 @@
+diff --git a/config/aerc.conf b/config/aerc.conf
+index fbc1f3ba..9eea2b81 100644
+--- a/config/aerc.conf
++++ b/config/aerc.conf
+@@ -301,8 +301,7 @@
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-#   /usr/local/share/aerc/stylesets
+-#   /usr/share/aerc/stylesets
++#   @out@/share/aerc/stylesets
+ #
+ #stylesets-dirs=
+ 
+@@ -741,8 +740,8 @@
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/filters
+ #   $PREFIX/libexec/aerc/filters
+ #   $PREFIX/share/aerc/filters
+-#   /usr/libexec/aerc/filters
+-#   /usr/share/aerc/filters
++#   @out@/libexec/aerc/filters
++#   @out@/share/aerc/filters
+ #
+ # If you want to run a program in your default $PATH which has the same name
+ # as a builtin filter (e.g. /usr/bin/colorize), use its absolute path.
+@@ -845,8 +844,7 @@ text/html=! html
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-#   /usr/local/share/aerc/templates
+-#   /usr/share/aerc/templates
++#   @out@/share/aerc/templates
+ #
+ #template-dirs=
+ 
+diff --git a/config/config.go b/config/config.go
+index 14c4b233..9f305ffd 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -46,10 +46,8 @@ func buildDefaultDirs() []string {
+ 	}
+ 
+ 	// Add fixed fallback locations
+-	defaultDirs = append(defaultDirs, "/usr/local/libexec/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/local/share/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/libexec/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/libexec/aerc")
++	defaultDirs = append(defaultDirs, "@out@/share/aerc")
+ 
+ 	return defaultDirs
+ }
+diff --git a/doc/aerc-config.5.scd b/doc/aerc-config.5.scd
+index 1e3daaa9..cd118be0 100644
+--- a/doc/aerc-config.5.scd
++++ b/doc/aerc-config.5.scd
+@@ -13,7 +13,7 @@ _aerc_, which defaults to _~/.config/aerc_. Alternate files can be specified via
+ command line arguments, see *aerc*(1).
+ 
+ Examples of these config files are typically included with your installation of
+-aerc and are usually installed in _/usr/share/aerc_.
++aerc and are usually installed in _@out@/share/aerc_.
+ 
+ Each file uses the ini format, and consists of sections with keys and values.
+ A line beginning with _#_ is considered a comment and ignored, as are empty
+@@ -386,8 +386,7 @@ These options are configured in the *[ui]* section of _aerc.conf_.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-	/usr/local/share/aerc/stylesets
+-	/usr/share/aerc/stylesets
++	@out@/share/aerc/stylesets
+ 	```
+ 
+ *styleset-name* = _<string>_
+@@ -1019,7 +1018,7 @@ will be set to the terminal TTY. The filter is expected to implement its own
+ paging.
+ 
+ aerc ships with some default filters installed in the libexec directory (usually
+-_/usr/libexec/aerc/filters_). Note that these may have additional dependencies
++_@out@/libexec/aerc/filters_). Note that these may have additional dependencies
+ that aerc does not have alone.
+ 
+ The filter commands are invoked with _sh -c command_. The following folders are
+@@ -1031,8 +1030,8 @@ ${XDG_CONFIG_HOME:-~/.config}/aerc/filters
+ ${XDG_DATA_HOME:-~/.local/share}/aerc/filters
+ $PREFIX/libexec/aerc/filters
+ $PREFIX/share/aerc/filters
+-/usr/libexec/aerc/filters
+-/usr/share/aerc/filters
++@out@/libexec/aerc/filters
++@out@/share/aerc/filters
+ ```
+ 
+ If you want to run a program in your default *$PATH* which has the same
+@@ -1370,7 +1369,7 @@ of the template name. The available symbols and functions are described in
+ *aerc-templates*(7).
+ 
+ aerc ships with some default templates installed in the share directory (usually
+-_/usr/share/aerc/templates_).
++_@out@/share/aerc/templates_).
+ 
+ These options are configured in the *[templates]* section of _aerc.conf_.
+ 
+@@ -1382,8 +1381,7 @@ These options are configured in the *[templates]* section of _aerc.conf_.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-	/usr/local/share/aerc/templates
+-	/usr/share/aerc/templates
++	@out@/share/aerc/templates
+ 	```
+ 
+ *new-message* = _<template_name>_
+diff --git a/doc/aerc-templates.7.scd b/doc/aerc-templates.7.scd
+index a6deb584..4f91869c 100644
+--- a/doc/aerc-templates.7.scd
++++ b/doc/aerc-templates.7.scd
+@@ -398,7 +398,7 @@ aerc provides the following additional functions:
+ 	Attaches a file to the message being composed.
+ 
+ 	```
+-	{{.Attach '/usr/libexec/aerc/filters/html'}}
++	{{.Attach '@out@/libexec/aerc/filters/html'}}
+ 	```
+ 
+ *exec*
+@@ -581,7 +581,7 @@ aerc provides the following additional functions:
+ 
+ 	```
+ 	{{if eq .OriginalMIMEType "text/html"}}
+-	{{exec `/usr/libexec/aerc/filters/html` .OriginalText | wrap 72 | quote}}
++	{{exec `@out@/libexec/aerc/filters/html` .OriginalText | wrap 72 | quote}}
+ 	{{else}}
+ 	{{wrap 72 .OriginalText | trimSignature | quote}}
+ 	{{end}}

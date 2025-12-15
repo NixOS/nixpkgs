@@ -1,0 +1,14 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index b7530e8f..af94a62d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -59,8 +59,7 @@ if(NOT MINGW AND WIN32)
+     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/Debug)
+ endif()
+ 
+-add_subdirectory(3rd/libirc/libirc libirc)
+-add_subdirectory(3rd/libirc/libircclient libircclient)
++include_directories(@libirc_includes@)
+ 
+ # YAML
+ find_package(YAML-CPP 0.6.3 QUIET)

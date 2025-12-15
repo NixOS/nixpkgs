@@ -1,0 +1,12 @@
+--- a/src/test/shell/bazel/list_source_repository.bzl
++++ b/src/test/shell/bazel/list_source_repository.bzl
+@@ -32,7 +32,8 @@ def _impl(rctx):
+     if "SRCS_EXCLUDES" in rctx.os.environ:
+         srcs_excludes = rctx.os.environ["SRCS_EXCLUDES"]
+     r = rctx.execute(["find", "-L", str(workspace), "-type", "f"])
+-    rctx.file("find.result.raw", r.stdout.replace(str(workspace) + "/", ""))
++    stdout = "\n".join(sorted(r.stdout.splitlines()))
++    rctx.file("find.result.raw", stdout.replace(str(workspace) + "/", ""))
+     rctx.file("BUILD", """
+ genrule(
+   name = "sources",
