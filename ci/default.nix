@@ -143,6 +143,8 @@ let
         };
 
         programs.zizmor.enable = true;
+
+        programs.ruff-format.enable = true;
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
