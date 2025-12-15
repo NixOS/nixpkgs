@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "gitlab-ci-local";
-  version = "4.63.0";
+  version = "4.64.1";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-IqfCEU/ZX28CAAFW9Wx9QFQY4E5iYKC5Ac0m7AuubNk=";
+    hash = "sha256-scZ6KqpO/E3Ycu6Nn5o/4LaEpSAOWim8mOqpByjZlZE=";
   };
 
-  npmDepsHash = "sha256-0XV9jT1Ps8TPhl4pKN92v6mbMT37EcXdcn+GUo2wprg=";
+  npmDepsHash = "sha256-IoycsUU+7o4A3d+pGQvyBvaIqg7fdvwS8Pay9MmRqM4=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
