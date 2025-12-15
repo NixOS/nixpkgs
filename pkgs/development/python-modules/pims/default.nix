@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "soft-matter";
     repo = "pims";
     tag = "v${version}";
-    hash = "sha256-3SBZk11w6eTZFmETMRJaYncxY38CYne1KzoF5oRgzuY=";
+    hash = "sha256-KJnjertoAts+70uuWtdvmpBlB+610IGIWeHwKKf3njA=";
   };
 
   propagatedBuildInputs = [
