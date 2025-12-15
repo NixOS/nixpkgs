@@ -21,6 +21,7 @@
   officialRelease ? null,
   monorepoSrc ? null,
   version ? null,
+  shouldCheck ? true,
   patchesFn ? lib.id,
   cmake,
   cmakeMinimal,

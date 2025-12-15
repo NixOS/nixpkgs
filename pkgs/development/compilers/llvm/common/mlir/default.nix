@@ -5,6 +5,7 @@
   release_version,
   buildLlvmPackages,
   monorepoSrc,
+  shouldCheck,
   runCommand,
   cmake,
   ninja,
@@ -23,7 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     (
       !stdenv.hostPlatform.isx86_32 # TODO: why
     )
-    && (!stdenv.hostPlatform.isMusl);
+    && (!stdenv.hostPlatform.isMusl)
+    && shouldCheck;
 
   # Blank llvm dir just so relative path works
   src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } ''

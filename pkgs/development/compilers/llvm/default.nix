@@ -42,6 +42,7 @@ let
       gitRelease ? null,
       monorepoSrc ? null,
       version ? null,
+      shouldCheck ? true,
     }@args:
     let
       inherit
@@ -65,6 +66,7 @@ let
               gitRelease
               monorepoSrc
               version
+              shouldCheck
               patchesFn
               bootBintools
               bootBintoolsNoLibc

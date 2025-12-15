@@ -5,6 +5,7 @@
   pkgsBuildBuild,
   src ? null,
   monorepoSrc ? null,
+  shouldCheck,
   runCommand,
   cmake,
   darwin,
@@ -571,7 +572,8 @@ stdenv.mkDerivation (
       )
       && (!stdenv.hostPlatform.isMusl)
       && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-      && (stdenv.hostPlatform == stdenv.buildPlatform);
+      && (stdenv.hostPlatform == stdenv.buildPlatform)
+      && shouldCheck;
 
     checkTarget = "check-all";
 
