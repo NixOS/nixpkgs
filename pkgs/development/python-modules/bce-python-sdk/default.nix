@@ -37,7 +37,7 @@ buildPythonPackage {
 
   meta = {
     description = "Baidu Cloud Engine SDK for python";
-    homepage = "https://pypi.org/project/bce-python-sdk";
+    homepage = "https://github.com/baidubce/bce-sdk-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kyehn ];
   };
