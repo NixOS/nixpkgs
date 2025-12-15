@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    mainProgram = "gdb";
+    mainProgram = targetPrefix + basename;
 
     description = "GNU Project debugger";
 
