@@ -25,18 +25,19 @@
   zlib,
   # plugins
   withLua ? true,
-  lua,
+  lua5_3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     rev = "v${version}";
-    hash = "sha256-yQN90R2gxUunUimZqT2kncnCNtDaLD36ctf1bU2vmIw=";
+    hash = "sha256-3M7ycbwKSmu8WUqC3anAi6GLPOex7gEndw/tDv0Ri7Q=";
   };
 
   postPatch = ''
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ lib.optional withLua lua;
+    ++ lib.optional withLua lua5_3;
 
   buildFlags = [ "translations" ];
 
@@ -78,6 +79,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";
