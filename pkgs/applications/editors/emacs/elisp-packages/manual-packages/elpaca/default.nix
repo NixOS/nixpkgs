@@ -25,6 +25,9 @@ melpaBuild {
     homepage = "https://github.com/progfolio/elpaca";
     description = "Elisp package manager";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ abhisheksingh0x558 ];
+    maintainers = with lib.maintainers; [
+      abhisheksingh0x558
+      normalcea
+    ];
   };
 }
