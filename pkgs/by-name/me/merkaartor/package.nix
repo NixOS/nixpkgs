@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "https://merkaartor.be/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "merkaartor";
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
 }
