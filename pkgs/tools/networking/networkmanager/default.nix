@@ -60,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.52.1";
+  version = "1.52.2";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ixIsc0k6cvK65SfBJc69h3EWcbkDUtvisXiKupV1rG8=";
+    hash = "sha256-NlhkDniLvLagAMKalfDczE3+u6Qcbl6akK0ebarLUSw=";
   };
 
   outputs = [
@@ -231,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
     maintainers = with maintainers; [
       domenkozar
       obadz
