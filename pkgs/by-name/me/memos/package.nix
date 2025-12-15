@@ -8,12 +8,6 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
-  buf,
-  cacert,
-  grpc-gateway,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  protoc-gen-validate,
 }:
 let
   version = "0.25.3";
@@ -22,39 +16,6 @@ let
     repo = "memos";
     rev = "v${version}";
     hash = "sha256-lAKzPteGjGa7fnbB0Pm3oWId5DJekbVWI9dnPEGbiBo=";
-  };
-
-  memos-protobuf-gen = stdenvNoCC.mkDerivation {
-    pname = "memos-protobuf-gen";
-    inherit version src;
-
-    nativeBuildInputs = [
-      buf
-      cacert
-      grpc-gateway
-      protoc-gen-go
-      protoc-gen-go-grpc
-      protoc-gen-validate
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-      pushd proto
-      HOME=$TMPDIR buf generate
-      popd
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/{proto,web/src/types}
-      cp -r {.,$out}/proto/gen
-      cp -r {.,$out}/web/src/types/proto
-      runHook postInstall
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-im9eVhsJ7sIxdYPugUP5Gi/ugr4I1c8aa3UzuArOxp8=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -72,9 +33,6 @@ let
       pnpmConfigHook
       pnpm
     ];
-    preBuild = ''
-      cp -r {${memos-protobuf-gen},.}/web/src/types/proto
-    '';
     buildPhase = ''
       runHook preBuild
       pnpm -C web build
@@ -93,7 +51,6 @@ buildGoModule {
     version
     src
     memos-web
-    memos-protobuf-gen
     ;
 
   vendorHash = "sha256-BoJxFpfKS/LByvK4AlTNc4gA/aNIvgLzoFOgyal+aF8=";
@@ -101,15 +58,12 @@ buildGoModule {
   preBuild = ''
     rm -rf server/router/frontend/dist
     cp -r ${memos-web} server/router/frontend/dist
-    cp -r {${memos-protobuf-gen},.}/proto/gen
   '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"
       "memos-web"
-      "--subpackage"
-      "memos-protobuf-gen"
     ];
   };
 
