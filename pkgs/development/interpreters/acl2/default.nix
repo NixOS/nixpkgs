@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/books
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interpreter and prover for a Lisp dialect";
     mainProgram = "acl2";
     longDescription = ''
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
         # ACL2 itself is bsd3
         bsd3
       ]
-      ++ optionals certifyBooks [
+      ++ lib.optionals certifyBooks [
         # The community books are mostly bsd3 or mit but with a few
         # other things thrown in.
         mit
