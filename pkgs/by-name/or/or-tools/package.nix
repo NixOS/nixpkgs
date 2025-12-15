@@ -64,9 +64,9 @@ let
   scipopt-scip' = scipopt-scip.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
-      ./scip.patch # https://github.com/google/or-tools/pull/4932/files#diff-e6b0a69b2e4b97ec922abc459d909483d440a1e0d2868bed263927b106b6efe6
+      # and updated with https://github.com/google/or-tools/pull/4932/files#diff-e6b0a69b2e4b97ec922abc459d909483d440a1e0d2868bed263927b106b6efe6
+      ./scip.patch
     ];
-    # message(STATUS "Finding Soplex")
     # Their patch forgets to find_package() soplex, bring it back.
     postPatch = (old.postPatch or "") + ''
       substituteInPlace CMakeLists.txt \
