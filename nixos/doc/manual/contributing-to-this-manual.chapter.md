@@ -13,8 +13,6 @@ $ nix-build nixos/release.nix -A manual.x86_64-linux
 
 If the build succeeds, the manual will be in `./result/share/doc/nixos/index.html`.
 
-There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-devmode).
-
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
 
 ## Development environment {#sec-contributing-development-env}
