@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
 
   # build-system
@@ -39,6 +40,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-9YnMOQUuwAcrL0ZaQr7iGly9esZaSRIFThQRNUtSndo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "networkmanager-1.54.2.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/1ce6196a687d324a55fbf1f74e0f66a4e83f7a15.patch";
+      hash = "sha256-Wo7AhmZu74cTHT9I36+NGGSU9dcFwmcDvtzgseTj/yA=";
+    })
+  ];
 
   build-system = [
     setuptools
