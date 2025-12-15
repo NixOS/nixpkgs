@@ -1,0 +1,20 @@
+diff --git a/src/third_party/salt/base/rsa.h b/src/third_party/salt/base/rsa.h
+index 172829fa7..41dd6222b 100644
+--- a/src/third_party/salt/base/rsa.h
++++ b/src/third_party/salt/base/rsa.h
+@@ -37,7 +37,7 @@ class InnerNode
+ class CompInnerNode
+ {
+  public:
+-  bool operator()(const InnerNode* a, const InnerNode* b)
++  bool operator()(const InnerNode* a, const InnerNode* b) const
+   {
+     return a->dist > b->dist ||  // prefer fathest one
+            (a->dist == b->dist
+@@ -88,4 +88,4 @@ class RsaBuilder : public RSABase
+   void PrintOuterNodes();
+ };
+ 
+-}  // namespace salt
+\ No newline at end of file
++}  // namespace salt

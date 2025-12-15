@@ -51,6 +51,7 @@ let
       # Fix CMake version requirement to support newer CMake versions,
       # Should be removed once upstream fixed it.
       ./fix-cmake-require.patch
+      ./fix-gcc15-build.patch
     ];
 
     dontBuild = true;
