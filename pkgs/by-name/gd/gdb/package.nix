@@ -212,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GNU Project debugger";
-    mainProgram = "gdb";
+    mainProgram = targetPrefix + "gdb";
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going
       on `inside' another program while it executes -- or what another
