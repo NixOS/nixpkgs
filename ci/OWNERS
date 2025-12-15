@@ -116,8 +116,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # NixOS Render Docs
 /pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
-/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
-/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+/doc/redirects.json                @fricklerhandwerk @GetPsyched
+/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
