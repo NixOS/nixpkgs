@@ -74,9 +74,11 @@ in
             pnpm # from args
             yq
             zstd
-          ];
+          ]
+          ++ args.nativeBuildInputs or [ ];
 
-          impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ];
+          impureEnvVars =
+            lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ] ++ args.impureEnvVars or [ ];
 
           installPhase = ''
             runHook preInstall
@@ -172,7 +174,7 @@ in
             runHook postFixup
           '';
 
-          passthru = {
+          passthru = args.passthru or { } // {
             inherit fetcherVersion;
             serve = callPackage ./serve.nix {
               inherit pnpm; # from args
