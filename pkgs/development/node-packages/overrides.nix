@@ -76,20 +76,6 @@ final: prev: {
       '';
   };
 
-  pulp = prev.pulp.override {
-    # tries to install purescript
-    npmFlags = toString [ "--ignore-scripts" ];
-
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/pulp" --suffix PATH : ${
-        lib.makeBinPath [
-          pkgs.purescript
-        ]
-      }
-    '';
-  };
-
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };

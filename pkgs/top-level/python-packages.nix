@@ -606,6 +606,24 @@ self: super: with self; {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  alibabacloud-credentials = callPackage ../development/python-modules/alibabacloud-credentials { };
+
+  alibabacloud-credentials-api =
+    callPackage ../development/python-modules/alibabacloud-credentials-api
+      { };
+
+  alibabacloud-endpoint-util =
+    callPackage ../development/python-modules/alibabacloud-endpoint-util
+      { };
+
+  alibabacloud-gateway-spi = callPackage ../development/python-modules/alibabacloud-gateway-spi { };
+
+  alibabacloud-openapi-util = callPackage ../development/python-modules/alibabacloud-openapi-util { };
+
+  alibabacloud-tea = callPackage ../development/python-modules/alibabacloud-tea { };
+
+  alibabacloud-tea-util = callPackage ../development/python-modules/alibabacloud-tea-util { };
+
   aligator = callPackage ../development/python-modules/aligator { inherit (pkgs) aligator; };
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
