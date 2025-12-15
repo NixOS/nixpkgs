@@ -32,13 +32,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atenpdu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to control ATEN PE PDUs";
     homepage = "https://github.com/mtdcr/pductl";
     changelog = "https://github.com/mtdcr/pductl/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pductl";
-    broken = versionAtLeast pysnmp.version "7";
+    broken = lib.versionAtLeast pysnmp.version "7";
   };
 }

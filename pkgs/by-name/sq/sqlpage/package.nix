@@ -42,13 +42,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlpage";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M9WtpDc067G/EfRTJBoDxBrdXRMqOwVTdGgyXSdHlhE=";
+    hash = "sha256-CmsAImnySdXlPQGWNMkPYhVj0HsvCzFB2LXeqFnjWG4=";
   };
 
   postPatch = ''
@@ -71,9 +71,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace sqlpage/tomselect.js \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js */' \
       "$(cat ${tomselect})"
+    substituteInPlace build.rs \
+      --replace-fail "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.35.0/dist/tabler-sprite.svg" "${tablerIcons}" \
+      --replace-fail "copy_url_to_opened_file(&client, sprite_url, &mut sprite_content).await;" "sprite_content = std::fs::read(sprite_url).unwrap();"
   '';
 
-  cargoHash = "sha256-lUQ1j2f/LXpqpb6VK4Bq2NI0L9KoyEdlPkENMOKkt0w=";
+  cargoHash = "sha256-CTJYFzSOLYFq7I9lJhD3JcO2PuqQjqtXnBCEk2VfLfI=";
 
   nativeBuildInputs = [ pkg-config ];
 

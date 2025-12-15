@@ -312,13 +312,13 @@ stdenv.mkDerivation rec {
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
 
-  meta = with lib; {
+  meta = {
     # webkitgtk_4_0 was removed
     broken = true;
     license = lib.licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
+    platforms = [ "x86_64-linux" ] ++ lib.optional (lib.versionOlder version "24") "i686-linux";
     maintainers = with lib.maintainers; [ flacks ];
     inherit homepage;
   };

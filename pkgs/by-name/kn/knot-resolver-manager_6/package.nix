@@ -25,6 +25,12 @@ python3Packages.buildPythonPackage {
     substitute '${knot-resolver.unwrapped.config_py}'/knot_resolver/constants.py ./python/knot_resolver/constants.py \
       --replace-fail '${knot-resolver.unwrapped.out}/etc' '/etc' \
       --replace-fail '${knot-resolver.unwrapped.out}/sbin' '${knot-resolver}/bin'
+  ''
+  # On non-Linux let's simplify construction of the knot-resolver command line,
+  # as it would break because of nixpkgs-specific wrapping of python packages.
+  + ''
+    substituteInPlace python/knot_resolver/controller/supervisord/config_file.py \
+      --replace-fail 'args = [sys.executable] + sys.argv' 'args = sys.argv'
   '';
 
   build-system = with python3Packages; [
@@ -42,6 +48,7 @@ python3Packages.buildPythonPackage {
     typing-extensions
   ];
 
+  doCheck = python3Packages.stdenv.isLinux; # maybe in future
   nativeCheckInputs = with python3Packages; [
     augeas
     dnspython

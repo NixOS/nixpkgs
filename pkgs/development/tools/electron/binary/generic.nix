@@ -39,7 +39,7 @@ version: hashes:
 let
   pname = "electron";
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = lib.licenses.mit;
@@ -54,7 +54,7 @@ let
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = lib.optional (lib.versionOlder version "37.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =

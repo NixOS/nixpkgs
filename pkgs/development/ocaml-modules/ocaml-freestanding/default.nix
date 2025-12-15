@@ -64,14 +64,14 @@ else
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       broken = true; # Not compatible with solo5 ≥ 0.7
       description = "Freestanding OCaml runtime";
       license = lib.licenses.mit;
       maintainers = [ lib.maintainers.sternenseemann ];
       homepage = "https://github.com/mirage/ocaml-freestanding";
       platforms = map ({ arch, os }: "${arch}-${os}") (
-        cartesianProduct {
+        lib.cartesianProduct {
           arch = [
             "aarch64"
             "x86_64"

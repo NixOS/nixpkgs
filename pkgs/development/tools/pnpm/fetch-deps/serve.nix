@@ -2,6 +2,7 @@
   writeShellApplication,
   pnpm,
   pnpmDeps,
+  zstd,
 }:
 
 writeShellApplication {
@@ -9,10 +10,13 @@ writeShellApplication {
 
   runtimeInputs = [
     pnpm
+    zstd
   ];
 
   text = ''
     storePath=$(mktemp -d)
+
+    fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
 
     clean() {
       echo "Cleaning up temporary store at '$storePath'..."
@@ -22,7 +26,12 @@ writeShellApplication {
 
     echo "Copying pnpm store '${pnpmDeps}' to temporary store..."
 
-    cp -Tr "${pnpmDeps}" "$storePath"
+    if [[ $fetcherVersion -ge 3 ]]; then
+      tar --zstd -xf "${pnpmDeps}/pnpm-store.tar.zst" -C "$storePath"
+    else
+      cp -Tr "${pnpmDeps}" "$storePath"
+    fi
+
     chmod -R +w "$storePath"
 
     echo "Run 'pnpm install --store-dir \"$storePath\"' to install packages from this store."

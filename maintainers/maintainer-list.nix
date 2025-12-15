@@ -12777,6 +12777,12 @@
     github = "jonocodes";
     githubId = 1310468;
   };
+  joostn = {
+    name = "Joost Nieuwenhuijse";
+    email = "joost@newhouse.nl";
+    github = "joostn";
+    githubId = 1309157;
+  };
   jopejoe1 = {
     email = "nixpkgs@missing.ninja";
     matrix = "@jopejoe1:matrix.org";
@@ -18261,6 +18267,12 @@
     github = "nathanruiz";
     githubId = 18604892;
     name = "Nathan Ruiz";
+  };
+  nathanscully = {
+    email = "nath@nscully.com";
+    github = "nathanscully";
+    githubId = 3359816;
+    name = "Nathan Scully";
   };
   nathyong = {
     github = "nathyong";
