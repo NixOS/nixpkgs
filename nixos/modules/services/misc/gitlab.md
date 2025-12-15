@@ -145,8 +145,8 @@ configure a Gitlab Runner with caching and reasonably good security practices.
 
 ## Example: Gitlab Runner with `podman` and Nix Store Caching
 
-The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/continuous-integration/gitlab-runner/runner.nix)
-(a NixOS Module for reuse) configures a Gitlab Runner with the following features:
+The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/continuous-integration/gitlab-runner/runner.nix)
+(a NixOS module for reuse) configures an advanced Gitlab runner with the following features:
 
 - The executor is `podman` which gives you better additional safety than
   `docker`. That means every job is run in a `podman` container.
@@ -163,14 +163,14 @@ The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos
 
   **Images for VM Setup**:
   - `local/nix-daemon-image`: An image with a Nix daemon which is
-    used to share the `/nix/store` across jobs (variable `nixDaemonImage`).
-  - `local/podman-daemon-image`: An image with a `podman` running as a daemon which is
+    used to share the `/nix/store` across jobs (variable `nixDaemonImage`) setup with some essentials derivations `bootstrapPkgs`.
+  - `local/podman-daemon-image`: An image with `podman` running as a daemon which is
     used to run `podman` inside the above job containers images
     (variable `podmanDaemonImage`).
 
 - Every job container runs in a `podman` container instance based by default on
   `ubuntuImage`. A pipeline job can override this with `image: local/alpine`.
-  - Each job container will have the `/nix/store` mounted from a container
+  - Each job container will have the `/nix/store` mounted from the container
     `nix-daemon-container` (see registration flags
     `--docker-volumes-from "nix-daemon-container:ro"`).
 
@@ -195,7 +195,7 @@ The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos
     If you only need to build containers you don't need this feature (`podman-daemon-container`), see below point.
 
     Container configuration files (`auxRootFiles`) are copied to all containers to
-    ensure `podman` works inside the job containers.
+    ensure `podman` works consistently inside the job containers.
 
   - The job containers do **not** mount the `podman` socket from the host (NixOS
     VM) mounted for security reasons.
@@ -209,9 +209,8 @@ The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos
   - **Cleanup Disk Space**:
 
     With this setup its really easy to clean the `nix-daemon-container`
-    (e.g. if you run out of disk space), then reboot and have the runner in a clean.
-    You can just do the following to effectively clean everything and start
-    with fresh volumes safely:
+    (e.g. if you run out of disk space), then reboot and have the runner in a clean state.
+    You can do the following to effectively clean everything and start with fresh volumes safely:
 
     ```bash
     # Stop the Gitlab runner.
