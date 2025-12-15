@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-designateclient";
     tag = version;
-    hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
+    hash = "sha256-m25WbU/GfUhul3bc6W6JRH+QSzZGri1iwiHMyyCL5Dk=";
   };
 
   env.PBR_VERSION = version;
