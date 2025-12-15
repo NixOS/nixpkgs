@@ -81,6 +81,7 @@ in
       # USB support, especially for booting from USB CD-ROM
       # drives.
       "uas"
+      "xhci-pci-renesas"
 
       # SD cards.
       "sdhci_pci"
@@ -155,9 +156,6 @@ in
       "axp20x-battery"
       "pinctrl-axp209"
       "mp8859"
-
-      # USB drivers
-      "xhci-pci-renesas"
 
       # Reset controllers
       "reset-raspberrypi" # Triggers USB chip firmware load.
