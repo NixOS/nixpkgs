@@ -13,7 +13,7 @@ from tempfile import NamedTemporaryFile
 
 import click
 
-IS_AUTO_CONFIG = @isAutoConfig@ # NOQA
+IS_AUTO_CONFIG = "@isAutoConfig@" == "True"
 CERTTOOL_COMMAND = "@certtool@"
 CERT_BITS = "@certBits@"
 CLIENT_EXPIRATION = "@clientExpiration@"

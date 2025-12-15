@@ -17,9 +17,9 @@ ENV = "@environment@"
 INTERPRETER = "@interpreter@"
 PYTHON_VERSION = "@pythonVersion@"
 
-IS_VIRTUALENV = @is_virtualenv@
-IS_VENV = @is_venv@
-IS_NIXENV = @is_nixenv@
+IS_VIRTUALENV = "@is_virtualenv@" == "True"
+IS_VENV = "@is_venv@" == "True"
+IS_NIXENV = "@is_nixenv@" == "True"
 IS_PYPY = platform.python_implementation() == "PyPy"
 
 
