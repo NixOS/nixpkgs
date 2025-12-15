@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-nZXz5FiGAcDqTi5hlSH7rq2QazhqYg1IoNDog35dygA=";
+    hash = "sha256-ej4rbsTDvaVpFZCeYlOOBq6r9PGMESFcXcV6dqx+Hbw=";
   };
 
   nativeBuildInputs = [
