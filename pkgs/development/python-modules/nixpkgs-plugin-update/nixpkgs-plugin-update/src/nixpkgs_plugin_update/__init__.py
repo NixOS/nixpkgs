@@ -256,9 +256,9 @@ class RepoGitHub(Repo):
             assert commit_link is not None, f"No link tag found feed entry {xml!r}"
             url = urlparse(commit_link.get("href"))
             updated_tag = latest_entry.find(ATOM_UPDATED)
-            assert (
-                updated_tag is not None and updated_tag.text is not None
-            ), f"No updated tag found feed entry {xml!r}"
+            assert updated_tag is not None and updated_tag.text is not None, (
+                f"No updated tag found feed entry {xml!r}"
+            )
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
 
@@ -641,7 +641,7 @@ class Editor:
 
             date, last_tag = Plugin.parse_version_string(version_str)
 
-            pdesc = PluginDesc.load_from_string(config, f'{attr["homePage"]} as {name}')
+            pdesc = PluginDesc.load_from_string(config, f"{attr['homePage']} as {name}")
             p = Plugin(
                 attr["pname"],
                 checksum["rev"],
@@ -769,7 +769,7 @@ class Editor:
 
         for plugin_desc, plugin, redirect in fetched:
             # Check if plugin is a Plugin object and has normalized_name attribute
-            if isinstance(plugin, Plugin) and hasattr(plugin, 'normalized_name'):
+            if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
                 # For exceptions, we can't determine the normalized_name
@@ -777,7 +777,9 @@ class Editor:
                 log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
             else:
                 # For unexpected types, log the issue
-                log.error(f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}")
+                log.error(
+                    f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}"
+                )
 
         return list(result.values())
 
