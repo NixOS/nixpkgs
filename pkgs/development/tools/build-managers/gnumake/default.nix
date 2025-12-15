@@ -5,6 +5,7 @@
   autoreconfHook,
   guileSupport ? false,
   guile,
+  texinfo,
   # avoid guile depend on bootstrap to prevent dependency cycles
   inBootstrap ? false,
   pkg-config,
@@ -40,7 +41,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
+  ]
+  ++ lib.optionals (!inBootstrap) [ texinfo ];
+
   buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags = lib.optional guileEnabled "--with-guile";
@@ -49,7 +52,18 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "info"
-  ];
+  ]
+  ++ lib.optionals (!inBootstrap) [ "doc" ];
+
+  postBuild = lib.optionalString (!inBootstrap) ''
+    makeinfo --html --no-split doc/make.texi
+  '';
+
+  postInstall = lib.optionalString (!inBootstrap) ''
+    mkdir -p $doc/share/doc/$pname-$version
+    cp ./make.html $doc/share/doc/$pname-$version/index.html
+  '';
+
   separateDebugInfo = true;
 
   passthru.tests = {
