@@ -19,22 +19,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.2.5";
+  # TODO When updating the version, check if the version-mismatch workaround in preBuild is still needed
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VDIC1BGgaFTiTnydJdEhVeUgVrH43MzpF4VkfgQ+Nas=";
+    hash = "sha256-tVIT3GUJ1qcv6HSvO+nqAz+VMfd8g9AjgaqE6+GSa+I=";
   };
 
   cargoRoot = "./.";
-  cargoHash = "sha256-gYYmtxMWst0ZB/YzJf/0FGOedoVpMgTq5qq+3m2R7T8=";
+  cargoHash = "sha256-T3cPvwph71lpqlGcugAO4Ua8Y5TNZSySbQatxcvoT4E=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-Tdcdghhc4cH+cYIeUy3inChgPfb1i9E7F1mpxxWoW4Q=";
+    hash = "sha256-XqKGAx2Q9cWO1oG4mP1cKM2Y9Pib5haFYEaq0PAfAdQ=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
+      # Skips the version mismatch check (and accepts the consequences)
+      # ref: https://github.com/atuinsh/desktop/issues/313
+      "--ignore-version-mismatches"
     )
   '';
 
