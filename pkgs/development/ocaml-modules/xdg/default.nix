@@ -1,22 +1,18 @@
 {
   lib,
   buildDunePackage,
-  dune_3,
+  dune,
 }:
 
 buildDunePackage {
   pname = "xdg";
-  inherit (dune_3) src version;
-
-  duneVersion = "3";
-  minimalOCamlVersion = "4.08";
+  inherit (dune) src version;
 
   dontAddPrefix = true;
 
   meta = {
     description = "XDG Base Directory Specification";
-    inherit (dune_3.meta) homepage;
-    maintainers = [ ];
+    inherit (dune.meta) homepage maintainers;
     license = lib.licenses.mit;
   };
 }

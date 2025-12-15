@@ -94,6 +94,12 @@ final: prev: {
       '';
   };
 
+  prebuild-install = prev.prebuild-install.override {
+    meta.knownVulnerabilities = [
+      "prebuild-install might be vulnerable to CVE-2025-59343 due to a dependency on an old version of tar-fs."
+    ];
+  };
+
   pulp = prev.pulp.override {
     # tries to install purescript
     npmFlags = toString [ "--ignore-scripts" ];
