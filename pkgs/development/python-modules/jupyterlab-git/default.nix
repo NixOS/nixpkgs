@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   git,
+  openssh,
   gitMinimal,
   nodejs,
   writableTmpDirAsHomeHook,
@@ -61,7 +62,10 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  propagatedBuildInputs = [ git ];
+  propagatedBuildInputs = [
+    git
+    openssh
+  ];
 
   nativeCheckInputs = [
     gitMinimal
