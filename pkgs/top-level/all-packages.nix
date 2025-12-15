@@ -2521,7 +2521,6 @@ with pkgs;
       pslSupport = true;
       zstdSupport = true;
       http3Support = true;
-      c-aresSupport = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;

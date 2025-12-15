@@ -120,6 +120,13 @@ stdenv'.mkDerivation (finalAttrs: {
     moveToOutput lib/libxml2.a "$static"
   '';
 
+  # TODO: Drop this; works around code signing issue on `staging-next-25.11`.
+  rebuildHack =
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && pythonSupport then
+      true
+    else
+      null;
+
   passthru = {
     inherit pythonSupport;
 

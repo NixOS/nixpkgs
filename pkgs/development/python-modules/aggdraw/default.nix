@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.19";
+  version = "1.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = "aggdraw";
     rev = "v${version}";
-    hash = "sha256-J9+mxlUxOoRBFdz+p8me2T93jaov5rNvKbAZ2YX/VhA=";
+    hash = "sha256-rBasRGdlM6/NsUd8+KsgHoZMsWhAhneSWjTeZ/QQZZ8=";
   };
 
   nativeBuildInputs = [
