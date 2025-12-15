@@ -154,6 +154,11 @@ The change gets submitted like this:
     `linux_X_Y_hardened = hardenedKernelFor kernels.linux_X_Y { };` in the `packages`-section.
   * Make sure to remove the hardened variant of the previous kernel version unless it's LTS.
     We only support the latest and latest LTS version of hardened.
+* If a new LTS is availabe:
+  * Instantiate a `linux_rt_X_Y = realtimeKernelsFor kernels.linux_X_Y { };` in `kernels` and
+    `linux_rt_X_Y = realtimeKernelFor kernels.linux_rt_X_Y { };` in the `packages`-section.
+  * Make sure to remove the realtime variant of the previous kernel version unless it's LTS.
+    We only support the latest and latest LTS version of realtime.
 * If no new hardened kernel is available:
   * Keep the previously latest kernel until its mainline counterpart gets removed.
     After that `linux_hardened` points to the latest LTS supported by hardened.
