@@ -5,6 +5,7 @@
   pkg-config,
   installShellFiles,
   buildGoModule,
+  buildPackages,
   gpgme,
   lvm2,
   btrfs-progs,
@@ -12,7 +13,6 @@
   libseccomp,
   libselinux,
   systemdMinimal,
-  go-md2man,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -71,7 +71,6 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    go-md2man
     installShellFiles
     makeBinaryWrapper
     python3
@@ -90,6 +89,7 @@ buildGoModule (finalAttrs: {
   env = {
     HELPER_BINARIES_DIR = "${placeholder "out"}/libexec/podman"; # used in buildPhase & installPhase
     PREFIX = "${placeholder "out"}";
+    GOMD2MAN = "${buildPackages.go-md2man}/bin/go-md2man";
   };
 
   buildPhase = ''

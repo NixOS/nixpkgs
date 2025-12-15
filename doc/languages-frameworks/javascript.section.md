@@ -354,7 +354,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
+    fetcherVersion = 3;
     hash = "...";
   };
 })
@@ -501,6 +501,7 @@ Changes can include workarounds or bug fixes to existing PNPM issues.
 
 - 1: Initial version, nothing special
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
+- 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 
 ### Yarn {#javascript-yarn}
 
