@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     tag = version;
-    hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
+    hash = "sha256-ub+pEmXwJ9L20U/A89wqjfkd+zft+R7hT7y4T33fDEo=";
   };
 
   patches = [
