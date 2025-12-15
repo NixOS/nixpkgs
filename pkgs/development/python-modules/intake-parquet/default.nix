@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "intake-parquet";
     tag = version;
-    hash = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
+    hash = "sha256-6OZPevpa3T/7p7X77Dib4My07oqksw9m0ELTLXwYJ70=";
   };
 
   postPatch = ''
