@@ -10,12 +10,14 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "197gzrxn9lbk0q1v079814c6s05cr4rwzyl6c1m6inkyif4yzr6c";
+    inherit version;
+    pname = "threadpool";
+    extension = "zip";
+    hash = "sha256-aju7DA584m/08kGTwVRkWVdUvUb4fYQSanwnc923uco=";
   };
 
   meta = {
-    homepage = "https://chrisarndt.de/projects/threadpool/";
+    # homepage was "https://chrisarndt.de/projects/threadpool/" but this is now a 404
     description = "Easy to use object-oriented thread pool framework";
     license = lib.licenses.mit;
   };
