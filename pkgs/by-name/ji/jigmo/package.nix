@@ -6,11 +6,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "jigmo";
-  version = "20230816";
+  version = "20250912";
 
   src = fetchzip {
     url = "https://kamichikoichi.github.io/jigmo/Jigmo-${version}.zip";
-    hash = "sha256-wBec7IiUneqCEyY704Wi6F6WG0Z1KK7gBGcJhRjrRDc=";
+    hash = "sha256-Z9WYPqNjHqnYjRndxtHsQ9XhFshMR50hVkQsXgUMKE8=";
+    stripRoot = false;
   };
 
   installPhase = ''
