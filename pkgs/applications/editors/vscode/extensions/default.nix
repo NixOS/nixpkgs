@@ -396,8 +396,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.15.4";
-          hash = "sha256-dyv7GTscj57Uc+HgImXETKW8olGcWpL+FyAHoS36rmk=";
+          version = "2.16.5";
+          hash = "sha256-sJMIlAZz9zKri2F5py5hY43MghOTDlvd5wUBO645Jhk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
