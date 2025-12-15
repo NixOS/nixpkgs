@@ -12141,7 +12141,7 @@ with pkgs;
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
-  typstPackages = typst.packages;
+  typstPackages = recurseIntoAttrs typst.packages;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
