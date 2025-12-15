@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/eclipse/sumo";
     license = licenses.epl20;
     maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
   };
 }
