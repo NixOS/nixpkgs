@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
+    hash = "sha256-IpM4s/cECtrmD1K+Ya2v+9KzFH/GKbMDqfte0A+2rMc=";
   };
 
   build-system = [
