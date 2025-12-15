@@ -11,19 +11,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = "3.86.1";
+  version = "3.88.1";
 
   src = fetchFromGitHub {
     owner = "shopify";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-wEddzW5/+qdtNTxdUs7YEA5vk6/KjrVOgWvIeo0o2ww=";
+    hash = "sha256-G4sk0V//JcJ+z3EdWsh+VDSJl102Ww9bgohdgxmUQ+0=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-JhyZpkrp78FECH6UKYYuhWF2w/mYW1BQG5FIsWh5GRE=";
+    hash = "sha256-l+Hw5n8AqdQimPQFkN92LVhH6zFlyJped6UD69lQ+vg=";
   };
 
   nativeBuildInputs = [
