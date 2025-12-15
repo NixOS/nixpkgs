@@ -2469,6 +2469,8 @@ self: super: with self; {
 
   categorical-distance = callPackage ../development/python-modules/categorical-distance { };
 
+  category-encoders = callPackage ../development/python-modules/category-encoders { };
+
   catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
 
   catppuccin = callPackage ../development/python-modules/catppuccin { };
