@@ -11,8 +11,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchurl {
-    url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
-    sha256 = "1l4ybj5rvrrcxf8csyq7qx52izybd502pmx70zxp46gxqm60d2l0";
+    url = "http://archive.debian.org/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
+    hash = "sha256-Mx8pvaE/HgLYfjcX9BeiRqUKdHNRjt57ZC/Zm35vhW4";
   };
 
   buildInputs = [ sphinx ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://liw.fi/tracing/";
+    # homepage was "https://liw.fi/tracing/", but is now a 404
     description = "Python debug logging helper";
     license = lib.licenses.gpl3;
     maintainers = [ ];
