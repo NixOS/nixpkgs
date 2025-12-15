@@ -13,6 +13,7 @@
   libselinux,
   systemdMinimal,
   go-md2man,
+  man,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -72,6 +73,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     go-md2man
+    man
     installShellFiles
     makeBinaryWrapper
     python3
