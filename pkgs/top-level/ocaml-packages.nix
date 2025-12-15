@@ -1713,6 +1713,10 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
+        ppx_deriving_variant_string =
+          callPackage ../development/ocaml-modules/ppx_deriving_variant_string
+            { };
+
         ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
           mdx = mdx.override { inherit logs; };
         };
