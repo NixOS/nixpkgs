@@ -6036,6 +6036,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gruvbox-alabaster-nvim = buildVimPlugin {
+    pname = "gruvbox-alabaster.nvim";
+    version = "2025-12-08";
+    src = fetchFromGitHub {
+      owner = "Xoconoch";
+      repo = "gruvbox-alabaster.nvim";
+      rev = "246822279aa2c23b9374c5aee8ee71dbc06d26e6";
+      sha256 = "0l5r429al3m6l65lvq6mlvbgpga8081swpigixhbm5sw728npfhz";
+    };
+    meta.homepage = "https://github.com/Xoconoch/gruvbox-alabaster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gruvbox-baby = buildVimPlugin {
     pname = "gruvbox-baby";
     version = "2024-01-25";

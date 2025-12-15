@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/AvengeMedia/dgop";
     changelog = "https://github.com/AvengeMedia/dgop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ luckshiba ];
+    teams = [ lib.teams.danklinux ];
     mainProgram = "dgop";
     platforms = lib.platforms.unix;
   };

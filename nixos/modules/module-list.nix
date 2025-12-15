@@ -411,6 +411,7 @@
   ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
   ./services/admin/docuum.nix
+  ./services/admin/komodo-periphery.nix
   ./services/admin/meshcentral.nix
   ./services/admin/oxidized.nix
   ./services/admin/pgadmin.nix
@@ -1821,6 +1822,7 @@
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/nimdow.nix
   ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/oxwm.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
