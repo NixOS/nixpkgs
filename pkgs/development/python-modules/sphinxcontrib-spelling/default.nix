@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "sphinx-contrib";
     repo = "spelling";
     tag = version;
-    hash = "sha256-gN+FkgIzk7wG/ni+DzaeiePjCiK9k7Jrn2IUDgy8DOg=";
+    hash = "sha256-ek0/d9ubAxYFYsJDzazcTQWel01gxuoW551iVGU9wgw=";
   };
 
   nativeBuildInputs = [
