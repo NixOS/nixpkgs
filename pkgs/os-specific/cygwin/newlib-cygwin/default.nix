@@ -65,6 +65,8 @@ in
       # where nix runs on cygwin, we can attempt to upstream this again.
       ./store-tls-pointer-in-win32-tls.patch
       ./Cygwin-only-use-native-symlinks-when-they-preserve-t.patch
+      # This fixes the nix libutil MonitorFdHup.shouldNotBlock test
+      ./fix-missing-POLLHUP-when-write-pipe-is-closed.patch
     ]
     # After cygwin hosted builds are working, we should upstream this
     ++ lib.optional (
