@@ -267,6 +267,8 @@ let
 
         cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
+        cohttp-lwt_5_3 = cohttp-lwt.override { cohttp = cohttp_5_3; };
+
         cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
 
         cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };

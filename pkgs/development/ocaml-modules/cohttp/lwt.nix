@@ -1,4 +1,5 @@
 {
+  lib,
   buildDunePackage,
   cohttp,
   ipaddr,
@@ -20,11 +21,13 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     cohttp
-    ipaddr
     lwt
     logs
     sexplib0
     uri
+  ]
+  ++ lib.optionals (lib.versionAtLeast cohttp.version "6.0.0") [
+    ipaddr
   ];
 
   meta = cohttp.meta // {
