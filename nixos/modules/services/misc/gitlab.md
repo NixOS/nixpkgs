@@ -143,10 +143,10 @@ configure a Gitlab Runner with caching and reasonably good security practices.
 
 ::: {#ex-gitlab-runner-podman .example}
 
-## Example Gitlab Runner with `podman` and Nix Store Caching
+## Example: Gitlab Runner with `podman` and Nix Store Caching
 
-The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/continuous-integration/gitlab-runner/runner.nix) (a NixOS Module for reuse) configures a Gitlab Runner with the following
-features:
+The [VM tested podman-runner](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/continuous-integration/gitlab-runner/runner.nix)
+(a NixOS Module for reuse) configures a Gitlab Runner with the following features:
 
 - The executor is `podman` which gives you better additional safety than
   `docker`. That means every job is run in a `podman` container.
@@ -188,7 +188,9 @@ features:
     `podman-daemon-container`.
 
     The `podman-daemon-container` is a single container of a `podmanDaemonImage` which runs
-    `podman` as a daemon. Job containers can use this daemon to spawn nested containers as well (podman-in-podman). **Keep in mind that `bind` mounts are local to the `podman-daemon-container`** and can be be worked around with a `podman volume create <vol>` and manual copy-to/copy-from this volume `<vol>`.
+    `podman` as a daemon. Job containers can use this daemon to spawn nested containers as well (podman-in-podman).
+    **Keep in mind that `bind` mounts are local to the `podman-daemon-container`**
+    and can be be worked around with a `podman volume create <vol>` and manual copy-to/copy-from this volume `<vol>`.
 
     If you only need to build containers you don't need this feature (`podman-daemon-container`), see below point.
 
@@ -203,5 +205,31 @@ features:
     `podman` for building images) inside a job which runs `alpineImage`
     is still possible.
     :::
+
+  - **Cleanup Disk Space**:
+
+    With this setup its really easy to clean the `nix-daemon-container`
+    (e.g. if you run out of disk space), then reboot and have the runner in a clean.
+    You can just do the following to effectively clean everything and start
+    with fresh volumes safely:
+
+    ```bash
+    # Stop the Gitlab runner.
+    systemctl stop gitlab-runner.service
+    # Stop `systemd`-managed containers, such that they get not recreated
+    # when deleting below.
+    systemctl stop podman-podman-daemon-container.service \
+                  podman-nix-daemon-container.service \
+                  podman-nix-container.service \
+                  podman-alpine-container.service \
+                  podman-ubuntu-container.service || true
+
+    podman container rm -f --all
+    podman image rm -f --all
+    podman volumes rm -f --all
+
+    reboot
+    # Systemd will restart all containers and create volumes etc.
+    ```
 
 :::
