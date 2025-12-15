@@ -1645,8 +1645,6 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
-
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
