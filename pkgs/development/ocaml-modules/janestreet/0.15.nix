@@ -333,7 +333,7 @@ with self;
     propagatedBuildInputs = [
       async_ssl
       async_websocket
-      cohttp-async
+      cohttp-async_5_3
       ppx_jane
       uri-sexp
     ];
