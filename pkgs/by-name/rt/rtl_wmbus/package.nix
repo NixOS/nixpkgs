@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   pname = "rtl-wmbus";
   version = "d2be82c";
 
-  # fetchFromGitHub does not support leaveDotGit
-  src = fetchgit {
-    url = "https://github.com/xaelsouth/rtl-wmbus";
+  src = fetchFromGitHub {
+    owner = "xaelsouth";
+    repo = "rtl-wmbus";
     tag = version;
     hash = "sha256-TbNOvEyG0vNG68UpKRwJYDcUiDWTujneSD0Vx/4eFrA=";
 
