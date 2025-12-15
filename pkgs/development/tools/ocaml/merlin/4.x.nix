@@ -3,7 +3,7 @@
   replaceVars,
   fetchurl,
   ocaml,
-  dune_3,
+  dune,
   buildDunePackage,
   yojson,
   csexp,
@@ -69,7 +69,7 @@ buildDunePackage {
     [
       (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
         dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-        dune = "${dune_3}/bin/dune";
+        dune = "${dune}/bin/dune";
       })
     ];
 
