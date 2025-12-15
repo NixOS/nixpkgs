@@ -12,7 +12,6 @@
   openssl,
   pkg-config,
   rustPlatform,
-  stdenv,
   webkitgtk_4_1,
   yarnConfigHook,
 }:
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./java-from-path.patch
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
@@ -81,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     longDescription = ''
       An easy way to launch the NoRisk Client, create modpacks,
       manage content for Minecraft, and much more - written in tauri.
