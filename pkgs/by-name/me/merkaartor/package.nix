@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+
   cmake,
   pkg-config,
   gdal,
@@ -28,6 +30,15 @@ stdenv.mkDerivation rec {
     tag = version;
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
+
+  patches = [
+    # Fix for GDAL 3.12
+    # https://github.com/openstreetmap/merkaartor/pull/316
+    (fetchpatch {
+      url = "https://github.com/openstreetmap/merkaartor/commit/28cca84e9f5db0aaba87c2084ed32f9677598823.diff";
+      hash = "sha256-so0La5djYhWF6NqLpShWa3vGl5A2jkS3Xwg5Pe1yse4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
