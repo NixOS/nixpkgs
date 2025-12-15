@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.13.8";
+  version = "1.13.9";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qVR5LcRWuh5KUoK0VRTpjEK3Er8VNjb71NP5G3RSDQM=";
+    hash = "sha256-AvwYAsc/dozSfIGPcsySAqOa47jg6bXvHj53eVsjYiM=";
   };
 
   patches = [ ./fix-deps.patch ];
