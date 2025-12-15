@@ -3,10 +3,9 @@
   fetchFromGitHub,
   fetchgit,
   lib,
-  autoconf,
-  automake,
   bison,
   blas,
+  cmake,
   flex,
   fftw,
   gfortran,
@@ -31,21 +30,23 @@
 assert withMPI -> trilinos.withMPI;
 
 let
-  version = "7.9.0";
+  version = "7.10.0";
 
   # using fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
+    name = "Xyce";
     url = "https://github.com/Xyce/Xyce.git";
     rev = "Release-${version}";
-    sha256 = "sha256-m8tHQYBs0hjepTDswrDJFRCPY941Ew98gYRPuQMdKZA=";
+    hash = "sha256-8cvglBCykZVQk3BD7VE3riXfJ0PAEBwsoloqUsrMlBc=";
   };
 
   regression_src = fetchFromGitHub {
+    name = "Xyce_Regression";
     owner = "Xyce";
     repo = "Xyce_Regression";
     rev = "Release-${version}";
-    sha256 = "sha256-7Jvt2LUw2C201pMp9CHnhOwMzxU7imfrRKCb3wu3Okk=";
+    hash = "sha256-aA/4UpzSb+EeJ1RVkVwSKiNh7BDcLHxNDnKXZmnCBmI=";
   };
 in
 
@@ -60,27 +61,15 @@ stdenv.mkDerivation rec {
 
   sourceRoot = xyce_src.name;
 
-  preConfigure = "./bootstrap";
-
-  configureFlags = [
-    "CXXFLAGS=-O3"
-    "--enable-xyce-shareable"
-    "--enable-shared"
-    "--enable-stokhos"
-    "--enable-amesos2"
-  ]
-  ++ lib.optionals withMPI [
-    "--enable-mpi"
-    "CXX=mpicxx"
-    "CC=mpicc"
-    "F77=mpif77"
+  cmakeFlags = lib.optionals withMPI [
+    "-DCMAKE_C_COMPILER=mpicc"
+    "-DCMAKE_CXX_COMPILER=mpicxx"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    cmake
     gfortran
     libtool_2
   ]
@@ -145,7 +134,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../${regression_src.name}"
+    TEST_ROOT="$(pwd)/../../${regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
@@ -171,6 +160,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString enableDocs ''
+    pushd ../../${xyce_src.name}
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
       "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
@@ -192,6 +182,7 @@ stdenv.mkDerivation rec {
       install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
       popd
     done
+    popd
   '';
 
   meta = {

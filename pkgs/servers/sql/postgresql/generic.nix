@@ -314,7 +314,8 @@ let
         nukeReferences
       ];
 
-      enableParallelBuilding = true;
+      # Just a temporary hack for persistent errors on Hydra.
+      enableParallelBuilding = !(stdenv.system == "aarch64-darwin" && version == "17.7");
 
       separateDebugInfo = true;
 
