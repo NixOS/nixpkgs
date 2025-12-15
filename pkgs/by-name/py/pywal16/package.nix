@@ -2,9 +2,17 @@
   lib,
   python3,
   fetchFromGitHub,
-  imagemagick,
   installShellFiles,
   nix-update-script,
+
+  imagemagick,
+  colorz,
+
+  withColorthief ? false,
+  withColorz ? false,
+  withFastColorthief ? false,
+  withHaishoku ? false,
+  withModernColorthief ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,12 +31,21 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  dependencies =
+    lib.optionals withColorthief optional-dependencies.colorthief
+    ++ lib.optionals withColorz optional-dependencies.colorz
+    ++ lib.optionals withFastColorthief optional-dependencies.fast-colorthief
+    ++ lib.optionals withHaishoku optional-dependencies.haishoku
+    ++ lib.optionals withModernColorthief optional-dependencies.modern_colorthief;
+
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
     imagemagick
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ imagemagick ]}" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
+  ];
 
   postInstall = ''
     installManPage data/man/man1/wal.1
@@ -45,11 +62,13 @@ python3.pkgs.buildPythonApplication rec {
     colorz = [ colorz ];
     fast-colorthief = [ fast-colorthief ];
     haishoku = [ haishoku ];
+    modern_colorthief = [ modern-colorthief ];
     all = [
       colorthief
       colorz
-      ast-colorthief
+      fast-colorthief
       haishoku
+      modern-colorthief
     ];
   };
 
