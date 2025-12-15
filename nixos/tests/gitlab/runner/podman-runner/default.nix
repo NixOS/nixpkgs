@@ -355,7 +355,7 @@ in
     //
       # Workaround to add the job images to the registry.
       (lib.concatMapAttrs (name: image: {
-        "container-${name}" = {
+        "${name}-container" = {
           imageFile = jobImages.${name};
           image = "${imageNames.${name}}:latest";
           cmd = [ "true" ];
