@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${version}";
-    hash = "sha256-U1ttxt7Ba+NrcbslmkZT/d+ZdXrmk0teT5vGAcfLqF4=";
+    hash = "sha256-RL6MHvpHSp8/CO/H1qCSiFhr60Vlx9y0Y5IU9yX50xQ=";
   };
 
   build-system = [
