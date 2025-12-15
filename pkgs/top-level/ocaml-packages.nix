@@ -1162,7 +1162,9 @@ let
 
         magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-        magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+        magic-trace = callPackage ../development/ocaml-modules/magic-trace {
+          cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
+        };
 
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
