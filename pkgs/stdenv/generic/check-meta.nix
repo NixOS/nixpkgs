@@ -234,7 +234,7 @@ let
          then pass `--impure` in order to allow use of environment variables.
     ";
 
-  remediate_allowlist = allow_attr: rebuild_amendment: attrs: ''
+  remediate_allowlist = allow_attr: rebuild_amendment: ''
     a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
        for a single invocation of the nix tools.
 
@@ -243,7 +243,7 @@ let
     b) For `nixos-rebuild` you can set
       { nixpkgs.config.allow${allow_attr} = true; }
     in configuration.nix to override this.
-    ${rebuild_amendment attrs}
+    ${rebuild_amendment}
     c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
       { allow${allow_attr} = true; }
     to ~/.config/nixpkgs/config.nix.
@@ -473,7 +473,7 @@ let
       {
         reason = "unfree";
         errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
-        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate") attrs;
+        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
     else if hasBlocklistedLicense attrs then
       {
@@ -485,13 +485,13 @@ let
       {
         reason = "non-source";
         errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
-        remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate") attrs;
+        remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
       }
     else if hasDeniedBroken attrs then
       {
         reason = "broken";
         errormsg = "is marked as broken";
-        remediation = remediate_allowlist "Broken" (x: "") attrs;
+        remediation = remediate_allowlist "Broken" "";
       }
     else if hasUnsupportedPlatform attrs && !allowUnsupportedSystem then
       let
@@ -508,7 +508,7 @@ let
             package.meta.platforms = ${toPretty' (attrs.meta.platforms or [ ])}
             package.meta.badPlatforms = ${toPretty' (attrs.meta.badPlatforms or [ ])}
         '';
-        remediation = remediate_allowlist "UnsupportedSystem" (x: "") attrs;
+        remediation = remediate_allowlist "UnsupportedSystem" "";
       }
     else if hasDisallowedInsecure attrs then
       {
