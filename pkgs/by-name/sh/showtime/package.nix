@@ -69,6 +69,13 @@ python3Packages.buildPythonApplication rec {
     export HOME="$TEMPDIR"
   '';
 
+  # HACK: To get rid of unreproducible __pycache__ created by pythonImportsCheck.
+  # See https://github.com/NixOS/nixpkgs/issues/469081
+  deletePycachePhase = ''
+    find $out/lib -type d -name __pycache__ -prune -exec rm -vr {} \;
+  '';
+  postPhases = [ "deletePycachePhase" ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "showtime";
