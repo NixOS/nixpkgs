@@ -115,9 +115,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS Render Docs
-/pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
-/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
-/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+/pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
+/doc/redirects.json                @GetPsyched @hsjobeki
+/nixos/doc/manual/redirects.json   @GetPsyched @hsjobeki
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
