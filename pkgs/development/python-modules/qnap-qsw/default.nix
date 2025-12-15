@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pythonOlder,
   requests,
 }:
@@ -13,11 +13,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "Noltari";
-    repo = "python-qnap-qsw";
-    rev = version;
-    sha256 = "WP1bGt7aAtSVFOMJgPXKqVSbi5zj9K7qoIVrYCrPGqk=";
+  src = fetchPypi {
+    inherit version;
+    pname = "qnap-qsw";
+    hash = "sha256-A3yam3amuvk7LJrN3IPXWAca2oZAJMHLe2dx0sQEK3c=";
   };
 
   propagatedBuildInputs = [ requests ];
