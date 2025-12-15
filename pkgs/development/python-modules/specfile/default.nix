@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "packit";
     repo = "specfile";
     tag = version;
-    hash = "sha256-phzvQs49AC9SbmcQHWprfjHssF0ughDJ9KKVnUEB/gg=";
+    hash = "sha256-8/k9cMmOA7eMxW5dhUoDKcgD7KNo0AKrt4y5lBa167A=";
   };
 
   build-system = [
