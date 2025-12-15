@@ -31,7 +31,11 @@ lib.extendMkDerivation {
       paths = [ typst ] ++ lib.concatMap (p: [ p ] ++ p.propagatedBuildInputs) selectedPkgs;
 
       pathsToLink = [
+        # The packages
         "/lib/typst-packages"
+        # The Typst executable & completions
+        "/bin"
+        "/share"
       ];
 
       derivationArgs = {
@@ -41,16 +45,8 @@ lib.extendMkDerivation {
       };
 
       postBuild = ''
-        export TYPST_LIB_DIR="$out/lib/typst/packages"
-        mkdir -p $TYPST_LIB_DIR
-
-        mv $out/lib/typst-packages $TYPST_LIB_DIR/preview
-
-        cp -r ${typst}/share $out/share
-        mkdir -p $out/bin
-
-        makeWrapper "${lib.getExe typst}" "$out/bin/typst" \
-          --set TYPST_PACKAGE_CACHE_PATH "$TYPST_LIB_DIR" \
+        wrapProgram "$out/bin/typst" \
+          --set-default TYPST_PACKAGE_CACHE_PATH "$out/lib/typst-packages" \
           --set-default TYPST_FONT_PATHS "$(IFS=":"; echo "''${typstWrapperArgs[*]}")" \
           --add-flags "''${typstWrapperArgs[*]}"
       '';
