@@ -19,6 +19,7 @@
   fsspec,
   hist,
   ipywidgets,
+  loky,
   lz4,
   matplotlib,
   mplhep,
@@ -27,6 +28,7 @@
   packaging,
   pandas,
   pyarrow,
+  pydantic,
   requests,
   rich,
   scipy,
@@ -42,25 +44,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coffea";
-  version = "2025.12.0";
+  version = "2026.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    tag = "v${version}";
-    hash = "sha256-+Qfb5NHJTlSBUqyv+n3zebEwAZPB9+UMV5KiQhOxJSY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gvNgXaTXoSkuQUmEpje6WZciGyGmoSaNxHcdEX81IjU=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
-  ];
-
-  pythonRelaxDeps = [
-    "dask"
   ];
 
   dependencies = [
@@ -69,12 +68,12 @@ buildPythonPackage rec {
     cachetools
     cloudpickle
     correctionlib
-    dask
     dask-awkward
     dask-histogram
     fsspec
     hist
     ipywidgets
+    loky
     lz4
     matplotlib
     mplhep
@@ -83,6 +82,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    pydantic
     requests
     rich
     scipy
@@ -118,8 +118,8 @@ buildPythonPackage rec {
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})
