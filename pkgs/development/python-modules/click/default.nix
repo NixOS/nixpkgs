@@ -1,10 +1,17 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  importlib-metadata,
   pytestCheckHook,
+  click,
+  sphinxHook,
+  python,
+  pallets-sphinx-themes,
+  sphinxcontrib-log-cabinet,
+  sphinx-tabs,
+  myst-parser,
 
   # large-rebuild downstream dependencies and applications
   flask,
@@ -48,14 +55,35 @@ buildPythonPackage rec {
     "test_file_surrogates"
   ];
 
-  passthru.tests = {
-    inherit
-      black
-      flask
-      magic-wormhole
-      mitmproxy
-      typer
-      ;
+  passthru = {
+    # Separate derivation; `myst-parser` indirectly depends on `click`
+    doc = stdenv.mkDerivation {
+      inherit (click) src;
+      name = "${click.name}-doc";
+
+      nativeBuildInputs = [
+        sphinxHook
+        pallets-sphinx-themes
+        sphinxcontrib-log-cabinet
+        sphinx-tabs
+        myst-parser
+        click
+      ];
+
+      postInstallSphinx = ''
+        mv $out/share/doc/${click.name}-doc $out/share/doc/${click.name}
+      '';
+    };
+
+    tests = {
+      inherit
+        black
+        flask
+        magic-wormhole
+        mitmproxy
+        typer
+        ;
+    };
   };
 
   meta = {
