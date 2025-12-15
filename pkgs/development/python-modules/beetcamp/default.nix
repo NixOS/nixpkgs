@@ -40,10 +40,13 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    beets
     httpx
     packaging
     pycountry
+  ];
+
+  nativeBuildInputs = [
+    beets
   ];
 
   nativeCheckInputs = [
