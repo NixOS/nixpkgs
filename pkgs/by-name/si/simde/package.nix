@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://simd-everywhere.github.io";
     description = "Implementations of SIMD instruction sets for systems which don't natively support them";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ whiteley ];
-    platforms = flatten (
+    platforms = lib.flatten (
       with lib.platforms;
       [
         arm

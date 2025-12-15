@@ -42,13 +42,13 @@ buildPythonPackage rec {
     "repoze.sphinx"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/repoze/repoze.sphinx.autointerface";
     description = "Auto-generate Sphinx API docs from Zope interfaces";
     changelog = "https://github.com/repoze/repoze.sphinx.autointerface/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
     # https://github.com/repoze/repoze.sphinx.autointerface/issues/21
-    broken = versionAtLeast sphinx.version "7.2";
+    broken = lib.versionAtLeast sphinx.version "7.2";
   };
 }

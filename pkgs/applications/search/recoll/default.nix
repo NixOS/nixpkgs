@@ -197,7 +197,7 @@ mkDerivation rec {
 
   enableParallelBuilding = false; # XXX: -j44 tried linking befoire librecoll had been created
 
-  meta = with lib; {
+  meta = {
     description = "Full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
