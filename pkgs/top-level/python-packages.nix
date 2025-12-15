@@ -582,6 +582,8 @@ self: super: with self; {
 
   airtouch5py = callPackage ../development/python-modules/airtouch5py { };
 
+  aistudio-sdk = callPackage ../development/python-modules/aistudio-sdk { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   ajsonrpc = callPackage ../development/python-modules/ajsonrpc { };
@@ -1823,6 +1825,8 @@ self: super: with self; {
   bcc = toPythonModule (pkgs.bcc.override { python3Packages = self; });
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
+
+  bce-python-sdk = callPackage ../development/python-modules/bce-python-sdk { };
 
   bcf = callPackage ../development/python-modules/bcf { };
 
@@ -3159,6 +3163,8 @@ self: super: with self; {
   country-list = callPackage ../development/python-modules/country-list { };
 
   countryguess = callPackage ../development/python-modules/countryguess { };
+
+  countryinfo = callPackage ../development/python-modules/countryinfo { };
 
   courlan = callPackage ../development/python-modules/courlan { };
 
@@ -9836,6 +9842,8 @@ self: super: with self; {
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };
+
+  modelscope = callPackage ../development/python-modules/modelscope { };
 
   modern-colorthief = callPackage ../development/python-modules/modern-colorthief { };
 
@@ -20678,6 +20686,8 @@ self: super: with self; {
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xcffib = callPackage ../development/python-modules/xcffib { };
+
+  xclim = callPackage ../development/python-modules/xclim { };
 
   xdg = callPackage ../development/python-modules/xdg { };
 

@@ -36,6 +36,7 @@ buildDunePackage rec {
       Markdown, to name but a few! This library provides OCaml combinators
       for these web formats.
     '';
+    homepage = "https://mirage.github.io/ocaml-cow/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
