@@ -44,6 +44,17 @@ in
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
 
+  excludeDrvArgNames = [
+    "allowImportFromDerivation"
+    "config"
+    "configfile"
+    "extraMakeFlags"
+    "extraMeta"
+    "kernelPatches"
+    "modDirVersion"
+    "randstructSeed"
+  ];
+
   extendDrvArgs =
     finalAttrs:
     {
