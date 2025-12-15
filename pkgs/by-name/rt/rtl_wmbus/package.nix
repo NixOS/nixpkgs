@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "software defined receiver for Wireless-M-Bus with RTL-SDR";
-    downloadPage = "https://github.com/xaelsouth/rtl-wmbus";
+    description = "Software defined receiver for Wireless-M-Bus with RTL-SDR";
+    homepage = "https://github.com/xaelsouth/rtl-wmbus";
     license = lib.licenses.bsd2;
     mainProgram = "rtl_wmbus";
   };
