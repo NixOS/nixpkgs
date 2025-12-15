@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dxRqf5iOlgJegeAqtTwoVqNHXU3eOse5eMYFknhAh2M=";
     fetchSubmodules = true;
   };
