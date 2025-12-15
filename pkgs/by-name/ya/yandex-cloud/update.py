@@ -30,24 +30,29 @@ def to_goarch(cpu):
 nixpkgs_path = "."
 attr_path = os.getenv("UPDATE_NIX_ATTR_PATH", "yandex-cloud")
 
-package_attrs = json.loads(subprocess.run(
-    [
-        "nix",
-        "--extra-experimental-features", "nix-command",
-        "eval",
-        "--json",
-        "--file", nixpkgs_path,
-        "--apply", """p: {
+package_attrs = json.loads(
+    subprocess.run(
+        [
+            "nix",
+            "--extra-experimental-features",
+            "nix-command",
+            "eval",
+            "--json",
+            "--file",
+            nixpkgs_path,
+            "--apply",
+            """p: {
           dir = dirOf p.meta.position;
           version = p.version;
         }""",
-        "--",
-        attr_path,
-    ],
-    stdout=subprocess.PIPE,
-    text=True,
-    check=True,
-).stdout)
+            "--",
+            attr_path,
+        ],
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+    ).stdout
+)
 
 old_version = package_attrs["version"]
 new_version = requests.get(f"{storage_url}/release/stable").text.rstrip()
@@ -66,7 +71,8 @@ for cpu, kernel in systems:
     nix_hash = subprocess.run(
         [
             "nix-prefetch-url",
-            "--type", "sha256",
+            "--type",
+            "sha256",
             url,
         ],
         stdout=subprocess.PIPE,
@@ -77,10 +83,12 @@ for cpu, kernel in systems:
     sri_hash = subprocess.run(
         [
             "nix",
-            "--extra-experimental-features", "nix-command",
+            "--extra-experimental-features",
+            "nix-command",
             "hash",
             "to-sri",
-            "--type", "sha256",
+            "--type",
+            "sha256",
             "--",
             nix_hash,
         ],
@@ -96,10 +104,16 @@ for cpu, kernel in systems:
 
 package_dir = package_attrs["dir"]
 file_path = os.path.join(package_dir, "sources.json")
-file_content = json.dumps({
-    "version": new_version,
-    "binaries": binaries,
-}, indent=2) + "\n"
+file_content = (
+    json.dumps(
+        {
+            "version": new_version,
+            "binaries": binaries,
+        },
+        indent=2,
+    )
+    + "\n"
+)
 
 with tempfile.NamedTemporaryFile(mode="w") as t:
     t.write(file_content)

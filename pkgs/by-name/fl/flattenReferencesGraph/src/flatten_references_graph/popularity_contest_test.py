@@ -12,14 +12,10 @@ from .popularity_contest import (
     make_graph_segment_from_root,
     make_lookup,
     popularity_contest,
-    order_by_popularity
+    order_by_popularity,
 )
 
-from .lib import (
-    directed_graph,
-    igraph_to_reference_graph,
-    over
-)
+from .lib import directed_graph, igraph_to_reference_graph, over
 
 
 if __name__ == "__main__":
@@ -29,26 +25,15 @@ if __name__ == "__main__":
 class CustomAssertions:
     @curry
     def assertResultKeys(self, keys, result):
-        self.assertListEqual(
-            list(result.keys()),
-            keys
-        )
+        self.assertListEqual(list(result.keys()), keys)
 
         return result
 
 
-class Test(
-    unittest.TestCase,
-    CustomAssertions,
-    th.CustomAssertions
-):
-
+class Test(unittest.TestCase, CustomAssertions, th.CustomAssertions):
     def test_empty_graph(self):
         def test_empty(graph):
-            self.assertListEqual(
-                list(popularity_contest(graph)),
-                []
-            )
+            self.assertListEqual(list(popularity_contest(graph)), [])
 
         # popularity_contest works with igraph graph or refurence_graph in
         # form a list of dicts (as returned by nix's exportReferencesGraph)
@@ -70,7 +55,7 @@ class Test(
             ("B", "D"),
             ("B", "F"),
             ("Root2", "B"),
-            ("Root3", "C")
+            ("Root3", "C"),
         ]
         detached_vertices = ["X"]
         vertex_props = vertex_props_dict.items()
@@ -79,29 +64,25 @@ class Test(
             result = list(popularity_contest(graph))
 
             expected_paths = [
-                'E',
-                'D',
-                'F',
-                'B',
-                'A',
-                'C',
-                'Root1',
-                'Root2',
-                'Root3',
-                'X'
+                "E",
+                "D",
+                "F",
+                "B",
+                "A",
+                "C",
+                "Root1",
+                "Root2",
+                "Root3",
+                "X",
             ]
 
-            self.assertEqual(
-                len(result),
-                len(expected_paths)
-            )
+            self.assertEqual(len(result), len(expected_paths))
 
-            for (index, path) in enumerate(expected_paths):
+            for index, path in enumerate(expected_paths):
                 path_props = vertex_props_dict.get(path) or {}
 
                 self.assertGraphEqual(
-                    result[index],
-                    directed_graph([], [path], [(path, path_props)])
+                    result[index], directed_graph([], [path], [(path, path_props)])
                 )
 
         graph = directed_graph(edges, detached_vertices, vertex_props)
@@ -113,28 +94,20 @@ class Test(
 class TestFindRoots(unittest.TestCase):
     def test_find_roots(self):
         self.assertCountEqual(
-            find_roots([
-                {
-                    "path": "/nix/store/foo",
-                    "references": [
-                        "/nix/store/foo",
-                        "/nix/store/bar"
-                    ]
-                },
-                {
-                    "path": "/nix/store/bar",
-                    "references": [
-                        "/nix/store/bar",
-                        "/nix/store/tux"
-                    ]
-                },
-                {
-                    "path": "/nix/store/hello",
-                    "references": [
-                    ]
-                }
-            ]),
-            ["/nix/store/foo", "/nix/store/hello"]
+            find_roots(
+                [
+                    {
+                        "path": "/nix/store/foo",
+                        "references": ["/nix/store/foo", "/nix/store/bar"],
+                    },
+                    {
+                        "path": "/nix/store/bar",
+                        "references": ["/nix/store/bar", "/nix/store/tux"],
+                    },
+                    {"path": "/nix/store/hello", "references": []},
+                ]
+            ),
+            ["/nix/store/foo", "/nix/store/hello"],
         )
 
 
@@ -144,13 +117,8 @@ class TestAnyReferTo(unittest.TestCase):
             any_refer_to(
                 "/nix/store/bar",
                 [
-                    {
-                        "path": "/nix/store/foo",
-                        "references": [
-                            "/nix/store/bar"
-                        ]
-                    },
-                ]
+                    {"path": "/nix/store/foo", "references": ["/nix/store/bar"]},
+                ],
             ),
         )
 
@@ -161,12 +129,9 @@ class TestAnyReferTo(unittest.TestCase):
                 [
                     {
                         "path": "/nix/store/foo",
-                        "references": [
-                            "/nix/store/foo",
-                            "/nix/store/bar"
-                        ]
+                        "references": ["/nix/store/foo", "/nix/store/bar"],
                     },
-                ]
+                ],
             ),
         )
 
@@ -174,29 +139,25 @@ class TestAnyReferTo(unittest.TestCase):
 class TestAllPaths(unittest.TestCase):
     def test_returns_all_paths(self):
         self.assertCountEqual(
-            all_paths([
-                {
-                    "path": "/nix/store/foo",
-                    "references": [
-                        "/nix/store/foo",
-                        "/nix/store/bar"
-                    ]
-                },
-                {
-                    "path": "/nix/store/bar",
-                    "references": [
-                        "/nix/store/bar",
-                        "/nix/store/tux"
-                    ]
-                },
-                {
-                    "path": "/nix/store/hello",
-                    "references": [
-                    ]
-                }
-            ]),
-            ["/nix/store/foo", "/nix/store/bar",
-                "/nix/store/hello", "/nix/store/tux", ]
+            all_paths(
+                [
+                    {
+                        "path": "/nix/store/foo",
+                        "references": ["/nix/store/foo", "/nix/store/bar"],
+                    },
+                    {
+                        "path": "/nix/store/bar",
+                        "references": ["/nix/store/bar", "/nix/store/tux"],
+                    },
+                    {"path": "/nix/store/hello", "references": []},
+                ]
+            ),
+            [
+                "/nix/store/foo",
+                "/nix/store/bar",
+                "/nix/store/hello",
+                "/nix/store/tux",
+            ],
         )
 
     def test_no_references(self):
@@ -206,12 +167,9 @@ class TestAllPaths(unittest.TestCase):
                 [
                     {
                         "path": "/nix/store/foo",
-                        "references": [
-                            "/nix/store/foo",
-                            "/nix/store/bar"
-                        ]
+                        "references": ["/nix/store/foo", "/nix/store/bar"],
                     },
-                ]
+                ],
             ),
         )
 
@@ -221,115 +179,102 @@ class TestMakeLookup(unittest.TestCase):
         self.assertDictEqual(
             # "references" in the result are iterators so we need
             # to convert them to a list before asserting.
-            tlz.valmap(over("references", list), make_lookup([
-                {
-                    "path": "/nix/store/foo",
-                    "references": [
-                        "/nix/store/foo",
-                        "/nix/store/bar",
-                        "/nix/store/hello"
+            tlz.valmap(
+                over("references", list),
+                make_lookup(
+                    [
+                        {
+                            "path": "/nix/store/foo",
+                            "references": [
+                                "/nix/store/foo",
+                                "/nix/store/bar",
+                                "/nix/store/hello",
+                            ],
+                        },
+                        {
+                            "path": "/nix/store/bar",
+                            "references": ["/nix/store/bar", "/nix/store/tux"],
+                        },
+                        {"path": "/nix/store/hello", "references": []},
                     ]
-                },
-                {
-                    "path": "/nix/store/bar",
-                    "references": [
-                        "/nix/store/bar",
-                        "/nix/store/tux"
-                    ]
-                },
-                {
-                    "path": "/nix/store/hello",
-                    "references": [
-                    ]
-                }
-            ])),
+                ),
+            ),
             {
                 "/nix/store/foo": {
                     "path": "/nix/store/foo",
-                    "references": [
-                        "/nix/store/bar",
-                        "/nix/store/hello"
-                    ]
+                    "references": ["/nix/store/bar", "/nix/store/hello"],
                 },
                 "/nix/store/bar": {
                     "path": "/nix/store/bar",
-                    "references": [
-                        "/nix/store/tux"
-                    ]
+                    "references": ["/nix/store/tux"],
                 },
-                "/nix/store/hello": {
-                    "path": "/nix/store/hello",
-                    "references": [
-                    ]
-                }
-            }
+                "/nix/store/hello": {"path": "/nix/store/hello", "references": []},
+            },
         )
 
 
 class TestMakeGraphSegmentFromRoot(unittest.TestCase):
     def test_returns_graph(self):
         self.assertDictEqual(
-            make_graph_segment_from_root({}, "/nix/store/foo", {
-                "/nix/store/foo": ["/nix/store/bar"],
-                "/nix/store/bar": ["/nix/store/tux"],
-                "/nix/store/tux": [],
-                "/nix/store/hello": [],
-            }),
-            {
-                "/nix/store/bar": {
-                    "/nix/store/tux": {}
-                }
-            }
+            make_graph_segment_from_root(
+                {},
+                "/nix/store/foo",
+                {
+                    "/nix/store/foo": ["/nix/store/bar"],
+                    "/nix/store/bar": ["/nix/store/tux"],
+                    "/nix/store/tux": [],
+                    "/nix/store/hello": [],
+                },
+            ),
+            {"/nix/store/bar": {"/nix/store/tux": {}}},
         )
 
     def test_returns_graph_tiny(self):
         self.assertDictEqual(
-            make_graph_segment_from_root({}, "/nix/store/tux", {
-                "/nix/store/foo": ["/nix/store/bar"],
-                "/nix/store/bar": ["/nix/store/tux"],
-                "/nix/store/tux": [],
-            }),
-            {}
+            make_graph_segment_from_root(
+                {},
+                "/nix/store/tux",
+                {
+                    "/nix/store/foo": ["/nix/store/bar"],
+                    "/nix/store/bar": ["/nix/store/tux"],
+                    "/nix/store/tux": [],
+                },
+            ),
+            {},
         )
 
 
 class TestGraphPopularityContest(unittest.TestCase):
     def test_counts_popularity(self):
         self.assertDictEqual(
-            graph_popularity_contest({}, {
-                "/nix/store/foo": {
-                    "/nix/store/bar": {
-                        "/nix/store/baz": {
-                            "/nix/store/tux": {}
-                        }
-                    },
-                    "/nix/store/baz": {
-                        "/nix/store/tux": {}
+            graph_popularity_contest(
+                {},
+                {
+                    "/nix/store/foo": {
+                        "/nix/store/bar": {"/nix/store/baz": {"/nix/store/tux": {}}},
+                        "/nix/store/baz": {"/nix/store/tux": {}},
                     }
-                }
-            }),
+                },
+            ),
             {
                 "/nix/store/foo": 1,
                 "/nix/store/bar": 2,
                 "/nix/store/baz": 4,
                 "/nix/store/tux": 6,
-            }
+            },
         )
 
 
 class TestOrderByPopularity(unittest.TestCase):
     def test_returns_in_order(self):
         self.assertEqual(
-            order_by_popularity({
-                "/nix/store/foo": 1,
-                "/nix/store/bar": 1,
-                "/nix/store/baz": 2,
-                "/nix/store/tux": 2,
-            }),
-            [
-                "/nix/store/baz",
-                "/nix/store/tux",
-                "/nix/store/bar",
-                "/nix/store/foo"
-            ]
+            order_by_popularity(
+                {
+                    "/nix/store/foo": 1,
+                    "/nix/store/bar": 1,
+                    "/nix/store/baz": 2,
+                    "/nix/store/tux": 2,
+                }
+            ),
+            ["/nix/store/baz", "/nix/store/tux", "/nix/store/bar", "/nix/store/foo"],
         )

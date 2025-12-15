@@ -86,9 +86,9 @@ def validate_mounts(pattern: Pattern) -> List[Tuple[PathString, PathString, bool
             roots.extend((m, m, pattern["unsafeFollowSymlinks"]) for m in matches)
         else:
             assert isinstance(mount, dict) and "host" in mount, mount
-            assert Path(
-                mount["host"]
-            ).exists(), f"Specified host paths do not exist: {mount['host']}"
+            assert Path(mount["host"]).exists(), (
+                f"Specified host paths do not exist: {mount['host']}"
+            )
             roots.append(
                 (
                     mount["guest"],

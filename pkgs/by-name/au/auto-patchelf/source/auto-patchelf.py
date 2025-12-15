@@ -26,14 +26,13 @@ DEFAULT_BINTOOLS = "@defaultBintools@"
 
 @contextmanager
 def open_elf(path: Path) -> Iterator[ELFFile]:
-    with path.open('rb') as stream:
+    with path.open("rb") as stream:
         yield ELFFile(stream)
 
 
 def is_static_executable(elf: ELFFile) -> bool:
     # Statically linked executables have an ELF type of EXEC but no INTERP.
-    return (elf.header["e_type"] == 'ET_EXEC'
-            and not elf.get_section_by_name(".interp"))
+    return elf.header["e_type"] == "ET_EXEC" and not elf.get_section_by_name(".interp")
 
 
 def is_dynamic_executable(elf: ELFFile) -> bool:
@@ -42,12 +41,17 @@ def is_dynamic_executable(elf: ELFFile) -> bool:
     # section but their ELF type is DYN.
     return bool(elf.get_section_by_name(".interp"))
 
+
 def is_separate_debug_object(elf: ELFFile) -> bool:
     # objects created by separateDebugInfo = true have all the section headers
     # of the unstripped objects but those that normal `strip` would have kept
     # are NOBITS
     text_section = elf.get_section_by_name(".text")
-    return elf.has_dwarf_info() and bool(text_section) and text_section.header['sh_type'] == "SHT_NOBITS"
+    return (
+        elf.has_dwarf_info()
+        and bool(text_section)
+        and text_section.header["sh_type"] == "SHT_NOBITS"
+    )
 
 
 def get_dependencies(elf: ELFFile) -> list[list[Path]]:
@@ -57,9 +61,9 @@ def get_dependencies(elf: ELFFile) -> list[list[Path]]:
     # instance of DynamicSection, but that is required to call iter_tags
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
-            for tag in section.iter_tags('DT_NEEDED'):
+            for tag in section.iter_tags("DT_NEEDED"):
                 dependencies.append([Path(tag.needed)])
-            break # There is only one dynamic section
+            break  # There is only one dynamic section
 
     return dependencies
 
@@ -91,13 +95,13 @@ def get_rpath(elf: ELFFile) -> list[str]:
     # instance of DynamicSection, but that is required to call iter_tags
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
-            for tag in section.iter_tags('DT_RUNPATH'):
-                return tag.runpath.split(':')
+            for tag in section.iter_tags("DT_RUNPATH"):
+                return tag.runpath.split(":")
 
-            for tag in section.iter_tags('DT_RPATH'):
-                return tag.rpath.split(':')
+            for tag in section.iter_tags("DT_RPATH"):
+                return tag.rpath.split(":")
 
-            break # There is only one dynamic section
+            break  # There is only one dynamic section
 
     return []
 
@@ -128,13 +132,13 @@ def osabi_are_compatible(wanted: str, got: str) -> bool:
     # compatibility into SHT_NOTE sections like .note.tag and
     # .note.ABI-tag.  It would be prudent to add these to the detection
     # logic to produce better ABI information.
-    if wanted == 'ELFOSABI_SYSV':
+    if wanted == "ELFOSABI_SYSV":
         return True
 
     # Similarly here, we should be able to link against a superset of
     # features, so even if the target has another ABI, this should be
     # fine.
-    if got == 'ELFOSABI_SYSV':
+    if got == "ELFOSABI_SYSV":
         return True
 
     # Otherwise, we simply return whether the ABIs are identical.
@@ -156,7 +160,7 @@ cached_paths: set[Path] = set()
 soname_cache: DefaultDict[tuple[str, str], list[tuple[Path, str]]] = defaultdict(list)
 
 
-def populate_cache(initial: list[Path], recursive: bool =False) -> None:
+def populate_cache(initial: list[Path], recursive: bool = False) -> None:
     lib_dirs = list(initial)
 
     while lib_dirs:
@@ -182,13 +186,16 @@ def populate_cache(initial: list[Path], recursive: bool =False) -> None:
             try:
                 with open_elf(path) as elf:
                     if is_separate_debug_object(elf):
-                        print(f"skipping {path} because it looks like a separate debug object")
+                        print(
+                            f"skipping {path} because it looks like a separate debug object"
+                        )
                         continue
 
                     osabi = get_osabi(elf)
                     arch = get_arch(elf)
-                    rpath = [Path(p) for p in get_rpath(elf)
-                                     if p and '$ORIGIN' not in p]
+                    rpath = [
+                        Path(p) for p in get_rpath(elf) if p and "$ORIGIN" not in p
+                    ]
                     lib_dirs += rpath
                     soname_cache[(path.name, arch)].append((resolved.parent, osabi))
 
@@ -206,15 +213,20 @@ def find_dependency(soname: str, soarch: str, soabi: str) -> Optional[Path]:
 
 @dataclass
 class Dependency:
-    file: Path              # The file that contains the dependency
-    name: Path              # The name of the dependency
-    found: bool = False     # Whether it was found somewhere
+    file: Path  # The file that contains the dependency
+    name: Path  # The name of the dependency
+    found: bool = False  # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(
+    path: Path,
+    runtime_deps: list[Path],
+    append_rpaths: list[Path] = [],
+    keep_libc: bool = False,
+    extra_args: list[str] = [],
+) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
-
             if is_static_executable(elf):
                 # No point patching these
                 print(f"skipping {path} because it is statically linked")
@@ -229,14 +241,18 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             if interpreter_arch != file_arch:
                 # Our target architecture is different than this file's
                 # architecture, so skip it.
-                print(f"skipping {path} because its architecture ({file_arch})"
-                      f" differs from target ({interpreter_arch})")
+                print(
+                    f"skipping {path} because its architecture ({file_arch})"
+                    f" differs from target ({interpreter_arch})"
+                )
                 return []
 
             file_osabi = get_osabi(elf)
             if not osabi_are_compatible(interpreter_osabi, file_osabi):
-                print(f"skipping {path} because its OS ABI ({file_osabi}) is"
-                      f" not compatible with target ({interpreter_osabi})")
+                print(
+                    f"skipping {path} because its OS ABI ({file_osabi}) is"
+                    f" not compatible with target ({interpreter_osabi})"
+                )
                 return []
 
             file_is_dynamic_executable = is_dynamic_executable(elf)
@@ -248,14 +264,21 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
     # these platforms are packaged in nixpkgs with ld.so in a separate derivation
     # than libc.so and friends. keep_libc is mandatory.
-    keep_libc |= file_osabi in ('ELFOSABI_FREEBSD', 'ELFOSABI_OPENBSD')
+    keep_libc |= file_osabi in ("ELFOSABI_FREEBSD", "ELFOSABI_OPENBSD")
 
     rpath = []
     if file_is_dynamic_executable:
         print("setting interpreter of", path)
         subprocess.run(
-                ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()] + extra_args,
-                check=True)
+            [
+                "patchelf",
+                "--set-interpreter",
+                interpreter_path.as_posix(),
+                path.as_posix(),
+            ]
+            + extra_args,
+            check=True,
+        )
         rpath += runtime_deps
 
     print("searching for dependencies of", path)
@@ -266,7 +289,6 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
     for dep in file_dependencies:
         was_found = False
         for candidate in dep:
-
             # This loop determines which candidate for a given
             # dependency can be found, and how. There may be multiple
             # candidates for a dep because of '.note.dlopen'
@@ -298,7 +320,9 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             elif is_libc and not keep_libc:
                 was_found = True
                 break
-            elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
+            elif found_dependency := find_dependency(
+                candidate.name, file_arch, file_osabi
+            ):
                 rpath.append(found_dependency)
                 dependencies.append(Dependency(path, candidate, found=True))
                 print(f"    {candidate} -> found: {found_dependency}")
@@ -321,23 +345,24 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
     if rpath:
         print("setting RPATH to:", rpath_str)
         subprocess.run(
-                ["patchelf", "--set-rpath", rpath_str, path.as_posix()] + extra_args,
-                check=True)
+            ["patchelf", "--set-rpath", rpath_str, path.as_posix()] + extra_args,
+            check=True,
+        )
 
     return dependencies
 
 
 def auto_patchelf(
-        paths_to_patch: list[Path],
-        lib_dirs: list[Path],
-        runtime_deps: list[Path],
-        recursive: bool = True,
-        ignore_missing: list[str] = [],
-        append_rpaths: list[Path] = [],
-        keep_libc: bool = False,
-        add_existing: bool = True,
-        extra_args: list[str] = []) -> None:
-
+    paths_to_patch: list[Path],
+    lib_dirs: list[Path],
+    runtime_deps: list[Path],
+    recursive: bool = True,
+    ignore_missing: list[str] = [],
+    append_rpaths: list[Path] = [],
+    keep_libc: bool = False,
+    add_existing: bool = True,
+    extra_args: list[str] = [],
+) -> None:
     if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
 
@@ -349,9 +374,11 @@ def auto_patchelf(
     populate_cache(lib_dirs)
 
     dependencies = []
-    for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
+    for path in chain.from_iterable(glob(p, "*", recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, extra_args)
+            dependencies += auto_patchelf_file(
+                path, runtime_deps, append_rpaths, keep_libc, extra_args
+            )
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -361,36 +388,43 @@ def auto_patchelf(
     for dep in missing:
         for pattern in ignore_missing:
             if fnmatch(dep.name.name, pattern):
-                print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                print(
+                    f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}"
+                )
                 break
         else:
-            print(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
+            print(
+                f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}"
+            )
             failure = True
 
     if failure:
-        sys.exit('auto-patchelf failed to find all the required dependencies.\n'
-                 'Add the missing dependencies to --libs or use '
-                 '`--ignore-missing="foo.so.1 bar.so etc.so"`.')
+        sys.exit(
+            "auto-patchelf failed to find all the required dependencies.\n"
+            "Add the missing dependencies to --libs or use "
+            '`--ignore-missing="foo.so.1 bar.so etc.so"`.'
+        )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="auto-patchelf",
-        description='auto-patchelf tries as hard as possible to patch the'
-                    ' provided binary files by looking for compatible'
-                    ' libraries in the provided paths.')
+        description="auto-patchelf tries as hard as possible to patch the"
+        " provided binary files by looking for compatible"
+        " libraries in the provided paths.",
+    )
     parser.add_argument(
         "--ignore-missing",
         nargs="*",
         type=str,
         default=[],
-        help="Do not fail when some dependencies are not found."
+        help="Do not fail when some dependencies are not found.",
     )
     parser.add_argument(
         "--no-recurse",
         dest="recursive",
         action="store_false",
-        help="Disable the recursive traversal of paths to patch."
+        help="Disable the recursive traversal of paths to patch.",
     )
     parser.add_argument(
         "--paths",
@@ -398,8 +432,8 @@ def main() -> None:
         type=Path,
         required=True,
         help="Paths whose content needs to be patched."
-             " Single files and directories are accepted."
-             " Directories are traversed recursively by default."
+        " Single files and directories are accepted."
+        " Directories are traversed recursively by default.",
     )
     parser.add_argument(
         "--libs",
@@ -407,8 +441,8 @@ def main() -> None:
         type=Path,
         default=[],
         help="Paths where libraries are searched for."
-             " Single files and directories are accepted."
-             " Directories are not searched recursively."
+        " Single files and directories are accepted."
+        " Directories are not searched recursively.",
     )
     parser.add_argument(
         "--runtime-dependencies",
@@ -416,7 +450,7 @@ def main() -> None:
         type=Path,
         default=[],
         help="Paths to prepend to the runtime path of executable binaries."
-             " Subject to deduplication, which may imply some reordering."
+        " Subject to deduplication, which may imply some reordering.",
     )
     parser.add_argument(
         "--append-rpaths",
@@ -461,18 +495,19 @@ def main() -> None:
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
         add_existing=args.add_existing,
-        extra_args=args.extra_args)
+        extra_args=args.extra_args,
+    )
 
 
-interpreter_path: Path  = None # type: ignore
-interpreter_osabi: str  = None # type: ignore
-interpreter_arch: str   = None # type: ignore
-libc_lib: Path          = None # type: ignore
+interpreter_path: Path = None  # type: ignore
+interpreter_osabi: str = None  # type: ignore
+interpreter_arch: str = None  # type: ignore
+libc_lib: Path = None  # type: ignore
 
 if __name__ == "__main__":
-    nix_support = Path(os.environ.get('NIX_BINTOOLS', DEFAULT_BINTOOLS)) / 'nix-support'
-    interpreter_path = Path((nix_support / 'dynamic-linker').read_text().strip())
-    libc_lib = Path((nix_support / 'orig-libc').read_text().strip()) / 'lib'
+    nix_support = Path(os.environ.get("NIX_BINTOOLS", DEFAULT_BINTOOLS)) / "nix-support"
+    interpreter_path = Path((nix_support / "dynamic-linker").read_text().strip())
+    libc_lib = Path((nix_support / "orig-libc").read_text().strip()) / "lib"
 
     with open_elf(interpreter_path) as interpreter:
         interpreter_osabi = get_osabi(interpreter)

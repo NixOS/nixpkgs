@@ -33,9 +33,7 @@ def generate_grammar(lang, parser_info):
     version = "0.0.0+rev={rev[:7]}";
     src = """
 
-    generated += subprocess.check_output(
-        ["nurl", url, rev, "--indent=4"], text=True
-    )
+    generated += subprocess.check_output(["nurl", url, rev, "--indent=4"], text=True)
     generated += ";"
 
     location = install_info.get("location", "")

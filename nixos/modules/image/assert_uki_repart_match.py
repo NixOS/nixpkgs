@@ -19,9 +19,7 @@ def extract_uki_cmdline_params(ukify_json: dict) -> dict[str, str]:
         params[key] = val
 
     if "usrhash" not in params:
-        print(
-            f"UKI cmdline does not contain a usrhash:\n{cmdline}"
-        )
+        print(f"UKI cmdline does not contain a usrhash:\n{cmdline}")
         exit(1)
 
     return params
@@ -33,17 +31,13 @@ def hashes_match(partition: dict[str, str], expected: str) -> bool:
     """
     if partition.get("roothash") != expected:
         pretty_part = json.dumps(partition, indent=2)
-        print(
-            f"hash mismatch, expected to find roothash {expected} in:\n{pretty_part}"
-        )
+        print(f"hash mismatch, expected to find roothash {expected} in:\n{pretty_part}")
         return False
     else:
         return True
 
 
-def check_partitions(
-    partitions: list[dict], uki_params: dict[str, str]
-) -> bool:
+def check_partitions(partitions: list[dict], uki_params: dict[str, str]) -> bool:
     """
     Checks if the usrhash from `uki_params` has a matching roothash
     for the corresponding partition in `partitions`.

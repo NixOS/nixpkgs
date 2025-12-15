@@ -119,7 +119,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         with tempfile.NamedTemporaryFile("w+") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
-            """
+                """
             {
               stdenv,
               lib,

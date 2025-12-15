@@ -69,12 +69,16 @@ def try_fetch(url: str, package_name: str, package_filename: str) -> None:
     parsed_url = urlparse(index_url)
     username = parsed_url.username or username
     password = parsed_url.password or password
-    index_url = parsed_url._replace(netloc=parsed_url.netloc.rpartition("@")[-1]).geturl()
+    index_url = parsed_url._replace(
+        netloc=parsed_url.netloc.rpartition("@")[-1]
+    ).geturl()
 
     req = urllib.request.Request(index_url)
 
     if username and password:  # Add authentication
-        password_b64 = base64.b64encode(":".join((username, password)).encode()).decode("utf-8")
+        password_b64 = base64.b64encode(":".join((username, password)).encode()).decode(
+            "utf-8"
+        )
         req.add_header("Authorization", "Basic {}".format(password_b64))
     else:  # If we are not using authentication disable TLS verification for long term reproducibility
         context.check_hostname = False
@@ -86,7 +90,10 @@ def try_fetch(url: str, package_name: str, package_filename: str) -> None:
     parser = Pep503()
     parser.feed(str(index, "utf-8"))
     if package_filename not in parser.sources:
-        print("The file %s has not be found in the index %s" % (package_filename, index_url))
+        print(
+            "The file %s has not be found in the index %s"
+            % (package_filename, index_url)
+        )
         exit(1)
 
     package_file = open(package_filename, "wb")

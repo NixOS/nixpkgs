@@ -87,7 +87,7 @@ if len(changes) == 0:
 print("Updating tarballs.list...")
 
 with open("./tarballs.list", "w") as f:
-    f.writelines(f'{tarball}\n' for tarball in updated_tarballs)
+    f.writelines(f"{tarball}\n" for tarball in updated_tarballs)
 
 print("Generating updated expr (slow)...")
 
@@ -100,4 +100,6 @@ subprocess.run(["nixfmt", "default.nix"], check=True)
 print("Committing...")
 
 subprocess.run(["git", "add", "default.nix", "tarballs.list"], check=True)
-subprocess.run(["git", "commit", "-mxorg.*: update\n\n%s" % "\n".join(changes_text)], check=True)
+subprocess.run(
+    ["git", "commit", "-mxorg.*: update\n\n%s" % "\n".join(changes_text)], check=True
+)

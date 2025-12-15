@@ -20,6 +20,7 @@ The `update` and `update-all` commands accept an optional `--commit`
 flag to automatically commit the changes for you, and `--force` to
 skip the up-to-date version check.
 """
+
 import base64
 import json
 import logging
@@ -46,7 +47,11 @@ SOURCE_INFO_JSON = "info.json"
 os.chdir(os.path.dirname(__file__))
 
 # Absolute path of nixpkgs top-level directory
-NIXPKGS_PATH = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode("utf-8").strip()
+NIXPKGS_PATH = (
+    subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    .decode("utf-8")
+    .strip()
+)
 
 memory: Memory = Memory("cache", verbose=0)
 
@@ -56,9 +61,13 @@ click_log.basic_config(logger)
 
 def get_gclient_data(rev: str) -> any:
     output = subprocess.check_output(
-        ["gclient2nix", "generate",
-         f"https://github.com/electron/electron@{rev}",
-         "--root", "src/electron"]
+        [
+            "gclient2nix",
+            "generate",
+            f"https://github.com/electron/electron@{rev}",
+            "--root",
+            "src/electron",
+        ]
     )
 
     return json.loads(output)
@@ -69,7 +78,7 @@ def get_chromium_file(chromium_tag: str, filepath: str) -> str:
         urlopen(
             f"https://chromium.googlesource.com/chromium/src.git/+/{chromium_tag}/{filepath}?format=TEXT"
         ).read()
-        ).decode("utf-8")
+    ).decode("utf-8")
 
 
 def get_electron_file(electron_tag: str, filepath: str) -> str:
@@ -89,6 +98,7 @@ def get_gn_hash(gn_version, gn_commit):
     out = subprocess.check_output(["nurl", "--hash", "--expr", expr])
     return out.decode("utf-8").strip()
 
+
 @memory.cache
 def get_chromium_gn_source(chromium_tag: str) -> dict:
     gn_pattern = r"'gn_version': 'git_revision:([0-9a-f]{40})'"
@@ -101,7 +111,9 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
         .split(")]}'\n")[1]
     )
 
-    gn_commit_date = datetime.strptime(gn_commit_info["committer"]["time"], "%a %b %d %H:%M:%S %Y %z")
+    gn_commit_date = datetime.strptime(
+        gn_commit_info["committer"]["time"], "%a %b %d %H:%M:%S %Y %z"
+    )
     gn_date = gn_commit_date.astimezone(UTC).date().isoformat()
     gn_version = f"0-unstable-{gn_date}"
 
@@ -112,6 +124,7 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
             "hash": get_gn_hash(gn_version, gn_commit),
         }
     }
+
 
 @memory.cache
 def get_electron_yarn_hash(electron_tag: str) -> str:
@@ -125,12 +138,15 @@ def get_electron_yarn_hash(electron_tag: str) -> str:
             .strip()
         )
 
+
 @memory.cache
 def get_chromium_npm_hash(chromium_tag: str) -> str:
     print(f"prefetch-npm-deps", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
         with open(tmp_dir + "/package-lock.json", "w") as f:
-            f.write(get_chromium_file(chromium_tag, "third_party/node/package-lock.json"))
+            f.write(
+                get_chromium_file(chromium_tag, "third_party/node/package-lock.json")
+            )
         return (
             subprocess.check_output(
                 ["prefetch-npm-deps", tmp_dir + "/package-lock.json"]
@@ -141,9 +157,13 @@ def get_chromium_npm_hash(chromium_tag: str) -> str:
 
 
 def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict]:
-
     tasks = []
-    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"])))
+    a = lambda: (
+        (
+            "electron_yarn_hash",
+            get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"]),
+        )
+    )
     tasks.append(delayed(a)())
     a = lambda: (
         (
@@ -194,9 +214,7 @@ def update_source(version: str, commit: bool, force: bool) -> None:
 
     old_info = load_info_json(SOURCE_INFO_JSON)
     old_version = (
-        old_info[major_version]["version"]
-        if major_version in old_info
-        else None
+        old_info[major_version]["version"] if major_version in old_info else None
     )
 
     m, rev = get_latest_version(major_version)
@@ -222,16 +240,22 @@ def cli() -> None:
 
 
 @cli.command("update", help="Update a single major release")
-@click.option("-v", "--version", required=True, type=str, help="The major version, e.g. '23'")
+@click.option(
+    "-v", "--version", required=True, type=str, help="The major version, e.g. '23'"
+)
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
-@click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
+@click.option(
+    "-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check"
+)
 def update(version: str, commit: bool, force: bool) -> None:
     update_source(version, commit, force)
 
 
 @cli.command("update-all", help="Update all releases at once")
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
-@click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
+@click.option(
+    "-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check"
+)
 def update_all(commit: bool, force: bool) -> None:
     """Update all eletron-source releases at once
 

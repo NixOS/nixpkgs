@@ -47,16 +47,19 @@ class VersionManager:
 
         # we only want versions that are no pre-releases
         release_versions = filter(
-            lambda v_name: all(s not in v_name for s in ["pre", "rc"]), response.json()["versions"])
+            lambda v_name: all(s not in v_name for s in ["pre", "rc"]),
+            response.json()["versions"],
+        )
 
         for version_name in release_versions:
-
             # split version string, convert to list ot int
             version_split = version_name.split(".")
             version_split = list(map(int, version_split))
 
             # check if version is higher than 1.<not_before_sub_version>
-            if (version_split[0] > 1) or (version_split[0] == 1 and version_split[1] >= not_before_minor_version):
+            if (version_split[0] > 1) or (
+                version_split[0] == 1 and version_split[1] >= not_before_minor_version
+            ):
                 self.versions.append(Version(version_name))
 
     def fetch_latest_version_builds(self):
@@ -77,7 +80,7 @@ class VersionManager:
                 return
 
             # the highest build in response.json()['builds']:
-            latest_build = response.json()['builds'][-1]
+            latest_build = response.json()["builds"][-1]
             version.build_number = latest_build
 
     def generate_version_hashes(self):
@@ -91,21 +94,25 @@ class VersionManager:
 
     def versions_to_json(self):
         return json.dumps(
-            {version.name: {'hash': version.hash, 'version': version.full_name}
-                for version in self.versions},
-            indent=4
+            {
+                version.name: {"hash": version.hash, "version": version.full_name}
+                for version in self.versions
+            },
+            indent=4,
         )
 
     def find_version_json() -> str:
         """
         Find the versions.json file in the same directory as this script
         """
-        return os.path.join(os.path.dirname(os.path.realpath(__file__)), "versions.json")
+        return os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), "versions.json"
+        )
 
     def write_versions(self, file_name: str = find_version_json()):
-        """ write all processed versions to json """
+        """write all processed versions to json"""
         # save json to versions.json
-        with open(file_name, 'w') as f:
+        with open(file_name, "w") as f:
             f.write(self.versions_to_json() + "\n")
 
     @staticmethod
@@ -135,7 +142,7 @@ class VersionManager:
         hash_value = sha256_hash.digest()
 
         # Encode the hash value in base64
-        base64_hash = base64.b64encode(hash_value).decode('utf-8')
+        base64_hash = base64.b64encode(hash_value).decode("utf-8")
 
         # Format it as "sha256-{base64_hash}"
         sri_representation = f"sha256-{base64_hash}"
@@ -143,7 +150,7 @@ class VersionManager:
         return sri_representation
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     version_manager = VersionManager()
 
     version_manager.fetch_versions()

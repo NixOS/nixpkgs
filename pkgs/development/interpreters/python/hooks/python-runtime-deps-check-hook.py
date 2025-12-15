@@ -7,7 +7,6 @@ In case that does not hold, it will print missing dependencies and
 violated version constraints.
 """
 
-
 import importlib.metadata
 import re
 import sys

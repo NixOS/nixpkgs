@@ -14,7 +14,7 @@ import sys
 
 for path_idx, sitedir in enumerate(sys.path):
     # ignore non-site-packages
-    if not sitedir.endswith('site-packages'):
+    if not sitedir.endswith("site-packages"):
         continue
 
     # find pth files
@@ -43,4 +43,4 @@ for path_idx, sitedir in enumerate(sys.path):
                 line = line.rstrip()
                 dir, dircase = site.makepath(sitedir, line)
                 if not dircase in sys.path:
-                    sys.path.insert(path_idx+1, dir)
+                    sys.path.insert(path_idx + 1, dir)

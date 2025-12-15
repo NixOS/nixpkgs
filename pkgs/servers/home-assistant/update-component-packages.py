@@ -56,9 +56,7 @@ PKG_PREFERENCES = {
 # Some dependencies are loaded dynamically at runtime, and are not
 # mentioned in the manifest files.
 EXTRA_COMPONENT_DEPS = {
-    "conversation": [
-        "intent"
-    ],
+    "conversation": ["intent"],
     "default_config": [
         "backup",
     ],
@@ -74,7 +72,6 @@ OUR_VERSION_IS_NEWER_THAN = {
     "pybluez": "0.22",
     "pyps4-2ndscreen": "1.3.1",
 }
-
 
 
 def run_sync(cmd: List[str]) -> None:
@@ -100,7 +97,9 @@ def parse_components(version: str = "master"):
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
         ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp, filter="data")
+            tarfile.open(fileobj=BytesIO(response.read())).extractall(
+                tmp, filter="data"
+            )
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
 
@@ -110,6 +109,7 @@ def parse_components(version: str = "master"):
 
         sys.path.append(core_path)
         from script.hassfest.model import Config, Integration  # type: ignore
+
         config = Config(
             root=pathlib.Path(core_path),
             specific_integrations=None,
@@ -128,7 +128,9 @@ def parse_components(version: str = "master"):
 
 
 # Recursively get the requirements of a component and its dependencies
-def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
+def get_reqs(
+    components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]
+) -> Set[str]:
     requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
     deps.extend(components[component].get("after_dependencies", []))
@@ -173,7 +175,9 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
             "-qa",
             "-A",
             PKG_SET,
-            "--arg", "config", "{ allowAliases = false; }",
+            "--arg",
+            "config",
+            "{ allowAliases = false; }",
             "--json",
         ]
     )
@@ -207,7 +211,9 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         return None
 
 
-def get_pkg_version(attr_path: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+def get_pkg_version(
+    attr_path: str, packages: Dict[str, Dict[str, str]]
+) -> Optional[str]:
     pkg = packages.get(attr_path, None)
     if not pkg:
         return None
@@ -236,8 +242,8 @@ def main() -> None:
             # Split package name and extra requires
             extras = []
             if name.endswith("]"):
-                extras = name[name.find("[")+1:name.find("]")].split(",")
-                name = name[:name.find("[")]
+                extras = name[name.find("[") + 1 : name.find("]")].split(",")
+                name = name[: name.find("[")]
             attr_path = name_to_attr_path(name, packages)
             if attr_path:
                 if our_version := get_pkg_version(attr_path, packages):
@@ -246,24 +252,33 @@ def main() -> None:
                     try:
                         Version.parse(our_version)
                     except InvalidVersion:
-                        print(f"Attribute {attr_name} has invalid version specifier {our_version}", file=sys.stderr)
+                        print(
+                            f"Attribute {attr_name} has invalid version specifier {our_version}",
+                            file=sys.stderr,
+                        )
 
                         # allow specifying that our unstable version is newer than some version
-                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(attr_name):
-                            attr_outdated = Version.parse(newer_than_version) < Version.parse(required_version)
+                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(
+                            attr_name
+                        ):
+                            attr_outdated = Version.parse(
+                                newer_than_version
+                            ) < Version.parse(required_version)
                         else:
                             attr_outdated = True
                     else:
-                        attr_outdated = Version.parse(our_version) < Version.parse(required_version)
+                        attr_outdated = Version.parse(our_version) < Version.parse(
+                            required_version
+                        )
                     finally:
                         if attr_outdated:
                             outdated[attr_name] = {
-                              'wanted': required_version,
-                              'current': our_version
+                                "wanted": required_version,
+                                "current": our_version,
                             }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
-                pname = attr_path[len(PKG_SET + "."):]
+                pname = attr_path[len(PKG_SET + ".") :]
                 attr_paths.append(pname)
                 for extra in extras:
                     # Check if package advertises extra requirements
@@ -298,7 +313,9 @@ def main() -> None:
                 f.write(f" # missing inputs: {' '.join(sorted(missing))}")
             f.write("\n")
         f.write("  };\n")
-        f.write("  # components listed in tests/components for which all dependencies are packaged\n")
+        f.write(
+            "  # components listed in tests/components for which all dependencies are packaged\n"
+        )
         f.write("  supportedComponentsWithTests = [\n")
         for component, deps in build_inputs.items():
             available, extras, missing = deps
@@ -309,11 +326,14 @@ def main() -> None:
 
     run_sync(["nixfmt", outpath])
 
-    supported_components = reduce(lambda n, c: n + (build_inputs[c][2] == []),
-                                  components.keys(), 0)
+    supported_components = reduce(
+        lambda n, c: n + (build_inputs[c][2] == []), components.keys(), 0
+    )
     total_components = len(components)
-    print(f"{supported_components} / {total_components} components supported, "
-          f"i.e. {supported_components / total_components:.2%}")
+    print(
+        f"{supported_components} / {total_components} components supported, "
+        f"i.e. {supported_components / total_components:.2%}"
+    )
 
     if outdated:
         table = Table(title="Outdated dependencies")
@@ -321,7 +341,7 @@ def main() -> None:
         table.add_column("Current")
         table.add_column("Wanted")
         for package, version in sorted(outdated.items()):
-            table.add_row(package, version['current'], version['wanted'])
+            table.add_row(package, version["current"], version["wanted"])
 
         console = Console()
         console.print(table)

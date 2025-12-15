@@ -117,7 +117,7 @@ from .lib import (
     igraph_to_reference_graph,
     over,
     pick_keys,
-    reference_graph_node_keys_to_keep
+    reference_graph_node_keys_to_keep,
 )
 
 eq = curry(eq)
@@ -128,11 +128,11 @@ pick_keys_to_keep = pick_keys(reference_graph_node_keys_to_keep)
 # Find paths in the original dataset which are never referenced by
 # any other paths
 def find_roots(closures):
-    debug('closures', closures)
+    debug("closures", closures)
     roots = []
 
     for closure in closures:
-        path = closure['path']
+        path = closure["path"]
         if not any_refer_to(path, closures):
             roots.append(path)
 
@@ -141,8 +141,8 @@ def find_roots(closures):
 
 def any_refer_to(path, closures):
     for closure in closures:
-        if path != closure['path']:
-            if path in closure['references']:
+        if path != closure["path"]:
+            if path in closure["references"]:
                 return True
     return False
 
@@ -150,8 +150,8 @@ def any_refer_to(path, closures):
 def all_paths(closures):
     paths = []
     for closure in closures:
-        paths.append(closure['path'])
-        paths.extend(closure['references'])
+        paths.append(closure["path"])
+        paths.extend(closure["references"])
     paths.sort()
     return list(set(paths))
 
@@ -252,6 +252,7 @@ def make_graph_segment_from_root(subgraphs_cache, root, lookup):
 #   /nix/store/tux: 6
 # ]
 
+
 def graph_popularity_contest(popularity_cache, full_graph):
     popularity = defaultdict(int)
     for path, subgraph in full_graph.items():
@@ -276,6 +277,7 @@ def graph_popularity_contest(popularity_cache, full_graph):
             popularity[subpath] += subpopularity + 1
 
     return popularity
+
 
 # Emit a list of packages by popularity, most first:
 #
@@ -310,12 +312,12 @@ def order_by_popularity(paths):
 
 
 def package_name(path):
-    parts = path.split('-')
+    parts = path.split("-")
     start = parts.pop(0)
     # don't throw away any data, so the order is always the same.
     # even in cases where only the hash at the start has changed.
     parts.append(start)
-    return '-'.join(parts)
+    return "-".join(parts)
 
 
 @curry
@@ -344,7 +346,7 @@ def popularity_contest(graph):
     # with v["name"] == path, and some properties (defined in
     # reference_graph_node_keys_to_keep) from the nodes of the input graph
     # copied as vertex attributes.
-    debug('graph', graph)
+    debug("graph", graph)
 
     if isinstance(graph, igraph.Graph):
         graph = igraph_to_reference_graph(graph)
@@ -360,12 +362,7 @@ def popularity_contest(graph):
     for root in roots:
         debug("Making full graph for", root)
         full_graph[root] = make_graph_segment_from_root(
-            subgraphs_cache,
-            root,
-            tlz.valmap(
-                tlz.get("references"),
-                lookup
-            )
+            subgraphs_cache, root, tlz.valmap(tlz.get("references"), lookup)
         )
 
     debug("Running contest")
@@ -391,7 +388,7 @@ def popularity_contest(graph):
             # One vertex, with name=path
             [path],
             # Setting desired attributes on the vertex.
-            [(path, pick_keys_to_keep(lookup[path]))]
+            [(path, pick_keys_to_keep(lookup[path]))],
         ),
-        ordered
+        ordered,
     )

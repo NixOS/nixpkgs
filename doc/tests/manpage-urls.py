@@ -14,17 +14,24 @@ import aiohttp, structlog
 from structlog.contextvars import bound_contextvars as log_context
 
 
-LogLevel = IntEnum('LogLevel', {
-    lvl: getattr(logging, lvl)
-    for lvl in ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
-})
+LogLevel = IntEnum(
+    "LogLevel",
+    {
+        lvl: getattr(logging, lvl)
+        for lvl in ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
+    },
+)
 LogLevel.__str__ = lambda self: self.name
 
 
-EXPECTED_STATUS=frozenset((
-    HTTPStatus.OK, HTTPStatus.FOUND,
-    HTTPStatus.NOT_FOUND,
-))
+EXPECTED_STATUS = frozenset(
+    (
+        HTTPStatus.OK,
+        HTTPStatus.FOUND,
+        HTTPStatus.NOT_FOUND,
+    )
+)
+
 
 async def check(session: aiohttp.ClientSession, manpage: str, url: str) -> HTTPStatus:
     with log_context(manpage=manpage, url=url):
@@ -43,6 +50,7 @@ async def check(session: aiohttp.ClientSession, manpage: str, url: str) -> HTTPS
 
             return st
 
+
 async def main(urls_path: Path) -> Mapping[HTTPStatus, int]:
     logger.info(f"Parsing {urls_path}")
     with urls_path.open() as urls_file:
@@ -52,36 +60,38 @@ async def main(urls_path: Path) -> Mapping[HTTPStatus, int]:
 
     logger.info(f"Checking URLs from {urls_path}")
     async with aiohttp.ClientSession() as session:
-        for status in asyncio.as_completed([
-            check(session, manpage, url)
-            for manpage, url in urls.items()
-        ]):
-            count[await status]+=1
+        for status in asyncio.as_completed(
+            [check(session, manpage, url) for manpage, url in urls.items()]
+        ):
+            count[await status] += 1
 
     ok = count[HTTPStatus.OK] + count[HTTPStatus.FOUND]
     broken = count[HTTPStatus.NOT_FOUND]
     unknown = sum(c for st, c in count.items() if st not in EXPECTED_STATUS)
-    logger.info(f"Done: {broken} broken links, "
-                f"{ok} correct links, and {unknown} unexpected status")
+    logger.info(
+        f"Done: {broken} broken links, "
+        f"{ok} correct links, and {unknown} unexpected status"
+    )
 
     return count
 
 
 def parse_args(args: Optional[Sequence[str]] = None) -> Namespace:
     parser = ArgumentParser(
-        prog = 'check-manpage-urls',
-        description = 'Check the validity of the manpage URLs linked in the nixpkgs manual',
+        prog="check-manpage-urls",
+        description="Check the validity of the manpage URLs linked in the nixpkgs manual",
     )
     parser.add_argument(
-        '-l', '--log-level',
-        default = os.getenv('LOG_LEVEL', 'INFO'),
-        type = lambda s: LogLevel[s],
-        choices = list(LogLevel),
+        "-l",
+        "--log-level",
+        default=os.getenv("LOG_LEVEL", "INFO"),
+        type=lambda s: LogLevel[s],
+        choices=list(LogLevel),
     )
     parser.add_argument(
-        'file',
-        type = Path,
-        nargs = '?',
+        "file",
+        type=Path,
+        nargs="?",
     )
 
     return parser.parse_args(args)
@@ -102,7 +112,7 @@ if __name__ == "__main__":
         REPO_ROOT = Path(__file__).parent.parent.parent.parent
         logger.info(f"Assuming we are in a nixpkgs repo rooted at {REPO_ROOT}")
 
-        urls_path = REPO_ROOT / 'doc' / 'manpage-urls.json'
+        urls_path = REPO_ROOT / "doc" / "manpage-urls.json"
 
     count = asyncio.run(main(urls_path))
 

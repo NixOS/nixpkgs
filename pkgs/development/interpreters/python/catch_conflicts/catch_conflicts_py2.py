@@ -9,7 +9,7 @@ for f in sys.path:
     for req in pkg_resources.find_distributions(f):
         if req not in packages[req.project_name]:
             # some exceptions inside buildPythonPackage
-            if req.project_name in ['setuptools', 'pip', 'wheel']:
+            if req.project_name in ["setuptools", "pip", "wheel"]:
                 continue
             packages[req.project_name].append(req)
 
@@ -24,7 +24,8 @@ for name, duplicates in packages.items():
 if do_abort:
     print("")
     print(
-        'Package duplicates found in closure, see above. Usually this '
-        'happens if two packages depend on different version '
-        'of the same dependency.')
+        "Package duplicates found in closure, see above. Usually this "
+        "happens if two packages depend on different version "
+        "of the same dependency."
+    )
     sys.exit(1)

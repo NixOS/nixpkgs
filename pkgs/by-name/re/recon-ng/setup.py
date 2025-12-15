@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='@pname@',
-    version='@version@',
+    name="@pname@",
+    version="@version@",
     install_requires=[
         "pyyaml",
         "dnspython",
@@ -15,11 +15,7 @@ setup(
         "dicttoxml",
         "xlsxwriter",
         "unicodecsv",
-        "rq"
+        "rq",
     ],
-    scripts=[
-        'recon-ng',
-        "recon-cli",
-        "recon-web"
-    ],
+    scripts=["recon-ng", "recon-cli", "recon-web"],
 )

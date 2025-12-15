@@ -8,6 +8,7 @@ It resolves chromium's DEPS file recursively when called with
 a working depot_tools checkout and a ref to fetch and prints
 the result as JSON to stdout.
 """
+
 import base64
 import json
 from typing import Optional
@@ -43,7 +44,9 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
+        evaluated = gclient_eval.Parse(
+            deps_file, vars_override=repo_vars, filename="DEPS"
+        )
 
         repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 
@@ -104,17 +107,30 @@ def repo_from_dep(dep: dict) -> Optional[Repo]:
         return None
 
 
-
-chromium = GitilesRepo("https://chromium.googlesource.com/chromium/src.git", chromium_version)
+chromium = GitilesRepo(
+    "https://chromium.googlesource.com/chromium/src.git", chromium_version
+)
 chromium.get_deps(
     {
         **{
-        f"checkout_{platform}": platform == "linux" or platform == "x64" or platform == "arm64" or platform == "arm"
-        for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
+            f"checkout_{platform}": platform == "linux"
+            or platform == "x64"
+            or platform == "arm64"
+            or platform == "arm"
+            for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
         },
         **{
-        f"checkout_{arch}": True
-        for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
+            f"checkout_{arch}": True
+            for arch in [
+                "x64",
+                "arm64",
+                "arm",
+                "x86",
+                "mips",
+                "mips64",
+                "ppc",
+                "riscv64",
+            ]
         },
     },
     "",

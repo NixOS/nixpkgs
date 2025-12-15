@@ -225,9 +225,9 @@ def add_layer_dir(tar, paths, store_dir, mtime, uid, gid, uname, gname):
     """
 
     invalid_paths = [i for i in paths if not i.startswith(store_dir)]
-    assert (
-        len(invalid_paths) == 0
-    ), f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
+    assert len(invalid_paths) == 0, (
+        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
+    )
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
@@ -343,8 +343,10 @@ Docker Image Specification v1.2 as reference [1].
     """,
     )
     arg_parser.add_argument(
-        "--repo_tag", "-t", type=str,
-        help="Override the RepoTags from the configuration"
+        "--repo_tag",
+        "-t",
+        type=str,
+        help="Override the RepoTags from the configuration",
     )
 
     args = arg_parser.parse_args()
@@ -386,9 +388,7 @@ Docker Image Specification v1.2 as reference [1].
             file=sys.stderr,
         )
         layers.append(
-            add_customisation_layer(
-                tar, conf["customisation_layer"], mtime=mtime
-            )
+            add_customisation_layer(tar, conf["customisation_layer"], mtime=mtime)
         )
 
         print("Adding manifests...", file=sys.stderr)

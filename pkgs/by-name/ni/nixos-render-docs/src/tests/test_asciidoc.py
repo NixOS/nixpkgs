@@ -2,15 +2,18 @@ import nixos_render_docs as nrd
 
 from sample_md import sample1
 
+
 class Converter(nrd.md.Converter[nrd.asciidoc.AsciiDocRenderer]):
     def __init__(self, manpage_urls: dict[str, str]):
         super().__init__()
         self._renderer = nrd.asciidoc.AsciiDocRenderer(manpage_urls)
 
+
 def test_lists() -> None:
     c = Converter({})
     # attaching to the nth ancestor list requires n newlines before the +
-    assert c._render("""\
+    assert (
+        c._render("""\
 - a
 
   b
@@ -21,7 +24,8 @@ def test_lists() -> None:
       1
 
   f
-""") == """\
+""")
+        == """\
 []
 * {empty}a
 +
@@ -41,10 +45,14 @@ b
 +
 f
 """
+    )
+
 
 def test_full() -> None:
-    c = Converter({ 'man(1)': 'http://example.org' })
-    assert c._render(sample1) == """\
+    c = Converter({"man(1)": "http://example.org"})
+    assert (
+        c._render(sample1)
+        == """\
 [WARNING]
 ====
 foo
@@ -143,3 +151,4 @@ text
 
 more stuff in same deflist:: {empty}foo
 """
+    )

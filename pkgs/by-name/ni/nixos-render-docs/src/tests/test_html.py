@@ -4,17 +4,25 @@ import textwrap
 
 from sample_md import sample1
 
+
 class Renderer(nrd.html.HTMLRenderer):
     def _pull_image(self, src: str) -> str:
         return src
 
+
 class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
-    def __init__(self, manpage_urls: dict[str, str], xrefs: dict[str, nrd.manual_structure.XrefTarget]):
+    def __init__(
+        self,
+        manpage_urls: dict[str, str],
+        xrefs: dict[str, nrd.manual_structure.XrefTarget],
+    ):
         super().__init__()
         self._renderer = Renderer(manpage_urls, xrefs)
 
+
 def unpretty(s: str) -> str:
-    return "".join(map(str.strip, s.splitlines())).replace('␣', ' ').replace('↵', '\n')
+    return "".join(map(str.strip, s.splitlines())).replace("␣", " ").replace("↵", "\n")
+
 
 def test_lists_styles() -> None:
     # nested lists rotate through a number of list style
@@ -62,21 +70,36 @@ def test_lists_styles() -> None:
       </ol></div>
     """)
 
+
 def test_xrefs() -> None:
     # nested lists rotate through a number of list style
-    c = Converter({}, {
-        'foo': nrd.manual_structure.XrefTarget('foo', '<hr/>', 'toc1', 'title1', 'index.html'),
-        'bar': nrd.manual_structure.XrefTarget('bar', '<br/>', 'toc2', 'title2', 'index.html', True),
-    })
-    assert c._render("[](#foo)") == '<p><a class="xref" href="index.html#foo" title="title1" ><hr/></a></p>'
-    assert c._render("[](#bar)") == '<p><a class="xref" href="index.html" title="title2" ><br/></a></p>'
+    c = Converter(
+        {},
+        {
+            "foo": nrd.manual_structure.XrefTarget(
+                "foo", "<hr/>", "toc1", "title1", "index.html"
+            ),
+            "bar": nrd.manual_structure.XrefTarget(
+                "bar", "<br/>", "toc2", "title2", "index.html", True
+            ),
+        },
+    )
+    assert (
+        c._render("[](#foo)")
+        == '<p><a class="xref" href="index.html#foo" title="title1" ><hr/></a></p>'
+    )
+    assert (
+        c._render("[](#bar)")
+        == '<p><a class="xref" href="index.html" title="title2" ><br/></a></p>'
+    )
     with pytest.raises(nrd.html.UnresolvedXrefError) as exc:
         c._render("[](#baz)")
-    assert exc.value.args[0] == 'bad local reference, id #baz not known'
+    assert exc.value.args[0] == "bad local reference, id #baz not known"
+
 
 def test_images() -> None:
     c = Converter({}, {})
-    assert c._render("![*alt text*](foo \"title text\")") == unpretty("""
+    assert c._render('![*alt text*](foo "title text")') == unpretty("""
       <p>
        <div class="mediaobject">
         <img src="foo" alt="*alt text*" title="title text" />
@@ -84,13 +107,16 @@ def test_images() -> None:
       </p>
     """)
 
+
 def test_tables() -> None:
     c = Converter({}, {})
-    assert c._render(textwrap.dedent("""
+    assert c._render(
+        textwrap.dedent("""
       | d | l | m | r |
       |---|:--|:-:|--:|
       | a | b | c | d |
-    """)) == unpretty("""
+    """)
+    ) == unpretty("""
       <div class="informaltable">
        <table class="informaltable" border="1">
         <colgroup>
@@ -119,17 +145,27 @@ def test_tables() -> None:
       </div>
     """)
 
+
 def test_footnotes() -> None:
-    c = Converter({}, {
-        "bar": nrd.manual_structure.XrefTarget("bar", "", None, None, ""),
-        "bar.__back.0": nrd.manual_structure.XrefTarget("bar.__back.0", "", None, None, ""),
-        "bar.__back.1": nrd.manual_structure.XrefTarget("bar.__back.1", "", None, None, ""),
-    })
-    assert c._render(textwrap.dedent("""
+    c = Converter(
+        {},
+        {
+            "bar": nrd.manual_structure.XrefTarget("bar", "", None, None, ""),
+            "bar.__back.0": nrd.manual_structure.XrefTarget(
+                "bar.__back.0", "", None, None, ""
+            ),
+            "bar.__back.1": nrd.manual_structure.XrefTarget(
+                "bar.__back.1", "", None, None, ""
+            ),
+        },
+    )
+    assert c._render(
+        textwrap.dedent("""
       foo [^bar] baz [^bar]
 
       [^bar]: note
-    """)) == unpretty("""
+    """)
+    ) == unpretty("""
       <p>
        foo <a href="#bar" class="footnote" id="bar.__back.0"><sup class="footnote">[1]</sup></a>␣
        baz <a href="#bar" class="footnote" id="bar.__back.1"><sup class="footnote">[1]</sup></a>
@@ -146,8 +182,9 @@ def test_footnotes() -> None:
        </div>
     """)
 
+
 def test_full() -> None:
-    c = Converter({ 'man(1)': 'http://example.org' }, {})
+    c = Converter({"man(1)": "http://example.org"}, {})
     assert c._render(sample1) == unpretty("""
         <div class="warning">
          <h3 class="title">Warning</h3>

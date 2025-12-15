@@ -21,7 +21,9 @@ if len(sys.argv) < 2:
 nupkg_dir = Path(sys.argv[1])
 for nupkg_name in glob("*.nupkg", root_dir=nupkg_dir):
     with zipfile.ZipFile(nupkg_dir / nupkg_name) as nupkg:
-        for nuspec_name in [name for name in nupkg.namelist() if name.endswith(".nuspec")]:
+        for nuspec_name in [
+            name for name in nupkg.namelist() if name.endswith(".nuspec")
+        ]:
             with nupkg.open(nuspec_name) as nuspec_stream:
                 nuspec = ET.parse(nuspec_stream)
                 licenses = nuspec.findall(".//{*}license[@type='expression']")

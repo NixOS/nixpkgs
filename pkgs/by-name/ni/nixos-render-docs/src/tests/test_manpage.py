@@ -6,39 +6,51 @@ from typing import Mapping
 
 
 class Converter(nrd.md.Converter[nrd.manpage.ManpageRenderer]):
-    def __init__(self, manpage_urls: Mapping[str, str], options_by_id: dict[str, str] = {}):
+    def __init__(
+        self, manpage_urls: Mapping[str, str], options_by_id: dict[str, str] = {}
+    ):
         super().__init__()
         self._renderer = nrd.manpage.ManpageRenderer(manpage_urls, options_by_id)
+
 
 def test_inline_code() -> None:
     c = Converter({})
     assert c._render("1  `x  a  x`  2") == "1 \\fR\\(oqx  a  x\\(cq\\fP 2"
+
 
 def test_fonts() -> None:
     c = Converter({})
     assert c._render("*a **b** c*") == "\\fIa \\fBb\\fI c\\fR"
     assert c._render("*a [1 `2`](3) c*") == "\\fIa \\fB1 \\fR\\(oq2\\(cq\\fP\\fI c\\fR"
 
+
 def test_expand_link_targets() -> None:
-    c = Converter({}, { '#foo1': "bar", "#foo2": "bar" })
-    assert (c._render("[a](#foo1) [](#foo2) [b](#bar1) [](#bar2)") ==
-            "\\fBa\\fR \\fBbar\\fR \\fBb\\fR \\fB\\fR")
+    c = Converter({}, {"#foo1": "bar", "#foo2": "bar"})
+    assert (
+        c._render("[a](#foo1) [](#foo2) [b](#bar1) [](#bar2)")
+        == "\\fBa\\fR \\fBbar\\fR \\fBb\\fR \\fB\\fR"
+    )
+
 
 def test_collect_links() -> None:
-    c = Converter({}, { '#foo': "bar" })
+    c = Converter({}, {"#foo": "bar"})
     c._renderer.link_footnotes = []
     assert c._render("[a](link1) [b](link2)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[2]\\fR"
-    assert c._renderer.link_footnotes == ['link1', 'link2']
+    assert c._renderer.link_footnotes == ["link1", "link2"]
+
 
 def test_dedup_links() -> None:
-    c = Converter({}, { '#foo': "bar" })
+    c = Converter({}, {"#foo": "bar"})
     c._renderer.link_footnotes = []
     assert c._render("[a](link) [b](link)") == "\\fBa\\fR[1]\\fR \\fBb\\fR[1]\\fR"
-    assert c._renderer.link_footnotes == ['link']
+    assert c._renderer.link_footnotes == ["link"]
+
 
 def test_full() -> None:
-    c = Converter({ 'man(1)': 'http://example.org' })
-    assert c._render(sample1) == """\
+    c = Converter({"man(1)": "http://example.org"})
+    assert (
+        c._render(sample1)
+        == """\
 .sp
 .RS 4
 \\fBWarning\\fP
@@ -167,3 +179,4 @@ more stuff in same deflist
 foo
 .RE
 .RE"""
+    )

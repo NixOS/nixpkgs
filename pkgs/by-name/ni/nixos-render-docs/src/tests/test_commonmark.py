@@ -10,8 +10,10 @@ class Converter(nrd.md.Converter[nrd.commonmark.CommonMarkRenderer]):
         super().__init__()
         self._renderer = nrd.commonmark.CommonMarkRenderer(manpage_urls)
 
+
 # NOTE: in these tests we represent trailing spaces by ` ` and replace them with real space later,
 # since a number of editors will strip trailing whitespace on save and that would break the tests.
+
 
 def test_indented_fence() -> None:
     c = Converter({})
@@ -21,12 +23,15 @@ def test_indented_fence() -> None:
 >      
 >    rest
 >    ```\
-""".replace(' ', ' ')
+""".replace(" ", " ")
     assert c._render(s) == s
 
+
 def test_full() -> None:
-    c = Converter({ 'man(1)': 'http://example.org' })
-    assert c._render(sample1) == """\
+    c = Converter({"man(1)": "http://example.org"})
+    assert (
+        c._render(sample1)
+        == """\
 **Warning:** foo
 
 **Note:** nested
@@ -90,10 +95,12 @@ some nested anchors
 
  - *‌more stuff in same deflist‌*
    
-   foo""".replace(' ', ' ')
+   foo""".replace(" ", " ")
+    )
+
 
 def test_images() -> None:
     c = Converter({})
-    assert c._render("![*alt text*](foo \"title \\\"quoted\\\" text\")") == (
-        "![*alt text*](foo \"title \\\"quoted\\\" text\")"
+    assert c._render('![*alt text*](foo "title \\"quoted\\" text")') == (
+        '![*alt text*](foo "title \\"quoted\\" text")'
     )

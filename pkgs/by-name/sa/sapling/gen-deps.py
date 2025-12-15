@@ -14,16 +14,23 @@ import subprocess
 from requests import get
 
 # Fetch the latest stable release metadata from GitHub
-releaseMetadata = get("https://api.github.com/repos/facebook/sapling/releases/latest").json()
+releaseMetadata = get(
+    "https://api.github.com/repos/facebook/sapling/releases/latest"
+).json()
 latestTag = releaseMetadata["tag_name"]
 latestTarballURL = releaseMetadata["tarball_url"]
 
-[_tarballHash, sourceDirectory] = run(
-    ["nix-prefetch-url", "--print-path", "--unpack", latestTarballURL],
-    check=True,
-    text=True,
-    stdout=subprocess.PIPE,
-).stdout.rstrip().splitlines()
+[_tarballHash, sourceDirectory] = (
+    run(
+        ["nix-prefetch-url", "--print-path", "--unpack", latestTarballURL],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    )
+    .stdout.rstrip()
+    .splitlines()
+)
+
 
 def updateCargoLock():
     with tempfile.TemporaryDirectory() as tempDir:
@@ -34,14 +41,19 @@ def updateCargoLock():
         for dirpath, dirnames, filenames in os.walk(sourceDirectory):
             relativeDirpath = os.path.relpath(dirpath, sourceDirectory)
             for filename in filenames:
-                shutil.copy(os.path.join(dirpath, filename), tempDir / relativeDirpath / filename)
+                shutil.copy(
+                    os.path.join(dirpath, filename),
+                    tempDir / relativeDirpath / filename,
+                )
             for dirname in dirnames:
                 os.mkdir(tempDir / relativeDirpath / dirname)
 
         run(["cargo", "fetch"], check=True, cwd=tempDir / "eden" / "scm")
         shutil.copy(tempDir / "eden" / "scm" / "Cargo.lock", "Cargo.lock")
 
+
 updateCargoLock()
+
 
 def nixPrefetchUrl(url):
     return run(

@@ -118,8 +118,12 @@ def get_latest_major_releases(releases: List[Version]) -> Dict[str, Version]:
     """
     return {
         major_release: max(
-            (release for release in releases if get_major_release(release.id) == major_release),
-            key=lambda x: tuple(map(int, x.id.split('.'))),
+            (
+                release
+                for release in releases
+                if get_major_release(release.id) == major_release
+            ),
+            key=lambda x: tuple(map(int, x.id.split("."))),
         )
         for major_release in group_major_releases(releases)
     }

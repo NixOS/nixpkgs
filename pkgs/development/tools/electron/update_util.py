@@ -13,6 +13,7 @@ JSON_INDENT = 4
 
 releases_json = None
 
+
 # Releases that have reached end-of-life no longer receive any updates
 # and it is rather pointless trying to update those.
 #
@@ -38,6 +39,7 @@ def supported_version_range() -> range:
         max(supported_releases) + 2,  # excl.
         1,
     )
+
 
 def get_latest_version(major_version: str) -> Tuple[str, str]:
     """Returns the latest version for a given major version"""
@@ -118,12 +120,12 @@ def commit_result(
 
         path: Path to the lockfile to be committed
     """
-    assert (
-        isinstance(package_name, str) and len(package_name) > 0
-    ), "Argument `package_name` cannot be empty"
-    assert (
-        isinstance(new_version, str) and len(new_version) > 0
-    ), "Argument `new_version` cannot be empty"
+    assert isinstance(package_name, str) and len(package_name) > 0, (
+        "Argument `package_name` cannot be empty"
+    )
+    assert isinstance(new_version, str) and len(new_version) > 0, (
+        "Argument `new_version` cannot be empty"
+    )
 
     if old_version != new_version:
         major_version = new_version.split(".")[0]

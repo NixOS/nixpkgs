@@ -20,11 +20,11 @@ def parse_proxy_url(url):
         return None
 
     return {
-        'protocol': parsed.scheme or 'http',
-        'host': parsed.hostname,
-        'port': parsed.port or (443 if parsed.scheme == 'https' else 80),
-        'username': parsed.username,
-        'password': parsed.password
+        "protocol": parsed.scheme or "http",
+        "host": parsed.hostname,
+        "port": parsed.port or (443 if parsed.scheme == "https" else 80),
+        "username": parsed.username,
+        "password": parsed.password,
     }
 
 
@@ -42,9 +42,9 @@ def format_proxy_block(proxy, id_suffix, non_proxy_hosts):
     return f"""  <proxy>
     <id>{id_suffix}-proxy</id>
     <active>true</active>
-    <protocol>{proxy['protocol']}</protocol>
-    <host>{proxy['host']}</host>
-    <port>{proxy['port']}</port>
+    <protocol>{proxy["protocol"]}</protocol>
+    <host>{proxy["host"]}</host>
+    <port>{proxy["port"]}</port>
 {auth}{np_hosts}  </proxy>"""
 
 
@@ -56,13 +56,9 @@ def main(output_path):
     proxy_blocks = []
 
     if http_proxy:
-        proxy_blocks.append(
-          format_proxy_block(http_proxy, "http", non_proxy_hosts)
-        )
+        proxy_blocks.append(format_proxy_block(http_proxy, "http", non_proxy_hosts))
     if https_proxy and https_proxy != http_proxy:
-        proxy_blocks.append(
-          format_proxy_block(https_proxy, "https", non_proxy_hosts)
-        )
+        proxy_blocks.append(format_proxy_block(https_proxy, "https", non_proxy_hosts))
 
     settings_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -70,7 +66,7 @@ def main(output_path):
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                   http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <proxies>
-{'\n'.join(proxy_blocks)}
+{"\n".join(proxy_blocks)}
   </proxies>
 </settings>
 """

@@ -11,6 +11,7 @@ from collections import OrderedDict
 DOWNLOADS_BASE_URL = "https://downloads.1password.com"
 OP_PGP_KEY_URL = "https://downloads.1password.com/linux/keys/1password.asc"
 
+
 class Sources(OrderedDict):
     def __init__(self):
         with open("sources.json", "r") as fp:
@@ -32,7 +33,7 @@ class PGP:
             return
 
         self.sq = shutil.which("sq")
-        if (self.sq is None):
+        if self.sq is None:
             raise SystemExit(f"sequoia sq not found")
 
         self.signer_file, _ = nix_store_prefetch(OP_PGP_KEY_URL)
@@ -45,7 +46,7 @@ class PGP:
             "verify",
             f"--signer-file={self.signer_file}",
             f"--signature-file={sig}",
-            tarball
+            tarball,
         ]
 
         try:

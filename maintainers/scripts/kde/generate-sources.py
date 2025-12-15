@@ -17,27 +17,32 @@ import packaging.version as v
 import utils
 
 
-LEAF_TEMPLATE = jinja2.Template('''
+LEAF_TEMPLATE = jinja2.Template(
+    """
 { mkKdeDerivation }:
 mkKdeDerivation {
   pname = "{{ pname }}";
 }
-'''.strip())
+""".strip()
+)
 
-ROOT_TEMPLATE = jinja2.Template('''
+ROOT_TEMPLATE = jinja2.Template(
+    """
 { callPackage }:
 {
   {%- for p in packages %}
   {{ p }} = callPackage ./{{ p }} { };
   {%- endfor %}
 }
-'''.strip())
+""".strip()
+)
 
 PROJECTS_WITH_RUST = {
     "akonadi-search",
     "angelfish",
     "kdepim-addons",
 }
+
 
 def to_sri(hash):
     raw = binascii.unhexlify(hash)
@@ -47,15 +52,9 @@ def to_sri(hash):
 
 @click.command
 @click.argument(
-    "pkgset",
-    type=click.Choice(["frameworks", "gear", "plasma"]),
-    required=True
+    "pkgset", type=click.Choice(["frameworks", "gear", "plasma"]), required=True
 )
-@click.argument(
-    "version",
-    type=str,
-    required=True
-)
+@click.argument("version", type=str, required=True)
 @click.option(
     "--nixpkgs",
     type=click.Path(
@@ -65,7 +64,7 @@ def to_sri(hash):
         writable=True,
         path_type=pathlib.Path,
     ),
-    default=pathlib.Path(__file__).parent.parent.parent.parent
+    default=pathlib.Path(__file__).parent.parent.parent.parent,
 )
 @click.option(
     "--sources-url",
@@ -128,13 +127,15 @@ def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | No
         if existing := results.get(project_name):
             old_version = existing["version"]
             if v.parse(old_version) > v.parse(version):
-                print(f"{project_name} {old_version} is newer than {version}, skipping...")
+                print(
+                    f"{project_name} {old_version} is newer than {version}, skipping..."
+                )
                 continue
 
         results[project_name] = {
             "version": version,
             "url": "mirror://kde" + urlparse(url).path,
-            "hash": to_sri(hash)
+            "hash": to_sri(hash),
         }
 
         pkg_dir = set_dir / project_name
@@ -156,15 +157,17 @@ def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | No
         json.dump(results, fd, indent=2)
 
     for project_name in projects_to_update_rust:
-            print(f"Updating cargoDeps hash for {pkgset}/{project_name}...")
-            subprocess.run([
+        print(f"Updating cargoDeps hash for {pkgset}/{project_name}...")
+        subprocess.run(
+            [
                 "nix-update",
                 f"kdePackages.{project_name}",
                 "--version",
                 "skip",
                 "--override-filename",
-                pkg_file
-            ])
+                pkg_file,
+            ]
+        )
 
 
 if __name__ == "__main__":

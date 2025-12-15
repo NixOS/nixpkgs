@@ -13,6 +13,7 @@ class Accessibility(IntEnum):
     have within a confined service. Higher levels mean more permissions for the
     user and thus a bigger attack surface.
     """
+
     NONE = 0
 
     # Directories can be listed or files can be read.
@@ -45,7 +46,7 @@ class Accessibility(IntEnum):
         elif path.is_dir():
             writable = True
 
-            dummy_file = path / 'can_i_write'
+            dummy_file = path / "can_i_write"
             try:
                 dummy_file.touch()
             except OSError as e:
@@ -68,7 +69,7 @@ class Accessibility(IntEnum):
                 actual = self.READABLE
         elif path.is_file():
             try:
-                with path.open('rb') as fp:
+                with path.open("rb") as fp:
                     fp.read(1)
                 actual = self.READABLE
             except PermissionError:
@@ -76,8 +77,8 @@ class Accessibility(IntEnum):
 
             writable = True
             try:
-                with path.open('ab') as fp:
-                    fp.write('x')
+                with path.open("ab") as fp:
+                    fp.write("x")
                     size = fp.tell()
                     fp.truncate(size)
             except PermissionError:
@@ -108,15 +109,17 @@ class Accessibility(IntEnum):
 
         if actual > self:
             stat = path.stat()
-            details = ', '.join([
-                f'permissions: {stat.st_mode & 0o7777:o}',
-                f'uid: {stat.st_uid}',
-                f'group: {stat.st_gid}',
-            ])
+            details = ", ".join(
+                [
+                    f"permissions: {stat.st_mode & 0o7777:o}",
+                    f"uid: {stat.st_uid}",
+                    f"group: {stat.st_gid}",
+                ]
+            )
 
             raise AssertionError(
-                f'Expected at most {self!r} but got {actual!r} for path'
-                f' {path} ({details}).'
+                f"Expected at most {self!r} but got {actual!r} for path"
+                f" {path} ({details})."
             )
 
 
@@ -126,10 +129,10 @@ def is_special_fs(path: Path) -> bool:
     or sysfs.
     """
     try:
-        if path == Path('/proc'):
-            return (path / 'version').read_text().startswith('Linux')
-        elif path == Path('/sys'):
-            return b'Linux' in (path / 'kernel' / 'notes').read_bytes()
+        if path == Path("/proc"):
+            return (path / "version").read_text().startswith("Linux")
+        elif path == Path("/sys"):
+            return b"Linux" in (path / "kernel" / "notes").read_bytes()
     except FileNotFoundError:
         pass
     return False
@@ -152,7 +155,7 @@ def _assert_permissions_in_directory(
 
     for file in directory.iterdir():
         if is_special_fs(file):
-            msg = f'Got unexpected special filesystem at {file}.'
+            msg = f"Got unexpected special filesystem at {file}."
             assert subdirs.pop(file) == Accessibility.SPECIAL, msg
         elif not file.is_symlink() and file.is_dir():
             subdir_access = subdirs.pop(file, accessibility)
@@ -175,7 +178,7 @@ def assert_permissions(subdirs: dict[str, Accessibility]) -> None:
     Recursively check whether the file system conforms to the accessibility
     specification we specified via 'subdirs'.
     """
-    root = Path('/')
+    root = Path("/")
     absolute_subdirs = {root / p: a for p, a in subdirs.items()}
     _assert_permissions_in_directory(
         root,
@@ -183,5 +186,5 @@ def assert_permissions(subdirs: dict[str, Accessibility]) -> None:
         absolute_subdirs,
     )
     for file in absolute_subdirs.keys():
-        msg = f'Expected {file} to exist, but it was nowwhere to be found.'
+        msg = f"Expected {file} to exist, but it was nowwhere to be found."
         raise AssertionError(msg)

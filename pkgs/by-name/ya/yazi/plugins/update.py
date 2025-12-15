@@ -27,19 +27,19 @@ def run_command(cmd: str, capture_output: bool = True) -> str:
 
 def get_plugin_info(nixpkgs_dir: str, plugin_name: str) -> dict[str, str]:
     """Get plugin repository information from Nix"""
-    owner = run_command(f"nix eval --raw -f {nixpkgs_dir} yaziPlugins.\"{plugin_name}\".src.owner")
-    repo = run_command(f"nix eval --raw -f {nixpkgs_dir} yaziPlugins.\"{plugin_name}\".src.repo")
+    owner = run_command(
+        f'nix eval --raw -f {nixpkgs_dir} yaziPlugins."{plugin_name}".src.owner'
+    )
+    repo = run_command(
+        f'nix eval --raw -f {nixpkgs_dir} yaziPlugins."{plugin_name}".src.repo'
+    )
 
-    return {
-        "owner": owner,
-        "repo": repo
-    }
+    return {"owner": owner, "repo": repo}
 
 
 def get_yazi_version(nixpkgs_dir: str) -> str:
     """Get the current Yazi version from Nix"""
     return run_command(f"nix eval --raw -f {nixpkgs_dir} yazi-unwrapped.version")
-
 
 
 def get_github_headers() -> dict[str, str]:
@@ -65,7 +65,10 @@ def get_default_branch(owner: str, repo: str, headers: dict[str, str]) -> str:
         print("Falling back to 'main' as default branch")
         return "main"
 
-def fetch_plugin_content(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> str:
+
+def fetch_plugin_content(
+    owner: str, repo: str, plugin_pname: str, headers: dict[str, str]
+) -> str:
     """Fetch the plugin's main.lua content from GitHub"""
     default_branch = get_default_branch(owner, repo, headers)
     plugin_path = f"{plugin_pname}/" if owner == "yazi-rs" else ""
@@ -79,13 +82,21 @@ def fetch_plugin_content(owner: str, repo: str, plugin_pname: str, headers: dict
         raise RuntimeError(f"Error fetching plugin content: {e}")
 
 
-def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
+def check_version_compatibility(
+    plugin_content: str, plugin_name: str, yazi_version: str
+) -> str:
     """Check if the plugin is compatible with the current Yazi version"""
-    required_version_match = re.search(r"since ([0-9.]+)", plugin_content.split("\n")[0])
-    required_version = required_version_match.group(1) if required_version_match else "0"
+    required_version_match = re.search(
+        r"since ([0-9.]+)", plugin_content.split("\n")[0]
+    )
+    required_version = (
+        required_version_match.group(1) if required_version_match else "0"
+    )
 
     if required_version == "0":
-        print(f"No version requirement found for {plugin_name}, assuming compatible with any Yazi version")
+        print(
+            f"No version requirement found for {plugin_name}, assuming compatible with any Yazi version"
+        )
     else:
         if version.parse(required_version) > version.parse(yazi_version):
             message = f"{plugin_name} plugin requires Yazi {required_version}, but we have {yazi_version}"
@@ -95,7 +106,9 @@ def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_vers
     return required_version
 
 
-def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: dict[str, str]) -> tuple[str, str]:
+def get_latest_commit(
+    owner: str, repo: str, plugin_pname: str, headers: dict[str, str]
+) -> tuple[str, str]:
     """Get the latest commit hash and date for the plugin"""
     default_branch = get_default_branch(owner, repo, headers)
 
@@ -104,7 +117,9 @@ def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: dict[st
         api_url = f"https://api.github.com/repos/{owner}/{repo}/commits?path={plugin_pname}/main.lua&per_page=1"
     else:
         # For third-party plugins, get latest commit on default branch
-        api_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{default_branch}"
+        api_url = (
+            f"https://api.github.com/repos/{owner}/{repo}/commits/{default_branch}"
+        )
 
     try:
         response = requests.get(api_url, headers=headers)
@@ -131,15 +146,25 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
     prefetch_url = f"https://github.com/{owner}/{repo}/archive/{latest_commit}.tar.gz"
 
     try:
-        new_hash = run_command(f"nix-prefetch-url --unpack --type sha256 {prefetch_url} 2>/dev/null")
+        new_hash = run_command(
+            f"nix-prefetch-url --unpack --type sha256 {prefetch_url} 2>/dev/null"
+        )
 
         if not new_hash.startswith("sha256-"):
-            new_hash = run_command(f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {new_hash} 2>/dev/null")
+            new_hash = run_command(
+                f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {new_hash} 2>/dev/null"
+            )
 
             if not new_hash.startswith("sha256-"):
-                print("Warning: Failed to get SRI hash directly, trying alternative method...")
-                raw_hash = run_command(f"nix-prefetch-url --type sha256 {prefetch_url} 2>/dev/null")
-                new_hash = run_command(f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {raw_hash} 2>/dev/null")
+                print(
+                    "Warning: Failed to get SRI hash directly, trying alternative method..."
+                )
+                raw_hash = run_command(
+                    f"nix-prefetch-url --type sha256 {prefetch_url} 2>/dev/null"
+                )
+                new_hash = run_command(
+                    f"nix --extra-experimental-features nix-command hash to-sri --type sha256 {raw_hash} 2>/dev/null"
+                )
     except Exception as e:
         raise RuntimeError(f"Error calculating hash: {e}")
 
@@ -152,7 +177,7 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
 def read_nix_file(file_path: str) -> str:
     """Read the content of a Nix file"""
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             return f.read()
     except IOError as e:
         raise RuntimeError(f"Error reading file {file_path}: {e}")
@@ -161,34 +186,51 @@ def read_nix_file(file_path: str) -> str:
 def write_nix_file(file_path: str, content: str) -> None:
     """Write content to a Nix file"""
     try:
-        with open(file_path, 'w') as f:
+        with open(file_path, "w") as f:
             f.write(content)
     except IOError as e:
         raise RuntimeError(f"Error writing to file {file_path}: {e}")
 
 
-def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str, new_hash: str) -> None:
+def update_nix_file(
+    default_nix_path: str, latest_commit: str, new_version: str, new_hash: str
+) -> None:
     """Update the default.nix file with new version, revision and hash"""
     default_nix_content = read_nix_file(default_nix_path)
 
-    default_nix_content = re.sub(r'rev = "[^"]*"', f'rev = "{latest_commit}"', default_nix_content)
+    default_nix_content = re.sub(
+        r'rev = "[^"]*"', f'rev = "{latest_commit}"', default_nix_content
+    )
 
     if 'version = "' in default_nix_content:
-        default_nix_content = re.sub(r'version = "[^"]*"', f'version = "{new_version}"', default_nix_content)
+        default_nix_content = re.sub(
+            r'version = "[^"]*"', f'version = "{new_version}"', default_nix_content
+        )
     else:
-        default_nix_content = re.sub(r'(pname = "[^"]*";)', f'\\1\n  version = "{new_version}";', default_nix_content)
+        default_nix_content = re.sub(
+            r'(pname = "[^"]*";)',
+            f'\\1\n  version = "{new_version}";',
+            default_nix_content,
+        )
 
     if 'hash = "' in default_nix_content:
-        default_nix_content = re.sub(r'hash = "[^"]*"', f'hash = "{new_hash}"', default_nix_content)
-    elif 'fetchFromGitHub' in default_nix_content:
-        default_nix_content = re.sub(r'sha256 = "[^"]*"', f'sha256 = "{new_hash}"', default_nix_content)
+        default_nix_content = re.sub(
+            r'hash = "[^"]*"', f'hash = "{new_hash}"', default_nix_content
+        )
+    elif "fetchFromGitHub" in default_nix_content:
+        default_nix_content = re.sub(
+            r'sha256 = "[^"]*"', f'sha256 = "{new_hash}"', default_nix_content
+        )
     else:
         raise RuntimeError(f"Could not find hash attribute in {default_nix_path}")
 
     write_nix_file(default_nix_path, default_nix_content)
 
     updated_content = read_nix_file(default_nix_path)
-    if f'hash = "{new_hash}"' in updated_content or f'sha256 = "{new_hash}"' in updated_content:
+    if (
+        f'hash = "{new_hash}"' in updated_content
+        or f'sha256 = "{new_hash}"' in updated_content
+    ):
         print(f"Successfully updated hash to: {new_hash}")
     else:
         raise RuntimeError(f"Failed to update hash in {default_nix_path}")
@@ -197,20 +239,32 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
 def get_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
     """Get all available Yazi plugins from the Nix expression"""
     try:
-        plugin_names_json = run_command(f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).yaziPlugins"')
+        plugin_names_json = run_command(
+            f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).yaziPlugins"'
+        )
         plugin_names = json.loads(plugin_names_json)
 
-        excluded_attrs = ["mkYaziPlugin", "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
+        excluded_attrs = [
+            "mkYaziPlugin",
+            "override",
+            "overrideDerivation",
+            "overrideAttrs",
+            "recurseForDerivations",
+        ]
         plugin_names = [name for name in plugin_names if name not in excluded_attrs]
 
         plugins = []
         for name in plugin_names:
             try:
-                pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{name}.pname"')
-                plugins.append({
-                    "name": name,  # Attribute name in yaziPlugins set
-                    "pname": pname  # Package name (used in repo paths)
-                })
+                pname = run_command(
+                    f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{name}.pname"'
+                )
+                plugins.append(
+                    {
+                        "name": name,  # Attribute name in yaziPlugins set
+                        "pname": pname,  # Package name (used in repo paths)
+                    }
+                )
             except Exception as e:
                 print(f"Warning: Could not get pname for plugin {name}, skipping: {e}")
                 continue
@@ -220,7 +274,9 @@ def get_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
         raise RuntimeError(f"Error getting plugin list: {e}")
 
 
-def validate_environment(plugin_name: str | None = None, plugin_pname: str | None = None) -> tuple[str, str | None, str | None]:
+def validate_environment(
+    plugin_name: str | None = None, plugin_pname: str | None = None
+) -> tuple[str, str | None, str | None]:
     """Validate environment variables and paths"""
     nixpkgs_dir = os.getcwd()
 
@@ -230,12 +286,16 @@ def validate_environment(plugin_name: str | None = None, plugin_pname: str | Non
     if plugin_name:
         plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
         if not Path(f"{plugin_dir}/default.nix").exists():
-            raise RuntimeError(f"Could not find default.nix for plugin {plugin_name} at {plugin_dir}")
+            raise RuntimeError(
+                f"Could not find default.nix for plugin {plugin_name} at {plugin_dir}"
+            )
 
     return nixpkgs_dir, plugin_name, plugin_pname
 
 
-def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) -> dict[str, str] | None:
+def update_single_plugin(
+    nixpkgs_dir: str, plugin_name: str, plugin_pname: str
+) -> dict[str, str] | None:
     """Update a single Yazi plugin
 
     Returns:
@@ -259,7 +319,9 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     headers = get_github_headers()
 
     plugin_content = fetch_plugin_content(owner, repo, plugin_pname, headers)
-    required_version = check_version_compatibility(plugin_content, plugin_name, yazi_version)
+    required_version = check_version_compatibility(
+        plugin_content, plugin_name, yazi_version
+    )
 
     latest_commit, commit_date = get_latest_commit(owner, repo, plugin_pname, headers)
     print(f"Checking {plugin_name} latest commit {latest_commit} ({commit_date})")
@@ -284,7 +346,7 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
         "old_version": old_version,
         "new_version": new_version,
         "old_commit": old_commit,
-        "new_commit": latest_commit
+        "new_commit": latest_commit,
     }
 
 
@@ -317,7 +379,9 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
             print(f"{'=' * 50}")
 
             try:
-                update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+                update_info = update_single_plugin(
+                    nixpkgs_dir, plugin_name, plugin_pname
+                )
                 checked_count += 1
 
                 if update_info:
@@ -336,12 +400,16 @@ def update_all_plugins(nixpkgs_dir: str) -> list[dict[str, str]]:
             continue
 
     print(f"\n{'=' * 50}")
-    print(f"Update summary: {updated_count} plugins updated out of {checked_count} checked")
+    print(
+        f"Update summary: {updated_count} plugins updated out of {checked_count} checked"
+    )
 
     if updated_count > 0:
         print("\nUpdated plugins:")
         for plugin in updated_plugins:
-            print(f"  - {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}")
+            print(
+                f"  - {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}"
+            )
 
     if failed_plugins:
         print(f"\nFailed to update {len(failed_plugins)} plugins:")
@@ -370,7 +438,7 @@ def commit_changes(updated_plugins: list[dict[str, str]]) -> None:
             commit_message = f"yaziPlugins.{plugin['name']}: update from {plugin['old_version']} to {plugin['new_version']}"
         else:
             commit_message = f"yaziPlugins: update on {current_date}\n\n"
-            for plugin in sorted(updated_plugins, key=lambda x: x['name']):
+            for plugin in sorted(updated_plugins, key=lambda x: x["name"]):
                 commit_message += f"- {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}\n"
 
         run_command("git add pkgs/by-name/ya/yazi/plugins/", capture_output=False)
@@ -388,7 +456,9 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true", help="Update all Yazi plugins")
     group.add_argument("--plugin", type=str, help="Update a specific plugin by name")
-    parser.add_argument("--commit", action="store_true", help="Commit changes after updating")
+    parser.add_argument(
+        "--commit", action="store_true", help="Commit changes after updating"
+    )
     args = parser.parse_args()
 
     nixpkgs_dir = os.getcwd()
@@ -401,7 +471,9 @@ def main():
     elif args.plugin:
         plugin_name = args.plugin
         try:
-            plugin_pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{plugin_name}.pname"')
+            plugin_pname = run_command(
+                f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{plugin_name}.pname"'
+            )
             print(f"Updating Yazi plugin: {plugin_name}")
             update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
             if update_info:

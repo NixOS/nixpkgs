@@ -8,8 +8,14 @@ from xmltodict import parse
 from json import dump, loads
 from sys import stdout
 
+
 def convert_hash_to_sri(base32: str) -> str:
-    result = subprocess.run(["nix-hash", "--to-sri", "--type", "sha256", base32], capture_output=True, check=True, text=True)
+    result = subprocess.run(
+        ["nix-hash", "--to-sri", "--type", "sha256", base32],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
     return result.stdout.strip()
 
 
@@ -22,50 +28,74 @@ def ensure_is_list(x):
 def jar_repositories(root_path: str) -> list[str]:
     repositories = []
     file_contents = parse(open(root_path + "/.idea/jarRepositories.xml").read())
-    component = file_contents['project']['component']
-    if component['@name'] != 'RemoteRepositoriesConfiguration':
+    component = file_contents["project"]["component"]
+    if component["@name"] != "RemoteRepositoriesConfiguration":
         return repositories
-    options = component['remote-repository']
+    options = component["remote-repository"]
     for option in ensure_is_list(options):
-        for item in option['option']:
-            if item['@name'] == 'url':
-                repositories.append(item['@value'])
+        for item in option["option"]:
+            if item["@name"] == "url":
+                repositories.append(item["@value"])
 
     return repositories
 
 
 def kotlin_jps_plugin_info(root_path: str) -> (str, str):
     file_contents = parse(open(root_path + "/.idea/kotlinc.xml").read())
-    components = file_contents['project']['component']
+    components = file_contents["project"]["component"]
     for component in components:
-        if component['@name'] != 'KotlinJpsPluginSettings':
+        if component["@name"] != "KotlinJpsPluginSettings":
             continue
 
-        option = component['option']
-        version = option['@value']
+        option = component["option"]
+        version = option["@value"]
 
         print(f"* Prefetching Kotlin JPS Plugin version {version}...")
-        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+        prefetch = subprocess.run(
+            [
+                "nix-prefetch-url",
+                "--type",
+                "sha256",
+                f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar",
+            ],
+            capture_output=True,
+            check=True,
+            text=True,
+        )
 
         return (version, convert_hash_to_sri(prefetch.stdout.strip()))
 
 
 def requested_kotlinc_version(root_path: str) -> str:
     file_contents = parse(open(root_path + "/.idea/kotlinc.xml").read())
-    components = file_contents['project']['component']
+    components = file_contents["project"]["component"]
     for component in components:
-        if component['@name'] != 'KotlinJpsPluginSettings':
+        if component["@name"] != "KotlinJpsPluginSettings":
             continue
 
-        option = component['option']
-        version = option['@value']
+        option = component["option"]
+        version = option["@value"]
 
         return version
 
 
 def prefetch_intellij_community(variant: str, buildNumber: str) -> (str, str):
     print("* Prefetching IntelliJ community source code...")
-    prefetch = subprocess.run(["nix-prefetch-url", "--print-path", "--unpack", "--name", "source", "--type", "sha256", f"https://github.com/jetbrains/intellij-community/archive/{variant}/{buildNumber}.tar.gz"], capture_output=True, check=True, text=True)
+    prefetch = subprocess.run(
+        [
+            "nix-prefetch-url",
+            "--print-path",
+            "--unpack",
+            "--name",
+            "source",
+            "--type",
+            "sha256",
+            f"https://github.com/jetbrains/intellij-community/archive/{variant}/{buildNumber}.tar.gz",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
     parts = prefetch.stdout.strip().split()
 
     hash = convert_hash_to_sri(parts[0])
@@ -76,7 +106,20 @@ def prefetch_intellij_community(variant: str, buildNumber: str) -> (str, str):
 
 def prefetch_android(variant: str, buildNumber: str) -> str:
     print("* Prefetching Android plugin source code...")
-    prefetch = subprocess.run(["nix-prefetch-url", "--unpack", "--name", "source", "--type", "sha256", f"https://github.com/jetbrains/android/archive/{variant}/{buildNumber}.tar.gz"], capture_output=True, check=True, text=True)
+    prefetch = subprocess.run(
+        [
+            "nix-prefetch-url",
+            "--unpack",
+            "--name",
+            "source",
+            "--type",
+            "sha256",
+            f"https://github.com/jetbrains/android/archive/{variant}/{buildNumber}.tar.gz",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
     return convert_hash_to_sri(prefetch.stdout.strip())
 
 
@@ -93,38 +136,54 @@ def get_args() -> (str, str):
 def main():
     versions_path, out = get_args()
     versions = loads(open(versions_path).read())
-    idea_data = versions['x86_64-linux']['idea-oss']
-    pycharm_data = versions['x86_64-linux']['pycharm-oss']
+    idea_data = versions["x86_64-linux"]["idea-oss"]
+    pycharm_data = versions["x86_64-linux"]["pycharm-oss"]
 
-    result = { 'idea-oss': {}, 'pycharm-oss': {} }
-    result['idea-oss']['version'] = idea_data['version']
-    result['idea-oss']['buildNumber'] = idea_data['build_number']
-    result['idea-oss']['buildType'] = 'idea'
-    result['pycharm-oss']['version'] = pycharm_data['version']
-    result['pycharm-oss']['buildNumber'] = pycharm_data['build_number']
-    result['pycharm-oss']['buildType'] = 'pycharm'
-    print('Fetching IDEA info...')
-    result['idea-oss']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-oss']['buildNumber'])
-    result['idea-oss']['androidHash'] = prefetch_android('idea', result['idea-oss']['buildNumber'])
-    result['idea-oss']['jpsHash'] = ''
-    result['idea-oss']['restarterHash'] = ''
-    result['idea-oss']['mvnDeps'] = 'idea_maven_artefacts.json'
-    result['idea-oss']['repositories'] = jar_repositories(ideaOutPath)
-    result['idea-oss']['kotlin-jps-plugin'] = {}
-    result['idea-oss']['kotlin-jps-plugin']['version'], result['idea-oss']['kotlin-jps-plugin']['hash'] = kotlin_jps_plugin_info(ideaOutPath)
+    result = {"idea-oss": {}, "pycharm-oss": {}}
+    result["idea-oss"]["version"] = idea_data["version"]
+    result["idea-oss"]["buildNumber"] = idea_data["build_number"]
+    result["idea-oss"]["buildType"] = "idea"
+    result["pycharm-oss"]["version"] = pycharm_data["version"]
+    result["pycharm-oss"]["buildNumber"] = pycharm_data["build_number"]
+    result["pycharm-oss"]["buildType"] = "pycharm"
+    print("Fetching IDEA info...")
+    result["idea-oss"]["ideaHash"], ideaOutPath = prefetch_intellij_community(
+        "idea", result["idea-oss"]["buildNumber"]
+    )
+    result["idea-oss"]["androidHash"] = prefetch_android(
+        "idea", result["idea-oss"]["buildNumber"]
+    )
+    result["idea-oss"]["jpsHash"] = ""
+    result["idea-oss"]["restarterHash"] = ""
+    result["idea-oss"]["mvnDeps"] = "idea_maven_artefacts.json"
+    result["idea-oss"]["repositories"] = jar_repositories(ideaOutPath)
+    result["idea-oss"]["kotlin-jps-plugin"] = {}
+    (
+        result["idea-oss"]["kotlin-jps-plugin"]["version"],
+        result["idea-oss"]["kotlin-jps-plugin"]["hash"],
+    ) = kotlin_jps_plugin_info(ideaOutPath)
     kotlinc_version = requested_kotlinc_version(ideaOutPath)
     print(f"* Prefetched IDEA Open Source requested Kotlin compiler {kotlinc_version}")
-    print('Fetching PyCharm info...')
-    result['pycharm-oss']['ideaHash'], pycharmOutPath = prefetch_intellij_community('pycharm', result['pycharm-oss']['buildNumber'])
-    result['pycharm-oss']['androidHash'] = prefetch_android('pycharm', result['pycharm-oss']['buildNumber'])
-    result['pycharm-oss']['jpsHash'] = ''
-    result['pycharm-oss']['restarterHash'] = ''
-    result['pycharm-oss']['mvnDeps'] = 'pycharm_maven_artefacts.json'
-    result['pycharm-oss']['repositories'] = jar_repositories(pycharmOutPath)
-    result['pycharm-oss']['kotlin-jps-plugin'] = {}
-    result['pycharm-oss']['kotlin-jps-plugin']['version'], result['pycharm-oss']['kotlin-jps-plugin']['hash'] = kotlin_jps_plugin_info(pycharmOutPath)
+    print("Fetching PyCharm info...")
+    result["pycharm-oss"]["ideaHash"], pycharmOutPath = prefetch_intellij_community(
+        "pycharm", result["pycharm-oss"]["buildNumber"]
+    )
+    result["pycharm-oss"]["androidHash"] = prefetch_android(
+        "pycharm", result["pycharm-oss"]["buildNumber"]
+    )
+    result["pycharm-oss"]["jpsHash"] = ""
+    result["pycharm-oss"]["restarterHash"] = ""
+    result["pycharm-oss"]["mvnDeps"] = "pycharm_maven_artefacts.json"
+    result["pycharm-oss"]["repositories"] = jar_repositories(pycharmOutPath)
+    result["pycharm-oss"]["kotlin-jps-plugin"] = {}
+    (
+        result["pycharm-oss"]["kotlin-jps-plugin"]["version"],
+        result["pycharm-oss"]["kotlin-jps-plugin"]["hash"],
+    ) = kotlin_jps_plugin_info(pycharmOutPath)
     kotlinc_version = requested_kotlinc_version(pycharmOutPath)
-    print(f"* Prefetched PyCharm Open Source requested Kotlin compiler {kotlinc_version}")
+    print(
+        f"* Prefetched PyCharm Open Source requested Kotlin compiler {kotlinc_version}"
+    )
 
     if out == "stdout":
         dump(result, stdout, indent=2)
@@ -134,5 +193,5 @@ def main():
         file.write("\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -316,25 +316,29 @@ cfglatestkernel = """  # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
 """
+
+
 def env_is_set(name):
     envValue = os.environ.get(name)
     return not (envValue is None or envValue == "")
 
+
 def generateProxyStrings():
     proxyEnv = []
-    if env_is_set('http_proxy'):
-        proxyEnv.append('http_proxy={}'.format(os.environ.get('http_proxy')))
-    if env_is_set('https_proxy'):
-        proxyEnv.append('https_proxy={}'.format(os.environ.get('https_proxy')))
-    if env_is_set('HTTP_PROXY'):
-        proxyEnv.append('HTTP_PROXY={}'.format(os.environ.get('HTTP_PROXY')))
-    if env_is_set('HTTPS_PROXY'):
-        proxyEnv.append('HTTPS_PROXY={}'.format(os.environ.get('HTTPS_PROXY')))
+    if env_is_set("http_proxy"):
+        proxyEnv.append("http_proxy={}".format(os.environ.get("http_proxy")))
+    if env_is_set("https_proxy"):
+        proxyEnv.append("https_proxy={}".format(os.environ.get("https_proxy")))
+    if env_is_set("HTTP_PROXY"):
+        proxyEnv.append("HTTP_PROXY={}".format(os.environ.get("HTTP_PROXY")))
+    if env_is_set("HTTPS_PROXY"):
+        proxyEnv.append("HTTPS_PROXY={}".format(os.environ.get("HTTPS_PROXY")))
 
     if len(proxyEnv) > 0:
         proxyEnv.insert(0, "env")
 
     return proxyEnv
+
 
 def pretty_name():
     return _("Installing NixOS.")
@@ -368,7 +372,7 @@ def run():
     libcalamares.job.setprogress(0.1)
 
     ngc_cfg = configparser.ConfigParser()
-    ngc_cfg["Defaults"] = { "Kernel": "lts" }
+    ngc_cfg["Defaults"] = {"Kernel": "lts"}
     ngc_cfg.read("/etc/nixos-generate-config.conf")
 
     # Create initial config file
@@ -790,7 +794,7 @@ def run():
     libcalamares.job.setprogress(0.3)
 
     # build nixos-install command
-    nixosInstallCmd = [ "pkexec" ]
+    nixosInstallCmd = ["pkexec"]
     nixosInstallCmd.extend(generateProxyStrings())
     nixosInstallCmd.extend(
         [
@@ -814,9 +818,7 @@ def run():
     try:
         output = ""
         proc = subprocess.Popen(
-            nixosInstallCmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
+            nixosInstallCmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
         while True:
             line = proc.stdout.readline().decode("utf-8")

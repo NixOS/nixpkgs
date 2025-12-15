@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Auth for the Google Cloud SDK.
-"""
+"""Auth for the Google Cloud SDK."""
 
 from googlecloudsdk.calliope import base
 
 
 @base.ReleaseTracks(base.ReleaseTrack.BETA)
 class Beta(base.Group):
-  """Beta versions of gcloud commands."""
+    """Beta versions of gcloud commands."""

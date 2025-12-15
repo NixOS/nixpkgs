@@ -53,7 +53,7 @@ def download_sha256(url):
     url = f"{url}.sha256"
     download_response = requests.get(url)
     download_response.raise_for_status()
-    return download_response.content.decode('UTF-8').split(' ')[0]
+    return download_response.content.decode("UTF-8").split(" ")[0]
 
 
 channels = download_channels()
@@ -78,7 +78,11 @@ def update_product(name, product):
     channel = channels.get(update_channel)
     if channel is None:
         logging.error("Failed to find channel %s.", update_channel)
-        logging.error("Check that the update-channel in %s matches the name in %s", versions_file_path, updates_url)
+        logging.error(
+            "Check that the update-channel in %s matches the name in %s",
+            versions_file_path,
+            updates_url,
+        )
     else:
         try:
             build = latest_build(channel)
@@ -92,20 +96,35 @@ def update_product(name, product):
                 version_or_build_number = new_version
             else:
                 version_or_build_number = new_build_number
-            version_number = new_version.split(' ')[0]
-            download_url = get_url(product["url-template"], version_or_build_number, version_number)
+            version_number = new_version.split(" ")[0]
+            download_url = get_url(
+                product["url-template"], version_or_build_number, version_number
+            )
             if not download_url:
-                raise Exception(f"No valid url for {name} version {version_or_build_number}")
+                raise Exception(
+                    f"No valid url for {name} version {version_or_build_number}"
+                )
             product["url"] = download_url
-            if "sha256" not in product or product.get("build_number") != new_build_number:
+            if (
+                "sha256" not in product
+                or product.get("build_number") != new_build_number
+            ):
                 fromVersions[name] = product["version"]
                 toVersions[name] = new_version
-                logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
+                logging.info(
+                    "Found a newer version %s with build number %s.",
+                    new_version,
+                    new_build_number,
+                )
                 product["version"] = new_version
                 product["build_number"] = new_build_number
                 product["sha256"] = download_sha256(download_url)
             else:
-                logging.info("Already at the latest version %s with build number %s.", new_version, new_build_number)
+                logging.info(
+                    "Already at the latest version %s with build number %s.",
+                    new_version,
+                    new_build_number,
+                )
         except Exception as e:
             logging.exception("Update failed:", exc_info=e)
             logging.warning("Skipping %s due to the above error.", name)
@@ -144,7 +163,9 @@ for name in toVersions.keys():
 
 # Commit the result
 logging.info("#### Committing changes... ####")
-subprocess.run(['git', 'commit', f'-m{commitMessage}', '--', f'{versions_file_path}'], check=True)
+subprocess.run(
+    ["git", "commit", f"-m{commitMessage}", "--", f"{versions_file_path}"], check=True
+)
 
 logging.info("#### Updating plugins ####")
 plugin_script = current_path.joinpath("../plugins/update_plugins.py").resolve()
