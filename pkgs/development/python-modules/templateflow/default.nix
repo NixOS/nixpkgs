@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "templateflow";
     repo = "python-client";
     tag = version;
-    hash = "sha256-7N8JJAJwnmesQIoZttcphmUW5HLEi8Rxv70MGNjOO98=";
+    hash = "sha256-prcoLdbma3c1QvVKzLG1+2668cfPtfemESjt3jHwEVI=";
   };
 
   build-system = [
