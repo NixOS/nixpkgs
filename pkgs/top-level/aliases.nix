@@ -1341,6 +1341,9 @@ mapAliases {
   protonvpn-cli = throw "protonvpn-cli source code was removed from upstream. Use protonvpn-gui instead."; # Added 2025-10-16
   protonvpn-cli_2 = throw "protonvpn-cli_2 has been removed due to being deprecated. Use protonvpn-gui instead."; # Added 2025-10-16
   proxmark3-rrg = throw "'proxmark3-rrg' has been renamed to/replaced by 'proxmark3'"; # Converted to throw 2025-10-27
+  pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-12
+  pulp = throw "'pulp' has been removed because it was unmaintained upstream"; # Added 2025-12-12
+  purescript-psa = throw "'purescript-psa' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
   purple-discord = throw "'purple-discord' has been renamed to/replaced by 'pidginPackages.purple-discord'"; # Converted to throw 2025-10-27
   purple-facebook = throw "'purple-facebook' has been removed as it is unmaintained and doesn't support e2ee enforced by facebook."; # Added 2025-09-17
   purple-googlechat = throw "'purple-googlechat' has been renamed to/replaced by 'pidginPackages.purple-googlechat'"; # Converted to throw 2025-10-27

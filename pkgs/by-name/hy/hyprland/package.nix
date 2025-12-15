@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
@@ -42,7 +42,7 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
@@ -75,11 +75,11 @@ let
   # which would be controlled by the `debug` flag
   # Condition on darwin to avoid breaking eval for darwin in CI,
   # even though darwin is not supported anyway.
-  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
+  adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
-  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
+  customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
 in
 assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";

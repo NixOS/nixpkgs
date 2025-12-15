@@ -24896,6 +24896,12 @@
     githubId = 2060836;
     name = "Casey Stark";
   };
+  starryreverie = {
+    email = "starryreverie@proton.me";
+    github = "StarryReverie";
+    githubId = 42143810;
+    name = "Justin Chen";
+  };
   starsep = {
     email = "nix@starsep.com";
     github = "starsep";
@@ -26656,6 +26662,12 @@
     github = "TomSmeets";
     githubId = 6740669;
     name = "Tom Smeets";
+  };
+  tonybanters = {
+    email = "tony@tonybtw.com";
+    github = "tonybanters";
+    githubId = 27378358;
+    name = "tony";
   };
   toonn = {
     email = "nixpkgs@toonn.io";

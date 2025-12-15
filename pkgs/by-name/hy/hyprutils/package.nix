@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   cmake,
   pkg-config,
   pixman,
@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
   version = "0.11.0";
 
