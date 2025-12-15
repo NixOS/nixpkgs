@@ -1,0 +1,31 @@
+# Tup needs a setuid fusermount which may be outside $PATH.
+
+diff --git a/src/tup/server/fuse_server.c b/src/tup/server/fuse_server.c
+index d4ab648d..2dc9294b 100644
+--- a/src/tup/server/fuse_server.c
++++ b/src/tup/server/fuse_server.c
+@@ -105,16 +105,21 @@ static void *fuse_thread(void *arg)
+ #if defined(__linux__)
+ static int os_unmount(void)
+ {
+-	int rc;
+ #ifdef FUSE3
+-	rc = system("fusermount3 -u -z " TUP_MNT);
++#define FUSERMOUNT "fusermount3"
+ #else
+-	rc = system("fusermount -u -z " TUP_MNT);
++#define FUSERMOUNT "fusermount"
+ #endif
++	int rc;
++	const char *cmd = (access("/run/wrappers/bin/" FUSERMOUNT, X_OK) == 0)
++		? "/run/wrappers/bin/" FUSERMOUNT " -u -z " TUP_MNT
++		: FUSERMOUNT " -u -z " TUP_MNT;
++	rc = system(cmd);
+ 	if(rc == -1) {
+ 		perror("system");
+ 	}
+ 	return rc;
++#undef FUSERMOUNT
+ }
+ #elif defined(__APPLE__)
+ static int os_unmount(void)

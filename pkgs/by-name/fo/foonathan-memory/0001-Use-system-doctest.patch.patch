@@ -1,0 +1,26 @@
+From: =?utf-8?q?Timo_R=C3=B6hling?= <timo@gaussglocke.de>
+Date: Wed, 2 Dec 2020 15:59:22 +0100
+Subject: Use system doctest
+
+Forwarded: not-needed
+---
+ test/CMakeLists.txt | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 37359ea..f269cfb 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -8,11 +8,7 @@ target_link_libraries(foonathan_memory_profiling foonathan_memory)
+ target_include_directories(foonathan_memory_profiling PRIVATE
+                             ${FOONATHAN_MEMORY_SOURCE_DIR}/include/foonathan/memory)
+ 
+-# Fetch doctest.
+-message(STATUS "Fetching doctest")
+-include(FetchContent)
+-FetchContent_Declare(doctest URL https://github.com/doctest/doctest/archive/refs/tags/v2.4.12.zip)
+-FetchContent_MakeAvailable(doctest)
++find_package(doctest REQUIRED)
+ 
+ set(tests
+     test_allocator.hpp

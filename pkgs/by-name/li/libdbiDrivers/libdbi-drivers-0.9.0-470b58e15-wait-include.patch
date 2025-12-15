@@ -1,0 +1,23 @@
+commit 470b58e15dc6f406899b1695aec7fc98986b8f14
+Author: Jan Engelhardt <jengelh@inai.de>
+Date:   Fri Jan 27 09:56:44 2017 +0100
+
+    build: resolve compiler warning for wait(2)
+    
+    src/unit.c: In function "wait_for_child_process":
+    src/unit.c:229:5: warning: implicit declaration of function "wait" [-Wimplicit-function-declaration]
+         wait(&status);
+
+diff --git a/tests/cgreen/src/unit.c b/tests/cgreen/src/unit.c
+index 7753ff1..bdd236f 100644
+--- a/tests/cgreen/src/unit.c
++++ b/tests/cgreen/src/unit.c
+@@ -9,6 +9,7 @@
+ #include <stdarg.h>
+ #include <unistd.h>
+ #include <signal.h>
++#include <sys/wait.h>
+ 
+ enum {test_function, test_suite};
+ 
+

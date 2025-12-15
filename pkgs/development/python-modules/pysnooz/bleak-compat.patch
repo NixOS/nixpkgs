@@ -1,0 +1,39 @@
+diff --git a/tests/test_api.py b/tests/test_api.py
+index 3289252..30388b2 100644
+--- a/tests/test_api.py
++++ b/tests/test_api.py
+@@ -25,7 +25,7 @@ DBUS_ERROR_UNKNOWN = BleakDBusError("org.bluez.Error.SomethingNotHandled", [])
+ @pytest.fixture()
+ def mock_client() -> MockSnoozClient:
+     return MockSnoozClient(
+-        BLEDevice("Snooz-ABCD", "00:00:00:00:12:34", [], 0), SnoozDeviceModel.ORIGINAL
++        BLEDevice("Snooz-ABCD", "00:00:00:00:12:34", []), SnoozDeviceModel.ORIGINAL
+     )
+ 
+ 
+diff --git a/tests/test_device.py b/tests/test_device.py
+index f24a7c6..38240e4 100644
+--- a/tests/test_device.py
++++ b/tests/test_device.py
+@@ -127,7 +127,7 @@ def snooz(
+     model_name = (
+         MODEL_NAME_BREEZ if model == SnoozDeviceModel.BREEZ else MODEL_NAME_SNOOZ
+     )
+-    device = BLEDevice("AA:BB:CC:DD:EE:FF", f"{model_name}-EEFF", [], 0)
++    device = BLEDevice("AA:BB:CC:DD:EE:FF", f"{model_name}-EEFF", [])
+     password = "AABBCCDDEEFF"
+     adv_data = SnoozAdvertisementData(
+         model,
+diff --git a/tests/test_testing.py b/tests/test_testing.py
+index d8ce6f2..7a1002d 100644
+--- a/tests/test_testing.py
++++ b/tests/test_testing.py
+@@ -22,7 +22,7 @@ from pysnooz.testing import MockSnoozClient, MockSnoozDevice
+ 
+ from . import SUPPORTED_MODELS
+ 
+-TEST_BLE_DEVICE = BLEDevice("00:00:00:00:AB:CD", "Snooz-ABCD", [], 0)
++TEST_BLE_DEVICE = BLEDevice("00:00:00:00:AB:CD", "Snooz-ABCD", [])
+ 
+ 
+ @pytest.mark.asyncio

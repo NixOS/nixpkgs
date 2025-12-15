@@ -1,0 +1,13 @@
+diff -rc replace-2.24-orig/replace.h replace-2.24/replace.h
+*** replace-2.24-orig/replace.h	2004-10-07 15:15:06.000000000 +0200
+--- replace-2.24/replace.h	2008-02-21 14:57:47.000000000 +0100
+***************
+*** 11,17 ****
+  #include <ctype.h>
+  #include <unistd.h>
+  #include <string.h>
+- #include <malloc.h>
+  #include <sys/stat.h>
+  #include <ftw.h>
+  #include <utime.h>
+--- 11,16 ----

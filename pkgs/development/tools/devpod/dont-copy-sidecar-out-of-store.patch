@@ -1,0 +1,25 @@
+diff --git a/src/client/client.ts b/src/client/client.ts
+index 3e1747e..a842534 100644
+--- a/src/client/client.ts
++++ b/src/client/client.ts
+@@ -250,6 +250,7 @@ class Client {
+   }
+ 
+   public async isCLIInstalled(): Promise<Result<boolean>> {
++    return Return.Value(true);
+     try {
+       // we're in a flatpak, we need to check in other paths.
+       if (import.meta.env.TAURI_IS_FLATPAK === "true") {
+diff --git a/src/components/useInstallCLI.tsx b/src/components/useInstallCLI.tsx
+index ba3be79..ad25f3f 100644
+--- a/src/components/useInstallCLI.tsx
++++ b/src/components/useInstallCLI.tsx
+@@ -77,7 +77,7 @@ export function useInstallCLI() {
+           variant="outline"
+           isLoading={isLoading}
+           onClick={() => addBinaryToPath({})}
+-          isDisabled={status === "success"}>
++          isDisabled={true}>
+           Add CLI to Path
+         </Button>
+         <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={cancelRef}>

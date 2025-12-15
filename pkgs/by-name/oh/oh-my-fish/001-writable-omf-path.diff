@@ -1,0 +1,12 @@
+diff -Naur source/bin/install source-new/bin/install
+--- source/bin/install	1969-12-31 21:00:01.000000000 -0300
++++ source-new/bin/install	2023-11-23 12:48:55.695330320 -0300
+@@ -245,6 +245,8 @@
+   command cp -r "$OFFLINE_PATH" "$OMF_PATH"
+     or abort "Failed to copy source!"
+
++  chmod -R u+w "$OMF_PATH"
++
+   # Set up Git remotes only if the offline install is a Git repository.
+   test -d "$OMF_PATH/.git"
+     and set_git_remotes

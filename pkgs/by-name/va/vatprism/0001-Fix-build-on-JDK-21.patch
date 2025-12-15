@@ -1,0 +1,25 @@
+From 78e78dc10e2a4fd84ef0041d346d8f6d162f22c6 Mon Sep 17 00:00:00 2001
+From: ThePuzzlemaker <tpzker@thepuzzlemaker.info>
+Date: Wed, 24 Jul 2024 21:18:04 -0500
+Subject: [PATCH] Fix build on JDK 21+
+
+---
+ pom.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pom.xml b/pom.xml
+index 5a3254b..42b1405 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -59,7 +59,7 @@
+         <maven.compiler.target>${java.version}</maven.compiler.target>
+ 
+         <java.version>15</java.version>
+-        <lombok.version>1.18.22</lombok.version>
++        <lombok.version>1.18.30</lombok.version>
+         <javafx.version>17.0.1</javafx.version>
+         <slf4j.version>1.7.32</slf4j.version>
+         <mvvmfx.version>1.9.0-SNAPSHOT</mvvmfx.version>
+-- 
+2.44.1
+

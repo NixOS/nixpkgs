@@ -1,0 +1,37 @@
+From ce22aed5afa89c9b591d865bdfcc84a739929a01 Mon Sep 17 00:00:00 2001
+From: jkachmar <j@mercury.com>
+Date: Fri, 24 Oct 2025 17:56:22 -0400
+Subject: [PATCH] disable tests that require redis
+
+---
+ internal/peer/peers_test.go | 4 ++++
+ pubsub/pubsub_test.go       | 1 -
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/internal/peer/peers_test.go b/internal/peer/peers_test.go
+index dae54067d8..b33ebc4979 100644
+--- a/internal/peer/peers_test.go
++++ b/internal/peer/peers_test.go
+@@ -86,6 +86,10 @@
+ }
+ 
+ func TestPeerShutdown(t *testing.T) {
++	// Skip tests requiring Redis so that nixpkgs can build & test refinery.
++	if os.Getenv("NO_REDIS_TEST") != "" {
++		t.Skip("Skipping Redis-requiring test");
++	}
+ 	c := &config.MockConfig{
+ 		GetPeerListenAddrVal: "0.0.0.0:8081",
+ 		PeerManagementType:   "redis",
+diff --git a/pubsub/pubsub_test.go b/pubsub/pubsub_test.go
+index 4ad630ff96..dff6981926 100644
+--- a/pubsub/pubsub_test.go
++++ b/pubsub/pubsub_test.go
+@@ -17,7 +17,6 @@
+ )
+ 
+ var types = []string{
+-	"goredis",
+ 	"local",
+ }
+ 

@@ -1,0 +1,65 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "uri";
+  version = "1.1.0";
+
+  src = fetchFromGitHub {
+    owner = "cpp-netlib";
+    repo = "uri";
+    rev = "v${version}";
+    sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
+  };
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=parentheses"
+      # Needed with GCC 12
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=nonnull"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # Needed with Clang 16
+      "-Wno-error=deprecated-builtins"
+    ]
+  );
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
+
+  cmakeFlags = [
+    "-DUri_BUILD_TESTS=OFF"
+    "-DUri_BUILD_DOCS=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  postBuild = "make doc";
+
+  postInstall = ''
+    install -vd $out/share/doc
+    cp -vR html $out/share/doc
+  '';
+
+  meta = {
+    description = "C++ URI library";
+    homepage = "https://cpp-netlib.org";
+    license = lib.licenses.boost;
+    platforms = lib.platforms.all;
+  };
+}

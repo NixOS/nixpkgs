@@ -1,0 +1,13 @@
+Do not use vendored libraries
+
+--- a/vendor/CMakeLists.txt
++++ b/vendor/CMakeLists.txt
+@@ -18,8 +18,6 @@
+ if(GRN_WITH_BUNDLED_ONIGMO)
+   add_subdirectory(onigmo)
+ endif()
+-add_subdirectory(mruby)
+-add_subdirectory(mecab)
+ if(GRN_WITH_MRUBY)
+   add_subdirectory(groonga-log)
+ endif()

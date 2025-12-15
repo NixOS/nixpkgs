@@ -1,0 +1,33 @@
+As originally implemented, the error message check
+described in the configure script
+breaks detection of Ada compiler support on x86_64-darwin,
+because the assembler in the version of cctools currently used
+unconditionally emits a deprecation message to stdout,
+with no way to disable it.
+
+Furthermore, GCC 3.4 was the minimum version needed to build GNAT
+as far back as GCC 4.4 (see the GCC git repo, tags/releases/gcc-4.4.0,
+gcc/doc/install.texi, lines 2052-2053 [1]);
+GCC 3.4 is newer than any of the broken GCC versions
+that the configure script works around
+(see the part of the comment in the configure script
+before the context in the patch below),
+and GCC 4.4 is older than any GCC that Nix currently packages (GCC 4.8).
+
+We therefore choose to not check for error messages,
+and just check for an error code.
+There's no harm in still checking for an object file being created, though.
+
+[1]: https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/doc/install.texi;h=6bdfbece981f7fb6c26da672d45e5d3ba7879c69;hb=b7fc996728085c0591ea7c5d0e1c84a8f6a29bd8#l2052
+--- a/configure        2022-08-19 18:09:52.000000000 +1000
++++ b/configure        2022-12-26 17:30:49.000000000 +1100
+@@ -5622,8 +5622,7 @@
+ # Other compilers, like HP Tru64 UNIX cc, exit successfully when
+ # given a .adb file, but produce no object file.  So we must check
+ # if an object file was really produced to guard against this.
+-errors=`(${CC} -c conftest.adb) 2>&1 || echo failure`
+-if test x"$errors" = x && test -f conftest.$ac_objext; then
++if ${CC} -c conftest.adb && test -f conftest.$ac_objext; then
+   acx_cv_cc_gcc_supports_ada=yes
+ fi
+ rm -f conftest.*

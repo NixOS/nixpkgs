@@ -1,0 +1,26 @@
+diff --git a/connect.c b/connect.c
+index 4813f005ab..b3f12f3268 100644
+--- a/connect.c
++++ b/connect.c
+@@ -1183,7 +1183,7 @@ static void fill_ssh_args(struct child_process *conn, const char *ssh_host,
+ 
+ 		ssh = getenv("GIT_SSH");
+ 		if (!ssh)
+-			ssh = "ssh";
++			ssh = "@ssh@";
+ 		variant = determine_ssh_variant(ssh, 0);
+ 	}
+ 
+diff --git a/git-gui/lib/remote_add.tcl b/git-gui/lib/remote_add.tcl
+index 480a6b30d0..7817204241 100644
+--- a/git-gui/lib/remote_add.tcl
++++ b/git-gui/lib/remote_add.tcl
+@@ -139,7 +139,7 @@ method _add {} {
+ 		# Parse the location
+ 		if { [regexp {(?:git\+)?ssh://([^/]+)(/.+)} $location xx host path]
+ 		     || [regexp {([^:][^:]+):(.+)} $location xx host path]} {
+-			set ssh ssh
++			set ssh @ssh@
+ 			if {[info exists env(GIT_SSH)]} {
+ 				set ssh $env(GIT_SSH)
+ 			}

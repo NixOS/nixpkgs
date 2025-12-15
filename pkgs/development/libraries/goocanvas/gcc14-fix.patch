@@ -1,0 +1,36 @@
+From d025d0eeae1c5266063bdc1476dbdff121bcfa57 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 31 Jan 2024 17:44:59 +0100
+Subject: [PATCH] Fix building with GCC 14
+
+GCC 14 becomes stricter regarging pointer types:
+
+goocanvasitemsimple.c: In function 'goo_canvas_item_simple_set_model':
+goocanvasitemsimple.c:1539:15: error: assignment to 'GooCanvasItemModelSimple *' {aka 'struct _GooCanvasItemModelSimple *'} from incompatible pointer type 'GooCanvasItemModel *' {aka 'struct _GooCanvasItemModel *'} [-Wincompatible-pointer-types]
+ 1539 |   item->model = g_object_ref (model);
+      |               ^
+make[3]: *** [Makefile:595: goocanvasitemsimple.lo] Error 1
+
+It looks like missing a pointer cast.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=2261209>
+---
+ src/goocanvasitemsimple.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/goocanvasitemsimple.c b/src/goocanvasitemsimple.c
+index 19b3424..28edc77 100644
+--- a/src/goocanvasitemsimple.c
++++ b/src/goocanvasitemsimple.c
+@@ -1536,7 +1536,7 @@ goo_canvas_item_simple_set_model (GooCanvasItemSimple  *item,
+   goo_canvas_item_simple_free_data (item->simple_data);
+   g_slice_free (GooCanvasItemSimpleData, item->simple_data);
+ 
+-  item->model = g_object_ref (model);
++  item->model = (GooCanvasItemModelSimple *) g_object_ref (model);
+   item->simple_data = &item->model->simple_data;
+ 
+   if (accessibility_enabled)
+-- 
+GitLab
+

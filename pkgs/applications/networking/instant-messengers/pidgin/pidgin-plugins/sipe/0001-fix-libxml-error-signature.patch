@@ -1,0 +1,21 @@
+diff --git a/src/core/sipe-xml.c b/src/core/sipe-xml.c
+index cfc5311..c38f6e8 100644
+--- a/src/core/sipe-xml.c
++++ b/src/core/sipe-xml.c
+@@ -29,6 +29,7 @@
+ #include <time.h>
+ 
+ #include "libxml/parser.h"
++#include "libxml/xmlerror.h"
+ #include "libxml/c14n.h"
+ #include "libxml/xmlversion.h"
+ 
+@@ -154,7 +155,7 @@ static void callback_error(void *user_data, const char *msg, ...)
+ 	g_free(errmsg);
+ }
+ 
+-static void callback_serror(void *user_data, xmlErrorPtr error)
++static void callback_serror(void *user_data, const xmlError *error)
+ {
+ 	struct _parser_data *pd = user_data;
+ 

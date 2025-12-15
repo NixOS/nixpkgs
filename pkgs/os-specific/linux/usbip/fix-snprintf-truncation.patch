@@ -1,0 +1,13 @@
+diff --git a/tools/usb/usbip/libsrc/vhci_driver.c b/tools/usb/usbip/libsrc/vhci_driver.c
+index 8159fd98680b..7d6eb3e3fe1e 100644
+--- a/tools/usb/usbip/libsrc/vhci_driver.c
++++ b/tools/usb/usbip/libsrc/vhci_driver.c
+@@ -111,7 +111,7 @@ static int parse_status(const char *value)
+ static int refresh_imported_device_list(void)
+ {
+ 	const char *attr_status;
+-	char status[MAX_STATUS_NAME+1] = "status";
++	char status[MAX_STATUS_NAME+2] = "status";
+ 	int i, ret;
+ 
+ 	for (i = 0; i < vhci_driver->ncontrollers; i++) {

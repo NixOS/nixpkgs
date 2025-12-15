@@ -1,0 +1,72 @@
+diff --git a/configure b/configure
+index 5edefba..a17e8c5 100755
+--- a/configure
++++ b/configure
+@@ -1184,10 +1184,10 @@ check_sdl()
+       fail
+     fi
+   else
+-    if which_wrapper sdl-config > /dev/null; then
+-      FLGSDL=`sdl-config --cflags`
++    if which_wrapper sdl2-config > /dev/null; then
++      FLGSDL=`sdl2-config --cflags`
+       INCSDL=`strip_I "$FLGSDL"`
+-      LIBSDL=`sdl-config --libs`
++      LIBSDL=`sdl2-config --libs`
+       LIBSDLMAIN="-lSDLmain"
+       FLDSDL=
+       foundsdl=1
+diff --git a/src/VBox/Frontends/VBoxSDL/Framebuffer.cpp b/src/VBox/Frontends/VBoxSDL/Framebuffer.cpp
+index 16dc282..4889865 100644
+--- a/src/VBox/Frontends/VBoxSDL/Framebuffer.cpp
++++ b/src/VBox/Frontends/VBoxSDL/Framebuffer.cpp
+@@ -56,7 +56,7 @@ using namespace com;
+ #  pragma warning(push)
+ #  pragma warning(disable: 4121) /* warning C4121: 'SDL_SysWMmsg' : alignment of a member was sensitive to packing*/
+ # endif
+-# include <SDL_syswm.h>           /* for SDL_GetWMInfo() */
++# include <SDL2/SDL_syswm.h>           /* for SDL_GetWMInfo() */
+ # ifdef _MSC_VER
+ #  pragma warning(pop)
+ # endif
+diff --git a/src/VBox/Frontends/VBoxSDL/Makefile.kmk b/src/VBox/Frontends/VBoxSDL/Makefile.kmk
+index da43153..2aa8cd7 100644
+--- a/src/VBox/Frontends/VBoxSDL/Makefile.kmk
++++ b/src/VBox/Frontends/VBoxSDL/Makefile.kmk
+@@ -79,10 +79,6 @@ if !defined(VBOX_WITH_HARDENING) || "$(KBUILD_TARGET)" != "darwin" # No hardened
+   VBoxSDL_INCS += \
+   	$(VBOX_XCURSOR_INCS)
+  endif
+- ifn1of ($(KBUILD_TARGET), solaris) # Probably wrong with SDL2
+-  VBoxSDL_LIBS = \
+-  	$(LIB_SDK_LIBSDL2_SDLMAIN)
+- endif
+  if1of ($(KBUILD_TARGET), freebsd linux netbsd openbsd solaris) # X11
+   VBoxSDL_LIBS += \
+   	$(PATH_STAGE_DLL)/VBoxKeyboard$(VBOX_SUFF_DLL) \
+diff --git a/src/VBox/Frontends/VBoxSDL/VBoxSDL.cpp b/src/VBox/Frontends/VBoxSDL/VBoxSDL.cpp
+index 065c391..22788e1 100644
+--- a/src/VBox/Frontends/VBoxSDL/VBoxSDL.cpp
++++ b/src/VBox/Frontends/VBoxSDL/VBoxSDL.cpp
+@@ -64,7 +64,7 @@ using namespace com;
+ # pragma warning(disable: 4121) /* warning C4121: 'SDL_SysWMmsg' : alignment of a member was sensitive to packing*/
+ #endif
+ #ifndef RT_OS_DARWIN
+-# include <SDL_syswm.h>          /* for SDL_GetWMInfo() */
++# include <SDL2/SDL_syswm.h>          /* for SDL_GetWMInfo() */
+ #endif
+ #ifdef _MSC_VER
+ # pragma warning(pop)
+diff --git a/src/VBox/Frontends/VBoxSDL/VBoxSDL.h b/src/VBox/Frontends/VBoxSDL/VBoxSDL.h
+index dde548f..8fc9fb3 100644
+--- a/src/VBox/Frontends/VBoxSDL/VBoxSDL.h
++++ b/src/VBox/Frontends/VBoxSDL/VBoxSDL.h
+@@ -45,7 +45,7 @@
+ # pragma warning(disable: 4121) /* warning C4121: 'SDL_SysWMmsg' : alignment of a member was sensitive to packing*/
+ # pragma warning(disable: 4668) /* warning C4668: '__GNUC__' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif' */
+ #endif
+-#include <SDL.h>
++#include <SDL2/SDL.h>
+ #ifdef _MSC_VER
+ # pragma warning(pop)
+ #endif

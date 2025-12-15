@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/nix-community/tree-sitter-nix",
+  "rev": "ff4e2b4c5a3598e8be3edf16bc69f6677af32145",
+  "date": "2025-08-11T14:30:35Z",
+  "path": "/nix/store/pv5yjrasf1k8pigwl0gnvbm7bwsg205q-tree-sitter-nix",
+  "sha256": "0bv38na2i53229lzkndbvchfgg8gmwdgpcw1ajq9rcqar8m1gyal",
+  "hash": "sha256-VPkXKsoKs5ywVIGz+xqvD73nINur2flpEmKUKJRFYy8=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

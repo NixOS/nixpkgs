@@ -1,0 +1,32 @@
+diff --git a/Makefile b/Makefile
+index 1a20f4f..077acdb 100755
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ 
+-RAW_CC = gcc
++RAW_CC := $(CC)
+ RAW_FLAGS = -Wall -O2
+ LINK_OPT = 
+ VERSION = 1.5.7
+@@ -24,9 +24,9 @@ MAN_PAGES = $(NAME).8.gz
+ RAW_FLAGS += -DVERSION=\"$(VERSION)\"
+ 
+ # Where we get installed
+-BIN = /usr/local/bin
+-MAN = /usr/share/man/man8
+-CONF= /usr/local/etc
++BIN = $(PREFIX)/bin
++MAN = $(PREFIX)/share/man/man8
++CONF= $(PREFIX)/etc
+ # Setup for compiling and cross-compiling for Windows
+ # The CR_ prefix refers to cross compiling from OSX to Windows
+ CR_CC = $(CR_BASE)/gcc
+@@ -120,7 +120,6 @@ foremost: $(OBJ)
+ install: goals
+ 	install -m 755 $(NAME) $(BIN)
+ 	install -m 444 $(MAN_PAGES) $(MAN)
+-	install -m 444 foremost.conf $(CONF)
+ macinstall: BIN = /usr/local/bin/
+ macinstall: MAN = /usr/share/man/man1/
+ macinstall: CONF = /usr/local/etc/

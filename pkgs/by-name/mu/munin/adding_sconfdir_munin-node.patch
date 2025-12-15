@@ -1,0 +1,41 @@
+commit af5fa3623bb9a73052f9154be4a0f38c60ea42a2
+Author: Kjetil Orbekk <kjetil.orbekk@gmail.com>
+Date:   Thu Nov 23 21:21:36 2017 -0500
+
+    node: add --sconfdir to set plugin configuration dir
+
+diff --git a/node/sbin/munin-node b/node/sbin/munin-node
+index 909c8c4e..0ccf3941 100755
+--- a/node/sbin/munin-node
++++ b/node/sbin/munin-node
+@@ -100,9 +100,11 @@ sub parse_args
+     my @ORIG_ARGV  = @ARGV;
+ 
+     my $servicedir_cmdline;
++    my $sconfdir_cmdline;
+     print_usage_and_exit() unless GetOptions(
+         "config=s"     => \$conffile,
+         "servicedir=s" => \$servicedir_cmdline,
++        "sconfdir=s"   => \$sconfdir_cmdline,
+         "debug!"       => \$DEBUG,
+         "pidebug!"     => \$PIDEBUG,
+         "paranoia!"    => \$paranoia,
+@@ -112,6 +114,7 @@ sub parse_args
+ 
+     # We untaint the args brutally, since the sysadm should know what he does
+     $servicedir = $1 if defined $servicedir_cmdline && $servicedir_cmdline =~ m/(.*)/;
++    $sconfdir = $1 if defined $sconfdir_cmdline && $sconfdir_cmdline =~ m/(.*)/;
+ 
+     # Reset ARGV (for HUPing)
+     @ARGV = @ORIG_ARGV;
+@@ -175,6 +178,10 @@ Use E<lt>fileE<gt> as configuration file. [@@CONFDIR@@/munin-node.conf]
+ 
+ Override plugin directory [@@CONFDIR@@/plugins/]
+ 
++=item B<< --sconfdir <dir> >>
++
++Override plugin configuration directory [@@CONFDIR@@/plugin-conf.d/]
++
+ =item B< --[no]paranoia >
+ 
+ Only run plugins owned by root. Check permissions as well. [--noparanoia]

@@ -1,0 +1,10 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=@out@/lib
+includedir=@out@/include
+
+Name: tbox
+Description: A glib-like multi-platform c library
+Version: @version@
+Libs: -L${libdir} -ltbox
+Cflags: -I${includedir}

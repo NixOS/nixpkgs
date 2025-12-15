@@ -1,0 +1,13 @@
+prefix=@LIB@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=@DEV@/include/wuffs
+
+Name: wuffs
+Description: @DESCRIPTION@
+Version: @VERSION@
+Requires:
+Conflicts:
+Libs: -L${libdir} -lwuffs
+Libs.private:
+Cflags: -I${includedir}

@@ -1,0 +1,10 @@
+{ fetchgit }:
+fetchgit {
+  url = "https://swiftshader.googlesource.com/SwiftShader.git";
+  rev = "@engine_swiftshader_rev@";
+
+  # Keep with in sync of pkgs/development/compilers/flutter/engine/package.nix
+  postFetch = ''
+    rm -rf $out/third_party/llvm-project
+  '';
+}

@@ -1,0 +1,44 @@
+From 8a6c16fd79e78aaaf1223090e673bdbe11451abc Mon Sep 17 00:00:00 2001
+From: DavHau <hsngrmpf+github@gmail.com>
+Date: Wed, 22 Oct 2025 10:40:03 +0700
+Subject: [PATCH] Fix cross-compilation by checking target arch in build.rs
+
+Previously, build.rs used #[cfg(target_arch)] attributes which check
+the host architecture where the build script runs, not the target
+being compiled for. This caused AVX-512 features to be incorrectly
+enabled when cross-compiling from x86_64 to other architectures like
+riscv64, leading to compilation errors.
+
+Now uses CARGO_CFG_TARGET_ARCH environment variable to correctly
+detect the target architecture during cross-compilation.
+---
+ build.rs | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/build.rs b/build.rs
+index 42788623..28e006a9 100644
+--- a/build.rs
++++ b/build.rs
+@@ -38,8 +38,11 @@ fn main() {
+     #[allow(unused_variables)]
+     let is_64_bit_python = matches!(python_config.pointer_width, Some(64));
+
+-    #[cfg(all(target_arch = "x86_64", not(target_os = "macos")))]
+-    if version_check::is_min_version("1.89.0").unwrap_or(false) && is_64_bit_python {
++    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default();
++    let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
++
++    if target_arch == "x86_64" && target_os != "macos"
++        && version_check::is_min_version("1.89.0").unwrap_or(false) && is_64_bit_python {
+         println!("cargo:rustc-cfg=feature=\"avx512\"");
+     }
+
+@@ -51,8 +54,7 @@ fn main() {
+         println!("cargo:rustc-cfg=feature=\"optimize\"");
+     }
+
+-    #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
+-    if is_64_bit_python {
++    if (target_arch == "x86_64" || target_arch == "aarch64") && is_64_bit_python {
+         println!("cargo:rustc-cfg=feature=\"inline_int\"");
+     }

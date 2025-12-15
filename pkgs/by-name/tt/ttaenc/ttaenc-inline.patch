@@ -1,0 +1,10 @@
+--- a/ttaenc.c
++++ b/ttaenc.c
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include "ttaenc.h"
++#define __inline static inline __attribute__((always_inline))
+ 
+ /******************* static variables and structures *******************/
+ 

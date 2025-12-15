@@ -1,0 +1,13 @@
+diff --git a/crates/engine_bibtex/src/xbuf.rs b/crates/engine_bibtex/src/xbuf.rs
+index 8f3949e7..c216eb4d 100644
+--- a/crates/engine_bibtex/src/xbuf.rs
++++ b/crates/engine_bibtex/src/xbuf.rs
+@@ -52,7 +52,7 @@ pub unsafe fn xrealloc_zeroed<T: SafelyZero>(
+     old: *mut [T],
+     new_len: usize,
+ ) -> Option<&'static mut [T]> {
+-    let old_len = (*old).len();
++    let old_len = (&(*old)).len();
+     let new_size = new_len * mem::size_of::<T>();
+     // SAFETY: realloc can be called with any size, even 0, that will just deallocate and return null
+     let ptr = unsafe { xrealloc(old.cast(), new_size) }.cast::<T>();

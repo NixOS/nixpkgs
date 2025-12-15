@@ -1,0 +1,26 @@
+From 83541449e953f15c34f53dce657a94f189f597d3 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Thu, 28 Nov 2024 09:30:59 +0100
+Subject: [PATCH] Support caldav service. ( Needed by buteo caldav plugin)
+
+---
+ lomiri-calendar-app.application | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/lomiri-calendar-app.application b/lomiri-calendar-app.application
+index f0781b77..684c14b6 100644
+--- a/lomiri-calendar-app.application
++++ b/lomiri-calendar-app.application
+@@ -7,6 +7,9 @@
+     <service-type id="calendar">
+       <description>Syncronize your calendar</description>
+     </service-type>
++    <service-type id="caldav">
++        <description>Syncronize your calendar</description>
++    </service-type>
+   </service-types>
+ 
+ </application>
+-- 
+GitLab
+

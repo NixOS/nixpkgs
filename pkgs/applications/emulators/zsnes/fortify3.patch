@@ -1,0 +1,20 @@
+pal16bxcl is an array of 256 dwords, not bytes:
+    src/endmem.asm:NEWSYM pal16bxcl, resd 256
+
+While at it fixes off-by-4 out of bounds exit.
+
+Detected by _FORTIFY_SOURCE=3:
+    *** buffer overflow detected ***: terminated
+    #7  0x08057c14 in memset (__len=2, __ch=255, __dest=<optimized out>) at ...-glibc-2.38-23-dev/include/bits/string_fortified.h:59
+#8  clearmem () at initc.c:1461
+--- a/src/initc.c
++++ b/src/initc.c
+@@ -1389,7 +1389,7 @@ extern unsigned char vidmemch8[4096];
+ extern unsigned char pal16b[1024];
+ extern unsigned char pal16bcl[1024];
+ extern unsigned char pal16bclha[1024];
+-extern unsigned char pal16bxcl[256];
++extern unsigned char pal16bxcl[1024];
+ extern unsigned char SPCRAM[65472];
+ unsigned char *SPCState = SPCRAM;
+ 

@@ -1,0 +1,380 @@
+From 2c3c84939b930986b31bc0f28e9a08bf43786255 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 9 Sep 2025 13:34:31 +0900
+Subject: [PATCH 29/30] musl: test: several random fixlets for unit tests
+
+---
+ src/boot/test-efi-string.c             | 36 ++++++++++++++++++++------
+ src/libsystemd/sd-bus/test-bus-error.c |  6 +++++
+ src/test/meson.build                   |  1 +
+ src/test/test-errno-util.c             | 12 ++++++++-
+ src/test/test-fileio.c                 | 10 ++++++-
+ src/test/test-locale-util.c            |  7 ++++-
+ src/test/test-os-util.c                |  6 ++++-
+ src/test/test-seccomp.c                |  8 ++++--
+ src/test/test-time-util.c              | 24 +++++++++++++++++
+ test/meson.build                       |  2 ++
+ test/test-sysusers.sh.in               | 22 +++++++++++++++-
+ 11 files changed, 119 insertions(+), 15 deletions(-)
+
+diff --git a/src/boot/test-efi-string.c b/src/boot/test-efi-string.c
+index e0d3bd9b71..af6dd1fb64 100644
+--- a/src/boot/test-efi-string.c
++++ b/src/boot/test-efi-string.c
+@@ -410,13 +410,27 @@ TEST(startswith8) {
+         ASSERT_NULL(startswith8(NULL, ""));
+ }
+ 
+-#define TEST_FNMATCH_ONE(pattern, haystack, expect)                                     \
+-        ({                                                                              \
+-                ASSERT_EQ(fnmatch(pattern, haystack, 0), expect ? 0 : FNM_NOMATCH);     \
+-                ASSERT_EQ(efi_fnmatch(u##pattern, u##haystack), expect);                \
++#define TEST_FNMATCH_ONE_FULL(pattern, haystack, expect, skip_libc)     \
++        ({                                                              \
++                if (!skip_libc)                                         \
++                        ASSERT_EQ(fnmatch(pattern, haystack, 0), expect ? 0 : FNM_NOMATCH); \
++                ASSERT_EQ(efi_fnmatch(u##pattern, u##haystack), expect); \
+         })
+ 
++#define TEST_FNMATCH_ONE(pattern, haystack, expect)             \
++        TEST_FNMATCH_ONE_FULL(pattern, haystack, expect, false)
++
+ TEST(efi_fnmatch) {
++        bool skip_libc;
++
++#ifdef __GLIBC__
++        skip_libc = false;
++#else
++        /* It seems musl is too strict in handling "[]" (or has a bug?). Anyway, let's skip some test cases
++         * when built with musl. The behavior of efi_fnmatch() does not need to match musl's fnmatch(). */
++        skip_libc = true;
++#endif
++
+         TEST_FNMATCH_ONE("", "", true);
+         TEST_FNMATCH_ONE("abc", "abc", true);
+         TEST_FNMATCH_ONE("aBc", "abc", false);
+@@ -447,18 +461,18 @@ TEST(efi_fnmatch) {
+         TEST_FNMATCH_ONE("[abc", "a", false);
+         TEST_FNMATCH_ONE("[][!] [][!] [][!]", "[ ] !", true);
+         TEST_FNMATCH_ONE("[]-] []-]", "] -", true);
+-        TEST_FNMATCH_ONE("[1\\]] [1\\]]", "1 ]", true);
++        TEST_FNMATCH_ONE_FULL("[1\\]] [1\\]]", "1 ]", true, skip_libc);
+         TEST_FNMATCH_ONE("[$-\\+]", "&", true);
+         TEST_FNMATCH_ONE("[1-3A-C] [1-3A-C]", "2 B", true);
+         TEST_FNMATCH_ONE("[3-5] [3-5] [3-5]", "3 4 5", true);
+         TEST_FNMATCH_ONE("[f-h] [f-h] [f-h]", "f g h", true);
+-        TEST_FNMATCH_ONE("[a-c-f] [a-c-f] [a-c-f] [a-c-f] [a-c-f]", "a b c - f", true);
+-        TEST_FNMATCH_ONE("[a-c-f]", "e", false);
++        TEST_FNMATCH_ONE_FULL("[a-c-f] [a-c-f] [a-c-f] [a-c-f] [a-c-f]", "a b c - f", true, skip_libc);
++        TEST_FNMATCH_ONE_FULL("[a-c-f]", "e", false, skip_libc);
+         TEST_FNMATCH_ONE("[--0] [--0] [--0]", "- . 0", true);
+         TEST_FNMATCH_ONE("[+--] [+--] [+--]", "+ , -", true);
+         TEST_FNMATCH_ONE("[f-l]", "m", false);
+         TEST_FNMATCH_ONE("[b]", "z-a", false);
+-        TEST_FNMATCH_ONE("[a\\-z]", "b", false);
++        TEST_FNMATCH_ONE_FULL("[a\\-z]", "b", false, skip_libc);
+         TEST_FNMATCH_ONE("?a*b[.-0]c", "/a/b/c", true);
+         TEST_FNMATCH_ONE("debian-*-*-*.*", "debian-jessie-2018-06-17-kernel-image-5.10.0-16-amd64.efi", true);
+ 
+@@ -674,8 +688,14 @@ TEST(xvasprintf_status) {
+         test_printf_one("string");
+         test_printf_one("%%-%%%%");
+ 
++#ifdef __GLIBC__
+         test_printf_one("%p %p %32p %*p %*p", NULL, (void *) 0xF, &errno, 0, &saved_argc, 20, &saved_argv);
+         test_printf_one("%-10p %-32p %-*p %-*p", NULL, &errno, 0, &saved_argc, 20, &saved_argv);
++#else
++        /* musl prints NULL as 0, while glibc and our implementation print it as (nil). */
++        test_printf_one("%p %32p %*p %*p", (void *) 0xF, &errno, 0, &saved_argc, 20, &saved_argv);
++        test_printf_one("%-32p %-*p %-*p", &errno, 0, &saved_argc, 20, &saved_argv);
++#endif
+ 
+         test_printf_one("%c %3c %*c %*c %-8c", '1', '!', 0, 'a', 9, '_', '>');
+ 
+diff --git a/src/libsystemd/sd-bus/test-bus-error.c b/src/libsystemd/sd-bus/test-bus-error.c
+index c6b86be621..d69eb984dc 100644
+--- a/src/libsystemd/sd-bus/test-bus-error.c
++++ b/src/libsystemd/sd-bus/test-bus-error.c
+@@ -232,7 +232,13 @@ TEST(sd_bus_error_set_errnof) {
+         errno = EACCES;
+         assert_se(asprintf(&str, "%m") >= 0);
+         assert_se(streq(error.message, str));
++#ifdef __GLIBC__
+         assert_se(error._need_free == 0);
++#else
++        /* musl's strerror_l() always writes error message in the given buffer, hence the we need to
++         * free it. */
++        assert_se(error._need_free == 1);
++#endif
+ 
+         str = mfree(str);
+         sd_bus_error_free(&error);
+diff --git a/src/test/meson.build b/src/test/meson.build
+index 1dd61effc0..4bdfc65f04 100644
+--- a/src/test/meson.build
++++ b/src/test/meson.build
+@@ -16,6 +16,7 @@ test_env = {
+         'PROJECT_BUILD_ROOT' : meson.project_build_root(),
+         'SYSTEMD_SLOW_TESTS' : want_slow_tests ? '1' : '0',
+         'PYTHONDONTWRITEBYTECODE' : '1',
++        'SYSTEMD_LIBC' : get_option('libc'),
+ }
+ if conf.get('ENABLE_LOCALED') == 1
+         test_env += {'SYSTEMD_LANGUAGE_FALLBACK_MAP' : language_fallback_map}
+diff --git a/src/test/test-errno-util.c b/src/test/test-errno-util.c
+index 1a0154fb05..1ad067b2c7 100644
+--- a/src/test/test-errno-util.c
++++ b/src/test/test-errno-util.c
+@@ -26,18 +26,28 @@ TEST(STRERROR) {
+         log_info("STRERROR(%d), STRERROR(%d) → %s, %s", 200, 201, STRERROR(200), STRERROR(201));
+ 
+         const char *a = STRERROR(200), *b = STRERROR(201);
++#ifdef __GLIBC__
+         ASSERT_NOT_NULL(strstr(a, "200"));
+         ASSERT_NOT_NULL(strstr(b, "201"));
++#else
++        /* musl provides catch all error message for unknown error number. */
++        ASSERT_STREQ(a, "No error information");
++        ASSERT_STREQ(b, "No error information");
++#endif
+ 
+         /* Check with negative values */
+         ASSERT_STREQ(a, STRERROR(-200));
+         ASSERT_STREQ(b, STRERROR(-201));
+ 
+         const char *c = STRERROR(INT_MAX);
++        log_info("STRERROR(%d) → %s", INT_MAX, c);
++#ifdef __GLIBC__
+         char buf[DECIMAL_STR_MAX(int)];
+         xsprintf(buf, "%d", INT_MAX);  /* INT_MAX is hexadecimal, use printf to convert to decimal */
+-        log_info("STRERROR(%d) → %s", INT_MAX, c);
+         ASSERT_NOT_NULL(strstr(c, buf));
++#else
++        ASSERT_STREQ(c, "No error information");
++#endif
+ }
+ 
+ TEST(STRERROR_OR_ELSE) {
+diff --git a/src/test/test-fileio.c b/src/test/test-fileio.c
+index e0ae30bbb9..ad572056c2 100644
+--- a/src/test/test-fileio.c
++++ b/src/test/test-fileio.c
+@@ -400,7 +400,15 @@ TEST(write_string_stream) {
+ 
+         f = fdopen(fd, "r");
+         assert_se(f);
+-        assert_se(write_string_stream(f, "boohoo", 0) < 0);
++#ifdef __GLIBC__
++        ASSERT_ERROR(write_string_stream(f, "boohoo", 0), EBADF);
++#else
++        /* Even the file is opened with the read-only mode, fputs() and fputc() by musl succeed but nothing
++         * actually written, thus write_string_stream() also succeeds. */
++        ASSERT_OK(write_string_stream(f, "boohoo", 0));
++        rewind(f);
++        ASSERT_NULL(fgets(buf, sizeof(buf), f));
++#endif
+         f = safe_fclose(f);
+ 
+         f = fopen(fn, "r+");
+diff --git a/src/test/test-locale-util.c b/src/test/test-locale-util.c
+index e264cff5dd..faa7ac4211 100644
+--- a/src/test/test-locale-util.c
++++ b/src/test/test-locale-util.c
+@@ -50,7 +50,12 @@ TEST(locale_is_installed) {
+         assert_se(locale_is_installed("\x01gar\x02 bage\x03") == 0);
+ 
+         /* Definitely not installed */
+-        assert_se(locale_is_installed("zz_ZZ") == 0);
++#ifdef __GLIBC__
++        ASSERT_OK_ZERO(locale_is_installed("zz_ZZ"));
++#else
++        /* musl seems to return a non-null locale object even if it is not installed. */
++        ASSERT_OK_POSITIVE(locale_is_installed("zz_ZZ"));
++#endif
+ }
+ 
+ TEST(keymaps) {
+diff --git a/src/test/test-os-util.c b/src/test/test-os-util.c
+index fcab1139c2..902062560f 100644
+--- a/src/test/test-os-util.c
++++ b/src/test/test-os-util.c
+@@ -127,7 +127,11 @@ TEST(os_release_support_ended) {
+ 
+         ASSERT_TRUE(os_release_support_ended("1999-01-01", false, NULL));
+         ASSERT_FALSE(os_release_support_ended("2037-12-31", false, NULL));
+-        assert_se(os_release_support_ended("-1-1-1", true, NULL) == -EINVAL);
++#ifdef __GLIBC__
++        ASSERT_ERROR(os_release_support_ended("-1-1-1", true, NULL), EINVAL);
++#else
++        ASSERT_ERROR(os_release_support_ended("-1-1-1", true, NULL), ERANGE);
++#endif
+ 
+         r = os_release_support_ended(NULL, false, NULL);
+         if (r < 0)
+diff --git a/src/test/test-seccomp.c b/src/test/test-seccomp.c
+index 13c65a93cd..a9953b2c98 100644
+--- a/src/test/test-seccomp.c
++++ b/src/test/test-seccomp.c
+@@ -553,9 +553,13 @@ TEST(memory_deny_write_execute_mmap) {
+                 assert_se(seccomp_memory_deny_write_execute() >= 0);
+ 
+                 p = mmap(NULL, page_size(), PROT_WRITE|PROT_EXEC, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+-#if defined(__x86_64__) || defined(__i386__) || defined(__powerpc64__) || defined(__arm__) || defined(__aarch64__) || defined(__loongarch_lp64)
++#if defined(__x86_64__) || defined(__i386__) || defined(__powerpc64__) || defined(__arm__) || defined(__aarch64__) || defined(__loongarch_lp64) || !defined(__GLIBC__)
+                 assert_se(p == MAP_FAILED);
+-                assert_se(errno == EPERM);
++#  ifdef __GLIBC__
++                ASSERT_EQ(errno, EPERM);
++#  else
++                ASSERT_EQ(errno, ENOMEM);
++#  endif
+ #endif
+                 /* Depending on kernel, libseccomp, and glibc versions, other architectures
+                  * might fail or not. Let's not assert success. */
+diff --git a/src/test/test-time-util.c b/src/test/test-time-util.c
+index 7569f89ca0..203f8a148d 100644
+--- a/src/test/test-time-util.c
++++ b/src/test/test-time-util.c
+@@ -406,6 +406,25 @@ static void test_format_timestamp_impl(usec_t x) {
+         const char *xx = FORMAT_TIMESTAMP(x);
+         ASSERT_NOT_NULL(xx);
+ 
++#ifndef __GLIBC__
++        /* Because of the timezone change, format_timestamp() may set timezone that is currently unused.
++         * E.g. Africa/Juba may set EAT, but currently it uses CAT/CAST. */
++        const char *space;
++        ASSERT_NOT_NULL(space = strrchr(xx, ' '));
++        const char *tz = space + 1;
++        if (!streq_ptr(tz, tzname[0]) &&
++            !streq_ptr(tz, tzname[1]) &&
++            parse_gmtoff(tz, NULL) < 0) {
++
++                log_warning("@" USEC_FMT " → %s, timezone '%s' is currently unused, ignoring.", x, xx, tz);
++
++                /* Verify the generated string except for the timezone part. Of course, in most cases, parsed
++                 * time does not match with the input, hence only check if it is parsable. */
++                ASSERT_OK(parse_timestamp(strndupa_safe(xx, space - xx), NULL));
++                return;
++        }
++#endif
++
+         usec_t y;
+         ASSERT_OK(parse_timestamp(xx, &y));
+         const char *yy = FORMAT_TIMESTAMP(y);
+@@ -1116,7 +1135,12 @@ TEST(in_utc_timezone) {
+         assert_se(setenv("TZ", ":UTC", 1) >= 0);
+         assert_se(in_utc_timezone());
+         ASSERT_STREQ(tzname[0], "UTC");
++#ifdef __GLIBC__
+         ASSERT_STREQ(tzname[1], "UTC");
++#else
++        /* musl sets an empty string to tzname[1] when DST is not used by the timezone. */
++        ASSERT_STREQ(tzname[1], "");
++#endif
+         assert_se(timezone == 0);
+         assert_se(daylight == 0);
+ 
+diff --git a/test/meson.build b/test/meson.build
+index 505a14aa81..1f1ec0a0e1 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -13,6 +13,7 @@ if conf.get('ENABLE_SYSUSERS') == 1
+                      # https://github.com/mesonbuild/meson/issues/2681
+                      args : exe.full_path(),
+                      depends : exe,
++                     env : test_env,
+                      suite : 'sysusers')
+ 
+                 if have_standalone_binaries
+@@ -22,6 +23,7 @@ if conf.get('ENABLE_SYSUSERS') == 1
+                              # https://github.com/mesonbuild/meson/issues/2681
+                              args : exe.full_path(),
+                              depends : exe,
++                             env : test_env,
+                              suite : 'sysusers')
+                 endif
+         endif
+diff --git a/test/test-sysusers.sh.in b/test/test-sysusers.sh.in
+index 3218923590..ae7bfee2fe 100755
+--- a/test/test-sysusers.sh.in
++++ b/test/test-sysusers.sh.in
+@@ -13,6 +13,12 @@ TESTDIR=$(mktemp --tmpdir --directory "test-sysusers.XXXXXXXXXX")
+ # shellcheck disable=SC2064
+ trap "rm -rf '$TESTDIR'" EXIT INT QUIT PIPE
+ 
++skip_nis() {
++    # musl seems to not support NIS entries. Let's skip the test case for NIS entries.
++    local path=${1:?}
++    [[ "${SYSTEMD_LIBC:-}" == musl && "${path##*/}" == "test-11.input" ]]
++}
++
+ prepare_testdir() {
+     mkdir -p "$TESTDIR/etc/sysusers.d/"
+     mkdir -p "$TESTDIR/usr/lib/sysusers.d/"
+@@ -50,6 +56,7 @@ rm -f "$TESTDIR"/etc/sysusers.d/* "$TESTDIR"/usr/lib/sysusers.d/*
+ 
+ # happy tests
+ for f in $(find "$SOURCE"/test-*.input | sort -V); do
++    skip_nis "$f" && continue
+     echo "*** Running $f"
+     prepare_testdir "${f%.input}"
+     cp "$f" "$TESTDIR/usr/lib/sysusers.d/test.conf"
+@@ -59,6 +66,7 @@ for f in $(find "$SOURCE"/test-*.input | sort -V); do
+ done
+ 
+ for f in $(find "$SOURCE"/test-*.input | sort -V); do
++    skip_nis "$f" && continue
+     echo "*** Running $f on stdin"
+     prepare_testdir "${f%.input}"
+     touch "$TESTDIR/etc/sysusers.d/test.conf"
+@@ -68,6 +76,7 @@ for f in $(find "$SOURCE"/test-*.input | sort -V); do
+ done
+ 
+ for f in $(find "$SOURCE"/test-*.input | sort -V); do
++    skip_nis "$f" && continue
+     echo "*** Running $f on stdin with --replace"
+     prepare_testdir "${f%.input}"
+     touch "$TESTDIR/etc/sysusers.d/test.conf"
+@@ -133,6 +142,7 @@ SYS_GID_MAX999
+ EOF
+ 
+ for f in $(find "$SOURCE"/test-*.input | sort -V); do
++    skip_nis "$f" && continue
+     echo "*** Running $f (with login.defs)"
+     prepare_testdir "${f%.input}"
+     cp "$f" "$TESTDIR/usr/lib/sysusers.d/test.conf"
+@@ -149,6 +159,7 @@ mv "$TESTDIR/etc/login.defs" "$TESTDIR/etc/login.defs.moved"
+ ln -s ../../../../../etc/login.defs.moved "$TESTDIR/etc/login.defs"
+ 
+ for f in $(find "$SOURCE"/test-*.input | sort -V); do
++    skip_nis "$f" && continue
+     echo "*** Running $f (with login.defs symlinked)"
+     prepare_testdir "${f%.input}"
+     cp "$f" "$TESTDIR/usr/lib/sysusers.d/test.conf"
+@@ -161,13 +172,22 @@ done
+ 
+ rm -f "$TESTDIR"/etc/sysusers.d/* "$TESTDIR"/usr/lib/sysusers.d/*
+ 
++preprocess_error() {
++    # Convert error message for ERANGE from glibc to musl.
++    if [[ "${SYSTEMD_LIBC:-}" == musl ]]; then
++        sed -e 's/Numerical result out of range/Result not representable/' "${1:?}"
++    else
++        cat "${1:?}"
++    fi
++}
++
+ # tests for error conditions
+ for f in $(find "$SOURCE"/unhappy-*.input | sort -V); do
+     echo "*** Running test $f"
+     prepare_testdir "${f%.input}"
+     cp "$f" "$TESTDIR/usr/lib/sysusers.d/test.conf"
+     SYSTEMD_LOG_LEVEL=info "$SYSUSERS" --root="$TESTDIR" 2>&1 | tail -n1 | sed -r 's/^[^:]+:[^:]+://' >"$TESTDIR/err"
+-    if ! diff -u "$TESTDIR/err"  "${f%.*}.expected-err" >&2; then
++    if ! diff -u "$TESTDIR/err"  <(preprocess_error "${f%.*}.expected-err") >&2; then
+         echo >&2 "**** Unexpected error output for $f"
+         cat >&2 "$TESTDIR/err"
+         exit 1
+-- 
+2.51.0
+
