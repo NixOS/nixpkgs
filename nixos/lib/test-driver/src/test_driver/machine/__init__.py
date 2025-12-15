@@ -25,6 +25,59 @@ from test_driver.logger import AbstractLogger
 from .ocr import perform_ocr_on_screenshot, perform_ocr_variants_on_screenshot
 from .qmp import QMPSession
 
+# Bash function to monitor stdout closure after command exits
+STDOUT_MONITOR_FN = """
+_nixos_test_run_with_monitor() {
+  local timeout_arg="$1"
+  local cmd="$2"
+
+  # Start the user command as a coproc to get its PID and stdout FD
+  if [ -n "$timeout_arg" ]; then
+    coproc cmd_proc { timeout "$timeout_arg" bash -c "$cmd"; }
+  else
+    coproc cmd_proc { bash -c "$cmd"; }
+  fi
+  local cmd_pid=$cmd_proc_PID
+
+  # Duplicate the read FD and close the original coproc FDs
+  exec {dup_read_fd}<&${cmd_proc[0]}
+  exec {cmd_proc[0]}<&-
+  exec {cmd_proc[1]}>&-
+
+  # Start base64 reading from the user command's stdout
+  { base64 -w 0 <&$dup_read_fd; echo; } &
+  local base64_pid=$!
+
+  # Wait for user command to exit and capture its status
+  wait $cmd_pid
+  local cmd_exit_status=$?
+
+  # Now monitor: either base64 finishes (stdout closed) or 10s timeout expires
+  sleep 10 &
+  local timeout_pid=$!
+
+  # Wait for whichever finishes first: base64 or timeout
+  # Use wait -p to definitively know which process finished
+  local finished_pid
+  wait -n -p finished_pid $base64_pid $timeout_pid
+
+  # Check which one finished
+  if [ "$finished_pid" = "$base64_pid" ]; then
+    # base64 finished first (fast path - no warning)
+    kill $timeout_pid 2>/dev/null
+    wait $timeout_pid 2>/dev/null
+  else
+    # Timeout finished first, base64 still running (slow path - emit warning)
+    echo -e "\033[1;31mWARNING:\033[0m Command '$cmd' for the test script has exited, but not closed stdout. This is indicative of a background process that still references stdout and could produce output. This is likely not intentional. Calls such as machine.succeed(), execute() and fail() record the entirety of stdout. Consider closing stdout by redirecting your background process stdout elsewhere. Typically that's >&2 to log to the console, >some/path.log for a file on the machine, or >/dev/null to discard stdout entirely." >&2
+    # Continue waiting for base64 to finish
+    wait $base64_pid
+  fi
+
+  # Return the command's exit status
+  return $cmd_exit_status
+}
+"""
+
 CHAR_TO_KEY = {
     "A": "shift-a",
     "N": "shift-n",
@@ -503,15 +556,10 @@ class Machine:
         # Always run command with shell opts
         command = f"set -euo pipefail; {command}"
 
-        timeout_str = ""
-        if timeout is not None:
-            timeout_str = f"timeout {timeout}"
-
-        # While sh is bash on NixOS, this is not the case for every distro.
-        # We explicitly call bash here to allow for the driver to boot other distros as well.
-        out_command = (
-            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)\n"
-        )
+        # Use the monitoring function that will warn if stdout stays open
+        # Pass timeout as first arg (empty string if None)
+        timeout_arg = str(timeout) if timeout is not None else ""
+        out_command = f"_nixos_test_run_with_monitor {shlex.quote(timeout_arg)} {shlex.quote(command)}\n"
 
         assert self.shell
         self.shell.send(out_command.encode())
@@ -525,8 +573,8 @@ class Machine:
         if not check_return:
             return (-1, output.decode())
 
-        # Get the return code
-        self.shell.send(b"echo ${PIPESTATUS[0]}\n")
+        # Get the return code (the monitor function returns the child command's exit status)
+        self.shell.send(b"echo $?\n")
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
         return (rc, output.decode(errors="replace"))
@@ -790,6 +838,15 @@ class Machine:
     def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         return self.systemctl(f"stop {jobname}", user)
 
+    def configure_backdoor_shell(self) -> None:
+        """
+        Configure the backdoor shell with helper functions and settings.
+        Called automatically after initial connection.
+        """
+        assert self.shell
+        # Send function definition with trailing newline to ensure it's complete
+        self.shell.send((STDOUT_MONITOR_FN + "\n").encode())
+
     def connect(self) -> None:
         def shell_ready(timeout_secs: int) -> bool:
             """We sent some data from the backdoor service running on the guest
@@ -830,6 +887,9 @@ class Machine:
             self.log("connected to guest root shell")
             self.log(f"(connecting took {toc - tic:.2f} seconds)")
             self.connected = True
+
+            # Configure the shell with helper functions
+            self.configure_backdoor_shell()
 
     @contextmanager
     def _managed_screenshot(self) -> Generator[Path]:
