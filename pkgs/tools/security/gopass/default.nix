@@ -75,7 +75,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
     gitMinimal
   ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit wrapperPath;
