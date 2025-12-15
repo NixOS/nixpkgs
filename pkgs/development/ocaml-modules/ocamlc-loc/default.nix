@@ -1,14 +1,13 @@
 {
   lib,
   buildDunePackage,
-  dune_3,
+  dune,
   dyn,
 }:
 
 buildDunePackage {
   pname = "ocamlc-loc";
-  inherit (dune_3) src version;
-  duneVersion = "3";
+  inherit (dune) src version;
 
   dontAddPrefix = true;
 
@@ -16,8 +15,6 @@ buildDunePackage {
     rm -rf vendor/csexp
     rm -rf vendor/pp
   '';
-
-  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [ dyn ];
 

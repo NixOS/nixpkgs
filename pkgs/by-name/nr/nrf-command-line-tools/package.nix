@@ -70,11 +70,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nordic Semiconductor nRF Command Line Tools";
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Command-Line-Tools";
     license = lib.licenses.unfree;
-    platforms = attrNames supported;
+    platforms = lib.attrNames supported;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
 }
