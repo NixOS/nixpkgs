@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "AIM-Harvard";
     repo = "pyradiomics";
     tag = "v${version}";
-    hash = "sha256-/qFNN63Bbq4DUZDPmwUGj1z5pY3ujsbqFJpVXbO+b8E=";
+    hash = "sha256-xyFRccogBwry/apTOMVVa0JDoaSydWqT5KfzSGYyr1Q=";
     name = "pyradiomics";
   };
 
