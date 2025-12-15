@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "JelteF";
     repo = "PyLaTeX";
     rev = "v${version}";
-    hash = "sha256-gZKMYGMp7bzDY5+Xx9h1AFP4l0Zd936fDfSXyW5lY1k=";
+    hash = "sha256-R6u2HDDLsli/omrtEKSRTH8Pd99gBI4iM+O0cZhoSJc=";
   };
 
   nativeBuildInputs = [ setuptools ];
