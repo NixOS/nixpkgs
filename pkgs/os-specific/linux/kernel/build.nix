@@ -82,12 +82,22 @@ lib.extendMkDerivation {
 
       # Whether to utilize the controversial import-from-derivation feature to parse the config
       allowImportFromDerivation ? false,
+
+      # drv args with defaulted values
+      installFlags ? [ ],
+      depsBuildBuild ? [ ],
+      nativeBuildInputs ? [ ],
+      env ? { },
+      makeFlags ? [ ],
+      postPatch ? "",
+      meta ? extraMeta,
       ...
     }@args:
     let
       # Provide defaults. Note that we support `null` so that callers don't need to use optionalAttrs,
       # which can lead to unnecessary strictness and infinite recursions.
-      modDirVersion_ = if modDirVersion == null then lib.versions.pad 3 version else modDirVersion;
+      modDirVersion_ =
+        if modDirVersion == null then lib.versions.pad 3 finalAttrs.version else modDirVersion;
       config_ = config;
     in
     let
@@ -137,7 +147,7 @@ lib.extendMkDerivation {
         "sparc"
         "xtensa"
       ];
-      needsUbootTools = lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage;
+      needsUbootTools = lib.elem finalAttrs.karch linuxPlatformsUsingUImage;
 
       config =
         let
@@ -175,7 +185,7 @@ lib.extendMkDerivation {
         # module makefiles often run uname commands to find out the kernel version
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
-      ++ optional (lib.versionAtLeast version "5.13") zstd
+      ++ optional (lib.versionAtLeast finalAttrs.version "5.13") zstd
       ++ optionals withRust [
         rustc-unwrapped
         rust-bindgen-unwrapped
@@ -210,15 +220,17 @@ lib.extendMkDerivation {
         # kernelPatches can contain config changes and no actual patch
         lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
-        ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
+        ++ optional (lib.versionOlder finalAttrs.version "5.19") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionAtLeast finalAttrs.version "5.19") ./randstruct-provide-seed-5.19.patch
         # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
         # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
         # https://github.com/openzfs/zfs/pull/13367
         ++
           optional
             (
-              lib.versionAtLeast version "5.12" && lib.versionOlder version "5.19" && stdenv.hostPlatform.isPower
+              lib.versionAtLeast finalAttrs.version "5.12"
+              && lib.versionOlder finalAttrs.version "5.19"
+              && stdenv.hostPlatform.isPower
             )
             (fetchpatch {
               url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
@@ -238,42 +250,46 @@ lib.extendMkDerivation {
       ]
       ++ extraMakeFlags;
 
-      installFlags = [
-        "INSTALL_PATH=${placeholder "out"}"
-      ]
-      ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
-      ++ optionals buildDTBs [
-        "dtbs_install"
-        "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
-      ];
+      installFlags =
+        installFlags
+        ++ [
+          "INSTALL_PATH=${placeholder "out"}"
+        ]
+        ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
+        ++ optionals buildDTBs [
+          "dtbs_install"
+          "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
+        ];
 
-      depsBuildBuild = [ buildPackages.stdenv.cc ];
-      nativeBuildInputs = [
-        bison
-        flex
-        perl
-        bc
-        openssl
-        rsync
-        gmp
-        libmpc
-        mpfr
-        elfutils
-        zstd
-        python3Minimal
-        kmod
-        hexdump
-      ]
-      ++ optional needsUbootTools ubootTools
-      ++ optionals (lib.versionAtLeast version "5.2") [
-        cpio
-        pahole
-        zlib
-      ]
-      ++ optionals withRust [
-        rustc-unwrapped
-        rust-bindgen-unwrapped
-      ];
+      depsBuildBuild = depsBuildBuild ++ [ buildPackages.stdenv.cc ];
+      nativeBuildInputs =
+        nativeBuildInputs
+        ++ [
+          bison
+          flex
+          perl
+          bc
+          openssl
+          rsync
+          gmp
+          libmpc
+          mpfr
+          elfutils
+          zstd
+          python3Minimal
+          kmod
+          hexdump
+        ]
+        ++ optional needsUbootTools ubootTools
+        ++ optionals (lib.versionAtLeast finalAttrs.version "5.2") [
+          cpio
+          pahole
+          zlib
+        ]
+        ++ optionals withRust [
+          rustc-unwrapped
+          rust-bindgen-unwrapped
+        ];
 
       env = {
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
@@ -281,26 +297,29 @@ lib.extendMkDerivation {
         # avoid leaking Rust source file names into the final binary, which adds
         # a false dependency on rust-lib-src on targets with uncompressed kernels
         KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
-      };
+      }
+      // env;
 
-      makeFlags = [
-        "O=$(buildRoot)"
+      makeFlags =
+        makeFlags
+        ++ [
+          "O=$(buildRoot)"
 
-        # We have a `modules` variable in the environment for our
-        # split output, but the kernel Makefiles also define their
-        # own `modules` variable. Their definition wins, but Make
-        # remembers that the variable was originally from the
-        # environment and exports it to all the build recipes. This
-        # breaks the build with an “Argument list too long” error due
-        # to passing the huge list of every module object file in the
-        # environment of every process invoked by every build recipe.
-        #
-        # We use `--eval` here to undefine the inherited environment
-        # variable before any Makefiles are read, ensuring that the
-        # kernel’s definition creates a new, unexported variable.
-        "--eval=undefine modules"
-      ]
-      ++ commonMakeFlags;
+          # We have a `modules` variable in the environment for our
+          # split output, but the kernel Makefiles also define their
+          # own `modules` variable. Their definition wins, but Make
+          # remembers that the variable was originally from the
+          # environment and exports it to all the build recipes. This
+          # breaks the build with an “Argument list too long” error due
+          # to passing the huge list of every module object file in the
+          # environment of every process invoked by every build recipe.
+          #
+          # We use `--eval` here to undefine the inherited environment
+          # variable before any Makefiles are read, ensuring that the
+          # kernel’s definition creates a new, unexported variable.
+          "--eval=undefine modules"
+        ]
+        ++ commonMakeFlags;
 
       postPatch = ''
         # Ensure that depmod gets resolved through PATH
@@ -502,8 +521,8 @@ lib.extendMkDerivation {
       requiredSystemFeatures = [ "big-parallel" ];
 
       passthru = {
+        inherit (finalAttrs) version;
         inherit
-          version
           modDirVersion
           config
           kernelPatches
@@ -520,18 +539,18 @@ lib.extendMkDerivation {
           ;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         baseVersion = lib.head (lib.splitString "-rc" finalAttrs.version);
-        kernelOlder = lib.versionOlder finalAttrs.baseVersion;
-        kernelAtLeast = lib.versionAtLeast finalAttrs.baseVersion;
+        kernelOlder = lib.versionOlder finalAttrs.passthru.baseVersion;
+        kernelAtLeast = lib.versionAtLeast finalAttrs.passthru.baseVersion;
       };
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
       installTargets = [
         (stdenv.hostPlatform.linux-kernel.installTarget or (
-          if target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
+          if target == "uImage" && finalAttrs.karch == "arm" then
             "uinstall"
           else if
             (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
-            && builtins.elem stdenv.hostPlatform.linuxArch [
+            && builtins.elem finalAttrs.karch [
               "arm"
               "arm64"
               "parisc"
@@ -551,7 +570,7 @@ lib.extendMkDerivation {
 
       meta = {
         # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
-        broken = withRust && lib.versionOlder version "6.12";
+        broken = withRust && lib.versionOlder finalAttrs.version "6.12";
 
         description =
           "The Linux kernel"
@@ -567,20 +586,20 @@ lib.extendMkDerivation {
         teams = [ teams.linux-kernel ];
         platforms = platforms.linux;
         badPlatforms =
-          lib.optionals (lib.versionOlder version "4.15") [
+          lib.optionals (lib.versionOlder finalAttrs.version "4.15") [
             "riscv32-linux"
             "riscv64-linux"
           ]
-          ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
+          ++ lib.optional (lib.versionOlder finalAttrs.version "5.19") "loongarch64-linux";
         timeout = 14400; # 4 hours
         identifiers.cpeParts = {
           part = "o";
           vendor = "linux";
           product = "linux_kernel";
-          inherit version;
+          inherit (finalAttrs) version;
           update = "*";
         };
       }
-      // extraMeta;
+      // meta;
     };
 }
