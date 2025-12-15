@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-Yk1nZkCsb54Rynlr4x1BEjT4ldZXUA96w31MzULB+Yo=";
+    hash = "sha256-s69BMjglj8mSW4N1QlT6go4o7MEjk6Xs9s6wAc8hCBA=";
   };
 
   postPatch = ''
