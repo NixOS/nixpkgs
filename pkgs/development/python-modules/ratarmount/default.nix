@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fusepy,
+  mfusepy,
   indexed-gzip,
   indexed-zstd,
   libarchive-c,
@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XiwtmZ7HGZwjJJrUD3TOP3o19RBwB/Yu09xdwK13+hk=";
+    hash = "sha256-rMpOWAPHX1D5TUx16tX0SqTEZhyed9UOsl0Ydub03sk=";
   };
 
   pythonRelaxDeps = [ "python-xz" ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    fusepy
+    mfusepy
     indexed-gzip
     indexed-zstd
     libarchive-c
@@ -56,5 +56,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
     mainProgram = "ratarmount";
+    platforms = lib.platforms.linux;
   };
 }
