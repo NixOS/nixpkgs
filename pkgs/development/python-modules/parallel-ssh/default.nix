@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ParallelSSH";
     repo = "parallel-ssh";
     tag = version;
-    hash = "sha256-TeNQitaNVbK96Aui8OcKin2sHpF8VlMQmb5ODT2lQh4=";
+    hash = "sha256-ak88VRQplFqogKg+hw03axeXmBEnMLSZq/kdZIdUah8=";
   };
 
   build-system = [
