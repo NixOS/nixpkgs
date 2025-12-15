@@ -5200,6 +5200,8 @@ self: super: with self; {
 
   fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
+  fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
