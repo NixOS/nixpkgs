@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.1.17";
+  version = "6.2.0";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     tag = version;
-    hash = "sha256-rNLQYCE7NZAel2fr5VoAMlm7QkH1KrySKdEn2+WMPo8=";
+    hash = "sha256-frQbfCdK7bD6IAUa+MAOaRLhMrbdFRdHocQ0Z1tzsqE=";
   };
 
-  cargoHash = "sha256-/vMVSGUO6Zu/8GSTq1jsXLWVP9sWsuD7fJty3NnKXf4=";
+  cargoHash = "sha256-Z3JFp/qH3mD3Hy/kqSONOZ+syulgr+t0ZzFRvNN+Ayg=";
 
   postPatch = ''
     files="
@@ -46,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace rog-control-center/src/main.rs \
       --replace-fail 'std::env::var("RUST_TRANSLATIONS").is_ok()' 'true'
 
-    substituteInPlace data/asusd.rules --replace-fail /usr/bin/systemctl ${lib.getExe' systemd "systemctl"}
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
@@ -106,6 +105,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       k900
       aacebedo
+      yuannan
     ];
   };
 }
