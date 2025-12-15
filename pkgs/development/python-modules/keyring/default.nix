@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "25.6.0";
+  version = "25.7.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -27,8 +27,12 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "keyring";
     tag = "v${version}";
-    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
+    hash = "sha256-v9s28vwx/5DJRa3dQyS/mdZppfvFcfBtafjBRi2c1oQ=";
   };
+
+  postPatch = ''
+    sed -i "/coherent\.licensed/d" pyproject.toml
+  '';
 
   build-system = [ setuptools-scm ];
 
