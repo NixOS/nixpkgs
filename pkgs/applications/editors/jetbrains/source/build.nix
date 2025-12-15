@@ -244,7 +244,7 @@ let
 
 in
 stdenvNoCC.mkDerivation rec {
-  pname = "${buildType}-community";
+  pname = "${buildType}-oss";
   inherit version buildNumber;
   name = "${pname}-${version}.tar.gz";
   inherit src;
