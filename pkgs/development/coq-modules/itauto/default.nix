@@ -4,6 +4,7 @@
   mkCoqDerivation,
   coq,
   stdlib,
+  dune,
   version ? null,
 }:
 
@@ -60,7 +61,7 @@
       nativeBuildInputs = with coq.ocamlPackages; [
         ocaml
         findlib
-        dune_3
+        dune
       ];
     }
   )

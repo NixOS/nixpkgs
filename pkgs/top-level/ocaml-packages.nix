@@ -464,10 +464,6 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
-
-        dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
-
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
         dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
@@ -2249,6 +2245,8 @@ let
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
         chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
+        dune_2 = pkgs.dune_2; # Added 2025-12-08
+        dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
