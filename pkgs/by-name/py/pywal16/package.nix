@@ -28,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     imagemagick
   ];
 
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ imagemagick ]}" ];
+
   postInstall = ''
     installManPage data/man/man1/wal.1
   '';
