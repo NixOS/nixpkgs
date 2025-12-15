@@ -17,6 +17,7 @@
       "transfer"
     ];
   },
+  azure-sdk-for-cpp,
   boost,
   brotli,
   bzip2,
@@ -58,7 +59,8 @@
     !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
   # google-cloud-cpp fails to build on RiscV
-  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
+  enableGcs ? !stdenv.hostPlatform.isRiscV64,
+  enableAzure ? true,
 }:
 
 let
@@ -170,6 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     google-cloud-cpp
     grpc
     nlohmann_json
+  ]
+  ++ lib.optionals enableAzure [
+    azure-sdk-for-cpp.identity
+    azure-sdk-for-cpp.storage-blobs
+    azure-sdk-for-cpp.storage-files-datalake
   ];
 
   # apache-orc looks for things in caps
@@ -224,6 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ARROW_FLIGHT_TESTING" enableFlight)
     (lib.cmakeBool "ARROW_S3" enableS3)
     (lib.cmakeBool "ARROW_GCS" enableGcs)
+    (lib.cmakeBool "ARROW_AZURE" enableAzure)
     (lib.cmakeBool "ARROW_ORC" true)
     # Parquet options:
     (lib.cmakeBool "ARROW_PARQUET" true)
