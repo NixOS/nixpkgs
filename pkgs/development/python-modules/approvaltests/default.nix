@@ -36,8 +36,6 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail "from setup_utils" "from setup.setup_utils"
 
-    echo 'version_number = "${version}"' > version.py
-
     patchShebangs internal_documentation/scripts
   '';
 
