@@ -64,12 +64,13 @@ let
   scipopt-scip' = scipopt-scip.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # from https://github.com/google/or-tools/commit/77a28070b9c4c83995ac6bbfa9544722ff3342ce#diff-c95174a817e73db366d414af1e329c1856f70e5158ed3994d43da88765ccc98f
-      ./scip.patch
+      ./scip.patch # https://github.com/google/or-tools/pull/4932/files#diff-e6b0a69b2e4b97ec922abc459d909483d440a1e0d2868bed263927b106b6efe6
     ];
+    # message(STATUS "Finding Soplex")
     # Their patch forgets to find_package() soplex, bring it back.
     postPatch = (old.postPatch or "") + ''
       substituteInPlace CMakeLists.txt \
-        --replace-fail 'message(STATUS "Finding Soplex...")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
+        --replace-fail 'message(STATUS "Finding Soplex")' 'find_package(SOPLEX CONFIG HINTS ''${SOPLEX_DIR})'
     '';
   });
 
@@ -112,6 +113,16 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "ortools/math_opt/solvers/highs_solver_test.cc" ];
       hash = "sha256-/dFk/F/3/BwH5IwIwNU4Ua+4sROPXYCjO8R6jpoZpgo=";
     })
+    # Fix compatibility with SCIP 10.0
+    # https://github.com/google/or-tools/issues/4912
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/pull/4932.patch";
+      includes = [ "ortools/linear_solver/proto_solver/scip_proto_solver.cc" ];
+      hash = "sha256-1jw/r3yAjIpq9o8mqAbNorQgmT1E5nt809N+Gb+D9ZI=";
+    })
+    # Compatibility with SCIP 10.0 also needs the following patch adjusted for or-tools 9.14
+    # https://github.com/google/or-tools/pull/4932/files#diff-9559febee3c6051bab4def3c102cb78cbf8a57fc2be4058ace32f89436c784a9
+    ./gscip-scip10.patch
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
