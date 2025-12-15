@@ -384,7 +384,7 @@ with self;
     pname = "cohttp_static_handler";
     hash = "sha256-7NCnJVArudBEvWARQUGlJuEq3kSCjpn5YtsLsL04bf4=";
     meta.description = "Library for easily creating a cohttp handler for static files";
-    propagatedBuildInputs = [ cohttp-async ];
+    propagatedBuildInputs = [ cohttp-async_5_3 ];
   };
 
   content_security_policy = janePackage {
