@@ -5208,6 +5208,8 @@ self: super: with self; {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastcan = callPackage ../development/python-modules/fastcan { };
+
   fastcore = callPackage ../development/python-modules/fastcore { };
 
   fastcrc = callPackage ../development/python-modules/fastcrc { };
