@@ -338,8 +338,8 @@ in
       "sha256-imDBFBMNm8LdlHf9m21aS39DGfF0dbpd7DsZ8fMzIyM=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.9"
-      "sha256-rw52qFKriqJ5yswHBenlQxzw8kMBahV5tlBu5ksf/UA=";
+    buildMypyBoto3Package "connect" "1.42.10"
+      "sha256-Ub7PZwdvQmJJDZA7iPY0MTIF582EWj1yPB2SqyxhyC8=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -446,8 +446,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.5"
-      "sha256-G1TqpkA8EGd0lvfczdDCkRUzsfJuSlcyr1b70xFBeW8=";
+    buildMypyBoto3Package "ec2" "1.42.10"
+      "sha256-fmYwZ5a8Q8gFSeyvXnIxnUl2qtPW3RHc6SyWD19TF6Y=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -510,8 +510,8 @@ in
       "sha256-N975AhqJFTeUcfAob8UcArGMnoDrp6T023OtmEJK4DY=";
 
   mypy-boto3-entityresolution =
-    buildMypyBoto3Package "entityresolution" "1.42.3"
-      "sha256-tZwEY8f91YWYCfHb3gSnbv0haTbyFKgpCvQKQDg12OE=";
+    buildMypyBoto3Package "entityresolution" "1.42.10"
+      "sha256-DyAxO4HPA98ON9Q2Sp5HF1lQNp8yecGiEaV12m0E7zM=";
 
   mypy-boto3-es =
     buildMypyBoto3Package "es" "1.42.3"
@@ -566,8 +566,8 @@ in
       "sha256-4LBhjln6mCxMSooGEV7mo1Fe7U6Jssxq+6JYwqnFhRs=";
 
   mypy-boto3-glacier =
-    buildMypyBoto3Package "glacier" "1.42.3"
-      "sha256-06ckDtpv0ZvarXu9RIy8UxLRprY54/NBmrCyc7vQ5ek=";
+    buildMypyBoto3Package "glacier" "1.42.10"
+      "sha256-EFKWChvNMhj07s/la58yb7iZKtAh96qysffZ8LdvZeE=";
 
   mypy-boto3-globalaccelerator =
     buildMypyBoto3Package "globalaccelerator" "1.42.3"
@@ -597,8 +597,8 @@ in
       "sha256-Wt++1dfId2tV74JssQK0iNv8jgyEfc1i0y5rUgtPecM=";
 
   mypy-boto3-health =
-    buildMypyBoto3Package "health" "1.42.3"
-      "sha256-sK6S4e6Bbvz9sjjxiTUGYS8uS+G/PRVVLGP8X+/c1HY=";
+    buildMypyBoto3Package "health" "1.42.10"
+      "sha256-4dxV8ztTpIHOx0SYIc0IZCMsThugUkobRYzjgkP5TnE=";
 
   mypy-boto3-healthlake =
     buildMypyBoto3Package "healthlake" "1.42.3"
@@ -809,8 +809,8 @@ in
       "sha256-VGQzgnrUynTDjfYpEk+FR+PrljbULl0UpbeqbaPKqSc=";
 
   mypy-boto3-logs =
-    buildMypyBoto3Package "logs" "1.42.3"
-      "sha256-6pXN1oeCkD+5UfHjhgXKOjLTtpfTFgObNZixP+2fJvo=";
+    buildMypyBoto3Package "logs" "1.42.10"
+      "sha256-Or5B12+lM/6CJUtOAIEjcv2PJA3/18Dd1L40UD0feD8=";
 
   mypy-boto3-lookoutequipment =
     buildMypyBoto3Package "lookoutequipment" "1.42.3"
@@ -889,8 +889,8 @@ in
       "sha256-VBsw9c9B6r3G5vJ0iVUCi4wVoFprYseRLeMWs69KpTQ=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.42.3"
-      "sha256-qkV6ZthcahS3h03vCnkam1Q78uas/Sfcqwk0c4R9tAg=";
+    buildMypyBoto3Package "mediatailor" "1.42.10"
+      "sha256-4YmRgBRIz2NtTnU6aSJ+0tPAaOXsMZQY0GFTHjqtF8I=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.42.3"
@@ -1153,16 +1153,16 @@ in
       "sha256-AasFHhNs7b904wj2hzm0Hhj0CHit16bl+f+0cl9Y/t4=";
 
   mypy-boto3-route53resolver =
-    buildMypyBoto3Package "route53resolver" "1.42.3"
-      "sha256-Q+Mzw0HmswKrJIH1KanYN/Hk1Uba3Sel5SdcX/1yH1w=";
+    buildMypyBoto3Package "route53resolver" "1.42.10"
+      "sha256-4zDAA7G0yZl+cm8l2aW/ATWy/Zv/1ogO1IYy7fmBKCk=";
 
   mypy-boto3-rum =
     buildMypyBoto3Package "rum" "1.42.3"
       "sha256-4/Q39UsUYaluauoaLm6BOej+Krl2VbO1xKKo1orRIkI=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.42.3"
-      "sha256-JQe9+heCnx9CK4vzNNuDZomwUp++ZjWvTg86qnL5KAY=";
+    buildMypyBoto3Package "s3" "1.42.10"
+      "sha256-mkV1EktQDCnAI5GfF7Ai5mEJpWuiMY74rqs9DdLNF04=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.42.3"
@@ -1233,8 +1233,8 @@ in
       "sha256-JIwTLfrkWY98gY+eH15Sy7r9Kif+68pBqgmZoj2DTWQ=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.42.3"
-      "sha256-INL6mi8S7oWOsHUoHb1h+uryG6chligV5vwB02XIoas=";
+    buildMypyBoto3Package "service-quotas" "1.42.10"
+      "sha256-aqQDN3jmfxcZ8PLBE9wsb4M2N7w3B+3ruKNcAngyKFE=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.42.3"
