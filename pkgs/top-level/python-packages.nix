@@ -17825,6 +17825,8 @@ self: super: with self; {
 
   sphinxcontrib-tikz = callPackage ../development/python-modules/sphinxcontrib-tikz { };
 
+  sphinxcontrib-towncrier = callPackage ../development/python-modules/sphinxcontrib-towncrier { };
+
   sphinxcontrib-wavedrom = callPackage ../development/python-modules/sphinxcontrib-wavedrom { };
 
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
