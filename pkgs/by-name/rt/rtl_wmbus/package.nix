@@ -36,8 +36,12 @@ stdenv.mkDerivation rec {
 
   # make install would use /usr/bin
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp build/rtl_wmbus $out/bin
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
