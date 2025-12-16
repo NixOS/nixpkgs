@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   gobject-introspection,
   gtk3,
   imagemagick,
@@ -21,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.33.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${version}";
-    hash = "sha256-3aN2MrD1U5iBneVbYtNeWpK+JAQunGpemDpJnDuQdVI=";
+    hash = "sha256-hDbNp9izcv8oaLkBbyjsY7vWZpC3vbuMlXi14cMOC3M=";
   };
 
   build-system = [ setuptools-scm ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
+    anyio
     gobject-introspection
     imagemagick
     keyring
