@@ -2782,6 +2782,10 @@ with pkgs;
     efiSupport = true;
   };
 
+  grub2_ieee1275 = grub2.override {
+    ieee1275Support = true;
+  };
+
   grub2_light = grub2.override {
     zfsSupport = false;
   };
