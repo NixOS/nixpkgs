@@ -1,70 +1,50 @@
 {
-  mkDerivation,
-  lib,
   stdenv,
-  fetchpatch,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  karchive,
-  kconfig,
-  kwidgetsaddons,
-  kcompletion,
-  kcoreaddons,
-  kguiaddons,
-  ki18n,
-  kitemmodels,
-  kitemviews,
-  kwindowsystem,
-  kio,
-  kcrash,
-  breeze-icons,
+  SDL2,
   boost,
-  libraw,
-  fftw,
+  cmake,
+  curl,
   eigen,
   exiv2,
+  extra-cmake-modules,
+  fetchpatch,
+  fetchurl,
+  fftw,
   fribidi,
-  libaom,
-  libheif,
-  #libkdcraw,
-  lcms2,
-  gsl,
-  openexr,
   giflib,
-  libjxl,
-  mlt,
-  openjpeg,
-  opencolorio,
-  xsimd,
-  poppler,
-  curl,
+  gsl,
   ilmbase,
   immer,
   kseexpr,
   lager,
+  lcms2,
+  lib,
+  libaom,
+  libheif,
+  libjxl,
   libmypaint,
+  libraw,
+  libsForQt5,
   libunibreak,
   libwebp,
-  qtmultimedia,
-  qtx11extras,
-  quazip,
-  SDL2,
-  zug,
+  mlt,
+  opencolorio,
+  openexr,
+  openjpeg,
   pkg-config,
+  poppler,
   python3Packages,
-  version,
-  kde-channel,
-  hash,
+  xsimd,
+  zug,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "krita-unwrapped";
-  inherit version;
 
+  version = "5.2.14";
   src = fetchurl {
-    url = "mirror://kde/${kde-channel}/krita/${version}/krita-${version}.tar.gz";
-    inherit hash;
+    url = "mirror://kde/stable/krita/${version}/krita-${version}.tar.gz";
+    hash = "sha256-VWkAcmwv8U5g97rB6OkVAQDyzZJmnKXcdKxYUe+sKIc=";
   };
 
   patches = [
@@ -81,22 +61,10 @@ mkDerivation rec {
     extra-cmake-modules
     pkg-config
     python3Packages.sip
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    karchive
-    kconfig
-    kwidgetsaddons
-    kcompletion
-    kcoreaddons
-    kguiaddons
-    ki18n
-    kitemmodels
-    kitemviews
-    kwindowsystem
-    kio
-    kcrash
-    breeze-icons
     boost
     libraw
     fftw
@@ -109,7 +77,7 @@ mkDerivation rec {
     lager
     libaom
     libheif
-    #libkdcraw
+
     giflib
     libjxl
     mlt
@@ -124,13 +92,31 @@ mkDerivation rec {
     libmypaint
     libunibreak
     libwebp
-    qtmultimedia
-    qtx11extras
-    quazip
     SDL2
     zug
     python3Packages.pyqt5
-  ];
+  ]
+  ++ (with libsForQt5; [
+    breeze-icons
+    karchive
+    kcompletion
+    kconfig
+    kcoreaddons
+    kcrash
+    kguiaddons
+    ki18n
+    kio
+    kitemmodels
+    kitemviews
+    kwidgetsaddons
+    kwindowsystem
+    qtmultimedia
+    qtx11extras
+    quazip
+
+    # TODO: reenable libkdcraw when migrating to Qt6, see #430298
+    # libkdcraw
+  ]);
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
 
