@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Vgf3k0pT8VswESXuWIIeZlCFLm861BYrteRFkmhk/3M=";
 
   cargoBuildFlags = [
-    "--exclude xtask"
+    "--exclude=xtask"
     "--workspace"
   ];
 
