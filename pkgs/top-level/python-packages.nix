@@ -5872,6 +5872,8 @@ self: super: with self; {
 
   fountains = callPackage ../development/python-modules/fountains { };
 
+  fowl = callPackage ../development/python-modules/fowl { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fpdf = callPackage ../development/python-modules/fpdf { };
