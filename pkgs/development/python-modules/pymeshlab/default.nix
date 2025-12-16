@@ -4,13 +4,16 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  buildPythonPackage,
+  python,
 
   # nativeBuildInputs
   cmake,
-  python3Packages,
+  pybind11,
 
   # propagatedBuildInputs
   meshlab,
+  numpy,
 
   # buildInputs
   libsForQt5,
@@ -19,14 +22,18 @@
   vcg,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "pymeshlab";
+let
   version = "2025.7";
+in
+buildPythonPackage {
+  inherit version;
+  pname = "pymeshlab";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "pymeshlab";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-LCR2/AyX9uVX4xhZareUL6YlpUsCFiGDMBB5nFp+H6k=";
   };
 
@@ -42,16 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3Packages.pybind11
-  ];
-
-  nativeCheckInputs = [
-    python3Packages.pythonImportsCheckHook
+    pybind11
   ];
 
   propagatedBuildInputs = [
     meshlab
-    python3Packages.numpy
+    numpy
   ];
 
   buildInputs = [
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}/pymeshlab"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python.sitePackages}/pymeshlab"
   ];
 
   # Get io & filter plugins from meshlab, to avoild render, decorate & edit ones
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       pyPlugins = if stdenv.hostPlatform.isDarwin then "PlugIns" else "lib/plugins";
     in
     ''
-      install -D -t $out/${python3Packages.python.sitePackages}/pymeshlab/${pyPlugins} \
+      install -D -t $out/${python.sitePackages}/pymeshlab/${pyPlugins} \
         ${meshlab}/${plugins}/libio_* \
         ${meshlab}/${plugins}/libfilter_*
     '';
@@ -88,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --add-needed ${meshlab}/lib/meshlab/libmeshlab-common.so \
-      $out/${python3Packages.python.sitePackages}/pymeshlab/pmeshlab.*.so
+      $out/${python.sitePackages}/pymeshlab/pmeshlab.*.so
   '';
 
   pythonImportsCheck = [ "pymeshlab" ];
@@ -100,4 +103,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-})
+}

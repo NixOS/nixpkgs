@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  nix,
+  nixVersions,
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -50,6 +50,8 @@
 }:
 
 let
+  nix = nixVersions.nix_2_32;
+
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
