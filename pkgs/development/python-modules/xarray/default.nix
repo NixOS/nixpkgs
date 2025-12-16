@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2025.10.1";
+  version = "2025.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
-    hash = "sha256-Yk1nZkCsb54Rynlr4x1BEjT4ldZXUA96w31MzULB+Yo=";
+    hash = "sha256-7MTZ/0BbJb3mg2FHvtsV+v4TsgoxD0Tpco7J4DgT/hY=";
   };
 
   postPatch = ''
@@ -99,11 +99,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  pytestFlags = [
-    # [2025.10.0] ChainedAssignmentError: behaviour will change in pandas 3.0!
-    "-Wignore::FutureWarning"
   ];
 
   pythonImportsCheck = [ "xarray" ];
