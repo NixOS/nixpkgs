@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4UxPeWiNxvKi/Nw0kZU6paI3QChqNRY8bLOdZKhPgr0=";
+    hash = "sha256-qTw8bYROAAB7FwKCCQamIbWGbqSexXl87DdvSNsFZ/I=";
   };
 
-  vendorHash = "sha256-mqwuCadUjKrQZA7DI5Bm3GBrnnvHxFqwl2FsgY2ZhgQ=";
+  vendorHash = "sha256-5OAS7s9A95h5LihXgOwkOXAMylS7g+lqjaI3MKTvlW0=";
 
   subPackages = [
     "cmd/upterm"
