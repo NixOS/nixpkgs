@@ -8520,6 +8520,8 @@ self: super: with self; {
     }
   );
 
+  libparse-python = callPackage ../development/python-modules/libparse-python/package.nix { };
+
   libpass = callPackage ../development/python-modules/libpass { };
 
   libpcap = callPackage ../development/python-modules/libpcap {
