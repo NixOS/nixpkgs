@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   nixosTests,
   rustPlatform,
   fetchFromGitLab,
@@ -21,6 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Bf9XmlY0IMPY4Convftd0Hv8mQbYoiE8WrkkAeaS6Z8=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  # cross compiling for linux target
+  buildInputs =
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isLinux)
+      [
+        stdenv.cc.libc
+        (stdenv.cc.libc.static or null)
+      ];
 
   checkFlags = [
     # Those time-based tests behave poorly in low-resource environments (CI...)
