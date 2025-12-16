@@ -6,27 +6,24 @@
   ipython,
   py3nvml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = "watermark";
     tag = "v${version}";
-    hash = "sha256-UR4kV6UoZ/JLO19on+qEH+M05QIsT0SXvXJtTMCKuZM=";
+    hash = "sha256-vHnXPGHPQz6+y2ZvfmUouL/3JlATGo4fmZ8AIk+bNEU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipython
     importlib-metadata
   ];
@@ -38,15 +35,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "watermark" ];
 
-  meta = with lib; {
+  meta = {
     description = "IPython extension for printing date and timestamps, version numbers, and hardware information";
     homepage = "https://github.com/rasbt/watermark";
-    changelog = "https://github.com/rasbt/watermark/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nphilou ];
+    changelog = "https://github.com/rasbt/watermark/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nphilou ];
   };
 }

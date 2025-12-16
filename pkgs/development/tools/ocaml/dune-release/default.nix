@@ -94,12 +94,12 @@ buildDunePackage rec {
       --prefix PATH : "${lib.makeBinPath runtimeInputs}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Release dune packages in opam";
     mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
     changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

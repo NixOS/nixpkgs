@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "METAINFODIR=${placeholder "out"}/share/metainfo"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "TeX and LaTeX editor";
     longDescription = ''
       This editor is a full fledged IDE for TeX and
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
       spell checking and support of any compilation chain.
     '';
     homepage = "http://www.xm1math.net/texmaker/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       cfouche
       markuskowa
     ];

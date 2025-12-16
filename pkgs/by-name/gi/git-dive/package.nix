@@ -55,11 +55,11 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";
     changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

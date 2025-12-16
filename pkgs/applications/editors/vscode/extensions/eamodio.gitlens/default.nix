@@ -1,7 +1,7 @@
 {
   lib,
   pkgs,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
   pnpm,
   nodejs,
@@ -10,8 +10,8 @@
 }:
 
 let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "gitlens-${finalAttrs.version}.zip";
+  vsix = stdenv.mkDerivation (finalAttrs: {
+    name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
     version = "17.7.1";
 
@@ -30,6 +30,8 @@ let
 
     postPatch = ''
       substituteInPlace scripts/generateLicenses.mjs --replace-fail 'https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/LICENSE.txt' '${pkgs.vscode-json-languageserver.src}/LICENSE.txt'
+      substituteInPlace webpack.config.mjs --replace-fail 'minify: TerserPlugin.swcMinify' 'minify: TerserPlugin.terserMinify'
+      substituteInPlace webpack.config.mjs --replace-fail 'env.skipLint' 'true'
     '';
 
     nativeBuildInputs = [

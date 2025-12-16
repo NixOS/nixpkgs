@@ -14,6 +14,8 @@
   sqlite,
   zlib,
   fmt,
+  jsoncpp,
+  icu77,
   # options
   enableMysql ? false,
   libmysqlclient,
@@ -121,13 +123,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "2.5.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-3X8/8ewqXy9tvy4S9frmPENhsYTwaW6SydtJeiyVH1I=";
+    sha256 = "sha256-dszd4WSTjOWwLNha0yq1gtC5kxCrJMhnnhKYaor8JyU=";
   };
 
   postPatch =
@@ -140,6 +142,7 @@ stdenv.mkDerivation rec {
     in
     ''
       ${mysqlPatch}
+      substituteInPlace CMakeLists.txt --replace-fail /usr/share/bash-completion/completions $out/share/bash-completion/completions
     '';
 
   cmakeFlags = [
@@ -162,6 +165,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     fmt
+    jsoncpp
+    icu77
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 

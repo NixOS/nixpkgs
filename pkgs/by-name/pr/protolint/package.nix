@@ -35,11 +35,11 @@ buildGoModule rec {
       "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.revision=${rev}"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable linter and fixer to enforce Protocol Buffer style and conventions";
     homepage = "https://github.com/yoheimuta/protolint";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "protolint";
   };

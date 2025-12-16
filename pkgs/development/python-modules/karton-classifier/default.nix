@@ -51,12 +51,12 @@ buildPythonPackage rec {
     "test_process_runnable_win32_lnk"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
     changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "karton-classifier";
   };
 }

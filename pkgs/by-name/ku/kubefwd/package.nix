@@ -23,10 +23,10 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bulk port forwarding Kubernetes services for local development";
     homepage = "https://github.com/txn2/kubefwd";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "kubefwd";
   };

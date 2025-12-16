@@ -3,6 +3,7 @@
   copyDesktopItems,
   electron_37,
   fetchFromGitHub,
+  fetchpatch,
   deltachat-rpc-server,
   makeDesktopItem,
   makeWrapper,
@@ -19,17 +20,17 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "2.25.0";
+    version = "2.33.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-ULOnR1YvNmKr7iEuf8cZ+WgN4JRIG3md9gwyXK81vPQ=";
+      hash = "sha256-4cnYTtm5bQ86BgMOOH5d881ahjuFFOxVuGffRp3Nbw4=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-EkYlG32EhtIFFDpVgbKw8TSqHhPHgxd6Kh3wYN4Moq8=";
+      hash = "sha256-TOGSvvFKsWshfMqGNEOtjhHcpTJ0FAiK6RigmlT4AFA=";
     };
   };
   electron = electron_37;
@@ -37,19 +38,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.25.1";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+BZs8WUoDoW5mA7s6WIalEq3F5konJsJuZwWSdUeYiA=";
+    hash = "sha256-PA2Faq1AmFxxizN1+NDYRB3uFI2bXdGshtyfHwY2btM=";
   };
+
+  patches = [
+    # https://github.com/deltachat/deltachat-desktop/pull/5854
+    (fetchpatch {
+      name = "dont-load-env-file-in-production.patch";
+      url = "https://github.com/deltachat/deltachat-desktop/commit/e0eca1672b2f0c951b96c1e921219d2a4a4dbcb0.patch";
+      hash = "sha256-/Dc8VjdF10qJOrEa0dJeBib+R+8kb5yD4/iKt9/VnBA=";
+    })
+  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-aih6WusKV44Wu9eF8te5t/liEcPB1pnYRganlJSSnXg=";
+    fetcherVersion = 2;
+    hash = "sha256-4BAcCzPZbCjUfHTnJ98TzcfI5UnfMmGdbdvCFaQNNsk=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       = ${lib.versions.major electron.version} \
       || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
 
-    pnpm -w build:electron
+    pnpm --filter=@deltachat-desktop/target-electron build4production
 
     pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
     pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules

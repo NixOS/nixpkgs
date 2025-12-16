@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   lib,
   go,
   buildGoModule,
@@ -33,7 +34,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus";
-  version = "3.7.2";
+  version = "3.8.0";
 
   outputs = [
     "out"
@@ -45,14 +46,16 @@ buildGoModule (finalAttrs: {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bitRDX1oymFfzvQVYL31BON6UBfQYnqjZefQKc+yXx0=";
+    hash = "sha256-hRuZxwPPDLxQvy5MPKEyfmanNabcSjLRO+XbNKugPtk=";
   };
 
-  vendorHash = "sha256-V+qLxjqGOaT1veEwtklqcS7iO31ufvDHBA9DbZLzDiE=";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  vendorHash = "sha256-5wDaG01vcTtGzrS/S33U5XWXoSWM+N9z3dzXZlILxD8=";
 
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NFv6zNpMacd0RgVYBlWKbXKNCEh7WijpREg0bNojisM=";
+    hash = "sha256-oOEvNZFlYtTNBsn+B2pAWXi0A2oJ6IAo7V8bOLtjfCM=";
   };
 
   excludedPackages = [
@@ -96,7 +99,9 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then
+      GOARCH= CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" make -o assets assets-compress plugins
+    fi
   '';
 
   tags = [ "builtinassets" ];
@@ -107,7 +112,6 @@ buildGoModule (finalAttrs: {
     in
     [
       "-s"
-      "-w"
       "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
@@ -129,19 +133,24 @@ buildGoModule (finalAttrs: {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+  checkFlags = [
+    # Skip for issue during TSDB compaction
+    "-skip=TestBlockRanges"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 
-  meta = with lib; {
+  meta = {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fpletz
       Frostman
     ];
+    mainProgram = "prometheus";
   };
 })

@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "seashells" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://seashells.io/";
     description = "Pipe command-line programs to seashells.io";
     mainProgram = "seashells";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
       Official cient for seashells.io, which allows you to view
       command-line output on the web, in real-time.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
   };
 }

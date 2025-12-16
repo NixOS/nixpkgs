@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "gerrit";
-  version = "3.12.3";
+  version = "3.13.1";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-egPuxGfRk8uB+7hzdrrEOT9wfBxlkaSjRpw2z9RYXAI=";
+    hash = "sha256-4+Z1q1cHEM5IaG+SAS7JgiCypfjM8W2Zaa25/KGaoqw=";
   };
 
   buildCommand = ''
@@ -46,16 +46,16 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gerritcodereview.com/index.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [
       flokli
       zimbatm
       felixsinger
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

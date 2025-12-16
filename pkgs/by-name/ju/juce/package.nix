@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "8.0.10";
+  version = "8.0.11";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     tag = finalAttrs.version;
-    hash = "sha256-YSNVQ337/IAlz3mFNgJisIY5D9wPz6sFboMNwsjcGBo=";
+    hash = "sha256-sUxPFxQ/Q1ESlp6tdGI8hGkc3szYkFwBO8xARg2JiR4=";
   };
 
   patches = [

@@ -11,7 +11,6 @@
   pytest-trio,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
   starlette,
   tiny-proxy,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
     tag = "v${version}";
-    hash = "sha256-1NDsIKJ8lWpjaTnlv5DrwTsEJU4gYwEUuqKpn+2QVhg=";
+    hash = "sha256-/8nz/5LqEuSr8A8/BWzJM9vHuum6fOYIS2rozr4Omi4=";
   };
 
   build-system = [ setuptools ];
@@ -70,11 +67,11 @@ buildPythonPackage rec {
     "test_secure_proxy"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
     changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

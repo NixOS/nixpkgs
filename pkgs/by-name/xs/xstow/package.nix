@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Replacement of GNU Stow written in C++";
     homepage = "https://github.com/majorkingleo/xstow";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nzbr ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nzbr ];
+    platforms = lib.platforms.unix;
   };
 }

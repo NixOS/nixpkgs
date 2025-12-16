@@ -76,12 +76,12 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line interface to the freedesktop.org trashcan";
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }

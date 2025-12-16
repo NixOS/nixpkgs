@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
     "-p=svg2pdf-cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert SVG files to PDFs";
     homepage = "https://github.com/typst/svg2pdf";
     changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       doronbehar
     ];
     mainProgram = "svg2pdf";

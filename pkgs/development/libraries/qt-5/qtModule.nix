@@ -114,7 +114,6 @@ mkDerivation (
       maintainers = with maintainers; [
         qknight
         ttuegel
-        periklis
         bkchr
       ];
       platforms = platforms.unix;

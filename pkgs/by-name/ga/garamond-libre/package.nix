@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dbenjaminmiller/garamond-libre";
     description = "Garamond Libre font family";
     maintainers = [ ];
-    license = licenses.x11;
-    platforms = platforms.all;
+    license = lib.licenses.x11;
+    platforms = lib.platforms.all;
   };
 }

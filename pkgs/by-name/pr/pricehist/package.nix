@@ -6,15 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pricehist";
-  version = "1.4.7";
+  version = "1.4.14";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
     tag = version;
-    hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
+    hash = "sha256-BnyoSYVjs2odnOzSpvgMF860PDkz7tPNnM0s3Fep5G0=";
   };
+
+  pythonRelaxDeps = [ "lxml" ];
 
   dependencies = with python3Packages; [
     requests

@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slip10" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic implementation of SLIP109";
     homepage = "https://github.com/trezor/python-slip10";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       prusnak
     ];
   };

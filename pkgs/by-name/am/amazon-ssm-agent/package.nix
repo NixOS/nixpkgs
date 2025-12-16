@@ -6,7 +6,7 @@
   darwin,
   fetchFromGitHub,
   coreutils,
-  net-tools,
+  unixtools,
   util-linux,
   stdenv,
   dmidecode,
@@ -90,7 +90,7 @@ buildGoModule rec {
 
     substituteInPlace agent/platform/platform_unix.go \
       --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
-      --replace-fail '"/bin", "hostname"' '"${net-tools}/bin/hostname"' \
+      --replace-fail '"/bin", "hostname"' '"${unixtools.hostname}/bin/hostname"' \
       --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \

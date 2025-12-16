@@ -43,7 +43,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "49.1";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-adpdExncLGit9c05StWb7Jm7LiTyhARaG7Ss13QAROU=";
+    hash = "sha256-mBNjH59fD4YOoUpDeGbmDvx77TAjt8O3Zcxd4d5ZegY=";
   };
 
   mesonFlags = [
@@ -202,12 +202,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program that manages graphical display servers and handles graphical user logins";
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

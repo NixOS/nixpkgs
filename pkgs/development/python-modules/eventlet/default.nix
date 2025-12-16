@@ -77,11 +77,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eventlet" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/eventlet/eventlet/blob/v${version}/NEWS";
     description = "Concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

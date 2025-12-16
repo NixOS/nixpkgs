@@ -42,12 +42,12 @@ mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "PDF viewer for the Lumina Desktop";
     mainProgram = "lumina-pdf";
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    teams = [ teams.lumina ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lumina ];
   };
 }

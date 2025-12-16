@@ -28,11 +28,11 @@ mkDerivation rec {
     qtwebkit
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Play and download Youtube videos";
     homepage = "http://smplayer.sourceforge.net/smtube.php";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vbgl ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
+    platforms = lib.platforms.linux;
   };
 }

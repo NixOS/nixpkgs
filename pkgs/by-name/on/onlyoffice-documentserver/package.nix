@@ -10,23 +10,24 @@
   liberation_ttf_v1,
   writeScript,
   xorg,
+  nixosTests,
 }:
 
 let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "8.3.3";
+    version = "9.1.0";
 
     src = fetchurl (
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-wF5TdBEpNXeE8SMTmvgjuOp713Vf9gIifsI1yeujuA0=";
+          sha256 = "sha256-QeeJe9pvwjgLrIRv2YuC5CE2EHevGfLP3c+eI6R80I0=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-zEI9R5AOkE1gMZHL209l6HOh/yfZgmEvMw8+hb9kC+s=";
+          sha256 = "sha256-MmUq6dV4/cDeeC0UL240U+yYcqBsi1vqB0BwPKWoDdc=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
@@ -72,6 +73,7 @@ let
     dontStrip = true;
 
     passthru = {
+      tests = nixosTests.onlyoffice;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 
@@ -155,7 +157,7 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
@@ -163,13 +165,13 @@ let
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
       homepage = "https://github.com/ONLYOFFICE/DocumentServer";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ sourceTypes.binaryNativeCode ];
-      maintainers = with maintainers; [ raboof ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      maintainers = with lib.maintainers; [ raboof ];
     };
   };
 in

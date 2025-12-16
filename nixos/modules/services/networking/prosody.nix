@@ -453,6 +453,11 @@ let
             or use a reverse proxy to handle the HTTP for that domain.
           '';
         };
+        http_external_url = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "External URL in case Prosody sits behind a reverse proxy.";
+        };
         size_limit = mkOption {
           type = types.int;
           default = 10 * 1024 * 1024;
@@ -596,7 +601,17 @@ let
         ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
           http_host = "${cfg.httpFileShare.http_host}"
         ''}
-        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
+        ${lib.optionalString (cfg.httpFileShare.http_external_url != null) ''
+          http_external_url = "${cfg.httpFileShare.http_external_url}"
+        ''}
+        ${settingsToLua "  http_file_share_" (
+          cfg.httpFileShare
+          // {
+            domain = null;
+            http_host = null;
+            http_external_url = null;
+          }
+        )}
       ''}
 
       ${lib.concatStringsSep "\n" (

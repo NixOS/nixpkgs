@@ -35,11 +35,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/georgebv/drf-pydantic/releases/tag/${src.tag}";
     description = "Use pydantic with the Django REST framework";
     homepage = "https://github.com/georgebv/drf-pydantic";
-    maintainers = [ maintainers.kiara ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.kiara ];
+    license = lib.licenses.mit;
   };
 }

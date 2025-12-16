@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "13.1.0";
+  version = "13.1.0"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -78,6 +78,8 @@ buildPythonPackage rec {
     "av.utils"
     "av.video"
   ];
+
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/PyAV-Org/PyAV/blob/${src.tag}/CHANGELOG.rst";

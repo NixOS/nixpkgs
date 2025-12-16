@@ -92,12 +92,12 @@ stdenv.mkDerivation rec {
     patchShebangs --host $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.linux;
   };
 
 }

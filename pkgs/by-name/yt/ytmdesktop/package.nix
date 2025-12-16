@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/ytmdesktop/ytmdesktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop App for YouTube Music";
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";

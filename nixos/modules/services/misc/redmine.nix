@@ -80,7 +80,7 @@ in
       enable = lib.mkEnableOption "Redmine, a project management web application";
 
       package = lib.mkPackageOption pkgs "redmine" {
-        example = "redmine.override { ruby = pkgs.ruby_3_4; }";
+        example = "redmine.override { ruby = pkgs.ruby_3_3; }";
       };
 
       user = lib.mkOption {

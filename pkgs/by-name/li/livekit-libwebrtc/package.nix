@@ -1,7 +1,7 @@
 {
   stdenv,
   clang,
-  callPackage,
+  gclient2nix,
   lib,
   gn,
   fetchurl,
@@ -29,11 +29,8 @@
   libxslt,
   minizip,
   ffmpeg_6,
-  writeShellScript,
 }:
 let
-  sources = callPackage ./sources.nix { };
-
   platformMap = {
     "x86_64" = "x64";
     "i686" = "x86";
@@ -69,13 +66,13 @@ let
       ffmpeg_6
       ;
   };
-  gclient2nix = python3.pkgs.callPackage ./gclient2nix.nix { };
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "125-unstable-2025-03-24";
+  version = "125-unstable-2025-07-25";
 
-  src = "${sources}/src";
+  gclientDeps = gclient2nix.importGclientDeps ./sources.json;
+  sourceRoot = "src";
 
   patches = [
     # Adds missing dependencies to generated LICENSE
@@ -95,7 +92,7 @@ stdenv.mkDerivation {
     })
     # Fixes "error: no matching member function for call to 'emplace'"
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/refs/heads/main/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
+      url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/5f04705ac3f356350ae31534ffbc476abc9ea83d/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
       hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
 
       extraPrefix = "third_party/";
@@ -103,20 +100,6 @@ stdenv.mkDerivation {
     })
     # Required for dynamically linking to ffmpeg libraries and exposing symbols
     ./0001-shared-libraries.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./0002-disable-narrowing-const-reference.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # GCC does not support C11 _Generic in C++ mode. Fixes boringssl build with GCC
-    (fetchpatch {
-      name = "fix-gcc-c11-generic-boringssl";
-
-      url = "https://github.com/google/boringssl/commit/c70190368c7040c37c1d655f0690bcde2b109a0d.patch";
-      hash = "sha256-xkmYulDOw5Ny5LOCl7rsheZSFbSF6md2NkZ3+azjFQk=";
-      stripLen = 1;
-      extraPrefix = "third_party/boringssl/src/";
-    })
   ];
 
   postPatch = ''
@@ -173,6 +156,7 @@ stdenv.mkDerivation {
       ) gnSystemLibraries
     ))
     ++ [
+      gclient2nix.gclientUnpackHook
       gn
       (python3.withPackages (ps: [ ps.setuptools ]))
       ninja
@@ -295,11 +279,7 @@ stdenv.mkDerivation {
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
   '';
 
-  passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''
-    set -eou pipefail
-    cd pkgs/by-name/li/livekit-libwebrtc
-    ${lib.getExe gclient2nix} --main-source-path src https://github.com/webrtc-sdk/webrtc.git m114_release
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "WebRTC library used by livekit";

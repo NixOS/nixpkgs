@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "mmixware";
-  version = "unstable-2021-06-18";
+  version = "1.0-unstable-2021-06-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";
@@ -47,11 +47,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MMIX simulator and assembler";
     homepage = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
-    license = licenses.publicDomain;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.publicDomain;
   };
 }

@@ -173,16 +173,16 @@ stdenv.mkDerivation (self: {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine (" + self.godotBuildDescription + ")";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rotaerk
       twey
     ];

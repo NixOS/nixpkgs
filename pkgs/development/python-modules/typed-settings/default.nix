@@ -66,7 +66,7 @@ buildPythonPackage rec {
     sybil
   ]
   ++ (lib.optional (pythonOlder "3.11") typing-extensions)
-  ++ (lib.flatten (lib.attrValues optional-dependencies));
+  ++ (lib.concatAttrValues optional-dependencies);
 
   enabledTestPaths = [ "tests" ];
 
@@ -83,11 +83,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typed_settings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

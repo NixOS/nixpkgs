@@ -48,11 +48,11 @@ buildPythonPackage rec {
     "test_invalid_messages"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to receive UDP Packets from Weatherflow Weatherstations";
     homepage = "https://github.com/briis/pyweatherflowudp";
     changelog = "https://github.com/briis/pyweatherflowudp/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

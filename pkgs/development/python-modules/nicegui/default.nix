@@ -105,7 +105,7 @@ buildPythonPackage rec {
     webdriver-manager
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nicegui" ];
 

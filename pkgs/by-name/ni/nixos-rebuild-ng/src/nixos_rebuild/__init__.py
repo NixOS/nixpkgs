@@ -5,7 +5,7 @@ from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
+from .constants import EXECUTABLE, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -100,6 +100,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--flake",
+        "-F",
         nargs="?",
         const=True,
         help="Build the NixOS system from the specified flake",
@@ -287,7 +288,7 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if WITH_REEXEC and can_run and not args.no_reexec:
+    if can_run and not args.no_reexec:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)

@@ -134,7 +134,7 @@ def test_build_remote(
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
+                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])
                 },
             ),
             call(
@@ -208,7 +208,7 @@ def test_build_remote_flake(
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
+                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS])
                 },
             ),
             call(
@@ -249,13 +249,13 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         mock_run.assert_called_with(
             ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
-                "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-opt"])
+                "NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])
             },
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     extra_env = {
-        "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-target-opt"])
+        "NIX_SSHOPTS": " ".join(["--ssh build-target-opt", *p.SSH_DEFAULT_OPTS])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
@@ -345,7 +345,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
         stdout=PIPE,
     )
 
-    build_attr = m.BuildAttr(Path(tmp_path), "preAttr")
+    build_attr = m.BuildAttr(tmp_path, "preAttr")
     assert n.get_build_image_variants(build_attr, {"inst_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
@@ -404,31 +404,20 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
     )
 
 
-def test_get_nixpkgs_rev() -> None:
+def test_get_nixpkgs_rev(tmpdir: Path) -> None:
     assert n.get_nixpkgs_rev(None) is None
+    assert n.get_nixpkgs_rev(tmpdir) is None
 
-    path = Path("/path/to/nix")
-
-    with patch(
-        get_qualified_name(n.run_wrapper, n),
-        autospec=True,
-        side_effect=[CompletedProcess([], 0, "")],
-    ) as mock_run:
-        assert n.get_nixpkgs_rev(path) is None
-        mock_run.assert_called_with(
-            ["git", "-C", path, "rev-parse", "--short", "HEAD"],
-            check=False,
-            capture_output=True,
-        )
+    (tmpdir / ".git").mkdir()
 
     expected_calls = [
         call(
-            ["git", "-C", path, "rev-parse", "--short", "HEAD"],
+            ["git", "-C", tmpdir, "rev-parse", "--short", "HEAD"],
             check=False,
             capture_output=True,
         ),
         call(
-            ["git", "-C", path, "diff", "--quiet"],
+            ["git", "-C", tmpdir, "diff", "--quiet"],
             check=False,
         ),
     ]
@@ -441,7 +430,7 @@ def test_get_nixpkgs_rev() -> None:
             CompletedProcess([], returncode=0),
         ],
     ) as mock_run:
-        assert n.get_nixpkgs_rev(path) == ".git.0f7c82403fd6"
+        assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6"
         mock_run.assert_has_calls(expected_calls)
 
     with patch(
@@ -452,7 +441,7 @@ def test_get_nixpkgs_rev() -> None:
             CompletedProcess([], returncode=1),
         ],
     ) as mock_run:
-        assert n.get_nixpkgs_rev(path) == ".git.0f7c82403fd6M"
+        assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6M"
         mock_run.assert_has_calls(expected_calls)
 
 

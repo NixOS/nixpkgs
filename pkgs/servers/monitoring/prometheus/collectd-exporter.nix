@@ -25,11 +25,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) collectd; };
 
-  meta = with lib; {
+  meta = {
     description = "Relay server for exporting metrics from collectd to Prometheus";
     mainProgram = "collectd_exporter";
     homepage = "https://github.com/prometheus/collectd_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ benley ];
   };
 }

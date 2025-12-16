@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-docker";
-  version = "3.2.4";
+  version = "3.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
     repo = "pytest-docker";
     tag = "v${version}";
-    hash = "sha256-Hf9ig4FPgI4Kafu9+WeAuo6NELc8m8pQHyveUM+eC1s=";
+    hash = "sha256-AkVLfCt2aQZrvSfa/5oXr95XUIR5mRqcMRz67kmuKKw=";
   };
 
   build-system = [ setuptools ];

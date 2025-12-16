@@ -11,17 +11,17 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "cucumber";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for executable specifications";
     homepage = "https://cucumber.io/";
     changelog = "https://github.com/cucumber/cucumber-ruby/blob/main/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "cucumber";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       nicknovitski
       anthonyroussel
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

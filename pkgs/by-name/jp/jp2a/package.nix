@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "https://csl.name/jp2a/";
+    homepage = "https://github.com/Talinx/jp2a";
     description = "Small utility that converts JPG images to ASCII";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.FlorianFranzen ];

@@ -15,6 +15,10 @@
   unbound,
   xdp-tools,
   openvswitch,
+  gawk,
+  coreutils,
+  gnugrep,
+  gnused,
   makeWrapper,
 }:
 let
@@ -22,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
-  version = "25.09.0";
+  version = "25.09.2";
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
+    hash = "sha256-JcOc9rNtpGhr+dn+dXltA+WTJZa3bEgqyS4zjlVM+Uc=";
     fetchSubmodules = true;
   };
 
@@ -41,19 +45,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix test failure with musl libc.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
-      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
-    })
-    # Fix sandbox test failure.
-    (fetchpatch {
-      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
-      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
-    })
     # Fix build failure due to make install race condition.
-    # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
-    ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d7c46f5d1f9b804ebc7b20b0edad4e11469a41da.patch";
+      hash = "sha256-P3XNZ2YXSa9s3DdlKX9C243bMovDbIsmapdrXaQS7go=";
+    })
+
+    # Disable scapy tests that were not marked with HAVE_SCAPY requirement -
+    # they hang indefinitely if scapy is not installed.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/df99035f88e43a3b80f4c58dc530fd3f45766c54.patch";
+      hash = "sha256-l+t1zZ3FEmcRa+G2qfDVaVTBRsFOPd6iceqDmRT+d7k=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/f353dbd03cd7a3c06b1b728321749e5e276aafc0.patch";
+      hash = "sha256-hXH2/tFFtVfrOFQZxmbS7grQeQnTejESU8w10E484PE=";
+    })
+
+    # Fix test failures due to spurious Broken pipe on AT_CHECK stderr.
+    # Posted: https://patchwork.ozlabs.org/project/ovn/patch/20251213030322.91112-1-ihar.hrachyshka@gmail.com/
+    ./0001-tests-Ignore-AT_CHECK-stderr-for-grep-.-grep-q.patch
   ];
 
   nativeBuildInputs = [
@@ -117,7 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
-      --prefix PATH : ${lib.makeBinPath [ openvswitch ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          openvswitch
+          gawk
+          coreutils # tr
+          gnugrep
+          gnused
+        ]
+      }
   '';
 
   env = {
@@ -133,6 +152,18 @@ stdenv.mkDerivation (finalAttrs: {
     # hack to stop tests from trying to read /etc/resolv.conf
     export OVS_RESOLV_CONF="$PWD/resolv.conf"
     touch $OVS_RESOLV_CONF
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    if ! make check; then
+      echo "Some tests failed. Collecting logs for analysis..."
+      find tests/testsuite.dir -type f -exec echo "==== Contents of {} ====" \; -exec cat {} \;
+      exit 1
+    fi
+
+    runHook postCheck
   '';
 
   passthru.updateScript = nix-update-script { };

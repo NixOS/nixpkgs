@@ -102,7 +102,7 @@ buildGoModule (finalAttrs: {
       Linux 5.13+ is required for file access restrictions, Linux 6.7+ for TCP restrictions.
     '';
     homepage = "https://github.com/Zouuup/landrun";
-    changelog = "https://github.com/Zouuup/landrun/releases/tag/{finalAttrs.src.tag}";
+    changelog = "https://github.com/Zouuup/landrun/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.fliegendewurst ];
     platforms = lib.platforms.linux;

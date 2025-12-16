@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-enCVn52wy42a1cXM2YYCg7RHpkzZoDHc52L6xlxQOo0=";
+    hash = "sha256-teBk3+t0iFaqOh0Bzpz6mAlQ/reEd84wZSVXnYIXAio=";
   };
 
   nativeBuildInputs = [

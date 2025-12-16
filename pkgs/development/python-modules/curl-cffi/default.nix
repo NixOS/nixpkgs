@@ -104,6 +104,10 @@ buildPythonPackage rec {
     "tests/unittest/test_websockets.py::test_websocket"
     # Runs out of memory while testing
     "tests/unittest/test_websockets.py::test_receive_large_messages_run_forever"
+    # Fails on high core-count machines (including x86_64)
+    "tests/unittest/test_websockets.py::on_message"
+    "tests/unittest/test_websockets.py::test_on_data_callback"
+    "tests/unittest/test_websockets.py::test_hello_twice_async"
   ];
 
   disabledTests = [

@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.48.0";
+  version = "4.54.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-0ren1A943mMzsAxFiUb2GUR9GFhFJ1Oen0Q4badAVKM=";
+    hash = "sha256-aDBKdpAoeVmKRvgNfQ9UrwpoeRG+WWHJ9pu1jrnxA0M=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 2;
-    hash = "sha256-n5nKP6BLw0xMgIecFVNt/vjfdQmO3HiI0vrqAtpA4ms=";
+    hash = "sha256-TiaMBbx3diKkyYWD0tbqnLwvvjF4LfL/GhlONJ0iUH4=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''

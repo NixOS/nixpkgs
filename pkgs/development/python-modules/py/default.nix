@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
     homepage = "https://py.readthedocs.io/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

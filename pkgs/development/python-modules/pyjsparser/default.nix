@@ -27,11 +27,11 @@ let
 
     pythonImportsCheck = [ "pyjsparser" ];
 
-    meta = with lib; {
+    meta = {
       description = "Fast javascript parser (based on esprima.js)";
       homepage = "https://github.com/PiotrDabkowski/pyjsparser";
-      license = licenses.mit;
-      maintainers = with maintainers; [ onny ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ onny ];
     };
   };
 in

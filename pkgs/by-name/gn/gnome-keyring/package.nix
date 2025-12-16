@@ -90,15 +90,25 @@ stdenv.mkDerivation rec {
     runHook preCheck
   '';
 
-  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-  postFixup = lib.optionalString useWrappedDaemon ''
-    files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+  postFixup =
+    # disable OnlyShowIn to allow xdg-autostart in any DE
+    # https://wiki.archlinux.org/title/GNOME/Keyring#Using_gnome-keyring-daemon_outside_desktop_environments_(KDE,_GNOME,_XFCE,_...)
+    ''
+      for f in "$out"/etc/xdg/autostart/*.desktop; do
+        [ -e "$f" ] || continue
+        substituteInPlace "$f" \
+          --replace-fail "OnlyShowIn=" "#OnlyShowIn="
+      done
+    ''
+    # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+    + lib.optionalString useWrappedDaemon ''
+      files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
-    for file in ''${files[*]}; do
-      substituteInPlace $file \
-        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
-    done
-  '';
+      for file in ''${files[*]}; do
+        substituteInPlace $file \
+          --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+      done
+    '';
 
   passthru = {
     updateScript = gnome.updateScript {

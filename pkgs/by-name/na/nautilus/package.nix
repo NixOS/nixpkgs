@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "49.1";
+  version = "49.2";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rdKg5BD9ItooUd3QxbPSLJ6djDMRFRHzNpYeO0YbU14=";
+    hash = "sha256-JXazS+0ngaifCQUeyfyuOuF+txcs175nj1kqoU5MJrE=";
   };
 
   patches = [
@@ -127,12 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
     mainProgram = "nautilus";
   };
 })

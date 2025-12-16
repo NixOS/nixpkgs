@@ -49,11 +49,11 @@ buildPythonPackage rec {
     "pyControl4.light"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lawtancool/pyControl4/releases/tag/v${version}";
     description = "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

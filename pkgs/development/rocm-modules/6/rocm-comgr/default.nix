@@ -65,12 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/ROCm/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

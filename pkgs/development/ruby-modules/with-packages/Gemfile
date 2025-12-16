@@ -9,7 +9,12 @@ gem 'bacon'
 gem 'byebug'
 gem 'cairo'
 gem 'cairo-gobject'
-gem 'camping', '~> 3'
+# Because camping >= 3.0.0 depends on rackup ~> 2.1.0
+#   and Gemfile depends on camping ~> 3.1.0,
+#   rackup ~> 2.1.0 is required.
+# So, because Gemfile depends on rackup ~> 2.2.1,
+#   version solving has failed.
+gem 'camping', '~> 2.1.532'
 # gem 'capybara-webkit' takes too long to build right now since webkit depends on ruby
 gem 'charlock_holmes'
 gem 'cf-uaac'
@@ -51,7 +56,12 @@ gem 'dip'
 gem 'domain_name'
 gem 'do_sqlite3'
 gem 'erb-formatter'
-gem 'ethon'
+# Because typhoeus >= 1.5.0 depends on ethon >= 0.9.0, < 0.16.0
+#   and Gemfile depends on ethon ~> 0.16.0,
+#   typhoeus >= 1.5.0 cannot be used.
+# So, because Gemfile depends on typhoeus ~> 1.5.0,
+#   version solving has failed.
+gem 'ethon', '~> 0.16.0'
 gem 'eventmachine'
 gem 'excon'
 gem 'faraday'
@@ -115,7 +125,18 @@ gem 'pry-doc'
 gem 'public_suffix'
 gem 'puma'
 gem 'pwntools'
-gem 'rails', '~> 8'
+# And because rails >= 8.1.1 depends on activesupport = 8.1.1
+#   and jekyll-webmention_io >= 4.0.0 depends on activesupport >= 7.0.4.3, < 8.A,
+#   jekyll-webmention_io >= 4.0.0 is incompatible with rails >= 8.0.0.
+# So, because Gemfile depends on jekyll-webmention_io ~> 4.1.0
+#   and Gemfile depends on rails ~> 8,
+#   version solving has failed.
+# ...
+# Thus, cocoapods >= 1.16.2 is incompatible with rails >= 8.0.0.
+# So, because Gemfile depends on cocoapods ~> 1.16.2
+#   and Gemfile depends on rails ~> 8,
+#   version solving has failed.
+gem 'rails', '~> 7.2'
 gem 'rainbow'
 # gem 'rbczmq' deprecated
 gem 'rbnacl'
@@ -135,7 +156,7 @@ gem 'ruby-lxc'
 gem 'ruby-progressbar'
 gem 'ruby-terminfo'
 gem 'ruby-vips'
-gem 'rubyzip', '~>3'
+gem 'rubyzip'
 gem 'rugged'
 gem 'sassc'
 gem 'scrypt'
@@ -143,11 +164,11 @@ gem 'seccomp-tools'
 gem 'semian'
 gem 'sequel'
 gem 'sequel_pg'
+gem 'solargraph'
 gem 'simplecov'
 gem 'sinatra'
 gem 'slop'
 gem 'snappy'
-gem 'solargraph'
 gem 'snmp'
 gem 'sqlite3'
 gem 'standard'

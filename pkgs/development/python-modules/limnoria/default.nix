@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2025.7.18";
+  version = "2025.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iXu+ObOFd0iQae8/mY2ztt7s4kuKutX3huHN7jP3cHE=";
+    hash = "sha256-cvlp1cfsdN8lv8hFvaHV6vtWEJ0CJUBmN1yCgxrhMi8=";
   };
 
   build-system = [ setuptools ];
@@ -59,10 +59,10 @@ buildPythonPackage rec {
     "supybot"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -60,7 +60,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       modules (written in Java or Scala) or through an external subprocesses.
     '';
     maintainers = with lib.maintainers; [
-      scalavision
       zenithal
     ];
     platforms = [

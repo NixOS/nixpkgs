@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/noxdafox/pebble";
     changelog = "https://github.com/noxdafox/pebble/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 }

@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "lovelace-card-mod";
-  version = "3.4.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "thomasloven";
     repo = "lovelace-card-mod";
     rev = "v${version}";
-    hash = "sha256-eQwJOVpRy9MTILWrKSru90p+kKgRlIUBFhpeHrYX3X0=";
+    hash = "sha256-w2ky3jSHRbIaTzl0b0aJq4pzuCNUV8GqYsI2U/eoGfs=";
   };
 
-  npmDepsHash = "sha256-3KXu/RhDt0jzO9UJKRN3nOc/mm9tCOeQYGRGaCUv2wM=";
+  npmDepsHash = "sha256-7VoPQGUQLuQYaB3xAbvv0Ux7kiE/usnIxX2+jYGQXqA=";
 
   installPhase = ''
     runHook preInstall
@@ -28,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "card-mod.js";
 
-  meta = with lib; {
+  meta = {
     description = "Add CSS styles to (almost) any lovelace card";
     homepage = "https://github.com/thomasloven/lovelace-card-mod";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
+    platforms = lib.platforms.all;
   };
 }

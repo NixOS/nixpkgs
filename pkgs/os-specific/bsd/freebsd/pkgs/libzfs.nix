@@ -77,6 +77,8 @@ mkDerivation {
     "debug"
   ];
 
+  MK_TESTS = "no";
+
   meta = {
     platforms = lib.platforms.freebsd;
     license = with lib.licenses; [ cddl ];

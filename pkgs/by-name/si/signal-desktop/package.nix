@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_38,
+  electron_39,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_38;
+  electron = electron_39;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.78.0";
+  version = "7.81.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-pQk1k3ARBMk3YDTPeLNCWG7dCl1TWBn/evgKIEny3k0=";
+    hash = "sha256-Ulv4/VZxsMAFKsNshVDdWjqGg4FzazvWdXGohwlyKs4=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -134,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-qOVwVQRGtxjpfVF+zBqeotYD0JE1n3az9yFclzXrHgs="
+        "sha256-aNef+j0Kw8ERa1KKerGFi1+14U7YEclHThGIjkmQQow="
       else
-        "sha256-Pby9shhDbvXGMY7K1Z+BZXwxY8QVwTYViaEMwZiDggI=";
+        "sha256-n5wvPqYCqKGC8ApUJ7K7OSwOHJq1rEivXiowK+HzN8M=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1762378649;
+    SOURCE_DATE_EPOCH = 1764799973;
   };
 
   preBuild = ''

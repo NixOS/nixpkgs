@@ -244,7 +244,7 @@ in
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
       phpOptions = ''
-        error_log = 'stderr'
+        error_log = '/dev/stderr'
         log_errors = on
         post_max_size = ${cfg.maxAttachmentSize}
         upload_max_filesize = ${cfg.maxAttachmentSize}

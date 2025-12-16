@@ -90,11 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-3.0" ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.lgpl21;
-    teams = [ teams.gnome ];
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.lgpl21;
+    teams = [ lib.teams.gnome ];
   };
 })

@@ -283,7 +283,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer Good Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
@@ -291,8 +291,8 @@ stdenv.mkDerivation (finalAttrs: {
       correct functionality, our preferred license (LGPL for the plug-in
       code, LGPL or LGPL-compatible for the supporting library).
     '';
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ ];
   };
 })

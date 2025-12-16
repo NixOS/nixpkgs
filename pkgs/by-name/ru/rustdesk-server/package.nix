@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       gaelreyrol
-      tjni
     ];
   };
 }

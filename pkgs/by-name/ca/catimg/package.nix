@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     CFLAGS = "-D_DEFAULT_SOURCE";
   };
 
-  meta = with lib; {
-    license = licenses.mit;
+  meta = {
+    license = lib.licenses.mit;
     homepage = "https://github.com/posva/catimg";
     description = "Insanely fast image printing in your terminal";
-    maintainers = with maintainers; [ ryantm ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ryantm ];
+    platforms = lib.platforms.unix;
     mainProgram = "catimg";
   };
 

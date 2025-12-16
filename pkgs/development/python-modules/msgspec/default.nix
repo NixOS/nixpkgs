@@ -67,7 +67,7 @@ buildPythonPackage rec {
     toml = [
       tomli-w
     ]
-    ++ lib.optional (pythonOlder 3.11) tomli;
+    ++ lib.optional (pythonOlder "3.11") tomli;
     yaml = [ pyyaml ];
   };
 
@@ -76,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msgspec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle JSON/MessagePack";
     homepage = "https://github.com/jcrist/msgspec";
     changelog = "https://github.com/jcrist/msgspec/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

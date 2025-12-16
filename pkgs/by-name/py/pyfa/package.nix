@@ -5,12 +5,13 @@
   gsettings-desktop-schemas,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  gobject-introspection,
   gdk-pixbuf,
   makeDesktopItem,
   copyDesktopItems,
 }:
 let
-  version = "2.64.2";
+  version = "2.65.1";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-82zXMcIQPXTjMnKwhfpkm2apwDXLwKpbyglah6yHz/E=";
+    hash = "sha256-s53EkXPySdijmkb32VZs44Fuy+lckBu9RxMfPVe0mag=";
   };
 
   desktopItems = [
@@ -51,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     python-jose
     requests-cache
+    pygobject3
   ];
 
   buildInputs = [
@@ -62,6 +64,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
+    gobject-introspection
     wrapGAppsHook3
     copyDesktopItems
   ];

@@ -19,19 +19,17 @@
 
   python3,
   python3Packages,
-  nimble,
-  nim,
 }:
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.3.1";
+  version = "29.4.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-Nne6niGnhaEQNvvFURmF0N9oyuG1ZvJ4NzxddJdSQtY=";
+    hash = "sha256-DzgR/GyVIUq6Dfes6OnTdYO/vyGBPcKSeD2IikF7sIM=";
   };
 
   lockFile = ./lock.json;
@@ -71,26 +69,23 @@ buildNimPackage rec {
       --replace-fail '"main=auto-editor"' '"main"'
   '';
 
-  # TODO: Fix checks
-  /*
-    nativeCheckInputs = [
-      python3Packages.av
-      python3
-    ];
+  nativeCheckInputs = [
+    python3
+    python3Packages.av
+  ];
 
-    checkPhase = ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      nim c \
-      ${if withHEVC then "-d:enable_hevc" else ""} \
-      ${if withWhisper then "-d:enable_whisper" else ""} \
-      -r $src/src/rationals
+    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/rationals.nim"
 
-      python3 $src/tests/test.py
+    substituteInPlace tests/test.py \
+      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
 
-      runHook postCheck
-    '';
-  */
+    python3 tests/test.py
+
+    runHook postCheck
+  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

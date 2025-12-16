@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_localserver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for the pytest testing framework to test server connections locally";
     homepage = "https://github.com/pytest-dev/pytest-localserver";
     changelog = "https://github.com/pytest-dev/pytest-localserver/blob/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siriobalmelli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

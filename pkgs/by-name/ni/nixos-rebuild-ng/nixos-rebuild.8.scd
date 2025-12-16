@@ -279,7 +279,7 @@ It must be one of the following:
 	attribute path from file specified by the *--file* option. If specified
 	without *--file* option, uses _default.nix_ in current directory.
 
-*--flake* _flake-uri[#name]_
+*--flake* _flake-uri[#name]_, *-F* _flake-uri[#name]_
 	Build the NixOS system from the specified flake. It defaults to the
 	directory containing the target of the symlink _/etc/nixos/flake.nix_,
 	if it exists. The flake must contain an output named

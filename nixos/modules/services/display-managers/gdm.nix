@@ -179,47 +179,33 @@ in
 
     services.xserver.displayManager.lightdm.enable = false;
 
-    users.users.gdm = {
-      name = "gdm";
-      uid = config.ids.uids.gdm;
-      group = "gdm";
-      description = "GDM user";
-    };
+    users.users = lib.mkMerge [
+      {
+        gdm = {
+          name = "gdm";
+          uid = config.ids.uids.gdm;
+          group = "gdm";
+          description = "GDM user";
+        };
 
-    users.users.gdm-greeter = {
-      isSystemUser = true;
-      uid = 60578;
-      group = "gdm";
-      home = "/run/gdm";
-    };
+        gdm-greeter = {
+          isSystemUser = true;
+          uid = 60578;
+          group = "gdm";
+          home = "/run/gdm";
+        };
+      }
 
-    users.users.gdm-greeter-1 = {
-      isSystemUser = true;
-      uid = 60579;
-      group = "gdm";
-      home = "/run/gdm-1";
-    };
-
-    users.users.gdm-greeter-2 = {
-      isSystemUser = true;
-      uid = 60580;
-      group = "gdm";
-      home = "/run/gdm-2";
-    };
-
-    users.users.gdm-greeter-3 = {
-      isSystemUser = true;
-      uid = 60581;
-      group = "gdm";
-      home = "/run/gdm-3";
-    };
-
-    users.users.gdm-greeter-4 = {
-      isSystemUser = true;
-      uid = 60582;
-      group = "gdm";
-      home = "/run/gdm-4";
-    };
+      (lib.genAttrs' [ 1 2 3 4 ] (
+        i:
+        lib.nameValuePair "gdm-greeter-${toString i}" {
+          isSystemUser = true;
+          uid = 60578 + i;
+          group = "gdm";
+          home = "/run/gdm-${toString i}";
+        }
+      ))
+    ];
 
     users.groups.gdm.gid = config.ids.gids.gdm;
 

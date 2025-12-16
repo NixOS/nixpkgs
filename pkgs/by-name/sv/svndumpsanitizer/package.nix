@@ -24,13 +24,13 @@ stdenv.mkDerivation {
     install -Dm555 svndumpsanitizer -t $out/bin
     runHook postInstall
   '';
-  meta = with lib; {
+  meta = {
     description = "Alternative to svndumpfilter that discovers which nodes should actually be kept";
     homepage = "https://miria.homelinuxserver.org/svndumpsanitizer";
     downloadPage = "https://github.com/dsuni/svndumpsanitizer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lafrenierejm ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "svndumpsanitizer";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

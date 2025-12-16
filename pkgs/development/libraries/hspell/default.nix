@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
-    platforms = platforms.all;
-    license = licenses.gpl2;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2;
   };
 }

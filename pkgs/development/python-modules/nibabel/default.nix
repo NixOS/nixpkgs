@@ -23,14 +23,12 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C9ymUDsceEtEbHRaRUI2fed1bPug1yFDuR+f+3i+Vps=";
+    hash = "sha256-jSAGtw1yf9CnmKiK5f1kM5dB9Db8/IPW6jJWzbxRxbc=";
   };
 
   patches = [
@@ -76,11 +74,11 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nipy.org/nibabel";
     changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

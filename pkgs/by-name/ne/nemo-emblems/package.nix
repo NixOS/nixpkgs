@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  version = "6.4.0";
+  version = "6.6.0";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
+    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
   sourceRoot = "${src.name}/nemo-emblems";
@@ -30,15 +30,15 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-emblems";
     description = "Change a folder or file emblem in Nemo";
     longDescription = ''
       Nemo extension that allows you to change folder or file emblems.
       When adding this to nemo-with-extensions you also need to add nemo-python.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

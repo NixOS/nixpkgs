@@ -86,7 +86,6 @@ let
               adisbladis
               jwiegley
               lovek323
-              matthewbauer
               panchoh
             ];
             "macport" = with lib.maintainers; [

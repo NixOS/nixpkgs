@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleach_allowlist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Curated lists of tags and attributes for sanitizing html";
     homepage = "https://github.com/yourcelf/bleach-allowlist";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

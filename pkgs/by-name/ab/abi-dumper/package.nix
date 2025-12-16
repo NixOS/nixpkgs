@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     description = "Dump ABI of an ELF object containing DWARF debug info";
     mainProgram = "abi-dumper";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ bhipple ];
     platforms = lib.platforms.all;
   };
 }

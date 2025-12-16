@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Personnal accounting application";
     mainProgram = "grisbi";
     longDescription = ''
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       associations.
     '';
     homepage = "https://grisbi.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ layus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ layus ];
+    platforms = lib.platforms.linux;
   };
 })

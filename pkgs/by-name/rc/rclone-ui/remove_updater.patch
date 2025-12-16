@@ -1,23 +1,37 @@
 diff --git a/src-tauri/src/lib.rs b/src-tauri/src/lib.rs
-index 04ea191..72d178d 100644
+index 5200821..8994d35 100644
 --- a/src-tauri/src/lib.rs
 +++ b/src-tauri/src/lib.rs
-@@ -83,7 +83,6 @@ pub fn run() {
- 	
+@@ -673,7 +673,7 @@ async fn update_system_rclone() -> Result<i32, String> {
+                 // Fallback to sudo with custom prompt (works if the user has NOPASSWD or cached credentials)
+                 let mut sudo_env = std::collections::HashMap::new();
+                 sudo_env.insert("SUDO_PROMPT", "Rclone UI needs permission to run rclone selfupdate. Please enter your password: ");
+-                
++
+                 let mut sudo_args: Vec<String> = Vec::new();
+                 sudo_args.push("-n".to_string());
+                 sudo_args.push("env".to_string());
+@@ -735,11 +735,10 @@ pub fn run() {
+     ));
+ 
+     let _guard = tauri_plugin_sentry::minidump::init(&client);
+-	
++
      let mut app = tauri::Builder::default()
+ 		.plugin(tauri_plugin_sentry::init_with_no_injection(&client))
          .plugin(tauri_plugin_clipboard_manager::init())
 -        .plugin(tauri_plugin_updater::Builder::new().build())
          .plugin(tauri_plugin_os::init())
          .plugin(tauri_plugin_notification::init())
          .plugin(tauri_plugin_process::init())
 diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
-index 8b1c89f..1705861 100644
+index 933f067..bbb69fc 100644
 --- a/src-tauri/tauri.conf.json
 +++ b/src-tauri/tauri.conf.json
-@@ -86,16 +86,9 @@
-                 "installMode": "both"
-             },
-             "signCommand": "trusted-signing-cli -e https://eus.codesigning.azure.net -a sign-1 -c Sign1 -d Rclone %1"
+@@ -87,16 +87,9 @@
+             "rpm": {
+                 "depends": ["(libappindicator-gtk3 or libayatana-appindicator-gtk3)"]
+             }
 -        },
 -        "createUpdaterArtifacts": true
 +        }

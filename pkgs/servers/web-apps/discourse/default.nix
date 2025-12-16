@@ -529,11 +529,11 @@ let
           ;
       };
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ talyz ];
+      license = lib.licenses.gpl2Plus;
       description = "Open source discussion platform";
     };
   };

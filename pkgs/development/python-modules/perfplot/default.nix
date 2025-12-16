@@ -43,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "perfplot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
     changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

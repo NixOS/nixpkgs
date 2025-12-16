@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "material_color_utilities_python" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/material_color_utilities_python";
     description = "Python port of material_color_utilities used for Material You colors";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
   };
 }

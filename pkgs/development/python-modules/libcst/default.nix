@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.8.5";
+  version = "1.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "LibCST";
     tag = "v${version}";
-    hash = "sha256-4FFkxy8UrLOXuZwvGvGQNZGtY27yLtiTWAzTbxLm3Eo=";
+    hash = "sha256-AJm3grS+I/NXZ8ame4rmHPOxRHGO0Ofo35RtSDO2tyI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-eFdcyqzH7meF4kIVT2qhbKVxEB6KtZVEONMgYw4sBew=";
+    hash = "sha256-7/Yf2yn7wjW0CDG1Ha3SsvOIytbU1bJCpR9WFAFiPEA=";
   };
 
   cargoRoot = "native";
@@ -77,6 +77,8 @@ buildPythonPackage rec {
     "TypeInferenceProviderTest"
     # we'd need to run `python -m libcst.codegen.generate all` but shouldn't modify $out
     "test_codegen_clean_visitor_functions"
+    "test_codegen_clean_matcher_classes"
+    "test_codegen_clean_return_types"
   ];
 
   # circular dependency on hypothesmith and ufmt

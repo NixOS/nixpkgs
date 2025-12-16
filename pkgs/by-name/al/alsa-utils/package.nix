@@ -12,6 +12,7 @@
   libsamplerate,
   pciutils,
   procps,
+  tree,
   which,
   fftw,
   pipewire,
@@ -64,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
         which
         pciutils
         procps
+        tree
       ]
-    }"
+    }" --prefix PATH : $out/bin
     for program in $out/bin/*; do
         wrapProgram "$program" --set-default ALSA_PLUGIN_DIR "${plugin-dir}"
     done

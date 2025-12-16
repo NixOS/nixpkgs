@@ -14,25 +14,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.49";
+  version = "0.5.50";
 
   src =
     {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
-        hash = "sha256-ydrSqSaHJcL5DX2voAcUfHn3Y0QRo8CyvYHNZrTMmhI=";
+        hash = "sha256-h0rA7pCHm9DtD7/ZO4XsCscvKh/wq9vWwcM2KeloSqc=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
-        hash = "sha256-qd+cDB9FnfOija0xeF0GMBIZu2JAjlax/nPtfORzhlM=";
+        hash = "sha256-FQXzmLvX4Ac4RtObLVRjeMNW2CYowh8Eq87mH2S9+WA=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-arm64.tar.gz";
-        hash = "sha256-5QPG6JkciD3iI7WVPB6p3NEO/ZNEBgpRe30XT1op4K8=";
+        hash = "sha256-Cb25GhImYPhfT/VbY4gFFU1PUEj87z1qi0dlkvFiT/8=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
-        hash = "sha256-LiW1Ugaaz1LzVDmfpSkiwtRYMhuv7XeNGEnFc9HndWg=";
+        hash = "sha256-XutiYr0x4PT4SVADun8ymJpPgX8a4aEqVhD2EqikRkU=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
@@ -69,15 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
       --set UCM_WEB_UI "$out/ui"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
     mainProgram = "ucm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ceedubs
       sellout
       virusdave
@@ -88,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

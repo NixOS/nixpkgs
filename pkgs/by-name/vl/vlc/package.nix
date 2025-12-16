@@ -1,24 +1,23 @@
 {
   lib,
-  a52dec,
   alsa-lib,
   autoreconfHook,
   avahi,
+  bison,
   cairo,
   curl,
   dbus,
   faad2,
+  fetchFromGitLab,
   fetchpatch,
-  fetchurl,
-  # Please unpin FFmpeg on the next upstream release.
-  ffmpeg_6,
+  ffmpeg_7,
   flac,
+  flex,
   fluidsynth,
   fontconfig,
   freefont_ttf,
   freetype,
   fribidi,
-  genericUpdater,
   gnutls,
   harfbuzz,
   libGL,
@@ -44,7 +43,6 @@
   libmatroska,
   libmicrodns,
   libmodplug,
-  libmpeg2,
   libmtp,
   libogg,
   libopus,
@@ -66,6 +64,7 @@
   live555,
   lua5,
   ncurses,
+  nix-update-script,
   perl,
   pkg-config,
   pkgsBuildBuild,
@@ -104,17 +103,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.21";
+  version = "3.0.22";
 
-  src = fetchurl {
-    url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = "vlc";
+    rev = finalAttrs.version;
+    hash = "sha256-EI8w8Nep8Vhgp+5wKOdtbFHiSkURnGqb/AjTfELTq1w=";
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
 
   nativeBuildInputs = [
     autoreconfHook
+    bison
+    flex
     lua5
     perl
     pkg-config
@@ -132,13 +136,12 @@ stdenv.mkDerivation (finalAttrs: {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    a52dec
     alsa-lib
     avahi
     cairo
     dbus
     faad2
-    ffmpeg_6
+    ffmpeg_7
     flac
     fluidsynth
     fontconfig
@@ -165,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     libmad
     libmatroska
     libmodplug
-    libmpeg2
     libmtp
     libogg
     libopus
@@ -236,18 +238,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       hash = "sha256-qs3gY1ksCZlf931TSZyMuT2JD0sqrmcRCZwL+wVG0U8=";
     })
-    # support VAAPI hardware video decoding with newer ffmpeg
-    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/6606 (will be included in the next release)
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/-/commit/ba5dc03aecc1d96f81b76838f845ebde7348cf62.diff";
-      hash = "sha256-s6AI9O0V3AKOyw9LbQ9CgjaCi5m5+nLacKNLl5ZLC6Q=";
-    })
     # make the plugins.dat file generation reproducible
     # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/7149
     ./deterministic-plugin-cache.diff
   ];
 
   postPatch = ''
+    echo "$version" > src/revision.txt
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
       --replace \
         /usr/share/fonts/truetype/freefont \
@@ -312,11 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
-  passthru.updateScript = genericUpdater {
-    versionLister = writeShellScript "vlc-versionLister" ''
-      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
-    '';
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform media player and streaming server";

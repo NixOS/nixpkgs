@@ -28,6 +28,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-applets";
   version = "1.28.1";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -70,15 +74,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Applets for use with the MATE panel";
     mainProgram = "mate-cpufreq-selector";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.linux;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
 }

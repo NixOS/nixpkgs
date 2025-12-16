@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=array-bounds"
+      "-Wno-character-conversion"
     ];
   };
 

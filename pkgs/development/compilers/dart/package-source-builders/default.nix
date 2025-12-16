@@ -11,6 +11,7 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
+  pdfium_flutter = callPackage ./pdfium_flutter { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };

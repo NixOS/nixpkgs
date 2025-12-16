@@ -39,12 +39,12 @@ mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative Qt-based front-end for the database maintained by the MediathekView project";
     inherit (src.meta) homepage;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "QMediathekView";
   };

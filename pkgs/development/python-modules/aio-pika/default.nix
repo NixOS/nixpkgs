@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aio_pika" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP 0.9 client designed for asyncio and humans";
     homepage = "https://github.com/mosquito/aio-pika";
     changelog = "https://github.com/mosquito/aio-pika/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

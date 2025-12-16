@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.13.6";
+  version = "1.13.9";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QY23r5URr0yDuZXamnW7Nrp+GAJOZ2Q+yZiyEHB8+o8=";
+    hash = "sha256-AvwYAsc/dozSfIGPcsySAqOa47jg6bXvHj53eVsjYiM=";
   };
 
   patches = [ ./fix-deps.patch ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     (pnpm_10.fetchDeps {
       inherit (finalAttrs) pname src;
       fetcherVersion = 2;
-      hash = "sha256-5MjxEs+jbowJJbJ9+Z+vppFImpB+PZzEhntwRAgv+xM=";
+      hash = "sha256-M9yZxBtuZg5KwG2Sli+f6Ionwccq7F7tI8/FnP1iObA=";
     }).overrideAttrs
       { inherit (finalAttrs) patches postPatch; };
 

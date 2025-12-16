@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.14";
+  version = "2.2.15";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-x6I5PMlQtsjvFtEyoaKKE6if3I0IBIyps4kPQL4c8aw=";
+    hash = "sha256-19i+TeBcPnI1Gfpf81gHE9sLvytsS4x1A5XU8oD7YIU=";
   };
 
-  vendorHash = "sha256-X/6YvAhIHSOS3qaoR6/pa2b7EziZzx8B+CbYrJ9/mcM=";
+  vendorHash = "sha256-XrTmXAUABlTQaA3Z0vU0HQW5Q1e/Yg6yq690oZH8M+A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,12 +40,12 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist and opinionated feed reader";
     changelog = "https://miniflux.app/releases/${finalAttrs.version}.html";
     homepage = "https://miniflux.app/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       benpye
       emilylange

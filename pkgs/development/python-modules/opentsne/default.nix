@@ -60,12 +60,12 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Modular Python implementation of t-Distributed Stochasitc Neighbor Embedding";
       homepage = "https://github.com/pavlin-policar/openTSNE";
       changelog = "https://github.com/pavlin-policar/openTSNE/releases/tag/v${version}";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ lucasew ];
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ lucasew ];
     };
   };
 in

@@ -2,32 +2,23 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   openssl,
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "govee2mqtt";
-  version = "2024.01.24-ea3cd430";
+  version = "2025.11.25-60a39bcc";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "govee2mqtt";
-    rev = version;
-    hash = "sha256-iGOj0a4+wLd8QlM1tr+NYfd2tuwgHV+u5dt0zf+WscY=";
+    tag = finalAttrs.version;
+    hash = "sha256-8N/qQHJvVKWdlPQDbLskGw9le0L7yzTwxwz1w4cFu5g=";
   };
 
   cargoPatches = [
     ./dont-vendor-openssl.diff
-  ];
-
-  patches = [
-    # update test fixtures https://github.com/wez/govee2mqtt/pull/120
-    (fetchpatch {
-      url = "https://github.com/wez/govee2mqtt/commit/0c2dc3e1cc1ccd44ddf98ead34e081ac4b4335f1.patch";
-      hash = "sha256-0TNYyvRRcMkE9FYPcVoKburejhAn/cVYM3eaobS4nx8=";
-    })
   ];
 
   postPatch = ''
@@ -35,7 +26,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"assets"' '"${placeholder "out"}/share/govee2mqtt/assets"'
   '';
 
-  cargoHash = "sha256-RJqAhAhrMHLunJwTtvUIBNO45xUWY251KXyX0RLruwk=";
+  cargoHash = "sha256-rs3wfvotR2p7jC6dn+JkTLJxVBtQR/IWgM9KmoYSelA=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -46,12 +37,12 @@ rustPlatform.buildRustPackage rec {
     cp -r assets $out/share/govee2mqtt/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Connect Govee lights and devices to Home Assistant";
     homepage = "https://github.com/wez/govee2mqtt";
-    changelog = "https://github.com/wez/govee2mqtt/blob/${src.rev}/addon/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/wez/govee2mqtt/blob/${finalAttrs.version}/addon/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "govee";
   };
-}
+})

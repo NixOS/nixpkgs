@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON parser on top of TOML implementation";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     homepage = "https://github.com/toml-f/jonquil";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

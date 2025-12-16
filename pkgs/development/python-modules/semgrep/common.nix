@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.140.0";
+  version = "1.145.0";
 
-  srcHash = "sha256-RLcES0kamYMlLo1L4Y+mSJDB91SP84h75oLQxX9eCjQ=";
+  srcHash = "sha256-yeTToWfCchGHGsSx/Ly3FQmj7K8iW66qItYs0MVtJvo=";
 
   # submodule dependencies
   # these are fetched so we:
@@ -13,8 +13,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "8baadf6b8604b59c9a660dbb371726c12a3666b8";
-      hash = "sha256-37sEprdR8I45tRYsXNNFz0okoTH32MJU9EvMogEMtMw=";
+      rev = "e5da9678488bc24e0d5c27a4de71ad67d375cc58";
+      hash = "sha256-9ilDZQmKYD2JN+CQ8VVyNyrjKYXttF+3KspRPHhuPF8=";
     };
   };
 
@@ -25,23 +25,23 @@ rec {
   core = {
     x86_64-linux = {
       platform = "musllinux_1_0_x86_64.manylinux2014_x86_64";
-      hash = "sha256-/aZnv5a7ifSk1l98Qf+HKQhnrHKi88SKTuJZwQ7Ons4=";
+      hash = "sha256-W6qWqGiuqOJcBAvTIbTCj4aMLMiAhabJ22lldu3cAR4=";
     };
     aarch64-linux = {
       platform = "musllinux_1_0_aarch64.manylinux2014_aarch64";
-      hash = "sha256-f0k/sNME/0JGrvV7/H47jWLY3OadslzljfA7Kpp0STo=";
+      hash = "sha256-WM2aq4PpYSNqB8PONJAqrYAzQNhIoK1MQvqoJri4S/Q=";
     };
     x86_64-darwin = {
       platform = "macosx_10_14_x86_64";
-      hash = "sha256-HldS8Rcx+OkFYfBr/5+rMXVg8prrAuBCDTbkgb8DVsQ=";
+      hash = "sha256-cpE+GBOZnWsNKRTFzpAQCl+JaqPl0bgLvW4GFdwnMQc=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-LiIO4Smomx6tHTtg8ewwXaKXdJDpcmE+auJ5FjWi990=";
+      hash = "sha256-FAjHtlrGLOGxE7c0/Qd+SpX6NTIh09zDbVAbxQHCDKc=";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://semgrep.dev/";
     downloadPage = "https://github.com/semgrep/semgrep/";
     changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
@@ -53,8 +53,8 @@ rec {
       uploaded. Its rules look like the code you already write; no abstract
       syntax trees, regex wrestling, or painful DSLs.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       jk
       ambroisie
     ];

@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
     # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.
     lib.optionals stdenv.cc.isClang [ "-Wno-int-conversion" ]
     # Silence fprintf format errors when building for Windows.
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "-Wno-error=format" ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      "-Wno-incompatible-pointer-types"
+      "-Wno-int-conversion"
+      "-Wno-error=format"
+    ]
   );
 
   enableParallelBuilding = true;
@@ -73,11 +77,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
-  meta = with lib; {
+  meta = {
     description = "Tool that allows packages to find out information about other packages";
     homepage = "http://pkg-config.freedesktop.org/wiki/";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "pkg-config";
   };
 }

@@ -16,11 +16,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bililiverecorder";
-  version = "2.17.3";
+  version = "2.18.0";
 
   src = fetchzip {
     url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${version}/BililiveRecorder-CLI-any.zip";
-    hash = "sha256-bmwRa8pQWCzP3SeZQsUZ9r0UbGypN5c6oeGa6XR/Hqo=";
+    hash = "sha256-b1hHLf0w+XwBBbnvP07Ik6bwIWSs13MPVjIN5b1n+C4=";
     stripRoot = false;
   };
 

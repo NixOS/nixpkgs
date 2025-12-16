@@ -104,14 +104,13 @@ stdenv.mkDerivation rec {
   # needed for nixos-anywhere
   passthru.tests.static = pkgsStatic.iproute2;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
 }

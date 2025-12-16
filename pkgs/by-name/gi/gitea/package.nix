@@ -45,18 +45,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.25.1";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${gitea.version}";
-    hash = "sha256-JTkpjUXCz+0Y8EY7JlDT4tLbCjDYElZ4uG1oLmij8Iw=";
+    hash = "sha256-8U7zRZoiuB2+LLeOg2QpCuxWRNkndlp/VyH1OvnZujc=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-HHW7xgXJKnzj6HLKAUXKYIZgOKKbXVSK+YGSKCwBeLU=";
+  vendorHash = "sha256-y7HurJg+/V1cn8iKDXepk/ie/iNgiJXsQbDi1dhgark=";
 
   outputs = [
     "out"
@@ -117,11 +117,11 @@ buildGoModule rec {
     tests = nixosTests.gitea;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       techknowlogick
       SuperSandro2000
     ];

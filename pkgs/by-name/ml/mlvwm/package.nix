@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     installManPage man/mlvwm.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/morgant/mlvwm";
     description = "Macintosh-like Virtual Window Manager";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     longDescription = ''
       MLVWM or Macintosh-Like Virtual Window Manager,
       is an FVWM descendant created by Takashi Hasegawa
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       As its name implies, it attempts to emulate the
       pre-Mac OS X Macintosh look and feel in its layout and window design.
     '';
-    platforms = platforms.linux;
-    maintainers = [ maintainers.j0hax ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.j0hax ];
     mainProgram = "mlvwm";
   };
 }

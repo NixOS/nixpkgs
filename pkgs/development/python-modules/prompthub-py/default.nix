@@ -32,11 +32,11 @@ buildPythonPackage {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple client to fetch prompts from Prompt Hub using its REST API";
     homepage = "https://github.com/deepset-ai/prompthub-py";
     changelog = "https://github.com/deepset-ai/prompthub-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

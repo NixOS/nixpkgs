@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
-  version = "1.13.0";
+  version = "1.13.1";
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8o66YbAH2pqPjW7yG2pfuEdEyEzoopE2DJNV70XymUY=";
+    hash = "sha256-qRwQhQyCjKkz0y14ryWjPdWuibfyb23Bi4/3cTkO8C4=";
   };
 
   nativeBuildInputs = [

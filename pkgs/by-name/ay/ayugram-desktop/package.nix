@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch2,
   fetchFromGitHub,
   nix-update-script,
   telegram-desktop,
@@ -13,23 +12,14 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "5.16.3";
+      version = "6.2.4";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
-        rev = "aafdac6da465e6498e39e1b55566fc8fe2402843";
-        hash = "sha256-GNFkGw/CxtbeoEMBjExNudBcKFwlfXee5VVnXa4wGko=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-bFGk8lqPlNlaxbrulYe0+8ayj33frctruce3/TZ+W2c=";
         fetchSubmodules = true;
-      };
-
-      # fix build failure with Qt 6.10
-      patches = fetchpatch2 {
-        name = "fix-build-with-qt-610.patch";
-        url = "https://github.com/desktop-app/cmake_helpers/commit/682f1b57.patch";
-        hash = "sha256-DHwgxAEFc1byQkVvrPwyctQKvUsK/KQ/cnzRv6PQuTM=";
-        stripLen = 1;
-        extraPrefix = "cmake/";
       };
 
       passthru.updateScript = nix-update-script { };

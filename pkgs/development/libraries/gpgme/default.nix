@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     qt6 = qt6Packages.qgpgme;
   };
 
-  meta = with lib; {
+  meta = {
     # fatal error: 'QtCore/qcompare.h' file not found
     broken = qtbase != null && stdenv.hostPlatform.isDarwin;
     homepage = "https://gnupg.org/software/gpgme/index.html";
@@ -114,11 +114,11 @@ stdenv.mkDerivation rec {
       encryption, decryption, signing, signature verification and key
       management.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

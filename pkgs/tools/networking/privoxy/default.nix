@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.privoxy = nixosTests.privoxy;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
     # When linked with mbedtls, the license becomes GPLv3 (or later), otherwise
     # GPLv2 (or later). See https://www.privoxy.org/user-manual/copyright.html
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "privoxy";
   };

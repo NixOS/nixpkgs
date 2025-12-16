@@ -38,6 +38,7 @@ in
 
     scheduler = lib.mkOption {
       type = lib.types.enum [
+        "scx_beerland"
         "scx_bpfland"
         "scx_chaos"
         "scx_cosmos"

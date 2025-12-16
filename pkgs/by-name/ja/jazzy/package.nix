@@ -11,13 +11,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "jazzy";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility that generates documentation for Swift or Objective-C";
     homepage = "https://github.com/realm/jazzy";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [
-      peterromfeldhk
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
   };

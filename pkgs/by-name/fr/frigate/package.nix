@@ -13,14 +13,14 @@
 }:
 
 let
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-8Lm4iLRdMqgZvy24WS1SOkbj855c2t9yg8n91WMg5Fg=";
+    hash = "sha256-gbEUmo28vjYsfIlHSBaLTUh9kK5rM17hkfKBQ9KhiBU=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -238,7 +238,7 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
@@ -247,7 +247,7 @@ python3Packages.buildPythonApplication rec {
       object detection locally for IP cameras.
     '';
     homepage = "https://github.com/blakeblackshear/frigate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

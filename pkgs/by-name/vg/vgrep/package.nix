@@ -36,11 +36,11 @@ buildGoModule rec {
     installManPage docs/*.[1-9]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly pager for grep/git-grep/ripgrep";
     mainProgram = "vgrep";
     homepage = "https://github.com/vrothberg/vgrep";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

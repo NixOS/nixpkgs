@@ -26,11 +26,11 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) podgrab; };
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted podcast manager to download episodes as soon as they become live";
     mainProgram = "podgrab";
     homepage = "https://github.com/akhilrex/podgrab";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

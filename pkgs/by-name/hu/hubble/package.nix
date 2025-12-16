@@ -52,7 +52,6 @@ buildGo124Module rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       humancalico
-      bryanasdev000
       FKouhai
     ];
     mainProgram = "hubble";

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build system
   setuptools,
@@ -73,6 +74,17 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
+
+  patches = [
+    # TypeError: Cannot handle this data type: (1, 1, 4), <u2
+    # Issue: https://github.com/tensorflow/datasets/issues/11148
+    # PR: https://github.com/tensorflow/datasets/pull/11149
+    (fetchpatch2 {
+      name = "fix-pillow-12-compat";
+      url = "https://github.com/tensorflow/datasets/pull/11149/commits/21062d65b33978f2263443280c03413add5c0224.patch";
+      hash = "sha256-GWb+1E5lQNhFVp57sqjp+WqzZSva1AGpXe9fbvXXeIA=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

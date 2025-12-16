@@ -58,12 +58,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_ciel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling AOSC OS packaging environments using multi-layer filesystems and containers";
     homepage = "https://github.com/AOSC-Dev/ciel-rs";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       A1ca7raz
       yisuidenghua
     ];

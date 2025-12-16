@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pysolr";
-  version = "3.10.0";
+  version = "3.11.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EntKLdFpI0rLFYZkOmzR4+lLkXkh5pv1adeyoqoO9Ak=";
+    sha256 = "sha256-u9DnRng1MWiA+ZS1U4bJvDwUZzPBfYWj/tMXdVl2xAo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   doCheck = false; # requires network access
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python wrapper for Apache Solr";
     homepage = "https://github.com/toastdriven/pysolr/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

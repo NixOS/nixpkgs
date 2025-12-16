@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced terminal calculator";
     longDescription = ''
       Quich is a compact, fast, powerful and useful calculator for your terminal
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
       written in ANSI C.
     '';
     homepage = "https://github.com/Usbac/quich";
-    license = licenses.mit;
-    maintainers = [ maintainers.xdhampus ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.xdhampus ];
+    platforms = lib.platforms.all;
     mainProgram = "quich";
   };
 }

@@ -5,38 +5,65 @@
   fetchYarnDeps,
   yarnConfigHook,
   nodejs,
+  makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commitlint";
-  version = "20.1.0";
+  version = "20.2.0";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-o8AnIewSmg8vRjs8LU6QwRyl2hMQ2iK5W7WL137treU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L9HfuwpFmKWoEyFdo7+UIEeEcD0jFhunj0x6UFHfhEY=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Kg19sEgstrWj+JLzdZFnMeb0F5lFX3Z0VPNyiYPi6nY=";
+    hash = "sha256-rKVMSbsipd8J2E+E2RdeXYDsMwSzFZMJJ4zceOLBbCs=";
   };
 
   nativeBuildInputs = [
     yarnConfigHook
     nodejs
+    makeBinaryWrapper
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    pkgs=("config-validator" "rules" "parse" "is-ignored" "lint"
-          "resolve-extends" "execute-rule" "load" "read" "types" "cli")
+    # Remove test files to avoid dependency on commitlint test packages
+    rm -rf @commitlint/**/*.test.{js,ts}
+
+    # See https://github.com/conventional-changelog/commitlint/blob/20.1.0/Dockerfile.ci
+    # Excludes `config-nx-scopes` which is a plain JavaScript package
+    pkgs=(
+      "config-validator"
+      "rules"
+      "parse"
+      "is-ignored"
+      "lint"
+      "resolve-extends"
+      "execute-rule"
+      "load"
+      "read"
+      "types"
+      "cli"
+      "config-conventional"
+      "config-pnpm-scopes"
+      "ensure"
+      "format"
+      "message"
+      "to-lines"
+      "top-level"
+    )
     for p in "''${pkgs[@]}" ; do
+      echo "Building package: @commitlint/$p"
       cd @commitlint/$p/
-      yarn run tsc --build --force
+      yarn run --offline tsc --build --force
       cd ../..
     done
 
@@ -50,15 +77,23 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mkdir -p $out/lib/node_modules/@commitlint/root
     mv * $out/lib/node_modules/@commitlint/root/
-    ln -s $out/lib/node_modules/@commitlint/root/@commitlint/cli/cli.js $out/bin/commitlint
+
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/commitlint \
+      --add-flags "$out/lib/node_modules/@commitlint/root/@commitlint/cli/cli.js" \
+      --set NODE_PATH "$out/lib/node_modules/@commitlint/root/node_modules"
 
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/conventional-changelog/commitlint/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/conventional-changelog/commitlint/releases/tag/${finalAttrs.src.tag}";
     description = "Lint your commit messages";
     homepage = "https://commitlint.js.org/";
     license = lib.licenses.mit;

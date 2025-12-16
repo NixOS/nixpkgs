@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/libimobiledevice-glue";
     description = "Library with common code used by the libraries and tools around the libimobiledevice project";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

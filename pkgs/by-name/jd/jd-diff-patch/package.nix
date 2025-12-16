@@ -30,7 +30,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/josephburnett/jd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       juliusfreudenberger
     ];
     mainProgram = "jd";

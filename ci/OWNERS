@@ -115,9 +115,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS Render Docs
-/pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
-/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
-/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+/pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
+/doc/redirects.json                @GetPsyched
+/nixos/doc/manual/redirects.json   @GetPsyched
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -139,7 +139,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Limine
-/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
+/nixos/modules/system/boot/loader/limine        @lzcunt @programmerlexi @johnrtitor
 /nixos/tests/limine                             @johnrtitor
 
 # Images and installer media
@@ -206,9 +206,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
-/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
+/pkgs/development/interpreters/perl @stigtsp @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -262,7 +262,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
-/pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
+/pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
 /lib/licenses.nix @alyssais @emilazy @jopejoe1
@@ -372,6 +372,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # LuaPackages
 /pkgs/development/lua-modules         @NixOS/lua
 
+# mpvScripts
+/pkgs/applications/video/mpv/scripts            @uninsane
+/pkgs/applications/video/mpv/scripts.nix        @uninsane
+
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
 
@@ -382,12 +386,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @globin @ma27 @talyz
-/pkgs/development/interpreters/php       @jtojnar @aanderse @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @ma27 @talyz
+/nixos/tests/php                                  @aanderse @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @ma27 @talyz
 
 # Docker tools
 /pkgs/build-support/docker                       @roberth @jhol

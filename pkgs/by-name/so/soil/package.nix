@@ -31,15 +31,15 @@ stdenv.mkDerivation {
     cp SOIL.h $out/include/SOIL/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple OpenGL Image Library";
     longDescription = ''
       SOIL is a tiny C library used primarily for uploading textures
       into OpenGL.
     '';
     homepage = "https://www.lonesock.net/soil.html";
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

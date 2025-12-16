@@ -1,36 +1,11 @@
 {
   lib,
-  stdenvNoCC,
   fetchzip,
+  stdenvNoCC,
+  symlinkJoin,
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "monaspace";
-  version = "1.200";
-
-  src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
-    stripRoot = false;
-    hash = "sha256-j1xQYVxfTNDVuzCKvT5FbU29t8XsH4XqcZ477sjydts=";
-  };
-
-  outputs = [
-    "out"
-    "woff"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    pushd monaspace-v${finalAttrs.version}/fonts/
-    install -Dm644 frozen/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 otf/*.otf -t $out/share/fonts/opentype
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
-    popd
-
-    runHook postInstall
-  '';
+let
+  fonts = lib.importTOML ./fonts.toml;
 
   meta = {
     description = "Innovative superfamily of fonts for code";
@@ -58,4 +33,70 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-})
+
+  makeFont =
+    {
+      pname,
+      fontFamily,
+      variant,
+      version,
+      baseUrl,
+      hash,
+      destination,
+      meta,
+    }:
+    stdenvNoCC.mkDerivation {
+      inherit pname version;
+
+      src = fetchzip {
+        url = "${baseUrl}/v${version}/${fontFamily}-${variant}-v${version}.zip";
+        inherit hash;
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out/share/fonts/${destination}"
+        find . -type f \( -name "*.otf" -o -name "*.ttf" -o -name "*.woff" \) -exec install -Dm644 {} $out/share/fonts/${destination} \;
+
+        runHook postInstall
+      '';
+      inherit meta;
+    };
+
+  makePackages =
+    filteredFonts:
+    lib.listToAttrs (
+      map (
+        font:
+        let
+          fontAttrs = rec {
+            inherit (fonts) baseUrl fontFamily version;
+            inherit (font) variant hash destination;
+            inherit meta;
+            pname = fontFamily + "-" + variant;
+          };
+        in
+        {
+          name = fontAttrs.variant;
+          value = makeFont fontAttrs;
+        }
+      ) filteredFonts
+    );
+  allFonts = makePackages fonts.fonts;
+  woffFonts = makePackages (builtins.filter (f: f.destination == "woff") fonts.fonts);
+  defaultFonts = lib.removeAttrs allFonts (builtins.attrNames woffFonts);
+in
+symlinkJoin {
+  pname = "monaspace";
+  inherit (fonts) version;
+  paths = builtins.attrValues defaultFonts;
+  passthru = allFonts // {
+    woff = symlinkJoin {
+      pname = "monaspace-webfonts";
+      inherit (fonts) version;
+      paths = builtins.attrValues woffFonts;
+    };
+  };
+  inherit meta;
+}

@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_storage_plugin_s3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snakemake storage plugin for S3 API storage (AWS S3, MinIO, etc.)";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-s3";
     changelog = "https://github.com/snakemake/snakemake-storage-plugin-s3/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

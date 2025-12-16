@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -26,12 +27,14 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  buildInputs = [ bash ];
+
+  meta = {
     description = "Wayland clipboard manager";
     homepage = "https://github.com/sentriz/cliphist";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "cliphist";
   };
 }

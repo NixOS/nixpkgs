@@ -3,6 +3,7 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   stdenv,
 
@@ -36,7 +37,6 @@
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
@@ -74,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "7062";
+  version = "7356";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-UHiyP8XVdTLH4HBF0IVK7nuXPykpqyoePdimUH1y4m4=";
+    hash = "sha256-zrdnjiwM0gdy1wSWSR0AA6uZHYW1deVG3yRFlalAAZc=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -90,9 +90,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     ninja
     pkg-config
-    git
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -153,6 +153,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
+
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 

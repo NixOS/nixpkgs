@@ -59,7 +59,7 @@ buildPythonPackage rec {
     fsspec
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ratarmountcore" ];
 
@@ -82,11 +82,11 @@ buildPythonPackage rec {
     "test_URL"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
     changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-${src.tag}/core/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

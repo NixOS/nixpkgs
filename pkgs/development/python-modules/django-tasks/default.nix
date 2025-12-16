@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -13,6 +14,7 @@
   fakeredis,
   pytestCheckHook,
   pytest-django,
+  redisTestHook,
 }:
 
 buildPythonPackage rec {
@@ -48,12 +50,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_tasks" ];
 
+  # redis hook does not support darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
-    dj-database-url
     django-rq
+    dj-database-url
     fakeredis
     pytestCheckHook
     pytest-django
+    redisTestHook
   ];
 
   disabledTests = [

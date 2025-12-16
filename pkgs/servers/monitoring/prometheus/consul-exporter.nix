@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Consul metrics";
     mainProgram = "consul_exporter";
     homepage = "https://github.com/prometheus/consul_exporter";
     changelog = "https://github.com/prometheus/consul_exporter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hectorj ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hectorj ];
   };
 }

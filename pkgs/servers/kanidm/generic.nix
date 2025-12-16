@@ -129,7 +129,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     installShellCompletion \
       --bash $releaseDir/build/completions/*.bash \
-      --zsh $releaseDir/build/completions/_*
+      --zsh $releaseDir/build/completions/_* \
+      --fish $releaseDir/build/completions/*.fish
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # PAM and NSS need fix library names

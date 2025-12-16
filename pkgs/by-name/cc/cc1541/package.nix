@@ -33,12 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for creating Commodore 1541 Floppy disk images in D64, D71 or D81 format";
     homepage = "https://bitbucket.org/ptv_claus/cc1541/src/master/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "cc1541";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

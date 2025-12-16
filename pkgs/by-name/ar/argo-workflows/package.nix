@@ -46,7 +46,7 @@ buildGoModule rec {
         if (stdenv.buildPlatform == stdenv.hostPlatform) then
           "$out/bin/argo"
         else
-          "${pkgsBuildBuild.argo}/bin/argo"
+          "${pkgsBuildBuild.argo-workflows}/bin/argo"
       } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done

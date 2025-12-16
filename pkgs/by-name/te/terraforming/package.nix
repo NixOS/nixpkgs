@@ -14,12 +14,12 @@ bundlerApp rec {
 
   passthru.updateScript = bundlerUpdateScript "terraforming";
 
-  meta = with lib; {
+  meta = {
     inherit (ruby.meta) platforms;
 
     description = "Export existing AWS resources to Terraform style (tf, tfstate)";
     homepage = "https://github.com/dtan4/terraforming";
-    license = with licenses; mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

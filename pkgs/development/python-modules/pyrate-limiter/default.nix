@@ -61,7 +61,7 @@ buildPythonPackage rec {
     pytest-xdist
     redisTestHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine

@@ -60,10 +60,12 @@ in
       ];
     };
   };
-  config = lib.mkIf config.hardware.facter.detected.dhcp.enable {
-    networking.useDHCP = lib.mkDefault true;
+  config =
+    lib.mkIf (config.hardware.facter.reportPath != null && config.hardware.facter.detected.dhcp.enable)
+      {
+        networking.useDHCP = lib.mkDefault true;
 
-    # Per-interface DHCP configuration
-    networking.interfaces = perInterfaceConfig;
-  };
+        # Per-interface DHCP configuration
+        networking.interfaces = perInterfaceConfig;
+      };
 }

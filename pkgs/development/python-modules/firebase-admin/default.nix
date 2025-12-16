@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   cachecontrol,
   cryptography,
@@ -32,6 +33,14 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  patches = [
+    (fetchpatch {
+      name = "remove-asyncio-default-fixture-loop-scope.patch";
+      url = "https://github.com/firebase/firebase-admin-python/commit/de713d21da83b1f50c24c5a23132ffc442700448.patch";
+      hash = "sha256-D4edbVHMejpnSmIYblrq9E5+YdbBzLe/VWbObvMNGdk=";
+    })
+  ];
 
   dependencies = [
     cachecontrol

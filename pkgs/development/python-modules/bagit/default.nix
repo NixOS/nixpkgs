@@ -36,11 +36,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test.py" ];
   pythonImportsCheck = [ "bagit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library and command line utility for working with BagIt style packages";
     mainProgram = "bagit.py";
     homepage = "https://libraryofcongress.github.io/bagit-python/";
-    license = with licenses; [ publicDomain ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ publicDomain ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

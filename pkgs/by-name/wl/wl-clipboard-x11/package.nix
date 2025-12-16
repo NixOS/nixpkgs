@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
       --replace '$(command -v wl-paste)' ${wl-clipboard}/bin/wl-paste
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to use wl-clipboard as a drop-in replacement for X11 clipboard tools";
     homepage = "https://github.com/brunelli/wl-clipboard-x11";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artturin ];
     mainProgram = "xclip";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

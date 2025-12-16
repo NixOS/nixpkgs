@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopinboard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the Pinboard API";
     homepage = "https://github.com/bachya/aiopinboard";
     changelog = "https://github.com/bachya/aiopinboard/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

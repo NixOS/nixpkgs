@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Correct bit errors in an AES key schedules";
     mainProgram = "aesfix";
     homepage = "https://citp.princeton.edu/our-work/memory/";
-    maintainers = with maintainers; [ fedx-sudo ];
+    maintainers = with lib.maintainers; [ fedx-sudo ];
   };
 }

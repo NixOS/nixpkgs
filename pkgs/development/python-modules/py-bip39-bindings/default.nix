@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bip39" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the tiny-bip39 library";
     homepage = "https://github.com/polkascan/py-bip39-bindings";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ stargate01 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stargate01 ];
   };
 }

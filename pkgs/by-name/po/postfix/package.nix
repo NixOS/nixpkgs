@@ -74,11 +74,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.5";
+  version = "3.10.7";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-apJr9wIXOGGwjkm8tR/KOi8mn5ozf3LvFZv0YFIIfjU=";
+    hash = "sha256-/NP/cIBq5/CoLntcMB4vT8+mpomi27Oz8bXlIIEVeIo=";
   };
 
   nativeBuildInputs = [
@@ -199,7 +199,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      globin
       dotlambda
       lewo
     ];

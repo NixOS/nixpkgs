@@ -18,14 +18,14 @@ python3.pkgs.buildPythonPackage rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Tool for partial deblobbing of Intel ME/TXE firmware images";
     longDescription = ''
       me_cleaner is a Python script able to modify an Intel ME firmware image
       with the final purpose of reducing its ability to interact with the system.
     '';
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "me_cleaner.py";
   };

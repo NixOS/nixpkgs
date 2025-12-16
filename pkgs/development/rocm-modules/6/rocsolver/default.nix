@@ -121,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCm/rocSOLVER";
-    license = with licenses; [ bsd2 ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ bsd2 ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
   };

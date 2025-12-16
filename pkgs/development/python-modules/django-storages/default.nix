@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pytestCheckHook
     rsa
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   checkInputs = [ pynacl ];
 

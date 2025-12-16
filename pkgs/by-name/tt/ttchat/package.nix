@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-6GcbEGC1O+lcTO+GsaVXOO69yIHMPywXJy7OFX15/eI=";
 
-  meta = with lib; {
+  meta = {
     description = "Connect to a Twitch channel's chat from your terminal";
     homepage = "https://github.com/atye/ttchat";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "ttchat";
   };

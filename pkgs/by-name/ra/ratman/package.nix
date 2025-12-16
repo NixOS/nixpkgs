@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage rec {
     sourceRoot = "${src.name}/ratman/dashboard";
 
     npmDeps = fetchNpmDeps {
-      name = "${pname}-${version}-npm-deps";
+      pname = "npm-deps-${pname}";
+      inherit version;
       src = "${src}/ratman/dashboard";
       hash = "sha256-47L4V/Vf8DK3q63MYw3x22+rzIN3UPD0N/REmXh5h3w=";
     };
@@ -69,11 +70,11 @@ rustPlatform.buildRustPackage rec {
     cp -r ${dashboard} ratman/dashboard/dist
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular decentralised peer-to-peer packet router and associated tools";
     homepage = "https://git.irde.st/we/irdest";
-    platforms = platforms.unix;
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ spacekookie ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ spacekookie ];
   };
 }

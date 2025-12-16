@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "georss_nrcan_earthquakes_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing Natural Resources Canada Earthquakes feed";
     homepage = "https://github.com/exxamalte/python-georss-nrcan-earthquakes-client";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

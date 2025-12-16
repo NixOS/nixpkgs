@@ -19,11 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-oyFPycyQoYnN261kmGhkN9NMPMA6XChf4jXlYezKiCo=";
 
-  meta = with lib; {
+  meta = {
     description = "More expressive universal gRPC client";
     mainProgram = "evans";
     homepage = "https://evans.syfm.me/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ diogox ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ diogox ];
   };
 }

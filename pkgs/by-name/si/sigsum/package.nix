@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "sigsum";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitLab {
     domain = "git.glasklar.is";
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "core";
     repo = "sigsum-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFEKbPOAU2cpsc9oLiX3Lhv/AvYNPNiLjjjGteHOtpg=";
+    hash = "sha256-GQ8ENsMc9vrAG23wHDPcWVadRVov3XOgR5WxnXtg94A=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "info.Main.Version" '"${finalAttrs.version}"'
   '';
 
-  vendorHash = "sha256-2v9NShhmHr0O5FH49tDSPUK1lT2tmhJkrZaVTwrL3cY=";
+  vendorHash = "sha256-SWNvBEIV25G9lp95DsftFKa48iGUgBQ4RdplJ5D1xUg=";
 
   ldflags = [
     "-s"

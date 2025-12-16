@@ -464,10 +464,6 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
-        dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
-
-        dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
-
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
         dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
@@ -574,6 +570,8 @@ let
 
         extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
+        extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
+
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
@@ -648,6 +646,12 @@ let
         };
 
         fpath = callPackage ../development/ocaml-modules/fpath { };
+
+        frama-c = callPackage ../development/ocaml-modules/frama-c {
+          framac = pkgs.framac.override { ocamlPackages = self; };
+        };
+
+        frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
 
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
@@ -1136,6 +1140,8 @@ let
           inherit (pkgs) mariadb;
         };
 
+        markdown = callPackage ../development/ocaml-modules/markdown { };
+
         markup = callPackage ../development/ocaml-modules/markup { };
 
         mccs = callPackage ../development/ocaml-modules/mccs { };
@@ -1394,8 +1400,6 @@ let
 
         ocaml-lua = callPackage ../development/ocaml-modules/ocaml-lua { };
 
-        ocaml_lwt = lwt;
-
         ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
 
         ocaml-migrate-parsetree-1-8 =
@@ -1485,6 +1489,8 @@ let
         ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
         ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
+
+        ocb = callPackage ../development/ocaml-modules/ocb { };
 
         ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
@@ -1715,6 +1721,10 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
+        ppx_deriving_variant_string =
+          callPackage ../development/ocaml-modules/ppx_deriving_variant_string
+            { };
+
         ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
           mdx = mdx.override { inherit logs; };
         };
@@ -1764,6 +1774,8 @@ let
         processor = callPackage ../development/ocaml-modules/processor { };
 
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
+
+        prometheus-app = callPackage ../development/ocaml-modules/prometheus/app.nix { };
 
         progress = callPackage ../development/ocaml-modules/progress { };
 
@@ -2247,8 +2259,11 @@ let
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
         chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
+        dune_2 = pkgs.dune_2; # Added 2025-12-08
+        dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
+        ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
       }
     )).overrideScope
       liftJaneStreet;

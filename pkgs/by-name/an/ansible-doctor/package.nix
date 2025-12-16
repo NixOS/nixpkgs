@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ansible-doctor";
-  version = "8.0.0";
+  version = "8.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     tag = "v${version}";
-    hash = "sha256-6elotoKZ4Hjelnw9LEiDONAFqqM5ewMKEorDtzA7LKY=";
+    hash = "sha256-vbI1VEtSQW+kUCIcqrHE+Ogmjjmpstgu2cpl3fDZ2rE=";
   };
 
   build-system = with python3Packages; [

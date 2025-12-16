@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.7.3";
+  version = "1.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${version}";
-    hash = "sha256-ge1M5yAu7Dzkmun+Zy2rRyYVggcTZyG9JlI2B2Q6V38=";
+    hash = "sha256-ze9znWob/Asba20AVpNeVCuz7UayiYeW40nc7eZlXHU=";
   };
 
   postPatch =
@@ -94,6 +94,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
     changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
 }

@@ -19,11 +19,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtbdata" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data files for the Robotics Toolbox for Python";
     homepage = "https://pypi.org/project/rtb-data/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       djacu
       a-camarillo
     ];

@@ -8,6 +8,7 @@
   librsvg,
   gdk-pixbuf,
   glib,
+  gobject-introspection,
   borgbackup,
   writeText,
   nixosTests,
@@ -63,7 +64,10 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   pythonRelaxDeps = [
+    "celery"
     "certifi"
+    "cyrtranslit"
+    "django-appconf"
   ];
 
   dependencies =
@@ -154,6 +158,7 @@ python.pkgs.buildPythonApplication rec {
     librsvg
     gdk-pixbuf
     glib
+    gobject-introspection
   ];
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 

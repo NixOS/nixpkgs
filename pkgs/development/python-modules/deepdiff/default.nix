@@ -68,7 +68,7 @@ buildPythonPackage rec {
     pandas
     uuid6
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Require pytest-benchmark

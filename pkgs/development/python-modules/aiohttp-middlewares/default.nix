@@ -51,11 +51,11 @@ buildPythonPackage rec {
     "test_shield_middleware_funcitonal[PUT-False]"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of useful middlewares for aiohttp.web applications";
     homepage = "https://github.com/playpauseandstop/aiohttp-middlewares";
     changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

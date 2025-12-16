@@ -674,15 +674,6 @@
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
   ],
-  "module-services-pingvin-share": [
-    "index.html#module-services-pingvin-share"
-  ],
-  "module-services-pingvin-share-basic-usage": [
-    "index.html#module-services-pingvin-share-basic-usage"
-  ],
-  "module-services-pingvin-share-reverse-proxy-configuration": [
-    "index.html#module-services-pingvin-share-reverse-proxy-configuration"
-  ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
   ],
@@ -2136,6 +2127,21 @@
   ],
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
+  ],
+  "sec-release-26.05": [
+    "release-notes.html#sec-release-26.05"
+  ],
+  "sec-release-26.05-highlights": [
+    "release-notes.html#sec-release-26.05-highlights"
+  ],
+  "sec-release-26.05-new-modules": [
+    "release-notes.html#sec-release-26.05-new-modules"
+  ],
+  "sec-release-26.05-incompatibilities": [
+    "release-notes.html#sec-release-26.05-incompatibilities"
+  ],
+  "sec-release-26.05-notable-changes": [
+    "release-notes.html#sec-release-26.05-notable-changes"
   ],
   "sec-release-25.11": [
     "release-notes.html#sec-release-25.11"

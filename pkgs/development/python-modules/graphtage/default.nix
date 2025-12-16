@@ -52,12 +52,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphtage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to diff tree-like files such as JSON and XML";
     homepage = "https://github.com/trailofbits/graphtage";
     changelog = "https://github.com/trailofbits/graphtage/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ veehaitch ];
     mainProgram = "graphtage";
   };
 }

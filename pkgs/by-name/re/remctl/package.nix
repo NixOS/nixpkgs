@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check-local";
 
-  meta = with lib; {
+  meta = {
     description = "Remote execution tool";
     homepage = "https://www.eyrie.org/~eagle/software/remctl";
     mainProgram = "remctl";
-    license = licenses.mit;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.deshaw ];
   };
 })

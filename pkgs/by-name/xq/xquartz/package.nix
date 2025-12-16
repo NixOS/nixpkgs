@@ -239,9 +239,9 @@ stdenv.mkDerivation {
     inherit pkgs;
   };
 
-  meta = with lib; {
-    platforms = platforms.darwin;
+  meta = {
+    platforms = lib.platforms.darwin;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -32,12 +32,12 @@ buildGoModule rec {
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Cipher/decipher text within a file";
     mainProgram = "s5";
     homepage = "https://github.com/mvisonneau/s5";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ mvisonneau ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ mvisonneau ];
   };
 }

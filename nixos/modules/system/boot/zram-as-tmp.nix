@@ -85,6 +85,10 @@ in
       }
     ];
 
+    boot.supportedFilesystems = {
+      ${cfg.zramSettings.fs-type} = true;
+    };
+
     services.zram-generator.enable = true;
     services.zram-generator.settings =
       let

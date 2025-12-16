@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
+    fetchGitHashesScript = ./fetch-git-hashes.py;
     updateScript = ./update.sh;
     tests = {
       testCreate = runCommand "dart-test-create" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''

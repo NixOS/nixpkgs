@@ -6,7 +6,7 @@
 
 let
   pname = "zotero";
-  version = "7.0.27";
+  version = "7.0.30";
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";

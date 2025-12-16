@@ -17,24 +17,25 @@
   # checks
   pytestCheckHook,
   pytest-xdist,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.5";
+  version = "1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = version;
-    hash = "sha256-2GTjKjLIWFaluTjdWdUF9Iim973y81xv715xspghRZI=";
+    hash = "sha256-ystvPfIsnMFYkC+LNtcRQsI19i/y/905SnPSApM8v4E=";
   };
 
   build-system = [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "jaxopt"
+  ];
   dependencies = [
     fastprogress
     jax
@@ -75,13 +76,6 @@ buildPythonPackage rec {
     "test_nuts__without_device"
     "test_nuts__without_jit"
     "test_smc_waste_free__with_jit"
-
-    # Numerical test (AssertionError)
-    # First report, when the failure was only happening on aarch64-linux:
-    # https://github.com/blackjax-devs/blackjax/issues/668
-    # Second report, when the test started happening on x86_64-linux too after Jax was updated to 0.7.0
-    # https://github.com/blackjax-devs/blackjax/issues/795
-    "test_chees_adaptation"
   ];
 
   pythonImportsCheck = [ "blackjax" ];
