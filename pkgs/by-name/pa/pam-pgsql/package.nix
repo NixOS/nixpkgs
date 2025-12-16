@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "pam_pgsql";
+  pname = "pam-pgsql";
   version = "0-unstable-2025-01-24";
 
   src = fetchFromGitHub {
