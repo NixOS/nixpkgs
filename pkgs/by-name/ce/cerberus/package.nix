@@ -10,7 +10,7 @@
   testers,
   cerberus,
 }:
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "cerberus";
   version = "0-unstable-2025-12-15";
 
@@ -35,7 +35,7 @@ ocamlPackages.buildDunePackage rec {
   # our version since git is impure
   postPatch = ''
     substituteInPlace tools/gen_version.ml \
-      --replace-fail '"unknown"' '"${version}"'
+      --replace-fail '"unknown"' '"${finalAttrs.version}"'
   '';
 
   minimalOCamlVersion = "4.12";
@@ -136,4 +136,4 @@ ocamlPackages.buildDunePackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
