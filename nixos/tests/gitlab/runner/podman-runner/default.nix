@@ -204,6 +204,7 @@ let
     in
     {
       # The Nix image.
+      # Similar to https://github.com/nix-community/docker-nixpkgs/blob/main/images/nix/default.nix.
       nix = pkgs.dockerTools.buildLayeredImage {
         name = imageNames.nix;
         tag = "latest";
@@ -226,7 +227,7 @@ let
         maxLayers = 2;
       };
 
-      # This is the analog image to `local/nix` but alpine based.
+      # This is the analog image to `local/nix` but Alpine based.
       alpine =
         let
           # Update with:
@@ -262,7 +263,7 @@ let
           maxLayers = 3;
         });
 
-      # This is the analog image to `local/nix` but ubuntu based.
+      # This is the analog image to `local/nix` but Ubuntu based.
       ubuntu =
         let
           # Update with:
