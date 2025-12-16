@@ -268,6 +268,41 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # Implement termios2 (TCGETS2 etc) for glibc 2.42 compatibility
+    # https://gitlab.com/qemu-project/qemu/-/issues/3065
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0004-FROMLIST-Add-termios2-support-to-linux-user.patch";
+      hash = "sha256-Fxky0kRVy6hQv+qhzhiFL0Kd8gMtmqjJBbNYtZLsUm8=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0005-AOSCOS-linux-user-fixup-termios2-related-things-on-P.patch";
+      hash = "sha256-USPfI3yZS2iuTjOaHyun2kY0jq+Zhg2RVQ1GMEg0ePI=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0006-FROMLIST-Add-termios2-support-to-alpha-target.patch";
+      hash = "sha256-5e5vUp9nr96ZmVA98W/ETReLbkofayysJXlx1Ck9gDs=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0007-FROMLIST-Add-termios2-support-to-hppa-target.patch";
+      hash = "sha256-nls6eTOB06eqACjQ/r1sQvb9YaYmrpJcegsDGqKAOaI=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0008-FROMLIST-Add-termios2-support-to-mips-target.patch";
+      hash = "sha256-GrBhyMq2QiCc+WlUwaB9j4G8vB3ipxJRV5Hvyab/5Fk=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0009-FROMLIST-Add-termios2-support-to-sh4-target.patch";
+      hash = "sha256-h+9eC6H8/GJ85Lt1Y0ggdJbbgTIvDfIJkPQfX/FgO4c=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0010-FROMLIST-Add-termios2-support-to-sparc-target.patch";
+      hash = "sha256-/JvF25aSR2mBSvkpqupDySMJYZI+lv7L0YwhqiaDk3A=";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOSC-Dev/aosc-os-abbs/164055ad888cc6ad4773d186a44c3dc732aa36de/app-virtualization/qemu/01-shared/patches/0011-FROMLIST-linux-user-Add-missing-termios-baud-rates.patch";
+      hash = "sha256-yb6MMY+3xHIupSSvfvKMBs00bK0klCkfn0W5fLPUTvc=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
