@@ -371,10 +371,13 @@ in
     warnings =
       lib.optional
         (
-          !(builtins.elem cfg.settings.bind_to_address [
-            "localhost"
-            "127.0.0.1"
-          ])
+          !(
+            (builtins.elem cfg.settings.bind_to_address [
+              "localhost"
+              "127.0.0.1"
+            ])
+            || (lib.hasPrefix "/" cfg.settings.bind_to_address)
+          )
           && !cfg.openFirewall
         )
         "Using '${cfg.settings.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
