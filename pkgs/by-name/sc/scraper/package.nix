@@ -41,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/rust-scraper/scraper";
     changelog = "https://github.com/rust-scraper/scraper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      kachick
+    ];
   };
 })
