@@ -1,81 +1,61 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
-  python3,
+  python3Packages,
   nginx,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pyparsing = super.pyparsing.overridePythonAttrs rec {
-        version = "2.4.7";
-        src = fetchFromGitHub {
-          owner = "pyparsing";
-          repo = "pyparsing";
-          rev = "pyparsing_${version}";
-          sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
-        };
-        nativeBuildInputs = [ super.setuptools ];
-      };
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gixy";
-  version = "0.1.21";
+  version = "0.7.1";
   pyproject = true;
 
-  # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
-    owner = "yandex";
-    repo = "gixy";
-    rev = "v${version}";
-    sha256 = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
+    owner = "MegaManSec";
+    repo = "Gixy-Next";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4YILDOcA226RPeL7ar87IGsYwNT+FvJm29NVqeQ86xI=";
   };
 
-  patches = [
-    # Migrate tests to pytest
-    # https://github.com/yandex/gixy/pull/146
-    (fetchpatch2 {
-      name = "migrate-tests-to-pytest.patch";
-      url = "https://github.com/yandex/gixy/compare/6f68624a7540ee51316651bda656894dc14c9a3e...b1c6899b3733b619c244368f0121a01be028e8c2.diff?full_index=1";
-      hash = "sha256-qIKKTC65ewZqiKiNLcaglKEdFh0SBZMJgIvY41/7WUc=";
-    })
-    ./python3.13-compat.patch
-  ];
+  postPatch = ''
+    substituteInPlace tests/cli/test_main.py tests/plugins/test_origins_determinism.py \
+      --replace-fail 'sys.executable, "-m", "gixy.cli.main"' '"gixy"'
+  '';
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
+    crossplane
     cached-property
     configargparse
-    pyparsing
     jinja2
-    six
+    tldextract
   ];
 
-  nativeCheckInputs = [ python.pkgs.pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
-  pythonRemoveDeps = [ "argparse" ];
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
 
   passthru = {
     inherit (nginx.passthru) tests;
   };
 
   meta = {
-    description = "Nginx configuration static analyzer";
-    mainProgram = "gixy";
+    changelog = "https://github.com/MegaManSec/Gixy-Next/releases/tag/${finalAttrs.src.tag}";
+    description = "NGINX Configuration Security Scanner & Performance Checker";
     longDescription = ''
-      Gixy is a tool to analyze Nginx configuration.
-      The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
+      Gixy-Next (Gixy) is an open-source NGINX configuration security scanner
+      and hardening tool that statically analyzes your nginx.conf to detect
+      security misconfigurations, hardening gaps, and common performance
+      pitfalls before they reach production.
     '';
-    homepage = "https://github.com/yandex/gixy";
+    homepage = "https://github.com/MegaManSec/Gixy-Next";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    mainProgram = "gixy";
     platforms = lib.platforms.unix;
   };
-}
+})
