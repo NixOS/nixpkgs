@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A free and open-source Minecraft launcher";
+    description = "Free, open-source Minecraft launcher";
     longDescription = ''
       This application lets you create and manage multiple
       independent Minecraft instances, each with its own
