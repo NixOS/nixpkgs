@@ -211,6 +211,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ delafthi ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
