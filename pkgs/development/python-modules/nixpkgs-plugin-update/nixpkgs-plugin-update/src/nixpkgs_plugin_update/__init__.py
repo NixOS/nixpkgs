@@ -201,7 +201,7 @@ class Repo:
         return f"""fetchgit {{
       url = "{self.uri}";
       rev = "{plugin.commit}";
-      sha256 = "{plugin.sha256}";
+      hash = "{plugin.to_sri_hash()}";
     }}"""
 
 
@@ -288,6 +288,14 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
+            if not self.token or self.token == "":
+                log.info(
+                    "No GitHub token available for %s/%s, using git ls-remote fallback",
+                    self.owner,
+                    self.repo,
+                )
+                return super().get_latest_tag()
+
             # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
             # an ancestor of the default branch.
             query = """
@@ -428,7 +436,7 @@ class RepoGitHub(Repo):
       owner = "{self.owner}";
       repo = "{self.repo}";
       rev = "{plugin.commit}";
-      sha256 = "{plugin.sha256}";{submodule_attr}
+      hash = "{plugin.to_sri_hash()}";{submodule_attr}
     }}"""
 
 
@@ -482,6 +490,23 @@ class Plugin:
     @property
     def normalized_name(self) -> str:
         return self.name.replace(".", "-")
+
+    def to_sri_hash(self) -> str:
+        if self.sha256.startswith("sha256-"):
+            return self.sha256
+
+        cmd = [
+            "nix",
+            "hash",
+            "convert",
+            "--hash-algo",
+            "sha256",
+            "--to",
+            "sri",
+            self.sha256,
+        ]
+        result = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
+        return result.decode("utf-8").strip()
 
     @property
     def version(self) -> str:
