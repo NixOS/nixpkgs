@@ -13,6 +13,7 @@
   libXtst,
   qtwayland,
   wayland,
+  wayland-scanner,
   pkg-config,
   wrapQtAppsHook,
   kdePackages,
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libXtst
     qtwayland
     wayland
+    wayland-scanner
     kdePackages.kconfig
     kdePackages.kstatusnotifieritem
     kdePackages.knotifications
