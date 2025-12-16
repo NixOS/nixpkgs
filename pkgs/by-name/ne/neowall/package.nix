@@ -3,8 +3,7 @@
   pkg-config,
   fetchFromGitHub,
   lib,
-  libglvnd,
-  mesa,
+  libGL,
   libX11,
   libXrandr,
   libpng,
@@ -13,31 +12,34 @@
   wayland-scanner,
   wayland-protocols,
   versionCheckHook,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neowall";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "1ay1";
     repo = "neowall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wt9sNuUO2IIXlQAanDsWNjbqAaUH/jCzPoQYokl36OU=";
+    hash = "sha256-wm9dmWoB+AeygfhPKWYh2Dn1QrXKMJpTcgKPLl0VMTQ=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
+    meson
+    ninja
   ];
 
   buildInputs = [
     wayland
     wayland-protocols
-    mesa
     libX11
     libXrandr
-    libglvnd
+    libGL
     libpng
     libjpeg
   ];
