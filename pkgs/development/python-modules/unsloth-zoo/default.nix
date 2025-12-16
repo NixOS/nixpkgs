@@ -5,36 +5,44 @@
 
   # build-system
   setuptools,
-  setuptools-scm,
 
   # dependencies
   accelerate,
   cut-cross-entropy,
   datasets,
+  filelock,
   hf-transfer,
   huggingface-hub,
   msgspec,
+  numpy,
   packaging,
   peft,
+  pillow,
+  protobuf,
   psutil,
+  regex,
   sentencepiece,
   torch,
+  torchao,
   tqdm,
   transformers,
+  triton,
   trl,
   tyro,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "unsloth-zoo";
-  version = "2026.1.3";
+  version = "2026.2.1";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit version;
-    hash = "sha256-njArRI9y6EKwZamJnQoWQIvmYzV6t0syUIi1d7DzX4U=";
+    hash = "sha256-IpUgoerT9xrSQZmbuuJpGyDXlhgooUde1b82tyTYP3w=";
   };
 
   # pyproject.toml requires an obsolete version of protobuf,
@@ -43,44 +51,56 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "datasets"
     "protobuf"
+    "trl"
     "transformers"
     "torch"
   ];
 
   patches = [
-    # Avoid circular dependency in Nix, since `unsloth` depends on `unsloth-zoo`.
+    # Avoid circular dependency during import, `unsloth` depends on `unsloth-zoo`.
     ./dont-require-unsloth.patch
   ];
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requires = ["setuptools==80.9.0", "setuptools-scm==9.2.0"]' \
+                'requires = ["setuptools"]'
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     accelerate
     cut-cross-entropy
     datasets
+    filelock
     hf-transfer
     huggingface-hub
     msgspec
+    numpy
     packaging
     peft
+    pillow
+    protobuf
     psutil
+    regex
     sentencepiece
     torch
+    torchao
     tqdm
     transformers
+    triton
     trl
     tyro
+    typing-extensions
+    wheel
   ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "unsloth_zoo"
-  ];
+  # Importing tries to detect a GPU and fails in pure CPU builders.
+  dontUsePythonImportsCheck = true;
 
   meta = {
     description = "Utils for Unsloth";
