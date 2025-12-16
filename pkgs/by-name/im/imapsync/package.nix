@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imapsync";
-  version = "2.290";
+  version = "2.314";
 
   src = fetchurl {
     url = "https://imapsync.lamiral.info/dist/old_releases/${finalAttrs.version}/imapsync-${finalAttrs.version}.tgz";
-    hash = "sha256-uFhTxnaUDP793isfpF/7T8d4AnXDL4uN6zU8igY+EFE=";
+    hash = "sha256-NOFxXGWEiJ/zvZwKzC+rJURGKCvtqQyOWnGoOzpZ28o=";
   };
 
   postPatch = ''
@@ -33,9 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     CryptOpenSSLRSA
     DataUniqid
     DistCheckConflicts
+    EmailAddress
     EncodeIMAPUTF7
     FileCopyRecursive
     FileTail
+    HTTPDaemon
+    HTTPDaemonSSL
     IOSocketINET6
     IOTee
     JSONWebToken
@@ -43,8 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     MailIMAPClient
     ModuleImplementation
     ModuleScanDeps
-    NetServer
     NTLM
+    NetDNS
+    NetServer
     PackageStash
     PackageStashXS
     ProcProcessTable
