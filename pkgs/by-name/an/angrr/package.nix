@@ -1,30 +1,33 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   testers,
   nix-update-script,
+  go-md2man,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PT3oCNPRvEroyVNiICeO0hSHDzKUC6KcP9HnIw1kMQE=";
+    hash = "sha256-Z+B0MO5ZoPJveO571mlzNVedBEac7P4RE7Cq8e/9bJk=";
   };
 
-  cargoHash = "sha256-lDOH4Ceap69fX6VWbgQoQfmYWZI+jPE0LJiXmqrTRn8=";
+  cargoHash = "sha256-j36vyfIP63Qmd55vaVb9buqrCItXwFalelzU8BlKm9s=";
 
   buildAndTestSubdir = "angrr";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
   postBuild = ''
     mkdir --parents build/{man-pages,shell-completions}
     cargo xtask man-pages --out build/man-pages
@@ -50,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Temporary GC Roots Cleaner";
+    description = "Auto Nix GC Root Retention";
     homepage = "https://github.com/linyinfeng/angrr";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ yinfeng ];
