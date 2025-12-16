@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "bincrypter";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "hackerschoice";
