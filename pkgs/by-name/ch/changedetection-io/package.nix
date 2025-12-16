@@ -60,10 +60,10 @@ python3.pkgs.buildPythonApplication rec {
       pluggy
       price-parser
       psutil
+      puremagic
       pyppeteer-ng
       # pyppeteerstealth
       python-engineio
-      python-magic
       python-socketio
       pytz
       referencing
