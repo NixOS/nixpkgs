@@ -49,6 +49,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
-    mainProgram = "convert4chan";
   };
 })
