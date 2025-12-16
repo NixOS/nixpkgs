@@ -49,18 +49,49 @@ let
     or you can set the following nixpkgs config option:
     `config.dyalog.acceptLicense = true;`
   '';
+
+  inherit (stdenv.hostPlatform) system isAarch;
+
+  htmlRendererNotOnAarch = ''
+    The HTMLRenderer is not currently supported on ${system}.
+    https://docs.dyalog.com/20.0/release-notes/announcements/#new-linux-platform
+  '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "19.0.50027";
+  version = "20.0.52753";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
+
+  passthru.sources =
+    let
+      fetchArtifact =
+        {
+          prefix,
+          suffix,
+          hash,
+        }:
+        fetchurl {
+          url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/${prefix}_${finalAttrs.version}_${suffix}";
+          inherit hash;
+        };
+    in
+    {
+      "x86_64-linux" = fetchArtifact {
+        prefix = "linux_64";
+        suffix = "unicode.x86_64.deb";
+        hash = "sha256-g5bilV2y7luWRZ1RPxe74F2mAKVHpKcytWWrX8dCuF8=";
+      };
+      "aarch64-linux" = fetchArtifact {
+        prefix = "linux_64";
+        suffix = "unicode.aarch64.deb";
+        hash = "sha256-DR7Kjqdp5BKW3XKUNYIdaUiR4Wd+sWkiSLtT5Ni1E4E=";
+      };
+    };
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
-    fetchurl {
-      url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      hash = "sha256-3uB102Hr0dmqAZj2ezLhsAdBotY24PWJfE7g5wSmKMA=";
-    };
+    assert htmlRendererSupport && isAarch -> throw htmlRendererNotOnAarch;
+    finalAttrs.passthru.sources.${system};
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
 
@@ -99,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
-    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
+    cp lib/{conga36_64.so,dyalog64.so,libconga36ssl64.so} ${dyalogHome}/lib
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
@@ -111,11 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString htmlRendererSupport ''
     cp -r locales ${dyalogHome}
     cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
-    cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp chrome-sandbox icudtl.dat v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString sqaplSupport ''
-    cp lib/cxdya65u64u.so ${dyalogHome}/lib
+    cp lib/cxdya66u64u.so ${dyalogHome}/lib
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
@@ -170,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       tomasajt
       markus1189
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
