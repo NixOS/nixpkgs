@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sectxt";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "DigitalTrustCenter";
     repo = "sectxt";
     tag = version;
-    hash = "sha256-CDVfT3ANb4ugLEvrSRTbkZMvZA6rcEwBu2c3pnjsza8=";
+    hash = "sha256-x8HcERUZpOijTEXbbtnG0Co5PiQlO4v5bxKM4CAExnI=";
   };
 
   build-system = [ setuptools ];
