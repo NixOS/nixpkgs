@@ -68,13 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Mail folder synchronizer between IMAP servers";
-    mainProgram = "imapsync";
-    homepage = "https://imapsync.lamiral.info/";
+    homepage = "https://imapsync.lamiral.info";
     license = lib.licenses.nlpl;
     maintainers = with lib.maintainers; [
       pSub
       motiejus
     ];
     platforms = lib.platforms.unix;
+    mainProgram = "imapsync";
   };
 })
