@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.20";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AZyYjgUd2dGnBUHwo/cPagFE8IJmzsgMLwebTypLAgE=";
+    hash = "sha256-R6wOGla4V7XTAS6OaKLxiyzPoSKvQrbU3Pmkb3ngR3A=";
   };
 
-  cargoHash = "sha256-a1yBu4MuyR0veBSQAUdaE/9rB04i6RVJ/NdWNmpRzmM=";
+  cargoHash = "sha256-8hT1Chci1Kt8R4+a1XKDklr1h/f2tq9k+J7qLEaJvhs=";
 
   nativeCheckInputs = [
     git
@@ -65,10 +65,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "rust::additional_dependencies_cli"
     "rust::rustup_installer"
     "rust::remote_hooks"
+    "rust::remote_hook_non_workspace"
     "rust::remote_hooks_with_lib_deps"
     "unsupported::unsupported_language"
     # "meta_hooks"
     "reuse_env"
+    "workspace_install_hooks"
     "docker::docker"
     "docker::workspace_docker"
     "docker_image::docker_image"
