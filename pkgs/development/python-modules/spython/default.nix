@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "spython";
-  version = "0.3.14";
+  version = "0.3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "singularityhub";
     repo = "singularity-cli";
     tag = version;
-    hash = "sha256-PNMzqnKb691wcd8aGSleqHOcsUrahl8e0r5s5ek5GmQ=";
+    hash = "sha256-XYiudDXXiX0izFZZpQb71DBg/wRKjeupvKHixGFVuKM=";
   };
 
   postPatch = ''
