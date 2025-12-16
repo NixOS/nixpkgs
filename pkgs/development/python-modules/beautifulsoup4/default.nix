@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.13.4";
+  version = "4.14.3";
   pyproject = true;
 
   outputs = [
@@ -45,17 +45,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-27PE4c6uau/r2vJCMkcmDNBiQwpBDjjGbyuqUKhDcZU=";
+    hash = "sha256-YpKxxRhtNWu6Zp759/BRdXCZVlrZraXdYwvZ3l+n+4Y=";
   };
-
-  patches = [
-    # backport test fix for behavior changes in libxml 2.14.3
-    (fetchpatch {
-      url = "https://git.launchpad.net/beautifulsoup/patch/?id=53d328406ec8c37c0edbd00ace3782be63e2e7e5";
-      excludes = [ "CHANGELOG" ];
-      hash = "sha256-RtavbpnfT6x0A8L3tAvCXwKUpty1ASPGJKdks7evBr8=";
-    })
-  ];
 
   build-system = [ hatchling ];
 
