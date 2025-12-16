@@ -17345,6 +17345,8 @@ self: super: with self; {
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
+  shwim = callPackage ../development/python-modules/shwim { };
+
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   signalslot = callPackage ../development/python-modules/signalslot { };
