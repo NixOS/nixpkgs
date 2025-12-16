@@ -4,15 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "spython";
   version = "0.3.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "singularityhub";
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Streamlined singularity python client (spython) for singularity";
     homepage = "https://github.com/singularityhub/singularity-cli";
-    changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/singularityhub/singularity-cli/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "spython";
