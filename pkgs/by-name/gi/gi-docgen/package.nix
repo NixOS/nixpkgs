@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
+      --replace-fail "${python3}" ""
   '';
 
   passthru = {
