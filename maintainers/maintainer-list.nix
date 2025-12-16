@@ -4010,6 +4010,12 @@
     name = "Builditluc";
     keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
+  burdzwastaken = {
+    email = "burdz@burdz.net";
+    github = "burdzwastaken";
+    githubId = 13855668;
+    name = "Matt Burdan";
+  };
   burmudar = {
     email = "william.bezuidenhout@gmail.com";
     github = "burmudar";
