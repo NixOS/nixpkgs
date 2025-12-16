@@ -371,13 +371,16 @@ in
     warnings =
       lib.optional
         (
-          !(builtins.elem cfg.bind_to_address [
-            "localhost"
-            "127.0.0.1"
-          ])
+          !(
+            (builtins.elem cfg.settings.bind_to_address [
+              "localhost"
+              "127.0.0.1"
+            ])
+            || (lib.hasPrefix "/" cfg.settings.bind_to_address)
+          )
           && !cfg.openFirewall
         )
-        "Using '${cfg.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
+        "Using '${cfg.settings.bind_to_address}' as services.mpd.settings.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
 
     # install mpd units
     systemd.packages = [ pkgs.mpd ];
