@@ -414,7 +414,7 @@ in
           imageFile = jobImages.${name};
           image = "${imageNames.${name}}:latest";
           extraOptions = [
-            "--docker-volumes-from"
+            "--volumes-from"
             "nix-daemon-container:ro"
           ];
           dependsOn = [ "nix-daemon-container" ];
