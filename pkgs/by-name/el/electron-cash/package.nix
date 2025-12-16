@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication rec {
       substituteInPlace electroncash/secp256k1.py \
         --replace-fail "${libsecp256k1_name}" "${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}"
       substituteInPlace contrib/requirements/requirements.txt \
-        --replace-fail "python-dateutil<2.9" "python-dateutil<2.10"
+        --replace-fail "python-dateutil<2.9" "python-dateutil"
     '';
 
   preFixup = ''
