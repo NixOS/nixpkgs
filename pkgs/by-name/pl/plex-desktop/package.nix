@@ -24,8 +24,8 @@
 }:
 let
   pname = "plex-desktop";
-  version = "1.109.0";
-  rev = "85";
+  version = "1.112.0";
+  rev = "87";
   meta = {
     homepage = "https://plex.tv/";
     description = "Streaming media player for Plex";
@@ -45,7 +45,7 @@ let
 
     src = fetchurl {
       url = "https://api.snapcraft.io/api/v1/snaps/download/qc6MFRM433ZhI1XjVzErdHivhSOhlpf0_${rev}.snap";
-      hash = "sha512-BSnA84purHv6qIVELp+AJI2m6erTngnupbuoCZTaje6LCd2+5+U+7gqWdahmO1mxJEGvuBwzetdDrp1Ibz5a6A==";
+      hash = "sha512-xDBnqPkYIpSsUe+X6oalecNz1bsX0O3pXUTI9GBZLAsT+4U4qdovn2ILPh4APJaqwNEswoIYepkjTSmm9pOI9A==";
     };
 
     nativeBuildInputs = [
