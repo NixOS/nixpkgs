@@ -4,8 +4,9 @@
   nixosTests,
   rustPlatform,
   fetchFromGitLab,
-  nix-update-script,
+  versionCheckHook,
   installShellFiles,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
@@ -52,6 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/share/examples
     install -Dm444 config/example* config/README.md $out/share/examples
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
   passthru.tests = { inherit (nixosTests) reaction reaction-firewall; };
