@@ -372,6 +372,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # LuaPackages
 /pkgs/development/lua-modules         @NixOS/lua
 
+# mpvScripts
+/pkgs/applications/video/mpv/scripts            @uninsane
+/pkgs/applications/video/mpv/scripts.nix        @uninsane
+
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
 
