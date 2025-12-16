@@ -3047,6 +3047,12 @@
     githubId = 75235;
     name = "Michael Walker";
   };
+  barsikus007 = {
+    name = "barsikus007";
+    email = "barsikus07@gmail.com";
+    github = "barsikus007";
+    githubId = 37113583;
+  };
   bartoostveen = {
     name = "Bart Oostveen";
     github = "bartoostveen";
