@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     substituteInPlace tests/scripts/all \
-      --replace "/bin/rm" "rm"
+      --replace-fail "/bin/rm" "rm"
 
     # skip flaky tests
     # https://bugs.openldap.org/show_bug.cgi?id=8623
