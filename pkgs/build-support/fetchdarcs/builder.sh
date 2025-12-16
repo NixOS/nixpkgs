@@ -1,5 +1,3 @@
-set -u
-
 tagtext=""
 tagflags=""
 # Darcs hashes are sha1 (120 bits, 40-character hex)
