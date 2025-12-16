@@ -48,6 +48,15 @@ buildPythonPackage rec {
     hash = "sha256-YpKxxRhtNWu6Zp759/BRdXCZVlrZraXdYwvZ3l+n+4Y=";
   };
 
+  patches = [
+    # Fix tests with python 3.13.10 / 3.14.1
+    (fetchpatch {
+      url = "https://git.launchpad.net/beautifulsoup/patch/?id=55f655ffb7ef03bdd1df0f013743831fe54e3c7a";
+      excludes = [ "CHANGELOG" ];
+      hash = "sha256-DJl1pey0NdJH+SyBH9+y6gwUvQCmou0D9xcRAEV8OBw=";
+    })
+  ];
+
   build-system = [ hatchling ];
 
   nativeBuildInputs = [ sphinxHook ];
