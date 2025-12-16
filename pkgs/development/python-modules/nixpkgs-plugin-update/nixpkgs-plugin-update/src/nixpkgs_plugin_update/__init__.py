@@ -288,6 +288,14 @@ class RepoGitHub(Repo):
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
+            if not self.token or self.token == "":
+                log.info(
+                    "No GitHub token available for %s/%s, using git ls-remote fallback",
+                    self.owner,
+                    self.repo,
+                )
+                return super().get_latest_tag()
+
             # FIXME: This fetches all tags. We need to find a way to check if a tag exists in
             # an ancestor of the default branch.
             query = """
