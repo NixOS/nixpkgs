@@ -23,18 +23,20 @@
   pydantic,
   pytestCheckHook,
   torch,
+  universal-pathlib,
+  bashInteractive,
 }:
 
 buildPythonPackage rec {
   pname = "tyro";
-  version = "0.9.35";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentyi";
     repo = "tyro";
     tag = "v${version}";
-    hash = "sha256-W1AtdZslaQ+lBR8vTmiq+MprDjqXc8fSWZ/63mS2obY=";
+    hash = "sha256-7Y42fq0xeuKr3+jBiFZEFEpe39sz7yMYVT8C1o9i6tE=";
   };
 
   build-system = [ hatchling ];
@@ -57,7 +59,14 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     torch
+    universal-pathlib
+    bashInteractive
   ];
+
+  preCheck = ''
+    export COLUMNS=200
+    export LINES=200
+  '';
 
   pythonImportsCheck = [ "tyro" ];
 
