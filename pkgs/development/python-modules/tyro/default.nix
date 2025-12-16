@@ -75,6 +75,11 @@ buildPythonPackage rec {
     "test_similar_arguments_subcommands_multiple_contains_match_cascading"
   ];
 
+  preCheck = ''
+    export COLUMNS=200
+    export LINES=200
+  '';
+
   pythonImportsCheck = [ "tyro" ];
 
   meta = {
