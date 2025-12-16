@@ -3,27 +3,33 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scraper";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "rust-scraper";
     repo = "scraper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T4a5eRWapDPctF8Nc2kIlgJGTckqlvt2ujARsNZH06k=";
+    hash = "sha256-SGYusb+8MKz4vXjZZlM+bpmrshmts+FZLjR44DyHYqg=";
   };
 
-  cargoHash = "sha256-0k8tYJbsWRAWn7stsodC8qkzzl3O8AZ1QrQ7i/n2YzY=";
+  cargoHash = "sha256-vbJMOVur2QE0rFo1OJkSsuNzTOzn22ty5Py3gozDEzs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage scraper/scraper.1
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
