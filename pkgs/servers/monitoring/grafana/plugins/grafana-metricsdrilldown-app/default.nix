@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-metricsdrilldown-app";
-  version = "1.0.24";
-  zipHash = "sha256-aoivPnxr8/8EQhz3hD/WAgvfwQ3nUXWjs22izx7yDp8=";
+  version = "1.0.25";
+  zipHash = "sha256-qN4o0u9Lh/jLjQEcdWp/pOwfz+jqss8esukGeI1y3Ps=";
   meta = {
     description = "Queryless experience for browsing Prometheus-compatible metrics. Quickly find related metrics without writing PromQL queries";
     license = lib.licenses.agpl3Only;

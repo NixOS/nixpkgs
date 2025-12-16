@@ -6,9 +6,11 @@
 
   # build-system
   cython,
-  gdal,
   numpy,
   setuptools,
+
+  # non-Python dependencies
+  gdal-cpp,
 
   # dependencies
   affine,
@@ -36,26 +38,37 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     tag = version;
-    hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
+    hash = "sha256-6y55JJ3R/JEEneM10UPHIDpSopaybY5XHJPiU+77ke4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "cython~=3.0.2" cython
+      --replace-fail "cython~=3.1.0" cython
   '';
 
   build-system = [
     cython
-    gdal
     numpy
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    gdal-cpp # for gdal-config
+  ];
+
+  buildInputs = [
+    gdal-cpp
+  ];
+
+  pythonRelaxDeps = [
+    "click"
   ];
 
   dependencies = [
