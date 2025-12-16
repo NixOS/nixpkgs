@@ -155,11 +155,11 @@ The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nix
 
   **Container Images for Gitlab Jobs**:
   - `local/alpine`: An image based on Alpine with a Nix installation
-    (variable `alpineImage`).
+    (attribute `jobImages.alpine`).
   - `local/ubuntu`: An image based on Ubuntu with a Nix installation
-    (variable `ubuntuImage`).
+    (attribute `jobImages.ubuntu`).
   - `local/nix`: An image based on Nix which only comes with `nix`
-    installed (variable `nixImage`).
+    installed (attribute `jobImages.nix`).
 
   **Images for VM Setup**:
   - `local/nix-daemon-image`: An image with a Nix daemon which is
@@ -169,7 +169,7 @@ The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nix
     (variable `podmanDaemonImage`).
 
 - Every job container runs in a `podman` container instance based by default on
-  `ubuntuImage`. A pipeline job can override this with `image: local/alpine`.
+  `jobImage.ubuntu`. A pipeline job can override this with `image: local/alpine`.
   - Each job container will have the `/nix/store` mounted from the container
     `nix-daemon-container` (see registration flags
     `--docker-volumes-from "nix-daemon-container:ro"`).
@@ -202,7 +202,7 @@ The [VM tested `podman-runner`](https://github.com/NixOS/nixpkgs/blob/master/nix
 
     ::: {.note}
     Building container images with `buildah` (stripped
-    `podman` for building images) inside a job which runs `alpineImage`
+    `podman` for building images) inside a job which runs `jobImage.alpine`
     is still possible.
     :::
 

@@ -18,6 +18,10 @@
 #   - The `bootstrapPkgs` derivation is copied into the job containers
 #     but without the Nix store paths cause they get provided by the
 #     `nix-daemon-store` volume.
+# I cannot denote these volumes because they overmount the
+# shit which is in the image.
+# TODO: make a systemd service which starts before
+# that and creates some volumes and inits these from the image.
 #
 # - The `podman-daemon-socket` volume gets mounted to the job container
 #   enabling it to use `podman`.
@@ -77,16 +81,24 @@ let
   };
 
   # This derivation will contain a folder `/etc`
-  auxRootFiles = pkgs.callPackage ./root { };
+  files = pkgs.callPackage ./files { };
   preBuildScript = pkgs.callPackage ./scripts/prebuild.nix { };
 
+  # These derivations are Linked into the job images root dir.
   bootstrapPkgs = [
     pkgs.nix
+    # Runtime dependencies of nix.
+    pkgs.gnutar
+    pkgs.gzip
+    pkgs.openssh
+    pkgs.xz
     pkgs.cacert
+
+    # Other stuff.
     (lib.hiPrio pkgs.coreutils)
     (lib.hiPrio pkgs.findutils)
     pkgs.openssh
-    pkgs.bash
+    pkgs.bashInteractive
     (lib.hiPrio pkgs.git)
     pkgs.cachix
 
@@ -94,7 +106,16 @@ let
     pkgs.podman # For nested containers.
 
     preBuildScript
-    auxRootFiles
+
+    files.containers
+    files.nixConfig
+  ];
+
+  # All these packages are added to the Nix daemon.
+  nixStorePkgs = bootstrapPkgs ++ [
+    # These files
+    files.basicRoot
+    files.fakeNixpkgs
   ];
 
   toEnvList = envs: lib.mapAttrsToList (k: v: "${k}=${v}") envs;
@@ -109,6 +130,8 @@ let
 
     # You can add here a user with uid,gid,uname,gname etc.
     # We are using root.
+
+    extraPkgs = nixStorePkgs;
 
     nixConf = {
       cores = "0";
@@ -125,8 +148,6 @@ let
     fromImage = nixImageBase;
     name = "local/nix-daemon";
     tag = "latest";
-
-    contents = bootstrapPkgs;
 
     config = {
       Volumes = {
@@ -166,94 +187,118 @@ let
       };
     };
 
-  jobImages = {
-    # The base image
-    nix = pkgs.dockerTools.buildLayeredImage {
-      fromImage = nixImageBase;
-      name = imageNames.nix;
-      tag = "latest";
+  jobImages =
+    let
+      extraCommands = ''
+        set -eu
+        # Set missing Nix directories.
+        mkdir -p -m 0755 nix/var/log/nix/drvs
+        mkdir -p -m 0755 nix/var/nix/{gcroots,profiles,temproots,userpool}
+        mkdir -p -m 1777 nix/var/nix/{gcroots,profiles}/per-user
+        mkdir -p -m 0755 nix/var/nix/profiles/per-user/root
 
-      contents = bootstrapPkgs;
-      # No store paths are copied into. We provide them by mounting the
-      # /nix/store.
-      includeStorePaths = false;
+        # Need a HOME.
+        mkdir -vp root
+        mkdir -p -m 0700 root/.nix-defexpr
+      '';
+    in
+    {
+      # The Nix image.
+      nix = pkgs.dockerTools.buildLayeredImage {
+        name = imageNames.nix;
+        tag = "latest";
 
-      config = {
-        Labels = noPruneLabels;
-        Env = toEnvList envs.nix;
+        extraCommands = extraCommands + ''
+          set -eu
+          # For `/usr/bin/env`.
+          mkdir -p usr && ln -s ../bin usr/bin
+        '';
+
+        contents = bootstrapPkgs ++ [ files.basicRoot ];
+        # No store paths are copied into. We provide them by mounting the
+        # /nix/store.
+        includeStorePaths = false;
+
+        config = {
+          Labels = noPruneLabels;
+          Env = toEnvList envs.nix;
+        };
+        maxLayers = 2;
       };
-      maxLayers = 4;
+
+      # This is the analog image to `local/nix` but alpine based.
+      alpine =
+        let
+          # Update with:
+          # ```shell
+          # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- --image-name alpine --image-tag latest
+          # ```
+          alpineBase = pkgs.dockerTools.pullImage {
+            imageName = "alpine";
+            imageDigest = "sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d";
+            sha256 = "0gf7wbjp37zbni3pz8vdgq1mss6mz69wynms0gqhq7lsxfmg9xj9";
+            finalImageName = "alpine";
+            finalImageTag = "latest";
+          };
+        in
+        (pkgs.dockerTools.buildLayeredImage {
+          fromImage = alpineBase;
+          name = imageNames.alpine;
+          tag = "latest";
+
+          inherit extraCommands;
+
+          contents = bootstrapPkgs;
+          # No store paths are copied into. We provide them by mounting the
+          # /nix/store.
+          includeStorePaths = false;
+
+          config = {
+            Labels = noPruneLabels;
+            Env = toEnvList envs.nix;
+          };
+
+          # Only if `build buildLayeredImage`.
+          maxLayers = 3;
+        });
+
+      # This is the analog image to `local/nix` but ubuntu based.
+      ubuntu =
+        let
+          # Update with:
+          # ```shell
+          # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- \
+          #   --image-name ubuntu --image-tag latest
+          # ```
+          ubuntuBase = pkgs.dockerTools.pullImage {
+            imageName = "ubuntu";
+            imageDigest = "sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02";
+            hash = "sha256-aC8SgxdcMSaaU89YMr/uwE022Yqey2frmeZqr+L1xEU=";
+            finalImageName = "ubuntu";
+            finalImageTag = "latest";
+          };
+        in
+        (pkgs.dockerTools.buildLayeredImage {
+          fromImage = ubuntuBase;
+          name = imageNames.ubuntu;
+          tag = "latest";
+
+          inherit extraCommands;
+
+          contents = bootstrapPkgs;
+          # No store paths are copied into. We provide them by mounting the
+          # /nix/store.
+          includeStorePaths = false;
+
+          config = {
+            Labels = noPruneLabels;
+            Env = toEnvList envs.ubuntu;
+          };
+
+          # Only if `build buildLayeredImage`.
+          maxLayers = 3;
+        });
     };
-
-    # This is the analog image to `local/nix` but alpine based.
-    alpine =
-      let
-        # Update with:
-        # ```shell
-        # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- --image-name alpine --image-tag latest
-        # ```
-        alpineBase = pkgs.dockerTools.pullImage {
-          imageName = "alpine";
-          imageDigest = "sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d";
-          sha256 = "0gf7wbjp37zbni3pz8vdgq1mss6mz69wynms0gqhq7lsxfmg9xj9";
-          finalImageName = "alpine";
-          finalImageTag = "latest";
-        };
-      in
-      (pkgs.dockerTools.buildLayeredImage {
-        fromImage = alpineBase;
-        name = imageNames.alpine;
-        tag = "latest";
-
-        contents = bootstrapPkgs;
-        # No store paths are copied into. We provide them by mounting the
-        # /nix/store.
-        includeStorePaths = false;
-
-        config = {
-          Labels = noPruneLabels;
-          Env = toEnvList envs.alpine;
-        };
-
-        # Only if `build buildLayeredImage`.
-        maxLayers = 15;
-      });
-
-    # This is the analog image to `local/nix` but ubuntu based.
-    ubuntu =
-      let
-        # Update with:
-        # ```shell
-        # nix run "github:nixos/nixpkgs/nixos-unstable#nix-prefetch-docker" -- \
-        #   --image-name ubuntu --image-tag latest
-        # ```
-        ubuntuBase = pkgs.dockerTools.pullImage {
-          imageName = "ubuntu";
-          imageDigest = "sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02";
-          hash = "sha256-aC8SgxdcMSaaU89YMr/uwE022Yqey2frmeZqr+L1xEU=";
-          finalImageName = "ubuntu";
-          finalImageTag = "latest";
-        };
-      in
-      (pkgs.dockerTools.buildLayeredImage {
-        fromImage = ubuntuBase;
-        name = imageNames.ubuntu;
-        tag = "latest";
-
-        contents = bootstrapPkgs;
-        # No store paths are copied into. We provide them by mounting the
-        # /nix/store.
-        includeStorePaths = false;
-
-        config = {
-          Labels = noPruneLabels;
-          Env = toEnvList envs.ubuntu;
-        };
-
-        # Only if `build buildLayeredImage`.
-        maxLayers = 15;
-      });
-  };
 
   nixDaemonContainer = {
     imageFile = nixDaemonImage;
@@ -293,27 +338,36 @@ let
 
   # Environment variables for all job containers.
   envs = rec {
-    daemons = {
+    common = {
       # Access to the nix daemon.
       NIX_REMOTE = "daemon";
       # Access to podman.
       CONTAINER_HOST = "unix:///run/podman/podman.sock";
-    };
-
-    nix = daemons // {
-      IMAGE_OS_DIST = "nixos";
-    };
-
-    alpine = daemons // {
-      IMAGE_OS_DIST = "alpine";
 
       USER = "root";
       PATH = "/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/bin:/sbin:/usr/bin:/usr/sbin";
+
       SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
       NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
+      # For shells, source this file.
+      ENV = "${pkgs.nix}/etc/profile.d/nix-daemon.sh";
+      BASH_ENV = "${pkgs.nix}/etc/profile.d/nix-daemon.sh";
+
+      # Make a fake nixpkgs which throws when using
+      # `nix repl -f <nixpkgs>` for example.
+      NIX_PATH = "nixpkgs=${files.fakeNixpkgs}";
     };
 
-    ubuntu = alpine // {
+    nix = common // {
+      IMAGE_OS_DIST = "nix";
+    };
+
+    alpine = common // {
+      IMAGE_OS_DIST = "alpine";
+    };
+
+    ubuntu = common // {
       IMAGE_OS_DIST = "ubuntu";
     };
   };
