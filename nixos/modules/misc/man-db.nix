@@ -86,7 +86,7 @@ in
             }
             ''
               echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-              mandb -C man.conf -psc >/dev/null 2>&1
+              mandb -C man.conf -pscq
             '';
       in
       ''
