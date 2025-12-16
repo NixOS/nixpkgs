@@ -29,6 +29,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
+  this = "is a change";
+
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "cuda-samples";
   version = if cudaAtLeast "13" then "13.0" else "12.8";
