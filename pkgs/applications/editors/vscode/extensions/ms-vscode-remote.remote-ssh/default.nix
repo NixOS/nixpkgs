@@ -84,8 +84,8 @@ buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "remote-ssh";
     publisher = "ms-vscode-remote";
-    version = "0.120.0";
-    hash = "sha256-D9YmLKGDtIb2wGfLNRbczqL4fzLASbZC/563ewzqGV0=";
+    version = "0.122.0";
+    hash = "sha256-apSBO3hsCSS2XTMQrqr+qqSnv3vRUJQ4U/ZOd4KlUJg=";
   };
 
   postPatch = ''
