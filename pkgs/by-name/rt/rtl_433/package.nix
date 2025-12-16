@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "25.02";
+  version = "25.12";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
     rev = version;
-    hash = "sha256-S0jtcgbpS2NOezZJ0uq1pVj0nsa82F0NRmQD9glILz4=";
+    hash = "sha256-VDNXLx6OUBQkflKFHp1LP8N5g15o6vYg3P9XWgIoYIg=";
   };
 
   nativeBuildInputs = [
@@ -32,12 +32,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    substituteInPlace ./CMakeLists.txt --replace-fail \
-      "cmake_minimum_required(VERSION 2.6)" \
-      "cmake_minimum_required(VERSION 2.6...3.10)"
-  '';
 
   meta = {
     description = "Decode traffic from devices that broadcast on 433.9 MHz, 868 MHz, 315 MHz, 345 MHz and 915 MHz";
