@@ -15,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.35.1";
+  version = "2.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-5+yMZysK69g+3uYrP12WK3ngpAYn8XrHoVjLqjvbobg=";
+    hash = "sha256-tzwiPp0+xNKmndTn9Y1AXiqscQWaCC8gKgQHEtkyGag=";
   };
 
   build-system = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
   ];
