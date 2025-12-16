@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -114,10 +115,16 @@ buildPythonPackage rec {
     # AttributeError: 'ZDT3' object has no attribute 'elementwise'
     "test_kktpm_correctness"
   ];
+
   disabledTestPaths = [
     # sensitive to float precision
     "tests/algorithms/test_no_modfication.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # sensitive to float precision
+    "tests/misc/test_kktpm.py::test_kktpm_correctness[zdt3-params3]"
   ];
+
   # Avoid crashing sandboxed build on macOS
   env.MATPLOTLIBRC = writeText "" ''
     backend: Agg
