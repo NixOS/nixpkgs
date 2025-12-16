@@ -215,66 +215,74 @@ let
 
   grammarToPlugin =
     grammar:
-    let
-      name = lib.pipe grammar [
-        lib.getName
+    # If the grammar has already been processed by this function, return it as-is.
+    # This makes the function idempotent and prevents double-wrapping which mangles
+    # the names of the generated parser files.
+    if grammar ? origGrammar then
+      grammar
+    else
+      let
+        name = lib.pipe grammar [
+          lib.getName
 
-        # added in buildGrammar
-        (lib.removeSuffix "-grammar")
+          # added in buildGrammar
+          (lib.removeSuffix "-grammar")
 
-        # grammars from tree-sitter.builtGrammars
-        (lib.removePrefix "tree-sitter-")
-        (lib.replaceStrings [ "-" ] [ "_" ])
-      ];
+          # grammars from tree-sitter.builtGrammars
+          (lib.removePrefix "tree-sitter-")
+          (lib.replaceStrings [ "-" ] [ "_" ])
+        ];
 
-      nvimGrammars = lib.mapAttrsToList (
-        name: value:
-        value.origGrammar
-          or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-      ) vimPlugins.nvim-treesitter.grammarPlugins;
-      isNvimGrammar = x: builtins.elem x nvimGrammars;
+        nvimGrammars = lib.mapAttrsToList (
+          name: value:
+          value.origGrammar
+            or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+        ) vimPlugins.nvim-treesitter.grammarPlugins;
+        isNvimGrammar = x: builtins.elem x nvimGrammars;
 
-      toNvimTreesitterGrammar = makeSetupHook {
-        name = "to-nvim-treesitter-grammar";
-      } ./to-nvim-treesitter-grammar.sh;
-    in
+        toNvimTreesitterGrammar = makeSetupHook {
+          name = "to-nvim-treesitter-grammar";
+        } ./to-nvim-treesitter-grammar.sh;
+      in
 
-    (toVimPlugin (
-      stdenv.mkDerivation {
-        name = "treesitter-grammar-${name}";
+      (toVimPlugin (
+        stdenv.mkDerivation {
+          name = "nvim-treesitter-grammar-${name}";
 
-        origGrammar = grammar;
-        grammarName = name;
+          origGrammar = grammar;
+          grammarName = name;
 
-        # Queries for nvim-treesitter's (not just tree-sitter's) officially
-        # supported languages are bundled with nvim-treesitter
-        # Queries from repositories for such languages are incompatible
-        # with nvim's implementation of treesitter.
-        #
-        # We try our best effort to only include queries for niche languages
-        # (there are grammars for them in nixpkgs, but they're in
-        # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
-        # only includes officially supported languages)
-        #
-        # To use grammar for a niche language, users usually do:
-        #   packages.all.start = with final.vimPlugins; [
-        #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
-        #   ]
-        #
-        # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
-        installQueries = !isNvimGrammar grammar;
+          # Queries for nvim-treesitter's (not just tree-sitter's) officially
+          # supported languages are bundled with nvim-treesitter
+          # Queries from repositories for such languages are incompatible
+          # with nvim's implementation of treesitter.
+          #
+          # We try our best effort to only include queries for niche languages
+          # (there are grammars for them in nixpkgs, but they're in
+          # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
+          # only includes officially supported languages)
+          #
+          # To use grammar for a niche language, users usually do:
+          #   packages.all.start = with final.vimPlugins; [
+          #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
+          #   ]
+          #
+          # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
+          installQueries = !isNvimGrammar grammar;
 
-        dontUnpack = true;
-        __structuredAttrs = true;
+          dontUnpack = true;
+          __structuredAttrs = true;
 
-        nativeBuildInputs = [ toNvimTreesitterGrammar ];
+          nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-        meta = {
-          platforms = lib.platforms.all;
+          passthru = grammar.passthru or { };
+
+          meta = {
+            platforms = lib.platforms.all;
+          }
+          // grammar.meta;
         }
-        // grammar.meta;
-      }
-    ));
+      ));
 
   /*
     Fork of vimUtils.packDir that additionally generates a propagated-build-inputs-file that
