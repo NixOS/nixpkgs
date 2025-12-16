@@ -12,6 +12,7 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   qtile,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     python-dateutil
     qtile
