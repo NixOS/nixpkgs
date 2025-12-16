@@ -7,6 +7,7 @@
   replaceVars,
   buildNpmPackage,
   python,
+  home-assistant-chip-wheels,
 
   # build
   setuptools,
@@ -45,22 +46,18 @@ let
     hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
   };
 
-  paaCerts = stdenvNoCC.mkDerivation rec {
+  paaCerts = stdenvNoCC.mkDerivation {
     pname = "matter-server-paa-certificates";
-    version = "1.4.0.0";
+    inherit (home-assistant-chip-wheels) version src;
 
-    src = fetchFromGitHub {
-      owner = "project-chip";
-      repo = "connectedhomeip";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
-    };
+    dontConfigure = true;
+    dontBuild = true;
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out
-      cp $src/credentials/development/paa-root-certs/* $out/
+      cp connectedhomeip/credentials/development/paa-root-certs/* $out/
 
       runHook postInstall
     '';
