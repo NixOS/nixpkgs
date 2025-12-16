@@ -413,6 +413,11 @@ in
         "${name}-container" = {
           imageFile = jobImages.${name};
           image = "${imageNames.${name}}:latest";
+          extraOptions = [
+            "--docker-volumes-from"
+            "nix-daemon-container:ro"
+          ];
+          dependsOn = [ "nix-daemon-container" ];
           cmd = [ "true" ];
         };
       }) jobImages);
