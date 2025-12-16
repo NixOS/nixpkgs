@@ -183,6 +183,10 @@ buildDotnetModule rec {
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
   '';
 
+  postFixup = ''
+    mv $out/bin/Renode $out/bin/renode
+  '';
+
   executables = [ "Renode" ];
 
   passthru.updateScript = nix-update-script { };
