@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   requests,
   python-dateutil,
   langcodes,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "sectxt";
   version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DigitalTrustCenter";
