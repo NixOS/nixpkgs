@@ -7,29 +7,28 @@
   versionCheckHook,
   pam,
   rustPlatform,
-  tzdata,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DGoEHeVs7EbzpfbmJQEIsL/eWXBvUCbaSPAGD65Op7k=";
+    hash = "sha256-F1JwVP2GDzKCfiJXh8PXTBghNwWeD8a+TMiEaPx6wGg=";
   };
 
-  cargoHash = "sha256-fn97cKdaIsbozI794CAeWQooC7evTErRJOg6cEjzvjY=";
+  cargoHash = "sha256-6NhyPdOAk2va8Vibsfpfq3xGLIzDBRmqxj4bZhQT9bY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ pam ];
 
   postPatch = ''
-    substituteInPlace build.rs \
-      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/system/audit.rs \
+      --replace-fail "/usr/share/zoneinfo" "/etc/zoneinfo"
   '';
 
   postInstall = ''
@@ -62,6 +61,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
+    # Assumes runtime zoneinfo paths
+    "sudo::env::environment::tests::test_tzinfo"
+
     # Unsure why those are failing
     "env::tests::test_environment_variable_filtering"
     "su::context::tests::invalid_shell"
@@ -80,11 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
-      ];
-    };
+    updateScript = nix-update-script { };
     tests = nixosTests.sudo-rs;
   };
 
