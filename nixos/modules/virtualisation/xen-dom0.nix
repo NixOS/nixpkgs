@@ -368,6 +368,12 @@ in
         readOnly = true;
         description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
       };
+      package = mkPackageOption pkgs [ "ocamlPackages" "oxenstored" ] {
+        extraDescription = ''
+          This is only used if the Xen Store Daemon being used is the newer OCaml-based store.
+          The legacy C-based store is always included.
+        '';
+      };
       settings = mkOption {
         default = { };
         example = {
@@ -799,7 +805,8 @@ in
       systemPackages = [
         cfg.package
         (hiPrio cfg.qemu.package)
-      ];
+      ]
+      ++ optional (cfg.store.type == "ocaml") (hiPrio cfg.store.package);
       etc =
         # Set up Xen Domain 0 configuration files.
         {
