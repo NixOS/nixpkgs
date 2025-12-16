@@ -182,7 +182,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           pattern: ${{ inputs.artifact-prefix }}diff-*
           path: diff
@@ -261,7 +261,7 @@ jobs:
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           pattern: "*-diff-*"
           path: versions
