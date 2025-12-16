@@ -63,7 +63,6 @@ buildPythonPackage rec {
         "file://${pymoo_data}/"
   '';
 
-  pythonRelaxDeps = [ "cma" ];
   pythonRemoveDeps = [ "alive-progress" ];
 
   build-system = [
