@@ -66,26 +66,38 @@
       "homepage": "https://www.jetbrains.com/go/"
     }
   },
+  "idea": {
+    "product": "IntelliJ IDEA",
+    "productShort": "IDEA",
+    "wmClass": "jetbrains-idea",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Java, Kotlin, Groovy and Scala IDE from Jetbrains",
+      "maintainers": [ "gytis-ivaskevicius", "tymscar" ],
+      "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
+      "homepage": "https://www.jetbrains.com/idea/"
+    }
+  },
   "idea-community": {
     "product": "IntelliJ IDEA CE",
     "productShort": "IDEA",
     "wmClass": "jetbrains-idea-ce",
     "meta": {
       "isOpenSource": true,
-      "description": "Free Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "tymscar" ],
+      "description": "Free Java, Kotlin, Groovy and Scala IDE from Jetbrains",
+      "maintainers": [ "gytis-ivaskevicius", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }
   },
-  "idea-ultimate": {
-    "product": "IntelliJ IDEA",
+  "idea-oss": {
+    "product": "IntelliJ IDEA Open Source",
     "productShort": "IDEA",
-    "wmClass": "jetbrains-idea",
+    "wmClass": "jetbrains-idea-ce",
     "meta": {
-      "isOpenSource": false,
-      "description": "Paid-for Java, Kotlin, Groovy and Scala IDE from jetbrains",
-      "maintainers": [ "edwtjo", "gytis-ivaskevicius", "steinybot", "tymscar" ],
+      "isOpenSource": true,
+      "description": "Free Java, Kotlin, Groovy and Scala IDE from Jetbrains",
+      "maintainers": [ "gytis-ivaskevicius", "tymscar" ],
       "longDescription": "IDE for Java SE, Groovy & Scala development Powerful environment for building Google Android apps Integration with JUnit, TestNG, popular SCMs, Ant & Maven. Also known as IntelliJ.",
       "homepage": "https://www.jetbrains.com/idea/"
     }
@@ -112,6 +124,18 @@
       "homepage": "https://www.jetbrains.com/phpstorm/"
     }
   },
+  "pycharm": {
+    "product": "PyCharm",
+    "productShort": "PyCharm",
+    "wmClass": "jetbrains-pycharm",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Python IDE from JetBrains",
+      "maintainers": [ "genericnerdyusername", "tymscar" ],
+      "longDescription": "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!",
+      "homepage": "https://www.jetbrains.com/pycharm/"
+    }
+  },
   "pycharm-community": {
     "product": "PyCharm CE",
     "productShort": "PyCharm",
@@ -124,13 +148,13 @@
       "homepage": "https://www.jetbrains.com/pycharm/"
     }
   },
-  "pycharm-professional": {
-    "product": "PyCharm",
+  "pycharm-oss": {
+    "product": "PyCharm Open Source",
     "productShort": "PyCharm",
-    "wmClass": "jetbrains-pycharm",
+    "wmClass": "jetbrains-pycharm-ce",
     "meta": {
-      "isOpenSource": false,
-      "description": "Paid-for Python IDE from JetBrains",
+      "isOpenSource": true,
+      "description": "Free Python IDE from JetBrains",
       "maintainers": [ "genericnerdyusername", "tymscar" ],
       "longDescription": "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!",
       "homepage": "https://www.jetbrains.com/pycharm/"
