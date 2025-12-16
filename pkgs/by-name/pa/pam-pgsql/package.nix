@@ -9,6 +9,7 @@
   pam,
   libxcrypt,
   unstableGitUpdater,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +36,10 @@ stdenv.mkDerivation {
     libxcrypt
   ];
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+  passthru = {
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    tests = { inherit (nixosTests) pam-pgsql; };
+  };
 
   meta = {
     description = "Support to authenticate against PostgreSQL for PAM-enabled applications";
