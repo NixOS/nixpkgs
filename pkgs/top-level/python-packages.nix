@@ -5146,6 +5146,8 @@ self: super: with self; {
 
   fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
+  fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
@@ -6603,6 +6605,8 @@ self: super: with self; {
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hacking = callPackage ../development/python-modules/hacking { };
+
+  haishoku = callPackage ../development/python-modules/haishoku { };
 
   hakuin = callPackage ../development/python-modules/hakuin { };
 
