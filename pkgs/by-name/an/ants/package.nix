@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ANTs";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AaurwFIDVKhAp8+Gu3TUlGJP33ChQ6flPTYWe/cVK0w=";
+    hash = "sha256-c2a73OpRE/kCq8gq2DlwTQVZdTfKBuUQN/VeOZEkGIc=";
   };
 
   nativeBuildInputs = [
