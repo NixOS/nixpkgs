@@ -3,7 +3,6 @@
   cairo,
   cppunit,
   fetchFromGitHub,
-  fetchpatch,
   fetchNpmDeps,
   lib,
   libcap,
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-online";
-  version = "24.04.13-2";
+  version = "25.04.8-1";
 
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online";
     tag = "cp-${finalAttrs.version}";
-    hash = "sha256-d6i/aSmbim7UAKz9VX1ClbtIQravMq0r8beZC9FD6as=";
+    hash = "sha256-pTsRqe+2529O6Iblrnf6JCHmuZgZJtOkJYnUMoK0NLI=";
   };
 
   nativeBuildInputs = [
@@ -66,22 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lokit-path=${libreoffice-collabora.src}/include"
   ];
 
-  patches = [
-    ./fix-file-server-regex.patch
-    # https://github.com/CollaboraOnline/online/pull/11464/
-    (fetchpatch {
-      name = "fix-testPreProcessedFileSubstitution";
-      url = "https://github.com/CollaboraOnline/online/commit/76a4b64297d721d66603dc63f525324475036917.patch";
-      hash = "sha256-PGys1dpHLFsUKKA1YyxkJpbBbc2prySdGH/CZni90kI=";
-    })
-  ];
-
   postPatch = ''
     cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
-    substituteInPlace coolwsd-systemplate-setup --replace-fail /bin/pwd pwd
   '';
 
   # Copy dummy self-signed certificates provided for testing.
@@ -96,13 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-0RnGt9NLgyARgbh2GOcz7H3l4vtij8PD5jmcdUDB/5Y=";
+    hash = "sha256-bA7oPDF5UUZSj4kG+HKvuzow4GS0oSoyUdPmz7yh2UI=";
   };
 
   npmRoot = "browser";
 
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
+    updateScript = ./update.sh;
   };
 
   meta = {
