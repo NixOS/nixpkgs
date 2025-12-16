@@ -26,8 +26,8 @@ let
         repository = theme.meta.homepage;
         author = theme.src.owner;
         version = theme.version;
-        isofficial = false;
-        isadmin = false;
+        is_official = false;
+        is_admin = false;
       };
     in
     (formats.yaml { }).generate "frontend-templates.yaml" (
@@ -36,15 +36,15 @@ let
           mkTemplate nezha-theme-admin
           // {
             name = "OfficialAdmin";
-            isadmin = true;
-            isofficial = true;
+            is_admin = true;
+            is_official = true;
           }
         )
         (
           mkTemplate nezha-theme-user
           // {
             name = "Official";
-            isofficial = true;
+            is_official = true;
           }
         )
       ]
