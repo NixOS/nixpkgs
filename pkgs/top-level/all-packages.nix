@@ -1624,14 +1624,6 @@ with pkgs;
 
   passExtensions = recurseIntoAttrs pass.extensions;
 
-  gopass = callPackage ../tools/security/gopass { };
-
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
-
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
-
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
-
   kerf = kerf_1; # kerf2 is WIP
   kerf_1 = callPackage ../development/interpreters/kerf {
     stdenv = clangStdenv;
@@ -5011,10 +5003,11 @@ with pkgs;
     mlton20180207Binary
     mlton20180207
     mlton20210117
+    mlton20241230
     mltonHEAD
     ;
 
-  mlton = mlton20210117;
+  mlton = mlton20241230;
 
   mono = mono6;
 
@@ -7303,8 +7296,6 @@ with pkgs;
     lib.warn "hunspellWithDicts is deprecated, please use hunspell.withDicts instead."
       hunspell.withDicts
       (_: dicts);
-
-  hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_32; };
 
   icu-versions = callPackages ../development/libraries/icu { };
   inherit (icu-versions)
