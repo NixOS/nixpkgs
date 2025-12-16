@@ -17,13 +17,13 @@ lib.makeScope newScope (
       name = toPackageName pname version;
 
       value = buildUniversePackage {
+        homepage = packageSpec.homepage or null;
         inherit pname version;
         inherit (packageSpec)
           hash
           description
           license
           typstDeps
-          homepage
           ;
       };
     };
@@ -34,16 +34,13 @@ lib.makeScope newScope (
       # 1. Create a list of versioned packages
       # Only recurse 2 levels deep because the leaf attrs are the pkgspec attrs
       (lib.mapAttrsToListRecursiveCond (path: _: (lib.length path) < 2) (
-        path: packageSpec:
+        path:
         let
           # Path is always [ path version ]
           pname = lib.head path;
           version = lib.last path;
         in
-        {
-          name = toPackageName pname version;
-          value = makeVersionedPackage pname version packageSpec;
-        }
+        makeVersionedPackage pname version
       ))
       # 2. Transform the list into a flat attrset
       lib.listToAttrs
