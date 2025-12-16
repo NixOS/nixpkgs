@@ -9,6 +9,7 @@
   lib,
   libdrm,
   libedit,
+  libgbm,
   libpulseaudio,
   libva,
   libxkbcommon,
@@ -58,6 +59,7 @@ let
       elfutils
       ffmpeg_6-headless
       libedit
+      libgbm
       libpulseaudio
       libva
       libxkbcommon
