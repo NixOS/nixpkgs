@@ -53,15 +53,21 @@ in
 
 buildPythonPackage rec {
   pname = "unsloth";
-  version = "2026.1.3";
+  version = "2026.2.1";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit version;
-    hash = "sha256-Vq47dKdOyRm+sQmGkfEQ8vM1A1Xq7NwqyE2NGhgyK/s=";
+    hash = "sha256-z9FbMdzs08A2jgD/GLSlZGVRpIw+qjCmpkAeK/Di/7A=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requires = ["setuptools==80.9.0", "setuptools-scm==9.2.0"]' \
+                'requires = ["setuptools", "setuptools-scm"]'
+  '';
 
   build-system = [
     setuptools
@@ -96,6 +102,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "datasets"
     "protobuf"
+    "trl"
     "transformers"
     "torch"
   ];
