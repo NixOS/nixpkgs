@@ -19,6 +19,10 @@ let
       efiSupport = cfg.efiSupport;
       efiRemovable = cfg.efiInstallAsRemovable;
       secureBoot = cfg.secureBoot;
+      uki = {
+        inherit (cfg.uki) enable forceAll buildUki;
+      };
+      ukify = if cfg.uki.buildUki then pkgs.systemdUkify else null;
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
@@ -239,6 +243,39 @@ in
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
     };
 
+    uki = {
+      enable = lib.mkEnableOption null // {
+        description = ''
+          Use UKI to store the kernel and initrd.
+
+          ::: {.note}
+          This is still experimental
+
+          This uses significantly more storage than storing kernel, initrd and command line separately.
+          :::
+        '';
+      };
+
+      forceAll = lib.mkEnableOption null // {
+        description = ''
+          Force all generations to use a UKI image independent of what the bootspec extension says.
+
+          ::: {.note}
+          This is experimental
+          :::
+        '';
+      };
+
+      buildUki = lib.mkEnableOption null // {
+        default = true;
+        description = ''
+          Whether to actually build UKIs or not.
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "systemdUkify" { };
+    };
+
     style = {
       wallpapers = lib.mkOption {
         default = [ ];
@@ -427,6 +464,29 @@ in
             python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
             configPath = limineInstallConfig;
           };
+        };
+      };
+    })
+    (lib.mkIf (cfg.enable && cfg.uki.enable) {
+      assertions = [
+        {
+          assertion = !cfg.uki.forceAll || cfg.uki.buildUki;
+          message = "boot.loader.limine.uki.forceAll requires UKIs to be built, but boot.loader.limine.uki.buildUki is set to false";
+        }
+      ];
+
+      warnings =
+        (lib.optional (
+          cfg.biosSupport && cfg.efiSupport
+        ) "Both BIOS support and UKI are enabled, kernel and initrd will be stored double")
+        ++ (lib.optional (!cfg.efiSupport) "System is BIOS-only, no UKI will be built")
+        ++ (lib.optional (
+          !cfg.uki.buildUki
+        ) "boot.loader.limine.uki.buildUki is set to false, no UKIs will actually be built");
+
+      boot.bootspec.extensions = {
+        "org.limine.uki.v1" = {
+          useUki = true;
         };
       };
     })
