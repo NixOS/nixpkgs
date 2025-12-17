@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hugin";
-  version = "2024.0.1";
+  version = "2025.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
-    hash = "sha256-E+wM3utOtjFJyDN2jT43Tnz1pqjY0C1QiFzklvBbp+Q=";
+    hash = "sha256-DeJ6XVQy421OXTisJde8r8e33VQqqwMWQKYe1mdnB2w";
   };
 
   buildInputs = [
@@ -81,6 +81,13 @@ stdenv.mkDerivation rec {
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
+
+  # hugin libs are added to NEEDED but not to RUNPATH
+  postFixup = ''
+    for p in $out/bin/..*; do
+      patchelf "$p" --add-rpath $out/lib/hugin
+    done
+  '';
 
   postInstall = ''
     for p in $out/bin/*; do
