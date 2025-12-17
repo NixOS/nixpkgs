@@ -30,7 +30,7 @@ let
       ...
     }:
     let
-      qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
+      qemu-common = import ../qemu-common.nix { inherit (pkgs) lib stdenv; };
 
       # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
       vlansNumbered = forEach (zipLists config.virtualisation.vlans (range 1 255)) (v: {
