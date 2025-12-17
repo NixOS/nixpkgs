@@ -1087,24 +1087,24 @@ let
     };
 
     debian12i386 = {
-      name = "debian-12.2-bookworm-i386";
-      fullName = "Debian 12.2 Bookworm (i386)";
+      name = "debian-12.12-bookworm-i386";
+      fullName = "Debian 12.12 Bookworm (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-i386/Packages.xz";
-        hash = "sha256-OeN9Q2HFM3GsPNhOa4VhM7qpwT66yUNwC+6Z8SbGEeQ=";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm/main/binary-i386/Packages.xz";
+        hash = "sha256-nIijsNoHUYkrL6eiwN4FCLHnJy/Bv/RMvnbMIHvieVI=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
 
     debian12x86_64 = {
-      name = "debian-12.2-bookworm-amd64";
-      fullName = "Debian 12.2 Bookworm (amd64)";
+      name = "debian-12.12-bookworm-amd64";
+      fullName = "Debian 12.12 Bookworm (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bookworm/main/binary-amd64/Packages.xz";
-        hash = "sha256-SZDElRfe9BlBwDlajQB79Qdn08rv8whYoQDeVCveKVs=";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm/main/binary-amd64/Packages.xz";
+        hash = "sha256-PfjQeu3tXmXZhH7foSD6WyFrvY4PfwSN/v5pBeShIBE=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
 
