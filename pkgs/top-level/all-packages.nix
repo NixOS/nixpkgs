@@ -21,6 +21,23 @@ let
     dontRecurseIntoAttrs
     makeOverridable
     ;
+
+  # On Linux, we use source electron package. On Darwin, we use binary. Hydra
+  # and other infra uses Linux package .meta.platforms to determine supported
+  # platforms. It means that Hydra won't cache podman-desktop and other
+  # electron-based apps on Darwin. This helper will force Linux package .meta
+  # to list darwin.
+  getElectronPkg =
+    {
+      stdenv,
+      src,
+      bin,
+    }:
+    (if lib.meta.availableOn stdenv.hostPlatform src then src else bin).overrideAttrs (old: {
+      meta = old.meta // {
+        platforms = lib.lists.unique (src.meta.platforms ++ bin.meta.platforms);
+      };
+    });
 in
 
 res: pkgs: super:
@@ -5935,21 +5952,21 @@ with pkgs;
     ;
 
   electron_36 = electron_36-bin;
-  electron_37 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_37 then
-      electron-source.electron_37
-    else
-      electron_37-bin;
-  electron_38 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_38 then
-      electron-source.electron_38
-    else
-      electron_38-bin;
-  electron_39 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_39 then
-      electron-source.electron_39
-    else
-      electron_39-bin;
+  electron_37 = getElectronPkg {
+    inherit stdenv;
+    src = electron-source.electron_37;
+    bin = electron_37-bin;
+  };
+  electron_38 = getElectronPkg {
+    inherit stdenv;
+    src = electron-source.electron_38;
+    bin = electron_38-bin;
+  };
+  electron_39 = getElectronPkg {
+    inherit stdenv;
+    src = electron-source.electron_39;
+    bin = electron_39-bin;
+  };
   electron = electron_38;
   electron-bin = electron_38-bin;
   electron-chromedriver = electron-chromedriver_38;
