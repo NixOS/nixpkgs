@@ -6094,27 +6094,48 @@ with pkgs;
     electron-chromedriver_40
     ;
 
-  electron_36 = electron_36-bin;
-  electron_37 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_37 then
-      electron-source.electron_37
-    else
-      electron_37-bin;
-  electron_38 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_38 then
-      electron-source.electron_38
-    else
-      electron_38-bin;
-  electron_39 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_39 then
-      electron-source.electron_39
-    else
-      electron_39-bin;
-  electron_40 =
-    if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_40 then
-      electron-source.electron_40
-    else
-      electron_40-bin;
+  inherit
+    (
+      let
+        # On Linux, we use source electron package. On Darwin, we use binary. Hydra
+        # and other infra uses Linux package .meta.platforms to determine supported
+        # platforms. It means that Hydra won't cache podman-desktop and other
+        # electron-based apps on Darwin. This helper will force Linux package .meta
+        # to list darwin.
+        getElectronPkg =
+          { src, bin }:
+          (if lib.meta.availableOn stdenv.hostPlatform src then src else bin).overrideAttrs (old: {
+            meta = old.meta // {
+              platforms = lib.lists.unique (src.meta.platforms ++ bin.meta.platforms);
+            };
+          });
+      in
+      {
+        electron_36 = electron_36-bin;
+        electron_37 = getElectronPkg {
+          src = electron-source.electron_37;
+          bin = electron_37-bin;
+        };
+        electron_38 = getElectronPkg {
+          src = electron-source.electron_38;
+          bin = electron_38-bin;
+        };
+        electron_39 = getElectronPkg {
+          src = electron-source.electron_39;
+          bin = electron_39-bin;
+        };
+        electron_40 = getElectronPkg {
+          src = electron-source.electron_40;
+          bin = electron_40-bin;
+        };
+      }
+    )
+    electron_36
+    electron_37
+    electron_38
+    electron_39
+    electron_40
+    ;
   electron = electron_38;
   electron-bin = electron_38-bin;
   electron-chromedriver = electron-chromedriver_38;
