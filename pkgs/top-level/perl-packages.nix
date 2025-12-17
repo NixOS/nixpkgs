@@ -35648,15 +35648,15 @@ with self;
 
   TextBibTeX = buildPerlModule {
     pname = "Text-BibTeX";
-    version = "0.89";
+    version = "0.91";
     buildInputs = [
       CaptureTiny
       ConfigAutoConf
       ExtUtilsLibBuilder
     ];
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.89.tar.gz";
-      hash = "sha256-iKeOvwiOx1AvQBxaKxOMhiz1RYU0t3MiO786r0EiQZY=";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.91.tar.gz";
+      hash = "sha256-PwETz4/nHcdIRjbcjipYFjfsvMgtC+KbvUbQvz+M2zc=";
     };
     # libbtparse.so: cannot open shared object file
     patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
