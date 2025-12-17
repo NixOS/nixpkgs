@@ -4,7 +4,9 @@ from markdown_it.token import Token
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
 from nixos_render_docs.md import Converter
 
-auto_id_prefix="TEST_PREFIX"
+auto_id_prefix = "TEST_PREFIX"
+
+
 def set_prefix(token: Token, ident: str) -> None:
     token.attrs["id"] = f"{auto_id_prefix}-{ident}"
 
@@ -24,10 +26,7 @@ def test_auto_id_prefix_simple() -> None:
         {**token.attrs, "tag": token.tag}
         for token in tokens
         if token.type == "heading_open"
-    ] == [
-        {"id": "TEST_PREFIX-1", "tag": "h1"},
-        {"id": "TEST_PREFIX-1.1", "tag": "h2"}
-    ]
+    ] == [{"id": "TEST_PREFIX-1", "tag": "h1"}, {"id": "TEST_PREFIX-1.1", "tag": "h2"}]
 
 
 def test_auto_id_prefix_repeated() -> None:
@@ -55,6 +54,7 @@ def test_auto_id_prefix_repeated() -> None:
         {"id": "TEST_PREFIX-2", "tag": "h1"},
         {"id": "TEST_PREFIX-2.1", "tag": "h2"},
     ]
+
 
 def test_auto_id_prefix_maximum_nested() -> None:
     md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})

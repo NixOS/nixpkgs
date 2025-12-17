@@ -5,7 +5,13 @@ import json
 from pathlib import Path
 import shutil
 
-from libfdt import Fdt, FdtException, FDT_ERR_NOSPACE, FDT_ERR_NOTFOUND, fdt_overlay_apply
+from libfdt import (
+    Fdt,
+    FdtException,
+    FDT_ERR_NOSPACE,
+    FDT_ERR_NOTFOUND,
+    fdt_overlay_apply,
+)
 
 
 @dataclass
@@ -57,7 +63,10 @@ def apply_overlay(dt: Fdt, dto: Fdt) -> Fdt:
 
         raise FdtException(err)
 
-def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: list[Overlay]):
+
+def process_dtb(
+    rel_path: Path, source: Path, destination: Path, overlays_data: list[Overlay]
+):
     source_dt = source / rel_path
     print(f"Processing source device tree {rel_path}...")
     with source_dt.open("rb") as fd:
@@ -70,9 +79,13 @@ def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: 
 
         dt_compatible = get_compatible(dt)
         if len(dt_compatible) == 0:
-            print(f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay")
+            print(
+                f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay"
+            )
         elif not overlay.compatible.intersection(dt_compatible):
-            print(f"  Skipping overlay {overlay.name}: {overlay.compatible} is incompatible with {dt_compatible}")
+            print(
+                f"  Skipping overlay {overlay.name}: {overlay.compatible} is incompatible with {dt_compatible}"
+            )
             continue
 
         print(f"  Applying overlay {overlay.name}")
@@ -84,11 +97,16 @@ def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: 
     with dest_path.open("wb") as fd:
         fd.write(dt.as_bytearray())
 
+
 def main():
-    parser = ArgumentParser(description='Apply a list of overlays to a directory of device trees')
+    parser = ArgumentParser(
+        description="Apply a list of overlays to a directory of device trees"
+    )
     parser.add_argument("--source", type=Path, help="Source directory")
     parser.add_argument("--destination", type=Path, help="Destination directory")
-    parser.add_argument("--overlays", type=Path, help="JSON file with overlay descriptions")
+    parser.add_argument(
+        "--overlays", type=Path, help="JSON file with overlay descriptions"
+    )
     args = parser.parse_args()
 
     source: Path = args.source
@@ -117,5 +135,5 @@ def main():
                 shutil.copy(source / rel_path, dest_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

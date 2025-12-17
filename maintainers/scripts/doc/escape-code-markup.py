@@ -10,6 +10,7 @@ import lxml.etree as ET
 import re
 import sys
 
+
 def replace_element_by_text(el: ET.Element, text: str) -> None:
     """
     Author: bernulf
@@ -25,6 +26,7 @@ def replace_element_by_text(el: ET.Element, text: str) -> None:
         else:
             parent.text = (parent.text or "") + text
         parent.remove(el)
+
 
 DOCBOOK_NS = "http://docbook.org/ns/docbook"
 
@@ -58,7 +60,8 @@ code_elements = [
 ]
 
 XMLNS_REGEX = re.compile(r'\s+xmlns(?::[^=]+)?="[^"]*"')
-ROOT_ELEMENT_REGEX = re.compile(r'^\s*<[^>]+>')
+ROOT_ELEMENT_REGEX = re.compile(r"^\s*<[^>]+>")
+
 
 def remove_xmlns(match: re.Match) -> str:
     """
@@ -66,15 +69,18 @@ def remove_xmlns(match: re.Match) -> str:
 
     Expects a match containing an opening tag.
     """
-    return XMLNS_REGEX.sub('', match.group(0))
+    return XMLNS_REGEX.sub("", match.group(0))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     assert len(sys.argv) >= 3, "usage: escape-code-markup.py <input> <output>"
 
     tree = ET.parse(sys.argv[1])
     name_predicate = " or ".join([f"local-name()='{el}'" for el in code_elements])
 
-    for markup in tree.xpath(f"//*[({name_predicate}) and namespace-uri()='{DOCBOOK_NS}']/*"):
+    for markup in tree.xpath(
+        f"//*[({name_predicate}) and namespace-uri()='{DOCBOOK_NS}']/*"
+    ):
         text = ET.tostring(markup, encoding=str)
 
         # tostring adds xmlns attributes to the element we want to stringify

@@ -17,14 +17,14 @@ ns = {
 }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     assert len(sys.argv) >= 3, "usage: replace-xrefs-by-empty-links.py <input> <output>"
 
     tree = ET.parse(sys.argv[1])
     for xref in tree.findall(".//db:xref", ns):
         text = ET.tostring(xref, encoding=str)
         parent = xref.getparent()
-        link = parent.makeelement('link')
+        link = parent.makeelement("link")
         target_name = xref.get("linkend")
         link.set(f"{{{XLINK_NS}}}href", f"#{target_name}")
         parent.replace(xref, link)

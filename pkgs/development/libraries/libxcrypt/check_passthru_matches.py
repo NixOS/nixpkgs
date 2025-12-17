@@ -58,12 +58,12 @@ def main() -> None:
         f"${scheme}$" for scheme in enabled_crypt_scheme_ids
     )
 
-    assert (
-        len(expected_supported_formats - passthru_supported_schemes) == 0
-    ), f"libxcrypt package enables the following crypt schemes that are not listed in passthru.enabledCryptSchemeIds: {expected_supported_formats - passthru_supported_schemes}"
-    assert (
-        len(passthru_supported_schemes - expected_supported_formats) == 0
-    ), f"libxcrypt package lists the following crypt schemes in passthru.enabledCryptSchemeIds that are not supported: {passthru_supported_schemes - expected_supported_formats}"
+    assert len(expected_supported_formats - passthru_supported_schemes) == 0, (
+        f"libxcrypt package enables the following crypt schemes that are not listed in passthru.enabledCryptSchemeIds: {expected_supported_formats - passthru_supported_schemes}"
+    )
+    assert len(passthru_supported_schemes - expected_supported_formats) == 0, (
+        f"libxcrypt package lists the following crypt schemes in passthru.enabledCryptSchemeIds that are not supported: {passthru_supported_schemes - expected_supported_formats}"
+    )
 
 
 if __name__ == "__main__":

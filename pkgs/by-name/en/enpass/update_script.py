@@ -21,8 +21,9 @@ last_new_version = None
 with open(DATA_JSON, "r") as versions_file:
     versions = json.load(versions_file)
 
+
 def find_latest_version(arch):
-    CHECK_URL = f'https://apt.enpass.io/dists/stable/main/binary-{arch}/Packages.gz'
+    CHECK_URL = f"https://apt.enpass.io/dists/stable/main/binary-{arch}/Packages.gz"
     packages = gzip.decompress(requests.get(CHECK_URL).content).decode()
 
     # Loop every package to find the newest one!
@@ -32,32 +33,37 @@ def find_latest_version(arch):
     last_version = version.parse("0")
     for package in packages.split("\n\n"):
         matches = version_selector.search(package)
-        matched_version = matches.group('version') if matches and matches.group('version') else "0"
+        matched_version = (
+            matches.group("version") if matches and matches.group("version") else "0"
+        )
         parsed_version = version.parse(matched_version)
         if parsed_version > last_version:
-            path = path_selector.search(package).group('path')
-            sha256 = hash_selector.search(package).group('sha256')
+            path = path_selector.search(package).group("path")
+            sha256 = hash_selector.search(package).group("sha256")
             last_version = parsed_version
             return {"path": path, "sha256": sha256, "version": matched_version}
 
+
 for arch in versions.keys():
-    current_version = versions[arch]['version']
+    current_version = versions[arch]["version"]
     logging.info(f"Current Version for {arch} is {current_version}")
     new_version = find_latest_version(arch)
 
-    if not new_version or new_version['version'] == current_version:
+    if not new_version or new_version["version"] == current_version:
         continue
 
     last_current_version = current_version
     last_new_version = new_version
-    logging.info(f"Update found ({arch}): enpass: {current_version} -> {new_version['version']}")
-    versions[arch]['path'] = new_version['path']
-    versions[arch]['sha256'] = new_version['sha256']
-    versions[arch]['version'] = new_version['version']
+    logging.info(
+        f"Update found ({arch}): enpass: {current_version} -> {new_version['version']}"
+    )
+    versions[arch]["path"] = new_version["path"]
+    versions[arch]["sha256"] = new_version["sha256"]
+    versions[arch]["version"] = new_version["version"]
 
 
 if not last_new_version:
-    logging.info('#### No update found ####')
+    logging.info("#### No update found ####")
     sys.exit(0)
 
 # write new versions back
@@ -68,7 +74,7 @@ with open(DATA_JSON, "w") as versions_file:
 # Commit the result:
 logging.info("Committing changes...")
 commit_message = f"enpass: {last_current_version} -> {last_new_version['version']}"
-subprocess.run(['git', 'add', DATA_JSON], check=True)
-subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
+subprocess.run(["git", "add", DATA_JSON], check=True)
+subprocess.run(["git", "commit", "--file=-"], input=commit_message.encode(), check=True)
 
 logging.info("Done.")

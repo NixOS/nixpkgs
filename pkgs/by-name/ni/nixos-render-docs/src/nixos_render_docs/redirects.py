@@ -12,11 +12,13 @@ class RedirectsError(Exception):
         divergent_redirects: set[str] = None,
         identifiers_missing_current_outpath: set[str] = None,
         identifiers_without_redirects: set[str] = None,
-        orphan_identifiers: set[str] = None
+        orphan_identifiers: set[str] = None,
     ):
         self.conflicting_anchors = conflicting_anchors or set()
         self.divergent_redirects = divergent_redirects or set()
-        self.identifiers_missing_current_outpath = identifiers_missing_current_outpath or set()
+        self.identifiers_missing_current_outpath = (
+            identifiers_missing_current_outpath or set()
+        )
         self.identifiers_without_redirects = identifiers_without_redirects or set()
         self.orphan_identifiers = orphan_identifiers or set()
 
@@ -53,7 +55,11 @@ Identifiers present in the source must have a mapping in the redirects file.
             error_messages.append(f"""
 Keys of the redirects mapping must correspond to some identifier in the source.
     - {"\n    - ".join(self.orphan_identifiers)}""")
-        if self.identifiers_without_redirects or self.orphan_identifiers or self.identifiers_missing_current_outpath:
+        if (
+            self.identifiers_without_redirects
+            or self.orphan_identifiers
+            or self.identifiers_missing_current_outpath
+        ):
             error_messages.append(f"""
 This can happen when an identifier was added, renamed, or removed.
 
@@ -77,7 +83,9 @@ This can happen when an identifier was added, renamed, or removed.
         NixOS:
         $ nix-shell nixos/doc/manual
 """)
-        error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
+        error_messages.append(
+            "NOTE: If your build passes locally and you see this message in CI, you probably need a rebase."
+        )
         return "\n".join(error_messages)
 
 
@@ -100,7 +108,13 @@ class Redirects:
           - The first element of an identifier's redirects list must denote its current location.
         """
         xref_targets = {}
-        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-", "service-opt-", "systemd-service-opt")
+        ignored_identifier_patterns = (
+            "opt-",
+            "auto-generated-",
+            "function-library-",
+            "service-opt-",
+            "systemd-service-opt",
+        )
         for id, target in initial_xref_targets.items():
             # filter out automatically generated identifiers from module options and library documentation
             if id.startswith(ignored_identifier_patterns):
@@ -120,18 +134,23 @@ class Redirects:
             if identifier not in xref_targets:
                 continue
 
-            if not locations or locations[0] != f"{xref_targets[identifier].path}#{identifier}":
+            if (
+                not locations
+                or locations[0] != f"{xref_targets[identifier].path}#{identifier}"
+            ):
                 identifiers_missing_current_outpath.add(identifier)
 
             for location in locations[1:]:
-                if '#' in location:
-                    path, anchor = location.split('#')
+                if "#" in location:
+                    path, anchor = location.split("#")
 
                     if anchor in identifiers_without_redirects:
                         identifiers_without_redirects.remove(anchor)
 
                     if location not in client_side_redirects:
-                        client_side_redirects[location] = f"{xref_targets[identifier].path}#{identifier}"
+                        client_side_redirects[location] = (
+                            f"{xref_targets[identifier].path}#{identifier}"
+                        )
                         for identifier, xref_target in xref_targets.items():
                             if xref_target.path == path and anchor == identifier:
                                 conflicting_anchors.add(anchor)
@@ -143,31 +162,35 @@ class Redirects:
                     else:
                         divergent_redirects.add(location)
 
-        if any([
-            conflicting_anchors,
-            divergent_redirects,
-            identifiers_missing_current_outpath,
-            identifiers_without_redirects,
-            orphan_identifiers
-        ]):
+        if any(
+            [
+                conflicting_anchors,
+                divergent_redirects,
+                identifiers_missing_current_outpath,
+                identifiers_without_redirects,
+                orphan_identifiers,
+            ]
+        ):
             raise RedirectsError(
                 conflicting_anchors=conflicting_anchors,
                 divergent_redirects=divergent_redirects,
                 identifiers_missing_current_outpath=identifiers_missing_current_outpath,
                 identifiers_without_redirects=identifiers_without_redirects,
-                orphan_identifiers=orphan_identifiers
+                orphan_identifiers=orphan_identifiers,
             )
 
         self._xref_targets = xref_targets
 
     def get_client_redirects(self, target: str):
-        paths_to_target = {src for src, dest in self.get_server_redirects().items() if dest == target}
+        paths_to_target = {
+            src for src, dest in self.get_server_redirects().items() if dest == target
+        }
         client_redirects = {}
         for locations in self._raw_redirects.values():
             for location in locations[1:]:
-                if '#' not in location:
+                if "#" not in location:
                     continue
-                path, anchor = location.split('#')
+                path, anchor = location.split("#")
                 if path not in [target, *paths_to_target]:
                     continue
                 client_redirects[anchor] = locations[0]
@@ -177,10 +200,12 @@ class Redirects:
         server_redirects = {}
         for identifier, locations in self._raw_redirects.items():
             for location in locations[1:]:
-                if '#' not in location and location not in server_redirects:
+                if "#" not in location and location not in server_redirects:
                     server_redirects[location] = self._xref_targets[identifier].path
         return server_redirects
 
     def get_redirect_script(self, target: str) -> str:
         client_redirects = self.get_client_redirects(target)
-        return self._redirects_script.replace('REDIRECTS_PLACEHOLDER', json.dumps(client_redirects))
+        return self._redirects_script.replace(
+            "REDIRECTS_PLACEHOLDER", json.dumps(client_redirects)
+        )

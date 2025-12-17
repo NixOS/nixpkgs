@@ -8,22 +8,34 @@ from nixos_render_docs.redirects import Redirects, RedirectsError
 
 class TestRedirects(unittest.TestCase):
     def setup_test(self, sources, raw_redirects):
-        with open(Path(__file__).parent / 'index.md', 'w') as infile:
-            indexHTML = ["# Redirects test suite {#redirects-test-suite}\n## Setup steps"]
+        with open(Path(__file__).parent / "index.md", "w") as infile:
+            indexHTML = [
+                "# Redirects test suite {#redirects-test-suite}\n## Setup steps"
+            ]
             for path in sources.keys():
                 outpath = f"{path.split('.md')[0]}.html"
-                indexHTML.append(f"```{{=include=}} appendix html:into-file=//{outpath}\n{path}\n```")
+                indexHTML.append(
+                    f"```{{=include=}} appendix html:into-file=//{outpath}\n{path}\n```"
+                )
             infile.write("\n".join(indexHTML))
 
         for filename, content in sources.items():
-            with open(Path(__file__).parent / filename, 'w') as infile:
+            with open(Path(__file__).parent / filename, "w") as infile:
                 infile.write(content)
 
-        redirects = Redirects({"redirects-test-suite": ["index.html#redirects-test-suite"]} | raw_redirects, '')
-        return HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, redirects)
+        redirects = Redirects(
+            {"redirects-test-suite": ["index.html#redirects-test-suite"]}
+            | raw_redirects,
+            "",
+        )
+        return HTMLConverter(
+            "1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, redirects
+        )
 
     def run_test(self, md: HTMLConverter):
-        md.convert(Path(__file__).parent / 'index.md', Path(__file__).parent / 'index.html')
+        md.convert(
+            Path(__file__).parent / "index.md", Path(__file__).parent / "index.html"
+        )
 
     def assert_redirect_error(self, expected_errors: dict, md: HTMLConverter):
         with self.assertRaises(RuntimeError) as context:
@@ -49,7 +61,9 @@ class TestRedirects(unittest.TestCase):
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
             raw_redirects={"foo": ["foo.html#foo"]},
         )
-        self.assert_redirect_error({"identifiers_without_redirects": ["bar"]}, intermediate)
+        self.assert_redirect_error(
+            {"identifiers_without_redirects": ["bar"]}, intermediate
+        )
 
         after = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
@@ -92,14 +106,17 @@ class TestRedirects(unittest.TestCase):
         self.assert_redirect_error(
             {
                 "identifiers_without_redirects": ["foo-prime"],
-                "orphan_identifiers": ["foo"]
+                "orphan_identifiers": ["foo"],
             },
-            intermediate
+            intermediate,
         )
 
         after = self.setup_test(
             sources={"foo.md": "# Foo Prime {#foo-prime}\n## Bar {#bar}"},
-            raw_redirects={"foo-prime": ["foo.html#foo-prime", "foo.html#foo"], "bar": ["foo.html#bar"]},
+            raw_redirects={
+                "foo-prime": ["foo.html#foo-prime", "foo.html#foo"],
+                "bar": ["foo.html#bar"],
+            },
         )
         self.run_test(after)
 
@@ -112,20 +129,19 @@ class TestRedirects(unittest.TestCase):
         self.run_test(before)
 
         intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
+            sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
             raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#foo"]},
         )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar"]}, intermediate)
+        self.assert_redirect_error(
+            {"identifiers_missing_current_outpath": ["bar"]}, intermediate
+        )
 
         after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
+            sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
+            raw_redirects={
+                "foo": ["foo.html#foo"],
+                "bar": ["bar.html#bar", "foo.html#bar"],
             },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["bar.html#bar", "foo.html#bar"]},
         )
         self.run_test(after)
 
@@ -133,28 +149,32 @@ class TestRedirects(unittest.TestCase):
         """Test moving a non-leaf identifier to a different output path."""
         before = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}\n### Baz {#baz}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
+            raw_redirects={
+                "foo": ["foo.html#foo"],
+                "bar": ["foo.html#bar"],
+                "baz": ["foo.html#baz"],
+            },
         )
         self.run_test(before)
 
         intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
+            sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}\n## Baz {#baz}"},
+            raw_redirects={
+                "foo": ["foo.html#foo"],
+                "bar": ["foo.html#bar"],
+                "baz": ["foo.html#baz"],
             },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
         )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate)
+        self.assert_redirect_error(
+            {"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate
+        )
 
         after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
-            },
+            sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}\n## Baz {#baz}"},
             raw_redirects={
                 "foo": ["foo.html#foo"],
                 "bar": ["bar.html#bar", "foo.html#bar"],
-                "baz": ["bar.html#baz", "foo.html#baz"]
+                "baz": ["bar.html#baz", "foo.html#baz"],
             },
         )
         self.run_test(after)
@@ -166,21 +186,18 @@ class TestRedirects(unittest.TestCase):
             raw_redirects={
                 "foo": ["foo.html#foo", "foo.html#bar"],
                 "bar": ["foo.html#bar"],
-            }
+            },
         )
         self.assert_redirect_error({"conflicting_anchors": ["bar"]}, md)
 
     def test_divergent_redirect(self):
         """Test for divergent redirects."""
         md = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
+            sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
             raw_redirects={
                 "foo": ["foo.html#foo", "old-foo.html"],
-                "bar": ["bar.html#bar", "old-foo.html"]
-            }
+                "bar": ["bar.html#bar", "old-foo.html"],
+            },
         )
         self.assert_redirect_error({"divergent_redirects": ["old-foo.html"]}, md)
 
@@ -188,7 +205,10 @@ class TestRedirects(unittest.TestCase):
         """Test fetching client side redirects and ignore server-side ones."""
         md = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar", "bar.html"]}
+            raw_redirects={
+                "foo": ["foo.html#foo"],
+                "bar": ["foo.html#bar", "bar.html"],
+            },
         )
         self.run_test(md)
         self.assertEqual(md._redirects.get_client_redirects("foo.html"), {})
@@ -198,14 +218,21 @@ class TestRedirects(unittest.TestCase):
         md = self.setup_test(
             sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
             raw_redirects={
-                'foo': ['foo.html#foo', 'foo.html#some-section', 'foo.html#another-section'],
-                'bar': ['foo.html#bar'],
+                "foo": [
+                    "foo.html#foo",
+                    "foo.html#some-section",
+                    "foo.html#another-section",
+                ],
+                "bar": ["foo.html#bar"],
             },
         )
         self.run_test(md)
 
         client_redirects = md._redirects.get_client_redirects("foo.html")
-        expected_redirects = {'some-section': 'foo.html#foo', 'another-section': 'foo.html#foo'}
+        expected_redirects = {
+            "some-section": "foo.html#foo",
+            "another-section": "foo.html#foo",
+        }
         self.assertEqual(client_redirects, expected_redirects)
 
     def test_advanced_redirect_matching(self):
@@ -213,19 +240,19 @@ class TestRedirects(unittest.TestCase):
         md = self.setup_test(
             sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
             raw_redirects={
-                'foo': ['foo.html#foo', 'foo.html#some-section', 'bar.html#foo'],
-                'bar': ['bar.html#bar', 'bar.html#another-section'],
+                "foo": ["foo.html#foo", "foo.html#some-section", "bar.html#foo"],
+                "bar": ["bar.html#bar", "bar.html#another-section"],
             },
         )
         self.run_test(md)
         self.assertEqual(md._redirects.get_client_redirects("index.html"), {})
 
         client_redirects = md._redirects.get_client_redirects("foo.html")
-        expected_redirects = {'some-section': 'foo.html#foo'}
+        expected_redirects = {"some-section": "foo.html#foo"}
         self.assertEqual(client_redirects, expected_redirects)
 
         client_redirects = md._redirects.get_client_redirects("bar.html")
-        expected_redirects = {'foo': 'foo.html#foo', 'another-section': 'bar.html#bar'}
+        expected_redirects = {"foo": "foo.html#foo", "another-section": "bar.html#bar"}
         self.assertEqual(client_redirects, expected_redirects)
 
     def test_server_redirects(self):
@@ -233,14 +260,17 @@ class TestRedirects(unittest.TestCase):
         md = self.setup_test(
             sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
             raw_redirects={
-                'foo': ['foo.html#foo', 'foo-prime.html'],
-                'bar': ['bar.html#bar', 'bar-prime.html'],
+                "foo": ["foo.html#foo", "foo-prime.html"],
+                "bar": ["bar.html#bar", "bar-prime.html"],
             },
         )
         self.run_test(md)
 
         server_redirects = md._redirects.get_server_redirects()
-        expected_redirects = {'foo-prime.html': 'foo.html', 'bar-prime.html': 'bar.html'}
+        expected_redirects = {
+            "foo-prime.html": "foo.html",
+            "bar-prime.html": "bar.html",
+        }
         self.assertEqual(server_redirects, expected_redirects)
 
     def test_client_redirects_to_ghost_paths(self):
@@ -248,12 +278,12 @@ class TestRedirects(unittest.TestCase):
         md = self.setup_test(
             sources={"foo.md": "# Foo {#foo}", "bar.md": "# Bar {#bar}"},
             raw_redirects={
-                'foo': ['foo.html#foo', 'foo-prime.html'],
-                'bar': ['bar.html#bar', 'foo-prime.html#old'],
+                "foo": ["foo.html#foo", "foo-prime.html"],
+                "bar": ["bar.html#bar", "foo-prime.html#old"],
             },
         )
         self.run_test(md)
 
         client_redirects = md._redirects.get_client_redirects("foo.html")
-        expected_redirects = {'old': 'bar.html#bar'}
+        expected_redirects = {"old": "bar.html#bar"}
         self.assertEqual(client_redirects, expected_redirects)

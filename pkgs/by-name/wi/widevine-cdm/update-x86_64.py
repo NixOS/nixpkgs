@@ -9,16 +9,19 @@ from pathlib import Path
 DEFAULT_JSON = "https://raw.githubusercontent.com/mozilla-firefox/firefox/refs/heads/main/toolkit/content/gmp-sources/widevinecdm.json"
 ARCH_PATTERNS = {
     "linux_x86_64": ["Linux_x86_64-gcc3"],
-    "linux_aarch64": ["Linux_aarch64-gcc3"]
+    "linux_aarch64": ["Linux_aarch64-gcc3"],
 }
+
 
 def fetch_json(url: str) -> dict:
     with urllib.request.urlopen(url) as r:
         return json.load(r)
 
+
 def hex_to_sri(hexstr: str) -> str:
     b = bytes.fromhex(hexstr)
     return "sha512-" + base64.b64encode(b).decode()
+
 
 def find_widevine_vendor(data: dict) -> dict:
     vendors = data.get("vendors") or {}
@@ -27,6 +30,7 @@ def find_widevine_vendor(data: dict) -> dict:
             return value
 
     raise SystemExit("ERR: couldn't find a widevine vendor entry in JSON !")
+
 
 def judge_platforms(platforms: dict, patterns) -> Optional[Tuple[str, dict]]:
     for plkey, plvalue in platforms.items():
@@ -40,6 +44,7 @@ def judge_platforms(platforms: dict, patterns) -> Optional[Tuple[str, dict]]:
 
     return None
 
+
 def normalize_fileurl(entry: dict) -> Optional[str]:
     if entry.get("fileUrl"):
         return entry["fileUrl"]
@@ -50,12 +55,14 @@ def normalize_fileurl(entry: dict) -> Optional[str]:
 
     return None
 
+
 def extract_ver_from_url(url: str) -> Optional[str]:
-    m = re.search(r'[_-](\d+\.\d+\.\d+\.\d+)[_-]', url)
+    m = re.search(r"[_-](\d+\.\d+\.\d+\.\d+)[_-]", url)
     if m:
         return m.group(1)
-    m = re.search(r'(\d+\.\d+\.\d+\.\d+)', url)
+    m = re.search(r"(\d+\.\d+\.\d+\.\d+)", url)
     return m.group(1) if m else None
+
 
 def build_entry(pkey: str, pentry: dict) -> dict:
     url = normalize_fileurl(pentry)
@@ -67,6 +74,7 @@ def build_entry(pkey: str, pentry: dict) -> dict:
     sri = hex_to_sri(hv)
     version = extract_ver_from_url(url)
     return {"platform_key": pkey, "url": url, "sri": sri, "version": version}
+
 
 def main():
     WIDEVINE_DIR = Path(__file__).resolve().parent
@@ -80,7 +88,9 @@ def main():
     print(f"# fetching {args.json_url} !", file=sys.stderr)
     data = fetch_json(args.json_url)
     vendor = find_widevine_vendor(data)
-    platforms = vendor.get("platforms") or {} # should never be null but moz could forseeably delete it
+    platforms = (
+        vendor.get("platforms") or {}
+    )  # should never be null but moz could forseeably delete it
     if not platforms:
         raise SystemExit("ERR: no widevine platforms !")
 
@@ -102,6 +112,7 @@ def main():
 
     args.file.write_text(json.dumps(linux_x64, indent=2) + "\n", encoding="utf-8")
     print("# updated", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()

@@ -32,24 +32,15 @@ class CustomAssertions:
     def runAndAssertResult(self, graph, pipeline, expected_graph_args):
         result = list(pipe(pipeline, graph))
 
-        for (index, expected_graph_arg) in enumerate(expected_graph_args):
-
-            self.assertGraphEqual(
-                directed_graph(*expected_graph_arg),
-                result[index]
-            )
+        for index, expected_graph_arg in enumerate(expected_graph_args):
+            self.assertGraphEqual(directed_graph(*expected_graph_arg), result[index])
 
 
 if __name__ == "__main__":
     unittest.main()
 
 
-class Test(
-    unittest.TestCase,
-    CustomAssertions,
-    th.CustomAssertions
-):
-
+class Test(unittest.TestCase, CustomAssertions, th.CustomAssertions):
     def test_1(self):
         pipeline = [
             ["split_paths", ["B"]],
@@ -60,13 +51,9 @@ class Test(
                     "pipe",
                     [
                         ["subcomponent_in", ["B"]],
-                        [
-                            "over",
-                            "rest",
-                            ["popularity_contest"]
-                        ]
-                    ]
-                ]
+                        ["over", "rest", ["popularity_contest"]],
+                    ],
+                ],
             ],
             ["flatten"],
             ["map", ["remove_paths", "Root3"]],
@@ -84,20 +71,10 @@ class Test(
             ([], ["E"]),
             # "rest" output of "split_paths" stage with "G" merged into it by
             # "limit_layers" stage.
-            (
-                [
-                    ("Root1", "A"),
-                    ("A", "C")
-                ],
-                ["Root2", "G"]
-            )
+            ([("Root1", "A"), ("A", "C")], ["Root2", "G"]),
         ]
 
-        self.runAndAssertResult(
-            make_test_graph(),
-            pipeline,
-            expected_graph_args
-        )
+        self.runAndAssertResult(make_test_graph(), pipeline, expected_graph_args)
 
     def test_2(self):
         graph = directed_graph(
@@ -105,7 +82,7 @@ class Test(
                 ("Root1", "A"),
                 ("A", "B"),
             ],
-            ["Root2"]
+            ["Root2"],
         )
         self.runAndAssertResult(
             graph,
@@ -117,8 +94,8 @@ class Test(
                 ([], ["B"]),
                 ([], ["A"]),
                 ([], ["Root1"]),
-                ([], ["Root2"])
-            ]
+                ([], ["Root2"]),
+            ],
         )
 
         self.runAndAssertResult(
@@ -133,7 +110,7 @@ class Test(
                 ([], ["A"]),
                 # Least popular combined
                 ([], ["Root1", "Root2"]),
-            ]
+            ],
         )
 
         self.runAndAssertResult(
@@ -148,6 +125,6 @@ class Test(
                 ([], ["Root2"]),
                 ([], ["Root1"]),
                 # Most popular first
-                ([], ["A", "B"])
-            ]
+                ([], ["A", "B"]),
+            ],
         )

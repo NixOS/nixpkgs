@@ -22,9 +22,7 @@ def main_impl(file_path):
     debug("exclude_paths", exclude_paths)
 
     result = flatten_references_graph(
-        references_graph,
-        pipeline,
-        exclude_paths=exclude_paths
+        references_graph, pipeline, exclude_paths=exclude_paths
     )
 
     debug("result", result)
@@ -35,7 +33,7 @@ def main_impl(file_path):
         sort_keys=True,
         indent=2,
         # Avoid tailing whitespaces.
-        separators=(",", ": ")
+        separators=(",", ": "),
     )
 
 

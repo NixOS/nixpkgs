@@ -55,9 +55,7 @@ def fetch_extension_data(uuid: str, version: str) -> tuple[str, str]:
 
     # The download URLs follow this schema
     uuid = uuid.replace("@", "")
-    url: str = (
-        f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
-    )
+    url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
 
     # Download extension and add the zip content to nix-store
     for _ in range(0, 10):
@@ -211,7 +209,9 @@ def process_extension(extension: dict[str, Any]) -> dict[str, Any] | None:
         k: v["version"] for k, v in extension["shell_version_map"].items()
     }
     # Transform shell_version_map to be more useful for us. Also throw away unwanted versions
-    shell_version_map: dict[ShellVersion, dict[str, str]] = generate_extension_versions(shell_version_map, uuid)  # type: ignore
+    shell_version_map: dict[ShellVersion, dict[str, str]] = generate_extension_versions(
+        shell_version_map, uuid
+    )  # type: ignore
 
     # No compatible versions found
     if not shell_version_map:
@@ -263,7 +263,6 @@ def scrape_extensions_index() -> list[dict[str, Any]]:
         page += 1
         logging.info("Scraping page " + str(page))
         try:
-
             with request(
                 f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:

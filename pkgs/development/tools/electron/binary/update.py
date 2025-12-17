@@ -19,6 +19,7 @@ The `update-all` command updates all non-eol major releases.
 The `update` and `update-all` commands accept an optional `--commit`
 flag to automatically commit the changes for you.
 """
+
 import logging
 import os
 import subprocess
@@ -27,6 +28,7 @@ import click
 import click_log
 
 from typing import Tuple
+
 os.chdir(os.path.dirname(__file__))
 sys.path.append("..")
 from update_util import *
@@ -50,6 +52,7 @@ systems = {
     "x86_64-darwin": "darwin-x64",
     "aarch64-darwin": "darwin-arm64",
 }
+
 
 def get_shasums256(version: str) -> list:
     """Returns the contents of SHASUMS256.txt"""
@@ -150,11 +153,11 @@ def update_binary(major_version: str, commit: bool, chromedriver: bool) -> None:
         commit: Whether the updater should commit the result
     """
     if chromedriver:
-        json_path=CHROMEDRIVER_INFO_JSON
+        json_path = CHROMEDRIVER_INFO_JSON
         package_name = f"electron-chromedriver_{major_version}"
-        update_fn=get_chromedriver_hashes
+        update_fn = get_chromedriver_hashes
     else:
-        json_path=BINARY_INFO_JSON
+        json_path = BINARY_INFO_JSON
         package_name = f"electron_{major_version}-bin"
         update_fn = get_electron_hashes
     print(f"Updating {package_name}")
@@ -190,7 +193,9 @@ def update_chromedriver(version: str, commit: bool) -> None:
 
 
 @cli.command("update", help="Update a single major release")
-@click.option("-v", "--version", required=True, type=str, help="The major version, e.g. '23'")
+@click.option(
+    "-v", "--version", required=True, type=str, help="The major version, e.g. '23'"
+)
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
 def update(version: str, commit: bool) -> None:
     update_binary(version, commit, False)

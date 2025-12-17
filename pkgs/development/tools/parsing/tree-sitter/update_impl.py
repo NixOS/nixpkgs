@@ -26,14 +26,11 @@ def atomically_write(file_path: str, content: bytes) -> None:
     with NamedTemporaryFile(
         # write to the parent dir, so that it’s guaranteed to be on the same filesystem
         dir=os.path.dirname(file_path),
-        delete=False
+        delete=False,
     ) as tmp:
         try:
             tmp.write(content)
-            os.rename(
-                src=tmp.name,
-                dst=file_path
-            )
+            os.rename(src=tmp.name, dst=file_path)
         except Exception:
             os.unlink(tmp.name)
 
@@ -104,7 +101,7 @@ def fetchRepo() -> None:
             out = run_cmd(
                 curl_github_args(
                     token,
-                    url=f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest"
+                    url=f"https://api.github.com/repos/{quote(orga)}/{quote(repo)}/releases/latest",
                 )
             )
             release: str
@@ -120,21 +117,20 @@ def fetchRepo() -> None:
                 case {"tag_name": tag_name}:
                     release = tag_name
                 case _:
-                    sys.exit(f"git result for {orga}/{repo} did not have a `tag_name` field")
+                    sys.exit(
+                        f"git result for {orga}/{repo} did not have a `tag_name` field"
+                    )
 
             log(f"Fetching latest release ({release}) of {orga}/{repo} …")
             res = run_cmd(
                 nix_prefetch_git_args(
                     url=f"https://github.com/{quote(orga)}/{quote(repo)}",
-                    version_rev=release
+                    version_rev=release,
                 )
             )
             atomically_write(
-                file_path=os.path.join(
-                    outputDir,
-                    f"{nixRepoAttrName}.json"
-                ),
-                content=res
+                file_path=os.path.join(outputDir, f"{nixRepoAttrName}.json"),
+                content=res,
             )
         case _:
             sys.exit("input json must have `orga` and `repo` keys")
@@ -145,8 +141,7 @@ def fetchOrgaLatestRepos(orga: str) -> set[str]:
     token: str | None = os.environ.get("GITHUB_TOKEN", None)
     out = run_cmd(
         curl_github_args(
-            token,
-            url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
+            token, url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
         )
     )
     match curl_result(out):
@@ -176,12 +171,7 @@ def checkTreeSitterRepos(latest_github_repos: set[str]) -> None:
 
 Grammar = TypedDict(
     "Grammar",
-    {
-        "nixRepoAttrName": str,
-        "orga": str,
-        "repo": str,
-        "branch": Optional[str]
-    }
+    {"nixRepoAttrName": str, "orga": str, "repo": str, "branch": Optional[str]},
 )
 
 
@@ -200,11 +190,8 @@ def printAllGrammarsNixFile() -> None:
         yield ""
 
     atomically_write(
-        file_path=os.path.join(
-            outputDir,
-            "default.nix"
-        ),
-        content="\n".join(file()).encode()
+        file_path=os.path.join(outputDir, "default.nix"),
+        content="\n".join(file()).encode(),
     )
 
 

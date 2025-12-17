@@ -33,22 +33,22 @@ def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
 
 
 def create_http_session() -> requests.Session:
-    retries = Retry(
-        total=5,
-        backoff_factor=0.5,
-        status_forcelist=[500, 502, 503, 504]
-    )
+    retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[500, 502, 503, 504])
     session = requests.Session()
-    session.mount('http://', HTTPAdapter(max_retries=retries))
-    session.mount('https://', HTTPAdapter(max_retries=retries))
+    session.mount("http://", HTTPAdapter(max_retries=retries))
+    session.mount("https://", HTTPAdapter(max_retries=retries))
     return session
 
 
-def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
+def download_file_with_checksum(
+    session: requests.Session, url: str, destination_path: Path
+) -> str:
     sha256_hash = hashlib.sha256()
     with session.get(url, stream=True) as response:
         if not response.ok:
-            raise Exception(f"Failed to fetch file from {url}. Status code: {response.status_code}")
+            raise Exception(
+                f"Failed to fetch file from {url}. Status code: {response.status_code}"
+            )
         with open(destination_path, "wb") as file:
             for chunk in response.iter_content(1024):  # Download in chunks
                 if chunk:  # Filter out keep-alive chunks
@@ -67,13 +67,14 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
         raise Exception("Only the default crates.io registry is supported.")
 
-    return f"https://crates.io/api/v1/crates/{pkg["name"]}/{pkg["version"]}/download"
+    return f"https://crates.io/api/v1/crates/{pkg['name']}/{pkg['version']}/download"
 
 
-def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
-
+def download_tarball(
+    session: requests.Session, pkg: dict[str, Any], out_dir: Path
+) -> None:
     url = get_download_url_for_tarball(pkg)
-    filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
+    filename = f"{pkg['name']}-{pkg['version']}.tar.gz"
 
     # TODO: allow legacy checksum specification, see importCargoLock for example
     #       also, don't forget about the other usage of the checksum
@@ -85,19 +86,33 @@ def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Pa
     calculated_checksum = download_file_with_checksum(session, url, tarball_out_dir)
 
     if calculated_checksum != expected_checksum:
-        raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
+        raise Exception(
+            f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}."
+        )
 
 
 def download_git_tree(url: str, git_sha_rev: str, out_dir: Path) -> None:
-
     tree_out_dir = out_dir / "git" / git_sha_rev
     eprint(f"Fetching {url}#{git_sha_rev} -> git/{git_sha_rev}")
 
-    cmd = ["nix-prefetch-git", "--builder", "--quiet", "--fetch-submodules", "--url", url, "--rev", git_sha_rev, "--out", str(tree_out_dir)]
+    cmd = [
+        "nix-prefetch-git",
+        "--builder",
+        "--quiet",
+        "--fetch-submodules",
+        "--url",
+        url,
+        "--rev",
+        git_sha_rev,
+        "--out",
+        str(tree_out_dir),
+    ]
     subprocess.check_output(cmd)
 
 
-GIT_SOURCE_REGEX = re.compile("git\\+(?P<url>[^?]+)(\\?(?P<type>rev|tag|branch)=(?P<value>.*))?#(?P<git_sha_rev>.*)")
+GIT_SOURCE_REGEX = re.compile(
+    "git\\+(?P<url>[^?]+)(\\?(?P<type>rev|tag|branch)=(?P<value>.*))?#(?P<git_sha_rev>.*)"
+)
 
 
 class GitSourceInfo(TypedDict):
@@ -132,7 +147,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     for pkg in cargo_lock_toml["package"]:
         # ignore local dependenices
         if "source" not in pkg.keys():
-            eprint(f"Skipping local dependency: {pkg["name"]}")
+            eprint(f"Skipping local dependency: {pkg['name']}")
             continue
         source = pkg["source"]
 
@@ -167,12 +182,22 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
 
 def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
-    cmd = ["cargo", "metadata", "--format-version", "1", "--no-deps", "--manifest-path", str(manifest_path)]
+    cmd = [
+        "cargo",
+        "metadata",
+        "--format-version",
+        "1",
+        "--no-deps",
+        "--manifest-path",
+        str(manifest_path),
+    ]
     output = subprocess.check_output(cmd)
     return json.loads(output)
 
 
-def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_name: str) -> Path | None:
+def try_get_crate_manifest_path_from_mainfest_path(
+    manifest_path: Path, crate_name: str
+) -> Path | None:
     metadata = get_manifest_metadata(manifest_path)
 
     for pkg in metadata["packages"]:
@@ -194,8 +219,9 @@ def find_crate_manifest_in_tree(tree: Path, crate_name: str) -> Path:
     raise Exception(f"Couldn't find manifest for crate {crate_name} inside {tree}.")
 
 
-def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_dir: Path) -> None:
-
+def copy_and_patch_git_crate_subtree(
+    git_tree: Path, crate_name: str, crate_out_dir: Path
+) -> None:
     # This function will get called by copytree to decide which entries of a directory should be copied
     # We'll copy everything except symlinks that are invalid
     def ignore_func(dir_str: str, path_strs: list[str]) -> list[str]:
@@ -220,7 +246,9 @@ def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_
             # This can be useful if the nix build sandbox is turned off and there is a symlink to a common absolute path
             if not target_path.is_relative_to(git_tree):
                 ignorelist.append(path_str)
-                eprint(f"Symlink points outside of the crate's base git tree, ignoring: {path} -> {target_path}")
+                eprint(
+                    f"Symlink points outside of the crate's base git tree, ignoring: {path} -> {target_path}"
+                )
                 continue
 
         return ignorelist
@@ -252,7 +280,14 @@ def copy_and_patch_git_crate_subtree(git_tree: Path, crate_name: str, crate_out_
 def extract_crate_tarball_contents(tarball_path: Path, crate_out_dir: Path) -> None:
     eprint(f"Unpacking to {crate_out_dir}")
     crate_out_dir.mkdir()
-    cmd = ["tar", "xf", str(tarball_path), "-C", str(crate_out_dir), "--strip-components=1"]
+    cmd = [
+        "tar",
+        "xf",
+        str(tarball_path),
+        "-C",
+        str(crate_out_dir),
+        "--strip-components=1",
+    ]
     subprocess.check_output(cmd)
 
 
@@ -265,26 +300,24 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     lockfile_version = get_lockfile_version(cargo_lock_toml)
 
     config_lines = [
-        '[source.vendored-sources]',
+        "[source.vendored-sources]",
         'directory = "@vendor@"',
-        '[source.crates-io]',
+        "[source.crates-io]",
         'replace-with = "vendored-sources"',
     ]
 
     seen_source_keys = set()
     for pkg in cargo_lock_toml["package"]:
-
         # ignore local dependenices
         if "source" not in pkg.keys():
             continue
 
         source: str = pkg["source"]
 
-        dir_name = f"{pkg["name"]}-{pkg["version"]}"
+        dir_name = f"{pkg['name']}-{pkg['version']}"
         crate_out_dir = out_dir / dir_name
 
         if source.startswith("git+"):
-
             source_info = parse_git_source(pkg["source"], lockfile_version)
 
             git_sha_rev = source_info["git_sha_rev"]
@@ -296,7 +329,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
             with open(crate_out_dir / ".cargo-checksum.json", "w") as f:
                 json.dump({"files": {}}, f)
 
-            source_key = source[0:source.find("#")]
+            source_key = source[0 : source.find("#")]
 
             if source_key in seen_source_keys:
                 continue
@@ -310,8 +343,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
             config_lines.append('replace-with = "vendored-sources"')
 
         elif source.startswith("registry+"):
-
-            filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
+            filename = f"{pkg['name']}-{pkg['version']}.tar.gz"
             tarball_path = vendor_staging_dir / "tarballs" / filename
 
             extract_crate_tarball_contents(tarball_path, crate_out_dir)
@@ -332,14 +364,20 @@ def main() -> None:
     subcommand = sys.argv[1]
 
     subcommand_func_dict = {
-        "create-vendor-staging": lambda: create_vendor_staging(lockfile_path=Path(sys.argv[2]), out_dir=Path(sys.argv[3])),
-        "create-vendor": lambda: create_vendor(vendor_staging_dir=Path(sys.argv[2]), out_dir=Path(sys.argv[3]))
+        "create-vendor-staging": lambda: create_vendor_staging(
+            lockfile_path=Path(sys.argv[2]), out_dir=Path(sys.argv[3])
+        ),
+        "create-vendor": lambda: create_vendor(
+            vendor_staging_dir=Path(sys.argv[2]), out_dir=Path(sys.argv[3])
+        ),
     }
 
     subcommand_func = subcommand_func_dict.get(subcommand)
 
     if subcommand_func is None:
-        raise Exception(f"Unknown subcommand: '{subcommand}'. Must be one of {list(subcommand_func_dict.keys())}")
+        raise Exception(
+            f"Unknown subcommand: '{subcommand}'. Must be one of {list(subcommand_func_dict.keys())}"
+        )
 
     subcommand_func()
 

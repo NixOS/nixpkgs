@@ -12,13 +12,17 @@ from .utils import Freezeable
 from .src_error import SrcError
 
 # FragmentType is used to restrict structural include blocks.
-FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
+FragmentType = Literal["preface", "part", "chapter", "section", "appendix"]
 
 # in the TOC all fragments are allowed, plus the all-encompassing book.
-TocEntryType = Literal['book', 'preface', 'part', 'chapter', 'section', 'appendix', 'example', 'figure']
+TocEntryType = Literal[
+    "book", "preface", "part", "chapter", "section", "appendix", "example", "figure"
+]
+
 
 def is_include(token: Token) -> bool:
     return token.type == "fence" and token.info.startswith("{=include=} ")
+
 
 # toplevel file must contain only the title headings and includes, anything else
 # would cause strange rendering.
@@ -31,28 +35,32 @@ def _check_book_structure(src: str, tokens: Sequence[Token]) -> None:
                 token=token,
             )
 
+
 # much like books, parts may not contain headings other than their title heading.
 # this is a limitation of the current renderers and TOC generators that do not handle
 # this case well even though it is supported in docbook (and probably supportable
 # anywhere else).
-def _check_part_structure(src: str,tokens: Sequence[Token]) -> None:
+def _check_part_structure(src: str, tokens: Sequence[Token]) -> None:
     _check_fragment_structure(src, tokens)
     for token in tokens[3:]:
-        if token.type == 'heading_open':
+        if token.type == "heading_open":
             raise SrcError(
                 src=src,
                 description="unexpected heading",
                 token=token,
             )
 
+
 # two include blocks must either be adjacent or separated by a heading, otherwise
 # we cannot generate a correct TOC (since there'd be nothing to link to between
 # the two includes).
 def _check_fragment_structure(src: str, tokens: Sequence[Token]) -> None:
     for i, token in enumerate(tokens):
-        if is_include(token) \
-           and i + 1 < len(tokens) \
-           and not (is_include(tokens[i + 1]) or tokens[i + 1].type == 'heading_open'):
+        if (
+            is_include(token)
+            and i + 1 < len(tokens)
+            and not (is_include(tokens[i + 1]) or tokens[i + 1].type == "heading_open")
+        ):
             assert token.map
             raise SrcError(
                 src=src,
@@ -60,21 +68,22 @@ def _check_fragment_structure(src: str, tokens: Sequence[Token]) -> None:
                 token=token,
             )
 
+
 def check_structure(src: str, kind: TocEntryType, tokens: Sequence[Token]) -> None:
-    wanted = { 'h1': 'title' }
-    wanted |= { 'h2': 'subtitle' } if kind == 'book' else {}
-    for (i, (tag, role)) in enumerate(wanted.items()):
+    wanted = {"h1": "title"}
+    wanted |= {"h2": "subtitle"} if kind == "book" else {}
+    for i, (tag, role) in enumerate(wanted.items()):
         if len(tokens) < 3 * (i + 1):
             raise RuntimeError(f"missing {role} ({tag}) heading")
         token = tokens[3 * i]
-        if token.type != 'heading_open' or token.tag != tag:
+        if token.type != "heading_open" or token.tag != tag:
             raise SrcError(
                 src=src,
                 description=f"expected {role} ({tag}) heading",
                 token=token,
             )
-    for t in tokens[3 * len(wanted):]:
-        if t.type != 'heading_open' or not (role := wanted.get(t.tag, '')):
+    for t in tokens[3 * len(wanted) :]:
+        if t.type != "heading_open" or not (role := wanted.get(t.tag, "")):
             continue
         raise SrcError(
             src=src,
@@ -86,35 +95,36 @@ def check_structure(src: str, kind: TocEntryType, tokens: Sequence[Token]) -> No
 
     last_heading_level = 0
     for token in tokens:
-        if token.type != 'heading_open':
+        if token.type != "heading_open":
             continue
 
         # book subtitle headings do not need an id, only book title headings do.
         # every other headings needs one too. we need this to build a TOC and to
         # provide stable links if the manual changes shape.
-        if 'id' not in token.attrs and (kind != 'book' or token.tag != 'h2'):
+        if "id" not in token.attrs and (kind != "book" or token.tag != "h2"):
             raise SrcError(
                 src=src,
                 description=f"heading does not have an id",
                 token=token,
             )
 
-        level = int(token.tag[1:]) # because tag = h1..h6
+        level = int(token.tag[1:])  # because tag = h1..h6
         if level > last_heading_level + 1:
             raise SrcError(
                 src=src,
                 description=f"heading skips one or more heading levels, "
-                               "which is currently not allowed",
+                "which is currently not allowed",
                 token=token,
             )
         last_heading_level = level
 
-    if kind == 'book':
+    if kind == "book":
         _check_book_structure(src, tokens)
-    elif kind == 'part':
+    elif kind == "part":
         _check_part_structure(src, tokens)
     else:
         _check_fragment_structure(src, tokens)
+
 
 @dc.dataclass(frozen=True)
 class XrefTarget:
@@ -137,6 +147,7 @@ class XrefTarget:
         path = "" if self.drop_target else html.escape(self.path, True)
         return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
+
 @dc.dataclass
 class TocEntry(Freezeable):
     kind: TocEntryType
@@ -155,18 +166,24 @@ class TocEntry(Freezeable):
 
     @classmethod
     def of(cls, token: Token) -> TocEntry:
-        entry = token.meta.get('TocEntry')
+        entry = token.meta.get("TocEntry")
         if not isinstance(entry, TocEntry):
-            raise RuntimeError('requested toc entry, none found', token)
+            raise RuntimeError("requested toc entry, none found", token)
         return entry
 
     @classmethod
-    def collect_and_link(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token]) -> TocEntry:
-        entries, examples, figures = cls._collect_entries(xrefs, tokens, 'book')
+    def collect_and_link(
+        cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token]
+    ) -> TocEntry:
+        entries, examples, figures = cls._collect_entries(xrefs, tokens, "book")
 
-        def flatten_with_parent(this: TocEntry, parent: TocEntry | None) -> Iterable[TocEntry]:
+        def flatten_with_parent(
+            this: TocEntry, parent: TocEntry | None
+        ) -> Iterable[TocEntry]:
             this.parent = parent
-            return itertools.chain([this], *[ flatten_with_parent(c, this) for c in this.children ])
+            return itertools.chain(
+                [this], *[flatten_with_parent(c, this) for c in this.children]
+            )
 
         flat = list(flatten_with_parent(entries, None))
         prev = flat[0]
@@ -188,8 +205,9 @@ class TocEntry(Freezeable):
         return entries
 
     @classmethod
-    def _collect_entries(cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token],
-                         kind: TocEntryType) -> tuple[TocEntry, list[TocEntry], list[TocEntry]]:
+    def _collect_entries(
+        cls, xrefs: dict[str, XrefTarget], tokens: Sequence[Token], kind: TocEntryType
+    ) -> tuple[TocEntry, list[TocEntry], list[TocEntry]]:
         # we assume that check_structure has been run recursively over the entire input.
         # list contains (tag, entry) pairs that will collapse to a single entry for
         # the full sequence.
@@ -197,40 +215,57 @@ class TocEntry(Freezeable):
         examples: list[TocEntry] = []
         figures: list[TocEntry] = []
         for token in tokens:
-            if token.type.startswith('included_') and (included := token.meta.get('included')):
-                fragment_type_str = token.type[9:].removesuffix('s')
+            if token.type.startswith("included_") and (
+                included := token.meta.get("included")
+            ):
+                fragment_type_str = token.type[9:].removesuffix("s")
                 assert fragment_type_str in get_args(TocEntryType)
                 fragment_type = cast(TocEntryType, fragment_type_str)
                 for fragment, _path in included:
-                    subentries, subexamples, subfigures = cls._collect_entries(xrefs, fragment, fragment_type)
+                    subentries, subexamples, subfigures = cls._collect_entries(
+                        xrefs, fragment, fragment_type
+                    )
                     entries[-1][1].children.append(subentries)
                     examples += subexamples
                     figures += subfigures
-            elif token.type == 'heading_open' and (id := cast(str, token.attrs.get('id', ''))):
+            elif token.type == "heading_open" and (
+                id := cast(str, token.attrs.get("id", ""))
+            ):
                 while len(entries) > 1 and entries[-1][0] >= token.tag:
                     entries[-2][1].children.append(entries.pop()[1])
-                entries.append((token.tag,
-                                TocEntry(kind if token.tag == 'h1' else 'section', xrefs[id])))
-                token.meta['TocEntry'] = entries[-1][1]
-            elif token.type == 'example_open' and (id := cast(str, token.attrs.get('id', ''))):
-                examples.append(TocEntry('example', xrefs[id]))
-            elif token.type == 'figure_open' and (id := cast(str, token.attrs.get('id', ''))):
-                figures.append(TocEntry('figure', xrefs[id]))
+                entries.append(
+                    (
+                        token.tag,
+                        TocEntry(kind if token.tag == "h1" else "section", xrefs[id]),
+                    )
+                )
+                token.meta["TocEntry"] = entries[-1][1]
+            elif token.type == "example_open" and (
+                id := cast(str, token.attrs.get("id", ""))
+            ):
+                examples.append(TocEntry("example", xrefs[id]))
+            elif token.type == "figure_open" and (
+                id := cast(str, token.attrs.get("id", ""))
+            ):
+                figures.append(TocEntry("figure", xrefs[id]))
 
         while len(entries) > 1:
             entries[-2][1].children.append(entries.pop()[1])
         return (entries[0][1], examples, figures)
 
+
 _xml_id_translate_table = {
-    ord('*'): ord('_'),
-    ord('<'): ord('_'),
-    ord(' '): ord('_'),
-    ord('>'): ord('_'),
-    ord('['): ord('_'),
-    ord(']'): ord('_'),
-    ord(':'): ord('_'),
-    ord('"'): ord('_'),
+    ord("*"): ord("_"),
+    ord("<"): ord("_"),
+    ord(" "): ord("_"),
+    ord(">"): ord("_"),
+    ord("["): ord("_"),
+    ord("]"): ord("_"),
+    ord(":"): ord("_"),
+    ord('"'): ord("_"),
 }
+
+
 # this function is needed to generate option id attributes in the same format as
 # the docbook toolchain did to not break existing links. we don't actually use
 # xml any more, that's just the legacy we're dealing with and part of our structure

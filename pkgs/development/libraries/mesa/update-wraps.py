@@ -34,11 +34,13 @@ def main(dir: str):
 
         hash = to_sri(parser.get("wrap-file", "source_hash"))
 
-        result.append({
-            "pname": name,
-            "version": version,
-            "hash": hash,
-        })
+        result.append(
+            {
+                "pname": name,
+                "version": version,
+                "hash": hash,
+            }
+        )
 
     here = pathlib.Path(__file__).parent
     with (here / "wraps.json").open("w") as fd:
@@ -46,5 +48,5 @@ def main(dir: str):
         _ = fd.write("\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv[1:])

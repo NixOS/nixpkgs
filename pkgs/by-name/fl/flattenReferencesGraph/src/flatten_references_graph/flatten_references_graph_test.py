@@ -14,41 +14,33 @@ references_graph = [
         "references": [
             "A",
             "C",
-        ]
+        ],
     },
     {
         "closureSize": 3,
         "narHash": "sha256:b",
         "narSize": 4,
         "path": "B",
-        "references": [
-            "C",
-            "D"
-        ]
+        "references": ["C", "D"],
     },
     {
         "closureSize": 5,
         "narHash": "sha256:c",
         "narSize": 6,
         "path": "C",
-        "references": [
-            "C"
-        ]
+        "references": ["C"],
     },
     {
         "closureSize": 7,
         "narHash": "sha256:d",
         "narSize": 8,
         "path": "D",
-        "references": [
-            "D"
-        ]
-    }
+        "references": ["D"],
+    },
 ]
 
 
 class Test(unittest.TestCase):
-
     def test_flatten_references_graph(self):
         pipeline = [
             ["split_paths", ["B"]],
@@ -64,8 +56,8 @@ class Test(unittest.TestCase):
                 # Common deps
                 ["C"],
                 # Rest (without common deps)
-                ["A"]
-            ]
+                ["A"],
+            ],
         )
 
         pipeline = [
@@ -75,15 +67,7 @@ class Test(unittest.TestCase):
 
         result = flatten_references_graph(references_graph, pipeline)
 
-        self.assertEqual(
-            result,
-            [
-                ["B"],
-                ["D"],
-                ["C"],
-                ["A"]
-            ]
-        )
+        self.assertEqual(result, [["B"], ["D"], ["C"], ["A"]])
 
     def test_flatten_references_graph_exclude_paths(self):
         pipeline = [
@@ -91,9 +75,7 @@ class Test(unittest.TestCase):
         ]
 
         result = flatten_references_graph(
-            references_graph,
-            pipeline,
-            exclude_paths=["A"]
+            references_graph, pipeline, exclude_paths=["A"]
         )
 
         self.assertEqual(
@@ -101,13 +83,11 @@ class Test(unittest.TestCase):
             [
                 # A was excluded so there is no "rest" or "common" layer
                 ["B", "C", "D"]
-            ]
+            ],
         )
 
         result = flatten_references_graph(
-            references_graph,
-            pipeline,
-            exclude_paths=["D"]
+            references_graph, pipeline, exclude_paths=["D"]
         )
 
         self.assertEqual(
@@ -116,6 +96,6 @@ class Test(unittest.TestCase):
                 # D removed from this layer
                 ["B"],
                 ["C"],
-                ["A"]
-            ]
+                ["A"],
+            ],
         )

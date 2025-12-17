@@ -7,58 +7,56 @@ machine.wait_until_succeeds("journalctl --since -1m --unit netbox --grep Listeni
 
 test_objects = {
     "sites": {
-        "test-site": {
-            "name": "Test site",
-            "slug": "test-site"
-        },
-        "test-site-two": {
-            "name": "Test site 2",
-            "slug": "test-site-second-edition"
-        }
+        "test-site": {"name": "Test site", "slug": "test-site"},
+        "test-site-two": {"name": "Test site 2", "slug": "test-site-second-edition"},
     },
     "prefixes": {
         "v4-with-updated-desc": {
             "prefix": "192.0.2.0/24",
             "class_type": "Prefix",
-            "family": { "label": "IPv4" },
+            "family": {"label": "IPv4"},
             "scope": {
                 "__typename": "SiteType",
                 "id": "1",
-                "description": "Test site description"
-            }
+                "description": "Test site description",
+            },
         },
         "v6-cidr-32": {
             "prefix": "2001:db8::/32",
             "class_type": "Prefix",
-            "family": { "label": "IPv6" },
+            "family": {"label": "IPv6"},
             "scope": {
                 "__typename": "SiteType",
                 "id": "1",
-                "description": "Test site description"
-            }
+                "description": "Test site description",
+            },
         },
         "v6-cidr-48": {
             "prefix": "2001:db8:c0fe::/48",
             "class_type": "Prefix",
-            "family": { "label": "IPv6" },
+            "family": {"label": "IPv6"},
             "scope": {
                 "__typename": "SiteType",
                 "id": "1",
-                "description": "Test site description"
-            }
-        }
-    }
+                "description": "Test site description",
+            },
+        },
+    },
 }
 
+
 def compare(a: str, b: str):
-    differences = [(x - y) for (x,y) in list(zip(
-        list(map(int, a.split('.'))),
-        list(map(int, b.split('.')))
-    ))]
+    differences = [
+        (x - y)
+        for (x, y) in list(
+            zip(list(map(int, a.split("."))), list(map(int, b.split("."))))
+        )
+    ]
     for d in differences:
         if d != 0:
             return d
     return 0
+
 
 with subtest("Home screen loads"):
     machine.wait_until_succeeds(
@@ -78,13 +76,12 @@ with subtest("Superuser can be created"):
 machine.wait_for_unit("network.target")
 
 with subtest("Home screen loads from nginx"):
-    machine.succeed(
-        "curl -sSfL http://localhost | grep '<title>Home | NetBox</title>'"
-    )
+    machine.succeed("curl -sSfL http://localhost | grep '<title>Home | NetBox</title>'")
 
 with subtest("Staticfiles can be fetched"):
     machine.succeed("curl -sSfL http://localhost/static/netbox.js")
     machine.succeed("curl -sSfL http://localhost/static/docs/")
+
 
 def login(username: str, password: str):
     encoded_data = json.dumps({"username": username, "password": password})
@@ -101,8 +98,10 @@ def login(username: str, password: str):
     )
     return result["key"]
 
+
 with subtest("Can login"):
     auth_token = login("netbox", "netbox")
+
 
 def get(uri: str):
     return json.loads(
@@ -113,6 +112,7 @@ def get(uri: str):
             f"'http://localhost/api{uri}'"
         )
     )
+
 
 def delete(uri: str):
     return machine.succeed(
@@ -138,11 +138,14 @@ def data_request(uri: str, method: str, data: Dict[str, Any]):
         )
     )
 
+
 def post(uri: str, data: Dict[str, Any]):
     return data_request(uri, "POST", data)
 
+
 def patch(uri: str, data: Dict[str, Any]):
     return data_request(uri, "PATCH", data)
+
 
 # Retrieve netbox version
 netbox_version = get("/status/")["netbox-version"]
@@ -151,24 +154,30 @@ with subtest("Can create objects"):
     result = post("/dcim/sites/", {"name": "Test site", "slug": "test-site"})
     site_id = result["id"]
 
-
     for prefix in test_objects["prefixes"].values():
-        if compare(netbox_version, '4.2.0') >= 0:
-            post("/ipam/prefixes/", {
-                "prefix": prefix["prefix"],
-                "scope_id": site_id,
-                "scope_type": "dcim." + prefix["scope"]["__typename"].replace("Type", "").lower()
-            })
+        if compare(netbox_version, "4.2.0") >= 0:
+            post(
+                "/ipam/prefixes/",
+                {
+                    "prefix": prefix["prefix"],
+                    "scope_id": site_id,
+                    "scope_type": "dcim."
+                    + prefix["scope"]["__typename"].replace("Type", "").lower(),
+                },
+            )
             prefix["scope"]["id"] = str(site_id)
         else:
-            post("/ipam/prefixes/", {
-                "prefix": prefix["prefix"],
-                "site": str(site_id),
-            })
+            post(
+                "/ipam/prefixes/",
+                {
+                    "prefix": prefix["prefix"],
+                    "site": str(site_id),
+                },
+            )
 
     result = post(
         "/dcim/manufacturers/",
-        {"name": "Test manufacturer", "slug": "test-manufacturer"}
+        {"name": "Test manufacturer", "slug": "test-manufacturer"},
     )
     manufacturer_id = result["id"]
 
@@ -209,6 +218,7 @@ with subtest("Can delete objects"):
     result = get("/dcim/device-types/")
     assert result["count"] == 0
 
+
 def request_graphql(query: str):
     return machine.succeed(
         "curl -sSfL "
@@ -216,13 +226,13 @@ def request_graphql(query: str):
         "-H 'Content-Type: application/json' "
         f"-H 'Authorization: Token {auth_token}' "
         "'http://localhost/graphql/' "
-        f"--data '{json.dumps({"query": query})}'"
+        f"--data '{json.dumps({'query': query})}'"
     )
 
 
-if compare(netbox_version, '4.2.0') >= 0:
+if compare(netbox_version, "4.2.0") >= 0:
     with subtest("Can use the GraphQL API (NetBox 4.2.0+)"):
-        graphql_query = '''query {
+        graphql_query = """query {
           prefix_list {
             prefix
             class_type
@@ -238,18 +248,21 @@ if compare(netbox_version, '4.2.0') >= 0:
             }
           }
         }
-        '''
+        """
 
         answer = request_graphql(graphql_query)
         result = json.loads(answer)
         assert len(result["data"]["prefix_list"]) == 3
-        assert test_objects["prefixes"]["v4-with-updated-desc"] in result["data"]["prefix_list"]
+        assert (
+            test_objects["prefixes"]["v4-with-updated-desc"]
+            in result["data"]["prefix_list"]
+        )
         assert test_objects["prefixes"]["v6-cidr-32"] in result["data"]["prefix_list"]
         assert test_objects["prefixes"]["v6-cidr-48"] in result["data"]["prefix_list"]
 
-if compare(netbox_version, '4.2.0') < 0:
+if compare(netbox_version, "4.2.0") < 0:
     with subtest("Can use the GraphQL API (Netbox <= 4.2.0)"):
-        answer = request_graphql('''query {
+        answer = request_graphql("""query {
           prefix_list {
             prefix
             site {
@@ -257,11 +270,16 @@ if compare(netbox_version, '4.2.0') < 0:
             }
           }
         }
-        ''')
+        """)
         result = json.loads(answer)
         print(result["data"]["prefix_list"][0])
-        assert result["data"]["prefix_list"][0]["prefix"] == test_objects["prefixes"]["v4-with-updated-desc"]["prefix"]
-        assert int(result["data"]["prefix_list"][0]["site"]["id"]) == int(test_objects["prefixes"]["v4-with-updated-desc"]["scope"]["id"])
+        assert (
+            result["data"]["prefix_list"][0]["prefix"]
+            == test_objects["prefixes"]["v4-with-updated-desc"]["prefix"]
+        )
+        assert int(result["data"]["prefix_list"][0]["site"]["id"]) == int(
+            test_objects["prefixes"]["v4-with-updated-desc"]["scope"]["id"]
+        )
 
 with subtest("Can login with LDAP"):
     machine.wait_for_unit("openldap.service")
@@ -271,4 +289,6 @@ with subtest("Can associate LDAP groups"):
     result = get("/users/users/?username=${testUser}")
 
     assert result["count"] == 1
-    assert any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"])
+    assert any(
+        group["name"] == "${testGroup}" for group in result["results"][0]["groups"]
+    )

@@ -13,7 +13,7 @@ from tempfile import NamedTemporaryFile
 
 import click
 
-IS_AUTO_CONFIG = @isAutoConfig@ # NOQA
+IS_AUTO_CONFIG = "@isAutoConfig@" == "True"
 CERTTOOL_COMMAND = "@certtool@"
 CERT_BITS = "@certBits@"
 CLIENT_EXPIRATION = "@clientExpiration@"
@@ -29,15 +29,15 @@ CA_KEY = os.path.join(TASKD_DATA_DIR, "keys", "ca.key")
 CA_CERT = os.path.join(TASKD_DATA_DIR, "keys", "ca.cert")
 CRL_FILE = os.path.join(TASKD_DATA_DIR, "keys", "server.crl")
 
-RE_CONFIGUSER = re.compile(r'^\s*user\s*=(.*)$')
-RE_USERKEY = re.compile(r'New user key: (.+)$', re.MULTILINE)
+RE_CONFIGUSER = re.compile(r"^\s*user\s*=(.*)$")
+RE_USERKEY = re.compile(r"New user key: (.+)$", re.MULTILINE)
 
 
 def lazyprop(fun):
     """
     Decorator which only evaluates the specified function when accessed.
     """
-    name = '_lazy_' + fun.__name__
+    name = "_lazy_" + fun.__name__
 
     @property
     def _lazy(self):
@@ -65,6 +65,7 @@ def run_as_taskd_group():
     gid = grp.getgrnam(TASKD_GROUP).gr_gid
     os.setgid(gid)
 
+
 def taskd_cmd(cmd, *args, **kwargs):
     """
     Invoke taskd with the specified command with the privileges of the 'taskd'
@@ -78,7 +79,7 @@ def taskd_cmd(cmd, *args, **kwargs):
     return fun(
         [TASKD_COMMAND, cmd, "--data", TASKD_DATA_DIR] + list(args),
         preexec_fn=run_as_taskd_user,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -96,7 +97,7 @@ def certtool_cmd(*args, **kwargs):
         [CERTTOOL_COMMAND] + list(args),
         preexec_fn=run_as_taskd_group,
         stderr=subprocess.STDOUT,
-        **kwargs
+        **kwargs,
     )
 
 
@@ -115,7 +116,7 @@ def mark_imperative(*path):
     file called ".imperative", so that it doesn't interfere with the
     declarative configuration.
     """
-    open(os.path.join(mkpath(*path), ".imperative"), 'a').close()
+    open(os.path.join(mkpath(*path), ".imperative"), "a").close()
 
 
 def is_imperative(*path):
@@ -155,14 +156,16 @@ def create_template(contents):
 
 def generate_key(org, user):
     if not IS_AUTO_CONFIG:
-        msg = "Automatic PKI handling is disabled, you need to " \
-              "manually issue a client certificate for user {}.\n"
+        msg = (
+            "Automatic PKI handling is disabled, you need to "
+            "manually issue a client certificate for user {}.\n"
+        )
         sys.stderr.write(msg.format(user))
         return
 
-    keysdir = os.path.join(TASKD_DATA_DIR, "keys" )
-    orgdir  = os.path.join(keysdir       , org    )
-    userdir = os.path.join(orgdir        , user   )
+    keysdir = os.path.join(TASKD_DATA_DIR, "keys")
+    orgdir = os.path.join(keysdir, org)
+    userdir = os.path.join(orgdir, user)
     if os.path.exists(userdir):
         raise OSError("Keyfile directory for {} already exists.".format(user))
 
@@ -194,17 +197,22 @@ def generate_key(org, user):
             "expiration_days = {}".format(CLIENT_EXPIRATION),
             "tls_www_client",
             "encryption_key",
-            "signing_key"
+            "signing_key",
         ]
 
         with create_template(template_data) as template:
             certtool_cmd(
                 "-c",
-                "--load-privkey", privkey,
-                "--load-ca-privkey", CA_KEY,
-                "--load-ca-certificate", CA_CERT,
-                "--template", template,
-                "--outfile", pubcert
+                "--load-privkey",
+                privkey,
+                "--load-ca-privkey",
+                CA_KEY,
+                "--load-ca-certificate",
+                CA_CERT,
+                "--template",
+                template,
+                "--outfile",
+                pubcert,
             )
     except:
         rmtree(userdir)
@@ -226,12 +234,18 @@ def revoke_key(org, user):
         oldcrl.flush()
         certtool_cmd(
             "--generate-crl",
-            "--load-crl", oldcrl.name,
-            "--load-ca-privkey", CA_KEY,
-            "--load-ca-certificate", CA_CERT,
-            "--load-certificate", pubcert,
-            "--template", template,
-            "--outfile", CRL_FILE
+            "--load-crl",
+            oldcrl.name,
+            "--load-ca-privkey",
+            CA_KEY,
+            "--load-ca-certificate",
+            CA_CERT,
+            "--load-certificate",
+            pubcert,
+            "--template",
+            template,
+            "--outfile",
+            CRL_FILE,
         )
         oldcrl.close()
     rmtree(basedir)
@@ -253,7 +267,7 @@ def getkey(*args):
         buf.append(line)
 
         if is_key_line(line, "END"):
-            return ''.join(buf)
+            return "".join(buf)
     raise IOError("Unable to get key from {}.".format(path))
 
 
@@ -270,7 +284,7 @@ class User(object):
         self.key = key
 
     def export(self):
-        credentials = '/'.join([self.__org, self.name, self.key])
+        credentials = "/".join([self.__org, self.name, self.key])
         allow_unquoted = string.ascii_letters + string.digits + "/-_."
         if not all((c in allow_unquoted) for c in credentials):
             credentials = "'" + credentials.replace("'", r"'\''") + "'"
@@ -287,15 +301,12 @@ class User(object):
             script += [
                 "umask 0077",
                 'mkdir -p "{}"'.format(keydir),
-                mktaskkey("certificate", os.path.join(keydir, "public.cert"),
-                          pubcert),
+                mktaskkey("certificate", os.path.join(keydir, "public.cert"), pubcert),
                 mktaskkey("key", os.path.join(keydir, "private.key"), privkey),
-                mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert)
+                mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert),
             ]
 
-        script.append(
-            "task config taskd.credentials -- {}".format(credentials)
-        )
+        script.append("task config taskd.credentials -- {}".format(credentials))
 
         return "\n".join(script) + "\n"
 
@@ -320,8 +331,9 @@ class Organisation(object):
         if self.ignore_imperative and is_imperative(self.name):
             return None
         if name not in self.users.keys():
-            output = taskd_cmd("add", "user", self.name, name,
-                               capture_stdout=True, encoding='utf-8')
+            output = taskd_cmd(
+                "add", "user", self.name, name, capture_stdout=True, encoding="utf-8"
+            )
             key = RE_USERKEY.search(output)
             if key is None:
                 msg = "Unable to find key while creating user {}."
@@ -339,8 +351,7 @@ class Organisation(object):
         """
         if name in self.users.keys():
             user = self.get_user(name)
-            if self.ignore_imperative and \
-               is_imperative(self.name, "users", user.key):
+            if self.ignore_imperative and is_imperative(self.name, "users", user.key):
                 return
 
             # Work around https://bug.tasktools.org/browse/TD-40:
@@ -369,8 +380,7 @@ class Organisation(object):
         Delete a group.
         """
         if name in self.users.keys():
-            if self.ignore_imperative and \
-               is_imperative(self.name, "groups", name):
+            if self.ignore_imperative and is_imperative(self.name, "groups", name):
                 return
             taskd_cmd("remove", "group", self.name, name)
             del self._lazy_groups[name]
@@ -451,13 +461,14 @@ class Manager(object):
 
 
 class OrganisationType(click.ParamType):
-    name = 'organisation'
+    name = "organisation"
 
     def convert(self, value, param, ctx):
         org = Manager().get_org(value)
         if org is None:
             self.fail("Organisation {} does not exist.".format(value))
         return org
+
 
 ORGANISATION = OrganisationType()
 
@@ -590,9 +601,11 @@ def del_org(name):
     will be revoked.
     """
     Manager().del_org(name)
-    msg = ("Organisation {} deleted. Be sure to restart the Taskserver"
-           " using 'systemctl restart taskserver.service' in order for"
-           " the certificate revocation to apply.")
+    msg = (
+        "Organisation {} deleted. Be sure to restart the Taskserver"
+        " using 'systemctl restart taskserver.service' in order for"
+        " the certificate revocation to apply."
+    )
     click.echo(msg.format(name), err=True)
 
 
@@ -625,9 +638,11 @@ def del_user(organisation, user):
     This will also revoke the client certificate of the given user.
     """
     organisation.del_user(user)
-    msg = ("User {} deleted. Be sure to restart the Taskserver using"
-           " 'systemctl restart taskserver.service' in order for the"
-           " certificate revocation to apply.")
+    msg = (
+        "User {} deleted. Be sure to restart the Taskserver using"
+        " 'systemctl restart taskserver.service' in order for the"
+        " certificate revocation to apply."
+    )
     click.echo(msg.format(user), err=True)
 
 
@@ -678,7 +693,7 @@ def add_or_delete(old, new, add_fun, del_fun):
 
 
 @cli.command("process-json")
-@click.argument('json-file', type=click.File('rb'))
+@click.argument("json-file", type=click.File("rb"))
 def process_json(json_file):
     """
     Create and delete users, groups and organisations based on a JSON file.
@@ -698,11 +713,13 @@ def process_json(json_file):
     for org in mgr.orgs.values():
         if is_imperative(org.name):
             continue
-        add_or_delete(org.users.keys(), data[org.name]['users'],
-                      org.add_user, org.del_user)
-        add_or_delete(org.groups.keys(), data[org.name]['groups'],
-                      org.add_group, org.del_group)
+        add_or_delete(
+            org.users.keys(), data[org.name]["users"], org.add_user, org.del_user
+        )
+        add_or_delete(
+            org.groups.keys(), data[org.name]["groups"], org.add_group, org.del_group
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

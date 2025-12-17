@@ -27,12 +27,15 @@ nixpkgs_path = "<nixpkgs>"
 
 memory: Memory = Memory(user_cache_dir("gclient2nix"), verbose=0)
 
+
 def cache(mem, **mem_kwargs):
     def cache_(f):
         f.__module__ = "gclient2nix"
         f.__qualname__ = f.__name__
         return mem.cache(f, **mem_kwargs)
+
     return cache_
+
 
 @cache(memory)
 def get_repo_hash(fetcher: str, args: dict) -> str:
@@ -60,7 +63,9 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
+        evaluated = gclient_eval.Parse(
+            deps_file, vars_override=repo_vars, filename="DEPS"
+        )
 
         repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 
@@ -86,12 +91,29 @@ class Repo:
         self.get_deps(
             {
                 **{
-                f"checkout_{platform}": platform == "linux"
-                for platform in ["ios", "chromeos", "android", "mac", "win", "linux", "fuchsia"]
+                    f"checkout_{platform}": platform == "linux"
+                    for platform in [
+                        "ios",
+                        "chromeos",
+                        "android",
+                        "mac",
+                        "win",
+                        "linux",
+                        "fuchsia",
+                    ]
                 },
                 **{
-                f"checkout_{arch}": True
-                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
+                    f"checkout_{arch}": True
+                    for arch in [
+                        "x64",
+                        "arm64",
+                        "arm",
+                        "x86",
+                        "mips",
+                        "mips64",
+                        "ppc",
+                        "riscv64",
+                    ]
                 },
             },
             "",
@@ -107,7 +129,13 @@ class Repo:
         )
 
     def flatten_repr(self) -> dict:
-        return {"fetcher": self.fetcher, "args": {**({"hash": self.hash} if hasattr(self, "hash") else {}), **self.args}}
+        return {
+            "fetcher": self.fetcher,
+            "args": {
+                **({"hash": self.hash} if hasattr(self, "hash") else {}),
+                **self.args,
+            },
+        }
 
     def flatten(self, path: str) -> dict:
         out = {path: self.flatten_repr()}
@@ -140,7 +168,9 @@ class GitHubRepo(Repo):
         }
 
     def get_file(self, filepath: str) -> str:
-        rev_or_tag = self.args['rev'] if 'rev' in self.args else f"refs/tags/{self.args['tag']}"
+        rev_or_tag = (
+            self.args["rev"] if "rev" in self.args else f"refs/tags/{self.args['tag']}"
+        )
         return (
             urlopen(
                 f"https://raw.githubusercontent.com/{self.args['owner']}/{self.args['repo']}/{rev_or_tag}/{filepath}"
@@ -166,20 +196,21 @@ class GitilesRepo(Repo):
         # (making it count the compressed instead of uncompressed size)
         # rather than complying with it.
         if url == "https://chromium.googlesource.com/chromium/src.git":
-            self.args["postFetch"] = "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); "
+            self.args["postFetch"] = (
+                "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); "
+            )
             self.args["postFetch"] += "rm -r $out/content/test/data; "
             self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
             self.args["postFetch"] += "rm -r $out/media/test/data; "
 
     def get_file(self, filepath: str) -> str:
-        rev_or_tag = self.args['rev'] if 'rev' in self.args else f"refs/tags/{self.args['tag']}"
+        rev_or_tag = (
+            self.args["rev"] if "rev" in self.args else f"refs/tags/{self.args['tag']}"
+        )
         return base64.b64decode(
-            urlopen(
-                f"{self.args['url']}/+/{rev_or_tag}/{filepath}?format=TEXT"
-            ).read()
+            urlopen(f"{self.args['url']}/+/{rev_or_tag}/{filepath}?format=TEXT").read()
         ).decode("utf-8")
-
 
 
 def repo_from_dep(dep: dict) -> Optional[Repo]:
@@ -207,16 +238,22 @@ def cli() -> None:
 
 @cli.command("eval", help="Evaluate and print the dependency tree of a gclient project")
 @click.argument("url", required=True, type=str)
-@click.option("--root", default="src", help="Root path, where the given url is placed", type=str)
+@click.option(
+    "--root", default="src", help="Root path, where the given url is placed", type=str
+)
 def eval(url: str, root: str) -> None:
     repo = repo_from_dep({"url": url})
     repo.eval()
     print(json.dumps(repo.flatten(root), sort_keys=True, indent=4))
 
 
-@cli.command("generate", help="Generate a dependencies description for a gclient project")
+@cli.command(
+    "generate", help="Generate a dependencies description for a gclient project"
+)
 @click.argument("url", required=True, type=str)
-@click.option("--root", default="src", help="Root path, where the given url is placed", type=str)
+@click.option(
+    "--root", default="src", help="Root path, where the given url is placed", type=str
+)
 def generate(url: str, root: str) -> None:
     repo = repo_from_dep({"url": url})
     repo.eval()

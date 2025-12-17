@@ -9,7 +9,7 @@ from .lib import (
     graph_is_empty,
     is_None,
     subcomponent_multi,
-    unnest_iterable
+    unnest_iterable,
 )
 
 
@@ -45,16 +45,12 @@ def remove_vertex(vertex_name, graph):
 
 
 def get_children_of(graph, vertex_names):
-    return unnest_iterable(map(
-        graph.successors,
-        tlz.remove(
-            is_None,
-            map(
-                find_vertex_by_name_or_none(graph),
-                vertex_names
-            )
+    return unnest_iterable(
+        map(
+            graph.successors,
+            tlz.remove(is_None, map(find_vertex_by_name_or_none(graph), vertex_names)),
         )
-    ))
+    )
 
 
 def as_list(x):
@@ -72,7 +68,7 @@ def split_path_spec_to_indices(graph, split_path_spec):
         else:
             raise Exception(
                 "Unexpected split path spec: dict with invalid keys."
-                "Valid: [\"children_of\"]"
+                'Valid: ["children_of"]'
             )
     else:
         vertex = find_vertex_by_name_or_none(graph)(split_path_spec)
@@ -96,10 +92,9 @@ def split_paths(split_paths, graph_in):
     # Convert list of split_paths into list of vertex indices. Ignores
     # split_paths which don"t match any vertices in the graph.
     # All edges pointing at the indices will be deleted from the graph.
-    split_path_indices = list(unnest_iterable(map(
-        split_path_spec_to_indices(graph_in),
-        split_paths
-    )))
+    split_path_indices = list(
+        unnest_iterable(map(split_path_spec_to_indices(graph_in), split_paths))
+    )
 
     debug("split_path_indices:", split_path_indices)
 
@@ -107,7 +102,7 @@ def split_paths(split_paths, graph_in):
     # vertices in the graph).
     if len(split_path_indices) == 0:
         if DEBUG_PLOT:
-            layout = graph_in.layout('tree')
+            layout = graph_in.layout("tree")
             debug_plot(graph_in, f"{graph_name_prefix}input", layout=layout)
             debug_plot(graph_in, f"{graph_name_prefix}result", layout=layout)
 
@@ -121,18 +116,15 @@ def split_paths(split_paths, graph_in):
 
     debug("root_name", root_name)
 
-    if (
-        find_vertex_by_name_or_none(graph)(root_name).index
-        in split_path_indices
-    ):
+    if find_vertex_by_name_or_none(graph)(root_name).index in split_path_indices:
         if DEBUG_PLOT:
-            layout = graph_in.layout('tree')
+            layout = graph_in.layout("tree")
             debug_plot(graph_in, f"{graph_name_prefix}input", layout=layout)
             debug_plot(
                 graph_in,
                 f"{graph_name_prefix}result",
                 layout=layout,
-                vertex_color="green"
+                vertex_color="green",
             )
 
         return {"main": graph_in}
@@ -143,14 +135,13 @@ def split_paths(split_paths, graph_in):
     graph = graph if graph is not graph_in else graph.copy()
 
     if DEBUG_PLOT:
-        layout = graph.layout('tree')
+        layout = graph.layout("tree")
         debug_plot(graph, f"{graph_name_prefix}input", layout=layout)
 
     # Get incidences of all vertices which can be reached split_path_indices
     # (including split_path_indices). This is a set of all split_paths and their
     # dependencies.
-    split_off_vertex_indices = frozenset(
-        subcomponent_multi(graph, split_path_indices))
+    split_off_vertex_indices = frozenset(subcomponent_multi(graph, split_path_indices))
     debug("split_off_vertex_indices", split_off_vertex_indices)
 
     # Delete edges which point at any of the vertices in split_path_indices.
@@ -182,10 +173,11 @@ def split_paths(split_paths, graph_in):
     debug("split_off_without_common", split_off_without_common)
 
     if DEBUG_PLOT:
+
         def choose_color(index):
-            if (index in split_off_without_common):
+            if index in split_off_without_common:
                 return "green"
-            elif (index in rest_without_common):
+            elif index in rest_without_common:
                 return "red"
             else:
                 return "purple"
@@ -196,7 +188,7 @@ def split_paths(split_paths, graph_in):
             graph,
             f"{graph_name_prefix}result",
             layout=layout,
-            vertex_color=vertex_color
+            vertex_color=vertex_color,
         )
 
     # Return subgraphs based on calculated sets of vertices.
@@ -212,16 +204,19 @@ def split_paths(split_paths, graph_in):
         graph.induced_subgraph(rest_without_common),
     ]
 
-    debug('result_values', result_values[0].vs["name"])
+    debug("result_values", result_values[0].vs["name"])
 
     return tlz.valfilter(
         tlz.complement(graph_is_empty),
-        dict(zip(
-            result_keys,
-            (
-                result_values if root_name != fake_root_name
-                # If root was added, remove it
-                else tlz.map(remove_vertex(fake_root_name), result_values)
+        dict(
+            zip(
+                result_keys,
+                (
+                    result_values
+                    if root_name != fake_root_name
+                    # If root was added, remove it
+                    else tlz.map(remove_vertex(fake_root_name), result_values)
+                ),
             )
-        ))
+        ),
     )

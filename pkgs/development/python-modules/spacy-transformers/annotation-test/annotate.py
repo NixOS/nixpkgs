@@ -7,7 +7,8 @@ en_text = (
     "seriously. “I can tell you very senior CEOs of major American "
     "car companies would shake my hand and turn away because I wasn’t "
     "worth talking to,” said Thrun, in an interview with Recode earlier "
-    "this week.")
+    "this week."
+)
 
 
 @pytest.fixture
@@ -21,49 +22,48 @@ def doc_en_core_web_trf(en_core_web_trf):
 
 
 def test_entities(doc_en_core_web_trf):
-    entities = list(map(lambda e: (e.text, e.label_),
-                        doc_en_core_web_trf.ents))
+    entities = list(map(lambda e: (e.text, e.label_), doc_en_core_web_trf.ents))
 
     assert entities == [
-        ('Sebastian Thrun', 'PERSON'),
-        ('Google', 'ORG'),
-        ('2007', 'DATE'),
-        ('American', 'NORP'),
-        ('Thrun', 'PERSON'),
-        ('Recode', 'ORG'),
-        ('earlier this week', 'DATE'),
+        ("Sebastian Thrun", "PERSON"),
+        ("Google", "ORG"),
+        ("2007", "DATE"),
+        ("American", "NORP"),
+        ("Thrun", "PERSON"),
+        ("Recode", "ORG"),
+        ("earlier this week", "DATE"),
     ]
 
 
 def test_nouns(doc_en_core_web_trf):
-    assert [
-        chunk.text for chunk in doc_en_core_web_trf.noun_chunks] == [
-        'Sebastian Thrun',
-        'self-driving cars',
-        'Google',
-        'few people',
-        'the company',
-        'him',
-        'I',
-        'you',
-        'very senior CEOs',
-        'major American car companies',
-        'my hand',
-        'I',
-        'Thrun',
-        'an interview',
-        'Recode']
+    assert [chunk.text for chunk in doc_en_core_web_trf.noun_chunks] == [
+        "Sebastian Thrun",
+        "self-driving cars",
+        "Google",
+        "few people",
+        "the company",
+        "him",
+        "I",
+        "you",
+        "very senior CEOs",
+        "major American car companies",
+        "my hand",
+        "I",
+        "Thrun",
+        "an interview",
+        "Recode",
+    ]
 
 
 def test_verbs(doc_en_core_web_trf):
-    assert [
-        token.lemma_ for token in doc_en_core_web_trf if token.pos_ == "VERB"] == [
-        'start',
-        'work',
-        'drive',
-        'take',
-        'tell',
-        'shake',
-        'turn',
-        'talk',
-        'say']
+    assert [token.lemma_ for token in doc_en_core_web_trf if token.pos_ == "VERB"] == [
+        "start",
+        "work",
+        "drive",
+        "take",
+        "tell",
+        "shake",
+        "turn",
+        "talk",
+        "say",
+    ]

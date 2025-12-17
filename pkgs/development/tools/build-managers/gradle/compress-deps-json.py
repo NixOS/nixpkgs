@@ -155,7 +155,9 @@ while changed:
             new_data[part1] = info1
     data = new_data
 
-new_data["!comment"] = "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual."  # type: ignore
+new_data["!comment"] = (
+    "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual."  # type: ignore
+)
 new_data["!version"] = 1  # type: ignore
 
 with open(sys.argv[2], "wt") as f:

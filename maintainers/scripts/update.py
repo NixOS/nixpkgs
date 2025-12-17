@@ -248,7 +248,7 @@ async def run_update_script(
             "nix-shell",
             nixpkgs_root + "/shell.nix",
             "--run",
-            " ".join([ shlex.quote(s) for s in update_script_command ]),
+            " ".join([shlex.quote(s) for s in update_script_command]),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             cwd=worktree,

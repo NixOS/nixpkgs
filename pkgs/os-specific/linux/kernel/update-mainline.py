@@ -113,13 +113,12 @@ def main():
 
     releases = release_table.find_all("tr")
     parsed_releases = [
-        parsed for release in releases
-        if (parsed := parse_release(release)) is not None
+        parsed for release in releases if (parsed := parse_release(release)) is not None
     ]
     all_kernels = json.load(VERSIONS_FILE.open())
     oldest_branch = get_oldest_branch(all_kernels)
 
-    for (branch, kernels) in groupby(parsed_releases, lambda kernel: kernel.branch):
+    for branch, kernels in groupby(parsed_releases, lambda kernel: kernel.branch):
         kernel = max(kernels, key=lambda kernel: kernel.parsed_version)
         nixpkgs_branch = branch.replace(".", "_")
 
@@ -131,16 +130,13 @@ def main():
         if predates_oldest_branch(oldest_branch, kernel.branch):
             print(
                 f"{kernel.branch} is too old and not supported anymore, skipping...",
-                file=sys.stderr
+                file=sys.stderr,
             )
             continue
 
         if old_version is None:
             if kernel.eol:
-                print(
-                    f"{kernel.branch} is EOL, not adding...",
-                    file=sys.stderr
-                )
+                print(f"{kernel.branch} is EOL, not adding...", file=sys.stderr)
                 continue
 
             message = f"linux_{nixpkgs_branch}: init at {kernel.version}"

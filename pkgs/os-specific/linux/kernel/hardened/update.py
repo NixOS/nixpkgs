@@ -33,12 +33,17 @@ VersionComponent = Union[int, str]
 Version = List[VersionComponent]
 
 
-PatchData = TypedDict("PatchData", {"name": str, "url": str, "sha256": str, "extra": str})
-Patch = TypedDict("Patch", {
-    "patch": PatchData,
-    "version": str,
-    "sha256": str,
-})
+PatchData = TypedDict(
+    "PatchData", {"name": str, "url": str, "sha256": str, "extra": str}
+)
+Patch = TypedDict(
+    "Patch",
+    {
+        "patch": PatchData,
+        "version": str,
+        "sha256": str,
+    },
+)
 
 
 def read_min_kernel_branch() -> List[str]:
@@ -88,7 +93,11 @@ def nix_prefetch_url(url: str) -> Tuple[str, Path]:
 
 
 def verify_openpgp_signature(
-    *, name: str, trusted_key: Path, sig_path: Path, data_path: Path,
+    *,
+    name: str,
+    trusted_key: Path,
+    sig_path: Path,
+    data_path: Path,
 ) -> bool:
     with TemporaryDirectory(suffix=".nixpkgs-gnupg-home") as gnupg_home_str:
         gnupg_home = Path(gnupg_home_str)
@@ -113,7 +122,7 @@ def verify_openpgp_signature(
 
 def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     release = release_info.release
-    extra = f'-{release_info.version[-1]}'
+    extra = f"-{release_info.version[-1]}"
 
     def find_asset(filename: str) -> str:
         try:
@@ -145,24 +154,30 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     if not sig_ok:
         return None
 
-    kernel_ver = re.sub(r"v?(.*)(-hardened[\d]+)$", r'\1', release_info.release.tag_name)
-    major = kernel_ver.split('.')[0]
-    sha256_kernel, _ = nix_prefetch_url(f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz")
+    kernel_ver = re.sub(
+        r"v?(.*)(-hardened[\d]+)$", r"\1", release_info.release.tag_name
+    )
+    major = kernel_ver.split(".")[0]
+    sha256_kernel, _ = nix_prefetch_url(
+        f"mirror://kernel/linux/kernel/v{major}.x/linux-{kernel_ver}.tar.xz"
+    )
 
     return Patch(
         patch=PatchData(name=patch_filename, url=patch_url, sha256=sha256, extra=extra),
         version=kernel_ver,
-        sha256=sha256_kernel
+        sha256=sha256_kernel,
     )
 
 
-def normalize_kernel_version(version_str: str) -> list[str|int]:
+def normalize_kernel_version(version_str: str) -> list[str | int]:
     # There have been two variants v6.10[..] and 6.10[..], drop the v
-    version_str_without_v = version_str[1:] if not version_str[0].isdigit() else version_str
+    version_str_without_v = (
+        version_str[1:] if not version_str[0].isdigit() else version_str
+    )
 
-    version: list[str|int] = []
+    version: list[str | int] = []
 
-    for component in re.split(r'\.|\-', version_str_without_v):
+    for component in re.split(r"\.|\-", version_str_without_v):
         try:
             version.append(int(component))
         except ValueError:
@@ -174,7 +189,7 @@ def version_string(version: Version) -> str:
     return ".".join(str(component) for component in version)
 
 
-def major_kernel_version_key(kernel_version: list[int|str]) -> str:
+def major_kernel_version_key(kernel_version: list[int | str]) -> str:
     return version_string(kernel_version[:-1])
 
 
@@ -211,7 +226,9 @@ with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as kernel_versions_json:
         if version != "testing"
     }
 
-    latest_lts = sorted(ver for ver, meta in kernels.items() if meta.get("lts", False))[-1]
+    latest_lts = sorted(ver for ver, meta in kernels.items() if meta.get("lts", False))[
+        -1
+    ]
     keys = sorted(kernels.keys())
     latest_release = keys[-1]
     fallback = keys[-2]
@@ -268,7 +285,7 @@ for kernel_key in sorted(kernels_to_package.keys()):
     version_str = release.tag_name
     name = f"linux-hardened-{version_str}"
 
-    old_version: Optional[list[int|str]] = None
+    old_version: Optional[list[int | str]] = None
     old_version_str: Optional[str] = None
     update: bool
     try:

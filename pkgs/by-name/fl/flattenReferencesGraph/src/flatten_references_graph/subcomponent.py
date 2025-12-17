@@ -8,14 +8,11 @@ from .lib import (
     DEBUG_PLOT,
     find_vertex_by_name_or_none,
     is_None,
-    subcomponent_multi
+    subcomponent_multi,
 )
 
 
-call_counts = {
-    "in": 0,
-    "out": 0
-}
+call_counts = {"in": 0, "out": 0}
 
 
 @curry
@@ -25,24 +22,25 @@ def subcomponent(mode, paths, graph):
         graph_name_prefix = f"subcomponent_{mode}_{call_counts[mode]}_"
         call_counts[mode] += 1
 
-        layout = graph.layout('tree')
+        layout = graph.layout("tree")
         debug_plot(graph, f"{graph_name_prefix}input", layout=layout)
 
     path_indices = tlz.compose(
-        tlz.map(attrgetter('index')),
+        tlz.map(attrgetter("index")),
         tlz.remove(is_None),
-        tlz.map(find_vertex_by_name_or_none(graph))
+        tlz.map(find_vertex_by_name_or_none(graph)),
     )(paths)
 
     debug("path_indices", path_indices)
 
     main_indices = list(subcomponent_multi(graph, path_indices, mode))
 
-    debug('main_indices', main_indices)
+    debug("main_indices", main_indices)
 
     if DEBUG_PLOT:
+
         def choose_color(index):
-            if (index in main_indices):
+            if index in main_indices:
                 return "green"
             else:
                 return "red"
@@ -53,13 +51,10 @@ def subcomponent(mode, paths, graph):
             graph,
             f"{graph_name_prefix}result",
             layout=layout,
-            vertex_color=vertex_color
+            vertex_color=vertex_color,
         )
 
-    return {
-        "main": graph.induced_subgraph(main_indices),
-        "rest": graph - main_indices
-    }
+    return {"main": graph.induced_subgraph(main_indices), "rest": graph - main_indices}
 
 
 subcomponent_in = subcomponent("in")

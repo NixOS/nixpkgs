@@ -10,14 +10,23 @@ from argparse import ArgumentParser
 # Token priorities for version checking
 # From https://github.com/JetBrains/intellij-community/blob/94f40c5d77f60af16550f6f78d481aaff8deaca4/platform/util-rt/src/com/intellij/util/text/VersionComparatorUtil.java#L50
 TOKENS = {
-    "snap": 10, "snapshot": 10,
+    "snap": 10,
+    "snapshot": 10,
     "m": 20,
-    "eap": 25, "pre": 25, "preview": 25,
-    "alpha": 30, "a": 30,
-    "beta": 40, "betta": 40, "b": 40,
+    "eap": 25,
+    "pre": 25,
+    "preview": 25,
+    "alpha": 30,
+    "a": 30,
+    "beta": 40,
+    "betta": 40,
+    "b": 40,
     "rc": 50,
     "sp": 70,
-    "rel": 80, "release": 80, "r": 80, "final": 80
+    "rel": 80,
+    "release": 80,
+    "r": 80,
+    "final": 80,
 }
 SNAPSHOT_VALUE = 99999
 PLUGINS_FILE = Path(__file__).parent.joinpath("plugins.json").resolve()
@@ -38,7 +47,7 @@ FRIENDLY_TO_PLUGIN = {
     "rider": "RIDER",
     "ruby-mine": "RUBYMINE",
     "rust-rover": "RUST",
-    "webstorm": "WEBSTORM"
+    "webstorm": "WEBSTORM",
 }
 PLUGIN_TO_FRIENDLY = {j: i for i, j in FRIENDLY_TO_PLUGIN.items()}
 
@@ -58,7 +67,6 @@ def split(version_string: str):
     prev_type = None
     block = ""
     for char in version_string:
-
         if char.isdigit():
             cur_type = "number"
         elif char.isalpha():
@@ -117,23 +125,32 @@ def is_build_older(ver1: str, ver2: str) -> int:
 
 
 def is_compatible(build, since, until) -> bool:
-    return (not since or is_build_older(since, build) < 0) and (not until or 0 < is_build_older(until, build))
+    return (not since or is_build_older(since, build) < 0) and (
+        not until or 0 < is_build_older(until, build)
+    )
 
 
-def get_newest_compatible(pid: str, build: str, plugin_infos: dict, quiet: bool) -> [None, str]:
+def get_newest_compatible(
+    pid: str, build: str, plugin_infos: dict, quiet: bool
+) -> [None, str]:
     newest_ver = None
     newest_index = None
     for index, info in enumerate(plugin_infos):
-        if pick_newest(newest_ver, info["version"]) != newest_ver and \
-                is_compatible(build, info["since"], info["until"]):
+        if pick_newest(newest_ver, info["version"]) != newest_ver and is_compatible(
+            build, info["since"], info["until"]
+        ):
             newest_ver = info["version"]
             newest_index = index
 
     if newest_ver is not None:
-        return "https://plugins.jetbrains.com/files/" + plugin_infos[newest_index]["file"]
+        return (
+            "https://plugins.jetbrains.com/files/" + plugin_infos[newest_index]["file"]
+        )
     else:
         if not quiet:
-            print(f"WARNING: Could not find version of plugin {pid} compatible with build {build}")
+            print(
+                f"WARNING: Could not find version of plugin {pid} compatible with build {build}"
+            )
         return None
 
 
@@ -163,29 +180,38 @@ def make_name_mapping(infos: dict) -> dict[str, str]:
     return sort_dict({i: id_to_name(*i.split("-", 1)) for i in infos.keys()})
 
 
-def make_plugin_files(plugin_infos: dict, ide_versions: dict, quiet: bool, extra_builds: list[str]) -> dict:
+def make_plugin_files(
+    plugin_infos: dict, ide_versions: dict, quiet: bool, extra_builds: list[str]
+) -> dict:
     result = {}
     names = make_name_mapping(plugin_infos)
     for pid in plugin_infos:
         plugin_versions = {
             "compatible": get_compatible_ides(pid),
             "builds": {},
-            "name": names[pid]
+            "name": names[pid],
         }
         relevant_builds = [
-            builds for ide, builds
-            in ide_versions.items()
+            builds
+            for ide, builds in ide_versions.items()
             if (
                 ide in plugin_versions["compatible"]
                 # TODO: Remove this once we removed pycharm-community
-                or (ide == "pycharm-community" and "pycharm" in plugin_versions["compatible"])
+                or (
+                    ide == "pycharm-community"
+                    and "pycharm" in plugin_versions["compatible"]
+                )
                 # TODO: Remove this once we removed idea-community
                 or (ide == "idea-community" and "idea" in plugin_versions["compatible"])
             )
         ] + [extra_builds]
-        relevant_builds = sorted(list(set(flatten(relevant_builds))))  # Flatten, remove duplicates and sort
+        relevant_builds = sorted(
+            list(set(flatten(relevant_builds)))
+        )  # Flatten, remove duplicates and sort
         for build in relevant_builds:
-            plugin_versions["builds"][build] = get_newest_compatible(pid, build, plugin_infos[pid], quiet)
+            plugin_versions["builds"][build] = get_newest_compatible(
+                pid, build, plugin_infos[pid], quiet
+            )
         result[pid] = plugin_versions
 
     return result
@@ -204,7 +230,10 @@ def get_hash(url):
         args.append("--executable")
     path_process = run(args, capture_output=True)
     path = path_process.stdout.decode().split("\n")[1]
-    result = run(["nix", "--extra-experimental-features", "nix-command", "hash", "path", path], capture_output=True)
+    result = run(
+        ["nix", "--extra-experimental-features", "nix-command", "hash", "path", path],
+        capture_output=True,
+    )
     result_contents = result.stdout.decode()[:-1]
     if not result_contents:
         raise RuntimeError(result.stderr.decode())
@@ -254,20 +283,36 @@ def get_args() -> tuple[list[str], list[str], bool, bool, bool, list[str]]:
     parser = ArgumentParser(
         description="Add/remove/update entries in plugins.json",
         epilog="To update all plugins, run with no args.\n"
-               "To add a version of a plugin from a different channel, append -[channel] to the id.\n"
-               "The id of a plugin is the number before the name in the address of its page on https://plugins.jetbrains.com/"
+        "To add a version of a plugin from a different channel, append -[channel] to the id.\n"
+        "The id of a plugin is the number before the name in the address of its page on https://plugins.jetbrains.com/",
     )
-    parser.add_argument("-r", "--refetch-all", action="store_true",
-                        help="don't use previously collected hashes, redownload all")
-    parser.add_argument("-l", "--list", action="store_true",
-                        help="list plugin ids")
-    parser.add_argument("-q", "--quiet", action="store_true",
-                        help="suppress warnings about not being able to find compatible plugin versions")
-    parser.add_argument("-w", "--with-build", action="append", default=[],
-                        help="append [builds] to the list of builds to fetch plugin versions for")
+    parser.add_argument(
+        "-r",
+        "--refetch-all",
+        action="store_true",
+        help="don't use previously collected hashes, redownload all",
+    )
+    parser.add_argument("-l", "--list", action="store_true", help="list plugin ids")
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="suppress warnings about not being able to find compatible plugin versions",
+    )
+    parser.add_argument(
+        "-w",
+        "--with-build",
+        action="append",
+        default=[],
+        help="append [builds] to the list of builds to fetch plugin versions for",
+    )
     sub = parser.add_subparsers(dest="action")
-    sub.add_parser("add").add_argument("ids", type=str, nargs="+", help="plugin(s) to add")
-    sub.add_parser("remove").add_argument("ids", type=str, nargs="+", help="plugin(s) to remove")
+    sub.add_parser("add").add_argument(
+        "ids", type=str, nargs="+", help="plugin(s) to add"
+    )
+    sub.add_parser("remove").add_argument(
+        "ids", type=str, nargs="+", help="plugin(s) to remove"
+    )
 
     args = parser.parse_args()
     add = []
@@ -315,7 +360,10 @@ def get_plugin_info(pid: str, channel: str) -> dict:
     decoded = resp.json()
 
     if resp.status_code != 200:
-        print(f"Server gave non-200 code {resp.status_code} with message " + decoded["message"])
+        print(
+            f"Server gave non-200 code {resp.status_code} with message "
+            + decoded["message"]
+        )
         exit(1)
 
     return decoded
@@ -393,7 +441,9 @@ def main():
 
     print("Working out which plugins need which files")
     ide_versions = get_ide_versions()
-    result["plugins"] = make_plugin_files(plugin_infos, ide_versions, quiet, extra_builds)
+    result["plugins"] = make_plugin_files(
+        plugin_infos, ide_versions, quiet, extra_builds
+    )
 
     print("Getting file hashes")
     file_list = get_file_names(result["plugins"])
@@ -404,8 +454,8 @@ def main():
     # Commit the result
     commitMessage = "jetbrains.plugins: update"
     print("#### Committing changes... ####")
-    run(['git', 'commit', f'-m{commitMessage}', '--', f'{PLUGINS_FILE}'], check=True)
+    run(["git", "commit", f"-m{commitMessage}", "--", f"{PLUGINS_FILE}"], check=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

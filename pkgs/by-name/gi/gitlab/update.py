@@ -49,6 +49,7 @@ class GitLabRepo:
             reverse=True,
         )
         return versions
+
     def get_git_hash(self, rev: str):
         return (
             subprocess.check_output(
@@ -112,7 +113,9 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
-            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/yarn.lock"),
+            frontend_islands_yarn_hash=self.get_yarn_hash(
+                rev, "/ee/frontend_islands/yarn.lock"
+            ),
             owner=self.owner,
             repo=self.repo,
             rev=rev,
@@ -177,7 +180,12 @@ def update_rubyenv():
 
     # update to 1.2.9 to include https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/commit/5d77f3f3e048834250589b416c6b3d4bba65a570
     subprocess.check_output(
-        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g", "Gemfile"],
+        [
+            "sed",
+            "-i",
+            "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g",
+            "Gemfile",
+        ],
         cwd=rubyenv_dir,
     )
 
@@ -192,7 +200,12 @@ def update_rubyenv():
     # [comment]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435#note_1979750600
     # [upstream issue]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435
     subprocess.check_output(
-        ["sed", "-i", "s|gem 'sidekiq', path: 'vendor/gems/sidekiq', require: 'sidekiq'|gem 'sidekiq', '~> 7.3.9'|g", "Gemfile"],
+        [
+            "sed",
+            "-i",
+            "s|gem 'sidekiq', path: 'vendor/gems/sidekiq', require: 'sidekiq'|gem 'sidekiq', '~> 7.3.9'|g",
+            "Gemfile",
+        ],
         cwd=rubyenv_dir,
     )
 
@@ -243,7 +256,9 @@ def update_rubyenv():
     subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
     # Reformat gemset.nix
-    subprocess.check_output(["nix-shell", "--run", "treefmt pkgs/by-name/gi/gitlab"], cwd=NIXPKGS_PATH)
+    subprocess.check_output(
+        ["nix-shell", "--run", "treefmt pkgs/by-name/gi/gitlab"], cwd=NIXPKGS_PATH
+    )
 
 
 @cli.command("update-gitaly")
@@ -251,14 +266,20 @@ def update_gitaly():
     """Update gitaly"""
     logger.info("Updating gitaly")
     data = _get_data_json()
-    gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
+    gitaly_server_version = data["passthru"]["GITALY_SERVER_VERSION"]
     repo = GitLabRepo(repo="gitaly")
-    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
+    gitaly_dir = pathlib.Path(__file__).parent / "gitaly"
 
     makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
     makefile += "\nprint-%:;@echo $($*)\n"
 
-    git_version = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
+    git_version = subprocess.run(
+        ["make", "-f", "-", "print-GIT_VERSION"],
+        check=True,
+        input=makefile,
+        text=True,
+        capture_output=True,
+    ).stdout.strip()
 
     _call_nix_update("gitaly", gitaly_server_version)
     _call_nix_update("gitaly.git", git_version)
@@ -331,21 +352,29 @@ def update_gitlab_container_registry(rev: str, commit: bool):
         )
 
 
-@cli.command('update-gitlab-elasticsearch-indexer')
+@cli.command("update-gitlab-elasticsearch-indexer")
 def update_gitlab_elasticsearch_indexer():
     """Update gitlab-elasticsearch-indexer"""
     data = _get_data_json()
-    gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
-    _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
+    gitlab_elasticsearch_indexer_version = data["passthru"][
+        "GITLAB_ELASTICSEARCH_INDEXER_VERSION"
+    ]
+    _call_nix_update(
+        "gitlab-elasticsearch-indexer", gitlab_elasticsearch_indexer_version
+    )
     # Update the dependency gitlab-code-parser
-    src_workdir = subprocess.check_output(
-        [
-            "nix-build",
-            "-A",
-            "gitlab-elasticsearch-indexer.src",
-        ],
-        cwd=NIXPKGS_PATH,
-    ).decode("utf-8").strip()
+    src_workdir = (
+        subprocess.check_output(
+            [
+                "nix-build",
+                "-A",
+                "gitlab-elasticsearch-indexer.src",
+            ],
+            cwd=NIXPKGS_PATH,
+        )
+        .decode("utf-8")
+        .strip()
+    )
     codeparser_module = json.loads(
         subprocess.check_output(
             [
@@ -353,13 +382,17 @@ def update_gitlab_elasticsearch_indexer():
                 "list",
                 "-m",
                 "-json",
-                "gitlab.com/gitlab-org/rust/gitlab-code-parser/bindings/go"
+                "gitlab.com/gitlab-org/rust/gitlab-code-parser/bindings/go",
             ],
-            cwd=src_workdir
-        ).decode("utf-8").strip()
+            cwd=src_workdir,
+        )
+        .decode("utf-8")
+        .strip()
     )
     codeparser_version = codeparser_module["Version"].replace("v", "")
-    _call_nix_update('gitlab-elasticsearch-indexer.codeParserBindings', codeparser_version)
+    _call_nix_update(
+        "gitlab-elasticsearch-indexer.codeParserBindings", codeparser_version
+    )
 
 
 @cli.command("update-all")
@@ -423,11 +456,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
 def commit_container_registry(old_version: str, new_version: str) -> None:
     """Commits the gitlab-container-registry changes for you"""
     subprocess.run(
-        [
-            "git",
-            "add",
-            "pkgs/by-name/gi/gitlab-container-registry"
-        ],
+        ["git", "add", "pkgs/by-name/gi/gitlab-container-registry"],
         cwd=NIXPKGS_PATH,
     )
     subprocess.run(

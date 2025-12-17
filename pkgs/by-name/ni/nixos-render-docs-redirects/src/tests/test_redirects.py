@@ -27,7 +27,6 @@ class RedirectsTestCase(unittest.TestCase):
         with self.assertRaises(IdentifierExists):
             add_content(result, "foo", "another/path.html")
 
-
     def test_move_content(self):
         initial_redirects = {
             "foo": ["path/to/foo.html#foo"],
@@ -43,7 +42,6 @@ class RedirectsTestCase(unittest.TestCase):
 
         with self.assertRaises(IdentifierNotFound):
             move_content(result, "baz", "path.html")
-
 
     def test_rename_identifier(self):
         initial_redirects = {
@@ -65,7 +63,6 @@ class RedirectsTestCase(unittest.TestCase):
         with self.assertRaises(IdentifierExists):
             rename_identifier(result, "boo", "boo")
 
-
     def test_remove_and_redirect(self):
         initial_redirects = {
             "foo": ["new/path.html#foo", "path/to/foo.html#foo"],
@@ -73,7 +70,11 @@ class RedirectsTestCase(unittest.TestCase):
             "baz": ["path/to/baz.html#baz"],
         }
         final_redirects = {
-            "bar": ["path/to/bar.html#bar", "new/path.html#foo", "path/to/foo.html#foo"],
+            "bar": [
+                "path/to/bar.html#bar",
+                "new/path.html#foo",
+                "path/to/foo.html#foo",
+            ],
             "baz": ["path/to/baz.html#baz"],
         }
 

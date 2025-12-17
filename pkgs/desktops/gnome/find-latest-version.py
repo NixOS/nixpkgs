@@ -114,7 +114,9 @@ def odd_unstable(version: Version) -> Stability:
         return Stability.STABLE
 
     even = version_parts[1] % 2 == 0
-    prerelease = (version_parts[1] >= 90 and version_parts[1] < 100) or (version_parts[1] >= 900 and version_parts[1] < 1000)
+    prerelease = (version_parts[1] >= 90 and version_parts[1] < 100) or (
+        version_parts[1] >= 900 and version_parts[1] < 1000
+    )
     stable = even and not prerelease
     if stable:
         return Stability.STABLE
@@ -180,7 +182,9 @@ def tagged(version: Version) -> Stability:
     >>> tagged(Version("3.2.1rc.3"))
     Stability.UNSTABLE
     """
-    prerelease = "alpha" in version.value or "beta" in version.value or "rc" in version.value
+    prerelease = (
+        "alpha" in version.value or "beta" in version.value or "rc" in version.value
+    )
     if prerelease:
         return Stability.UNSTABLE
     else:
@@ -221,12 +225,19 @@ def make_version_policy(
     if not upper_bound:
         return lambda version: selected.allows(version_classifier(version))
     else:
-        return lambda version: selected.allows(version_classifier(version)) and version < upper_bound
+        return (
+            lambda version: selected.allows(version_classifier(version))
+            and version < upper_bound
+        )
 
 
 def find_versions(package_name: str, version_policy: VersionPolicy) -> List[Version]:
     # The structure of cache.json: https://gitlab.gnome.org/Infrastructure/sysadmin-bin/blob/master/ftpadmin#L762
-    cache = json.loads(requests.get(f"https://download.gnome.org/sources/{package_name}/cache.json").text)
+    cache = json.loads(
+        requests.get(
+            f"https://download.gnome.org/sources/{package_name}/cache.json"
+        ).text
+    )
     if type(cache) != list or cache[0] != 4:
         raise Exception("Unknown format of cache.json file.")
 
@@ -272,8 +283,12 @@ if __name__ == "__main__":
     upper_bound = getattr(args, "upper-bound")
     if upper_bound is not None:
         upper_bound = Version(upper_bound)
-    version_policy_kind = arg_to_enum(VersionPolicyKind, getattr(args, "version-policy"))
-    version_policy = make_version_policy(version_policy_kind, requested_release, upper_bound)
+    version_policy_kind = arg_to_enum(
+        VersionPolicyKind, getattr(args, "version-policy")
+    )
+    version_policy = make_version_policy(
+        version_policy_kind, requested_release, upper_bound
+    )
 
     try:
         versions = find_versions(package_name, version_policy)

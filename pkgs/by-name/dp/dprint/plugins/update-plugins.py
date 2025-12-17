@@ -93,7 +93,7 @@ def get_update_url(plugin_url):
 
 def write_plugin_derivation(drv_attrs):
     drv = f"{{ mkDprintPlugin }}: mkDprintPlugin {json_to_nix(drv_attrs)}"
-    filepath = SCRIPT_DIR / f"{drv_attrs["pname"]}.nix"
+    filepath = SCRIPT_DIR / f"{drv_attrs['pname']}.nix"
     with open(filepath, "w+", encoding="utf8") as f:
         f.write(drv)
     nixfmt(filepath)

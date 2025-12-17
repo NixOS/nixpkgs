@@ -7,14 +7,24 @@ import shutil
 
 from pathlib import Path
 
-from plumbum.cmd import nix_prefetch, nix_build, yarn, chmod, yarn_berry_fetcher, prefetch_npm_deps, diff
+from plumbum.cmd import (
+    nix_prefetch,
+    nix_build,
+    yarn,
+    chmod,
+    yarn_berry_fetcher,
+    prefetch_npm_deps,
+    diff,
+)
 
 HERE = Path(__file__).parent
+
 
 def write_release(release):
     with HERE.joinpath("release-data.json").open("w") as fd:
         json.dump(release, fd, indent=2)
         fd.write("\n")
+
 
 def dict_to_argstr(d):
     args = "{ "
@@ -52,7 +62,7 @@ release["hash"] = nix_prefetch[
     "--rev",
     "--expr",
     "null",
-    package
+    package,
 ]().strip()
 
 print(release["hash"])
@@ -61,9 +71,7 @@ print(release["hash"])
 write_release(release)
 
 src_dir = nix_build[
-    "--no-out-link",
-    "-E",
-    f"((import <nixpkgs> {{}}).callPackage {package} {{}}).src"
+    "--no-out-link", "-E", f"((import <nixpkgs> {{}}).callPackage {package} {{}}).src"
 ]().strip()
 
 print(src_dir)
@@ -90,21 +98,25 @@ for key, value in plugin_repositories.items():
 
     plugin["name"] = value["cloneUrl"].split("/")[-1].removesuffix(".git")
 
-    plugin["url"] = f"{value["cloneUrl"].removesuffix('.git')}/archive/{value["commit"]}.tar.gz"
+    plugin["url"] = (
+        f"{value['cloneUrl'].removesuffix('.git')}/archive/{value['commit']}.tar.gz"
+    )
 
     plugin["hash"] = nix_prefetch.with_cwd(HERE)[
         "--option",
         "extra-experimental-features",
         "flakes",
-        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
+        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src",
     ]().strip()
 
     plugin_src = nix_build.with_cwd(HERE)[
         "--no-out-link",
         "-E",
-        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src"
+        f"((import <nixpkgs> {{}}).callPackage ./buildPlugin.nix {dict_to_argstr(plugin)}).src",
     ]().strip()
-    plugin["npmDepsHash"] = prefetch_npm_deps(Path(plugin_src).joinpath("package-lock.json")).strip()
+    plugin["npmDepsHash"] = prefetch_npm_deps(
+        Path(plugin_src).joinpath("package-lock.json")
+    ).strip()
 
     release["plugins"][key] = plugin
 
@@ -115,19 +127,14 @@ yarn_lock = Path(src_dir).joinpath("yarn.lock")
 missing_hashes = HERE.joinpath("missing-hashes.json")
 
 with missing_hashes.open("w") as fd:
-    new_missing_hashes = yarn_berry_fetcher[
-        "missing-hashes",
-        yarn_lock
-    ]()
+    new_missing_hashes = yarn_berry_fetcher["missing-hashes", yarn_lock]()
     fd.write(new_missing_hashes)
 
 
 print("prefetching offline cache...")
 
 release["deps_hash"] = yarn_berry_fetcher[
-    "prefetch",
-    yarn_lock,
-    missing_hashes
+    "prefetch", yarn_lock, missing_hashes
 ]().strip()
 
 

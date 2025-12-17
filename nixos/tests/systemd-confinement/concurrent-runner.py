@@ -44,21 +44,23 @@ def client_actions(draw, size: int = 10):
         start = draw(st.integers(min_value=0, max_value=size - 2))
         stop = draw(st.integers(min_value=start + 1, max_value=size - 1))
         if start + 1 < stop:
-            runs = draw(st.sets(
-                st.integers(min_value=start + 1, max_value=stop - 1),
-                max_size=stop - start,
-            ))
+            runs = draw(
+                st.sets(
+                    st.integers(min_value=start + 1, max_value=stop - 1),
+                    max_size=stop - start,
+                )
+            )
 
-    out = ''
+    out = ""
     for index in range(size):
         if start is not None and index == start:
-            out += '['
+            out += "["
         elif stop is not None and index == stop:
-            out += ']'
+            out += "]"
         elif index in runs:
-            out += 'R'
+            out += "R"
         else:
-            out += ' '
+            out += " "
     return out
 
 
@@ -67,7 +69,7 @@ def cli() -> None:
     pass
 
 
-@cli.command('driver')
+@cli.command("driver")
 @settings(deadline=None, max_examples=20)
 @given(st.lists(client_actions(), max_size=5))
 def test_driver(client_actions: list[str]) -> None:
@@ -80,52 +82,51 @@ def test_driver(client_actions: list[str]) -> None:
             except IndexError:
                 continue
             match action:
-                case '[':
+                case "[":
                     client = socket.socket(socket.AF_INET6)
                     client.settimeout(60)
-                    client.connect(('::1', 12345))
-                    client.send(b'[')
+                    client.connect(("::1", 12345))
+                    client.send(b"[")
                     clients[n] = client
-                case ']':
+                case "]":
                     assert client is not None
-                    client.send(b']')
+                    client.send(b"]")
                     # At this point if we get ']' back from the client, we know
                     # that everything went smoothly up to this point because
                     # otherwise the client would have just thrown an exception
                     # and the connection would be closed.
-                    assert client.recv(1) == b']'
+                    assert client.recv(1) == b"]"
                     assert not client.recv(1)
                     client.close()
                     clients[n] = None
-                case 'R':
+                case "R":
                     assert client is not None
-                    client.send(b'R')
-                case ' ':
+                    client.send(b"R")
+                case " ":
                     if client is not None:
-                        client.send(b' ')
+                        client.send(b" ")
         sleep(0.1)
-    assert all(c is None for c in clients), \
-           f'clients still running: {clients!r}'
+    assert all(c is None for c in clients), f"clients still running: {clients!r}"
 
 
-@cli.command('client')
-@click.argument('executable')
+@cli.command("client")
+@click.argument("executable")
 def test_client(executable: str) -> None:
     if not (action := sys.stdin.read(1)):
         raise SystemExit(1)
-    assert action == '[', f'{action!r} != "["'
+    assert action == "[", f'{action!r} != "["'
     while action := sys.stdin.read(1):
         match action:
-            case 'R':
+            case "R":
                 run([executable], check=True, stdout=sys.stderr)
-            case ']':
-                sys.stdout.write(']')
+            case "]":
+                sys.stdout.write("]")
                 return
-            case ' ':
+            case " ":
                 sleep(0.1)
-            case '':
+            case "":
                 raise SystemExit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

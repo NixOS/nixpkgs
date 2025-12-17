@@ -8,6 +8,7 @@ Example usage:
 Check this file with mypy after every change!
 $ mypy --strict maintainers/scripts/remove-old-aliases.py
 """
+
 import argparse
 import shutil
 import subprocess
@@ -141,7 +142,7 @@ def convert(lines: list[str], convert_to: str) -> list[tuple[str, str]]:
                     x.strip() for x in line.split("=", maxsplit=2)
                 )
                 if after_equal.startswith("warnAlias"):
-                    after_equal = after_equal.split("\"", maxsplit=3)[2].strip()
+                    after_equal = after_equal.split('"', maxsplit=3)[2].strip()
             except ValueError as err:
                 print(err, line, "\n")
                 lines.remove(line)

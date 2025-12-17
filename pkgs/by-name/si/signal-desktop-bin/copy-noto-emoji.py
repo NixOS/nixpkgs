@@ -50,10 +50,10 @@ def _main() -> None:
 
     for signal_emoji_names in jumbomoji_packs.values():
         for signal_emoji_name in signal_emoji_names:
-
             try:
                 shutil.copy(
-                    noto_png_path / f"emoji_u{emoji_to_noto_name(signal_emoji_name)}.png",
+                    noto_png_path
+                    / f"emoji_u{emoji_to_noto_name(signal_emoji_name)}.png",
                     out_path / signal_emoji_name,
                 )
             except FileNotFoundError:

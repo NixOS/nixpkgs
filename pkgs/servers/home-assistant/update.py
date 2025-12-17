@@ -14,11 +14,17 @@ import aiohttp
 from aiohttp import ClientSession
 from packaging.version import Version
 
-ROOT: Final = check_output([
-    "git",
-    "rev-parse",
-    "--show-toplevel",
-]).decode().strip()
+ROOT: Final = (
+    check_output(
+        [
+            "git",
+            "rev-parse",
+            "--show-toplevel",
+        ]
+    )
+    .decode()
+    .strip()
+)
 
 
 def run_sync(cmd: List[str]) -> None:
@@ -32,9 +38,7 @@ def run_sync(cmd: List[str]) -> None:
 async def check_async(cmd: List[str]) -> str:
     print(f"$ {' '.join(cmd)}")
     process = await asyncio.create_subprocess_exec(
-        *cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
+        *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
     stdout, stderr = await process.communicate()
 
@@ -73,8 +77,7 @@ class File:
 
     def get_exact_match(self, attr: str, value: str):
         matches = re.findall(
-            rf'{re.escape(attr)}\s+=\s+\"?{re.escape(value)}\"?',
-            self.text
+            rf"{re.escape(attr)}\s+=\s+\"?{re.escape(value)}\"?", self.text
         )
 
         n = len(matches)
@@ -95,6 +98,7 @@ class File:
         with open(self.path, "w") as handle:
             handle.write(self.text)
 
+
 class Nurl:
     @classmethod
     async def prefetch(cls, url: str, version: str, *extra_args: str) -> str:
@@ -112,7 +116,8 @@ class Nix:
     base_cmd: Final = [
         "nix",
         "--show-trace",
-        "--extra-experimental-features", "nix-command"
+        "--extra-experimental-features",
+        "nix-command",
     ]
 
     @classmethod
@@ -121,12 +126,7 @@ class Nix:
 
     @classmethod
     async def eval(cls, expr: str) -> Union[List, Dict, int, float, str, bool]:
-        response = await cls._run([
-            "eval",
-            "-f", f"{ROOT}/default.nix",
-            "--json",
-            expr
-        ])
+        response = await cls._run(["eval", "-f", f"{ROOT}/default.nix", "--json", expr])
         if response is None:
             raise RuntimeError("Nix eval expression returned no response")
         try:
@@ -136,12 +136,7 @@ class Nix:
 
     @classmethod
     async def hash_to_sri(cls, algorithm: str, value: str) -> Optional[str]:
-        return await cls._run([
-            "hash",
-            "to-sri",
-            "--type", algorithm,
-            value
-        ])
+        return await cls._run(["hash", "to-sri", "--type", algorithm, value])
 
 
 class HomeAssistant:
@@ -149,9 +144,7 @@ class HomeAssistant:
         self._session = session
 
     async def get_latest_core_version(
-        self,
-        owner: str = "home-assistant",
-        repo: str = "core"
+        self, owner: str = "home-assistant", repo: str = "core"
     ) -> str:
         async with self._session.get(
             f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
@@ -162,11 +155,7 @@ class HomeAssistant:
         except KeyError:
             raise RuntimeError("No tag name in response document")
 
-
-    async def get_latest_frontend_version(
-        self,
-        core_version: str
-    ) -> str:
+    async def get_latest_frontend_version(self, core_version: str) -> str:
         async with self._session.get(
             f"https://raw.githubusercontent.com/home-assistant/core/{core_version}/homeassistant/components/frontend/manifest.json"
         ) as response:
@@ -187,18 +176,19 @@ class HomeAssistant:
             _, version = requirement.split("==", maxsplit=1)
             return str(version)
         else:
-            raise RuntimeError(
-                "Found no version specifier for frontend package"
-            )
-
+            raise RuntimeError("Found no version specifier for frontend package")
 
     async def update_core(self, old_version: str, new_version: str) -> None:
         old_sdist_hash = str(await Nix.eval("home-assistant.sdist.outputHash"))
-        new_sdist_hash = await Nurl.prefetch("https://pypi.org/project/homeassistant/", new_version)
+        new_sdist_hash = await Nurl.prefetch(
+            "https://pypi.org/project/homeassistant/", new_version
+        )
         print(f"sdist: {old_sdist_hash} -> {new_sdist_hash}")
 
         old_git_hash = str(await Nix.eval("home-assistant.src.outputHash"))
-        new_git_hash = await Nurl.prefetch("https://github.com/home-assistant/core/", new_version)
+        new_git_hash = await Nurl.prefetch(
+            "https://github.com/home-assistant/core/", new_version
+        )
         print(f"git: {old_git_hash} -> {new_git_hash}")
 
         with File("pkgs/servers/home-assistant/default.nix") as file:
@@ -211,9 +201,15 @@ class HomeAssistant:
         new_hash = await Nurl.prefetch(
             "https://pypi.org/project/home_assistant_frontend/",
             new_version,
-            "-A", "format", "wheel",
-            "-A", "dist", "py3",
-            "-A", "python", "py3"
+            "-A",
+            "format",
+            "wheel",
+            "-A",
+            "dist",
+            "py3",
+            "-A",
+            "python",
+            "py3",
         )
         print(f"frontend: {old_hash} -> {new_hash}")
 
@@ -222,9 +218,9 @@ class HomeAssistant:
             file.substitute("hash", old_hash, new_hash)
 
     async def update_components(self):
-        await run_async([
-            f"{ROOT}/pkgs/servers/home-assistant/update-component-packages.py"
-        ])
+        await run_async(
+            [f"{ROOT}/pkgs/servers/home-assistant/update-component-packages.py"]
+        )
 
 
 async def main(target_version: Optional[str] = None):
@@ -256,6 +252,7 @@ async def main(target_version: Optional[str] = None):
         # wait for async client sessions to close
         # https://docs.aiohttp.org/en/stable/client_advanced.html#graceful-shutdown
         await asyncio.sleep(0)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
