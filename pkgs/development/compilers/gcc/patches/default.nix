@@ -99,7 +99,7 @@ optionals noSysDirs (
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
-++ optional atLeast14 ./c++tools-dont-check-enable-default-pie.patch
+++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
