@@ -54,9 +54,9 @@
   };
 
   comment = {
-    version = "0.1.0";
+    version = "0.3.0";
     url = "github:stsewd/tree-sitter-comment";
-    hash = "sha256-XfHUHWenRjjQer9N4jhkFjNDlvz8ZI8Qep5eiWIyr7Q=";
+    hash = "sha256-O9BBcsMfIfDDzvm2eWuOhgLclUNdgZ/GsQd0kuFFFPQ=";
   };
 
   commonlisp = {
