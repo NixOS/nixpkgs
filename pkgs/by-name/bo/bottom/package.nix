@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/btm";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

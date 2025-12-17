@@ -72,7 +72,6 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     "tests/unit"

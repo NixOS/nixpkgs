@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rd";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

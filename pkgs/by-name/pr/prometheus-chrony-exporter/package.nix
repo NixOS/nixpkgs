@@ -44,7 +44,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/chrony_exporter";
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/superq/chrony_exporter/releases/tag/v${finalAttrs.version}";

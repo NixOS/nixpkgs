@@ -29,8 +29,6 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Tool for listing assets from multiple cloud providers";
     homepage = "https://github.com/projectdiscovery/cloudlist";

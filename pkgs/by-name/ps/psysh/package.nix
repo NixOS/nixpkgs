@@ -50,7 +50,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";

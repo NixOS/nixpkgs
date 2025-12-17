@@ -327,11 +327,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cope = callPackage ../by-name/co/cope/package.nix {
-    perl = perl538;
-    perlPackages = perl538Packages;
-  };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   cup-docker-noserver = cup-docker.override { withServer = false; };
@@ -2411,7 +2406,6 @@ with pkgs;
       pslSupport = true;
       zstdSupport = true;
       http3Support = true;
-      c-aresSupport = true;
     }
     // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
       brotliSupport = true;
@@ -3103,8 +3097,8 @@ with pkgs;
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = nodejs_22;
-  nodejs-slim = nodejs-slim_22;
+  nodejs = nodejs_24;
+  nodejs-slim = nodejs-slim_24;
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
@@ -4308,7 +4302,7 @@ with pkgs;
   gerbilPackages-unstable = pkgs.gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
   glow-lang = pkgs.gerbilPackages-unstable.glow-lang;
 
-  default-gcc-version = 14;
+  default-gcc-version = 15;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -5109,7 +5103,6 @@ with pkgs;
 
   inherit (rustPackages)
     cargo
-    cargo-auditable
     cargo-auditable-cargo-wrapper
     clippy
     rustc
@@ -5687,9 +5680,9 @@ with pkgs;
   python27Packages = python27.pkgs;
   python310Packages = python310.pkgs;
   python311Packages = python311.pkgs;
-  python312Packages = recurseIntoAttrs python312.pkgs;
+  python312Packages = python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
-  python314Packages = python314.pkgs;
+  python314Packages = recurseIntoAttrs python314.pkgs;
   python315Packages = python315.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
@@ -7168,8 +7161,6 @@ with pkgs;
     util-linux = util-linuxMinimal; # break the cyclic dependency
     autoconf = buildPackages.autoconf269;
   };
-
-  gpgme = callPackage ../development/libraries/gpgme { };
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
@@ -8753,13 +8744,12 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl538 perl540;
+  inherit (perlInterpreters) perl5;
 
-  perl538Packages = recurseIntoAttrs perl538.pkgs;
-  perl540Packages = recurseIntoAttrs perl540.pkgs;
+  perl5Packages = recurseIntoAttrs perl5.pkgs;
 
-  perl = perl540;
-  perlPackages = perl540Packages;
+  perl = perl5;
+  perlPackages = perl5Packages;
 
   ack = perlPackages.ack;
 
@@ -12139,7 +12129,7 @@ with pkgs;
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
-  typstPackages = typst.packages;
+  typstPackages = recurseIntoAttrs typst.packages;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 

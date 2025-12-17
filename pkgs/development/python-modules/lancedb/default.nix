@@ -22,6 +22,7 @@
 
   # tests
   aiohttp,
+  datafusion,
   pandas,
   polars,
   pylance,
@@ -33,21 +34,21 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.21.2";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
+    hash = "sha256-2Kl1SikqiCXTYcja2mPnQQYxcRBjW2oW+o9PDaBbEoc=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+    hash = "sha256-1FllSQJySSwz4AYyQYAn3JGCmlp3atgDiiLRZeBedyU=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -80,6 +81,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
+    datafusion
     duckdb
     pandas
     polars

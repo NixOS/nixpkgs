@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sphinxygen";
-  version = "1.0.10";
+  version = "1.0.12";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = "sphinxygen";
     tag = "v${version}";
-    hash = "sha256-Xii5pDa1eHrHUKERC2gDif/NIkpab/IZYBRvMq9YKtE=";
+    hash = "sha256-54D7h6JCsUEh3y6WmpSaMFlRBElve1lscbQtJz+OJTQ=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

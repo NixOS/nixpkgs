@@ -8,8 +8,6 @@
   hatch-fancy-pypi-readme,
   h11,
   h2,
-  pproxy,
-  pytest-asyncio,
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
@@ -54,8 +52,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pproxy
-    pytest-asyncio
     pytest-httpbin
     pytest-trio
     pytestCheckHook

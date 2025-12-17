@@ -41,8 +41,6 @@ python3Packages.buildPythonApplication {
     # python3Packages.pytestCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";

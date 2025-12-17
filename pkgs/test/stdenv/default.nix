@@ -9,6 +9,9 @@
 }:
 
 let
+  # tests can be based on builtins.derivation and bootstrapTools directly to minimize rebuilds
+  # see test 'make-symlinks-relative' in ./hooks.nix as an example.
+  bootstrapTools = stdenv.bootstrapTools;
   # early enough not to rebuild gcc but late enough to have patchelf
   earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages or pkgs;
   earlierPkgs =
@@ -240,7 +243,7 @@ in
     import ./hooks.nix {
       stdenv = bootStdenv;
       pkgs = earlyPkgs;
-      inherit lib;
+      inherit bootstrapTools lib;
     }
   );
 
@@ -499,7 +502,7 @@ in
       import ./hooks.nix {
         stdenv = bootStdenvStructuredAttrsByDefault;
         pkgs = earlyPkgs;
-        inherit lib;
+        inherit bootstrapTools lib;
       }
     );
 

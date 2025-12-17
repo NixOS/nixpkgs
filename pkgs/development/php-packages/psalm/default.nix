@@ -35,7 +35,6 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     broken = lib.versionOlder php.version "8.2";

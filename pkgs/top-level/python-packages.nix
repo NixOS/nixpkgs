@@ -722,6 +722,8 @@ self: super: with self; {
 
   annexremote = callPackage ../development/python-modules/annexremote { };
 
+  annotated-doc = callPackage ../development/python-modules/annotated-doc { };
+
   annotated-types = callPackage ../development/python-modules/annotated-types { };
 
   annotatedyaml = callPackage ../development/python-modules/annotatedyaml { };
@@ -3969,7 +3971,7 @@ self: super: with self; {
   dj-static = callPackage ../development/python-modules/dj-static { };
 
   # LTS with mainsteam support
-  django = self.django_4;
+  django = self.django_5;
 
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
@@ -4121,7 +4123,7 @@ self: super: with self; {
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
-  django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+  django-jinja = callPackage ../development/python-modules/django-jinja { };
 
   django-jquery-js = callPackage ../development/python-modules/django-jquery-js { };
 
@@ -16011,6 +16013,8 @@ self: super: with self; {
 
   quart-schema = callPackage ../development/python-modules/quart-schema { };
 
+  quart-trio = callPackage ../development/python-modules/quart-trio { };
+
   quaternion = callPackage ../development/python-modules/quaternion { };
 
   qudida = callPackage ../development/python-modules/qudida { };
@@ -19369,7 +19373,7 @@ self: super: with self; {
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
-  typer-slim = self.typer.override { package = "typer-slim"; };
+  typer-slim = callPackage ../development/python-modules/typer-slim { };
 
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 

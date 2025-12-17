@@ -106,6 +106,7 @@ buildPythonPackage {
   # that override globally the `numpy` attribute to point to `numpy_1`.
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.8,<3.2.0" "Cython>=3.0.8" \
       --replace-fail "numpy>=2.0.0,<2.6" numpy
   '';
 

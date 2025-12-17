@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.25.0";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-TZdmG/WEjdnl633tSA3sz50yzizVALiKJqy/e9KGSYU=";
+    hash = "sha256-q9TfIEhaCYPiyjNKIWJJthhtbjwWJ+EGZRlD29t5Guo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0wMmhiUjXY5DaA43l7kBKE7IX1UoEFZBJ8xnafVlU60=";
+    hash = "sha256-mhFAV3KTVIUG/hU524cyeLv3sELv8wMtx820kPWeftE=";
   };
 
   nativeBuildInputs = [

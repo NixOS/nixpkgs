@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/air";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   cargoBuildFlags = [ "-p air" ];

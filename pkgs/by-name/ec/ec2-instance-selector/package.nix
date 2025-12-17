@@ -32,7 +32,6 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 

@@ -60,6 +60,8 @@ buildPythonPackage rec {
     "test_internal_errors_propagate_to_controller"
     # https://github.com/pytest-dev/pytest-xdist/issues/985
     "test_workqueue_ordered_by_size"
+    # https://github.com/pytest-dev/pytest-xdist/issues/1248
+    "test_workqueue_ordered_by_input"
   ];
 
   setupHook = ./setup-hook.sh;

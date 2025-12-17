@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.4.328.0";
+  version = "1.4.335.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-Fq2Kw8KOlh35hRZy5EnPtWAjazun4vdTk/HyhY76GRM=";
+    hash = "sha256-BmWHmGh7wu2hkOm04PhHxwTs3e8r8O62tq6SDx6b5xM=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isUnix [
     (lib.cmakeBool "SPIRV_CROSS_SHARED" true)
   ];
 

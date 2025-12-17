@@ -66,7 +66,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

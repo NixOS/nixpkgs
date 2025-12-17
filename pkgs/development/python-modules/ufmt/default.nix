@@ -60,7 +60,6 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "ufmt" ];
 

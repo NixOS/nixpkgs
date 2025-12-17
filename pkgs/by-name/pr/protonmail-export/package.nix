@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/proton-mail-export-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

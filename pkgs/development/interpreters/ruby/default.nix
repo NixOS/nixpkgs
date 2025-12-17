@@ -20,7 +20,6 @@
   buildEnv,
   bundler,
   bundix,
-  cargo,
   rustPlatform,
   rustc,
   makeBinaryWrapper,
@@ -100,7 +99,6 @@ let
           # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
           removeReferencesTo,
           jitSupport ? yjitSupport,
-          cargo,
           rustPlatform,
           rustc,
           yjitSupport ? yjitSupported,
@@ -150,7 +148,6 @@ let
           ])
           ++ ops yjitSupport [
             rustPlatform.cargoSetupHook
-            cargo
             rustc
           ]
           ++ op useBaseRuby baseRuby;

@@ -31,6 +31,12 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RecursionError not raised
+    "test_deep_split"
+    "test_deep_subgroup"
+  ];
+
   pythonImportsCheck = [ "exceptiongroup" ];
 
   meta = {

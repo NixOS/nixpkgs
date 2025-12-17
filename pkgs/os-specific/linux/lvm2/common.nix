@@ -143,8 +143,6 @@ stdenv.mkDerivation rec {
       }
     ))
     ./fix-stdio-usage.patch
-    # https://gitlab.com/lvmteam/lvm2/-/merge_requests/33
-    ./fix-manpage-reproducibility.patch
   ];
 
   doCheck = false; # requires root

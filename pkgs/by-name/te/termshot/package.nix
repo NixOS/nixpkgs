@@ -28,7 +28,6 @@ buildGoModule (finalAttrs: {
   checkFlags = [ "-skip=^TestPtexec$" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

@@ -72,7 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   # sudo binary fails because it checks if it is suid 0
   versionCheckProgram = "${placeholder "out"}/bin/su";
-  versionCheckProgramArg = "--version";
 
   postInstallCheck = ''
     [ -e ${placeholder "out"}/share/man/man8/sudo.8.gz ] || \

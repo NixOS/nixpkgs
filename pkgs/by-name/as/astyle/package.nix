@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = !asLibrary;
 
   meta = {

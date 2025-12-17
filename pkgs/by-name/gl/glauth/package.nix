@@ -40,7 +40,6 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Lightweight LDAP server for development, home use, or CI";

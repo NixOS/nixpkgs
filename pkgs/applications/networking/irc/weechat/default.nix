@@ -174,7 +174,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell

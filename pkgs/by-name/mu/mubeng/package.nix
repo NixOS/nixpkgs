@@ -28,7 +28,6 @@ buildGoModule rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Proxy checker and IP rotator";

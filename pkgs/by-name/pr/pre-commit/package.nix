@@ -85,7 +85,6 @@ python3Packages.buildPythonApplication rec {
     # Node.js-related tests that are currently disabled on i686-linux.
     nodejs
   ];
-  versionCheckProgramArg = "--version";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \

@@ -97,6 +97,9 @@ optionals noSysDirs (
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+# c++tools: Don't check --enable-default-pie.
+# --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
+++ optional atLeast14 ./c++tools-dont-check-enable-default-pie.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
@@ -160,13 +163,14 @@ optionals noSysDirs (
 
 ## Darwin
 
-# Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+# Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+++ optional (is14 && stdenv.hostPlatform.isDarwin) ../patches/14/libgcc-darwin-detection.patch
+++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
+
+# Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
 ++ optional (
-  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/14/libgcc-darwin-detection.patch
-++ optional (
-  atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/15/libgcc-darwin-detection.patch
+  atLeast15 && stdenv.hostPlatform.isDarwin
+) ../patches/15/libgcc-darwin-fix-reexport.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch

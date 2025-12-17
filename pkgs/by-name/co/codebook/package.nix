@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Unholy spellchecker for code";

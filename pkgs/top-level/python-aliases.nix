@@ -439,6 +439,7 @@ mapAliases {
   sentry-sdk_2 = throw "'sentry-sdk_2' has been renamed to/replaced by 'sentry-sdk'"; # Converted to throw 2025-10-29
   setuptools_dso = throw "'setuptools_dso' has been renamed to/replaced by 'setuptools-dso'"; # Converted to throw 2025-10-29
   setuptools_scm = throw "'setuptools_scm' has been renamed to/replaced by 'setuptools-scm'"; # Converted to throw 2025-10-29
+  setuptoolsRustBuildHook = lib.warn "setuptoolsRustBuildHook is deprecated. Instead, include 'setuptools-rust' via 'build-system'" setuptools-rust; # added 2025-12-07
   setuptoolsTrial = throw "'setuptoolsTrial' has been renamed to/replaced by 'setuptools-trial'"; # Converted to throw 2025-10-29
   sharkiqpy = throw "'sharkiqpy' has been renamed to/replaced by 'sharkiq'"; # Converted to throw 2025-10-29
   shippai = throw "shippai has been removed because the upstream repository was archived in 2023"; # added 2025-07-09

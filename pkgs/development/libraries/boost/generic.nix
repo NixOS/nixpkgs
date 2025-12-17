@@ -226,7 +226,7 @@ stdenv.mkDerivation {
         hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
       })
     ]
-    ++ lib.optional (version == "1.87.0") [
+    ++ lib.optionals (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
@@ -402,4 +402,6 @@ stdenv.mkDerivation {
     "dev"
   ];
   setOutputFlags = false;
+
+  __structuredAttrs = true;
 }

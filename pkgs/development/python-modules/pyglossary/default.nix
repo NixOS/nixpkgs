@@ -81,7 +81,6 @@ buildPythonPackage rec {
   env = {
     # The default --help creates permission errors that may be confusing when
     # observed in the build log.
-    versionCheckProgramArg = "--version";
   };
 
   pythonImportsCheck = [

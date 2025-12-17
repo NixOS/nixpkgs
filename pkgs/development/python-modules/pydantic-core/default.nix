@@ -1,84 +1,74 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   cargo,
   rustPlatform,
   rustc,
-  libiconv,
   typing-extensions,
   pytestCheckHook,
   hypothesis,
+  inline-snapshot,
+  pytest-benchmark,
+  pytest-run-parallel,
   pytest-timeout,
   pytest-mock,
   dirty-equals,
   pydantic,
+  typing-inspection,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.33.2";
+    version = "2.41.5";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
       tag = "v${version}";
-      hash = "sha256-2jUkd/Y92Iuq/A31cevqjZK4bCOp+AEC/MAnHSt2HLY=";
+      hash = "sha256-oIYHLSep8tWOXEaUybXG8Gv9WBoPGQ1Aj7QyqYksvMw=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      hash = "sha256-MY6Gxoz5Q7nCptR+zvdABh2agfbpqOtfTtor4pmkb9c=";
+      hash = "sha256-Kvc0a34C6oGc9oS/iaPaazoVUWn5ABUgrmPa/YocV+Y=";
     };
 
     nativeBuildInputs = [
       cargo
       rustPlatform.cargoSetupHook
+      rustPlatform.maturinBuildHook
       rustc
     ];
-
-    build-system = [
-      rustPlatform.maturinBuildHook
-      typing-extensions
-    ];
-
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
     dependencies = [ typing-extensions ];
 
     pythonImportsCheck = [ "pydantic_core" ];
 
-    # escape infinite recursion with pydantic via dirty-equals
+    # escape infinite recursion with pydantic via inline-snapshot
     doCheck = false;
-    passthru.tests.pytest = pydantic-core.overrideAttrs { doCheck = true; };
+    passthru.tests.pytest = pydantic-core.overridePythonAttrs { doCheck = true; };
 
     nativeCheckInputs = [
       pytestCheckHook
       hypothesis
+      inline-snapshot
       pytest-timeout
       dirty-equals
+      pytest-benchmark
       pytest-mock
-    ];
-
-    disabledTests = [
-      # RecursionError: maximum recursion depth exceeded while calling a Python object
-      "test_recursive"
-    ];
-
-    disabledTestPaths = [
-      # no point in benchmarking in nixpkgs build farm
-      "tests/benchmarks"
+      pytest-run-parallel
+      typing-inspection
     ];
 
     meta = {
-      changelog = "https://github.com/pydantic/pydantic-core/releases/tag/v${version}";
+      changelog = "https://github.com/pydantic/pydantic-core/releases/tag/${src.tag}";
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
       license = lib.licenses.mit;
-      maintainers = pydantic.meta.maintainers;
+      inherit (pydantic.meta) maintainers;
     };
   };
 in

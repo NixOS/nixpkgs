@@ -310,6 +310,13 @@ effectiveStdenv.mkDerivation {
       url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
       hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
     })
+    # Backport upstream fix for reproducible builds
+    # https://github.com/opencv/opencv/pull/27962
+    (fetchpatch {
+      name = "support-reproducible-builds.patch";
+      url = "https://github.com/opencv/opencv/commit/7224bced8bff9d16d5e869d44f90f95ad8fdfe25.patch";
+      hash = "sha256-DIlTQaIVWpPgJgPktY+0vd3BWJoS38YZn5aFS7DqsNM=";
+    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -467,6 +474,7 @@ effectiveStdenv.mkDerivation {
   OpenBLAS = optionalString withOpenblas openblas_;
 
   cmakeFlags = [
+    (cmakeBool "BUILD_INFO_SKIP_SYSTEM_VERSION" true)
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)

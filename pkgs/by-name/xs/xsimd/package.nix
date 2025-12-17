@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "13.2.0";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     tag = finalAttrs.version;
-    hash = "sha256-L4ttJxP46uNwQAEUMoJ8rsc51Le2GeIGbT1kX7ZzcPA=";
+    hash = "sha256-ijNoHb6xC+OHJbUB4j1PRsoHMzjrnOHVoDRe/nKguDo=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [

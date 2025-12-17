@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "zope-copy";
-  version = "5.0";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.copy";
     tag = version;
-    hash = "sha256-uQUvfZGrMvtClXa8tLKZFYehbcBIRx7WQnumUrdQjIk=";
+    hash = "sha256-hYeLUSwAq5rK4TRngvNQGR4Fdimb2k5dHtFdptMVqPo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools < 74" "setuptools"
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];

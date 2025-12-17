@@ -28,7 +28,6 @@ buildNpmPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/tsc";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script {

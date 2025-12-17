@@ -121,8 +121,6 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     mainProgram = "teams-for-linux";

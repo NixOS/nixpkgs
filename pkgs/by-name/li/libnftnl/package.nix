@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.3.1";
   pname = "libnftnl";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    hash = "sha256-D0vkeou4t3o1DuWMvUtfrmJgrUhqUncGqxXP4d1Vo8Q=";
+    hash = "sha256-YH2ijbpm+97M+O8Tld3tkHfo0Z8plfmk1FqcLwvP+6g=";
   };
 
   configureFlags = lib.optional (

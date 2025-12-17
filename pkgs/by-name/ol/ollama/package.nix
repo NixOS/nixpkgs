@@ -269,7 +269,6 @@ goBuild (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = "HOME";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {

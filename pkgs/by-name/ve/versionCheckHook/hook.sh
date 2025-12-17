@@ -61,7 +61,7 @@ versionCheckHook(){
         exit 2
     fi
     if [[ -z "${versionCheckProgramArg}" ]]; then
-        for cmdArg in "--help" "--version"; do
+        for cmdArg in "--version" "--help"; do
             echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckKeepEnvironment")"
             if [[ "$echoPrefix" == "Successfully managed to" ]]; then
                 break

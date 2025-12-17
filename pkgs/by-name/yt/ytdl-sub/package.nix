@@ -46,7 +46,6 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     python3Packages.pytestCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   env = {
     YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";

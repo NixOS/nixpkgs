@@ -62,8 +62,6 @@ python3Packages.buildPythonApplication rec {
     "test_valid_chroots"
   ];
 
-  versionCheckProgramArg = "--version";
-
   makeWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [

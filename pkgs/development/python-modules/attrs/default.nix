@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "25.3.0";
+  version = "25.4.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ddfO/H+1dnR7LIG0RC1NShzgkAlzUnwBHRAw/Tv0rxs=";
+    hash = "sha256-FtWWm4fwhZ7zOkizXVWsG+bkKuSdXoU7WX23DDXFfhE=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   postInstall = ''
     # Install tests as the tests output.
     mkdir $testout
-    cp -R conftest.py tests $testout
+    cp -R tests $testout
   '';
 
   pythonImportsCheck = [ "attr" ];

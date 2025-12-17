@@ -107,12 +107,9 @@ lib.warnIf (withDocs != null)
       }"
     ]
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
-      "--without-libintl-prefix"
-      "--without-libiconv-prefix"
-      "--with-installed-readline"
       "bash_cv_dev_stdin=present"
       "bash_cv_dev_fd=standard"
-      "bash_cv_termcap_lib=libncurses"
+      "gt_cv_func_printf_posix=yes"
     ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
       "--disable-nls"
@@ -136,15 +133,10 @@ lib.warnIf (withDocs != null)
 
     enableParallelBuilding = true;
 
-    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
-      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-      "SHOBJ_LIBS=-lbash"
-    ];
-
     doCheck = false; # Can't be enabled by default due to dependency cycle, use passthru.tests.withChecks instead
 
     postInstall = ''
-      ln -s bash "$out/bin/sh"
+      ln -s bash${stdenv.hostPlatform.extensions.executable} "$out/bin/sh"
       rm -f $out/lib/bash/Makefile.inc
     '';
 

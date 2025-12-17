@@ -119,8 +119,6 @@ python3Packages.buildPythonApplication rec {
       addBinToPathHook
     ];
 
-  versionCheckProgramArg = "--version";
-
   disabledTests =
     # On darwin, kaleido fails to starts
     lib.optionals (stdenv.hostPlatform.isDarwin) [

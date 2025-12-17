@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "eval-type-backport";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "eval_type_backport";
     tag = "v${version}";
-    hash = "sha256-r+JiPBcU/6li9R/CQP0CKoWJiMgky03GKrMIsmaSJEk=";
+    hash = "sha256-K+FrgRyxCbrKHcrUaHEJWlLp2i0xes3HwXPN9ucioZY=";
   };
 
   nativeBuildInputs = [

@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "TUI log analysis tool";

@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 
   nativeBuildInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   checkFlags = [

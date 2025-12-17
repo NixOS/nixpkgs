@@ -130,7 +130,6 @@ buildDotnetModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/eddie-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

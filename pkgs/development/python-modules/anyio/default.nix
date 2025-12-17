@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.11.0";
+  version = "4.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-TOXg9J/Z2S5/X7OBgU+J0HZNB3BDluaWTqDiqp3O4ek=";
+    hash = "sha256-zFVvAK06HG40numRihLHBMKCI3d1wQvmEKk+EaBFVVU=";
   };
 
   build-system = [ setuptools-scm ];
@@ -77,6 +77,9 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestMarks = [

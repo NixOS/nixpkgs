@@ -11,15 +11,20 @@
 
 buildPythonPackage rec {
   pname = "zope-schema";
-  version = "7.0.1";
+  version = "8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.schema";
     tag = version;
-    hash = "sha256-aUjlSgMfoKQdE0ta8jxNjh+L7OKkfOVvUWnvhx+QRsI=";
+    hash = "sha256-qZ7OWpDTBV/wT3FZBUhe6D4olCTBaYkilj+JSwjHKOU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
 
   build-system = [ setuptools ];
 
