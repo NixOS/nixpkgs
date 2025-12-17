@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://setserial.sourceforge.net";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+    mainProgram = "setserial";
     maintainers = [ lib.maintainers.mmlb ];
   };
 }
