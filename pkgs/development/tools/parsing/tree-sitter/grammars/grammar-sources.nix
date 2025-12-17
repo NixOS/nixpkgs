@@ -775,9 +775,9 @@
   };
 
   yaml = {
-    version = "0.7.1";
+    version = "0.7.2";
     url = "github:tree-sitter-grammars/tree-sitter-yaml";
-    hash = "sha256-Z2L/aQWIyZ8cSqbfjm/i10fJP++yZ2tZgho0U3asA0g=";
+    hash = "sha256-BX6TOfAZLW+0h2TNsgsLC9K2lfirraCWlBN2vCKiXQ4=";
   };
 
   yang = {
