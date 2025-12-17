@@ -474,9 +474,9 @@
   };
 
   pgn = {
-    version = "1.2.12";
+    version = "1.4.2";
     url = "github:rolandwalker/tree-sitter-pgn";
-    hash = "sha256-VxRXEidQG0Q/BR4ob3Xr/UCuu7NgmaOGAqJdgHzyX1U=";
+    hash = "sha256-pGUSsmm+YUvfvt5c4tPs6tmEcFh3DZoDtVf+EpFhOo0=";
   };
 
   php = {
