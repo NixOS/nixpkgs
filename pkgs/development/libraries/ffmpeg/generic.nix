@@ -225,10 +225,10 @@
     || buildSwscale,
   # Documentation options
   withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc,
-  withHtmlDoc ? withHeadlessDeps, # HTML documentation pages
-  withManPages ? withHeadlessDeps, # Man documentation pages
-  withPodDoc ? withHeadlessDeps, # POD documentation pages
-  withTxtDoc ? withHeadlessDeps, # Text documentation pages
+  withHtmlDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # HTML documentation pages
+  withManPages ? withHeadlessDeps && lib.versionAtLeast version "6", # Man documentation pages
+  withPodDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # POD documentation pages
+  withTxtDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # Text documentation pages
   # Whether a "doc" output will be produced. Note that withManPages does not produce
   # a "doc" output because its files go to "man".
   withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc),
