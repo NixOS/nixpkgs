@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hall-style reverb based on freeverb3 algorithms";
     maintainers = [ lib.maintainers.magnetophon ];
     license = lib.licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })
