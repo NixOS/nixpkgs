@@ -528,9 +528,9 @@
   };
 
   query = {
-    version = "0.5.0";
+    version = "0.8.0";
     url = "github:nvim-treesitter/tree-sitter-query";
-    hash = "sha256-2JxX4KntUP/DvoCik0NYzfrU/qzs43uDwy21JkU8Hjc=";
+    hash = "sha256-0y8TbbZKMstjIVFEtq+9Fz44ueRup0ngNcJPJEQB/NQ=";
   };
 
   r = {
