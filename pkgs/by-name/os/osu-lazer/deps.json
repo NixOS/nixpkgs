@@ -596,13 +596,13 @@
   },
   {
     "pname": "ppy.LocalisationAnalyser",
-    "version": "2024.802.0",
-    "hash": "sha256-vyRWbdPUp5n8hJPJReU9LUy2o/bwwLT1po9f2M16tMA="
+    "version": "2025.1208.0",
+    "hash": "sha256-klogAaNxpEVJKd1NcySgTUwv5WwrvaUXBRypj5wKX5Y="
   },
   {
     "pname": "ppy.LocalisationAnalyser.Tools",
-    "version": "2024.802.0",
-    "hash": "sha256-bniBSY8rS005OHO/ixn2NFM0/KIMiawHyMSXhlAEqwc="
+    "version": "2025.1208.0",
+    "hash": "sha256-diVAckS1zNyVE1UGkbiu9jH/25j/c+Ad5XC3EjdLDsg="
   },
   {
     "pname": "ppy.ManagedBass",
@@ -641,8 +641,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2025.1125.0",
-    "hash": "sha256-jJHpti142HgEBFhTDl5iThM05mQypVEF0J7JIVskVQ0="
+    "version": "2025.1215.0",
+    "hash": "sha256-u2xGoDYxVxqoRXLqcyN4r97HA1f9vqoVFJMmqMOd5vk="
   },
   {
     "pname": "ppy.osuTK.NS20",
