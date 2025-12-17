@@ -1165,11 +1165,11 @@
     "vendorHash": "sha256-WDyULPLN+uZ5OaE/j3FgurHbXKRU93S3nbXk8mW5dc4="
   },
   "sap_btp": {
-    "hash": "sha256-TLMEHDmjdS9zqU+WdUc9YUt7IwYmEBr3pizVDxAH1YA=",
+    "hash": "sha256-jN/tvfzVnzJTLpAriT68F2HwAS5lxL+iMU1yGR6P8ww=",
     "homepage": "https://registry.terraform.io/providers/SAP/btp",
     "owner": "SAP",
     "repo": "terraform-provider-btp",
-    "rev": "v1.18.0",
+    "rev": "v1.18.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-f3b4NULINH8XworCn46fiz4GmBM31ROdAJy1j4GKkx4="
   },
