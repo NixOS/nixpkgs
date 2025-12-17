@@ -5105,6 +5105,10 @@ self: super: with self; {
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
+  extra-streamlit-components =
+    callPackage ../development/python-modules/extra-streamlit-components
+      { };
+
   extract-msg = callPackage ../development/python-modules/extract-msg { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
