@@ -36,9 +36,9 @@
   };
 
   c = {
-    version = "0.23.5";
+    version = "0.24.1";
     url = "github:tree-sitter/tree-sitter-c";
-    hash = "sha256-6sebiNg9P/B/5HrbGO7bl3GHVMfVUepetJuszEeTh+8=";
+    hash = "sha256-gmzbdwvrKSo6C1fqTJFGxy8x0+T+vUTswm7F5sojzKc=";
   };
 
   clojure = {
