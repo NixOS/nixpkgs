@@ -77,6 +77,7 @@ mkDerivation rec {
     "-DUSE_JS=ON"
     "-DWITH_LUASCRIPTS=ON"
     "-DWITH_SOUNDS=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   postInstall = ''
