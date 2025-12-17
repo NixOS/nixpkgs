@@ -406,8 +406,6 @@ let
 
       passthru = {
         inherit disabled;
-      }
-      // {
         updateScript =
           let
             filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
