@@ -13,23 +13,26 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
           extraFlags = [
             "--storage.tsdb.min-block-duration=15s"
           ];
-          scrapeConfigs = [
-            {
-              job_name = "prometheus";
-              static_configs = [
-                {
-                  targets = [
-                    "prometheus1:${toString config.services.prometheus.port}"
-                    "prometheus2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-          ];
+
+          settings = {
+            global.scrape_interval = "2s";
+            scrape_configs = [
+              {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [
+                      "prometheus1:${toString config.services.prometheus.port}"
+                      "prometheus2:${toString config.services.prometheus.port}"
+                    ];
+                  }
+                ];
+              }
+            ];
+          };
         };
       };
 
@@ -42,23 +45,26 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
           extraFlags = [
             "--storage.tsdb.min-block-duration=15s"
           ];
-          scrapeConfigs = [
-            {
-              job_name = "prometheus";
-              static_configs = [
-                {
-                  targets = [
-                    "prometheus1:${toString config.services.prometheus.port}"
-                    "prometheus2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-          ];
+
+          settings = {
+            global.scrape_interval = "2s";
+            scrape_configs = [
+              {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [
+                      "prometheus1:${toString config.services.prometheus.port}"
+                      "prometheus2:${toString config.services.prometheus.port}"
+                    ];
+                  }
+                ];
+              }
+            ];
+          };
         };
       };
   };
