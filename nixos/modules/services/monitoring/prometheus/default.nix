@@ -95,7 +95,6 @@ let
         ]
     )
     ++ lib.optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ lib.optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
     ++ lib.optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   #
@@ -152,6 +151,18 @@ in
     (mkRenamedOptionModule
       [ "services" "prometheus" "alertmanagers" ]
       [ "services" "prometheus" "settings" "alerting" "alertmanagers" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "prometheus" "retentionTime" ]
+      [
+        "services"
+        "prometheus"
+        "settings"
+        "storage"
+        "tsdb"
+        "retention"
+        "time"
+      ]
     )
   ];
 
@@ -369,15 +380,6 @@ in
         and it will report errors, despite a correct configuration.
         To resolve this, you may set this option to `"syntax-only"`
         in order to only syntax check the Prometheus configuration.
-      '';
-    };
-
-    retentionTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "15d";
-      description = ''
-        How long to retain samples in storage.
       '';
     };
   };
