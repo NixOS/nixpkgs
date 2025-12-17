@@ -34,8 +34,28 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
+  nativeCheckInputs = [
+    pytest
+  ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export PYTHONPATH="$out/${python.sitePackages}"
+    pytest ${src}/tests/main.py
+
+    # mirror upstream CLI test
+    export PATH="$out/bin:$PATH"
+    complexipy complexipy --failed
+
+    runHook postInstallCheck
+  '';
+
+  pythonImportsCheck = [ "complexipy" ];
+
   meta = {
-    description = "Blazingly fast cognitive complexity analysis for Python, written in Rust.";
+    description = "Blazingly fast cognitive complexity analysis for Python, written in Rust";
     homepage = "https://github.com/rohaquinlop/complexipy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ traphi ];
