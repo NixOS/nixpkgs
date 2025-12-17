@@ -1,8 +1,8 @@
 {
   bash = {
-    version = "0.23.3";
+    version = "0.25.1";
     url = "github:tree-sitter/tree-sitter-bash";
-    hash = "sha256-7N1PLVMJxwN5FzHW9NbXZTzGhvziwLCC8tDO3qdjtOo=";
+    hash = "sha256-ONQ1Ljk3aRWjElSWD2crCFZraZoRj3b3/VELz1789GE=";
   };
 
   beancount = {
