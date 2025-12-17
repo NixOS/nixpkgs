@@ -4843,13 +4843,6 @@
     github = "Ciflire";
     githubId = 39668077;
   };
-  cig0 = {
-    name = "Martín Cigorraga";
-    email = "cig0.github@gmail.com";
-    github = "cig0";
-    githubId = 394089;
-    keys = [ { fingerprint = "1828 B459 DB9A 7EE2 03F4 7E6E AFBE ACC5 5D93 84A0"; } ];
-  };
   cigrainger = {
     name = "Christopher Grainger";
     email = "chris@amplified.ai";
