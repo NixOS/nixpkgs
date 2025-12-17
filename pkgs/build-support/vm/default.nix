@@ -1,9 +1,38 @@
 {
   lib,
+  stdenv,
+  buildPackages,
+  bash,
+  bashInteractive,
+  busybox,
+  coreutils,
+  cpio,
+  dpkg,
+  e2fsprogs,
+  fetchurl,
+  glibc,
+  kmod,
+  linux,
+  makeInitrd,
+  makeModulesClosure,
+  mtdutils,
+  rpm,
+  runCommand,
+  util-linux,
+  virtiofsd,
+  writeScript,
+  writeText,
+  xz,
+  zstd,
   pkgs,
+
+  # ----------------------------
+  # The following  arguments form the "interface" of `pkgs.vmTools`.
+  # Note that `img` is a real package, but is set to this default in `all-packages.nix`.
+  # ----------------------------
   customQemu ? null,
-  kernel ? pkgs.linux,
-  img ? pkgs.stdenv.hostPlatform.linux-kernel.target,
+  kernel ? linux,
+  img ? stdenv.hostPlatform.linux-kernel.target,
   storeDir ? builtins.storeDir,
   rootModules ? [
     "virtio_pci"
@@ -18,30 +47,11 @@
 }:
 
 let
-  inherit (pkgs)
-    bash
-    bashInteractive
-    busybox
-    cpio
-    coreutils
-    e2fsprogs
-    fetchurl
-    kmod
-    rpm
-    stdenv
-    util-linux
-    buildPackages
-    writeScript
-    writeText
-    runCommand
-    ;
-in
-rec {
   qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
   qemu = buildPackages.qemu_kvm;
 
-  modulesClosure = pkgs.makeModulesClosure {
+  modulesClosure = makeModulesClosure {
     kernel = lib.getOutput "modules" kernel;
     inherit rootModules;
     firmware = kernel;
@@ -64,18 +74,18 @@ rec {
 
         # Copy what we need from Glibc.
         cp -p \
-          ${pkgs.stdenv.cc.libc}/lib/ld-*.so.? \
-          ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
-          ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
-          ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
-          ${pkgs.stdenv.cc.libc}/lib/libpthread.so.* \
-          ${pkgs.zstd.out}/lib/libzstd.so.* \
-          ${pkgs.xz.out}/lib/liblzma.so.* \
+          ${stdenv.cc.libc}/lib/ld-*.so.? \
+          ${stdenv.cc.libc}/lib/libc.so.* \
+          ${stdenv.cc.libc}/lib/libm.so.* \
+          ${stdenv.cc.libc}/lib/libresolv.so.* \
+          ${stdenv.cc.libc}/lib/libpthread.so.* \
+          ${zstd.out}/lib/libzstd.so.* \
+          ${xz.out}/lib/liblzma.so.* \
           $out/lib
 
         # Copy BusyBox.
-        cp -pd ${pkgs.busybox}/bin/* $out/bin
-        cp -pd ${pkgs.kmod}/bin/* $out/bin
+        cp -pd ${busybox}/bin/* $out/bin
+        cp -pd ${kmod}/bin/* $out/bin
 
         # Run patchelf to make the programs refer to the copied libraries.
         for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -179,7 +189,7 @@ rec {
     exec switch_root /fs $command
   '';
 
-  initrd = pkgs.makeInitrd {
+  initrd = makeInitrd {
     contents = [
       {
         object = stage1Init;
@@ -294,8 +304,8 @@ rec {
       ''${diskImage:+diskImage=$diskImage}
       # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
       # Since we are running in a sandbox already, the difference between seccomp and none is minimal
-      ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
-      ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
+      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
+      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
 
       # Wait until virtiofsd has created these sockets to avoid race condition.
       until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 1; done
@@ -437,8 +447,8 @@ rec {
       stdenv.mkDerivation {
         name = "extract-file-mtd";
         buildInputs = [
-          pkgs.util-linux
-          pkgs.mtdutils
+          util-linux
+          mtdutils
         ];
         buildCommand = ''
           ln -s ${kernel}/lib /lib
@@ -729,9 +739,9 @@ rec {
 
             PATH=$PATH:${
               lib.makeBinPath [
-                pkgs.dpkg
-                pkgs.glibc
-                pkgs.xz
+                dpkg
+                glibc
+                xz
               ]
             }
 
@@ -1100,24 +1110,24 @@ rec {
     };
 
     debian13i386 = {
-      name = "debian-13.0-trixie-i386";
-      fullName = "Debian 13.0 Trixie (i386)";
+      name = "debian-13.2-trixie-i386";
+      fullName = "Debian 13.2 Trixie (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-i386/Packages.xz";
-        hash = "sha256-fXjhaG1Y+kn6iMEtqVZLwYN7lZ0cEQKVfMS3hSHJipY=";
+        url = "https://snapshot.debian.org/archive/debian/20251203T144617Z/dists/trixie/main/binary-i386/Packages.xz";
+        hash = "sha256-9zozvFZoWiv3wNe9rb+kPwSOgc5G5f4zmNpdoet5A78=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251203T144617Z";
       packages = commonDebianPackages;
     };
 
     debian13x86_64 = {
-      name = "debian-13.0-trixie-amd64";
-      fullName = "Debian 13.0 Trixie (amd64)";
+      name = "debian-13.2-trixie-amd64";
+      fullName = "Debian 13.2 Trixie (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20250819T202603Z/dists/trixie/main/binary-amd64/Packages.xz";
-        hash = "sha256-15cDoCcTv3m5fiZqP1hqWWnSG1BVUZSrm5YszTSKQs4=";
+        url = "https://snapshot.debian.org/archive/debian/20251203T144617Z/dists/trixie/main/binary-amd64/Packages.xz";
+        hash = "sha256-g7f+tKljUXAC4gxJfzSC8+j0GbiwRZjonv25tYuvxtU=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20250819T202603Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251203T144617Z";
       packages = commonDebianPackages;
     };
   };
@@ -1284,5 +1294,43 @@ rec {
     `debDistros' sets.
   */
   diskImages = lib.mapAttrs (name: f: f { }) diskImageFuns;
-
+in
+{
+  inherit
+    buildRPM
+    commonCentOSPackages
+    commonDebPackages
+    commonDebianPackages
+    commonFedoraPackages
+    commonOpenSUSEPackages
+    commonRHELPackages
+    createEmptyImage
+    debClosureGenerator
+    debDistros
+    defaultCreateRootFS
+    diskImageExtraFuns
+    diskImageFuns
+    diskImages
+    extractFs
+    extractMTDfs
+    fillDiskWithDebs
+    fillDiskWithRPMs
+    hd
+    initrd
+    initrdUtils
+    makeImageFromDebDist
+    makeImageFromRPMDist
+    makeImageTestScript
+    modulesClosure
+    qemu
+    qemu-common
+    qemuCommandLinux
+    rpmClosureGenerator
+    rpmDistros
+    runInLinuxImage
+    runInLinuxVM
+    stage1Init
+    stage2Init
+    vmRunCommand
+    ;
 }
