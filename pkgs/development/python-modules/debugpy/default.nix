@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.18";
+  version = "1.8.19";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
-    hash = "sha256-8e8t3CegWjg48nkUkrPpAPtQCO09zWe1+iRfs84kuP8=";
+    hash = "sha256-O9RHqyV7xMMnouCp4t18CNH/z2jBxZBUkybAw1c2gY0=";
   };
 
   patches = [
@@ -79,20 +79,21 @@ buildPythonPackage rec {
   # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
-        set -x
-        cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
-          {
-            "x86_64-linux" = "-shared -o attach_linux_amd64.so";
-            "i686-linux" = "-shared -o attach_linux_x86.so";
-            "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
-          }
-          .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      set -x
+      cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
+      $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
+        {
+          "x86_64-linux" = "-shared -o attach_linux_amd64.so";
+          "i686-linux" = "-shared -o attach_linux_x86.so";
+          "aarch64-linux" = "-shared -o attach_linux_arm64.so";
+          "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+          "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+          "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
         }
-      )'';
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+      }
+    )
+  '';
 
   build-system = [ setuptools ];
 
