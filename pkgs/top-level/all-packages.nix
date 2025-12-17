@@ -12558,6 +12558,16 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  bitcoin-knots-bip110 = libsForQt5.callPackage ../applications/blockchains/bitcoin-knots-bip110 {
+    withGui = true;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  bitcoind-knots-bip110 = callPackage ../applications/blockchains/bitcoin-knots-bip110 {
+    withGui = false;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
   elements = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
