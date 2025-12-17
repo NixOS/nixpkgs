@@ -1411,12 +1411,6 @@ let
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
-        GOOGLE_CBMEM = whenAtLeast "6.2" module;
-        GOOGLE_COREBOOT_TABLE = module;
-        GOOGLE_MEMCONSOLE = module;
-        GOOGLE_MEMCONSOLE_COREBOOT = module;
-        GOOGLE_FRAMEBUFFER_COREBOOT = module;
-        GOOGLE_VPD = module;
       }
       //
         lib.optionalAttrs
