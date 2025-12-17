@@ -2570,6 +2570,7 @@ with self;
       url = "mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-7.4.tar.gz";
       hash = "sha256-PG2qZx/s+8Nfkqk4W1Y9ZfUN/Gvci0gF+e9GwNA1qSY=";
     };
+    env.NIX_CFLAGS_COMPILE = "-std=gnu17";
     propagatedBuildInputs = [ CarpClan ];
     meta = {
       description = "Efficient bit vector, set of integers and 'big int' math library";
