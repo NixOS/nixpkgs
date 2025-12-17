@@ -8,7 +8,6 @@
   pkg-config,
   perl,
   texinfo,
-  texinfo6,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
@@ -826,7 +825,7 @@ stdenv.mkDerivation (
     ]
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
-    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
+    ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
     ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
