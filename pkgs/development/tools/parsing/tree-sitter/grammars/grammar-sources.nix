@@ -289,9 +289,9 @@
   };
 
   hyprlang = {
-    version = "3.0.0";
+    version = "3.1.0";
     url = "github:tree-sitter-grammars/tree-sitter-hyprlang";
-    hash = "sha256-1HGA4VUWM/iR1XBNmrsdj1PRGo7qPYMw5vmcVQO1BH0=";
+    hash = "sha256-pNAN5TF01Bnqfcsoa0IllchCCBph9/SowzIoMyQcN5w=";
   };
 
   janet-simple = {
