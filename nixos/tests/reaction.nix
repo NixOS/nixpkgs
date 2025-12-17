@@ -10,18 +10,22 @@
     services.reaction = {
       enable = true;
       stopForFirewall = false;
-      settingsFiles = [
-        "${pkgs.reaction}/share/examples/example.jsonnet"
-        # "${pkgs.reaction}/share/examples/example.yml" # can't specify both because conflicts
-      ];
+      # example.jsonnet/example.yml can be copied and modified from ${pkgs.reaction}/share/examples
+      settingsFiles = [ "${pkgs.reaction}/share/examples/example.jsonnet" ];
       runAsRoot = false;
     };
     services.openssh.enable = true;
+    # If not running as root you need to give the reaction user and service the proper permissions
 
-    # required to access journal of sshd.service as runAsRoot = false
+    # allows reading journal logs of processess
     users.users.reaction.extraGroups = [ "systemd-journal" ];
-    # required for allowing reaction to modifiy firewall rules
-    systemd.services.reaction.serviceConfig.AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+
+    # allows modifying ip firewall rules
+    systemd.services.reaction.unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+    systemd.services.reaction.serviceConfig = {
+      CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+      AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+    };
 
     users.users.nixos.isNormalUser = true; # neeeded to establish a ssh connection, by default root login is succeeding without any password
   };
@@ -42,7 +46,6 @@
       server.wait_for_unit("multi-user.target")
       server.wait_for_unit("reaction")
       server.wait_for_unit("sshd")
-      client.wait_for_unit("multi-user.target")
 
       client_addr = "${(lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address}"
       server_addr = "${(lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address}"
