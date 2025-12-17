@@ -5,7 +5,6 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
-  wrapGAppsHook4,
   iconConvTools,
   copyDesktopItems,
   makeDesktopItem,
@@ -16,25 +15,18 @@
   libXcursor,
   libXext,
   libXrandr,
-  fontconfig,
-  glew,
-  glfw,
-  glibc,
   libGL,
   freetype,
-  openal,
-  fluidsynth,
-  gtk3,
-  pango,
-  atk,
-  cairo,
-  zlib,
   glib,
-  gdk-pixbuf,
   alsa-lib,
   libjack2,
   pipewire,
   libpulseaudio,
+  at-spi2-atk,
+  at-spi2-core,
+  libxkbcommon,
+  wayland,
+  fontconfig,
   alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -46,7 +38,7 @@
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.35.0";
+  version = "0.36.1";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -59,8 +51,8 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "space-wizards";
     repo = "SS14.Launcher";
-    tag = "v${version}";
-    hash = "sha256-8YDlX5GwL5S/gdjIWOa48sEGA/sMEYZvy2FTWSPO+Ug=";
+    rev = "v${version}";
+    hash = "sha256-6wH2CkTuwy+a3EGpKrdLDsIaQ7oZc2I1OLdmAREMazw=";
     fetchSubmodules = true;
   };
 
@@ -78,14 +70,8 @@ buildDotnetModule rec {
     inherit version;
   };
 
-  # SDK 8.0 required for Robust.LoaderApi
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_9_0
-      sdk_8_0
-    ];
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -94,48 +80,14 @@ buildDotnetModule rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook4
     iconConvTools
     copyDesktopItems
   ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
-    fontconfig
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-
-    glfw
-    glibc
-    libGL
-    openal
-    freetype
-    fluidsynth
-  ];
-
   runtimeDeps = [
-    # Required by the game.
-    glfw
-    glibc
     libGL
-    openal
     freetype
-    fluidsynth
-
-    # Needed for file dialogs.
-    gtk3
-    pango
-    cairo
-    atk
-    zlib
     glib
-    gdk-pixbuf
-
-    # Avalonia UI dependencies.
     libX11
     libICE
     libSM
@@ -143,10 +95,11 @@ buildDotnetModule rec {
     libXcursor
     libXext
     libXrandr
-    fontconfig
-    glew
-
-    # TODO: Figure out dependencies for CEF support.
+    at-spi2-atk
+    at-spi2-core
+    libxkbcommon
+    wayland
+    fontconfig.lib
   ]
   ++ lib.optional alsaSupport alsa-lib
   ++ lib.optional jackSupport libjack2
@@ -177,12 +130,6 @@ buildDotnetModule rec {
     cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico space-station-14-launcher $out
-  '';
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = {
