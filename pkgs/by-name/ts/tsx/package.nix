@@ -8,6 +8,9 @@
   nodejs_22,
   versionCheckHook,
 }:
+let
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation rec {
   pname = "tsx";
   version = "4.19.3";
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
       version
       src
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm';
     fetcherVersion = 1;
     hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
   };
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     nodejs_22
     pnpmConfigHook
-    pnpm_9
+    pnpm'
   ];
 
   buildInputs = [
