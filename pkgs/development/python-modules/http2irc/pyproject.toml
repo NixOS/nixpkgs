@@ -1,0 +1,23 @@
+[project]
+name = "http2irc"
+version = "0"
+dependencies = [
+    "aiohttp",
+    "ircstates",
+    "toml",
+]
+requires-python = ">=3.7"
+authors = [
+    {name = "JustAnotherArchivist"}
+]
+
+license = "AGPL-3.0-or-later"
+classifiers = [
+    "Programming Language :: Python",
+]
+
+[project.scripts]
+http2irc = 'http2irc.async_wrapper:async_main'
+
+[project.urls]
+Homepage = "https://gitea.arpa.li/ArchiveTeam/http2irc"
