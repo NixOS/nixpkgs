@@ -65,11 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    nativeBuildInputs = [ gitMinimal ];
     pnpm = pnpm';
     fetcherVersion = 2;
-    prePnpmInstall = ''
-      export PATH=$PATH:${gitMinimal}/bin
-    '';
     hash = "sha256-wPwsFY7wvbE1LW5PMwMZKejELtqmdsYO2RVrEuOzdcg=";
   };
 
