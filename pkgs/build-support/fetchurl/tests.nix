@@ -80,6 +80,14 @@ in
     '';
   };
 
+  flag-appending-netrcPhase-curlOptsList = testFlagAppending {
+    name = "test-fetchurl-flag-appending-netrcPhase-curlOptsList";
+    netrcPhase = ''
+      touch netrc
+      curlOptsList+=("--foo" "--bar")
+    '';
+  };
+
   # Tests that we can send custom headers with spaces in them
   header =
     let
