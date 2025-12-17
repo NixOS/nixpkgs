@@ -6,6 +6,9 @@ npmConfigHook() {
     # Use npm patches in the nodejs package
     export NIX_NODEJS_BUILDNPMPACKAGE=1
     export prefetchNpmDeps="@prefetchNpmDeps@"
+    # Make npmDeps available as an environment variable to @prefetchNpmDeps@
+    # when __structuredAttrs is enabled
+    export npmDeps
 
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
