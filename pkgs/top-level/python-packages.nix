@@ -18182,6 +18182,8 @@ self: super: with self; {
 
   streamlit-folium = callPackage ../development/python-modules/streamlit-folium { };
 
+  streamlit-kpi-card = callPackage ../development/python-modules/streamlit-kpi-card { };
+
   streamlit-notify = callPackage ../development/python-modules/streamlit-notify { };
 
   streamz = callPackage ../development/python-modules/streamz { };
