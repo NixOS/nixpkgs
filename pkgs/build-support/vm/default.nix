@@ -1112,10 +1112,10 @@ let
       name = "debian-13.2-trixie-i386";
       fullName = "Debian 13.2 Trixie (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20251203T144617Z/dists/trixie/main/binary-i386/Packages.xz";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie/main/binary-i386/Packages.xz";
         hash = "sha256-9zozvFZoWiv3wNe9rb+kPwSOgc5G5f4zmNpdoet5A78=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251203T144617Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
 
@@ -1123,10 +1123,10 @@ let
       name = "debian-13.2-trixie-amd64";
       fullName = "Debian 13.2 Trixie (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20251203T144617Z/dists/trixie/main/binary-amd64/Packages.xz";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie/main/binary-amd64/Packages.xz";
         hash = "sha256-g7f+tKljUXAC4gxJfzSC8+j0GbiwRZjonv25tYuvxtU=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251203T144617Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
   };
