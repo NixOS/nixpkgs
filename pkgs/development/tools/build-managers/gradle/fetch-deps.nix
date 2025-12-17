@@ -176,14 +176,14 @@ let
                   uniqueVersions' = map (x: x.version) uniqueVersionFiles;
                   releaseVersions = map (x: x.version) (builtins.filter (x: !x.isSnapshot) uniqueVersionFiles);
                   latestVer = v.latest or v.release or (lib.last uniqueVersions');
-                  releaseVer = v.release or (lib.last releaseVersions);
+                  releaseVer = v.release or (if releaseVersions != [ ] then lib.last releaseVersions else null);
 
                   # The very latest version isn't necessarily used by Gradle, so it may not be present in the MITM data.
                   # In order to generate better metadata xml, if the latest version is known but wasn't fetched by Gradle,
                   # add it anyway.
                   uniqueVersions =
                     uniqueVersions'
-                    ++ lib.optional (!builtins.elem releaseVer uniqueVersions') releaseVer
+                    ++ lib.optional (releaseVer != null && !builtins.elem releaseVer uniqueVersions') releaseVer
                     ++ lib.optional (!builtins.elem latestVer uniqueVersions' && releaseVer != latestVer) latestVer;
 
                   lastUpdated =
@@ -235,7 +235,7 @@ let
                   ''
                 else
                   assert !containsSpecialXmlChars latestVer;
-                  assert !containsSpecialXmlChars releaseVer;
+                  assert releaseVer == null || !containsSpecialXmlChars releaseVer;
                   ''
                     <?xml version="1.0" encoding="UTF-8"?>
                     <metadata modelVersion="1.1.0">
@@ -243,7 +243,11 @@ let
                       <artifactId>${artifactId}</artifactId>
                       <versioning>
                         <latest>${latestVer}</latest>
-                        <release>${releaseVer}</release>
+                  ''
+                  + lib.optionalString (releaseVer != null) ''
+                    <release>${releaseVer}</release>
+                  ''
+                  + ''
                         <versions>
                     ${builtins.concatStringsSep "\n" (map (x: "      <version>${x}</version>") uniqueVersions)}
                         </versions>
