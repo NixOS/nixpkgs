@@ -1,18 +1,18 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGoModule,
   buildNpmPackage,
 }:
 
 let
-  version = "0.7.10-beta";
+  version = "1.0.3-stable";
 
   src = fetchFromGitHub {
     owner = "gtsteffaniak";
     repo = "filebrowser";
     tag = "v${version}";
-    hash = "sha256-gxEXSsRc2gGgmpEol9Q9FOlLUJtVL0PdkrLXXhR+8mk=";
+    hash = "sha256-nNfJswCMsd47f7x6vCnjhf/HE8gX5nBy3VK23KH/nMY=";
   };
 
   frontend = buildNpmPackage {
@@ -24,12 +24,12 @@ let
     '';
 
     sourceRoot = "${src.name}/frontend";
-    npmDepsHash = "sha256-ZGF5+bfnSETajicUSbF6tDEfubEUBGRdVFuJRpPFCR0=";
+    npmDepsHash = "sha256-u7CzKG4+tBeq3JvTEPIPySs8/u9tfF308Zv43g+7klA=";
 
     buildPhase = ''
       runHook preBuild
 
-      npm run build-docker
+      npm run build:docker
 
       runHook postBuild
     '';
@@ -45,13 +45,13 @@ let
   };
 
 in
-buildGo124Module {
+buildGoModule {
   pname = "filebrowser-quantum";
   inherit version src;
 
   sourceRoot = "${src.name}/backend";
 
-  vendorHash = "sha256-XCXb52c097hkWM+ey20DjthHN4eHNkmQ9E8ZpUN5JZ8=";
+  vendorHash = "sha256-urJZMOkZzoN//kecpJ47ldZk+H2qvMGTr/Pw90bMpDc=";
 
   preBuild = ''
     mkdir -p http/embed
@@ -74,7 +74,10 @@ buildGo124Module {
     homepage = "https://github.com/gtsteffaniak/filebrowser";
     changelog = "https://github.com/gtsteffaniak/filebrowser/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jocimsus ];
+    maintainers = with lib.maintainers; [
+      jocimsus
+      denperidge
+    ];
     mainProgram = "filebrowser-quantum";
   };
 }
