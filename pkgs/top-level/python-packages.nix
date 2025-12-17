@@ -18180,6 +18180,8 @@ self: super: with self; {
 
   streamlit-folium = callPackage ../development/python-modules/streamlit-folium { };
 
+  streamlit-notify = callPackage ../development/python-modules/streamlit-notify { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strenum = callPackage ../development/python-modules/strenum { };
