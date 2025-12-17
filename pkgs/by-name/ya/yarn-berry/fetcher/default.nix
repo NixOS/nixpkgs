@@ -50,9 +50,9 @@ let
             withZlibCompat = true;
           };
         }).overrideAttrs
-          (oA: {
-            patches = (oA.patches or [ ]) ++ [
-              (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
+          (old: {
+            patches = (old.patches or [ ]) ++ [
+              ./libzip-revert-to-old-versionneeded-behavior.patch
             ];
           });
     };
