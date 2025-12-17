@@ -251,6 +251,19 @@ buildPythonPackage rec {
     "test_feature_store"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # MPS (Metal) tests are failing when using `libtorch_cpu`.
+    # Crashes in `structured_cat_out_mps`
+    "test/nn/models/test_deep_graph_infomax.py::test_infomax_predefined_model[mps]"
+    "test/nn/norm/test_instance_norm.py::test_instance_norm[True-mps]"
+    "test/nn/norm/test_instance_norm.py::test_instance_norm[False-mps]"
+    "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-True-mps]"
+    "test/nn/norm/test_layer_norm.py::test_layer_norm[graph-False-mps]"
+    "test/nn/norm/test_layer_norm.py::test_layer_norm[node-True-mps]"
+    "test/nn/norm/test_layer_norm.py::test_layer_norm[node-False-mps]"
+    "test/utils/test_scatter.py::test_group_cat[mps]"
+  ];
+
   meta = {
     description = "Graph Neural Network Library for PyTorch";
     homepage = "https://github.com/pyg-team/pytorch_geometric";
