@@ -65,35 +65,38 @@ stdenv.mkDerivation (finalAttrs: {
     ./go-env-go_ldso.patch
   ];
 
-  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
-  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-  # Go will nevertheless build a for host system that we will copy over in
-  # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
-  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
+  env = {
+    inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
+    # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+    # Go will nevertheless build a for host system that we will copy over in
+    # the install phase.
+    GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+    GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
-  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-  # to be different from CC/CXX
-  CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
-  CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
+    GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
+    # Wasi does not support CGO
+    # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
+    # https://github.com/golang/go/issues/8912
+    # https://github.com/golang/go/issues/13192
+    CGO_ENABLED =
+      if
+        (
+          stdenv.targetPlatform.isWasi
+          || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
+        )
+      then
+        0
+      else
+        1;
 
-  GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  # Wasi does not support CGO
-  # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
-  # https://github.com/golang/go/issues/8912
-  # https://github.com/golang/go/issues/13192
-  CGO_ENABLED =
-    if
-      (
-        stdenv.targetPlatform.isWasi
-        || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
-      )
-    then
-      0
-    else
-      1;
-
-  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+    GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
+  }
+  // lib.optionalAttrs isCross {
+    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
+    # to be different from CC/CXX
+    CC_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}cc";
+    CXX_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}c++";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -113,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       # interpreter for cross
       # When CGO is not supported we rely on static binaries being built
       # since they don't need an ELF interpreter
-      export GO_EXTLINK_ENABLED=${toString finalAttrs.CGO_ENABLED}
+      export GO_EXTLINK_ENABLED=${toString finalAttrs.env.CGO_ENABLED}
     ''}
     ulimit -a
 
@@ -134,9 +137,13 @@ stdenv.mkDerivation (finalAttrs: {
         mv bin/*_*/* bin
         rmdir bin/*_*
         ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          (
+            !(
+              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
+            )
+          )
           ''
-            rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+            rm -rf pkg/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH} pkg/tool/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH}
           ''
         }
       ''
@@ -144,9 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
         rm -rf bin/*_*
         ${lib.optionalString
-          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          (
+            !(
+              finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS
+            )
+          )
           ''
-            rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+            rm -rf pkg/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH} pkg/tool/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH}
           ''
         }
       ''
@@ -170,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
       buildGoModule = buildGo125Module;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
