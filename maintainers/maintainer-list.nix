@@ -11545,12 +11545,6 @@
     github = "j0hax";
     githubId = 3802620;
   };
-  j0lol = {
-    name = "Jo";
-    email = "me@j0.lol";
-    github = "j0lol";
-    githubId = 24716467;
-  };
   j0xaf = {
     email = "j0xaf@j0xaf.de";
     name = "Jörn Gersdorf";
