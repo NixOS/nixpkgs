@@ -633,9 +633,9 @@
   };
 
   sql = {
-    version = "0.3.9";
+    version = "0.3.11";
     url = "github:derekstride/tree-sitter-sql";
-    hash = "sha256-DC7cZs8ePQmj5t/6GgnmgT5ubuOBaaS3Xch/f76/ZWM=";
+    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
     generate = true;
   };
 
