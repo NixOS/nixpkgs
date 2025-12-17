@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ rustc.llvm ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   # Without disabling the test the build fails with:
   # error: failed to run custom build command for `rustc_llvm v0.0.0
@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage {
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/clippy-driver"
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/cargo-clippy"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://rust-lang.github.io/rust-clippy/";
