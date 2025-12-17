@@ -49,7 +49,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@d07416681cab29bf2661702f925f020aaa962997 # v3.4.1
+        uses: korthout/backport-action@3634249d418881baa47fd6bae694506145f7a61b # v4.0.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'
