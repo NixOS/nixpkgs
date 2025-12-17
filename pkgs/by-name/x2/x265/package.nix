@@ -33,12 +33,10 @@
 }:
 
 let
-  mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
-
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x265";
   version = "4.1";
 
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
   # Check that x265Version.txt contains the expected version number
   # whether we fetch a source tarball or a tag from the git repo
   src = fetchurl {
-    url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${version}.tar.gz";
+    url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${finalAttrs.version}.tar.gz";
     hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
   };
 
@@ -89,18 +87,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  sourceRoot = "x265_${version}/source";
+  sourceRoot = "x265_${finalAttrs.version}/source";
 
   postPatch = ''
     substituteInPlace cmake/Version.cmake \
-      --replace-fail "unknown" "${version}" \
-      --replace-fail "0.0" "${version}"
+      --replace-fail "unknown" "${finalAttrs.version}" \
+      --replace-fail "0.0" "${finalAttrs.version}"
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
   # mingwW64 builds. This bypasses the logic by setting it at the end of the
   # file
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
-    echo 'set(X265_LATEST_TAG "${version}")' >> ./cmake/Version.cmake
+    echo 'set(X265_LATEST_TAG "${finalAttrs.version}")' >> ./cmake/Version.cmake
   '';
 
   nativeBuildInputs = [
@@ -110,15 +108,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals numaSupport [ numactl ];
 
   cmakeFlags = [
-    "-DENABLE_ALPHA=ON"
-    "-DENABLE_MULTIVIEW=ON"
-    "-DENABLE_SCC_EXT=ON"
+    (lib.cmakeBool "ENABLE_ALPHA" true)
+    (lib.cmakeBool "ENABLE_MULTIVIEW" true)
+    (lib.cmakeBool "ENABLE_SCC_EXT" true)
     "-Wno-dev"
-    (mkFlag custatsSupport "DETAILED_CU_STATS")
-    (mkFlag debugSupport "CHECKED_BUILD")
-    (mkFlag ppaSupport "ENABLE_PPA")
-    (mkFlag vtuneSupport "ENABLE_VTUNE")
-    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+    (lib.cmakeBool "DETAILED_CU_STATS" custatsSupport)
+    (lib.cmakeBool "CHECKED_BUILD" debugSupport)
+    (lib.cmakeBool "ENABLE_PPA" ppaSupport)
+    (lib.cmakeBool "ENABLE_VTUNE" vtuneSupport)
+    (lib.cmakeBool "WARNINGS_AS_ERRORS" werrorSupport)
   ]
   ++ lib.optionals stdenv.hostPlatform.isPower [
     # baseline for everything but ppc64le doesn't have AltiVec
@@ -128,46 +126,49 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "CPU_POWER8" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
   ]
   # Clang does not support the endfunc directive so use GCC.
-  ++ lib.optional (
-    stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
-  ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+  ++
+    lib.optionals
+      (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD)
+      [
+        (lib.cmakeFeature "CMAKE_ASM_COMPILER" "${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc")
+      ]
   # Neon support
   ++ lib.optionals (neonSupport && stdenv.hostPlatform.isAarch32) [
-    "-DENABLE_NEON=ON"
-    "-DCPU_HAS_NEON=ON"
-    "-DENABLE_ASSEMBLY=ON"
+    (lib.cmakeBool "ENABLE_NEON" true)
+    (lib.cmakeBool "CPU_HAS_NEON" true)
+    (lib.cmakeBool "ENABLE_ASSEMBLY" true)
   ];
 
   cmakeStaticLibFlags = [
-    "-DHIGH_BIT_DEPTH=ON"
-    "-DENABLE_CLI=OFF"
-    "-DENABLE_SHARED=OFF"
-    "-DEXPORT_C_API=OFF"
+    (lib.cmakeBool "HIGH_BIT_DEPTH" true)
+    (lib.cmakeBool "ENABLE_CLI" false)
+    (lib.cmakeBool "ENABLE_SHARED" false)
+    (lib.cmakeBool "EXPORT_C_API" false)
   ]
   ++ lib.optionals isCross [
-    (mkFlag stdenv.hostPlatform.isAarch32 "CROSS_COMPILE_ARM")
-    (mkFlag stdenv.hostPlatform.isAarch64 "CROSS_COMPILE_ARM64")
+    (lib.cmakeBool "CROSS_COMPILE_ARM" stdenv.hostPlatform.isAarch32)
+    (lib.cmakeBool "CROSS_COMPILE_ARM64" stdenv.hostPlatform.isAarch64)
   ];
 
   preConfigure =
     lib.optionalString multibitdepthSupport ''
       cmake -B build-10bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}"
-      cmake -B build-12bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}" -DMAIN12=ON
+      cmake -B build-12bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}" ${lib.cmakeBool "MAIN12" true}
       cmakeFlagsArray+=(
-        -DEXTRA_LIB="x265-10.a;x265-12.a"
-        -DEXTRA_LINK_FLAGS=-L.
-        -DLINKED_10BIT=ON
-        -DLINKED_12BIT=ON
+        ${lib.cmakeFeature "EXTRA_LIB" "\"x265-10.a;x265-12.a\""}
+        ${lib.cmakeFeature "EXTRA_LINK_FLAGS" "-L."}
+        ${lib.cmakeBool "LINKED_10BIT" true}
+        ${lib.cmakeBool "LINKED_12BIT" true}
       )
     ''
     + ''
       cmakeFlagsArray+=(
-        -DGIT_ARCHETYPE=1 # https://bugs.gentoo.org/814116
-        ${mkFlag (!stdenv.hostPlatform.isStatic) "ENABLE_SHARED"}
-        -DHIGH_BIT_DEPTH=OFF
-        -DENABLE_HDR10_PLUS=ON
-        ${mkFlag cliSupport "ENABLE_CLI"}
-        ${mkFlag unittestsSupport "ENABLE_TESTS"}
+        ${lib.cmakeBool "GIT_ARCHETYPE" true} # https://bugs.gentoo.org/814116
+        ${lib.cmakeBool "ENABLE_SHARED" (!stdenv.hostPlatform.isStatic)}
+        ${lib.cmakeBool "HIGH_BIT_DEPTH" false}
+        ${lib.cmakeBool "ENABLE_HDR10_PLUS" true}
+        ${lib.cmakeBool "ENABLE_CLI" cliSupport}
+        ${lib.cmakeBool "ENABLE_TESTS" unittestsSupport}
       )
     '';
 
@@ -205,10 +206,10 @@ stdenv.mkDerivation rec {
     mainProgram = "x265";
     homepage = "https://www.x265.org";
     changelog = "https://x265.readthedocs.io/en/master/releasenotes.html#version-${
-      lib.strings.replaceStrings [ "." ] [ "-" ] version
+      lib.strings.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ codyopel ];
     platforms = lib.platforms.all;
   };
-}
+})
