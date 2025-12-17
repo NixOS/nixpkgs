@@ -6,7 +6,7 @@ index c99912738ec2..adeda1fe964e 100755
  #set -x
  ## DO NOT CHANGE THIS FILE
  
--INSTALLDIR="/opt/mdyalog/19.0/64/unicode"
+-INSTALLDIR="/opt/mdyalog/20.0/64/unicode"
 +INSTALLDIR="@installdir@"
  EXE="dyalog"
  

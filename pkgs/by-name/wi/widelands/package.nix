@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config, # needed to find minizip
   SDL2,
   SDL2_image,
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-/MEeb0KnefK812w5y238Icd4gW85d/pvZ08xnlVXDdk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "modern-asio.patch";
+      url = "https://codeberg.org/wl/widelands/pulls/5025.patch";
+      sha256 = "sha256-ip9ZG9u/z7G+yG7xrEvi+DH9vsjRzYWhEe0rEjxHzzY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace xdg/org.widelands.Widelands.desktop \

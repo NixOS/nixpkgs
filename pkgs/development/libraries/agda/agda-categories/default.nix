@@ -13,7 +13,7 @@ mkDerivation rec {
     owner = "agda";
     repo = "agda-categories";
     rev = "v${version}";
-    sha256 = "sha256-zPh6RFnky4KsnQx5Y/3FeYZ/jWK+hqJGNyCjEFPPHWQ=";
+    sha256 = "sha256-/3e8CkaTr0bUBgzhjAvu2RV6y0gk77VRA4PE6vutKPc=";
   };
 
   postPatch = ''

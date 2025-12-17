@@ -4010,6 +4010,12 @@
     name = "Builditluc";
     keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
+  burdzwastaken = {
+    email = "burdz@burdz.net";
+    github = "burdzwastaken";
+    githubId = 13855668;
+    name = "Matt Burdan";
+  };
   burmudar = {
     email = "william.bezuidenhout@gmail.com";
     github = "burmudar";
@@ -8624,6 +8630,9 @@
     githubId = 30697622;
     name = "Firelight Flagboy";
     keys = [
+      {
+        fingerprint = "A14B AC2E 1BDB 9035 F6A0  5741 6C0A B3D8 F176 0318";
+      }
       {
         fingerprint = "D6E2 4BD5 680C 609D D146  99B4 4304 CE0B A5E8 67D1";
       }
@@ -14201,6 +14210,13 @@
     github = "ktechmidas";
     githubId = 9920871;
     name = "Monotoko";
+  };
+  ktemkin = {
+    email = "kate@ktemk.in";
+    github = "ktemkin";
+    githubId = 1298105;
+    name = "Kate Temkin";
+    matrix = "@ktemkin:katesiria.org";
   };
   ktf = {
     email = "giulio.eulisse@cern.ch";

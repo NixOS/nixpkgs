@@ -5208,6 +5208,8 @@ self: super: with self; {
 
   fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
+  fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
@@ -5233,6 +5235,8 @@ self: super: with self; {
   fastbencode = callPackage ../development/python-modules/fastbencode { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
+
+  fastcan = callPackage ../development/python-modules/fastcan { };
 
   fastcore = callPackage ../development/python-modules/fastcore { };
 
@@ -6675,6 +6679,8 @@ self: super: with self; {
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hacking = callPackage ../development/python-modules/hacking { };
+
+  haishoku = callPackage ../development/python-modules/haishoku { };
 
   hakuin = callPackage ../development/python-modules/hakuin { };
 
@@ -11594,6 +11600,8 @@ self: super: with self; {
 
   ots-python = callPackage ../development/python-modules/ots-python { };
 
+  otxv2 = callPackage ../development/python-modules/otxv2 { };
+
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
   outcome = callPackage ../development/python-modules/outcome { };
@@ -13830,7 +13838,7 @@ self: super: with self; {
 
   pyment = callPackage ../development/python-modules/pyment { };
 
-  pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
+  pymeshlab = callPackage ../development/python-modules/pymeshlab { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
 
@@ -20060,6 +20068,8 @@ self: super: with self; {
   urlobject = callPackage ../development/python-modules/urlobject { };
 
   urlpy = callPackage ../development/python-modules/urlpy { };
+
+  urlscan-python = callPackage ../development/python-modules/urlscan-python { };
 
   urwid = callPackage ../development/python-modules/urwid { };
 

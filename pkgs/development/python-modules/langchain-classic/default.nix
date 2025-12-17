@@ -104,7 +104,10 @@ buildPythonPackage rec {
   ];
 
   # Bulk updater selects wrong tag (there is no tag for this yet)
-  passthru.skipBulkUpdate = true;
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = false;
+  };
 
   pythonImportsCheck = [ "langchain_classic" ];
 
