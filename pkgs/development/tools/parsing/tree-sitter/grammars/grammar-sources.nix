@@ -670,9 +670,9 @@
   };
 
   tera = {
-    version = "0-unstable-2025-07-22";
-    url = "github:uncenter/tree-sitter-tera/692937d52c8dfd91ce0dde722b9b4febbc9bc712";
-    hash = "sha256-3ZUark8lSH8mJwuLcvJPiQnE7+rlXstKkTPjvHzsE38=";
+    version = "0.1.0";
+    url = "github:uncenter/tree-sitter-tera";
+    hash = "sha256-1Gb947YJnEFrCVKAuz06kwJdKD9PMab/alFJtyYjBso=";
   };
 
   tiger = {
