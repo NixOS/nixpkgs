@@ -41,10 +41,9 @@ if [[ -n "${netrcPhase-}" ]]; then
     curl+=(--netrc-file "$PWD/netrc")
 fi
 
-curl+=("${curlOptsList[@]}")
-
 curl+=(
-    ${curlOpts[*]}
+    "${curlOptsList[@]}"
+    $curlOpts
     $NIX_CURL_FLAGS
 )
 
