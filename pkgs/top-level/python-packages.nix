@@ -5105,6 +5105,10 @@ self: super: with self; {
 
   extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
+  extra-streamlit-components =
+    callPackage ../development/python-modules/extra-streamlit-components
+      { };
+
   extract-msg = callPackage ../development/python-modules/extract-msg { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
@@ -15939,8 +15943,6 @@ self: super: with self; {
 
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
-  qnap-qsw = callPackage ../development/python-modules/qnap-qsw { };
-
   qnapstats = callPackage ../development/python-modules/qnapstats { };
 
   qpageview = callPackage ../development/python-modules/qpageview { };
@@ -18176,7 +18178,11 @@ self: super: with self; {
 
   streamlit = callPackage ../development/python-modules/streamlit { };
 
+  streamlit-avatar = callPackage ../development/python-modules/streamlit-avatar { };
+
   streamlit-folium = callPackage ../development/python-modules/streamlit-folium { };
+
+  streamlit-notify = callPackage ../development/python-modules/streamlit-notify { };
 
   streamz = callPackage ../development/python-modules/streamz { };
 
@@ -19074,8 +19080,6 @@ self: super: with self; {
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   tracerite = callPackage ../development/python-modules/tracerite { };
-
-  tracing = callPackage ../development/python-modules/tracing { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
