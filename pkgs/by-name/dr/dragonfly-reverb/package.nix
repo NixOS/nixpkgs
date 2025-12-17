@@ -5,17 +5,17 @@
   libjack2,
   libGL,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dragonfly-reverb";
   version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "michaelwillis";
     repo = "dragonfly-reverb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YXJ4U5J8Za+DlXvp6QduvCHIVC2eRJ3+I/KPihCaIoY=";
     fetchSubmodules = true;
   };
@@ -27,21 +27,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libjack2
-    xorg.libX11
+    libx11
     libGL
   ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    mkdir -p $out/lib/lv2/
-    mkdir -p $out/lib/vst/
-    cd bin
-    for bin in DragonflyEarlyReflections DragonflyPlateReverb DragonflyHallReverb DragonflyRoomReverb; do
-      cp -a $bin        $out/bin/
-      cp -a $bin-vst.so $out/lib/vst/
-      cp -a $bin.lv2/   $out/lib/lv2/ ;
-    done
+
+    mkdir -p $out/lib/lv2
+
+    pushd bin
+      for bin in DragonflyEarlyReflections DragonflyPlateReverb DragonflyHallReverb DragonflyRoomReverb; do
+        install -Dm755 $bin -t $out/bin
+        install -Dm755 $bin-vst.so -t $out/lib/vst
+
+        cp -r $bin.lv2 $out/lib/lv2
+      done
+    popd
+
     runHook postInstall
   '';
 
@@ -52,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
   };
-}
+})
