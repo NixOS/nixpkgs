@@ -10,7 +10,7 @@
   fetchzip,
   replaceVars,
   runCommand,
-
+  which,
   ant,
   cacert,
   cmake,
@@ -24,7 +24,6 @@
   yarnConfigHook,
   zip,
 
-  apple-sdk_11,
   boost187,
   electron_37,
   fontconfig,
@@ -88,13 +87,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
-  version = "2025.09.1+401";
+  version = "2025.09.2+418";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
-    hash = "sha256-FVK/1trMVFEv17HbUpaISC9gyE2HBKtdZWjxbgdXALc=";
+    hash = "sha256-UFhvNLamKZQ9IBjEtDvSPOUILqGphDDOVb7ZZ8dnfVU=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -160,9 +159,6 @@ stdenv.mkDerivation rec {
     soci
     sqlite.dev
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ]
   ++ lib.optionals (!server) [
     fontconfig
   ]
@@ -221,6 +217,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # fix hardcoded paths to /usr/bin/which
+    substituteInPlace \
+    src/node/desktop/src/main/detect-r.ts \
+    src/node/desktop/src/main/gwt-callback.ts \
+    src/cpp/session/modules/clang/CodeCompletion.cpp \
+    src/cpp/core/system/PosixSystemTests.cpp \
+    --replace-fail "/usr/bin/which" "${lib.getExe which}"
+
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
       --replace-fail "\''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
@@ -248,7 +252,7 @@ stdenv.mkDerivation rec {
     name = "rstudio-${version}-npm-deps";
     inherit src;
     postPatch = "cd ${npmRoot}";
-    hash = "sha256-HfJsm/UauA5Vdi22WfTJGiI9K979Sw7RYApYdZU0AUs=";
+    hash = "sha256-/5GgRusDRyBMr5581ypTMzhqkvjpzYBaniFos524bEw=";
   };
 
   preConfigure = ''
@@ -365,7 +369,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ciil
-      cfhammill
       tomasajt
     ];
     mainProgram = "rstudio" + lib.optionalString server "-server";

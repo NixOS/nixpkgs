@@ -42,6 +42,11 @@ buildPythonPackage rec {
     hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
 
+  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # fix architecture checks in build.rs to fix build for riscv
+    ./cross-arch-compat.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-y6FmK1RR1DAswVoTlnl19CmoYXAco1dY7lpV/KTypzE=";
@@ -78,15 +83,15 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
     changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ misuzu ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

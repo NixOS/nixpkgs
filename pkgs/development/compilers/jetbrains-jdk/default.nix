@@ -45,27 +45,27 @@ let
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.8";
-  build = "1148.57";
+  javaVersion = "21.0.9";
+  build = "1163.86";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git tag --points-at [revision]
   # Look for the line that starts with jbr-
-  openjdkTag = "jbr-release-21.0.8b1148.57";
+  openjdkTag = "jbr-release-21.0.9b1163.86";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-RgXwWNHAeFxmrFmyB+DP5dOif06iql2UvimEaARnQvg=";
+    hash = "sha256-P2boCbGB66X8LB4sZHGFO8lqHbv6F4kqGVMGBd9yKu0=";
   };
 
   env = {
     BOOT_JDK = jdk.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    SOURCE_DATE_EPOCH = 1759539679;
+    SOURCE_DATE_EPOCH = 1765114563;
   };
 
   patches = [ ];
@@ -183,7 +183,7 @@ jdk.overrideAttrs (oldAttrs: rec {
   ]
   ++ oldAttrs.buildInputs or [ ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenJDK fork to better support Jetbrains's products";
     longDescription = ''
       JetBrains Runtime is a runtime environment for running IntelliJ Platform
@@ -197,8 +197,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (jdk.meta) license platforms mainProgram;
-    maintainers = with maintainers; [
-      edwtjo
+    maintainers = with lib.maintainers; [
       aoli-al
     ];
 

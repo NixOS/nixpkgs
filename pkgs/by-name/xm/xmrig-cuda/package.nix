@@ -34,6 +34,10 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail '-std=c++11' '-std=c++17'
   '';
 
+  cmakeFlags = [
+    "-DLIBCUDA_LIBRARY_DIR=${lib.getLib cudaPackages.cuda_cudart}/lib/stubs/"
+  ];
+
   nativeBuildInputs = [
     autoAddDriverRunpath
     cmake

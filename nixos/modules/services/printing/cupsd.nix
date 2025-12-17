@@ -541,6 +541,6 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ matthewbauer ];
+  meta.maintainers = [ ];
 
 }

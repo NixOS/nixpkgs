@@ -10,20 +10,20 @@ callPackage ./generic.nix args {
   kernelModuleAttribute = "zfs_unstable";
 
   kernelMinSupportedMajorMinor = "4.18";
-  kernelMaxSupportedMajorMinor = "6.17";
+  kernelMaxSupportedMajorMinor = "6.18";
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.4.0-rc3";
+  version = "2.4.0-rc5";
   # rev = "";
 
   tests = {
     inherit (nixosTests.zfs) unstable;
   };
 
-  hash = "sha256-VfCeQqgahNNQA4jsiFHTdUjgXIH26k5r3q/Rpo2JrCc=";
+  hash = "sha256-HLxqzZjAFnaKqzy1CA3RecTdqpheR2pmFCTqMIcm+wk=";
 
   extraLongDescription = ''
     This is "unstable" ZFS, and will usually be a pre-release version of ZFS.

@@ -20,21 +20,23 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "15.3.2";
+  version = "16.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-cOaL8u5q9kx+yLB0e/ALnGYYGF5v50wsIIF1UUTPe1Y=";
+    hash = "sha256-SAevC6yIDndtNRakyzsRNw4vM2wLc/Qbs3ZlmXEa+40=";
   };
 
   postPatch = ''
-    echo 'version_number = "${version}"' > version.py
-    mv .github approvaltests approval_utilities tests setup
-    cd setup
-    rm setup.cfg
+    test -f setup.py || mv setup/setup.py .
+    touch setup/__init__.py
+    substituteInPlace setup.py \
+      --replace-fail "from setup_utils" "from setup.setup_utils"
+
+    patchShebangs internal_documentation/scripts
   '';
 
   build-system = [ setuptools ];

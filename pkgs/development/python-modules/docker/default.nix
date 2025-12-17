@@ -58,7 +58,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests/unit" ];
 
@@ -69,11 +69,11 @@ buildPythonPackage rec {
     "socket_file"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/docker/docker-py/releases/tag/${version}";
     description = "API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

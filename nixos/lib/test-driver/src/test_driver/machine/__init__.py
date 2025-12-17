@@ -194,8 +194,7 @@ class StartCommand:
 
 
 class NixStartScript(StartCommand):
-    """A start script from nixos/modules/virtualiation/qemu-vm.nix
-    that also satisfies the requirement of the BaseStartCommand.
+    """A start script from nixos/modules/virtualiation/qemu-vm.nix.
     These Nix commands have the particular characteristic that the
     machine name can be extracted out of them via a regex match.
     (Admittedly a _very_ implicit contract, evtl. TODO fix)
@@ -790,9 +789,6 @@ class Machine:
 
     def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         return self.systemctl(f"stop {jobname}", user)
-
-    def wait_for_job(self, jobname: str) -> None:
-        self.wait_for_unit(jobname)
 
     def connect(self) -> None:
         def shell_ready(timeout_secs: int) -> bool:

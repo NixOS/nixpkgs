@@ -54,11 +54,11 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "tuna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
     mainProgram = "tuna";
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

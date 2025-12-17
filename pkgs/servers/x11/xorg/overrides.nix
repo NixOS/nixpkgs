@@ -113,32 +113,6 @@ self: super:
       )
   ) { };
 
-  bitmap = addMainProgram super.bitmap { };
-
-  editres = super.editres.overrideAttrs (attrs: {
-    hardeningDisable = [ "format" ];
-    meta = attrs.meta // {
-      mainProgram = "editres";
-    };
-  });
-
-  fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
-    postInstall = ''
-      ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
-      test -f $ALIASFILE
-      cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
-    '';
-  });
-
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "fonttosfnt";
-    };
-  });
-
-  iceauth = addMainProgram super.iceauth { };
-
   mkfontdir = xorg.mkfontscale;
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
@@ -172,19 +146,6 @@ self: super:
       mainProgram = "xdm";
     };
   });
-
-  setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
-    postInstall = ''
-      mkdir -p $out/share/man/man7
-      ln -sfn ${xorg.xkeyboardconfig}/etc/X11 $out/share/X11
-      ln -sfn ${xorg.xkeyboardconfig}/share/man/man7/xkeyboard-config.7.gz $out/share/man/man7
-    '';
-    meta = attrs.meta // {
-      mainProgram = "setxkbmap";
-    };
-  });
-
-  oclock = addMainProgram super.oclock { };
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
@@ -260,55 +221,33 @@ self: super:
   xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
   xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
 
-  # Obsolete drivers that don't compile anymore.
   xf86videoark = super.xf86videoark.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
+
   xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videoglide = super.xf86videoglide.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videoi128 = super.xf86videoi128.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
-  xf86videotga = super.xf86videotga.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
+
   xf86videov4l = super.xf86videov4l.overrideAttrs (attrs: {
     meta = attrs.meta // {
-      broken = true;
-    };
-  });
-  xf86videovoodoo = super.xf86videovoodoo.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
-    };
-  });
-  xf86videowsfb = super.xf86videowsfb.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      broken = true;
+      platforms = lib.platforms.linux;
     };
   });
 
@@ -328,15 +267,6 @@ self: super:
     ];
     # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  });
-
-  xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
-    meta = attrs.meta // {
-      broken = true;
-    };
   });
 
   xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
@@ -790,39 +720,15 @@ self: super:
   xwd = addMainProgram super.xwd { };
 }
 
-# mark some packages as unfree
-// (
-  let
-    # unfree but redistributable
-    redist = [
-      "fontibmtype1"
-    ];
-
-    # unfree, possibly not redistributable
-    unfree = [
-      # no license, just a copyright notice
-      "fontdaewoomisc"
-
-      # unclear license, "permission to use"?
-      "fontjismisc"
-    ];
-
-    setLicense =
-      license: name:
-      super.${name}.overrideAttrs (attrs: {
-        meta = attrs.meta // {
-          inherit license;
-        };
-      });
-    mapNamesToAttrs =
-      f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
-
-  in
-  mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
-  // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
-)
-
 # deprecate some packages
 // lib.optionalAttrs config.allowAliases {
   fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+  xf86videoglide = throw "The Xorg Glide video driver has been archived upstream due to being obsolete"; # added 2025-12-13
+  xf86videoglint = throw ''
+    The Xorg GLINT/Permedia video driver has been broken since xorg 21.
+    see https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
+  ''; # added 2025-12-13
+  xf86videonewport = throw "The Xorg Newport video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videotga = throw "The Xorg TGA (aka DEC 21030) video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xf86videowsfb = throw "The Xorg BSD wsdisplay framebuffer video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
 }

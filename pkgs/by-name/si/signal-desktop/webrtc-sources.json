@@ -1,10 +1,10 @@
 {
     "src": {
         "args": {
-            "hash": "sha256-mNj4Sw7EROc2Cn4nPSm789h1je7EOjNAg2s6fQ19Dcc=",
+            "hash": "sha256-E4qWqB9rxANygL3UMavjbVNcKdsn6GAv0eawXsrmIQg=",
             "owner": "signalapp",
             "repo": "webrtc",
-            "tag": "7339c"
+            "tag": "7339d"
         },
         "fetcher": "fetchFromGitHub"
     },

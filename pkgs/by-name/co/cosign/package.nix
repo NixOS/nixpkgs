@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5jCO2LW7nzbzo+de0fpxBcVASDmINB6yFerkQZlo2o8=";
+    hash = "sha256-2cCeSG3ELkSWL1ZJ/bMGm4Nj7OZgewyUwu8lblRjCh4=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-hedkslhyAsictu9Cbw7CgreoWa1StLpTt8oTPNLr5fc=";
+  vendorHash = "sha256-LTJoEEOGrmgQi+8T++wNMfs+jdWI+R+Xo1vBXuoLBMM=";
 
   subPackages = [
     "cmd/cosign"
@@ -78,13 +78,13 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/cosign";
     changelog = "https://github.com/sigstore/cosign/releases/tag/v${finalAttrs.version}";
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     mainProgram = "cosign";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lesuisse
       jk
       developer-guy

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.13.0";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
     tag = version;
-    hash = "sha256-MkoJpztVjwZbGcJTdnLRF7ZtIFd0qGoz/cksEoqLe4w=";
+    hash = "sha256-n2NJskgNzYPSwhy8ATYc8t6t2qRB9wh+7foegQG2GZs=";
   };
 
   pythonRelaxDeps = [
@@ -80,11 +80,11 @@ buildPythonPackage rec {
     "tests/unit/test_moto.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
     changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mcwitt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mcwitt ];
   };
 }

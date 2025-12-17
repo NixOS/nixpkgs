@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-zugferd";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-zugferd";
     rev = "v${version}";
-    hash = "sha256-yBlbHhiA+Tk1IHnFqYxu0hrQHWQP8LrLHgzu9+OHyN4=";
+    hash = "sha256-nLpzNx/k1pJsYgMBhMkEOKfHmB46/AOzxB59cYkrGUU=";
   };
 
   postPatch = ''
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretix_zugferd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Annotate pretix' invoices with ZUGFeRD data";
     homepage = "https://github.com/pretix/pretix-zugferd";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

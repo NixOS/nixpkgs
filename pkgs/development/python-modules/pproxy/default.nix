@@ -4,6 +4,9 @@
   fetchFromGitHub,
   pycryptodome,
   uvloop,
+  asyncssh,
+  aioquic,
+  python-daemon,
   setuptools,
   pythonOlder,
 }:
@@ -24,10 +27,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycryptodome
-    uvloop
-  ];
+  optional-dependencies = {
+    accelerated = [
+      pycryptodome
+      uvloop
+    ];
+    sshtunnel = [ asyncssh ];
+    quic = [ aioquic ];
+    daemon = [ python-daemon ];
+  };
+
+  nativeCheckInputs = lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pproxy" ];
 
@@ -46,11 +56,11 @@ buildPythonPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proxy server that can tunnel among remote servers by regex rules";
     mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

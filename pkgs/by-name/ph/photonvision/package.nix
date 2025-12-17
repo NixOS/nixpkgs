@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxarm64.jar";
-        hash = "sha256-mNQk8gaTASsmyJUpLLIbG7QRMjbdSN2LMCXx6j3gbCU=";
+        hash = "sha256-YG9wyh+MCsv/RBdiFvgrF6Fw/6AnN7OEi4ofkMptfT0=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     starts-web-server = nixosTests.photonvision;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
     homepage = "https://photonvision.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ max-niederman ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ max-niederman ];
     mainProgram = "photonvision";
     platforms = [
       "x86_64-linux"

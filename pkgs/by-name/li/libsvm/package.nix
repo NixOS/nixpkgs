@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

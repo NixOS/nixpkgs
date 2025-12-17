@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.iqtree.org/";
     description = "Efficient and versatile phylogenomic software by maximum likelihood";
     mainProgram = "iqtree2";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ bzizou ];
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ bzizou ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

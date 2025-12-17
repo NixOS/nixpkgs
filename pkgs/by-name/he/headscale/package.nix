@@ -11,24 +11,24 @@
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     tag = "v${version}";
-    hash = "sha256-bWY12OW2gc5m6xdEJYh6xBixUMKYRuSBH4lCkcToL04=";
+    hash = "sha256-eMqGJL+dxBThtW+0uMvnP5n2gk2kwOao6SukA38OMOE=";
   };
 
-  vendorHash = "sha256-GUIzlPRsyEq1uSTzRNds9p1uVu4pTeH5PAxrJ5Njhis=";
+  postPatch = ''
+    substituteInPlace hscontrol/types/version.go \
+      --replace-fail 'Version:   "dev"' 'Version: "${version}"' \
+      --replace-fail 'Commit:    "unknown"' 'Commit: "${src.tag}"'
+  '';
+
+  vendorHash = "sha256-VOi4PGZ8I+2MiwtzxpKc/4smsL5KcH/pHVkjJfAFPJ0=";
 
   subPackages = [ "cmd/headscale" ];
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"
-  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,7 +52,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) headscale; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/juanfont/headscale";
     description = "Open source, self-hosted implementation of the Tailscale control server";
     longDescription = ''
@@ -71,9 +71,9 @@ buildGoModule rec {
 
       Headscale implements this coordination server.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "headscale";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kradalby
       misterio77
     ];

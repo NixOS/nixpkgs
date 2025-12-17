@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "2.5.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-S4VE33wMima6GeGPmZOU6ub5V/ZWoVYqAIizh9BJHGo=";
+    hash = "sha256-2jUUipT6xE/8qxWaMsUmrEf2qmDcE93vp2nME01B34A=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux (
@@ -86,6 +86,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tom94 ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
   };
 }

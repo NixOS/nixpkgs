@@ -168,14 +168,13 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly configurable, dynamic window manager for X";
     homepage = "https://awesomewm.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lovek323
-      rasendubi
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

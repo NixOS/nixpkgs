@@ -36,6 +36,7 @@
   sscg,
   systemd,
   udev,
+  util-linux,
   xmlto,
   # Enables lightweight NixOS branding, replacing the default Cockpit icons
   withBranding ? true,
@@ -44,13 +45,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "350";
+  version = "352";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-DOMX3msM5Ko7TDMRS+GcAf+gmyogjSExNEM9sjK0cCY=";
+    hash = "sha256-8FtC5fr/FPjHnb7RpVi4kz0RS6nvp7aD++ILo0LRZxo=";
     fetchSubmodules = true;
   };
 
@@ -167,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
-    "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
+    "--with-default-session-path=${placeholder "out"}/bin:/etc/cockpit/bin:${util-linux}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
@@ -191,7 +192,8 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
-        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages} \
+        --prefix XDG_DATA_DIRS : /etc/cockpit/share # Cockpit apps will be stored at /etc/cockpit/share/cockpit/ (managed by Cockpit nixos service)
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue

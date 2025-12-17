@@ -12,6 +12,8 @@
   makeDesktopItem,
   makeWrapper,
   SDL2,
+  fetchurl,
+  imagemagick,
 }:
 let
   platforms = {
@@ -25,24 +27,30 @@ let
   bindir =
     platforms."${stdenv.hostPlatform.system}"
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  icon = fetchurl {
+    url = "https://warmplace.ru/soft/sunvox/images/icon.png";
+    hash = "sha256-ld2GCOhBhMThuUYBNa+2iTdY2HsYBRyApWiHTPuVgKA=";
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      "https://web.archive.org/web/20251019141206/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+      "https://web.archive.org/web/20251208174416/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
-    hash = "sha256-egOaIZEyI5x2VV660qbO+pan22BFRaa4d+8sOpJhpBM=";
+    hash = "sha256-FY5DxdQN1ClFp/dS5fXgFhoU7uk/gUoPrYtsZK5q9O4=";
   };
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       copyDesktopItems
+      imagemagick
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
@@ -60,20 +68,35 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "sunvox";
-      exec = "sunvox";
-      desktopName = "SunVox";
-      genericName = "Modular Synthesizer";
-      comment = "Modular synthesizer with pattern-based sequencer";
-      categories = [
-        "AudioVideo"
-        "Audio"
-        "Midi"
-      ];
-    })
-  ];
+  desktopItems =
+    let
+      sunvoxDesktop =
+        variant:
+        makeDesktopItem {
+          name = "sunvox" + lib.optionalString (variant != null) "-${lib.strings.toLower variant}";
+          exec = "sunvox" + lib.optionalString (variant != null) "_${lib.strings.toLower variant}";
+          desktopName = "SunVox" + lib.optionalString (variant != null) " (${variant})";
+          genericName = "Modular Synthesizer";
+          comment = "Modular synthesizer with pattern-based sequencer";
+          icon = "sunvox";
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Midi"
+          ];
+        };
+    in
+    lib.optionals stdenv.hostPlatform.isLinux (
+      [
+        (sunvoxDesktop null)
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64) [
+        (sunvoxDesktop "OpenGL")
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isi686) [
+        (sunvoxDesktop "LoFi")
+      ]
+    );
 
   dontConfigure = true;
   dontBuild = true;
@@ -96,6 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Cleanup, make sure we didn't miss anything
     find $out/share/sunvox/sunvox -type f -name readme.txt -delete
     rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+
+    # Resize & install icons
+    for size in 16 24 32 48 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+      magick ${icon} -resize ''${size}x''${size} \
+      $out/share/icons/hicolor/''${size}x''${size}/apps/sunvox.png
+    done
+
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
@@ -110,12 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
-    license = licenses.unfreeRedistributable;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://www.warmplace.ru/soft/sunvox/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       puffnfresh
       OPNA2608
     ];

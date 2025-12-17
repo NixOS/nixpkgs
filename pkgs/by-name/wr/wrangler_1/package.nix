@@ -37,14 +37,13 @@ rustPlatform.buildRustPackage rec {
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool designed for folks who are interested in using Cloudflare Workers";
     mainProgram = "wrangler";
     homepage = "https://github.com/cloudflare/wrangler";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

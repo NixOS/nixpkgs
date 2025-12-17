@@ -18,6 +18,7 @@
   ldap3,
   mitmproxy-rs,
   msgpack,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -38,28 +39,23 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.0";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-2ldebsgR0xZV4WiCLV7DBUKXZo3oE+M6cmvRbSeCSLQ=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "bcrypt"
-    "cryptography"
-    "flask"
-    "h2"
-    "kaitaistruct"
-    "pyopenssl"
-    "pyperclip"
-    "tornado"
-    "typing-extensions"
-    "urwid"
     "zstandard"
+
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
   ];
 
   build-system = [ setuptools ];
@@ -129,6 +125,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -146,11 +145,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

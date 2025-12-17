@@ -5,7 +5,7 @@
   copyDesktopItems,
   fetchFromGitHub,
   flutter329,
-  ffmpeg,
+  ffmpeg_7,
   gst_all_1,
   fuse3,
   libXtst,
@@ -30,11 +30,13 @@
   yq,
   callPackage,
   addDriverRunpath,
+  perl,
+  openssl,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.1/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.4/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -64,24 +66,25 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
+    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
   };
 
   strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
+  env.OPENSSL_NO_VENDOR = true;
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
   # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -92,7 +95,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
+    hash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
   };
 
   dontCargoBuild = true;
@@ -116,10 +119,11 @@ flutter329.buildFlutterApplication rec {
     rustPlatform.bindgenHook
     ffigen
     yq
+    perl
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -135,6 +139,7 @@ flutter329.buildFlutterApplication rec {
     libyuv
     pam
     xdotool
+    openssl
   ];
 
   prePatch = ''

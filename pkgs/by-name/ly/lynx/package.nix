@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
   configureFlags = [
     "--enable-default-colors"
     "--enable-widec"
@@ -54,12 +52,12 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

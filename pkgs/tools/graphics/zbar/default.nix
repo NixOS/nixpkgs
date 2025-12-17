@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various
@@ -177,9 +177,9 @@ stdenv.mkDerivation rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";
     mainProgram = "zbarimg";
   };

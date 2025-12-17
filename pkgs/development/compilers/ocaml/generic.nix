@@ -134,8 +134,7 @@ stdenv.mkDerivation (
         ];
     # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
     hardeningDisable =
-      lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
-      ++ lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
+      lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
       ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
     # Older versions have some race:
@@ -190,10 +189,10 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with licenses; [
+      license = with lib.licenses; [
         qpl # compiler
         lgpl2 # library
       ];
@@ -216,7 +215,7 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
-      platforms = with platforms; linux ++ darwin;
+      platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

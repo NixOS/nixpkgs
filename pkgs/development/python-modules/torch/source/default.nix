@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -42,7 +41,6 @@
   removeReferencesTo,
 
   # Build inputs
-  apple-sdk_13,
   openssl,
   numactl,
   llvmPackages,
@@ -282,7 +280,7 @@ in
 buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
 
   outputs = [
@@ -582,9 +580,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_13
-  ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [

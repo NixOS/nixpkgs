@@ -5,7 +5,7 @@
   alsa-lib,
   dbus,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_7,
   flac,
   freetype,
   gamemode,
@@ -36,6 +36,7 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
+  wrapGAppsHook3,
   zlib,
   # wrapper deps
   libretro,
@@ -58,24 +59,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.21.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
+    hash = "sha256-+3jgoh6OVbPzW5/nCvpB1CRgkMTBxLkYMm6UV16/cfU=";
     rev = "v${version}";
   };
 
   nativeBuildInputs = [
     pkg-config
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optional withWayland wayland
   ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_7
     flac
     freetype
     libGL
@@ -117,7 +119,8 @@ stdenv.mkDerivation rec {
     "--disable-builtinmbedtls"
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
-    "--disable-builtinflac"
+    # https://github.com/libretro/RetroArch/issues/18370
+    # "--disable-builtinflac"
     "--disable-update_assets"
     "--disable-update_core_info"
   ]
@@ -178,7 +181,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with lib.maintainers; [
-      matthewbauer
       kolbycrouch
     ];
     teams = [ lib.teams.libretro ];

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karere";
-  version = "0.9.4";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "tobagin";
     repo = "karere";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qfBAA9PFXqU+hS9evsX8898ysE58IcZz3df4kVsnaa8=";
+    hash = "sha256-QpKKUP/Lp0nWI+h67Uc2f+4G3LG593hLB7b7IMinThI=";
   };
 
   nativeBuildInputs = [

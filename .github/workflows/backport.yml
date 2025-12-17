@@ -22,12 +22,12 @@ jobs:
   backport:
     name: Backport Pull Request
     if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
-      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         id: app-token
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
@@ -36,7 +36,7 @@ jobs:
           permission-pull-requests: write
           permission-workflows: write
 
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@d07416681cab29bf2661702f925f020aaa962997 # v3.4.1
+        uses: korthout/backport-action@3634249d418881baa47fd6bae694506145f7a61b # v4.0.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'
@@ -60,6 +60,9 @@ jobs:
             **Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).**
 
             Even as a non-committer, if you find that it is not acceptable, leave a comment.
+
+            > [!TIP]
+            > If you maintain all packages touched by this pull request, and they are all located under `pkgs/by-name/*`, you can comment **`@NixOS/nixpkgs-merge-bot merge`** to automatically merge this PR using the [`nixpkgs-merge-bot`](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md#nixpkgs-merge-bot).
 
       - name: Log current API rate limits
         env:

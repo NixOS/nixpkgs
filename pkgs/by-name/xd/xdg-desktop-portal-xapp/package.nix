@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-xapp";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xdg-desktop-portal-xapp";
     rev = version;
-    hash = "sha256-3EGim8GDlzVhgKiBHaOjV+apyEanFyfTqfJLegwlQHo=";
+    hash = "sha256-5gJmWj15jUVGhCf8jOl/eXHVisFdegbbx6pqz6btNTM=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xapp ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend implementation for xdg-desktop-portal for Cinnamon, MATE, Xfce";
     homepage = "https://github.com/linuxmint/xdg-desktop-portal-xapp";
-    teams = [ teams.cinnamon ];
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    teams = [ lib.teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
   };
 }

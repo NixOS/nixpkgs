@@ -22,6 +22,9 @@ buildRedist (finalAttrs: {
     "out"
   ];
 
+  # We have stubs but we don't have an explicit stubs output.
+  includeRemoveStubsFromRunpathHook = true;
+
   propagatedBuildOutputs =
     # required by CMake
     lib.optionals (lib.elem "static" finalAttrs.outputs) [ "static" ]

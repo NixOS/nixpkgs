@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   libcosmicAppHook,
+  just,
   pulseaudio,
   pipewire,
   libinput,
@@ -13,19 +15,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.0-beta.5";
+  version = "1.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-JClwgNfTiGrXVMheRmHuiDBwvUQJqgF4GCe4IWUk87E=";
+    hash = "sha256-InQdJ3ddyDg8SfkIaK2T4r+gS5Cr0h93afwBGmI40fk=";
   };
 
-  cargoHash = "sha256-v6/lWqGG3uFSFgw77M0kGM+cK9wSiuaGaciPqz/wFIQ=";
+  cargoHash = "sha256-DNQvmE/2swrDybjcQfCAjMRkAttjl+ibbLG0HSlcZwU=";
 
   nativeBuildInputs = [
+    just
     libcosmicAppHook
     rustPlatform.bindgenHook
   ];
@@ -35,6 +38,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
     libinput
     pipewire
+  ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
@@ -48,10 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
-        "--version"
-        "unstable"
         "--version-regex"
         "epoch-(.*)"
       ];

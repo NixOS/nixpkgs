@@ -3,17 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "node_exporter";
   version = "1.10.2";
-  rev = "v${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
+    tag = "${finalAttrs.version}";
     hash = "sha256-UaybbRmcvifXNwTNXg7mIYN9JnonSxwG62KfvU5auIE=";
   };
 
@@ -27,8 +27,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/prometheus/common/version.Version=${version}"
-    "-X github.com/prometheus/common/version.Revision=${rev}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
     "-X github.com/prometheus/common/version.Branch=unknown"
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
     "-X github.com/prometheus/common/version.BuildDate=unknown"
@@ -36,11 +36,16 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = {
     description = "Prometheus exporter for machine metrics";
     mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
-    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       benley
@@ -49,4 +54,4 @@ buildGoModule rec {
       Frostman
     ];
   };
-}
+})

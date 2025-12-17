@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpie_ntlm" ];
 
-  meta = with lib; {
+  meta = {
     description = "NTLM auth plugin for HTTPie";
     homepage = "https://github.com/httpie/httpie-ntlm";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

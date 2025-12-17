@@ -5,8 +5,12 @@
 }:
 {
   imports = [
+    ./bluetooth.nix
+    ./camera
     ./disk.nix
+    ./fingerprint
     ./firmware.nix
+    ./graphics
     ./keyboard.nix
     ./networking
     ./system.nix

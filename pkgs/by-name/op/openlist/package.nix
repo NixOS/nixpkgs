@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.1.6";
+  version = "4.1.8";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6GO8xcTw05OrKpfiRmVD75rbI2OtmXjpf3pWjGg3AdM=";
+    hash = "sha256-R3R5DfI+lctpFh68z9zsNhNc3siVIOj02lclYIYElzg=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-7LbJlattHOMYUKeqwg+E+X3NQO8p4mwqmtpd2I98JAI=";
+  vendorHash = "sha256-Kx553w93A6nCBJTejY2TEUQhfYiByivMAfcVsWa1z6U=";
 
   buildInputs = [ fuse ];
 

@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "videocr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract hardcoded subtitles from videos using machine learning";
     homepage = "https://github.com/apm1467/videocr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ozkutuk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ozkutuk ];
   };
 }

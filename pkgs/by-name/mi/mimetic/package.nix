@@ -26,11 +26,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isAarch64 ./narrowing.patch;
 
-  meta = with lib; {
+  meta = {
     description = "MIME handling library";
     homepage = "https://www.codesink.org/mimetic_mime_library.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

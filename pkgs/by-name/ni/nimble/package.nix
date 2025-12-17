@@ -42,7 +42,7 @@ buildNimPackage (
       changelog = "https://github.com/nim-lang/nimble/releases/tag/v${final.version}";
       license = lib.licenses.bsd3;
       mainProgram = "nimble";
-      maintainers = [ lib.maintainers.daylinmorgan ];
+      teams = [ lib.teams.nim ];
     };
   }
 )

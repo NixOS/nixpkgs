@@ -4,9 +4,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python,
-  pax-utils,
 
   # build-system
   setuptools,
@@ -61,22 +59,15 @@ let
 in
 buildPythonPackage rec {
   pname = "firedrake";
-  version = "2025.10.1";
+  version = "2025.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
     tag = version;
-    hash = "sha256-paZNs6T9v7TNSdc8YJTjNcQvGrPg/Sy9K27/aUxNu5w=";
+    hash = "sha256-A0dr9A1fm74IzpYiVxzdo4jtELYH7JBeRMOD9uYJODQ=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/firedrakeproject/firedrake/pull/4632/commits/717ae8a62e19e0cc91419c12ca14170d252b2bb9.patch?full_index=1";
-      hash = "sha256-XHIcXmfh/brlQkrM4FTRvTrOovLvBN5mBrqZpZewTnc=";
-    })
-  ];
 
   # relax build-dependency petsc4py
   postPatch = ''
@@ -111,6 +102,7 @@ buildPythonPackage rec {
     fenics-ufl
     firedrake-fiat
     firedrakePackages.h5py
+    immutabledict
     libsupermesh
     loopy
     petsc4py
@@ -126,11 +118,11 @@ buildPythonPackage rec {
     rtree
     scipy
     sympy
+    # vtk optional required by IO module, we can make it a hard dependency in nixpkgs,
+    # see https://github.com/firedrakeproject/firedrake/pull/4713
     vtk
     # required by script spydump
     matplotlib
-    # required by pyop2
-    immutabledict
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     islpy

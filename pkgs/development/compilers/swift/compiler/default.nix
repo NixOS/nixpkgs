@@ -523,8 +523,10 @@ stdenv.mkDerivation {
     # Add appleSwiftCore to the search paths. Adding the whole SDK results in build failures.
     OLD_NIX_SWIFTFLAGS_COMPILE="$NIX_SWIFTFLAGS_COMPILE"
     OLD_NIX_LDFLAGS="$NIX_LDFLAGS"
+    OLD_NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE"
     export NIX_SWIFTFLAGS_COMPILE=" -I ${appleSwiftCore}/lib/swift"
     export NIX_LDFLAGS+=" -L ${appleSwiftCore}/lib/swift"
+    export NIX_CFLAGS_COMPILE+=" -Wno-error=unguarded-availability"
   ''
   + ''
 
@@ -568,6 +570,7 @@ stdenv.mkDerivation {
     # Restore search paths to remove appleSwiftCore.
     export NIX_SWIFTFLAGS_COMPILE="$OLD_NIX_SWIFTFLAGS_COMPILE"
     export NIX_LDFLAGS="$OLD_NIX_LDFLAGS"
+    export NIX_CFLAGS_COMPILE="$OLD_NIX_CFLAGS_COMPILE"
   ''
   + ''
 

@@ -24,10 +24,10 @@ let
 
   boolOption = value: if value then "True" else "False";
 
-  gclient = writeText "flutter-engine-${version}.gclient" ''
+  gclient = writeText "flutter-${version}.gclient" ''
     solutions = [{
       "managed": False,
-      "name": "${lib.optionalString (lib.versionAtLeast flutterVersion "3.29") "engine/"}src/flutter",
+      "name": ".",
       "url": "${url}",
       "custom_vars": {
         "download_fuchsia_deps": False,
@@ -35,7 +35,7 @@ let
         "download_linux_deps": ${boolOption targetPlatform.isLinux},
         "setup_githooks": False,
         "download_esbuild": False,
-        "download_dart_sdk": False,
+        "download_dart_sdk": True,
         "host_cpu": "${build-constants.alt-arch}",
         "host_os": "${build-constants.alt-os}",
       },
@@ -85,38 +85,19 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
       (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
         or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
   }
-  (
-    ''
-      source ${../../../../build-support/fetchgit/deterministic-git}
-      export -f clean_git
-      export -f make_deterministic_repo
+  ''
+    source ${../../../../build-support/fetchgit/deterministic-git}
+    export -f clean_git
+    export -f make_deterministic_repo
 
-      mkdir --parents source
-      cp ${gclient} source/.gclient
-      cd source
-      export PATH=$PATH:${tools.depot_tools}
-      python3 ${tools.depot_tools}/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
-    ''
-    + lib.optionalString (lib.versionAtLeast flutterVersion "3.29") ''
-      cp --recursive engine/src/flutter/third_party/* engine/src/flutter/engine/src/flutter/third_party/
-      ${
-        if (lib.versionAtLeast flutterVersion "3.38") then
-          "mv engine/src/flutter $out"
-        else
-          "mv engine/src/flutter/engine $out"
-      }
-    ''
-    + ''
-      ${if (lib.versionAtLeast flutterVersion "3.38") then "pushd $out/engine" else "pushd $out"}
-      find $out -name '.git' -exec rm --recursive --force {} \; || true
+    mkdir --parents flutter
+    cp ${gclient} flutter/.gclient
+    cd flutter
+    export PATH=$PATH:${tools.depot_tools}
+    python3 ${tools.depot_tools}/gclient.py sync --no-history --shallow --nohooks -j $NIX_BUILD_CORES
+    mv engine $out
 
-      rm --recursive --force src/{buildtools,fuchsia}
-      rm --recursive --force src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
-      rm --recursive --force src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
-      rm --recursive --force src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
+    find $out -name '.git' -exec rm --recursive --force {} \; || true
 
-      rm --recursive --force .cipd .gclient .gclient_entries .gclient_previous_custom_vars .gclient_previous_sync_commits
-
-      popd
-    ''
-  )
+    rm --recursive $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions,third_party/dart/tools/sdks/dart-sdk}
+  ''

@@ -11,12 +11,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.10.1";
+  version = "25.11.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-5OWfWey6pFn+XUv9cvGoXD6ExKKFHL7PMTqqce7C7Q8=";
+    hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
       ;
     fetcherVersion = 2;
-    hash = "sha256-2cozIe70PGo1WRUeWrY8W1B6U2QYLbWYcwN5WllRwkg=";
+    hash = "sha256-TtazfRhcniA1H//C95AMH8/Pw+Rbtinlfg7dDAmSk1w=";
   };
 
   nativeBuildInputs = [
@@ -67,15 +67,15 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Very simple static homepage for your server";
     homepage = "https://github.com/bastienwirtz/homer";
     changelog = "https://github.com/bastienwirtz/homer/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       stunkymonkey
       christoph-heiss
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

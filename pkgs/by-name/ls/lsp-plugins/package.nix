@@ -13,10 +13,28 @@
   lv2,
   php84,
   pkg-config,
+
+  buildVST3 ? true,
+  buildVST2 ? true,
+  buildCLAP ? true,
+  buildLV2 ? true,
+  buildLADSPA ? true,
+  buildJACK ? true,
+  buildGStreamer ? true,
 }:
 
 let
   php = php84;
+
+  subFeatures = [
+    (lib.optionalString (!buildVST3) "vst3")
+    (lib.optionalString (!buildVST2) "vst2")
+    (lib.optionalString (!buildCLAP) "clap")
+    (lib.optionalString (!buildLV2) "lv2")
+    (lib.optionalString (!buildLADSPA) "ladspa")
+    (lib.optionalString (!buildJACK) "jack")
+    (lib.optionalString (!buildGStreamer) "gst")
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    make $makeFlags config
+    make $makeFlags config SUB_FEATURES="${lib.concatStringsSep " " subFeatures}"
 
     runHook postConfigure
   '';

@@ -7,26 +7,26 @@
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "9.5.0";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "fastly-exporter";
     rev = "v${version}";
-    hash = "sha256-W3VVnI83RKwNkQj4njvZS+ANklNR27BWIrJmdcmSq2I=";
+    hash = "sha256-Iu+GqCE7Eg2oN6vmdpgsPKHqxz91f12waxj0J2K+gWk=";
   };
 
-  vendorHash = "sha256-wbkm6b8xTGAQ4bCjIOVvJVA7sckPxtDiwMcjglaL/Pk=";
+  vendorHash = "sha256-83qUoQNiQ3D2Bm6D4DoVZDEO8EtUmxBXlpV6F+N1eSA=";
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) fastly;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for the Fastly Real-time Analytics API";
     homepage = "https://github.com/fastly/fastly-exporter";
-    license = licenses.asl20;
-    teams = [ teams.deshaw ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.deshaw ];
     mainProgram = "fastly-exporter";
   };
 }

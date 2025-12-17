@@ -24,16 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.85";
+  version = "0.2.86";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-n9LeGXXL4HK4fy/lvOlyXhhu10JmxGILmhIYxhEJ1B8=";
+    hash = "sha256-68b6czefoqLskdqhc9kDIoS8eDCKu56lqvX8Jz47C3k=";
   };
 
-  cargoHash = "sha256-XCaf2sa4898xZFJLcFBRe9HTk2NCGpefQF6bfvrlca4=";
+  cargoHash = "sha256-CoYnP83Ci5Jp3Hunm2+xdXBu0mlhADf4jyfLSIXZ0jI=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \

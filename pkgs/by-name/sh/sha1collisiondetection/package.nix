@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and command line tool to detect SHA-1 collision";
     longDescription = ''
       This library and command line tool were designed as near drop-in
@@ -36,9 +36,8 @@ stdenv.mkDerivation rec {
       each file. It is very fast and takes less than twice the amount
       of time as regular SHA-1.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     mainProgram = "sha1dcsum";
   };
 }

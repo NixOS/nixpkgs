@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "4.1.1";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     tag = "v${version}";
-    hash = "sha256-0/yzOoO9WeArTm9qlL3++rn0EUCJAjmUX2zxClu3LRE=";
+    hash = "sha256-3RuAFg+9Mi+tBuLmXyWlFFNOfrUvrkNvedo9Au3tMYU=";
   };
 
   sourceRoot = "${src.name}/source";
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     mprisify
     requests
     ytmusicapi
+    logboth
   ];
 
   build-system = with python3Packages; [
@@ -51,7 +52,9 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
-  postInstall = "make install prefix=$out";
+  postInstall = ''
+    make install prefix=$out
+  '';
 
   dontWrapGApps = true;
 
@@ -70,7 +73,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/zehkira/monophony";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ quadradical ];
+    maintainers = with lib.maintainers; [
+      quadradical
+      aleksana
+    ];
     mainProgram = "monophony";
   };
 }

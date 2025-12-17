@@ -42,14 +42,14 @@ let
           rm -rf Xcode.app
         '';
       };
-      meta = with lib; {
+      meta = {
         homepage = "https://developer.apple.com/xcode/";
         description = "Apple's Xcode developer tools";
         maintainers = with lib.maintainers; [ DimitarNestorov ];
-        license = licenses.unfree;
-        platforms = platforms.darwin ++ platforms.linux;
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.darwin ++ lib.platforms.linux;
         hydraPlatforms = [ ];
-        sourceProvenance = [ sourceTypes.binaryNativeCode ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
 
     in
@@ -111,6 +111,8 @@ lib.makeExtensible (self: {
   xcode_26_Apple_silicon = requireXcode "26_Apple_silicon" "sha256-dlfZ2sM6a9pUPdukoMoqvQAj7EEUyj0a/VkXKwkkFT8=";
   xcode_26_0_1 = requireXcode "26.0.1" "sha256-PsEIjrzxgXFqCWeHs/bsvrlxy8aN899jMhesczMbPfE=";
   xcode_26_0_1_Apple_silicon = requireXcode "26.0.1_Apple_silicon" "sha256-UBDey19uBljjRw84bY4rzxetFEkHiXLEj39Q578jYL8=";
+  xcode_26_1 = requireXcode "26.1" "sha256-SLIn1xAjaYhKGN6EEKslzmVZv+Zoq7QNGdtNreWJ5L8=";
+  xcode_26_1_Apple_silicon = requireXcode "26.1_Apple_silicon" "sha256-xFMknk3RxxJi/5IOb2mmw7vyC1xOaY5ZwCZ09AARtJU=";
   xcode =
     self."xcode_${
       lib.replaceStrings [ "." ] [ "_" ] (

@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "busypie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Expressive busy wait for Python";
     homepage = "https://github.com/rockem/busypie";
     changelog = "https://github.com/rockem/busypie/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

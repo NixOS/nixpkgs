@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     inherit withMPI;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Engineering and scientific problems algorithms";
     mainProgram = "nvcc_wrapper";
     longDescription = ''
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
       problems.
     '';
     homepage = "https://trilinos.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.all;
   };
 }

@@ -16,7 +16,7 @@ For example, when upgrading from 1.4 -> 1.5
 ### Init new version
 
 1. `cp pkgs/by-name/ka/kanidm/1_4.nix pkgs/by-name/ka/kanidm/1_5.nix`
-1. `cp -r pkgs/by-name/ka/kanidm/patches/1_4 pkgs/by-name/ka/kanidm/patches/1_5`
+1. `cp -r pkgs/by-name/ka/kanidm/provision-patches/1_4 pkgs/by-name/ka/kanidm/provision-patches/1_5`
 1. Update `1_5.nix` hashes/paths, and as needed for upstream changes, `generic.nix`
 1. Update `all-packages.nix` to add `kanidm_1_5` and `kanidmWithSecretProvisioning_1_5`, leave default
 1. Update the previous release, e.g. `1_4.nix` and set `eolDate = "YYYY-MM-DD"` where the date is 30 days from release of 1.5.

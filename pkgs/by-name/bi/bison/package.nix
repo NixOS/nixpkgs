@@ -69,8 +69,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-
-  passthru = {
-    glrSupport = true;
-  };
 }

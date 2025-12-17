@@ -4,23 +4,19 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "wtf8";
   version = "1.0.2";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.02";
-
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
+    url = "https://github.com/flowtype/ocaml-wtf8/releases/download/v${finalAttrs.version}/wtf8-v${finalAttrs.version}.tbz";
+    hash = "sha256-d5/3KUBAWRj8tntr4RkJ74KWW7wvn/B/m1nx0npnzyc=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
     description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates";
-    license = licenses.mit;
-    maintainers = [ maintainers.eqyiel ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.eqyiel ];
   };
-}
+})

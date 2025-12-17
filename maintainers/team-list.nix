@@ -79,7 +79,6 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
@@ -137,7 +136,6 @@ with lib.maintainers;
 
   c = {
     members = [
-      matthewbauer
       mic92
     ];
     scope = "Maintain C libraries and tooling.";
@@ -226,6 +224,18 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
+  ctrl-os = {
+    # Existing members may approve additions.
+    members = [
+      blitz
+      messemar
+      flyfloh
+    ];
+
+    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
+    shortName = "CTRL-OS";
+  };
+
   cuda = {
     github = "cuda-maintainers";
   };
@@ -234,12 +244,20 @@ with lib.maintainers;
     # Verify additions by approval of an already existing member of the team.
     members = [
       xanderio
-      blitz
       snu
       e1mo
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
+  };
+
+  danklinux = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
+    shortName = "Dank Linux";
   };
 
   darwin = {
@@ -332,6 +350,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  feel-co = {
+    github = "feel-co";
+  };
+
   flutter = {
     enableFeatureFreezePing = false;
     github = "flutter";
@@ -348,6 +370,20 @@ with lib.maintainers;
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
+  };
+
+  forgejo = {
+    members = [
+      adamcstephens
+      bendlas
+      christoph-heiss
+      emilylange
+      marie
+      pyrox0
+      tebriel
+    ];
+    scope = "Maintain the Forgejo code forge, packages and modules.";
+    shortName = "Forgejo";
   };
 
   formatter = {
@@ -386,7 +422,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz
@@ -481,7 +516,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      edwtjo
       leona
       theCapypara
       thiagokokada
@@ -521,7 +555,6 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
@@ -537,8 +570,6 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
-      edwtjo
-      hrdinka
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -620,7 +651,6 @@ with lib.maintainers;
   mate = {
     members = [
       bobby285271
-      j03
       romildo
     ];
     scope = "Maintain Mate desktop environment and related packages.";
@@ -631,7 +661,6 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      fadenb
       mguentner
       dandellion
       nickcao
@@ -656,10 +685,12 @@ with lib.maintainers;
   minimal-bootstrap = {
     members = [
       alejandrosame
+      aleksi
       artturin
       emilytrau
       ericson2314
       jk
+      pyrox0
       siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";
@@ -704,6 +735,11 @@ with lib.maintainers;
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
+  };
+
+  nim = {
+    github = "nim";
+    enableFeatureFreezePing = true;
   };
 
   # same as https://github.com/orgs/NixOS/teams/nix-team
@@ -775,7 +811,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";

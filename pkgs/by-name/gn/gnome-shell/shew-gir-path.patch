@@ -1,5 +1,5 @@
---- a/subprojects/shew/src/meson.build
-+++ b/subprojects/shew/src/meson.build
+--- a/subprojects/libshew/src/meson.build
++++ b/subprojects/libshew/src/meson.build
 @@ -13,7 +13,7 @@ shew_sources = [
  libshew = library(full_name,
    sources: shew_sources,

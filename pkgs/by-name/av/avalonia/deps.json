@@ -887,8 +887,8 @@
   },
   {
     "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "8.0.21",
-    "hash": "sha256-RufsU8Mr81jK6fIbULBgkv0BRVmobXL38L8rBwBjJyg="
+    "version": "8.0.22",
+    "hash": "sha256-F8DQPfK1IiD8+H8A85QSBHhzJIo1fmAXwXaSge7EhBE="
   },
   {
     "pname": "Mono.Cecil",

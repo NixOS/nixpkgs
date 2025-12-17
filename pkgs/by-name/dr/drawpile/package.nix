@@ -6,6 +6,7 @@
   extra-cmake-modules,
   rustc,
   rustPlatform,
+  fetchpatch,
 
   # common deps
   libzip,
@@ -64,19 +65,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "drawpile";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
+    sha256 = "sha256-0paLKxAEvlbExq426xTekBt+Dkphx7Wg/AtpYN3f/4w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-VUX6J7TfxWpa07HPFZ8JzpltIwJUYAl5TABIpBmGYYo=";
+    hash = "sha256-u9fRbxKeQSou9Umw4EaqzzzDiN4zhyfx9sWnlZpfpxU=";
   };
+
+  patches = [
+    # Remove for 2.3.1
+    # QT updated and broke some functionality so we have to get the commit that fixes it from upstream
+    (fetchpatch {
+      name = "qt-6.10.1.patch";
+      url = "https://github.com/drawpile/Drawpile/commit/c4f69f79b1cb0d25e68b49e807ce6773ddb9dd3c.patch";
+      hash = "sha256-Z8mcPux8tvK5y1GirfKq1X9+kxHDIrnSLTd2MCSIxTg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -111,7 +122,10 @@ stdenv.mkDerivation rec {
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = with lib.maintainers; [
+      fgaz
+      qubic
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   }

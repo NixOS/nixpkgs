@@ -139,18 +139,18 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
     changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       illustris
       jfroche
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

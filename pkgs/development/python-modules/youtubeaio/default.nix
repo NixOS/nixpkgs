@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiohttp,
@@ -16,17 +15,20 @@
 
 buildPythonPackage rec {
   pname = "youtubeaio";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-lpmqQXizfFJXgGcKWhFqS4XMML12CFlB40k2ixdszCM=";
+    hash = "sha256-2PqVFZ5816g8Ilc0Mhlm+Gzw/eOSaC1JYPY/t2yzxCU=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/__snapshots__/test_video.ambr \
+      --replace-fail "TzInfo(0)" "TzInfo(UTC)"
+  '';
 
   build-system = [ poetry-core ];
 

@@ -36,10 +36,10 @@ mkDerivation rec {
 
   propagatedBuildInputs = [ qtbase ];
 
-  meta = with lib; {
+  meta = {
     description = "Property editing framework with editor widget similar to what is known from Qt Designer";
-    license = licenses.lgpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

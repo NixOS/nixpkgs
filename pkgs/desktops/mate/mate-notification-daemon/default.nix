@@ -23,6 +23,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
   version = "1.28.5";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
@@ -59,15 +63,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Notification daemon for MATE Desktop";
     mainProgram = "mate-notification-properties";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       gpl3Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

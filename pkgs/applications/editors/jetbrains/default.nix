@@ -1,11 +1,12 @@
 let
   # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
   # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  ideInfo = builtins.fromJSON (builtins.readFile ./ides.json);
   versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
 in
 
 {
+  config,
   lib,
   stdenv,
   callPackage,
@@ -45,7 +46,7 @@ let
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0-source;
 
   package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
@@ -116,16 +117,8 @@ let
       passthru.tests = extraTests // {
         plugins = callPackage ./plugins/tests.nix { ideName = pname; };
       };
-      libdbm =
-        if ideInfo."${pname}".meta.isOpenSource then
-          communitySources."${pname}".libdbm
-        else
-          communitySources.idea-community.libdbm;
-      fsnotifier =
-        if ideInfo."${pname}".meta.isOpenSource then
-          communitySources."${pname}".fsnotifier
-        else
-          communitySources.idea-community.fsnotifier;
+      libdbm = communitySources."${pname}".libdbm or communitySources.idea-oss.libdbm;
+      fsnotifier = communitySources."${pname}".fsnotifier or communitySources.idea-oss.fsnotifier;
     };
 
   communitySources = callPackage ./source { };
@@ -175,20 +168,36 @@ let
       $out/*/plugins/*/bin/*/linux/*/lib/python3.8/lib-dynload/* |
     xargs patchelf \
       --replace-needed libssl.so.10 libssl.so \
+      --replace-needed libssl.so.1.1 libssl.so \
       --replace-needed libcrypto.so.10 libcrypto.so \
+      --replace-needed libcrypto.so.1.1 libcrypto.so \
       --replace-needed libcrypt.so.1 libcrypt.so \
       ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
   '';
-in
-rec {
-  # Sorted alphabetically
 
-  aqua = mkJetBrainsProduct {
-    pname = "aqua";
+  # TODO: These can be moved down again when we don't need the aliases anymore:
+  _idea = buildIdea {
+    pname = "idea";
     extraBuildInputs = [
       lldb
+      musl
     ];
   };
+  _idea-oss = buildIdea {
+    pname = "idea-oss";
+    fromSource = true;
+  };
+  _pycharm = buildPycharm {
+    pname = "pycharm";
+    extraBuildInputs = [ musl ];
+  };
+  _pycharm-oss = buildPycharm {
+    pname = "pycharm-oss";
+    fromSource = true;
+  };
+in
+{
+  # Sorted alphabetically. Deprecated products and aliases are at the very end.
 
   clion =
     (mkJetBrainsProduct {
@@ -268,28 +277,9 @@ rec {
           '';
       });
 
-  idea-community-bin = buildIdea {
-    pname = "idea-community";
-  };
+  idea = _idea;
 
-  idea-community-src = buildIdea {
-    pname = "idea-community";
-    fromSource = true;
-  };
-
-  idea-community =
-    if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then
-      idea-community-bin
-    else
-      idea-community-src;
-
-  idea-ultimate = buildIdea {
-    pname = "idea-ultimate";
-    extraBuildInputs = [
-      lldb
-      musl
-    ];
-  };
+  idea-oss = _idea-oss;
 
   mps = mkJetBrainsProduct { pname = "mps"; };
 
@@ -300,20 +290,9 @@ rec {
     ];
   };
 
-  pycharm-community-bin = buildPycharm { pname = "pycharm-community"; };
+  pycharm = _pycharm;
 
-  pycharm-community-src = buildPycharm {
-    pname = "pycharm-community";
-    fromSource = true;
-  };
-
-  pycharm-community =
-    if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
-
-  pycharm-professional = buildPycharm {
-    pname = "pycharm-professional";
-    extraBuildInputs = [ musl ];
-  };
+  pycharm-oss = _pycharm-oss;
 
   rider =
     (mkJetBrainsProduct {
@@ -388,13 +367,70 @@ rec {
     ];
   };
 
-  writerside = mkJetBrainsProduct {
-    pname = "writerside";
-    extraBuildInputs = [
-      musl
-    ];
-  };
+  # Plugins
 
   plugins = callPackage ./plugins { };
 
+}
+
+// lib.optionalAttrs config.allowAliases rec {
+
+  # Deprecated products and aliases.
+
+  aqua =
+    lib.warnOnInstantiate
+      "jetbrains.aqua: Aqua has been discontinued by Jetbrains and is not receiving updates. It will be removed in NixOS 26.05."
+      (mkJetBrainsProduct {
+        pname = "aqua";
+        extraBuildInputs = [
+          lldb
+        ];
+      });
+
+  idea-community =
+    lib.warnOnInstantiate
+      "jetbrains.idea-community: IntelliJ IDEA Community has been discontinued by Jetbrains. This deprecated alias uses the, no longer updated, binary build on Darwin & Linux aarch64. On other platforms it uses IDEA Open Source, built from source. Either switch to 'jetbrains.idea-oss' or 'jetbrains.idea'. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/"
+      (
+        if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then
+          idea-community-bin
+        else
+          _idea-oss
+      );
+
+  idea-community-bin =
+    lib.warnOnInstantiate
+      "jetbrains.idea-community-bin: IntelliJ IDEA Community has been discontinued by Jetbrains. This binary build is no longer updated. Switch to 'jetbrains.idea-oss' for open source builds (from source) or 'jetbrains.idea' for commercial builds (binary, unfree). See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/"
+      (buildIdea {
+        pname = "idea-community";
+      });
+
+  idea-ultimate = lib.warnOnInstantiate "'jetbrains.idea-ultimate' has been renamed to/replaced by 'jetbrains.idea'" _idea;
+
+  idea-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: IntelliJ IDEA Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.idea-oss', the Open Source build of IntelliJ. See: https://blog.jetbrains.com/idea/2025/07/intellij-idea-unified-distribution-plan/" _idea-oss;
+
+  pycharm-community =
+    lib.warnOnInstantiate
+      "pycharm-comminity: PyCharm Community has been discontinued by Jetbrains. This deprecated alias uses the, no longer updated, binary build on Darwin. On Linux it uses PyCharm Open Source, built from source. Either switch to 'jetbrains.pycharm-oss' or 'jetbrains.pycharm'. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025"
+      (if stdenv.hostPlatform.isDarwin then pycharm-community-bin else _pycharm-oss);
+
+  pycharm-community-bin =
+    lib.warnOnInstantiate
+      "pycharm-comminity-bin: PyCharm Community has been discontinued by Jetbrains. This binary build is no longer updated. Switch to 'jetbrains.pycharm-oss' for open source builds (from source) or 'jetbrains.pycharm' for commercial builds (binary, unfree). See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025"
+      (buildPycharm {
+        pname = "pycharm-community";
+      });
+
+  pycharm-community-src = lib.warnOnInstantiate "jetbrains.idea-community-src: PyCharm Community has been discontinued by Jetbrains. This is now an alias for 'jetbrains.pycharm-oss', the Open Source build of PyCharm. See: https://blog.jetbrains.com/pycharm/2025/04/pycharm-2025" _pycharm-oss;
+
+  pycharm-professional = lib.warnOnInstantiate "'jetbrains.pycharm-professional' has been renamed to/replaced by 'jetbrains.pycharm'" _pycharm;
+
+  writerside =
+    lib.warnOnInstantiate
+      "jetbrains.writerside: Writerside has been discontinued by Jetbrains and is not receiving updates. It will be removed in NixOS 26.05."
+      (mkJetBrainsProduct {
+        pname = "writerside";
+        extraBuildInputs = [
+          musl
+        ];
+      });
 }

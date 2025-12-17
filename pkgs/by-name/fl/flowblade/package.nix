@@ -57,18 +57,20 @@ stdenv.mkDerivation rec {
     makeWrapper $out/flowblade/flowblade $out/bin/flowblade \
       --set FREI0R_PATH ${frei0r}/lib/frei0r-1 \
       --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa \
+      --set GDK_BACKEND x11 \
+      --set SDL_VIDEODRIVER x11 \
       --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
       ''${gappsWrapperArgs[@]}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multitrack Non-Linear Video Editor";
     homepage = "https://jliljebl.github.io/flowblade/";
-    license = with licenses; [ gpl3Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ polygon ];
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ polygon ];
     mainProgram = "flowblade";
   };
 }

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.19.2";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${version}";
-    hash = "sha256-8cAN560wg2MwZ9EooHVz3dsoNC5WQWhCAGqu48ZeRtY=";
+    hash = "sha256-q/JVvhI1NZTuX8vRWi/Q9ANE8ZTaTFNfb94n0NpH+/0=";
   };
 
   pythonRelaxDeps = [
@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lacuscore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
     changelog = "https://github.com/ail-project/LacusCore/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -431,6 +431,11 @@ stdenv.mkDerivation rec {
           sedVerbose $wrapper \
             -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g"
         done
+
+        # set --macos_sdk_version to make utimensat visible:
+        sedVerbose compile.sh \
+          -e "/bazel_build /a\  --macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion} \\\\" \
+
       '';
 
       genericPatches = ''
@@ -519,14 +524,14 @@ stdenv.mkDerivation rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
     + genericPatches;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     inherit platforms;

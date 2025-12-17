@@ -50,6 +50,11 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
+    (fetchpatch {
+      name = "fix-test_html.patch";
+      url = "https://github.com/jvoisin/mat2/commit/00b4f110711754496932c59d5af3c0b2ed694484.patch";
+      hash = "sha256-5h/nM1dK8HmYtoIBVGOvUegMFBpGxcfpn5O6QrjLi9M=";
+    })
   ];
 
   postPatch = ''

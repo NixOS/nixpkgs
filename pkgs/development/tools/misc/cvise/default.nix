@@ -90,11 +90,11 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/marxin/cvise";
     description = "Super-parallel Python port of C-Reduce";
-    license = licenses.ncsa;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.ncsa;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

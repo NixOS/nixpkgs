@@ -15,6 +15,7 @@
   glib,
   gitUpdater,
   bubblewrap,
+  xapp-symbolic-icons,
 }:
 
 let
@@ -29,7 +30,6 @@ let
       python-xapp
       zeroconf
       grpcio
-      setuptools
       cryptography
       pynacl
       netifaces
@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.10";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
     rev = version;
-    hash = "sha256-OSZYjCnFIHmWCwVcWP1MLmezt5HL4Njf0WMyCRmPP58=";
+    hash = "sha256-bVK60fSIWp02qrKCJ68awyPcZhMTW5bjRPI7YHmmScc=";
   };
 
   nativeBuildInputs = [
@@ -89,15 +89,21 @@ stdenv.mkDerivation rec {
       --replace-fail 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
   passthru.updateScript = gitUpdater {
     ignoredVersions = "^master.*";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

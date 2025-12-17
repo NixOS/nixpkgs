@@ -406,6 +406,9 @@ let
 
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
               "test-wasi"
+
+              # This is failing on newer macOS versions, no fix has yet been provided upstream:
+              "test-cluster-dgram-1"
             ]
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
@@ -424,12 +427,9 @@ let
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
-            ++ lib.optionals (majorVersion == "22" && stdenv.buildPlatform.isDarwin) [
-              "test-cluster-dgram-1"
-              "test/sequential/test-http-server-request-timeouts-mixed.js"
-            ]
-            # This is failing on newer macOS versions, no fix has yet been provided upstream:
-            ++ lib.optional (majorVersion == "24" && stdenv.buildPlatform.isDarwin) "test-cluster-dgram-1"
+            ++ lib.optional (
+              majorVersion == "22" && stdenv.buildPlatform.isDarwin
+            ) "test/sequential/test-http-server-request-timeouts-mixed.js"
           )
         }"
       ];
@@ -550,18 +550,18 @@ let
         inherit majorVersion;
       };
 
-      meta = with lib; {
+      meta = {
         description = "Event-driven I/O framework for the V8 JavaScript engine";
         homepage = "https://nodejs.org";
         changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
-        license = licenses.mit;
-        maintainers = with maintainers; [ aduh95 ];
-        platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [ aduh95 ];
+        platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
         # This broken condition is likely too conservative. Feel free to loosen it if it works.
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
-        knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+        knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

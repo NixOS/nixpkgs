@@ -10,8 +10,8 @@
   libnl,
   sensorsSupport ? stdenv.hostPlatform.isLinux,
   lm_sensors,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 assert systemdSupport -> stdenv.hostPlatform.isLinux;
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libnl
   ]
   ++ lib.optional sensorsSupport lm_sensors
-  ++ lib.optional systemdSupport systemd;
+  ++ lib.optional systemdSupport systemdLibs;
 
   configureFlags = [
     "--enable-unicode"
@@ -77,15 +77,15 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString (!stdenv.hostPlatform.isStatic) ''
       ${optionalPatch sensorsSupport "${lib.getLib lm_sensors}/lib/libsensors.so"}
-      ${optionalPatch systemdSupport "${systemd}/lib/libsystemd.so"}
+      ${optionalPatch systemdSupport "${systemdLibs}/lib/libsystemd.so"}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive process viewer, with vim-style keybindings";
     homepage = "https://aur.archlinux.org/packages/htop-vim";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thiagokokada ];
     mainProgram = "htop";
   };
 }

@@ -26,6 +26,7 @@
   runtimeShell,
   zfs ? null,
   efiSupport ? false,
+  ieee1275Support ? false,
   zfsSupport ? false,
   xenSupport ? false,
   xenPvhSupport ? false,
@@ -61,6 +62,11 @@ let
     riscv64-linux.target = "riscv64";
   };
 
+  ieee1275SystemsBuild = {
+    x86_64-linux.target = "i386";
+    powerpc64-linux.target = "powerpc";
+  };
+
   xenSystemsBuild = {
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
@@ -74,7 +80,7 @@ let
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
   gnulib = fetchgit {
-    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
+    url = "https://git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
@@ -90,15 +96,23 @@ let
 in
 
 assert zfsSupport -> zfs != null;
-assert !(efiSupport && (xenSupport || xenPvhSupport));
-assert !(xenSupport && xenPvhSupport);
+assert lib.asserts.assertMsg (
+  lib.lists.length (
+    lib.lists.filter (x: x) [
+      efiSupport
+      ieee1275Support
+      xenSupport
+      xenPvhSupport
+    ]
+  ) <= 1 # (0 == pc)
+) "Only <= 1 of grub2's platform-related *Support options may be enabled at the same time";
 
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
 
   src = fetchgit {
-    url = "https://https.git.savannah.gnu.org/git/grub.git";
+    url = "https://git.savannah.gnu.org/git/grub.git";
     tag = "grub-${version}";
     hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
@@ -505,6 +519,70 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=348cd416a3574348f4255bf2b04ec95938990997";
       hash = "sha256-WBLYQxv8si2tvdPAvbm0/4NNqYWBMJpFV4GC0HhN/kE=";
     })
+    (fetchpatch {
+      name = "CVE-2025-4382.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
+      hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
+    })
+    # https://lists.gnu.org/archive/html/grub-devel/2025-11/msg00155.html
+    (fetchpatch {
+      name = "1_commands_test_fix_error_in_recursion_depth_calculation.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cc9d621dd06bfa12eac511b37b4ceda5bd2f8246";
+      hash = "sha256-GpLpqTKr2ke/YaxnZIO1Kh9wpde44h2mvwcODcAL/nk=";
+    })
+    (fetchpatch {
+      name = "2_CVE-2025-54771.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c4fb4cbc941981894a00ba8e75d634a41967a27f";
+      hash = "sha256-yWowlAMVXdfIyC+BiB00IZvTwIybvaPhxAyz0MPjQuY=";
+    })
+    (fetchpatch {
+      name = "3_CVE-2025-54770.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=10e58a14db20e17d1b6a39abe38df01fef98e29d";
+      hash = "sha256-1ROc5n7sApw7aGr+y8gygFqVkifLdgOD3RPaW9b8aQQ=";
+    })
+    (fetchpatch {
+      name = "4_CVE-2025-61662.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=8ed78fd9f0852ab218cc1f991c38e5a229e43807";
+      hash = "sha256-mG+vcZHbF4duY2YoYAzPBQRHfWvp5Fvgtm0XBk7JqqM=";
+    })
+    (fetchpatch {
+      name = "5_CVE-2025-61663_CVE-2025-61664.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=05d3698b8b03eccc49e53491bbd75dba15f40917";
+      hash = "sha256-kgtXhZmAQpassEf8+RzqkghAzLrCcRoRMMnfunF/0J8=";
+    })
+    (fetchpatch {
+      name = "6_tests_lib_functional_test_unregister_commands_on_module_unload.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9df1e693e70c5a274b6d60dc76efe2694b89c2fc";
+      hash = "sha256-UzyYkpP7vivx2jzxi7BMP9h9OB2yraswrMW4g9UWsbI=";
+    })
+    (fetchpatch {
+      name = "7_CVE-2025-61661.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=549a9cc372fd0b96a4ccdfad0e12140476cc62a3";
+      hash = "sha256-2mlDoVXY7Upwx4QBeAMOHUtoUlyx1MDDmabnrwK1gEY=";
+    })
+    (fetchpatch {
+      name = "8_commands_usbtest_ensure_string_length_is_sufficient_in_usb_string_processing.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7debdce1e98907e65223a4b4c53a41345ac45e53";
+      hash = "sha256-2ALvrmwxvpjQYjGNrQ0gyGotpk0kgmYlJXMF1xXrnEw=";
+    })
+    # Required to apply the GCC-15 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_1.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=bba7dd7363402157034e9c94ee3d9ea82e37861d";
+      hash = "sha256-KO9rE/9xRkIGi/Y6jv1gVPiAJZUejwaUW6kIWthPUhw=";
+    })
+    # Required to apply the GCC-11 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=db506b3b83640ab166a782e1ca47c47836afddcd";
+      hash = "sha256-4ucCu+9OZ8NoicLF9hCgUpX4xgJk4Gzu6F3P4zl9J3U=";
+    })
+    # Required to build grub 2.12 with GCC 15
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_1_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac1512b872af8567b408518a7efa01607a0219ae";
+      hash = "sha256-deyp6Yatlgv86bYMt7WcWhKg8J6StDPUEy4UPHqJYIc=";
+    })
   ];
 
   postPatch =
@@ -613,6 +691,10 @@ stdenv.mkDerivation rec {
     "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
     "--program-prefix="
   ]
+  ++ lib.optionals ieee1275Support [
+    "--with-platform=ieee1275"
+    "--target=${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
     "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
@@ -626,6 +708,8 @@ stdenv.mkDerivation rec {
   grubTarget =
     if efiSupport then
       "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
+    else if ieee1275Support then
+      "${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}-ieee1275"
     else
       lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
@@ -647,7 +731,7 @@ stdenv.mkDerivation rec {
     nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader";
 
     longDescription = ''
@@ -664,17 +748,19 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/grub/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     platforms =
       if efiSupport then
         lib.attrNames efiSystemsBuild
+      else if ieee1275Support then
+        lib.attrNames ieee1275SystemsBuild
       else if xenSupport then
         lib.attrNames xenSystemsBuild
       else if xenPvhSupport then
         lib.attrNames xenPvhSystemsBuild
       else
-        platforms.gnu ++ platforms.linux;
+        lib.platforms.gnu ++ lib.platforms.linux;
 
     maintainers = [ ];
   };

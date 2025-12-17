@@ -2,25 +2,25 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pytestCheckHook,
   python,
-  pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.1.0";
+  version = "7.1.2";
   pyproject = true;
 
   inherit stdenv;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZVcIs8BpOHyLd7By/EKaV9DiFCIdAcCnct99/tyzvNI=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
   };
 
   postPatch = ''
@@ -63,11 +63,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

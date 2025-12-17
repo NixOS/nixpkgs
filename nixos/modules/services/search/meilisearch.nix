@@ -54,7 +54,6 @@ let
 in
 {
   meta.maintainers = with lib.maintainers; [
-    Br1ght0ne
     happysalada
   ];
   meta.doc = ./meilisearch.md;
@@ -180,6 +179,9 @@ in
 
       # this is intentionally different from upstream's default.
       no_analytics = lib.mkDefault true;
+
+      # allow updating without manual intervention
+      experimental_dumpless_upgrade = lib.mkDefault true;
     };
 
     # used to restore dumps

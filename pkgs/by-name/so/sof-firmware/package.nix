@@ -42,6 +42,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       hmenke
     ];
     platforms = with lib.platforms; linux;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
 })

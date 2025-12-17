@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gswatcher";
-  version = "1.7.3";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "lxndr";
     repo = "gswatcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0iJTJkG+EhiOYZQiWBsT0TY/NC7fLny2dXbmYYWnuic=";
+    hash = "sha256-RnyvKAnEF1tzVS+/GEwaGQNPIXKx7KU790ZElj6hJtw=";
   };
 
   nativeBuildInputs = [

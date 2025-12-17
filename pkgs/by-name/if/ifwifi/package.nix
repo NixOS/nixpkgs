@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Simple wrapper over nmcli using wifiscanner made in rust";
     mainProgram = "ifwifi";
     longDescription = ''
@@ -50,10 +50,10 @@ rustPlatform.buildRustPackage rec {
       project that gave me almost everything I wanted to create this tool.
     '';
     homepage = "https://github.com/araujobsd/ifwifi";
-    license = with licenses; [ bsd2 ];
+    license = with lib.licenses; [ bsd2 ];
     maintainers = [ ];
     # networkmanager doesn't work on darwin
     # even though the `wifiscanner` crate would work
-    platforms = with platforms; linux; # ++ darwin;
+    platforms = with lib.platforms; linux; # ++ darwin;
   };
 }

@@ -5,20 +5,17 @@
   llama-index-core,
   openai,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai";
-  version = "0.5.6";
+  version = "0.6.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_llms_openai";
     inherit version;
-    hash = "sha256-klM+g74usyHYSgGoT7K/RQa/aExBDNlMyymubJSaJ9Q=";
+    hash = "sha256-7hk3FpHGzQD4V6Xa7a4DEBoBv01e+0cxudJYO2bDZEE=";
   };
 
   pythonRemoveDeps = [
@@ -38,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.llms.openai" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex LLMS Integration for OpenAI";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/llms/llama-index-llms-openai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

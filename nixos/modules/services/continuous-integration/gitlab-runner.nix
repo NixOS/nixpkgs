@@ -318,7 +318,7 @@ in
 
               ''${pkgs.nix}/bin/nix-env -i ''${concatStringsSep " " (with pkgs; [ nix cacert git openssh ])}
 
-              ''${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixpkgs-unstable
+              ''${pkgs.nix}/bin/nix-channel --add https://channels.nixos.org/nixpkgs-unstable
               ''${pkgs.nix}/bin/nix-channel --update nixpkgs
             ''';
             environmentVariables = {

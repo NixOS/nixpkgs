@@ -242,7 +242,6 @@ in
   apparmor = runTest ./apparmor;
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
-  archi = runTest ./archi.nix;
   aria2 = runTest ./aria2.nix;
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
@@ -359,6 +358,7 @@ in
   cinnamon = runTest ./cinnamon.nix;
   cinnamon-wayland = runTest ./cinnamon-wayland.nix;
   cjdns = runTest ./cjdns.nix;
+  clamav = runTest ./clamav.nix;
   clatd = runTest ./clatd.nix;
   clickhouse = import ./clickhouse {
     inherit runTest;
@@ -522,6 +522,11 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
+  ersatztv = runTest ./ersatztv.nix;
+  espanso = import ./espanso.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   esphome = runTest ./esphome.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   etcd = import ./etcd/default.nix { inherit pkgs runTest; };
@@ -564,16 +569,22 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
+  firefox-syncserver = runTest ./firefox-syncserver.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
   firewall = runTest {
     imports = [ ./firewall.nix ];
-    _module.args.nftables = false;
+    _module.args.backend = "iptables";
+  };
+  firewall-firewalld = runTest {
+    imports = [ ./firewall.nix ];
+    _module.args.backend = "firewalld";
   };
   firewall-nftables = runTest {
     imports = [ ./firewall.nix ];
-    _module.args.nftables = true;
+    _module.args.backend = "nftables";
   };
+  firewalld = runTest ./firewalld.nix;
   firezone = runTest ./firezone/firezone.nix;
   fish = runTest ./fish.nix;
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
@@ -642,7 +653,6 @@ in
   gnome = runTest ./gnome.nix;
   gnome-extensions = runTest ./gnome-extensions.nix;
   gnome-flashback = runTest ./gnome-flashback.nix;
-  gnome-xorg = runTest ./gnome-xorg.nix;
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
   go-camo = runTest ./go-camo.nix;
@@ -742,9 +752,11 @@ in
   iftop = runTest ./iftop.nix;
   image-contents = handleTest ./image-contents.nix { };
   immich = runTest ./web-apps/immich.nix;
+  immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
+  immichframe = runTest ./web-apps/immichframe.nix;
   incron = runTest ./incron.nix;
   incus = import ./incus {
     inherit runTestOn;
@@ -790,9 +802,11 @@ in
   jotta-cli = runTest ./jotta-cli.nix;
   k3s = handleTest ./k3s { };
   kafka = handleTest ./kafka { };
+  kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
+  karakeep = runTest ./web-apps/karakeep.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
@@ -814,6 +828,7 @@ in
   kmonad = runTest ./kmonad.nix;
   knot = runTest ./knot.nix;
   komga = runTest ./komga.nix;
+  komodo-periphery = runTest ./komodo-periphery.nix;
   krb5 = discoverTests (import ./krb5);
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
@@ -843,6 +858,7 @@ in
   lemurs-xorg = runTest ./lemurs/lemurs-xorg.nix;
   lemurs-xorg-script = runTest ./lemurs/lemurs-xorg-script.nix;
   libinput = runTest ./libinput.nix;
+  librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
@@ -889,7 +905,7 @@ in
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
-  lxc = handleTest ./lxc { };
+  lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;
@@ -927,6 +943,7 @@ in
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
+  meshtasticd = runTest ./networking/meshtasticd.nix;
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
   mimir = runTest ./mimir.nix;
@@ -973,7 +990,6 @@ in
   mpd = runTest ./mpd.nix;
   mpv = runTest ./mpv.nix;
   mtp = runTest ./mtp.nix;
-  multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
   munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;
@@ -1011,12 +1027,15 @@ in
     defaults.services.ncps.cache.dataPath = "/path/to/ncps";
   };
   ndppd = runTest ./ndppd.nix;
-  nebula = runTest ./nebula.nix;
+  nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
+  nebula.connectivity = runTest ./nebula/connectivity.nix;
+  nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
+  netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netdata = runTest ./netdata.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
   networking.networkmanager = handleTest ./networking/networkmanager.nix { };
@@ -1055,6 +1074,7 @@ in
   nitter = runTest ./nitter.nix;
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nix-config = runTest ./nix-config.nix;
+  nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
@@ -1069,25 +1089,12 @@ in
   nixos-generate-config = runTest ./nixos-generate-config.nix;
   nixos-rebuild-install-bootloader = handleTestOn [
     "x86_64-linux"
-  ] ./nixos-rebuild-install-bootloader.nix { withNg = false; };
-  nixos-rebuild-install-bootloader-ng = handleTestOn [
-    "x86_64-linux"
-  ] ./nixos-rebuild-install-bootloader.nix { withNg = true; };
+  ] ./nixos-rebuild-install-bootloader.nix { };
   nixos-rebuild-specialisations = runTestOn [ "x86_64-linux" ] {
     imports = [ ./nixos-rebuild-specialisations.nix ];
-    _module.args.withNg = false;
-  };
-  nixos-rebuild-specialisations-ng = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./nixos-rebuild-specialisations.nix ];
-    _module.args.withNg = true;
   };
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
-    _module.args.withNg = false;
-  };
-  nixos-rebuild-target-host-ng = runTest {
-    imports = [ ./nixos-rebuild-target-host.nix ];
-    _module.args.withNg = true;
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
@@ -1133,9 +1140,11 @@ in
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-cuda.nix;
   ollama-rocm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-rocm.nix;
+  ollama-vulkan = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ollama-vulkan.nix;
   ombi = runTest ./ombi.nix;
   omnom = runTest ./omnom;
   oncall = runTest ./web-apps/oncall.nix;
+  onlyoffice = runTest ./onlyoffice.nix;
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   open-webui = runTest ./open-webui.nix;
   openarena = runTest ./openarena.nix;
@@ -1175,6 +1184,7 @@ in
   pam-file-contents = runTest ./pam/pam-file-contents.nix;
   pam-lastlog = runTest ./pam/pam-lastlog.nix;
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
+  pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
@@ -1219,7 +1229,6 @@ in
   phylactery = runTest ./web-apps/phylactery.nix;
   pict-rs = runTest ./pict-rs.nix;
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
-  pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
   plantuml-server = runTest ./plantuml-server.nix;
@@ -1288,6 +1297,7 @@ in
   public-inbox = runTest ./public-inbox.nix;
   pufferpanel = runTest ./pufferpanel.nix;
   pulseaudio = discoverTests (import ./pulseaudio.nix);
+  pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pykms = runTest ./pykms.nix;
   pyload = runTest ./pyload.nix;
   qbittorrent = runTest ./qbittorrent.nix;
@@ -1312,6 +1322,9 @@ in
   ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
+  rauc = runTest ./rauc.nix;
+  reaction = runTest ./reaction.nix;
+  reaction-firewall = runTest ./reaction-firewall.nix;
   readarr = runTest ./readarr.nix;
   readeck = runTest ./readeck.nix;
   realm = runTest ./realm.nix;
@@ -1442,9 +1455,7 @@ in
   syncthing-guiPassword = runTest ./syncthing/guiPassword.nix;
   syncthing-guiPasswordFile = runTest ./syncthing/guiPasswordFile.nix;
   syncthing-init = runTest ./syncthing/init.nix;
-  # FIXME: Test has been failing since 2025-07-06:
-  # https://github.com/NixOS/nixpkgs/issues/447674
-  # syncthing-many-devices = runTest ./syncthing/many-devices.nix;
+  syncthing-many-devices = runTest ./syncthing/many-devices.nix;
   syncthing-no-settings = runTest ./syncthing/no-settings.nix;
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
@@ -1519,6 +1530,7 @@ in
   systemd-sysusers-password-option-override-ordering = runTest ./systemd-sysusers-password-option-override-ordering.nix;
   systemd-timesyncd-nscd-dnssec = runTest ./systemd-timesyncd-nscd-dnssec.nix;
   systemd-user-linger = runTest ./systemd-user-linger.nix;
+  systemd-user-linger-purge = runTest ./systemd-user-linger-purge.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;
   systemd-userdbd = runTest ./systemd-userdbd.nix;
   systemtap = handleTest ./systemtap.nix { };
@@ -1554,6 +1566,7 @@ in
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
   tpm2 = runTest ./tpm2.nix;
+  traccar = runTest ./traccar.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
@@ -1564,7 +1577,9 @@ in
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
   tsm-client-gui = runTest ./tsm-client-gui.nix;
+  tt-rss = runTest ./web-apps/tt-rss.nix;
   ttyd = runTest ./web-servers/ttyd.nix;
+  tuliprox = runTest ./tuliprox.nix;
   tuned = runTest ./tuned.nix;
   tuptime = runTest ./tuptime.nix;
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
@@ -1577,6 +1592,7 @@ in
   tzupdate = runTest ./tzupdate.nix;
   ucarp = runTest ./ucarp.nix;
   udisks2 = runTest ./udisks2.nix;
+  udp-over-tcp = runTest ./udp-over-tcp.nix;
   ulogd = runTest ./ulogd/ulogd.nix;
   umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;
@@ -1642,6 +1658,10 @@ in
   whoami = runTest ./whoami.nix;
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
+  windmill = import ./windmill {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   wine = handleTest ./wine.nix { };
   wireguard = import ./wireguard {
     inherit pkgs runTest;

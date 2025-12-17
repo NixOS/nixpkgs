@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     "--enable-snmp"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.raitobezarius ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raitobezarius ];
     mainProgram = "keepalived";
   };
 }

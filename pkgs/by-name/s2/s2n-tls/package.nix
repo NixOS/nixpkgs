@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.5.26";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     rev = "v${version}";
-    hash = "sha256-6Py1ygHinx3n7k/hQN+85C57YXh7ag0OGYR+NOnx1rE=";
+    hash = "sha256-aJRw1a/XJivNZS3NkZ4U6nC12+wY/aoNv33mbAzNl0k=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

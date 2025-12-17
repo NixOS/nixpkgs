@@ -62,6 +62,13 @@ rustPlatform.buildRustPackage.override
     # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
     RUSTC_BOOTSTRAP = 1;
 
+    RUSTFLAGS =
+      if stdenv.hostPlatform.rust.rustcTargetSpec == "x86_64-unknown-linux-gnu" then
+        # Upstream defaults to lld on x86_64-unknown-linux-gnu, we want to use our linker
+        "-Clinker-features=-lld -Clink-self-contained=-linker"
+      else
+        null;
+
     postInstall = ''
       wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
 
@@ -89,16 +96,16 @@ rustPlatform.buildRustPackage.override
       runHook postInstallCheck
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://crates.io";
       description = "Downloads your Rust project's dependencies and builds your project";
       mainProgram = "cargo";
-      teams = [ teams.rust ];
+      teams = [ lib.teams.rust ];
       license = [
-        licenses.mit
-        licenses.asl20
+        lib.licenses.mit
+        lib.licenses.asl20
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       # https://github.com/alexcrichton/nghttp2-rs/issues/2
       broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
     };

@@ -33,13 +33,16 @@ let
         [
           mpv.luaEnv
         ]
-        ++ lib.optionals youtubeSupport [
-          yt-dlp
-        ]
         ++ lib.optionals mpv.vapoursynthSupport [
           mpv.vapoursynth.python3
         ]
       );
+
+      # With some tools, we want to prioritize tools that are in PATH. For example, users may want
+      # to quickly expose a newer version of yt-dlp through the nix shell because it needs to be
+      # kept up-to-date for it to work.
+      fallbackBinPath = lib.makeBinPath (lib.optionals youtubeSupport [ yt-dlp ]);
+
       # All arguments besides the input and output binaries (${mpv}/bin/mpv and
       # $out/bin/mpv). These are used by the darwin specific makeWrapper call
       # used to wrap $out/Applications/mpv.app/Contents/MacOS/mpv as well.
@@ -68,17 +71,28 @@ let
           ":"
           binPath
         ]
+        ++ lib.optionals (fallbackBinPath != "") [
+          "--suffix"
+          "PATH"
+          ":"
+          fallbackBinPath
+        ]
         ++ (lib.lists.flatten (
           map
             # For every script in the `scripts` argument, add the necessary flags to the wrapper
             (
               script:
-              [
-                "--add-flags"
-                # Here we rely on the existence of the `scriptName` passthru
-                # attribute of the script derivation from the `scripts`
-                "--script=${script}/share/mpv/scripts/${script.scriptName}"
-              ]
+              let
+                mkScriptArgs = script: scriptName: [
+                  "--add-flags"
+                  "--script=${script}/share/mpv/scripts/${scriptName}"
+                ];
+              in
+              # Here we rely on the existence of the `scriptName` passthru
+              # attribute of the script derivation from the `scripts`
+              (mkScriptArgs script script.scriptName)
+              # scripts might need others to be explicitly loaded
+              ++ (map (extraScriptName: mkScriptArgs script extraScriptName) (script.extraScriptsToLoad or [ ]))
               # scripts can also set the `extraWrapperArgs` passthru
               ++ (script.extraWrapperArgs or [ ])
             )

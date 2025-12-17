@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.frontdoor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Front Door Service Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/network/azure-mgmt-frontdoor";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-frontdoor_${version}/sdk/network/azure-mgmt-frontdoor/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

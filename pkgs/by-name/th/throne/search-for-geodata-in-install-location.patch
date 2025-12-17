@@ -1,0 +1,13 @@
+diff --git a/src/global/Configs.cpp b/src/global/Configs.cpp
+index d9be515..15de64b 100644
+--- a/src/global/Configs.cpp
++++ b/src/global/Configs.cpp
+@@ -426,8 +426,6 @@ namespace Configs {
+     };
+ 
+     QString GetBasePath() {
+-        if (dataStore->flag_use_appdata) return QStandardPaths::writableLocation(
+-              QStandardPaths::AppConfigLocation);
+         return qApp->applicationDirPath();
+     }
+ 

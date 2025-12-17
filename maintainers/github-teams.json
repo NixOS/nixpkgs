@@ -49,19 +49,17 @@
       "ethercrow": 222467,
       "groodt": 343415,
       "kalbasit": 87115,
-      "mboes": 51356,
-      "uri-canva": 33242106
+      "mboes": 51356
     },
     "name": "Bazel"
   },
   "beam": {
     "description": "Maintain BEAM-related packages and modules.",
-    "id": 4502493,
+    "id": 15530553,
     "maintainers": {
       "happysalada": 5317234
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "DianaOlympos": 15774340,
       "adamcstephens": 2071575,
       "ankhers": 750786,
@@ -141,12 +139,11 @@
   },
   "crystal-lang": {
     "description": "The Crystal Lang eco-system",
-    "id": 3806663,
+    "id": 15530580,
     "maintainers": {
       "peterhoeg": 722550
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "manveru": 3507
     },
     "name": "crystal-lang"
@@ -241,11 +238,9 @@
       "mirkolenz": 5160954,
       "mstone": 412508,
       "n8henrie": 1234956,
-      "niklaskorz": 590517,
       "ofalvai": 1694986,
       "pasqui23": 6931743,
       "prusnak": 42201,
-      "pupbrained": 33522919,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -254,6 +249,7 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
+      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
@@ -262,7 +258,6 @@
       "thefloweringash": 42933,
       "tricktron": 16036882,
       "uncenter": 47499684,
-      "uri-canva": 33242106,
       "usertam": 22500027,
       "veprbl": 245573,
       "viraptor": 188063,
@@ -310,8 +305,7 @@
     "description": "",
     "id": 2516946,
     "maintainers": {
-      "jian-lin": 75130626,
-      "matthewbauer": 19036
+      "jian-lin": 75130626
     },
     "members": {
       "AndersonTorres": 5954806,
@@ -347,6 +341,18 @@
       "sternenseemann": 3154475
     },
     "name": "exotic-platform-maintainers"
+  },
+  "feel-co": {
+    "description": "Managing packages related to https://github.com/feel-co",
+    "id": 15169000,
+    "maintainers": {
+      "NotAShelf": 62766066,
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Gerg-L": 88247690
+    },
+    "name": "feel-co"
   },
   "flutter": {
     "description": "Maintain Flutter and Dart-related packages and build tools",
@@ -477,6 +483,7 @@
       "wrmilling": 6162814
     },
     "members": {
+      "azey7f": 41077433,
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
       "rorosen": 76747196
@@ -491,7 +498,6 @@
     },
     "members": {
       "cpages": 411324,
-      "edwtjo": 54799,
       "minijackson": 1200507,
       "peterhoeg": 722550,
       "sephalon": 893474
@@ -519,7 +525,6 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "NeQuissimus": 628342,
       "TredwellGit": 61860346
     },
     "name": "Linux kernel"
@@ -632,8 +637,7 @@
     "description": "Marketing team [leader=@djacu]",
     "id": 7709512,
     "maintainers": {
-      "djacu": 7043297,
-      "tomberek": 178444
+      "djacu": 7043297
     },
     "members": {
       "flyfloh": 74379,
@@ -665,6 +669,18 @@
     },
     "name": "neovim"
   },
+  "nim": {
+    "description": "Maintains the nim language and build tooling",
+    "id": 14913434,
+    "maintainers": {
+      "eclairevoyant": 848000
+    },
+    "members": {
+      "Eveeifyeve": 88671402,
+      "daylinmorgan": 47667941
+    },
+    "name": "nim"
+  },
   "nix-formatting": {
     "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
@@ -677,7 +693,7 @@
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
       "dasJ": 4971975,
-      "piegamesde": 14054505
+      "dyegoaurelio": 42411160
     },
     "name": "nix-formatting"
   },
@@ -685,11 +701,12 @@
     "description": "",
     "id": 174820,
     "maintainers": {
+      "Ericson2314": 1055245,
       "tomberek": 178444
     },
     "members": {
-      "Ericson2314": 1055245,
       "Mic92": 96200,
+      "Radvendii": 1239929,
       "edolstra": 1148549,
       "xokdvium": 145775305
     },
@@ -709,14 +726,12 @@
     "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
-      "philiptaron": 43863,
-      "wolfgangwalther": 9132420
-    },
-    "members": {
       "MattSturgeon": 5046562,
       "Mic92": 96200,
+      "philiptaron": 43863,
       "zowoq": 59103226
     },
+    "members": {},
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
@@ -876,9 +891,7 @@
       "winterqt": 78392041,
       "zowoq": 59103226
     },
-    "members": {
-      "tjni": 3806110
-    },
+    "members": {},
     "name": "rust"
   },
   "scala": {

@@ -7,16 +7,17 @@
   libseccomp,
   rust-bindgen,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firecracker";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZrIvz5hmP0d8ADF723Z+lOP9hi5nYbi6WUtV4wTp73U=";
   };
 
@@ -30,12 +31,20 @@ rustPlatform.buildRustPackage rec {
   #   inlined from 'OPENSSL_memcpy' at aws-lc/crypto/asn1/../internal.h
   #   inlined from 'aws_lc_0_22_0_i2c_ASN1_BIT_STRING' at aws-lc/crypto/asn1/a_bitstr.c
   # glibc/.../string_fortified.h: error: '__builtin_memcpy' specified bound exceeds maximum object size [-Werror=stringop-overflow=]
+  #
+  # For cpu-template-helper: patch build.rs to use stdenv's cc which ensures the correct compiler is used across all stdenv's.
+  #
+  # For seccompiler: fix hardcoded /usr/local/lib path to libseccomp.lib, this makes sure rustc can find seccomp across stdenv's(including pkgsStatic).
   postPatch = ''
     substituteInPlace $cargoDepsCopy/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
       --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
-  '';
 
-  buildInputs = [ libseccomp ];
+    substituteInPlace src/cpu-template-helper/build.rs \
+      --replace-warn '"gcc"' "\"$CC\""
+
+    substituteInPlace src/seccompiler/build.rs \
+      --replace-warn "/usr/local/lib" "${lib.getLib libseccomp}/lib"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -70,6 +79,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=resource_limits::tests::test_set_resource_limits"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -85,7 +99,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
-    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${finalAttrs.version}";
     mainProgram = "firecracker";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
@@ -96,4 +110,4 @@ rustPlatform.buildRustPackage rec {
       techknowlogick
     ];
   };
-}
+})

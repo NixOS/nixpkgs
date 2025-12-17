@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux network throughput multiple-thread benchmark tool";
     homepage = "https://github.com/microsoft/ntttcp-for-linux";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ntttcp";
   };
 }

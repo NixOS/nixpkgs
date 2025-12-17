@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "goawk";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
     rev = "v${version}";
-    hash = "sha256-wy7rMZ0JyOKWr5u0CTaIaUDuu/SlUR8oVNf4gXWsMWY=";
+    hash = "sha256-143KcCeZOwn3FkAtpPkfbyTupYCWw2R+tD7R3ldla6I=";
   };
 
   vendorHash = null;
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   doCheck = (stdenv.system != "aarch64-darwin");
 
-  meta = with lib; {
+  meta = {
     description = "POSIX-compliant AWK interpreter written in Go";
     homepage = "https://benhoyt.com/writings/goawk/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "goawk";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [ abbe ];
   };
 }

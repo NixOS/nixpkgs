@@ -29,10 +29,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_moped" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/martijnboland/moped";
     description = "Web client for Mopidy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     hydraPlatforms = [ ];
   };

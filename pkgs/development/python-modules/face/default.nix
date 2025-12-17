@@ -34,14 +34,14 @@ buildPythonPackage rec {
     "test_module_shortcut"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface parser and framework";
     longDescription = ''
       A command-line interface parser and framework, friendly for
       users, full-featured for developers.
     '';
     homepage = "https://github.com/mahmoud/face";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

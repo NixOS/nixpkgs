@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   pythonOlder,
+  publicsuffix-list,
 }:
 
 buildPythonPackage rec {
@@ -22,16 +23,19 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i -e "/def test_fetch/i\\
     \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
+
+    rm publicsuffix/public_suffix_list.dat
+    ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat publicsuffix/public_suffix_list.dat
   '';
 
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "publicsuffix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to get the public suffix of a domain name";
     homepage = "https://pypi.python.org/pypi/publicsuffix/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

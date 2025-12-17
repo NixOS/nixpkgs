@@ -84,7 +84,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://www.thonny.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
     platforms = lib.platforms.unix;
     mainProgram = "thonny";
   };

@@ -40,19 +40,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "18.0";
+  version = "18.1";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_18_0";
-    hash = "sha256-xA6gbJe4tIV9bYRFrdI4Rfy20ZwTkvyyjt7ZxvCFEec=";
+    rev = "refs/tags/REL_18_1";
+    hash = "sha256-cZA2hWtr5RwsUrRWkvl/yvUzFPSfdtpyAKGXfrVUr0g=";
   };
 
   __structuredAttrs = true;
-
-  hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
 
   outputs = [
     "out"

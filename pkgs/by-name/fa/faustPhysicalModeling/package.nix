@@ -26,10 +26,6 @@ stdenv.mkDerivation rec {
     bash
   ];
 
-  # ld: /nix/store/*-gcc-14-20241116/lib/gcc/x86_64-unknown-linux-gnu/14.2.1/crtbegin.o:
-  #  relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a PIE object
-  hardeningDisable = [ "pie" ];
-
   dontWrapQtApps = true;
 
   buildPhase = ''
@@ -58,12 +54,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Physical models included with faust compiled as jack standalone and lv2 instruments";
     homepage = "https://github.com/grame-cncm/faust/tree/master-dev/examples/physicalModeling";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
     # compiles stuff for the build platform, difficult to do properly
     broken = stdenv.hostPlatform != stdenv.buildPlatform;
   };

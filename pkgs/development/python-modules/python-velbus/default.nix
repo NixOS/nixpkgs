@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "velbus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control the Velbus home automation system";
     homepage = "https://github.com/thomasdelaet/python-velbus";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -44,6 +44,7 @@
   meson,
   mesonEmulatorHook,
   ninja,
+  libnvme,
   libpsl,
   mobile-broadband-provider-info,
   runtimeShell,
@@ -53,6 +54,9 @@
   udev,
   udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  # NBFT (NVMe Boot Firmware Table) support, opt-in due to closure size
+  # https://github.com/NixOS/nixpkgs/pull/446121#discussion_r2380598419
+  withNbft ? false,
 }:
 
 let
@@ -60,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.52.1";
+  version = "1.54.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ixIsc0k6cvK65SfBJc69h3EWcbkDUtvisXiKupV1rG8=";
+    hash = "sha256-z0/vw76WgCxaTas+aQvcTOTHglGVTvChtlAm2IZwmYk=";
   };
 
   outputs = [
@@ -107,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dnmtui=true"
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     "-Dqt=false"
+    (lib.mesonBool "nbft" withNbft)
 
     # Handlers
     "-Dresolvconf=${openresolv}/bin/resolvconf"
@@ -118,8 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     # almost cross-compiles, however fails with
     # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
     "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    # We don't use firewalld in NixOS
-    "-Dfirewalld_zone=false"
     "-Dtests=no"
     "-Dcrypto=gnutls"
     "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
@@ -158,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     newt
     jansson
     dbus # used to get directory paths with pkg-config during configuration
+  ]
+  ++ lib.optionals withNbft [
+    libnvme
   ];
 
   propagatedBuildInputs = [
@@ -229,16 +235,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       obadz
     ];
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.freedesktop ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

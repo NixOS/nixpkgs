@@ -16,6 +16,10 @@
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
   version = "1.26.0";
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE utilities for netbooks";
     mainProgram = "mate-maximus";
     longDescription = ''
@@ -51,11 +55,11 @@ stdenv.mkDerivation rec {
       devices with low resolution displays.
     '';
     homepage = "https://mate-desktop.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       lgpl2Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

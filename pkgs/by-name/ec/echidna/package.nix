@@ -96,7 +96,7 @@ haskellPackages.mkDerivation rec {
     makeWrapper
   ];
 
-  preConfigure = ''
+  prePatch = ''
     hpack
   '';
 
@@ -127,4 +127,6 @@ haskellPackages.mkDerivation rec {
   ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna";
+  # Fails to build since https://hydra.nixos.org/build/313316669/nixlog/2
+  broken = true;
 }

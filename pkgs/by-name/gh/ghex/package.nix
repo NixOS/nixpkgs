@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "48.0";
+  version = "48.3";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qh0KtfdDBKqjGYehgtQh1j8ZzgJGXXxkJpbjFhI+MKg=";
+    hash = "sha256-y8hEJ7Kt6pQDUCoSXzZrnyiIE/cugb9rGRVGBvFZ3Tk=";
   };
 
   nativeBuildInputs = [
@@ -74,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
     changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    teams = [ teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
   };
 })

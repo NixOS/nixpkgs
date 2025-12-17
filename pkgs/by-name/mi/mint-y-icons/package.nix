@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.8.8";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-y-icons";
     rev = version;
-    hash = "sha256-PFq0NVUD6uQtHtObJfIsn/wPSwYMT6267UWjBnIpWAQ=";
+    hash = "sha256-1ymx9qcv7YyIK1+mwKaXn8afh1o6I6jMIZtdvId8dEg=";
   };
 
   propagatedBuildInputs = [
@@ -44,11 +44,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-y-icons";
     description = "Mint-Y icon theme";
-    license = licenses.gpl3; # from debian/copyright
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl3; # from debian/copyright
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

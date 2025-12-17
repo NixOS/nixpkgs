@@ -40,14 +40,14 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-usbids-dir=${hwdata}/share/hwdata/" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
     description = "Allows to pass USB device from server to client over the network";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl2Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     broken = kernelOlder "4.10";
   };
 }

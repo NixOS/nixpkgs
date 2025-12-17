@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -121,14 +122,14 @@ let
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
+    hash = "sha256-3tbscRFryjCynIqh0OWec8CUjXTeIDxOGJkHTK2aIao=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
+    hash = "sha256-f8PZyFLdfixt1ApjMc9Cvj9nfEaDRUszSeEfCsWziis=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -292,13 +293,23 @@ effectiveStdenv.mkDerivation {
   cudaPropagateToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
-    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
     ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
+    (fetchpatch {
+      name = "ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/90c444abd387ffa70b2e72a34922903a2f0f4f5a.patch";
+      hash = "sha256-iRRparDJoNhrvELH6cAagWcVzpiE2lfivHVxvZyi3ik=";
+    })
+    (fetchpatch {
+      name = "fix-ffmpeg-8-support.patch";
+      url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
+      hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
+    })
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -314,7 +325,7 @@ effectiveStdenv.mkDerivation {
     installExtraFile ade
     + optionalString enableIpp (installExtraFiles ippicv)
     + (optionalString buildContrib ''
-      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}

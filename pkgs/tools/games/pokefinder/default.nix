@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Admiral-Fish/PokeFinder";
     description = "Cross platform Pokémon RNG tool";
     mainProgram = "PokeFinder";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ leo60228 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ leo60228 ];
   };
 }

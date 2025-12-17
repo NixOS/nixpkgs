@@ -72,11 +72,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastparquet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the parquet format";
     homepage = "https://github.com/dask/fastparquet";
     changelog = "https://github.com/dask/fastparquet/blob/${version}/docs/source/releasenotes.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

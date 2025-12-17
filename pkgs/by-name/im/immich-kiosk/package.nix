@@ -8,31 +8,26 @@
 
 buildGoModule rec {
   pname = "immich-kiosk";
-  version = "0.25.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-p/DP0rTO+1CVtREAIcP43mTd5zeeQaYRM2BlfqCfUm4=";
+    hash = "sha256-9ZKjhCmOL2fjGOjdzgVG7/aq6SdBJCG/+bFrlHdkll4=";
   };
 
-  # Remove pnpm-workspace.yaml as it causes monorepo detection issues
   # Delete vendor directory to regenerate it consistently across platforms
   postPatch = ''
-    rm -f frontend/pnpm-workspace.yaml
     rm -rf vendor
   '';
-  vendorHash = "sha256-kVyAGBOTgfvddsGlT4/wCnK9YYuks0OplUE3Z124z1k=";
+  vendorHash = "sha256-5y//CdHgQjNJayNI/jzdD5WPa4XlIxMonqkPc/kJp8c=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-Gqd63bsipy/zpY75krSsQeaMsTpbNg8w0VIu7JYyv/k=";
+    hash = "sha256-FThVaNUUE3QCbq0iPRCet4SnlHCCQaw3N5PThKSM1ek=";
     fetcherVersion = 2;
-    postPatch = ''
-      rm -f pnpm-workspace.yaml
-    '';
   };
 
   # Frontend is in a subdirectory

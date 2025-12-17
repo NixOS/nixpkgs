@@ -4,17 +4,20 @@
   apscheduler,
   azure-identity,
   azure-keyvault-secrets,
+  azure-storage-blob,
   backoff,
   boto3,
   buildPythonPackage,
   click,
   cryptography,
-  email-validator,
   fastapi,
   fastapi-sso,
+  fastuuid,
   fetchFromGitHub,
+  google-cloud-iam,
   google-cloud-kms,
   gunicorn,
+  httpx,
   importlib-metadata,
   jinja2,
   jsonschema,
@@ -22,6 +25,7 @@
   openai,
   orjson,
   poetry-core,
+  polars,
   prisma,
   pydantic,
   pyjwt,
@@ -29,12 +33,12 @@
   python,
   python-dotenv,
   python-multipart,
-  pythonOlder,
   pyyaml,
   requests,
   resend,
   rich,
   rq,
+  soundfile,
   tiktoken,
   tokenizers,
   uvloop,
@@ -46,16 +50,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.75.5";
+  version = "1.80.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-VedQ0cNOf9vUFF7wjT7WOsCfTesIvzhudDfGnBTXO3E=";
+    tag = "v${version}-stable.1";
+    hash = "sha256-W1tckXXQ9PlqTW5S4ml0X5rcPXSCioubDaSkQxHQrMY=";
   };
 
   build-system = [ poetry-core ];
@@ -63,7 +65,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     click
-    email-validator
+    fastuuid
+    httpx
     importlib-metadata
     jinja2
     jsonschema
@@ -78,20 +81,26 @@ buildPythonPackage rec {
   optional-dependencies = {
     proxy = [
       apscheduler
+      azure-identity
+      azure-storage-blob
       backoff
       boto3
       cryptography
       fastapi
       fastapi-sso
       gunicorn
+      # FIXME package litellm-enterprise
+      # FIXME package litellm-proxy-extras
       mcp
       orjson
+      polars
       pyjwt
       pynacl
       python-multipart
       pyyaml
       rich
       rq
+      soundfile
       uvloop
       uvicorn
       websockets
@@ -100,8 +109,10 @@ buildPythonPackage rec {
     extra_proxy = [
       azure-identity
       azure-keyvault-secrets
+      google-cloud-iam
       google-cloud-kms
       prisma
+      # FIXME package redisvl
       resend
     ];
   };

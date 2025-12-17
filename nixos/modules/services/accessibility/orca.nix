@@ -20,9 +20,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    systemd.services.display-manager = lib.mkIf config.services.displayManager.enable {
-      path = [ cfg.package ];
-    };
+    systemd.packages = [ cfg.package ];
+    services.gnome.at-spi2-core.enable = true;
     services.speechd.enable = true;
   };
 }

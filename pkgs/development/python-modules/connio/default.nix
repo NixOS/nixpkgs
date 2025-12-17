@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for concurrency agnostic communication";
     homepage = "https://github.com/tiagocoutinho/connio";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

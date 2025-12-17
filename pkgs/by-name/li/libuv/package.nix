@@ -12,7 +12,7 @@
   # for passthru.tests
   bind,
   cmake,
-  knot-resolver,
+  knot-resolver_5,
   sbclPackages,
   luajitPackages,
   mosquitto,
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       bind
       cmake
-      knot-resolver
+      knot-resolver_5
       mosquitto
       neovim
       nodejs
@@ -196,14 +196,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
     maintainers = [ ];
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       mit
       isc
       bsd2

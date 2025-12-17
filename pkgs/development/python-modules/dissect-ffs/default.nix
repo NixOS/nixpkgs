@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
-  version = "3.11";
+  version = "3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ffs";
     tag = version;
-    hash = "sha256-rfoSUhTB++cei7X8jaSp9ek8+pAAyaNkYC0M5cCDBtk=";
+    hash = "sha256-U/Roo1+viW/Fnvt+QV6Rt6YvOSyOSGg5c2ZaHfaFQLQ=";
   };
 
   build-system = [
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.ffs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the FFS file system";
     homepage = "https://github.com/fox-it/dissect.ffs";
     changelog = "https://github.com/fox-it/dissect.ffs/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

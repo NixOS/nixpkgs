@@ -1269,7 +1269,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
       mainProgram = "cpm";
     };
   };
@@ -5721,7 +5720,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -6690,7 +6688,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14482,7 +14479,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -14505,7 +14501,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -17385,7 +17380,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -17445,6 +17439,8 @@ with self;
       mainProgram = "streamzip";
     };
   };
+
+  IOCompressBrotli = callPackage ../development/perl-modules/IOCompressBrotli { };
 
   IODigest = buildPerlPackage {
     pname = "IO-Digest";
@@ -21311,7 +21307,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -21757,7 +21752,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22854,7 +22848,6 @@ with self;
       description = "(DISCOURAGED) Promises/A+ and flow-control helpers";
       homepage = "https://github.com/jberger/Mojo-IOLoop-Delay";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -22882,7 +22875,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -25154,7 +25146,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -25235,7 +25226,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -26595,7 +26585,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -27074,7 +27063,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -27268,9 +27256,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JM/JMACFARLA/Parse-Win32Registry-1.1.tar.gz";
       hash = "sha256-wWOyAr5q17WPSEZJT/crjJqXloPKmU5DgOmsZWTcBbo=";
     };
-    meta = with lib; {
+    meta = {
       description = "Module for parsing Windows Registry files";
-      license = with licenses; [
+      license = with lib.licenses; [
         artistic1
         gpl1Only
       ];
@@ -32356,7 +32344,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -38201,6 +38188,10 @@ with self;
       substituteInPlace ext/dnd/XS/DataObject.xs \
         --replace "#ifdef __WXGTK20__" "#if wxUSE_GUI"
     '';
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
@@ -38226,6 +38217,10 @@ with self;
       pkgs.libGLU
       Wx
     ];
+    # Build system attempts to compile c++ files with clang.
+    preConfigure = ''
+      export CC=$CXX
+    '';
     doCheck = false;
     meta = {
       description = "wxPerl demo helper for Wx::GLCanvas";
@@ -39090,7 +39085,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -39109,7 +39103,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = [ maintainers.zakame ];
     };
   };
 

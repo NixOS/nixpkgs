@@ -32,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yasi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dialect-aware s-expression indenter written in Python and newLISP";
     mainProgram = "yasi";
     homepage = "https://github.com/nkmathew/yasi-sexp-indenter";
     changelog = "https://github.com/nkmathew/yasi-sexp-indenter/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
 }

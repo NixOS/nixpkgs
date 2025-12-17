@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stringparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use pattern matching and information extraction";
     homepage = "https://github.com/hgrecco/stringparser";
     changelog = "https://github.com/hgrecco/stringparser/blob/${version}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evilmav ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evilmav ];
   };
 }

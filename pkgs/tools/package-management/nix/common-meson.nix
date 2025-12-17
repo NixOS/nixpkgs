@@ -101,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   hardeningDisable = [
     "shadowstack"
   ]
@@ -263,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
-  meta = with lib; {
+  meta = {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
       Nix is a powerful package manager for Linux and other Unix systems that
@@ -273,14 +271,14 @@ stdenv.mkDerivation (finalAttrs: {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     inherit maintainers teams;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022
     # probably https://github.com/NixOS/nix/issues/13042
     broken = stdenv.hostPlatform.system == "i686-linux" && stdenv.buildPlatform != stdenv.hostPlatform;
-    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
   };
 })

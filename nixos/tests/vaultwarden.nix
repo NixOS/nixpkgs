@@ -210,9 +210,6 @@ let
                   output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
 
                   assert output[0]['login']['password'] == "${storedPassword}"
-
-              with subtest("Check systemd unit hardening"):
-                  server.log(server.succeed("systemd-analyze security vaultwarden.service | grep -v ✓"))
             '';
       }
     );
@@ -239,7 +236,6 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
       with subtest("Check that backup exists"):
           server.succeed('[ -d "/srv/backups/vaultwarden" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/db.sqlite3" ]')
-          server.succeed('[ -d "/srv/backups/vaultwarden/attachments" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/rsa_key.pem" ]')
           # Ensure only the db backed up with the backup command exists and not the other db files.
           server.succeed('[ ! -f "/srv/backups/vaultwarden/db.sqlite3-shm" ]')

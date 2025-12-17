@@ -17,10 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-wJ6jB8MxyYOlOpABRv5GmULofWuPQR8yClj63qsr/tg=";
 
-  meta = with lib; {
+  meta = {
     description = "Detect licences in Go projects and generate documentation";
     homepage = "https://github.com/elastic/go-licence-detector";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

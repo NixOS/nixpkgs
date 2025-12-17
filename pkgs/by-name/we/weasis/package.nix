@@ -6,6 +6,9 @@
   unzip,
   copyDesktopItems,
   makeDesktopItem,
+  makeBinaryWrapper,
+  libGL,
+  xorg,
 }:
 
 let
@@ -19,6 +22,14 @@ let
     "aarch64-darwin" = "macosx-aarch64";
   };
 
+  runtimeDeps = [
+    libGL
+  ]
+  ++ (with xorg; [
+    libX11
+    libXrender
+    libXxf86vm
+  ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
@@ -33,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeBinaryWrapper
   ]
   ++ lib.optional stdenv.isDarwin unzip;
 
@@ -69,9 +81,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
   ''
   + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share/{applications,pixmaps}
-    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/
-    mv $out/lib/*.png $out/share/pixmaps/
+    mkdir -p $out/{bin,opt/Weasis,share/{applications,pixmaps}}
+
+    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/opt/Weasis
+    mv $out/opt/Weasis/lib/*.png $out/share/pixmaps/
+
+    for bin in $out/opt/Weasis/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeDeps}
+    done
   ''
   + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications

@@ -290,6 +290,12 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # https://github.com/NixOS/nixpkgs/issues/460687
+        # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
+        "arrow-flight-internals-test"
+        "arrow-flight-sql-test"
       ];
     in
     ''
@@ -300,12 +306,12 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       tobim
       veprbl
       cpcloud

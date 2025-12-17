@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "coq-tools";
-  version = "0.0.36";
+  version = "0.0.39";
   pyproject = true;
 
   src = fetchPypi {
     pname = "coq_tools";
     inherit version;
-    hash = "sha256-lZ469FZ19Cy+LdC4ymU4wVWe7ZtPSbYlgmym/ouQSwk=";
+    hash = "sha256-MPgu5inr2CMOU3qlF9v8QtqhkPuP/uIQrJYyfmpZBxE=";
   };
 
   build-system = [ setuptools ];

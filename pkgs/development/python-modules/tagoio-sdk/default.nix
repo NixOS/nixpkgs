@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tagoio-sdk";
-  version = "5.0.4";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tago-io";
     repo = "sdk-python";
     tag = "v${version}";
-    hash = "sha256-a+cwDPYLfDgMiWf7jpFszwdueFbnfNgwZLWQrffjBqU=";
+    hash = "sha256-jKgH78ZFb9hr7rb71mF7qIpfDzCCWLlqUJVjO88dbYc=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tagoio_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Tago.io";
     homepage = "https://github.com/tago-io/sdk-python";
     changelog = "https://github.com/tago-io/sdk-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

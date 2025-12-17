@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./autoconf.patch
+    # https://github.com/alexkay/spek/pull/338
+    ./ffmpeg8-compat.patch
   ];
 
   nativeBuildInputs = [

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.25.1";
+  version = "3.26.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-Yd640HJ7RcJo79wbO2yeZ5zZfL9e5LKNHerXyLeica8=";
+    hash = "sha256-jVTHFwKRBvFkSq2vgCq5aS5T2T3QFcvRnnQZDrpha9c=";
   };
 
   patches = [
@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=148912";
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
+    # https://bugs.kde.org/show_bug.cgi?id=511548
+    (fetchpatch {
+      url = "https://bugsfiles.kde.org/attachment.cgi?id=186451";
+      hash = "sha256-IGmyHwwGoy00hcz3XxQSDcwcU8zHLBJ9dfqTvWDQ520=";
+    })
+
     # Fix build on armv7l.
     # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
@@ -41,7 +47,6 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [
-    "pie"
     "stackprotector"
   ];
 
@@ -105,7 +110,7 @@ stdenv.mkDerivation rec {
       Valgrind to build new tools.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ lib.maintainers.eelco ];
     platforms =

@@ -71,10 +71,24 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "preload"
+      ]
+      ''
+        The corresponding package was removed from nixpkgs,
+        due to lack of usage and being broken since its introduction.
+      ''
+    ) # added 2025-11-29
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
+      "file-roller"
+    ] "Not required for the package to function anymore, use `pkgs.file-roller` instead.")
     (mkRemovedOptionModule [ "programs" "pantheon-tweaks" ] ''
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
@@ -153,6 +167,9 @@ in
       moreover the NixOS module had to rely on an abandoned version of dnscrypt-proxy v1 for the rotation of keys.
 
       To wrap a resolver with DNSCrypt you can instead use dnsdist. See options `services.dnsdist.dnscrypt.*`
+    '')
+    (mkRemovedOptionModule [ "services" "ethercalc" ] ''
+      The ethercalc module has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs.
     '')
     (mkRemovedOptionModule [
       "services"
@@ -238,6 +255,9 @@ in
       The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
       and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
     '')
+    (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
+      The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
     '')
@@ -275,9 +295,6 @@ in
     '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
-    '')
-    (mkRemovedOptionModule [ "services" "tt-rss" ] ''
-      The tt-rss package and module have been removed, since upstream development ceased 2025-11-01 and the source is no longer available officially.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
@@ -426,6 +443,9 @@ in
       as an hardware RNG, as it will automatically run the krngd task
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
+    '')
+    (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
+      virtualisation.multipass has been removed since it was unmaintained in nixpkgs
     '')
     # Do NOT add any option renames here, see top of the file
   ];

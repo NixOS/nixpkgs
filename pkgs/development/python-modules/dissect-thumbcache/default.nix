@@ -5,23 +5,20 @@
   dissect-util,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.10";
+  version = "1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     tag = version;
-    hash = "sha256-seUhGD0stutZ6jfXDs86V6aiZ5ilUNS6ymBR5E3H9Ug=";
+    hash = "sha256-yZAowAPQGfYl8RcCcnR5yPiiaY2s7LykRqgVeKThkpk=";
   };
 
   build-system = [
@@ -44,11 +41,11 @@ buildPythonPackage rec {
     "test_index_type"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the Windows thumbcache";
     homepage = "https://github.com/fox-it/dissect.thumbcache";
     changelog = "https://github.com/fox-it/dissect.thumbcache/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

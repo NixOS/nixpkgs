@@ -59,17 +59,17 @@ let
     popd
   '';
 
-  # Fixed output derivation hash is identical for all derivations: the empty
-  # directory.
   fetchtorrentWithHash =
     args:
     fetchtorrent (
       {
-        hash = builtins.convertHash {
-          hash = emptyDirectory.outputHash;
-          toHashFormat = "sri";
-          hashAlgo = emptyDirectory.outputHashAlgo;
-        };
+        # Fixed output derivation hash is identical for all derivations: the empty directory.
+        hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+        # Reported in https://github.com/NixOS/nixpkgs/pull/458193#issuecomment-3575753211
+        # that these tests are causing Hydra to spin for hours on macOS.
+        # They all pass locally, and we don't care too much about running them on Hydra.
+        meta.hydraPlatforms = [ ];
       }
       // args
     );

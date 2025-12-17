@@ -64,12 +64,12 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.libdivecomputer.org";
       description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
-      maintainers = with maintainers; [ mguentner ];
-      license = licenses.lgpl21;
-      platforms = platforms.all;
+      maintainers = with lib.maintainers; [ mguentner ];
+      license = lib.licenses.lgpl21;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -103,12 +103,12 @@ let
       mv lib $out/
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
-      maintainers = with maintainers; [ orivej ];
-      license = licenses.mit;
-      platforms = platforms.all;
+      maintainers = [ ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Divelog program";
     mainProgram = "subsurface";
     longDescription = ''
@@ -187,8 +187,8 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mguentner ];
+    platforms = lib.platforms.all;
   };
 }

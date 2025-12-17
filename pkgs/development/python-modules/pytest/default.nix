@@ -76,9 +76,6 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  # FIXME(jade): perhaps this should be the default?
-  # https://github.com/NixOS/nixpkgs/issues/435069
-  dontWrapPythonPrograms = true;
   passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
@@ -104,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    teams = [ teams.python ];
-    license = licenses.mit;
+    teams = [ lib.teams.python ];
+    license = lib.licenses.mit;
   };
 }

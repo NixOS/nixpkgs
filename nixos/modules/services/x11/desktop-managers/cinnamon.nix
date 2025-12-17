@@ -109,6 +109,7 @@ in
 
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
+      services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -173,6 +174,7 @@ in
             cinnamon-translations
 
             # utils needed by some scripts
+            inxi
             killall
 
             # session requirements
@@ -211,6 +213,7 @@ in
             mint-x-icons
             mint-y-icons
             xapp # provides some xapp-* icons
+            xapp-symbolic-icons
           ] config.environment.cinnamon.excludePackages
         );
 
@@ -249,7 +252,6 @@ in
     (mkIf serviceCfg.apps.enable {
       programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages =
         with pkgs;
@@ -269,6 +271,8 @@ in
           gnome-calculator
           gnome-calendar
           gnome-screenshot
+          file-roller
+          gucharmap
         ] config.environment.cinnamon.excludePackages;
     })
   ];

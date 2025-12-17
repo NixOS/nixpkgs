@@ -8,6 +8,7 @@
   # build-system
   setuptools,
   pkg-config,
+  pybind11,
 
   # native dependencies
   freetype,
@@ -43,17 +44,20 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.3.0";
+  version = "12.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
     tag = version;
-    hash = "sha256-VOOIxzTyERI85CvA2oIutybiivU14kIko8ysXpmwUN8=";
+    hash = "sha256-58mjwHErEZPkkGBVZznkkMQN5Zo4ZBBiXnhqVp1F81g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    pybind11
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -105,7 +109,7 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Code quality mismathch 9 vs 10
@@ -137,7 +141,7 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
@@ -147,8 +151,8 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = licenses.mit-cmu;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit-cmu;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
 }

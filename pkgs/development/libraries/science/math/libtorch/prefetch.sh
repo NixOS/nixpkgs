@@ -6,12 +6,12 @@ set -eou pipefail
 version=$1
 
 bucket="https://download.pytorch.org/libtorch"
-CUDA_VERSION=cu124
+CUDA_VERSION=cu130
 
 url_and_key_list=(
   "aarch64-darwin-cpu $bucket/cpu/libtorch-macos-arm64-${version}.zip libtorch-macos-arm64-${version}.zip"
-  "x86_64-linux-cpu $bucket/cpu/libtorch-cxx11-abi-shared-with-deps-${version}%2Bcpu.zip libtorch-cxx11-abi-shared-with-deps-${version}-cpu.zip"
-  "x86_64-linux-cuda $bucket/${CUDA_VERSION}/libtorch-cxx11-abi-shared-with-deps-${version}%2B${CUDA_VERSION}.zip libtorch-cxx11-abi-shared-with-deps-${version}-${CUDA_VERSION}.zip"
+  "x86_64-linux-cpu $bucket/cpu/libtorch-shared-with-deps-${version}%2Bcpu.zip libtorch-shared-with-deps-${version}-cpu.zip"
+  "x86_64-linux-cuda $bucket/${CUDA_VERSION}/libtorch-shared-with-deps-${version}%2B${CUDA_VERSION}.zip libtorch-shared-with-deps-${version}-${CUDA_VERSION}.zip"
 )
 
 hashfile="binary-hashes-$version.nix"
@@ -23,7 +23,7 @@ for url_and_key in "${url_and_key_list[@]}"; do
   name=$(echo "$url_and_key" | cut -d' ' -f3)
 
   echo "prefetching ${url}..."
-  hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --unpack "$url" --name "$name"))
+  hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url --unpack "$url" --name "$name"))
 
   echo "    $key = {" >> $hashfile
   echo "      name = \"$name\";" >> $hashfile

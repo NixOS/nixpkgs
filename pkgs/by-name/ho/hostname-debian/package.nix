@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://salsa.debian.org/meskes/hostname/-/blob/${src.tag}/debian/changelog";
     description = "Utility to set/show the host name or domain name";
     longDescription = ''
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       DNS name, and to display or set its hostname or NIS domain name.
     '';
     homepage = "https://tracker.debian.org/pkg/hostname";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "hostname";
-    maintainers = with maintainers; [ posch ];
-    platforms = platforms.gnu;
+    maintainers = with lib.maintainers; [ posch ];
+    platforms = lib.platforms.gnu;
   };
 }

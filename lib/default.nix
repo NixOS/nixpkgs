@@ -303,6 +303,7 @@ let
         elem
         elemAt
         isList
+        concatAttrValues
         ;
       inherit (self.strings)
         concatStrings

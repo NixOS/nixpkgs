@@ -51,7 +51,7 @@ The maintainer is welcome to come back at any time.
 When a pull request is made against a package, nixpkgs CI will notify the appropriate maintainer(s) by trying to correlate the files the PR touches with the packages that need rebuilding.
 This process is subject to error however, so we encourage PR authors to notify the appropriate people.
 
-Maintainers can also invoke the [nixpkgs-merge-bot](https://github.com/nixos/nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](https://github.com/NixOS/nixpkgs-merge-bot/blob/main/README.md#constraints).
+Maintainers can also invoke the [nixpkgs-merge-bot](../ci/README.md#nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](../ci/README.md#merge-bot-constraints).
 Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-2789382120) and [#377027](https://github.com/NixOS/nixpkgs/pull/377027#issuecomment-2614510869)
 
 New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.

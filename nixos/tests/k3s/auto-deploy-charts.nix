@@ -27,9 +27,57 @@ import ../make-test-python.nix (
       pkgs.runCommand "k3s-test-chart.tgz"
         {
           nativeBuildInputs = [ pkgs.kubernetes-helm ];
+          chart = builtins.toJSON {
+            name = "k3s-test-chart";
+            version = "0.1.0";
+          };
+          values = builtins.toJSON {
+            restartPolicy = "Never";
+            runCommand = "";
+            image = {
+              repository = "foo";
+              tag = "1.0.0";
+            };
+          };
+          job = builtins.toJSON {
+            apiVersion = "batch/v1";
+            kind = "Job";
+            metadata = {
+              name = "{{ .Release.Name }}";
+              namespace = "{{ .Release.Namespace }}";
+            };
+            spec = {
+              template = {
+                spec = {
+                  containers = [
+                    {
+                      name = "test";
+                      image = "{{ .Values.image.repository }}:{{ .Values.image.tag }}";
+                      command = [ "sh" ];
+                      args = [
+                        "-c"
+                        "{{ .Values.runCommand }}"
+                      ];
+                    }
+                  ];
+                  restartPolicy = "{{ .Values.restartPolicy }}";
+                };
+              };
+            };
+          };
+          passAsFile = [
+            "values"
+            "chart"
+            "job"
+          ];
         }
         ''
-          helm package ${./k3s-test-chart}
+          mkdir -p chart/templates
+          cp "$chartPath" chart/Chart.yaml
+          cp "$valuesPath" chart/values.yaml
+          cp "$jobPath" chart/templates/job.json
+
+          helm package chart
           mv ./*.tgz $out
         '';
     # The common Helm chart that is used in this test
@@ -135,7 +183,7 @@ import ../make-test-python.nix (
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
-        advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
+        advancedManifest = json.loads(machine.succeed("yq -o json '.items[0]' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
         t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)

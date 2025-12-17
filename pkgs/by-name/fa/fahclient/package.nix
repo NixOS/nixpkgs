@@ -7,6 +7,7 @@
   re2,
   libevent,
   git,
+  versionCheckHook,
   zlib,
   expat,
   scons,
@@ -15,13 +16,13 @@
 }:
 let
   pname = "fah-client";
-  version = "8.4.9";
+  version = "8.5.3";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
-    rev = "bastet-v${version}";
-    sha256 = "sha256-xApE5m8YyIFRJLQYeboWelWukuuIjHNZxPDyq0RzSL4=";
+    tag = "bastet-v${version}";
+    hash = "sha256-RU13qT9UQ1uNsRNBaEGSWTgNmE3f72veabl2OmKK6Z0=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -30,8 +31,8 @@ let
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
-      rev = "v${version}";
-      sha256 = "sha256-PewXhmkTru2yJhMkenbn7pcmVsa7eomjrMvs1PUGph8=";
+      tag = "v${version}";
+      hash = "sha256-PBguylWnYU5iTzrjWA1B5Iwb57JpoWGPSpjgNJP3aoI=";
     };
 
     nativeBuildInputs = [
@@ -69,6 +70,12 @@ let
       runHook postInstall
     '';
 
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgramArg = "--version";
+    doInstallCheck = true;
+
   };
 in
 buildFHSEnv {
@@ -91,7 +98,7 @@ buildFHSEnv {
     homepage = "https://foldingathome.org/";
     license = lib.licenses.gpl3;
     mainProgram = "fah-client";
-    maintainers = [ lib.maintainers.zimbatm ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
 }

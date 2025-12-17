@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
   passthru.tests = { inherit (nixosTests) tinyproxy; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tinyproxy.github.io/";
     description = "Light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
-    license = licenses.gpl2Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.carlosdagos ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.carlosdagos ];
     mainProgram = "tinyproxy";
   };
 }

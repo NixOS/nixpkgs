@@ -25,6 +25,9 @@
   conf ? null,
   removeReferencesTo,
   testers,
+  providers ? [ ], # Each provider in the format { name = "provider-name"; package = <drv>; }
+  autoloadProviders ? false,
+  extraINIConfig ? null, # Extra INI config in the format { section_name = { key = "value"}; }
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -36,6 +39,8 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
+  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+
   common =
     {
       version,
@@ -95,7 +100,10 @@ let
           (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
           ''
             rm test/recipes/02-test_errstr.t
-          '';
+          ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        rm test/recipes/01-test_symbol_presence.t
+      '';
 
       outputs = [
         "bin"
@@ -118,7 +126,7 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
-        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+        lib.optional useBinaryWrapper makeBinaryWrapper
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -172,6 +180,8 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+          else if stdenv.hostPlatform.isCygwin then
+            "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -260,6 +270,8 @@ let
         patchShebangs util
       '';
 
+      __darwinAllowLocalNetworking = true;
+
       postInstall =
         (
           if static then
@@ -285,7 +297,7 @@ let
 
         ''
         +
-          lib.optionalString (!stdenv.hostPlatform.isWindows)
+          lib.optionalString useBinaryWrapper
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -307,6 +319,44 @@ let
         ''
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
+        ''
+
+        # Replace the config's default provider section with the providers we wish
+        # to automatically load
+        + lib.optionalString autoloadProviders ''
+          sed -i '/^[[:space:]]*#/!s|\[provider_sect\]|${
+            let
+              config-provider-attrset = lib.foldl' (acc: elem: acc // elem) { } (
+                map (provider: { "${provider.name}" = "${provider.name}_sect"; }) providers
+              );
+            in
+            lib.escape [ "\n" ] (lib.generators.toINI { } { provider_sect = config-provider-attrset; })
+          }|' $etc/etc/ssl/openssl.cnf
+
+          # Activate the default provider
+          sed -i '/^[[:space:]]*#/!s/\[default_sect\]/[default_sect]\nactivate = 1/g' $etc/etc/ssl/openssl.cnf
+        ''
+
+        + lib.concatStringsSep "\n" (
+          map
+            (provider: ''
+              cp ${provider.package}/lib/ossl-modules/* "$out/lib/ossl-modules"
+
+              ${lib.optionalString autoloadProviders ''
+                echo '${
+                  lib.generators.toINI { } {
+                    "${provider.name}_sect" = {
+                      activate = 1;
+                    };
+                  }
+                }' >> $etc/etc/ssl/openssl.cnf
+              ''}
+            '')
+
+            providers
+        )
+        + lib.optionalString (extraINIConfig != null) ''
+          echo '${lib.generators.toINI { } extraINIConfig}' >> $etc/etc/ssl/openssl.cnf
         '';
 
       allowedImpureDLLs = [ "CRYPT32.dll" ];
@@ -396,7 +446,11 @@ in
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 
@@ -428,7 +482,11 @@ in
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
-    ];
+    ]
+    ++
+      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
+      # and also https://github.com/openssl/openssl/pull/29321
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
 

@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-z55599eTJy5oQeE+BD0AYXtLTKoeKZzvNDurE0/oPYQ=";
+    hash = "sha256-zjVii3ipkjSiF6ELujH+JSRSyIWfpeNFFzdQKasUsfo=";
   };
 
   dependencies = [
@@ -42,12 +42,12 @@ buildHomeAssistantComponent rec {
     home-assistant
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/danielcherubini/elegoo-homeassistant/releases/tag/v${version}";
     description = "Home Assistant integration for Elegoo 3D printers using the SDCP protocol";
     homepage = "https://github.com/danielcherubini/elegoo-homeassistant";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       typedrat
     ];
   };

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "lint-staged";
-  version = "16.2.6";
+  version = "16.2.7";
 
   src = fetchFromGitHub {
     owner = "okonet";
     repo = "lint-staged";
     rev = "v${version}";
-    hash = "sha256-d4DB1kVUwO9+VF90BZjSAAH3/KyjmbJ4yfXOMOX23Wc=";
+    hash = "sha256-w5oiIMxdkJXsE6kVhym0R7OBPbDQ4wrUBjwnSHLismw=";
   };
 
-  npmDepsHash = "sha256-L0X3v5Ekd8qt8A9TTtgGsnv1WV1HKcRwAiHpf5zP3oo=";
+  npmDepsHash = "sha256-4cocT13aqX3wniwDtPDlJt/8J/6vcN0TAdBIJLjGPM0=";
 
   dontNpmBuild = true;
 
@@ -30,14 +30,14 @@ buildNpmPackage rec {
 
   passthru.tests.version = testers.testVersion { package = lint-staged; };
 
-  meta = with lib; {
+  meta = {
     description = "Run linters on git staged files";
     longDescription = ''
       Run linters against staged git files and don't let 💩 slip into your code base!
     '';
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    maintainers = with maintainers; [ DamienCassou ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "lint-staged";
   };
 }

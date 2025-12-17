@@ -248,6 +248,9 @@ fi
 # TODO: If we ever need to expand functionality of this hook, it may no longer
 # be compatible with Swift. Right now, it is only used on Darwin to force
 # -target, which also happens to work with Swift.
+# As of 369cc5c66b1efdbca2f136aa0055fedca1117304 (#445119), this hook also sets
+# the -Werror=unguarded-availability flag, which Swift can't accept. We prefix
+# that flag with -Xcc in the for loop below
 if [[ -e $cc_wrapper/nix-support/add-local-cc-cflags-before.sh ]]; then
     source $cc_wrapper/nix-support/add-local-cc-cflags-before.sh
 fi
@@ -262,7 +265,7 @@ for ((i=0; i < ${#extraBefore[@]}; i++));do
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
         ;;
-    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*|-Werror=*)
         [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
         extraBefore=(
             "${extraBefore[@]:0:i}"

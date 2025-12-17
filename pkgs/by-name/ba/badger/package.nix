@@ -21,11 +21,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Fast key-value DB in Go";
     homepage = "https://github.com/dgraph-io/badger";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "badger";
-    maintainers = with maintainers; [ farcaller ];
+    maintainers = with lib.maintainers; [ farcaller ];
   };
 }

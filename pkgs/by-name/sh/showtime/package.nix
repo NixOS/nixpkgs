@@ -3,15 +3,15 @@
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  fetchFromGitLab,
+  fetchurl,
   glib,
+  gnome,
   gobject-introspection,
   gst_all_1,
   gtk4,
   libadwaita,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -19,19 +19,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "48.1";
+  version = "49.1";
   pyproject = false;
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "GNOME";
-    owner = "Incubator";
-    repo = "showtime";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uk3KgiLsYjqBhlKssnkWO6D4ufwJb/o+rQYSA7pa1lU=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/showtime/${lib.versions.major version}/showtime-${version}.tar.xz";
+    hash = "sha256-iu+7DiAJx6HNRKuAGwbKN19+loPwKaBS64b7Qzp4U5M=";
   };
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -64,8 +64,15 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "showtime" ];
 
+  preInstallCheck = ''
+    export XDG_DATA_DIRS="${glib.makeSchemaDataDirPath "$out" "$name"}:$XDG_DATA_DIRS"
+    export HOME="$TEMPDIR"
+  '';
+
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gnome.updateScript {
+      packageName = "showtime";
+    };
   };
 
   meta = {
@@ -73,6 +80,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Showtime";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.gnome ];
     mainProgram = "showtime";
   };
 }

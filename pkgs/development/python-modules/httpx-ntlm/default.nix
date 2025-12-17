@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpx_ntlm" ];
 
-  meta = with lib; {
+  meta = {
     description = "NTLM authentication support for HTTPX";
     homepage = "https://github.com/ulodciv/httpx-ntlm";
     changelog = "https://github.com/ulodciv/httpx-ntlm/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

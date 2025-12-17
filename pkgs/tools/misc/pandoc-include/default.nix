@@ -35,11 +35,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "pandoc_include.main" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pandoc filter to allow file and header includes";
     homepage = "https://github.com/DCsunset/pandoc-include";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ppenguin
       DCsunset
     ];

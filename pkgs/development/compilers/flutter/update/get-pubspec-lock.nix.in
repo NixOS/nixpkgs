@@ -12,8 +12,6 @@ stdenv.mkDerivation (finalAttrs: {
   name = "pubspec-lock";
   src = @flutter_src@;
 
-  sourceRoot = "${finalAttrs.src.name}/packages/flutter_tools";
-
   nativeBuildInputs = [
     dart
     writableTmpDirAsHomeHook
@@ -26,7 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    dart --root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt pub get -verbose
+    cd packages/flutter_tools
+    dart --root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt pub get
 
     runHook postBuild
   '';

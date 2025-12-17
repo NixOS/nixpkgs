@@ -18,7 +18,6 @@
   darwin,
   xcbuild,
   swiftPackages,
-  apple-sdk_13,
   openssl,
   getconf,
   python3,
@@ -112,15 +111,12 @@ stdenv.mkDerivation rec {
     krb5
     lttng-ust_2_12
   ]
-  ++ lib.optionals isDarwin (
-    [
-      xcbuild
-      swift
-      krb5
-      sigtool
-    ]
-    ++ lib.optional (lib.versionAtLeast version "10") apple-sdk_13
-  );
+  ++ lib.optionals isDarwin [
+    xcbuild
+    swift
+    krb5
+    sigtool
+  ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -404,7 +400,7 @@ stdenv.mkDerivation rec {
     "--source-build"
   ]
   ++ lib.optionals (lib.versionAtLeast version "10") [
-    "--branding default"
+    "--branding rtm"
   ]
   ++ [
     "--"
@@ -500,11 +496,11 @@ stdenv.mkDerivation rec {
     hasILCompiler = lib.versionAtLeast version "9";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI";
     homepage = "https://dotnet.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ corngood ];
     mainProgram = "dotnet";
     platforms = [
       "x86_64-linux"

@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-shared" ];
 
-  meta = with lib; {
+  meta = {
     description = "Essential Routines for Fundamental Astronomy";
     homepage = "https://github.com/liberfa/erfa";
-    maintainers = with maintainers; [ mir06 ];
+    maintainers = with lib.maintainers; [ mir06 ];
     license = {
       url = "https://github.com/liberfa/erfa/blob/master/LICENSE";
       free = true;

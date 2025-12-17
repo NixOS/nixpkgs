@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GP1Xr+M7mDXFB1fVdTq3VPPQR9QU43iQlJNW9MqcLB0=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for generating license files";
     homepage = "https://github.com/azu/license-generator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
     mainProgram = "license-generator";
   };
 }

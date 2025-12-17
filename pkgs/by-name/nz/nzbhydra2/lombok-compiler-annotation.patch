@@ -1,0 +1,25 @@
+--- a/pom.xml	1970-01-01 01:00:01.000000000 +0100
++++ b/pom.xml	2025-12-02 21:04:01.739489000 +0100
+@@ -74,12 +74,13 @@
+                 <version>3.10.1</version>
+                 <configuration>
+                     <compilerArgs>
+                         <arg>-parameters</arg>
++                      <arg>-proc:full</arg>
+                     </compilerArgs>
+                     <source>17</source>
+                     <target>17</target>
+                 </configuration>
+             </plugin>
+         </plugins>
+     </build>
+ 
+@@ -108,7 +109,7 @@
+         <spring-data-commons.version>3.1.5</spring-data-commons.version>
+         <jakarta.persistence-api.version>3.1.0</jakarta.persistence-api.version>
+         <jackson.version>2.15.0</jackson.version>
+-        <lombok.version>1.18.30</lombok.version>
++        <lombok.version>1.18.42</lombok.version>
+         <logback.version>1.5.21</logback.version>
+         <guava.version>23.0</guava.version>
+         <junit.version>4.13.2</junit.version>

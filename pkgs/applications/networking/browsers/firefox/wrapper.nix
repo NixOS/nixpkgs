@@ -11,7 +11,7 @@
   writeText,
 
   ## various stuff that can be plugged in
-  ffmpeg,
+  ffmpeg_7,
   xorg,
   alsa-lib,
   libpulseaudio,
@@ -35,10 +35,23 @@
 
 ## configurability of the wrapper itself
 
-browser:
+browser_:
 
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
+  browser =
+    # Wrapper breaks codesigning on macOS; though plugins that may require
+    # original mozilla signature (like 1Password) won't work with signatures
+    # stripped, at least the wrapped browser will launch.
+    if isDarwin then
+      browser_.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs (oldAttrs.dontFixup or false) {
+          dontFixup = false;
+        }
+      )
+    else
+      browser_;
   wrapper =
     {
       applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
@@ -93,7 +106,7 @@ let
           ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
         )
         ++ lib.optional pipewireSupport pipewire
-        ++ lib.optional ffmpegSupport ffmpeg
+        ++ lib.optional ffmpegSupport ffmpeg_7
         ++ lib.optional gssSupport libkrb5
         ++ lib.optional useGlvnd libglvnd
         ++ lib.optionals (cfg.enableQuakeLive or false) (

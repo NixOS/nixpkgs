@@ -74,7 +74,7 @@ in
     systemd.services.litestream = {
       description = "Litestream";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/litestream replicate";

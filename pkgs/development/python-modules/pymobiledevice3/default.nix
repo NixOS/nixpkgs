@@ -4,6 +4,7 @@
   click,
   coloredlogs,
   construct,
+  construct-typing,
   cryptography,
   daemonize,
   developer-disk-image,
@@ -47,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
-  version = "5.1.2";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
-    hash = "sha256-HKkLkkPCu9d7iBy7FEPWR6cnNuYFgxSGN6beMCCiuyo=";
+    hash = "sha256-Sc02p2zZb/CPYFU+lz6fe1UZgWhdJYH2/pSJ5gVE0iY=";
   };
 
   build-system = [
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     click
     coloredlogs
     construct
+    construct-typing
     cryptography
     daemonize
     developer-disk-image

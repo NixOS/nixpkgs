@@ -518,6 +518,4 @@ in
       group = config.services.nginx.group;
     };
   };
-
-  meta.maintainers = with maintainers; [ melling ];
 }

@@ -1,4 +1,5 @@
 {
+  autoAddDriverRunpath,
   backendStdenv,
   _cuda,
   cmake,
@@ -176,6 +177,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
+    autoAddDriverRunpath
     cmake
     cuda_nvcc
   ];

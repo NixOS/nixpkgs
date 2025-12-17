@@ -1,3 +1,4 @@
+source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
 
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
@@ -22,10 +23,10 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
-eval "curl+=($curlOptsList)"
+curl+=("${curlOptsList[@]}")
 
 curl+=(
-    $curlOpts
+    ${curlOpts[*]}
     $NIX_CURL_FLAGS
 )
 
@@ -108,7 +109,7 @@ tryHashedMirrors() {
 set -o noglob
 
 urls2=
-for url in $urls; do
+for url in "${urls[@]}"; do
     if test "${url:0:9}" != "mirror://"; then
         urls2="$urls2 $url"
     else

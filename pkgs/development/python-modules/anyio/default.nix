@@ -95,6 +95,8 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+    # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
+    "test_multiple_threads"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
@@ -124,11 +126,11 @@ buildPythonPackage rec {
     inherit starlette;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/agronholm/anyio/blob/${src.tag}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

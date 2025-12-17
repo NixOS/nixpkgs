@@ -36,7 +36,7 @@ buildHomeAssistantComponent {
     # python requirements, as specified in manifest.json
   ];
 
-  meta = with lib; {
+  meta = {
     # changelog, description, homepage, license, maintainers
   };
 }

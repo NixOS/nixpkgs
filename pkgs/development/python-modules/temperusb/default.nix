@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "temperusb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read TEMPer USB HID devices";
     homepage = "https://github.com/padelt/temper-python";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

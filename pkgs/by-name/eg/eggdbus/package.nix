@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     dbus-glib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hal.freedesktop.org/releases/";
     description = "D-Bus bindings for GObject";
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
 }

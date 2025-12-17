@@ -86,7 +86,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.1";
+  version = "2.50.3";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,7 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
+    hash = "sha256-cKAGtGlbtrLhV+gB9aDQKfQRDwUMbwiC3s2KO/WU1U8=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -260,18 +260,26 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
-    license = licenses.bsd2;
-    pkgConfigModules = [
-      "javascriptcoregtk-${abiVersion}"
-      "webkit2gtk-${abiVersion}"
-      "webkit2gtk-web-extension-${abiVersion}"
-    ];
-    platforms = platforms.linux ++ platforms.darwin;
-    teams = [ teams.gnome ];
+    license = lib.licenses.bsd2;
+    pkgConfigModules =
+      if lib.versionAtLeast abiVersion "6.0" then
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkitgtk-${abiVersion}"
+          "webkitgtk-web-process-extension-${abiVersion}"
+        ]
+      else
+        [
+          "javascriptcoregtk-${abiVersion}"
+          "webkit2gtk-${abiVersion}"
+          "webkit2gtk-web-extension-${abiVersion}"
+        ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    teams = [ lib.teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

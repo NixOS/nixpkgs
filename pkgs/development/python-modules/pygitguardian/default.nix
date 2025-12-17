@@ -6,7 +6,6 @@
   marshmallow,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-CwGmNyY4U1vt7CHuO4nS1TuUJWm6Ok8vIE3kRG/qles=";
+    hash = "sha256-Jn8wy5UmuzqEputujGJQtAe8AoGCLYpSwZWHpDGlSWg=";
   };
 
   pythonRelaxDeps = [
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   env.GITGUARDIAN_API_KEY = "Test key for tests";
 
-  meta = with lib; {
+  meta = {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
     changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

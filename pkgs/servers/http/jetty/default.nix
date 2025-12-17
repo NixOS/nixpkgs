@@ -32,17 +32,17 @@ let
         rev-prefix = "jetty-";
       };
 
-      meta = with lib; {
+      meta = {
         changelog = "https://github.com/jetty/jetty.project/releases/tag/jetty-${version}";
         description = "Web server and javax.servlet container";
         homepage = "https://jetty.org/";
-        platforms = platforms.all;
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
-        license = with licenses; [
+        platforms = lib.platforms.all;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+        license = with lib.licenses; [
           asl20
           epl10
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           emmanuelrosa
           anthonyroussel
         ];
@@ -57,7 +57,7 @@ in
   };
 
   jetty_12 = common {
-    version = "12.1.3";
-    hash = "sha256-+DCfP0tFBouTZqOEzCFaQ4dl78xPFudUzS9hAzUkc7Y=";
+    version = "12.1.4";
+    hash = "sha256-no5Ge4pdYKN+tXUJq10RKCTtRLFNdz5sOuw6o+ZxXdY=";
   };
 }

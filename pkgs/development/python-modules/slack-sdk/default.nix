@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.37.0";
+  version = "3.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${version}";
-    hash = "sha256-yckw0qA/NhnqN9HvF06Q5IqDmUTsPuo4JSKMrKXUGuc=";
+    hash = "sha256-c9MPcamxXPxWnj5OpJNME/PTHssOxOJP6zjSLu5cW7Y=";
   };
 
   build-system = [ setuptools ];

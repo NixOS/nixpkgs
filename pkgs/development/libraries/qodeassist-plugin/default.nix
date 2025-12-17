@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qodeassist-plugin";
-  version = "0.8.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "Palm1r";
     repo = "QodeAssist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7wsRgZEAOd8mGnTCGJM7LTde2ITKW7ibIB7ZGy25s+E=";
+    hash = "sha256-n+MDFJbFl/miVt8qm90PNOQE2QWc0kGgRfaQMu9MPA4=";
   };
 
   dontWrapQtApps = true;

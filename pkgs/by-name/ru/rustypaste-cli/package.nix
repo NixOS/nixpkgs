@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Z8rybofRp4hzTbn3iT0X50fcJCn2tT3HTYTLLWTJBek=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for rustypaste";
     homepage = "https://github.com/orhun/rustypaste-cli";
     changelog = "https://github.com/orhun/rustypaste-cli/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rpaste";
   };

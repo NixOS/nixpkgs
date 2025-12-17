@@ -179,13 +179,33 @@ in
 
     services.xserver.displayManager.lightdm.enable = false;
 
-    users.users.gdm = {
-      name = "gdm";
-      uid = config.ids.uids.gdm;
-      group = "gdm";
-      home = "/run/gdm";
-      description = "GDM user";
-    };
+    users.users = lib.mkMerge [
+      {
+        gdm = {
+          name = "gdm";
+          uid = config.ids.uids.gdm;
+          group = "gdm";
+          description = "GDM user";
+        };
+
+        gdm-greeter = {
+          isSystemUser = true;
+          uid = 60578;
+          group = "gdm";
+          home = "/run/gdm";
+        };
+      }
+
+      (lib.genAttrs' [ 1 2 3 4 ] (
+        i:
+        lib.nameValuePair "gdm-greeter-${toString i}" {
+          isSystemUser = true;
+          uid = 60578 + i;
+          group = "gdm";
+          home = "/run/gdm-${toString i}";
+        }
+      ))
+    ];
 
     users.groups.gdm.gid = config.ids.gids.gdm;
 
@@ -348,15 +368,15 @@ in
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment.text = ''
-        auth     required       pam_succeed_if.so audit quiet_success user = gdm
+        auth     required       pam_succeed_if.so audit quiet_success user ingroup gdm
         auth     optional       pam_permit.so
 
-        account  required       pam_succeed_if.so audit quiet_success user = gdm
+        account  required       pam_succeed_if.so audit quiet_success user ingroup gdm
         account  sufficient     pam_unix.so
 
         password required       pam_deny.so
 
-        session  required       pam_succeed_if.so audit quiet_success user = gdm
+        session  required       pam_succeed_if.so audit quiet_success user ingroup gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke

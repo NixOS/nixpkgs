@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "0.1.41";
+  version = "0.1.42";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-QAzkRbAxtHa7Py4DDSc2/QHHyFHp+e+/uGmGzUPtFPI=";
+    hash = "sha256-STb4JCEoKgzokIA5mWFqJkFH9mtdnIp8NcopLWYSbwQ=";
   };
 
   sourceRoot = "source/src/backend";
@@ -32,44 +32,49 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ setuptools ];
 
-  dependencies = with python.pkgs; [
-    aiohttp
-    boto3
-    brevo-python
-    brotli
-    celery
-    django
-    django-configurations
-    django-cors-headers
-    django-countries
-    django-extensions
-    django-lasuite
-    django-parler
-    django-redis
-    django-storages
-    django-timezone-field
-    djangorestframework
-    dockerflow
-    drf-spectacular
-    drf-spectacular-sidecar
-    easy-thumbnails
-    factory-boy
-    gunicorn
-    jsonschema
-    june-analytics-python
-    livekit-api
-    markdown
-    mozilla-django-oidc
-    nested-multipart-parser
-    psycopg
-    pyjwt
-    pyopenssl
-    python-frontmatter
-    redis
-    requests
-    sentry-sdk
-    whitenoise
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      aiohttp
+      boto3
+      brevo-python
+      brotli
+      celery
+      django
+      django-configurations
+      django-cors-headers
+      django-countries
+      django-extensions
+      django-lasuite
+      django-parler
+      django-redis
+      django-storages
+      django-timezone-field
+      djangorestframework
+      dockerflow
+      drf-spectacular
+      drf-spectacular-sidecar
+      easy-thumbnails
+      factory-boy
+      gunicorn
+      jsonschema
+      june-analytics-python
+      livekit-api
+      markdown
+      mozilla-django-oidc
+      nested-multipart-parser
+      psycopg
+      pyjwt
+      pyopenssl
+      python-frontmatter
+      redis
+      requests
+      sentry-sdk
+      whitenoise
+    ]
+    ++ celery.optional-dependencies.redis
+    ++ django-lasuite.optional-dependencies.all
+    ++ django-storages.optional-dependencies.s3;
 
   pythonRelaxDeps = true;
 

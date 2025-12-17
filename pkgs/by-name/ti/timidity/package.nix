@@ -99,6 +99,9 @@ stdenv.mkDerivation rec {
     sed -i 's/^\(calcnewt\$(EXEEXT):\).*/\1/g' timidity/Makefile
   '';
 
+  # Fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   # the instruments could be compressed (?)
   postInstall = ''
     mkdir -p $out/share/timidity/;
@@ -112,12 +115,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.timidity;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/timidity/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Software MIDI renderer";
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
     mainProgram = "timidity";
   };
 }

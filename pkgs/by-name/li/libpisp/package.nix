@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/raspberrypi/libpisp";
     description = "Helper library to generate run-time configuration for the Raspberry Pi ISP (PiSP), consisting of the Frontend and Backend hardware components";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
   };
 })

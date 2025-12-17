@@ -119,7 +119,7 @@ in
     pkgs = lib.mkOption {
       defaultText = lib.literalExpression ''
         import "''${nixos}/.." {
-          inherit (cfg) config overlays localSystem crossSystem;
+          inherit (config.nixpkgs) config overlays localSystem crossSystem;
         }
       '';
       type = pkgsType;

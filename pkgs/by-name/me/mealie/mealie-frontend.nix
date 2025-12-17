@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-vw7OtXRrASOac4J5j6X/U2kxZa9I9thecUUl6XOYz5w=";
+    hash = "sha256-qwxsnl9xKzNJEomMB4p8eaiybmlpeUgSUpJtIRhF1Cw=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +61,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for Mealie";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ litchipi ];
   };
 }

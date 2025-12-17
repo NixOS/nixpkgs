@@ -6,7 +6,8 @@
   which is `throw`'s and `abort`'s, without error messages.
 
   If you need to test error messages or more complex evaluations, see
-  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+  `lib/tests/modules.sh`, `lib/tests/sources.sh`, `lib/tests/filesystem.sh` or
+  `lib/tests/debug.sh` as examples.
 
   To run these tests:
 
@@ -1288,25 +1289,23 @@ runTests {
     expected = [ 15 ];
   };
 
-  testFold =
+  testFoldr =
     let
-      f = op: fold: fold op 0 (range 0 100);
-      # fold with associative operator
+      f = op: foldr: foldr op 0 (range 0 100);
+      # foldr with associative operator
       assoc = f builtins.add;
-      # fold with non-associative operator
+      # foldr with non-associative operator
       nonAssoc = f builtins.sub;
     in
     {
       expr = {
         assocRight = assoc foldr;
-        # right fold with assoc operator is same as left fold
+        # foldr with assoc operator is same as foldl
         assocRightIsLeft = assoc foldr == assoc foldl;
         nonAssocRight = nonAssoc foldr;
         nonAssocLeft = nonAssoc foldl;
-        # with non-assoc operator the fold results are not the same
+        # with non-assoc operator the foldr results are not the same
         nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
-        # fold is an alias for foldr
-        foldIsRight = nonAssoc fold == nonAssoc foldr;
       };
       expected = {
         assocRight = 5050;
@@ -1314,7 +1313,6 @@ runTests {
         nonAssocRight = 50;
         nonAssocLeft = (-5050);
         nonAssocRightIsNotLeft = true;
-        foldIsRight = true;
       };
     };
 
@@ -4741,8 +4739,6 @@ runTests {
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
   };
 
-  # Tests for cross index utilities
-
   testRenameCrossIndexFrom = {
     expr = lib.renameCrossIndexFrom "pkgs" {
       pkgsBuildBuild = "dummy-build-build";
@@ -4818,5 +4814,4 @@ runTests {
       targetTarget = "prefix-tt";
     };
   };
-
 }

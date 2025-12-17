@@ -43,6 +43,9 @@ buildPythonPackage rec {
       stripLen = 2;
       hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
     })
+
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
+    ./skip-failing-test-not-initialized.patch
   ];
 
   # Python 2.x is not supported.
@@ -86,14 +89,14 @@ buildPythonPackage rec {
     (lib.mesonEnable "tests" gst-python.doInstallCheck)
   ];
 
-  # Tests are very flaky on Darwin.
-  # See: https://github.com/NixOS/nixpkgs/issues/454955
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
   # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
   # See: https://github.com/NixOS/nixpkgs/issues/47390
-  installCheckPhase = "mesonCheckPhase";
+  installCheckPhase = ''
+    runHook preCheck
+    mesonCheckPhase
+    runHook postCheck
+  '';
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"

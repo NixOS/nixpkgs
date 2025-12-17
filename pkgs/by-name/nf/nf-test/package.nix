@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     command = "nf-test version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple test framework for Nextflow pipelines";
     homepage = "https://www.nf-test.com/";
     changelog = "https://github.com/askimed/nf-test/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rollf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rollf ];
     mainProgram = "nf-test";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

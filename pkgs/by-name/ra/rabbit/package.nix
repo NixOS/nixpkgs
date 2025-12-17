@@ -21,6 +21,13 @@ let
             hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
           };
 
+          # Preserve the postPatch for this scikit-learn version
+          postPatch = ''
+            substituteInPlace meson.build --replace-fail \
+              "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
+              "'${version}',"
+          '';
+
           # There are 2 tests that are failing, disabling the tests for now.
           # - test_csr_polynomial_expansion_index_overflow[csr_array-False-True-2-65535]
           # - test_csr_polynomial_expansion_index_overflow[csr_array-False-True-3-2344]
@@ -50,6 +57,7 @@ python3'.pkgs.buildPythonApplication {
   pythonRelaxDeps = [
     "joblib"
     "numpy"
+    "pandas"
     "requests"
     "scikit-learn"
     "scipy"

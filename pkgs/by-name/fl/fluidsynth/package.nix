@@ -6,7 +6,6 @@
   pkg-config,
   cmake,
   alsa-lib,
-  glib,
   libjack2,
   libsndfile,
   libpulseaudio,
@@ -14,13 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
-  version = "2.4.8";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rOPoRV0NWrlFZohqQ76gnXvt4/ryEI4nSlX+mNW+qf8=";
+    hash = "sha256-gTkW2X7fcmxJwYf13Yma6cBigz4sbsb99dBSYTDlcyY=";
+    fetchSubmodules = true;
   };
 
   outputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glib
+    stdenv.cc.cc.lib
     libsndfile
     libjack2
   ]
@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-Denable-framework=off"
+    "-Dosal=cpp11"
+    "-Denable-libinstpatch=0"
   ];
 
   meta = {

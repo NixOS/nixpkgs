@@ -11,6 +11,7 @@
   libarchive,
   libxml2,
   xapp,
+  xapp-symbolic-icons,
   meson,
   pkg-config,
   cairo,
@@ -19,7 +20,7 @@
   libspectre,
   libgxps,
   webkitgtk_4_1,
-  nodePackages,
+  mathjax,
   ninja,
   djvulibre,
   backends ? [
@@ -36,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.4.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = version;
-    hash = "sha256-56G+UmYTNEp9lMU56Nm+OIuPwXwhDt92ANkaC0NWZZQ=";
+    hash = "sha256-+T89KxGTGycN1pnXBxJY15ViRvwJbM2adZVUTTSG3VQ=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dmathjax-directory=${nodePackages.mathjax}"
+    "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -73,16 +74,22 @@ stdenv.mkDerivation rec {
     libspectre
     libgxps
     webkitgtk_4_1
-    nodePackages.mathjax
+    mathjax
     djvulibre
   ];
 
-  meta = with lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
+  meta = {
     description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
     homepage = "https://github.com/linuxmint/xreader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

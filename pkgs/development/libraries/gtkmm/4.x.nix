@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.18.0";
+  version = "4.20.0";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
-    hash = "sha256-LuMcFUefxNjpWLA8i1+7yOF7wSLCovVESXtOBWGeM+w=";
+    hash = "sha256-2q2b+bcPkJdfkXgfx6ZWySOpE3QmH1dsiDzTrr1ZyDM=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the GTK graphical user interface library";
     longDescription = ''
       gtkmm is the official C++ interface for the popular GUI library
@@ -90,9 +90,9 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
     homepage = "https://gtkmm.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

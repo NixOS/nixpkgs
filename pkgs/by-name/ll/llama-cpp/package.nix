@@ -3,6 +3,7 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   stdenv,
 
@@ -30,14 +31,12 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
-  apple-sdk_14,
   curl,
   llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
   ninja,
-  git,
 }:
 
 let
@@ -75,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6981";
+  version = "7445";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-0WtiHDlMeb+m2XcMwkPFY1mtwVTwRJUoxQSwzpiRbts=";
+    hash = "sha256-oHQtfGu1altWwHUl4z2ApLVp8ISfd+l9t+k5NqtbWgA=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -91,9 +90,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     ninja
     pkg-config
-    git
   ]
   ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -106,7 +105,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
-    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''
@@ -155,6 +153,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
+
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
@@ -184,6 +186,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       dit7ya
       philiptaron
       xddxdd
+      yuannan
     ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;

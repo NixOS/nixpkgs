@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rova" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to access for ROVA calendars";
     homepage = "https://github.com/GidoHakvoort/rova";
     changelog = "https://github.com/GidoHakvoort/rova/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -60,11 +60,11 @@ buildPythonPackage rec {
     inherit qtile;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flacjacket/pywlroots";
     description = "Python bindings to wlroots using cffi";
-    license = licenses.ncsa;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chvp ];
+    license = lib.licenses.ncsa;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
   };
 }

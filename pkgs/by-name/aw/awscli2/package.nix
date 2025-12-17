@@ -26,8 +26,8 @@ let
         prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
           version = "3.0.51";
           src = prev.src.override {
-            inherit version;
-            hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
+            tag = version;
+            hash = "sha256-pNYmjAgnP9nK40VS/qvPR3g+809Yra2ISASWJDdQKrU=";
           };
         });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
@@ -73,14 +73,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.31.11"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.32.15"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-JyTL3q8MMKSKbNiJvBL3u7vpUNFt9rp2Ueh8mL9FRkM=";
+    hash = "sha256-TOXoArw33exbMfKBnNSECymYS8hVzPoVOA7PWzbnroc=";
   };
 
   postPatch = ''
@@ -208,9 +208,7 @@ py.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bhipple
       davegallant
-      bryanasdev000
       devusb
       anthonyroussel
     ];

@@ -74,5 +74,5 @@ runCommand buildah-unwrapped.name
     ln -s ${buildah-unwrapped}/share $out/share
     makeWrapper ${buildah-unwrapped}/bin/buildah $out/bin/buildah \
       --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
-      --prefix PATH : ${binPath}
+      --prefix PATH : "${binPath}"
   ''

@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "black" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is a small utility built on top of the black Python code formatter to enable formatting of partial files";
     mainProgram = "black-macchiato";
     homepage = "https://github.com/wbolster/black-macchiato";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jperras ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jperras ];
   };
 }

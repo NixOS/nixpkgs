@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "11.0.0";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-FSzuPRiJ6OXkdy4XyvGs2kTKPF2Kl55e53keztmEdfY=";
+    hash = "sha256-6xifendLRHekTOXDGEpyYxzucg9hRf85gwxS1FyBkCc=";
   };
 
   build-system = [ setuptools ];
@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibm_watson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
     changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

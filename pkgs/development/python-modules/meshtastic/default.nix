@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.7.4";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = version;
-    hash = "sha256-fIr80k++BwA3UFgeS9Fgq6fpOOIcK4jj7bjfjqkc6ug=";
+    hash = "sha256-Vc8m5qc2vKQ4ZwP/TQWJhottBANqEaSUNFCbCNPmQnI=";
   };
 
   pythonRelaxDeps = [
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -120,11 +120,11 @@ buildPythonPackage rec {
     "test_TCPInterface"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

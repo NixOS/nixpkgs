@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "1.9.0";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "plugwise";
     repo = "python-plugwise";
     tag = "v${version}";
-    hash = "sha256-OKbzN4IWrXCrn0qUd7hL6Oh2dvO9udxymo7pZXPmqA4=";
+    hash = "sha256-fgUIyI9akQbVhcff413gIPzviGNZlQJztFTnW5+n9wU=";
   };
 
   postPatch = ''
@@ -57,11 +57,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
     homepage = "https://github.com/plugwise/python-plugwise";
     changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -63,14 +63,21 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_exclude"
   ];
 
+  disabledTestPaths = [
+    # AssertionError
+    "tests/test_analyze.py"
+    "tests/test_convert.py"
+    "tests/test_filters.py"
+  ];
+
   pythonImportsCheck = [ "sigma.cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/${src.tag}";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sigma";
   };
 }

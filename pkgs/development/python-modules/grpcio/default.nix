@@ -19,14 +19,14 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.75.1";
+  version = "1.76.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PoHYns6ZuaziOmkWiAusphPAOnmZJa+yhXiH76ixs9I=";
+    hash = "sha256-e+eDiNbaGiXA1exQZSPbWLGL4i2cN9jToywIvkmHvXM=";
   };
 
   outputs = [
@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2-based RPC framework";
     homepage = "https://grpc.io/grpc/python/";
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

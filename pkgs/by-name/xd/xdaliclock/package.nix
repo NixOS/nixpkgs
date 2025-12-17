@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     "GTK_APPDIR=${placeholder "out"}/share/applications/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clock application that morphs digits when they are changed";
-    maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux ++ freebsd;
-    license = licenses.free; # TODO BSD on Gentoo, looks like MIT
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
+    license = lib.licenses.free; # TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";
     mainProgram = "xdaliclock";
   };

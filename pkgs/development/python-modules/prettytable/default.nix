@@ -11,22 +11,20 @@
   wcwidth,
 
   # tests
-  coverage,
-  pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.16.0";
+  version = "3.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "prettytable";
     tag = version;
-    hash = "sha256-2x7Q1HiCACJfbgWkczy3dS+dkE1fUqJK4LtqB9f3CzY=";
+    hash = "sha256-MvKa6M2kfD3rUl+kxsD87ieBzmDtahoMQJUNWsofCBc=";
   };
 
   build-system = [
@@ -37,8 +35,6 @@ buildPythonPackage rec {
   dependencies = [ wcwidth ];
 
   nativeCheckInputs = [
-    coverage
-    pytest-cov-stub
     pytest-lazy-fixtures
     pytestCheckHook
   ];

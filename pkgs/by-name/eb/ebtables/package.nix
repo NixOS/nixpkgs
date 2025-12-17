@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/ebtables-legacy-save     $out/sbin/ebtables-save
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Filtering tool for Linux-based bridging firewalls";
     homepage = "http://ebtables.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

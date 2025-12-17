@@ -12,12 +12,12 @@
   pkgs,
 }:
 let
-  version = "0.0.27-unstable-2025-11-09";
+  version = "0.0.27-unstable-2025-12-09";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "f8a7cd1a606460ec0a2c4ec886bc102daccf912e";
-    hash = "sha256-jRIPBO/5JKFe2bZYjPtW8o0dDujoCxU8zq9Ot3hCtzs=";
+    rev = "bbf6d8f0d9aa072a2ccffc7701936eaa71985f92";
+    hash = "sha256-Ig4yMpoNEWMIHqh3Cq6taAkyBFesLk+C+nb/Kld18ag=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -36,6 +36,9 @@ let
     ];
 
     buildFeatures = [ "luajit" ];
+
+    # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
+    env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
 
     checkFlags = [
       # Disabled because they access the network.

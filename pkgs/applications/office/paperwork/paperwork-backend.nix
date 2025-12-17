@@ -84,11 +84,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aszlig
       symphorien
     ];

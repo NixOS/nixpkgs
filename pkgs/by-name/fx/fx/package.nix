@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "39.1.0";
+  version = "39.2.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "fx";
     tag = finalAttrs.version;
-    hash = "sha256-k8BrH3tRc6RM6PG93MRLR/uJGyo953vYH2v4eBBhPrI=";
+    hash = "sha256-sQnawn5My511IsxBMh6r06R2aLKGmF0ndP1alr/Y8vw=";
   };
 
   vendorHash = "sha256-C4TqFRECIFzc6TyAJ2yj97t2BVHXBovIV3iIjNhm7ek=";

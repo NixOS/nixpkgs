@@ -45,6 +45,7 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
@@ -141,6 +142,12 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
+
+    # Fix timeout issue in Fish integration tests after recent Fish release
+    (fetchpatch {
+      url = "https://github.com/kovidgoyal/kitty/commit/456fa8691a94f99fae0cef7f19dd2c85c208445a.patch";
+      hash = "sha256-WLPodki5cA9Y3pcVwSV7EUmLEGGXkJDYX1MsHIzPk2s=";
+    })
   ];
 
   hardeningDisable = [
@@ -309,17 +316,17 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "Fast, feature-rich, GPU based terminal emulator";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
       "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
     ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rvolosatovs
       Luflosi
       kashw2

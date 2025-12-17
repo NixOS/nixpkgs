@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.56.4";
+  version = "1.57.0";
 
   outputs = [
     "bin"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FwZeL8xfWlvb/8iEyVa/x8RRqW6MT7L4rYN8ZBPLWgE=";
+    hash = "sha256-iQZAyEHa530649j+iVN4S5MPokGxdCPmEgx7/fi4kec=";
   };
 
   depsBuildBuild = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for laying out and rendering of text, with an emphasis on internationalization";
 
     longDescription = ''
@@ -127,11 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.pango.org/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
 
     pkgConfigModules = [
       "pango"

@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
 
+  patches = [
+    # Compatibility with mupdf 1.26
+    ./mupdf-1.26.patch
+  ];
+
   postPatch = ''
     sed -i "2d;s/ver=.*/ver=${version}/" build.bash
   '';
@@ -85,14 +90,14 @@ stdenv.mkDerivation rec {
         --prefix PATH ":" "${procps}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/criticic/llpp";
     description = "MuPDF based PDF pager written in OCaml";
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ pSub ];
     license = [
-      licenses.publicDomain
-      licenses.bsd3
+      lib.licenses.publicDomain
+      lib.licenses.bsd3
     ];
   };
 }

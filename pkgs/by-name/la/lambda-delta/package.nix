@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "02m43fj9dzc1i1jl01qwnhjiq1rh03jw1xq59sx2h3bhn7dk941x";
   };
 
+  patches = [ ./fix-implicit-int.patch ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -29,11 +31,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-SDL1" ];
 
-  meta = with lib; {
+  meta = {
     description = "LMI (Lambda Lisp Machine) emulator";
     homepage = "https://github.com/dseagrav/ld";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -26,6 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-VraFR3Mp4mPh+39hw88R0q1p5iNkcQzvhRVNPwSxzU0=";
 
+  patches = [
+    # This patch comes from https://github.com/ezrosent/frawk/pull/120, which was squash-merged.
+    ./fix-some-compiler-warnings-errors.patch
+  ];
+
   buildInputs = [
     libxml2
     ncurses

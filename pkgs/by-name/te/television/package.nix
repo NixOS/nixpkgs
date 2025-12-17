@@ -19,16 +19,16 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
-    version = "0.13.5";
+    version = "0.14.1";
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
-      hash = "sha256-IlFOYnZ9xPQaRheielKqAckyVlSVQMhnO4wCtVixlNQ=";
+      hash = "sha256-PBWadCAGfCgYcNZpkQhY9g7mrKQgkJ9UhqMjAcM/IuU=";
     };
 
-    cargoHash = "sha256-QKUspbC1bmSeZP0n/O5roEqQkrja+fVKLhAvgzqNS9E=";
+    cargoHash = "sha256-aa+XV1QUHjL2AjO+0AkMYimJeB7bNdb7ShrgNwevJc8=";
 
     strictDeps = true;
     nativeBuildInputs = [
@@ -38,6 +38,27 @@ let
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
     # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
     doCheck = false;
+
+    postPatch = ''
+      # Remove keybinding overrides from shell completion scripts
+      # Users should configure their own keybindings
+
+      # Bash: Remove bind commands
+      sed -i '/^# Bind the functions to key combinations/,$d' \
+        television/utils/shell/completion.bash
+
+      # Fish: Remove bind commands for both modes
+      sed -i '/^for mode in default insert/,$d' \
+        television/utils/shell/completion.fish
+
+      # Nushell: Remove keybinding configuration
+      sed -i '/^# Bind custom keybindings/,$d' \
+        television/utils/shell/completion.nu
+
+      # Zsh: Remove zle and bindkey commands
+      sed -i '/^zle -N tv-smart-autocomplete/,$d' \
+        television/utils/shell/completion.zsh
+    '';
 
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1

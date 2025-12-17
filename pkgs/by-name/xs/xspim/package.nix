@@ -60,11 +60,11 @@ stdenv.mkDerivation {
     install -D ../Documentation/xspim.man $out/share/man/man1/xspim.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIPS32 simulator";
     homepage = "https://spimsimulator.sourceforge.net/";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.linux;
   };
 }

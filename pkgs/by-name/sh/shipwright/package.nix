@@ -1,5 +1,4 @@
 {
-  apple-sdk_13,
   stdenv,
   cmake,
   lsb-release,
@@ -178,10 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     zenity
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Metal.hpp requires macOS 13.x min.
-    apple-sdk_13
   ];
 
   cmakeFlags = [

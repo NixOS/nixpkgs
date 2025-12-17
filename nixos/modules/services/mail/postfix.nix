@@ -972,7 +972,7 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${lib.getExe' cfg.package "postmap"} -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postmap"} /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -1279,7 +1279,7 @@ in
       [ "services" "postfix" "settings" "main" "recipient_delimiter" ]
     )
     (lib.mkRenamedOptionModule
-      [ "services" "postfix" "tlsTrustedAuthoriies" ]
+      [ "services" "postfix" "tlsTrustedAuthorities" ]
       [ "services" "postfix" "settings" "main" "smtp_tls_CAfile" ]
     )
     (lib.mkRenamedOptionModule

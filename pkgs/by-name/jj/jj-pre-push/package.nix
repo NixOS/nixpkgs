@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
 }:
 
 python3Packages.buildPythonApplication rec {

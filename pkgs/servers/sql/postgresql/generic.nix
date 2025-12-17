@@ -163,11 +163,12 @@ let
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
-      # Pin LLVM 20 until upstream has resolved:
+      # Pin LLVM 20 until upstream has fully resolved:
       # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
+      # Currently still a problem on aarch64.
       # TODO: Remove with next minor releases
       llvmPackages = lib.warnIf (
-        version == "17.7"
+        version == "17.8"
       ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =
@@ -175,7 +176,7 @@ let
           overrideCC llvmPackages.stdenv (
             llvmPackages.stdenv.cc.override {
               # LLVM bintools are not used by default, but are needed to make -flto work below.
-              bintools = llvmPackages.bintools;
+              bintools = buildPackages."llvmPackages_${lib.versions.major llvmPackages.release_version}".bintools;
             }
           )
         else
@@ -425,12 +426,6 @@ let
       ]
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
         ./patches/export-dynamic-darwin-15-.patch
-      ]
-      ++ lib.optionals (atLeast "17") [
-        (fetchpatch2 {
-          url = "https://github.com/postgres/postgres/commit/a48d1ef58652229521ba4b5070e19f857608b22e.patch";
-          hash = "sha256-3FKQS1Vpu+p6z6c1GWs6GlrLl2Bgm9paEU/z81LrEus=";
-        })
       ];
 
       installTargets = [ "install-world" ];
@@ -577,7 +572,7 @@ let
 
           psqlSchema = lib.versions.major version;
 
-          withJIT = this.withPackages (_: [ this.jit ]);
+          withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
           withoutJIT = this;
 
           pkgs =
@@ -626,19 +621,19 @@ let
           };
         };
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.postgresql.org";
         description = "Powerful, open source object-relational database system";
-        license = licenses.postgresql;
+        license = lib.licenses.postgresql;
         changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-        teams = [ teams.postgres ];
+        teams = [ lib.teams.postgres ];
         pkgConfigModules = [
           "libecpg"
           "libecpg_compat"
           "libpgtypes"
           "libpq"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
 
         # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
         # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for

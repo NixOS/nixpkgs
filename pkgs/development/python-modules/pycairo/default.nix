@@ -48,13 +48,13 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       mpl11
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   importlib-metadata,
   pytestCheckHook,
 
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-3FfLKwpfkiGfY2+H2fQoZwLBqfPlV46xw2Bc4YEsyps=";
   };
+
+  patches = [
+    # https://github.com/pallets/click/pull/2940
+    (fetchpatch {
+      name = "fix-SystemExit-when-using-stdin.patch";
+      url = "https://github.com/pallets/click/commit/93c6966eb3a575c2b600434d1cc9f4b3aee505ac.patch";
+      hash = "sha256-DkVF0JnKbcsdAhgVjWJEDZZ8vr2sf6wba8P3SyRUy6o=";
+    })
+  ];
 
   build-system = [ flit-core ];
 

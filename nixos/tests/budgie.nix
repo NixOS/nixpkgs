@@ -42,13 +42,7 @@
     in
     ''
       with subtest("Wait for login"):
-          # wait_for_x() checks graphical-session.target, which is expected to be
-          # inactive on Budgie before Budgie manages user session with systemd.
-          # https://github.com/BuddiesOfBudgie/budgie-desktop/blob/39e9f0895c978f76/src/session/budgie-desktop.in#L16
-          #
-          # Previously this was unconditionally touched by xsessionWrapper but was
-          # changed in #233981 (we have Budgie:GNOME in XDG_CURRENT_DESKTOP).
-          # machine.wait_for_x()
+          machine.wait_for_x()
           machine.wait_until_succeeds('journalctl -t budgie-session-binary --grep "Entering running state"')
           machine.wait_for_file("${user.home}/.Xauthority")
           machine.succeed("xauth merge ${user.home}/.Xauthority")
@@ -58,8 +52,9 @@
           machine.succeed("getfacl -p /dev/dri/card0 | grep -q ${user.name}")
 
       with subtest("Check if Budgie session components actually start"):
-          for i in ["budgie-daemon", "budgie-panel", "budgie-wm", "budgie-desktop-view", "gsd-media-keys"]:
-              machine.wait_until_succeeds(f"pgrep -f {i}")
+          for i in ["budgie-daemon", "budgie-panel", "budgie-wm", "bsd-media-keys", "gsd-xsettings"]:
+              machine.wait_until_succeeds(f"pgrep {i}")
+          machine.wait_until_succeeds("pgrep -xf /run/current-system/sw/bin/org.buddiesofbudgie.budgie-desktop-view")
           # We don't check xwininfo for budgie-wm.
           # See https://github.com/NixOS/nixpkgs/pull/216737#discussion_r1155312754
           machine.wait_for_window("budgie-daemon")
@@ -67,7 +62,7 @@
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-wm)/environ"
-          machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
+          machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie'")
           machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie-desktop-with-plugins.pname}'")
           # From the nixos/budgie module
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")

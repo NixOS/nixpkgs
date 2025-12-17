@@ -19,6 +19,7 @@
   gtk4,
   libadwaita,
   libcamera,
+  lcms2,
   libseccomp,
   pipewire,
   gnome,
@@ -26,16 +27,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "48.0.1";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OTF2hZogt9I138MDAxuiDGhkQRBpiNyRHdkbe21m4f0=";
+    hash = "sha256-X5YZPSkZxzVXRdJqGwHyPDyzCpPHQtWD7EKSfEpFrhg=";
   };
 
   patches = [
     # Fix paths in glycin library
-    libglycin.passthru.glycinPathsPatch
+    libglycin.passthru.glycin3PathsPatch
   ];
 
   cargoVendorDir = "vendor";
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libcamera # for the gstreamer plugin
+    lcms2
     libseccomp
     pipewire # for device provider
   ];
@@ -96,12 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "snapshot";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";
     description = "Take pictures and videos on your computer, tablet, or phone";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "snapshot";
   };
 })

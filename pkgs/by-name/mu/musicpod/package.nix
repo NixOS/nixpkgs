@@ -1,27 +1,29 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   alsa-lib,
   mpv-unwrapped,
   libass,
+  libnotify,
   pulseaudio,
   musicpod,
   runCommand,
   _experimental-update-script-combinators,
   yq,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${version}";
-    hash = "sha256-fwESbZxin1R/xcnI321k8a60vBeU8VFvBRqGITSe92s=";
+    hash = "sha256-AUggxf6qveyLiEhXeA9orVzy03bl6eBHHEh15zZQ0wE=";
   };
 
   postPatch = ''
@@ -31,12 +33,13 @@ flutter332.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   buildInputs = [
     alsa-lib
     mpv-unwrapped
     libass
+    libnotify
   ];
 
   runtimeDependencies = [ pulseaudio ];
@@ -57,11 +60,22 @@ flutter332.buildFlutterApplication rec {
           cat $src/pubspec.lock | yq > $out
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };

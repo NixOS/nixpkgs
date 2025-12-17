@@ -16,29 +16,22 @@
 
   # tests
   pyarrow,
+  pytest-flake8,
   pytestCheckHook,
   scikit-image,
 }:
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2024.5.3";
+  version = "2025.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-image";
     tag = "v${version}";
-    hash = "sha256-kXCAqJ2Zgo/2Khvo2YcK+n4oGM219GyQ2Hsq9re1Lac=";
+    hash = "sha256-+nzYthnobcemunMcAWwRpHOQy6yFtjdib/7VZqWEiqc=";
   };
-
-  postPatch = ''
-    substituteInPlace dask_image/ndinterp/__init__.py \
-      --replace-fail "out_bounds.ptp(axis=1)" "np.ptp(out_bounds, axis=1)"
-
-    substituteInPlace tests/test_dask_image/test_imread/test_core.py \
-      --replace-fail "fh.save(" "fh.write("
-  '';
 
   build-system = [
     setuptools
@@ -55,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyarrow
+    pytest-flake8
     pytestCheckHook
     scikit-image
   ];

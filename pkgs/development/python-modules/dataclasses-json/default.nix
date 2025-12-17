@@ -55,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclasses_json" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
     changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ albakham ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ albakham ];
   };
 }

@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
+  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
   ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
 
   postInstall = ''

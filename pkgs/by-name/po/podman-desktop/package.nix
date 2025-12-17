@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
-  electron_38,
+  electron_39,
   nodejs,
   pnpm_10,
   makeDesktopItem,
@@ -19,12 +19,12 @@
 }:
 
 let
-  electron = electron_38;
+  electron = electron_39;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.22.1";
+  version = "1.23.1";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -57,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+YM1fiY2bH5nY1L/xWjMbWe5lH1LfyKW47OzCROB3nE=";
+    hash = "sha256-08boCPsuT09OileZUWhB8awXWHrlJzoER2Bx0WXeOHU=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-2Cja6CQxjOlxjhsjGQ5C9a/C/2RfzKdvtRCKO7VztwQ=";
+    fetcherVersion = 2;
+    hash = "sha256-nBjAmXzjR0qGCM91UAonQKP0NG7+DXImueSbhbnMK/k=";
   };
 
   patches = [
@@ -74,13 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     pnpm_10.configHook
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-    makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -122,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
           ${commonWrapperArgs}
       ''
+      # Enforce X11 to avoid the Wayland dashboard issue.
+      # Revisit this once issue https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         mkdir -p "$out/share/lib/podman-desktop"
         cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
@@ -130,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
           --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+          --set XDG_SESSION_TYPE 'x11' \
           ${commonWrapperArgs} \
           --inherit-argv0
       ''

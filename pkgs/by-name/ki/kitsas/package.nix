@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
   };
 
+  patches = [
+    # Fix Qt 6.10 compatibility: QString::arg() no longer accepts Euro type directly
+    ./fix-qt610-euro-arg.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     qt6.qmake
@@ -56,12 +61,12 @@ stdenv.mkDerivation rec {
       install -Dm644 ../kitsas.desktop -t $out/share/applications
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/artoh/kitupiikki";
     description = "Accounting tool suitable for Finnish associations and small business";
     mainProgram = "kitsas";
-    maintainers = with maintainers; [ gspia ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ gspia ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

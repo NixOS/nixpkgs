@@ -38,6 +38,10 @@ let
     # These tests rely on outbound IP address
     "TestHandler"
     "TestHandler_gcCache"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # Uses docker-specific options, unsupported on Darwin
+    "TestMergeJobOptions"
   ];
 in
 buildGoModule rec {
@@ -91,19 +95,13 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
-    # Cannot process container options: '--pid=host --device=/dev/sda': 'unknown server OS: darwin'
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      adamcstephens
-      emilylange
-      christoph-heiss
-      tebriel
-    ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nrabulinski ];
+    teams = [ lib.teams.forgejo ];
     mainProgram = "forgejo-runner";
   };
 }

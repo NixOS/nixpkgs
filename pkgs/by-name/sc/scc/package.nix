@@ -19,14 +19,13 @@ buildGoModule rec {
   # scc has a scripts/ sub-package that's for testing.
   excludedPackages = [ "scripts" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/boyter/scc";
     description = "Very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sigma
-      Br1ght0ne
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
     ];
   };

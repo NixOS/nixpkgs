@@ -1,97 +1,119 @@
 {
   lib,
   stdenv,
-  appstream-glib,
   calf,
+  cmake,
   deepfilternet,
-  desktop-file-utils,
   fetchFromGitHub,
   fftw,
   fftwFloat,
-  fmt_9,
   glib,
   gsl,
-  gtk4,
-  itstool,
+  intltool,
+  kdePackages,
   ladspaH,
-  libadwaita,
   libbs2b,
   libebur128,
-  libportal-gtk4,
-  libsamplerate,
+  libmysofa,
   libsigcxx30,
   libsndfile,
   lilv,
   lsp-plugins,
   lv2,
   mda_lv2,
-  meson,
   ninja,
   nix-update-script,
   nlohmann_json,
   pipewire,
   pkg-config,
+  qt6,
   rnnoise,
   rubberband,
   soundtouch,
   speexdsp,
   onetbb,
-  wrapGAppsHook4,
+  webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
+  wrapGAppsNoGuiHook,
 }:
 
 let
-  # Fix crashes with speexdsp effects
-  speexdsp' = speexdsp.override { withFftw3 = false; };
+  inherit (qt6)
+    qtbase
+    qtgraphs
+    wrapQtAppsHook
+    ;
+  inherit (kdePackages)
+    breeze
+    breeze-icons
+    extra-cmake-modules
+    kcolorscheme
+    kconfigwidgets
+    kiconthemes
+    kirigami
+    kirigami-addons
+    qqc2-desktop-style
+    ;
 in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.2.5";
+  version = "8.0.8";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-w3Mb13LOSF8vgcdJrqbesLqyyilI5AoA19jFquE5lEw=";
+    hash = "sha256-Pw9rMYHrRBSttdtElWDH1YOF0tNWgb2zBzJBI9jJe4Q=";
   };
 
+  patches = [ ./qmlmodule-fix.patch ];
+
   nativeBuildInputs = [
-    desktop-file-utils
-    itstool
-    meson
+    cmake
+    extra-cmake-modules
+    intltool
     ninja
     pkg-config
-    wrapGAppsHook4
+    wrapGAppsNoGuiHook
+    wrapQtAppsHook
   ];
 
+  dontWrapGApps = true;
+
   buildInputs = [
-    appstream-glib
+    breeze
+    breeze-icons
     deepfilternet
     fftw
     fftwFloat
-    fmt_9
     glib
     gsl
-    gtk4
+    kcolorscheme
+    kconfigwidgets
+    kiconthemes
+    kirigami
+    kirigami-addons
     ladspaH
-    libadwaita
+    qqc2-desktop-style
     libbs2b
     libebur128
-    libportal-gtk4
-    libsamplerate
+    libmysofa
     libsigcxx30
     libsndfile
     lilv
     lv2
     nlohmann_json
     pipewire
+    qtbase
+    qtgraphs
     rnnoise
     rubberband
     soundtouch
-    speexdsp'
+    speexdsp
     onetbb
+    webrtc-audio-processing
     zita-convolver
   ];
 
@@ -110,7 +132,8 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
-      gappsWrapperArgs+=(
+      qtWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
         --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
@@ -125,11 +148,12 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo
       aleksana
+      Gliczy
     ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;

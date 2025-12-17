@@ -1,10 +1,13 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+
+  stdenv,
+  buildPackages,
+
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,7 +28,12 @@ buildGoModule (finalAttrs: {
   ];
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
-  excludedPackages = [ "./test" ];
+  excludedPackages = [
+    "./test/e2e"
+  ];
+
+  # tests bind to localhost
+  __darwinAllowLocalNetworking = true;
 
   ldflags = [
     "-s"
@@ -34,23 +42,35 @@ buildGoModule (finalAttrs: {
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd notation \
-      --bash <($out/bin/notation completion bash) \
-      --fish <($out/bin/notation completion fish) \
-      --zsh <($out/bin/notation completion zsh)
-  '';
+  postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}"
+        else
+          lib.getExe buildPackages.notation;
+    in
+    ''
+      installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "notation version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "CLI tool to sign and verify OCI artifacts and container images";
     homepage = "https://notaryproject.dev/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      jk
+      vdemeester
+    ];
     mainProgram = "notation";
   };
 })

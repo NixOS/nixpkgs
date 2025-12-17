@@ -13,15 +13,15 @@
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.11.2";
+  version = "10.11.5";
 
   src =
     assert version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      rev = "v${version}";
-      hash = "sha256-xgZ2fh2dMpcvXXUWcZSvcARm4Qy8qgi8T5nFyk+sOgs=";
+      tag = "v${version}";
+      hash = "sha256-9gDGREPORJILjVqw+Kk56+5qS/TQUd8OFmsEXL7KPAE=";
     };
 
   nodejs = nodejs_20; # does not build with 22
@@ -31,7 +31,7 @@ buildNpmPackage rec {
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-Uikude8cNBA79KNPf6D0McwR/AoaaWJVMw2Q08AiK3U=";
+  npmDepsHash = "sha256-AYGWZ5QvmQl8+ayjzkWuBra+QUvde36ReIJ7Fxk89VM=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -60,11 +60,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       minijackson
       purcell

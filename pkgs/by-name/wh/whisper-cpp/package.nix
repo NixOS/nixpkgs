@@ -3,12 +3,12 @@
   stdenv,
   cmake,
   git,
-  apple-sdk_13,
   ninja,
   fetchFromGitHub,
   SDL2,
   wget,
   which,
+  ffmpeg,
   autoAddDriverRunpath,
   makeWrapper,
   nix-update-script,
@@ -30,10 +30,13 @@
   vulkan-loader,
 
   withSDL ? true,
+
+  withFFmpegSupport ? false,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
 assert coreMLSupport -> stdenv.hostPlatform.isDarwin;
+assert withFFmpegSupport -> stdenv.hostPlatform.isLinux;
 
 let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
@@ -46,8 +49,6 @@ let
     optional
     optionals
     ;
-
-  darwinBuildInputs = [ apple-sdk_13 ];
 
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
@@ -111,7 +112,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     optional withSDL SDL2
-    ++ optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
+    ++ optional withFFmpegSupport ffmpeg
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
@@ -125,6 +126,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_LTO" true)
     (cmakeBool "GGML_NATIVE" false)
     (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
+  ]
+  ++ optionals effectiveStdenv.hostPlatform.isLinux [
+    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
   ]
   ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
@@ -160,6 +164,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
+  ''
+  + lib.optionalString withFFmpegSupport ''
+    wrapProgram "$out/bin/whisper-server" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build

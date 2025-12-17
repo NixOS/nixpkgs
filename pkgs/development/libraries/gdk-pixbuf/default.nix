@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.12";
+  version = "2.44.4";
 
   outputs = [
     "out"
@@ -44,14 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-uVBbNEW5p+SM7TR2DDvLc+lm3zrJTJWhSMtmmrdI48c=";
+      hash = "sha256-k6Gqw/FCeuc0Vzl1gqLDjQSWOKgBeIzL1fSMpge9vRc=";
     };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    ./static-deps.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -90,7 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
-    (lib.mesonBool "gtk_doc" withIntrospection)
+    "-Dandroid=disabled"
+    "-Dglycin=disabled"
+    (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "others" true)
   ]
@@ -108,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     # it should be a build-time dep for build
     # TODO: send upstream
     substituteInPlace docs/meson.build \
-      --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
 
     # Remove 'ani' loader until proper fix for CVE-2022-48622
     substituteInPlace meson.build --replace-fail "'ani'," ""
@@ -169,13 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
     moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
     mainProgram = "gdk-pixbuf-thumbnailer";
     pkgConfigModules = [ "gdk-pixbuf-2.0" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

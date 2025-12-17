@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rarfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "RAR archive reader for Python";
     homepage = "https://github.com/markokr/rarfile";
     changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

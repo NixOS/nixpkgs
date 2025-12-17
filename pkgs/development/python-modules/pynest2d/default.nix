@@ -7,6 +7,7 @@
   libnest2d,
   sip4,
   clipper,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,14 @@ buildPythonPackage rec {
     libnest2d
     sip4
     clipper
+    distutils
   ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
+
+  strictDeps = true;
 
   CLIPPER_PATH = "${clipper.out}";
 
@@ -34,10 +41,10 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
   };
 }

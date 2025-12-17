@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykoplenti" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python REST client API for Kostal Plenticore Inverters";
     mainProgram = "pykoplenti";
     homepage = "https://github.com/stegm/pykoplenti/";
     changelog = "https://github.com/stegm/pykoplenti/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

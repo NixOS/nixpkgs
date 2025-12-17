@@ -83,7 +83,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [
     "pic"
-    "pie" # MBR gets too big with PIE
     "stackprotector"
     "fortify"
   ];
@@ -136,10 +135,10 @@ stdenv.mkDerivation {
 
   passthru.tests.biosCdrom = nixosTests.boot.biosCdrom;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslinux.org/";
     description = "Lightweight bootloader";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = [
       "i686-linux"

@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     cp io.github.zefr0x.ianny.desktop $out/etc/xdg/autostart/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop utility that helps preventing repetitive strain injuries by keeping track of usage patterns and periodically informing the user to take breaks";
     homepage = "https://github.com/zefr0x/ianny";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "ianny";
-    maintainers = with maintainers; [ max-amb ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ max-amb ];
+    platforms = lib.platforms.linux;
   };
 }

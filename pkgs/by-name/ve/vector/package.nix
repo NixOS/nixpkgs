@@ -26,16 +26,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.51.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aIe+s1Zw6J2Indh0+QmvvykRHx4S2sWqHJxodtQoAQY=";
+    hash = "sha256-jwEJ+myovZYcohvxH1VvvOW8xok3HSLvhtMsLC2M3KY=";
   };
 
-  cargoHash = "sha256-LqvXWIsSDzGznyIr1kyNU5e8rUSyoAiRn/4Nc9rzvM0=";
+  cargoHash = "sha256-EfgDL5asygFqr8pVcTR9BsYU3fcG28xhrCn5nCkVfcA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -125,16 +125,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       happysalada
     ];
-    platforms = with platforms; all;
+    platforms = with lib.platforms; all;
     mainProgram = "vector";
   };
 })

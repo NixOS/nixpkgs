@@ -17,9 +17,7 @@ in
   name = "containers-ipv4-ipv6";
   meta = {
     maintainers = with lib.maintainers; [
-      aristid
       aszlig
-      kampfschlaefer
     ];
   };
 

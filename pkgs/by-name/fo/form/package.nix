@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Symbolic manipulation of very big expressions";
     homepage = "https://www.nikhef.nl/~form/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.veprbl ];
+    platforms = lib.platforms.unix;
   };
 })

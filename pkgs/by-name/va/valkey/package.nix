@@ -64,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
@@ -114,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     serverBin = "valkey-server";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";

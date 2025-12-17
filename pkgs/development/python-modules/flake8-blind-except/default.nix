@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_blind_except" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 extension that checks for blind except: statements";
     homepage = "https://github.com/elijahandrews/flake8-blind-except";
-    license = licenses.mit;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

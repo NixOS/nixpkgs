@@ -3,30 +3,58 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  withPkcs11 ? true,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nebula";
-  version = "1.9.7";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = "nebula";
-    tag = "v${version}";
-    hash = "sha256-U6PCHRSETkrA/nulTqIn9vvj3zks10kJ1k2syFsPMnM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p/2A1ZTBUPvrA8eAgLxjR7NSAfiIEkDcjX0Db8dCmfQ=";
   };
 
-  vendorHash = "sha256-oXhq+s5gDKPVClZpOzYi7BaYwcDqbCLBEO5BNGy9LJA=";
+  vendorHash = "sha256-rod6YDosI9nBf2v6Q/rw/fT9p9N8Zo/lu989UhyL8/s=";
 
   subPackages = [
     "cmd/nebula"
     "cmd/nebula-cert"
   ];
 
-  ldflags = [ "-X main.Build=${version}" ];
+  tags = lib.optional withPkcs11 "pkcs11";
+
+  ldflags = [ "-X main.Build=${finalAttrs.version}" ];
+
+  checkFlags = [
+    "-v"
+  ]
+  ++ lib.optionals withPkcs11 [
+    "-tags"
+    "pkcs11"
+  ];
+
+  env = lib.optionalAttrs (!withPkcs11) {
+    CGO_ENABLED = 0;
+  };
 
   passthru.tests = {
-    inherit (nixosTests) nebula;
+    e2e = finalAttrs.finalPackage.overrideAttrs (prev: {
+      # go test picks up all the tests if we do not limit the subpackages built
+      subPackages = [ ];
+
+      # Also run the e2e tests.
+      postCheck = ''
+        make e2ev
+      '';
+    });
+
+    inherit (nixosTests.nebula)
+      connectivity
+      reload
+      ;
   };
 
   meta = {
@@ -47,11 +75,10 @@ buildGoModule rec {
       parts.
     '';
     homepage = "https://github.com/slackhq/nebula";
-    changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slackhq/nebula/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       numinit
     ];
   };
-}
+})

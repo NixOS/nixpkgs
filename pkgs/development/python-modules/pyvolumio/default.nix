@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvolumio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control Volumio";
     homepage = "https://github.com/OnFreund/PyVolumio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

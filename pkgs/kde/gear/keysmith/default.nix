@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtsvg,
-  kirigami-addons,
   pkg-config,
   libsodium,
 }:
@@ -15,7 +14,6 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtsvg
-    kirigami-addons
     libsodium
   ];
   meta.mainProgram = "keysmith";

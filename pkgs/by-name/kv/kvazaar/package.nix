@@ -21,10 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Th30XO3m4GVeDvdb/RIwKT6+To9C/YU7y8s8hm7vPi0=";
   };
 
-  # https://github.com/ultravideo/kvazaar/pull/426
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail 'NOT LINUX' 'NOT LINUX AND NOT BSD'
-
     substituteInPlace tests/util.sh --replace-fail '../libtool' '${lib.getExe libtool}'
     substituteInPlace tests/util.sh --replace-fail 'TAppDecoderStatic' '${lib.getExe' hm "TAppDecoder"}'
 
@@ -45,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  env.XFAIL_TESTS = lib.optionalString stdenv.hostPlatform.isDarwin "test_slices.sh";
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

@@ -4,6 +4,7 @@
   buildGoModule,
   callPackage,
   installShellFiles,
+  procps,
   qemu,
   darwin,
   makeWrapper,
@@ -40,6 +41,11 @@ buildGoModule (finalAttrs: {
     substituteInPlace Makefile \
       --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -' \
       --replace-fail 'rm -rf _output vendor' 'rm -rf _output'
+  ''
+  # fixed upstream, remove when version >=2.0.0
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace pkg/networks/usernet/recoincile.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
   '';
 
   # It attaches entitlements with codesign and strip removes those,

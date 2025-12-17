@@ -34,11 +34,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/berg completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI Tool for Codeberg similar to gh and glab";
     homepage = "https://codeberg.org/Aviac/codeberg-cli";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ robwalt ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "berg";
   };
 }

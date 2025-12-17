@@ -32,6 +32,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to read/write/manipulate files in an ext2/ext3 filesystem";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.leenaars ];
   };
 })
