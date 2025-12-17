@@ -17,7 +17,7 @@ _assignFirst() {
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
     for _var in "$@"; do
-        if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
+        if [ -n "${!_var-}" ]; then eval "export ${varName}"="${_var}"; return; fi
     done
     echo
     echo "error: _assignFirst: could not find a non-empty variable whose name to assign to ${varName}."
