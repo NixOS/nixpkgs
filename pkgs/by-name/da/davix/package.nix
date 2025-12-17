@@ -12,6 +12,7 @@
   curl,
   gsoap,
   rapidjson,
+  zlib,
   enableTools ? true,
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     openssl
     rapidjson
+    zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
   ++ lib.optional enableThirdPartyCopy gsoap;
@@ -73,6 +75,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-FNXOQrY0gsMK+D4jwbJmYyEqD3lFui0giXUd+Rr0jLk=";
     })
   ];
+
+  # Transitive dependency of gsoap (only supports static library builds)
+  env.NIX_LDFLAGS = "-lz";
 
   meta = {
     description = "Toolkit for Http-based file management";
