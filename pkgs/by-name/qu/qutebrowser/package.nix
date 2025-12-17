@@ -169,7 +169,6 @@ python3.pkgs.buildPythonApplication {
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
     maintainers = with lib.maintainers; [
       rnhmjoj
-      ebzzry
       dotlambda
     ];
   };
