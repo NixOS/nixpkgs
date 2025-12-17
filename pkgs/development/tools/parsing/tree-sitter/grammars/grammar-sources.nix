@@ -579,9 +579,9 @@
   };
 
   rust = {
-    version = "0.23.2";
+    version = "0.24.0";
     url = "github:tree-sitter/tree-sitter-rust";
-    hash = "sha256-aT+tlrEKMgWqTEq/NHh8Vj92h6i1aU6uPikDyaP2vfc=";
+    hash = "sha256-y3sJURlSTM7LRRN5WGIAeslsdRZU522Tfcu6dnXH/XQ=";
   };
 
   scala = {
