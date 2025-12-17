@@ -72,6 +72,8 @@ buildNpmPackage' rec {
 
     # unneeded for desktop, and causes errors
     rm -r apps/cli
+
+    export CONCURRENTLY_MAX_PROCESSES=1
   '';
 
   nodejs = nodejs_22;
