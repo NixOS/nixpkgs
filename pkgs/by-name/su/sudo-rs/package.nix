@@ -7,6 +7,7 @@
   versionCheckHook,
   pam,
   rustPlatform,
+  tzdata,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/system/audit.rs \
-      --replace-fail "/usr/share/zoneinfo" "/etc/zoneinfo"
+      --replace-fail '/usr/share/zoneinfo' '/etc/zoneinfo' \
+      --replace-fail '/usr/share/lib/zoneinfo' '${tzdata}/share/zoneinfo'
   '';
 
   postInstall = ''
@@ -58,7 +60,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
-    # Assumes runtime zoneinfo paths
+    # Store paths are not owned by root in the build sandbox, so the zoneinfo path
+    # doesn't pass the validations done by sudo-rs.
+    # This is not an issue at runtime, since there the zoneinfo path is owned by root.
     "sudo::env::environment::tests::test_tzinfo"
 
     # Unsure why those are failing
