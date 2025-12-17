@@ -51,7 +51,6 @@ let
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       cig0
-      j0lol
       keysmashes
     ];
     platforms = [
