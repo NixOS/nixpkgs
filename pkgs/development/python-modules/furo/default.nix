@@ -34,6 +34,8 @@ let
       cp -rv scripts styles $out/
       popd
     '';
+
+    __structuredAttrs = true;
   };
 in
 
