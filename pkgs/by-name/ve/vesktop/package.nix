@@ -9,8 +9,11 @@
   copyDesktopItems,
   vencord,
   electron,
+  glib,
   libicns,
   pipewire,
+  pkg-config,
+  python3,
   libpulseaudio,
   autoPatchelfHook,
   pnpm_10,
@@ -44,6 +47,53 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7fYD4lTSLCMOa+CqGlL45Mjw6qMfIJddPcRF5/dGGrk=";
   };
 
+  libvesktop = stdenv.mkDerivation (finalAttrs': {
+    pname = "libvesktop";
+    inherit (finalAttrs) version src;
+
+    sourceRoot = "${finalAttrs'.src.name}/packages/libvesktop";
+
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs')
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 2;
+      hash = "sha256-0WlkDPoxTVWe4h22UBswwWHF513hBHpYjhbZNnHhiZQ=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm_10.configHook
+      python3
+    ];
+
+    buildInputs = [
+      glib
+      pkg-config
+    ];
+
+    env.npm_config_nodedir = nodejs;
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 build/Release/vesktop.node $out/lib/vesktop/vesktop.node
+
+      runHook postInstall
+    '';
+  });
+
   nativeBuildInputs = [
     nodejs
     pnpm_10.configHook
@@ -76,6 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit vencord;
     }
   );
+
+  postPatch = ''
+    substituteInPlace scripts/build/build.mts \
+      --replace-fail "./packages/libvesktop/build/Release/vesktop.node" "$libvesktop/lib/vesktop/vesktop.node"
+  '';
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -169,7 +224,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "libvesktop"
+      ];
+    };
   };
 
   meta = {

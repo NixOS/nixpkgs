@@ -102,7 +102,7 @@ in
 
             # If the packageManager field in package.json is set to a different pnpm version than what is in nixpkgs,
             # any pnpm command would fail in that directory, the following disables this
-            pushd ..
+            pushd /
             pnpm config set manage-package-manager-versions false
             popd
 
