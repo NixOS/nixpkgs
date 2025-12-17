@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "serial-studio";
-  version = "3.1.10-unstable-2025-12-12";
+  version = "continuous-unstable-2025-12-17";
 
   src = fetchFromGitHub {
     owner = "Serial-Studio";
     repo = "Serial-Studio";
-    rev = "b2e8b5430da59969dd697636677873f3f6c10c7c";
-    hash = "sha256-O/KAYKpVGn2Q0CPaReh564P5l+ilHuQYRJ4w5aFKZmg=";
+    rev = "149b8757fbb1d20e4ae58d5f292900465b51ad10";
+    hash = "sha256-ywL4pYvCWPGAUMssCgWqfJn4pTP3/5FKf/lErWIGoWg=";
     fetchSubmodules = true;
   };
 
