@@ -16,7 +16,7 @@
 stdenv.mkDerivation {
   pname = "lkl";
 
-  version = "2025-03-20";
+  version = "2025-11-13";
 
   outputs = [
     "dev"
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lkl";
     repo = "linux";
-    rev = "fd33ab3d21a99a31683ebada5bd3db3a54a58800";
-    sha256 = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
+    rev = "9c51103caa1481493ebbbaf858f016e7f25ab921";
+    hash = "sha256-7S1lA6qfpGLj5lCqdOEEfcChxNw+35SC/NEjFWcwvko=";
   };
 
   nativeBuildInputs = [
@@ -43,22 +43,11 @@ stdenv.mkDerivation {
     libarchive
   ];
 
-  patches = [
-    # Fix corruption in hijack and zpoline libraries when building in parallel,
-    # because both hijack and zpoline share object files, which may result in
-    # missing symbols.
-    # https://github.com/lkl/linux/pull/612/commits/4ee5d9b78ca1425b4473ede98602b656f28027e8
-    ./fix-hijack-and-zpoline-parallel-builds.patch
-  ];
-
   postPatch = ''
     # Fix a /usr/bin/env reference in here that breaks sandboxed builds
     patchShebangs arch/lkl/scripts
 
     patchShebangs scripts/ld-version.sh
-
-    # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
-    sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
   ''
   + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
     echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
