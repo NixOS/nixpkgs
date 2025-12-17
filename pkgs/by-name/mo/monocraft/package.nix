@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "4.0";
+  version = "4.2.1";
   relArtifact =
     name: hash:
     fetchurl {
@@ -18,9 +18,9 @@ stdenvNoCC.mkDerivation {
   inherit version;
 
   srcs = [
-    (relArtifact "Monocraft.ttc" "sha256-SBzl/X2PQOq1cY4dlqO89BDwCrP+/LYwZ9X24p2LDCs=")
-    (relArtifact "Monocraft-no-ligatures.ttc" "sha256-jFZ5Fr/cBwGVsdy7lPqLiLlKtzjF5OIWVkwZI6gR3W4=")
-    (relArtifact "Monocraft-nerd-fonts-patched.ttc" "sha256-lYAb8hgmv4VyrzeHr4LnfuSN9L+4fpDEMX/P++fq8Dc=")
+    (relArtifact "Monocraft.ttc" "sha256-DqGuoS8D1VKkafwBfxnqkntTv50h5gpBxcR2w/rzx/k=")
+    (relArtifact "Monocraft-no-ligatures.ttc" "sha256-k+55umK30KZT39kNXFGflJ461k7EgwRrQX8sxpQ4MdA=")
+    (relArtifact "Monocraft-nerd-fonts-patched.ttc" "sha256-Z/iP+efGVg9s9g+wYv01OnL2LcJlRGKVDGW2PtU9l1Q=")
   ];
 
   dontUnpack = true;
