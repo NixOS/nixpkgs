@@ -78,9 +78,9 @@
   };
 
   css = {
-    version = "0.23.2";
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-css";
-    hash = "sha256-LP2UBU/RgZCnVwCnM7bQv6DZHmDrqdCjynV6Jv1PsjA=";
+    hash = "sha256-jFsnEyS+FThk7L48FzAdSp5fNPSLvM8hTL/VC5FMlOE=";
   };
 
   cuda = {
