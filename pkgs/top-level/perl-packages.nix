@@ -37048,6 +37048,7 @@ with self;
       NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-int"
         "-Wno-error=incompatible-pointer-types"
+        "-std=gnu17"
       ];
     };
     doCheck = false; # Expects working X11.
