@@ -86,6 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         "Chat"
         "Network"
       ];
+      startupWMClass = "teamspeak-client";
     })
   ];
 
