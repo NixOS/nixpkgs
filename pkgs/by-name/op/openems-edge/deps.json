@@ -2749,6 +2749,7 @@
    "pom": "sha256-aBLcCCXOg/qwuFh4Dxyjr+SkXYT2ETT04HusakgmkT8="
   },
   "org/bouncycastle#bcprov-jdk15on/1.65": {
+   "jar": "sha256-54+W61kGbJTJT7LWteuA9S/qxvX5d2iYY0+K3exuITc=",
    "pom": "sha256-niMbZunXFLzaKR5qenJd5O9k+lHw3kexFUwfeZgSDiY="
   },
   "org/bouncycastle#bcprov-jdk18on/1.83": {
@@ -4095,7 +4096,6 @@
    "pom": "sha256-ep5ydsHTU9KyAUu07iBEbvAWqZ5y2be3rDs4DL0MNoU="
   },
   "org/slf4j#slf4j-api/1.8.0-beta4": {
-   "jar": "sha256-YCtxIynIS0qDxARk9P39D+QjjFPvOXE5qGcGRznb9OA=",
    "pom": "sha256-+DFtKKzyUrIbHp6O7ZqEwq+9yOBA9p06ELq4E9PYWoU="
   },
   "org/slf4j#slf4j-api/2.0.17": {
