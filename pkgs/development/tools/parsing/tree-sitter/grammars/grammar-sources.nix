@@ -337,9 +337,9 @@
   };
 
   julia = {
-    version = "0.23.1";
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-julia";
-    hash = "sha256-jwtMgHYSa9/kcsqyEUBrxC+U955zFZHVQ4N4iogiIHY=";
+    hash = "sha256-Jk2jby7vWWSdnUU8s8zIIfyXFt7keWPJPyTyxPBrqBw=";
   };
 
   just = {
