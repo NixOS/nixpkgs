@@ -5,18 +5,19 @@
   pkg-config,
   dbus-glib,
   autoreconfHook,
-  xorg,
+  libX11,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kbdd";
-  version = "unstable-2021-04-26";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "qnikst";
     repo = "kbdd";
-    rev = "3145099e1fbbe65b27678be72465aaa5b5872874";
-    sha256 = "1gzcjnflgdqnjgphiqpzwbcx60hm0h2cprncm7i8xca3ln5q6ba1";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hl8zrF5aegVUQtLjf0FTacp4t3pcb2pJn5y0lV85eGI=";
   };
 
   nativeBuildInputs = [
@@ -24,16 +25,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
   buildInputs = [
-    xorg.libX11
+    libX11
     dbus-glib
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "kbdd";
   };
-}
+})
