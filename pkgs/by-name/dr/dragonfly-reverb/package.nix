@@ -25,19 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  postPatch = let
-    targets = lib.concatStringsSep " " [
-      (lib.optionalString buildStandalone "jack")
-      (lib.optionalString buildVST3 "vst3")
-      (lib.optionalString buildLV2 "lv2_sep")
-      (lib.optionalString buildCLAP "clap")
-    ];
-  in ''
-    patchShebangs dpf/utils/generate-ttl.sh
+  postPatch =
+    let
+      targets = lib.concatStringsSep " " [
+        (lib.optionalString buildStandalone "jack")
+        (lib.optionalString buildVST3 "vst3")
+        (lib.optionalString buildLV2 "lv2_sep")
+        (lib.optionalString buildCLAP "clap")
+      ];
+    in
+    ''
+      patchShebangs dpf/utils/generate-ttl.sh
 
-    substituteInPlace plugins/*/Makefile \
-      --replace-fail "TARGETS = jack lv2_sep vst2 vst3 clap" "TARGETS = ${targets}"
-  '';
+      substituteInPlace plugins/*/Makefile \
+        --replace-fail "TARGETS = jack lv2_sep vst2 vst3 clap" "TARGETS = ${targets}"
+    '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -83,7 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/michaelwillis/dragonfly-reverb";
     description = "Hall-style reverb based on freeverb3 algorithms";
-    maintainers = with lib.maintainers; [ magnetophon mrtnvgr ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mrtnvgr
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
