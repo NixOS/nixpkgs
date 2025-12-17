@@ -8,7 +8,7 @@
 buildHomeAssistantComponent {
   owner = "JosephAbbey";
   domain = "calendar_export";
-  version = "0.1.0-unstable-2025-12-13";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "JosephAbbey";
