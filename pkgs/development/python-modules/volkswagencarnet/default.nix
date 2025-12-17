@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "volkswagencarnet";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-e1QfD5/zB2iEmp7iTTZi8+beDSlC6xXjGRLxb9m65sA=";
+    hash = "sha256-p2J5CCZ0mMXZl4vV6bVJBspPq9I/3u60R6wOd7jg1iY=";
   };
 
   postPatch = ''
