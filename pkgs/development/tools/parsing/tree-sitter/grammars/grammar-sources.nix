@@ -492,9 +492,9 @@
   };
 
   prisma = {
-    version = "1.5.1";
+    version = "1.6.0";
     url = "github:victorhqc/tree-sitter-prisma";
-    hash = "sha256-WxR3URFjljD9IEoKRvo0eBbv16PGhrv9aTUWPw8XlJA=";
+    hash = "sha256-VE9HUG0z6oPVlA8no011vwYI2HxufJEuXXnCGbCgI4Q=";
   };
 
   proto = {
