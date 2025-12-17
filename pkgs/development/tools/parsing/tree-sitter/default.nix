@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchgit,
   fetchFromGitHub,
+  fetchFromGitLab,
+  fetchFromSourcehut,
   nix-update-script,
   runCommand,
   which,
@@ -18,122 +19,55 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
-  extraGrammars ? { },
 
   # tests
   lunarvim,
 }:
 
 let
-  # to update:
-  # 1) change all these hashes
-  # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
-  # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.25.10";
-  hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
+  /**
+    Build a parser grammar and put the resulting shared object in `$out/parser`.
 
-  src = fetchFromGitHub {
-    owner = "tree-sitter";
-    repo = "tree-sitter";
-    tag = "v${version}";
-    inherit hash;
-    fetchSubmodules = true;
+    # Example
+
+    ```nix
+    tree-sitter-foo = pkgs.tree-sitter.buildGrammar {
+      language = "foo";
+      version = "0.42.0";
+      src = fetchFromGitHub { ... };
+    };
+    ```
+  */
+  buildGrammar = callPackage ./build-grammar.nix { };
+
+  /**
+    Attrset of grammar sources.
+
+    Values are of the form { language, version, src }. These may be referenced
+    directly by other areas of the tree-sitter ecosystem in nixpkgs. Src will
+    contain all language bindings provided by the upstream grammar.
+
+    Use pkgs.tree-sitter.grammars.<name> to access.
+  */
+  grammars = import ./grammars {
+    inherit
+      lib
+      nix-update-script
+      fetchFromGitHub
+      fetchFromGitLab
+      fetchFromSourcehut
+      ;
   };
 
-  update-all-grammars = callPackage ./update.nix { };
+  /**
+    Attrset of compiled grammars.
 
-  fetchGrammar =
-    v:
-    fetchgit {
-      inherit (v)
-        url
-        rev
-        sha256
-        fetchSubmodules
-        ;
-    };
+    Compiled grammars contain the pre-built shared library and any queries from
+    the grammar source.
 
-  grammars = runCommand "grammars" { } (
-    ''
-      mkdir $out
-    ''
-    + (lib.concatStrings (
-      lib.mapAttrsToList (
-        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
-      ) (import ./grammars { inherit lib; })
-    ))
-  );
-
-  buildGrammar = callPackage ./grammar.nix { };
-
-  builtGrammars =
-    let
-      build =
-        name: grammar:
-        buildGrammar {
-          language = grammar.language or name;
-          inherit version;
-          src = grammar.src or (fetchGrammar grammar);
-          location = grammar.location or null;
-          generate = grammar.generate or false;
-        };
-      grammars' = import ./grammars { inherit lib; } // extraGrammars;
-      grammars =
-        grammars'
-        // {
-          tree-sitter-latex = grammars'.tree-sitter-latex // {
-            generate = true;
-          };
-        }
-        // {
-          tree-sitter-ocaml = grammars'.tree-sitter-ocaml // {
-            location = "grammars/ocaml";
-          };
-        }
-        // {
-          tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // {
-            location = "grammars/interface";
-          };
-        }
-        // {
-          tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // {
-            language = "tree-sitter-org";
-          };
-        }
-        // {
-          tree-sitter-typescript = grammars'.tree-sitter-typescript // {
-            location = "typescript";
-          };
-        }
-        // {
-          tree-sitter-tsx = grammars'.tree-sitter-typescript // {
-            location = "tsx";
-          };
-        }
-        // {
-          tree-sitter-markdown = grammars'.tree-sitter-markdown // {
-            location = "tree-sitter-markdown";
-          };
-        }
-        // {
-          tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
-            language = "tree-sitter-markdown_inline";
-            location = "tree-sitter-markdown-inline";
-          };
-        }
-        // {
-          tree-sitter-php = grammars'.tree-sitter-php // {
-            location = "php";
-          };
-        }
-        // {
-          tree-sitter-sql = grammars'.tree-sitter-sql // {
-            generate = true;
-          };
-        };
-    in
-    lib.mapAttrs build grammars;
+    Use pkgs.tree-sitter-grammars.<name> to access.
+  */
+  builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -167,9 +101,17 @@ let
   allGrammars = builtins.attrValues builtGrammars;
 
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (final: {
   pname = "tree-sitter";
-  inherit src version;
+  version = "0.25.10";
+
+  src = fetchFromGitHub {
+    owner = "tree-sitter";
+    repo = "tree-sitter";
+    tag = "v${final.version}";
+    hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
+    fetchSubmodules = true;
+  };
 
   cargoHash = "sha256-4R5Y9yancbg/w3PhACtsWq0+gieUd2j8YnmEj/5eqkg=";
 
@@ -238,9 +180,6 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   passthru = {
-    updater = {
-      inherit update-all-grammars;
-    };
     inherit
       grammars
       buildGrammar
@@ -263,7 +202,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
-    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${final.version}";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.
@@ -282,4 +221,4 @@ rustPlatform.buildRustPackage {
       amaanq
     ];
   };
-}
+})
