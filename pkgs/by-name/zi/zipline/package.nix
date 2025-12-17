@@ -30,6 +30,8 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
+
+  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm';
     fetcherVersion = 2;
     hash = "sha256-JphaLunhwPdeKxlHdpMNGAl8um7wsOkNCCWYxQhLuBM=";
   };
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm'
     nodejs_24
     makeWrapper
     # for sharp build:

@@ -12,6 +12,7 @@
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_9.override { nodejs = nodejs_24; };
 in
 buildNpmPackage' (finalAttrs: {
   pname = "claude-code-router";
@@ -32,7 +33,7 @@ buildNpmPackage' (finalAttrs: {
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname src;
-    pnpm = pnpm_9;
+    pnpm = pnpm';
     fetcherVersion = 2;
     hash = "sha256-BLPGTbDvvI40kuXfE/p3+s9hkE0reXr7OJA6UGXN4ys=";
   };
@@ -40,7 +41,7 @@ buildNpmPackage' (finalAttrs: {
   nativeBuildInputs = [
     esbuild
     makeBinaryWrapper
-    pnpm_9
+    pnpm'
   ];
 
   npmConfigHook = pnpmConfigHook;
@@ -81,13 +82,13 @@ buildNpmPackage' (finalAttrs: {
     npmDeps = null;
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname src sourceRoot;
-      pnpm = pnpm_9;
+      pnpm = pnpm';
       fetcherVersion = 2;
       hash = "sha256-ZjYLUec9EADQmKfju8hMbq0y4f1TDVwjbe3yw8Gh4Ac=";
     };
 
     nativeBuildInputs = [
-      pnpm_9
+      pnpm'
     ];
 
     npmConfigHook = pnpmConfigHook;

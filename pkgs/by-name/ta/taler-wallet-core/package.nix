@@ -18,6 +18,7 @@
 }:
 let
   nodeSources = srcOnly nodejs_20;
+  pnpm' = pnpm_9.override { nodejs = nodejs_20; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     customPython
     nodejs_20
     pnpmConfigHook
-    pnpm_9
+    pnpm'
     gitMinimal
     jq
     zip
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm';
     fetcherVersion = 1;
     hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };

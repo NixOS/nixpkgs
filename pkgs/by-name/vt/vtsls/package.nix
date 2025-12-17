@@ -10,6 +10,9 @@
   pnpmConfigHook,
   nix-update-script,
 }:
+let
+  pnpm' = pnpm_8.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
   version = "0.2.9";
@@ -28,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     gitMinimal
     gitSetupHook
     pnpmConfigHook
-    pnpm_8
+    pnpm'
   ];
 
   buildInputs = [ nodejs_22 ];
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       version
       ;
-    pnpm = pnpm_8;
+    pnpm = pnpm';
     fetcherVersion = 1;
     hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };

@@ -12,6 +12,9 @@
   discord-canary,
   discord-development,
 }:
+let
+  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
   version = "1.3.33";
@@ -26,14 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs_22
     pnpmConfigHook
-    pnpm_10
+    pnpm'
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-
-    buildInputs = [ nodejs_22 ];
+    pnpm = pnpm';
 
     fetcherVersion = 2;
     hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";
