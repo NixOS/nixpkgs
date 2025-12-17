@@ -40,7 +40,7 @@ Prometheus can now be configured to consume the metrics produced by the exporter
   services.prometheus = {
     # ...
 
-    scrapeConfigs = [
+    settings.scrape_configs = [
       {
         job_name = "node";
         static_configs = [
