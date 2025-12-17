@@ -19081,8 +19081,6 @@ self: super: with self; {
 
   tracerite = callPackage ../development/python-modules/tracerite { };
 
-  tracing = callPackage ../development/python-modules/tracing { };
-
   trackpy = callPackage ../development/python-modules/trackpy { };
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
