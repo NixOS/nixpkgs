@@ -35648,15 +35648,15 @@ with self;
 
   TextBibTeX = buildPerlModule {
     pname = "Text-BibTeX";
-    version = "0.89";
+    version = "0.91";
     buildInputs = [
       CaptureTiny
       ConfigAutoConf
       ExtUtilsLibBuilder
     ];
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.89.tar.gz";
-      hash = "sha256-iKeOvwiOx1AvQBxaKxOMhiz1RYU0t3MiO786r0EiQZY=";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.91.tar.gz";
+      hash = "sha256-PwETz4/nHcdIRjbcjipYFjfsvMgtC+KbvUbQvz+M2zc=";
     };
     # libbtparse.so: cannot open shared object file
     patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
@@ -37048,6 +37048,7 @@ with self;
       NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-int"
         "-Wno-error=incompatible-pointer-types"
+        "-std=gnu17"
       ];
     };
     doCheck = false; # Expects working X11.
@@ -39069,11 +39070,12 @@ with self;
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.34";
+    version = "1.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
-      hash = "sha256-zJFWzK69p5jr/i8xthnoBld/hg7RcEJi8X/608bjQVk=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.36.tar.gz";
+      hash = "sha256-Tc2dmzsM48ZaL/K5tMb/+LZJ/fJDv9fhiJVDvs25GlI=";
     };
+    env.NIX_CFLAGS_COMPILE = "-std=gnu11";
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";

@@ -318,13 +318,13 @@
     "vendorHash": "sha256-fP6brpY/wRI1Yjgapzi+FfOci65gxWeOZulXbGdilrE="
   },
   "dnsimple_dnsimple": {
-    "hash": "sha256-Zx4M0TKamyfm5Z5EAtiHWQQTNX/VT0EkAaHM7x/2SGk=",
+    "hash": "sha256-zPvHTSmptdm5w28rpgmwrYBIo+0Y077wZ+FNKbKHaT4=",
     "homepage": "https://registry.terraform.io/providers/dnsimple/dnsimple",
     "owner": "dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v1.10.0",
+    "rev": "v2.0.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-M6Z/wMOKhQncuHAhkSPfWT77b14lIZ/sVQT7DmM60FI="
+    "vendorHash": "sha256-DRMbcAR+DDrxrg1jNgnoWUg+OjlKm7wkqgIN6Hhkp3U="
   },
   "dnsmadeeasy_dme": {
     "hash": "sha256-JH9YcM9Fvd1x0BJpLUZCm6a9hZZxySrkFVLP89FO3fU=",
@@ -714,13 +714,13 @@
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-S1Azsq42GEqgpqVB3Wpi6EJAL8x+s+i+oTJFPQCVfeI=",
+    "hash": "sha256-xiiQKp4ZBLAR1OM31D8UWJbaZ2SkzrBIr3uW3N3iSZg=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.86.0",
+    "rev": "v1.86.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-IDv2L1fFqhbThc3kO6UNM+6hRJ+DZkT7voc/m3c5BCA="
+    "vendorHash": "sha256-vHgeVhZV9JLH2vXwFUO0N8xp8BLBPk7ypK+kkWwtbTk="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1174,13 +1174,13 @@
     "vendorHash": "sha256-f3b4NULINH8XworCn46fiz4GmBM31ROdAJy1j4GKkx4="
   },
   "scaleway_scaleway": {
-    "hash": "sha256-V0mR72RJa+DgWZxnvSCWI6HwZpqewbHT5FKLdSiwGw4=",
+    "hash": "sha256-LR1e8gAF8htYpxfj/m/Ge266sFRFc8tijaE/9uKYYBw=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.64.0",
+    "rev": "v2.65.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Z9EKIWBkmKptQMJFRh5SK2hhKwh5z5Lij0ZwXChOarY="
+    "vendorHash": "sha256-HWAaBgKD/viiFaxvyHE4BuWdsY0tCSQFaf8YJq4PS/0="
   },
   "scottwinkler_shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
