@@ -85,6 +85,9 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  # Exclude `regression` which depends on a specific llama model and `recipies` which are sample code
+  enabledTestPaths = [ "tests/torchtune" ];
+
   disabledTests = [
     # AssertionError (tensors are not equal)
     "test_stop_tokens"
