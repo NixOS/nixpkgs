@@ -24,7 +24,6 @@
   writeText,
   xz,
   zstd,
-  pkgs,
 
   # ----------------------------
   # The following  arguments form the "interface" of `pkgs.vmTools`.
@@ -47,7 +46,7 @@
 }:
 
 let
-  qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib stdenv; };
 
   qemu = buildPackages.qemu_kvm;
 
@@ -1323,8 +1322,6 @@ in
     makeImageTestScript
     modulesClosure
     qemu
-    qemu-common
-    qemuCommandLinux
     rpmClosureGenerator
     rpmDistros
     runInLinuxImage
