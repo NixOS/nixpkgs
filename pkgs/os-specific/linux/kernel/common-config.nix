@@ -931,6 +931,7 @@ let
       BPF_EVENTS = yes;
       FUNCTION_PROFILER = yes;
       RING_BUFFER_BENCHMARK = no;
+      FUNCTION_GRAPH_RETVAL = whenAtLeast "6.5" yes;
     };
 
     perf = {
