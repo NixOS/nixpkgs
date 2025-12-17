@@ -9,9 +9,9 @@
 
   buildStandalone ? true,
   buildVST3 ? true,
-  buildVST2 ? true,
   buildLV2 ? true,
   buildCLAP ? true,
+  buildVST2 ? false, # can't distribute
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
       targets = lib.concatStringsSep " " [
         (lib.optionalString buildStandalone "jack")
         (lib.optionalString buildVST3 "vst3")
-        (lib.optionalString buildVST2 "vst2")
         (lib.optionalString buildLV2 "lv2_sep")
         (lib.optionalString buildCLAP "clap")
+        (lib.optionalString buildVST2 "vst2")
       ];
     in
     ''
@@ -75,16 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
           cp -r $bin.vst3 $out/lib/vst3
         ''}
 
-        ${lib.optionalString buildVST2 ''
-          install -Dm755 $bin-vst.so -t $out/lib/vst
-        ''}
-
         ${lib.optionalString buildLV2 ''
           cp -r $bin.lv2 $out/lib/lv2
         ''}
 
         ${lib.optionalString buildCLAP ''
           cp -r $bin.clap $out/lib/clap
+        ''}
+
+        ${lib.optionalString buildVST2 ''
+          install -Dm755 $bin-vst.so -t $out/lib/vst
         ''}
       done
     popd
