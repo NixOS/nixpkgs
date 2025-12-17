@@ -166,6 +166,14 @@ lib.makeScope
         gawk = gawk-mes;
       };
 
+      gcc-glibc = callPackage ./gcc/glibc.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+        # FIXME: not sure why new gawk doesn't work
+        gawk = gawk-mes;
+      };
+
       glibc = callPackage ./glibc {
         gcc = gcc-latest;
         gnumake = gnumake-musl;
@@ -388,6 +396,7 @@ lib.makeScope
         echo ${gcc46-cxx.tests.hello-world}
         echo ${gcc8.tests.hello-world}
         echo ${gcc-latest.tests.hello-world}
+        echo ${gcc-glibc.tests.hello-world}
         echo ${glibc.tests.hello-world}
         echo ${gnugrep.tests.get-version}
         echo ${gnugrep-static.tests.get-version}
