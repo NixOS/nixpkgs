@@ -2981,6 +2981,8 @@ with pkgs;
 
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
+  http2irc = with python3Packages; toPythonApplication http2irc;
+
   httpie = with python3Packages; toPythonApplication httpie;
 
   hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
