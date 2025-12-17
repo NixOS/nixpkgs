@@ -1,11 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  # Dependencies
-  tomli,
-  typer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, pytest
+, python
+, tomli
+, typer
+,
 }:
 buildPythonPackage rec {
   pname = "complexipy";
