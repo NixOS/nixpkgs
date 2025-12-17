@@ -52,7 +52,7 @@ let
         }).overrideAttrs
           (old: {
             patches = (old.patches or [ ]) ++ [
-              (final.yarn-berry-fetcher.src + "/libzip-revert-to-old-versionneeded-behavior.patch")
+              ./libzip-revert-to-old-versionneeded-behavior.patch
             ];
           });
     };
