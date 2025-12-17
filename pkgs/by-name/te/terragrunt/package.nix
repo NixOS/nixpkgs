@@ -7,13 +7,13 @@
 }:
 buildGo125Module (finalAttrs: {
   pname = "terragrunt";
-  version = "0.94.0";
+  version = "0.96.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "terragrunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-agc7tciz9ciz2gFjGsmafc46MgenOAQDyByJN9X4Wm4=";
+    hash = "sha256-KIfhgzPQwN3AieWexjiWOMrVNTyK0/kuubP2LQk10QE=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ buildGo125Module (finalAttrs: {
     make generate-mocks
   '';
 
-  vendorHash = "sha256-DkFqj52mdkJvjG5yceRH5GEKWHU73rOE6dJno/6N2k8=";
+  vendorHash = "sha256-9KrOn55C3c8G7PkIgnqkUQM6jqnZwUW0Mas1ZgEINxI=";
 
   doCheck = false;
 
