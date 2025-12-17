@@ -2782,6 +2782,10 @@ with pkgs;
     efiSupport = true;
   };
 
+  grub2_ieee1275 = grub2.override {
+    ieee1275Support = true;
+  };
+
   grub2_light = grub2.override {
     zfsSupport = false;
   };
@@ -10584,8 +10588,6 @@ with pkgs;
   electrum-grs = libsForQt5.callPackage ../applications/misc/electrum/grs.nix { };
 
   electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
-
-  elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs30
