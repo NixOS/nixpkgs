@@ -144,9 +144,9 @@
   };
 
   elm = {
-    version = "5.7.0";
+    version = "5.9.0";
     url = "github:elm-tooling/tree-sitter-elm";
-    hash = "sha256-vYN1E49IpsvTUmxuzRyydCmhYZYGndcZPMBYgSMudrE=";
+    hash = "sha256-vaeGViXob7AYyJj93AUJWBD8Zdfs4zXdKikvBZ3GptU=";
   };
 
   embedded-template = {
