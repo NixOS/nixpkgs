@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "cloudflare-exporter";
-  version = "0.3.0";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "lablabs";
     repo = pname;
     tag = "cloudflare-exporter-${version}";
-    sha256 = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
+    sha256 = "sha256-lQltG8T3V7L81bKj4yoP0rHEeBRQWFAZ1e7y/1+UbIM=";
   };
 
   vendorHash = "sha256-v8qw4Cofw0vOrEg5oo9YtRabXMrjpQ+tI4l+A43JllA=";
