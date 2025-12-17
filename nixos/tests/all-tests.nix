@@ -1096,6 +1096,9 @@ in
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
   };
+  nixos-rebuild-target-host-interrupted = runTest {
+    imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
+  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
