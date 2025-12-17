@@ -185,6 +185,19 @@ buildPythonPackage rec {
     # RuntimeError: quantized engine NoQEngine is not supported
     "test_smooth_linear_cpu"
     "test_smooth_linear_edge_cases"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test_subclass_slice_subclass2_shape0_device_mps"
+    "test_subclass_slice_subclass2_shape1_device_mps"
+    # torch._inductor.exc.InductorError: KeyError: torch.float8_e4m3fn
+    "test_optim_default_dtype_bf16_optim_name_AdamFp8_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamWFp8_float32_device_mps"
+    "test_param_groups_optim_name_AdamFp8_device_mps"
+    "test_subclass_slice_subclass0_shape0_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_bfloat16_device_mps"
+    "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
+    "test_subclass_slice_subclass0_shape1_device_mps"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
