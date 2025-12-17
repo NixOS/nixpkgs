@@ -8,6 +8,7 @@
 let
   inherit (lib)
     mkEnableOption
+    mkChangedOptionModule
     mkIf
     mkOption
     mkPackageOption
@@ -49,16 +50,16 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck =
-    what: name: file:
+    name: file:
     if checkConfigEnabled then
-      pkgs.runCommand "${name}-${lib.replaceStrings [ " " ] [ "" ] what}-checked"
+      pkgs.runCommand "${name}-checked.yml"
         {
           preferLocalBuild = true;
           nativeBuildInputs = [ cfg.package.cli ];
         }
         ''
           ln -s ${file} $out
-          promtool ${what} $out
+          promtool check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"} $out
         ''
     else
       file;
@@ -73,9 +74,7 @@ let
         else
           generatedPrometheusYml;
     in
-    promtoolCheck "check config ${
-      lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"
-    }" "prometheus.yml" yml;
+    promtoolCheck "prometheus.yml" yml;
 
   cmdlineArgs =
     cfg.extraFlags
@@ -163,6 +162,20 @@ in
         "retention"
         "time"
       ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "prometheus" "ruleFiles" ]
+      [ "services" "prometheus" "settings" "rule_files" ]
+    )
+    (mkChangedOptionModule
+      [ "services" "prometheus" "rules" ]
+      [ "services" "prometheus" "settings" "rule_files" ]
+      (
+        config:
+        lib.optional (lib.length config.services.prometheus.rules != 0) (
+          pkgs.writeText "prometheus.rules" (lib.concatStringsSep "\n" config.services.prometheus.rules)
+        )
+      )
     )
   ];
 
@@ -323,22 +336,6 @@ in
       };
     };
 
-    rules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = ''
-        Alerting and/or Recording rules to evaluate at runtime.
-      '';
-    };
-
-    ruleFiles = mkOption {
-      type = types.listOf types.path;
-      default = [ ];
-      description = ''
-        Any additional rules files to include in this configuration.
-      '';
-    };
-
     alertmanagerNotificationQueueCapacity = mkOption {
       type = types.int;
       default = 10000;
@@ -403,15 +400,6 @@ in
         }
       )
     ];
-
-    services.prometheus.settings.rule_files = lib.optionals (!cfg.enableAgentMode) (
-      map (promtoolCheck "check rules" "rules") (
-        cfg.ruleFiles
-        ++ [
-          (pkgs.writeText "prometheus.rules" (lib.concatStringsSep "\n" cfg.rules))
-        ]
-      )
-    );
 
     users.groups.prometheus.gid = config.ids.gids.prometheus;
     users.users.prometheus = {
