@@ -5,7 +5,6 @@
   typstPackages,
 }:
 lib.extendMkDerivation {
-  inheritFunctionArgs = false;
   constructDrv = buildTypstPackage;
 
   excludeDrvArgNames = [
