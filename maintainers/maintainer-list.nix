@@ -3996,6 +3996,12 @@
     name = "Builditluc";
     keys = [ { fingerprint = "FF16E475723B8C1E57A6B2569374074AE2D6F20E"; } ];
   };
+  burdzwastaken = {
+    email = "burdz@burdz.net";
+    github = "burdzwastaken";
+    githubId = 13855668;
+    name = "Matt Burdan";
+  };
   burmudar = {
     email = "william.bezuidenhout@gmail.com";
     github = "burmudar";
@@ -14182,6 +14188,13 @@
     github = "ktechmidas";
     githubId = 9920871;
     name = "Monotoko";
+  };
+  ktemkin = {
+    email = "kate@ktemk.in";
+    github = "ktemkin";
+    githubId = 1298105;
+    name = "Kate Temkin";
+    matrix = "@ktemkin:katesiria.org";
   };
   ktf = {
     email = "giulio.eulisse@cern.ch";
@@ -24923,6 +24936,12 @@
     githubId = 2060836;
     name = "Casey Stark";
   };
+  starryreverie = {
+    email = "starryreverie@proton.me";
+    github = "StarryReverie";
+    githubId = 42143810;
+    name = "Justin Chen";
+  };
   starsep = {
     email = "nix@starsep.com";
     github = "starsep";
@@ -29316,6 +29335,12 @@
     name = "Zhaith Izaliel";
     github = "Zhaith-Izaliel";
     githubId = 39216756;
+  };
+  zhangxy = {
+    email = "zhangxy_2023@163.com";
+    github = "zhangxy-2023";
+    githubId = 246511921;
+    name = "Xinyao Zhang";
   };
   zhaofengli = {
     email = "hello@zhaofeng.li";
