@@ -1065,24 +1065,24 @@ let
     };
 
     debian11i386 = {
-      name = "debian-11.8-bullseye-i386";
-      fullName = "Debian 11.8 Bullseye (i386)";
+      name = "debian-11.11-bullseye-i386";
+      fullName = "Debian 11.11 Bullseye (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-i386/Packages.xz";
-        hash = "sha256-0bKSLLPhEC7FB5D1NA2jaQP0wTe/Qp1ddiA/NDVjRaI=";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-kUg1VBUO6co/5bKloxncta49191oCeF05Hm399+UuDA=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
 
     debian11x86_64 = {
-      name = "debian-11.8-bullseye-amd64";
-      fullName = "Debian 11.8 Bullseye (amd64)";
+      name = "debian-11.11-bullseye-amd64";
+      fullName = "Debian 11.11 Bullseye (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20231124T031419Z/dists/bullseye/main/binary-amd64/Packages.xz";
-        hash = "sha256-CYPsGgQgJZkh3JmbcAQkYDWP193qrkOADOgrMETZIeo=";
+        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-HDQFREKX6thkcRwY5kvOSBDbY7SDQKL52BGC2fI1rXE=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20231124T031419Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
       packages = commonDebianPackages;
     };
 
