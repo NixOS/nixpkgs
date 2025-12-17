@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.16.1";
+  version = "0.17";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = "s3-credentials";
     tag = version;
-    hash = "sha256-TuGrKSfnn0CSMpRxdCM6C446z+y9d2ZLB7+wSCxSqP4=";
+    hash = "sha256-zDolFoil/oTmvFDGVF+cLTgCpfigvvEW2UuVdIN2pYM=";
   };
 
   build-system = [ setuptools ];
