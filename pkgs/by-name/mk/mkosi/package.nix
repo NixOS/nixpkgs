@@ -58,7 +58,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "mkosi";
-  version = "25.3";
+  version = "26";
   format = "pyproject";
 
   outputs = [
