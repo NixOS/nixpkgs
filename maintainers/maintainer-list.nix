@@ -23046,6 +23046,11 @@
     githubId = 3280280;
     name = "Ryne Everett";
   };
+  ryoppippi = {
+    github = "ryoppippi";
+    githubId = 1560508;
+    name = "ryoppippi";
+  };
   ryota-ka = {
     email = "ok@ryota-ka.me";
     github = "ryota-ka";
