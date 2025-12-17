@@ -6612,6 +6612,12 @@
     github = "dietmarw";
     githubId = 9332;
   };
+  Dietr1ch = {
+    name = "Dietrich Daroch";
+    github = "Dietr1ch";
+    githubId = 2096594;
+    email = "Dietrich@Daroch.me";
+  };
   different-name = {
     name = "different-name";
     email = "hello@different-name.dev";
@@ -18642,6 +18648,12 @@
     github = "nicknovitski";
     githubId = 151337;
     name = "Nick Novitski";
+  };
+  nickthegroot = {
+    name = "Nick DeGroot";
+    email = "nick@nickthegroot.com";
+    github = "nickthegroot";
+    githubId = 1966472;
   };
   nico202 = {
     email = "anothersms@gmail.com";
