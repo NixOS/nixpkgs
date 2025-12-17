@@ -102,9 +102,9 @@
   };
 
   devicetree = {
-    version = "0.11.1";
+    version = "0.15.0";
     url = "github:joelspadin/tree-sitter-devicetree";
-    hash = "sha256-2uJEItLwoBoiB49r2XuO216Dhu9AnAa0p7Plmm4JNY8=";
+    hash = "sha256-iMmr4zSm6B7goevHE03DMj9scW4ldXS7CV74sKeqGD4=";
   };
 
   dockerfile = {
