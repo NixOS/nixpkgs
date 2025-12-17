@@ -50,7 +50,6 @@ let
     homepage = "https://notesnook.com";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      cig0
       keysmashes
     ];
     platforms = [
