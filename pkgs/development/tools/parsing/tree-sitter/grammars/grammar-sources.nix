@@ -186,9 +186,9 @@
   };
 
   gdscript = {
-    version = "6.0.0";
+    version = "6.1.0";
     url = "github:prestonknopp/tree-sitter-gdscript";
-    hash = "sha256-S+AF6slDnw3O00C8hcL013A8MU7fKU5mCwhyV50rqmI=";
+    hash = "sha256-QT28TQBt20lMScfF4zb2RJhlPFNekjocOWbvQ2a2yuM=";
   };
 
   gemini = rec {
