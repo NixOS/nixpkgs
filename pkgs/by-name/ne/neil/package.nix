@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neil";
-  version = "0.3.68";
+  version = "0.3.69";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
     rev = "v${version}";
-    sha256 = "sha256-ulqVrFsuYvRKxASHI6AqnHkKKdmDVgtivsRIscivcXw=";
+    sha256 = "sha256-NRuWRZRh93lQjfi3C+gliixZYAZ/JZRMZJbcPv29YFI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
