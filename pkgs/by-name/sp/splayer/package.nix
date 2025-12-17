@@ -14,14 +14,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.6";
+  version = "3.0.0-beta.7";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-7guh5KJ9RbYCiifH0ERXbIXxoJDxanUAHAf/zux7yU4=";
+    hash = "sha256-W4XvYQ0O3Qnr9kRxTxt21UkU5dw66ww1qpIY3ph3elE=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-3t9Qx+1OQwqVvzgYssP8azGG/PNSJkrG614wQh0W4WQ=";
+    hash = "sha256-lcSecyT55hFtRFPK7xtPhSbXynGIOgKIfV5T5tDQzfA=";
   };
 
   nativeBuildInputs = [
