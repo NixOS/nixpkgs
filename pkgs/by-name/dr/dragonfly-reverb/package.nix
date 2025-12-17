@@ -9,7 +9,6 @@
 
   buildStandalone ? true,
   buildVST3 ? true,
-  buildVST2 ? true,
   buildLV2 ? true,
   buildCLAP ? true,
 }:
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     targets = lib.concatStringsSep " " [
       (lib.optionalString buildStandalone "jack")
       (lib.optionalString buildVST3 "vst3")
-      (lib.optionalString buildVST2 "vst2")
       (lib.optionalString buildLV2 "lv2_sep")
       (lib.optionalString buildCLAP "clap")
     ];
@@ -67,10 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
 
         ${lib.optionalString buildVST3 ''
           cp -r $bin.vst3 $out/lib/vst3
-        ''}
-
-        ${lib.optionalString buildVST2 ''
-          install -Dm755 $bin-vst.so -t $out/lib/vst
         ''}
 
         ${lib.optionalString buildLV2 ''
