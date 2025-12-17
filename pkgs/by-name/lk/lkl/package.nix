@@ -16,7 +16,7 @@
 stdenv.mkDerivation {
   pname = "lkl";
 
-  version = "2025-03-20";
+  version = "2025-11-13";
 
   outputs = [
     "dev"
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lkl";
     repo = "linux";
-    rev = "fd33ab3d21a99a31683ebada5bd3db3a54a58800";
-    sha256 = "sha256-3uPkOyL/hoA/H2gKrEEDsuJvwOE2x27vxY5Y2DyNNxU=";
+    rev = "9c51103caa1481493ebbbaf858f016e7f25ab921";
+    sha256 = "sha256-7S1lA6qfpGLj5lCqdOEEfcChxNw+35SC/NEjFWcwvko=";
   };
 
   nativeBuildInputs = [
