@@ -151,8 +151,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     lib.optionalString multibitdepthSupport ''
-      cmake -B build-10bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags
-      cmake -B build-12bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags -DMAIN12=ON
+      cmake -B build-10bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}"
+      cmake -B build-12bits "''${cmakeFlags[@]}" "''${cmakeFlagsArray[@]}" "''${cmakeStaticLibFlags[@]}" -DMAIN12=ON
       cmakeFlagsArray+=(
         -DEXTRA_LIB="x265-10.a;x265-12.a"
         -DEXTRA_LINK_FLAGS=-L.
@@ -197,6 +197,8 @@ stdenv.mkDerivation rec {
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     ln -s $out/bin/*.dll $out/lib
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for encoding H.265/HEVC video streams";
