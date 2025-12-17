@@ -15943,8 +15943,6 @@ self: super: with self; {
 
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
-  qnap-qsw = callPackage ../development/python-modules/qnap-qsw { };
-
   qnapstats = callPackage ../development/python-modules/qnapstats { };
 
   qpageview = callPackage ../development/python-modules/qpageview { };
