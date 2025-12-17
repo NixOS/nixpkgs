@@ -6,7 +6,7 @@
   pkg-config,
   anytype-heart,
   libsecret,
-  electron_37,
+  electron,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
@@ -44,7 +44,7 @@ buildNpmPackage (finalAttrs: {
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
-    "--nodedir=${electron_37.headers}"
+    "--nodedir=${electron.headers}"
   ];
 
   patches = [
@@ -87,7 +87,7 @@ buildNpmPackage (finalAttrs: {
 
     cp LICENSE.md $out/share
 
-    makeWrapper '${lib.getExe electron_37}' $out/bin/anytype \
+    makeWrapper '${lib.getExe electron}' $out/bin/anytype \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/anytype/ \
