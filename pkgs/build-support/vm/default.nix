@@ -1004,20 +1004,22 @@ let
   # The set of supported Dpkg-based distributions.
 
   debDistros = {
+    # Ubuntu's snapshot service returns the same data for 22.04 regardless of the timestamp in the
+    # URL. The hashes don't change between mirror://ubuntu and snapshot.ubuntu.com, so this is fine.
     ubuntu2204i386 = {
       name = "ubuntu-22.04-jammy-i386";
       fullName = "Ubuntu 22.04 Jammy (i386)";
       packagesLists = [
         (fetchurl {
-          url = "mirror://ubuntu/dists/jammy/main/binary-i386/Packages.xz";
-          sha256 = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/jammy/main/binary-i386/Packages.xz";
+          hash = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
         })
         (fetchurl {
-          url = "mirror://ubuntu/dists/jammy/universe/binary-i386/Packages.xz";
-          sha256 = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/jammy/universe/binary-i386/Packages.xz";
+          hash = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
         })
       ];
-      urlPrefix = "mirror://ubuntu";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
@@ -1029,15 +1031,15 @@ let
       fullName = "Ubuntu 22.04 Jammy (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "mirror://ubuntu/dists/jammy/main/binary-amd64/Packages.xz";
-          sha256 = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/jammy/main/binary-amd64/Packages.xz";
+          hash = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
         })
         (fetchurl {
-          url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
-          sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/jammy/universe/binary-amd64/Packages.xz";
+          hash = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
         })
       ];
-      urlPrefix = "mirror://ubuntu";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
@@ -1049,15 +1051,15 @@ let
       fullName = "Ubuntu 24.04 Noble (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "mirror://ubuntu/dists/noble/main/binary-amd64/Packages.xz";
-          sha256 = "sha256-KmoZnhAxpcJ5yzRmRtWUmT81scA91KgqqgMjmA3ZJFE=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/noble/main/binary-amd64/Packages.xz";
+          hash = "sha256-KmoZnhAxpcJ5yzRmRtWUmT81scA91KgqqgMjmA3ZJFE=";
         })
         (fetchurl {
-          url = "mirror://ubuntu/dists/noble/universe/binary-amd64/Packages.xz";
-          sha256 = "sha256-upBX+huRQ4zIodJoCNAMhTif4QHQwUliVN+XI2QFWZo=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z/dists/noble/universe/binary-amd64/Packages.xz";
+          hash = "sha256-upBX+huRQ4zIodJoCNAMhTif4QHQwUliVN+XI2QFWZo=";
         })
       ];
-      urlPrefix = "mirror://ubuntu";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20251217T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
