@@ -17,7 +17,6 @@ in
 {
   options.services.reaction = {
     enable = mkEnableOption "enable reaction";
-
     package = mkPackageOption pkgs "reaction" { };
 
     settings = mkOption {
@@ -102,8 +101,14 @@ in
         {
           # allows reading journal logs of processess
           users.users.reaction.extraGroups = [ "systemd-journal" ];
+
           # allows modifying ip firewall rules
-          systemd.services.reaction.AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+          systemd.services.reaction.unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+          systemd.services.reaction.serviceConfig = {
+            CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+            AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+          };
+
           # optional, if more control over ssh logs is needed
           services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
         }
@@ -117,19 +122,14 @@ in
       cfg = config.services.reaction;
 
       generatedSettings = settingsFormat.generate "reaction.yml" cfg.settings;
-      namedGeneratedSettings = lib.optional (cfg.settings != { }) {
-        name = "reaction.yml";
-        path = generatedSettings;
-      };
-
-      # SAFETY: We can discard the dependencies of "file" in the name attribute because we keep them in the path attribute
-      # See https://nix.dev/manual/nix/2.32/language/string-context
-      namedSettingsFiles = builtins.map (file: {
-        name = builtins.unsafeDiscardStringContext (builtins.baseNameOf file);
-        path = file;
-      }) cfg.settingsFiles;
-
-      settingsDir = pkgs.linkFarm "reaction.d" (namedSettingsFiles ++ namedGeneratedSettings);
+      settingsDir = pkgs.runCommand "reaction-settings-dir" { } ''
+        mkdir -p $out
+        ${lib.concatMapStringsSep "\n" (file: ''
+          filename=$(basename "${file}")
+          ln -s "${file}" "$out/$filename"
+        '') cfg.settingsFiles}
+        ln -s ${generatedSettings} $out/reaction.yml
+      '';
     in
     lib.mkIf cfg.enable {
       assertions = [
@@ -157,18 +157,12 @@ in
             ''
           );
 
-      # Easier to debug conf when we have direct access to it,
-      # rather than having to look for it in the systemd service file.
-      environment.etc."reaction".source = settingsDir;
-
       systemd.services.reaction = {
-        enable = true;
         description = "Scan logs and take action";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         partOf = lib.optionals cfg.stopForFirewall [ "firewall.service" ];
         path = [ pkgs.iptables ];
-        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
         serviceConfig = {
           Type = "simple";
           User = if (!cfg.runAsRoot) then "reaction" else "root";
@@ -177,11 +171,29 @@ in
               lib.optionalString (cfg.loglevel != null) " -l ${cfg.loglevel}"
             }
           '';
-          StateDirectory = "reaction";
-          RuntimeDirectory = "reaction";
-          WorkingDirectory = "/var/lib/reaction";
 
-          CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+          NoNewPrivileges = true;
+
+          RuntimeDirectory = "reaction";
+          RuntimeDirectoryMode = "0750";
+          WorkingDirectory = "%S/reaction";
+          StateDirectory = "reaction";
+          StateDirectoryMode = "0750";
+          LogsDirectory = "reaction";
+          LogsDirectoryMode = "0750";
+          UMask = 0077;
+
+          RemoveIPC = true;
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectClock = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectSystem = "strict";
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
         };
       };
 
