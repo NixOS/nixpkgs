@@ -11,7 +11,7 @@ let
   pname = "Jan";
   version = "0.7.5";
   src = fetchurl {
-    url = "https://github.com/menloresearch/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
     hash = "sha256-RIEBpeogNIDPMpoY5Gk8q4+t7jxcWJEZLPqJHWyaVk4=";
   };
 
@@ -32,9 +32,9 @@ appimageTools.wrapType2 {
     ];
 
   meta = {
-    changelog = "https://github.com/menloresearch/jan/releases/tag/v${version}";
+    changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
     description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
-    homepage = "https://github.com/menloresearch/jan";
+    homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "Jan";
     maintainers = [ ];
