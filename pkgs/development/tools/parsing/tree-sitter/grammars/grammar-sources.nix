@@ -48,9 +48,9 @@
   };
 
   cmake = {
-    version = "0.7.1";
+    version = "0.7.2";
     url = "github:uyha/tree-sitter-cmake";
-    hash = "sha256-OxViW7H5fNc5BP072ob7GGgx1EYc6TiQEut0wHGrE1c=";
+    hash = "sha256-mR+gA7eWigC2zO1gMHzOgRagsfK1y/NBsn3mAOqR35A=";
   };
 
   comment = {
@@ -603,9 +603,9 @@
   };
 
   slint = {
-    version = "0-unstable-2025-07-13";
-    url = "github:slint-ui/tree-sitter-slint/96bc969d20ff347030519184ea2467f4046a524d";
-    hash = "sha256-yTZxuA3Bco0Cv+kZ1VbfQZbIu12Y5N4b3HIUJ/PBpWA=";
+    version = "0-unstable-2025-12-09";
+    url = "github:slint-ui/tree-sitter-slint/10fb0f188d7950400773c06ba6c31075866e14bf";
+    hash = "sha256-60DfIx7aQqe0/ocxbpr00eU3IPs23E8TUILcVGrBYVs=";
   };
 
   smithy = {
