@@ -180,9 +180,9 @@
   };
 
   fortran = {
-    version = "0.4.0";
+    version = "0.5.1";
     url = "github:stadelmanma/tree-sitter-fortran";
-    hash = "sha256-STRbEv7kBtkrokXgaN9g1JNwWmSV+7gkyklhYKJszNY=";
+    hash = "sha256-6l+cfLVbs8geKIYhnfuZDac8uzmNHOZf2rFANdl4tDs=";
   };
 
   gdscript = {
