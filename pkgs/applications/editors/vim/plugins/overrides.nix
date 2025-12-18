@@ -3967,11 +3967,6 @@ assertNoAdditions {
     buildInputs = [ vim ];
   };
 
-  vim-illuminate = super.vim-illuminate.overrideAttrs {
-    # Optional treesitter integration
-    checkInputs = [ self.nvim-treesitter ];
-  };
-
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace autoload/vimisort.vim \
