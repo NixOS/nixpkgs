@@ -1162,6 +1162,60 @@ let
       ];
       unifiedSystemDir = true;
     };
+
+    alma9x86_64 = {
+      name = "alma-9-x86_64";
+      fullName = "AlmaLinux 9 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/repodata/e7e7e537062ffd6778b5190b7b6785086efab6647401014d1985c10a0d3de609-primary.xml.gz";
+          hash = "sha256-5+flNwYv/Wd4tRkLe2eFCG76tmR0AQFNGYXBCg095gk=";
+        })
+        (fetchurl {
+          url = "https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/repodata/e61f480b84cb0a671452c21cbd52930a6fa111e7fb3407ed75cabff71c1a07b7-primary.xml.gz";
+          hash = "sha256-5h9IC4TLCmcUUsIcvVKTCm+hEef7NAftdcq/9xwaB7c=";
+        })
+      ];
+      urlPrefixes = [
+        "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os"
+        "https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonAlmaPackages ++ [
+        "annobin"
+      ];
+      unifiedSystemDir = true;
+    };
+
+    alma10x86_64 = {
+      name = "alma-10-x86_64";
+      fullName = "AlmaLinux 10 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os/repodata/e0a4a18c4f302fa3188b757197b81d606199eccddd8480602c378def572fabbf-primary.xml.gz";
+          hash = "sha256-4KShjE8wL6MYi3Vxl7gdYGGZ7M3dhIBgLDeN71cvq78=";
+        })
+        (fetchurl {
+          url = "https://repo.almalinux.org/almalinux/10/AppStream/x86_64/os/repodata/fb3e7acc93f1b0969c3c00dc3bc4364d4f5837d11274cae650c34cf71c0f80ae-primary.xml.gz";
+          hash = "sha256-+z56zJPxsJacPADcO8Q2TU9YN9ESdMrmUMNM9xwPgK4=";
+        })
+      ];
+      urlPrefixes = [
+        "https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os"
+        "https://repo.almalinux.org/almalinux/10/AppStream/x86_64/os"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonAlmaPackages ++ [
+        "annobin-plugin-gcc"
+      ];
+      unifiedSystemDir = true;
+    };
   };
 
   # The set of supported Dpkg-based distributions.
@@ -1407,6 +1461,12 @@ let
     "gcc-plugin-annobin"
     "pkgconf"
     "rocky-release"
+  ];
+
+  commonAlmaPackages = baseRHELFamilyPackages ++ [
+    "almalinux-release"
+    "gcc-plugin-annobin"
+    "pkgconf"
   ];
 
   # Common packages for openSUSE images.
