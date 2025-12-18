@@ -1056,6 +1056,8 @@ with pkgs;
     }
   );
 
+  htop-vim = htop.override { withVimKeys = true; };
+
   inherit (callPackages ../tools/networking/iroh/default.nix { })
     iroh-relay
     iroh-dns-server
