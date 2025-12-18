@@ -1568,6 +1568,7 @@ mapAliases {
   tclx = throw "'tclx' has been renamed to/replaced by 'tclPackages.tclx'"; # Converted to throw 2025-10-27
   tcp-cutter = throw "tcp-cutter has been removed because it fails to compile and the source url is dead"; # Added 2025-05-25
   tdesktop = throw "'tdesktop' has been renamed to/replaced by 'telegram-desktop'"; # Converted to throw 2025-10-27
+  tdfgo = throw "'tdfgo' has been removed because it was removed from upstream"; # Added 2025-12-18
   tdlib-purple = throw "'tdlib-purple' has been renamed to/replaced by 'pidginPackages.tdlib-purple'"; # Converted to throw 2025-10-27
   tdom = throw "'tdom' has been renamed to/replaced by 'tclPackages.tdom'"; # Converted to throw 2025-10-27
   teamspeak5_client = throw "'teamspeak5_client' has been renamed to/replaced by 'teamspeak6-client'"; # Converted to throw 2025-10-27
