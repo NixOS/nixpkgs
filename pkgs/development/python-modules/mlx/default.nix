@@ -142,9 +142,10 @@ let
       license = lib.licenses.mit;
       platforms = [ "aarch64-darwin" ];
       maintainers = with lib.maintainers; [
-        viraptor
         Gabriella439
+        booxter
         cameronyule
+        viraptor
       ];
     };
   };
