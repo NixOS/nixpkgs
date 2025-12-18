@@ -2948,7 +2948,6 @@ assertNoAdditions {
     dependencies = with self; [
       nvim-parinfer
       nvim-paredit
-      nvim-treesitter
     ];
   };
 
