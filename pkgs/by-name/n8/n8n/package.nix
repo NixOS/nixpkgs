@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-B1YL/kGYKHKZ8l50UGDiGwkYedvlYobW9QZzx2FwjDY=";
+    hash = "sha256-3vXJnLqQz60Sq1A8lLW0x6xAoN3DneFYVsaHAD0nzng=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
