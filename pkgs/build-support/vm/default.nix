@@ -1310,76 +1310,39 @@ let
     };
   };
 
-  # Common packages for Fedora images.
-  commonFedoraPackages = [
+  # Base packages for all RHEL-family distros (Fedora, CentOS Stream, Rocky, Alma, etc.)
+  baseRHELFamilyPackages = [
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "glibc-gconv-extra"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+  commonFedoraPackages = baseRHELFamilyPackages ++ [
     "annobin-plugin-gcc"
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
     "fedora-release"
-    "findutils"
-    "gawk"
-    "gcc-c++"
     "gcc-plugin-annobin"
-    "glibc-gconv-extra"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
     "pkgconf-pkg-config"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
   ];
 
-  commonCentOSStreamPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
+  commonCentOSStreamPackages = baseRHELFamilyPackages ++ [
     "centos-stream-release"
-    "curl"
-    "diffutils"
-    "findutils"
-    "gawk"
-    "gcc-c++"
     "gcc-plugin-annobin"
-    "glibc-gconv-extra"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
     "pkgconf"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
-  ];
-
-  commonRHELPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkgconfig"
-    "procps-ng"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
   ];
 
   # Common packages for openSUSE images.
@@ -1485,7 +1448,6 @@ in
     commonDebianPackages
     commonFedoraPackages
     commonOpenSUSEPackages
-    commonRHELPackages
     createEmptyImage
     debClosureGenerator
     debDistros
