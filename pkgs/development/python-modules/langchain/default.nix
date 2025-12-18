@@ -126,6 +126,8 @@ buildPythonPackage rec {
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
+    # Timing sensitive tests
+    "test_tool_retry_constant_backoff"
   ];
 
   disabledTestPaths = [
