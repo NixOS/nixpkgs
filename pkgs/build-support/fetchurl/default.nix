@@ -35,6 +35,18 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  resolveUrl =
+    url:
+    let
+      mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+      mirrorName = lib.head mirrorSplit;
+      mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
+    in
+    if mirrorSplit == null || mirrorName == null then
+      [ url ]
+    else
+      map (mirror: mirror + lib.elemAt mirrorSplit 1) mirrorList;
+
   impureEnvVars =
     lib.fetchers.proxyImpureEnvVars
     ++ [
@@ -223,16 +235,7 @@ lib.extendMkDerivation {
       finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
       finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
 
-      resolvedUrl =
-        let
-          mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
-          mirrorName = lib.head mirrorSplit;
-          mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
-        in
-        if mirrorSplit == null || mirrorName == null then
-          url
-        else
-          "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
+      resolvedUrl = lib.head (resolveUrl url);
     in
 
     derivationArgs
@@ -338,4 +341,7 @@ lib.extendMkDerivation {
 
   # No ellipsis
   inheritFunctionArgs = false;
+}
+// {
+  inherit resolveUrl;
 }
