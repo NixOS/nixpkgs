@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecell-solver";
-  version = "6.14.0";
+  version = "6.16.0";
 
   src = fetchurl {
     url = "https://fc-solve.shlomifish.org/downloads/fc-solve/freecell-solver-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HREl2FQivNUhEC18sefIS3aGP+RF3SGHn5d53Gss59w=";
+    hash = "sha256-cbiILmjxvmJSkGkBjQxzK3UHhmkHfJY0gnlXWEnzQxM=";
   };
 
   outputs = [
