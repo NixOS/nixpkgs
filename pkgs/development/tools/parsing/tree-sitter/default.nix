@@ -5,7 +5,6 @@
   fetchFromGitLab,
   fetchFromSourcehut,
   nix-update-script,
-  runCommand,
   which,
   rustPlatform,
   emscripten,
@@ -67,7 +66,9 @@ let
 
     Use pkgs.tree-sitter-grammars.<name> to access.
   */
-  builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
+  builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) (
+    lib.filterAttrs (_: g: !(g.meta.broken or false)) grammars
+  );
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
