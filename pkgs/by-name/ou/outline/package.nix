@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
     makeWrapper
     prefetch-yarn-deps
     fixup-yarn-lock
+    yarn
   ];
+
   buildInputs = [
     yarn
     nodejs
