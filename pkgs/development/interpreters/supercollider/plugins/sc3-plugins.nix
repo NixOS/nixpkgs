@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/supercollider/sc3-plugins/commit/3dc56bf7fcc1f2261afc13f96da762b78bcbfa51.patch";
       hash = "sha256-lvXvGunfmjt6i+XPog14IKdnH1Qk8vefxplSDkXXXHU=";
     })
+
+    # Fix build with GCC 15
+    (fetchpatch2 {
+      url = "https://github.com/supercollider/sc3-plugins/commit/deaa55a7204bedf65a2000a463ae87a481bf3eb8.patch";
+      hash = "sha256-d8+4ZmedAwVt/AlU/YKqQF+80shEa8DiPnvMwJtW/RM=";
+    })
   ];
 
   strictDeps = true;
