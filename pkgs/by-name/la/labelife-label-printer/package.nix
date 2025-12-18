@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = ''
     runHook preUnpack
 
-    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.001.tar.gz --strip-components=1
+    tar -xzf ${finalAttrs.src}/LabelPrinter-${finalAttrs.version}.004.tar.gz --strip-components=1
 
     runHook postUnpack
   '';
