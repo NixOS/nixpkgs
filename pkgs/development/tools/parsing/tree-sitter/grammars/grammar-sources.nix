@@ -400,15 +400,15 @@
   markdown = {
     version = "0.3.2";
     url = "github:MDeiml/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek=";
     location = "tree-sitter-markdown";
   };
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "0.5.1";
     url = "github:MDeiml/tree-sitter-markdown";
-    hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
+    hash = "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek=";
     location = "tree-sitter-markdown-inline";
   };
 
