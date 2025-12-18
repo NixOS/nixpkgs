@@ -29,6 +29,15 @@ in
 
   buildHelloInVM = runInLinuxVM hello;
   buildStructuredAttrsHelloInVM = runInLinuxVM (hello.overrideAttrs { __structuredAttrs = true; });
+  buildHelloInFedora = runInLinuxImage (
+    stdenv.mkDerivation {
+      inherit (hello) pname version src;
+
+      diskImage = diskImages.fedora42x86_64;
+      diskImageFormat = "qcow2";
+      memSize = 512;
+    }
+  );
 
   buildPcmanrmInVM = runInLinuxVM (
     pcmanfm.overrideAttrs (old: {
@@ -37,15 +46,6 @@ in
     })
   );
 
-  #testRPMImage = makeImageTestScript diskImages.fedora27x86_64;
-
-  #buildPatchelfRPM = buildRPM {
-  #  name = "patchelf-rpm";
-  #  src = patchelf.src;
-  #  diskImage = diskImages.fedora27x86_64;
-  #  diskImageFormat = "qcow2";
-  #};
-
+  testFedoraImage = makeImageTestScript diskImages.fedora42x86_64;
   testUbuntuImage = makeImageTestScript diskImages.ubuntu2404x86_64;
-
 }

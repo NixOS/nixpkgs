@@ -831,12 +831,30 @@ let
         nativeBuildInputs = [
           buildPackages.perl
           buildPackages.perlPackages.XMLSimple
+          buildPackages.zstd
         ];
         inherit archs;
       }
       ''
         ${lib.concatImapStrings (i: pl: ''
-          gunzip < ${pl} > ./packages_${toString i}.xml
+          echo "decompressing ${pl}..."
+          case ${pl} in
+            *.zst)
+              zstd -d < ${pl} > ./packages_${toString i}.xml
+              ;;
+            *.xz | *.lzma)
+              xz -d < ${pl} > ./packages_${toString i}.xml
+              ;;
+            *.bz2)
+              bunzip2 < ${pl} > ./packages_${toString i}.xml
+              ;;
+            *.gz)
+              gunzip < ${pl} > ./packages_${toString i}.xml
+              ;;
+            *)
+              cp ${pl} ./packages_${toString i}.xml
+              ;;
+          esac
         '') packagesLists}
         perl -w ${rpm/rpm-closure.pl} \
           ${
@@ -994,7 +1012,23 @@ let
 
   # The set of supported RPM-based distributions.
 
-  rpmDistros = { };
+  rpmDistros = {
+    fedora42x86_64 = {
+      name = "fedora-42-x86_64";
+      fullName = "Fedora 42 (x86_64)";
+      packagesList = fetchurl {
+        url = "https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/x86_64/os/repodata/cd483b35df017d68b73a878a392bbf666a43d75db54c386e4720bc369eb5c3a3-primary.xml.zst";
+        hash = "sha256-zUg7Nd8BfWi3OoeKOSu/ZmpD1121TDhuRyC8Np61w6M=";
+      };
+      urlPrefix = "https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/x86_64/os";
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonFedoraPackages;
+      unifiedSystemDir = true;
+    };
+  };
 
   # The set of supported Dpkg-based distributions.
 
@@ -1202,6 +1236,7 @@ let
 
   # Common packages for Fedora images.
   commonFedoraPackages = [
+    "annobin-plugin-gcc"
     "autoconf"
     "automake"
     "basesystem"
@@ -1212,6 +1247,8 @@ let
     "findutils"
     "gawk"
     "gcc-c++"
+    "gcc-plugin-annobin"
+    "glibc-gconv-extra"
     "gzip"
     "make"
     "patch"
