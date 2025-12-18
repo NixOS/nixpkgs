@@ -713,8 +713,8 @@ in
       "sha256-N21GfynAZdHOQnQgKcA9mJMWDfbN/pBfx509W4XDGjU=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.42.3"
-      "sha256-P6wj5rx+bELx4TVmTqj8pOfnT3K9s/8GgAF9bpFPnE4=";
+    buildMypyBoto3Package "kafkaconnect" "1.42.12"
+      "sha256-CdqSbNGUfeYz76BipvPsF+8j7hFOHJSSgXgcr2BEDUY=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.42.3"
