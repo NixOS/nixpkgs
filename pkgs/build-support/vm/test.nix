@@ -46,6 +46,7 @@ in
     })
   );
 
-  testFedoraImage = makeImageTestScript diskImages.fedora42x86_64;
+  testFedora42Image = makeImageTestScript diskImages.fedora42x86_64;
+  testFedora43Image = makeImageTestScript diskImages.fedora43x86_64;
   testUbuntuImage = makeImageTestScript diskImages.ubuntu2404x86_64;
 }

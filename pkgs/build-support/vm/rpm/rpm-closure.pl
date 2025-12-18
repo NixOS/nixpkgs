@@ -156,7 +156,13 @@ sub closePackage {
 
 
 foreach my $pkgName (@toplevelPkgs) {
-    closePackage $pkgName;
+    # If the package doesn't exist by name, check if something provides it
+    if (!defined $pkgs{$pkgName} && defined $provides{$pkgName}) {
+        print STDERR "package $pkgName is provided by $provides{$pkgName}\n";
+        closePackage $provides{$pkgName};
+    } else {
+        closePackage $pkgName;
+    }
 }
 
 
