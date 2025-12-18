@@ -18,6 +18,7 @@
     ];
   },
   azure-sdk-for-cpp,
+  azurite,
   boost,
   brotli,
   bzip2,
@@ -284,7 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals enableS3 [ minio ]
-  ++ lib.optionals enableFlight [ python3 ];
+  ++ lib.optionals enableFlight [ python3 ]
+  ++ lib.optionals enableAzure [ azurite ];
 
   installCheckPhase =
     let
