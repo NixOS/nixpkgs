@@ -567,9 +567,9 @@
   };
 
   rst = {
-    version = "0.1.0";
+    version = "0.2.0";
     url = "github:stsewd/tree-sitter-rst";
-    hash = "sha256-g3CovnXY15SkxAdVk15M4hAxizqLc551omwKKG+Vozg=";
+    hash = "sha256-EYUn60fU2hMizL+4PITtzJFJKdBktoPjMsYJ1R70LdM=";
   };
 
   ruby = {
