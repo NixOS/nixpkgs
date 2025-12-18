@@ -591,9 +591,9 @@
   };
 
   scheme = {
-    version = "0-unstable-2025-09-17";
-    url = "github:6cdh/tree-sitter-scheme/67b5c8d6ce19fd5265f13204fec0a3efa9e095d9";
-    hash = "sha256-njPs+AAQYIGzztARtlpl2pmTrA0ozcXmbpuJxFp+44s=";
+    version = "0.24.7-1-unstable-2025-12-13";
+    url = "github:6cdh/tree-sitter-scheme/b5c701148501fa056302827442b5b4956f1edc03";
+    hash = "sha256-SLuK8S03pKVVhxJTkE3ZJvNaNnmXD323YwE7ah2VxyQ=";
   };
 
   scss = {
