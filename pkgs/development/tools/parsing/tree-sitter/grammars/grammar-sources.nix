@@ -386,7 +386,7 @@
   };
 
   lua = {
-    version = "0-unstable-2025-05-16";
+    version = "0.0.19-unstable-2025-05-16";
     url = "github:MunifTanjim/tree-sitter-lua/4fbec840c34149b7d5fe10097c93a320ee4af053";
     hash = "sha256-fO8XqlauYiPR0KaFzlAzvkrYXgEsiSzlB3xYzUpcbrs=";
   };
