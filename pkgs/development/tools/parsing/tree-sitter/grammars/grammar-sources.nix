@@ -751,7 +751,7 @@
   };
 
   vim = {
-    version = "0-unstable-2023-05-05";
+    version = "0.2.0-unstable-2023-05-05";
     url = "github:vigoux/tree-sitter-viml/7c317fbade4b40baa7babcd6c9097c157d148e60";
     hash = "sha256-/TyPUBsKRcF9Ig8psqd4so2IMbHtTu4weJXgfd96Vrs=";
   };
