@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "ebzzry";
     repo = "usync";
-    rev = "99f11b0c196a81843f55ca3456abcb85149b6d51";
-    sha256 = "16i1q8f0jmfd43rb8d70l2b383vr5ib4kh7iq3yd345q7xjz9c2j";
+    rev = "2d6003afceeccb73114caa25f84e48b300430f0c";
+    hash = "sha256-UrD0ZT+4kNH8wPHASVYseQ80lqDgNLTyIM1VCRzCIZo=";
   };
 
   installPhase = ''
