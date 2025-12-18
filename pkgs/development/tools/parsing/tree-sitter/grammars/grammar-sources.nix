@@ -1,3 +1,5 @@
+{ lib }:
+
 {
   bash = {
     version = "0.23.3";
@@ -525,6 +527,18 @@
     version = "0.23.1";
     url = "github:tree-sitter/tree-sitter-ql";
     hash = "sha256-mJ/bj09mT1WTaiKoXiRXDM7dkenf5hv2ArXieeTVe6I=";
+  };
+
+  qmljs = rec {
+    version = "0.3.0";
+    url = "github:yuja/tree-sitter-qmljs?ref=${version}";
+    hash = "sha256-tV4lipey+OAQwygRFp9lQAzgCNiZzSu7p3Mr6CCBH1g=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        jaredmontoya
+      ];
+    };
   };
 
   query = {
