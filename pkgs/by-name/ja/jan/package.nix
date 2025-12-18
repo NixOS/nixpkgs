@@ -2,14 +2,17 @@
   lib,
   appimageTools,
   fetchurl,
+  config,
+  cudaPackages,
+  cudaSupport ? config.cudaSupport,
 }:
 
 let
   pname = "Jan";
-  version = "0.6.10";
+  version = "0.7.5";
   src = fetchurl {
     url = "https://github.com/menloresearch/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-eag8c/Jp2ahV71kEuFoT2rmz0S9RPbiqy5YBO0Z+ICY=";
+    hash = "sha256-RIEBpeogNIDPMpoY5Gk8q4+t7jxcWJEZLPqJHWyaVk4=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -21,6 +24,12 @@ appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
+
+  extraPkgs =
+    pkgs:
+    lib.optionals cudaSupport [
+      cudaPackages.cudatoolkit
+    ];
 
   meta = {
     changelog = "https://github.com/menloresearch/jan/releases/tag/v${version}";
