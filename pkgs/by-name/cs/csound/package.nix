@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libsndfile,
   libsamplerate,
@@ -35,6 +36,14 @@ stdenv.mkDerivation {
     rev = "2536da284dd70ec7272040cb0763f70ae57123c4";
     sha256 = "sha256-NDYltwmjBsX1DWCjy8/4cXMSl3/mK+HaQHSKUmRR9TI=";
   };
+
+  patches = [
+    # Fix typo that breaks build
+    (fetchpatch {
+      url = "https://github.com/csound/csound/commit/bb9bafcfa17a87d3733eda1e25a812fd0be08ac6.diff";
+      hash = "sha256-0M047uALPAoyQP0LbfBAybb2DWQ2/6QwZXxUjs1O1fE=";
+    })
+  ];
 
   cmakeFlags = [
     "-DBUILD_CSOUND_AC=0"
