@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oo2RNJQUVDqxhfBI6h1KCAgsMjDe7ns3F9qD4eKLVic=";
+    hash = "sha256-EewRittG90ZHRklGtXHtEJ83DWzA6f0iKfX87YlmVgY=";
   };
 
   build-system = [
