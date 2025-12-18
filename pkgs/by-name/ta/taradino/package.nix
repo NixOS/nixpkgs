@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taradino" + lib.optionalString buildShareware "-shareware";
-  version = "20251031";
+  version = "20251222";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "taradino";
     tag = finalAttrs.version;
-    hash = "sha256-Z3yAT4CxZIQ63F6G7ZUAdz2VK+8dcv6WHyQJ8Pmz4Zk=";
+    hash = "sha256-nB6FNET9OCgK7xqku5gaXfuaIIhYPj8Lo03gINCZSFI=";
   };
 
   strictDeps = true;
