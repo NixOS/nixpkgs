@@ -380,9 +380,9 @@
   };
 
   llvm = {
-    version = "0-unstable-2024-10-07";
-    url = "github:benwilliamgraham/tree-sitter-llvm/c14cb839003348692158b845db9edda201374548";
-    hash = "sha256-L3XwPhvwIR/mUbugMbaHS9dXyhO7bApv/gdlxQ+2Bbo=";
+    version = "1.1.0-unstable-2025-08-22";
+    url = "github:benwilliamgraham/tree-sitter-llvm/2914786ae6774d4c4e25a230f4afe16aa68fe1c1";
+    hash = "sha256-jBSotMFsBUcgQrWH5p8EiywG00+v9QqePcUTI6ZqAkw=";
   };
 
   lua = {
