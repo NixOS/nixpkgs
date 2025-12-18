@@ -1104,6 +1104,35 @@ let
       ];
       unifiedSystemDir = true;
     };
+
+    # Rocky Linux's /pub/rocky/9/ URL is rolling and changes with each minor release. We use the
+    # vault instead, which provides stable URLs for specific minor versions.
+    rocky9x86_64 = {
+      name = "rocky-9.5-x86_64";
+      fullName = "Rocky Linux 9.5 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://dl.rockylinux.org/vault/rocky/9.5/BaseOS/x86_64/os/repodata/554cd09406b7bf632fc7014d0a567094272d37ac08f75af955de96183425dfa8-primary.xml.gz";
+          hash = "sha256-VUzQlAa3v2MvxwFNClZwlCctN6wI91r5Vd6WGDQl36g=";
+        })
+        (fetchurl {
+          url = "https://dl.rockylinux.org/vault/rocky/9.5/AppStream/x86_64/os/repodata/db8f32057dd37687574ea660d322ff7a0b5dc01bfba42888818b48ef686837cd-primary.xml.gz";
+          hash = "sha256-248yBX3TdodXTqZg0yL/egtdwBv7pCiIgYtI72hoN80=";
+        })
+      ];
+      urlPrefixes = [
+        "https://dl.rockylinux.org/vault/rocky/9.5/BaseOS/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/9.5/AppStream/x86_64/os"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonRockyPackages ++ [
+        "annobin"
+      ];
+      unifiedSystemDir = true;
+    };
   };
 
   # The set of supported Dpkg-based distributions.
@@ -1343,6 +1372,12 @@ let
     "centos-stream-release"
     "gcc-plugin-annobin"
     "pkgconf"
+  ];
+
+  commonRockyPackages = baseRHELFamilyPackages ++ [
+    "gcc-plugin-annobin"
+    "pkgconf"
+    "rocky-release"
   ];
 
   # Common packages for openSUSE images.
