@@ -754,11 +754,11 @@
       "dependency": "direct main",
       "description": {
         "name": "watcher",
-        "sha256": "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a",
+        "sha256": "f52385d4f73589977c80797e60fe51014f7f2b957b5e9a62c3f6ada439889249",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.4"
+      "version": "1.2.0"
     },
     "web": {
       "dependency": "transitive",

@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nongnu.org/devilspie2/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.linux;
     mainProgram = "devilspie2";
   };

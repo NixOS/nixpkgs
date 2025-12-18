@@ -18184,7 +18184,11 @@ self: super: with self; {
 
   streamlit-avatar = callPackage ../development/python-modules/streamlit-avatar { };
 
+  streamlit-card = callPackage ../development/python-modules/streamlit-card { };
+
   streamlit-folium = callPackage ../development/python-modules/streamlit-folium { };
+
+  streamlit-kpi-card = callPackage ../development/python-modules/streamlit-kpi-card { };
 
   streamlit-notify = callPackage ../development/python-modules/streamlit-notify { };
 
