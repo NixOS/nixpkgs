@@ -1,19 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   ppp,
 }:
-let
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rp-pppoe";
   version = "4.0";
 
-  src = fetchFromGitHub {
-    owner = "dfskoll";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dskoll";
     repo = "rp-pppoe";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-2y26FVxVn8sU9/E2yJeJmbhAeOB0Go7EUPMU9H58H6U=";
   };
 
@@ -45,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ DictXiong ];
   };
-}
+})
