@@ -443,9 +443,9 @@
   };
 
   nu = {
-    version = "0-unstable-2025-09-19";
-    url = "github:nushell/tree-sitter-nu/0e6c59c46db3c246eaf86ce5b325da1247e971a5";
-    hash = "sha256-qGKQTdMrxhsMSSY7ghFkc/32O6Fhps9b9oG1wo0m1NA=";
+    version = "0-unstable-2025-12-13";
+    url = "github:nushell/tree-sitter-nu/4c149627cc592560f77ead1c384e27ec85926407";
+    hash = "sha256-h02kb3VxSK/fxQENtj2yaRmAQ5I8rt5s5R8VrWOQWeo=";
   };
 
   ocaml = {
