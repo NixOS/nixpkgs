@@ -1864,11 +1864,9 @@ assertNoAdditions {
 
   markdoc-nvim = super.markdoc-nvim.overrideAttrs {
     dependencies = with self; [
-      (nvim-treesitter.withPlugins (p: [
-        p.markdown
-        p.markdown_inline
-        p.html
-      ]))
+      nvim-treesitter-parsers.markdown
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.html
     ];
   };
 
