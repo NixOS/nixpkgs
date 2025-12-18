@@ -127,6 +127,7 @@ let
       vra7 = archived "vra7" "2025/10";
       ccloud = removed "ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
       sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
+      oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
     };
 
   # added 2025-10-12
