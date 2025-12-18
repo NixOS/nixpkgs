@@ -2,10 +2,8 @@
   lib,
   stdenv,
   fetchFromGitea,
-  fetchYarnDeps,
   writableTmpDirAsHomeHook,
-  fixup-yarn-lock,
-  yarn,
+  yarn-berry_3,
   nodejs,
   git,
   python3,
@@ -17,25 +15,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "admin-fe";
-  version = "2.3.0-2-unstable-2024-04-27";
+  version = "2.3.0-2-unstable-2025-12-18";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "admin-fe";
-    rev = "7e16abcbaab10efa6c2c4589660cf99f820a718d";
-    hash = "sha256-W/2Ay2dNeVQk88lgkyTzKwCNw0kLkfI6+Azlbp0oMm4=";
+    rev = "a0e3b95a75367d1b5e329963a3d54f67cf59dfca";
+    hash = "sha256-eEAM1itUvpR57B0BseeeRuV+ZjcYiJvbdln8vleRNcc=";
+    # archive export endpoint on akkoma.dev 500s
+    forceFetchGit = true;
   };
 
-  offlineCache = fetchYarnDeps {
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-acF+YuWXlMZMipD5+XJS+K9vVFRz3wB2fZqc3Hd0Bjc=";
+    hash = "sha256-YZlvIr27bHBgsQcBiayqEX07kjX6iH2Kh5wt+PQFq04=";
   };
 
   nativeBuildInputs = [
-    fixup-yarn-lock
     writableTmpDirAsHomeHook
-    yarn
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
     nodejs
     pkg-config
     python3
@@ -44,33 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  configurePhase = ''
-    runHook preConfigure
-
-    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
-    fixup-yarn-lock yarn.lock
-    substituteInPlace yarn.lock \
-      --replace-fail '"git://github.com/adobe-webplatform/eve.git#eef80ed"' '"https://github.com/adobe-webplatform/eve.git#eef80ed"'
-
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/cross-env
-
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    runHook postConfigure
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    pushd node_modules/node-sass
-    LIBSASS_EXT=auto yarn run build --offline
-    popd
-
-    export NODE_OPTIONS="--openssl-legacy-provider"
     yarn run build:prod --offline
 
     runHook postBuild
@@ -88,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Admin interface for Akkoma";
-    homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
+    homepage = "https://akkoma.dev/AkkomaGang/admin-fe/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mvs ];
   };
