@@ -1,6 +1,7 @@
 use strict;
 use XML::Simple;
 use List::Util qw(min);
+use URI::Escape;
 
 my @packagesFiles = ();
 my @urlPrefixes = ();
@@ -174,8 +175,13 @@ print "[\n\n";
 
 foreach my $pkgName (@needed) {
     my $pkg = $pkgs{$pkgName};
+    # URL-encode each path segment separately to handle special characters like '+'
+    my $href = $pkg->{location}->{href};
+    my @segments = split('/', $href);
+    my @encoded_segments = map { uri_escape($_) } @segments;
+    my $encoded_href = join('/', @encoded_segments);
     print "  (fetchurl {\n";
-    print "    url = $pkg->{urlPrefix}/$pkg->{location}->{href};\n";
+    print "    url = \"$pkg->{urlPrefix}/$encoded_href\";\n";
     if ($pkg->{checksum}->{type} eq "sha") {
         print "    sha1 = \"$pkg->{checksum}->{content}\";\n";
     } elsif ($pkg->{checksum}->{type} eq "sha256") {
