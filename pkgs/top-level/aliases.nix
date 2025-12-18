@@ -557,6 +557,7 @@ mapAliases {
   emacsNativeComp = throw "'emacsNativeComp' has been renamed to/replaced by 'emacs'"; # Converted to throw 2025-10-27
   emanote = throw "'emanote' has been removed due to lack of a Nixpkgs maintainer"; # Added 2025-09-18
   embree2 = throw "embree2 has been removed, as it is unmaintained upstream and depended on tbb_2020"; # Added 2025-09-14
+  emem = throw "'emem' has been removed as it is unused"; # Added 2025-12-18
   emojione = throw "emojione has beem removed, as it has been archived upstream."; # Added 2025-11-06
   EmptyEpsilon = throw "'EmptyEpsilon' has been renamed to/replaced by 'empty-epsilon'"; # Converted to throw 2025-10-27
   emulationstation = throw "emulationstation was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
