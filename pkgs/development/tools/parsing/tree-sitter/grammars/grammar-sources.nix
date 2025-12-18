@@ -621,9 +621,9 @@
   };
 
   solidity = {
-    version = "1.2.3";
+    version = "1.2.13";
     url = "github:JoranHonig/tree-sitter-solidity";
-    hash = "sha256-BN3a/gEZxOgRWm/H3CEFk4eTKhoZrBAFlUnZiLs9RUE=";
+    hash = "sha256-b+DHy7BkkMg88kLhirtCzjF3dHlCFkXea65aGC18fW0=";
   };
 
   sparql = {
