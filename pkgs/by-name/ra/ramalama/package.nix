@@ -48,24 +48,24 @@ python3Packages.buildPythonApplication rec {
     make docs
   '';
 
-  postInstall = lib.optionalString withPodman ''
-    wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${
-        lib.makeBinPath (
-          [
-            llama-cpp-vulkan
-            podman
-          ]
-          ++ (
-            with python3Packages;
-            [
-              huggingface-hub
-            ]
-            ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
-          )
-        )
-      }
-  '';
+  postInstall =
+    let
+      binPackages = [
+        llama-cpp-vulkan
+      ]
+      ++ (
+        with python3Packages;
+        [
+          huggingface-hub
+        ]
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm
+      )
+      ++ lib.optional withPodman podman;
+    in
+    ''
+      wrapProgram $out/bin/ramalama \
+        --prefix PATH : ${lib.makeBinPath binPackages}
+    '';
 
   pythonImportsCheck = [
     "ramalama"
