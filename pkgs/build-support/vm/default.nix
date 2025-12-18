@@ -1133,6 +1133,35 @@ let
       ];
       unifiedSystemDir = true;
     };
+
+    # Rocky Linux's /pub/rocky/10/ URL is rolling and changes with each minor release. We use the
+    # vault instead, which provides stable URLs for specific minor versions.
+    rocky10x86_64 = {
+      name = "rocky-10.0-x86_64";
+      fullName = "Rocky Linux 10.0 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://dl.rockylinux.org/vault/rocky/10.0/BaseOS/x86_64/os/repodata/484d5c43cdb1058dd1328a6b891f45c85f1cb2620c528f2ef423d4b9feb9e2f0-primary.xml.gz";
+          hash = "sha256-SE1cQ82xBY3RMopriR9FyF8csmIMUo8u9CPUuf654vA=";
+        })
+        (fetchurl {
+          url = "https://dl.rockylinux.org/vault/rocky/10.0/AppStream/x86_64/os/repodata/32c93064142d89f3f19c11e92642c5abd8368418f7ab3f3bdd752e4afa9b5b23-primary.xml.gz";
+          hash = "sha256-MskwZBQtifPxnBHpJkLFq9g2hBj3qz873XUuSvqbWyM=";
+        })
+      ];
+      urlPrefixes = [
+        "https://dl.rockylinux.org/vault/rocky/10.0/BaseOS/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/10.0/AppStream/x86_64/os"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonRockyPackages ++ [
+        "annobin-plugin-gcc"
+      ];
+      unifiedSystemDir = true;
+    };
   };
 
   # The set of supported Dpkg-based distributions.

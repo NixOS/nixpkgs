@@ -51,5 +51,6 @@ in
   testCentOSStream9Image = makeImageTestScript diskImages.centosStream9x86_64;
   testCentOSStream10Image = makeImageTestScript diskImages.centosStream10x86_64;
   testRocky9Image = makeImageTestScript diskImages.rocky9x86_64;
+  testRocky10Image = makeImageTestScript diskImages.rocky10x86_64;
   testUbuntuImage = makeImageTestScript diskImages.ubuntu2404x86_64;
 }
