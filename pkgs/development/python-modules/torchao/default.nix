@@ -168,7 +168,7 @@ buildPythonPackage rec {
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Scalars are not equal!
     "test_comm"
     "test_fsdp2"
@@ -176,8 +176,7 @@ buildPythonPackage rec {
     "test_precompute_bitnet_scale"
     "test_qlora_fsdp2"
     "test_uneven_shard"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
@@ -206,7 +205,7 @@ buildPythonPackage rec {
     "test_int8_weight_only_quant_with_freeze_2_cpu"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
