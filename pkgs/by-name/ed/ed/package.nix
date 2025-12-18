@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.22.3";
+  version = "1.22.3"; # Check if Darwin tests were fixed before updating.
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
@@ -31,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/pull/471828
+  doCheck = !stdenv.buildPlatform.isDarwin;
 
   passthru = {
     tests.version = testers.testVersion {
