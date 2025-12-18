@@ -3370,14 +3370,6 @@ assertNoAdditions {
       };
     });
 
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs (old: {
-    dependencies = [ self.nvim-treesitter ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ callumio ];
-    };
-  });
-
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
     meta = old.meta // {

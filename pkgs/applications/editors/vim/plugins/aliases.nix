@@ -139,6 +139,7 @@ mapAliases (
     Supertab = supertab;
     surround = vim-surround;
     Syntastic = syntastic;
+    syntax-tree-surfer = throw "syntax-tree-surfer has been archived"; # Added 2025-12-18
     SyntaxRange = vim-SyntaxRange;
     table-mode = vim-table-mode;
     tabpagebuffer = tabpagebuffer-vim;
