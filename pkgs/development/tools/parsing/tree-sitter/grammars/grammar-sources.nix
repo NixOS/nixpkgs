@@ -24,7 +24,7 @@
   };
 
   bqn = {
-    version = "0.3.2";
+    version = "v0.5.0.2";
     url = "github:shnarazk/tree-sitter-bqn";
     hash = "sha256-/FsA5GeFhWYFl1L9pF+sQfDSyihTnweEdz2k8mtLqnY=";
   };
@@ -138,7 +138,7 @@
   };
 
   elixir = {
-    version = "0.3.4";
+    version = "v0.5.0.4";
     url = "github:elixir-lang/tree-sitter-elixir";
     hash = "sha256-9M/DpqpGivDtgGt3ojU/kHR51sla59+KtZ/95hT6IIo=";
   };
@@ -361,7 +361,7 @@
   };
 
   kotlin = rec {
-    version = "0.3.8";
+    version = "v0.5.0.8";
     url = "github:fwcd/tree-sitter-kotlin?ref=${version}";
     hash = "sha256-kze1kF8naH2qQou58MKMhzmMXk0ouzcP6i3F61kOYi8=";
   };
@@ -398,7 +398,7 @@
   };
 
   markdown = {
-    version = "0.3.2";
+    version = "v0.5.0.2";
     url = "github:MDeiml/tree-sitter-markdown";
     hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
     location = "tree-sitter-markdown";
@@ -406,7 +406,7 @@
 
   markdown-inline = {
     language = "markdown_inline";
-    version = "0.3.2";
+    version = "v0.5.0.2";
     url = "github:MDeiml/tree-sitter-markdown";
     hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
     location = "tree-sitter-markdown-inline";
@@ -419,9 +419,9 @@
   };
 
   nickel = {
-    version = "0.3.0";
-    url = "github:nickel-lang/tree-sitter-nickel?ref=0.3";
-    hash = "sha256-jL054OJj+1eXksNYOTTTFzZjwPqTFp06syC3TInN8rc=";
+    version = "v0.5.0.0";
+    url = "github:nickel-lang/tree-sitter-nickel?ref=v0.5.0";
+    hash = "sha256-2la/9XxL2dN+rzTotgDXQFz9ktDXQ3Og9svX5Din2zo=";
   };
 
   nix = {
@@ -633,14 +633,14 @@
   };
 
   sql = {
-    version = "0.3.9";
+    version = "v0.5.0.9";
     url = "github:derekstride/tree-sitter-sql";
     hash = "sha256-DC7cZs8ePQmj5t/6GgnmgT5ubuOBaaS3Xch/f76/ZWM=";
     generate = true;
   };
 
   supercollider = {
-    version = "0.3.2";
+    version = "v0.5.0.2";
     url = "github:madskjeldgaard/tree-sitter-supercollider";
     hash = "sha256-drn1S4gNm6fOSUTCa/CrAqCWoUn16y1hpaZBCPpyaNE=";
   };
@@ -745,7 +745,7 @@
   };
 
   verilog = {
-    version = "1.0.3";
+    version = "1.v0.5.0";
     url = "github:tree-sitter/tree-sitter-verilog";
     hash = "sha256-SlK33WQhutIeCXAEFpvWbQAwOwMab68WD3LRIqPiaNY=";
   };
