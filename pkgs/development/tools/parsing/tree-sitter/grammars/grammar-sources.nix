@@ -168,7 +168,7 @@
   };
 
   fennel = {
-    version = "0-unstable-2025-09-07";
+    version = "1.1.0-unstable-2025-09-07";
     url = "github:travonted/tree-sitter-fennel/36eb796a84b4f57bdf159d0a99267260d4960c89";
     hash = "sha256-aFcTPgWkd/o1qu8d/hulmVDyFlTHJgb35iea4Jc1510=";
   };
