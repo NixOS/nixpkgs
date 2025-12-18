@@ -223,6 +223,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/ao";
     changelog = "https://github.com/pytorch/ao/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 }
