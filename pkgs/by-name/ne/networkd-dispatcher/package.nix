@@ -57,10 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = with python3Packages; [
-    dbus-python
-    iw
     mock
-    pygobject3
     pytestCheckHook
   ];
 
