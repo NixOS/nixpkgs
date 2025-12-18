@@ -2512,10 +2512,6 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
-  nvim-gps = super.nvim-gps.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
