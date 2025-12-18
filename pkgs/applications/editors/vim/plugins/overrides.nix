@@ -2665,13 +2665,6 @@ assertNoAdditions {
     ];
   };
 
-  nvim-surround = super.nvim-surround.overrideAttrs {
-    checkInputs = [
-      # Optional treesitter integration
-      self.nvim-treesitter
-    ];
-  };
-
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/tealmaker/init.lua \
