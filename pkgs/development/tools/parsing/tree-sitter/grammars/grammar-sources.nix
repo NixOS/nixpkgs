@@ -757,7 +757,7 @@
   };
 
   vue = {
-    version = "0-unstable-2021-04-04";
+    version = "0.2.1-unstable-2021-04-04";
     url = "github:ikatyang/tree-sitter-vue/91fe2754796cd8fba5f229505a23fa08f3546c06";
     hash = "sha256-NeuNpMsKZUP5mrLCjJEOSLD6tlJpNO4Z/rFUqZLHE1A=";
   };
