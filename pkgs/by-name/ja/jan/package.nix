@@ -35,7 +35,7 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
     description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.asl20;
     mainProgram = "Jan";
     maintainers = [ ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
