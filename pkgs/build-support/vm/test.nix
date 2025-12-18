@@ -54,5 +54,6 @@ in
   testRocky10Image = makeImageTestScript diskImages.rocky10x86_64;
   testAlma9Image = makeImageTestScript diskImages.alma9x86_64;
   testAlma10Image = makeImageTestScript diskImages.alma10x86_64;
+  testOracle9Image = makeImageTestScript diskImages.oracle9x86_64;
   testUbuntuImage = makeImageTestScript diskImages.ubuntu2404x86_64;
 }
