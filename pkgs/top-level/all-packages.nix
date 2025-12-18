@@ -3304,6 +3304,8 @@ with pkgs;
 
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
+  lxgw-fonts = recurseIntoAttrs (callPackage ../data/fonts/lxgw-fonts { });
+
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
 
   maple-mono = recurseIntoAttrs (callPackage ../data/fonts/maple-font { });
