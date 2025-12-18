@@ -46,7 +46,7 @@
   vala,
   gi-docgen,
   perl,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
   xorg,
   glib-networking,
@@ -66,6 +66,7 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
+  fetchpatch,
 }:
 
 let
@@ -77,7 +78,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.4";
+  version = "3.0.6";
 
   outputs = [
     "out"
@@ -87,10 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
+    hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
   };
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15257
+    (fetchpatch {
+      name = "fix-gegl-bevel-test.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/2fd12847496a9a242ca8edc448d400d3660b8009.patch";
+      hash = "sha256-pjOjyzZxxl+zRqThXBwCBfYHdGhgaMI/IMKaL3XGAMs=";
+    })
+
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
     (replaceVars ./remove-cc-reference.patch {
@@ -138,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream-glib # for library
+    appstream # for library
     babl
     cfitsio
     gegl
