@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchzip,
+  nix-update-script,
   ninja,
   cmake,
   SDL2,
@@ -57,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/${datadir}"
     unzip -d "$out/${datadir}" ${sharewareData}/ROTTSW13.SHR
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SDL2 port of Rise of the Triad";
