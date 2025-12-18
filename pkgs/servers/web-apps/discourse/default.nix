@@ -40,6 +40,8 @@
   rustc,
   cargo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   svgo,
   nodejs,
   jq,
@@ -299,9 +301,10 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
       inherit version src;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
     };
@@ -316,7 +319,8 @@ let
       jq
       moreutils
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
     outputs = [

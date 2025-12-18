@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nodejs_20,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   wrapGAppsHook3,
   glib-networking,
@@ -15,6 +17,7 @@
 let
   # NodeJS 22.18.0 broke our build, not sure why
   wails' = wails.override { nodejs = nodejs_20; };
+  pnpm' = pnpm_8.override { nodejs = nodejs_20; };
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
@@ -42,7 +45,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    pnpm_8.configHook
+    pnpmConfigHook
+    pnpm'
     wails'
     wrapGAppsHook3
     copyDesktopItems
@@ -55,8 +59,13 @@ buildGoModule rec {
   # we use env because buildGoModule doesn't forward all normal attrs
   # this is pretty hacky
   env = {
-    pnpmDeps = pnpm_8.fetchDeps {
-      inherit pname version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        ;
+      pnpm = pnpm';
       sourceRoot = "${src.name}/frontend";
       fetcherVersion = 1;
       hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
