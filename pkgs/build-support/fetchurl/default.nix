@@ -35,6 +35,28 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  /**
+    Resolve a URL against the available mirrors.
+
+    If the input is a `"mirror://"` URL, it is normalized.
+    Otherwise, the URL is returned unmodified in a singleton list.
+
+    Mirror URLs should be formatted as:
+    ```
+    mirror://{mirror_name}/{path}
+    ```
+
+    The specified `mirror_name` must correspond to an entry in `pkgs/build-support/fetchurl/mirrors.nix`, otherwise an error is thrown.
+
+    # Inputs
+
+    `url` (String)
+    : A (possibly `"mirror://"`) URL to resolve.
+
+    # Output
+
+    A list of resolved URLs.
+  */
   resolveUrl =
     url:
     let
