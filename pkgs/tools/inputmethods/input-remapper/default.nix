@@ -66,7 +66,6 @@ in
     glib
     gobject-introspection
     pygobject3
-    udevCheckHook
   ]
   ++ maybeXmodmap;
 
@@ -81,9 +80,11 @@ in
     psutil
   ];
 
-  doCheck = withDoCheck;
-
-  nativeCheckInputs = [ psutil ];
+  # buildPythonApplication maps nativeCheckInputs to nativeInstallCheckInputs.
+  nativeCheckInputs = [
+    udevCheckHook
+  ]
+  ++ lib.optionals withDoCheck [ psutil ];
 
   pythonImportsCheck = [
     "evdev"
@@ -115,9 +116,7 @@ in
   # We only run tests in the unit folder, integration tests require UI
   # To allow tests which access the system and session DBUS to run, we start a dbus session
   # and bind it to both the system and session buses
-  installCheckPhase = ''
-    runHook preInstallCheck
-
+  upstreamCheck = lib.optionalString withDoCheck ''
     echo "<busconfig>
       <type>session</type>
       <listen>unix:tmpdir=$TMPDIR</listen>
@@ -145,7 +144,11 @@ in
       DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket \
       ${dbus}/bin/dbus-run-session --config-file dbus.cfg \
       python tests/test.py --start-dir unit
+  '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+    eval "$upstreamCheck"
     runHook postInstallCheck
   '';
 
