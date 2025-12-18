@@ -538,6 +538,8 @@ self: super: with self; {
 
   aiousbwatcher = callPackage ../development/python-modules/aiousbwatcher { };
 
+  aiovban = callPackage ../development/python-modules/aiovban { };
+
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
   aiovodafone = callPackage ../development/python-modules/aiovodafone { };
