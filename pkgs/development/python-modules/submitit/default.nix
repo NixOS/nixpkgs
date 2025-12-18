@@ -2,12 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   cloudpickle,
   flit-core,
   typing-extensions,
   pytestCheckHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +25,12 @@ buildPythonPackage rec {
 
   dependencies = [
     cloudpickle
-    setuptools
     typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    # event_loop was removed in pytest-asyncio 1.x
-    pytest-asyncio_0
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [
@@ -42,13 +39,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests are broken
-    "test_snapshot"
-    "test_snapshot_excludes"
-    "test_job_use_snapshot_cwd"
-    "test_job_use_snapshot_modules"
-    "test_nested_pickling"
     "test_setup"
-    "test_requeuing"
   ];
 
   meta = {
