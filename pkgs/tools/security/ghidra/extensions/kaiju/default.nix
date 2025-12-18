@@ -26,13 +26,13 @@ let
 
   self = buildGhidraExtension (finalAttrs: {
     pname = "kaiju";
-    version = "250828";
+    version = "251218";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
       rev = finalAttrs.version;
-      hash = "sha256-edsQIBoOTY+WxVBtH1bbM7TZZHhA0jgVb2iJKC66iVM=";
+      hash = "sha256-oSbYinEysFHMdFUQCA60wVDCTCIDvEDzW76ZFa0ANbg=";
     };
 
     buildInputs = [
