@@ -2006,7 +2006,6 @@ assertNoAdditions {
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       hydra-nvim
     ];
   };
