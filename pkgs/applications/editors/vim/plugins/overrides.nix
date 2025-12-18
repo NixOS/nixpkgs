@@ -2215,7 +2215,6 @@ assertNoAdditions {
     dependencies = with self; [
       neotest
       nvim-nio
-      nvim-treesitter
       plenary-nvim
     ];
   };
