@@ -715,7 +715,7 @@
   };
 
   turtle = {
-    version = "0-unstable-2024-07-02";
+    version = "0.1.0-unstable-2024-07-02";
     url = "github:bonabeavis/tree-sitter-turtle/7f789ea7ef765080f71a298fc96b7c957fa24422";
     hash = "sha256-z6f73euFAG9du5owz7V9WLbWK81Jg0DwxN1metKPbTA=";
   };
