@@ -111,6 +111,7 @@ mapAliases (
     open-browser = open-browser-vim;
     pathogen = vim-pathogen;
     peskcolor-vim = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
+    playground = throw "playground has been archived"; # Added 2025-12-18
     polyglot = vim-polyglot;
     prettyprint = vim-prettyprint;
     pure-lua = lib.warnOnInstantiate "Please replace 'pure-lua' with 'moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
