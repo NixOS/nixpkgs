@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString (lib.versionAtLeast version "1.11") ''
     substituteInPlace deps/curl.mk \
-      --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
-                     'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
+      --replace-fail 'jxf $(notdir $<)' \
+                     'jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
   ''
   + lib.optionalString (lib.versionOlder version "1.12") ''
     substituteInPlace deps/tools/common.mk \
