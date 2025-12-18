@@ -72,9 +72,9 @@
   };
 
   crystal = {
-    version = "0-unstable-2025-09-09";
-    url = "github:crystal-lang-tools/tree-sitter-crystal/f0ada43161f77d5bad18c4ce0b21d1dc9310e408";
-    hash = "sha256-5NPRFMeMbAe/wwFkUMkOJxMABFPBk2AbJ5HsY6RZfUg=";
+    version = "0-unstable-2025-10-12";
+    url = "github:crystal-lang-tools/tree-sitter-crystal/50ca9e6fcfb16a2cbcad59203cfd8ad650e25c49";
+    hash = "sha256-xmQrplDxoJ8GhcTyCOuEGn4wwMM3/9M6tyM1dgRGARU=";
   };
 
   css = {
