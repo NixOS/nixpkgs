@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://dotcolon.net/font/ferrum/";
+    homepage = "https://dotcolon.net/font/ferrum/";
     description = "Decorative font";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
