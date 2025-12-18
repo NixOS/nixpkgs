@@ -8,27 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "13.2.0";
+  version = "14.2.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     tag = finalAttrs.version;
-    hash = "sha256-L4ttJxP46uNwQAEUMoJ8rsc51Le2GeIGbT1kX7ZzcPA=";
+    hash = "sha256-BTiN4B3//wlB3nmOoluM/7bL7J7YIBp5afih9zUP1yw=";
   };
-
-  patches = [
-    # See: https://github.com/xtensor-stack/xsimd/issues/1030
-    #
-    # NOTE: Although the patch is needed only on Darwin, it is safer to always
-    # include it, to avoid a situation an linux user trying to update the
-    # package fails to notice it doesn't apply on their platform. We prefer not
-    # performing this test on linux platforms too although it should pass.
-    ./disable-test_error_gamma.patch
-
-    # https://github.com/xtensor-stack/xsimd/issues/1063
-    ./relax-asin-precision.diff
-  ];
 
   # strictDeps raises the chance that xsimd will be able to be cross compiled
   strictDeps = true;
