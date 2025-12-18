@@ -56,6 +56,7 @@ mapAliases (
     command_T = command-t; # backwards compat, added 2014-10-18
     commentary = vim-commentary;
     committia = committia-vim;
+    completion-treesitter = throw "completion-treesitter has been archived since 2024-01"; # Added 2025-12-18
     concealedyank = concealedyank-vim;
     context-filetype = context_filetype-vim;
     Cosco = cosco-vim;

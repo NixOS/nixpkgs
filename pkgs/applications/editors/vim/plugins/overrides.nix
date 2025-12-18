@@ -826,13 +826,6 @@ assertNoAdditions {
     '';
   };
 
-  completion-treesitter = super.completion-treesitter.overrideAttrs {
-    dependencies = with self; [
-      completion-nvim
-      nvim-treesitter
-    ];
-  };
-
   conjure = super.conjure.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
