@@ -121,6 +121,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/meta-pytorch/torchtune";
     changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 }
