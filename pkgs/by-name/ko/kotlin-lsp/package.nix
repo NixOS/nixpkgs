@@ -2,17 +2,35 @@
   lib,
   stdenv,
   fetchzip,
-  openjdk,
-  makeWrapper,
 }:
+let
+  system = stdenv.hostPlatform.system;
+  platformSuffix =
+    {
+      "x86_64-linux" = "linux-x64";
+      "aarch64-linux" = "linux-aarch64";
+      "x86_64-darwin" = "macos-x64";
+      "aarch64-darwin" = "macos-aarch64";
+    }
+    .${system};
 
+  hash =
+    {
+      "x86_64-linux" = "sha256-EweSqy30NJuxvlJup78O+e+JOkzvUdb6DshqAy1j9jE=";
+      "aarch64-linux" = "sha256-MhHEYHBctaDH9JVkN/guDCG1if9Bip1aP3n+JkvHCvA=";
+      "x86_64-darwin" = "sha256-zMuUcahT1IiCT1NTrMCIzUNM0U6U3zaBkJtbGrzF7I8=";
+      "aarch64-darwin" = "sha256-zwlzVt3KYN0OXKr6sI9XSijXSbTImomSTGRGa+3zCK8=";
+    }
+    .${system};
+in
 stdenv.mkDerivation rec {
   pname = "kotlin-lsp";
-  version = "0.253.10629";
+  version = "261.13587.0";
+
   src = fetchzip {
+    inherit hash;
     stripRoot = false;
-    url = "https://download-cdn.jetbrains.com/kotlin-lsp/${version}/kotlin-${version}.zip";
-    hash = "sha256-LCLGo3Q8/4TYI7z50UdXAbtPNgzFYtmUY/kzo2JCln0=";
+    url = "https://download-cdn.jetbrains.com/kotlin-lsp/${version}/kotlin-lsp-${version}-${platformSuffix}.zip";
   };
 
   dontBuild = true;
@@ -20,28 +38,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
-    mkdir -p $out/native
-    mkdir -p $out/bin
-    cp -r lib/* $out/lib
-    cp -r native/* $out/native
-    chmod +x kotlin-lsp.sh
-    cp "kotlin-lsp.sh" "$out/kotlin-lsp.sh"
-    ln -s $out/kotlin-lsp.sh $out/bin/kotlin-lsp
+    mkdir -p $out/bin $out/lib/kotlin-lsp
+    cp -r * $out/lib/kotlin-lsp
+    chmod +x $out/lib/kotlin-lsp/jre/bin/java
+    chmod +x $out/lib/kotlin-lsp/kotlin-lsp.sh
+    ln -s $out/lib/kotlin-lsp/kotlin-lsp.sh $out/bin/kotlin-lsp
 
     runHook postInstall
-  '';
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-
-  postFixup = ''
-    wrapProgram "$out/bin/kotlin-lsp" --set JAVA_HOME ${openjdk} --prefix PATH : ${
-      lib.strings.makeBinPath [
-        openjdk
-      ]
-    }
   '';
 
   meta = {
@@ -50,7 +53,12 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Kotlin/kotlin-lsp";
     changelog = "https://github.com/Kotlin/kotlin-lsp/blob/kotlin-lsp/v${version}/RELEASES.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     mainProgram = "kotlin-lsp";
   };
