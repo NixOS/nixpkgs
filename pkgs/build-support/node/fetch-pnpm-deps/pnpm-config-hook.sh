@@ -12,6 +12,13 @@ pnpmConfigHook() {
       exit 1
     fi
 
+    if ! command -v "pnpm" &> /dev/null; then
+      echo "Error: 'pnpm' binary not found in PATH. Consider adding 'pkgs.pnpm' to 'nativeBuildInputs'." >&2
+      exit 1
+    fi
+
+    echo "Found 'pnpm' with version '$(pnpm --version)'"
+
     fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
 
     echo "Using fetcherVersion: $fetcherVersion"

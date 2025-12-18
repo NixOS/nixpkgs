@@ -6,8 +6,9 @@
 
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openlist-frontend";
   version = "4.1.8";
@@ -27,11 +28,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-bPI8g7wN9k1fBzj+F9wRDw7XPGT6DKDllbyOmUKi7HY=";
   };

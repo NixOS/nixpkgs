@@ -3,6 +3,8 @@
   stdenv,
   callPackage,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
 }:
 let
@@ -14,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${common.src.name}/web";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${common.src.name}/web";
     fetcherVersion = 2;
@@ -23,7 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   buildPhase = ''

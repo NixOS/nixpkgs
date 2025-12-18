@@ -7,6 +7,8 @@
   makeWrapper,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
 }:
 stdenv.mkDerivation rec {
@@ -23,13 +25,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     makeWrapper
     imagemagick
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10;
     fetcherVersion = 1;
     hash = "sha256-6I10NSmTDd/wmL/HfAgLH+G2MDfuPmrTePNDDy08nRA=";
   };
