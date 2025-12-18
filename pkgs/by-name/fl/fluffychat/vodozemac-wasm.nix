@@ -15,24 +15,24 @@
   binaryen,
   writableTmpDirAsHomeHook,
   runCommand,
+  removeReferencesTo,
 }:
 
 let
   pubSources = fluffychat-web.pubspecLock.dependencySources;
 
   # wasm-pack doesn't take 'RUST_SRC_PATH' into consideration
-  rustcWithLibSrc = buildPackages.rustc.override {
-    sysroot = symlinkJoin {
-      name = "rustc_unwrapped_with_libsrc";
-      paths = [
-        buildPackages.rustc.unwrapped
-      ];
-      postBuild = ''
-        mkdir -p $out/lib/rustlib/src/rust
-        ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
-      '';
-    };
+  sysroot = symlinkJoin {
+    name = "rustc_unwrapped_with_libsrc";
+    paths = [
+      buildPackages.rustc.unwrapped
+    ];
+    postBuild = ''
+      mkdir -p $out/lib/rustlib/src/rust
+      ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
+    '';
   };
+  rustcWithLibSrc = buildPackages.rustc.override { inherit sysroot; };
 in
 
 # https://github.com/krille-chan/fluffychat/blob/main/scripts/prepare-web.sh
@@ -80,6 +80,7 @@ stdenv.mkDerivation {
     wasm-bindgen-cli_0_2_100
     binaryen
     writableTmpDirAsHomeHook
+    removeReferencesTo
   ];
 
   buildPhase = ''
@@ -101,6 +102,12 @@ stdenv.mkDerivation {
     cp -r dart/web/pkg/vodozemac_bindings_dart* $out/
 
     runHook postInstall
+  '';
+
+  # fix rustc leaking into closure
+  # fluffychat-web should not reference build-time dependencies
+  preFixup = ''
+    find $out -name "*.wasm" -exec remove-references-to -t ${sysroot} {} +
   '';
 
   env = {
