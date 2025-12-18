@@ -19,7 +19,7 @@
 
   bitbake = {
     version = "1.1.0";
-    url = "github:amaanq/tree-sitter-bitbake";
+    url = "github:tree-sitter-grammars/tree-sitter-bitbake";
     hash = "sha256-PSI1XVDGwDk5GjHjvCJfmBDfYM2Gmm1KR4h5KxBR1d0=";
   };
 
@@ -61,7 +61,7 @@
 
   commonlisp = {
     version = "0.4.1";
-    url = "github:thehamsta/tree-sitter-commonlisp";
+    url = "github:tree-sitter-grammars/tree-sitter-commonlisp";
     hash = "sha256-wHVdRiorBgxQ+gG+m/duv9nt5COxz6XK0AcKQ5FX43U=";
   };
 
@@ -85,7 +85,7 @@
 
   cuda = {
     version = "0.21.1";
-    url = "github:thehamsta/tree-sitter-cuda";
+    url = "github:tree-sitter-grammars/tree-sitter-cuda";
     hash = "sha256-sX9AOe8dJJsRbzGq20qakWBnLiwYQ90mQspAuYxQzoQ=";
   };
 
@@ -205,13 +205,13 @@
 
   glimmer = {
     version = "1.4.0";
-    url = "github:alexlafroscia/tree-sitter-glimmer?ref=v1.4.0-tree-sitter-glimmer";
+    url = "github:ember-tooling/tree-sitter-glimmer?ref=v1.4.0-tree-sitter-glimmer";
     hash = "sha256-4kEOvObNnZtt2aaf0Df+R/Wvyk/JlFnsvbasDIJxt4w=";
   };
 
   glsl = {
     version = "0.2.0";
-    url = "github:thehamsta/tree-sitter-glsl";
+    url = "github:tree-sitter-grammars/tree-sitter-glsl";
     hash = "sha256-S0Yr/RQE4uLpazphTKLUoHgPEOUbOBDGCkkRXemsHjQ=";
   };
 
@@ -260,13 +260,13 @@
 
   hcl = {
     version = "1.1.0";
-    url = "github:MichaHoffmann/tree-sitter-hcl";
+    url = "github:tree-sitter-grammars/tree-sitter-hcl";
     hash = "sha256-saVKSYUJY7OuIuNm9EpQnhFO/vQGKxCXuv3EKYOJzfs=";
   };
 
   heex = {
     version = "0.8.0";
-    url = "github:connorlay/tree-sitter-heex";
+    url = "github:phoenixframework/tree-sitter-heex";
     hash = "sha256-rifYGyIpB14VfcEZrmRwYSz+ZcajQcB4mCjXnXuVFDQ=";
   };
 
@@ -284,7 +284,7 @@
 
   http = {
     version = "3.0.0";
-    url = "github:ntbbloodbath/tree-sitter-http?ref=v3.0";
+    url = "github:rest-nvim/tree-sitter-http?ref=v3.0";
     hash = "sha256-pg7QmnfhuCmyuq6HupCJl4H/rcxDeUn563LoL+Wd2Uw=";
   };
 
@@ -399,7 +399,7 @@
 
   markdown = {
     version = "0.3.2";
-    url = "github:MDeiml/tree-sitter-markdown";
+    url = "github:tree-sitter-grammars/tree-sitter-markdown";
     hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
     location = "tree-sitter-markdown";
   };
@@ -407,7 +407,7 @@
   markdown-inline = {
     language = "markdown_inline";
     version = "0.3.2";
-    url = "github:MDeiml/tree-sitter-markdown";
+    url = "github:tree-sitter-grammars/tree-sitter-markdown";
     hash = "sha256-OlVuHz9/5lxsGVT+1WhKx+7XtQiezMW1odiHGinzro8=";
     location = "tree-sitter-markdown-inline";
   };
@@ -463,7 +463,7 @@
 
   org-nvim = {
     version = "0-unstable-2023-06-19";
-    url = "github:milisims/tree-sitter-org/64cfbc213f5a83da17632c95382a5a0a2f3357c1";
+    url = "github:emiasims/tree-sitter-org/64cfbc213f5a83da17632c95382a5a0a2f3357c1";
     hash = "sha256-/03eZBbv23W5s/GbDgPgaJV5TyK+/lrWUVeINRS5wtA=";
   };
 
@@ -529,7 +529,7 @@
 
   query = {
     version = "0.8.0";
-    url = "github:nvim-treesitter/tree-sitter-query";
+    url = "github:tree-sitter-grammars/tree-sitter-query";
     hash = "sha256-0y8TbbZKMstjIVFEtq+9Fz44ueRup0ngNcJPJEQB/NQ=";
   };
 
@@ -628,7 +628,7 @@
 
   sparql = {
     version = "0-unstable-2024-06-26";
-    url = "github:bonabeavis/tree-sitter-sparql/d853661ca680d8ff7f8d800182d5782b61d0dd58";
+    url = "github:GordianDziwis/tree-sitter-sparql/d853661ca680d8ff7f8d800182d5782b61d0dd58";
     hash = "sha256-0BV0y8IyeIPpuxTixlJL1PsDCuhXbGaImu8JU8WFoPU=";
   };
 
@@ -716,7 +716,7 @@
 
   turtle = {
     version = "0-unstable-2024-07-02";
-    url = "github:bonabeavis/tree-sitter-turtle/7f789ea7ef765080f71a298fc96b7c957fa24422";
+    url = "github:GordianDziwis/tree-sitter-turtle/7f789ea7ef765080f71a298fc96b7c957fa24422";
     hash = "sha256-z6f73euFAG9du5owz7V9WLbWK81Jg0DwxN1metKPbTA=";
   };
 
