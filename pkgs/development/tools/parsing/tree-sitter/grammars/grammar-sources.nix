@@ -703,7 +703,7 @@
   };
 
   tsq = {
-    version = "0-unstable-2024-02-24";
+    version = "0.19.0-unstable-2024-02-24";
     url = "github:tree-sitter/tree-sitter-tsq/49da6de661be6a07cb51018880ebe680324e7b82";
     hash = "sha256-md4xynJx9F/l6N+JZYU8CLXmz50fV13L8xGJVUqk6do=";
   };
