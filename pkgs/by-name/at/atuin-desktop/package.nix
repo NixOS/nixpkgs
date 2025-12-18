@@ -9,6 +9,8 @@
   cargo-tauri,
   nodejs,
   pkg-config,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
 
   alsa-lib,
@@ -32,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "./.";
   cargoHash = "sha256-T3cPvwph71lpqlGcugAO4Ua8Y5TNZSySbQatxcvoT4E=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-XqKGAx2Q9cWO1oG4mP1cKM2Y9Pib5haFYEaq0PAfAdQ=";
@@ -40,7 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     rustPlatform.bindgenHook
 
     nodejs

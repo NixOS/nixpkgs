@@ -1,5 +1,7 @@
 {
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   stdenv,
   clang,
@@ -25,15 +27,21 @@ let
   web = stdenv.mkDerivation {
     inherit pname version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
-      inherit pname version src;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        ;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
     buildPhase = ''

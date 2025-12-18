@@ -2,7 +2,8 @@
   lib,
   stdenvNoCC,
   writeScript,
-  callPackages,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchurl,
   installShellFiles,
   nodejs,
@@ -71,12 +72,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      fetchDepsAttrs = callPackages ./fetch-deps {
-        pnpm = buildPackages."pnpm_${lib.versions.major version}";
-      };
+      pnpm' = buildPackages."pnpm_${lib.versions.major version}";
     in
     {
-      inherit (fetchDepsAttrs) fetchDeps configHook;
+      fetchDeps =
+        lib.warn
+          "pnpm.fetchDeps: The package attribute is deprecated. Use the top-level fetchPnpmDeps attribute instead"
+          (
+            { ... }@args:
+            fetchPnpmDeps args
+            // {
+              pnpm = pnpm';
+            }
+          );
+      configHook =
+        lib.warn
+          "pnpm.configHook: The package attribue is deprecated. Use the top-level pnpmConfigHook attribute instead"
+          (
+            pnpmConfigHook.overrideAttrs (prevAttrs: {
+              propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [
+                pnpm'
+              ];
+            })
+          );
       inherit majorVersion;
 
       tests.version = lib.optionalAttrs withNode (

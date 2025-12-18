@@ -7,6 +7,8 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
@@ -27,19 +29,21 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
       typescript
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 1;
       hash = "sha256-LOY8fLGsX966MyH4w+pa9tm/5HS6LnGwd51cj8TG6Mk=";
     };

@@ -2,11 +2,12 @@
   fetchFromGitHub,
   lib,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenvNoCC,
   nodejs,
   nix-update-script,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
   version = "2.0.49";
@@ -18,15 +19,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-Dsp7cv9+g8PDunDnTGnWF4z88SmlJYErfWWylU9mAag=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-NGAgueJ+cuK/csjdf94KNklu+Xf91BHoWKVgEctX6eA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''
