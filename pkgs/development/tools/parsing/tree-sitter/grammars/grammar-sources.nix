@@ -697,7 +697,7 @@
   };
 
   toml = {
-    version = "0-unstable-2022-04-21";
+    version = "0.5.1-unstable-2022-04-21";
     url = "github:tree-sitter/tree-sitter-toml/342d9be207c2dba869b9967124c679b5e6fd0ebe";
     hash = "sha256-V2c7K16g8PikE9eNgrM6iUDiu4kzBvHMFQwfkph+8QI=";
   };
