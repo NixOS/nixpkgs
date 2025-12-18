@@ -1336,28 +1336,6 @@ let
     "unzip"
   ];
 
-  commonCentOSPackages = [
-    "autoconf"
-    "automake"
-    "basesystem"
-    "bzip2"
-    "curl"
-    "diffutils"
-    "centos-release"
-    "findutils"
-    "gawk"
-    "gcc-c++"
-    "gzip"
-    "make"
-    "patch"
-    "perl"
-    "pkgconfig"
-    "rpm"
-    "rpm-build"
-    "tar"
-    "unzip"
-  ];
-
   commonCentOSStreamPackages = [
     "autoconf"
     "automake"
@@ -1503,7 +1481,6 @@ in
 {
   inherit
     buildRPM
-    commonCentOSPackages
     commonDebPackages
     commonDebianPackages
     commonFedoraPackages
