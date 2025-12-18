@@ -132,9 +132,9 @@
   };
 
   elisp = rec {
-    version = "1.3.0";
+    version = "1.6.1";
     url = "github:wilfred/tree-sitter-elisp?ref=${version}";
-    hash = "sha256-hmPJtB0pEBqc9rbnQ5YZzs9kHCqXWfbjRWN6WoFZ1NQ=";
+    hash = "sha256-ixZKsQtRk5ykR6miQ5JicI3xn/Bp9t4WGAIoNTC/gbY=";
   };
 
   elixir = {
