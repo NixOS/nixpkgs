@@ -31,6 +31,13 @@ let
       ncurses.dev
     ];
   };
+  libxaw_combined = symlinkJoin {
+    name = "libxaw_combined";
+    paths = [
+      libxaw
+      libxaw.dev
+    ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eli";
@@ -42,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    ncurses
+    curses_combined
     fontconfig
     libx11.dev
     libxt.dev
-    libxaw.dev
     libxext.dev
+    libxaw_combined
   ];
 
   nativeBuildInputs = [
@@ -70,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     configureFlagsArray=(
       --with-tcltk="${tcl} ${tk_combined}"
       --with-curses="${curses_combined}"
+      --with-Xaw="${libxaw_combined}"
     )
     export ODIN_LOCALIPC=1
   '';
