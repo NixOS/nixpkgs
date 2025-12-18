@@ -9,8 +9,7 @@ const { classify } = require('../supportedBranches.js')
  * }} CheckCommitMessagesProps
  */
 async function checkCommitMessages({ github, context, core }) {
-  // Do not run on merge groups: it'd be much harder, and there is no need
-  // (changes to the target branch can't change commit messages on the base branch).
+  // This check should only be run when we have the pull_request context.
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.info('This is not a pull request. Skipping checks.')
