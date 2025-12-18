@@ -567,10 +567,7 @@ let
           (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
           {
             # Enable Hyper-V guest stuff
-            HYPERV = lib.mkMerge [
-              (whenOlder "6.18" module)
-              (whenAtLeast "6.18" yes)
-            ];
+            HYPERV = whenAtLeast "6.18" yes;
             # Enable Hyper-V Synthetic DRM Driver
             DRM_HYPERV = whenAtLeast "5.14" module;
             # And disable the legacy framebuffer driver when we have the new one

@@ -144,6 +144,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lua::remote_hook"
     # error message differs
     "run_in_non_git_repo"
+    # depends on locale
+    "init_nonexistent_repo"
   ];
 
   meta = {
