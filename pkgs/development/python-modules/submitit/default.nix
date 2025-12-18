@@ -30,7 +30,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    # event_loop was removed in pytest-asyncio 1.x
     pytest-asyncio
   ];
 
@@ -40,13 +39,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests are broken
-    "test_snapshot"
-    "test_snapshot_excludes"
-    "test_job_use_snapshot_cwd"
-    "test_job_use_snapshot_modules"
-    "test_nested_pickling"
     "test_setup"
-    "test_requeuing"
   ];
 
   meta = {
