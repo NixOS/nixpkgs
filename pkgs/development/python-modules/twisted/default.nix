@@ -73,6 +73,11 @@ buildPythonPackage rec {
     })
     # https://github.com/twisted/twisted/pull/12511
     ./python314-urljoin-compat.patch
+    (fetchpatch {
+      # https://github.com/twisted/twisted/pull/12551
+      url = "https://github.com/twisted/twisted/commit/b1173fa307a9752eedd63890113eb610c3cca4a0.patch";
+      hash = "sha256-DWEygdo1b8uQOeFLy0/zcRNuuKJdSsF7cQM7RH04Puw=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;

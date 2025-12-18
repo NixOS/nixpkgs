@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   pythonOlder,
   replaceVars,
 
@@ -63,6 +63,18 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that expects timezone issues
     ./django_5_disable_failing_tests.patch
+
+    # 3.14.1/3.13.10 comapt
+    (fetchpatch {
+      # https://github.com/django/django/pull/20390
+      url = "https://github.com/django/django/commit/5ca0f62213911a77dd4a62e843db7e420cc98b78.patch";
+      hash = "sha256-SpVdbS4S5wqvrrUOoZJ7d2cIbtmgI0mvxwwCveSA068=";
+    })
+    (fetchpatch {
+      # https://github.com/django/django/pull/20392
+      url = "https://github.com/django/django/commit/9cc231e8243091519f5d627cd02ee40bbb853ced.patch";
+      hash = "sha256-/aimmqxurMCCntraxOtybEq8qNgZgQWLD5Gxs/3pkIU=";
+    })
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
