@@ -275,7 +275,10 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.home
+        ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"
