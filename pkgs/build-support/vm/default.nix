@@ -1216,6 +1216,34 @@ let
       ];
       unifiedSystemDir = true;
     };
+
+    oracle9x86_64 = {
+      name = "oracle-9-x86_64";
+      fullName = "Oracle Linux 9 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/repodata/edda5aa6dc1ad233cd5fe29838e535ef959cd291be343844e127e29c290f93ca-primary.xml.gz";
+          hash = "sha256-7dpaptwa0jPNX+KYOOU175Wc0pG+NDhE4SfinCkPk8o=";
+        })
+        (fetchurl {
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/repodata/4d559ceb3228c2f734d1bcbc79079141e4ce1f2abd90ce77f7f8e31d1deb77b2-primary.xml.gz";
+          hash = "sha256-TVWc6zIowvc00by8eQeRQeTOHyq9kM539/jjHR3rd7I=";
+        })
+      ];
+      urlPrefixes = [
+        "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64"
+        "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonOraclePackages ++ [
+        "annobin"
+      ];
+      unifiedSystemDir = true;
+    };
+
   };
 
   # The set of supported Dpkg-based distributions.
@@ -1466,6 +1494,12 @@ let
   commonAlmaPackages = baseRHELFamilyPackages ++ [
     "almalinux-release"
     "gcc-plugin-annobin"
+    "pkgconf"
+  ];
+
+  commonOraclePackages = baseRHELFamilyPackages ++ [
+    "gcc-plugin-annobin"
+    "oraclelinux-release"
     "pkgconf"
   ];
 
