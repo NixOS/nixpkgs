@@ -83,6 +83,25 @@ in
             slurm to work properly (see `services.munge.password`).
           '';
         };
+
+        flags = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.oneOf [
+              lib.types.str
+              lib.types.bool
+            ]
+          );
+          default = { };
+          example = {
+            "i" = true;
+            "systemd" = true;
+            "L" = "/var/log/file with space.log";
+          };
+          description = ''
+            Flags passed to `slurmctld` daemon, see {manpage}`slurmctld(8)`.
+            Special characters are properly escaped.
+          '';
+        };
       };
 
       dbdserver = {
@@ -433,7 +452,16 @@ in
 
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${wrappedSlurm}/bin/slurmctld";
+          ExecStart =
+            let
+              isLong = optionName: builtins.stringLength optionName > 1;
+              flagFormat = optionName: {
+                option = if isLong optionName then "--${optionName}" else "-${optionName}";
+                sep = " ";
+                explicitBool = false;
+              };
+            in
+            "${wrappedSlurm}/bin/slurmctld ${lib.cli.toCommandLineShell flagFormat cfg.server.flags}";
           PIDFile = "/run/slurmctld.pid";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
