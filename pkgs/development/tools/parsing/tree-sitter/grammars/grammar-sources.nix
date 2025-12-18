@@ -96,9 +96,9 @@
   };
 
   dart = {
-    version = "0-unstable-2025-02-28";
-    url = "github:usernobody14/tree-sitter-dart/80e23c07b64494f7e21090bb3450223ef0b192f4";
-    hash = "sha256-bMFBSVAHTGstvalL5vZGahA5gL95IZQmJfBOE+trnwM=";
+    version = "0-unstable-2025-10-04";
+    url = "github:usernobody14/tree-sitter-dart/d4d8f3e337d8be23be27ffc35a0aef972343cd54";
+    hash = "sha256-1ftYqCor1A0PsQ0AJLVqtxVRZxaXqE/NZ5yy7SizZCY=";
   };
 
   devicetree = {
