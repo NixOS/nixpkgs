@@ -1050,6 +1050,31 @@ let
       packages = commonFedoraPackages ++ [ "gpgverify" ];
       unifiedSystemDir = true;
     };
+
+    centosStream9x86_64 = {
+      name = "centos-stream-9-x86_64";
+      fullName = "CentOS Stream 9 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/repodata/737e7bb91d5464e0cc258ff5ae5070a00d682c39fc2de0b9b55df671022ba732-primary.xml.gz";
+          hash = "sha256-c357uR1UZODMJY/1rlBwoA1oLDn8LeC5tV32cQIrpzI=";
+        })
+        (fetchurl {
+          url = "https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/repodata/9f0c1578e5df33e6479a1d3e5397b87ecaa1b5bac7fd34de6c837bddb3949fde-primary.xml.gz";
+          hash = "sha256-nwwVeOXfM+ZHmh0+U5e4fsqhtbrH/TTebIN73bOUn94=";
+        })
+      ];
+      urlPrefixes = [
+        "https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os"
+        "https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonCentOSStreamPackages;
+      unifiedSystemDir = true;
+    };
   };
 
   # The set of supported Dpkg-based distributions.
@@ -1298,6 +1323,31 @@ let
     "patch"
     "perl"
     "pkgconfig"
+    "rpm"
+    "rpm-build"
+    "tar"
+    "unzip"
+  ];
+
+  commonCentOSStreamPackages = [
+    "annobin"
+    "autoconf"
+    "automake"
+    "basesystem"
+    "bzip2"
+    "curl"
+    "diffutils"
+    "centos-stream-release"
+    "findutils"
+    "gawk"
+    "gcc-c++"
+    "gcc-plugin-annobin"
+    "glibc-gconv-extra"
+    "gzip"
+    "make"
+    "patch"
+    "perl"
+    "pkgconf"
     "rpm"
     "rpm-build"
     "tar"
