@@ -17,8 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-L4ttJxP46uNwQAEUMoJ8rsc51Le2GeIGbT1kX7ZzcPA=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://github.com/xtensor-stack/xsimd/issues/1030
+  patches = [
+    # See: https://github.com/xtensor-stack/xsimd/issues/1030
+    #
+    # NOTE: Although the patch is needed only on Darwin, it is safer to always
+    # include it, to avoid a situation an linux user trying to update the
+    # package fails to notice it doesn't apply on their platform. We prefer not
+    # performing this test on linux platforms too although it should pass.
     ./disable-test_error_gamma.patch
 
     # https://github.com/xtensor-stack/xsimd/issues/1063
