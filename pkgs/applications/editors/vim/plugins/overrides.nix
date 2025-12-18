@@ -3086,7 +3086,6 @@ assertNoAdditions {
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       plenary-nvim
     ];
   };
