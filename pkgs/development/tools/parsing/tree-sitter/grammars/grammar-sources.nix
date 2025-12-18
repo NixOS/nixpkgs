@@ -114,9 +114,9 @@
   };
 
   dot = {
-    version = "0-unstable-2022-08-25";
-    url = "github:rydesun/tree-sitter-dot/9ab85550c896d8b294d9b9ca1e30698736f08cea";
-    hash = "sha256-w4DInIT7mkTvQ6Hmi8yaAww6ktyNgRz0tPfBLGnOawQ=";
+    version = "0-unstable-2025-10-21";
+    url = "github:rydesun/tree-sitter-dot/80327abbba6f47530edeb0df9f11bd5d5c93c14d";
+    hash = "sha256-sepmaKnpbj/bgMBa06ksQFOMPtcCqGaINiJqFBJN/0Y=";
   };
 
   earthfile = {
