@@ -10,6 +10,8 @@
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   rustPlatform,
   stdenv,
@@ -34,7 +36,6 @@ let
     };
   };
   electron = electron_37;
-  pnpm = pnpm_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
@@ -56,8 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-4BAcCzPZbCjUfHTnJ98TzcfI5UnfMmGdbdvCFaQNNsk=";
   };
@@ -67,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
