@@ -1507,9 +1507,13 @@ assertNoAdditions {
   };
 
   indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    checkInputs = [
+      # nvim-treesitter-textobjects dep
+      self.nvim-treesitter
+    ];
     dependencies = with self; [
       arshlib-nvim
-      nvim-treesitter
+      # Optional dep for repeatable jumps
       nvim-treesitter-textobjects
     ];
   };
