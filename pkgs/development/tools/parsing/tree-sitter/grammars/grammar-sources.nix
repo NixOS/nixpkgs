@@ -48,9 +48,9 @@
   };
 
   cmake = {
-    version = "0.7.1";
+    version = "0.7.2";
     url = "github:uyha/tree-sitter-cmake";
-    hash = "sha256-OxViW7H5fNc5BP072ob7GGgx1EYc6TiQEut0wHGrE1c=";
+    hash = "sha256-mR+gA7eWigC2zO1gMHzOgRagsfK1y/NBsn3mAOqR35A=";
   };
 
   comment = {
