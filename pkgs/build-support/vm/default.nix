@@ -557,9 +557,10 @@ let
           # Newer distributions like Fedora 18 require /lib etc. to be
           # symlinked to /usr.
           ${lib.optionalString unifiedSystemDir ''
-            mkdir -p /mnt/usr/bin /mnt/usr/sbin /mnt/usr/lib /mnt/usr/lib64
+            mkdir -p /mnt/usr/bin /mnt/usr/lib /mnt/usr/lib64
             ln -s /usr/bin /mnt/bin
-            ln -s /usr/sbin /mnt/sbin
+            ln -s /usr/bin /mnt/sbin
+            ln -s /usr/bin /mnt/usr/sbin
             ln -s /usr/lib /mnt/lib
             ln -s /usr/lib64 /mnt/lib64
             ${util-linux}/bin/mount -t proc none /mnt/proc
@@ -1031,6 +1032,22 @@ let
         "x86_64"
       ];
       packages = commonFedoraPackages;
+      unifiedSystemDir = true;
+    };
+
+    fedora43x86_64 = {
+      name = "fedora-43-x86_64";
+      fullName = "Fedora 43 (x86_64)";
+      packagesList = fetchurl {
+        url = "https://dl.fedoraproject.org/pub/fedora/linux/releases/43/Everything/x86_64/os/repodata/fffa3e9f63fffd3d21b8ea5e9bb0fe349a7ed1d4e09777a618cec93a2bcc305f-primary.xml.zst";
+        hash = "sha256-//o+n2P//T0huOpem7D+NJp+0dTgl3emGM7JOivMMF8=";
+      };
+      urlPrefix = "https://dl.fedoraproject.org/pub/fedora/linux/releases/43/Everything/x86_64/os";
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonFedoraPackages ++ [ "gpgverify" ];
       unifiedSystemDir = true;
     };
   };
