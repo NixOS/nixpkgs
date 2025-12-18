@@ -2748,10 +2748,6 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter ];
   };
 
-  nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-ufo = super.nvim-ufo.overrideAttrs {
     dependencies = [ self.promise-async ];
   };
