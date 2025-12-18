@@ -425,9 +425,9 @@
   };
 
   nix = {
-    version = "0-unstable-2025-08-11";
-    url = "github:nix-community/tree-sitter-nix/ff4e2b4c5a3598e8be3edf16bc69f6677af32145";
-    hash = "sha256-VPkXKsoKs5ywVIGz+xqvD73nINur2flpEmKUKJRFYy8=";
+    version = "0.3.0-unstable-2025-12-03";
+    url = "github:nix-community/tree-sitter-nix/eabf96807ea4ab6d6c7f09b671a88cd483542840";
+    hash = "sha256-cSiBd0XkSR8l1CF2vkThWUtMxqATwuxCNO5oy2kyOZY=";
   };
 
   norg-meta = {
