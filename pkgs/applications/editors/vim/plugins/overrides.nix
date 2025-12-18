@@ -2641,8 +2641,8 @@ assertNoAdditions {
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       none-ls-nvim
+      nvim-treesitter-parsers.nu
     ];
   };
 
