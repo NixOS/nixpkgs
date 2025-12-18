@@ -419,9 +419,9 @@
   };
 
   nickel = {
-    version = "0.3.0";
-    url = "github:nickel-lang/tree-sitter-nickel?ref=0.3";
-    hash = "sha256-jL054OJj+1eXksNYOTTTFzZjwPqTFp06syC3TInN8rc=";
+    version = "0.5.0";
+    url = "github:nickel-lang/tree-sitter-nickel";
+    hash = "sha256-2la/9XxL2dN+rzTotgDXQFz9ktDXQ3Og9svX5Din2zo=";
   };
 
   nix = {
