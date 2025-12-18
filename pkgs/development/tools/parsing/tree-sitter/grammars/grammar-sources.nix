@@ -676,7 +676,7 @@
   };
 
   tiger = {
-    version = "0-unstable-2025-03-13";
+    version = "0.3.0-unstable-2025-03-13";
     url = "github:ambroisie/tree-sitter-tiger/4a77b2d7a004587646bddc4e854779044b6db459";
     hash = "sha256-jLdJ3nLShoBxVCcUbnaswYG5d4UU8aaE1xexb2LnmTQ=";
   };
