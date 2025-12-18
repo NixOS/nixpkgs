@@ -11,6 +11,7 @@
   mpiCheckPhaseHook,
   ninja,
   cudaPackages_12,
+  cudaPackages_13,
   boost186,
   fmt_10,
   git,
@@ -31,12 +32,15 @@ let
   # include the CUDA libraries.
   cudaPackageSets = [
     cudaPackages_12
+    cudaPackages_13
   ];
 
   # Select needed redist packages from cudaPackages
   # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/scripts/0080_cuda.sh#L24-L39
   getCudaPackages =
-    p: with p; [
+    p:
+    with p;
+    [
       cuda_cccl
       cuda_cudart
       cuda_nvcc
@@ -44,22 +48,21 @@ let
       libcublas
       libcufft
       libcurand
-    ];
+    ]
+    ++ lib.optional (p.cudaMajorVersion >= "13") cuda_crt;
 
   # Builds CMake flags to add CUDA paths for include and lib.
   mkCudaFlags =
     cudaPackages:
     let
       version = cudaPackages.cudaMajorVersion;
-      # The DCGM CMake assumes that the folder containing cuda.h contains all headers, so we must
-      # combine everything together for headers to work.
-      headers = symlinkJoin {
-        name = "cuda-headers-combined-${version}";
-        paths = lib.map (pkg: "${lib.getInclude pkg}/include") (getCudaPackages cudaPackages);
-      };
+      # Create a CMake list format (semicolon-separated, but properly quoted)
+      includePaths = lib.concatMapStringsSep ";" (pkg: "${lib.getInclude pkg}/include") (
+        getCudaPackages cudaPackages
+      );
     in
     [
-      (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${headers}")
+      (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${includePaths}")
       (lib.cmakeFeature "CUDA${version}_LIBS" "${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs/libcuda.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_LIBS" "${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (
@@ -70,27 +73,26 @@ let
       ))
     ];
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
+  version = "4.4.2"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
     # No tag for 4.3.1 yet.
-    #tag = "v${version}";
-    rev = "1477d8785e899ab3450fdff2b486102e9bed096b";
-    hash = "sha256-FebqG28aodENGLNBBbiGpckzzeuP+y44dCALtYnN1yU=";
+    tag = "v${version}";
+    hash = "sha256-md13fDtTGFmxCBK/Or4PvZ7MmBTO0TFHF3Z/KpBAsrs=";
   };
 
   patches = [
     ./remove-cuda-11.patch
     ./dynamic-libs.patch
+    ./fix-cublas-includes.patch
     (replaceVars ./fix-paths.patch {
       inherit coreutils;
       inherit util-linux;
       inherit lshw;
-      inherit mpi;
       inherit (stdenv) shell;
       dcgm_out = null;
     })
@@ -145,10 +147,15 @@ stdenv.mkDerivation {
     "DcgmModuleSysmon::ReadCoreSpeed"
     "DcgmModuleSysmon::ReadTemperature"
     "Sysmon: initialize module"
+
+    # Fail due to missing plugin directory in sandbox
+    "Scenario: GetPluginCudalessDir returns cudaless directory in plugin directory"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
-  cmakeFlags = lib.concatMap mkCudaFlags cudaPackageSets;
+  cmakeFlags = lib.concatMap mkCudaFlags cudaPackageSets ++ [
+    "-DCMAKE_CXX_FLAGS=-D_GNU_SOURCE"
+  ];
 
   # Lots of dodgy C++.
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -157,6 +164,16 @@ stdenv.mkDerivation {
   dontUseNinjaCheck = true;
 
   postPatch = ''
+    # Fix gettid.h to include unistd.h unconditionally
+    sed -i '/#pragma once/a #include <unistd.h>' common/gettid.h
+
+    # Fix jsoncpp_static references to use dynamic library
+    find . -name "CMakeLists.txt" -exec sed -i 's/jsoncpp_static/jsoncpp/g' {} +
+
+    # Remove all the problematic test install commands from mndiag
+    # These create symlinks and directories that aren't needed in Nix
+    sed -i '/^install(CODE "$/,/^    COMPONENT Tests)$/d' modules/mndiag/CMakeLists.txt
+
     while read -r -d "" file; do
       substituteInPlace "$file" --replace-quiet @dcgm_out@ "$out"
     done < <(find . '(' -name '*.h' -or -name '*.cpp' ')' -print0)
