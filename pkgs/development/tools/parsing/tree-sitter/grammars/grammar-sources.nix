@@ -627,9 +627,9 @@
   };
 
   sparql = {
-    version = "0-unstable-2024-06-26";
-    url = "github:bonabeavis/tree-sitter-sparql/d853661ca680d8ff7f8d800182d5782b61d0dd58";
-    hash = "sha256-0BV0y8IyeIPpuxTixlJL1PsDCuhXbGaImu8JU8WFoPU=";
+    version = "0.1.0-unstable-2025-10-15";
+    url = "github:bonabeavis/tree-sitter-sparql/1ef52d35a73a2a5f2e433ecfd1c751c1360a923b";
+    hash = "sha256-9DaV12dkcwF7/jWc4QaTQaHcKu5zO5evWlXGNZMdRqc=";
   };
 
   sql = {
