@@ -20,6 +20,7 @@
   gtksourceview4,
   bash,
   udevCheckHook,
+  versionCheckHook,
   nixosTests,
   # Change the default log level to debug for easier debugging of package issues
   withDebugLogLevel ? false,
@@ -83,8 +84,11 @@ in
   # buildPythonApplication maps nativeCheckInputs to nativeInstallCheckInputs.
   nativeCheckInputs = [
     udevCheckHook
+    versionCheckHook
   ]
   ++ lib.optionals withDoCheck [ psutil ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/input-remapper-control";
 
   pythonImportsCheck = [
     "evdev"
