@@ -203,6 +203,9 @@ buildPythonPackage rec {
     "test_int8_weight_only_quant_with_freeze_0_cpu"
     "test_int8_weight_only_quant_with_freeze_1_cpu"
     "test_int8_weight_only_quant_with_freeze_2_cpu"
+
+    # Illegal instruction in subclass_4bit.py::dequantize
+    "test_subclass_slice"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
