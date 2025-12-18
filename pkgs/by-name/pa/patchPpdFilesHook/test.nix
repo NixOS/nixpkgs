@@ -33,10 +33,10 @@ stdenv.mkDerivation {
   ppdFileCommands = [ "cmp" ];
   preFixup = ''
     install -D "${input}" "${placeholder "out"}/share/cups/model/test.ppd"
-    install -D "${input}" "${placeholder "out"}/share/ppds/test.ppd"
+    install -D "${input}" "${placeholder "out"}/share/ppd/test.ppd"
   '';
   postFixup = ''
     diff --color --report-identical-files "${output}" "${placeholder "out"}/share/cups/model/test.ppd"
-    diff --color --report-identical-files "${output}" "${placeholder "out"}/share/ppds/test.ppd"
+    diff --color --report-identical-files "${output}" "${placeholder "out"}/share/ppd/test.ppd"
   '';
 }
