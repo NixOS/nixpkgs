@@ -1429,7 +1429,7 @@ assertNoAdditions {
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-parsers.haskell ];
   };
 
   haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
