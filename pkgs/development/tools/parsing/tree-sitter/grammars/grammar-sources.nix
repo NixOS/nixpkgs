@@ -120,9 +120,9 @@
   };
 
   earthfile = {
-    version = "0-unstable-2025-05-13";
-    url = "github:glehmann/tree-sitter-earthfile/a37c5ee95ce401ca311c0ae1369d9cfb953e151d";
-    hash = "sha256-lYoS3RtHPYRrkfgo/qqAnT918FXeXnDUhG4l1TMXjb4=";
+    version = "0.6.0-unstable-2025-10-27";
+    url = "github:glehmann/tree-sitter-earthfile/5baef88717ad0156fd29a8b12d0d8245bb1096a8";
+    hash = "sha256-eeXzc+thSPey7r59QkJd5jgchZRhSwT5isSljYLBQ8k=";
   };
 
   eex = {
