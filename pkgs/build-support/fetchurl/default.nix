@@ -227,11 +227,7 @@ lib.extendMkDerivation {
         let
           mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
           mirrorName = lib.head mirrorSplit;
-          mirrorList =
-            if lib.hasAttr mirrorName mirrors then
-              mirrors."${mirrorName}"
-            else
-              throw "unknown mirror:// site ${mirrorName}";
+          mirrorList = mirrors."${mirrorName}" or (throw "unknown mirror:// site ${mirrorName}");
         in
         if mirrorSplit == null || mirrorName == null then
           url
