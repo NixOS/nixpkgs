@@ -26,7 +26,7 @@
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.5.3-qt6";
+  version = "1.5.5-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-uVtvPeGfiCpXIN1aQzF0nw8qNddIeIjFeoKXJUInqwg=";
+    hash = "sha256-QJL2CKcP1Sv7JR2ir0XP4nZUpBeH0NX7QeyrZWPSMoI=";
   };
 
   patches = [
@@ -87,6 +87,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # axml-parser/CMakeLists.txt
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON_EXT" (
       toString (fetchzip {
