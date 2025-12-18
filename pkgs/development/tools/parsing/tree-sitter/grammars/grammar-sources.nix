@@ -12,9 +12,9 @@
   };
 
   bibtex = {
-    version = "0-unstable-2021-03-26";
-    url = "github:latex-lsp/tree-sitter-bibtex/ccfd77db0ed799b6c22c214fe9d2937f47bc8b34";
-    hash = "sha256-wgduSxlpbJy/ITenBLfj5lhziUM1BApX6MjXhWcb7lQ=";
+    version = "0-unstable-2025-04-19";
+    url = "github:latex-lsp/tree-sitter-bibtex/8d04ed27b3bc7929f14b7df9236797dab9f3fa66";
+    hash = "sha256-UOXGWm8k9YP0GUwvNEuIxeiXqJo4Jf9uBt+/oYaYUl4=";
   };
 
   bitbake = {
