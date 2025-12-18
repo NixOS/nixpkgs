@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/ferrum_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/ferrum_${majorVersion}${minorVersion}.zip";
     hash = "sha256-NDJwgFWZgyhMkGRWlY55l2omEw6ju3e3dHCEsWNzQIc=";
     stripRoot = false;
   };
