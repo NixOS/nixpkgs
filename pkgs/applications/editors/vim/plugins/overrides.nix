@@ -3627,10 +3627,6 @@ assertNoAdditions {
     nvimSkipModules = "tsc.better-messages-test";
   };
 
-  tssorter-nvim = super.tssorter-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   tv-nvim = super.tv-nvim.overrideAttrs {
     runtimeDeps = [ television ];
   };
