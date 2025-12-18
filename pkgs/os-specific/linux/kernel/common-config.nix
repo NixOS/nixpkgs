@@ -561,6 +561,10 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
+
+        # Required for Nova
+        # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
+        RUST_FW_LOADER_ABSTRACTIONS = whenAtLeast "6.12" yes;
       }
       //
         lib.optionalAttrs
