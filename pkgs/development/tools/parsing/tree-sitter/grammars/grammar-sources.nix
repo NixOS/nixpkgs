@@ -259,9 +259,9 @@
   };
 
   hcl = {
-    version = "1.1.0";
+    version = "1.2.0";
     url = "github:MichaHoffmann/tree-sitter-hcl";
-    hash = "sha256-saVKSYUJY7OuIuNm9EpQnhFO/vQGKxCXuv3EKYOJzfs=";
+    hash = "sha256-Kq0KtkF6xtZcN2s8KzYGyguJH2iOTlA2WRytZ+KGTUE=";
   };
 
   heex = {
