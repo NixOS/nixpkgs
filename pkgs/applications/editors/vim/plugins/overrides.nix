@@ -1231,10 +1231,6 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   forms = super.forms.overrideAttrs {
     dependencies = [ self.self ];
   };
