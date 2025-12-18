@@ -6,6 +6,7 @@
   jq,
   moreutils,
   emptyFile,
+  hello,
   ...
 }:
 let
@@ -137,5 +138,14 @@ in
     # $downloadedFile, but here we know that because the URL is broken, it will
     # have to fallback to fetching the previously-built derivation from
     # tarballs.nixos.org, which provides pre-built derivation outputs.
+  };
+
+  urls-simple = testers.invalidateFetcherByDrvHash fetchurl {
+    name = "test-fetchurl-urls-simple";
+    urls = [
+      "http://broken"
+      hello.src.resolvedUrl
+    ];
+    hash = hello.src.outputHash;
   };
 }
