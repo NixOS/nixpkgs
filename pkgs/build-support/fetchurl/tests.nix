@@ -3,6 +3,7 @@
   testers,
   fetchurl,
   writeShellScriptBin,
+  writeText,
   jq,
   moreutils,
   emptyFile,
@@ -147,5 +148,24 @@ in
       hello.src.resolvedUrl
     ];
     hash = hello.src.outputHash;
+  };
+
+  urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl rec {
+    name = "test-fetchurl-urls-simple";
+    urls = [
+      "http://broken"
+    ]
+    ++ hello.src.urls;
+    hash = hello.src.outputHash;
+    postFetch = hello.postFetch or "" + ''
+      if ! diff -u ${
+        builtins.toFile "urls-resolved-by-eval" (
+          lib.concatStringsSep "\n" (lib.concatMap fetchurl.resolveUrl urls) + "\n"
+        )
+      } <(printf '%s\n' "''${resolvedUrls[@]}"); then
+        echo "ERROR: fetchurl: build-time-resolved URLs \`urls' differ from the evaluation-resolved URLs." >&2
+        exit 1
+      fi
+    '';
   };
 }
