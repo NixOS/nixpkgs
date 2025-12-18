@@ -42,7 +42,7 @@
   };
 
   clojure = {
-    version = "0-unstable-2025-08-26";
+    version = "0.0.13-unstable-2025-08-26";
     url = "github:sogaiu/tree-sitter-clojure/e43eff80d17cf34852dcd92ca5e6986d23a7040f";
     hash = "sha256-jokekIuuQLx5UtuPs4XAI+euispeFCwSQByVKVelrC4=";
   };
