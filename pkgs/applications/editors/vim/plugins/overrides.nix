@@ -2647,10 +2647,6 @@ assertNoAdditions {
     ];
   };
 
-  nvim-paredit = super.nvim-paredit.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
-  };
-
   nvim-rip-substitute = super.nvim-rip-substitute.overrideAttrs {
     buildInputs = [ ripgrep ];
   };
