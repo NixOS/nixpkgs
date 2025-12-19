@@ -14,8 +14,6 @@ buildDunePackage {
   pname = "atd";
   inherit (atdgen-codec-runtime) version src;
 
-  minimalOCamlVersion = "4.08";
-
   nativeBuildInputs = [ menhir ];
   buildInputs = [ cmdliner ];
   propagatedBuildInputs = [
