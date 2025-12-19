@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # requires nightly features
-  RUSTC_BOOTSTRAP = true;
+  env.RUSTC_BOOTSTRAP = true;
 
   meta = {
     description = "Functional programming language and proof assistant";
