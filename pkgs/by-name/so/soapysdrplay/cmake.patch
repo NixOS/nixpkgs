@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1ca2171..2928008 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ ########################################################################
+ # Build Soapy SDR support module for SDRplay (API version 3)
+ ########################################################################
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.10)
+ project(SoapySDRPlay CXX)
+ 
+ find_package(SoapySDR "0.4.0" NO_MODULE REQUIRED)
