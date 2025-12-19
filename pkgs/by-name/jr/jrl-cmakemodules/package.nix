@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   cmake,
+  sphinxHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,36 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TUewcxvBGYF3WpqkiWvZzmbyXyaM+UqzHLVsaUJdC0w=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    sphinxHook
+  ];
+
+  sphinxRoot = "../.docs";
+
+  postPatch = ''
+    patchShebangs _unittests/run_unit_tests.sh
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd ../_unittests
+    ./run_unit_tests.sh
+    cmake -P test_pkg-config.cmake
+
+    rm -rf build install
+    popd
+
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
