@@ -1,0 +1,13 @@
+diff --git a/src/filesystem.rs b/src/filesystem.rs
+index 28c2a01..cfc8fcb 100644
+--- a/src/filesystem.rs
++++ b/src/filesystem.rs
+@@ -44,7 +44,7 @@ wrap2!(copy, fs, u64);
+ 
+ macro_rules! make_error_message {
+     ($path:ident) => {
+-        |err| Error::new(format!("{}: {}", $path.display(), err));
++        |err| Error::new(format!("{}: {}", $path.display(), err))
+     };
+ }
+ 
