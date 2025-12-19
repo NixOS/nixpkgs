@@ -28,6 +28,7 @@
   freetype,
   gst_all_1,
   harfbuzz,
+  icu77,
   libGL,
   libunwind,
   libxkbcommon,
@@ -83,6 +84,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-FR9/5aZ7e2ekYYCFQMr55JXuJScqjDKb4o+w6nNr4yo=";
 
+  patches = [
+    ./servo-use-system-icu.patch
+  ];
+
+  postPatch = ''
+    patch -p1 -d ../servo-*-vendor/mozjs_sys-*/ -i ${./mozjs-use-system-icu.patch}
+  '';
+
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
   preConfigure = ''
@@ -121,6 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     harfbuzz
+    icu77
     libunwind
     libGL
     zlib
@@ -138,16 +148,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "servo_allocator/use-system-allocator"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # mozjs-sys fails with:
-      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
-      "-Wno-error=format-security"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-    ]
-  );
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        # mozjs-sys fails with:
+        #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+        "-Wno-error=format-security"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      ]
+    );
+    MOZJS_USE_SYSTEM_ICU = "1";
+  };
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
