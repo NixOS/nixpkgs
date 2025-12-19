@@ -12,7 +12,7 @@
 # version of prisma-engines and prisma must be the same for them to
 # function correctly.
 rustPlatform.buildRustPackage rec {
-  pname = "prisma-engines";
+  pname = "prisma-engines_6";
   version = "6.19.0";
 
   src = fetchFromGitHub {

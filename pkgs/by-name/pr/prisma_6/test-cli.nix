@@ -1,19 +1,19 @@
 {
   lib,
   runCommand,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
   sqlite-interactive,
 }:
 
 let
-  prismaMajorVersion = lib.versions.majorMinor prisma.version;
-  enginesMajorVersion = lib.versions.majorMinor prisma-engines.version;
+  prismaMajorVersion = lib.versions.majorMinor prisma_6.version;
+  enginesMajorVersion = lib.versions.majorMinor prisma-engines_6.version;
 in
 runCommand "prisma-cli-tests"
   {
     nativeBuildInputs = [
-      prisma
+      prisma_6
       sqlite-interactive
     ];
     meta.timeout = 60;

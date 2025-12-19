@@ -6,14 +6,14 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  prisma-engines,
+  prisma-engines_6,
   jq,
   makeWrapper,
   moreutils,
   callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "prisma";
+  pname = "prisma_6";
   version = "6.19.0";
 
   src = fetchFromGitHub {
@@ -86,9 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/prisma" \
       --add-flags "$out/lib/prisma/packages/cli/build/index.js" \
-      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-      --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node
+      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines_6}/bin/schema-engine \
+      --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines_6}/bin/query-engine \
+      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines_6}/lib/libquery_engine.node
 
     runHook postInstall
   '';
