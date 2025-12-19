@@ -7,20 +7,32 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "deskreen";
-  version = "2.0.4";
+  version = "3.2.1";
 
-  src = fetchurl {
-    url = "https://github.com/pavlobu/deskreen/releases/download/v${finalAttrs.version}/Deskreen-${finalAttrs.version}.AppImage";
-    hash = "sha256-0jI/mbXaXanY6ay2zn+dPWGvsqWRcF8aYHRvfGVsObE=";
-  };
+  src =
+    let
+      sources = {
+        x86_64-linux = {
+          arch = "x86_64";
+          hash = "sha256-yuz6F/sTWgH8YA710BxsCNTMYXUnC++f8DcefmugkvM=";
+        };
+        aarch64-linux = {
+          arch = "arm64";
+          hash = "sha256-SqbDHkXQHRbrH723ECHhyrYJcJnDG+9LawEWED6xT/k=";
+        };
+        # TODO more sources could be added
+      };
+    in
+    fetchurl {
+      url = "https://github.com/pavlobu/deskreen/releases/download/v${finalAttrs.version}/deskreen-ce-${finalAttrs.version}-${
+        sources.${stdenvNoCC.hostPlatform.system}.arch
+      }.AppImage";
+      inherit (sources.${stdenvNoCC.hostPlatform.system}) hash;
+    };
+
   deskreenUnwrapped = appimageTools.wrapType2 {
-    inherit (finalAttrs) pname version;
-    src = finalAttrs.src;
+    inherit (finalAttrs) pname version src;
   };
-
-  buildInputs = [
-    finalAttrs.deskreenUnwrapped
-  ];
 
   dontUnpack = true;
   dontBuild = true;
@@ -42,6 +54,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       leo248
     ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })
