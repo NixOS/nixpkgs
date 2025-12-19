@@ -3,7 +3,6 @@
   lib,
   openssl,
   pkg-config,
-  protobuf,
   rustPlatform,
   stdenv,
 }:
@@ -34,9 +33,6 @@ rustPlatform.buildRustPackage rec {
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
-
-    export PROTOC=${protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${protobuf}/include";
 
     export SQLITE_MAX_VARIABLE_NUMBER=250000
     export SQLITE_MAX_EXPR_DEPTH=10000
