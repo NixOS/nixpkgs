@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jL8kf63MsCbTTvYn1M7YbpUOMXPl2h/ZY7Rpz2rAr34=";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://download.strongswan.org/security/CVE-2025-9615/NetworkManager-strongswan-1.5.0-1.6.3_nm_credential_access.patch";
+      hash = "sha256-gqpFRHeIkg9sNZ5yDjdQTSB0NqpwLzqoZPoqDoFYIZ0=";
+    })
+  ];
+
   nativeBuildInputs = [
     intltool
     pkg-config
