@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -58,6 +59,14 @@ buildPythonPackage rec {
     "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Hang forever
+    "test/examples/test_spectral_mixture_gp_regression.py"
+    "test/kernels/test_spectral_mixture_kernel.py"
+    "test/utils/test_nearest_neighbors.py"
+    "test/variational/test_nearest_neighbor_variational_strategy.py"
   ];
 
   meta = {
