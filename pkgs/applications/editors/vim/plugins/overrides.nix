@@ -826,13 +826,6 @@ assertNoAdditions {
     '';
   };
 
-  completion-treesitter = super.completion-treesitter.overrideAttrs {
-    dependencies = with self; [
-      completion-nvim
-      nvim-treesitter
-    ];
-  };
-
   conjure = super.conjure.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
@@ -2519,10 +2512,6 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
-  nvim-gps = super.nvim-gps.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
@@ -3020,13 +3009,6 @@ assertNoAdditions {
     dependencies = [ self.LibDeflate-nvim ];
   };
 
-  playground = super.playground.overrideAttrs {
-    dependencies = with self; [
-      # we need the 'query' grammar to make
-      (nvim-treesitter.withPlugins (p: [ p.query ]))
-    ];
-  };
-
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
     # Optional treesitter support
     nvimSkipModules = "poimandres.highlights";
@@ -3380,14 +3362,6 @@ assertNoAdditions {
         description = "synctex support between vim/neovim and evince";
       };
     });
-
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs (old: {
-    dependencies = [ self.nvim-treesitter ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ callumio ];
-    };
-  });
 
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
