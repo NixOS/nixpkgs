@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
 
   checkFlags = [
-    "--skip test_github" # requires internet
+    "--skip=test_github" # requires internet
   ];
 
   meta = {
