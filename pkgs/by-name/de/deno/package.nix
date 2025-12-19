@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # unit tests
-    "--test integration_tests"
+    "--test=integration_tests"
     # Test targets not included here:
     # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
     # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
