@@ -300,26 +300,26 @@ WRAPPER_DEF(execv)
 
 WRAPPER(int, execvp)(const char * path, char * const argv[])
 {
-    int (*_execvp) (const char *, char * const argv[]) = LOOKUP_REAL(execvp);
+    int (*execvp_real) (const char *, char * const argv[]) = LOOKUP_REAL(execvp);
     char buf[PATH_MAX];
-    return _execvp(rewrite(path, buf), argv);
+    return execvp_real(rewrite(path, buf), argv);
 }
 WRAPPER_DEF(execvp)
 
 WRAPPER(int, execve)(const char * path, char * const argv[], char * const envp[])
 {
-    int (*_execve) (const char *, char * const argv[], char * const envp[]) = LOOKUP_REAL(execve);
+    int (*execve_real) (const char *, char * const argv[], char * const envp[]) = LOOKUP_REAL(execve);
     char buf[PATH_MAX];
-    return _execve(rewrite(path, buf), argv, envp);
+    return execve_real(rewrite(path, buf), argv, envp);
 }
 WRAPPER_DEF(execve)
 
 WRAPPER(DIR *, opendir)(const char * path)
 {
     char buf[PATH_MAX];
-    DIR * (*_opendir) (const char*) = LOOKUP_REAL(opendir);
+    DIR * (*opendir_real) (const char*) = LOOKUP_REAL(opendir);
 
-    return _opendir(rewrite(path, buf));
+    return opendir_real(rewrite(path, buf));
 }
 WRAPPER_DEF(opendir)
 
@@ -383,11 +383,11 @@ static void rewriteSystemCall(const char * command, char * buf) {
 
 WRAPPER(int, system)(const char *command)
 {
-    int (*_system) (const char*) = LOOKUP_REAL(system);
+    int (*system_real) (const char*) = LOOKUP_REAL(system);
 
     char newCommand[SYSTEM_CMD_MAX];
     rewriteSystemCall(command, newCommand);
-    return _system(newCommand);
+    return system_real(newCommand);
 }
 WRAPPER_DEF(system)
 
