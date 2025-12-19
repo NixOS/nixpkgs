@@ -28,7 +28,7 @@ versions into the Python environment.
 buildHomeAssistantComponent {
   # owner, domain, version
 
-  src = fetchFromGithub {
+  src = fetchFromGitHub {
     # owner, repo, rev, hash
   };
 
