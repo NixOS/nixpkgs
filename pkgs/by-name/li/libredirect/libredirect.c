@@ -325,6 +325,16 @@ WRAPPER(DIR *, opendir)(const char * path)
 WRAPPER_DEF(opendir)
 
 #if !defined(__APPLE__)
+WRAPPER(ssize_t, listxattr)(const char * path, char * list, size_t size)
+{
+    int (*listxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(listxattr);
+    char buf[PATH_MAX];
+    return listxattr_real(rewrite(path, buf), list, size);
+}
+WRAPPER_DEF(listxattr);
+#endif
+
+#if !defined(__APPLE__)
 WRAPPER(ssize_t, llistxattr)(const char * path, char * list, size_t size)
 {
     int (*llistxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(llistxattr);
