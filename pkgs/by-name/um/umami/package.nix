@@ -46,7 +46,7 @@ let
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
-      rev = version;
+      tag = version;
       hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
     };
     cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
@@ -62,7 +62,7 @@ let
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma";
-      rev = version;
+      tag = version;
       hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
     };
     pnpmDeps = old.pnpmDeps.override {
