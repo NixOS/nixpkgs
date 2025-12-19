@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     description = "Trivial Markdown to HTML converter";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
     mainProgram = "emem";
   };

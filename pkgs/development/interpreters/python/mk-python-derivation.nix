@@ -417,8 +417,6 @@ let
           dependencies
           optional-dependencies
           ;
-      }
-      // {
         updateScript = nix-update-script { };
       }
       // attrs.passthru or { };

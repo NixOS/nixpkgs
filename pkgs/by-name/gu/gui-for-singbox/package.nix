@@ -8,6 +8,8 @@
   nodejs,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -39,16 +41,18 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
       hash = "sha256-MA0CNF2MTCGvsxvEpRbTFu5Diap4XkIHKnxeROkgwnU=";
     };

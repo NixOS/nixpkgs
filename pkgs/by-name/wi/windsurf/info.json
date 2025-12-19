@@ -1,20 +1,20 @@
 {
   "aarch64-darwin": {
-    "version": "1.12.43",
+    "version": "1.12.47",
     "vscodeVersion": "1.106.0",
-    "url": "https://windsurf-stable.codeiumdata.com/darwin-arm64/stable/8b6a7c68fb76075b29a085605ef19c1d660a258e/Windsurf-darwin-arm64-1.12.43.zip",
-    "sha256": "17c080308b63ee72ba70655082f0a9e586755cc6616038b72d2b362450bc7cad"
+    "url": "https://windsurf-stable.codeiumdata.com/darwin-arm64/stable/8951cd3ad688e789573d7f51750d67ae4a0bea7d/Windsurf-darwin-arm64-1.12.47.zip",
+    "sha256": "92413d066d9e8dda8fc081a9a958508cf427a9457502b837c7516187c45b6523"
   },
   "x86_64-darwin": {
-    "version": "1.12.43",
+    "version": "1.12.47",
     "vscodeVersion": "1.106.0",
-    "url": "https://windsurf-stable.codeiumdata.com/darwin-x64/stable/8b6a7c68fb76075b29a085605ef19c1d660a258e/Windsurf-darwin-x64-1.12.43.zip",
-    "sha256": "87d53b2dc977975a7876eaac3fe2306520e40ffb1e022dd11585ffedc68721c8"
+    "url": "https://windsurf-stable.codeiumdata.com/darwin-x64/stable/8951cd3ad688e789573d7f51750d67ae4a0bea7d/Windsurf-darwin-x64-1.12.47.zip",
+    "sha256": "35ab590001e5aed09d73056584a1df4f477e47105bb89aad920b1f481338f477"
   },
   "x86_64-linux": {
-    "version": "1.12.43",
+    "version": "1.12.47",
     "vscodeVersion": "1.106.0",
-    "url": "https://windsurf-stable.codeiumdata.com/linux-x64/stable/8b6a7c68fb76075b29a085605ef19c1d660a258e/Windsurf-linux-x64-1.12.43.tar.gz",
-    "sha256": "c7f3c83561e40c63b36eff39bcfe8591250e735da3ecc2b29c277b8e04856825"
+    "url": "https://windsurf-stable.codeiumdata.com/linux-x64/stable/8951cd3ad688e789573d7f51750d67ae4a0bea7d/Windsurf-linux-x64-1.12.47.tar.gz",
+    "sha256": "6237203ae97062d57711f9cf2562b9aea4d268cd930d9d0c7fd0c4d9c9d89cb3"
   }
 }

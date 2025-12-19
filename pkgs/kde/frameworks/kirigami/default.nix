@@ -27,6 +27,10 @@ let
         url = "https://invent.kde.org/frameworks/kirigami/-/commit/19127672cd812d177192cf84da4107f9abed2934.diff";
         hash = "sha256-dh1OwMTksbVTEsEDw4vfBarR3fyBaulQa8SSHsddht0=";
       })
+      (fetchpatch {
+        url = "https://invent.kde.org/frameworks/kirigami/-/commit/d13c1cb97313947f7f0e43f54585a83286604370.diff";
+        hash = "sha256-xAm08K1slaUhHT1aPl8n9Hz0EMlAlVSRYA0iHRhH36c=";
+      })
     ];
 
     extraNativeBuildInputs = [

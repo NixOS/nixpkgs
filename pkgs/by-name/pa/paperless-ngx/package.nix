@@ -17,7 +17,9 @@
   qpdf,
   tesseract5,
   unpaper,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -59,6 +61,8 @@ let
     };
   };
 
+  pnpm' = pnpm_10.override { nodejs = nodejs_20; };
+
   path = lib.makeBinPath [
     ghostscript_headless
     (imagemagickBig.override { ghostscript = ghostscript_headless; })
@@ -77,8 +81,9 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm';
       fetcherVersion = 2;
       hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
     };
@@ -87,7 +92,8 @@ let
       node-gyp
       nodejs_20
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm'
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

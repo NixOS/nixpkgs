@@ -5,6 +5,8 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   autoPatchelfHook,
   cacert,
   llvmPackages,
@@ -26,13 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aDBKdpAoeVmKRvgNfQ9UrwpoeRG+WWHJ9pu1jrnxA0M=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-TiaMBbx3diKkyYWD0tbqnLwvvjF4LfL/GhlONJ0iUH4=";
   };
@@ -59,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     jq
     moreutils
   ]

@@ -5,6 +5,8 @@
   makeWrapper,
   nix-update-script,
   nodejs,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
   versionCheckHook,
 }:
@@ -26,11 +28,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   pnpmWorkspaces = [ workspace ];
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version

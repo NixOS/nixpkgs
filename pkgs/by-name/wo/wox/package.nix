@@ -6,6 +6,8 @@
   keybinder3,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3Packages,
   writableTmpDirAsHomeHook,
   buildGoModule,
@@ -64,16 +66,18 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 2;
       hash = "sha256-OyXYuUCvT9I5xusouoBG9CX4Efl+aTZAYSkOBVDzQVs=";
     };

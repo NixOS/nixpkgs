@@ -4,8 +4,9 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
 buildGoModule rec {
   pname = "immich-kiosk";
   version = "0.28.1";
@@ -23,8 +24,13 @@ buildGoModule rec {
   '';
   vendorHash = "sha256-5y//CdHgQjNJayNI/jzdD5WPa4XlIxMonqkPc/kJp8c=";
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
     sourceRoot = "${src.name}/frontend";
     hash = "sha256-FThVaNUUE3QCbq0iPRCet4SnlHCCQaw3N5PThKSM1ek=";
     fetcherVersion = 2;
@@ -35,13 +41,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   # Generate templ templates during vendor hash calculation
-  # Don't run pnpm in this phase - filter out pnpm.configHook
+  # Don't run pnpm in this phase - filter out pnpmConfigHook
   overrideModAttrs = oldAttrs: {
-    nativeBuildInputs = builtins.filter (drv: drv != pnpm_9.configHook) (
+    nativeBuildInputs = builtins.filter (drv: drv != pnpmConfigHook) (
       oldAttrs.nativeBuildInputs or [ ]
     );
     preBuild = ''

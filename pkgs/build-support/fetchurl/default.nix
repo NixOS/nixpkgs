@@ -333,15 +333,6 @@ lib.extendMkDerivation {
 
       inherit preferLocalBuild;
 
-      postHook =
-        if netrcPhase == null then
-          null
-        else
-          ''
-            ${netrcPhase}
-            curlOpts="$curlOpts --netrc-file $PWD/netrc"
-          '';
-
       inherit meta;
       passthru = {
         inherit url resolvedUrl;

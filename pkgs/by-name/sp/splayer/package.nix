@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   electron,
   makeWrapper,
@@ -22,16 +24,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7guh5KJ9RbYCiifH0ERXbIXxoJDxanUAHAf/zux7yU4=";
   };
 
-  pnpm = pnpm_10;
-
-  pnpmDeps = finalAttrs.pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-3t9Qx+1OQwqVvzgYssP8azGG/PNSJkrG614wQh0W4WQ=";
   };
 
   nativeBuildInputs = [
-    finalAttrs.pnpm.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     makeWrapper
     copyDesktopItems
