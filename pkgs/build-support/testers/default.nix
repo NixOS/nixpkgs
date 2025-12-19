@@ -132,6 +132,7 @@
   invalidateFetcherByDrvHash =
     f: args:
     let
+      optionalFix = if lib.isFunction args then lib.id else lib.fix;
       unsalted = f args;
       drvPath = unsalted.drvPath;
       # It's safe to discard the context, because we don't access the path.
@@ -144,7 +145,7 @@
         else
           { name = saltName args.name or "source"; };
       # New derivation incorporating the original drv hash in the name
-      saltedByArgs = f (args // getSaltedNames args);
+      saltedByArgs = f (optionalFix (lib.extends (lib.toExtension getSaltedNames) (lib.toFunction args)));
       saltedByOverrideAttrs = unsalted.overrideAttrs (previousAttrs: getSaltedNames previousAttrs);
       saltedByOverrideAttrsForced = unsalted.overrideAttrs (previousAttrs: {
         name = saltName unsalted.name;
