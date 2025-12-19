@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "prisma";
     maintainers = with lib.maintainers; [
-      tomhoule
       aqrln
     ];
   };
