@@ -94,8 +94,6 @@ stdenv.mkDerivation rec {
     # Copy package contents to the output directory
     mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
     cp -r * "$prefix/usr/lib/zotero-bin-${version}"
-    mkdir -p "$out/bin"
-    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
 
     # Replace bundled shared libraries with system-provided ones
     for path in ${firefox-esr}/lib/firefox ${nspr}/lib ${nss}/lib; do
@@ -121,21 +119,16 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for executable in \
-      zotero-bin plugin-container updater vaapitest \
-      minidump-analyzer glxtest
-    do
-      if [ -e "$out/usr/lib/zotero-bin-${version}/$executable" ]; then
-        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          "$out/usr/lib/zotero-bin-${version}/$executable"
-      fi
-    done
     find . -executable -type f -exec \
-      patchelf --set-rpath "$libPath" \
-        "$out/usr/lib/zotero-bin-${version}/{}" \;
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        "$out/usr/lib/zotero-bin-${version}/{}" \
+        --set-rpath "$libPath" \;
 
     patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 \
       "$out/usr/lib/zotero-bin-${version}/zotero-bin"
+
+    makeWrapper $out/usr/lib/zotero-bin-${version}/zotero $out/bin/zotero \
+      ''${gappsWrapperArgs[@]}
   '';
 
   meta = {
