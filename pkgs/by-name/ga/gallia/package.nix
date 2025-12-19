@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     boltons
     construct
-    more-itertools
     platformdirs
     pydantic
     tabulate
