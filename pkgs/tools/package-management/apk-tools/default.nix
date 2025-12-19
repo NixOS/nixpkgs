@@ -8,7 +8,7 @@
   zlib,
   zstd,
   luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
-  lua,
+  lua5_3,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     scdoc
   ]
   ++ lib.optionals luaSupport [
-    lua
-    lua.pkgs.lua-zlib
+    lua5_3
+    lua5_3.pkgs.lua-zlib
   ];
   buildInputs = [
     openssl
     zlib
     zstd
   ]
-  ++ lib.optional luaSupport lua;
+  ++ lib.optional luaSupport lua5_3;
   strictDeps = true;
 
   makeFlags = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(out)/bin"
     "LIBDIR=$(out)/lib"
     "LUA=${if luaSupport then "lua" else "no"}"
-    "LUA_LIBDIR=$(out)/lib/lua/${lib.versions.majorMinor lua.version}"
+    "LUA_LIBDIR=$(out)/lib/lua/${lib.versions.majorMinor lua5_3.version}"
     "MANDIR=$(out)/share/man"
     "DOCDIR=$(out)/share/doc/apk"
     "INCLUDEDIR=$(out)/include"
