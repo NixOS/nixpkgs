@@ -6,20 +6,21 @@
   scdoc,
   openssl,
   zlib,
+  zstd,
   luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
   lua,
 }:
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
-  version = "2.14.10";
+  version = "3.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
-    sha256 = "sha256-9TSkcJe7FVdTtfcCmwp+IWMYa/OL9OXJwPcKLyj5AAA=";
+    sha256 = "sha256-ydqJiLkz80TQGyf9m/l8HSXfoTAvi0av7LHETk1c0GI=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     zlib
+    zstd
   ]
   ++ lib.optional luaSupport lua;
   strictDeps = true;
