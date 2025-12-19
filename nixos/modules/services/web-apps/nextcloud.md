@@ -234,6 +234,21 @@ However, it's possible to use e.g. `httpd` by explicitly disabling
 settings `listen.owner` &amp; `listen.group` in the
 [`phpfpm` pool `nextcloud`](#opt-services.phpfpm.pools).
 
+## Disabling Apps {#disabling-apps-nextcloud}
+
+Nextcloud apps are disabled statefully through the web interface.
+Apps including built-in apps need the app-id to be disabled.
+
+With this optional you can send a list of app-ids and they will all be disabled:
+
+```nix
+{ config, pkgs, ... }:
+[
+  "app_api"
+  "contacts"
+]
+```
+
 ## Installing Apps and PHP extensions {#installing-apps-php-extensions-nextcloud}
 
 Nextcloud apps are installed statefully through the web interface.

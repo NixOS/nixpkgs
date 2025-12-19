@@ -35,6 +35,7 @@ runTest (
               logLevel = "debug";
             };
             extraAppsEnable = true;
+            disableApps = [ "app_api" ];
             # This test also validates that we can use an "external" database
             database.createLocally = false;
             config = {
@@ -93,6 +94,9 @@ runTest (
     };
 
     test-helpers.extraTests = ''
+      with subtest("disable-apps unit contains disable command"):
+          nextcloud.succeed('grep -F "app:disable app_api" /etc/systemd/system/nextcloud-setup.service')
+
       with subtest("non-empty redis cache"):
           # redis cache should not be empty
           assert nextcloud.succeed('redis-cli --pass secret --json KEYS "*" | jq length').strip() != "0", """

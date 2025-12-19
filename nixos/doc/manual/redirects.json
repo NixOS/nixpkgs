@@ -701,6 +701,9 @@
   "module-services-nextcloud-occ": [
     "index.html#module-services-nextcloud-occ"
   ],
+  "disabling-apps-nextcloud": [
+    "index.html#disabling-apps-nextcloud"
+  ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"
   ],
