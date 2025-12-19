@@ -6,16 +6,18 @@
 
 buildGoModule rec {
   pname = "certgraph";
-  version = "20220513";
+  version = "20220513.20220514.0";
 
   src = fetchFromGitHub {
     owner = "lanrat";
     repo = "certgraph";
-    rev = version;
-    sha256 = "sha256-7tvPiJHZE9X7I79DFNF1ZAQiaAkrtrXiD2fY7AkbWMk=";
+    tag = "v${version}";
+    sha256 = "sha256-OQkPWImUPgn8kQ1Ong1D+0y/rUjHitsE4UPwMcrKbvc=";
   };
 
-  vendorHash = "sha256-ErTn7pUCtz6ip2kL8FCe+3Rhs876xtqto+z5nZqQ6cI=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-l1tjBG9qXCtys6WIT7JysWQZjMje7lXmXmvyMrpNj9U=";
 
   meta = {
     description = "Intelligence tool to crawl the graph of certificate alternate names";
