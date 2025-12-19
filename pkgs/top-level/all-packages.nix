@@ -7924,14 +7924,14 @@ with pkgs;
 
   openal = openalSoft;
 
-  opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
+  opencascade-occt_7_6 = opencascade-occt.overrideAttrs {
     pname = "opencascade-occt";
     version = "7.6.2";
-    commit = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    src = fetchurl {
-      name = "occt-${commit}.tar.gz";
-      url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-      hash = "sha256-n3KFrN/mN1SVXfuhEUAQ1fJzrCvhiclxfEIouyj9Z18=";
+    src = fetchFromGitHub {
+      owner = "Open-Cascade-SAS";
+      repo = "OCCT";
+      tag = "V7_6_2";
+      hash = "sha256-tg71cFx9HZ471T/3No9CeEHi8VSo0ZITIuNfTSNB2qU=";
     };
     patches = [
       # Backport GCC 14 build fix

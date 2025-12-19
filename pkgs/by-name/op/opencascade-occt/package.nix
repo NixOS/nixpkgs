@@ -22,12 +22,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencascade-occt";
   version = "7.8.1";
-  commit = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
 
   src = fetchFromGitHub {
     owner = "Open-Cascade-SAS";
     repo = "OCCT";
-    tag = finalAttrs.commit;
+    tag = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-tg71cFx9HZ471T/3No9CeEHi8VSo0ZITIuNfTSNB2qU=";
   };
 
