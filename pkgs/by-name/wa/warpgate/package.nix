@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage (
       description = "Smart SSH, HTTPS, MySQL and Postgres bastion that requires no additional client-side software";
       homepage = "https://warpgate.null.page";
       license = lib.licenses.asl20;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "warpgate";
       maintainers = with lib.maintainers; [ alemonmk ];
     };
