@@ -135,8 +135,15 @@
       drvPath = (f args).drvPath;
       # It's safe to discard the context, because we don't access the path.
       salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
+      saltName = name: "${name}-salted-${salt}";
+      getSaltedNames =
+        args:
+        if args.pname or null != null then
+          { pname = saltName args.pname; }
+        else
+          { name = saltName args.name or "source"; };
       # New derivation incorporating the original drv hash in the name
-      salted = f (args // { name = "${args.name or "source"}-salted-${salt}"; });
+      salted = f (args // getSaltedNames args);
       # Make sure we did change the derivation. If the fetcher ignores `name`,
       # `invalidateFetcherByDrvHash` doesn't work.
       checked =
