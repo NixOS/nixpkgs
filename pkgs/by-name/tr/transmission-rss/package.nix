@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
     description = "Add torrents to transmission based on RSS list";
