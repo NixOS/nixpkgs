@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/pull/449689
     # Upstream: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5531
     ./patches/3.0-mr5531-backport.patch
+    ./patches/3.0-fix-pkg-config-deps.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
