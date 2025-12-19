@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dmidecode";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchurl {
     url = "mirror://savannah/dmidecode/dmidecode-${version}.tar.xz";
-    sha256 = "sha256-5Axl8+w9r+Ma2DSaTvGpcSLTj2UATtZldeGo1XXdi64=";
+    sha256 = "sha256-LDrtEshaHmqUENQG1eQXxFVGbcG8fIkni7Ms98rZHoo=";
   };
 
   makeFlags = [
