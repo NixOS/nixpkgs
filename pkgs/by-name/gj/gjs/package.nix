@@ -103,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
-    "-Dprofiler=disabled"
+    (lib.mesonEnable "profiler" false)
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
