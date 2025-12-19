@@ -4,40 +4,48 @@
   stdenv,
   cmake,
   ninja,
+  python3,
   wrapQtAppsHook,
   qtbase,
   qtdeclarative,
   qtwebchannel,
   qtwebengine,
+  mpv-unwrapped,
   mpvqt,
   libcec,
   SDL2,
   libXrandr,
+  cacert,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
-  pname = "jellyfin-media-player";
+  pname = "jellyfin-desktop";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
-    repo = "jellyfin-media-player";
+    repo = "jellyfin-desktop";
     rev = "v${version}";
-    hash = "sha256-tdjmOeuC3LFEIDSH8X9LG/myvE1FoxwR1zpDQRyaTkQ=";
+    hash = "sha256-ITlYOrMS6COx9kDRSBi4wM6mzL/Q2G5X9GbABwDIOe4=";
+    fetchSubmodules = true;
   };
+  patches = [
+    ./non-fatal-unique-app.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
     wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin python3;
 
   buildInputs = [
     qtbase
     qtdeclarative
     qtwebchannel
     qtwebengine
-
-    mpvqt
+    mpv-unwrapped
 
     # input sources
     libcec
@@ -45,23 +53,33 @@ stdenv.mkDerivation rec {
 
     # frame rate switching
     libXrandr
-  ];
+    cacert
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) mpvqt;
 
   cmakeFlags = [
     "-DCHECK_FOR_UPDATES=OFF"
-    "-DUSE_STATIC_MPVQT=OFF"
     # workaround for Qt cmake weirdness
     "-DQT_DISABLE_NO_DEFAULT_PATH_IN_QT_PACKAGES=ON"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DUSE_STATIC_MPVQT=ON"
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DUSE_STATIC_MPVQT=OFF";
+
+  qtWrapperArgs = [
+    "--set QT_STYLE_OVERRIDE Fusion"
+    "--set NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
-    mv "$out/Jellyfin Media Player.app" $out/Applications
-    ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
+    mv "$out/Jellyfin Desktop.app" $out/Applications
+    ln -s "$out/Applications/Jellyfin Desktop.app/Contents/MacOS/Jellyfin Desktop" $out/bin/jellyfindesktop
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://github.com/jellyfin/jellyfin-media-player";
+    homepage = "https://github.com/jellyfin/jellyfin-desktop";
     description = "Jellyfin Desktop Client";
     license = with lib.licenses; [
       gpl2Only
@@ -78,6 +96,6 @@ stdenv.mkDerivation rec {
       kranzes
       paumr
     ];
-    mainProgram = "jellyfinmediaplayer";
+    mainProgram = "jellyfin-desktop";
   };
 }

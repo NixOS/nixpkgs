@@ -13,6 +13,7 @@
   menhir,
   menhirLib,
   menhirSdk,
+  seq,
   # Each releases of Merlin support a limited range of versions of OCaml.
   version ?
     {
@@ -85,7 +86,8 @@ buildDunePackage {
     (if lib.versionAtLeast version "4.7-414" then merlin-lib else csexp)
     menhirSdk
     menhirLib
-  ];
+  ]
+  ++ lib.optional (!lib.versionAtLeast version "4.7-414") seq;
 
   doCheck = false;
   checkPhase = ''
