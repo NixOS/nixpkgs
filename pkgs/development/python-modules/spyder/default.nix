@@ -59,12 +59,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.1";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-swpIjmkrEljaPc2eA7YbXwXRuq2mOvga6Zm8v4acYU4=";
+    hash = "sha256-bgkiihfqqIHnYes5gvIvAdQ7arUAm7NmGLaqnP/Ml40=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
