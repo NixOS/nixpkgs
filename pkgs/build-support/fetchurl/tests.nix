@@ -141,6 +141,24 @@ in
     # tarballs.nixos.org, which provides pre-built derivation outputs.
   };
 
+  showURLs-urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl (finalAttrs: {
+    name = "test-fetchurl-showURLs-urls-mirrors";
+    showURLs = true;
+    urls = [
+      "http://broken"
+    ]
+    ++ hello.src.urls;
+    hash =
+      let
+        hashAlgo = lib.head (lib.splitString "-" lib.fakeHash);
+      in
+      hashAlgo
+      + ":"
+      + builtins.hashString hashAlgo (
+        lib.concatStringsSep " " (lib.concatMap fetchurl.resolveUrl finalAttrs.urls) + "\n"
+      );
+  });
+
   urls-simple = testers.invalidateFetcherByDrvHash fetchurl {
     name = "test-fetchurl-urls-simple";
     urls = [
