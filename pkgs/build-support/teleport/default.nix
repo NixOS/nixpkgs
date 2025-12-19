@@ -58,7 +58,7 @@ let
     # buildRustPackage sets strictDeps = true;
     nativeCheckInputs = finalAttrs.buildInputs;
 
-    OPENSSL_NO_VENDOR = "1";
+    env.OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
       mkdir -p $out/include
