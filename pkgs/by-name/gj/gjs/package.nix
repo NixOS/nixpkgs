@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
+    (lib.mesonBool "skip_gtk_tests" (!finalAttrs.doCheck))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     (lib.mesonEnable "profiler" false)
