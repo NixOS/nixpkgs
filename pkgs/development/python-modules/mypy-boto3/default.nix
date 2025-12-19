@@ -593,8 +593,8 @@ in
       "sha256-BrtHCaCwsfpaB5GA9kEhCFapQceZsjpyv3HVgpXUOFA=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.42.6"
-      "sha256-Wt++1dfId2tV74JssQK0iNv8jgyEfc1i0y5rUgtPecM=";
+    buildMypyBoto3Package "guardduty" "1.42.12"
+      "sha256-TPr4NaYxmjrUisu3CiZcwtrhC9xjauPpXJd4x8qBuxo=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.42.10"
@@ -713,8 +713,8 @@ in
       "sha256-N21GfynAZdHOQnQgKcA9mJMWDfbN/pBfx509W4XDGjU=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.42.3"
-      "sha256-P6wj5rx+bELx4TVmTqj8pOfnT3K9s/8GgAF9bpFPnE4=";
+    buildMypyBoto3Package "kafkaconnect" "1.42.12"
+      "sha256-CdqSbNGUfeYz76BipvPsF+8j7hFOHJSSgXgcr2BEDUY=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.42.3"
@@ -861,8 +861,8 @@ in
       "sha256-NcDxuCqZqbynRmVPzmCNQpGml6tXBaZzTjlqqnTw+RI=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.42.3"
-      "sha256-mQMV9CW9e0eKnkIacV/gcdkOfDSrIOCk+MFqXag9pxQ=";
+    buildMypyBoto3Package "mediaconvert" "1.42.12"
+      "sha256-aRL46lVNdGu/D0xioGFn/pVUioEiLm8+5XTgUPHqguo=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.42.3"
@@ -877,8 +877,8 @@ in
       "sha256-ZbxRVZaTcS4k2d0+qAT8GOK5tieYduZ4FqXd/k+CElk=";
 
   mypy-boto3-mediapackagev2 =
-    buildMypyBoto3Package "mediapackagev2" "1.42.3"
-      "sha256-/rmTQqf5hXJM5JZQg5LeJ8OTeqsk0RxUJBzVGkGYjyQ=";
+    buildMypyBoto3Package "mediapackagev2" "1.42.12"
+      "sha256-29Et9fpHzmYz9kL9us/x9Tt8Nq7WQC3UWb5jBmPUOUI=";
 
   mypy-boto3-mediastore =
     buildMypyBoto3Package "mediastore" "1.42.3"
@@ -1001,12 +1001,12 @@ in
       "sha256-ynBHsnTvNz9G8sM9d88RI31ZMl0UzBgIz3ONEsJ+aHA=";
 
   mypy-boto3-payment-cryptography =
-    buildMypyBoto3Package "payment-cryptography" "1.42.3"
-      "sha256-5IcLMUEVTNDXyQ2m0rSuE+atxInpG1SZ5LI/YEKuwxs=";
+    buildMypyBoto3Package "payment-cryptography" "1.42.12"
+      "sha256-MpksWgEGbXdbgF2r6CKcEZif7zzFNqmLrsbvETJAAXc=";
 
   mypy-boto3-payment-cryptography-data =
-    buildMypyBoto3Package "payment-cryptography-data" "1.42.3"
-      "sha256-ZuUoqs/aaXeieXwMwMUbQHRwAYkowcFS/KJHMMSLcSY=";
+    buildMypyBoto3Package "payment-cryptography-data" "1.42.12"
+      "sha256-6DvE6qkfAHVvo0xDDA+w1bMacVqejk4kN2a0CiTbP3M=";
 
   mypy-boto3-pca-connector-ad =
     buildMypyBoto3Package "pca-connector-ad" "1.42.3"
@@ -1173,8 +1173,8 @@ in
       "sha256-juVfwdjPDNPaT5tvyXpzDtomugqxeu++AERLkVtFIxw=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.42.3"
-      "sha256-zLVZat92f9tuuikz9rrfAbYFO66ZKkWgJabljitb1Zg=";
+    buildMypyBoto3Package "sagemaker" "1.42.12"
+      "sha256-KILYAFD23VrtKZDwO+6Hc0/qclBqBY68BsHKJl8GyOA=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.42.3"

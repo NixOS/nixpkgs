@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "submitit";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
     tag = version;
-    hash = "sha256-uBlKbg1oKeUPcWzM9WxisGtpBu69eZyTetaANYpTG5E=";
+    hash = "sha256-Q/2mC7viLYl8fx7dtQueZqT191EbERZPfN0WkTS/U1w=";
   };
 
   build-system = [ flit-core ];

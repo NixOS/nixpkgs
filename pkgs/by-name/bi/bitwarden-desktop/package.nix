@@ -3,7 +3,7 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  dart,
+  dart-sass,
   darwin,
   electron_37,
   fetchFromGitHub,
@@ -130,8 +130,13 @@ buildNpmPackage' rec {
       exit 1
     fi
 
+    # force our dart-sass executable
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail "\''${compiler_module_1.compilerModule}/dart-sass/src/dart" "${lib.getExe' dart "dartaotruntime"}"
+      --replace-fail "dart-sass/src/sass.snapshot" "dart-sass/src/sass.snapshot.disabled"
+
+    for f in $(find node_modules/ -name sass -type f -executable); do
+      ln -sf ${lib.getExe dart-sass} $f
+    done
 
     pushd apps/desktop/desktop_native/napi
     npm run build

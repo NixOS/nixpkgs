@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "restish";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
     tag = "v${version}";
-    hash = "sha256-7x7ejClJezxr+V6xpOMZMd4s+CjOCx1obSSNo97MAbE=";
+    hash = "sha256-C+fB9UeEq+h6SlBtVPPZWs5fCCsJVe/TJFy4KhhaItU=";
   };
 
-  vendorHash = "sha256-bO0z+LCiF/Dp0hKNulBmCgk16NzCCoY32P2/Ieq8y+c=";
+  vendorHash = "sha256-5+N6iL9wD5J/E6H5qn1InQR8bbuAlTOzPQn0sawVbrI=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libX11

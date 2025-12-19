@@ -126,6 +126,11 @@ jobs:
           fi
 
   commits:
+    # Only check commits if we have access to the pull_request context.
+    #
+    # Luckily there's no need to lint commit messages in the Merge Queue, because
+    # changes to the target branch can't change commit messages on the base branch.
+    if: ${{ github.event.pull_request.number }}
     runs-on: ubuntu-slim
     timeout-minutes: 5
     steps:
