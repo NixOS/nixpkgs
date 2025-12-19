@@ -128,6 +128,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    description = "Terminal emulator for the X Window System";
+    longDescription = ''
+      The xterm program is a terminal emulator for the X Window System. It
+      provides DEC VT102/VT220 and selected features from higher-level
+      terminals such as VT320/VT420/VT520 (VTxxx). It also provides Tektronix
+      4014 emulation for programs that cannot use the window system directly.
+      If the underlying operating system supports terminal resizing
+      capabilities (for example, the SIGWINCH signal in systems derived from
+      4.3bsd), xterm will use the facilities to notify programs running in the
+      window whenever it is resized.
+    '';
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
     platforms = with lib.platforms; linux ++ darwin;
