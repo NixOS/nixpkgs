@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     gpgme
     libgpg-error
   ];
