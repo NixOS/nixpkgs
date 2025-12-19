@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-QXDBZjBjNXZVvL83x9b5oNfwgBnkyYCb+e4HKGu2/g0=";
 
   # Fail to run in sandbox environment
-  checkFlags = map (t: "--skip ${t}") [
+  checkFlags = map (t: "--skip=${t}") [
     "modules::path::tests::relative_path_inside_home_renders_tilde"
     "modules::path::tests::relative_path_with_shared_prefix_is_not_tilde"
     "test_git_module"
