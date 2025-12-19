@@ -54,14 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/util.cpp \
         --replace-fail "#ifdef _LIBCPP_VERSION" "#if FALSE"
-    ''
-    # These tests fail on x86_64-darwin, see ispc/ispc#{3529, 3623}
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace tests/func-tests/round-float16-uniform.ispc \
-        --replace-fail "// See issue #3529" "// rule: skip on OS=mac"
-
-      substituteInPlace tests/func-tests/round-float16-varying.ispc \
-        --replace-fail "// See issue #3529" "// rule: skip on OS=mac"
     '';
 
   inherit testedTargets;

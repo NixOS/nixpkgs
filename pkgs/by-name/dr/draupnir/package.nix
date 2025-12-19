@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "draupnir";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I9DYiNxD95pzHVsgZ/hJwHfrsVqE/eBALNiePVNDpy0=";
+    hash = "sha256-j5UEW9JpIHhFWGMEwrPE1v0hdFAw5Z4CImRYEm56I4k=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-kTdJ6zKNjH5CxcM9EvXzbz2Phrp5xI0+pvNwMLRmLgQ=";
+    hash = "sha256-Ck6Ba/qDlEW5jqKUX8tyB0QbiVXU8+ND2tvhftmYktY=";
   };
 
   preBuild = ''

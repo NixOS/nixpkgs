@@ -22,7 +22,6 @@
 , "postcss"
 , "sass"
 , "semver"
-, "vega-cli"
 , "vercel"
 , "wavedrom-cli"
 ]

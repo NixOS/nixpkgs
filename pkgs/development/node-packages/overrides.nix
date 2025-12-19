@@ -80,17 +80,6 @@ final: prev: {
     name = "rush";
   };
 
-  vega-cli = prev.vega-cli.override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      node-pre-gyp
-      pixman
-      cairo
-      pango
-      libjpeg
-    ];
-  };
-
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [
       pkgs.pkg-config
