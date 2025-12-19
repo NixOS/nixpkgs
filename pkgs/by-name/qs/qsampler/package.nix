@@ -2,47 +2,41 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf,
-  automake,
-  libtool,
+  cmake,
   pkg-config,
+  qt6,
   liblscp,
   libgig,
-  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qsampler";
-  version = "0.6.1";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsampler/qsampler-${finalAttrs.version}.tar.gz";
-    sha256 = "1wr7k739zx2nz00b810f60g9k3y92w05nfci987hw7y2sks9rd8j";
+    hash = "sha256-cvdnVE3FmsgLy5s6N2nX+2fM4Nyri+rUaxQQeWGluxo=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+    cmake
     pkg-config
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
+
   buildInputs = [
     liblscp
-    libgig
-    libsForQt5.qtbase
+    qt6.qtbase
   ];
 
-  preConfigure = "make -f Makefile.svn";
-
-  enableParallelBuilding = true;
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libgig ]}" ];
 
   meta = {
-    homepage = "http://www.linuxsampler.org";
-    description = "Graphical frontend to LinuxSampler";
+    homepage = "https://qsampler.sourceforge.io";
+    description = "LinuxSampler GUI front-end application";
     mainProgram = "qsampler";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
