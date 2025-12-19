@@ -46,6 +46,5 @@ python3Packages.buildPythonApplication rec {
     description = "Command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

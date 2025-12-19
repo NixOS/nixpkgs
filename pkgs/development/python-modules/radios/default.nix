@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/frenck/python-radios/releases/tag/v${version}";
     description = "Asynchronous Python client for the Radio Browser API";
     homepage = "https://github.com/frenck/python-radios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

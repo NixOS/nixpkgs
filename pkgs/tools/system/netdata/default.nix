@@ -66,13 +66,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.8.0";
+    version = "2.8.4";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-QV9h+TMAuRCkYFr8KMOPhWq5fEnKpmA/HxQ8fV/jKBI=";
+      hash = "sha256-rrwoyTejfOwSWMZ0juTE4CzgeRVBrC7AISFUoFBMaIs=";
       fetchSubmodules = true;
     };
 
@@ -232,7 +232,7 @@ stdenv.mkDerivation (
         --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
         --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
         --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "${placeholder "out"}/sbin")' \
+        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
         --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
     '';
 
@@ -266,7 +266,6 @@ stdenv.mkDerivation (
       ''}
 
       # Time to cleanup the output directory.
-      unlink $out/sbin
       cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
       mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
       rm -rf $out/{var,usr,etc}
@@ -334,15 +333,15 @@ stdenv.mkDerivation (
       tests.netdata = nixosTests.netdata;
     };
 
-    meta = with lib; {
+    meta = {
       broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
       description = "Real-time performance monitoring tool";
       homepage = "https://www.netdata.cloud/";
-      changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-      license = [ licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ licenses.ncul1 ];
+      changelog = "https://github.com/netdata/netdata/releases/tag/v${finalAttrs.version}";
+      license = [ lib.licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ lib.licenses.ncul1 ];
       mainProgram = "netdata";
-      platforms = platforms.unix;
-      maintainers = with maintainers; [
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
         mkg20001
         rhoriguchi
       ];

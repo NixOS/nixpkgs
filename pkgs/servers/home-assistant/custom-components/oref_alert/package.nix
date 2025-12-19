@@ -13,13 +13,13 @@
 buildHomeAssistantComponent rec {
   owner = "amitfin";
   domain = "oref_alert";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
     tag = "v${version}";
-    hash = "sha256-nWp8cG0lFYUEO11lcZGkqx5QvOSfSVnqIqpHA8YAN30=";
+    hash = "sha256-mE39/f/2SmEJ5rTHhwmgGdQga4PQPGxoj/iKA1+Ou5k=";
   };
 
   dependencies = [

@@ -68,17 +68,17 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise ready, Network Backup Tool";
     homepage = "http://bacula.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       eleanor
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

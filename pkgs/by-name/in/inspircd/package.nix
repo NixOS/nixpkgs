@@ -56,6 +56,7 @@ let
       "pgsql"
       "regex_pcre2"
       "regex_re2"
+      "regex_tre"
       "sqlite3"
       "ssl_gnutls"
     ]
@@ -82,6 +83,7 @@ in
   gnutls,
   libmaxminddb,
   openssl,
+  tre,
   yyjson,
   # For a full list of module names, see https://docs.inspircd.org/packaging/
   extraModules ? compatibleModules lib stdenv,
@@ -117,6 +119,7 @@ let
     sslrehashsignal = [ ];
     # depends on used libc++
     regex_stdlib = [ ];
+    regex_tre = [ tre ];
     # GPLv2 incompatible
     geo_maxmind = [ libmaxminddb ];
     ssl_openssl = [ openssl ];
@@ -148,13 +151,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "4.8.0";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-fMfsNbkp9M8KiuhwOEFmPjowZ4JLP4IpX6LRO9aLHzY=";
+    sha256 = "sha256-DoXf0F7tjfQZRFMrVECrlRlJLt7PymjwHSg9+4RLH00=";
   };
 
   outputs = [

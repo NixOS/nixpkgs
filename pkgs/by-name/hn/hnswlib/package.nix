@@ -58,12 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/nmslib/hnswlib";
     changelog = "https://github.com/nmslib/hnswlib/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
   };
 })

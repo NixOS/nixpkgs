@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anxdpanic/script.common.plugin.cache";
     description = "Common plugin cache";
-    license = licenses.gpl3Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.kodi ];
   };
 }

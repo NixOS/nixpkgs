@@ -31,10 +31,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/monochromegane/the_platinum_searcher";
     description = "Code search tool similar to ack and the_silver_searcher(ag)";
     mainProgram = "pt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

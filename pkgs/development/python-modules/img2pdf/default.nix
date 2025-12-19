@@ -2,7 +2,7 @@
   lib,
   pkgs,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromGitHub,
   replaceVars,
   colord,
   setuptools,
@@ -25,8 +25,9 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "gitlab.mister-muffin.de";
+  # gitlab.mister-muffin.de produces a 500 error on 0.6.1
+  # when upgrading, switch src attribute back to gitlab if fixed.
+  src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
     tag = version;

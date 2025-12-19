@@ -180,10 +180,10 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       publicDomain
       lgpl21Only
@@ -191,12 +191,11 @@ stdenv.mkDerivation rec {
       bsdOriginal
     ];
     mainProgram = "dovecot";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
     teams = [ lib.teams.helsinki-systems ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;

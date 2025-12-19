@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     "install-config"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Proxifier for SOCKS proxies";
     homepage = "https://proxychains.sourceforge.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
     mainProgram = "proxychains4";
   };
 }

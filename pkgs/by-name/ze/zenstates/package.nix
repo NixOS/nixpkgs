@@ -47,12 +47,12 @@ stdenv.mkDerivation {
     patchShebangs --build $out/bin/zenstates
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux utility for Ryzen processors and motherboards";
     mainProgram = "zenstates";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

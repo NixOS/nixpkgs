@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "WITH_MAGNETIC" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ccxvii.net/gargoyle/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";
     mainProgram = "gargoyle";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

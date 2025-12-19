@@ -91,15 +91,14 @@ buildPythonPackage rec {
     appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       madjar
-      lsix
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

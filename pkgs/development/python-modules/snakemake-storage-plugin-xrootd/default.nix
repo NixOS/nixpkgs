@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Snakemake storage plugin for handling input and output via XRootD";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-xrootd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

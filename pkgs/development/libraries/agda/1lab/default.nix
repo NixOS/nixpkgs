@@ -25,11 +25,11 @@ mkDerivation {
     sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = "https://github.com/the1lab/1lab";
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 }

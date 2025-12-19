@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "3.3.1";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${version}";
-    hash = "sha256-PGZu3CVF8X9LeFr8HRD7G6LcYoq/RPbqztopopFcAuA=";
+    hash = "sha256-crhJ1jEr5gyNMNPQgN41+cduO6WSii9OnWbKDcVNX3w=";
   };
 
   build-system = [

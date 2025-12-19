@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devialet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with the Devialet API";
     homepage = "https://github.com/fwestenberg/devialet";
     changelog = "https://github.com/fwestenberg/devialet/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

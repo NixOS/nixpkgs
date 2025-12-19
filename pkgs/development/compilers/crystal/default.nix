@@ -267,13 +267,13 @@ let
       };
       passthru.llvmPackages = llvmPackages;
 
-      meta = with lib; {
+      meta = {
         inherit (binary.meta) platforms;
         description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           david50407
           manveru
           peterhoeg

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.17.1";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-xtpxwbKf7ZaUYblGdwtPZE09qrlBQTMm5oryUJwa6AA=";
+    hash = "sha256-LLV6fMFPh45IvNJv9totMYDoKAkZW/1Bx3qOlDTWMLA=";
   };
 
   build-system = [ setuptools ];
@@ -73,6 +73,8 @@ buildPythonPackage rec {
   # These tests fail when MPS devices are detected
   disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
     "gpu"
+    "test_save_load"
+    "test_resume_training_model_with_topk_weights"
   ];
 
   disabledTestPaths = [
@@ -81,6 +83,7 @@ buildPythonPackage rec {
 
     # Require internet access to download a dataset
     "tests/test_adaption_prompt.py"
+    "tests/test_arrow.py"
     "tests/test_auto.py"
     "tests/test_boft.py"
     "tests/test_cpt.py"
@@ -92,9 +95,9 @@ buildPythonPackage rec {
     "tests/test_hub_features.py"
     "tests/test_incremental_pca.py"
     "tests/test_initialization.py"
+    "tests/test_lora_variants.py"
     "tests/test_mixed.py"
     "tests/test_multitask_prompt_tuning.py"
-    "tests/test_other.py"
     "tests/test_other.py"
     "tests/test_poly.py"
     "tests/test_stablediffusion.py"

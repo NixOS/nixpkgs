@@ -87,8 +87,6 @@ let
         ];
       });
 
-      av = self.av_13;
-
       imageio = super.imageio.overridePythonAttrs (oldAttrs: {
         disabledTests = oldAttrs.disabledTests or [ ] ++ [
           # broken by pyav pin
@@ -293,7 +291,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.3";
+  hassVersion = "2025.12.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -314,13 +312,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-Wd+q2ooNguJMKnQ1uzLJtglAyBFXjBSj5hjEgY4bgzY=";
+    hash = "sha256-NAnEOe92ealtD59VB+i6Hzb0YFLgfbM6oVAclty5xvk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-KxpjOPlusEHT+bRtgs/9EsIksTd4pRMKsXb7e5q+b2Q=";
+    hash = "sha256-e99VSS2iMsZSH43s5TXZ4CGEc7i+btnockfwLSstlE4=";
   };
 
   build-system = with python.pkgs; [
@@ -348,9 +346,11 @@ python.pkgs.buildPythonApplication rec {
     })
 
     (fetchpatch {
-      # [2025.11.2] fix matter snapshots
-      url = "https://github.com/home-assistant/core/commit/04458e01be0748c3f6c980e126d5238d1ca915b6.patch";
-      hash = "sha256-gzc0KmSZhOfHVRhIVmOTFTJMI+pAX+8LcOit4JUypyA=";
+      # pytest 9 renames some snapshots
+      name = "revert-to-pytest-8.patch";
+      url = "https://github.com/home-assistant/core/commit/3f22dbaa2e1a7776185ec443bf26f90e90e55efa.patch";
+      revert = true;
+      hash = "sha256-rHXpmHUNCr+lhYqiOVrCSQTWvWJ+jHNwPJzUeFtDPIw=";
     })
   ];
 
@@ -526,13 +526,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://home-assistant.io/";
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
+    platforms = lib.platforms.linux;
     mainProgram = "hass";
   };
 }

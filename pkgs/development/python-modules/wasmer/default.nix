@@ -71,13 +71,13 @@ let
 
       pythonImportsCheck = [ "${lib.replaceStrings [ "-" ] [ "_" ] pname}" ];
 
-      meta = with lib; {
+      meta = {
         # https://github.com/wasmerio/wasmer-python/issues/778
         broken = pythonAtLeast "3.12";
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
-        license = licenses.mit;
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        platforms = lib.platforms.unix;
         maintainers = [ ];
       };
     };

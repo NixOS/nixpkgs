@@ -42,12 +42,12 @@ buildHomeAssistantComponent rec {
     home-assistant
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/danielcherubini/elegoo-homeassistant/releases/tag/v${version}";
     description = "Home Assistant integration for Elegoo 3D printers using the SDCP protocol";
     homepage = "https://github.com/danielcherubini/elegoo-homeassistant";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       typedrat
     ];
   };

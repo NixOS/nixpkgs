@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gridnet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for NET2GRID devices";
     homepage = "https://github.com/klaasnicolaas/python-gridnet";
     changelog = "https://github.com/klaasnicolaas/python-gridnet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

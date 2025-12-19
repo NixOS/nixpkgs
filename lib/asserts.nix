@@ -14,7 +14,7 @@ in
 rec {
 
   /**
-    Throw if pred is false, else return pred.
+    Throw if `pred` is false, else return `pred`.
     Intended to be used to augment asserts with helpful error messages.
 
     # Inputs

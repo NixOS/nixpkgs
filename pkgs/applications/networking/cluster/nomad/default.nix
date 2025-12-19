@@ -64,12 +64,12 @@ let
           installShellCompletion nomad.bash
         '';
 
-        meta = with lib; {
+        meta = {
           homepage = "https://developer.hashicorp.com/nomad";
           description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
           mainProgram = "nomad";
           inherit license;
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             rushmorem
             techknowlogick
             cottand

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc_interceptor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simplified gRPC interceptors";
     homepage = "https://github.com/d5h-foss/grpc-interceptor";
     changelog = "https://github.com/d5h-foss/grpc-interceptor/releases/tag/v${version}";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       context. Access to these are often desired, to be able to log data in the
       request or response, or set status codes on the context.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomaskala ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomaskala ];
   };
 }

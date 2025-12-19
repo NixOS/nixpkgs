@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_lru" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/aio-libs/async-lru/releases/tag/${src.tag}";
     description = "Simple lru cache for asyncio";
     homepage = "https://github.com/wikibusiness/async_lru";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

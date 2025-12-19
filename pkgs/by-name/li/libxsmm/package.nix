@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     mainProgram = "libxsmm_gemm_generator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ chessai ];
   };
 }

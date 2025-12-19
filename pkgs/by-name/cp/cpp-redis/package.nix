@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
       "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++11 Lightweight Redis client: async, thread-safe, no dependency, pipelining, multi-platform";
     homepage = "https://github.com/cpp-redis/cpp_redis";
     changelog = "https://github.com/cpp-redis/cpp_redis/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ poelzi ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ poelzi ];
+    platforms = lib.platforms.all;
   };
 }

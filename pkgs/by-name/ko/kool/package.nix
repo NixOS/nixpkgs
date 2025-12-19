@@ -31,12 +31,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "From local development to the cloud: development workflow made easy";
     mainProgram = "kool";
     homepage = "https://kool.dev";
     changelog = "https://github.com/kool-dev/kool/releases/tag/${src.rev}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

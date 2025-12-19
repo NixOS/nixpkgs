@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to create panels and other desktop components for Wayland using the Layer Shell protocol and GTK4";
     mainProgram = "gtk4-layer-demo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ donovanglover ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ donovanglover ];
+    platforms = lib.platforms.linux;
   };
 })

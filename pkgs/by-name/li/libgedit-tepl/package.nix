@@ -64,14 +64,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

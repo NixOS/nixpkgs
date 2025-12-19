@@ -10,6 +10,8 @@
   casadi,
   matplotlib,
   python,
+
+  buildStandalone ? true,
 }:
 toPythonModule (
   pinocchio.overrideAttrs (super: {
@@ -17,18 +19,19 @@ toPythonModule (
 
     cmakeFlags = super.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" true)
-      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" true)
+      (lib.cmakeBool "BUILD_STANDALONE_PYTHON_INTERFACE" buildStandalone)
     ];
 
     nativeBuildInputs = super.nativeBuildInputs ++ [
       python
     ];
 
-    propagatedBuildInputs = super.propagatedBuildInputs ++ [
+    propagatedBuildInputs = [
       casadi
       coal
-      pinocchio
-    ];
+    ]
+    ++ super.propagatedBuildInputs
+    ++ lib.optional buildStandalone pinocchio;
 
     checkInputs = super.checkInputs ++ [
       matplotlib

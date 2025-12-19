@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage {
 
   postFixup = "mv $out/lib/*.so $out/lib/libnss_xhosts.so.2";
 
-  meta = with lib; {
+  meta = {
     description = "NSS Module which supports wildcards";
     homepage = "https://github.com/dvob/nss-xhosts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "nss-xhosts";
   };
 }

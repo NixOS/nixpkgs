@@ -70,7 +70,7 @@ let
       '';
     };
 
-    meta = with lib; {
+    meta = {
       description = "Code coverage tester for compiled programs, Python scripts and shell scripts";
 
       longDescription = ''
@@ -82,14 +82,13 @@ let
       '';
 
       homepage = "http://simonkagstrom.github.io/kcov/index.html";
-      license = licenses.gpl2;
+      license = lib.licenses.gpl2;
       changelog = "https://github.com/SimonKagstrom/kcov/blob/master/ChangeLog";
 
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         gal_bolle
-        ekleog
       ];
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 in

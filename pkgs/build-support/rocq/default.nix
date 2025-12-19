@@ -6,6 +6,7 @@
   which,
   fetchzip,
   fetchurl,
+  dune,
 }@args:
 
 let
@@ -174,7 +175,7 @@ stdenv.mkDerivation (
       nativeBuildInputs =
         args.overrideNativeBuildInputs or (
           [ which ]
-          ++ optional useDune rocq-core.ocamlPackages.dune_3
+          ++ optional useDune dune
           ++ optionals (useDune || mlPlugin) [
             rocq-core.ocamlPackages.ocaml
             rocq-core.ocamlPackages.findlib

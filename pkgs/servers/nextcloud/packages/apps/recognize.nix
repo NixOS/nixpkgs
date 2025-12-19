@@ -121,9 +121,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ beardhatcode ];
+  meta = {
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ beardhatcode ];
     longDescription = ''
       Nextcloud app that does Smart media tagging and face recognition with on-premises machine learning models.
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.

@@ -57,11 +57,11 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple X-Window (X11R6) programming API in C";
     homepage = "https://github.com/42Paris/minilibx-linux";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

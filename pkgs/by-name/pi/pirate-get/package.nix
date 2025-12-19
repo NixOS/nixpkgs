@@ -26,12 +26,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "pirate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for The Pirate Bay";
     mainProgram = "pirate-get";
     homepage = "https://github.com/vikstrous/pirate-get";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
   };
 }

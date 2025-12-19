@@ -42,11 +42,11 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
     homepage = "https://github.com/doronbehar/pistol";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pistol";
   };
 }

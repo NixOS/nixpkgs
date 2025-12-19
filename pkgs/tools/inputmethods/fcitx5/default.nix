@@ -107,12 +107,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "fcitx5";
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webexpythonsdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/WebexCommunity/WebexPythonSDK";
     changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -39,11 +39,11 @@ python3.pkgs.buildPythonApplication {
     "hekatomb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to connect to LDAP directory to retrieve informations";
     homepage = "https://github.com/ProcessusT/HEKATOMB";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hekatomb";
   };
 }

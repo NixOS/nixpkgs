@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.2.3";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    hash = "sha256-htyFH1Q8RFyvkW75NMpjajNJDzv/87k/Dr8+R5beT2w=";
+    hash = "sha256-soXhVpzO4bJfZ5EV6uEDJOhwV9HJDfxUIuHi9AxaE0A=";
   };
 
   nativeBuildInputs = [
@@ -97,14 +97,14 @@ stdenv.mkDerivation rec {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Slick-looking LightDM greeter";
     homepage = "https://github.com/linuxmint/slick-greeter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       water-sucks
       bobby285271
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

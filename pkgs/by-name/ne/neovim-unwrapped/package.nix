@@ -34,7 +34,7 @@ stdenv.mkDerivation (
         let
           luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
         in
-        (luapkgs.lpeg.overrideAttrs (oa: {
+        (luapkgs.lpeg.overrideAttrs (old: {
           preConfigure = ''
             # neovim wants clang .dylib
             substituteInPlace Makefile \
@@ -53,7 +53,7 @@ stdenv.mkDerivation (
             rm -f ${luaLibDir}/lpeg.so
           '';
           nativeBuildInputs =
-            oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+            old.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
         }))
       else
         luapkgs.lpeg;

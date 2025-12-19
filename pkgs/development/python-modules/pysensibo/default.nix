@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysensibo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Sensibo";
     homepage = "https://github.com/andrey-git/pysensibo";
     changelog = "https://github.com/andrey-git/pysensibo/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

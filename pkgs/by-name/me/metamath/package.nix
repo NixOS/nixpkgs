@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Interpreter for the metamath proof language";
     mainProgram = "metamath";
     longDescription = ''
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://us.metamath.org";
     downloadPage = "https://us.metamath.org/#downloads";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.taneb ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.taneb ];
+    platforms = lib.platforms.all;
   };
 }

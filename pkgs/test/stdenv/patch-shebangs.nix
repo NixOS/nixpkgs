@@ -10,6 +10,10 @@
 # strictDeps has to be disabled because the shell isn't in buildInputs
 
 let
+  earlyBash =
+    stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive or pkgs.bashNonInteractive;
+  earlyCoreutils = stdenv.__bootPackages.stdenv.__bootPackages.coreutils or pkgs.coreutils;
+
   tests = {
     bad-shebang = stdenv.mkDerivation {
       name = "bad-shebang";
@@ -110,9 +114,9 @@ let
       (derivation {
         name = "read-only-script";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = "${earlyBash}/bin/bash";
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyCoreutils
         ];
         strictDeps = false;
         args = [
@@ -138,9 +142,9 @@ let
       (derivation {
         name = "preserves-read-only";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = "${earlyBash}/bin/bash";
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyCoreutils
         ];
         strictDeps = false;
         args = [
@@ -173,9 +177,9 @@ let
       (derivation {
         name = "preserves-timestamp";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = "${earlyBash}/bin/bash";
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyCoreutils
         ];
         strictDeps = false;
         args = [
@@ -209,9 +213,9 @@ let
       (derivation {
         name = "preserves-binary-data";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = "${earlyBash}/bin/bash";
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyCoreutils
         ];
         strictDeps = false;
         args = [

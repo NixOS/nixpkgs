@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.samba.org/index.php/LinuxCIFS_utils";
     description = "Tools for managing Linux CIFS client filesystems";
-    platforms = platforms.linux;
-    license = licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3;
   };
 }

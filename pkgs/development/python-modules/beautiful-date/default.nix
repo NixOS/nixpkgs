@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beautiful_date" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and beautiful way to create date and datetime objects";
     homepage = "https://github.com/kuzmoyev/beautiful-date";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

@@ -32,10 +32,10 @@ buildPythonPackage rec {
     ${python.interpreter} ./testr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Database of test results which can be used as part of developer workflow";
     mainProgram = "testr";
     homepage = "https://pypi.python.org/pypi/testrepository";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

@@ -1252,7 +1252,7 @@ let
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
-          gnosis = mkHome super.gnosis;
+          gnosis = ignoreCompilationError (mkHome super.gnosis); # doing db stuff when compiling
 
           go = ignoreCompilationError super.go; # elisp error
 
@@ -1458,6 +1458,8 @@ let
           mu4e-query-fragments = addPackageRequires super.mu4e-query-fragments [ self.mu4e ];
 
           mu4e-views = addPackageRequires super.mu4e-views [ self.mu4e ];
+
+          mu4e-walk = addPackageRequires super.mu4e-walk [ self.mu4e ];
 
           # https://github.com/magnars/multifiles.el/issues/9
           multifiles = addPackageRequires super.multifiles [ self.dash ];
@@ -1670,18 +1672,6 @@ let
 
           scad-preview = ignoreCompilationError super.scad-preview; # elisp error
 
-          sdml-mode = super.sdml-mode.overrideAttrs (
-            finalAttrs: previousAttrs: {
-              patches = previousAttrs.patches or [ ] ++ [
-                (pkgs.fetchpatch {
-                  name = "make-pretty-hydra-optional.patch";
-                  url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
-                  hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
-                })
-              ];
-            }
-          );
-
           # https://github.com/wanderlust/semi/pull/29
           # missing optional dependencies
           semi = addPackageRequires super.semi [ self.bbdb-vcard ];
@@ -1773,6 +1763,14 @@ let
           weibo = ignoreCompilationError super.weibo; # elisp error
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
+
+          ws-butler = super.ws-butler.overrideAttrs (old: {
+            # work around https://github.com/NixOS/nixpkgs/issues/436534
+            src = pkgs.fetchFromSavannah {
+              repo = "emacs/nongnu";
+              inherit (old.src) rev outputHash outputHashAlgo;
+            };
+          });
 
           # https://github.com/nicklanasa/xcode-mode/issues/28
           xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];

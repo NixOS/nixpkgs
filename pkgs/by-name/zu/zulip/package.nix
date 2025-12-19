@@ -77,11 +77,11 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };

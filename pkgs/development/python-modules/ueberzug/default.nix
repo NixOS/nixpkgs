@@ -56,7 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ueber-devel/ueberzug/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "ueberzug";
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
     platforms = lib.platforms.linux;
   };
 }

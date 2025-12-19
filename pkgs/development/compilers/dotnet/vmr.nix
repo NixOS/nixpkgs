@@ -134,11 +134,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    lib.optionals (lib.versionAtLeast version "10") [
-      # https://github.com/dotnet/source-build/issues/5410
-      ./fix-prep-script.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
+    lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
     ]
@@ -500,11 +496,11 @@ stdenv.mkDerivation rec {
     hasILCompiler = lib.versionAtLeast version "9";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI";
     homepage = "https://dotnet.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ corngood ];
     mainProgram = "dotnet";
     platforms = [
       "x86_64-linux"

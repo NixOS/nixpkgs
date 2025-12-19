@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $out/libexec/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
-    license = with licenses; [ mit ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

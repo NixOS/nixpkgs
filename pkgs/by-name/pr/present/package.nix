@@ -40,11 +40,11 @@ python3Packages.buildPythonPackage rec {
   # TypeError: don't know how to make test from: 0.6.0
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-based presentation tool with colors and effects";
     homepage = "https://github.com/vinayak-mehta/present";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lom ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "present";
   };
 }

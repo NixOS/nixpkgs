@@ -36,11 +36,10 @@ buildPythonPackage rec {
   #   "dvc_gs"
   # ];
 
-  meta = with lib; {
+  meta = {
     description = "gs plugin for dvc";
     homepage = "https://pypi.org/project/dvc-gs/version";
     changelog = "https://github.com/iterative/dvc-gs/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    license = lib.licenses.asl20;
   };
 }

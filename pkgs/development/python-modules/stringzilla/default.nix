@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "4.3.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-MitvjIb+mBK22hxjtqbVB6kYP7pdvF5LxWiS2R/6Jk4=";
+    hash = "sha256-0T8hQ+P6gZnIX52jkRcpF1Ofxy45+B7K/feEQr5Phf0=";
   };
 
   build-system = [
@@ -33,6 +33,11 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "scripts/test_stringzilla.py" ];
+
+  disabledTests = [
+    # test downloads CaseFolding.txt from unicode.org
+    "test_utf8_case_fold_all_codepoints"
+  ];
 
   meta = {
     changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";

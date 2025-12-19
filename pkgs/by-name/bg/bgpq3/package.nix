@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-rqZI7yqlVHfdRTOsA5V6kzJ2TGCy8mp6yP+rzsQX9Yc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "bgp filtering automation tool";
     homepage = "https://github.com/snar/bgpq3";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ b4dm4n ];
-    platforms = with platforms; unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ b4dm4n ];
+    platforms = with lib.platforms; unix;
     mainProgram = "bgpq3";
   };
 }

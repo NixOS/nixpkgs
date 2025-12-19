@@ -53,7 +53,7 @@ buildPythonPackage rec {
     "test_write_closewrite_read"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     changelog = "https://github.com/jgehrcke/gipc/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

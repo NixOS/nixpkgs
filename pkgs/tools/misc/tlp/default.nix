@@ -136,15 +136,15 @@ stdenv.mkDerivation rec {
       rm -rf $out/share/metainfo
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced Power Management for Linux";
     homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "tlp";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

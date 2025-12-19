@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cvc4";
-    repo = "cvc4";
+    repo = "cvc4-archived";
     rev = version;
     sha256 = "1rhs4pvzaa1wk00czrczp58b2cxfghpsnq534m0l3snnya2958jp";
   };
@@ -84,13 +84,13 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "Production";
 
-  meta = with lib; {
+  meta = {
     description = "High-performance theorem prover and SMT solver";
     mainProgram = "cvc4";
     homepage = "http://cvc4.cs.stanford.edu/web/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       vbgl
       thoughtpolice
     ];

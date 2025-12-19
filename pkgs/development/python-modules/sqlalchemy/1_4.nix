@@ -99,12 +99,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

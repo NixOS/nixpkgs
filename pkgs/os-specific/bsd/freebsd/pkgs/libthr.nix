@@ -3,6 +3,7 @@
   stdenv,
   fetchpatch,
   mkDerivation,
+  libsys,
   libcMinimal,
   include,
   libgcc,
@@ -15,6 +16,7 @@ mkDerivation {
   extraPaths = [
     "lib/libthread_db"
     "lib/libc" # needs /include + arch-specific files
+    "lib/libsys"
     "libexec/rtld-elf"
   ]
   ++ extraSrc;
@@ -31,6 +33,7 @@ mkDerivation {
     libcMinimal
     include
     libgcc
+    libsys
   ];
 
   patches = [

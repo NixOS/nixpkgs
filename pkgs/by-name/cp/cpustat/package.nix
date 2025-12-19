@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CPU usage monitoring tool";
     homepage = "https://github.com/ColinIanKing/cpustat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "cpustat";
   };

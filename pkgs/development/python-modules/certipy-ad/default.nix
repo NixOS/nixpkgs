@@ -67,12 +67,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "certipy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
     homepage = "https://github.com/ly4k/Certipy";
     changelog = "https://github.com/ly4k/Certipy/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "certipy";
   };
 }

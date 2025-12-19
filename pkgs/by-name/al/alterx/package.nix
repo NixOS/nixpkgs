@@ -6,23 +6,23 @@
 
 buildGoModule rec {
   pname = "alterx";
-  version = "0.0.6";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "alterx";
     tag = "v${version}";
-    hash = "sha256-IjCK0TVZOBegNdfpqOFoOTuj8KtmCuIqNPvcIa1vSo0=";
+    hash = "sha256-aqCsPv+vxO45SwUXwicjQdGNq+Ad4awiF/wwGlPETDU=";
   };
 
-  vendorHash = "sha256-aTA5KGeYmJnbVRbEhT9LigQoJFLD17q9spzBV4BGhNw=";
+  vendorHash = "sha256-13ODJNo6xbQkubaGJT3svFbOLbdsHluTCp1Gom+jYeU=";
 
   meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
-    mainProgram = "alterx";
     homepage = "https://github.com/projectdiscovery/alterx";
-    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "alterx";
   };
 }

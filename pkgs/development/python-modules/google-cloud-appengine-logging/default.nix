@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "google.cloud.appengine_logging_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Appengine logging client library";
     homepage = "https://github.com/googleapis/python-appengine-logging";
     changelog = "https://github.com/googleapis/python-appengine-logging/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

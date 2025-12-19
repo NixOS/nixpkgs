@@ -33,13 +33,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seqdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate sequence-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/seqdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "seqdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

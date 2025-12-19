@@ -80,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcs_api_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://qcs-api-client-python.readthedocs.io/";
     changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

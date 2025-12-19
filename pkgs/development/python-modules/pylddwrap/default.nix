@@ -53,15 +53,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lddwrap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper around ldd *nix utility to determine shared libraries of a program";
     mainProgram = "pylddwrap";
     homepage = "https://github.com/Parquery/pylddwrap";
     changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thiagokokada ];
     # should work in any Unix platform that uses glibc, except for darwin
     # since it has its own tool (`otool`)
-    badPlatforms = platforms.darwin;
+    badPlatforms = lib.platforms.darwin;
   };
 }

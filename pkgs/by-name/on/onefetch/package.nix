@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       kloenk
     ];
     mainProgram = "onefetch";

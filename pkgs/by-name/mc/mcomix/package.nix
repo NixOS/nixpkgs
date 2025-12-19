@@ -5,7 +5,7 @@
   gobject-introspection,
   gtk3,
   mcomix,
-  python312, # TODO: Revert to python3 when upgrading past 3.1.0
+  python3,
   testers,
   wrapGAppsHook3,
 
@@ -17,14 +17,14 @@
   unrarSupport ? false, # unfree software
 }:
 
-python312.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/mcomix-${version}.tar.gz";
-    hash = "sha256-+Shuun/7w86VKBNamTmCPEJfO76fdKY5+HBvzCi0xCc=";
+    hash = "sha256-oQqq7XvAfet0796Tv5qKJ+G8vxgkoFGbJkz+5YK+zvg=";
   };
 
   buildInputs = [
@@ -34,12 +34,12 @@ python312.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python312.pkgs.setuptools
+    python3.pkgs.setuptools
     wrapGAppsHook3
   ];
 
   propagatedBuildInputs =
-    with python312.pkgs;
+    with python3.pkgs;
     [
       pillow
       pycairo
@@ -69,7 +69,7 @@ python312.pkgs.buildPythonApplication rec {
     package = mcomix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Comic book reader and image viewer";
     mainProgram = "mcomix";
     longDescription = ''
@@ -78,7 +78,10 @@ python312.pkgs.buildPythonApplication rec {
       (including CBR, CBZ, CB7, CBT, LHA and PDF)
     '';
     homepage = "https://sourceforge.net/projects/mcomix/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ thiagokokada ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      confus
+      thiagokokada
+    ];
   };
 }

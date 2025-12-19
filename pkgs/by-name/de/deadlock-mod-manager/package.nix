@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   wrapGAppsHook3,
   desktop-file-utils,
@@ -23,28 +25,28 @@
   fontconfig,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "deadlock-mod-manager";
     repo = "deadlock-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/84P9ONG25Ia1BnRcbzQuJKt8HwstCzf0bkx1Xc9VgU=";
+    hash = "sha256-0T2/8mfSxfJXWTbLfXaRrrVeBrf0PvpIr41BrnuSwOU=";
   };
 
   cargoRoot = "apps/desktop";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-wVsr6GwCGuuveTDT6oS1keejx+y+oSuE6dGAjvNRrdE=";
+  cargoHash = "sha256-tzF1mFzFCdnB6h43TiVKEKWWQgWlrEm9Xh3HKKnNXZ0=";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     pkg-config
     wrapGAppsHook3
   ];
@@ -68,20 +70,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   pnpmRoot = ".";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     sourceRoot = "source";
-    hash = "sha256-7HhMW28hl2hHi8epcKMTbfuVjKYj+U1N/d2tMcu4aQg=";
+    hash = "sha256-MCzRZt+l2wHETOxzSatPnz5G48HjjGrOj3BVP+S7/Ss=";
   };
 
   patches = [
     ./no-updater-artifacts.patch
-    ./disable-update-notice.patch
   ];
 
   VITE_API_URL = "https://api.deadlockmods.app";
@@ -99,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set DISABLE_UPDATE_DESKTOP_DATABASE 1
       --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
+      --add-flags "--disable-auto-update"
     )
   '';
 

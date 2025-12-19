@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gnome theme based upon Adwaita-Maia dark skin";
     homepage = "https://github.com/madmaxms/theme-obsidian-2";
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = with lib.licenses; [ gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

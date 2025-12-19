@@ -24,9 +24,9 @@ let
       ];
     });
   };
-  python = python3Packages.python.override (oa: {
+  python = python3Packages.python.override (old: {
     self = python3Packages.python;
-    packageOverrides = lib.composeExtensions (oa.packageOverrides or (_: _: { })) packageOverrides;
+    packageOverrides = lib.composeExtensions (old.packageOverrides or (_: _: { })) packageOverrides;
   });
   pythonPackages = python.pkgs;
 in

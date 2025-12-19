@@ -67,11 +67,11 @@ buildPythonPackage rec {
     "test_redis_handler"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

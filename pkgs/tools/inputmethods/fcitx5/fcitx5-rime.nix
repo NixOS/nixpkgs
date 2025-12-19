@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RIME support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-rime";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

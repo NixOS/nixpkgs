@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library passing all socket communications through unix sockets";
     homepage = "https://git.samba.org/?p=socket_wrapper.git;a=summary;";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

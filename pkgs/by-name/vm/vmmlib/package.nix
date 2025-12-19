@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Vector and matrix math library implemented using C++ templates";
 
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
       computations and frustum culling classes, and spatial data structures
     '';
 
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/VMML/vmmlib/";
-    maintainers = [ maintainers.adev ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.adev ];
+    platforms = lib.platforms.all;
   };
 }

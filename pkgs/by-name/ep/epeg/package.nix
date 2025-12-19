@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mattes/epeg";
     description = "Insanely fast JPEG/ JPG thumbnail scaling";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.mit-enna;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "epeg";
   };
 }

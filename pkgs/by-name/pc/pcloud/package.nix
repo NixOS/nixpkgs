@@ -118,13 +118,13 @@ stdenv.mkDerivation {
     ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png $out/app/pcloud.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
     changelog = "https://www.pcloud.com/release-notes/linux.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ patryk27 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "pcloud";
   };

@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Sanitizing parser for OpenType fonts";
     homepage = "https://github.com/khaledhosny/ots";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 })

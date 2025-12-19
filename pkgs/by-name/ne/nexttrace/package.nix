@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,8 @@ buildGoModule rec {
   };
   vendorHash = "sha256-8KxY3KYcaaZZjk+IIKdu8tzGhgGUlJ5nyMMSKhe41kg=";
 
+  buildInputs = [ libpcap ];
+
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
@@ -29,11 +32,11 @@ buildGoModule rec {
     mv $out/bin/NTrace-core $out/bin/nexttrace
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source visual route tracking CLI tool";
     homepage = "https://mtr.moe";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sharzy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "nexttrace";
   };
 }

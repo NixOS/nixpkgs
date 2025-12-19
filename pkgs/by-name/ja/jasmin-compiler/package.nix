@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchurl,
-  dune_3,
   ocamlPackages,
+  dune,
   mpfr,
   ppl,
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with ocamlPackages; [
     ocaml
     findlib
-    dune_3
+    dune
     menhir
     camlidl
     cmdliner

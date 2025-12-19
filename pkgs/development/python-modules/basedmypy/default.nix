@@ -140,6 +140,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/KotlinIsland/basedmypy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

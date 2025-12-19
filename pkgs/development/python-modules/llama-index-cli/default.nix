@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex CLI";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

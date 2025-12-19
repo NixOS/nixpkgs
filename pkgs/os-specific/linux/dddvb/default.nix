@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dddvb";
-  version = "0.9.40";
+  version = "0.9.40a";
 
   src = fetchFromGitHub {
     owner = "DigitalDevices";
     repo = "dddvb";
     tag = finalAttrs.version;
-    hash = "sha256-6FDvgmZ6KHydy5CfrI/nHhKAJeG1HQ/aRUojFDSEzQY=";
+    hash = "sha256-HsTkOYNKxlJ0NaMO/o0irVDBWP8i7Z5Rm1FBflGbRCo=";
   };
 
   postPatch = ''

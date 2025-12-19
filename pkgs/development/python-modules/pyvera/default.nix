@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvera" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control devices via the Vera hub";
     homepage = "https://github.com/pavoni/pyvera";
     changelog = "https://github.com/maximvelichko/pyvera/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

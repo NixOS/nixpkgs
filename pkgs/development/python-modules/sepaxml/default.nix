@@ -35,9 +35,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sepaxml" ];
 
-  meta = with lib; {
+  meta = {
     description = "SEPA Direct Debit XML generation in python";
     homepage = "https://github.com/raphaelm/python-sepaxml/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

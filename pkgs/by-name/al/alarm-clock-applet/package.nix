@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_GCONF_MIGRATION=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fully-featured alarm clock with an indicator";
     homepage = "https://alarm-clock-applet.github.io";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
     mainProgram = "alarm-clock-applet";
   };
 }

@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EusvBjrtm7PAZ5exDUuCu2n300x1b1c9oks+T6cR2c8=";
 
-  meta = with lib; {
+  meta = {
     description = "Better rust version of pokeget";
     homepage = "https://github.com/talwat/pokeget-rs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pokeget";
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [ aleksana ];
   };
 }

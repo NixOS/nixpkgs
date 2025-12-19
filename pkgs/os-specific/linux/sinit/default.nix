@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
       rcreboot != null
     ) ''sed -re 's@(rc(reboot)cmd[^"]*")[^"]*"@\1${rcreboot}"@' -i config.def.h; '');
 
-  meta = with lib; {
+  meta = {
     description = "Very minimal Linux init implementation from suckless.org";
     mainProgram = "sinit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://tools.suckless.org/sinit";
     downloadPage = "https://git.suckless.org/sinit";
   };

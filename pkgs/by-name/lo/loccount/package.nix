@@ -32,7 +32,7 @@ buildGoModule rec {
     go generate
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Re-implementation of sloccount in Go";
     mainProgram = "loccount";
     longDescription = ''
@@ -48,7 +48,7 @@ buildGoModule rec {
     '';
     homepage = "https://gitlab.com/esr/loccount";
     downloadPage = "https://gitlab.com/esr/loccount/tree/master";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ calvertvl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ calvertvl ];
   };
 }

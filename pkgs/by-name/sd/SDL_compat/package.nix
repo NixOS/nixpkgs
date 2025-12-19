@@ -4,7 +4,6 @@
   cmake,
   darwin,
   fetchFromGitHub,
-  fetchpatch2,
   libGLU,
   libiconv,
   libX11,
@@ -28,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
-  version = "1.2.70";
+  version = "1.2.72";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + finalAttrs.version;
-    hash = "sha256-vmbkeBpuzgq1B/6rp9/Gy8+Y7aF5uz8lC/mK0uA9v7I=";
+    hash = "sha256-dTBsbLJFQSaWWhn1+CCQopq7sBONxvlaAximmo3iYVM=";
   };
 
   nativeBuildInputs = [
@@ -90,12 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     # adds their include and library paths to environment variables. The sdl-config
     # is patched to use these variables to produce correct flags for compiler.
     ./find-headers.patch
-
-    # https://github.com/libsdl-org/sdl12-compat/issues/382
-    (fetchpatch2 {
-      url = "https://github.com/libsdl-org/sdl12-compat/commit/bef8f7412dd44edc4f7e14dc35d3b20399e25496.patch?full_index=1";
-      hash = "sha256-5kJawjmA8C3uH3OIXHmqQjnIRtoTJtXmm3iLxG3e1qc=";
-    })
   ];
   setupHook = ./setup-hook.sh;
 

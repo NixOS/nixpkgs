@@ -7,10 +7,12 @@
 {
   name = "owasp dep-scan test";
 
-  meta.maintainers = with lib; [
-    maintainers.ethancedwards8
-    teams.ngi
-  ];
+  meta.maintainers =
+    with lib;
+    [
+      maintainers.ethancedwards8
+    ]
+    ++ teams.ngi.members;
 
   nodes.machine = {
     environment.systemPackages = with pkgs; [

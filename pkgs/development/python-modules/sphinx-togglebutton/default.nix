@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_togglebutton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toggle page content and collapse admonitions in Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-togglebutton";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

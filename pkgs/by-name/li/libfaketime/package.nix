@@ -52,23 +52,26 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
   '';
 
-  PREFIX = placeholder "out";
-  LIBDIRNAME = "/lib";
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=cast-function-type"
-      "-Wno-error=format-truncation"
-    ]
-    # https://github.com/wolfcw/libfaketime/blob/6714b98794a9e8a413bf90d2927abf5d888ada99/README#L101-L104
-    ++ lib.optionals (stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64) [
-      "-DFORCE_PTHREAD_NONVER"
-    ]
-  );
+  env = {
+    PREFIX = placeholder "out";
+    LIBDIRNAME = "/lib";
+    NIX_CFLAGS_COMPILE = toString (
+      lib.optionals stdenv.cc.isClang [
+        "-Wno-error=cast-function-type"
+        "-Wno-error=format-truncation"
+      ]
+      # https://github.com/wolfcw/libfaketime/blob/6714b98794a9e8a413bf90d2927abf5d888ada99/README#L101-L104
+      ++ lib.optionals (stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64) [
+        "-DFORCE_PTHREAD_NONVER"
+      ]
+    );
+  };
 
   nativeCheckInputs = [ perl ];
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";

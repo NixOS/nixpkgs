@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgenerate-shell-completions=disabled"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/enkore/j4-dmenu-desktop/blob/${finalAttrs.src.rev}/CHANGELOG";
     description = "Wrapper for dmenu that recognizes .desktop files";
     homepage = "https://github.com/enkore/j4-dmenu-desktop";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "j4-dmenu-desktop";
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -48,11 +48,11 @@ buildPythonPackage rec {
   # TODO: doesn't pass because `can_use` fails and `task --version` seems not to be answering.
   # pythonImportsCheck = [ "taskw_ng" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Taskwarrior API";
     homepage = "https://github.com/bergercookie/taskw-ng";
     changelog = "https://github.com/bergercookie/taskw-ng/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

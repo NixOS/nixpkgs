@@ -20,11 +20,11 @@ buildGoModule rec {
   # tests are broken in nix environment
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate Go tests from your source code";
     mainProgram = "gotests";
     homepage = "https://github.com/cweill/gotests";
-    maintainers = with maintainers; [ vdemeester ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.asl20;
   };
 }

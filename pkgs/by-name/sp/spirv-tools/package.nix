@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
-    license = licenses.asl20;
-    platforms = with platforms; unix ++ windows;
-    maintainers = [ maintainers.ralith ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; unix ++ windows;
+    maintainers = [ lib.maintainers.ralith ];
   };
 })

@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "omnikinverter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the Omnik Inverter";
     homepage = "https://github.com/klaasnicolaas/python-omnikinverter";
     changelog = "https://github.com/klaasnicolaas/python-omnikinverter/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

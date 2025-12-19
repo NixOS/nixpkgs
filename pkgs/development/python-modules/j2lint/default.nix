@@ -34,10 +34,10 @@ buildPythonPackage rec {
   ];
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aristanetworks/j2lint";
     description = "Jinja2 Linter CLI";
-    license = licenses.mit;
-    maintainers = with maintainers; [ polyfloyd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ polyfloyd ];
   };
 }

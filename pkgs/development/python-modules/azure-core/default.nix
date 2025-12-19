@@ -109,11 +109,11 @@ buildPythonPackage rec {
     "tests/test_tracing_live.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

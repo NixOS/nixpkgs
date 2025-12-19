@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for converting DSL dictionary texts into HTML";
     homepage = "https://github.com/Crissium/python-dsl";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

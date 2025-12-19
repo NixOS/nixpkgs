@@ -45,7 +45,7 @@ else
       done
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (thunar.meta)
         homepage
         license
@@ -56,7 +56,7 @@ else
       description =
         thunar.meta.description
         +
-          optionalString (0 != length thunarPlugins)
-            " (with plugins: ${concatStringsSep ", " (map (x: x.name) thunarPlugins)})";
+          lib.optionalString (0 != lib.length thunarPlugins)
+            " (with plugins: ${lib.concatStringsSep ", " (map (x: x.name) thunarPlugins)})";
     };
   }

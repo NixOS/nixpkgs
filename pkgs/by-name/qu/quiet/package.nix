@@ -13,7 +13,7 @@
 
 let
   pname = "quiet";
-  version = "6.3.0";
+  version = "6.4.1";
 
   meta = {
     description = "Private, p2p alternative to Slack and Discord built on Tor & IPFS";
@@ -39,7 +39,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.AppImage";
-      hash = "sha256-LRUm2QMYg2oD6USOUYRyNUDf1VHu2txsaCUhbi1Ar5o=";
+      hash = "sha256-CAJgd7d0Fq6pEKLNAojE7krKJCpBBjhyOTsgYEPz0DY=";
     };
 
     meta = meta // {
@@ -52,7 +52,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.dmg";
-      hash = "sha256-T3EDgQ2DhYttbRjAklhw/C4paUzkdEx6i6Gi+Jx1N+w=";
+      hash = "sha256-wg2WyQ6y/wBcRuhhY8EyacKy4Xwfo1SKdeTJw/OIjMc=";
     };
 
     nativeBuildInputs = [

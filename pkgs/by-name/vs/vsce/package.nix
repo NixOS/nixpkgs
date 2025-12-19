@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dNSO+PoUNQUtvS6NZJ/InOYqI4vav+WNg6kCA+CaWL8=";
+    hash = "sha256-7Urn3MlcvJragFvbPYOurUCIOyqYQsEqg5IKbFwcHBo=";
   };
 
-  npmDepsHash = "sha256-rqwb1bz/OFHzL8GgqMZtuqYkeST5qlFybDRSFOx7LtU=";
+  npmDepsHash = "sha256-lJDCeOqSYZCI9o9RsFSviQKkxgcv8XGps3ecy55r7E4=";
 
   postPatch = ''
     substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'

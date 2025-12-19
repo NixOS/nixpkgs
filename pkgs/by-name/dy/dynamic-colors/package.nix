@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
       --replace /usr/share/dynamic-colors $out/share/dynamic-colors
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Change terminal colors on the fly";
     homepage = "https://github.com/peterhoeg/dynamic-colors";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "dynamic-colors";
   };
 }

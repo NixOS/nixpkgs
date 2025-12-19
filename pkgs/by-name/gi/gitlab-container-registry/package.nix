@@ -34,14 +34,14 @@ buildGo124Module rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
-    license = licenses.asl20;
-    teams = with teams; [
+    license = lib.licenses.asl20;
+    teams = with lib.teams; [
       gitlab
       cyberus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "registry";
   };
 }

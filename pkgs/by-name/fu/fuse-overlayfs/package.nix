@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     description = "FUSE implementation for overlayfs";
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ma9e ];
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ma9e ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     inherit (src.meta) homepage;
     mainProgram = "fuse-overlayfs";
   };

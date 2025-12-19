@@ -5,20 +5,17 @@
   httpx,
   poetry-core,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-cloud";
-  version = "0.1.44";
+  version = "0.1.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_cloud";
     inherit version;
-    hash = "sha256-J2orT5RGPaA3QxyjBjMxs7a+OYu/sAMRPudrfCqHO1M=";
+    hash = "sha256-FAJEAIzFcQ4xrpfGBDlzo6mWmlGw84FV+jOoQ0B46Ko=";
   };
 
   build-system = [ poetry-core ];
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Python Client";
     homepage = "https://pypi.org/project/llama-cloud/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -88,15 +88,15 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modular multi screen pdf presentation viewer";
     homepage = "https://github.com/beamerpresenter/BeamerPresenter";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       gpl3Plus
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       euxane
       dotlambda
     ];

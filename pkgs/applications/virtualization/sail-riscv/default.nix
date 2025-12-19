@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
   # sail-riscv 0.8 fails to install without compressed_changelog
   ninjaFlags = [ "compressed_changelog" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/riscv/sail-riscv";
     description = "Formal specification of the RISC-V architecture, written in Sail";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = lib.licenses.bsd2;
   };
 }

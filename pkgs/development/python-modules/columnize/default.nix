@@ -11,6 +11,9 @@ buildPythonPackage rec {
   version = "0.3.11";
   pyproject = true;
 
+  # 3.11 is the git tag for the 0.3.11 version
+  # r-ryantm keeps trying to change the version to 3.11
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "pycolumnize";

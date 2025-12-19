@@ -12,6 +12,7 @@
   inih,
   liburcu,
   nixosTests,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,11 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
     hash = "sha256-Ww9WqB9kEyYmb3Yq6KVjsp2Vzbzag7x5OPaM4SLx7dk=";
   };
+
+  postPatch = ''
+    substituteInPlace {./scrub/xfs_scrub_all.py.in,./mkfs/xfs_protofile.py.in}\
+      --replace-fail '#!/usr/bin/python3' '#!/usr/bin/env python3'
+  '';
 
   outputs = [
     "bin"
@@ -43,6 +49,7 @@ stdenv.mkDerivation rec {
     icu
     inih
     liburcu
+    (python3.withPackages (ps: [ ps.dbus-python ]))
   ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
@@ -85,16 +92,16 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer) lvm;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       gpl3Plus
     ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       dezgeg
       ajs124
     ];

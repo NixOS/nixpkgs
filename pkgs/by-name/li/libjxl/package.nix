@@ -205,11 +205,11 @@ stdenv.mkDerivation rec {
     ".*bitSqueeze.*"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libjxl/libjxl";
     description = "JPEG XL image format reference implementation";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nh2 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nh2 ];
+    platforms = lib.platforms.all;
   };
 }

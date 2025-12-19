@@ -16,14 +16,14 @@
       version = "4.0.2";
       format = "setuptools";
 
-      meta = with lib; {
+      meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "OpenSteno Plover stenography software";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           twey
           kovirobi
         ];
-        license = licenses.gpl2;
+        license = lib.licenses.gpl2;
       };
 
       src = fetchFromGitHub {

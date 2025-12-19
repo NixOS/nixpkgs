@@ -61,16 +61,16 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       marcweber
       oxalica
       Necior
     ];
     mainProgram = "task";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

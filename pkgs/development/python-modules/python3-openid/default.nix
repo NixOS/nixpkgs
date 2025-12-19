@@ -22,9 +22,9 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     description = "OpenID support for modern servers and consumers";
     homepage = "https://github.com/necaris/python3-openid";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

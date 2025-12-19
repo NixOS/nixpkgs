@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pothosware/SoapyPlutoSDR";
     changelog = "https://github.com/pothosware/SoapyPlutoSDR/blob/soapy-plutosdr-${finalAttrs.version}/Changelog.txt";
     description = "SoapySDR plugin for Pluto SDR devices";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ wucke13 ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ wucke13 ];
+    platforms = lib.platforms.unix;
   };
 })

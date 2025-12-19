@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gersemi";
-  version = "0.23.1";
+  version = "0.23.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
     tag = version;
-    hash = "sha256-mAScW+OLHSN5idHk/Kd909sOJDBUAe2Vi55kdhTtlzQ=";
+    hash = "sha256-sXgu3KscRi/3Myg/4jarMZ4W7/CaQTmyxxbcu8/0o6Y=";
   };
 
   build-system = with python3Packages; [

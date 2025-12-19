@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
       --set PATH "${spath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XML debugger";
     mainProgram = "xmloscopy";
     homepage = "https://github.com/grahamc/xmloscopy";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ grahamc ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ grahamc ];
   };
 }

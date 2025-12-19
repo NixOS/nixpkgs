@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docs.part-db.de/";
     changelog = "https://github.com/Part-DB/Part-DB-server/releases/tag/v${version}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ felbinger ];
+    teams = with lib.teams; [ secshell ];
     platforms = lib.platforms.linux;
   };
 })

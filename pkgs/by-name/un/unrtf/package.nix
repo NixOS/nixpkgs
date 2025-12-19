@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converter from Rich Text Format to other formats";
     mainProgram = "unrtf";
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       formats, including HTML, LaTeX, and RTF itself.
     '';
     homepage = "https://www.gnu.org/software/unrtf/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ joachifm ];
+    platforms = lib.platforms.unix;
   };
 }

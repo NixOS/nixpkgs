@@ -67,11 +67,11 @@ buildBazelPackage {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Linux perf files to the profile.proto format used by pprof";
     homepage = "https://github.com/google/perf_data_converter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hzeller ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hzeller ];
+    platforms = lib.platforms.linux;
   };
 }

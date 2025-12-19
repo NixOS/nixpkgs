@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-but-set-variable"
       # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
       "-Wno-error=c++20-extensions"
+      # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 

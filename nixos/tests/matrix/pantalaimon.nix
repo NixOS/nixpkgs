@@ -31,8 +31,8 @@ let
 in
 {
   name = "pantalaimon";
-  meta = with pkgs.lib; {
-    maintainers = teams.matrix.members;
+  meta = {
+    maintainers = pkgs.lib.teams.matrix.members;
   };
 
   nodes.machine =

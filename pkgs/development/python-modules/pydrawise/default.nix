@@ -52,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydrawise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with Hydrawise sprinkler controllers through the GraphQL API";
     homepage = "https://github.com/dknowles2/pydrawise";
     changelog = "https://github.com/dknowles2/pydrawise/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

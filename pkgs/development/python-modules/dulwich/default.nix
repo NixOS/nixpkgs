@@ -105,7 +105,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dulwich" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
@@ -113,10 +113,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl2Plus
     ];
-    maintainers = with maintainers; [ koral ];
+    maintainers = with lib.maintainers; [ koral ];
   };
 }

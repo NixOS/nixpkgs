@@ -121,7 +121,7 @@ ags.bundle {
     description = "Bar/Panel for Hyprland with extensive customizability";
     homepage = "https://github.com/Jas-SinghFSU/HyprPanel";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
     mainProgram = "hyprpanel";
     platforms = lib.platforms.linux;
   };

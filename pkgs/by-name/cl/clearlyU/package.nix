@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     mkfontdir "$fontDir"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode font";
-    license = licenses.mit;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
   };
 }

@@ -54,6 +54,11 @@ getHashes() {
   };
 }
 EOF
+
+  if [ "$variant" = "web" ]; then
+    local shared_components_yarn_hash="$(fixupHash "$(prefetch-yarn-deps "$src_path/packages/shared-components/yarn.lock")")"
+    sed -i "/^    \"webYarnHash/a \    \"webSharedComponentsYarnHash\" = \"$shared_components_yarn_hash\";" "$output"
+  fi
 }
 
 getHashes web ../element-web-unwrapped/element-web-pin.nix

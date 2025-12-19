@@ -66,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of the original Unreal Engine";
     mainProgram = "SurrealEngine";
     homepage = "https://github.com/dpjudas/SurrealEngine";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ hughobrien ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ hughobrien ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -9,21 +9,21 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  name = "wayscriber";
-  version = "0.7.2";
+  pname = "wayscriber";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "devmobasa";
     repo = "wayscriber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2CBSonwYa0lxhDYp1To08VicoNrAQkKwhJxZd0Iu+P0=";
+    hash = "sha256-NQmi9JozGOD/EQ8dMiBCgIziUmjwhInxypX9dyk3TTY=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pango
     libxkbcommon
   ];
-  cargoHash = "sha256-DjC8UOGSMqinr5p+Jzot7sRV1AP9xn4AwWXKRDZLdU4=";
+  cargoHash = "sha256-c/eSzYyAELeP8zU1nnkbmx1E8U1EY5zAR55Wp2zLn9k=";
   passthru.updateScript = nix-update-script { };
 
   meta = {

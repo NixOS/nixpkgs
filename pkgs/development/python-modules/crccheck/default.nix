@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crccheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for CRCs and checksums";
     homepage = "https://github.com/MartinScharrer/crccheck";
     changelog = "https://github.com/MartinScharrer/crccheck/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

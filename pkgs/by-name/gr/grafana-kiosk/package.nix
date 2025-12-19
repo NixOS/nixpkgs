@@ -24,12 +24,12 @@ buildGoModule rec {
     wrapProgram $out/bin/grafana-kiosk --prefix PATH : ${lib.makeBinPath [ chromium ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kiosk Utility for Grafana";
     homepage = "https://github.com/grafana/grafana-kiosk";
     changelog = "https://github.com/grafana/grafana-kiosk/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ marcusramberg ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ marcusramberg ];
     mainProgram = "grafana-kiosk";
   };
 }

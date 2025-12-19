@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform g2p for Korean";
     homepage = "https://github.com/harmlessman/g2pkk";
-    license = licenses.asl20;
-    teams = [ teams.tts ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.tts ];
   };
 }

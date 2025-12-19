@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing OpenPGP keys within organizations";
     homepage = "https://openpgp-ca.org/";
     changelog = "https://openpgp-ca.org/doc/changelog/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "oca";
   };
 }

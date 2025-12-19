@@ -83,15 +83,15 @@ python.pkgs.buildPythonApplication rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to help with software supply chain challenges on nix targets";
     homepage = "https://github.com/tiiuae/sbomnix";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       bsd3
       cc-by-30
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       henrirosten
       jk
     ];

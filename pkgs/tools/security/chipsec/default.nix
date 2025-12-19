@@ -67,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     "chipsec"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform Security Assessment Framework";
     longDescription = ''
       CHIPSEC is a framework for analyzing the security of PC platforms
@@ -76,9 +76,9 @@ python3.pkgs.buildPythonApplication rec {
       interfaces, and forensic capabilities. It can be run on Windows, Linux,
       Mac OS X and UEFI shell.
     '';
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       johnazoidberg
       erdnaxe
     ];

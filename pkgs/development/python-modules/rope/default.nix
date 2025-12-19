@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "test_hint_parametrized_iterator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
     changelog = "https://github.com/python-rope/rope/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

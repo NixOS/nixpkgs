@@ -58,16 +58,16 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.3.5";
+  version = "33.3.6";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-DLLUM2ogC5kFFyOcwd1kkUgJEJEFO5VgSdfrRTKQKM4=";
+    hash = "sha256-/Bex4N+3xnYwteO85UaqrIKL5qGnYgSJYO9ET/WEUjM=";
   };
 
-  npmDepsHash = "sha256-avjEEJFr9918FzgE1Yxx9S6KRY0A940nlaKVcjkmepI=";
+  npmDepsHash = "sha256-6TTcXFf9z3ebL4l+++0DS26BJVnwzIi7hU2R1H0DF44=";
 
   nativeBuildInputs = [
     remarshal
@@ -121,7 +121,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     # pipe to cat to disable progress bar
-    npm run build --no-update-notifier --targets ttf::$pname -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
+    npm run build --no-update-notifier --targets ttf::"$pname" -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
 
     runHook postBuild
   '';
@@ -137,7 +137,7 @@ buildNpmPackage rec {
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = "Versatile typeface for code, from code";
@@ -146,9 +146,9 @@ buildNpmPackage rec {
       quasi‑proportional typeface family, designed for writing code, using in
       terminals, and preparing technical documents.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ttuegel
       lunik1
     ];

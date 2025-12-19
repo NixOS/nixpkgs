@@ -64,11 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
     changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

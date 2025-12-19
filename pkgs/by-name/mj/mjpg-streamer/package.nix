@@ -38,11 +38,11 @@ stdenv.mkDerivation {
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/mjpg_streamer):$out/lib/mjpg-streamer" $out/bin/mjpg_streamer
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jacksonliam/mjpg-streamer";
     description = "Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software";
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
     mainProgram = "mjpg_streamer";
   };

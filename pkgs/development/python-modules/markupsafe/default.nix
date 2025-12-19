@@ -46,13 +46,13 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
-      replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] version
     }";
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

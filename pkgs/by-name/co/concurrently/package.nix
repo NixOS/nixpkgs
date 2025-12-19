@@ -6,11 +6,9 @@
   makeWrapper,
   nodejs,
   pnpm_8,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-
-let
-  pnpm = pnpm_8;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "concurrently";
   version = "8.2.2";
@@ -22,13 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VoyVYBOBMguFKnG2VItk1L5BbF72nO7bYJpb7adqICs=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_8;
     fetcherVersion = 1;
     hash = "sha256-F1teWIABkK0mqZcK3RdGNKmexI/C59QWSrrD1jYbHt0=";
   };
@@ -44,7 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_8
   ];
 
   buildPhase = ''

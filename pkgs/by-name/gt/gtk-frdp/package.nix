@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-frdp";
     description = "RDP viewer widget for GTK";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

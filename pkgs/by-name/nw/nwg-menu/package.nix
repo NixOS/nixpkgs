@@ -55,12 +55,12 @@ buildGoModule rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$out/share")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-menu";
     description = "MenuStart plugin for nwg-panel";
     mainProgram = "nwg-menu";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ berbiche ];
   };
 }

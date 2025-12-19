@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pombeirp ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pombeirp ];
     mainProgram = "makensis";
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "labmath" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/labmath";
     description = "Module for basic math in the general vicinity of computational number theory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }

@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Narrow monospaced font, designed to fit a fifteen pixel bitmap";
     homepage = "https://fontlibrary.org/en/font/quinze";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ phunehehe ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ phunehehe ];
+    platforms = lib.platforms.all;
   };
 }

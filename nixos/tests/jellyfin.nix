@@ -154,5 +154,7 @@
 
           if duration.strip() != "5.000000":
               raise Exception("Downloaded video has wrong duration")
+
+      machine.log(machine.succeed("systemd-analyze security jellyfin.service | grep -v '✓'"))
     '';
 }

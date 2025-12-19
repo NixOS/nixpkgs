@@ -171,11 +171,11 @@ buildPythonPackage rec {
     "tests/loaders/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
     changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

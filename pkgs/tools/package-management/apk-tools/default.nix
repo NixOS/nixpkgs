@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.alpinelinux.org/alpine/apk-tools";
     description = "Alpine Package Keeper";
     maintainers = [ ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "apk";
   };
 }

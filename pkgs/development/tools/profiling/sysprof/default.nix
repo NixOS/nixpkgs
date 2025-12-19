@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System-wide profiler for Linux";
     homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
@@ -86,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl3Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 })

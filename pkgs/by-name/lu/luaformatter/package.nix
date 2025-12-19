@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     yaml-cpp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code formatter for Lua";
     homepage = "https://github.com/Koihik/LuaFormatter";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "lua-format";
   };

@@ -1,29 +1,36 @@
 {
   stdenv,
   lib,
-  rustPlatform,
+  cmake,
   fetchFromGitHub,
-  rust-jemalloc-sys,
-  versionCheckHook,
   nix-update-script,
+  rust-jemalloc-sys,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zerofs";
-  version = "0.18.0";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "Barre";
     repo = "ZeroFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+kXAlPfo3YhAGy9nkKCL7384dWUvPr4cZ+WIX99OSc=";
+    hash = "sha256-17KYkB5TtD+JYXhLVj09gcvETlpG1yC/U2Ql04Ur57g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/zerofs";
 
-  cargoHash = "sha256-XbjtlWQkXanOo7SbbgsZNXj5SKy0PQAd2eRM/9f9gLs=";
+  cargoHash = "sha256-5Yn4aaYo34NnwSnZ5kVPMe0xfkvu9fGk9OHje9q1oLw=";
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ rust-jemalloc-sys ];
+
+  env = {
+    RUSTFLAGS = "--cfg tokio_unstable";
+  };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -9,6 +9,7 @@
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
   libv4l,
   opentimelineio,
@@ -38,6 +39,7 @@ mkKdeDerivation {
     qtmultimedia
     qtnetworkauth
 
+    kddockwidgets
     qqc2-desktop-style
 
     ffmpeg-full

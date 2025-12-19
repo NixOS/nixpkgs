@@ -537,19 +537,18 @@ stdenv.mkDerivation (
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.qt.io/";
         description = "Cross-platform application framework for C++";
-        license = with licenses; [
+        license = with lib.licenses; [
           fdl13Plus
           gpl2Plus
           lgpl21Plus
           lgpl3Plus
         ];
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           qknight
           ttuegel
-          periklis
           bkchr
         ];
         pkgConfigModules = [
@@ -571,7 +570,7 @@ stdenv.mkDerivation (
           "Qt5Widgets"
           "Qt5Xml"
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
 
     }

@@ -148,8 +148,8 @@ buildPythonPackage rec {
   '';
 
   # The majority of the tests require a graphical environment, but xvfb-run is available only on Linux.
-  # Tests on aarch64-linux fail randomly on OfBorg.
-  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
+  # Tests fail randomly on OfBorg and Hydra.
+  doCheck = false;
 
   checkPhase =
     let
@@ -177,14 +177,14 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

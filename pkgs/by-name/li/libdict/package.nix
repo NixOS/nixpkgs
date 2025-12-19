@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdict";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "rtbrick";
     repo = "libdict";
     rev = finalAttrs.version;
-    hash = "sha256-GFK2yjtxAwwstoJQGCXxwNKxn3LL74FBxad7JdOn0pU=";
+    hash = "sha256-604escyV5MVuYggs1awIrorCrdXSUj3IhjwXV2QdDMU=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rtbrick/libdict/";
     changelog = "https://github.com/rtbrick/libdict/releases/tag/${finalAttrs.version}";
     description = "C library of key-value data structures";
-    license = licenses.bsd2;
-    teams = [ teams.wdz ];
+    license = lib.licenses.bsd2;
+    teams = [ lib.teams.wdz ];
   };
 })

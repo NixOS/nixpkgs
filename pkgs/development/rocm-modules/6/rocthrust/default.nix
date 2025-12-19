@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCm/rocThrust";
-    license = with licenses; [ asl20 ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ asl20 ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

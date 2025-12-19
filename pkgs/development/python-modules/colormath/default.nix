@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colormath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Color math and conversion library";
     homepage = "https://github.com/gtaylor/python-colormath";
     changelog = "https://github.com/gtaylor/python-colormath/releases/tag/${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ jonathanreeve ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jonathanreeve ];
   };
 }

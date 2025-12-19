@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
-      "https://web.archive.org/web/20250807131013/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+      "https://web.archive.org/web/20251218152602/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
     ];
-    hash = "sha256-zmVpy7T1AyVE5nwD0aZ//9kIFK2IYjl3rSq+9bcHPDE=";
+    hash = "sha256-XH3RZq9ls0e9mM7cZhCSkNMUwMJyBeFTdfn006PaqNg=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/mint-artwork";
     description = "Artwork for the cinnamon desktop";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       cc-by-40
     ]; # from debian/copyright
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

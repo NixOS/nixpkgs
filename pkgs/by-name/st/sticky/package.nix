@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.28";
+  version = "1.29";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
     rev = version;
-    hash = "sha256-6CRkeJ2xuUs3viyYxnrgGFUIakK7ANyVpPZuwU486NM=";
+    hash = "sha256-5KDjvohmdw8j5G8V+uFXPzRSRo/C2HgeRodWfguQjYg=";
   };
 
   postPatch = ''
@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sticky notes app for the Linux desktop";
     mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       linsui
       bobby285271
     ];

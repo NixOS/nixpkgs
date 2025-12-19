@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBHardwareSyncPlugin";
     description = "Sync your ARGB devices colors with hardware measures (CPU, GPU, fan speed, etc...)";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

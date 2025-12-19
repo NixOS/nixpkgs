@@ -21,11 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxgw/LxgwWenKaiTC";
     description = "Traditional Chinese Edition of LXGW WenKai";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ lebensterben ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ lebensterben ];
   };
 }

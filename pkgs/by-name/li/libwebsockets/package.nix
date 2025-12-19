@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebsockets";
-  version = "4.3.5";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
-    hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
+    hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
   };
 
   patches = [
@@ -34,14 +34,6 @@ stdenv.mkDerivation rec {
       hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
     })
   ];
-
-  # Updating to 4.4.1 would bring some errors, and the patch doesn't apply cleanly
-  # https://github.com/warmcat/libwebsockets/commit/47efb8c1c2371fa309f85a32984e99b2cc1d614a
-  postPatch = ''
-    for f in $(find . -name CMakeLists.txt); do
-      sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i "$f"
-    done
-  '';
 
   outputs = [
     "out"
@@ -62,6 +54,8 @@ stdenv.mkDerivation rec {
     "-DLWS_WITH_SOCKS5=ON"
     "-DDISABLE_WERROR=ON"
     "-DLWS_BUILD_HASH=no_hash"
+    # TODO(Mindavi): figure out why linking has broken for test apps between 4.3.5 and 4.4.1.
+    "-DLWS_WITHOUT_TESTAPPS=ON"
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
   ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
@@ -89,7 +83,7 @@ stdenv.mkDerivation rec {
   # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
   disallowedReferences = [ stdenv.cc.cc ];
 
-  meta = with lib; {
+  meta = {
     description = "Light, portable C library for websockets";
     longDescription = ''
       Libwebsockets is a lightweight pure C library built to
@@ -99,13 +93,13 @@ stdenv.mkDerivation rec {
     homepage = "https://libwebsockets.org/";
     # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
     # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       publicDomain
       bsd3
       asl20
     ];
-    maintainers = with maintainers; [ mindavi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mindavi ];
+    platforms = lib.platforms.all;
   };
 }

@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7PTe7popLS0zYYKv+K4629GkNG1wR/fhGi14a/4pkS0=";
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Rust code for gRPC";
     homepage = "https://github.com/stepancheg/grpc-rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
     mainProgram = "protoc-gen-rust-grpc";
   };
 }

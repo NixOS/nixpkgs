@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ETBCOR/nasin-nanpa";
     description = ''UCSUR OpenType monospaced font for the Toki Pona writing system, Sitelen Pona ("Discord" version; makes UCSUR visible in vanilla Discord)'';
     longDescription = ''
@@ -31,8 +31,8 @@ stdenvNoCC.mkDerivation rec {
       sitelen ale pi nasin ni li sama mute weka.
       sitelen pi nasin ni li lon nasin UCSUR kin.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ feathecutie ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ feathecutie ];
   };
 }

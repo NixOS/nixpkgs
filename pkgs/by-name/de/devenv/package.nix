@@ -20,12 +20,16 @@ let
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
-    (nixVersions.git.overrideSource (fetchFromGitHub {
-      owner = "cachix";
-      repo = "nix";
-      rev = "devenv-${devenvNixVersion}";
-      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-    })).overrideAttrs
+    (
+      (nixVersions.nixComponents_git.override { version = devenvNixVersion; })
+      .nix-everything.overrideSource
+      (fetchFromGitHub {
+        owner = "cachix";
+        repo = "nix";
+        rev = "devenv-${devenvNixVersion}";
+        hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
+      })
+    ).overrideAttrs
       (old: {
         pname = "devenv-nix";
         version = devenvNixVersion;

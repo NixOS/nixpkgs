@@ -254,20 +254,20 @@ let
       // (args.passhtru or { });
 
       meta =
-        with lib;
+
         (
           {
             homepage = "https://www.graalvm.org/";
             description = "High-Performance Polyglot VM";
-            license = with licenses; [
+            license = with lib.licenses; [
               upl
               gpl2
               classpathException20
               bsd3
             ];
-            sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+            sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            teams = [ teams.graalvm-ce ];
+            teams = [ lib.teams.graalvm-ce ];
           }
           // (args.meta or { })
         );

@@ -53,11 +53,11 @@ buildPythonPackage {
     "test_random_ua_set_on_exception"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Random User-Agent middleware based on fake-useragent";
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     changelog = "https://github.com/alecxe/scrapy-fake-useragent/blob/master/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

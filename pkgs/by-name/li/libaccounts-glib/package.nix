@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     rev-prefix = "VERSION_";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for managing accounts which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libaccounts-glib";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
   };
 }

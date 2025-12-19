@@ -103,15 +103,15 @@ stdenv.mkDerivation rec {
     odd-unstable = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
       fdl11Plus
     ];
-    platforms = platforms.unix;
-    teams = [ teams.mate ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

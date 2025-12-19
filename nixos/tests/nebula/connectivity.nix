@@ -257,7 +257,7 @@ in
 
       restartAndCheckNebula = name: ip: ''
         ${name}.systemctl("restart nebula@smoke.service")
-        ${name}.succeed("ping -c5 ${ip}")
+        ${name}.wait_until_succeeds("ping -c1 -W1 ${ip}", timeout=10)
       '';
 
       # Create a keypair on the client node, then use the public key to sign a cert on the lighthouse.
@@ -317,7 +317,13 @@ in
       lighthouse.shutdown()
       lighthouse.start()
       lighthouse.wait_for_unit("nebula@smoke.service")
-      lighthouse.succeed("ping -c5 10.0.100.1")
+      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
+
+      # Start all the machines to be set up
+      allowAny.start()
+      allowFromLighthouse.start()
+      allowToLighthouse.start()
+      disabled.start()
 
       # Create keys for allowAny's nebula service and test that it comes up.
       ${setUpPrivateKey "allowAny"}
@@ -338,87 +344,87 @@ in
       ${setUpPrivateKey "disabled"}
       ${signKeysFor "disabled" "10.0.100.5/24"}
       disabled.fail("systemctl status nebula@smoke.service")
-      disabled.fail("ping -c5 10.0.100.5")
+      disabled.fail("ping -c3 -W1 10.0.100.5")
 
       # The lighthouse can ping allowAny and allowFromLighthouse but not disabled
-      lighthouse.succeed("ping -c3 10.0.100.2")
-      lighthouse.succeed("ping -c3 10.0.100.3")
-      lighthouse.fail("ping -c3 10.0.100.5")
+      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
+      lighthouse.fail("ping -c3 -W1 10.0.100.5")
 
       # allowAny can ping the lighthouse, but not allowFromLighthouse because of its inbound firewall
-      allowAny.succeed("ping -c3 10.0.100.1")
-      allowAny.fail("ping -c3 10.0.100.3")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
       # allowAny can also resolve DNS on lighthouse
       allowAny.succeed("dig @10.0.100.1 allowToLighthouse | grep -E 'allowToLighthouse\.\s+[0-9]+\s+IN\s+A\s+10\.0\.100\.4'")
 
       # allowFromLighthouse can ping the lighthouse and allowAny
-      allowFromLighthouse.succeed("ping -c3 10.0.100.1")
-      allowFromLighthouse.succeed("ping -c3 10.0.100.2")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
 
       # block allowFromLighthouse <-> allowAny, and allowFromLighthouse -> allowAny should still work.
       ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.succeed("ping -c10 10.0.100.2")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
       ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.succeed("ping -c10 10.0.100.2")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
 
       # allowToLighthouse can ping the lighthouse but not allowAny or allowFromLighthouse
-      allowToLighthouse.succeed("ping -c3 10.0.100.1")
-      allowToLighthouse.fail("ping -c3 10.0.100.2")
-      allowToLighthouse.fail("ping -c3 10.0.100.3")
+      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.3")
 
       # allowAny can ping allowFromLighthouse now that allowFromLighthouse pinged it first
-      allowAny.succeed("ping -c3 10.0.100.3")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
 
       # block allowAny <-> allowFromLighthouse, and allowAny -> allowFromLighthouse should still work.
       ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
-      allowFromLighthouse.succeed("ping -c10 10.0.100.2")
-      allowAny.succeed("ping -c10 10.0.100.3")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
       ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
-      allowFromLighthouse.succeed("ping -c10 10.0.100.2")
-      allowAny.succeed("ping -c10 10.0.100.3")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
 
       # allowToLighthouse can ping allowAny if allowAny pings it first
-      allowAny.succeed("ping -c3 10.0.100.4")
-      allowToLighthouse.succeed("ping -c3 10.0.100.2")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
+      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
 
       # block allowToLighthouse <-> allowAny, and allowAny <-> allowToLighthouse should still work.
       ${blockTrafficBetween "allowAny" "allowToLighthouse"}
-      allowAny.succeed("ping -c10 10.0.100.4")
-      allowToLighthouse.succeed("ping -c10 10.0.100.2")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
+      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
-      allowAny.succeed("ping -c10 10.0.100.4")
-      allowToLighthouse.succeed("ping -c10 10.0.100.2")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
+      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
 
       # block lighthouse <-> allowFromLighthouse and allowAny <-> allowFromLighthouse; allowFromLighthouse won't get to allowAny
       ${blockTrafficBetween "allowFromLighthouse" "lighthouse"}
       ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.fail("ping -c3 10.0.100.2")
+      allowFromLighthouse.fail("ping -c3 -W1 10.0.100.2")
       ${allowTrafficBetween "allowFromLighthouse" "lighthouse"}
       ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.succeed("ping -c3 10.0.100.2")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
 
       # block lighthouse <-> allowAny, allowAny <-> allowFromLighthouse, and allowAny <-> allowToLighthouse; it won't get to allowFromLighthouse or allowToLighthouse
       ${blockTrafficBetween "allowAny" "lighthouse"}
       ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
       ${blockTrafficBetween "allowAny" "allowToLighthouse"}
-      allowFromLighthouse.fail("ping -c3 10.0.100.2")
-      allowAny.fail("ping -c3 10.0.100.3")
-      allowAny.fail("ping -c3 10.0.100.4")
+      allowFromLighthouse.fail("ping -c3 -W1 10.0.100.2")
+      allowAny.fail("ping -c3 -W1 10.0.100.3")
+      allowAny.fail("ping -c3 -W1 10.0.100.4")
       ${allowTrafficBetween "allowAny" "lighthouse"}
       ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
-      allowFromLighthouse.succeed("ping -c3 10.0.100.2")
-      allowAny.succeed("ping -c3 10.0.100.3")
-      allowAny.succeed("ping -c3 10.0.100.4")
+      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
 
       # block lighthouse <-> allowToLighthouse and allowToLighthouse <-> allowAny; it won't get to allowAny
       ${blockTrafficBetween "allowToLighthouse" "lighthouse"}
       ${blockTrafficBetween "allowToLighthouse" "allowAny"}
-      allowAny.fail("ping -c3 10.0.100.4")
-      allowToLighthouse.fail("ping -c3 10.0.100.2")
+      allowAny.fail("ping -c3 -W1 10.0.100.4")
+      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
       ${allowTrafficBetween "allowToLighthouse" "lighthouse"}
       ${allowTrafficBetween "allowToLighthouse" "allowAny"}
-      allowAny.succeed("ping -c3 10.0.100.4")
-      allowToLighthouse.succeed("ping -c3 10.0.100.2")
+      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
+      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
     '';
 }

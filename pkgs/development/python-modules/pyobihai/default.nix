@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyobihai" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Obihai devices";
     homepage = "https://github.com/ejpenney/pyobihai";
     changelog = "https://github.com/ejpenney/pyobihai/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

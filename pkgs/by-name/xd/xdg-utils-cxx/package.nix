@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 3.10)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the FreeDesktop specifications to be used in c++ projects";
     homepage = "https://github.com/azubieta/xdg-utils-cxx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "xdg-utils-cxx";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

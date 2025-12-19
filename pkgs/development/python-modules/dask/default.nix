@@ -32,6 +32,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.11.0";
+  version = "2025.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-cU4w4dqJQ3ew+fRyD7Lc4URNfW738kKqls6k6j65pIo=";
+    hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
   };
 
   build-system = [
@@ -94,6 +95,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     versionCheckHook

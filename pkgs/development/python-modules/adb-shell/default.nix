@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adb_shell" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of ADB with shell and FileSync functionality";
     homepage = "https://github.com/JeffLIrion/adb_shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

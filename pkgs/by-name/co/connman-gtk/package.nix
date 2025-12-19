@@ -51,12 +51,12 @@ stdenv.mkDerivation {
 
   env.MESON_INSTALL_PREFIX = placeholder "out";
 
-  meta = with lib; {
+  meta = {
     description = "GTK GUI for Connman";
     mainProgram = "connman-gtk";
     homepage = "https://github.com/jgke/connman-gtk";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

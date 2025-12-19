@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux and Mac OS support for the CorsairLink Devices";
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "OpenCorsairLink.elf";
   };

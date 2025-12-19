@@ -226,15 +226,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit dmdBootstrap;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     changelog = "https://dlang.org/changelog/${finalAttrs.version}.html";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
-    license = licenses.boost;
+    license = lib.licenses.boost;
     mainProgram = "dmd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lionello
       dukc
       jtbx

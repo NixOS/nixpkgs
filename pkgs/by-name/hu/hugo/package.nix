@@ -81,7 +81,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "hugo";
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       Frostman
       savtrip
     ];

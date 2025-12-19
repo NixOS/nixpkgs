@@ -28,10 +28,10 @@ buildGoModule rec {
     mv $out/bin/lambda $lambda/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool (and Lambda) for collecting Buildkite agent metrics";
     homepage = "https://github.com/buildkite/buildkite-agent-metrics";
-    license = licenses.mit;
-    teams = [ teams.determinatesystems ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.determinatesystems ];
   };
 }

@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     ./install.sh -d $out/share/themes
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Adwaita-based GTK theme with design influence from elementary OS and Vertex GTK theme";
     homepage = "https://github.com/hrdwrrsk/adementary-theme";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

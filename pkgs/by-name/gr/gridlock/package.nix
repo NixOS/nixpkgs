@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage {
     moveToOutput bin/nyarr $nyarr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix compatible lockfile manager, without Nix";
     homepage = "https://github.com/lf-/gridlock";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -18,8 +18,13 @@ buildPythonPackage rec {
     owner = "pymitsubishi";
     repo = "pymitsubishi";
     tag = "v${version}";
-    hash = "sha256-QjHMIzl2VV1S8tNWsFLgLDNX6/0wN9FeIJIo5KgkDVE=";
+    hash = "sha256-frqyAXAP2O8TZzXx5ephcLSLJA9p0P74KJrPoSKPYYo=";
   };
+
+  postPatch = ''
+    # make sure pyproject.toml specifies the correct version
+    grep -qF 'version = "${version}"' pyproject.toml
+  '';
 
   build-system = [ setuptools ];
 

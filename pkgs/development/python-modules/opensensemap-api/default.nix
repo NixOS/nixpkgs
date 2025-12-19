@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opensensemap_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenSenseMap API Python client";
     longDescription = ''
       Python Client for interacting with the openSenseMap API. All
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-opensensemap-api";
     changelog = "https://github.com/home-assistant-ecosystem/python-opensensemap-api/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

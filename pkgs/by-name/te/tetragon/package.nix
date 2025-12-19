@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-riuSByvMpbukA+pwbzecnyUvZGtPR6lLEA1s2oBnI+A=";
+    hash = "sha256-A6a7yjxenB/7sfdfoIaJAxdkw0ouNinZtahNMRAytwA=";
   };
 
   nativeBuildInputs = [

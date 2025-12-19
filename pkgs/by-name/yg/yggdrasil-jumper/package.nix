@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Reduce latency of a connection over Yggdrasil Network";
     longDescription = ''
       An independent project that aims to transparently reduce latency
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       configuration or port mapping.
     '';
     homepage = "https://github.com/one-d-wide/yggdrasil-jumper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ one-d-wide ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ one-d-wide ];
   };
 }

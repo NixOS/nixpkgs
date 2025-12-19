@@ -104,16 +104,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Database access library";
     homepage = "https://www.gnome-db.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       # library
       lgpl2Plus
       # CLI tools
       gpl2Plus
     ];
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

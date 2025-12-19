@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whois" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to produce parsed WHOIS data";
     homepage = "https://github.com/richardpenman/whois";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -7,6 +7,8 @@
   pandoc,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   makeWrapper,
   makeDesktopItem,
@@ -16,8 +18,6 @@
 }:
 
 let
-  pnpm = pnpm_9;
-
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
@@ -36,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BplxcFV8h0V+eyk2knCpwPCxUo9PdoIHp4mDXXo/HyE=";
+    hash = "sha256-INwbp6gGqrmOtrM5d/8iEv1nlTUDSuo9AVN0EwNhW9Y=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-v2I8+1K+Yz+DR2QsJ+1SaKLh3aEIBaR3aXRfwDMNvVs=";
+    vendorHash = "sha256-kt5fnkF/bxpeY9d86zKr9VlShvLy1gtaICfA0PGVGKI=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -84,12 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -97,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       postPatch
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };

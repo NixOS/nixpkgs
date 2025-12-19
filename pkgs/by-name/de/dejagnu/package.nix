@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Framework for testing other programs";
 
     longDescription = ''
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/dejagnu/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

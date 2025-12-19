@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing JSON config files";
     homepage = "https://github.com/andrewrk/liblaxjson";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = [ maintainers.andrewrk ];
+    maintainers = [ lib.maintainers.andrewrk ];
   };
 }

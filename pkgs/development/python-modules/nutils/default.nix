@@ -67,11 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Numerical Utilities for Finite Element Analysis";
     changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }

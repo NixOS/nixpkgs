@@ -64,11 +64,11 @@ buildPythonApplication rec {
     "test/test_file_changes.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Work with remote hosts seamlessly via rsync and ssh";
     homepage = "https://github.com/remote-cli/remote";
     changelog = "https://github.com/remote-cli/remote/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

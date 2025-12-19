@@ -46,6 +46,14 @@ let
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
+  # What should lib be linked to: lib32 or lib64?
+  defaultLib =
+    {
+      "i686-linux" = "lib32";
+      "x86_64-linux" = "lib64";
+      "aarch64-linux" = "lib64";
+    }
+    .${stdenv.system} or (throw "Please expand list of system with defaultLib for '${stdenv.system}'");
 
   # list of packages (usually programs) which match the host's architecture
   # (which includes stuff from multiPkgs)
@@ -229,7 +237,7 @@ let
         ln -s /usr/lib $out/lib
         ln -s /usr/lib32 $out/lib32
         ln -s /usr/lib64 $out/lib64
-        ln -s /usr/lib64 $out/usr/lib
+        ln -s /usr/${defaultLib} $out/usr/lib
         ln -s /usr/libexec $out/libexec
 
         # symlink 32-bit ld-linux so it's visible in /lib

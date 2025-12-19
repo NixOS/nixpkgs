@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "test/test_modules.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing your infrastructure";
     homepage = "https://github.com/pytest-dev/pytest-testinfra";
     changelog = "https://github.com/pytest-dev/pytest-testinfra/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hulr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hulr ];
   };
 }

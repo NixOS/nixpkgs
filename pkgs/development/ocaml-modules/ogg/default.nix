@@ -22,10 +22,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libogg ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-ogg";
     description = "Bindings to libogg";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

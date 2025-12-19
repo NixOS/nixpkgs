@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "docutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
     changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

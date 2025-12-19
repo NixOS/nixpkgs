@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "skippy-xd";
-  version = "2025.10.05";
+  version = "2025.11.30";
 
   src = fetchFromGitHub {
     owner = "felixfung";
     repo = "skippy-xd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WrB633mhZwoP+54mjSE+3gSU/VsdBZVITfD0dkYaoa8=";
+    hash = "sha256-aN1ZJnN8xH5ggH3lknrIrz2MxrVreElUKhL8RjvZBO0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scanner button daemon";
     longDescription = ''
       scanbd polls a scanner's buttons, looking for button presses, function
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://scanbd.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/scanbd/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

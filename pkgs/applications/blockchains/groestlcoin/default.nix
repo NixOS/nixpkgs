@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription = ''
       Groestlcoin is a free open source peer-to-peer electronic cash system that is
@@ -122,8 +122,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://groestlcoin.org/";
     downloadPage = "https://github.com/Groestlcoin/groestlcoin/releases/tag/v${version}/";
-    maintainers = with maintainers; [ gruve-p ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ gruve-p ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

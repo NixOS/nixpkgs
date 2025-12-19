@@ -32,6 +32,7 @@ let
 
   vsix = buildNpmPackage {
     inherit pname releaseTag;
+    name = "${pname}-${version}.vsix";
     version = lib.trim (lib.readFile ./version.txt);
     src = "${src}/editors/code";
     npmDepsHash = "sha256-fV4Z3jj+v56A7wbIEYhVAPVuAMqMds5xSe3OetWAsbw=";
@@ -57,15 +58,14 @@ let
         walk(del(.["$generated-start"]?) | del(.["$generated-end"]?))
       ' package.json | sponge package.json
 
-      mkdir -p $out
-      npx vsce package -o $out/${pname}.zip
+      npm exec --package=@vscode/vsce -- vsce package --out $out
     '';
   };
 
 in
 vscode-utils.buildVscodeExtension {
   inherit version vsix pname;
-  src = "${vsix}/${pname}.zip";
+  src = vsix;
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
   vscodeExtName = pname;

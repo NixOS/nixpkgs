@@ -36,15 +36,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eigen.tuxfamily.org";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
-      sander
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       raskin
       pbsds
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

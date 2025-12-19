@@ -46,7 +46,6 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ (with python3Packages; [
     click
-    dulwich
     grpcio
     jinja2
     markupsafe
@@ -55,10 +54,8 @@ python3Packages.buildPythonApplication rec {
     protobuf
     psutil
     pyroaring
-    requests
     ruamel-yaml
     ruamel-yaml-clib
-    tomlkit
     ujson
   ])
   ++ lib.optionals enableBuildstreamPlugins [

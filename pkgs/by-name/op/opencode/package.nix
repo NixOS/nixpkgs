@@ -13,12 +13,12 @@
 }:
 let
   pname = "opencode";
-  version = "1.0.119";
+  version = "1.0.164";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-U2oIEXhAWOaOZHGBlVUPgysW0AtEh/P8LxbGlm8Lquk=";
+    hash = "sha256-bz20/y6zVhEWQZB17HocvYg0F9XNwy6EKg3LHSkmvLE=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -70,7 +70,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-rGmHVBhsyOmPD4kG8k0hhER5pZn2KVwBXk0O8MER8jc=";
+    outputHash = "sha256-I7y6e+ODXShbMCmKOvC48+Y3wyrLKH0IES4S6gOnMiE=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -211,6 +211,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/sst/opencode";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ delafthi ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

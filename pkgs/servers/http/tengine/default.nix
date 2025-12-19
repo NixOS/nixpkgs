@@ -148,12 +148,12 @@ stdenv.mkDerivation rec {
     tests = nixosTests.nginx-variants.tengine;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web server based on Nginx and has many advanced features, originated by Taobao";
     mainProgram = "nginx";
     homepage = "https://tengine.taobao.org";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
 }

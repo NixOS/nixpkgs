@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyemby" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with the Emby API";
     homepage = "https://github.com/mezz64/pyemby";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

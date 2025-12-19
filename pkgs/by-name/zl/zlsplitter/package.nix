@@ -29,13 +29,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlsplitter";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLSplitter";
     tag = "${finalAttrs.version}";
-    hash = "sha256-8a/t1yJG5CUr4udnKIy80exQejDy0HzOi7uMjelPldg=";
+    hash = "sha256-6ICXL1jX6MMYf5VasTW9osJ2BNb6jqWfeAtmmEp6L/4=";
     fetchSubmodules = true;
   };
 
@@ -87,6 +87,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # set the version for in the settings screen.
+    (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];
 
   installPhase = ''

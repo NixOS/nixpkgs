@@ -28,12 +28,12 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
     downloadPage = "https://github.com/johman10/flood-for-transmission/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ al3xtjames ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ al3xtjames ];
+    platforms = lib.platforms.all;
   };
 }

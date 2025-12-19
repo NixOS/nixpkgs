@@ -38,9 +38,9 @@ mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = with lib; {
+  meta = {
     description = "Robust and expressive tactic language for Coq";
-    maintainers = [ maintainers.vbgl ];
-    license = licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
   };
 }

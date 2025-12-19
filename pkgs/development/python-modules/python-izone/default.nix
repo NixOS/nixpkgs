@@ -55,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pizone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the iZone airconditioner controller";
     homepage = "https://github.com/Swamp-Ig/pizone";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

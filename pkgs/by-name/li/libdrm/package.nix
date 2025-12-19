@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
     downloadPage = "https://dri.freedesktop.org/libdrm/";
     description = "Direct Rendering Manager library and headers";
@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
       libdrm is a low-level library, typically used by graphics drivers such as
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
-    license = licenses.mit;
-    platforms = lib.subtractLists platforms.darwin platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
     maintainers = [ ];
   };
 }

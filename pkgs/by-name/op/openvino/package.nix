@@ -41,12 +41,6 @@ let
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
 
-  tbbbind_version = "2_5";
-  tbbbind = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
-    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
-  };
-
   python = python3Packages.python.withPackages (
     ps: with ps; [
       cython
@@ -100,14 +94,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
-
-  postPatch = ''
-    mkdir -p temp/tbbbind_${tbbbind_version}
-    pushd temp/tbbbind_${tbbbind_version}
-    bsdtar -xf ${tbbbind}
-    echo "${tbbbind.url}" > ie_dependency.info
-    popd
-  '';
 
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
@@ -186,7 +172,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
@@ -197,8 +183,8 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
-    license = with licenses; [ asl20 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 }

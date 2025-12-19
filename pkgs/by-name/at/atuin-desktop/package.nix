@@ -9,8 +9,11 @@
   cargo-tauri,
   nodejs,
   pkg-config,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm,
 
+  alsa-lib,
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -18,27 +21,30 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
-  version = "0.2.3";
+  # TODO When updating the version, check if the version-mismatch workaround in preBuild is still needed
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jBCf6Wq7xTgI2VjhQ+RZ3uN7LVh+ZlQ3TDJ0epsGj0M=";
+    hash = "sha256-tVIT3GUJ1qcv6HSvO+nqAz+VMfd8g9AjgaqE6+GSa+I=";
   };
 
   cargoRoot = "./.";
-  cargoHash = "sha256-329uNcc8LSNreD8CgPCpEhGCR2PebpmFoaRwZn+oscE=";
+  cargoHash = "sha256-T3cPvwph71lpqlGcugAO4Ua8Y5TNZSySbQatxcvoT4E=";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-2i1mL4HwwiXrmM1qaWvHhm27U2/oElbOpnXh09ziamo=";
+    hash = "sha256-XqKGAx2Q9cWO1oG4mP1cKM2Y9Pib5haFYEaq0PAfAdQ=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
+    rustPlatform.bindgenHook
 
     nodejs
     pkg-config
@@ -46,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     glib-networking
     libappindicator-gtk3
     openssl
@@ -65,6 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
+      # Skips the version mismatch check (and accepts the consequences)
+      # ref: https://github.com/atuinsh/desktop/issues/313
+      "--ignore-version-mismatches"
     )
   '';
 

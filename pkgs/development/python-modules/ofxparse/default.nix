@@ -23,9 +23,9 @@ buildPythonPackage rec {
     lxml
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sites.google.com/site/ofxparse";
     description = "Tools for working with the OFX (Open Financial Exchange) file format";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

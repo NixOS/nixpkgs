@@ -10,9 +10,9 @@ in
 {
   patchRcPathBash = makeSetupHook {
     name = "patch-rc-path-bash";
-    meta = with lib; {
+    meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Bash/Ksh/Zsh script";
-      maintainers = with maintainers; [ ShamrockLee ];
+      maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
       inherit (tests) test-bash;
@@ -23,9 +23,9 @@ in
     substitutions = {
       sed = "${gnused}/bin/sed";
     };
-    meta = with lib; {
+    meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Csh script";
-      maintainers = with maintainers; [ ShamrockLee ];
+      maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
       inherit (tests) test-csh;
@@ -33,9 +33,9 @@ in
   } ./patch-rc-path-csh.sh;
   patchRcPathFish = makeSetupHook {
     name = "patch-rc-path-fish";
-    meta = with lib; {
+    meta = {
       description = "Setup-hook to inject source-time PATH prefix to a Fish script";
-      maintainers = with maintainers; [ ShamrockLee ];
+      maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
       inherit (tests) test-fish;
@@ -46,9 +46,9 @@ in
     substitutions = {
       sed = "${gnused}/bin/sed";
     };
-    meta = with lib; {
+    meta = {
       description = "Setup-hook to inject source-time PATH prefix to a POSIX shell script";
-      maintainers = with maintainers; [ ShamrockLee ];
+      maintainers = with lib.maintainers; [ ShamrockLee ];
     };
     passthru.tests = {
       inherit (tests) test-posix;

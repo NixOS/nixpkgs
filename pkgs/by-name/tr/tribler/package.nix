@@ -115,7 +115,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   postInstall = ''
-    ln -s ${tribler-webui} $out/lib/python*/site-packages/tribler/ui
+    ln -s ${tribler-webui} $out/${python312.sitePackages}/tribler/ui
   '';
 
   preFixup = ''

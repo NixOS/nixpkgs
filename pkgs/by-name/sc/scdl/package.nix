@@ -42,10 +42,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "scdl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Download Music from Soundcloud";
     homepage = "https://github.com/flyingrub/scdl";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "scdl";
   };

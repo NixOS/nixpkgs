@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = version;
-    hash = "sha256-hXcPcGj+efvRVt3cHQc9KttE0/DOD9Bul6f3cY4ofgs=";
+    hash = "sha256-ysiHvRMOgVFTFKeMWjshZpIZAOTf+EbBQQm3dDeMB3I=";
   };
   missingHashes = ./missing-hashes.json;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-V7ptquAohv0t5oA+3iTvlQOZoEtY5xWyhSoJP8jwYI8=";
+    hash = "sha256-jMJXNWvmlweCJu+xs2ucMtB6N+0r1cgP/aGt2zfH4iQ=";
   };
 
   nativeBuildInputs = [

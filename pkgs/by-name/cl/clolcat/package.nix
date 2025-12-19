@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Much faster lolcat";
     homepage = "https://github.com/IchMageBaume/clolcat";
-    platforms = platforms.all;
-    maintainers = [ maintainers.felipeqq2 ];
-    license = licenses.wtfpl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.felipeqq2 ];
+    license = lib.licenses.wtfpl;
     mainProgram = "clolcat";
   };
 }

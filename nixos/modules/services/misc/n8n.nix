@@ -20,6 +20,8 @@ in
   options.services.n8n = {
     enable = lib.mkEnableOption "n8n server";
 
+    package = lib.mkPackageOption pkgs "n8n" { };
+
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -89,7 +91,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.n8n}/bin/n8n";
+        ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         StateDirectory = "n8n";
 

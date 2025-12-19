@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio adding a filter that can watch a directory for media files";
     homepage = "https://github.com/exeldro/obs-dir-watch-media";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Only;
     inherit (obs-studio.meta) platforms;
   };
 }

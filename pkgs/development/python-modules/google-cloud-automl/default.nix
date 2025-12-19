@@ -68,11 +68,11 @@ buildPythonPackage rec {
     "google.cloud.automl_v1beta1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -12,13 +12,13 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  version = "25.11.0";
+  version = "25.12.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Skpfhhxd8MUoVpwPv4j8/bnFYYEAJkjKN2g1HVwWH/w=";
+    hash = "sha256-hu5Y67vomAJI1IJ1gLAdapRACDW/Q+cOAB+Bo4uQ9+w=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -26,8 +26,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "8f6353763f28d1690c97c04f46a6479668130ec7";
-    hash = "sha256-E+RTa2OvT8fzwuscHhTY4Fd3LhWle9x5X+j9siHnUPM=";
+    rev = "570f8db9dd436810e014d587b4d27105bce7dfda";
+    hash = "sha256-fVyO4rMgbdI1Hm3J4ka9/72sNcwlfLS6Ef06YUvx4Gs=";
   };
 
 in
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     NODE_JQ_SKIP_INSTALL_BINARY = "true";
+    SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
   };
 
   postPatch = ''
@@ -74,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Disable building @swc/core from source - use the pre-built binaries instead
     cat <<< $(${lib.getExe jq} '.dependenciesMeta."@swc/core".built = false' ./package.json) > ./package.json
+
+    # Disable the install script for sharp to prevent it from trying to download binaries
+    cat <<< $(${lib.getExe jq} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
   '';
 
   buildPhase = ''
@@ -90,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-soP7oHCufTL7RekU479evFSe2LUq2OM56A9TbJ13Nmg=";
+    hash = "sha256-Hlc/UMPfZCBbBcmCzmNgDSX+uH8WDEIp/KE9H5jYr2Y=";
   };
 
   pname = "actual-server";

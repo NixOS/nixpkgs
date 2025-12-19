@@ -53,11 +53,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) hound; };
 
-  meta = with lib; {
+  meta = {
     description = "Lightning fast code searching made easy";
     homepage = "https://github.com/hound-search/hound";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       grahamc
       SuperSandro2000
     ];

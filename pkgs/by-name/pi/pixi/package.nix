@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.59.0";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDwuMRceMxRCh9w89Q2ktpNWwmStg3KzggwhZUAAauk=";
+    hash = "sha256-UHaLFzlz0aRl+CTtYURNhJAOd0sQOjhXgOOO+sZw4EE=";
   };
 
-  cargoHash = "sha256-BbPX+ZKMfLtKWBnrGBRfrl6d40rBQaWJLBg0Vv5UnZE=";
+  cargoHash = "sha256-eQQLIdck8C6lLoXcTK/zUw6L9IUAnp7gRrMBlFGMEVg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -69,7 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://pixi.sh/latest/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      edmundmiller
       xiaoxiangmoe
     ];
     mainProgram = "pixi";

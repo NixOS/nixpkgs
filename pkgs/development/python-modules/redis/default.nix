@@ -65,10 +65,10 @@ buildPythonPackage rec {
   # Tests require a running redis
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/redis/redis-py";
     changelog = "https://github.com/redis/redis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
   };
 }

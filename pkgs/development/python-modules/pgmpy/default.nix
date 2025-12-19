@@ -22,9 +22,7 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
-  coverage,
   mock,
-  black,
 }:
 buildPythonPackage rec {
   pname = "pgmpy";
@@ -75,9 +73,7 @@ buildPythonPackage rec {
     pytestCheckHook
     # xdoctest
     pytest-cov-stub
-    coverage
     mock
-    black
   ];
 
   pythonImportsCheck = [ "pgmpy" ];

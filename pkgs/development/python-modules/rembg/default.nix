@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "rembg";
-  version = "2.0.67";
+  version = "2.0.69";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${version}";
-    hash = "sha256-QHx1qa1tErneLC1H6df6mTbKTWPh3BzJUqeE65D2c4E=";
+    hash = "sha256-9Ncs1DHPG3ouU5yFyeH0M2ZCQ9yHqJhVjkDO8fNSqIg=";
   };
 
   build-system = [
@@ -95,6 +95,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
-    platforms = [ "x86_64-linux" ];
   };
 }

@@ -580,6 +580,8 @@ in
 
         mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
+        morse-driver = callPackage ../os-specific/linux/morse-driver { };
+
         # compiles but has to be integrated into the kernel somehow
         # Let's have it uncommented and finish it..
         ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
@@ -665,6 +667,10 @@ in
         zenpower = callPackage ../os-specific/linux/zenpower { };
 
         zfs_2_3 = callPackage ../os-specific/linux/zfs/2_3.nix {
+          configFile = "kernel";
+          inherit pkgs kernel;
+        };
+        zfs_2_4 = callPackage ../os-specific/linux/zfs/2_4.nix {
           configFile = "kernel";
           inherit pkgs kernel;
         };

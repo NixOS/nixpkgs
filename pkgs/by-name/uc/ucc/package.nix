@@ -114,12 +114,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/ucc_info "$dev"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collective communication operations API";
     homepage = "https://openucx.github.io/ucc/";
     mainProgram = "ucc_info";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
 })

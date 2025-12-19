@@ -15,12 +15,12 @@ mkDerivation {
 
   libraryFile = "base.agda-lib";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/agda/agda2hs";
     description = "Standard library for compiling Agda code to readable Haskell";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       wrvsrx
     ];
   };

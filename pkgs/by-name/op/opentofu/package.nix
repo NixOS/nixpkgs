@@ -4,9 +4,10 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  coreutils,
   runCommand,
   runtimeShell,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   writeText,
   terraform-providers,
   installShellFiles,
@@ -15,16 +16,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.10.7";
+    version = "1.11.1";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-aCNXOEYA+6pKBrGLf/u6RkLw5YbKJHbVPltZko3aGgs=";
+      hash = "sha256-2mtSRszdHeHDKpIu+w/Y/P8NfoSPzPBkgQ9YgKSwrls=";
     };
 
-    vendorHash = "sha256-rOSl5WE1/WcgCVpcAOXVl8cBSxjrlG7fxzpRO/5i5GA=";
+    vendorHash = "sha256-aPBP7mZ4NuPAYAOW20cQ6bWQUqk9mfiaeFUS/RQyW4I=";
     ldflags = [
       "-s"
       "-w"
@@ -32,10 +33,8 @@ let
       "github.com/opentofu/opentofu/version.dev=no"
     ];
 
-    postConfigure = ''
-      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
-      substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
+    postPatch = ''
+      substituteInPlace go.mod --replace-fail 'go 1.25.5' 'go 1.25.4'
     '';
 
     nativeBuildInputs = [ installShellFiles ];
@@ -53,8 +52,17 @@ let
       installShellCompletion --bash --name tofu <(echo complete -C tofu tofu)
     '';
 
+    __darwinAllowLocalNetworking = true;
+
+    nativeCheckInputs = [
+      writableTmpDirAsHomeHook
+      versionCheckHook
+    ];
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "version";
+
     preCheck = ''
-      export HOME=$TMPDIR
       export TF_SKIP_REMOTE_TESTS=1
     '';
 

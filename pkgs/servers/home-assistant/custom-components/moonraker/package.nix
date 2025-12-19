@@ -37,11 +37,11 @@ buildHomeAssistantComponent rec {
   #skip phases with nothing to do
   dontConfigure = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/marcolivierarsenault/moonraker-home-assistant/releases/tag/${version}";
     description = "Custom integration for Moonraker and Klipper in Home Assistant";
     homepage = "https://github.com/marcolivierarsenault/moonraker-home-assistant";
-    maintainers = with maintainers; [ _9R ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9R ];
+    license = lib.licenses.mit;
   };
 }

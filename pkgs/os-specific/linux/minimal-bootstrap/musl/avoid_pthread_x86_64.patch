@@ -1,0 +1,16 @@
+diff --git arch/x86_64/pthread_arch.h arch/x86_64/pthread_arch.h
+index 65e880c..91b4a63 100644
+--- arch/x86_64/pthread_arch.h
++++ arch/x86_64/pthread_arch.h
+@@ -1,8 +1,8 @@
++extern pthread_t g_pthread;
++
+ static inline struct pthread *__pthread_self()
+ {
+-	struct pthread *self;
+-	__asm__ ("mov %%fs:0,%0" : "=r" (self) );
+-	return self;
++	return g_pthread;
+ }
+ 
+ #define TP_ADJ(p) (p)

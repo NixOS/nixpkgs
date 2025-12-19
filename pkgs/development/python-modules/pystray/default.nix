@@ -70,14 +70,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moses-palmer/pystray";
     description = "This library allows you to create a system tray icon";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jojosch ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

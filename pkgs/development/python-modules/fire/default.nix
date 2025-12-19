@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fire" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/google/python-fire";
     changelog = "https://github.com/google/python-fire/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

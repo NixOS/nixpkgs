@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Use SSH keys from 1Password with age";
     mainProgram = "age-plugin-1p";
     homepage = "https://github.com/Enzime/age-plugin-1p";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Enzime ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Enzime ];
   };
 }

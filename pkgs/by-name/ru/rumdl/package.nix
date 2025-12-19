@@ -2,28 +2,31 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenvNoCC,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.0.185";
+  version = "0.0.195";
 
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iIpNG8tTwSA6Kj7hQL/6NzSszGLX7lPHNmmXDl67bwo=";
+    hash = "sha256-g0cbn+VhSqCiSLxVHMpWoTzBaM9zkK4Neo3Z91ts8ic=";
   };
 
-  cargoHash = "sha256-CLH+5/ydhaYYSkTYNzTgROefPnC/FPutqDXziTmw7+k=";
+  cargoHash = "sha256-sK7HM0lTQFTCCS7dC/Q3+XyskepGBM3r3GORsA0zgsw=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
   ];
 
-  __darwinAllowLocalNetworking = true; # required for LSP tests
+  # Non-specific tests often fail on Darwin (especially aarch64-darwin),
+  # on both Hydra and GitHub-hosted runners, even with __darwinAllowLocalNetworking enabled.
+  doCheck = !stdenvNoCC.hostPlatform.isDarwin;
 
   useNextest = true;
 

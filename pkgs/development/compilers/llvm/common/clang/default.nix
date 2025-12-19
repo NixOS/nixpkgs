@@ -160,7 +160,11 @@ stdenv.mkDerivation (
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+    ''
+    + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
+    ''
+    + ''
       patchShebangs $python/bin
 
       mkdir -p $dev/bin

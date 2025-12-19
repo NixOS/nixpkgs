@@ -74,12 +74,12 @@ buildDotnetModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "WheelWizard, Retro Rewind Launcher";
     homepage = "https://github.com/TeamWheelWizard/WheelWizard";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "WheelWizard";
-    maintainers = with maintainers; [ DerHalbGrieche ];
+    maintainers = with lib.maintainers; [ DerHalbGrieche ];
   };
 }

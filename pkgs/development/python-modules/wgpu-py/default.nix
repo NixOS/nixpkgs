@@ -39,14 +39,14 @@
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.27.0";
+  version = "0.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-PCZaPG2e6KpV6NDYrnsZIb/rO0/su/dA65s85+/V0HY=";
+    hash = "sha256-91L0rXaMYtDztk9aJQhWDWa8sG+MHQ4sPyidzZmK+ZI=";
   };
 
   postPatch =
@@ -59,10 +59,12 @@ buildPythonPackage rec {
         --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
         --replace-fail 'path = "tools/hatch_build.py"' ""
     ''
-    # Skip the compute_textures / astronauts example during testing, as it uses `imageio` to
+    # Skip the compute_textures example during testing, as it uses `imageio` to
     # retrieve an image of an astronaut, which touches the network.
+    # Additionally skip the imgui_backend_sea and imgui_basic_example examples during testing,
+    # as they depend on imgui_bundle which has not been packaged for nixpkgs.
     + ''
-      substituteInPlace examples/compute_textures.py \
+      substituteInPlace examples/{compute_textures.py,imgui_backend_sea.py,imgui_basic_example.py} \
         --replace-fail 'import wgpu' 'import wgpu # run_example = false'
     '';
 
@@ -79,6 +81,8 @@ buildPythonPackage rec {
     [
       cffi
       sniffio
+      # https://github.com/pygfx/wgpu-py/blob/ff8db1772f7f94bf2a3e82989f5d296d2ddbb923/pyproject.toml#L16
+      (rendercanvas.overrideAttrs { doInstallCheck = false; })
     ]
     # Required only on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

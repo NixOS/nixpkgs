@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.49.4";
+  version = "0.49.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     tag = "v${version}";
-    hash = "sha256-I1//jAF7Exz5d+5B3lhcdokh7xlUoJUFryqTQwFqWuM=";
+    hash = "sha256-69p7lAO7W+odrm1kLhvB8v4kNKx6IWBUSOQKgrxVCCY=";
   };
 
   postPatch = ''

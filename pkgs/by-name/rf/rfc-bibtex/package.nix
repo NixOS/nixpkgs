@@ -27,11 +27,11 @@ python3.pkgs.buildPythonApplication rec {
     "rfc_bibtex"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iluxonchik/rfc-bibtex/";
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "rfcbibtex";
   };
 }

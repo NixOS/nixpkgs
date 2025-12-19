@@ -21,6 +21,10 @@
   version,
 
   embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
+
+  withAWS ?
+    # Default is this way because there have been issues building this dependency
+    stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin),
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -39,7 +43,7 @@ mkMesonLibrary (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
   # There have been issues building these dependencies
   ++
-    lib.optional (stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin))
+    lib.optional withAWS
       # Nix >=2.33 doesn't depend on aws-sdk-cpp and only requires aws-crt-cpp for authenticated s3:// requests.
       (if lib.versionAtLeast (lib.versions.majorMinor version) "2.33" then aws-crt-cpp else aws-sdk-cpp);
 
@@ -52,6 +56,9 @@ mkMesonLibrary (finalAttrs: {
     (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
   ]
+  ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") (
+    lib.mesonEnable "s3-aws-auth" withAWS
+  )
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
   ];

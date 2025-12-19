@@ -48,12 +48,12 @@ stdenv.mkDerivation {
     libdbusmenu-gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast status bar written with GTK";
     homepage = "https://github.com/scorpion-26/gBar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ocfox ];
     mainProgram = "gBar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

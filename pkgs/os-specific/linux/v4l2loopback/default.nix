@@ -5,21 +5,18 @@
   kernel,
   kmod,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
-let
-  version = "0.15.1";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "${version}-${kernel.version}";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
     tag = "v${version}";
-    hash = "sha256-uokj0MB6bw4I8q5dVmSO9XMDvh4T7YODBoCCHvEf4v4=";
+    hash = "sha256-KXJgsEJJTr4TG4Ww5HlF42v2F1J+AsHwrllUP1n/7g8=";
   };
 
   hardeningDisable = [
@@ -53,6 +50,8 @@ stdenv.mkDerivation {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "v4l2loopback.ko"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Kernel module to create V4L2 loopback devices";

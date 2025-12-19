@@ -52,11 +52,11 @@ buildPythonPackage rec {
     "test_weekly"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Garmin SSO auth and connect client";
     homepage = "https://github.com/matin/garth";
     changelog = "https://github.com/matin/garth/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

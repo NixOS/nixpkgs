@@ -9,11 +9,11 @@ let
   base = {
     version = "unstable-2023-01-26";
     dontBuild = true;
-    meta = with lib; {
+    meta = {
       description = "Data repository for seaborn examples";
       homepage = "https://github.com/mwaskom/seaborn-data";
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mbalatsko ];
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ mbalatsko ];
     };
   };
   makeSeabornDataPackage =

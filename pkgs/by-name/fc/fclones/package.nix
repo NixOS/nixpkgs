@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <(fclones complete zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
     changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cyounkins
     ];
     mainProgram = "fclones";

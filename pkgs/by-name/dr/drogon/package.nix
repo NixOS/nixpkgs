@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
   # in the buildPhase)
   doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/drogonframework/drogon";
     description = "C++14/17 based HTTP web application framework";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urlordjames ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urlordjames ];
+    platforms = lib.platforms.all;
   };
 })

@@ -64,11 +64,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_func"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for analysing binaries";
     mainProgram = "amoco";
     homepage = "https://github.com/bdcht/amoco";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

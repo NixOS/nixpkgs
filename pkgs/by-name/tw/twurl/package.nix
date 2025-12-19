@@ -11,12 +11,12 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "twurl";
 
-  meta = with lib; {
+  meta = {
     description = "OAuth-enabled curl for the Twitter API";
     homepage = "https://github.com/twitter/twurl";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ brecht ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ brecht ];
+    platforms = lib.platforms.unix;
     mainProgram = "twurl";
   };
 }

@@ -58,14 +58,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) geth; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       asymmetric
       RaghavSood
     ];

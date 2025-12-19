@@ -5,7 +5,7 @@
   libspelling,
   fetchFromGitHub,
   python312Packages,
-  nodePackages,
+  mathjax,
   meson,
   ninja,
   pkg-config,
@@ -57,7 +57,7 @@ python312Packages.buildPythonApplication {
   # Use mathjax from nixpkgs to avoid loading from CDN
   + ''
     substituteInPlace apostrophe/preview_converter.py \
-      --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
+      --replace-fail "--mathjax" "--mathjax=file://${mathjax}/lib/node_modules/mathjax/tex-chtml-full.js"
   '';
 
   # Should be done in postInstall, but meson checks this eagerly before build

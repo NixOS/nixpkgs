@@ -37,10 +37,10 @@ stdenv.mkDerivation {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vilhalmer/oguri/";
     description = "Very nice animated wallpaper daemon for Wayland compositors";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # this should be enfoced by wayland platforms in the future

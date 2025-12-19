@@ -78,11 +78,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "msprime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";
     homepage = "https://github.com/tskit-dev/msprime";
     changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

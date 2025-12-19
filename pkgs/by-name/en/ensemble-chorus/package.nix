@@ -59,11 +59,11 @@ stdenv.mkDerivation {
       'cmake_minimum_required(VERSION 4.0)'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jpcima/ensemble-chorus";
     description = "Digital model of electronic string ensemble chorus";
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
-    license = licenses.boost;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
   };
 }

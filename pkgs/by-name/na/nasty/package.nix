@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp nasty $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recover the passphrase of your PGP or GPG-key";
     mainProgram = "nasty";
     longDescription = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       this program could be at least 100x faster.
     '';
     homepage = "http://www.vanheusden.com/nasty/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ davidak ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -36,6 +36,7 @@ let
           a = cfg.tcp.anonymousClients.allowedIpRanges;
         in
         lib.optional (a != [ ]) ''auth-ip-acl=${lib.concatStringsSep ";" a}'';
+      port = lib.optional (!(isNull cfg.tcp.port)) "port=${toString cfg.tcp.port}";
     in
     pkgs.writeTextFile {
       name = "default.pa";
@@ -44,7 +45,7 @@ let
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
         ${addModuleIf cfg.tcp.enable (
-          lib.concatStringsSep " " ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon)
+          lib.concatStringsSep " " ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon ++ port)
         )}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
@@ -205,6 +206,19 @@ in
       # TODO: enable by default?
       tcp = {
         enable = lib.mkEnableOption "tcp streaming support";
+        openFirewall = lib.mkEnableOption "Open firewall for the specified port";
+
+        port = lib.mkOption {
+          type = lib.types.nullOr lib.types.port;
+          description = ''
+            TCP connection port. The default `null` value, means
+            pulseaudio will try to use the default 4713 port, but if it is
+            occupied, it will fallback to a random port.
+          '';
+          # Per https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Network/#directconnection
+          example = 4713;
+          default = null;
+        };
 
         anonymousClients = {
           allowAll = lib.mkEnableOption "all anonymous clients to stream to the server";
@@ -226,6 +240,12 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion = cfg.tcp.openFirewall -> (!isNull cfg.tcp.port);
+            message = "If you wish to open the firewall for the Pulseaudio's tcp.port, set the port explicitly";
+          }
+        ];
         environment.etc."pulse/client.conf".source = clientConf;
 
         environment.systemPackages = [ overriddenPackage ];
@@ -279,6 +299,9 @@ in
       (lib.mkIf cfg.zeroconf.publish.enable {
         services.avahi.publish.enable = true;
         services.avahi.publish.userServices = true;
+      })
+      (lib.mkIf cfg.tcp.openFirewall {
+        networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];
       })
 
       (lib.mkIf (!cfg.systemWide) {

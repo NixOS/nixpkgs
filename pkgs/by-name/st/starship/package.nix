@@ -63,7 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       danth
-      Br1ght0ne
       Frostman
       da157
       sigmasquadron

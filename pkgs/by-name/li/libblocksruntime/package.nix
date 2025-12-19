@@ -37,9 +37,9 @@ stdenv.mkDerivation {
 
   doCheck = false; # hasdescriptor.c test fails, hrm.
 
-  meta = with lib; {
+  meta = {
     description = "Installs the BlocksRuntime library from the compiler-rt";
     homepage = "https://github.com/mackyle/blocksruntime";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

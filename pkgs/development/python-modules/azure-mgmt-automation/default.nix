@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.automation" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Automation Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/automation/azure-mgmt-automation";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-automation_${version}/sdk/automation/azure-mgmt-automation/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wfdewith ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wfdewith ];
   };
 }

@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     description = "Parser generator for C";
     longDescription = ''
       PackCC is a parser generator for C. Its main features are as follows:
@@ -71,9 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/arithy/packcc";
     changelog = "https://github.com/arithy/packcc/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.unix;
     mainProgram = "packcc";
   };
 })

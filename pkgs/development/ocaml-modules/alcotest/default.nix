@@ -33,10 +33,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/alcotest";
     description = "Lightweight and colourful test framework";
-    license = licenses.isc;
-    maintainers = [ maintainers.ericbmerritt ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.ericbmerritt ];
   };
 }

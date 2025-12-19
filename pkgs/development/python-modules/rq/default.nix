@@ -9,6 +9,7 @@
 
   # dependencies
   click,
+  croniter,
   redis,
 
   # tests
@@ -21,20 +22,21 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.4.1";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-CtxirZg6WNQpTMoXQRvB8i/KB3r58WlKh+wjBvyVMMs=";
+    hash = "sha256-4+zP3pOiZ+r/dt9F2NyxgJsyGPIHgj9XokuPxlWyS1g=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     click
+    croniter
     redis
   ];
 

@@ -106,11 +106,11 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     description = "Mail Framework for the C Language";
     homepage = "https://www.etpan.org/libetpan.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oxzi ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oxzi ];
+    platforms = lib.platforms.unix;
   };
 }

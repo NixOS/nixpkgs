@@ -27,11 +27,11 @@ python3Packages.buildPythonApplication rec {
     $out/bin/colorz --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Color scheme generator";
     homepage = "https://github.com/metakirby5/colorz";
-    license = licenses.mit;
-    maintainers = with maintainers; [ skykanin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ skykanin ];
     mainProgram = "colorz";
   };
 }

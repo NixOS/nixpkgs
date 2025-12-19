@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ManimCommunity";
     repo = "manimpango";
     tag = "v${version}";
-    hash = "sha256-nN+XOnki8fG7URMy2Fhs2X+yNi8Y7wDo53d61xaRa3w=";
+    hash = "sha256-8eQmhVsW440/zxOwjngnPTGT7iFbdSvBV7tnI332piE=";
   };
 
   postPatch = ''
@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manimpango" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binding for Pango";
     homepage = "https://github.com/ManimCommunity/ManimPango";
     changelog = "https://github.com/ManimCommunity/ManimPango/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

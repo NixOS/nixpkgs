@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BioPP/bpp-core";
     changelog = "https://github.com/BioPP/bpp-core/blob/master/ChangeLog";
     description = "C++ bioinformatics libraries and tools";
-    maintainers = with maintainers; [ bcdarwin ];
-    license = licenses.cecill20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.cecill20;
   };
 }

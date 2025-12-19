@@ -674,15 +674,6 @@
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
   ],
-  "module-services-pingvin-share": [
-    "index.html#module-services-pingvin-share"
-  ],
-  "module-services-pingvin-share-basic-usage": [
-    "index.html#module-services-pingvin-share-basic-usage"
-  ],
-  "module-services-pingvin-share-reverse-proxy-configuration": [
-    "index.html#module-services-pingvin-share-reverse-proxy-configuration"
-  ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
   ],
@@ -1193,6 +1184,12 @@
   ],
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
+  ],
+  "module-services-gitlab-runner": [
+    "index.html#module-services-gitlab-runner"
+  ],
+  "ex-gitlab-runner-podman": [
+    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"

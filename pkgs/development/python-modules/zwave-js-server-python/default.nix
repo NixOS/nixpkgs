@@ -38,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zwave_js_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for zwave-js-server";
     homepage = "https://github.com/home-assistant-libs/zwave-js-server-python";
     changelog = "https://github.com/home-assistant-libs/zwave-js-server-python/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "zwave-js-server-python";
   };
 }

@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minimock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic mocking library";
     homepage = "https://pypi.python.org/pypi/MiniMock";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

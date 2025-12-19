@@ -99,11 +99,11 @@ stdenv.mkDerivation rec {
     inherit nix lowdown-unsandboxed;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.unix;
   };
 }

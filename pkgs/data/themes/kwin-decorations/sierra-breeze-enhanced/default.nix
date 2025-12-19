@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OSX-like window decoration for KDE Plasma written in C++";
     homepage = "https://github.com/kupiqu/SierraBreezeEnhanced";
     changelog = "https://github.com/kupiqu/SierraBreezeEnhanced/releases/tag/V${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ A1ca7raz ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ A1ca7raz ];
   };
 }

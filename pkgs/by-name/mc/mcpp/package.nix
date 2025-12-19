@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-mcpplib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/museoa/mcpp";
     description = "Matsui's C preprocessor";
     mainProgram = "mcpp";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

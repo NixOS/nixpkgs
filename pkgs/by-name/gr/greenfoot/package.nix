@@ -57,16 +57,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = with lib.licenses; [
       gpl2Plus
       classpathException20
     ];
     mainProgram = "greenfoot";
-    maintainers = [ maintainers.chvp ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.chvp ];
+    platforms = lib.platforms.linux;
   };
 }

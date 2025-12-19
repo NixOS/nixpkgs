@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kak-tree-sitter-unwrapped";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "kak-tree-sitter";
     rev = "kak-tree-sitter-v${version}";
-    hash = "sha256-vFhNxixXsezK3Qm9d5hEiIttSjcuqHfgCHYrEOeKWvs=";
+    hash = "sha256-9QeTHmDTw1Qxnl+AnqCZgxlCCycq5qYF0aM/6fu8qwM=";
   };
 
-  cargoHash = "sha256-tO6i19UuistT4yUc0YzZOh+8M5kXq5l1NUTBUOA3YT8=";
+  cargoHash = "sha256-lZNM5HqICP6JfaMiBjACcUNRTTTIRhq2ou8cOLU0yOU=";
 
   passthru = {
     updateScript = nix-update-script { };

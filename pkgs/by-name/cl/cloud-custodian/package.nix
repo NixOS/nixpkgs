@@ -50,7 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://cloudcustodian.io";
     changelog = "https://github.com/cloud-custodian/cloud-custodian/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bhipple ];
     mainProgram = "custodian";
   };
 }

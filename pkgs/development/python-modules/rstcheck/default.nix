@@ -48,12 +48,12 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";
     changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ staccato ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ staccato ];
     mainProgram = "rstcheck";
   };
 }

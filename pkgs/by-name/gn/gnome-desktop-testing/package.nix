@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME test runner for installed tests";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop-testing";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.jtojnar ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jtojnar ];
   };
 }

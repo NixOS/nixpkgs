@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplejson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensible JSON encoder/decoder for Python";
     longDescription = ''
       simplejson covers the full JSON specification for both encoding
@@ -34,10 +34,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/simplejson/simplejson";
     changelog = "https://github.com/simplejson/simplejson/blob/v${version}/CHANGES.txt";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       afl21
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

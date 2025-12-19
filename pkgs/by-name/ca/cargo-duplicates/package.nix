@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";
     mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };

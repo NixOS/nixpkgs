@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plexapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
     changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${src.tag}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

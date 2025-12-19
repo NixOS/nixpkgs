@@ -16,13 +16,13 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform app for quick and easy still image camera matching";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://fspy.io/";
     knownVulnerabilities = [ "Vendors Electron 2.0 (end-of-life)" ];
-    maintainers = with maintainers; [ polygon ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ polygon ];
+    platforms = lib.platforms.linux;
     mainProgram = "fspy";
   };
 }

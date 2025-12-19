@@ -58,17 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
+      url = "https://github.com/archlinux/aur/raw/ff59780039697591e7e3a966db058b23bee0451c/020-megasync-sdk-fix-cmake-dependencies-detection.patch";
       hash = "sha256-hQY6tMwiV3B6M6WiFdOESdhahAtuWjdoj2eI2mst/K8=";
       extraPrefix = "src/MEGASync/mega/";
       stripLen = true;
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=ff59780039697591e7e3a966db058b23bee0451c";
+      url = "https://github.com/archlinux/aur/raw/ff59780039697591e7e3a966db058b23bee0451c/030-megasync-app-fix-cmake-dependencies-detection.patch";
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/040-megasync-app-add-missing-link-to-zlib.patch?h=megasync&id=c1f647871f5aad7e421971165b07e51b3e7900e9";
+      url = "https://github.com/archlinux/aur/raw/c1f647871f5aad7e421971165b07e51b3e7900e9/040-megasync-app-add-missing-link-to-zlib.patch";
       hash = "sha256-HMsS5TlzkQZbfANSIrvH8Cp6mTxLJ04idcWUWeD2A0U=";
     })
     ./megasync-fix-cmake-install-bindir.patch

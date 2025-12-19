@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.8";
+  version = "5.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-ruzQ3CUNqHa0RmxCDBVXbtetkMvz+G/D4/LB/2aBc8I=";
+    hash = "sha256-9URe8hB15WP92AU1YgGGFfZhVxn59gfBRrORZ04L+F0=";
   };
 
   patches = [
@@ -134,11 +134,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

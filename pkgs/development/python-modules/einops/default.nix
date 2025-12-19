@@ -53,11 +53,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/arogozhnikov/einops/releases/tag/${src.tag}";
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

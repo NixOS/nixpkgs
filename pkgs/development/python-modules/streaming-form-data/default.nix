@@ -48,10 +48,10 @@ buildPythonPackage rec {
     rm -rf streaming_form_data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Streaming parser for multipart/form-data";
     homepage = "https://github.com/siddhantgoel/streaming-form-data";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

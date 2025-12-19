@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   glibcLocales,
   installShellFiles,
   python3Packages,
@@ -19,6 +20,15 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
   };
+
+  patches = [
+    # https://github.com/pimutils/khal/pull/1418/
+    (fetchpatch {
+      name = "fix_calendar_popup";
+      url = "https://github.com/pimutils/khal/commit/3fadf020bb65c9c95bba46b5d3695c2565cceacd.patch";
+      hash = "sha256-KhqP0RLLOXm1d/4rCVAb5f7v0q7N0/U2iM23+TcnJhY=";
+    })
+  ];
 
   build-system = with python3Packages; [
     setuptools

@@ -129,12 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Hardware detection tool from openSUSE";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/openSUSE/hwinfo";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
     mainProgram = "hwinfo";
     pkgConfigModules = [ "hwinfo" ];
   };

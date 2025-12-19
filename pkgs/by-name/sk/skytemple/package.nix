@@ -67,11 +67,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm444 installer/skytemple.ico $out/share/icons/hicolor/256x256/apps/org.skytemple.SkyTemple.ico
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
     mainProgram = "skytemple";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

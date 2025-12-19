@@ -61,11 +61,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GuiWonder/Shanggu";
     description = "Heritage glyph (old glyph) font based on Siyuan";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Cryolitia ];
   };
 }

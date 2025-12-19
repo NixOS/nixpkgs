@@ -10,12 +10,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "10.0.156";
+  version = "10.0.162";
 
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
-    hash = "sha256-FlWsCAH6HN7HzoTLJET36FhGi/ci52jSP7132ayKvpA=";
+    hash = "sha256-1wuI6Dg/cKBEhtcoLipXa1q4UiKtqOpRAc8FF0dY5T4=";
   };
 
   nativeBuildInputs = [
@@ -38,16 +38,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) unifi; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ui.com";
     description = "Controller for Ubiquiti UniFi access points";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       globin
       patryk27
     ];

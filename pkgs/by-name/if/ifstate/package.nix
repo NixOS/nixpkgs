@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "2.2.1";
+  version = "2.2.3";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "liske";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-L79DZbkf+Yob1kfIKvHeUEvPfSbWfS0TTP0UYlkLzjI=";
+    hash = "sha256-gDeMVnseOLBGpyyjE/L60ujp0LZGf3uzlKfPiQB4VHA=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -33,7 +33,9 @@ let
       (
         [
           mkdocs-material
+          mike
           mkdocs-glightbox
+          mkdocs-macros-plugin
           mkdocs-minify-plugin
         ]
         ++ mkdocs-material.optional-dependencies.imaging

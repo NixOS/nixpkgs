@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastrlock" ];
 
-  meta = with lib; {
+  meta = {
     description = "RLock implementation for CPython";
     homepage = "https://github.com/scoder/fastrlock";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hyphon81 ];
   };
 }

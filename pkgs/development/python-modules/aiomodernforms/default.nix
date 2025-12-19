@@ -57,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomodernforms" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Modern Forms fans";
     homepage = "https://github.com/wonderslug/aiomodernforms";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

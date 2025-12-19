@@ -43,17 +43,17 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree";
     description = "Command to produce a depth indented directory listing";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Tree is a recursive directory listing command that produces a
       depth indented listing of files, which is colorized ala dircolors if
       the LS_COLORS environment variable is set and output is to tty.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tree";
   };
 }

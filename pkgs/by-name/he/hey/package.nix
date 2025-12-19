@@ -17,11 +17,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.asl20;
     mainProgram = "hey";
   };
 }

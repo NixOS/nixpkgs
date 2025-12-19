@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mf2py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microformats2 parser written in Python";
     homepage = "https://microformats.org/wiki/mf2py";
     changelog = "https://github.com/microformats/mf2py/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

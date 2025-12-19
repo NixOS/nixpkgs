@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     libva
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source implementation of NVIDIA's GameStream";
     homepage = "https://github.com/moonlight-stream/moonlight-embedded";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "moonlight";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

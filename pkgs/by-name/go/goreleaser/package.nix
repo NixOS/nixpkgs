@@ -56,15 +56,15 @@ buildGo125Module rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sarcasticadmin
       techknowlogick
       caarlos0
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "goreleaser";
   };
 }

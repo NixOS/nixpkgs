@@ -49,12 +49,12 @@ python3Packages.buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bkerler/edl";
     description = "Qualcomm EDL tool (Sahara / Firehose / Diag)";
     # See https://github.com/NixOS/nixpkgs/issues/348931
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       lorenz
       xddxdd
     ];

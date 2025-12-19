@@ -32,12 +32,12 @@ buildGoModule rec {
     mv *.8 $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Certificate Transparency Log Monitor";
     homepage = "https://github.com/SSLMate/certspotter";
     changelog = "https://github.com/SSLMate/certspotter/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "certspotter";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

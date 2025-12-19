@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koffydrop ];
     mainProgram = "nu_plugin_semver";
-    platforms = lib.platforms.linux;
   };
 })

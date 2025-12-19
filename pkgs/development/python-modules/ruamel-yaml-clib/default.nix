@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   preBuild = "cython _ruamel_yaml.pyx -3 --module-name _ruamel_yaml -I.";
 
-  meta = with lib; {
+  meta = {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml-clib/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

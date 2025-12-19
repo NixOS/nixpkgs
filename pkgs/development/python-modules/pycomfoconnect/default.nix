@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycomfoconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with ComfoAir Q350/450/600 units";
     homepage = "https://github.com/michaelarnauts/comfoconnect";
     changelog = "https://github.com/michaelarnauts/comfoconnect/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

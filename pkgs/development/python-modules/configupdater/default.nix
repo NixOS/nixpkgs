@@ -27,13 +27,13 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser like ConfigParser but for updating configuration files";
     homepage = "https://configupdater.readthedocs.io/en/latest/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       psfl
     ];
-    maintainers = with maintainers; [ ris ];
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

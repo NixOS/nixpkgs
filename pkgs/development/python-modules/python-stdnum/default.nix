@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stdnum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to handle standardized numbers and codes";
     homepage = "https://arthurdejong.org/python-stdnum/";
     changelog = "https://github.com/arthurdejong/python-stdnum/blob/${version}/ChangeLog";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ johbo ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ johbo ];
   };
 }

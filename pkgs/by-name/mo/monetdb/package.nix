@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) monetdb; };
 
-  meta = with lib; {
+  meta = {
     description = "Open source database system";
     homepage = "https://www.monetdb.org/";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.StillerHarpo ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.StillerHarpo ];
   };
 })

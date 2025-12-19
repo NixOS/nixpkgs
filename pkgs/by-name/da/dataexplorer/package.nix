@@ -79,13 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type jar $out/share/DataExplorer/{DataExplorer.jar,devices/*.jar}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical tool to analyze data, gathered from various hardware devices";
     homepage = "https://www.nongnu.org/dataexplorer/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ panicgh ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # contains RXTXcomm (JNI library with *.so files)
       binaryBytecode # contains thirdparty jar files, e.g. javax.json, org.glassfish.json

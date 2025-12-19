@@ -51,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "rm -r $out/bin/testc";
 
-  meta = with lib; {
+  meta = {
     description = "Library to read and write MED files";
     homepage = "https://salome-platform.org/";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.lgpl3Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl3Plus;
   };
 })

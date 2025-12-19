@@ -25,10 +25,10 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pgmetrics.io/";
     description = "Collect and display information and stats from a running PostgreSQL server";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "pgmetrics";
   };

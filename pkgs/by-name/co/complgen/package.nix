@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JexvR/djdRGq3BsOWfEhFCbTe3OaP/jqQgiO+RkK1Tg=";
 
-  meta = with lib; {
+  meta = {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
     mainProgram = "complgen";
     homepage = "https://github.com/adaszko/complgen";
     changelog = "https://github.com/adaszko/complgen/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -16,10 +16,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/let-def/merlin-extend";
     description = "SDK to extend Merlin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -2,25 +2,21 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  imagemagick,
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.44.2";
+  version = "1.45.0";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-59cCZpeWcfr9A3BeF6IfGFvRsoP/hD7XL+KQ6G+sQzE=";
+    hash = "sha256-1Jm8frPXGDXCvsHJyu2IoDCK7DfwcmTnURDSor7wJTQ=";
   };
 
   postPatch = ''
-    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
-
-    # fix generating previews for SVGs
-    substituteInPlace includes/config-schema.php \
-      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+    substituteInPlace includes/installer/CliInstaller.php \
+      --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
   installPhase = ''
@@ -39,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests.mediawiki) mysql postgresql;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collaborative editing software that runs Wikipedia";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
-    platforms = platforms.all;
-    teams = [ teams.c3d2 ];
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.c3d2 ];
   };
 }

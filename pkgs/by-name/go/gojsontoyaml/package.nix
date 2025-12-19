@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Simply tool to convert json to yaml written in Go";
     mainProgram = "gojsontoyaml";
     homepage = "https://github.com/brancz/gojsontoyaml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

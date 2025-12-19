@@ -23,11 +23,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rumps" ];
 
-  meta = with lib; {
+  meta = {
     description = "Ridiculously Uncomplicated macOS Python Statusbar apps";
     homepage = "https://github.com/jaredks/rumps";
-    license = licenses.bsd2;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

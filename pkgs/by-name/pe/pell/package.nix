@@ -35,12 +35,11 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/pell --replace "/usr/share/pell/offline.mp3" "$out/share/offline.mp3"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ebzzry/pell";
     description = "Simple host availability monitor";
-    license = licenses.mit;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "pell";
   };
 

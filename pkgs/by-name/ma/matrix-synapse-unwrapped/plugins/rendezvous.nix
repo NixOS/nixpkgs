@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "matrix_http_rendezvous_synapse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of MSC3886: Simple rendezvous capability";
     homepage = "https://github.com/matrix-org/rust-http-rendezvous-server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

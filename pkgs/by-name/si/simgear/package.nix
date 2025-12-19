@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     xz
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulation construction toolkit";
     homepage = "https://wiki.flightgear.org/SimGear";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.lgpl2;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2;
   };
 }

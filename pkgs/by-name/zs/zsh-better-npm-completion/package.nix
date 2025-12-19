@@ -20,11 +20,11 @@ stdenv.mkDerivation {
     install -Dm 0644 zsh-better-npm-completion.plugin.zsh $out/share/zsh-better-npm-completion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Better completion for npm";
     homepage = "https://github.com/lukechilds/zsh-better-npm-completion";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gerschtli ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.gerschtli ];
   };
 }

@@ -90,10 +90,10 @@
 
   propagatedBuildInputs = [ stdlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "Plugin for Coq to add dependent pattern-matching";
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }).overrideAttrs
   (

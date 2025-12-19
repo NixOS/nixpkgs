@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     install -Dm644 src/FTSize.h src/FTFace.h -t $out/include/FTGL
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frankheckenbach/ftgl";
     description = "Font rendering library for OpenGL applications";
     longDescription = ''
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
       pixmaps, texture maps, outlines, polygon mesh, and extruded polygon
       rendering modes.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

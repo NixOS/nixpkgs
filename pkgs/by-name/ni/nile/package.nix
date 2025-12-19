@@ -43,11 +43,11 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "nile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Amazon Games client";
     mainProgram = "nile";
     homepage = "https://github.com/imLinguin/nile";
-    license = with licenses; [ gpl3 ];
+    license = with lib.licenses; [ gpl3 ];
   };
 
   passthru.updateScript = gitUpdater {

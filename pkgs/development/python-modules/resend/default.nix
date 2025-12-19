@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resend" ];
 
-  meta = with lib; {
+  meta = {
     description = "SDK for Resend";
     homepage = "https://github.com/resend/resend-python";
     changelog = "https://github.com/resend/resend-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

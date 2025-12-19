@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Console-based network statistics utility for Linux";
     longDescription = ''
       vnStat is a console-based network traffic monitor for Linux and BSD that
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       ensures light use of system resources.
     '';
     homepage = "https://humdi.net/vnstat/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

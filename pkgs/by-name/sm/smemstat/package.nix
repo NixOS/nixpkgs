@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory usage monitoring tool";
     mainProgram = "smemstat";
     homepage = "https://github.com/ColinIanKing/smemstat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
 }

@@ -85,7 +85,7 @@
     `optionValueSeparator`
 
     : How to separate an option from its flag;
-    By default, there is no separator, so option `-c` and value `5` would become ["-c" "5"].
+    By default, there is no separator, so option `-c` and value `5` would become `["-c" "5"]`.
     This is useful if the command requires equals, for example, `-c=5`.
 
     # Examples

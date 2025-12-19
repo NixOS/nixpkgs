@@ -6,17 +6,23 @@
   pytestCheckHook,
   requests,
   setuptools,
+  publicsuffix-list,
 }:
 
 buildPythonPackage rec {
   pname = "publicsuffixlist";
-  version = "1.0.2.20251128";
+  version = "1.0.2.20251217";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JXOynB/jza+ELY1q2XEoLawZgyEt360GF98GRUMn3Do=";
+    hash = "sha256-9ejbvyQMukwcXUJv79coU2L7YEe8fA393cyBC6S2QCo=";
   };
+
+  postPatch = ''
+    rm publicsuffixlist/public_suffix_list.dat
+    ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat publicsuffixlist/public_suffix_list.dat
+  '';
 
   build-system = [ setuptools ];
 
@@ -31,12 +37,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "publicsuffixlist/test.py" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ko-zu/psl/blob/v${version}-gha/CHANGES.md";
     description = "Public Suffix List parser implementation";
     homepage = "https://github.com/ko-zu/psl";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "publicsuffixlist-download";
   };
 }

@@ -1,12 +1,12 @@
 { lib }:
 
 {
-  meta = with lib; {
+  meta = {
     description = "GNU sed, a batch stream editor";
     homepage = "https://www.gnu.org/software/sed";
-    license = licenses.gpl3Plus;
-    teams = [ teams.minimal-bootstrap ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
     mainProgram = "sed";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

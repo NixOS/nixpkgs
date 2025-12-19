@@ -107,12 +107,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://exiv2.org";
     description = "Library and command-line utility to manage image metadata";
     mainProgram = "exiv2";
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

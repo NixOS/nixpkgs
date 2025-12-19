@@ -58,8 +58,8 @@ mkXfceDerivation {
     wrapGApp $out/lib/tumbler-1/tumblerd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus thumbnailer service";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libsoundtouch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bose Soundtouch Python library";
     homepage = "https://github.com/CharlesBlonde/libsoundtouch";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

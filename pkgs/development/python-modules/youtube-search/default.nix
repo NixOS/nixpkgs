@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "youtube_search" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for searching for youtube videos to avoid using their heavily rate-limited API";
     homepage = "https://github.com/joetats/youtube_search";
-    license = licenses.mit;
-    maintainers = with maintainers; [ j0hax ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ j0hax ];
   };
 }

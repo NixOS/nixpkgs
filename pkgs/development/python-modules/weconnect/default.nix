@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.60.10";
+  version = "0.60.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     tag = "v${version}";
-    hash = "sha256-ZvJoZ4mUNkUJ5sOxOHDsuxGZO2s3PSEfidt3aDfmBeg=";
+    hash = "sha256-llAWCjhP/fwI+H8BRpMYxba8jC+WDc66xkUDwT3NHcA=";
   };
 
   postPatch = ''
@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weconnect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Volkswagen WeConnect Services";
     homepage = "https://github.com/tillsteinbach/WeConnect-python";
     changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

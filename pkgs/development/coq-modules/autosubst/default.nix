@@ -33,13 +33,13 @@ mkCoqDerivation {
     stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";
     description = "Automation for de Bruijn syntax and substitution in Coq";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       siraben
       jwiegley
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

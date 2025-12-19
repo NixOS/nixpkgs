@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.agwa.name/projects/git-crypt";
     description = "Transparent file encryption in git";
     longDescription = ''
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ dochang ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ dochang ];
+    platforms = lib.platforms.unix;
     mainProgram = "git-crypt";
   };
 

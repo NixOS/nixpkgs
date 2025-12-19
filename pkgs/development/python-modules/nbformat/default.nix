@@ -56,6 +56,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

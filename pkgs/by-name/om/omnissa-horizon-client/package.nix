@@ -154,12 +154,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "Allows you to connect to your Omnissa Horizon virtual desktop";
     homepage = "https://www.omnissa.com/products/horizon-8/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mhutter ];
+    maintainers = with lib.maintainers; [ mhutter ];
   };
 }

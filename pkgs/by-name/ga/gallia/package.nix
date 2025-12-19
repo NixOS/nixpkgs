@@ -8,19 +8,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "2.0.0b2";
+  version = "2.0.0b3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     tag = "v${version}";
-    hash = "sha256-CZsVd9ob4FHC9KeepK7OHWatVTJUiJEjqtaylhD+yS0=";
+    hash = "sha256-/ql2EORU1oqZ/+90F0FFfRVdv6Esa5UqfaasLE4wf8k=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.11,<0.9.0" "uv_build"
+      --replace-fail "uv_build>=0.9.11,<0.10.0" "uv_build"
   '';
 
   pythonRelaxDeps = [ "pydantic" ];

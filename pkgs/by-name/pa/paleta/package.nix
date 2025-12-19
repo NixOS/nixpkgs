@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract the dominant colors from any image";
     mainProgram = "paleta";
     homepage = "https://github.com/nate-xyz/paleta";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

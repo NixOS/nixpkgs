@@ -66,11 +66,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pass_audit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pass extension for auditing your password repository";
     homepage = "https://github.com/roddhjav/pass-audit";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ma27 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 }

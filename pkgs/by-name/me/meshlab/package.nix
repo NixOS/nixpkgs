@@ -102,8 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ref. https://github.com/cnr-isti-vclab/meshlab/pull/1617
     # merged upstream
     ./1617_cmake-use-system-dependencies-install-exports.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+
     ./no-plist.patch
   ];
 

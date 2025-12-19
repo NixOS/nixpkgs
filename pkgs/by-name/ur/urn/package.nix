@@ -61,13 +61,13 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${urn-rt}/lib/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://urn-lang.com";
     description = "Yet another Lisp variant which compiles to Lua";
     mainProgram = "urn";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   passthru = {

@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sctplab/usrsctp";
     description = "Portable SCTP userland stack";
-    maintainers = with maintainers; [ misuzu ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ misuzu ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

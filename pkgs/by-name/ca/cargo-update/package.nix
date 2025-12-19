@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerschtli
-      Br1ght0ne
       johntitor
       matthiasbeyer
     ];

@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyversasense" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with the VersaSense API";
     homepage = "https://github.com/imstevenxyz/pyversasense";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

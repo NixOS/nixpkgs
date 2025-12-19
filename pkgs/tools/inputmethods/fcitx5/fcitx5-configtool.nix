@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
     mainProgram = "fcitx5-config-qt";
   };
 }

@@ -4,22 +4,21 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  dnscontrol,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnscontrol";
-  version = "4.27.1";
+  version = "4.29.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
-    tag = "v${version}";
-    hash = "sha256-OlXqX26aL08gft8sFPZrYBhf7U4DY46BYqli68xEPbg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0MwDp2wu/K402It8nqMV+ihVg2eLAyb33Ceo9XLz4EQ=";
   };
 
-  vendorHash = "sha256-3JlPT0nL/FzjxH6aWZBwYaNetSEzzEv00/F7bsj4h0Y=";
+  vendorHash = "sha256-zeai1PySgsAK1zkV0Z4JIDTGU/mfqfOwmVdu34wd9w0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,8 +26,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/StackExchange/dnscontrol/v${lib.versions.major version}/pkg/version.version=${version}"
+    "-X=github.com/StackExchange/dnscontrol/v${lib.versions.major finalAttrs.version}/pkg/version.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -42,17 +40,16 @@ buildGoModule rec {
     rm pkg/spflib/flatten_test.go pkg/spflib/parse_test.go
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      command = "${lib.getExe dnscontrol} version";
-      package = dnscontrol;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
     homepage = "https://dnscontrol.org/";
-    changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/v${version}";
+    changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SuperSandro2000
@@ -60,4 +57,4 @@ buildGoModule rec {
     ];
     mainProgram = "dnscontrol";
   };
-}
+})

@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sdl60VNjrSVj8YFZR/b2WOzN8taZ6wsJx5FnED9XQbw=";
+    hash = "sha256-EXcmL/KNj9vCChCs6RH1J/+aetYcXnEdGEhvVzGNNZA=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-6o7IbDBJU+FGYezfm37Z4eBBWa7G06vFbopI0FqJu7c=";
+  cargoHash = "sha256-HDu7/kgpBgUe/CrHm17BkNlg3DYlegTevgAeBCXp6so=";
 
   nativeBuildInputs = [
     installShellFiles

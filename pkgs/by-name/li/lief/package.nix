@@ -70,12 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
-    license = [ licenses.asl20 ];
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    license = [ lib.licenses.asl20 ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       lassulus
       genericnerdyusername
     ];

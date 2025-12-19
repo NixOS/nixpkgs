@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter335,
+  flutter338,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,13 +14,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.70";
+  version = "0.6.85";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-XWa5jEIQWmApbXNu8AgKt6Af9S1ZrsyaFET07FVn7Rc=";
+    hash = "sha256-Zy4B0nl9R/LmXj/DUI4v98GbSUu8YWGOO0GCXpRHtBA=";
   };
 
   metaCommon = {
@@ -44,7 +44,7 @@ let
     meta = metaCommon;
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

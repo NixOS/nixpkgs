@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get energy consumption data from Atome";
     mainProgram = "pyatome";
     homepage = "https://github.com/baqs/pyAtome";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ uvnikita ];
   };
 }

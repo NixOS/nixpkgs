@@ -68,10 +68,10 @@ stdenv.mkDerivation {
   enableParallelInstalling = false;
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://davidepucci.it/doc/vpnc/";
     description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
-    license = if opensslSupport then licenses.unfree else licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = if opensslSupport then lib.licenses.unfree else lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

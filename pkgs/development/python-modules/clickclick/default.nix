@@ -46,10 +46,10 @@ buildPythonPackage rec {
     "test_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Click command line utilities";
     homepage = "https://codeberg.org/hjacobs/python-clickclick/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pi1wire" ];
 
-  meta = with lib; {
+  meta = {
     description = "1Wire Sensor Library for Raspberry PI";
     homepage = "https://github.com/ushiboy/pi1wire";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

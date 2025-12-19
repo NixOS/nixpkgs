@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     "-DLIB_SUFFIX=" # Install in $out/lib.
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.swamiproject.org/";
     description = "MIDI instrument patch files support library";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

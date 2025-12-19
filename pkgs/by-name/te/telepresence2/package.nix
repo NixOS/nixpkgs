@@ -61,11 +61,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/telepresence" ];
 
-  meta = with lib; {
+  meta = {
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://telepresence.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mausch
       vilsol
       wrbbz

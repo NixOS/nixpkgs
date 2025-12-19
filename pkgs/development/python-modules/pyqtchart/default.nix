@@ -65,10 +65,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt5.QtChart" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Qt Charts library";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

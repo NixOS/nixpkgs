@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ciso8601" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast ISO8601 date time parser for Python written in C";
     homepage = "https://github.com/closeio/ciso8601";
     changelog = "https://github.com/closeio/ciso8601/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

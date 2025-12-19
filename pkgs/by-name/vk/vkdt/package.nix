@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
     package = vkdt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan-powered raw image processor";
     homepage = "https://github.com/hanatos/vkdt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ paperdigits ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ paperdigits ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -89,11 +89,11 @@ python3Packages.buildPythonApplication {
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ shou ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shou ];
     mainProgram = "mkchromecast";
   };
 }

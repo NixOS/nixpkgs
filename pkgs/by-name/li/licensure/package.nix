@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_get_project_files"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "FOSS License management tool for your projects";
     homepage = "https://github.com/chasinglogic/licensure";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "licensure";
-    maintainers = [ maintainers.bpeetz ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.bpeetz ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

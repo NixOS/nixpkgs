@@ -102,6 +102,7 @@ let
         exec = "bolt-launcher";
         icon = "bolt-launcher";
         categories = [ "Game" ];
+        startupWMClass = "BoltLauncher";
       })
     ];
   });

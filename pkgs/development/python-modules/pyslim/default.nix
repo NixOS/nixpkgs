@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyslim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for dealing with tree sequences coming to and from SLiM";
     homepage = "https://github.com/tskit-dev/pyslim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

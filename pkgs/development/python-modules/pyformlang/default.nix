@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyformlang" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for formal grammars";
     homepage = "https://github.com/Aunsiels/pyformlang";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

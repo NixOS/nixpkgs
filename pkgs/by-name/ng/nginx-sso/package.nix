@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nginx-sso";
-  version = "0.27.4";
+  version = "0.27.5";
 
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
     rev = "v${version}";
-    hash = "sha256-fNMCskS8uXAykl2Zu4ZZqtIS2F5w7HV7C8hyPaWnav4=";
+    hash = "sha256-yiwKnOv/4Zy9bBvQZiIp8cH1XvgV88m9t4ptqQp1LG8=";
   };
 
-  vendorHash = "sha256-J3CObmSbrAn0D5MOaclRvlnqLqUYfQCkfD6om/tNKac=";
+  vendorHash = "sha256-KflzlrjOOTDZQq2yP0zQsDgULrbnoeRRxOVHxKINsYw=";
 
   postInstall = ''
     mkdir -p $out/share
@@ -27,11 +27,11 @@ buildGoModule rec {
     inherit (nixosTests) nginx-sso;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SSO authentication provider for the auth_request nginx module";
     homepage = "https://github.com/Luzifer/nginx-sso";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nginx-sso";
   };
 }

@@ -25,10 +25,10 @@ stdenv.mkDerivation {
     $out/bin/replace-secret "and this" <(echo "b") short_test
     diff ${./test/expected_short_output} short_test
   '';
-  meta = with lib; {
-    platforms = platforms.all;
-    maintainers = with maintainers; [ talyz ];
-    license = licenses.mit;
+  meta = {
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ talyz ];
+    license = lib.licenses.mit;
     description = "Replace a string in one file with a secret from a second file";
     longDescription = ''
       Replace a string in one file with a secret from a second file.

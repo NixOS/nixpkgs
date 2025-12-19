@@ -40,10 +40,10 @@ buildGoModule {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "GTK4 frontend for catnip";
     homepage = "https://github.com/diamondburned/catnip-gtk4";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "catnip-gtk4";
   };

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   '';
   prefixKey = "-prefix=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/cil/";
     description = "Front-end for the C programming language that facilitates program analysis and transformation";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     broken = lib.versionAtLeast ocaml.version "4.06";
     platforms = ocaml.meta.platforms or [ ];
   };

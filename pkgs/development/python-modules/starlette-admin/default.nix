@@ -118,11 +118,11 @@ buildPythonPackage rec {
     "starlette_admin.views"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, beautiful and extensible administrative interface framework for Starlette & FastApi applications";
     homepage = "https://github.com/jowilf/starlette-admin";
     changelog = "https://jowilf.github.io/starlette-admin/changelog/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

@@ -6,10 +6,10 @@
 
 let
   pname = "fflogs";
-  version = "8.17.101";
+  version = "8.17.115";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-yCnFN46/vHrQA8KkaoWQUBCOZ1+6Oa4UkdUhCghGByo=";
+    hash = "sha256-i16jMTbthl+XvL/I6tOqBKBdKyb6wOLYIQeWveR4Oyg=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -25,14 +25,14 @@ appimageTools.wrapType2 {
     sed -i 's@^Exec=AppRun --no-sandbox@Exec=fflogs@g' $out/share/applications/fflogs.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Application for uploading Final Fantasy XIV combat logs to fflogs.com";
     homepage = "https://www.fflogs.com/client/download";
     downloadPage = "https://github.com/RPGLogs/Uploaders-fflogs/releases/latest";
-    license = licenses.unfree; # no license listed
+    license = lib.licenses.unfree; # no license listed
     mainProgram = "fflogs";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keysmashes ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ keysmashes ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

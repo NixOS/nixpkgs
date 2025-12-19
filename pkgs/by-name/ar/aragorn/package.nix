@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
     mainProgram = "aragorn";
     homepage = "https://www.trna.se/ARAGORN/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.unix;
   };
 })

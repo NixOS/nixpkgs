@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "install_bin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line program which concatenates MP3 files";
     longDescription = ''
       A command line program which concatenates MP3 files, mp3cat
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
       in its input stream
     '';
     homepage = "https://github.com/tomclegg/mp3cat";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.omnipotententity ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.omnipotententity ];
+    platforms = lib.platforms.all;
     mainProgram = "mp3cat";
   };
 }

@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to create JSON objects";
     mainProgram = "gjo";
     homepage = "https://github.com/skanehira/gjo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

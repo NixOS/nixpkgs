@@ -82,17 +82,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reuse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc-by-sa-40
       cc0
       gpl3Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       FlorianFranzen
       Luflosi
     ];

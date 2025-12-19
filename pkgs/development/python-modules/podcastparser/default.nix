@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "podcastparser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse podcasts";
     homepage = "http://gpodder.org/podcastparser/";
     changelog = "https://github.com/gpodder/podcastparser/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

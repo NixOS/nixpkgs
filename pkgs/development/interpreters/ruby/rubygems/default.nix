@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
     ignoredVersions = "(pre|alpha|beta|rc|bundler).*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package management framework for Ruby";
     changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       ruby
     ];
     mainProgram = "gem";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

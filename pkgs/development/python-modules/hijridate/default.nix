@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hijridate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Accurate Hijri-Gregorian date converter based on the Umm al-Qura calendar";
     homepage = "https://github.com/dralshehri/hijridate";
     changelog = "https://github.com/dralshehri/hijridate/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

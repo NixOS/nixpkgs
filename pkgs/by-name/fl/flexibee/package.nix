@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for an accouting economic system";
     homepage = "https://www.flexibee.eu/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
 }

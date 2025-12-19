@@ -64,11 +64,11 @@ buildPythonPackage rec {
     "pyfuse3_asyncio"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       nyanloutre
       dotlambda
     ];

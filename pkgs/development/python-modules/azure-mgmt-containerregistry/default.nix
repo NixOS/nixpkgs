@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "azure.mgmt.containerregistry"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Container Registry Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/containerregistry/azure-mgmt-containerregistry";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-containerregistry_${version}/sdk/containerregistry/azure-mgmt-containerregistry/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

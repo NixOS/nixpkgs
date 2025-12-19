@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ailment" ];
 
-  meta = with lib; {
+  meta = {
     description = "Angr Intermediate Language";
     homepage = "https://github.com/angr/ailment";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

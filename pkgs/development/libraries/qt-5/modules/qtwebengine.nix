@@ -438,7 +438,7 @@ qtModule (
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    meta = with lib; {
+    meta = {
       description = "Web engine based on the Chromium web browser";
       mainProgram = "qwebengine_convert_dict";
       maintainers = [ ];
@@ -450,7 +450,7 @@ qtModule (
         let
           inherit (lib.systems.inspect) patternLogicalAnd;
         in
-        concatMap (patternLogicalAnd isUnix) (
+        lib.concatMap (patternLogicalAnd isUnix) (
           lib.concatMap lib.toList [
             isx86_32
             isx86_64

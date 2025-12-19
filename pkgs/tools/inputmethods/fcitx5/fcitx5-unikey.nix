@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Unikey engine support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-unikey";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ berberman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ berberman ];
+    platforms = lib.platforms.linux;
   };
 }

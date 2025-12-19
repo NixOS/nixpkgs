@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix the build with Clang 20.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=deprecated-literal-operator";
 
-  meta = with lib; {
+  meta = {
     description = "Schrodinger-developed 2D Coordinate Generation";
     homepage = "https://github.com/schrodinger/coordgenlibs";
     changelog = "https://github.com/schrodinger/coordgenlibs/releases/tag/${finalAttrs.version}";
-    maintainers = [ maintainers.rmcgibbo ];
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.rmcgibbo ];
+    license = lib.licenses.bsd3;
   };
 })

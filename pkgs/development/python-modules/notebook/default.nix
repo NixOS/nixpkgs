@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.4.4";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook";
     tag = "v${version}";
-    hash = "sha256-bj4iQvm0TGBiCu9drJ8QFXsedzm/cEjevNQS6UsasNs=";
+    hash = "sha256-EKfe3uqIwb+kKmSuU7aIinNj1nkRaBvg3liV6RiR3xc=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-nRaWzr5Q904KojfK0mPgLX9be82axb8Aab0SJULE7RU=";
+    hash = "sha256-ILDTRK5NJ33T30YRTT3/g1mIE2sI8spGPwMsWyQ5UTc=";
   };
 
   build-system = [

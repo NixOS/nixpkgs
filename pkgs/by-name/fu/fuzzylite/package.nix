@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
   # use unstable as latest release does not yet support cmake-4
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzy logic control library in C++";
     mainProgram = "fuzzylite";
     homepage = "https://fuzzylite.com";
     changelog = "https://github.com/fuzzylite/fuzzylite/${src.rev}/release/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.all;
   };
 }

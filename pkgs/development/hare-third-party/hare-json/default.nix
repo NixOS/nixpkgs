@@ -23,11 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-json/";
     description = "This package provides JSON support for Hare";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ starzation ];
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ starzation ];
     inherit (harec.meta) platforms badPlatforms;
   };
 })

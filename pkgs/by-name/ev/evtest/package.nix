@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-M7AGcHklErfRIOu64+OU397OFuqkAn4dqZxx7sDfklc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool for input event debugging";
     license = lib.licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "evtest";
   };
 }

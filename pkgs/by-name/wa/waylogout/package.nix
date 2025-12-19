@@ -41,12 +41,12 @@ stdenv.mkDerivation {
     gdk-pixbuf
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical logout/suspend/reboot/shutdown dialog for wayland";
     homepage = "https://github.com/loserMcloser/waylogout";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.linux;
     mainProgram = "waylogout";
   };
 }

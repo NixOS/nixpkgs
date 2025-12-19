@@ -69,9 +69,9 @@ mkXfceDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Xfce file manager";
     mainProgram = "thunar";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

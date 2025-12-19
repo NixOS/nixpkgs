@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-wou5inOX8vadEBCIBccwSRjtzf0GH1abwNdUu4JBvyM=";
 
-  meta = with lib; {
+  meta = {
     description = "Interactive kubernetes client featuring auto-complete";
     mainProgram = "kube-prompt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/c-bata/kube-prompt";
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with lib.maintainers; [ vdemeester ];
   };
 }

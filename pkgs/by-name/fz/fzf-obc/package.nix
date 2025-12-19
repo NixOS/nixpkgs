@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     install -m644 plugins/gradle/* $out/share/fzf-obc/plugins/gradle
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fzf-obc.readthedocs.io";
     description = "Completion script adding fzf over all know bash completion functions";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

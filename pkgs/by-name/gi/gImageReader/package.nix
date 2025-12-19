@@ -98,13 +98,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";
     mainProgram = if withQt6 then "gImageReader-qt6" else "gImageReader";
     homepage = "https://github.com/manisandro/gImageReader";
     changelog = "https://github.com/manisandro/gImageReader/blob/${version}/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.linux;
   };
 }

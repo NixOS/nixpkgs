@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bougyman/wifish";
     description = "Simple wifi shell script for linux";
     mainProgram = "wifish";
-    license = licenses.wtfpl;
+    license = lib.licenses.wtfpl;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

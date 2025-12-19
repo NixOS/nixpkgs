@@ -68,9 +68,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://opsdroid.dev";
     changelog = "https://github.com/opsdroid/opsdroid/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      globin
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "opsdroid";
   };

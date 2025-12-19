@@ -42,14 +42,14 @@ let
           rm -rf Xcode.app
         '';
       };
-      meta = with lib; {
+      meta = {
         homepage = "https://developer.apple.com/xcode/";
         description = "Apple's Xcode developer tools";
         maintainers = with lib.maintainers; [ DimitarNestorov ];
-        license = licenses.unfree;
-        platforms = platforms.darwin ++ platforms.linux;
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.darwin ++ lib.platforms.linux;
         hydraPlatforms = [ ];
-        sourceProvenance = [ sourceTypes.binaryNativeCode ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
 
     in

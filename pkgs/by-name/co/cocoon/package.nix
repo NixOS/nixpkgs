@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "cocoon";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "haileyok";
     repo = "cocoon";
-    tag = finalAttrs.version;
-    hash = "sha256-2zvbPhvYoKlQTZDjpo6LRr9DLKzSmcH0qnU1oJ+7k04=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/EaTQC5mkil6SeDCRUcwb8Hv68SeCrlgWDphoFrx3Aw=";
   };
 
   ldflags = [
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "ATProtocol Personal Data Server written in Go with a SQLite block and blob store";
-    changelog = "https://github.com/haileyok/cocoon/releases/${finalAttrs.version}";
+    changelog = "https://github.com/haileyok/cocoon/releases/v${finalAttrs.version}";
     homepage = "https://github.com/haileyok/cocoon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];

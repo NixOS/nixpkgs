@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argh" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
     homepage = "https://github.com/neithere/argh";
     description = "Unobtrusive argparse wrapper with natural syntax";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

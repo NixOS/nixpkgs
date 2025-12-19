@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to manage your SSH, telnet, kubernetes, winrm, web or any custom shell";
     homepage = "https://github.com/evilsocket/shellz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "shellz";
   };
 }

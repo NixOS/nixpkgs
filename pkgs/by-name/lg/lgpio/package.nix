@@ -55,6 +55,7 @@ mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
+    "CROSS_PREFIX=${stdenv.cc.targetPrefix}"
   ];
 
   meta = {

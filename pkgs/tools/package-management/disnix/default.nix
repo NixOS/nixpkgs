@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     description = "Nix-based distributed service deployment tool";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      sander
       tomberek
     ];
     platforms = lib.platforms.unix;

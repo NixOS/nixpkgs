@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnooper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Poor man's debugger for Python";
     homepage = "https://github.com/cool-RR/PySnooper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
   };
 }

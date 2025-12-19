@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrevolve" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/devitocodes/pyrevolve";
     changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/${src.tag}";
     description = "Python library to manage checkpointing for adjoints";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

@@ -21,11 +21,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "C-style structs for Python";
     homepage = "https://github.com/andreax79/python-cstruct";
     changelog = "https://github.com/andreax79/python-cstruct/blob/${src.tag}/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tnias ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tnias ];
   };
 }

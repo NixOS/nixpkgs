@@ -21,12 +21,12 @@ stdenv.mkDerivation {
   buildPhase = "make mkpasswd";
   installPhase = "make install-mkpasswd";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://packages.qa.debian.org/w/whois.html";
     description = "Overfeatured front-end to crypt, from the Debian whois package";
     mainProgram = "mkpasswd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
   };
 }

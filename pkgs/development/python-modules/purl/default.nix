@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "purl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Immutable URL class for easy URL-building and manipulation";
     homepage = "https://github.com/codeinthehole/purl";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

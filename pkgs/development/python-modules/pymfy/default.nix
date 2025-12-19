@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymfy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Somfy Open API";
     homepage = "https://github.com/tetienne/somfy-open-api";
     changelog = "https://github.com/tetienne/somfy-open-api/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

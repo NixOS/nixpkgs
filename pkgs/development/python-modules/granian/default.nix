@@ -1,5 +1,6 @@
 {
   lib,
+  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.5.6";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-XSDBSl7QWqIN5u48z4H5yPHR+ltRmmmrP0JSmvcCcsA=";
+    hash = "sha256-Jj75ycr9Y0aCTP5YGzd6um/7emWKqqegUDB7HpTfTcM=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -34,12 +35,17 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
+    (fetchurl {
+      # Refresh expired TLS certificates for tests
+      url = "https://github.com/emmett-framework/granian/commit/189f1bed2effb4a8a9cba07b2c5004e599a6a890.patch";
+      hash = "sha256-7FgVR7/lAh2P5ptGx6jlFzWuk24RY7wieN+aLaAEY+c=";
+    })
     ./no-alloc.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-zQAHJcBWNx5IT/t2wtm7UeOfVNnvfowcp137TePnwiM=";
+    hash = "sha256-Q7BWwvkK5rRuhVobxW4qXLo6tnusOaQYN8mBoNVoulw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -78,6 +84,12 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   enabledTestPaths = [ "tests/" ];
+
+  disabledTests = [
+    # SSLCertVerificationError: certificate verify failed: certificate has expired
+    "test_asgi_ws_scope"
+    "test_rsgi_ws_scope"
+  ];
 
   pythonImportsCheck = [ "granian" ];
 

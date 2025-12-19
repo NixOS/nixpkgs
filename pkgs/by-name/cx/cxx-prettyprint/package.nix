@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     cp prettyprint.hpp "$out/include"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header only C++ library for pretty printing standard containers";
     homepage = "https://github.com/louisdx/cxx-prettyprint";
     license = lib.licenses.boost;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
     # This is a header-only library, no point in hydra building it:
     hydraPlatforms = [ ];

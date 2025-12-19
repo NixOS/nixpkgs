@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings daemon for Pantheon";
     homepage = "https://github.com/elementary/settings-daemon";
-    license = licenses.gpl3Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.elementary.settings-daemon";
   };
 }

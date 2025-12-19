@@ -25,11 +25,11 @@ buildHomeAssistantComponent rec {
     xmltodict
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Home Assistant custom integration for SmartThinQ LG devices configurable with Lovelace User Interface";
     homepage = "https://github.com/ollo69/ha-smartthinq-sensors";
     changelog = "https://github.com/ollo69/ha-smartthinq-sensors/releases/tag/v${version}";
-    maintainers = with maintainers; [ k900 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ k900 ];
+    license = lib.licenses.asl20;
   };
 }

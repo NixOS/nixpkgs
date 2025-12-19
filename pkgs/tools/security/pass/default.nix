@@ -188,12 +188,12 @@ stdenv.mkDerivation rec {
     withExtensions = env;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://www.passwordstore.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "pass";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       fpletz
       tadfisher
@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
       ma27
       ryan4yin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       pass is a very simple password store that keeps passwords inside gpg2

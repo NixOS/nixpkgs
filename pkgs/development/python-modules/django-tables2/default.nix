@@ -55,11 +55,11 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
     description = "Django app for creating HTML tables";
     homepage = "https://github.com/jieter/django-tables2";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

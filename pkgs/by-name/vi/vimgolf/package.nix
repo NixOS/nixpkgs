@@ -11,11 +11,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "vimgolf";
 
-  meta = with lib; {
+  meta = {
     description = "Game that tests Vim efficiency";
     homepage = "https://vimgolf.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leungbk ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leungbk ];
+    platforms = lib.platforms.unix;
   };
 }

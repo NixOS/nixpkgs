@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MCUboot's image signing and key management";
     homepage = "https://github.com/mcu-tools/mcuboot/tree/main/scripts";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "imgtool";
   };
 }

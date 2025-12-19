@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     cp up $out/bin/up
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Faster shell navigation of projects";
     homepage = "https://github.com/zimbatm/h";
-    license = licenses.mit;
-    maintainers = [ maintainers.zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zimbatm ];
   };
 }

@@ -221,10 +221,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.1";
+  version = "0.12.0";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
+    sha256 = "sha256-H/caXhsIdgsiat3UTi1QMF9J22dtyEB6YEIn9f8wWB4=";
   };
   nativeBuildInputs = [
     meson
@@ -282,7 +282,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Data processing for serial crystallography";
     longDescription = ''
       CrystFEL is a suite of programs for processing (and simulating) Bragg diffraction data from "serial crystallography" experiments, often (but not always) performed using an X-ray Free-Electron Laser. Compared to rotation data, some of the particular characteristics of such data which call for a specialised software suite are:
@@ -294,9 +294,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.desy.de/~twhite/crystfel/";
     changelog = "https://www.desy.de/~twhite/crystfel/changes.html";
     downloadPage = "https://www.desy.de/~twhite/crystfel/download.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pmiddend ];
+    platforms = lib.platforms.unix;
   };
 
 }

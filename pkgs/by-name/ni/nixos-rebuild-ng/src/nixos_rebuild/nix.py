@@ -382,6 +382,9 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     if not nixpkgs_path:
         return None
 
+    if not (nixpkgs_path / ".git").exists():
+        return None
+
     try:
         # Get current revision
         r = run_wrapper(

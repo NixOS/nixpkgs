@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
     cp -ar applications icons man $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to graphically examine ddrescue mapfiles";
     homepage = "https://sourceforge.net/projects/ddrescueview/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "ddrescueview";
   };

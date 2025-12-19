@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication {
     inherit pname version hash;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/erdewit/HiFiScan";
     description = "Optimize the audio quality of your loudspeakers";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ cab404 ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ cab404 ];
     mainProgram = "hifiscan";
   };
 }
