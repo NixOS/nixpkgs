@@ -640,12 +640,21 @@ class Editor:
             autocommit = not args.no_commit
             if autocommit:
                 assert editor.nixpkgs_repo is not None
+
+                commit_message = "{drv_name}: init at {version}".format(
+                    drv_name=editor.get_drv_name(plugin.normalized_name),
+                    version=plugin.version,
+                )
+
+                if isinstance(pdesc.repo, RepoGitHub):
+                    github_url = (
+                        f"https://github.com/{pdesc.repo.owner}/{pdesc.repo.repo}"
+                    )
+                    commit_message += f"\n\n{github_url}"
+
                 commit(
                     editor.nixpkgs_repo,
-                    "{drv_name}: init at {version}".format(
-                        drv_name=editor.get_drv_name(plugin.normalized_name),
-                        version=plugin.version,
-                    ),
+                    commit_message,
                     [args.outfile, args.input_file],
                 )
 
