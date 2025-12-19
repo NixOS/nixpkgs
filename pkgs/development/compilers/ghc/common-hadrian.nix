@@ -606,6 +606,16 @@ stdenv.mkDerivation (
         "-j$NIX_BUILD_CORES"
         ${lib.escapeShellArgs hadrianSettings}
       )
+    ''
+    # Configure tests the C compiler by building and linking. This works mostly fine,
+    # even in pkgsStatic, even though the makeStatic adapater doesn't actually take
+    # effect for the target platform here. This only works, because stdenv provides
+    # some core libraries as shared objects in pkgsStatic as well.
+    # FreeBSD has disabled this entirely, and thus configure would fail this step.
+    # Only provide -static for non-darwin, because on darwin we only build mostly-static
+    # binaries anyway, which don't use -static.
+    + lib.optionalString (targetPlatform.isStatic && !targetPlatform.isDarwin) ''
+      export NIX_CFLAGS_LINK_FOR_TARGET+=" -static"
     '';
 
     ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
