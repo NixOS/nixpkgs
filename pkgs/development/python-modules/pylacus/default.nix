@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pylacus";
-  version = "1.20.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "PyLacus";
     tag = "v${version}";
-    hash = "sha256-Ody+2zBnApdZqfmS6veWxHgrjVBO3xSulbu5/Uxd2u8=";
+    hash = "sha256-YTHFA25c9EnXlOKmJd2sdrdYZ+5tAopvpWRfW8IpDpU=";
   };
 
   build-system = [ poetry-core ];

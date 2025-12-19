@@ -502,7 +502,7 @@
   ./services/continuous-integration/buildkite-agents.nix
   ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runners.nix
-  ./services/continuous-integration/gitlab-runner.nix
+  ./services/continuous-integration/gitlab-runner/runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix

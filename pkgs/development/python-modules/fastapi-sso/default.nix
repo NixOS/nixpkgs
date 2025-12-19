@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-sso";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "tomasvotava";
     repo = "fastapi-sso";
     tag = version;
-    hash = "sha256-591+7Jjg3Pb0qXZsj4tEk8lHqxAzWrs5GO92jFJ4Qmo=";
+    hash = "sha256-ve1xeJjAfE6b5NBJJZuDUdE58RjDmIq3KI3xC5ScCco=";
   };
 
   build-system = [ poetry-core ];
