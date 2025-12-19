@@ -1,11 +1,14 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/un.h>
 #include <sys/xattr.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -107,6 +110,25 @@ static int open_needs_mode(int flags)
 /* The following set of Glibc library functions is very incomplete -
    it contains only what we needed for programs in Nixpkgs. Just add
    more functions as needed. */
+
+WRAPPER(int, bind)(int socket, const struct sockaddr *addr, socklen_t addr_len)
+{
+    int (*bind_real) (int, const struct sockaddr *, socklen_t) = LOOKUP_REAL(bind);
+    char buf[PATH_MAX];
+    const struct sockaddr *real_addr = addr;
+    if (addr->sa_family == AF_UNIX) {
+	    struct sockaddr_un real_addr_un = *(struct sockaddr_un *)addr;
+	    const char *sun_path = rewrite(real_addr_un.sun_path, buf);
+	    if (sun_path != real_addr_un.sun_path) {
+		    strncpy(real_addr_un.sun_path, buf, sizeof(real_addr_un.sun_path) - 1);
+		    real_addr_un.sun_path[sizeof(real_addr_un.sun_path) - 1] = '\0';
+		    real_addr = (struct sockaddr *)&real_addr_un;
+		    addr_len = offsetof(struct sockaddr_un, sun_path) + strlen(real_addr_un.sun_path) + 1;
+	    }
+    }
+    return bind_real(socket, real_addr, addr_len);
+}
+WRAPPER_DEF(bind)
 
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
