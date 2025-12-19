@@ -15807,6 +15807,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  treesitter-modules-nvim = buildVimPlugin {
+    pname = "treesitter-modules.nvim";
+    version = "0-unstable-2025-12-15";
+    src = fetchFromGitHub {
+      owner = "MeanderingProgrammer";
+      repo = "treesitter-modules.nvim";
+      rev = "dcb5030422732af54631083316887e512e4a79a3";
+      hash = "sha256-AkyzqsYlSuGKrBEPQahP02TGay+g5TRhYcxYIGR8+9Y=";
+    };
+    meta.homepage = "https://github.com/MeanderingProgrammer/treesitter-modules.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   treesj = buildVimPlugin {
     pname = "treesj";
     version = "0-unstable-2025-12-08";
