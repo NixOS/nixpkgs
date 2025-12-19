@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   cmake,
   ninja,
@@ -19,15 +19,16 @@
   # used in passthru.tests
   opencascade-occt,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencascade-occt";
   version = "7.8.1";
-  commit = "V${builtins.replaceStrings [ "." ] [ "_" ] version}";
+  commit = "V${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
 
-  src = fetchurl {
-    name = "occt-${commit}.tar.gz";
-    url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
-    hash = "sha256-AGMZqTLLjXbzJFW/RSTsohAGV8sMxlUmdU/Y2oOzkk8=";
+  src = fetchFromGitHub {
+    owner = "Open-Cascade-SAS";
+    repo = "OCCT";
+    tag = finalAttrs.commit;
+    hash = "sha256-tg71cFx9HZ471T/3No9CeEHi8VSo0ZITIuNfTSNB2qU=";
   };
 
   patches = [
@@ -89,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = lib.platforms.all;
   };
-}
+})
