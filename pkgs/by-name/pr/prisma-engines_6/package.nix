@@ -13,13 +13,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines_6";
-  version = "6.19.0";
+  version = "6.19.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
+    hash = "sha256-z3GdnrLEMJIGPKXXbz2wrbiGpuNlgYxqg3iYINYTnPI=";
   };
 
   cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
