@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
