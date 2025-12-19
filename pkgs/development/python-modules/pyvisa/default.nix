@@ -6,15 +6,12 @@
   setuptools,
   typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyvisa";
   version = "1.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyvisa";
@@ -23,12 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-KvRY+JZbZLjENwRdFi2D0VuNgf8Oaxip0mkLxvJfS58=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -38,6 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
+    changelog = "https://github.com/pyvisa/pyvisa/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mvnetbiz ];
   };
