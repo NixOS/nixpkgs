@@ -315,6 +315,7 @@ mapAliases {
   protonvpn-nm-lib = throw "protonvpn-nm-lib source code was removed from upstream"; # Added 2025-10-16
   proxy_tools = throw "'proxy_tools' has been renamed to/replaced by 'proxy-tools'"; # Converted to throw 2025-10-29
   ptable = throw "ptable has been removed, as it is unmaintained and broken"; # added 2025-05-25
+  publicsuffix = throw "'publicsuffix' is unmaintained since 2019. The API compatible publicsuffix2 should be used instead."; # Added 2025-12-19
   push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
   pushbullet = throw "'pushbullet' has been renamed to/replaced by 'pushbullet-py'"; # Converted to throw 2025-10-29
   Pweave = throw "'Pweave' has been renamed to/replaced by 'pweave'"; # Converted to throw 2025-10-29
