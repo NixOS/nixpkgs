@@ -43,6 +43,8 @@ default-package-overrides:
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
   # this no longer works with later versions.
   - pandoc-crossref == 0.3.21
+  # 2025-12-19: Needs to match Stackage version of rhine
+  - rhine-bayes < 1.6
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
