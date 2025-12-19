@@ -6,6 +6,7 @@
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <string.h>
@@ -322,6 +323,16 @@ WRAPPER(DIR *, opendir)(const char * path)
     return opendir_real(rewrite(path, buf));
 }
 WRAPPER_DEF(opendir)
+
+#if !defined(__APPLE__)
+WRAPPER(ssize_t, llistxattr)(const char * path, char * list, size_t size)
+{
+    int (*llistxattr_real) (const char *, char *, size_t) = LOOKUP_REAL(llistxattr);
+    char buf[PATH_MAX];
+    return llistxattr_real(rewrite(path, buf), list, size);
+}
+WRAPPER_DEF(llistxattr);
+#endif
 
 #define SYSTEM_CMD_MAX 512
 
