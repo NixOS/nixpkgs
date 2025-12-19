@@ -420,6 +420,14 @@ WRAPPER(int, chdir)(const char *path)
 }
 WRAPPER_DEF(chdir);
 
+WRAPPER(int, chmod)(const char * path, mode_t mode)
+{
+    int (*chmod_real) (const char *, mode_t) = LOOKUP_REAL(chmod);
+    char buf[PATH_MAX];
+    return chmod_real(rewrite(path, buf), mode);
+}
+WRAPPER_DEF(chmod)
+
 WRAPPER(int, mkdir)(const char *path, mode_t mode)
 {
     int (*mkdir_real) (const char *path, mode_t mode) = LOOKUP_REAL(mkdir);
