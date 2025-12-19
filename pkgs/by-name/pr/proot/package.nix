@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "-C src" ];
+  makeFlags = [ "--directory=src" ];
 
   postBuild = ''
-    make -C doc proot/man.1
+    make --directory=doc proot/man.1
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
