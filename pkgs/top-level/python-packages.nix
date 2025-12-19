@@ -12646,8 +12646,6 @@ self: super: with self; {
 
   ptyprocess = callPackage ../development/python-modules/ptyprocess { };
 
-  publicsuffix = callPackage ../development/python-modules/publicsuffix { };
-
   publicsuffix2 = callPackage ../development/python-modules/publicsuffix2 { };
 
   publicsuffixlist = callPackage ../development/python-modules/publicsuffixlist { };
