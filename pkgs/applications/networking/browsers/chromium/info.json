@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "143.0.7499.146",
+    "version": "143.0.7499.169",
     "chromedriver": {
-      "version": "143.0.7499.147",
-      "hash_darwin": "sha256-bsyTxvmiIDdV/ivUjbLk3K+Ve03DvVZG3HF/y4X9JUU=",
-      "hash_darwin_aarch64": "sha256-j5PbvqUsR+XlYZU7xB2MTPJncfSgCIy9tE298ww8Ux4="
+      "version": "143.0.7499.170",
+      "hash_darwin": "sha256-1/wdCF7ADdn3JL2ZIxdpjxMqCdLB00vXjXI9vSrPk2I=",
+      "hash_darwin_aarch64": "sha256-aKOt2lgQ3133kDFDfHnvUhEycw8aYMgg/uJQHtiud7c="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "c1224fc40c96e7f17f0cdeb87a8f4c64b93c0d74",
-        "hash": "sha256-Sn4j7vs7g/D9GnL+BMCyg73iEeGn7Miq0k42mV6Z3hM=",
+        "rev": "164b20aab62509dad21fd46383951aeec084ad1e",
+        "hash": "sha256-WqpZXjcklOyPIvEmWi23bC8D/vVXMLkAmFrQQ13Iy6o=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
