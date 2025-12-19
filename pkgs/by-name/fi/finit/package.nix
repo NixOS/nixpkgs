@@ -4,19 +4,20 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  libcap,
   libite,
   libuev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
-  version = "4.14";
+  version = "4.15-rc1";
 
   src = fetchFromGitHub {
-    owner = "troglobit";
+    owner = "finit-project";
     repo = "finit";
     tag = finalAttrs.version;
-    hash = "sha256-v4QHc6pX50z4j4UBpw7J2k78Pqt7n503qiDRDWyrhOc=";
+    hash = "sha256-K4ZG9Xc2JSk69la2+q0hQEZxsR+lMKxudmU1BF9rTVg=";
   };
 
   postPatch = ''
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libcap
     libite
     libuev
   ];
