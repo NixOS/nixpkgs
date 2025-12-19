@@ -460,6 +460,14 @@ WRAPPER(int, unlinkat)(int dirfd, const char *path, int flags)
 }
 WRAPPER_DEF(unlinkat)
 
+WRAPPER(int, remove)(const char *path)
+{
+    int (*remove_real) (const char *path) = LOOKUP_REAL(remove);
+    char buf[PATH_MAX];
+    return remove_real(rewrite(path, buf));
+}
+WRAPPER_DEF(remove)
+
 WRAPPER(int, rmdir)(const char *path)
 {
     int (*rmdir_real) (const char *path) = LOOKUP_REAL(rmdir);
