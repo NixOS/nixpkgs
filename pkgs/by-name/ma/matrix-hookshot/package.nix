@@ -6,7 +6,6 @@
   makeWrapper,
   matrix-sdk-crypto-nodejs,
   yarnConfigHook,
-  yarnInstallHook,
   cargo,
   rustPlatform,
   rustc,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     yarnConfigHook
-    yarnInstallHook
     pkg-config
     cargo
     rustc
@@ -71,9 +69,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf ./node_modules
+    yarn install --production --offline --force --ignore-engines --no-bin-links --frozen-lockfile
+
+    # Re-install matrix-sdk-crypto-nodejs
+    rm -rf node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+
+    mkdir -p $out/lib/node_modules/matrix-hookshot/
+    mkdir $out/bin
+
+    mv ./lib/* $out/lib/node_modules/matrix-hookshot
+    mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/matrix-hookshot
+
+    runHook postInstall
+  '';
+
   postInstall = ''
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" --add-flags \
-        "$out/lib/node_modules/matrix-hookshot/lib/App/BridgeApp.js"
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
+      --set NODE_ENV "production" \
+      --add-flags "$out/lib/node_modules/matrix-hookshot/App/BridgeApp.js"
   '';
 
   passthru.updateScript = nix-update-script { };
