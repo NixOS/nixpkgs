@@ -18678,6 +18678,8 @@ self: super: with self; {
 
   textual-slider = callPackage ../development/python-modules/textual-slider { };
 
+  textual-speedups = callPackage ../development/python-modules/textual-speedups { };
+
   textual-textarea = callPackage ../development/python-modules/textual-textarea { };
 
   textual-universal-directorytree =
