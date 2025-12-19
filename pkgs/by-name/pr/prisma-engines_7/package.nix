@@ -42,8 +42,6 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "-p"
     "schema-engine-cli"
-    "-p"
-    "prisma-fmt"
   ];
 
   # Tests are long to compile
