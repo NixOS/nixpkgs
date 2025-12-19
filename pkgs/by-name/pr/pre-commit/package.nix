@@ -184,6 +184,7 @@ python3Packages.buildPythonApplication rec {
     "test_invalidated_virtualenv"
     "test_language_versioned_python_hook"
     "test_local_python_repo"
+    "test_local_repo_with_other_artifacts"
     "test_python_hook_weird_setup_cfg"
     "test_really_long_file_paths"
     "test_reinstall"
