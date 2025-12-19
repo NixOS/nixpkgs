@@ -7,11 +7,14 @@
   cmake,
   extra-cmake-modules,
   kwin,
+  kwin-x11,
   qttools,
+
+  withKwinX11 ? false,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "kwin-better-blur-dx";
+  pname = "kwin-better-blur-dx" + lib.optionalString withKwinX11 "-x11";
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -28,9 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    kwin
     qttools
-  ];
+  ]
+  ++ lib.optional withKwinX11 kwin-x11
+  ++ lib.optional (!withKwinX11) kwin;
+
+  cmakeFlags = lib.optional withKwinX11 "-DBETTERBLUR_X11=on";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
