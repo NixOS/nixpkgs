@@ -17186,6 +17186,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-buffet = buildVimPlugin {
+    pname = "vim-buffet";
+    version = "2.0.1-unstable-2021-09-03";
+    src = fetchFromGitHub {
+      owner = "bagrat";
+      repo = "vim-buffet";
+      rev = "3ee5c836cd7ded3526902122e06110cd3f8549cb";
+      hash = "sha256-cyZN06Dn+qaL5AjbZfBZIj9Est7b+Q8BYemmWpCt7Gs=";
+    };
+    meta.homepage = "https://github.com/bagrat/vim-buffet/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-bufkill = buildVimPlugin {
     pname = "vim-bufkill";
     version = "0-unstable-2022-04-19";
