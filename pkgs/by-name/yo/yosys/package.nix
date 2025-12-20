@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/YosysHQ/yosys/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
+    mainProgram = "yosys";
     maintainers = with lib.maintainers; [
       shell
       thoughtpolice
