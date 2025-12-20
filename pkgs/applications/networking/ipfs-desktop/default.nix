@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application for IPFS";
     homepage = "https://github.com/ipfs/ipfs-desktop";
     license = licenses.mit;
