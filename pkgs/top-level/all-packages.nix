@@ -8459,6 +8459,8 @@ with pkgs;
   # See: https://github.com/vllm-project/vllm/issues/12083
   vllm = with python312Packages; toPythonApplication vllm;
 
+  vship = recurseIntoAttrs (import ../development/libraries/vship { inherit callPackage stdenv; });
+
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
