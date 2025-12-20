@@ -87,12 +87,6 @@ makeScopeWithSplicing' {
 
       xfwm4-themes = callPackage ./art/xfwm4-themes { };
 
-      #### PANEL PLUGINS
-
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
-        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-      };
-
     }
     // lib.optionalAttrs config.allowAliases {
       #### ALIASES
@@ -147,5 +141,6 @@ makeScopeWithSplicing' {
   xfce4-whiskermenu-plugin = lib.warnOnInstantiate "‘xfce.xfce4-whiskermenu-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-whiskermenu-plugin’ directly" pkgs.xfce4-whiskermenu-plugin; # Added on 2025-12-19
   xfce4-windowck-plugin = lib.warnOnInstantiate "‘xfce.xfce4-windowck-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-windowck-plugin’ directly" pkgs.xfce4-windowck-plugin; # Added on 2025-12-19
   xfce4-pulseaudio-plugin = lib.warnOnInstantiate "‘xfce.xfce4-pulseaudio-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-pulseaudio-plugin’ directly" pkgs.xfce4-pulseaudio-plugin; # Added on 2025-12-19
+  xfce4-sensors-plugin = lib.warnOnInstantiate "‘xfce.xfce4-sensors-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-sensors-plugin’ directly" pkgs.xfce4-sensors-plugin; # Added on 2025-12-19
 
 }
