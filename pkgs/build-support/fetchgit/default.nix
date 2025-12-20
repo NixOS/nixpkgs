@@ -35,11 +35,6 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
-in
-
-lib.makeOverridable (
-  lib.extendMkDerivation {
-    constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
       # Additional stdenv.mkDerivation arguments from derived fetchers.
@@ -265,10 +260,56 @@ lib.makeOverridable (
         }
       );
 
+  resolveSpecialArgs =
+    finalAttrs:
+    {
+      deepClone ? false,
+      fetchTags ? false,
+      leaveDotGit ? null,
+      nonConeMode ? null,
+      rootDir ? "",
+      sparseCheckout ? null,
+      ...
+    }:
+    {
+      inherit
+        deepClone
+        fetchTags
+        rootDir
+        ;
+      leaveDotGit =
+        if leaveDotGit != null then
+          assert fetchTags -> leaveDotGit;
+          assert rootDir != "" -> !leaveDotGit;
+          leaveDotGit
+        else
+          deepClone || fetchTags;
+      nonConeMode = lib.defaultTo (finalAttrs.rootDir != "") nonConeMode;
+      sparseCheckout = lib.defaultTo (lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir) sparseCheckout;
+    };
+in
+
+lib.makeOverridable (
+  lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    inherit excludeDrvArgNames extendDrvArgs;
+
     # No ellipsis.
     inheritFunctionArgs = false;
   }
 )
 // {
-  inherit getRevWithTag;
+  inherit
+    getRevWithTag
+    resolveSpecialArgs
+    ;
+  expectDrvArgs =
+    let
+      faRaw = lib.functionArgs (extendDrvArgs { });
+    in
+    lib.zipAttrsWith (_: lib.any lib.id) [
+      (lib.mapAttrs (_: v: !v) (removeAttrs faRaw excludeDrvArgNames))
+      (lib.mapAttrs (_: _: true) (extendDrvArgs { } (faRaw // { derivationArgs = { }; })))
+    ];
 }
