@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_15,
+  apple-sdk_26,
   cereal,
   glslang,
   spirv-cross,
@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.4.0";
+  version = "1.4.1";
 
   strictDeps = true;
 
   buildInputs = [
-    apple-sdk_15
+    apple-sdk_26
     cereal
     glslang
     spirv-cross
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ydXyah6/J6/1Lzuv+7JnMurkqnvQPs+6Vec0uUrxGq0=";
+    hash = "sha256-7S10p/XrQ/oMXuCnOU6gqnWMGMfP5vhimec1ThxmuIE=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     while IFS= read -d "" proj; do
       echo "Updating deployment target to ${stdenv.hostPlatform.darwinMinVersion}: $proj"
       substituteInPlace "$proj" \
-        --replace-fail 'MACOSX_DEPLOYMENT_TARGET = 10.15' "MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
+        --replace-fail 'MACOSX_DEPLOYMENT_TARGET = 11.0' "MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
     done < <(grep -Z -rl --include=project.pbxproj MACOSX_DEPLOYMENT_TARGET)
 
     # Move `mvkGitRevDerived.h` to a stable location
