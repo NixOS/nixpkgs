@@ -89,8 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-alsa-plugin = callPackage ./panel-plugins/xfce4-alsa-plugin { };
-
       xfce4-battery-plugin = callPackage ./panel-plugins/xfce4-battery-plugin { };
 
       xfce4-clipman-plugin = callPackage ./panel-plugins/xfce4-clipman-plugin { };
@@ -170,4 +168,6 @@ makeScopeWithSplicing' {
   xfce4-dev-tools = lib.warnOnInstantiate "‘xfce.xfce4-dev-tools’ was moved to top-level. Please use ‘pkgs.xfce4-dev-tools’ directly" pkgs.xfce4-dev-tools; # Added on 2025-12-23
   xfce4-panel = lib.warnOnInstantiate "‘xfce.xfce4-panel’ was moved to top-level. Please use ‘pkgs.xfce4-panel’ directly" pkgs.xfce4-panel; # Added on 2025-12-23
   xfconf = lib.warnOnInstantiate "‘xfce.xfconf’ was moved to top-level. Please use ‘pkgs.xfconf’ directly" pkgs.xfconf; # Added on 2025-12-23
+
+  xfce4-alsa-plugin = lib.warnOnInstantiate "‘xfce.xfce4-alsa-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-alsa-plugin’ directly" pkgs.xfce4-alsa-plugin; # Added on 2025-12-19
 }
