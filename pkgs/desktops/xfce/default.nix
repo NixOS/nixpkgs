@@ -93,8 +93,6 @@ makeScopeWithSplicing' {
         libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
       };
 
-      xfce4-xkb-plugin = callPackage ./panel-plugins/xfce4-xkb-plugin { };
-
       xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin { };
 
       xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
@@ -152,5 +150,6 @@ makeScopeWithSplicing' {
   xfce4-time-out-plugin = lib.warnOnInstantiate "‘xfce.xfce4-time-out-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-time-out-plugin’ directly" pkgs.xfce4-time-out-plugin; # Added on 2025-12-19
   xfce4-timer-plugin = lib.warnOnInstantiate "‘xfce.xfce4-timer-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-timer-plugin’ directly" pkgs.xfce4-timer-plugin; # Added on 2025-12-19
   xfce4-verve-plugin = lib.warnOnInstantiate "‘xfce.xfce4-verve-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-verve-plugin’ directly" pkgs.xfce4-verve-plugin; # Added on 2025-12-19
+  xfce4-xkb-plugin = lib.warnOnInstantiate "‘xfce.xfce4-xkb-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-xkb-plugin’ directly" pkgs.xfce4-xkb-plugin; # Added on 2025-12-19
 
 }
