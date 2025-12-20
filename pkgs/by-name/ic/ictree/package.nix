@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Like tree but interactive";
     homepage = "https://github.com/NikitaIvanovV/ictree";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     mainProgram = "ictree";
   };
 }
