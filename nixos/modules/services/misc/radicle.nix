@@ -308,17 +308,12 @@ in
               if lib.length keyCred > 1 then
                 {
                   LoadCredentialEncrypted = [ cfg.privateKeyFile ];
-                  # Note that neither %d nor ${CREDENTIALS_DIRECTORY} works in BindReadOnlyPaths=
-                  BindReadOnlyPaths = [
-                    "/run/credentials/radicle-node.service/${lib.head keyCred}:${env.RAD_HOME}/keys/radicle"
-                  ];
+                  BindReadOnlyPaths = [ "%d/${lib.head keyCred}:${env.RAD_HOME}/keys/radicle" ];
                 }
               else
                 {
                   LoadCredential = [ "radicle:${cfg.privateKeyFile}" ];
-                  BindReadOnlyPaths = [
-                    "/run/credentials/radicle-node.service/radicle:${env.RAD_HOME}/keys/radicle"
-                  ];
+                  BindReadOnlyPaths = [ "%d/radicle:${env.RAD_HOME}/keys/radicle" ];
                 };
           }
         ];
