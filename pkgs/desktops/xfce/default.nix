@@ -89,8 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-cpufreq-plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin { };
-
       xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
@@ -168,4 +166,5 @@ makeScopeWithSplicing' {
   xfce4-alsa-plugin = lib.warnOnInstantiate "‘xfce.xfce4-alsa-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-alsa-plugin’ directly" pkgs.xfce4-alsa-plugin; # Added on 2025-12-19
   xfce4-battery-plugin = lib.warnOnInstantiate "‘xfce.xfce4-battery-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-battery-plugin’ directly" pkgs.xfce4-battery-plugin; # Added on 2025-12-19
   xfce4-clipman-plugin = lib.warnOnInstantiate "‘xfce.xfce4-clipman-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-clipman-plugin’ directly" pkgs.xfce4-clipman-plugin; # Added on 2025-12-19
+  xfce4-cpufreq-plugin = lib.warnOnInstantiate "‘xfce.xfce4-cpufreq-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-cpufreq-plugin’ directly" pkgs.xfce4-cpufreq-plugin; # Added on 2025-12-19
 }
