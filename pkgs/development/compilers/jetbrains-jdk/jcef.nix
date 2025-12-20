@@ -206,5 +206,8 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "x86_64-linux"
     ];
+    maintainers = with lib.maintainers; [
+      aoli-al
+    ];
   };
 }
