@@ -1376,6 +1376,7 @@ in
   sabnzbd = runTest ./sabnzbd.nix;
   samba = runTest ./samba.nix;
   samba-wsdd = runTest ./samba-wsdd.nix;
+  sandhole = import ./sandhole { inherit runTest; };
   sane = runTest ./sane.nix;
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
