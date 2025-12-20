@@ -4,39 +4,40 @@
   stdenv,
   nodejs,
   pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  prisma-engines,
+  prisma-engines_7,
   jq,
   makeWrapper,
   moreutils,
   callPackage,
+  pnpmConfigHook,
+  fetchPnpmDeps,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
-  pname = "prisma";
-  version = "6.19.0";
+  pname = "prisma_7";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
-    rev = finalAttrs.version;
-    hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-bmmthEFMBMJAracWUCU/6Nyic05JglP5t1VAWPVKFnU=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
     jq
     makeWrapper
     moreutils
+    pnpm_10
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
+    hash = "sha256-sJmlMF8nay4/3LTHEWzBWaS8Xq91JRZlzKBfeMnJEMM=";
   };
 
   patchPhase = ''
@@ -86,9 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/prisma" \
       --add-flags "$out/lib/prisma/packages/cli/build/index.js" \
-      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-      --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-      --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node
+      --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines_7}/bin/schema-engine
 
     runHook postInstall
   '';
@@ -99,12 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     cli = callPackage ./test-cli.nix { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Next-generation ORM for Node.js and TypeScript";
     homepage = "https://www.prisma.io/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aqrln ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aqrln ];
     mainProgram = "prisma";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })
