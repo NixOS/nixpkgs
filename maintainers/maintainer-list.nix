@@ -10838,12 +10838,6 @@
     githubId = 2332070;
     name = "Serge Baltic";
   };
-  hyphon81 = {
-    email = "zero812n@gmail.com";
-    github = "hyphon81";
-    githubId = 12491746;
-    name = "Masato Yonekawa";
-  };
   hyshka = {
     name = "Bryan Hyshka";
     email = "bryan@hyshka.com";
