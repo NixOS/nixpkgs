@@ -76,9 +76,12 @@ in
       {
         imports = [ commonHostConfig ];
 
+        virtualisation.credentials = {
+          "xyz.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+        };
+
         services.radicle = {
           enable = true;
-          privateKeyFile = seed-ssh-keys.snakeOilEd25519PrivateKey;
           publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
           node = {
             openFirewall = true;
