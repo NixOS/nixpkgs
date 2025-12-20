@@ -38,7 +38,7 @@
 #
 # Debugging on the VM:
 #
-# - You can use `journalclt -u gitlab-runner.service`.
+# - You can use `journalctl -u gitlab-runner.service`.
 #
 # - To run a job container use:
 #   ```bash
