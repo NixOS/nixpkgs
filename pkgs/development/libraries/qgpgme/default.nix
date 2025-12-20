@@ -1,10 +1,8 @@
 {
   cmake,
   fetchurl,
-  gpgme,
   gpgmepp,
   lib,
-  libgpg-error,
   qtbase,
   stdenv,
   which,
@@ -24,10 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gpgme
-    gpgmepp
-    libgpg-error
     qtbase
+  ];
+
+  propagatedBuildInputs = [
+    gpgmepp
   ];
 
   dontWrapQtApps = true;
