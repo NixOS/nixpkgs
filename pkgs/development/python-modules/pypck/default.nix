@@ -6,22 +6,19 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = version;
-    hash = "sha256-hca0LyHn37Jj4tx61TT3nJ7sd2h6wXbMJqdoLURv+uM=";
+    hash = "sha256-UQL56CUeHhW9aPOv0stAfvW4ZbFZaylsPgdI++EuSCY=";
   };
 
   postPatch = ''
@@ -35,8 +32,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
-
-  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 
