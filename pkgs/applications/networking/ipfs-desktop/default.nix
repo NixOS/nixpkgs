@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Desktop application for IPFS";
     homepage = "https://github.com/ipfs/ipfs-desktop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with maintainers; [ ltpie123 ];
     platforms = platforms.linux;
     mainProgram = "ipfs-desktop";
