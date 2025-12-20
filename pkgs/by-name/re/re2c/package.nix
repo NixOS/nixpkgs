@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re2c";
-  version = "4.3.1";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
     rev = version;
-    hash = "sha256-ihtAB6HLgYhX+FKPFy01RByy/M468YrHv2v5wB9bJws=";
+    hash = "sha256-/uQOcbK63le1FsGM7RF8NDRGMk4fs2g+u3hBGX2rBv4=";
   };
 
   nativeBuildInputs = [
