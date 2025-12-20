@@ -2,6 +2,7 @@
   cmake,
   fetchFromGitHub,
   lib,
+  nixosTests,
   perl,
   rustPlatform,
   versionCheckHook,
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.tests = { inherit (nixosTests) sandhole; };
 
   meta = {
     description = "Expose HTTP/SSH/TCP services through SSH port forwarding";
