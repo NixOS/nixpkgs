@@ -129,7 +129,7 @@ stdenv.mkDerivation {
     num
     re
     sexplib
-    yojson
+    yojson_2
   ])
   ++ (lib.optionals (gnat_version == "14") [
     gpr2_24_2_next

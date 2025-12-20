@@ -826,13 +826,6 @@ assertNoAdditions {
     '';
   };
 
-  completion-treesitter = super.completion-treesitter.overrideAttrs {
-    dependencies = with self; [
-      completion-nvim
-      nvim-treesitter
-    ];
-  };
-
   conjure = super.conjure.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
@@ -1231,10 +1224,6 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   forms = super.forms.overrideAttrs {
     dependencies = [ self.self ];
   };
@@ -1433,7 +1422,7 @@ assertNoAdditions {
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-parsers.haskell ];
   };
 
   haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
@@ -1481,7 +1470,6 @@ assertNoAdditions {
   hurl-nvim = super.hurl-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
-      nvim-treesitter
       nvim-treesitter-parsers.hurl
       plenary-nvim
     ];
@@ -1512,9 +1500,13 @@ assertNoAdditions {
   };
 
   indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    checkInputs = [
+      # nvim-treesitter-textobjects dep
+      self.nvim-treesitter
+    ];
     dependencies = with self; [
       arshlib-nvim
-      nvim-treesitter
+      # Optional dep for repeatable jumps
       nvim-treesitter-textobjects
     ];
   };
@@ -1864,11 +1856,9 @@ assertNoAdditions {
 
   markdoc-nvim = super.markdoc-nvim.overrideAttrs {
     dependencies = with self; [
-      (nvim-treesitter.withPlugins (p: [
-        p.markdown
-        p.markdown_inline
-        p.html
-      ]))
+      nvim-treesitter-parsers.markdown
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.html
     ];
   };
 
@@ -2009,7 +1999,6 @@ assertNoAdditions {
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       hydra-nvim
     ];
   };
@@ -2219,7 +2208,6 @@ assertNoAdditions {
     dependencies = with self; [
       neotest
       nvim-nio
-      nvim-treesitter
       plenary-nvim
     ];
   };
@@ -2519,10 +2507,6 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
-  nvim-gps = super.nvim-gps.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
@@ -2646,13 +2630,9 @@ assertNoAdditions {
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       none-ls-nvim
+      nvim-treesitter-parsers.nu
     ];
-  };
-
-  nvim-paredit = super.nvim-paredit.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
   };
 
   nvim-rip-substitute = super.nvim-rip-substitute.overrideAttrs {
@@ -2670,13 +2650,6 @@ assertNoAdditions {
     checkInputs = [
       # Optional cmp integration
       self.nvim-cmp
-    ];
-  };
-
-  nvim-surround = super.nvim-surround.overrideAttrs {
-    checkInputs = [
-      # Optional treesitter integration
-      self.nvim-treesitter
     ];
   };
 
@@ -2761,10 +2734,6 @@ assertNoAdditions {
   };
 
   nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
-  nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
   };
 
@@ -2968,7 +2937,6 @@ assertNoAdditions {
     dependencies = with self; [
       nvim-parinfer
       nvim-paredit
-      nvim-treesitter
     ];
   };
 
@@ -3018,13 +2986,6 @@ assertNoAdditions {
 
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
     dependencies = [ self.LibDeflate-nvim ];
-  };
-
-  playground = super.playground.overrideAttrs {
-    dependencies = with self; [
-      # we need the 'query' grammar to make
-      (nvim-treesitter.withPlugins (p: [ p.query ]))
-    ];
   };
 
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
@@ -3107,7 +3068,6 @@ assertNoAdditions {
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       plenary-nvim
     ];
   };
@@ -3381,14 +3341,6 @@ assertNoAdditions {
       };
     });
 
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs (old: {
-    dependencies = [ self.nvim-treesitter ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ callumio ];
-    };
-  });
-
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
     meta = old.meta // {
@@ -3638,18 +3590,14 @@ assertNoAdditions {
   };
 
   tsc-nvim = super.tsc-nvim.overrideAttrs {
-    patches = [ ./patches/tsc.nvim/fix-path.patch ];
-
     postPatch = ''
-      substituteInPlace lua/tsc/utils.lua --replace-fail '@tsc@' ${typescript}/bin/tsc
+      substituteInPlace lua/tsc/utils.lua --replace-fail \
+      'bin_name = bin_name or "tsc"' \
+      'bin_name = bin_name or "${typescript}/bin/tsc"'
     '';
 
     # Unit test
     nvimSkipModules = "tsc.better-messages-test";
-  };
-
-  tssorter-nvim = super.tssorter-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
   };
 
   tv-nvim = super.tv-nvim.overrideAttrs {
@@ -3990,11 +3938,6 @@ assertNoAdditions {
 
   vim-hier = super.vim-hier.overrideAttrs {
     buildInputs = [ vim ];
-  };
-
-  vim-illuminate = super.vim-illuminate.overrideAttrs {
-    # Optional treesitter integration
-    checkInputs = [ self.nvim-treesitter ];
   };
 
   vim-isort = super.vim-isort.overrideAttrs {

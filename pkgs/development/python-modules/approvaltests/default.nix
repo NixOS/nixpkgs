@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "16.2.0";
+  version = "16.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-SAevC6yIDndtNRakyzsRNw4vM2wLc/Qbs3ZlmXEa+40=";
+    hash = "sha256-gu9Wa52yekUmFg1zlVtLSN18hUuqVOUCN7krUh0m1m0=";
   };
 
   postPatch = ''
