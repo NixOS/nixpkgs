@@ -102,13 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
-  hardeningDisable = [ "strictflexarrays3" ];
+  hardeningDisable = [
+    "strictflexarrays3"
+  ]
+  # some tests won't compile because this makes memcpy a macro:
+  # libarchive/test/test_write_format_mtree_preset_digests.c:2020:29: error: macro "memcpy" passed 66 arguments, but takes just 3
+  ++ lib.optional stdenv.hostPlatform.isCygwin "fortify";
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
-
-  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
-    echo "#include <windows.h>" >> config.h
-  '';
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
