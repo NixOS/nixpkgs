@@ -1250,6 +1250,14 @@ let
       unifiedSystemDir = true;
     };
 
+    # Amazon Linux 2023 uses GUID-based URLs that don't allow directory listing.
+    # To update: The GUID corresponds to a specific AL2023 release version. You can find the
+    # current GUID by either:
+    #   1. Running an AL2023 container: `docker run -it amazonlinux:2023 dnf repolist -v`
+    #      and extracting the GUID from the Repo-baseurl field
+    #   2. Checking https://github.com/docker-library/repo-info/blob/master/repos/amazonlinux/local/latest.md
+    #      which tracks the repository URLs from the official Docker image
+    # Release notes: https://docs.aws.amazon.com/linux/al2023/release-notes/relnotes.html
     amazon2023x86_64 = {
       name = "amazon-2023-x86_64";
       fullName = "Amazon Linux 2023 (x86_64)";
