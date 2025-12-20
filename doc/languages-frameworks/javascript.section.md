@@ -364,8 +364,6 @@ stdenv.mkDerivation (finalAttrs: {
 
 It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnpm_10`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
 
-<!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
-
 ```diff
  {
    fetchPnpmDeps,
@@ -376,9 +374,9 @@ It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnp
    stdenv,
  }:
 +let
-+  # Optionally override pnpm to use a custom nodejs version
++  # If necessary, override pnpm to use a custom nodejs version
 +  # Make sure that the same nodejs version is referenced in nativeBuildInputs
-+  # pnpm = pnpm_10.override { nodejs = nodejs_20; };
++  # pnpm = buildPackages.pnpm_10.override { nodejs = buildPackages.nodejs_20; };
 +in
  stdenv.mkDerivation (finalAttrs: {
    pname = "foo";
