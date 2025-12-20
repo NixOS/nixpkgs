@@ -585,6 +585,18 @@ rec {
       "--with-ttfautohint"
     ];
 
+    # GCC15 compataiblity patches
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/mgieseki/dvisvgm/commit/ebf66e3f59edf89e9d2b4fb7973b859e185eb034.patch";
+        hash = "sha256-5dppK9saWOuIH4Pmv7Zk9vrRc81oK8qKZqkwCuOQhaY=";
+      })
+      (fetchpatch {
+        url = "https://github.com/mgieseki/dvisvgm/commit/dcb5940dff7ca3084330119a4ff1472cd52ef6de.patch";
+        hash = "sha256-rGTFeeLaWIon4O16x1wFxb3Wr020HdUR3BgrqB5r864=";
+      })
+    ];
+
     # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
     postPatch = ''
       substituteInPlace src/PDFHandler.cpp \
