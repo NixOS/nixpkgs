@@ -12,7 +12,7 @@
 { pkgs, lib, ... }:
 
 let
-  inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+  inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   initialRootPassword = "notproduction";
   rootProjectId = "2";
 
@@ -37,7 +37,7 @@ in
     gitlab =
       { ... }:
       {
-        imports = [ common/user-account.nix ];
+        imports = [ ../common/user-account.nix ];
 
         environment.systemPackages = with pkgs; [ git ];
 
