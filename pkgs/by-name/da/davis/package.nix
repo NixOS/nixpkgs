@@ -13,10 +13,10 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "tchapi";
     repo = "davis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-okysA35sdtvbyn90fqGbhGr2yWYAw1DBJYBBhPep6T0=";
+    hash = "sha256-YLVfcoC8cIcCfi7R2zWXNxD4P+KIXOCL+MqFEt2Z7Tc=";
   };
 
-  vendorHash = "sha256-j28IsT7tdTg7+M8KwBa1LDWw0YGgv9EGnaCQNeTJZyw=";
+  vendorHash = "sha256-ub2iv4455AAP9ohN2Zh+8DCbYT1uJOasMeZ/P7tDdw0=";
 
   composerNoPlugins = false;
 
