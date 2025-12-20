@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${version}";
-    hash = "sha256-7ZsO4jresikA17M8cyHskdcVnTscGHxTCLJv5p1SvfI=";
+    hash = "sha256-M/xfw5k+WbrVFKcOu3fxGacausTrbjrvN8gfAuRcf6c=";
   };
 
   build-system = [ setuptools ];

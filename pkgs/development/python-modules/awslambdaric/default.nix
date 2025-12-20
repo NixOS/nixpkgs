@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     tag = version;
-    sha256 = "sha256-pUVWd4zpmTygndPIy76uVk7+sLCmwQqulLaUI7B0fQc=";
+    sha256 = "sha256-gwbEDo/LewCb0wTtkw/bF3XSAiSu1ITYHAnuvpNsfs0=";
   };
 
   propagatedBuildInputs = [

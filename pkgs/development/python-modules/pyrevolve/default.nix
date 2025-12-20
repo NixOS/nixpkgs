@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-jjiFOlxXjaa4L4IEtojeeS0jx4GsftAeIGBpJLhUcY4=";
+    hash = "sha256-gFYT/kQDWSjY1V+uqMPif5II2XG0LmBKujp06vljVF8=";
   };
 
   postPatch = ''

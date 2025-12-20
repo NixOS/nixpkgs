@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-nn0NKX6rqNKrSZd+p/oq/LmESAgvTkSOA08wq1xLY2I=";
+    hash = "sha256-zvyGfD2iU/1a1AYi+Srscg92pc6ZSJpJ0TGKwjw+X24=";
   };
 
   build-system = [

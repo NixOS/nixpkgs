@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-xONYpDGsx6lhbAjAqwFx5Vo3PxeFsblhZxkxTSjMWOE=";
+    hash = "sha256-ifJ+CapLe2iEHuipte0SPKvyRCnP6pixaFxMXd5Hk2M=";
   };
 
   build-system = [ setuptools ];

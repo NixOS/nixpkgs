@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "miurahr";
     repo = "pybcj";
     tag = "v${version}";
-    hash = "sha256-ExSt7E7ZaVEa0NwAQHU0fOaXJW9jYmEUUy/1iUilGz8=";
+    hash = "sha256-nFPk+1V0VXDvFA2w42w4UBF9T6adwBXfH78kDNnMGSU=";
   };
 
   build-system = [

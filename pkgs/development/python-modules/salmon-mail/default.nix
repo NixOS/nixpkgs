@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "moggers87";
     repo = "salmon";
     tag = version;
-    hash = "sha256-ysBO/ridfy7YPoTsVwAxar9UvfM/qxrx2dp0EtDNLvE=";
+    hash = "sha256-QKuXrwe0q14AcsCOEQqFNCzXBZgGvlUa5CtuAiYJEM0=";
   };
 
   nativeCheckInputs = [

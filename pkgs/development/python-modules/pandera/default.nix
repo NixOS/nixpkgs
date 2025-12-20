@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-r9lHK2fK1q2pHhpdW+Q83Kk+OZhAOwx8k3GgxHHlj/4=";
+    hash = "sha256-BFwOvMAiDy5A0HYgHwFeutB4k2XAreBjVKjukf4ZgIc=";
   };
 
   build-system = [

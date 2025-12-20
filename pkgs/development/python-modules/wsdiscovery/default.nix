@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "andreikop";
     repo = "python-ws-discovery";
     rev = "v${version}";
-    hash = "sha256-6LGZogNRCnmCrRXvHq9jmHwqW13KQPpaGaao/52JPtk=";
+    hash = "sha256-c9ExGiNo0j+h1U9yKU3OtInawJXivBxdzAGvrSfi7VE=";
   };
 
   build-system = [ setuptools ];

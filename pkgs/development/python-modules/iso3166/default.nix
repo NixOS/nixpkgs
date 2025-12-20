@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "deactivated";
     repo = "python-iso3166";
     tag = "v${version}";
-    hash = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
+    hash = "sha256-qJYw1FlhQD9EI3xCRv3U6fkKxHoAqNfO8myItki1C0g=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "CiscoDevNet";
     repo = "webexteamssdk";
     tag = "v${version}";
-    hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
+    hash = "sha256-BKdeN53sADwBWy+pxdEP3kThj/GPrGoOpLANQw3/Q9Y=";
   };
 
   # opsdroid still depends on webexteamssdk but package was renamed

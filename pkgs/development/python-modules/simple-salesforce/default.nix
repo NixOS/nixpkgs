@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "simple-salesforce";
     repo = "simple-salesforce";
     tag = "v${version}";
-    hash = "sha256-nrfIyXftS2X2HuuLFRZpWLz/IbRasqUzv+r/HvhxfAw=";
+    hash = "sha256-Obr65WB8ARsJtFTtH9PsHUW/z09x2MjJWy5Fd2AJ9is=";
   };
 
   nativeBuildInputs = [ setuptools ];

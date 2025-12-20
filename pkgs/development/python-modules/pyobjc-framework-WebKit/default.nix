@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ronaldoussoren";
     repo = "pyobjc";
     tag = "v${version}";
-    hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
+    hash = "sha256-vbw9F2CQRykP+042lTUL7hrJ2rVWnjk9JMKnUdPWTGQ=";
   };
 
   sourceRoot = "${src.name}/pyobjc-framework-WebKit";

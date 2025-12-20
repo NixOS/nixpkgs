@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jensengroup";
     repo = "propka";
     tag = "v${version}";
-    hash = "sha256-EJQqCe4WPOpqsSxxfbTjF0qETpSPYqpixpylweTCjko=";
+    hash = "sha256-L/NhMAJ3IUXEQknNzju0AtL7rZeGzzdU9I4ct6QyXlI=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "CMA-ES";
     repo = "pycma";
     tag = "r${version}";
-    hash = "sha256-2uCn5CZma9RLK8zaaPhiQCqnK+2dWgLNr5+Ck2cV6vI=";
+    hash = "sha256-ArdgaeeSjl6PcfkdJy+TNRBzwHuWlBUuOcDDJvHEgno=";
   };
 
   # setuptools.errors.PackageDiscoveryError:
