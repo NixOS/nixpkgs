@@ -760,6 +760,42 @@ in
     };
   };
 
+  search-panes = mkTmuxPlugin {
+    pluginName = "search-panes";
+    version = "0-unstable-2025-07-27";
+    src = fetchFromGitHub {
+      owner = "multi-io";
+      repo = "tmux-search-panes";
+      rev = "3996b5c56c6be69d3a85ef26065b1877d9ac71c6";
+      hash = "sha256-Z9Gu4v2LAyG6UxXVLTvQUz1wU4PaJlBQXjLiSzfSP7s=";
+    };
+    rtpFilePath = "tmux-search-panes.tmux";
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for f in search-panes.sh _fzf-and-switch.sh _render-preview.sh; do
+        chmod +x $target/bin/$f
+        wrapProgram $target/bin/$f \
+          --prefix PATH : ${
+            with pkgs;
+            lib.makeBinPath [
+              coreutils
+              fzf
+              gnugrep
+              gnused
+              tmux
+            ]
+          }
+      done
+    '';
+    meta = {
+      homepage = "https://github.com/multi-io/tmux-search-panes";
+      description = "Tmux plugin that allows you to perform a fulltext search";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.DieracDelta ];
+    };
+  };
+
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
     version = "unstable-2022-08-14";
