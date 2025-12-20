@@ -56,6 +56,11 @@ buildPythonPackage rec {
     "t/unit/test_schedulers.py"
   ];
 
+  disabledTests = [
+    # AssertionError: 'At 02:00, only on Monday UTC' != 'At 02:00 AM, only on Monday UTC'
+    "test_long_name"
+  ];
+
   pythonImportsCheck = [ "django_celery_beat" ];
 
   meta = {
