@@ -41,9 +41,6 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # With 0.6.0 the tests are properly mocked
-  doCheck = false;
-
   nativeCheckInputs = [
     aioresponses
     syrupy
