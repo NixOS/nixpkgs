@@ -2,12 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   cloudpickle,
   flit-core,
   typing-extensions,
   pytestCheckHook,
-  pytest-asyncio_0,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +25,13 @@ buildPythonPackage rec {
 
   dependencies = [
     cloudpickle
-    setuptools
     typing-extensions
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     # event_loop was removed in pytest-asyncio 1.x
-    pytest-asyncio_0
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [
