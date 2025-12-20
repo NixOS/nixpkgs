@@ -1,7 +1,7 @@
 { callPackage }:
 callPackage ./generic.nix { } {
-  version = "2.4.0";
-  hash = "sha256-6Q5J+MMbCaUIJJpP7oYF+qZf4yCBm/ytryUkEmJT1a4=";
+  version = "2.4.2";
+  hash = "sha256-LNYuTSK5/ByAvThklzmVDw29o0+8PmJiT7aEImTpPG4=";
   patches = [
     # Fix loading extended modules.
     ./load-extended-modules.patch

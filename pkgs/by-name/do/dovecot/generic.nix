@@ -24,6 +24,7 @@
   libsodium,
   libstemmer,
   cyrus_sasl,
+  pcre2,
   nixosTests,
   rpcsvc-proto,
   libtirpc,
@@ -73,6 +74,7 @@ stdenv.mkDerivation {
     libstemmer
     cyrus_sasl.dev
   ]
+  ++ lib.optional (lib.strings.versionAtLeast version "2.4") pcre2
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemd
     pam
@@ -93,6 +95,12 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  postConfigure = lib.optionalString (lib.strings.versionAtLeast version "2.4") ''
+    substituteInPlace src/lib-regex/Makefile --replace-fail \
+    "test_regex_DEPENDENCIES = libdregex.la \$(LIBPCRE_LIBS)" \
+    "test_regex_DEPENDENCIES = libdregex.la"
+  '';
 
   postPatch = ''
     sed -i -E \
