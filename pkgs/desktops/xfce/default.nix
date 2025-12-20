@@ -93,8 +93,6 @@ makeScopeWithSplicing' {
         libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
       };
 
-      xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
-
       xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin { };
 
       xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
@@ -150,5 +148,6 @@ makeScopeWithSplicing' {
   xfce4-verve-plugin = lib.warnOnInstantiate "‘xfce.xfce4-verve-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-verve-plugin’ directly" pkgs.xfce4-verve-plugin; # Added on 2025-12-19
   xfce4-xkb-plugin = lib.warnOnInstantiate "‘xfce.xfce4-xkb-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-xkb-plugin’ directly" pkgs.xfce4-xkb-plugin; # Added on 2025-12-19
   xfce4-weather-plugin = lib.warnOnInstantiate "‘xfce.xfce4-weather-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-weather-plugin’ directly" pkgs.xfce4-weather-plugin; # Added on 2025-12-19
+  xfce4-whiskermenu-plugin = lib.warnOnInstantiate "‘xfce.xfce4-whiskermenu-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-whiskermenu-plugin’ directly" pkgs.xfce4-whiskermenu-plugin; # Added on 2025-12-19
 
 }
