@@ -89,10 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
-
-      xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
-
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
       xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
@@ -166,4 +162,7 @@ makeScopeWithSplicing' {
   xfce4-clipman-plugin = lib.warnOnInstantiate "‘xfce.xfce4-clipman-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-clipman-plugin’ directly" pkgs.xfce4-clipman-plugin; # Added on 2025-12-19
   xfce4-cpufreq-plugin = lib.warnOnInstantiate "‘xfce.xfce4-cpufreq-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-cpufreq-plugin’ directly" pkgs.xfce4-cpufreq-plugin; # Added on 2025-12-19
   xfce4-cpugraph-plugin = lib.warnOnInstantiate "‘xfce.xfce4-cpugraph-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-cpugraph-plugin’ directly" pkgs.xfce4-cpugraph-plugin; # Added on 2025-12-19
+  xfce4-dockbarx-plugin = lib.warnOnInstantiate "‘xfce.xfce4-dockbarx-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-dockbarx-plugin’ directly" pkgs.xfce4-dockbarx-plugin; # Added on 2025-12-19
+  xfce4-docklike-plugin = lib.warnOnInstantiate "‘xfce.xfce4-docklike-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-docklike-plugin’ directly" pkgs.xfce4-docklike-plugin; # Added on 2025-12-19
+
 }

@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZxaWORqA8LiM4CzakxClg5C6AsyHrzCGydgboCrC45g=";
   };
 
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
+
   pythonPath = [
     dockbarx
     python3Packages.pygobject3
