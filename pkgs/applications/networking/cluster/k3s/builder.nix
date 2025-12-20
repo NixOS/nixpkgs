@@ -470,14 +470,11 @@ buildGoModule (finalAttrs: {
       ;
     tests =
       let
-        mkTests =
-          version:
-          let
-            k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-          in
-          lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+        versionedPackage = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor k3sVersion);
       in
-      mkTests k3sVersion;
+      lib.mapAttrs (name: _: nixosTests.k3s.${name}.${versionedPackage}) (
+        lib.filterAttrs (n: _: n != "all") nixosTests.k3s
+      );
     imagesList = throw "k3s.imagesList was removed";
     airgapImages = throw "k3s.airgapImages was renamed to k3s.airgap-images";
     airgapImagesAmd64 = throw "k3s.airgapImagesAmd64 was renamed to k3s.airgap-images-amd64-tar-zst";
