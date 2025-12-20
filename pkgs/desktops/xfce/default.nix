@@ -89,8 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
-
       xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
       xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
@@ -164,5 +162,6 @@ makeScopeWithSplicing' {
   xfce4-cpugraph-plugin = lib.warnOnInstantiate "‘xfce.xfce4-cpugraph-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-cpugraph-plugin’ directly" pkgs.xfce4-cpugraph-plugin; # Added on 2025-12-19
   xfce4-dockbarx-plugin = lib.warnOnInstantiate "‘xfce.xfce4-dockbarx-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-dockbarx-plugin’ directly" pkgs.xfce4-dockbarx-plugin; # Added on 2025-12-19
   xfce4-docklike-plugin = lib.warnOnInstantiate "‘xfce.xfce4-docklike-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-docklike-plugin’ directly" pkgs.xfce4-docklike-plugin; # Added on 2025-12-19
+  xfce4-eyes-plugin = lib.warnOnInstantiate "‘xfce.xfce4-eyes-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-eyes-plugin’ directly" pkgs.xfce4-eyes-plugin; # Added on 2025-12-19
 
 }
