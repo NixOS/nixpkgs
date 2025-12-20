@@ -31,9 +31,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
 
-  LIBPG_QUERY_PATH = libpg_query;
+    LIBPG_QUERY_PATH = libpg_query;
+  };
 
   checkFlags = [
     # depends on the PostgreSQL version
