@@ -15,7 +15,7 @@ let
       }
       ''
         mkdir -p $out/lib
-        source ${pkgs.activemq}/lib/classpath.env
+        source ${cfg.package}/lib/classpath.env
         export CLASSPATH
         ln -s "${./ActiveMQBroker.java}" ActiveMQBroker.java
         javac -d $out/lib ActiveMQBroker.java
@@ -26,16 +26,13 @@ in
 
   options = {
     services.activemq = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Enable the Apache ActiveMQ message broker service.
-        '';
-      };
+      enable = lib.mkEnableOption "Apache ActiveMQ message broker service";
+
+      package = lib.mkPackageOption pkgs "activemq" { };
+
       configurationDir = lib.mkOption {
-        default = "${pkgs.activemq}/conf";
-        defaultText = lib.literalExpression ''"''${pkgs.activemq}/conf"'';
+        default = "${cfg.package}/conf";
+        defaultText = lib.literalExpression ''"''${cfg.package}/conf"'';
         type = lib.types.str;
         description = ''
           The base directory for ActiveMQ's configuration.
@@ -43,6 +40,7 @@ in
           which should contain the configuration for the broker service.
         '';
       };
+
       configurationURI = lib.mkOption {
         type = lib.types.str;
         default = "xbean:activemq.xml";
@@ -54,6 +52,7 @@ in
           an activemq.xml configuration file in it.
         '';
       };
+
       baseDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/activemq";
@@ -64,6 +63,7 @@ in
           this in activemq.xml.
         '';
       };
+
       javaProperties = lib.mkOption {
         type = lib.types.attrs;
         default = { };
@@ -78,7 +78,7 @@ in
             "activemq.base" = "${cfg.baseDir}";
             "activemq.data" = "${cfg.baseDir}/data";
             "activemq.conf" = "${cfg.configurationDir}";
-            "activemq.home" = "${pkgs.activemq}";
+            "activemq.home" = "${cfg.package}";
           }
           // attrs;
         description = ''
@@ -89,6 +89,7 @@ in
           given reasonable defaults.
         '';
       };
+
       extraJavaOptions = lib.mkOption {
         type = lib.types.separatedString " ";
         default = "";
@@ -111,6 +112,7 @@ in
     users.groups.activemq.gid = config.ids.gids.activemq;
 
     systemd.services.activemq_init = {
+      description = "Initialize Apache ActiveMQ Message Broker Data Directory";
       wantedBy = [ "activemq.service" ];
       partOf = [ "activemq.service" ];
       before = [ "activemq.service" ];
@@ -122,12 +124,13 @@ in
     };
 
     systemd.services.activemq = {
+      description = "Apache ActiveMQ Message Broker";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pkgs.jre ];
       serviceConfig.User = "activemq";
       script = ''
-        source ${pkgs.activemq}/lib/classpath.env
+        source ${cfg.package}/lib/classpath.env
         export CLASSPATH=${activemqBroker}/lib:${cfg.configurationDir}:$CLASSPATH
         exec java \
           ${
