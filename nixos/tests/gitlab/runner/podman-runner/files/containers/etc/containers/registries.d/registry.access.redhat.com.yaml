@@ -1,3 +1,0 @@
-docker:
-  registry.access.redhat.com:
-    lookaside: https://access.redhat.com/webassets/docker/content/sigstore
