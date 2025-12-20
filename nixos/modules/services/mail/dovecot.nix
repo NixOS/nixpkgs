@@ -43,12 +43,16 @@ let
     splitString
     traceSeq
     types
+    versionAtLeast
+    versionOlder
     ;
 
   cfg = config.services.dovecot2;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
+
+  sievec = lib.getExe' cfg.package.passthru.dovecot_pigeonhole "sievec";
 
   sieveScriptSettings = mapAttrs' (
     to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}"
@@ -89,9 +93,14 @@ let
   );
 
   allSieveSettings = mkMerge [
-    imapSieveMailboxSettings
     sieveScriptSettings
     {
+      sieve_pipe_bin_dir =
+        mkIf (cfg.sieve.pipeBins != [ ]) # .
+          sievePipeBinScriptDirectory;
+    }
+    (mkIf isPre24 imapSieveMailboxSettings)
+    (mkIf isPre24 {
       sieve_plugins =
         mkIf (cfg.sieve.plugins != [ ]) # .
           (concatStringsSep " " cfg.sieve.plugins);
@@ -101,10 +110,7 @@ let
       sieve_global_extensions =
         mkIf (cfg.sieve.globalExtensions != [ ]) # .
           (concatMapStringsSep " " (el: "+${el}") cfg.sieve.globalExtensions);
-      sieve_pipe_bin_dir =
-        mkIf (cfg.sieve.pipeBins != [ ]) # .
-          sievePipeBinScriptDirectory;
-    }
+    })
   ];
 
   yesOrNo = v: if v then "yes" else "no";
@@ -153,10 +159,23 @@ let
     else
       throw (traceSeq v "services.dovecot2.settings: unexpected type");
 
-  doveConf = concatStringsSep "\n" (
-    optionals (cfg.includeFiles != [ ]) (map (f: "!include ${f}") cfg.includeFiles)
-    ++ flatten (mapAttrsToList (formatKeyValue "") cfg.settings)
-  );
+  doveConf =
+    let
+      configVersion = cfg.settings.dovecot_config_version or null;
+      storageVersion = cfg.settings.dovecot_storage_version or null;
+      remainingSettings = builtins.removeAttrs cfg.settings [
+        "dovecot_config_version"
+        "dovecot_storage_version"
+      ];
+    in
+    concatStringsSep "\n" (
+      optional (configVersion != null) (formatKeyValue "" "dovecot_config_version" configVersion)
+      ++ optional (storageVersion != null) (formatKeyValue "" "dovecot_storage_version" storageVersion)
+      ++ optionals (cfg.includeFiles != [ ]) (map (f: "!include ${f}") cfg.includeFiles)
+      ++ flatten (mapAttrsToList (formatKeyValue "") remainingSettings)
+    );
+
+  isPre24 = versionOlder cfg.package.version "2.4";
 in
 {
   imports = [
@@ -180,6 +199,31 @@ in
       "dovecot2"
       "enableLmtp"
     ] "Set 'services.dovecot2.settings.protocols.lmtp = true/false;' instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "sslServerCert"
+    ] "Use `settings.ssl_cert` for Dovecot 2.3, `settings.ssl_server_cert_file` for 2.4.")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "sslServerKey"
+    ] "Use `settings.ssl_key` for Dovecot 2.3, `settings.ssl_server_key_file` for 2.4.")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "sslCACert"
+    ] "Use `settings.ssl_ca` for Dovecot 2.3, `settings.ssl_server_ca_file` for 2.4.")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "mailLocation"
+    ] "Use `settings.mail_location` for Dovecot 2.3, `settings.mail_path` for 2.4.")
+    (mkRemovedOptionModule [
+      "services"
+      "dovecot2"
+      "enableDHE"
+    ] "Use ECDHE instead, or use recommended parameters from RFC7919.")
     (mkRenamedOptionModule
       [ "services" "dovecot2" "sieveScripts" ]
       [ "services" "dovecot2" "sieve" "scripts" ]
@@ -223,6 +267,9 @@ in
     enable = mkEnableOption "the dovecot 2.x POP3/IMAP server";
 
     package = mkPackageOption pkgs "dovecot" { } // {
+      default =
+        if versionAtLeast config.system.stateVersion "26.05" then pkgs.dovecot else pkgs.dovecot_2_3;
+      defaultText = lib.literalExpression ''if versionAtLeast config.system.stateVersion "26.05" then pkgs.dovecot else pkgs.dovecot_2_3'';
     };
 
     settings = mkOption {
@@ -440,7 +487,13 @@ in
 
     imapsieve.mailbox = mkOption {
       default = [ ];
-      description = "Configure Sieve filtering rules on IMAP actions";
+      description = ''
+        Configure Sieve filtering rules on IMAP actions
+
+        ::: {.note}
+        This option is no longer used starting from Dovecot version 2.4.
+        :::
+      '';
       type = types.listOf (
         types.submodule (
           { config, ... }:
@@ -566,13 +619,15 @@ in
     security.pam.services.dovecot2 = mkIf cfg.enablePAM { };
 
     services.dovecot2 = {
-      sieve.plugins =
+      sieve.plugins = mkIf isPre24 (
         optional (cfg.imapsieve.mailbox != [ ]) "sieve_imapsieve"
-        ++ optional (cfg.sieve.pipeBins != [ ]) "sieve_extprograms";
+        ++ optional (cfg.sieve.pipeBins != [ ]) "sieve_extprograms"
+      );
 
-      sieve.globalExtensions = optional (cfg.sieve.pipeBins != [ ]) "vnd.dovecot.pipe";
+      sieve.globalExtensions = mkIf isPre24 (optional (cfg.sieve.pipeBins != [ ]) "vnd.dovecot.pipe");
 
       settings = mkMerge [
+        # options shared between 2.3 and 2.4
         {
           base_dir = mkDefault baseDir;
           sendmail_path = mkDefault "/run/wrappers/bin/sendmail";
@@ -582,13 +637,16 @@ in
           default_internal_group = mkDefault cfg.group;
 
           maildir_copy_with_hardlinks = mkDefault true;
-          pop3_uidl_format = mkDefault "%08Xv%08Xu";
+          pop3_uidl_format = if !isPre24 then mkDefault "%{uidvalidity}%{uid}" else mkDefault "%08Xv%08Xu";
 
           auth_mechanisms = mkDefault "plain login";
           "service auth" = {
             user = "root";
           };
-
+        }
+        # these options differ quite a bit between 2.3 and 2.4, which is why they were split up here
+        # for pre-2.4:
+        (mkIf isPre24 {
           mail_location = mkDefault "maildir:/var/spool/mail/%u";
 
           passdb = mkIf cfg.enablePAM (mkDefault {
@@ -603,8 +661,8 @@ in
           mail_plugins = mkDefault "$mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}";
 
           plugin = allSieveSettings;
-        }
-        (mkIf (cfg.mailPlugins.perProtocol != { } || cfg.mailPlugins.globally.enable != [ ]) (
+        })
+        (mkIf (isPre24 && cfg.mailPlugins.perProtocol != { } || cfg.mailPlugins.globally.enable != [ ]) (
           listToAttrs (
             map (m: {
               name = "protocol ${elemAt (splitString "." m.name) 0}";
@@ -614,6 +672,32 @@ in
             }) (attrsToList cfg.mailPlugins.perProtocol)
           )
         ))
+        # for 2.4:
+        (mkIf (!isPre24) {
+          mail_driver = mkDefault "maildir";
+          mail_path = mkDefault "/var/spool/mail/%{user}";
+
+          sieve_script_bin_path = "/tmp/dovecot-%{user|username|lower}";
+
+          "passdb pam" = mkIf cfg.enablePAM (mkDefault {
+            driver = "pam";
+            service_name = "dovecot2";
+            failure_show_msg = mkIf cfg.showPAMFailure true;
+          });
+
+          "userdb passwd" = mkIf cfg.enablePAM (mkDefault {
+            driver = "passwd";
+          });
+
+          sieve_plugins = mkIf (cfg.sieve.pipeBins != [ ]) {
+            "sieve_extprograms" = true;
+          };
+
+          sieve_global_extensions = mkIf (cfg.sieve.pipeBins != [ ]) {
+            "vnd.dovecot.pipe" = true;
+          };
+        })
+        (mkIf (!isPre24) allSieveSettings)
       ];
     };
 
@@ -733,7 +817,7 @@ in
             else
               cp -p '${from}' '${stateDir}/sieve/${to}'
             fi
-            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+            ${sievec} '${stateDir}/sieve/${to}'
           '') cfg.sieve.scripts
         )}
         ${optionalString (
@@ -747,11 +831,11 @@ in
           el:
           optionalString (el.before != null) ''
             cp -p ${el.before} ${stateDir}/imapsieve/before/${baseNameOf el.before}
-            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/before/${baseNameOf el.before}'
+            ${sievec} '${stateDir}/imapsieve/before/${baseNameOf el.before}'
           ''
           + optionalString (el.after != null) ''
             cp -p ${el.after} ${stateDir}/imapsieve/after/${baseNameOf el.after}
-            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/imapsieve/after/${baseNameOf el.after}'
+            ${sievec} '${stateDir}/imapsieve/after/${baseNameOf el.after}'
           ''
         ) cfg.imapsieve.mailbox}
 
@@ -763,7 +847,73 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    warnings = optional isPre24 ''
+      While Dovecot 2.3 is not yet deprecated or EOL,
+      there is a newer version available in Nixpkgs (Dovecot 2.4).
+      Check https://doc.dovecot.org/latest/installation/upgrade/2.3-to-2.4.html
+      before upgrading.
+    '';
+
     assertions = [
+      {
+        assertion = isPre24 || cfg.settings.dovecot_config_version != null;
+        message = ''
+          services.dovecot2: Since Dovecot 2.4, the option 'services.dovecot2.settings.dovecot_config_version' must be explicitly set.
+           To retain compatibility with future updates, set the following and manually update as needed.
+
+               services.dovecot2.settings.dovecot_config_version = "${cfg.package.version}";
+
+           Alternatively, you can automatically update to newer versions of the configuration format, which might break compatibility with future updates.
+
+               services.dovecot2.settings.dovecot_config_version = config.services.dovecot2.package.version;
+
+           See <https://doc.dovecot.org/latest/installation/upgrade/2.3-to-2.4.html>.
+        '';
+      }
+      {
+        assertion = isPre24 || cfg.settings.dovecot_storage_version != null;
+        message = ''
+          services.dovecot2: Since Dovecot 2.4, the option 'services.dovecot2.settings.dovecot_storage_version' must be explicitly set.
+           Set it to the oldest version the storage should stay compatible with, for example the following for the currently selected version.
+
+               services.dovecot2.settings.dovecot_storage_version = "${cfg.package.version}";
+
+           See <https://doc.dovecot.org/latest/installation/upgrade/2.3-to-2.4.html>.
+        '';
+      }
+      {
+        assertion = isPre24 || cfg.imapsieve.mailbox == [ ];
+        message = "since Dovecot 2.4, the `imapsieve.mailbox` option is no longer used in the NixOS module, please use the `settings` option instead.";
+      }
+      {
+        assertion = isPre24 || cfg.sieve.extensions == [ ];
+        message = ''
+          services.dovecot2: Since Dovecot 2.4, the option 'services.dovecot2.sieve.extensions' is no longer valid, but it is set.
+           Set 'services.dovecot2.settings.sieve_extensions' instead.
+           See <https://doc.dovecot.org/latest/core/summaries/settings.html#sieve_extensions>.
+        '';
+      }
+      {
+        assertion = isPre24 || cfg.sieve.globalExtensions == [ ];
+        message = ''
+          services.dovecot2: Since Dovecot 2.4, the option 'services.dovecot2.sieve.globalExtensions' is no longer valid, but it is set.
+           Set 'services.dovecot2.settings.sieve_global_extensions' instead.
+           See <https://doc.dovecot.org/latest/core/summaries/settings.html#sieve_global_extensions>.
+        '';
+      }
+      {
+        assertion =
+          isPre24
+          ||
+            # this is the default value for cfg.mailPlugins
+            cfg.mailPlugins == {
+              globally = {
+                enable = [ ];
+              };
+              perProtocol = { };
+            };
+        message = "since Dovecot 2.4, the `mailPlugins` option is no longer used in the NixOS module, please use the `settings` option instead.";
+      }
       {
         assertion = cfg.showPAMFailure -> cfg.enablePAM;
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
