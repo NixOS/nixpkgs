@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ipfs/ipfs-desktop";
     license = lib.licenses.mit;
     maintainers = with maintainers; [ ltpie123 ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ipfs-desktop";
   };
 }
