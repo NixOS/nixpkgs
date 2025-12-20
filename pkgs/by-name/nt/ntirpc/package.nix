@@ -7,17 +7,18 @@
   liburcu,
   libtirpc,
   libnsl,
+  prometheus-cpp-lite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ntirpc";
-  version = "6.3";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${version}";
-    sha256 = "sha256-e4eF09xwX2Qf/y9YfOGy7p6yhDFnKGI5cnrQy3o8c98=";
+    hash = "sha256-4E6wDAwinCNn7arRgBulg7e0x9S/steh+mjwNY4X3Vc=";
   };
 
   outputs = [
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     krb5
     liburcu
     libnsl
+    prometheus-cpp-lite
+  ];
+
+  cmakeFlags = [
+    "-DUSE_MONITORING=ON"
   ];
 
   postInstall = ''

@@ -62,7 +62,6 @@ ocamlPackages.buildDunePackage {
   ++ (with ocamlPackages; [
     findlib
     lablgtk3-sourceview3
-    yojson
     zarith
     ppx_inline_test
     ppx_assert
@@ -70,7 +69,9 @@ ocamlPackages.buildDunePackage {
     ppx_deriving
     ppx_import
     sexplib
-    ppx_yojson_conv
+    (ppx_yojson_conv.override {
+      ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
+    })
     lsp
     sel
     ppx_optcomp

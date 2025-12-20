@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mcuboot-imgtool";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "imgtool";
-    hash = "sha256-XIc6EYleNtDrmeg2akOjriJwzE9Bnja2k0KJGCVRZM8=";
+    hash = "sha256-//cuTnk6wOwCpJPBlUhxXMwKI1ivruqhC0nMwuC9EpU=";
   };
 
   passthru.updateScript = nix-update-script { };

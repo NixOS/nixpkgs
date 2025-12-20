@@ -1,24 +1,31 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   exabgp,
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "exabgp";
-  version = "4.2.25";
-  format = "pyproject";
+  version = "5.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
     tag = version;
-    hash = "sha256-YBxRDcm4Qt44W3lBHDwdvZq2pXEujbqJDh24JbXthMg=";
+    hash = "sha256-UFo92jS/QmwTUEAhxQnbtY9K905jiBrJujfqGIUCUOg=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  postPatch = ''
+    # https://github.com/Exa-Networks/exabgp/pull/1344
+    substituteInPlace src/exabgp/application/healthcheck.py --replace-fail \
+      "f'/sbin/ip -o address show dev {ifname}'.split()" \
+      '["ip", "-o", "address", "show", "dev", ifname]'
+  '';
+
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -26,13 +33,31 @@ python3.pkgs.buildPythonApplication rec {
     "exabgp"
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
+    hypothesis
+    psutil
+    pytest-asyncio
+    pytest-benchmark
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlags = [ "--benchmark-disable" ];
+
+  enabledTests = [ "tests" ];
+
+  disabledTests = [
+    # AssertionError: Server should receive connection
+    "test_outgoing_connection_establishment"
   ];
 
   passthru.tests = {
     version = testers.testVersion {
       package = exabgp;
+      command = "exabgp version";
     };
   };
 

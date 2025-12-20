@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "1.1.2";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,12 +27,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
-    tag = "v${version}";
-    hash = "sha256-8DjmYYTb0BR5KvtSeI2s7VtYdbRSI+QCjhZfDwqnk3M=";
+    tag = "core-v${version}";
+    hash = "sha256-7xknOpJIjXMr7Z7JD3Jn3oma63hbEZcj/1zQ6FAp5aA=";
     fetchSubmodules = true;
   };
 
   sourceRoot = "${src.name}/core";
+
+  postPatch = ''
+    substituteInPlace tests/test_AutoMountLayer.py \
+      --replace-fail 'f"tests/{name}.tgz.tgz.gz"' 'os.path.join(os.path.dirname(__file__), f"../../tests/{name}.tgz.tgz.gz")' \
+      --replace-fail 'copy_test_file("tests/double-compressed-nested-tar.tgz.tgz")' 'copy_test_file(os.path.join(os.path.dirname(__file__), "../../tests/double-compressed-nested-tar.tgz.tgz"))'
+  '';
 
   build-system = [ setuptools ];
 
@@ -85,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
-    changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-${src.tag}/core/CHANGELOG.md";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/${src.rev}/core/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };

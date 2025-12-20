@@ -13,19 +13,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "silver-platter";
-  version = "0.5.20";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "silver-platter";
-    rev = version;
-    hash = "sha256-k+C4jrC4FO/yy9Eb6x4lv1zyyp/eGkpMcDqZ0KoxfBs=";
+    tag = "v${version}";
+    hash = "sha256-/GFTM/VF+b0I8cDY4vkHzSxCBbvpMiLBVVEPFHcn1/Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-hZQfzaLvHSN/hGR5vn+/2TRH6GwDTTp+UcnePXY7JlM=";
+    hash = "sha256-Y16OnSBC4v21NcCeWAwwGoFYJMQq/se25QqvpMyblmk=";
   };
 
   dependencies = with python3Packages; [

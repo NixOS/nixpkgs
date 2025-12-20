@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucto";
-  version = "0.35";
+  version = "0.36";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "ucto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DaLoq+FBNZG4J+h9fRh9HHl2TKVXUTrt9RAzwmv6lIc=";
+    hash = "sha256-sq1AslcpoG5gY40DiSMtphp7gXGYRuX1QrQYVGuM/+4=";
   };
 
   nativeBuildInputs = [

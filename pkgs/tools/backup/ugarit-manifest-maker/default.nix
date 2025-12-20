@@ -34,7 +34,6 @@ eggDerivation rec {
     description = "Tool for generating import manifests for Ugarit";
     mainProgram = "ugarit-manifest-maker";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
   };
 }

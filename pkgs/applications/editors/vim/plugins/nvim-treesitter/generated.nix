@@ -220,12 +220,12 @@
   };
   brightscript = buildGrammar {
     language = "brightscript";
-    version = "0.0.0+rev=5516826";
+    version = "0.0.0+rev=253fdfa";
     src = fetchFromGitHub {
       owner = "ajdelcimmuto";
       repo = "tree-sitter-brightscript";
-      rev = "55168264ea174085d2e91377a33f216190df2f51";
-      hash = "sha256-bZ8zhjfnF47ur2XNEYiGiATqDKAEnONusY/it9jmBBY=";
+      rev = "253fdfaa23814cb46c2d5fc19049fa0f2f62c6da";
+      hash = "sha256-aE8Of2shLliebuY9A/Sr4bjCm6At9fgDFyPaqMqpg/4=";
     };
     meta.homepage = "https://github.com/ajdelcimmuto/tree-sitter-brightscript";
   };
@@ -1402,12 +1402,12 @@
   };
   ini = buildGrammar {
     language = "ini";
-    version = "0.0.0+rev=bea2237";
+    version = "0.0.0+rev=e4018b5";
     src = fetchFromGitHub {
       owner = "justinmk";
       repo = "tree-sitter-ini";
-      rev = "bea223734aa9cea2c8793bf9098bd7fdef912f57";
-      hash = "sha256-Wmr/zth/MIVFpPIZk3NLIqUwo38QmIskHZ9Tfo204o0=";
+      rev = "e4018b5176132b4f3c5d6e61cea383f42288d0f5";
+      hash = "sha256-8WCyIaApsLPOybe+cntF4ISyQKN41L2IRAATd9KmzL0=";
     };
     meta.homepage = "https://github.com/justinmk/tree-sitter-ini";
   };
@@ -1457,12 +1457,12 @@
   };
   javadoc = buildGrammar {
     language = "javadoc";
-    version = "0.0.0+rev=2533aff";
+    version = "0.0.0+rev=5c6157f";
     src = fetchFromGitHub {
       owner = "rmuir";
       repo = "tree-sitter-javadoc";
-      rev = "2533affe83e57df9b0dbf7350cd73a84af9811b3";
-      hash = "sha256-SKQaCCa/sUU0QVT+0LmD/bQuNT4bwLou3rh0ASMA6Rs=";
+      rev = "5c6157fe1c44e843f739e11b41c48c5918ec8709";
+      hash = "sha256-mbTqYzTr78UIyx7Z/x4M4CU841BafvXVMzq678LtqGU=";
     };
     meta.homepage = "https://github.com/rmuir/tree-sitter-javadoc";
   };
@@ -1891,12 +1891,12 @@
   };
   mlir = buildGrammar {
     language = "mlir";
-    version = "0.0.0+rev=834a0b0";
+    version = "0.0.0+rev=1f76a88";
     src = fetchFromGitHub {
       owner = "artagnon";
       repo = "tree-sitter-mlir";
-      rev = "834a0b01e98eaf4313dfd48778e20bef1738ff8f";
-      hash = "sha256-ed7h87jGE1C0ryj/4MWdLExiIt+BSk5YYU/IVYJ47Zs=";
+      rev = "1f76a88b79e70222968a9f8185992c9bb5ddacf0";
+      hash = "sha256-QAdDUge9hqL1kWTDInnQS0wsqZLjWWTU3JYWYIdaMg4=";
     };
     generate = true;
     meta.homepage = "https://github.com/artagnon/tree-sitter-mlir";
@@ -2759,12 +2759,12 @@
   };
   slint = buildGrammar {
     language = "slint";
-    version = "0.0.0+rev=927f3e2";
+    version = "0.0.0+rev=f2e4e5a";
     src = fetchFromGitHub {
       owner = "slint-ui";
       repo = "tree-sitter-slint";
-      rev = "927f3e2f0213d0eea7f12c978c81067c3dc4289d";
-      hash = "sha256-1jC4ZqkVbKgq35LUo4Gbj6Hw3Yg1zsDWFhPBMuLewxI=";
+      rev = "f2e4e5a7bccb177562de8f5b4fe49a5531c9f7ca";
+      hash = "sha256-60DfIx7aQqe0/ocxbpr00eU3IPs23E8TUILcVGrBYVs=";
     };
     meta.homepage = "https://github.com/slint-ui/tree-sitter-slint";
   };
@@ -3430,12 +3430,12 @@
   };
   vimdoc = buildGrammar {
     language = "vimdoc";
-    version = "0.0.0+rev=5cb043a";
+    version = "0.0.0+rev=570dc10";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "tree-sitter-vimdoc";
-      rev = "5cb043a38ff04cadb6b8e6688aabbf34edd0c3e3";
-      hash = "sha256-+wNT6yVLedZQ6OkqEpnzF3kDBnxTKyCdcQaa2r52Yzs=";
+      rev = "570dc10aed5963546322e6c935e1125b9fd747bf";
+      hash = "sha256-G5QkX4ZRjQ882tNsSBVEp64Ox3KmZq9C8Vsn0OLtdXg=";
     };
     meta.homepage = "https://github.com/neovim/tree-sitter-vimdoc";
   };
@@ -3541,12 +3541,12 @@
   };
   xresources = buildGrammar {
     language = "xresources";
-    version = "0.0.0+rev=a96227a";
+    version = "0.0.0+rev=68240ae";
     src = fetchFromGitHub {
       owner = "ValdezFOmar";
       repo = "tree-sitter-xresources";
-      rev = "a96227aaa37e5f8e1a5888bfac2dcb31ad0bf1f1";
-      hash = "sha256-yNOpIFc7jdXWWeoo1C1JwSx121BO1sHYbiiieQyxNPM=";
+      rev = "68240ae1beef503cfe0d1bc40f25b0fab71df8f5";
+      hash = "sha256-lbgeR8Xc/Hsu6zimS9NIndeayMc4f3xZyhTgKdK2jVE=";
     };
     meta.homepage = "https://github.com/ValdezFOmar/tree-sitter-xresources";
   };

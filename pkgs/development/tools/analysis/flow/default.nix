@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   ocamlPackages,
+  dune,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with ocamlPackages; [
     ocaml
-    dune_3
+    dune
     findlib
     ocamlbuild
   ];

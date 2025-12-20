@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/medio_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/medio_${majorVersion}${minorVersion}.zip";
     hash = "sha256-S+CcwD4zGVk7cIFD6K4NnpE/0mrJq4RnDJC576rhcLQ=";
     stripRoot = false;
   };
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://dotcolon.net/font/medio/";
+    homepage = "https://dotcolon.net/font/medio/";
     description = "Serif font designed by Sora Sagano";
     longDescription = ''
       Medio is a serif font designed by Sora Sagano, based roughly

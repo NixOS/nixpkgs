@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "ebzzry";
     repo = "pell";
-    rev = "f251625ece6bb5517227970287119e7d2dfcea8b";
+    rev = "3b8a9a59c4a8671705805edb7be7c35b1654971f";
     sha256 = "0k8m1lv2kyrs8fylxmbgxg3jn65g57frf2bndc82gkr5svwb554a";
   };
 
@@ -39,7 +39,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ebzzry/pell";
     description = "Simple host availability monitor";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
     mainProgram = "pell";
   };

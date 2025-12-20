@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "rtorrent";
     maintainers = with lib.maintainers; [
-      ebzzry
       codyopel
       thiagokokada
     ];

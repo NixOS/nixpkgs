@@ -4,27 +4,27 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "fira-go";
   version = "1.001";
 
   src = fetchzip {
-    url = "https://github.com/bBoxType/FiraGo/archive/9882ba0851f88ab904dc237f250db1d45641f45d.zip";
-    hash = "sha256-WwgPg7OLrXBjR6oHG5061RO3HeNkj2Izs6ktwIxVw9o=";
+    url = "https://carrois.com/downloads/FiraGO/Download_Folder_FiraGO_${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }.zip";
+    hash = "sha256-+lw4dh7G/Xv3pzGXdMUl9xNc2Nk7wUOAh+lq3K1LrXs=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/opentype
-    mv Fonts/FiraGO_OTF_1001/{Roman,Italic}/*.otf \
-      $out/share/fonts/opentype
+    install --mode=644 -Dt $out/share/fonts/opentype Download_Folder_FiraGO*/Fonts/FiraGO_OTF*/*/*.otf
 
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://bboxtype.com/typefaces/FiraGO";
+    homepage = "https://carrois.com/fira/";
     description = ''
       Font with the same glyph set as Fira Sans 4.3 and additionally
       supports Arabic, Devenagari, Georgian, Hebrew and Thai

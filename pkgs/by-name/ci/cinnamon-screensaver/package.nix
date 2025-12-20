@@ -21,7 +21,6 @@
   python3,
   pam,
   cairo,
-  xapp,
   xdotool,
   xorg,
   iso-flags-png-320x240,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.4.1";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
     tag = version;
-    hash = "sha256-CK4WP5IafNII81e8HxUNN3Vp36Ln78Xvv5lIMvL+nbk=";
+    hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
   };
 
   patches = [
@@ -75,7 +74,6 @@ stdenv.mkDerivation rec {
         pycairo
       ]
     ))
-    xapp
     xdotool
     pam
     cairo

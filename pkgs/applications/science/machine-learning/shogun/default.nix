@@ -264,6 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://shogun-toolbox.org/";
     license = if withSvmLight then lib.licenses.unfree else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+      edwtjo
       smancill
     ];
   };

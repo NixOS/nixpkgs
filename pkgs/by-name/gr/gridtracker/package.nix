@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = "https://gridtracker.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

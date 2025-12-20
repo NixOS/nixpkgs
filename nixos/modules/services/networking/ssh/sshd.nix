@@ -48,6 +48,7 @@ let
         "Macs"
       ];
       spaceSeparated = [
+        "AcceptEnv"
         "AuthorizedKeysFile"
         "AllowGroups"
         "AllowUsers"
@@ -463,6 +464,15 @@ in
           {
             freeformType = settingsFormat.type;
             options = {
+              AcceptEnv = lib.mkOption {
+                type = lib.types.nullOr (lib.types.listOf lib.types.str);
+                default = null;
+                description = ''
+                  Specifies what environment variables sent by the client will be copied into the session's
+                  environment. The TERM environment variable is always accepted whenever the client requests
+                  a pseudo-terminal as it is required by the protocol.
+                '';
+              };
               AuthorizedPrincipalsFile = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = "none"; # upstream default

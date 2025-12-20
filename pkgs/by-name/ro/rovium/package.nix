@@ -17,11 +17,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rovium";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "https://github.com/rovium/rovium-beta/releases/download/v${finalAttrs.version}/rovium-${finalAttrs.version}-amd64.deb";
-    hash = "sha256-CZ1XFSgWBjzqCZD4rV6xmAvAZEaUD+tQ9vo0UiGzcJ8=";
+    hash = "sha256-hGnjspZq1DXwBFQk89SbsQkm/o/5ecyh6IjJSdLu5Ys=";
   };
 
   strictDeps = true;

@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
   name = "jitsi-meet";
-  meta = with pkgs.lib; {
-    maintainers = teams.jitsi.members;
+  meta = {
+    maintainers = pkgs.lib.teams.jitsi.members;
   };
 
   nodes = {

@@ -185,6 +185,5 @@ buildPythonPackage rec {
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with lib.maintainers; [ hexa ];
   };
 }

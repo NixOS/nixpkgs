@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.6.12";
+  version = "1.6.15";
 
   src =
     let
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/xishang0128/sparkle/releases/download/${finalAttrs.version}/sparkle-linux-${finalAttrs.version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-jExqA15faSvkjXMAvKMwDwsdBjijG3hOyf0j1J7jH/A=";
-        aarch64-linux = "sha256-1hZa5Dr+Fh9vc+066TNcvgH44Lgx5sebvMKSO+bh9B4=";
+        x86_64-linux = "sha256-6WGMFmsUr/17lxZd+Q2Ellgs8ftn2YRb/lwmSR7uqLE=";
+        aarch64-linux = "sha256-lo19xwSqNgTxBxZuNIV7cq2qE93xtbxnsn7K3vROmrc=";
       };
     };
 
@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    chmod 0755 opt/sparkle/resources/files/sysproxy
     cp -r opt $out/opt
     substituteInPlace usr/share/applications/sparkle.desktop \
       --replace-fail "/opt/sparkle/sparkle" "sparkle"

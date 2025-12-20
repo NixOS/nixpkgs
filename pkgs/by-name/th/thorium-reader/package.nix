@@ -11,16 +11,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thorium-reader";
-  version = "3.2.2";
+  version = "3.3.0";
   nodejs = nodejs_24;
-  npmDepsHash = "sha256-T70Oxn97oDyFSxkJ55nlM2ET0UEWpo8ahnipkUwgTcM=";
+  npmDepsHash = "sha256-UR2MSqmdJ79Fz7qjQRkCAwx2jdMn8KLWPzNSnnsb5Ak=";
   makeCacheWritable = true;
 
   src = fetchFromGitHub {
     owner = "edrlab";
     repo = "thorium-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+1cc8UxcLaqC6Yrc4RYAKDZ4hzoz0eX31HaiUtp/znE=";
+    hash = "sha256-2d5M9C/cLK2A8O3Ls0xEkT6H8tucVR7eivPi+82V7Zg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";

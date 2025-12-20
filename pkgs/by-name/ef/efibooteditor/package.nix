@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "efibooteditor";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "Neverous";
     repo = "efibooteditor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tufB90EhO/jdCnQfeuibcJu5C7RfCjIxBYp+8uR0Zv0=";
+    hash = "sha256-OtNZA2K6Kr4IHnTw0i+evHJmBx9oAGKuU90XtUfXKy0=";
   };
 
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux efivar;

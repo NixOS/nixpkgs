@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aioairzone";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = "aioairzone";
     tag = version;
-    hash = "sha256-eNSsBlLn6Go+2gQ8IHEzFOQPRuJM8nLqwIaDvXLgthY=";
+    hash = "sha256-dVnjBhb2gWP0DIYONoJNrd/an5PTrNa1ldSi8Ip9UFs=";
   };
 
   build-system = [ setuptools ];

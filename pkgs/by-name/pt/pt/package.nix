@@ -16,7 +16,6 @@ bundlerApp {
     homepage = "http://www.github.com/raul/pt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      ebzzry
       manveru
       nicknovitski
     ];

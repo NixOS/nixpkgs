@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unite is a GNOME Shell extension which makes a few layout tweaks to the top panel and removes window decorations to make it look like Ubuntu Unity Shell";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rhoriguchi ];
     homepage = "https://github.com/hardpixel/unite-shell";
-    broken = versionOlder gnome-shell.version "3.32";
+    broken = lib.versionOlder gnome-shell.version "3.32";
   };
 }

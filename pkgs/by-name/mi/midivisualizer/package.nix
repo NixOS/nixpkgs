@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "midivisualizer";
-  version = "7.2";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = "MIDIVisualizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ilsqc14PBTqreLhrEpvMOZAp37xOY/OwuhHTjeOjqm8=";
+    sha256 = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
   };
 
   nativeBuildInputs = [

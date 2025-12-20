@@ -4,7 +4,6 @@
   python3,
   fetchFromGitHub,
   nixosTests,
-  fetchPypi,
   fetchYarnDeps,
   nodejs,
   yarnBuildHook,
@@ -15,23 +14,15 @@ let
     self = python3;
     packageOverrides = self: super: {
       django = super.django_5_2;
-      django-csp = super.django-csp.overridePythonAttrs rec {
-        version = "4.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
-        };
-      };
     };
   };
 
-  version = "4.0.0";
+  version = "4.1.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-rhbS6NYk8sZmtrNpKJrm24vOwAJGEDVS9fpFWuyvPGA=";
+    hash = "sha256-vZkqHlZ1aDOXcrdyV8BXmI95AmMalXOuVLS9XWB/YxU=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -71,46 +62,51 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ setuptools ];
 
-  dependencies = with python.pkgs; [
-    beautifulsoup4
-    boto3
-    celery
-    django
-    django-configurations
-    django-cors-headers
-    django-countries
-    django-csp
-    django-extensions
-    django-filter
-    django-lasuite
-    django-parler
-    django-redis
-    django-storages
-    django-timezone-field
-    django-treebeard
-    djangorestframework
-    drf-spectacular
-    drf-spectacular-sidecar
-    dockerflow
-    easy-thumbnails
-    factory-boy
-    gunicorn
-    jsonschema
-    lxml
-    markdown
-    mozilla-django-oidc
-    nested-multipart-parser
-    openai
-    psycopg
-    pycrdt
-    pyjwt
-    pyopenssl
-    python-magic
-    redis
-    requests
-    sentry-sdk
-    whitenoise
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      beautifulsoup4
+      boto3
+      celery
+      django
+      django-configurations
+      django-cors-headers
+      django-countries
+      django-csp
+      django-extensions
+      django-filter
+      django-lasuite
+      django-parler
+      django-redis
+      django-storages
+      django-timezone-field
+      django-treebeard
+      djangorestframework
+      drf-spectacular
+      drf-spectacular-sidecar
+      dockerflow
+      easy-thumbnails
+      factory-boy
+      gunicorn
+      jsonschema
+      lxml
+      markdown
+      mozilla-django-oidc
+      nested-multipart-parser
+      openai
+      psycopg
+      pycrdt
+      pyjwt
+      pyopenssl
+      python-magic
+      redis
+      requests
+      sentry-sdk
+      whitenoise
+    ]
+    ++ celery.optional-dependencies.redis
+    ++ django-lasuite.optional-dependencies.all
+    ++ django-storages.optional-dependencies.s3;
 
   pythonRelaxDeps = true;
 

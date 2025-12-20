@@ -1,14 +1,13 @@
-{ lib, vscode-utils }:
-
-let
-  inherit (vscode-utils) buildVscodeMarketplaceExtension;
-in
-buildVscodeMarketplaceExtension {
+{
+  lib,
+  vscode-utils,
+}:
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-wakatime";
     publisher = "WakaTime";
-    version = "25.3.2";
-    hash = "sha256-xX1vejS8zoidcI6fnp7vvtSw4rMHIe2IF4JQJB5hvqs=";
+    version = "25.4.0";
+    hash = "sha256-furuRhQPcK9r4G878WKD9BiQuiwRbn+pJpNWAbpIgOw=";
   };
 
   meta = {

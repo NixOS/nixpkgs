@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://tthsum.devs.nu/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
     mainProgram = "tthsum";
   };

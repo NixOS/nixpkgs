@@ -47,6 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/iterative/iterative-telemetry";
     changelog = "https://github.com/iterative/iterative-telemetry/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "circle-flags";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "HatScripts";
     repo = "circle-flags";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/+f5MDRW+tRH+jMtl3XuVPBShgy2PlD3NY+74mJa2Qk=";
+    hash = "sha256-Wa59G8ov/S89BABtpey/ueplztiYIUXrSDg72wG74jQ=";
   };
 
   installPhase = ''

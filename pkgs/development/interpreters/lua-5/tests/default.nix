@@ -22,7 +22,7 @@ let
         + "touch $out"
       );
 
-  wrappedHello = hello.overrideAttrs (oa: {
+  wrappedHello = hello.overrideAttrs {
     propagatedBuildInputs = [
       wrapLua
       lua.pkgs.cjson
@@ -30,7 +30,7 @@ let
     postFixup = ''
       wrapLuaPrograms
     '';
-  });
+  };
 
   luaWithModule = lua.withPackages (ps: [
     ps.lua-cjson

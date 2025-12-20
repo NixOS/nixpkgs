@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.4.2";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
     tag = version;
-    hash = "sha256-kNxVdPtCQtz4TSyCc6uKHmAGWm2nlWnLwC3Cm0E42Jc=";
+    hash = "sha256-vBRaUXsPAPOpMEs2pl6AaaKIMeeXB0UdCb1hzYd43KY=";
   };
 
   outputs = [

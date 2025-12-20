@@ -8,7 +8,7 @@ qtModule {
   pname = "qtmacextras";
   propagatedBuildInputs = [ qtbase ];
   meta = {
-    maintainers = with lib.maintainers; [ periklis ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
 }

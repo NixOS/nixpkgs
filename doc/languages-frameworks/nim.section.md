@@ -93,7 +93,7 @@ The `buildNimPackage` and `buildNimSbom` functions generate flags and additional
 ```nix
 pkgs.nitter.overrideNimAttrs {
   # using a different source which has different dependencies from the standard package
-  src = pkgs.fetchFromGithub {
+  src = pkgs.fetchFromGitHub {
     # …
   };
   # new lock file generated from the source

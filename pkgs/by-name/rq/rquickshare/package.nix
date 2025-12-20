@@ -10,6 +10,8 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   protobuf,
   rustPlatform,
   stdenv,
@@ -39,13 +41,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   pnpmRoot = "app/main";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_9;
     postPatch = "cd ${pnpmRoot}";
     fetcherVersion = 1;
     hash = "sha256-VbdMaIEL1e+0U+ny4qbk1Mmkuc3cahKakKKYowCBK5Q=";
@@ -64,7 +67,8 @@ rustPlatform.buildRustPackage rec {
 
     # Setup pnpm
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
 
     protobuf
   ]

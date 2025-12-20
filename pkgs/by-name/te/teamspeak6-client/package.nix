@@ -31,11 +31,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta3.2";
+  version = "6.0.0-beta3.4";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-sZrYGonBw3BgUSExovs8GW5E54vhr3i/VR9eH9/qjWM=";
+    hash = "sha256-ubpAigtYFwzjI4T8i7pWgAhA1pS9MQBQy63QkkbUvyc=";
   };
 
   sourceRoot = ".";
@@ -86,6 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         "Chat"
         "Network"
       ];
+      startupWMClass = "teamspeak-client";
     })
   ];
 
@@ -114,7 +115,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  updateScript = ./update.sh;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "TeamSpeak voice communication tool (beta version)";

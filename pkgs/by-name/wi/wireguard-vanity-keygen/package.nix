@@ -23,10 +23,10 @@ buildGoModule rec {
     "-X main.appVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog =
       let
-        versionWithoutDots = concatStrings (splitString "." version);
+        versionWithoutDots = lib.concatStrings (lib.splitString "." version);
       in
       "https://github.com/axllent/wireguard-vanity-keygen/blob/develop/CHANGELOG.md#${versionWithoutDots}";
     description = "WireGuard vanity key generator";

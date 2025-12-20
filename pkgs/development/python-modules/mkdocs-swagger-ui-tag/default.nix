@@ -1,21 +1,25 @@
 {
-  beautifulsoup4,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  lib,
+
+  # dependencies
+  beautifulsoup4,
+
+  # tests
+  click,
   mkdocs,
   playwright,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
   version = "0.7.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blueswen";
@@ -24,13 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-5bQJMmPrweIAR42bjfWHUqnSy4IFoTpFoBaV+Gj/OGI=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
+  build-system = [
     hatchling
-    mkdocs
+  ];
+
+  dependencies = [
+    beautifulsoup4
   ];
 
   nativeCheckInputs = [
+    click
+    mkdocs
     playwright
     pytestCheckHook
   ];
@@ -44,6 +52,9 @@ buildPythonPackage rec {
     "test_template"
     "test_mkdocs_screenshot"
     "test_no_console_errors"
+
+    # ValueError: I/O operation on closed file
+    "test_error"
   ];
 
   meta = {

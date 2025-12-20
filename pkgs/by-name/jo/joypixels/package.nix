@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
       Updated for 2024! JoyPixels 9.0 includes 3,820 originally crafted icon

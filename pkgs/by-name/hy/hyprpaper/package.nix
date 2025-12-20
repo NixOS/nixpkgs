@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   cairo,
@@ -31,7 +31,7 @@
   hyprgraphics,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
   version = "0.7.6";
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc15Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

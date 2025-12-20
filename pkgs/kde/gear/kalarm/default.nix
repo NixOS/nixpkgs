@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
+  kauth,
   mpv,
 }:
 mkKdeDerivation {
@@ -11,5 +12,8 @@ mkKdeDerivation {
   ];
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ mpv ];
+  extraBuildInputs = [
+    kauth
+    mpv
+  ];
 }

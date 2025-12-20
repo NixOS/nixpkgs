@@ -24,6 +24,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spacy-legacy";
     changelog = "https://github.com/explosion/spacy-legacy/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

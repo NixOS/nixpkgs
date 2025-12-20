@@ -168,7 +168,7 @@ let
         ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        inherit (unwrapped) meta;
+        inherit (unwrapped) version meta;
       }
       (
         ''

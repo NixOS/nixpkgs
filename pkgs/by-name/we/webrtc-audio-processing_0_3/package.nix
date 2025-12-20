@@ -58,13 +58,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = lib.licenses.bsd3;
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v0.3.1/webrtc/typedefs.h
     # + our patches
-    platforms = intersectLists lib.platforms.unix (
+    platforms = lib.intersectLists lib.platforms.unix (
       lib.platforms.arm
       ++ lib.platforms.aarch64
       ++ lib.platforms.mips

@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  nix,
+  nixVersions,
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -38,7 +38,7 @@
   mdbook,
   foreman,
   python3,
-  libressl,
+  netcat,
   cacert,
   glibcLocales,
   meson,
@@ -50,6 +50,8 @@
 }:
 
 let
+  nix = nixVersions.nix_2_32;
+
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
@@ -208,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     foreman
     glibcLocales
     python3
-    libressl.nc
+    netcat
     nix-eval-jobs
     openldap
     postgresql

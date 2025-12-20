@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "General purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.scala-lang.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    branch = versions.majorMinor version;
+    branch = lib.versions.majorMinor version;
     maintainers = with lib.maintainers; [
       kashw2
     ];

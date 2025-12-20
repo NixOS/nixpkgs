@@ -5,8 +5,13 @@
   makeWrapper,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   testers,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
   version = "0.2.10";
@@ -15,26 +20,28 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-H46wFDSxG5Fg9HuJOLulBXoXR+osf4gJEa+ZMUMWT5Q=";
+    hash = "sha256-wItKDLAJHIyxUUaLIFM+sNYWtXKWC4P6GkCKn2Wh2JA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     makeWrapper
   ];
 
   pnpmWorkspaces = [ "zenn-cli..." ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 1;
-    hash = "sha256-QEOGL/FK0Vq8opPu7NeTTrk/rwWlMgisx+A7edMN9fw=";
+    hash = "sha256-WXsS5/J08n/dWV5MbyX4vK7j1mfiUoLdzwmzyqoX3FA=";
   };
 
   preBuild = ''

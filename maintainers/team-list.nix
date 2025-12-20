@@ -251,6 +251,15 @@ with lib.maintainers;
     shortName = "Cyberus Technology employees";
   };
 
+  danklinux = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
+    shortName = "Dank Linux";
+  };
+
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -361,6 +370,20 @@ with lib.maintainers;
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
+  };
+
+  forgejo = {
+    members = [
+      adamcstephens
+      bendlas
+      christoph-heiss
+      emilylange
+      marie
+      pyrox0
+      tebriel
+    ];
+    scope = "Maintain the Forgejo code forge, packages and modules.";
+    shortName = "Forgejo";
   };
 
   formatter = {
@@ -662,10 +685,12 @@ with lib.maintainers;
   minimal-bootstrap = {
     members = [
       alejandrosame
+      aleksi
       artturin
       emilytrau
       ericson2314
       jk
+      pyrox0
       siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";

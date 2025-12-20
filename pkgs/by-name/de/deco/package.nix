@@ -36,7 +36,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/vedatechnologiesinc/deco";
     description = "Simple root image setter";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.unix;
     mainProgram = "deco";
   };

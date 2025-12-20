@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zigpy-cli";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
     tag = "v${version}";
-    hash = "sha256-IwL69fZLbCvoliYB7Ne6nhe9QVoy9Wu55Mwca+mbucc=";
+    hash = "sha256-vY6mv5R7A4kVg4Z4nWdm5hgQv6fewyIbOrvhDUuiXa0=";
   };
 
   postPatch = ''

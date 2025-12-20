@@ -75,7 +75,6 @@ buildGoModule rec {
     mainProgram = "minikube";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      ebzzry
       vdemeester
       atkinschang
       Chili-Man

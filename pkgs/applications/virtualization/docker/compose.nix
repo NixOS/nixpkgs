@@ -15,7 +15,11 @@ buildGoModule rec {
     hash = "sha256-7g9l9SBxPY3jMS3DWZNI/fhOZN1oZo1qkUfhMfbzAaM=";
   };
 
-  vendorHash = "sha256-COfB0MLBMOfTdLbpShBkMOEule/1cu6Bo5lm1ieO/nA=";
+  vendorHash = "sha256-EFbEd1UwrBnH6pSh+MvupYdie8SnKr8y6K9lQflBSlk=";
+
+  modPostBuild = ''
+    patch -d vendor/github.com/docker/cli/ -p1 < ${./cli-system-plugin-dir-from-env.patch}
+  '';
 
   ldflags = [
     "-X github.com/docker/compose/v2/internal.Version=${version}"

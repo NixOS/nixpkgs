@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv target/usr/local/bin $out/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hadoop.apache.org/";
     description = "Framework for distributed processing of large data sets across clusters of computers";
     license = lib.licenses.asl20;
@@ -45,6 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     maintainers = with lib.maintainers; [ illustris ];
-    platforms = filter (strings.hasSuffix "linux") (attrNames platformAttrs);
+    platforms = lib.filter (lib.strings.hasSuffix "linux") (lib.attrNames platformAttrs);
   };
 })

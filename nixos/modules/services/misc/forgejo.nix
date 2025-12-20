@@ -801,9 +801,9 @@ in
       // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (
-      !cfg.settings.server.START_SSH_SERVER or false
-    ) "GIT_PROTOCOL";
+    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.server.START_SSH_SERVER or false) [
+      "GIT_PROTOCOL"
+    ];
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
@@ -849,9 +849,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [
-    bendlas
-    emilylange
-    pyrox0
-  ];
+  meta.maintainers = lib.teams.forgejo.members;
 }

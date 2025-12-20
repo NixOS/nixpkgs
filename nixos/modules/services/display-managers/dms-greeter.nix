@@ -13,15 +13,18 @@ let
     mkIf
     mkDefault
     mkPackageOption
+    mkRemovedOptionModule
     literalExpression
     getExe
     makeBinPath
     optionalString
-    concatMapStringsSep
+    escapeShellArgs
     ;
 
   cfg = config.services.displayManager.dms-greeter;
   cfgAutoLogin = config.services.displayManager.autoLogin;
+
+  cacheDir = "/var/lib/dms-greeter";
 
   greeterScript = pkgs.writeShellScriptBin "dms-greeter-start" ''
     export PATH=$PATH:${
@@ -30,17 +33,27 @@ let
         config.programs.${cfg.compositor.name}.package
       ]
     }
-    exec ${cfg.package}/share/quickshell/dms/Modules/Greetd/assets/dms-greeter \
-      --command ${cfg.compositor.name} \
-      -p ${cfg.package}/share/quickshell/dms \
-      --cache-dir /var/lib/dms-greeter \
-      ${
-        optionalString (
-          cfg.compositor.customConfig != ""
-        ) "-C ${pkgs.writeText "dms-greeter-compositor-config" cfg.compositor.customConfig}"
-      } \
-      ${optionalString cfg.logs.save ">> ${cfg.logs.path} 2>&1"}
+    ${
+      escapeShellArgs (
+        [
+          "sh"
+          "${cfg.package}/share/quickshell/dms/Modules/Greetd/assets/dms-greeter"
+          "--cache-dir"
+          cacheDir
+          "--command"
+          cfg.compositor.name
+          "-p"
+          "${cfg.package}/share/quickshell/dms"
+        ]
+        ++ lib.optionals (cfg.compositor.customConfig != "") [
+          "-C"
+          "${pkgs.writeText "dmsgreeter-compositor-config" cfg.compositor.customConfig}"
+        ]
+      )
+    } ${optionalString cfg.logs.save "> ${cfg.logs.path} 2>&1"}
   '';
+
+  jq = getExe pkgs.jq;
 
   configFilesFromHome =
     if cfg.configHome != null then
@@ -180,7 +193,7 @@ in
     ];
 
     services.greetd = {
-      enable = true;
+      enable = mkDefault true;
       settings = {
         default_session = {
           user = "dms-greeter";
@@ -200,7 +213,7 @@ in
       material-symbols
     ];
 
-    systemd.tmpfiles.settings."10-dms-greeter"."/var/lib/dms-greeter".d = {
+    systemd.tmpfiles.settings."10-dms-greeter".${cacheDir}.d = {
       user = "dms-greeter";
       group = "dms-greeter";
       mode = "0750";
@@ -211,40 +224,64 @@ in
         allConfigFiles = cfg.configFiles ++ configFilesFromHome;
       in
       ''
-        set -euo pipefail
-
-        cd /var/lib/dms-greeter || exit 1
-
-        ${concatMapStringsSep "\n" (f: ''
-          if [[ -f "${f}" ]]; then
-            cp "${f}" . || true
-          fi
-        '') allConfigFiles}
-
-        # Handle session.json wallpaper path
-        if [[ -f session.json ]]; then
-          if wallpaper=$(${getExe pkgs.jq} -r '.wallpaperPath' session.json 2>/dev/null); then
-            if [[ -f "$wallpaper" ]]; then
-              cp "$wallpaper" wallpaper.jpg || true
-              mv session.json session.orig.json
-              ${getExe pkgs.jq} '.wallpaperPath = "/var/lib/dms-greeter/wallpaper.jpg"' \
-                session.orig.json > session.json || true
+        cd ${cacheDir}
+        ${lib.concatStringsSep "\n" (
+          lib.map (f: ''
+            if [ -f "${f}" ]; then
+                cp "${f}" .
             fi
-          fi
+          '') allConfigFiles
+        )}
+
+        if [ -f session.json ]; then
+            copy_wallpaper() {
+                local path=$(${jq} -r ".$1 // empty" session.json)
+                if [ -f "$path" ]; then
+                    cp "$path" "$2"
+                    ${jq} ".$1 = \"${cacheDir}/$2\"" session.json > session.tmp
+                    mv session.tmp session.json
+                fi
+            }
+
+            copy_monitor_wallpapers() {
+                ${jq} -r ".$1 // {} | to_entries[] | .key + \":\" + .value" session.json 2>/dev/null | while IFS=: read monitor path; do
+                    local dest="$2-$(echo "$monitor" | tr -c '[:alnum:]' '-')"
+                    if [ -f "$path" ]; then
+                        cp "$path" "$dest"
+                        ${jq} --arg m "$monitor" --arg p "${cacheDir}/$dest" ".$1[\$m] = \$p" session.json > session.tmp
+                        mv session.tmp session.json
+                    fi
+                done
+            }
+
+            copy_wallpaper "wallpaperPath" "wallpaper"
+            copy_wallpaper "wallpaperPathLight" "wallpaper-light"
+            copy_wallpaper "wallpaperPathDark" "wallpaper-dark"
+            copy_monitor_wallpapers "monitorWallpapers" "wallpaper-monitor"
+            copy_monitor_wallpapers "monitorWallpapersLight" "wallpaper-monitor-light"
+            copy_monitor_wallpapers "monitorWallpapersDark" "wallpaper-monitor-dark"
         fi
 
-        # Rename colors file if it exists
-        [[ -f dms-colors.json ]] && mv dms-colors.json colors.json || true
+        if [ -f settings.json ]; then
+            if cp "$(${jq} -r '.customThemeFile' settings.json)" custom-theme.json; then
+                mv settings.json settings.orig.json
+                ${jq} '.customThemeFile = "${cacheDir}/custom-theme.json"' settings.orig.json > settings.json
+            fi
+        fi
 
-        # Fix ownership of all files
-        chown -R "dms-greeter:dms-greeter" . || true
+        mv dms-colors.json colors.json || :
+        chown dms-greeter:dms-greeter * || :
       '';
+
+    services.displayManager.dms-greeter.configFiles = lib.mkIf (
+      cfg.configHome != null
+    ) configFilesFromHome;
 
     users.groups.dms-greeter = { };
     users.users.dms-greeter = {
       description = "DankMaterialShell greeter user";
       isSystemUser = true;
-      home = "/var/lib/dms-greeter";
+      home = cacheDir;
       homeMode = "0750";
       createHome = true;
       group = "dms-greeter";
@@ -257,5 +294,5 @@ in
     services.libinput.enable = mkDefault true;
   };
 
-  meta.maintainers = with lib.maintainers; [ luckshiba ];
+  meta.maintainers = lib.teams.danklinux.maintainers;
 }

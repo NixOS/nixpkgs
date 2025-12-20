@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
 
+  patches = [
+    # Compatibility with mupdf 1.26
+    ./mupdf-1.26.patch
+  ];
+
   postPatch = ''
     sed -i "2d;s/ver=.*/ver=${version}/" build.bash
   '';

@@ -42,16 +42,24 @@ let
   # The revisions are extracted from https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/fetch_sources.py#L290
   # with the vk-cts-sources.py script.
   sources = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
+
+  # Use pinned version from vulkan-video-samples
+  shaderc-src = fetchFromGitHub {
+    owner = "google";
+    repo = "shaderc";
+    tag = "v2024.4";
+    hash = "sha256-DIpgHiYAZlCIQ/uCZ3qSucPUZ1j3tKg0VgZVun+1UnI=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.4.3.3";
+  version = "1.4.5.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-bhbk2ayY4syyUXJcYesRlVFArAVhivTjELvM8uuNzEQ=";
+    hash = "sha256-cbXSelRPCCH52xczWaxqftbimHe4PyIKZqySQSFTHos=";
   };
 
   prePatch = ''
@@ -60,12 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
     ${sources.prePatch}
-
-    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
-      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
-
-    substituteInPlace external/vulkan-video-samples/src/cmake/FindVulkanSDK.cmake \
-      --replace-fail 'GIT_TAG main' 'GIT_TAG main FIND_PACKAGE_ARGS NAMES VulkanHeaders'
 
     chmod u+w -R external
   '';
@@ -111,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DSELECTED_BUILD_TARGETS=deqp-vk"
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SHADERC" "${shaderc-src}")
   ];
 
   postInstall = ''

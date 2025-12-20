@@ -1,15 +1,16 @@
 {
   buildPythonApplication,
   fetchFromGitHub,
-  poetry-core,
   i3ipc,
   lib,
+  poetry-core,
+  writeScript,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "kitti3";
-  version = "unstable-2021-09-11";
-  format = "pyproject";
+  version = "0.5.1-unstable-2021-09-10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LandingEllipse";
@@ -31,6 +32,25 @@ buildPythonApplication {
   propagatedBuildInputs = [
     i3ipc
   ];
+
+  passthru.updateScript = writeScript "update-kitti3" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git common-updater-scripts perl tomlq
+    tmpdir="$(mktemp -d)"
+    trap "rm -rf $tmpdir" EXIT
+    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+    pushd "$tmpdir"
+    newVersionNumber=$(perl -ne 'print if s/version = "([\d.]+)"/$1/' pyproject.toml)
+    newRevision=$(git show -s --pretty='format:%H')
+    newDate=$(git show -s --pretty='format:%cs')
+    newVersion="$newVersionNumber-unstable-$newDate"
+    echo "newVersion = $newVersion" >&2
+    echo "newRevision = $newRevision" >&2
+    popd
+    update-source-version --rev="$newRevision" "kitti3" "$newVersion"
+    perl -pe 's/^(.*version = ")([\d\.]+)(.*)$/''${1}'"''${newVersion}"'";/' \
+      -i 'pkgs/applications/window-managers/i3/kitti3.nix'
+  '';
 
   meta = {
     homepage = "https://github.com/LandingEllipse/kitti3";

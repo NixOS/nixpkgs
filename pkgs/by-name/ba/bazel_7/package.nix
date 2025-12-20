@@ -431,6 +431,11 @@ stdenv.mkDerivation rec {
           sedVerbose $wrapper \
             -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g"
         done
+
+        # set --macos_sdk_version to make utimensat visible:
+        sedVerbose compile.sh \
+          -e "/bazel_build /a\  --macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion} \\\\" \
+
       '';
 
       genericPatches = ''

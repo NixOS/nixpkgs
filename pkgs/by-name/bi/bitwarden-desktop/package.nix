@@ -3,7 +3,7 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  dart,
+  dart-sass,
   darwin,
   electron_37,
   fetchFromGitHub,
@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.11.2";
+  version = "2025.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-0djpeXHHqA8tVcQsE/yCDZVnoEuYwUpln2Hhj2chGNc=";
+    hash = "sha256-i+hLslZ2i94r04vaOzx9e55AR8aXa9sSK8el+Dcp05A=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-l5Lcm1ggF7qFqNuSYRoRPf1Gbt/gH3g6dYu30YTXgsI=";
+  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +97,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-WhiKqN+FCR/c9BuwhQT0EoidGUkP2ueSlsnupUflVlM=";
+    hash = "sha256-rA9zY9TAF6DnsTT3MzU18VeQDm6m25gjZ0rcmnbZb8E=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -130,8 +130,13 @@ buildNpmPackage' rec {
       exit 1
     fi
 
+    # force our dart-sass executable
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail "\''${compiler_module_1.compilerModule}/dart-sass/src/dart" "${lib.getExe' dart "dartaotruntime"}"
+      --replace-fail "dart-sass/src/sass.snapshot" "dart-sass/src/sass.snapshot.disabled"
+
+    for f in $(find node_modules/ -name sass -type f -executable); do
+      ln -sf ${lib.getExe dart-sass} $f
+    done
 
     pushd apps/desktop/desktop_native/napi
     npm run build

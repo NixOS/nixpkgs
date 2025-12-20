@@ -13,6 +13,8 @@
   gvfs,
   cinnamon-desktop,
   xapp,
+  xapp-symbolic-icons,
+  xdg-user-dirs,
   libexif,
   json-glib,
   exempi,
@@ -35,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "6.4.5";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
     rev = version;
-    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
+    hash = "sha256-5jgD2C71sQkqnAGsnsjK8W9qaLtNtGeYLXsV2+7u2jU=";
   };
 
   patches = [
@@ -93,9 +95,20 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${xapp}/share"
+       --prefix XDG_DATA_DIRS : "${
+         lib.makeSearchPath "share" [
+           # For non-fd.o icons.
+           xapp
+           xapp-symbolic-icons
+         ]
+       }"
+       --prefix PATH : "${
+         lib.makeBinPath [
+           # For xdg-user-dirs-update.
+           xdg-user-dirs
+         ]
+       }"
     )
   '';
 

@@ -6,8 +6,7 @@
   rustPlatform,
   installShellFiles,
   cargo-c,
-  testers,
-  yara-x,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-CT+walpFIFTaO480ATHO1E38K9Tw14QqLRYzztWQmeA=";
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,10 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Seems to be flaky
     "--skip=scanner::blocks::tests::block_scanner_timeout"
   ];
+  checkType = "debug";
 
-  passthru.tests.version = testers.testVersion {
-    package = yara-x;
-  };
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to do pattern matching for malware research";

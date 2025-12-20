@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
     homepage = "https://github.com/paritytech/polkadot-sdk";
     license = lib.licenses.gpl3Only;
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
       RaghavSood
     ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
-    platforms = intersectLists lib.platforms.unix (
+    platforms = lib.intersectLists lib.platforms.unix (
       lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
   };

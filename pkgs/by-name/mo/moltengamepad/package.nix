@@ -38,7 +38,6 @@ stdenv.mkDerivation {
     description = "Flexible Linux input device translator, geared for gamepads";
     mainProgram = "moltengamepad";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ebzzry ];
     platforms = lib.platforms.linux;
   };
 

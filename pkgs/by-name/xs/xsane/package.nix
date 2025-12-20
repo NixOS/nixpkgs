@@ -134,6 +134,5 @@ stdenv.mkDerivation rec {
     mainProgram = "xsane";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

@@ -108,12 +108,12 @@ buildPythonPackage rec {
     "tests/multi_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Interface To The cURL library";
     homepage = "http://pycurl.io/";
     changelog =
       "https://github.com/pycurl/pycurl/blob/REL_"
-      + replaceStrings [ "." ] [ "_" ] version
+      + lib.replaceStrings [ "." ] [ "_" ] version
       + "/ChangeLog";
     license = with lib.licenses; [
       lgpl2Only

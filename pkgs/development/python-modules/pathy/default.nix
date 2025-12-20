@@ -55,6 +55,5 @@ buildPythonPackage rec {
     mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

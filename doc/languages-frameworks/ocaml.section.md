@@ -21,7 +21,7 @@ pkgs.mkShell {
   nativeBuildInputs = with ocamlPackages; [
     ocaml
     findlib
-    dune_2
+    pkgs.dune
     ocaml-lsp
   ];
   # dependencies
