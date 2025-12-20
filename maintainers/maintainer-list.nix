@@ -5735,6 +5735,13 @@
     matrix = "@Dan:matrix.org";
     name = "Daniel Theriault";
   };
+  danberdev = {
+    email = "me@danber.dev";
+    github = "danberdev";
+    githubId = 13893528;
+    name = "Daniil Berendeev";
+    keys = [ { fingerprint = "60D7 0EE0 3BD4 A415 B255  1938 6556 0668 006B 4906"; } ];
+  };
   danbst = {
     email = "abcz2.uprola@gmail.com";
     github = "danbst";
@@ -13331,6 +13338,12 @@
     githubId = 386765;
     matrix = "@k900:0upti.me";
   };
+  kaasboteram = {
+    name = "Luuk Machielse";
+    github = "kaasboteram";
+    githubId = 168290368;
+    email = "luuk.machielse@gmail.com";
+  };
   kachick = {
     email = "kachick1@gmail.com";
     github = "kachick";
@@ -13508,6 +13521,11 @@
     github = "kcalvinalvin";
     githubId = 37185887;
     name = "Calvin Kim";
+  };
+  kedry = {
+    name = "Kevin Edry";
+    github = "kedry";
+    githubId = 12020122;
   };
   keegancsmith = {
     email = "keegan.csmith@gmail.com";
