@@ -6284,6 +6284,8 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
+  ffvship = recurseIntoAttrs (import ../tools/video/ffvship { inherit callPackage stdenv; });
+
   flow = callPackage ../development/tools/analysis/flow {
     ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
       self: super: {
