@@ -17524,6 +17524,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-crystalline = buildVimPlugin {
+    pname = "vim-crystalline";
+    version = "1.1.4-unstable-2025-04-16";
+    src = fetchFromGitHub {
+      owner = "rbong";
+      repo = "vim-crystalline";
+      rev = "3d1b744439f5fcdae9b58d58639fc85c37e1e0a6";
+      hash = "sha256-XvEPEBCvJIocIu12ZF8aqncjoBd2H4JX365MnvsD3zI=";
+    };
+    meta.homepage = "https://github.com/rbong/vim-crystalline/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-csharp = buildVimPlugin {
     pname = "vim-csharp";
     version = "0-unstable-2017-03-29";
