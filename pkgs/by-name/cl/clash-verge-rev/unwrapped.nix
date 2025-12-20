@@ -8,7 +8,6 @@
   vendor-hash,
 
   rustPlatform,
-  fetchpatch,
 
   cargo-tauri,
   jq,
@@ -31,9 +30,6 @@ rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
 
-  cargoRoot = "src-tauri";
-  buildAndTestSubdir = "src-tauri";
-
   cargoHash = vendor-hash;
 
   pnpmDeps = fetchPnpmDeps {
@@ -50,13 +46,6 @@ rustPlatform.buildRustPackage {
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/645b92bc2815fe55bbc827907bff0edbfee48674.patch";
-      hash = "sha256-BH0SvVofW6YJ3e/LOHojisenMwcxYfm3gG/dbxvYBMs=";
-    })
-  ];
 
   postPatch = ''
     # We disable the option to try to use the bleeding-edge version of mihomo
