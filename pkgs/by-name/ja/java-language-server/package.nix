@@ -6,18 +6,6 @@
   maven,
   makeWrapper,
 }:
-
-let
-  platform =
-    if stdenv.hostPlatform.isLinux then
-      "linux"
-    else if stdenv.hostPlatform.isDarwin then
-      "mac"
-    else if stdenv.hostPlatform.isWindows then
-      "windows"
-    else
-      throw "unsupported platform";
-in
 maven.buildMavenPackage {
   pname = "java-language-server";
   version = "0.2.46";
@@ -34,34 +22,32 @@ maven.buildMavenPackage {
   mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [
-    jdk_headless
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontConfigure = true;
-  preBuild = ''
-    jlink \
-      ${
-        lib.optionalString (!stdenv.hostPlatform.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"
-      } \
-      --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
-      --output dist/${platform} \
-      --no-header-files \
-      --no-man-pages \
-      --compress 2
-  '';
-
   doCheck = false;
-
+  platform =
+    if stdenv.hostPlatform.isLinux then
+      "linux"
+    else if stdenv.hostPlatform.isDarwin then
+      "mac"
+    else if stdenv.hostPlatform.isWindows then
+      "windows"
+    else
+      throw "unsupported platform";
+  patches = [ ./use-full-jdk.patch ];
+  postBuild = ''
+    java=${lib.escapeShellArg (lib.getExe jdk_headless)}
+    substituteInPlace dist/launch_*.sh --subst-var-by java "''${java@Q}"
+  '';
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/java/java-language-server
-    cp -r dist/classpath dist/*${platform}* $out/share/java/java-language-server
+    mkdir -p "$out/libexec/java-language-server"
+    cp -r dist/classpath dist/*"$platform"* "$out/libexec/java-language-server"
 
-    # a link is not used as lang_server_${platform}.sh makes use of "dirname $0" to access other files
-    makeWrapper $out/share/java/java-language-server/lang_server_${platform}.sh $out/bin/java-language-server
+    # a link is not used as lang_server_$platform.sh makes use of "dirname $0" to access other files
+    makeWrapper "$out/libexec/java-language-server/lang_server_$platform.sh" "$out/bin/java-language-server"
 
     runHook postInstall
   '';
