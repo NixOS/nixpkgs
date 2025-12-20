@@ -20529,6 +20529,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-pythonsense = buildVimPlugin {
+    pname = "vim-pythonsense";
+    version = "0-unstable-2021-06-12";
+    src = fetchFromGitHub {
+      owner = "jeetsukumaran";
+      repo = "vim-pythonsense";
+      rev = "9200a57629c904ed2ab8c9b2e8c5649d311794ba";
+      hash = "sha256-LQTwroaz7Eb/1GMwya1ucEgk74LTMil5Sn64AuT4WNQ=";
+    };
+    meta.homepage = "https://github.com/jeetsukumaran/vim-pythonsense/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-qf = buildVimPlugin {
     pname = "vim-qf";
     version = "0.2.0-unstable-2025-05-18";
