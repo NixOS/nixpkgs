@@ -89,8 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
-
       xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
         libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
       };
@@ -157,5 +155,6 @@ makeScopeWithSplicing' {
   xfce4-mailwatch-plugin = lib.warnOnInstantiate "‘xfce.xfce4-mailwatch-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-mailwatch-plugin’ directly" pkgs.xfce4-mailwatch-plugin; # Added on 2025-12-19
   xfce4-mpc-plugin = lib.warnOnInstantiate "‘xfce.xfce4-mpc-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-mpc-plugin’ directly" pkgs.xfce4-mpc-plugin; # Added on 2025-12-19
   xfce4-netload-plugin = lib.warnOnInstantiate "‘xfce.xfce4-netload-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-netload-plugin’ directly" pkgs.xfce4-netload-plugin; # Added on 2025-12-19
+  xfce4-notes-plugin = lib.warnOnInstantiate "‘xfce.xfce4-notes-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-notes-plugin’ directly" pkgs.xfce4-notes-plugin; # Added on 2025-12-19
 
 }
