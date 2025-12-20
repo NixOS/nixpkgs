@@ -8,16 +8,18 @@
   sdrplay,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr-sdrplay3";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDRPlay3";
-    rev = "soapy-sdrplay3-${version}";
+    rev = "soapy-sdrplay3-${finalAttrs.version}";
     hash = "sha256-5XBOUhI/37sMfdVEb19zWU00/j+Nb30wsP5CXjJ+sJY=";
   };
+
+  patches = [ ./cmake.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -45,4 +47,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})
