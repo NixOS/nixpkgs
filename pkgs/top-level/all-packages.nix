@@ -918,7 +918,7 @@ with pkgs;
   };
 
   wrapGAppsNoGuiHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
-    makeWrapper = buildPackages.makeBinaryWrapper;
+    makeWrapper = makeBinaryWrapper;
   };
 
   separateDebugInfo = makeSetupHook {
