@@ -77,10 +77,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     {
       fetchDeps =
         { ... }@args:
-        fetchPnpmDeps args
-        // {
-          pnpm = pnpm';
-        };
+        fetchPnpmDeps (
+          args
+          // {
+            pnpm = pnpm';
+          }
+        );
       configHook = pnpmConfigHook.overrideAttrs (prevAttrs: {
         propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [
           pnpm'
