@@ -2142,6 +2142,21 @@ builtins.intersectAttrs super {
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 
+  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  inherit
+    (
+      let
+        noExternalInterpreter = overrideCabal {
+          enableExternalInterpreter = false;
+        };
+      in
+      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy network; }
+    )
+    iserv-proxy
+    network
+    ;
+
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
 }

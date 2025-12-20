@@ -257,6 +257,10 @@ with haskellLib;
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # network < 3.2.8
+  # bound only required when running under WINE: https://github.com/haskell/network/issues/604
+  iserv-proxy = doJailbreak super.iserv-proxy;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
@@ -3273,12 +3277,6 @@ with haskellLib;
 
   # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
   sv2v = doJailbreak super.sv2v;
-
-  # 2025-09-20: New revision already on hackage.
-  nvfetcher = lib.pipe super.nvfetcher [
-    (warnAfterVersion "0.7.0.0")
-    doJailbreak
-  ];
 
   # 2025-06-25: Upper bounds of transformers and bytestring too strict,
   # as haskore 0.2.0.8 was released in 2016 and is quite outdated.
