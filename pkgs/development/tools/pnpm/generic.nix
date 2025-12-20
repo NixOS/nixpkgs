@@ -80,10 +80,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           "pnpm.fetchDeps: The package attribute is deprecated. Use the top-level fetchPnpmDeps attribute instead"
           (
             { ... }@args:
-            fetchPnpmDeps args
-            // {
-              pnpm = pnpm';
-            }
+            fetchPnpmDeps (
+              args
+              // {
+                pnpm = pnpm';
+              }
+            )
           );
       configHook =
         lib.warn

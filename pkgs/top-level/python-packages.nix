@@ -8663,6 +8663,10 @@ self: super: with self; {
 
   libvirt = callPackage ../development/python-modules/libvirt { inherit (pkgs) libvirt; };
 
+  libxc = callPackage ../by-name/li/libxc/python.nix {
+    libxc = pkgs.libxc_7;
+  };
+
   libxml2 =
     (toPythonModule (
       pkgs.libxml2.override {

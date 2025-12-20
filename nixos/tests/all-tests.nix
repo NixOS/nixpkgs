@@ -643,7 +643,7 @@ in
   gitdaemon = runTest ./gitdaemon.nix;
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
   github-runner = runTest ./github-runner.nix;
-  gitlab = import ./gitlab/default.nix {
+  gitlab = import ./gitlab {
     inherit runTest;
   };
   gitolite = runTest ./gitolite.nix;
