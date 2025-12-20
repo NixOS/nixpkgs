@@ -11,10 +11,9 @@
   srcOnly,
   removeReferencesTo,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
   version = "0.27.0";
@@ -38,10 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     node-gyp
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
+    pnpm = pnpm_9;
 
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {

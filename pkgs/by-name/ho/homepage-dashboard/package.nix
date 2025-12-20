@@ -4,6 +4,8 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   stdenv,
   unixtools,
@@ -38,12 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-03am9z381UozNsmWZefopMp8/tLycXJyiZ5BUGaV1kY=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 1;
     hash = "sha256-svkqmRFwZpcExFWtAbLL0lpHhzsI2s7RiLfQajIqjck=";
   };
@@ -51,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 

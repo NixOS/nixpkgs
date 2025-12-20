@@ -6,6 +6,8 @@
   gitUpdater,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   makeWrapper,
   python3,
   bash,
@@ -14,7 +16,6 @@
   writeShellScript,
   xcbuild,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
   version = "2025.7.0";
@@ -33,20 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
@@ -121,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
     updateScript = gitUpdater { };
   };

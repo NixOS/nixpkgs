@@ -4,13 +4,12 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   npmHooks,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taze";
   version = "19.9.0";
@@ -22,15 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Xpi5Wc8YP3hUSbEnfEM6uNvdlNiVMRz0oqZAJCBkLHQ=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-g1LGiCb2NESywYN4tTVf8sXbuJla2whCm5amvPsdmRc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     npmHooks.npmInstallHook
   ];
 
