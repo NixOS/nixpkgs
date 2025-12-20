@@ -3274,10 +3274,6 @@ assertNoAdditions {
     }
   );
 
-  ssr-nvim = super.ssr-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   startup-nvim = super.startup-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
