@@ -24,7 +24,7 @@
 }:
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_10.override { inherit nodejs; };
+  pnpm = pnpm_10;
   electron = electron_39;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
