@@ -1220,17 +1220,20 @@ let
       unifiedSystemDir = true;
     };
 
+    # Oracle provides versioned URLs for baseos (e.g., OL9/7/baseos/base/) but not for appstream.
+    # We can't mix versioned baseos with rolling appstream due to package version dependencies,
+    # so we use rolling URLs for both. These may need hash updates when Oracle releases new versions.
     oracle9x86_64 = {
       name = "oracle-9-x86_64";
       fullName = "Oracle Linux 9 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/repodata/edda5aa6dc1ad233cd5fe29838e535ef959cd291be343844e127e29c290f93ca-primary.xml.gz";
-          hash = "sha256-7dpaptwa0jPNX+KYOOU175Wc0pG+NDhE4SfinCkPk8o=";
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/repodata/22683534c792aff59db7dc398a72291012dce25a2873843c004be83f85587822-primary.xml.gz";
+          hash = "sha256-Img1NMeSr/Wdt9w5inIpEBLc4looc4Q8AEvoP4VYeCI=";
         })
         (fetchurl {
-          url = "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/repodata/4d559ceb3228c2f734d1bcbc79079141e4ce1f2abd90ce77f7f8e31d1deb77b2-primary.xml.gz";
-          hash = "sha256-TVWc6zIowvc00by8eQeRQeTOHyq9kM539/jjHR3rd7I=";
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/repodata/2a1fe56f0dabfcb0fcd6bcddbb5ca6052ac1a6ac124498d95578416c06162e0d-primary.xml.gz";
+          hash = "sha256-Kh/lbw2r/LD81rzdu1ymBSrBpqwSRJjZVXhBbAYWLg0=";
         })
       ];
       urlPrefixes = [
