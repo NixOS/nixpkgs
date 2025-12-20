@@ -1164,22 +1164,24 @@ let
       unifiedSystemDir = true;
     };
 
+    # AlmaLinux's repo.almalinux.org URLs are rolling and change with each minor release.
+    # We use vault.almalinux.org instead, which provides stable URLs for specific versions.
     alma9x86_64 = {
-      name = "alma-9-x86_64";
-      fullName = "AlmaLinux 9 (x86_64)";
+      name = "alma-9.6-x86_64";
+      fullName = "AlmaLinux 9.6 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/repodata/e7e7e537062ffd6778b5190b7b6785086efab6647401014d1985c10a0d3de609-primary.xml.gz";
-          hash = "sha256-5+flNwYv/Wd4tRkLe2eFCG76tmR0AQFNGYXBCg095gk=";
+          url = "https://vault.almalinux.org/9.6/BaseOS/x86_64/os/repodata/26d6cf944c86ef850773e61919e892a375ff10bb2254003e1d71673db9900b07-primary.xml.gz";
+          hash = "sha256-JtbPlEyG74UHc+YZGeiSo3X/ELsiVAA+HXFnPbmQCwc=";
         })
         (fetchurl {
-          url = "https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/repodata/e61f480b84cb0a671452c21cbd52930a6fa111e7fb3407ed75cabff71c1a07b7-primary.xml.gz";
-          hash = "sha256-5h9IC4TLCmcUUsIcvVKTCm+hEef7NAftdcq/9xwaB7c=";
+          url = "https://vault.almalinux.org/9.6/AppStream/x86_64/os/repodata/afb5d18b78d819d826d3d0e32ba439da7b9e0fd91d726dd833366496b1b8ca20-primary.xml.gz";
+          hash = "sha256-r7XRi3jYGdgm09DjK6Q52nueD9kdcm3YMzZklrG4yiA=";
         })
       ];
       urlPrefixes = [
-        "https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os"
-        "https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os"
+        "https://vault.almalinux.org/9.6/BaseOS/x86_64/os"
+        "https://vault.almalinux.org/9.6/AppStream/x86_64/os"
       ];
       archs = [
         "noarch"
@@ -1192,21 +1194,21 @@ let
     };
 
     alma10x86_64 = {
-      name = "alma-10-x86_64";
-      fullName = "AlmaLinux 10 (x86_64)";
+      name = "alma-10.0-x86_64";
+      fullName = "AlmaLinux 10.0 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os/repodata/e0a4a18c4f302fa3188b757197b81d606199eccddd8480602c378def572fabbf-primary.xml.gz";
-          hash = "sha256-4KShjE8wL6MYi3Vxl7gdYGGZ7M3dhIBgLDeN71cvq78=";
+          url = "https://vault.almalinux.org/10.0/BaseOS/x86_64/os/repodata/4d88695fa7ccb6298897fa9682ac1ded4628df342ffe08312846225e4469e3e4-primary.xml.gz";
+          hash = "sha256-TYhpX6fMtimIl/qWgqwd7UYo3zQv/ggxKEYiXkRp4+Q=";
         })
         (fetchurl {
-          url = "https://repo.almalinux.org/almalinux/10/AppStream/x86_64/os/repodata/fb3e7acc93f1b0969c3c00dc3bc4364d4f5837d11274cae650c34cf71c0f80ae-primary.xml.gz";
-          hash = "sha256-+z56zJPxsJacPADcO8Q2TU9YN9ESdMrmUMNM9xwPgK4=";
+          url = "https://vault.almalinux.org/10.0/AppStream/x86_64/os/repodata/11ac32065bae6f2c2451803458690fc550e79f93a4ea9f438930f0c228964791-primary.xml.gz";
+          hash = "sha256-EawyBluubywkUYA0WGkPxVDnn5Ok6p9DiTDwwiiWR5E=";
         })
       ];
       urlPrefixes = [
-        "https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os"
-        "https://repo.almalinux.org/almalinux/10/AppStream/x86_64/os"
+        "https://vault.almalinux.org/10.0/BaseOS/x86_64/os"
+        "https://vault.almalinux.org/10.0/AppStream/x86_64/os"
       ];
       archs = [
         "noarch"
