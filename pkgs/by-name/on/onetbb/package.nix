@@ -100,6 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
       performance of multi-core processors.
     '';
     platforms = lib.platforms.all;
+    # oneTBB does not support static builds
+    # "You are building oneTBB as a static library. This is highly discouraged and such configuration is not supported. Consider building a dynamic library to avoid unforeseen issues."
+    # https://github.com/uxlfoundation/oneTBB/blob/db7891a246cafbb90719c3dee497d96889ca692b/CMakeLists.txt#L160
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = with lib.maintainers; [
       silvanshade
       thoughtpolice
