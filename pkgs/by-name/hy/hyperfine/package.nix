@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line benchmarking tool";
