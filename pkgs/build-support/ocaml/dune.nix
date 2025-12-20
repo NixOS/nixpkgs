@@ -37,10 +37,10 @@ lib.extendMkDerivation {
     in
 
     if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion then
-      throw "${finalAttrs.pname}-${finalAttrs.version} is not available for OCaml ${ocaml.version}"
+      throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
     else
       {
-        name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
+        name = "ocaml${ocaml.version}-${pname}-${version}";
 
         strictDeps = true;
 
@@ -58,14 +58,14 @@ lib.extendMkDerivation {
         buildPhase =
           args.buildPhase or ''
             runHook preBuild
-            dune build -p ${finalAttrs.pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+            dune build -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
             runHook postBuild
           '';
 
         installPhase =
           args.installPhase or ''
             runHook preInstall
-            dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${finalAttrs.pname} \
+            dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname} \
              ${
                if lib.versionAtLeast Dune.version "2.9" then
                  "--docdir $out/share/doc --mandir $out/share/man"
@@ -78,15 +78,11 @@ lib.extendMkDerivation {
         checkPhase =
           args.checkPhase or ''
             runHook preCheck
-            dune runtest -p ${finalAttrs.pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+            dune runtest -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
             runHook postCheck
           '';
 
         meta = (args.meta or { }) // {
-          # TODO: ocaml.meta.platforms is where the compiler can run
-          # Package's meta.platforms are where the compiler can target.
-          #
-          # See: rustc.targetPlatforms
           platforms = args.meta.platforms or ocaml.meta.platforms;
         };
       };
