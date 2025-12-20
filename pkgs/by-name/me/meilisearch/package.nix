@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "meiliSearch";
+    repo = "meilisearch";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Q2K4ojWrPI0XGVKnzS4DUz0y0G+DQdIGSGlbEEm/iEA=";
   };
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     tests = {
       meilisearch = nixosTests.meilisearch;
     };
