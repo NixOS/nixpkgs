@@ -1,0 +1,18 @@
+diff --git a/rust/suricatasc/src/unix/main.rs b/rust/suricatasc/src/unix/main.rs
+--- a/rust/suricatasc/src/unix/main.rs
++++ b/rust/suricatasc/src/unix/main.rs
+@@ -25,14 +25,10 @@ struct Args {
+ }
+ 
+ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
+-    let localstatedir = option_env!("LOCALSTATEDIR");
+-
+     let args = Args::parse();
+ 
+     let socket_filename = if let Some(filename) = args.socket {
+         filename.to_string()
+-    } else if let Some(localstatedir) = localstatedir {
+-        format!("{localstatedir}/suricata-command.socket")
+     } else {
+         DEFAULT_SC_PATH.to_string()
+     };
