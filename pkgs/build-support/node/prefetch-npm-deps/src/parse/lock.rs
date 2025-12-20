@@ -1,8 +1,8 @@
-use anyhow::{anyhow, bail, Context};
+use anyhow::{Context, anyhow, bail};
 use rayon::slice::ParallelSliceMut;
 use serde::{
-    de::{self, Visitor},
     Deserialize, Deserializer,
+    de::{self, Visitor},
 };
 use std::{
     cmp::Ordering,
@@ -132,7 +132,7 @@ impl<'de> Deserialize<'de> for HashCollection {
 
 struct HashCollectionVisitor;
 
-impl<'de> Visitor<'de> for HashCollectionVisitor {
+impl Visitor<'_> for HashCollectionVisitor {
     type Value = HashCollection;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -161,7 +161,7 @@ impl Hash {
             .ok_or_else(|| anyhow!("expected SRI hash, got {:?}", s.as_ref()))?
             .0;
 
-        if ALGOS.iter().any(|&a| algo == a) {
+        if ALGOS.contains(&algo) {
             Ok(Hash(s.as_ref().to_string()))
         } else {
             Err(anyhow!("unknown hash algorithm {algo:?}"))
@@ -215,7 +215,7 @@ fn to_new_packages(
 
         if let UrlOrString::Url(v) = &package.version {
             if v.scheme() == "npm" {
-                if let Some(UrlOrString::Url(ref url)) = &package.resolved {
+                if let Some(UrlOrString::Url(url)) = &package.resolved {
                     package.version = UrlOrString::Url(url.clone());
                 }
             } else {
@@ -272,8 +272,8 @@ fn get_initial_url() -> anyhow::Result<Url> {
 #[cfg(test)]
 mod tests {
     use super::{
-        get_initial_url, packages, to_new_packages, Hash, HashCollection, OldPackage, Package,
-        UrlOrString,
+        Hash, HashCollection, OldPackage, Package, UrlOrString, get_initial_url, packages,
+        to_new_packages,
     };
     use std::{
         cmp::Ordering,

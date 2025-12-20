@@ -3124,7 +3124,7 @@ with pkgs;
 
   npmHooks = recurseIntoAttrs (callPackage ../build-support/node/build-npm-package/hooks { });
 
-  inherit (callPackages ../build-support/node/fetch-npm-deps { })
+  inherit (callPackages ../build-support/node/prefetch-npm-deps { })
     fetchNpmDeps
     prefetch-npm-deps
     ;
