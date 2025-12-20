@@ -3739,7 +3739,7 @@ with pkgs;
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
 
-  sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
+  sasview = callPackage ../applications/science/misc/sasview { };
 
   saunafs = callPackage ../by-name/sa/saunafs/package.nix {
     fmt = fmt_11;
