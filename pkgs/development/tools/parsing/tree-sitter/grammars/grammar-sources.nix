@@ -554,12 +554,9 @@
   };
 
   razor = {
-    version = "0-unstable-2016-07-08";
-    url = "github:tree-sitter/tree-sitter-razor/60edbd8e798e416f5226a746396efa6a8614fa9b";
-    hash = "sha256-UVzs4z1Aa/Wvpwck4wrApijTEOrc53h867M32m2yutE=";
-    # Source repo is marked as archived (no update for 9 hears) and does not
-    # compile with current tree-sitter toolchain.
-    meta.broken = true;
+    version = "0-unstable-2025-02-17";
+    url = "github:tris203/tree-sitter-razor/fe46ce5ea7d844e53d59bc96f2175d33691c61c5";
+    hash = "sha256-E4fgy588g6IP258TS2DvoILc1Aikvpfbtq20VIhBE4U=";
   };
 
   regex = {
