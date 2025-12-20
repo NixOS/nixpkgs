@@ -1185,12 +1185,6 @@
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
   ],
-  "module-services-gitlab-runner": [
-    "index.html#module-services-gitlab-runner"
-  ],
-  "ex-gitlab-runner-podman": [
-    "index.html#ex-gitlab-runner-podman"
-  ],
   "module-forgejo": [
     "index.html#module-forgejo"
   ],
