@@ -908,12 +908,6 @@ with lib.maintainers;
     shortName = "Serokell employees";
   };
 
-  sphinx = {
-    members = [ ];
-    scope = "Maintain Sphinx related packages.";
-    shortName = "Sphinx";
-  };
-
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
