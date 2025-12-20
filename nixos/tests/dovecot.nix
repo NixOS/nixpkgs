@@ -8,12 +8,14 @@
       services.postfix.enable = true;
       services.dovecot2 = {
         enable = true;
-        protocols = [
-          "imap"
-          "pop3"
-        ];
-        mailUser = "vmail";
-        mailGroup = "vmail";
+        settings = {
+          protocols = [
+            "imap"
+            "pop3"
+          ];
+          mail_uid = "vmail";
+          mail_gid = "vmail";
+        };
       };
       environment.systemPackages =
         let
