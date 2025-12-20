@@ -29,6 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-wl8THtmdJ2l6XNDtmmnk/MF+qTZL0UsbL8o6i/Vwf5k=";
   };
 
+  postPatch = ''
+    # Version is wrong and not properly set by upstream's workflow
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.2.0"' 'version = "${version}"'
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [
