@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${version}";
-    hash = "sha256-sz/8b0iTtvS4RPBJynvGKf5oiRPJ9Lu/z6leZ1Hoqns=";
+    hash = "sha256-qiLynV/nJkejUVyS3p12bcAR3+Oj+XKp7Z/zVpxb84I=";
   };
 
   build-system = [ poetry-core ];
