@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ipfs/ipfs-desktop/releases/download/v${version}/ipfs-desktop-${version}-linux-x64.tar.xz";
-    sha256 = "6ff6535010c744c8e17c66bf40f5a3fa043cf6ed5a5fc5463868cebcdaba6a1f";
+    hash = "";
   };
 
   nativeBuildInputs = [
