@@ -2480,7 +2480,15 @@ with haskellLib;
 
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
-  geojson = dontCheck super.geojson;
+  # 2025-12-07: too strict bound on:
+  # - containers >=0.5.7.1 && <0.7,
+  # - deepseq >=1.4.2.0 && <1.5,
+  # - text >=1.2.3.0 && <2.1
+  geojson = lib.pipe super.geojson [
+    dontCheck
+    doJailbreak
+    unmarkBroken
+  ];
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
