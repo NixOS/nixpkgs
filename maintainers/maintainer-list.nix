@@ -13331,6 +13331,12 @@
     githubId = 386765;
     matrix = "@k900:0upti.me";
   };
+  kaasboteram = {
+    name = "Luuk Machielse";
+    github = "kaasboteram";
+    githubId = 168290368;
+    email = "luuk.machielse@gmail.com";
+  };
   kachick = {
     email = "kachick1@gmail.com";
     github = "kachick";
