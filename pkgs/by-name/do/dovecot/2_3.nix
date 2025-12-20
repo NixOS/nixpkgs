@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchpatch,
+  dovecot_pigeonhole_2_3,
 }:
 callPackage ./generic.nix { } {
   version = "2.3.21.1";
@@ -19,4 +20,6 @@ callPackage ./generic.nix { } {
       hash = "sha256-dAX80dRqOba9Fkzl11ChYJ6vqcgfkaw/o+TOQKCnnns=";
     })
   ];
+
+  dovecot_pigeonhole = dovecot_pigeonhole_2_3;
 }
