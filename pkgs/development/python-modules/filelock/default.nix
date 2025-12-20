@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ hyphon81 ];
+    maintainers = [ ];
   };
 }
