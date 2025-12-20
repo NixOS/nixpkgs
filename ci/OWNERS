@@ -439,6 +439,7 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/prefetch-npm-deps      @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
+/pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

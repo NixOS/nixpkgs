@@ -5,8 +5,8 @@
   nodejs,
   faketty,
   openssl,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
 }:
 
 buildNpmPackage rec {
@@ -30,7 +30,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-KSKqybqVw2BG/WKuVRyNsneLYyedVeyCvNBLIREx7MQ=";
 
   nativeBuildInputs = [
-    prisma
+    prisma_6
     faketty
   ];
 
@@ -67,11 +67,11 @@ buildNpmPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
       ${lib.concatStringsSep " " (
         lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") {
-          PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
-          PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
-          PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-          PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
-          PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+          PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
+          PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
+          PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
+          PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
+          PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
         }
       )}
 
