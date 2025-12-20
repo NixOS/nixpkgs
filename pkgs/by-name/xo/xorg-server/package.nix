@@ -151,6 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
     mesa
   ];
 
+  hardeningDisable = [
+    # Removing this breaks GLAMOR due to failing to find libgbm symbols at runtime:
+    # Failed to load /...modesetting_drv.so: /...modesetting_drv.so: undefined symbol: gbm_bo_get_plane_count
+    # This is likely some load order weirdness, but we don't have a better solution for now.
+    # FIXME: fix this properly.
+    "bindnow"
+  ];
+
   propagatedBuildInputs = [
     dbus
     libepoxy
