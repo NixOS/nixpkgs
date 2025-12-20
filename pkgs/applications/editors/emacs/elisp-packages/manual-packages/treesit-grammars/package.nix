@@ -20,5 +20,5 @@ in
 {
   inherit with-grammars;
 
-  with-all-grammars = with-grammars builtins.attrValues;
+  with-all-grammars = with-grammars (ps: lib.filter (p: !p.meta.broken) (lib.attrValues ps));
 }
