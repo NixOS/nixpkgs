@@ -11,7 +11,7 @@ let
   activemqBroker =
     pkgs.runCommand "activemq-broker"
       {
-        nativeBuildInputs = [ pkgs.jdk ];
+        nativeBuildInputs = [ cfg.jdk ];
       }
       ''
         mkdir -p $out/lib
@@ -29,6 +29,10 @@ in
       enable = lib.mkEnableOption "Apache ActiveMQ message broker service";
 
       package = lib.mkPackageOption pkgs "activemq" { };
+
+      jdk = lib.mkPackageOption pkgs "JDK" {
+        default = "jdk17_headless";
+      };
 
       configurationDir = lib.mkOption {
         default = "${cfg.package}/conf";
@@ -127,7 +131,7 @@ in
       description = "Apache ActiveMQ Message Broker";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.jre ];
+      path = [ cfg.jdk ];
       serviceConfig.User = "activemq";
       script = ''
         source ${cfg.package}/lib/classpath.env
