@@ -12,14 +12,14 @@
   versionCheckHook,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
   version = "10.11.5"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MOzMSubYkxz2kwpvamaOwz3h8drEgeSoiE9Gwassmbk=";
   };
 
@@ -67,6 +67,6 @@ buildDotnetModule rec {
       jojosch
     ];
     mainProgram = "jellyfin";
-    platforms = dotnet-runtime.meta.platforms;
+    platforms = finalAttrs.dotnet-runtime.meta.platforms;
   };
-}
+})
