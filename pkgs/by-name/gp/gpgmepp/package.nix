@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1HlgScBnCKJvMJb3SO8JU0fho8HlcFYXAf6VLD9WU4I=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   patches = [
     ./0001-Fix-handling-of-absolute-install-dirs-in-.pc-install.patch
     ./0001-Don-t-hardcode-include-as-includedir.patch
