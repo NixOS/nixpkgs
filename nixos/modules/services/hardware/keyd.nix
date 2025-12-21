@@ -7,60 +7,58 @@
 let
   cfg = config.services.keyd;
 
-  keyboardOptions =
-    { ... }:
-    {
-      options = {
-        ids = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ "*" ];
-          example = [
-            "*"
-            "-0123:0456"
-          ];
-          description = ''
-            Device identifiers, as shown by {manpage}`keyd(1)`.
-          '';
-        };
+  keyboardOptions = _: {
+    options = {
+      ids = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ "*" ];
+        example = [
+          "*"
+          "-0123:0456"
+        ];
+        description = ''
+          Device identifiers, as shown by {manpage}`keyd(1)`.
+        '';
+      };
 
-        settings = lib.mkOption {
-          type = (pkgs.formats.ini { }).type;
-          default = { };
-          example = {
-            main = {
-              capslock = "overload(control, esc)";
-              rightalt = "layer(rightalt)";
-            };
-
-            rightalt = {
-              j = "down";
-              k = "up";
-              h = "left";
-              l = "right";
-            };
+      settings = lib.mkOption {
+        inherit (pkgs.formats.ini { }) type;
+        default = { };
+        example = {
+          main = {
+            capslock = "overload(control, esc)";
+            rightalt = "layer(rightalt)";
           };
-          description = ''
-            Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
-            Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
-            See <https://github.com/rvaiya/keyd> how to configure.
-          '';
-        };
 
-        extraConfig = lib.mkOption {
-          type = lib.types.lines;
-          default = "";
-          example = ''
-            [control+shift]
-            h = left
-          '';
-          description = ''
-            Extra configuration that is appended to the end of the file.
-            **Do not** write `ids` section here, use a separate option for it.
-            You can use this option to define compound layers that must always be defined after the layer they are comprised.
-          '';
+          rightalt = {
+            j = "down";
+            k = "up";
+            h = "left";
+            l = "right";
+          };
         };
+        description = ''
+          Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
+          Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
+          See <https://github.com/rvaiya/keyd> how to configure.
+        '';
+      };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = ''
+          [control+shift]
+          h = left
+        '';
+        description = ''
+          Extra configuration that is appended to the end of the file.
+          **Do not** write `ids` section here, use a separate option for it.
+          You can use this option to define compound layers that must always be defined after the layer they are comprised.
+        '';
       };
     };
+  };
 in
 {
   imports = [
@@ -128,17 +126,11 @@ in
       wantedBy = [ "multi-user.target" ];
 
       restartTriggers = lib.mapAttrsToList (
-        name: options: config.environment.etc."keyd/${name}.conf".source
+        name: _options: config.environment.etc."keyd/${name}.conf".source
       ) cfg.keyboards;
 
-      # this is configurable in 2.4.2, later versions seem to remove this option.
-      # post-2.4.2 may need to set makeFlags in the derivation:
-      #
-      #     makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
-      environment.KEYD_SOCKET = "/run/keyd/keyd.sock";
-
       serviceConfig = {
-        ExecStart = "${pkgs.keyd}/bin/keyd";
+        ExecStart = lib.getExe pkgs.keyd;
         Restart = "always";
 
         # TODO investigate why it doesn't work propeprly with DynamicUser
