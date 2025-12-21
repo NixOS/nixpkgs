@@ -1,6 +1,6 @@
 #! /bin/sh
 choice="$1";
-shift
+[ "$#" = "0" ] || shift;
 case "$choice" in
     encode | create | write | CommandLineEncoder)
         @out@/bin/zxing-cmdline-encoder "$@";
