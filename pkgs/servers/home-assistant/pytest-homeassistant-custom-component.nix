@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.300";
+  version = "0.13.301";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-8SLhkzGKfT2RLWeKq3e8SZHD2H1Pm0uX/G3OqUGICxg=";
+    hash = "sha256-ayLMdWz2KrHkAUc46QdjsikdO96YtpaPeDNGEfkYo9w=";
   };
 
   build-system = [ setuptools ];

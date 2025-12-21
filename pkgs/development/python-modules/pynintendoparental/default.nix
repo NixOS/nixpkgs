@@ -3,26 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  python-dotenv,
+  pynintendoauth,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynintendoparental";
-  version = "1.1.3";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pynintendoparental";
     tag = version;
-    hash = "sha256-mH34BcbK3qyB2sAmVyAQz6GhI+xWAdRHagZzLVI9gr8=";
+    hash = "sha256-47usTrCxHpbUFI2NEmjtumeliRrlYXfPz7VSUE1Vd8Q=";
   };
+
+  postPatch = ''
+    substituteInPlace pynintendoparental/_version.py \
+      --replace-fail '__version__ = "0.0.0"' '__version__ = "${version}"'
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    pynintendoauth
   ];
 
   pythonImportsCheck = [ "pynintendoparental" ];
