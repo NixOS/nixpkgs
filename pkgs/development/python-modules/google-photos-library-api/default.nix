@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-photos-library-api";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-photos-library-api";
     tag = version;
-    hash = "sha256-BtVnFQ0MtxQBvT0xff59hBED89rtg8xfuv31T13qL8w=";
+    hash = "sha256-pmAAvwhr783ih9vpqr5DmT462z3Ug1xwHaz9itu/mt4=";
   };
 
   build-system = [ setuptools ];
