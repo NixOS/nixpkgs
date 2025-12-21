@@ -18070,6 +18070,9 @@ self: super: with self; {
     else
       null;
 
+  standard-uu =
+    if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-uu { } else null;
+
   standardwebhooks = callPackage ../development/python-modules/standardwebhooks { };
 
   stanio = callPackage ../development/python-modules/stanio { };
