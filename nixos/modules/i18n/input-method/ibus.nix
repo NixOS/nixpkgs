@@ -75,7 +75,7 @@ in
       ibusPackage
     ];
 
-    environment.variables = {
+    environment.sessionVariables = {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
