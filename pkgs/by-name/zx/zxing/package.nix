@@ -29,11 +29,12 @@ maven.buildMavenPackage rec {
 
     mkdir -p "$out/lib/java" "$out/bin"
     cp "target/javase-${version}-jar-with-dependencies.jar" "$out/lib/java"
-    substituteAll "${./java-zxing.sh}" "$out/bin/java-zxing"
-    substituteAll "${./zxing-cmdline-runner.sh}" "$out/bin/zxing-cmdline-runner"
-    substituteAll "${./zxing-cmdline-encoder.sh}" "$out/bin/zxing-cmdline-encoder"
-    substituteAll "${./zxing.sh}" "$out/bin/zxing"
-    chmod a+x "$out/bin"/*
+    for source in "${./java-zxing.sh}" "${./zxing-cmdline-encoder.sh}" "${./zxing-cmdline-runner.sh}" "${./zxing-gui-runner.sh}" "${./zxing.sh}"; do
+        target="''${source#*-}"
+        target="$out/bin/''${target%.sh}"
+        substituteAll "$source" "$target"
+        chmod a+x "$target"
+    done
 
     runHook postInstall
   '';
