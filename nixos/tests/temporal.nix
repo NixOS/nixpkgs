@@ -9,6 +9,8 @@
       temporal =
         { config, pkgs, ... }:
         {
+          virtualisation.cores = 2;
+
           networking.firewall.allowedTCPPorts = [ 7233 ];
 
           environment.systemPackages = [
