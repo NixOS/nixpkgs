@@ -153,6 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
     # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
     substituteInPlace CMakeLists.txt \
       --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+
+    # Fix Unicode minus sign (U+2212) in comment that breaks EMBED_USE=CArrays
+    # The embed mechanism generates char[] arrays that can't store unicode −
+    # which has values >127
+    substituteInPlace src/targets/gpu/kernels/include/migraphx/kernels/bit.hpp \
+      --replace-fail "// popcount(~(x | −x))" "// popcount(~(x | -x))"
   ''
   + lib.optionalString (!buildDocs) ''
     substituteInPlace CMakeLists.txt \
