@@ -6,6 +6,7 @@
   cacert,
   makeSetupHook,
   bun,
+  symlinks,
 }:
 
 {
@@ -41,12 +42,13 @@
             jq
             moreutils
             bun
+            symlinks
           ]
           ++ args'.nativeBuildInputs or [ ];
 
-          installPhase =
-            args.installPhase or ''
-              runHook preInstall
+          buildPhase =
+            args.buildPhase or ''
+              runHook preBuild
 
               export HOME=$(mktemp -d)
               export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
@@ -59,25 +61,28 @@
                   ${lib.escapeShellArgs installFlags} \
                   --frozen-lockfile
 
-              runHook postInstall
+              # rewrite all symlinks to be relative
+              symlinks -cr $BUN_INSTALL_CACHE_DIR
+
+              runHook postBuild
             '';
 
           # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
-          fixupPhase =
-            args.fixupPhase or ''
-              runHook preFixup
+          installPhase =
+            args.installPhase or ''
+              runHook preInstall
 
               tar --sort=name \
                 --mtime="@$SOURCE_DATE_EPOCH" \
                 --owner=0 --group=0 --numeric-owner \
                 --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-                -czf $out $BUN_INSTALL_CACHE_DIR
+                -czf $out -C $BUN_INSTALL_CACHE_DIR .
 
-                runHook postFixup
+                runHook postInstall
             '';
 
           dontConfigure = args'.dontConfigure or true;
-          dontBuild = args'.dontBuild or true;
+          dontFixup = args'.dontFixup or true;
 
           inherit outputHash outputHashAlgo;
           outputHashMode = "recursive";
