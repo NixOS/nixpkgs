@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/myriadrf/LimeSuite/commit/4e5ad459d50c922267a008e5cecb3efdbff31f09.patch";
       hash = "sha256-OASki3bISJvV7wjMz0pBT3kO5RvJ5BnymiF6ruHkCJ8=";
     })
+    # Fixes for C23 (GCC 15). Remove upon next version bump
+    (fetchpatch {
+      url = "https://github.com/myriadrf/LimeSuite/commit/524cd2e548b11084e6f739b2dfe0f958c2e30354.patch";
+      hash = "sha256-wxwhFjXcIgBMTJoJ6efdtyttxMFZviCTXtEb2qFX9yU=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
