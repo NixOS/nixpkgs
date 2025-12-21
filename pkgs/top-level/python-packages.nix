@@ -478,6 +478,8 @@ self: super: with self; {
 
   aiosasl = callPackage ../development/python-modules/aiosasl { };
 
+  aiosendspin = callPackage ../development/python-modules/aiosendspin { };
+
   aiosenz = callPackage ../development/python-modules/aiosenz { };
 
   aioserial = callPackage ../development/python-modules/aioserial { };
@@ -535,6 +537,8 @@ self: super: with self; {
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
   aiousbwatcher = callPackage ../development/python-modules/aiousbwatcher { };
+
+  aiovban = callPackage ../development/python-modules/aiovban { };
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
@@ -6727,6 +6731,8 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-build-scripts = callPackage ../development/python-modules/hatch-build-scripts { };
+
   hatch-deps-selector = callPackage ../development/python-modules/hatch-deps-selector { };
 
   hatch-docstring-description =
@@ -8659,6 +8665,10 @@ self: super: with self; {
 
   libvirt = callPackage ../development/python-modules/libvirt { inherit (pkgs) libvirt; };
 
+  libxc = callPackage ../by-name/li/libxc/python.nix {
+    libxc = pkgs.libxc_7;
+  };
+
   libxml2 =
     (toPythonModule (
       pkgs.libxml2.override {
@@ -9997,8 +10007,6 @@ self: super: with self; {
   mpltoolbox = callPackage ../development/python-modules/mpltoolbox { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
-
-  mpris-server = callPackage ../development/python-modules/mpris-server { };
 
   mprisify = callPackage ../development/python-modules/mprisify { };
 
@@ -16785,6 +16793,8 @@ self: super: with self; {
 
   sarif-tools = callPackage ../development/python-modules/sarif-tools { };
 
+  sasdata = callPackage ../development/python-modules/sasdata { };
+
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
   sat-tmp = callPackage ../development/python-modules/sat-tmp { };
@@ -18496,6 +18506,8 @@ self: super: with self; {
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
+
+  tccbox = callPackage ../development/python-modules/tccbox { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 

@@ -580,13 +580,13 @@
     "vendorHash": "sha256-H6NjQhSokIMhFAKyirr2LTvgu6/c2p++YYDHO/SLuN8="
   },
   "hashicorp_google-beta": {
-    "hash": "sha256-NHnKafm46W/owbugb/TTxZS/hKjSPpEt7WdRmxTCWVw=",
+    "hash": "sha256-BQ5AjO1SrODFyEzM6WTpqUqGURusNRQ/4W4fttoc0Rk=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v7.13.0",
+    "rev": "v7.14.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-nfFfXnFBaCWiGryTigB/dTxFvclKJ7ocVcV7rbnBMWI="
+    "vendorHash": "sha256-7sM6Rvs0zzXesT6uW335Q3JcYKBqU942voOa1i3H4ds="
   },
   "hashicorp_helm": {
     "hash": "sha256-S4Fe65f+gEWWxRMC+/i93dwwe7QigPccx4wiqNBpcL8=",
@@ -652,13 +652,13 @@
     "vendorHash": "sha256-jyfzk3vbgZwHlyiFFw1mhD+us/7WNatUQTGN4WsrfgE="
   },
   "hashicorp_tfe": {
-    "hash": "sha256-W0O3J08p6QtQVCqE3AGZbR+19SQVXLbxLkkDhpZhJMM=",
+    "hash": "sha256-9BrGuvIGs5ztEz2/qBkPqGHeAtPAiWA+3UeoEEOWneM=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tfe",
     "owner": "hashicorp",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.71.0",
+    "rev": "v0.72.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-dZFjjogCIRzxXgJ/VW/WJY1mCNqoa3Es4q+oXLgcGQg="
+    "vendorHash": "sha256-P49ShCqu3wU2baUjzq8h30s85eIGdrevgzjbOIN0jp8="
   },
   "hashicorp_time": {
     "hash": "sha256-ZArYfbzbrkxGlL1BRFM7PN3hLzdssIL4COsUBdLVMYY=",
@@ -869,13 +869,13 @@
     "vendorHash": "sha256-vcuUt3WIo1TnLApch410JgtyCzliQRYMQQQ2Z9diDZ8="
   },
   "lxc_incus": {
-    "hash": "sha256-OznwpRtSxf9XOJLjO732bwVh0dclGHAFuFUKGUdg3Xc=",
+    "hash": "sha256-apgSFI+NgIGEnYAJifwN5X9eIrrdy7Xti83YGdu2bPU=",
     "homepage": "https://registry.terraform.io/providers/lxc/incus",
     "owner": "lxc",
     "repo": "terraform-provider-incus",
-    "rev": "v1.0.1",
+    "rev": "v1.0.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5FZFHzZGjIE49cszj5aeTDJRB7JXK6vLlsk8RJKRMpY="
+    "vendorHash": "sha256-6CoEZz7/8PysjolcTsrBKForJkoOQqgERYX8g5PeoMY="
   },
   "marcofranssen_dexidp": {
     "hash": "sha256-un+jAmcK1MYljcAFyIHw0AFmvz4GltAsWxTOd/zXxyU=",

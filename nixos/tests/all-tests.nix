@@ -643,9 +643,7 @@ in
   gitdaemon = runTest ./gitdaemon.nix;
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
   github-runner = runTest ./github-runner.nix;
-  gitlab = import ./gitlab/default.nix {
-    inherit runTest;
-  };
+  gitlab = runTest ./gitlab.nix;
   gitolite = runTest ./gitolite.nix;
   gitolite-fcgiwrap = runTest ./gitolite-fcgiwrap.nix;
   glance = runTest ./glance.nix;
@@ -802,7 +800,11 @@ in
   jitsi-meet = runTest ./jitsi-meet.nix;
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = runTest ./jotta-cli.nix;
-  k3s = handleTest ./k3s { };
+  k3s = import ./rancher {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+    rancherDistro = "k3s";
+  };
   kafka = handleTest ./kafka { };
   kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
@@ -1343,7 +1345,15 @@ in
   restic-rest-server = runTest ./restic-rest-server.nix;
   retroarch = runTest ./retroarch.nix;
   ringboard = runTest ./ringboard.nix;
-  rke2 = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./rke2 { };
+  rke2 = import ./rancher {
+    inherit pkgs;
+    inherit (pkgs) lib;
+    runTest = runTestOn [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    rancherDistro = "rke2";
+  };
   rkvm = handleTest ./rkvm { };
   rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = runTest ./robustirc-bridge.nix;

@@ -15,8 +15,8 @@
   openssl,
   google-fonts,
   playwright-driver,
-  prisma,
-  prisma-engines,
+  prisma_6,
+  prisma-engines_6,
 }:
 
 let
@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    prisma
+    prisma_6
     yarnConfigHook
   ];
 
@@ -101,9 +101,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preBuild = ''
     export PRISMA_CLIENT_ENGINE_TYPE='binary'
-    export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines}/lib/libquery_engine.node"
-    export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines}/bin/query-engine"
-    export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines}/bin/schema-engine"
+    export PRISMA_QUERY_ENGINE_LIBRARY="${prisma-engines_6}/lib/libquery_engine.node"
+    export PRISMA_QUERY_ENGINE_BINARY="${prisma-engines_6}/bin/query-engine"
+    export PRISMA_SCHEMA_ENGINE_BINARY="${prisma-engines_6}/bin/schema-engine"
   '';
 
   buildPhase = ''
@@ -151,7 +151,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/worker
     else
       echo "Starting server"
-      ${lib.getExe prisma} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
+      ${lib.getExe prisma_6} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
         && ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/web -- -H \$LINKWARDEN_HOST -p \$LINKWARDEN_PORT
     fi
     " > $out/bin/start.sh
@@ -166,9 +166,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       }" \
       --set-default PRISMA_CLIENT_ENGINE_TYPE 'binary' \
-      --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
-      --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines}/bin/query-engine" \
-      --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines}/bin/schema-engine" \
+      --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines_6}/lib/libquery_engine.node" \
+      --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines_6}/bin/query-engine" \
+      --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines_6}/bin/schema-engine" \
       --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/chrome-linux/chrome \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
