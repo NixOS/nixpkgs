@@ -95,6 +95,7 @@
                     asyncio.run(main())
               ''
             )
+            pkgs.grpc-health-probe
             pkgs.temporal-cli
           ];
 
@@ -266,6 +267,18 @@
       temporal.wait_for_open_port(7233)
       temporal.wait_for_open_port(7234)
       temporal.wait_for_open_port(7235)
+
+      temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7233 -service=temporal.api.workflowservice.v1.WorkflowService"
+      )
+
+      temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7234 -service=temporal.api.workflowservice.v1.HistoryService"
+      )
+
+      temporal.wait_until_succeeds(
+        "grpc-health-probe -addr=localhost:7235 -service=temporal.api.workflowservice.v1.MatchingService"
+      )
 
       temporal.wait_until_succeeds(
         "journalctl -o cat -u temporal.service | grep 'server-version' | grep '${pkgs.temporal.version}'"
