@@ -9,6 +9,7 @@
   freetype,
   jellyfin-web,
   sqlite,
+  versionCheckHook,
 }:
 
 buildDotnetModule rec {
@@ -42,6 +43,11 @@ buildDotnetModule rec {
     "--add-flags"
     "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;
