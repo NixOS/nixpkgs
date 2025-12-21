@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://italiangrid.github.io/voms/";
     changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux; # gsoap is currently Linux-only in Nixpkgs
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      ShamrockLee
+      veprbl
+    ];
   };
 })
