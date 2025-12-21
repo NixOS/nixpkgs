@@ -9,11 +9,11 @@
   systemd,
   udev,
   pkg-config,
-  procps,
   fex,
   writeShellApplication,
   coreutils,
   makeBinaryWrapper,
+  nix-update-script,
 # TODO: Enable again when sommelier is not broken.
 # For now, don't give false impression of sommelier being supported.
 # sommelier,
@@ -50,25 +50,22 @@ let
     "--execute-pre=${lib.getExe initScript}"
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "muvm";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "muvm";
-    rev = "muvm-${version}";
-    hash = "sha256-1XPhVEj7iqTxdWyYwNk6cbb9VRGuhpvvowYDPJb1cWU=";
+    tag = "muvm-${finalAttrs.version}";
+    hash = "sha256-k3Jj/Tzu5ZfnADMiVG7pAPqosrkZvhmehi0NMbyudN0=";
   };
 
-  cargoHash = "sha256-fkvdS0c1Ib8Kto44ou06leXy731cpMHXevyFR5RROt4=";
+  cargoHash = "sha256-jFNyQD2Hf1K5+wHDRD2WG70IJfZbL+hT/gtjeUnt5Mk=";
 
   postPatch = ''
     substituteInPlace crates/muvm/src/guest/bin/muvm-guest.rs \
       --replace-fail "/usr/lib/systemd/systemd-udevd" "${systemd}/lib/systemd/systemd-udevd"
-
-    substituteInPlace crates/muvm/src/monitor.rs \
-      --replace-fail "/sbin/sysctl" "${lib.getExe' procps "sysctl"}"
   ''
   # Only patch FEX path if we're aarch64, otherwise we don't want the derivation to pull in FEX in any way
   + lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -95,6 +92,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/muvm ${wrapArgs}
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Run programs from your system in a microVM";
     homepage = "https://github.com/AsahiLinux/muvm";
@@ -106,4 +107,4 @@ rustPlatform.buildRustPackage rec {
     inherit (libkrun.meta) platforms;
     mainProgram = "muvm";
   };
-}
+})
