@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-saTKmS0lhPvsxwNxTYwHtR7d85esPUyxzXYheVbaZsI=";
+    hash = "sha256-cebu3E2sbVWRUYbSeuslCZhaF+zWV7E56iSwB7Ms3ts=";
   };
 
   build-system = [
