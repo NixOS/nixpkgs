@@ -17,17 +17,17 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "9.1.0";
+    version = "9.2.1";
 
     src = fetchurl (
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-QeeJe9pvwjgLrIRv2YuC5CE2EHevGfLP3c+eI6R80I0=";
+          sha256 = "sha256-1hSGR68v2azRT2PsthXKjEekGekgAv0FFESrXK6vGs0=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-MmUq6dV4/cDeeC0UL240U+yYcqBsi1vqB0BwPKWoDdc=";
+          sha256 = "sha256-/H/x069JA9MtrfILos5KRT0IKOHKOuS7nI1ZspizvvA=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
