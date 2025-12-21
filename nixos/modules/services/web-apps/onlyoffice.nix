@@ -264,8 +264,15 @@ in
           "postgresql.target"
         ];
         wantedBy = [ "multi-user.target" ];
+        environment = {
+          NODE_CONFIG_DIR = "/run/onlyoffice/config";
+          NODE_DISABLE_COLORS = "1";
+          NODE_ENV = "production-linux";
+        };
         serviceConfig = {
-          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
+          # needs to be ran wrapped in FHS for now
+          # because the default config refers to many FHS paths
+          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter /run/onlyoffice/config";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -344,7 +351,7 @@ in
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
+            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice /run/onlyoffice/config";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
