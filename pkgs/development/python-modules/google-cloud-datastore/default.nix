@@ -11,7 +11,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "google-cloud-datastore";
   version = "2.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_datastore";
