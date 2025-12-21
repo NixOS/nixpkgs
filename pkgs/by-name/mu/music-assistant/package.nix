@@ -103,56 +103,48 @@ python.pkgs.buildPythonApplication rec {
     "uv"
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      aiohttp
-      chardet
-      mashumaro
-      orjson
-    ]
-    ++ optional-dependencies.server;
+  dependencies = with python.pkgs; [
+    # Only packages required in pyproject.toml
+    aiodns
+    aiofiles
+    aiohttp
+    aiohttp-asyncmdnsresolver
+    aiohttp-fast-zlib
+    aiorun
+    aiosqlite
+    brotli
+    certifi
+    chardet
+    colorlog
+    cryptography
+    mashumaro
+    music-assistant-frontend
+    music-assistant-models
+    mutagen
+    orjson
+    pillow
+    podcastparser
+    propcache
+    python-slugify
+    shortuuid
+    unidecode
+    xmltodict
+    zeroconf
+  ];
 
   optional-dependencies = with python.pkgs; {
-    server = [
-      aiodns
-      aiofiles
-      aiohttp
-      aiorun
-      aiosqlite
-      asyncio-throttle
-      brotli
-      certifi
-      colorlog
-      cryptography
-      eyed3
-      faust-cchardet
-      ifaddr
-      mashumaro
-      memory-tempfile
-      music-assistant-frontend
-      music-assistant-models
-      mutagen
-      orjson
-      pillow
-      podcastparser
-      python-slugify
-      shortuuid
-      unidecode
-      xmltodict
-      zeroconf
+    # Required subset of optional-dependencies in pyproject.toml
+    test = [
+      pytest-aiohttp
+      pytest-cov-stub
+      syrupy
     ];
   };
 
   nativeCheckInputs =
     with python.pkgs;
     [
-      pytest-aiohttp
-      pytest-cov-stub
-      pytest-timeout
       pytestCheckHook
-      syrupy
-      pytest-timeout
     ]
     ++ lib.concatAttrValues optional-dependencies
     ++ (providerPackages.jellyfin python.pkgs)
