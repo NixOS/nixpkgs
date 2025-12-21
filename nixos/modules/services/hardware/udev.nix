@@ -189,6 +189,8 @@ let
         res="$(${pkgs.buildPackages.systemd}/bin/systemd-hwdb --root=$(pwd) update 2>&1)"
         echo "$res"
         [ -z "$(echo "$res" | egrep '^Error')" ]
+        # if no hwdb files where found then no hwdb.bin file will be created and move errors out
+        touch etc/udev/hwdb.bin
         mv etc/udev/hwdb.bin $out
       '';
 
