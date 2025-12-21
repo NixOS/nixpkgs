@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       lord-valen
+      anderscs
     ];
     platforms = lib.platforms.linux;
   };
