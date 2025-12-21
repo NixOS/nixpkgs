@@ -173,7 +173,14 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = map (url: "${url}/${entry.url}") repositories;
+      urls = lib.flatten (
+        map (url: [
+          "https://cache-redirector.jetbrains.com/${url}/${entry.url}"
+          "https://${url}/${entry.url}"
+        ]) repositories
+      );
+      # Do not try to retry 4xx errors
+      curlOptsList = [ "--no-retry-all-errors" ];
       sha256 = entry.hash;
     };
   };
@@ -181,25 +188,20 @@ let
 
   kotlin-jps-plugin-classpath =
     let
-      repoUrl = "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath";
+      repoBaseUrl = "packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath";
+      repoUrls = [
+        "https://cache-redirector.jetbrains.com/${repoBaseUrl}"
+        "https://${repoBaseUrl}"
+      ];
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
       version = kotlin-jps-plugin.version;
     in
     fetchurl {
-      url =
-        repoUrl
-        + "/"
-        + groupId
-        + "/"
-        + artefactId
-        + "/"
-        + version
-        + "/"
-        + artefactId
-        + "-"
-        + version
-        + ".jar";
+      urls = map (
+        url:
+        url + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar"
+      ) repoUrls;
       hash = kotlin-jps-plugin.hash;
     };
 
@@ -215,7 +217,10 @@ let
       "OpenSourceCommunityInstallersBuildTarget";
 
   xplat-launcher = fetchzip {
-    url = "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz";
+    urls = [
+      "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
+      "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
+    ];
     hash = "sha256-ttrQZUbBvvyH1BSVt1yWOoD82WwRi/hkoRfrsdCjwTA=";
     stripRoot = false;
   };
