@@ -152,7 +152,6 @@ in
         RuntimeDirectory = "keyd";
 
         # Hardening
-        CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
         DeviceAllow = [
           "char-input rw"
           "/dev/uinput rw"
@@ -170,7 +169,6 @@ in
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         MemoryDenyWriteExecute = true;
-        RestrictRealtime = true;
         LockPersonality = true;
         ProtectProc = "invisible";
         SystemCallFilter = [
