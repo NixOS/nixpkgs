@@ -8,52 +8,71 @@
 with lib;
 
 let
-  systemBuilder = ''
-    mkdir $out
+  systemBuilder =
+    let
+      metadataJson = pkgs.writers.writeJSON "nixos-metadata.json" (
+        {
+          firmware = "${config.hardware.firmware}/lib/firmware";
+          modprobe_binary = "${pkgs.kmod}/bin/modprobe";
+          nix_store_mount_opts = config.boot.nixStoreMountOpts;
+        }
+        // lib.optionalAttrs (config.environment.binsh != null) {
+          sh_binary = config.environment.binsh;
+        }
+        // lib.optionalAttrs (config.environment.usrbinenv != null) {
+          env_binary = config.environment.usrbinenv;
+        }
+        // lib.optionalAttrs config.system.etc.overlay.enable {
+          etc_metadata_image = config.system.build.etcMetadataImage;
+          etc_basedir = config.system.build.etcBasedir;
+        }
+      );
+    in
+    #bash
+    ''
+      mkdir $out
 
-    ${
-      if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
-        ''
-          # This must not be a symlink or the abs_path of the grub builder for the tests
-          # will resolve the symlink and we end up with a path that doesn't point to a
-          # system closure.
-          cp "$systemd/lib/systemd/systemd" $out/init
+      ${
+        if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
+          ''
+            # This must not be a symlink or the abs_path of the grub builder for the tests
+            # will resolve the symlink and we end up with a path that doesn't point to a
+            # system closure.
+            cp "$systemd/lib/systemd/systemd" $out/init
 
-          ${lib.optionalString (!config.system.nixos-init.enable) ''
-            cp ${config.system.build.bootStage2} $out/prepare-root
-            substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
-          ''}
-        ''
-      else
-        ''
-          cp ${config.system.build.bootStage2} $out/init
-          substituteInPlace $out/init --subst-var-by systemConfig $out
-        ''
-    }
+            ${lib.optionalString (!config.system.nixos-init.enable) ''
+              cp ${config.system.build.bootStage2} $out/prepare-root
+              substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+            ''}
+          ''
+        else
+          ''
+            cp ${config.system.build.bootStage2} $out/init
+            substituteInPlace $out/init --subst-var-by systemConfig $out
+          ''
+      }
 
-    ln -s ${config.system.build.etc}/etc $out/etc
+      ln -s ${config.system.build.etc}/etc $out/etc
 
-    ${lib.optionalString config.system.etc.overlay.enable ''
-      ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
-      ln -s ${config.system.build.etcBasedir} $out/etc-basedir
-    ''}
+      ln -s ${config.system.path} $out/sw
+      ln -s "$systemd" $out/systemd
 
-    ln -s ${config.system.path} $out/sw
-    ln -s "$systemd" $out/systemd
+      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
+      echo -n "$nixosLabel" > $out/nixos-version
+      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
-    echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
-    echo -n "$nixosLabel" > $out/nixos-version
-    echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
+      # Copy the file to avoid needing to do another fork in initrd to canonicalise the path
+      cp "${metadataJson}" "$out/nixos-metadata.json"
 
-    ${config.system.systemBuilderCommands}
+      ${config.system.systemBuilderCommands}
 
-    cp "$extraDependenciesPath" "$out/extra-dependencies"
+      cp "$extraDependenciesPath" "$out/extra-dependencies"
 
-    ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
-      ${config.boot.bootspec.writer}
-      ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
-    ''}
-  '';
+      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+        ${config.boot.bootspec.writer}
+        ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
+      ''}
+    '';
 
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
