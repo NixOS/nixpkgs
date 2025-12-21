@@ -1351,6 +1351,8 @@ let
         X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
         X86_PLATFORM_DRIVERS_HP = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "6.1" yes);
 
+        ARM64_PMEM = lib.mkIf stdenv.hostPlatform.isAarch64 yes;
+
         LIRC = yes;
 
         SCHED_CORE = whenAtLeast "5.14" yes;
