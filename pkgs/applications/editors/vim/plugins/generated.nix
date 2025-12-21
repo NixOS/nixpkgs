@@ -15128,6 +15128,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  telescope-hierarchy-nvim = buildVimPlugin {
+    pname = "telescope-hierarchy.nvim";
+    version = "0-unstable-2025-12-19";
+    src = fetchFromGitHub {
+      owner = "jmacadie";
+      repo = "telescope-hierarchy.nvim";
+      rev = "85fb67112daf99f3918531558ee85a36c1891f91";
+      hash = "sha256-Ck7xM+m8sRkkviXdXpeDYrxr3MNpavkW4/UCih0Ohc8=";
+    };
+    meta.homepage = "https://github.com/jmacadie/telescope-hierarchy.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   telescope-live-grep-args-nvim = buildVimPlugin {
     pname = "telescope-live-grep-args.nvim";
     version = "1.1.0-unstable-2025-02-24";
