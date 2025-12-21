@@ -102,6 +102,7 @@ mapAliases {
   CommonMark = throw "'CommonMark' has been renamed to/replaced by 'commonmark'"; # Converted to throw 2025-10-29
   ConfigArgParse = throw "'ConfigArgParse' has been renamed to/replaced by 'configargparse'"; # Converted to throw 2025-10-29
   configshell = throw "'configshell' has been renamed to/replaced by 'configshell-fb'"; # Converted to throw 2025-10-29
+  coq-tools = throw "coq-tools has been removed"; # added 2025-12-21
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
