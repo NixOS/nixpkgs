@@ -38248,6 +38248,15 @@ with self;
       url = "mirror://cpan/authors/id/Z/ZH/ZHMYLOVE/X11-XCB-0.24.tar.gz";
       hash = "sha256-eIUZZzpDxHUecwYaiCG2WPyV8G1cGcnx3rtgX7ILoEU=";
     };
+    patches = [
+      # Fix "undefined symbol: xcb_composite_unredirect_window"
+      (fetchpatch {
+        url = "https://github.com/zhmylove/X11-XCB/commit/b78e33f7cdf8141b085a4f8773adda6c4a4870c3.patch";
+        hash = "sha256-r1X/tGCALZOS35fNx/9udznNvLxC73o7M2U1MVqXcf0=";
+        revert = true;
+        excludes = [ "lib/X11/XCB.pm" ];
+      })
+    ];
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [
