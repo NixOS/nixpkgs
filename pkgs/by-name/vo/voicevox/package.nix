@@ -12,6 +12,8 @@
   moreutils,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   _7zz,
   electron,
@@ -48,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ' && electron-builder --config electron-builder.config.cjs --publish never' ""
   '';
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
+    inherit pnpm;
+
     fetcherVersion = 1;
     hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
   };
@@ -74,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     moreutils
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems

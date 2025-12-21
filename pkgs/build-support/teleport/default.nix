@@ -11,6 +11,8 @@
   openssl,
   pkg-config,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustc,
   stdenv,
   xdg-utils,
@@ -73,8 +75,13 @@ let
       hash = cargoHash;
     };
 
-    pnpmDeps = pnpm_10.fetchDeps {
-      inherit src pname version;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        src
+        pname
+        version
+        ;
+      pnpm = pnpm_10;
       fetcherVersion = 2;
       hash = pnpmHash;
     };
@@ -83,7 +90,8 @@ let
       binaryen
       cargo
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook

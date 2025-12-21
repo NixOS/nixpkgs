@@ -14,6 +14,8 @@
   libpulseaudio,
   autoPatchelfHook,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nix-update-script,
   withTTS ? true,
@@ -33,20 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZFAsyH+5duKerZissOR/lESLetqqEMLk86msLlQO1xU=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-7fYD4lTSLCMOa+CqGlL45Mjw6qMfIJddPcRF5/dGGrk=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # vesktop uses venmic, which is a shipped as a prebuilt node module

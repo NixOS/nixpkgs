@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm_10,
   python3,
   nodejs,
@@ -122,9 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K/E5bQraTlvNx1Cd0bKyY6ZhesafGccqVZ9Mu6Q0pZ0=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    pname = "immich";
-    inherit (finalAttrs) version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-i0JHKjsQcdDUrDLK0hJGOvVRh/aOyvms/k+6WEPbyh8=";
   };
@@ -139,8 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pkg-config
-    pnpm_10
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
     python3
     makeWrapper
     node-gyp # for building node_modules/sharp from source
@@ -239,8 +241,8 @@ stdenv.mkDerivation (finalAttrs: {
         binaryen
         extism-js
         nodejs
+        pnpmConfigHook
         pnpm
-        pnpm.configHook
       ];
 
       buildPhase = ''
@@ -268,8 +270,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         nodejs
+        pnpmConfigHook
         pnpm
-        pnpm.configHook
       ];
 
       buildPhase = ''

@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pnpm_10,
   nodejs,
   electron,
@@ -24,14 +26,20 @@ stdenv.mkDerivation (final: {
 
   pnpm = pnpm_10;
 
-  pnpmDeps = final.pnpm.fetchDeps {
-    inherit (final) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (final)
+      pname
+      version
+      src
+      pnpm
+      ;
     fetcherVersion = 2;
     hash = "sha256-ZyQcuZYwfc0a5PgfYgvp2GdfV3cBf5sb8oxJtI4+kp4=";
   };
 
   nativeBuildInputs = [
-    final.pnpm.configHook
+    pnpmConfigHook
+    final.pnpm
     nodejs
     makeWrapper
     copyDesktopItems

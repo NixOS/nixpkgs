@@ -5,15 +5,13 @@
   nodejs,
   npmHooks,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   systemdMinimal,
   nixosTests,
   nix-update-script,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 }:
-
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
   version = "2.6.3";
@@ -25,8 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-50f5cSwrLiGfMeb3pqOc+599f0y8vG/7emQO1GLrO/4=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-Z8wZX4kGvCG6uAwBxhtY8kFn7WPid8PuxPFjr95nE/I=";
   };
@@ -34,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     npmHooks.npmInstallHook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = lib.optionals withSystemd [
