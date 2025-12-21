@@ -28727,6 +28727,12 @@
     githubId = 5121426;
     name = "Albert Safin";
   };
+  yadokani389 = {
+    email = "yadokani389@gmail.com";
+    github = "yadokani389";
+    githubId = 155296849;
+    name = "yadokani389";
+  };
   yah = {
     email = "yah@singularpoint.cc";
     github = "wangxiaoerYah";
