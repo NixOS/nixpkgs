@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "xmlstarlet";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ normalcea ];
   };
 }
