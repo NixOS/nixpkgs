@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/bytecodealliance/cargo-wasi/blob/0.1.28/tests/tests/support.rs#L13-L18
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Cargo subcommand to build code for the wasm32-wasi target";
     mainProgram = "cargo-wasi";
     homepage = "https://bytecodealliance.github.io/cargo-wasi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

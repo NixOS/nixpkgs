@@ -21,7 +21,7 @@
   direnv,
   fzf,
   gawk,
-  gperf,
+  git,
   helm-ls,
   himalaya,
   htop,
@@ -31,7 +31,6 @@
   libgit2,
   llvmPackages,
   neovim-unwrapped,
-  nim1,
   nodejs,
   openscad,
   openssh,
@@ -71,6 +70,8 @@
   pandoc,
   # nvim-tinygit
   gitMinimal,
+  # opencode-nvim,
+  opencode,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -102,6 +103,8 @@
   impl,
   reftools,
   revive,
+  tree-sitter-grammars,
+  neovimUtils,
   # hurl dependencies
   hurl,
   # must be lua51Packages
@@ -823,13 +826,6 @@ assertNoAdditions {
     '';
   };
 
-  completion-treesitter = super.completion-treesitter.overrideAttrs {
-    dependencies = with self; [
-      completion-nvim
-      nvim-treesitter
-    ];
-  };
-
   conjure = super.conjure.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
@@ -1228,10 +1224,6 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   forms = super.forms.overrideAttrs {
     dependencies = [ self.self ];
   };
@@ -1289,7 +1281,7 @@ assertNoAdditions {
     '';
   };
 
-  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (oa: {
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (old: {
     # add this to your lua config to prevent the plugin from trying to write in the
     # nix store:
     # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
@@ -1298,7 +1290,7 @@ assertNoAdditions {
       gawk
     ];
     dependencies = [ self.fzf-vim ];
-    passthru = oa.passthru // {
+    passthru = old.passthru // {
 
       initLua = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
     };
@@ -1361,16 +1353,19 @@ assertNoAdditions {
       nvim-treesitter
     ];
     nvimSkipModules = [
+      "init"
       # _GO_NVIM_CFG
+      "go.comment"
+      "go.format"
+      "go.ginkgo"
+      "go.gotest"
+      "go.gotests"
       "go.inlay"
       "go.project"
-      "go.comment"
+      "go.snips"
       "go.tags"
-      "go.gotests"
-      "go.format"
       "go.ts.go"
       "go.ts.nodes"
-      "go.snips"
       "snips.go"
     ];
   };
@@ -1427,7 +1422,7 @@ assertNoAdditions {
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
+    dependencies = [ self.nvim-treesitter-parsers.haskell ];
   };
 
   haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
@@ -1475,7 +1470,7 @@ assertNoAdditions {
   hurl-nvim = super.hurl-nvim.overrideAttrs {
     dependencies = with self; [
       nui-nvim
-      nvim-treesitter
+      nvim-treesitter-parsers.hurl
       plenary-nvim
     ];
 
@@ -1505,9 +1500,13 @@ assertNoAdditions {
   };
 
   indent-tools-nvim = super.indent-tools-nvim.overrideAttrs {
+    checkInputs = [
+      # nvim-treesitter-textobjects dep
+      self.nvim-treesitter
+    ];
     dependencies = with self; [
       arshlib-nvim
-      nvim-treesitter
+      # Optional dep for repeatable jumps
       nvim-treesitter-textobjects
     ];
   };
@@ -1786,6 +1785,10 @@ assertNoAdditions {
     };
   });
 
+  lsp-format-modifications-nvim = super.lsp-format-modifications-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   lspcontainers-nvim = super.lspcontainers-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1853,11 +1856,9 @@ assertNoAdditions {
 
   markdoc-nvim = super.markdoc-nvim.overrideAttrs {
     dependencies = with self; [
-      (nvim-treesitter.withPlugins (p: [
-        p.markdown
-        p.markdown_inline
-        p.html
-      ]))
+      nvim-treesitter-parsers.markdown
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.html
     ];
   };
 
@@ -1998,7 +1999,6 @@ assertNoAdditions {
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       hydra-nvim
     ];
   };
@@ -2059,6 +2059,13 @@ assertNoAdditions {
       "neorepl.bufs"
       "neorepl.map"
       "neorepl.repl"
+    ];
+  };
+
+  neorg = super.neorg.overrideAttrs {
+    dependencies = [
+      (neovimUtils.grammarToPlugin tree-sitter-grammars.tree-sitter-norg)
+      (neovimUtils.grammarToPlugin tree-sitter-grammars.tree-sitter-norg-meta)
     ];
   };
 
@@ -2201,7 +2208,6 @@ assertNoAdditions {
     dependencies = with self; [
       neotest
       nvim-nio
-      nvim-treesitter
       plenary-nvim
     ];
   };
@@ -2311,6 +2317,7 @@ assertNoAdditions {
   };
 
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
+    checkInputs = [ git ];
     dependencies = with self; [
       plenary-nvim
       nui-nvim
@@ -2325,6 +2332,7 @@ assertNoAdditions {
     checkInputs = with self; [
       neo-tree-nvim
       # FIXME: propagate `neo-tree` dependencies
+      git
       nui-nvim
       plenary-nvim
     ];
@@ -2499,10 +2507,6 @@ assertNoAdditions {
     doInstallCheck = true;
   };
 
-  nvim-gps = super.nvim-gps.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
@@ -2626,13 +2630,9 @@ assertNoAdditions {
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       none-ls-nvim
+      nvim-treesitter-parsers.nu
     ];
-  };
-
-  nvim-paredit = super.nvim-paredit.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
   };
 
   nvim-rip-substitute = super.nvim-rip-substitute.overrideAttrs {
@@ -2650,13 +2650,6 @@ assertNoAdditions {
     checkInputs = [
       # Optional cmp integration
       self.nvim-cmp
-    ];
-  };
-
-  nvim-surround = super.nvim-surround.overrideAttrs {
-    checkInputs = [
-      # Optional treesitter integration
-      self.nvim-treesitter
     ];
   };
 
@@ -2744,10 +2737,6 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter ];
   };
 
-  nvim-trevJ-lua = super.nvim-trevJ-lua.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
-
   nvim-ufo = super.nvim-ufo.overrideAttrs {
     dependencies = [ self.promise-async ];
   };
@@ -2776,6 +2765,7 @@ assertNoAdditions {
       nvim-tree-lua
       neo-tree-nvim
       # FIXME: should propagate from neo-tree-nvim
+      git
       nui-nvim
       plenary-nvim
     ];
@@ -2869,6 +2859,13 @@ assertNoAdditions {
     };
   });
 
+  opencode-nvim = super.opencode-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+      opencode
+    ];
+  };
+
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
   openscad-nvim = super.openscad-nvim.overrideAttrs {
@@ -2940,7 +2937,6 @@ assertNoAdditions {
     dependencies = with self; [
       nvim-parinfer
       nvim-paredit
-      nvim-treesitter
     ];
   };
 
@@ -2990,13 +2986,6 @@ assertNoAdditions {
 
   plantuml-nvim = super.plantuml-nvim.overrideAttrs {
     dependencies = [ self.LibDeflate-nvim ];
-  };
-
-  playground = super.playground.overrideAttrs {
-    dependencies = with self; [
-      # we need the 'query' grammar to make
-      (nvim-treesitter.withPlugins (p: [ p.query ]))
-    ];
   };
 
   poimandres-nvim = super.poimandres-nvim.overrideAttrs {
@@ -3079,7 +3068,6 @@ assertNoAdditions {
 
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-treesitter
       plenary-nvim
     ];
   };
@@ -3112,8 +3100,8 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  rocks-nvim = super.rocks-nvim.overrideAttrs (oa: {
-    passthru = oa.passthru // {
+  rocks-nvim = super.rocks-nvim.overrideAttrs (old: {
+    passthru = old.passthru // {
       initLua = ''
         vim.g.rocks_nvim = {
           luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
@@ -3263,7 +3251,7 @@ assertNoAdditions {
   };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (
-    oa:
+    old:
     let
       libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
     in
@@ -3273,7 +3261,7 @@ assertNoAdditions {
           --replace-fail "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or '${lib.escapeShellArg libsqlite}'"
       '';
 
-      passthru = oa.passthru // {
+      passthru = old.passthru // {
         initLua = ''vim.g.sqlite_clib_path = "${libsqlite}"'';
       };
 
@@ -3285,10 +3273,6 @@ assertNoAdditions {
       ];
     }
   );
-
-  ssr-nvim = super.ssr-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
-  };
 
   startup-nvim = super.startup-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -3352,14 +3336,6 @@ assertNoAdditions {
         description = "synctex support between vim/neovim and evince";
       };
     });
-
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs (old: {
-    dependencies = [ self.nvim-treesitter ];
-
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ callumio ];
-    };
-  });
 
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
@@ -3610,18 +3586,14 @@ assertNoAdditions {
   };
 
   tsc-nvim = super.tsc-nvim.overrideAttrs {
-    patches = [ ./patches/tsc.nvim/fix-path.patch ];
-
     postPatch = ''
-      substituteInPlace lua/tsc/utils.lua --replace-fail '@tsc@' ${typescript}/bin/tsc
+      substituteInPlace lua/tsc/utils.lua --replace-fail \
+      'bin_name = bin_name or "tsc"' \
+      'bin_name = bin_name or "${typescript}/bin/tsc"'
     '';
 
     # Unit test
     nvimSkipModules = "tsc.better-messages-test";
-  };
-
-  tssorter-nvim = super.tssorter-nvim.overrideAttrs {
-    dependencies = [ self.nvim-treesitter ];
   };
 
   tv-nvim = super.tv-nvim.overrideAttrs {
@@ -3664,7 +3636,7 @@ assertNoAdditions {
         sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
       };
     in
-    super.unicode-vim.overrideAttrs (oa: {
+    super.unicode-vim.overrideAttrs (old: {
       # redirect to /dev/null else changes terminal color
       buildPhase = ''
         cp "${unicode-data}" autoload/unicode/UnicodeData.txt
@@ -3672,8 +3644,7 @@ assertNoAdditions {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
 
-      passthru = oa.passthru // {
-
+      passthru = old.passthru // {
         initLua = ''vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"'';
       };
     });
@@ -3965,11 +3936,6 @@ assertNoAdditions {
     buildInputs = [ vim ];
   };
 
-  vim-illuminate = super.vim-illuminate.overrideAttrs {
-    # Optional treesitter integration
-    checkInputs = [ self.nvim-treesitter ];
-  };
-
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace autoload/vimisort.vim \
@@ -4193,7 +4159,6 @@ assertNoAdditions {
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
         marcweber
-        jagajaga
         mel
       ];
       platforms = lib.platforms.unix;
@@ -4215,6 +4180,7 @@ assertNoAdditions {
       # Optional shipwright
       "zenbones.shipwright.runners.alacritty"
       "zenbones.shipwright.runners.foot"
+      "zenbones.shipwright.runners.ghostty"
       "zenbones.shipwright.runners.iterm"
       "zenbones.shipwright.runners.kitty"
       "zenbones.shipwright.runners.lightline"

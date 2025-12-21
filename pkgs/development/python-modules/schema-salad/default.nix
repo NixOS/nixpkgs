@@ -84,11 +84,11 @@ buildPythonPackage rec {
     pycodegen = [ black ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ veprbl ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

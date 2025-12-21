@@ -19,10 +19,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Live coding demos without Context Switching";
     homepage = "https://github.com/dgageot/demoit";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "demoit";
   };

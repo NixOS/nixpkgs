@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ntbtls-config" $dev
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny TLS 1.2 only implementation";
     mainProgram = "ntbtls-config";
     homepage = "https://www.gnupg.org/software/ntbtls/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ joachifm ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ joachifm ];
   };
 }

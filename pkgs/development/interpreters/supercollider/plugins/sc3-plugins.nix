@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
     ignoredVersions = "rc|beta";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

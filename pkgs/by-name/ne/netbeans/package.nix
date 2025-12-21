@@ -91,7 +91,6 @@ stdenv.mkDerivation {
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [
-      sander
       rszibele
       kashw2
     ];

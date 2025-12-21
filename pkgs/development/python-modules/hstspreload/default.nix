@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hstspreload" ];
 
-  meta = with lib; {
+  meta = {
     description = "Chromium HSTS Preload list";
     homepage = "https://github.com/sethmlarson/hstspreload";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -68,14 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pattypan";
-    maintainers = with maintainers; [ fee1-dead ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    maintainers = with lib.maintainers; [ fee1-dead ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];

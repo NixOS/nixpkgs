@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-/2WRP5d8hZqUxWEb2Tnbj5DyflZ6TfMnH7J/SxHyM0Y=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v3.3.0/collectives-3.3.0.tar.gz",
-    "version": "3.3.0",
+    "hash": "sha256-a71w9Ya8bZdo4/H225vw2FjSBSMM57hLbcMfBN2aSs0=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v3.4.0/collectives-3.4.0.tar.gz",
+    "version": "3.4.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-5Za0sTodxsRyon5KKC1oWC/kK6ZRsglEkecjckO8NNk=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.7/contacts-v7.3.7.tar.gz",
-    "version": "7.3.7",
+    "hash": "sha256-hUYfZ3EX0sLOWoaH7NGpashgKS8gf0YPpwwEniJL0jk=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.8/contacts-v7.3.8.tar.gz",
+    "version": "7.3.8",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-ogtvqkOuuYlnSFmVqN7cYCqJdUStU7ORocMUoxjGLlY=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.15.4/deck-v1.15.4.tar.gz",
-    "version": "1.15.4",
+    "hash": "sha256-d3z0Z+3zc25kqmlz+mZkqsmRxoENIYBXiL4pwURJCNI=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.15.5/deck-v1.15.5.tar.gz",
+    "version": "1.15.5",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-gUFrPO3Dxxhx0qvXNML7EeNOtiz0UaC2Xegk78+BZj8=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.2/forms-v5.2.2.tar.gz",
-    "version": "5.2.2",
+    "hash": "sha256-yCyGcCHTmgSjZ7U3h79jeYW69oIIVF4kd5wGxDBmK2s=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.3/forms-v5.2.3.tar.gz",
+    "version": "5.2.3",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-ViAMVoJ82G4UJ4m/unUqJH9I8mMNN5mx3HSJqfsGiQ4=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.1.10/groupfolders-v19.1.10.tar.gz",
-    "version": "19.1.10",
+    "hash": "sha256-UJyKjn3nurTVw2+F2zwDgPGyJ94F3rQb9p5HUARNWa4=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v19.1.11/groupfolders-v19.1.11.tar.gz",
+    "version": "19.1.11",
     "description": "Admin configured folders shared with everyone in a team.\n\nFolders can be configured from *Team folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more teams, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -170,9 +170,9 @@
     ]
   },
   "integration_deepl": {
-    "hash": "sha256-WjTg/+ckoZ/xFrfN0LaLvWIM/JbbnfvVO4EbnRnvB60=",
-    "url": "https://github.com/nextcloud-releases/integration_deepl/releases/download/v2.0.0/integration_deepl-v2.0.0.tar.gz",
-    "version": "2.0.0",
+    "hash": "sha256-o50BZEMtN81UuemxP4+lJt1uI/40EwXiHfaf8FtvkbM=",
+    "url": "https://github.com/nextcloud-releases/integration_deepl/releases/download/v2.1.0/integration_deepl-v2.1.0.tar.gz",
+    "version": "2.1.0",
     "description": "Deepl integration providing an translations through deepl.com with Nextcloud\n\nThis app integrates with [Nextcloud Assistant](https://apps.nextcloud.com/apps/assistant) to offer translation services We recommend to install Assistant additionally and activate Deepl as translation provider in the Artifical Intelligence admin settings.\n\nThis app also integrates with the translation API of Nextcloud server to offer translation services without Assistant. Currently this is available in Text and Talk.\n\nTo run translations and any other Task Processing tasks synchronously, run the following command in a background process (10 is the interval in seconds when the process should relaunch to use the latest php changes):\n\n```sh\nset -e; while true; do occ background-job:worker -v -t 10 \"OC\\TaskProcessing\\SynchronousBackgroundJob\"; done\n```\n\n## Ethical AI Rating\n### Rating: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/integration_deepl",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-GgUUah/A+bGdJ/LnUjpROwW6157Kl+MXXFI9UTsQJAU=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.0/mail-v5.6.0.tar.gz",
-    "version": "5.6.0",
+    "hash": "sha256-NKfGt1KNri30fB4WeIhcnOjWooRJ8GCY9nCbl2X66W8=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.6.4/mail-v5.6.4.tar.gz",
+    "version": "5.6.4",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -250,9 +250,9 @@
     ]
   },
   "notes": {
-    "hash": "sha256-tFR9r5kmR7Egczt62I7k8JUllAc4cNu95d3NSUGD108=",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.12.3/notes-v4.12.3.tar.gz",
-    "version": "4.12.3",
+    "hash": "sha256-iiNXIvq+rUbbecU646pyRpHP0EjUdQT1ybKMS2JQbwc=",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.12.4/notes-v4.12.4.tar.gz",
+    "version": "4.12.4",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into apps ([Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios), as well as [3rd-party apps](https://github.com/nextcloud/notes/wiki#3rd-party-clients) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -350,9 +350,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-W6P+2T2QDWI3/jsAHoPMfAaY7l3N8IyF7G/FwVNKeXg=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.7.6/richdocuments-v8.7.6.tar.gz",
-    "version": "8.7.6",
+    "hash": "sha256-Mb1eWB6U1jg99J1Cu82rgswuRlmQJUoxZ/bzJ+HeJdk=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.7.7/richdocuments-v8.7.7.tar.gz",
+    "version": "8.7.7",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -470,9 +470,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-kRIxEohejrCt1OQDDjKXRfawBL5utoPjSZ2ruSF0T0Q=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.0/user_saml-v7.1.0.tar.gz",
-    "version": "7.1.0",
+    "hash": "sha256-FWC1n/23XmqGKmq+BDkdor6IbkN8Q7IYyayHqtdnlFg=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.1/user_saml-v7.1.1.tar.gz",
+    "version": "7.1.1",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "whiteboard": {
-    "hash": "sha256-QO6CkELExGuqsPCg5E6VW8p6RBR6M160yNPF1z2Y3ns=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.4.1/whiteboard-v1.4.1.tar.gz",
-    "version": "1.4.1",
+    "hash": "sha256-H9iRas76993ApcJpKyZfPkfpcbElza6QkbgYJjT3X0I=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.4.2/whiteboard-v1.4.2.tar.gz",
+    "version": "1.4.2",
     "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
     "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [

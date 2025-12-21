@@ -30,11 +30,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion tydra.{bash,fish} _tydra
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Shortcut menu-based task runner, inspired by Emacs Hydra";
     homepage = "https://github.com/Mange/tydra";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.mit;
     mainProgram = "tydra";
   };
 }

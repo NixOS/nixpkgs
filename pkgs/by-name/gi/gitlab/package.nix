@@ -78,12 +78,12 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
-              cp -R ext/glfm_markdown $out
+              cp -R ext/gitlab_glfm_markdown $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-f2a6/xPNGfiT4bbKAlHYYcqc0PkEkW+cpH7QbJMCY7c=";
+          hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
         };
 
         dontBuild = false;
@@ -104,7 +104,6 @@ let
         '';
 
         postInstall = ''
-          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
           find $out -type f -name .rustc_info.json -delete
         '';
       };
@@ -321,21 +320,21 @@ stdenv.mkDerivation {
   };
 
   meta =
-    with lib;
+
     {
       homepage = "http://www.gitlab.com/";
-      platforms = platforms.linux;
-      teams = [ teams.gitlab ];
+      platforms = lib.platforms.linux;
+      teams = [ lib.teams.gitlab ];
     }
     // (
       if gitlabEnterprise then
         {
-          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+          license = lib.licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
           description = "GitLab Enterprise Edition";
         }
       else
         {
-          license = licenses.mit;
+          license = lib.licenses.mit;
           description = "GitLab Community Edition";
           longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
         }

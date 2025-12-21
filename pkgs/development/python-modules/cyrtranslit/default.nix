@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cyrtranslit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Transliterate Cyrillic script to Latin script and vice versa";
     homepage = "https://github.com/opendatakosovo/cyrillic-transliteration";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

@@ -77,7 +77,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Modbus protocol";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
@@ -87,8 +87,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
     changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pymodbus.simulator";
   };
 }

@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create and update Microsoft Word .docx files";
     homepage = "https://python-docx.readthedocs.io/";
     changelog = "https://github.com/python-openxml/python-docx/blob/v${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alexchapman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alexchapman ];
   };
 }

@@ -76,11 +76,11 @@ buildPythonPackage rec {
     "tests/testing/test_time_travel.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python datetimes made easy";
     homepage = "https://github.com/sdispater/pendulum";
     changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

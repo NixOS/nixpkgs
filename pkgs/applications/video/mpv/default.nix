@@ -264,6 +264,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow mach-lookup (global-name "com.apple.coreservices.launchservicesd"))
+  '';
+
   postInstall = ''
     # Use a standard font
     mkdir -p $out/share/mpv
@@ -347,7 +351,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
       fpletz
-      globin
       SchweGELBin
     ];
     platforms = lib.platforms.unix;

@@ -29,16 +29,16 @@ let
       "--skip=test_wasm"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
-      license = with licenses; [
+      license = with lib.licenses; [
         mit # or
         asl20
       ];
-      maintainers = with maintainers; [ RossSmyth ];
+      maintainers = with lib.maintainers; [ RossSmyth ];
       broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
   };

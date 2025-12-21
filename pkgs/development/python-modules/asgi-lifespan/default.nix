@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgi_lifespan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Programmatic startup/shutdown of ASGI apps";
     homepage = "https://github.com/florimondmanca/asgi-lifespan";
     changelog = "https://github.com/florimondmanca/asgi-lifespan/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

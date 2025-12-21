@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extremely fast compression algorithm";
     longDescription = ''
       Very fast lossless compression algorithm, providing compression speed
@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
       multi-core systems.
     '';
     homepage = "https://lz4.github.io/lz4/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       gpl2Plus
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "lz4";
-    maintainers = [ maintainers.tobim ];
+    maintainers = [ lib.maintainers.tobim ];
   };
 })

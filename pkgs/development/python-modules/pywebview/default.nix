@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "6.0";
+  version = "6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     tag = version;
-    hash = "sha256-EuDm3Ixw1z5xwpl4U15Xwg5mE3dXslTvv0N0XyjxrAg=";
+    hash = "sha256-vqdJRxZbHNu2Sq318RnJjzDjYRRCSiO72WM+flKwW7g=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webview" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight cross-platform wrapper around a webview";
     homepage = "https://github.com/r0x0r/pywebview";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

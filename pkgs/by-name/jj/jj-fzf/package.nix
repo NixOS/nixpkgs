@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text UI for Jujutsu based on fzf";
     homepage = "https://github.com/tim-janik/jj-fzf";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ bbigras ];
-    platforms = platforms.all;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ bbigras ];
+    platforms = lib.platforms.all;
   };
 }

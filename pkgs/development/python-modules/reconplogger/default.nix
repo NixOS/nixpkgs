@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "reconplogger_tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to ease the standardization of logging within omni:us";
     homepage = "https://github.com/omni-us/reconplogger";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

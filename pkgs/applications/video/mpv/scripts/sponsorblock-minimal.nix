@@ -27,11 +27,11 @@ buildLua {
       --replace-fail "sha256sum" "${lib.getExe' coreutils "sha256sum"}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal script to skip sponsored segments of YouTube videos";
     homepage = "https://codeberg.org/jouni/mpv_sponsorblock_minimal";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ arthsmn ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ arthsmn ];
   };
 }

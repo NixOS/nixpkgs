@@ -28,11 +28,11 @@ buildHomeAssistantComponent rec {
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/weltenwort/home-assistant-rct-power-integration/releases/tag/${src.tag}";
     description = "Custom integration for RCT Power Inverters";
     homepage = "https://github.com/weltenwort/home-assistant-rct-power-integration";
-    maintainers = with maintainers; [ _9R ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _9R ];
+    license = lib.licenses.mit;
   };
 }

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixbit";
-  version = "0.5.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = "nixbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3zDRR8zaO0VViMI8gtAVJvpeNp1C/VNHUNMdqqxFlPY=";
+    hash = "sha256-Vbv6+d0jUNxI7TP06vIey3a7fCzX/jgnNJZ18ntBN2k=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       --fish <(xvfb-run $out/bin/nixbit --completion-fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KDE Plasma application to update your NixOS system from a git repository";
     homepage = "https://github.com/pbek/nixbit";
     changelog = "https://github.com/pbek/nixbit/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbek ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "nixbit";
   };
 })

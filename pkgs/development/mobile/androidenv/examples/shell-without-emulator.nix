@@ -48,6 +48,8 @@ let
     includeSystemImages = false;
     includeEmulator = false;
 
+    platformVersions = [ "latest" ];
+
     # Accepting more licenses declaratively:
     extraLicenses = [
       # Already accepted for you with the global accept_license = true or

@@ -36,11 +36,11 @@ buildPythonPackage rec {
     "tests/test_smartapp.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation to work with SmartApp lifecycle events";
     homepage = "https://github.com/andrewsayre/pysmartapp";
     changelog = "https://github.com/andrewsayre/pysmartapp/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

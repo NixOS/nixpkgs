@@ -42,13 +42,13 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ asl20 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ghuntley
       jlesquembre
       cpcloud

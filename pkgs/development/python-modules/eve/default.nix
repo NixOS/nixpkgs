@@ -39,11 +39,11 @@ buildPythonPackage rec {
   # Tests call a running mongodb instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open source Python REST API framework designed for human beings";
     homepage = "https://python-eve.org/";
     changelog = "https://github.com/pyeve/eve/blob/${src.tag}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

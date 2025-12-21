@@ -16,6 +16,7 @@
   flex,
   nfs-utils,
   acl,
+  prometheus-cpp-lite,
   useCeph ? false,
   ceph,
   useDbus ? true,
@@ -24,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "6.5";
+  version = "9.2";
 
   outputs = [
     "out"
@@ -35,13 +36,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
-    rev = "V${version}";
-    hash = "sha256-OHGmEzHu8y/TPQ70E2sicaLtNgvlf/bRq8JRs6S1tpY=";
+    tag = "V${version}";
+    hash = "sha256-2EAkr+zu7Jc2j/8BrJ/+Skv/D3rTSbh4A5JTRhWafEk=";
   };
 
   patches = lib.optional useDbus ./allow-bypassing-dbus-pkg-config-test.patch;
 
   preConfigure = "cd src";
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-redundant-move";
 
   cmakeFlags = [
     "-DUSE_SYSTEM_NTIRPC=ON"
@@ -50,6 +53,7 @@ stdenv.mkDerivation rec {
     "-DUSE_ACL_MAPPING=ON"
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DUSE_MAN_PAGE=ON"
+    "-DUSE_MONITORING=ON"
   ]
   ++ lib.optionals useCeph [
     "-DUSE_RADOS_RECOV=ON"
@@ -85,14 +89,11 @@ stdenv.mkDerivation rec {
     ntirpc
     liburcu
     nfs-utils
+    prometheus-cpp-lite
   ]
   ++ lib.optional useCeph ceph;
 
   postPatch = ''
-    substituteInPlace src/CMakeLists.txt --replace-fail \
-      "cmake_minimum_required(VERSION 2.6.3)" \
-      "cmake_minimum_required(VERSION 3.10)"
-
     substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
   '';
 
@@ -114,12 +115,12 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NFS server that runs in user space";
     homepage = "https://github.com/nfs-ganesha/nfs-ganesha/wiki";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "ganesha.nfsd";
     outputsToInstall = [
       "out"

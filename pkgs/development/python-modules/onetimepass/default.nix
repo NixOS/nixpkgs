@@ -34,11 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "onetimepass" ];
 
-  meta = with lib; {
+  meta = {
     description = "One-time password library for HMAC-based (HOTP) and time-based (TOTP) passwords";
     homepage = "https://github.com/tadeck/onetimepass";
     changelog = "https://github.com/tadeck/onetimepass/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zakame ];
+    license = lib.licenses.mit;
   };
 }

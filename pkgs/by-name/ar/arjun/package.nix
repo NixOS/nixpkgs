@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "arjun";
-  version = "2.2.7";
+  version = "2.2.7-unstable-2025-02-20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Arjun";
-    tag = version;
-    hash = "sha256-XEfCQEvRCvmNQ8yOlaR0nd7knhK1fQIrXEfQgrdVDrs=";
+    rev = "d1fb995cb1e064d4e171d83f19f6af79b0a3c5ce";
+    hash = "sha256-z6YGCwypp69+98KSC1YUzJETfwb3V4Qp1sV5V3N9zMI=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "HTTP parameter discovery suite";
     homepage = "https://github.com/s0md3v/Arjun";
-    changelog = "https://github.com/s0md3v/Arjun/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/s0md3v/Arjun/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "arjun";

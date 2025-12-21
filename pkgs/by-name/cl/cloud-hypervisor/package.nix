@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   dtc,
@@ -12,29 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bPPs/4XMcvOH4BGfQrjQdvgjGWae4UEZjzPKjalDN3w=";
+    hash = "sha256-U2jNKdc+CWB/Z9TvAC0xfHDipfe4dhWjL9VXbBVaNJE=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "vsock-seccomp-Rust-1.90.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/ec57aade1563075e37b8e9ccc0b85fe2c04a54b8.patch";
-      hash = "sha256-M+I+ZbiNDV1a8Y46+/mPTyDlQgQS7G6ytvPgli0NhJ0=";
-    })
-    (fetchpatch {
-      name = "vfio-user-seccomp-Rust-1.90.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/95b8c6afdd6eec9810243f92ec1956dccfe305da.patch";
-      hash = "sha256-kCP/Fu0Dg+GdnwyFQLqZWKlbqO9w4KRJcbV4sReSDYM=";
-    })
-  ];
-
-  cargoHash = "sha256-5EK9V9yiF/UjmlYSKBIJgQOA1YU33ezicLikWYnKFAo=";
+  cargoHash = "sha256-M1jVvFo9Bo/ZFqaFtzwp2rusl1T1m7jAkEobOF0cnlA=";
 
   separateDebugInfo = true;
 

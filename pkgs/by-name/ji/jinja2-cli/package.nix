@@ -49,10 +49,10 @@ python3.pkgs.buildPythonApplication rec {
     yaml = [ pyyaml ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for Jinja2";
     homepage = "https://github.com/mattrobenolt/jinja2-cli";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "jinja2";
   };

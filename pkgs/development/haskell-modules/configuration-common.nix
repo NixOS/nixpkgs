@@ -718,6 +718,10 @@ with haskellLib;
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
 
+  # 2025-12-11: Too strict bound on containers (<0.7)
+  # https://github.com/byteverse/disjoint-containers/pull/15
+  disjoint-containers = doJailbreak super.disjoint-containers;
+
   # Test suite doesn't compile with 9.6
   # https://github.com/sebastiaanvisser/fclabels/issues/45
   # Doesn't compile with 9.8 at all
@@ -3032,6 +3036,17 @@ with haskellLib;
     })
   ] (doJailbreak super.http2-client);
 
+  # Needs tls >= 2.1.10
+  http2-tls =
+    lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
+      "haskellPackages.http2-tls: tls override can be removed"
+      (super.http2-tls.override { tls = self.tls_2_1_12; });
+
+  # Relax http2 version bound (5.3.9 -> 5.3.10)
+  # https://github.com/well-typed/grapesy/issues/297
+  # Tests fail with duplicate IsLabel instance error
+  grapesy = dontCheck (doJailbreak super.grapesy);
+
   # doctests are failing https://github.com/alpmestan/taggy-lens/issues/8
   taggy-lens = dontCheck super.taggy-lens;
 
@@ -3904,25 +3919,21 @@ with haskellLib;
       src = src + "/cachix-api";
     } super.cachix-api;
 
-    cachix = lib.pipe super.cachix (
-      [
-        (overrideSrc {
-          inherit version;
-          src = src + "/cachix";
-        })
-        (addBuildDepends [
-          self.pqueue
-        ])
-        (
-          drv:
-          drv.override {
-            nix = self.hercules-ci-cnix-store.nixPackage;
-            hnix-store-core = self.hnix-store-core_0_8_0_0;
-          }
-        )
-      ]
-      # https://github.com/NixOS/nixpkgs/issues/461651
-      ++ lib.optional pkgs.stdenv.isDarwin dontCheck
-    );
+    cachix = lib.pipe super.cachix [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix";
+      })
+      (addBuildDepends [
+        self.pqueue
+      ])
+      (
+        drv:
+        drv.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+          hnix-store-core = self.hnix-store-core_0_8_0_0;
+        }
+      )
+    ];
   }
 )

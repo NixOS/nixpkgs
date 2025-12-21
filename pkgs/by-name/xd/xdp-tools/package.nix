@@ -75,19 +75,19 @@ stdenv.mkDerivation rec {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       tirex
       vcunat
       vifino
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -32,11 +32,11 @@ buildHomeAssistantComponent rec {
     pytest-homeassistant-custom-component
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Home Assistant Mitsubishi Air Conditioner Integration";
     changelog = "https://github.com/pymitsubishi/homeassistant-mitsubishi/releases/tag/v${version}";
     homepage = "https://github.com/pymitsubishi/homeassistant-mitsubishi";
-    maintainers = with maintainers; [ uvnikita ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ uvnikita ];
+    license = lib.licenses.mit;
   };
 }

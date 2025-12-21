@@ -28,26 +28,24 @@
 }:
 
 let
-  tdlib-1811 = tdlib.overrideAttrs (
-    oa: fa: {
-      version = "1.8.11";
-      src = fetchFromGitHub {
-        owner = "tdlib";
-        repo = "td";
-        rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
-        hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
-      };
+  tdlib-1811 = tdlib.overrideAttrs {
+    version = "1.8.11";
+    src = fetchFromGitHub {
+      owner = "tdlib";
+      repo = "td";
+      rev = "3179d35694a28267a0b6273fc9b5bdce3b6b1235";
+      hash = "sha256-XvqqDXaFclWK/XpIxOqAXQ9gcc/dTljl841CN0KrlyA=";
+    };
 
-      # CMake 4 compat
-      postPatch = ''
-        substituteInPlace CMakeLists.txt \
-          --replace-fail 'cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+    # CMake 4 compat
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
 
-        substituteInPlace td/generate/tl-parser/CMakeLists.txt \
-          --replace-fail 'cmake_minimum_required(VERSION 3.0 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
-      '';
-    }
-  );
+      substituteInPlace td/generate/tl-parser/CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 3.0 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10 FATAL_ERROR)'
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "teleports";

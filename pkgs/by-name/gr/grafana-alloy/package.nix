@@ -142,13 +142,13 @@ buildGoModule (finalAttrs: {
     offlineCache = finalAttrs.yarnOfflineCache;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
     mainProgram = "alloy";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
     changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azahi
       flokli
       hbjydev

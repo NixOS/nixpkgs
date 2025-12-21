@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linphone-desktop";
-  version = "5.3.1";
+  version = "5.3.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     group = "BC";
     repo = "linphone-desktop";
     rev = finalAttrs.version;
-    hash = "sha256-TO9JNsOnx4sTJEkai0nDKNyZWcLuGoWfuKLBM79tQvs=";
+    hash = "sha256-YBwN2d8Bhr876xDzzge1CutJEtWkoGJWwkybSKUDiM0=";
   };
 
   patches = [

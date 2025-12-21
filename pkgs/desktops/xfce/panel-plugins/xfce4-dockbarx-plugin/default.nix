@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/dockbarx" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xuzhen/xfce4-dockbarx-plugin";
     description = "Plugins to embed DockbarX into xfce4-panel";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    teams = [ teams.xfce ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

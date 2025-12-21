@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8aFISZ2nzCmxxKkX77jEOE/MWcKwyTw8IGTEbJ0mKWg=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo plugin to easily build Swift packages from Rust code";
     mainProgram = "cargo-swift";
     homepage = "https://github.com/antoniusnaumann/cargo-swift";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ elliot ];
+    maintainers = with lib.maintainers; [ elliot ];
   };
 }

@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     ln -s $out/games/supertux2 $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classic 2D jump'n run sidescroller game";
     homepage = "https://supertux.github.io/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; linux;
     mainProgram = "supertux2";
   };
 }

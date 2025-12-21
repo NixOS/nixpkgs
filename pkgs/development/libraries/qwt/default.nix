@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Qt widgets for technical applications";
     homepage = "http://qwt.sourceforge.net/";
     # LGPL 2.1 plus a few exceptions (more liberal)
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       lgpl21Only
       qwtException
     ];
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

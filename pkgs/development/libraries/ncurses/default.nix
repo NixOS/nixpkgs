@@ -257,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
     execer cannot bin/{reset,tput,tset}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
     longDescription = ''
@@ -271,7 +271,7 @@ stdenv.mkDerivation (finalAttrs: {
       NetBSD as an external package. It should port easily to any
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules =
       let
         base = [
@@ -283,7 +283,7 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.optional withCxx "ncurses++";
       in
       base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 
   passthru = {

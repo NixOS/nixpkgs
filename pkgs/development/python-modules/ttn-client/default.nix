@@ -36,11 +36,11 @@ buildPythonPackage rec {
     "test_connection_auth_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
     changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -5,6 +5,8 @@
   cargo-tauri,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   pkg-config,
   wrapGAppsHook3,
   desktop-file-utils,
@@ -23,7 +25,6 @@
   fontconfig,
   nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
   version = "0.11.1";
@@ -44,7 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo-tauri.hook
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     pkg-config
     wrapGAppsHook3
   ];
@@ -68,12 +70,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   pnpmRoot = ".";
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
     sourceRoot = "source";
     hash = "sha256-MCzRZt+l2wHETOxzSatPnz5G48HjjGrOj3BVP+S7/Ss=";

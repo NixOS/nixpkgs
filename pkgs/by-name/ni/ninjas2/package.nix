@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clearly-broken-software/ninjas2";
     description = "Sample slicer plugin for LV2, VST, and jack standalone";
-    license = with licenses; [ gpl3 ];
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "ninjas2";
   };
 }

@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp pbzx $out/bin
   '';
-  meta = with lib; {
+  meta = {
     description = "Stream parser of Apple's pbzx compression format";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "pbzx";
   };

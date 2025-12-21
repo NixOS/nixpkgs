@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
     homepage = "https://github.com/myriadrf/LimeSuite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.unix;
-    badPlatforms = lib.optionals withGui platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals withGui lib.platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
   };
 }

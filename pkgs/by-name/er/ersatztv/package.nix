@@ -48,11 +48,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Stream custom live channels using your own media";
     homepage = "https://ersatztv.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ allout58 ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ allout58 ];
     mainProgram = "ErsatzTV";
     platforms = dotnet-runtime.meta.platforms;
   };

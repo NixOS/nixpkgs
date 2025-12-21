@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xz ];
 
-  meta = with lib; {
+  meta = {
     description = "Archive of autoconf m4 macros";
     homepage = "https://www.gnu.org/software/autoconf-archive/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -5,14 +5,15 @@
   pkg-config,
   installShellFiles,
   buildGoModule,
+  buildPackages,
   gpgme,
   lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
   libselinux,
-  systemdMinimal,
-  go-md2man,
+  # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
+  systemd,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -21,6 +22,7 @@
   extraPackages ? [ ],
   crun,
   runc,
+  krunkit,
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
@@ -70,7 +72,6 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    go-md2man
     installShellFiles
     makeBinaryWrapper
     python3
@@ -83,12 +84,13 @@ buildGoModule (finalAttrs: {
     libseccomp
     libselinux
     lvm2
-    systemdMinimal
+    systemd
   ];
 
   env = {
     HELPER_BINARIES_DIR = "${placeholder "out"}/libexec/podman"; # used in buildPhase & installPhase
     PREFIX = "${placeholder "out"}";
+    GOMD2MAN = "${buildPackages.go-md2man}/bin/go-md2man";
   };
 
   buildPhase = ''
@@ -134,7 +136,7 @@ buildGoModule (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemdMinimal ]}":$RPATH $out/bin/.podman-wrapped
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
     substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
       --replace-fail sleep '${coreutils}/bin/sleep' \
       --replace-fail /bin/sh '${runtimeShell}'
@@ -166,9 +168,8 @@ buildGoModule (finalAttrs: {
         iproute2
         nftables
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        vfkit
-      ]
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform vfkit) vfkit
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
       ++ extraPackages
     );
 

@@ -5,7 +5,6 @@
   cargo,
   rustPlatform,
   rustc,
-  pyinstaller,
 
   # dependencies
   msgpack,
@@ -46,10 +45,6 @@ buildPythonPackage rec {
 
   dependencies = [
     msgpack
-  ];
-
-  nativeBuildInputs = [
-    pyinstaller
   ];
 
   nativeCheckInputs = [

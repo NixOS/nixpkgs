@@ -1,28 +1,34 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitLab,
+  nix-update-script,
+  nixosTests,
+
+  # build
   cmake,
   extra-cmake-modules,
-  pkg-config,
   kdePackages,
-  kdsingleapplication,
-  zxing-cpp,
-  qxmpp,
+  pkg-config,
+  writableTmpDirAsHomeHook,
+
+  # runtime
   gst_all_1,
-  nix-update-script,
+  kdsingleapplication,
+  qxmpp,
+  zxing-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
-  version = "0.13.0-unstable-2025-12-03";
+  version = "0.13.0-unstable-2025-12-13";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    rev = "f9d9d236aa0fc584771524c1078ab899a9cd5822";
-    hash = "sha256-O3L3VEB7HsPYF0FyJtma98SlxgFIADZd/uhfJyEucGQ=";
+    rev = "eb43bd732997f52c630dc94d45682713c2bb5c75";
+    hash = "sha256-YIK6te7pjD28M/5bkPnYojGeaBNk8j8pt1VPlh+OnXE=";
   };
 
   patches = [
@@ -32,37 +38,44 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkg-config
     kdePackages.wrapQtAppsHook
+    pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
+    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     kdePackages.kio
     kdePackages.kirigami
     kdePackages.kirigami-addons
     kdePackages.knotifications
-    kdePackages.kquickimageedit
+    kdePackages.kquickimageeditor
     kdePackages.prison
+    kdePackages.qqc2-desktop-style
     kdePackages.qtbase
     kdePackages.qtkeychain
-    kdePackages.qttools
-    kdePackages.qtmultimedia
     kdePackages.qtlocation
-    kdePackages.qqc2-desktop-style
+    kdePackages.qtmultimedia
+    kdePackages.qttools
     kdePackages.sonnet
     kdsingleapplication
-    zxing-cpp
     qxmpp
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
+    zxing-cpp
   ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+  ];
+
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.tests.kaidan = nixosTests.kaidan;
 
   meta = {
     description = "User-friendly and modern chat app, using XMPP";

@@ -81,13 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
-    teams = [ teams.geospatial ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.unix;
   };
 })

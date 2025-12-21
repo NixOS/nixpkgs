@@ -51,12 +51,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cantools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools to work with CAN bus";
     homepage = "https://github.com/cantools/cantools";
     changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gray-heron ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gray-heron ];
     mainProgram = "cantools";
   };
 }

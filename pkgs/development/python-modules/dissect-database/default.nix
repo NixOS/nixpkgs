@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.database" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for various database formats";
     homepage = "https://github.com/fox-it/dissect.database";
     changelog = "https://github.com/fox-it/dissect.database/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -23,11 +23,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
 
-  meta = with lib; {
+  meta = {
     description = "Generates (structured) log messages from Prometheus AlertManager webhook notifier";
     mainProgram = "alertmanager-webhook-logger";
     homepage = "https://github.com/tomtom-international/alertmanager-webhook-logger";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpds ];
   };
 }

@@ -27,11 +27,11 @@ buildPecl {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/krakjoe/apcu/releases/tag/v${version}";
     description = "Userland cache for PHP";
     homepage = "https://pecl.php.net/package/APCu";
-    license = licenses.php301;
-    teams = [ teams.php ];
+    license = lib.licenses.php301;
+    teams = [ lib.teams.php ];
   };
 }

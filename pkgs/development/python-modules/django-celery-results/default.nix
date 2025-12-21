@@ -33,11 +33,11 @@ buildPythonPackage rec {
   # Tests need access to a database.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Celery result back end with django";
     homepage = "https://github.com/celery/django-celery-results";
     changelog = "https://github.com/celery/django-celery-results/blob/v${version}/Changelog";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

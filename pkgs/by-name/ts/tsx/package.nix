@@ -3,9 +3,14 @@
   stdenv,
   fetchFromGitHub,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_22,
   versionCheckHook,
 }:
+let
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation rec {
   pname = "tsx";
   version = "4.19.3";
@@ -17,15 +22,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-wdv2oqJNc6U0Fyv4jT+0LUcYaDfodHk1vQZGMdyFF/E=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm';
     fetcherVersion = 1;
     hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
   };
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm'
   ];
 
   buildInputs = [

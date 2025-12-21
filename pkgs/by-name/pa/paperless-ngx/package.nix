@@ -17,7 +17,9 @@
   qpdf,
   tesseract5,
   unpaper,
-  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -28,13 +30,13 @@
   xorg,
 }:
 let
-  version = "2.20.0";
+  version = "2.20.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-uf6/cl41lp2zEp3+gTbTYQlJcM3bdLTtOo+vEUrGIco=";
+    hash = "sha256-aAcE0AUkB5SS4jwFOKCM7+iqc7EqGJv0qjqz0mnj2Wo=";
   };
 
   python = python3.override {
@@ -59,6 +61,8 @@ let
     };
   };
 
+  pnpm' = pnpm_10.override { nodejs = nodejs_20; };
+
   path = lib.makeBinPath [
     ghostscript_headless
     (imagemagickBig.override { ghostscript = ghostscript_headless; })
@@ -77,17 +81,19 @@ let
 
     src = src + "/src-ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      pnpm = pnpm';
       fetcherVersion = 2;
-      hash = "sha256-JqFkA8t5D0SmhlKwhiKIztzWGXf+vO0Ro1ABVGXVzS8=";
+      hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
     };
 
     nativeBuildInputs = [
       node-gyp
       nodejs_20
       pkg-config
-      pnpm.configHook
+      pnpmConfigHook
+      pnpm'
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -169,6 +175,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "celery"
     "django-allauth"
+    "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
     "redis"

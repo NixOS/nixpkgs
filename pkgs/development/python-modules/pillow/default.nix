@@ -141,7 +141,7 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
@@ -151,8 +151,8 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = licenses.mit-cmu;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit-cmu;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
 }

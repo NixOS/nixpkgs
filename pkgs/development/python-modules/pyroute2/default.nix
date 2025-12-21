@@ -40,18 +40,18 @@ buildPythonPackage rec {
     make VERSION
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     changelog = "https://github.com/svinota/pyroute2/blob/${src.tag}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fab
       mic92
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

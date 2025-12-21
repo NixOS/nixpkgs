@@ -80,11 +80,11 @@ buildPythonPackage rec {
     "test_pdb_interaction_capturing_simple"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Workflow management system that facilitates reproducible data analyses";
     homepage = "https://github.com/pytask-dev/pytask";
     changelog = "https://github.com/pytask-dev/pytask/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erooke ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erooke ];
   };
 }

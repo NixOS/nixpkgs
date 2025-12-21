@@ -1,0 +1,93 @@
+diff --git a/app/createThumbnail.js b/app/createThumbnail.js
+index 56875b5..3216e79 100755
+--- a/app/createThumbnail.js
++++ b/app/createThumbnail.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/gjs
++#!@gjs@/bin/gjs
+
+ /* DING: Desktop Icons New Generation for GNOME Shell
+  *
+diff --git a/app/ding.js b/app/ding.js
+index 9a1550a..7bd25fc 100755
+--- a/app/ding.js
++++ b/app/ding.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env gjs
++#!@gjs@/bin/gjs
+
+ /* DING: Desktop Icons New Generation for GNOME Shell
+  *
+@@ -18,6 +18,7 @@
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 'use strict';
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@typelib_path@');
+ imports.gi.versions.Gtk = '3.0';
+ const Gtk = imports.gi.Gtk;
+ const Gio = imports.gi.Gio;
+diff --git a/app/fileItemMenu.js b/app/fileItemMenu.js
+index 4fae9ef..5127eff 100644
+--- a/app/fileItemMenu.js
++++ b/app/fileItemMenu.js
+@@ -520,7 +520,7 @@ var FileItemMenu = class {
+             return;
+         }
+         let xdgEmailCommand = [];
+-        xdgEmailCommand.push('xdg-email');
++        xdgEmailCommand.push('@xdg_utils@/bin/xdg-email');
+         for (let fileItem of this._desktopManager.getCurrentSelection(false)) {
+             fileItem.unsetSelected();
+             xdgEmailCommand.push('--attach');
+diff --git a/app/preferences.js b/app/preferences.js
+index c6517a3..1379a0e 100644
+--- a/app/preferences.js
++++ b/app/preferences.js
+@@ -46,9 +46,12 @@ var prefsWindow;
+  */
+ function init(path) {
+     let schemaSource = GioSSS.get_default();
+-    let schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
++    const schemaSourceGtk = Gio.SettingsSchemaSource.new_from_directory('@gtk3_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++    let schemaGtk = schemaSourceGtk.lookup(Enums.SCHEMA_GTK, true);
++    console.log('schemaGtk: ' + schemaGtk);
+     gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
+-    let schemaObj = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
++    const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++    let schemaObj = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
+     if (!schemaObj) {
+         nautilusSettings = null;
+     } else {
+@@ -56,7 +59,7 @@ function init(path) {
+         nautilusSettings.connect('changed', _onNautilusSettingsChanged);
+         _onNautilusSettingsChanged();
+     }
+-    const compressionSchema = schemaSource.lookup(Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
++    const compressionSchema = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
+     if (!compressionSchema) {
+         nautilusCompression = null;
+     } else {
+diff --git a/extension.js b/extension.js
+index 774fbef..3f2023b 100644
+--- a/extension.js
++++ b/extension.js
+@@ -17,6 +17,7 @@
+  */
+ 'use strict';
+ import Clutter from 'gi://Clutter'
++import GIRepository from 'gi://GIRepository';
+ import GLib from 'gi://GLib'
+ import Gio from 'gi://Gio'
+ import Meta from 'gi://Meta'
+@@ -391,9 +392,9 @@ export default class DING extends Extension {
+                     contents += String.fromCharCode(readData[i]);
+                 }
+             }
+-            let path = `gjs ${GLib.build_filenamev([this.path, 'app', 'ding.js'])}`;
++            let path = `@gjs@/bin/gjs ${GLib.build_filenamev([this.path, 'app', 'ding.js'])}`;
+             if (contents.startsWith(path)) {
+-                let proc = new Gio.Subprocess({argv: ['/bin/kill', filename]});
++                let proc = new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+                 proc.init(null);
+                 proc.wait(null);
+             }

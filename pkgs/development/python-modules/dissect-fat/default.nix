@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.fat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing a parser for the FAT file system";
     homepage = "https://github.com/fox-it/dissect.fat";
     changelog = "https://github.com/fox-it/dissect.fat/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

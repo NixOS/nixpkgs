@@ -86,13 +86,13 @@ stdenv.mkDerivation rec {
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Client UI to inspect Kafka topics, consume, produce and much more";
     homepage = "https://github.com/andrewinci/insulator2";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tc-kaluza ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
 }

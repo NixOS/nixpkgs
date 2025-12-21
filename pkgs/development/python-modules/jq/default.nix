@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.10.0";
+  version = "1.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = "jq.py";
     tag = version;
-    hash = "sha256-xzkOWIMvGBVJtdZWFFIQkfgTivMTxV+dze71E8S6SlM=";
+    hash = "sha256-1BhRX9OWCfHnelktsrje4ejFxMTpSaGbYuocQ2H4pAI=";
   };
 
   env.JQPY_USE_SYSTEM_LIBS = 1;
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for jq, the flexible JSON processor";
     homepage = "https://github.com/mwilliamson/jq.py";
     changelog = "https://github.com/mwilliamson/jq.py/blob/${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ benley ];
   };
 }

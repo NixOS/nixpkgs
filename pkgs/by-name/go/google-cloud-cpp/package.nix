@@ -135,11 +135,11 @@ stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
-    license = with licenses; [ asl20 ];
+  meta = {
+    license = with lib.licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

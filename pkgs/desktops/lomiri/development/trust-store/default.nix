@@ -5,8 +5,8 @@
   fetchpatch,
   gitUpdater,
   testers,
-  # dbus-cpp not compatible with Boost 1.87
-  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  # Uses boost/asio/io_service.hpp
+  # Waiting for https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/19 to get finished & merged
   boost186,
   cmake,
   cmake-extras,
@@ -142,12 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common implementation of a trust store to be used by trusted helpers";
     homepage = "https://gitlab.com/ubports/development/core/trust-store";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "trust-store"
     ];

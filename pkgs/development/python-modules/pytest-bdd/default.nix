@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_bdd" ];
 
-  meta = with lib; {
+  meta = {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jm2dev ];
     mainProgram = "pytest-bdd";
   };
 }

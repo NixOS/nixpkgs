@@ -8,20 +8,24 @@
   setuptools,
 
   # dependencies
+  alive-progress,
   autograd,
   cma,
   deprecated,
-  dill,
   matplotlib,
+  moocore,
   numpy,
   scipy,
 
   # tests
-  pytestCheckHook,
+  jupytext,
   nbformat,
   notebook,
   numba,
+  optuna,
+  pytestCheckHook,
   pythonAtLeast,
+  scikit-learn,
   writeText,
 }:
 
@@ -29,20 +33,20 @@ let
   pymoo_data = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo-data";
-    tag = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
-    hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
+    rev = "8dae7d02078def161ee109184399adc3db25265b";
+    hash = "sha256-dpuRIMqDQ+oKrvK1VAQxPG6vijZMxT6MB8xOswPwv5o=";
   };
 in
 buildPythonPackage rec {
   pname = "pymoo";
-  version = "0.6.1.5";
+  version = "0.6.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
     tag = version;
-    hash = "sha256-IRNYluK6fO1cQq0u9dIJYnI5HWqtTPLXARXNoHa4F0I=";
+    hash = "sha256-tLkXH0Ig/yWZbaFwzsdIdmbnlNd9UAruVSziaL3iW4U=";
   };
 
   postPatch = ''
@@ -67,25 +71,24 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    alive-progress
     autograd
     cma
     deprecated
-    dill
     matplotlib
+    moocore
     numpy
     scipy
   ];
 
-  # Some tests require a grad backend to be configured, this is a hacky way to do so.
-  # The choice must be either "jax.numpy" or "autograd.numpy"
-  preCheck = ''
-    echo 'from pymoo.gradient import activate; activate("autograd.numpy")' >> tests/conftest.py
-  '';
   nativeCheckInputs = [
-    pytestCheckHook
+    jupytext
     nbformat
     notebook
     numba
+    optuna
+    pytestCheckHook
+    scikit-learn
   ];
   # Select some lightweight tests
   disabledTestMarks = [ "long" ];
@@ -116,7 +119,7 @@ buildPythonPackage rec {
     "tests/algorithms/test_no_modfication.py"
   ];
   # Avoid crashing sandboxed build on macOS
-  MATPLOTLIBRC = writeText "" ''
+  env.MATPLOTLIBRC = writeText "" ''
     backend: Agg
   '';
 
@@ -125,6 +128,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-objective Optimization in Python";
     homepage = "https://pymoo.org/";
+    downloadPage = "https://github.com/anyoptimization/pymoo";
+    changelog = "https://github.com/anyoptimization/pymoo/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };

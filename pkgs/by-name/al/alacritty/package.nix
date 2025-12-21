@@ -161,7 +161,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with lib.maintainers;
       if !withGraphics then
         [
-          Br1ght0ne
           rvdp
         ]
       else

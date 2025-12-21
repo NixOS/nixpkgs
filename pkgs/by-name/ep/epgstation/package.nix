@@ -126,11 +126,11 @@ buildNpmPackage rec {
       popd
     '';
 
-  meta = with lib; {
+  meta = {
     description = "DVR software compatible with Mirakurun";
     homepage = "https://github.com/l3tnun/EPGStation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ midchildan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ midchildan ];
     mainProgram = "epgstation";
   };
 }

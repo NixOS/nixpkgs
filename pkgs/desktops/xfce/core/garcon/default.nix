@@ -1,7 +1,10 @@
 {
   stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
   gtk3,
   libxfce4ui,
   libxfce4util,
@@ -10,16 +13,32 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "garcon";
   version = "4.20.0";
 
-  sha256 = "sha256-MeZkDb2QgGMaloO6Nwlj9JmZByepd6ERqpAWqrVv1xw=";
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = lib.optionals withIntrospection [
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "garcon";
+    tag = "garcon-${finalAttrs.version}";
+    hash = "sha256-MeZkDb2QgGMaloO6Nwlj9JmZByepd6ERqpAWqrVv1xw=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
@@ -29,12 +48,22 @@ mkXfceDerivation {
     libxfce4util
   ];
 
-  meta = with lib; {
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "garcon-";
+    odd-unstable = true;
+  };
+
+  meta = {
     description = "Xfce menu support library";
-    license = with licenses; [
+    homepage = "https://gitlab.xfce.org/xfce/garcon";
+    license = with lib.licenses; [
       lgpl2Only
       fdl11Only
     ];
-    teams = [ teams.xfce ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

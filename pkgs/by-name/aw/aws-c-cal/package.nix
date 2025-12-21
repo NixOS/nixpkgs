@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS Crypto Abstraction Layer";
     homepage = "https://github.com/awslabs/aws-c-cal";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

@@ -41,11 +41,11 @@ buildPythonPackage rec {
     "google.cloud.language_v1beta2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Natural Language API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-language";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-language-v${version}/packages/google-cloud-language/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

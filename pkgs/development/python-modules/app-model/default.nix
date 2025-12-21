@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "app_model" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to implement generic application schema";
     homepage = "https://github.com/pyapp-kit/app-model";
     changelog = "https://github.com/pyapp-kit/app-model/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -41,8 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,metainfo}
-
     install -m 444 \
         -D $src/assets/io.github.dimtpap.coppwr.desktop \
         -t $out/share/applications
@@ -51,12 +49,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         -t $out/share/metainfo
     install -m 444 \
         -D $src/assets/icon/scalable.svg \
-        -t $out/share/icons/hicolor/scalable/apps/io.github.dimtpap.coppwr.svg
+        $out/share/icons/hicolor/scalable/apps/io.github.dimtpap.coppwr.svg
     for size in 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       install -m 444 \
           -D $src/assets/icon/"$size".png \
-          -t $out/share/icons/hicolor/"$size"x"$size"/apps/io.github.dimtpap.coppwr.png
+          $out/share/icons/hicolor/"$size"x"$size"/apps/io.github.dimtpap.coppwr.png
     done
   '';
 

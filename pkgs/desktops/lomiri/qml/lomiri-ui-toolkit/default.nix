@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5110";
+  version = "1.3.5901";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
+    hash = "sha256-adKCk8iYExKHTkWtzh6cF4AlIsbMoKg1SE7udhLo+ss=";
   };
 
   outputs = [
@@ -177,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Many tests try to load Suru theme icons via XDG_DATA_DIRS
     export QT_PLUGIN_PATH=${qtPluginPaths}
     export XDG_DATA_DIRS=${suru-icon-theme}/share
+
+    export UITK_BUILD_ROOT=$PWD
 
     tests/xvfb.sh make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
 

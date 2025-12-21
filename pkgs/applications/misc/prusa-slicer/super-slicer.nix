@@ -127,11 +127,11 @@ let
         })
       ];
 
-      meta = with lib; {
+      meta = {
         inherit description;
         homepage = "https://github.com/supermerill/SuperSlicer";
-        license = licenses.agpl3Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.agpl3Plus;
+        maintainers = with lib.maintainers; [
           cab404
           tmarkus
         ];

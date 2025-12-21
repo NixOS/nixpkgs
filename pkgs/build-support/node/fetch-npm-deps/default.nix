@@ -197,11 +197,11 @@
         };
       };
 
-    meta = with lib; {
+    meta = {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
       mainProgram = "prefetch-npm-deps";
-      maintainers = with maintainers; [ winter ];
-      license = licenses.mit;
+      maintainers = with lib.maintainers; [ winter ];
+      license = lib.licenses.mit;
     };
   };
 

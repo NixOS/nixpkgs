@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "grpc-tools@";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distribution of protoc and the gRPC Node protoc plugin for ease of installation with npm";
     longDescription = ''
       This package distributes the Protocol Buffers compiler protoc along with
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       gRPC libraries.
     '';
     homepage = "https://github.com/grpc/grpc-node/tree/master/packages/grpc-tools";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.nzhang-zh ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.nzhang-zh ];
   };
 }

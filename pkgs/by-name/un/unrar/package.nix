@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-qRGaj2NL8uKq2O8t99odcfmiu2VamF409p4v5Wh29oM=";
+    hash = "sha256-AMaJ0PfnqUVPF2rdxWNtBfYu1oVFEqvSdnDaiNtmRAo=";
   };
 
   sourceRoot = finalAttrs.src.name;
@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "unrar";
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.all;
   };
 })

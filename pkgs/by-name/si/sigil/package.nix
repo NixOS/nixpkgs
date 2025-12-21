@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-cKnWAVLScPZYNAFOiXaoHSXMl3YNOh6zmEryILaOR4w=";
   };
 
-  pythonPath = with python3Packages; [ lxml ];
+  pythonPath = with python3Packages; [
+    lxml
+    dulwich
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,6 +40,7 @@ stdenv.mkDerivation rec {
     qt6.qtwebengine
     qt6.qtsvg
     python3Packages.lxml
+    python3Packages.dulwich
   ];
 
   prePatch = ''

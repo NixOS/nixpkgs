@@ -37,7 +37,8 @@ buildPythonPackage rec {
     http = [
       flask
       swagger-ui-py
-    ];
+    ]
+    ++ flask.optional-dependencies.async;
     zeroconf = [ zeroconf ];
   };
 
@@ -53,11 +54,11 @@ buildPythonPackage rec {
     inherit wyoming-faster-whisper wyoming-openwakeword wyoming-piper;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/OHF-Voice/wyoming/releases/tag/${src.tag}";
     description = "Protocol for Rhasspy Voice Assistant";
     homepage = "https://github.com/OHF-Voice/wyoming";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

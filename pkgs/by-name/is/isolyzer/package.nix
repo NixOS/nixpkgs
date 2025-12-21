@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "isolyzer" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KBNLresearch/isolyzer";
     description = "Verify size of ISO 9660 image against Volume Descriptor fields";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "isolyzer";
   };
 }

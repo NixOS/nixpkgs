@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uP4JCbQEe7/en5sBq/k73kqK6YVmuLvfiUy1fqPitw=";
+    hash = "sha256-103Jb2CA/Zz+MBIJei3vhqcPyg7e5JkpFKqh1hjAhLc=";
   };
 
-  vendorHash = "sha256-bN1iV2JrrjwiiIXr5lp389HvEoQGteJQD94cug0/048=";
+  vendorHash = "sha256-LgGsXaJ97uXtqHHicsLOaMNx3PzlVPhz/xG+KvO4nLI=";
 
   subPackages = [
     "cmd/alertmanager"
@@ -55,13 +55,13 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     changelog = "https://github.com/prometheus/alertmanager/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alertmanager";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       benley
       fpletz
       globin

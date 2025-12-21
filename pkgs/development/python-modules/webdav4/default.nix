@@ -80,12 +80,12 @@ buildPythonPackage rec {
     "tests/test_cli.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with WebDAV";
     mainProgram = "dav";
     homepage = "https://skshetry.github.io/webdav4/";
     changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

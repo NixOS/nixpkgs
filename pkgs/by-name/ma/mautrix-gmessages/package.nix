@@ -45,12 +45,12 @@ buildGoModule rec {
     tests.version = testers.testVersion { package = mautrix-gmessages; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Matrix-Google Messages puppeting bridge";
     homepage = "https://github.com/mautrix/gmessages";
     changelog = "https://github.com/mautrix/gmessages/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ sumnerevans ];
     mainProgram = "mautrix-gmessages";
   };
 }

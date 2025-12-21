@@ -5,13 +5,14 @@
   beamPackages,
   gitMinimal,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   tailwindcss_3,
   esbuild,
 
   mixReleaseName ? "domain", # "domain" "web" or "api"
 }:
-
 beamPackages.mixRelease rec {
   pname = "firezone-server-${mixReleaseName}";
   version = "0-unstable-2025-08-31";
@@ -31,8 +32,9 @@ beamPackages.mixRelease rec {
     }
   }/elixir";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname version;
+    pnpm = pnpm_9;
     src = "${src}/apps/web/assets";
     fetcherVersion = 1;
     hash = "sha256-40vtQIBhJNnzdxkAOVAcPN57IuD0IB6LFxGICo68AbQ=";
@@ -60,8 +62,8 @@ beamPackages.mixRelease rec {
   '';
 
   nativeBuildInputs = [
+    pnpmConfigHook
     pnpm_9
-    pnpm_9.configHook
     nodejs
   ];
 

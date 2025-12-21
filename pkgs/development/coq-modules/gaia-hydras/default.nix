@@ -49,14 +49,14 @@ mkCoqDerivation {
 
   useDune = true;
 
-  meta = with lib; {
+  meta = {
     description = "Comparison between ordinals in Gaia and Hydra battles";
     longDescription = ''
       The Gaia and Hydra battles projects develop different notions of ordinals.
       This development bridges the different notions.
     '';
-    maintainers = with maintainers; [ Zimmi48 ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ Zimmi48 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

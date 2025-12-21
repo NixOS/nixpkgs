@@ -27,11 +27,11 @@ buildGoModule rec {
   # Kubernetes, Docker, and GCC.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building modern cloud native development environments";
     homepage = "https://jumppad.dev";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "jumppad";
   };
 }

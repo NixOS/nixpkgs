@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Don't let your Mac fall asleep";
     homepage = "https://intelliscapesolutions.com/apps/caffeine";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"

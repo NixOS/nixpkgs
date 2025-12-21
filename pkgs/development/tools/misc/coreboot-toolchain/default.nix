@@ -76,21 +76,21 @@ let
           make crossgcc-${arch} CPUS=$NIX_BUILD_CORES DEST=$out
         '';
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.coreboot.org";
           description = "Coreboot toolchain for ${arch} targets";
-          license = with licenses; [
+          license = with lib.licenses; [
             bsd2
             bsd3
             gpl2
             lgpl2Plus
             gpl3Plus
           ];
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             felixsinger
             jmbaur
           ];
-          platforms = platforms.linux;
+          platforms = lib.platforms.linux;
         };
       })
     );

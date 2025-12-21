@@ -219,7 +219,7 @@ in
     };
   };
 
-  pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+  pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 

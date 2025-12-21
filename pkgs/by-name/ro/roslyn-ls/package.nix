@@ -6,16 +6,18 @@
   stdenvNoCC,
   testers,
   jq,
-  writeText,
   runCommand,
   expect,
 }:
 let
   pname = "roslyn-ls";
+  # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
   dotnet-sdk =
     with dotnetCorePackages;
+    # required sdk
     sdk_10_0
     // {
+      # with additional packages to minimize deps.json
       inherit
         (combinePackages [
           sdk_9_0
@@ -25,45 +27,29 @@ let
         targetPackages
         ;
     };
-  # need sdk on runtime as well
-  dotnet-runtime = dotnetCorePackages.sdk_10_0;
+  # should match the default NetVSCode property
+  # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
+  dotnet-runtime = dotnetCorePackages.sdk_10_0.runtime;
+
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
-
-  targets = writeText "versions.targets" ''
-    <Project>
-      <ItemGroup>
-        <KnownFrameworkReference Update="@(KnownFrameworkReference)">
-          <LatestRuntimeFrameworkVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</LatestRuntimeFrameworkVersion>
-          <LatestRuntimeFrameworkVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</LatestRuntimeFrameworkVersion>
-          <TargetingPackVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</TargetingPackVersion>
-          <TargetingPackVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</TargetingPackVersion>
-        </KnownFrameworkReference>
-        <KnownAppHostPack Update="@(KnownAppHostPack)">
-          <AppHostPackVersion Condition="'%(TargetFramework)' == 'net8.0'">${dotnetCorePackages.sdk_8_0.runtime.version}</AppHostPackVersion>
-          <AppHostPackVersion Condition="'%(TargetFramework)' == 'net9.0'">${dotnetCorePackages.sdk_9_0.runtime.version}</AppHostPackVersion>
-        </KnownAppHostPack>
-      </ItemGroup>
-    </Project>
-  '';
-
 in
 buildDotnetModule (finalAttrs: rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.102.30-prerelease";
+  vsVersion = "2.111.2-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-C61Zew0W1r1klw3zGZfv3YNhZ7SrCd0UbGlXhqkfrbI=";
+    hash = "sha256-oP+mKOvsbc+/NnqJvounE75BlE6UJTIAnmYTBNQlMFA=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.3.0-2.25568.9";
+  version = "5.3.0-2.25604.5";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -80,23 +66,34 @@ buildDotnetModule (finalAttrs: rec {
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
-
-    substituteInPlace Directory.Build.targets \
-      --replace-fail '</Project>' '<Import Project="${targets}" /></Project>'
   '';
 
+  # don't build binary
+  useAppHost = false;
   dotnetFlags = [
     "-p:TargetRid=${rid}"
+    # we don't want to build the binary
+    # and useAppHost is not enough, need to explicilty set to false
+    "-p:UseAppHost=false"
+    # avoid platform-specific crossgen packages
+    "-p:PublishReadyToRun=false"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
-    # this is needed for the KnownAppHostPack changes to work
-    "-p:EnableAppHostPackDownload=true"
+    # avoid unnecessary packages in deps.json
+    "-p:EnableAppHostPackDownload=false"
+    "-p:EnableRuntimePackDownload=false"
   ];
 
-  # two problems solved here:
-  # 1. --no-build removed -> BuildHost project within roslyn is running Build target during publish
-  # 2. missing crossgen2 7.* in local nuget directory when PublishReadyToRun=true
-  # the latter should be fixable here but unsure how
+  executables = [ project ];
+
+  postInstall = ''
+    # fake executable that we substitute in postFixup
+    touch $out/lib/$pname/${project}
+    chmod +x $out/lib/$pname/${project}
+  '';
+
+  # problem and solution:
+  # BuildHost project within roslyn is running Build target during publish -> --no-build removed
   installPhase = ''
     runHook preInstall
 
@@ -104,9 +101,8 @@ buildDotnetModule (finalAttrs: rec {
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
         -p:InformationalVersion=$version \
-        -p:UseAppHost=true \
         -p:PublishTrimmed=false \
-        -p:PublishReadyToRun=false \
+        -p:OverwriteReadOnlyFiles=true \
         --configuration Release \
         --no-self-contained \
         --output "$out/lib/$pname" \
@@ -116,6 +112,14 @@ buildDotnetModule (finalAttrs: rec {
         ''${dotnetFlags[@]}
 
     runHook postInstall
+  '';
+
+  # force dotnet-runtime to run the dll
+  # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
+  postFixup = ''
+    rm -f $out/lib/$pname/${project}
+    substituteInPlace $out/bin/${project} \
+      --replace-fail "$out/lib/$pname/${project}" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/${project}.dll"
   '';
 
   passthru = {
@@ -151,6 +155,7 @@ buildDotnetModule (finalAttrs: rec {
       in
       {
         # Make sure we can run with any supported SDK version, as well as without
+        with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
         with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
         with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
         no-sdk = with-sdk null;

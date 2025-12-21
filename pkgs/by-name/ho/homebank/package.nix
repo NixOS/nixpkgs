@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free, easy, personal accounting for everyone";
     mainProgram = "homebank";
     homepage = "https://www.gethomebank.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
       frlan
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

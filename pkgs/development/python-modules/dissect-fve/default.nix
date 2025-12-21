@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.fve" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dissect module implementing parsers for full volume encryption implementations";
     homepage = "https://github.com/fox-it/dissect.fve";
     changelog = "https://github.com/fox-it/dissect.fve/releases/tag/${src.tag}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

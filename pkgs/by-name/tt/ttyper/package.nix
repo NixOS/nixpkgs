@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-M8LG/rZLFRUztniCmUuyj5mdzH3qUKoj02uUQ2zlq8M=";
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-based typing test";
     homepage = "https://github.com/max-niederman/ttyper";
     changelog = "https://github.com/max-niederman/ttyper/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       max-niederman
     ];
     mainProgram = "ttyper";

@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.hybridcompute" ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure Hybrid Compute Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/hybridcompute/azure-mgmt-hybridcompute/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

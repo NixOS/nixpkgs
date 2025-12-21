@@ -39,15 +39,15 @@ stdenv.mkDerivation {
     install -D udev/90-cc-debugger.rules $out/lib/udev/rules.d/90-cc-debugger.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for the Texas Instruments CC Debugger";
     mainProgram = "cc-tool";
     longDescription = ''
       cc-tool provides support for Texas Instruments CC Debugger
     '';
     homepage = "https://github.com/dashesy/cc-tool";
-    license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.CRTified ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.CRTified ];
   };
 }

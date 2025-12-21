@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
     pgbouncer = nixosTests.pgbouncer;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pgbouncer.org/";
     mainProgram = "pgbouncer";
     description = "Lightweight connection pooler for PostgreSQL";
     changelog = "https://github.com/pgbouncer/pgbouncer/releases/tag/pgbouncer_${
-      replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] version
     }";
-    license = licenses.isc;
-    maintainers = with maintainers; [ _1000101 ];
-    platforms = platforms.all;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ _1000101 ];
+    platforms = lib.platforms.all;
   };
 }

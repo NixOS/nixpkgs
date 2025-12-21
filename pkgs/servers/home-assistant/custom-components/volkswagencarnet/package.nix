@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "robinostlund";
   domain = "volkswagencarnet";
-  version = "5.2.7";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "homeassistant-volkswagencarnet";
     tag = "v${version}";
-    hash = "sha256-AgIGYAH20QJFLQxOY5jUjd1M/l9dflH48XYIFom3M+E=";
+    hash = "sha256-58PYLC7JoMLHN3ep2Fd0qXhzToZPcUgvJQDMX9swhjU=";
   };
 
   postPatch = ''

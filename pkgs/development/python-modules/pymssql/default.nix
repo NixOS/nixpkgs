@@ -50,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymssql" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pymssql/pymssql/blob/v${version}/ChangeLog.rst";
     description = "Simple database interface for Python that builds on top of FreeTDS to provide a Python DB-API (PEP-249) interface to Microsoft SQL Server";
     homepage = "https://github.com/pymssql/pymssql";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.sith-lord-vader ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.sith-lord-vader ];
   };
 }

@@ -5,15 +5,13 @@
   nodejs,
   npmHooks,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   systemdMinimal,
   nixosTests,
   nix-update-script,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 }:
-
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
   version = "2.7.1";
@@ -25,8 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aKLgp8/BkxBu2lQwFeG4VhjzN9/X8sYuhILXjUreZBQ=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-XHDSjjYt/wbCdafLQ73dxDD+1ClbFtI7NejS9h5SNmE=";
   };
@@ -34,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     npmHooks.npmInstallHook
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = lib.optionals withSystemd [
@@ -54,18 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Koenkk/zigbee2mqtt/releases/tag/${finalAttrs.version}";
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
     homepage = "https://github.com/Koenkk/zigbee2mqtt";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     longDescription = ''
       Allows you to use your Zigbee devices without the vendor's bridge or gateway.
 
       It bridges events and allows you to control your Zigbee devices via MQTT.
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       sweber
       hexa
     ];

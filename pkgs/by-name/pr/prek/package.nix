@@ -5,20 +5,21 @@
   git,
   uv,
   python312,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.19";
+  version = "0.2.20";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/B7Z4d4GEJKhEDRznVzeqeB2Qrsz/dAVV3Syo8EhfvM=";
+    hash = "sha256-AZyYjgUd2dGnBUHwo/cPagFE8IJmzsgMLwebTypLAgE=";
   };
 
-  cargoHash = "sha256-quWyPdFEBYylhi1gugdew9KXhHldTkIAbea7GmVhH5g=";
+  cargoHash = "sha256-a1yBu4MuyR0veBSQAUdaE/9rB04i6RVJ/NdWNmpRzmM=";
 
   nativeCheckInputs = [
     git
@@ -61,6 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "run_worktree"
     "try_repo_relative_path"
     "languages::tests::test_native_tls"
+    "rust::additional_dependencies_cli"
+    "rust::rustup_installer"
+    "rust::remote_hooks"
+    "rust::remote_hooks_with_lib_deps"
+    "unsupported::unsupported_language"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -137,7 +143,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lua::remote_hook"
     # error message differs
     "run_in_non_git_repo"
+    # depends on locale
+    "init_nonexistent_repo"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/j178/prek";

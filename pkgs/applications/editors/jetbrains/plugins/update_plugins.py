@@ -22,19 +22,19 @@ TOKENS = {
 SNAPSHOT_VALUE = 99999
 PLUGINS_FILE = Path(__file__).parent.joinpath("plugins.json").resolve()
 IDES_BIN_FILE = Path(__file__).parent.joinpath("../bin/versions.json").resolve()
-IDES_SOURCE_FILE = Path(__file__).parent.joinpath("../source/ides.json").resolve()
+IDES_SOURCE_FILE = Path(__file__).parent.joinpath("../source/sources.json").resolve()
 # The plugin compatibility system uses a different naming scheme to the ide update system.
 # These dicts convert between them
 FRIENDLY_TO_PLUGIN = {
     "clion": "CLION",
     "datagrip": "DBE",
     "goland": "GOLAND",
-    "idea-community": "IDEA_COMMUNITY",
-    "idea-ultimate": "IDEA",
+    "idea-oss": "IDEA",  # This was "IDEA_COMMUNITY" before, but this product doesn't exist anymore.
+    "idea": "IDEA",
     "mps": "MPS",
     "phpstorm": "PHPSTORM",
-    "pycharm-community": "PYCHARM_COMMUNITY",
-    "pycharm-professional": "PYCHARM",
+    "pycharm-oss": "PYCHARM",  # This was "PYCHARM_COMMUNITY" before, but this product doesn't exist anymore.
+    "pycharm": "PYCHARM",
     "rider": "RIDER",
     "ruby-mine": "RUBYMINE",
     "rust-rover": "RUST",
@@ -172,7 +172,17 @@ def make_plugin_files(plugin_infos: dict, ide_versions: dict, quiet: bool, extra
             "builds": {},
             "name": names[pid]
         }
-        relevant_builds = [builds for ide, builds in ide_versions.items() if ide in plugin_versions["compatible"]] + [extra_builds]
+        relevant_builds = [
+            builds for ide, builds
+            in ide_versions.items()
+            if (
+                ide in plugin_versions["compatible"]
+                # TODO: Remove this once we removed pycharm-community
+                or (ide == "pycharm-community" and "pycharm" in plugin_versions["compatible"])
+                # TODO: Remove this once we removed idea-community
+                or (ide == "idea-community" and "idea" in plugin_versions["compatible"])
+            )
+        ] + [extra_builds]
         relevant_builds = sorted(list(set(flatten(relevant_builds))))  # Flatten, remove duplicates and sort
         for build in relevant_builds:
             plugin_versions["builds"][build] = get_newest_compatible(pid, build, plugin_infos[pid], quiet)

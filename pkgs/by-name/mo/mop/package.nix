@@ -25,10 +25,10 @@ buildGoModule rec {
     mv cmd mop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple stock tracker implemented in go";
     homepage = "https://github.com/mop-tracker/mop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "mop";
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal screenshot annotation tool with lua config";
     homepage = "https://github.com/Nooo37/pinsel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lom ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "pinsel";
   };
 }

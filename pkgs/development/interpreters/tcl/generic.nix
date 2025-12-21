@@ -108,12 +108,12 @@ let
         ''}
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Tcl scripting language";
       homepage = "https://www.tcl.tk/";
-      license = licenses.tcltk;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ agbrooks ];
+      license = lib.licenses.tcltk;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ agbrooks ];
     };
 
     passthru = rec {

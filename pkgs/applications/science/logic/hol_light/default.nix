@@ -71,12 +71,12 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/hol_light"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       vbgl
     ];

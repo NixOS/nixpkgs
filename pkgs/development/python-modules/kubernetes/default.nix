@@ -68,11 +68,10 @@ buildPythonPackage rec {
     "test_rest_proxycare"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
     changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lsix ];
+    license = lib.licenses.asl20;
   };
 }

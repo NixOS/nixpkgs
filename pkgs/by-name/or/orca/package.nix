@@ -113,7 +113,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://orca.gnome.org/";
     changelog = "https://gitlab.gnome.org/GNOME/orca/-/blob/main/NEWS";
     description = "Screen reader";
@@ -128,9 +128,9 @@ python3.pkgs.buildPythonApplication rec {
 
       Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ];
-    teams = [ teams.gnome ];
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ berce ];
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
   };
 }

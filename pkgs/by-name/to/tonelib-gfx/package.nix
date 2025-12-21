@@ -63,12 +63,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass";
     homepage = "https://tonelib.net/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       husjon
     ];
     platforms = [ "x86_64-linux" ];

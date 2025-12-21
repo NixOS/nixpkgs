@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.dosbox.com/";
     changelog = "https://www.dosbox.com/wiki/Releases";
     description = "DOS emulator";
@@ -97,9 +97,9 @@ stdenv.mkDerivation rec {
       unmodified. In order to utilize all of DOSBox's features you need to first
       understand some basic concepts about the MS-DOS environment.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "dosbox";
   };
 }

@@ -29,11 +29,11 @@ stdenv.mkDerivation {
         'cmake_minimum_required (VERSION 3.10)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video stabilization library";
     homepage = "http://public.hronopik.de/vid.stab/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

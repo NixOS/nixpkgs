@@ -84,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     $CXX test.cc -L $out/lib -I $out/include -lpulsar -o test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-cpp/";
     description = "Apache Pulsar C++ library";
     changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${finalAttrs.version}";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       corbanr
       gaelreyrol
     ];

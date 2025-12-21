@@ -35,8 +35,8 @@ mkXfceDerivation {
     thunar
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Xfce's desktop manager";
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

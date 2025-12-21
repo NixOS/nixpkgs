@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "@OUT@" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host for the Thunderbird addon allowing to edit mails in external programs";
     homepage = "https://github.com/Frederick888/external-editor-revived";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ mofrim ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ mofrim ];
     mainProgram = "external-editor-revived";
   };
 }

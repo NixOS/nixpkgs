@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     nix-serve-ssh = nixosTests.nix-serve-ssh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/edolstra/nix-serve";
     description = "Utility for sharing a Nix store as a binary cache";
-    maintainers = [ maintainers.eelco ];
-    license = licenses.lgpl21;
+    maintainers = [ lib.maintainers.eelco ];
+    license = lib.licenses.lgpl21;
     # See https://github.com/edolstra/nix-serve/issues/57
     broken = stdenv.hostPlatform.isDarwin;
     platforms = nix.meta.platforms;

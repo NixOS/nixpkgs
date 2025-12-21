@@ -57,14 +57,14 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free EDA software to develop printed circuit boards";
     homepage = "https://librepcb.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       luz
       thoughtpolice
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

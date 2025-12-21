@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of LV2 plugins by Robin Gareus";
     homepage = "https://github.com/x42/x42-plugins";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       magnetophon
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "i686-linux"
       "x86_64-linux"

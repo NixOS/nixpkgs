@@ -108,9 +108,7 @@ qtModule {
   enableParallelBuilding = true;
 
   meta = {
-    maintainers = with lib.maintainers; [
-      periklis
-    ];
+    maintainers = [ ];
     knownVulnerabilities = [
       "QtWebkit upstream is unmaintained and receives no security updates, see https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/"
     ];

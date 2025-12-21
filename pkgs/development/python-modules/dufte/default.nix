@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dufte" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean matplotlib plots";
     homepage = "https://github.com/nschloe/dufte";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

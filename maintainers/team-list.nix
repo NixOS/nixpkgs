@@ -79,7 +79,6 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
-      uri-canva
       cbley
       olebedev
       groodt
@@ -252,6 +251,15 @@ with lib.maintainers;
     shortName = "Cyberus Technology employees";
   };
 
+  danklinux = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
+    shortName = "Dank Linux";
+  };
+
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -364,6 +372,20 @@ with lib.maintainers;
     shortName = "Flying Circus employees";
   };
 
+  forgejo = {
+    members = [
+      adamcstephens
+      bendlas
+      christoph-heiss
+      emilylange
+      marie
+      pyrox0
+      tebriel
+    ];
+    scope = "Maintain the Forgejo code forge, packages and modules.";
+    shortName = "Forgejo";
+  };
+
   formatter = {
     github = "nix-formatting";
   };
@@ -400,7 +422,6 @@ with lib.maintainers;
 
   gitlab = {
     members = [
-      globin
       krav
       leona
       talyz
@@ -495,7 +516,6 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
-      edwtjo
       leona
       theCapypara
       thiagokokada
@@ -535,7 +555,6 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
-      edwtjo
       kazenyuk
       minijackson
       peterhoeg
@@ -551,8 +570,6 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
-      edwtjo
-      hrdinka
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -668,10 +685,12 @@ with lib.maintainers;
   minimal-bootstrap = {
     members = [
       alejandrosame
+      aleksi
       artturin
       emilytrau
       ericson2314
       jk
+      pyrox0
       siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";
@@ -792,7 +811,6 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
-      zakame
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";

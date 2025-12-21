@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kdlfmt";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "kdlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VHcpF9CTRDl9dtX/rZeDKVoCerI1sNjwURBpiE9bH80=";
+    hash = "sha256-IiR7luc474uL0B2lCGEl6taTM2VXRQCjo88TuWOh7ic=";
   };
 
-  cargoHash = "sha256-A8pp4IWL8hR4G1WDNFo6e3BVRxuVjfazIKOwCEGN7Rc=";
+  cargoHash = "sha256-ZlBsEPvATh9i3+davxTkJQeH2eeSJzoyweAhZhNkBgk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

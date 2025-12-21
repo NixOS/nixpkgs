@@ -24,10 +24,10 @@ buildLua rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Userscript that allows you to play 'up next'/recommended youtube videos";
     homepage = "https://github.com/cvzi/mpv-youtube-upnext";
-    maintainers = with maintainers; [ bddvlpr ];
-    license = licenses.unfree;
+    maintainers = with lib.maintainers; [ bddvlpr ];
+    license = lib.licenses.unfree;
   };
 }

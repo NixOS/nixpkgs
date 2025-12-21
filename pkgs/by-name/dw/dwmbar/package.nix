@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     install -Dm755 -t $out/bin/ dwmbar
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thytom/dwmbar";
     description = "Modular Status Bar for dwm";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ baitinq ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ baitinq ];
+    platforms = lib.platforms.linux;
     mainProgram = "dwmbar";
   };
 }

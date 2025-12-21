@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "009l3k2zyn06dbrlja2d4p2vfnzjhlcqxi88v02mlrnb17mx1v84";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://opensource.yubico.com/yubico-c/";
     description = "C library for manipulating Yubico YubiKey One-Time Passwords (OTPs)";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
   };
 }

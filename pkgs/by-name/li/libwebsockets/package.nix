@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
   disallowedReferences = [ stdenv.cc.cc ];
 
-  meta = with lib; {
+  meta = {
     description = "Light, portable C library for websockets";
     longDescription = ''
       Libwebsockets is a lightweight pure C library built to
@@ -93,13 +93,13 @@ stdenv.mkDerivation rec {
     homepage = "https://libwebsockets.org/";
     # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
     # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       publicDomain
       bsd3
       asl20
     ];
-    maintainers = with maintainers; [ mindavi ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mindavi ];
+    platforms = lib.platforms.all;
   };
 }

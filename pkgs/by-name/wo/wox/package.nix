@@ -6,6 +6,8 @@
   keybinder3,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3Packages,
   writableTmpDirAsHomeHook,
   buildGoModule,
@@ -22,13 +24,13 @@
 }:
 
 let
-  version = "2.0.0-beta.5";
+  version = "2.0.0-beta.6";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-ZuKsIWooLqGeEex8uRiMVYVxnAJyiQt0soZ9OP6+qq0=";
+    hash = "sha256-IZuk2ZADagJJuwS6X+gSAE0hjZQpvz8o0xR7TJWnCNY=";
   };
 
   metaCommon = {
@@ -64,18 +66,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-HhdMwVNt7178EQlZGpTiTySBp8GR9tBpUaikEWt1BGY=";
+      hash = "sha256-OyXYuUCvT9I5xusouoBG9CX4Efl+aTZAYSkOBVDzQVs=";
     };
 
     buildPhase = ''
@@ -152,9 +156,10 @@ buildGoModule {
       --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
       --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \
       --replace-fail "Exec=%s" "Exec=wox"
+    sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-Ft4X2woSf0ib0Z8dAwf0VAFQv0ck9nVs7EnpWgGi2+0=";
+  vendorHash = "sha256-P62Q9oRRodo71n/9jzJqlsDvPkia2SQsRq28AhJ1Wno=";
 
   proxyVendor = true;
 

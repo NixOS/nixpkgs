@@ -22,11 +22,11 @@ buildGoModule rec {
   buildInputs = [ srt ];
   nativeCheckInputs = [ ffmpeg ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming-Relay for the SRT-protocol";
     homepage = "https://github.com/voc/srtrelay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "srtrelay";
   };
 }

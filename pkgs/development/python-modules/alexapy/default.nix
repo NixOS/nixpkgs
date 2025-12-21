@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "alexapy";
-  version = "1.29.11";
+  version = "1.29.13";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "keatontaylor";
     repo = "alexapy";
     tag = "v${version}";
-    hash = "sha256-czg3g1dsHBQbbSeXmLrU28eo66Ph9FYx/q4nyR2BZL4=";
+    hash = "sha256-GQ4Xv/4OdBRAc9qP0qO75FtqRVX0+v5zSjVjeOYr17Q=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];

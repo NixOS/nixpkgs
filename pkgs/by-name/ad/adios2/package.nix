@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   perl,
   cmake,
   ninja,
@@ -66,12 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x cmake/install/post/adios2-config.pre.sh.in
     patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
+  '';
 
+  # TODO: remove these patches when updating to > v2.11.x, which will already include these commits
+  patches = [
     # use upstream GoogleTest.cmake
     # see https://github.com/ornladios/ADIOS2/issues/4659
-    substituteInPlace cmake/GoogleTest.cmake \
-      --replace-fail 'CMAKE_VERSION VERSION_LESS 4' 'TRUE'
-  '';
+    (fetchpatch2 {
+      name = "googletest-cmake-fix.patch";
+      url = "https://github.com/ornladios/ADIOS2/commit/20aab0f99d38dc4437b086edf6b44ecf4100ed76.patch?full_index=1";
+      hash = "sha256-CZD3QUATX0JI75Oip0LNwirWIwgQakWuCHs1fIjwzj0=";
+    })
+    # fix double import cmake conflict
+    # see https://github.com/ornladios/ADIOS2/issues/4760
+    (fetchpatch2 {
+      name = "cmake-target-guard-fix.patch";
+      url = "https://github.com/ornladios/ADIOS2/commit/23fd08a10b52a971150f93f99d341b83b8096e3d.patch?full_index=1";
+      hash = "sha256-+29a9JgiCv2kBz0uUT8Kn/Tf3KDD1JNPdzeb/DruTBo=";
+    })
+  ];
 
   nativeBuildInputs = [
     perl

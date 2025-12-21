@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -58,15 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/Applications/wxFormBuilder.app/Contents/MacOS/wxFormBuilder $out/bin/wxformbuilder
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "wxformbuilder";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matthuszagh
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

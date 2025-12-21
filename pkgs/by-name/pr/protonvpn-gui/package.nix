@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.12.0";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     tag = "v${version}";
-    hash = "sha256-pDTzqTiGAisVEHwez526z9C9GzNkMWl6Cui8E6siIXo=";
+    hash = "sha256-1T8gh0aKYiVnkr4SLg2a5Hcc8FQn8llofCXxeZGwd8I=";
   };
 
   nativeBuildInputs = [

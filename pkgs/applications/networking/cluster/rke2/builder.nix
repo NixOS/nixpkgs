@@ -22,6 +22,7 @@ lib:
   makeWrapper,
   fetchzip,
   fetchurl,
+  versionCheckHook,
 
   # Runtime dependencies
   procps,
@@ -42,7 +43,6 @@ lib:
 
   # Testing dependencies
   nixosTests,
-  testers,
 }:
 buildGoModule (finalAttrs: {
   pname = "rke2";
@@ -129,25 +129,19 @@ buildGoModule (finalAttrs: {
     go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
     runHook postInstallCheck
   '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit updateScript;
     tests =
       let
-        moduleTests =
-          let
-            package_version =
-              "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
-          in
-          lib.mapAttrs (name: value: nixosTests.rke2.${name}.${package_version}) nixosTests.rke2;
+        versionedPackage =
+          "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
       in
-      {
-        version = testers.testVersion {
-          package = finalAttrs.finalPackage;
-          version = "v${finalAttrs.version}";
-        };
-      }
-      // moduleTests;
+      lib.mapAttrs (name: _: nixosTests.rke2.${name}.${versionedPackage}) (
+        lib.filterAttrs (n: _: n != "all") nixosTests.rke2
+      );
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 

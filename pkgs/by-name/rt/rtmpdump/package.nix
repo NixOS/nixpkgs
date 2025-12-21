@@ -51,11 +51,11 @@ stdenv.mkDerivation {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for RTMP streams";
     homepage = "https://rtmpdump.mplayerhq.hu/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ codyopel ];
   };
 }

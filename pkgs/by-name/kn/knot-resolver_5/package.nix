@@ -143,13 +143,13 @@ let
       meson test --print-errorlogs --no-suite snowflake
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Caching validating DNS resolver, from .cz domain registry";
       homepage = "https://knot-resolver.cz";
-      license = licenses.gpl3Plus;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
       maintainers = [
-        maintainers.vcunat # upstream developer
+        lib.maintainers.vcunat # upstream developer
       ];
       mainProgram = "kresd";
     };
@@ -168,7 +168,7 @@ let
         ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        inherit (unwrapped) meta;
+        inherit (unwrapped) version meta;
       }
       (
         ''

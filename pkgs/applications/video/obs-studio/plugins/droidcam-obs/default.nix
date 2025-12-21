@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   obs-studio,
-  ffmpeg_7,
+  ffmpeg,
   libjpeg,
   libimobiledevice,
   libusbmuxd,
@@ -21,6 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-hxG/v15Q4D+6LU4BNV6ErSa1WvPk4kMPl07pIqiMcc4=";
   };
 
+  patches = [
+    # Fix build with ffmpeg 8 / libavcodec 62
+    # TODO: Drop this once v2.4.3+ is released
+    (fetchpatch {
+      url = "https://github.com/dev47apps/droidcam-obs-plugin/commit/73ec2a01e234e6b2287866c25b4242dca6d9d2f6.patch";
+      hash = "sha256-AI2Z9i3+KfvmpyVX9WwX3jcA1hyUZiFO7kWRsb+8/10=";
+    })
+  ];
+
   preBuild = ''
     mkdir ./build
   '';
@@ -31,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusbmuxd
     libplist
     obs-studio
-    ffmpeg_7
+    ffmpeg
   ];
 
   nativeBuildInputs = [
@@ -47,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
     "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
     "LIBOBS_INCLUDES=${obs-studio}/include/obs"
-    "FFMPEG_INCLUDES=${lib.getLib ffmpeg_7}"
+    "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
     "LIBUSBMUXD=libusbmuxd-2.0"
     "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];

@@ -14,7 +14,7 @@ let
   # Coerces a string to an int.
   coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
 
-  coerceIntVersion = v: coerceInt (lib.versions.major v);
+  coerceIntVersion = v: coerceInt (lib.versions.major (toString v));
 
   # Parses a single version, substituting "latest" with the latest version.
   parseVersion =
@@ -144,7 +144,7 @@ in
 
 let
   # Resolve all the platform versions.
-  platformVersions' = map coerceInt (parseVersions repo "platforms" platformVersions);
+  platformVersions' = map coerceIntVersion (parseVersions repo "platforms" platformVersions);
 
   # Determine the Android os identifier from Nix's system identifier
   os =
@@ -220,6 +220,28 @@ let
     extras = fetchArchives repo.extras;
   };
 
+  # Latest packages that are typically keyed by the API level.
+  archivesByApiLevel =
+    let
+      # Transforms the given attrset mapping API levels (with possible suffixes and minor versions)
+      # into the latest API level for each major version.
+      mkLatestByApiLevel =
+        packages:
+        lib.filterAttrs (_: value: value != null) (
+          lib.mapAttrs (
+            _: value:
+            (lib.findFirst (x: x.name == lib.versions.majorMinor x.name) { value = null; } (
+              lib.lists.sort (x: y: lib.strings.versionOlder y.name x.name) value
+            )).value
+          ) (lib.groupBy (x: lib.versions.major x.name) (lib.attrsToList packages))
+        );
+    in
+    {
+      platforms = mkLatestByApiLevel allArchives.packages.platforms;
+      sources = mkLatestByApiLevel allArchives.packages.sources;
+      system-images = mkLatestByApiLevel allArchives.system-images;
+    };
+
   # Lift the archives to the package level for easy search,
   # and add recurseIntoAttrs to all of them.
   allPackages =
@@ -284,17 +306,28 @@ let
     lib.hasAttrByPath [ package (toString version) ] packages;
 
   # Displays a nice error message that includes the available options if a version doesn't exist.
+  # Note that allPackages can be a list of package sets, or a single package set. Pass a list if
+  # you want to prioritize elements to the left (e.g. for passing a platform major version).
   checkVersion =
-    packages: package: version:
-    if hasVersion packages package version then
-      packages.${package}.${toString version}
-    else
+    allPackages: package: version:
+    let
+      # Convert the package sets to a list.
+      allPackages' = if lib.isList allPackages then allPackages else lib.singleton allPackages;
+
+      # Pick the first package set where we have the version.
+      packageSet = lib.findFirst (packages: hasVersion packages package version) null allPackages';
+    in
+    if packageSet == null then
       throw ''
         The version ${toString version} is missing in package ${package}.
         The only available versions are ${
-          builtins.concatStringsSep ", " (builtins.attrNames packages.${package})
+          lib.concatStringsSep ", " (
+            lib.attrNames (lib.foldl (s: x: s // (x.${package} or { })) { } allPackages')
+          )
         }.
-      '';
+      ''
+    else
+      packageSet.${package}.${toString version};
 
   # Returns true if we should link the specified plugins.
   shouldLink =
@@ -508,19 +541,23 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
+  # This is a list of the chosen API levels, as integers.
   platformVersions = platformVersions';
 
   platforms = map (
     version:
     deployAndroidPackage {
-      package = checkVersion allArchives.packages "platforms" version;
+      package = checkVersion [ archivesByApiLevel allArchives.packages ] "platforms" version;
     }
   ) platformVersions';
+
+  # This exposes the version strings (e.g. "36.1" for API 36).
+  platformVersionStrings = map (platform: platform.version) platforms;
 
   sources = map (
     version:
     deployAndroidPackage {
-      package = checkVersion allArchives.packages "sources" version;
+      package = checkVersion [ archivesByApiLevel allArchives.packages ] "sources" version;
     }
   ) platformVersions';
 
@@ -539,14 +576,19 @@ lib.recurseIntoAttrs rec {
         # ```
         let
           availablePackages =
-            map (abiVersion: allArchives.system-images.${toString apiVersion}.${type}.${abiVersion})
+            map
+              (
+                abiVersion:
+                archivesByApiLevel.system-images.${toString apiVersion}.${type}.${abiVersion}
+                or allArchives.system-images.${toString apiVersion}.${type}.${abiVersion}
+              )
               (
                 builtins.filter (
                   abiVersion: lib.hasAttrByPath [ (toString apiVersion) type abiVersion ] allArchives.system-images
                 ) abiVersions
               );
 
-          instructions = builtins.listToAttrs (
+          instructions = lib.listToAttrs (
             map (package: {
               name = package.name;
               value = lib.optionalString (lib.hasPrefix "google_apis" type) ''

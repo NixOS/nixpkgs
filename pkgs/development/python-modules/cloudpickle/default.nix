@@ -40,11 +40,11 @@ buildPythonPackage rec {
     "tests/cloudpickle_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cloudpipe/cloudpickle/blob/${src.tag}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
   };
 }
