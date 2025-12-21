@@ -9,8 +9,8 @@ case "$choice" in
         zxing-cmdline-runner "$@";
         ;;
     help | usage | --help | --usage | -h)
-        zxing read;
-        zxing write;
+        zxing read --help;
+        zxing write --help;
         ;;
     *)
         zxing read "$choice" "$@"
