@@ -5,6 +5,76 @@
   python,
 }:
 
+let
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+
+  getInstallCheckPhaseArgs =
+    args:
+    lib.mapAttrs'
+      (name: value: {
+        name = lib.replaceString "Check" "InstallCheck" name;
+        inherit value;
+      })
+      (
+        getOptionalAttrs [
+          "doCheck"
+          "preCheck"
+          "postCheck"
+        ] args
+      )
+    // getOptionalAttrs [
+      "doInstallCheck"
+      "preInstallCheck"
+      "postInstallCheck"
+    ] args
+    // {
+      nativeInstallCheckInputs = args.nativeCheckInputs or [ ] ++ args.nativeInstallCheckInputs or [ ];
+      installCheckInputs = args.checkInputs or [ ] ++ args.installCheckInputs or [ ];
+    }
+    // lib.optionalAttrs (args ? installCheckPhase || args ? checkPhase) {
+      installCheckPhase =
+        lib.replaceStrings
+          [ "runHook preCheck\n" "runHook postCheck\n" ]
+          [ "runHook preInstallCheck\n" "runHook postInstallCheck\n" ]
+          (args.installCheckPhase or args.checkPhase);
+    };
+
+  getCheckPhaseArgs =
+    args:
+    lib.mapAttrs'
+      (name: value: {
+        name = lib.replaceString "Install" "" name;
+        inherit value;
+      })
+      (
+        getOptionalAttrs [
+          "doInstallCheck"
+          "nativeInstallCheckInputs"
+          "preInstallCheck"
+          "postInstallCheck"
+        ] args
+      )
+    // lib.optionalAttrs (args ? installCheckInputs) {
+      checkInputs = args.installCheckInputs;
+    }
+    // lib.optionalAttrs (args ? installCheckPhase) {
+      checkPhase =
+        lib.replaceStrings
+          [ "runHook preInstallCheck\n" "runHook postInstallCheck\n" ]
+          [ "runHook preCheck\n" "runHook postCheck\n" ]
+          args.installCheckPhase;
+    };
+
+  getOutArgs =
+    args:
+    let
+      outArgsInstallCheck = getInstallCheckPhaseArgs args;
+      outArgsCheck = getCheckPhaseArgs outArgsInstallCheck;
+    in
+    removeAttrs args (lib.attrNames outArgsCheck) // outArgsInstallCheck;
+in
+
 self:
 
 let
@@ -22,15 +92,19 @@ let
     lib.mirrorFunctionArgs f (
       origArgs:
       let
-        result = f origArgs;
-        overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
+        installCheckPhaseArgsOrig = getInstallCheckPhaseArgs origArgs;
+        checkPhaseArgsOrig = getCheckPhaseArgs installCheckPhaseArgsOrig;
+        inArgs = origArgs // checkPhaseArgsOrig // installCheckPhaseArgsOrig;
+
+        result = f (getOutArgs origArgs);
+        overrideWith = newArgs: getOutArgs origArgs // getOutArgs (lib.toFunction newArgs inArgs);
       in
       if lib.isAttrs result then
         result
         // {
           overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
           overrideAttrs =
-            newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
+            newArgs: makeOverridablePythonPackage (args: (f (getOutArgs args)).overrideAttrs newArgs) origArgs;
         }
       else
         result
