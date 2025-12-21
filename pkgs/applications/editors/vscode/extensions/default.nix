@@ -1005,8 +1005,8 @@ let
         mktplcRef = {
           name = "coder-remote";
           publisher = "coder";
-          version = "1.11.5";
-          hash = "sha256-p2mAm6bY2lNocQLQ/8ZW+JcDFlwhMytoQtXNMeJq+CE=";
+          version = "1.11.6";
+          hash = "sha256-yMhbOnG7jVO0oPzLa+El5i7KlD1GCYTOcfF0cOUf5hQ=";
         };
         meta = {
           description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
