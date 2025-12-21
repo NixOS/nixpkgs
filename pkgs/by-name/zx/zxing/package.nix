@@ -39,12 +39,14 @@ maven.buildMavenPackage rec {
   '';
 
   meta = {
+    changelog = "https://github.com/zxing/zxing/releases/tag/zxing-${version}";
     description = "1D and 2D code reading library";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       fromSource
     ];
     license = lib.licenses.asl20;
+    mainProgram = "zxing";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/zxing/zxing";
