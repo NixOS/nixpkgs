@@ -3,6 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+  # frontend deps
+  yarn-berry_4,
+  nodejs,
+
   # build-system
   setuptools,
 
@@ -16,20 +20,24 @@
   docker,
   fastapi,
   flask,
+  flask-cors,
   gitpython,
   graphene,
   gunicorn,
+  huey,
   importlib-metadata,
   jinja2,
   markdown,
   matplotlib,
   numpy,
   opentelemetry-api,
+  opentelemetry-proto,
   opentelemetry-sdk,
   packaging,
   pandas,
   protobuf,
   pyarrow,
+  python-dotenv,
   pyyaml,
   requests,
   scikit-learn,
@@ -69,17 +77,19 @@
   transformers,
   xgboost,
 }:
-
+let
+  yarn-berry = yarn-berry_4;
+in
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "3.3.1";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-5zObSnGx7+cCrqRfvcnprQN05NqVBCeWcAZEE1Jpeuo=";
+    hash = "sha256-+5r/ddXetFDleAru3d6Cl3t6HhrX1Juf0DoI4JawdMU=";
   };
 
   pythonRelaxDeps = [
@@ -104,21 +114,25 @@ buildPythonPackage rec {
     docker
     fastapi
     flask
+    flask-cors
     gitpython
     graphene
     gunicorn
+    huey
     importlib-metadata
     jinja2
     markdown
     matplotlib
     numpy
     opentelemetry-api
+    opentelemetry-proto
     opentelemetry-sdk
     packaging
     pandas
     protobuf
     pyarrow
     pydantic
+    python-dotenv
     pyyaml
     requests
     scikit-learn
@@ -130,6 +144,29 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "mlflow" ];
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry.yarnBerryConfigHook
+    yarn-berry
+  ];
+
+  missingHashes = ./missing-hashes.json;
+
+  preConfigure = ''
+    pushd mlflow/server/js;
+  '';
+
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    sourceRoot = "${src.name}/mlflow/server/js";
+    hash = "sha256-pz30tdN4QrskYduA/OrPlcf+wJTOvW6hHWkQOraTVOA=";
+  };
+
+  preBuild = ''
+    yarn build
+    popd
+  '';
 
   nativeCheckInputs = [
     aiohttp
