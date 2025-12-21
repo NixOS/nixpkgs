@@ -20,14 +20,14 @@ buildPythonPackage rec {
   pname = "tensile";
   # Using a specific commit which has compression support from after the 6.4 release
   # Without compression packages are too large for hydra
-  version = "7.0.0";
+  version = "7.0.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "Tensile";
     rev = "rocm-${version}";
-    hash = "sha256-miNQzXfr/1qIqPJqun42zp6QGI6v6K1fKIXdCfkNKow=";
+    hash = "sha256-1G6qp/VBJL67QW9t2VB5KK5lwn+PbY0hqHq8DzyK2fg=";
   };
 
   # TODO: It should be possible to run asm caps test ONCE for all supported arches

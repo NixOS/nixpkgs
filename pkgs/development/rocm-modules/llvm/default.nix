@@ -33,7 +33,7 @@
 }:
 
 let
-  version = "7.0.1";
+  version = "7.0.2";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "20.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
@@ -115,7 +115,7 @@ let
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${version}";
-    hash = "sha256-C6QTDKqjeqExxgBtlCEZmgsEir1uFijgmvKCA/32+/A=";
+    hash = "sha256-gJlDFbCRsiwHgRzmwm36C3WvGfWwgPrtBNUHYmZHTB8=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;
   # An llvmPackages (pkgs/development/compilers/llvm/) built from ROCm LLVM's source tree
@@ -353,14 +353,6 @@ overrideLlvmPackagesRocm (s: {
             # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
             sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
             url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
-            relative = "clang";
-          })
-          (fetchpatch {
-            # [PATCH] Reapply "[CUDA][HIP] Add a __device__ version of std::__glibcxx_assert_fail()"
-            # Fix errors with gcc15
-            # https://github.com/ROCm/composable_kernel/issues/2887
-            hash = "sha256-liowyS6FTsDhH8mJYXsanK7GEIlXFhd68GRDf/7Y6gg=";
-            url = "https://github.com/llvm/llvm-project/commit/8ec0552a7f1f50986dda6d13eae310d121d7e3ba.patch";
             relative = "clang";
           })
         ];

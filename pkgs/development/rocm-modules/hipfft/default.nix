@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.0.1";
+  version = "7.0.2";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-dbmCPzvz+xnvAWn610HCvmGzzLEq1IPhX78lJgY87bg=";
+    hash = "sha256-cozwHUlqACq0IM3YToc/xFB694DJ3rPiEPUCTo0xuHY=";
     fetchSubmodules = true;
   };
 

@@ -14,8 +14,7 @@ buildPythonPackage {
     setuptools
     setuptools-scm
   ];
-  version = "7.0";
-  inherit (composable_kernel) src;
+  inherit (composable_kernel) version src;
   pythonImportsCheck = [
     "ck4inductor"
     "ck4inductor.universal_gemm.gen_instances"
