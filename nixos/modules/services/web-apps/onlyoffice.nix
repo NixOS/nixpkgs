@@ -101,6 +101,12 @@ in
     };
 
     wopi = lib.mkEnableOption "Enable WOPI support";
+
+    loglevel = lib.mkOption {
+      type = lib.types.str;
+      default = "WARN";
+      description = "Default loglevel to use for documentserver and converter";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -264,8 +270,15 @@ in
           "postgresql.target"
         ];
         wantedBy = [ "multi-user.target" ];
+        environment = {
+          NODE_CONFIG_DIR = "/run/onlyoffice/config";
+          NODE_DISABLE_COLORS = "1";
+          NODE_ENV = "production-linux";
+        };
         serviceConfig = {
-          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
+          # needs to be ran wrapped in FHS for now
+          # because the default config refers to many FHS paths
+          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter /run/onlyoffice/config";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -326,6 +339,10 @@ in
             jq '.FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"' \
               /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
+            chmod u+w /run/onlyoffice/config/log4js/production.json
+            jq '.categories.default.level = "${cfg.loglevel}"' \
+              /run/onlyoffice/config/log4js/production.json | sponge /run/onlyoffice/config/log4js/production.json
+
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/createdb.sql
@@ -344,7 +361,7 @@ in
           requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
+            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice /run/onlyoffice/config";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
