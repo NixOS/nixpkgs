@@ -34,7 +34,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Nadim147c/waybar-lyric";
     license = lib.licenses.agpl3Only;
     mainProgram = "waybar-lyric";
-    maintainers = with lib.maintainers; [ vanadium5000 ];
+    maintainers = with lib.maintainers; [
+      Nadim147c
+      vanadium5000
+    ];
     platforms = lib.platforms.linux;
   };
 })
