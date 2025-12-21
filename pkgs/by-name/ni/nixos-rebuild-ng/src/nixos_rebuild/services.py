@@ -281,7 +281,11 @@ def build_and_activate_system(
     build_attr: BuildAttr,
     grouped_nix_args: GroupedNixArgs,
 ) -> None:
-    logger.info("building the system configuration...")
+    if args.use_prebuilt_closure:
+        logger.info(f"using prebuilt system configuration at {args.use_prebuilt_closure}...")
+    else:
+        logger.info("building the system configuration...")
+
     attr = _get_system_attr(
         action=action,
         args=args,
@@ -290,7 +294,9 @@ def build_and_activate_system(
         grouped_nix_args=grouped_nix_args,
     )
 
-    if args.rollback:
+    if args.use_prebuilt_closure:
+        path_to_config = Path(args.use_prebuilt_closure)
+    elif args.rollback:
         path_to_config = _rollback_system(
             action=action,
             args=args,
