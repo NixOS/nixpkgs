@@ -190,6 +190,7 @@ python311Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [
       pbar
       thoughtpolice
+      shikanime
     ];
     platforms = lib.platforms.unix;
     mainProgram = "sl";
