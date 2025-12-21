@@ -2434,6 +2434,33 @@
   "cernlib-hook": [
     "index.html#cernlib-hook"
   ],
+  "checkbinaryarchhook": [
+    "index.html#checkbinaryarchhook"
+  ],
+  "checkbinaryarchhook-usage": [
+    "index.html#checkbinaryarchhook-usage"
+  ],
+  "checkbinaryarchhook-how-it-works": [
+    "index.html#checkbinaryarchhook-how-it-works"
+  ],
+  "checkbinaryarchhook-configuration": [
+    "index.html#checkbinaryarchhook-configuration"
+  ],
+  "checkbinaryarchhook-dontCheckBinaryArch": [
+    "index.html#checkbinaryarchhook-dontCheckBinaryArch"
+  ],
+  "checkbinaryarchhook-checkBinaryArchExtraPaths": [
+    "index.html#checkbinaryarchhook-checkBinaryArchExtraPaths"
+  ],
+  "checkbinaryarchhook-checkBinaryArchDebug": [
+    "index.html#checkbinaryarchhook-checkBinaryArchDebug"
+  ],
+  "checkbinaryarchhook-common-causes": [
+    "index.html#checkbinaryarchhook-common-causes"
+  ],
+  "checkbinaryarchhook-example-error": [
+    "index.html#checkbinaryarchhook-example-error"
+  ],
   "cmake": [
     "index.html#cmake"
   ],
