@@ -18159,6 +18159,12 @@
     github = "nadiaholmquist";
     githubId = 893884;
   };
+  Nadim147c = {
+    email = "theephemeral.txt@gmail.com";
+    github = "Nadim147c";
+    githubId = 90786729;
+    name = "Ephemeral";
+  };
   nadir-ishiguro = {
     github = "nadir-ishiguro";
     githubId = 23151917;
