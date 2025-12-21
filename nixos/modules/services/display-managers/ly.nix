@@ -45,6 +45,7 @@ let
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
+    session_log = ".local/state/ly-session.log";
   };
 
   finalConfig = defaultConfig // cfg.settings;

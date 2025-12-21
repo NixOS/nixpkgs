@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.12.3";
+  version = "2025.12.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -4105,6 +4105,7 @@
       ];
     "nintendo_parental_controls" =
       ps: with ps; [
+        pynintendoauth
         pynintendoparental
       ];
     "nissan_leaf" =

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyhik";
-  version = "0.3.2";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mezz64";
     repo = "pyHik";
     tag = version;
-    hash = "sha256-GqBHmwzQsnVGK1M2kKV3lQ3s7tsudoxmLC7xxGH55E0=";
+    hash = "sha256-/0cmEhjiojj7ovEUICun+naR4iVnrsJk+6/4+tTXEQA=";
   };
 
   build-system = [
