@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridix";
-  version = "0.5.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "MCB-SMART-BOY";
     repo = "Gridix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7AvaSqLjDAA65V5UXZRd6Gjgns4smJnI01T14RoQqBg=";
+    hash = "sha256-ANeJ9r1tJz0JJEa474ybGl5DRTjTp9C3/f0dPWAIDlE=";
   };
 
-  cargoHash = "sha256-EW6fVDYD2Fsw8hNhwN/M9tT53ivRl1uc/JqQMgIH57k=";
+  cargoHash = "sha256-DLoB7GJrZr9JYq3uW7w0Oi5DhQYf27lKSJVY6zSzJfE=";
 
   nativeBuildInputs = [
     pkg-config
