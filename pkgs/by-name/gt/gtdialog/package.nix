@@ -1,22 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
   cdk,
   unzip,
   gtk2,
   glib,
   ncurses,
   pkg-config,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtdialog";
   version = "1.4";
 
-  src = fetchurl {
-    url = "https://foicica.com/gtdialog/download/gtdialog_${version}.zip";
-    sha256 = "sha256-0+WBr1IZIhQjxOsKO/yuXjaTRWPObhMdGqgibcpXGtI=";
+  src = fetchFromGitHub {
+    owner = "orbitalquark";
+    repo = "gtdialog";
+    rev = "gtdialog_${finalAttrs.version}";
+    hash = "sha256-BJZP91HzGBm/G5sbKi3jyKQ2LD7l/PC1AoljthNxWtU=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +43,4 @@ stdenv.mkDerivation rec {
     homepage = "http://foicica.com/gtdialog";
     downloadPage = "http://foicica.com/gtdialog/download";
   };
-}
+})
