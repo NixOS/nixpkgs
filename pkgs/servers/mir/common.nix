@@ -2,7 +2,10 @@
   stdenv,
   rustPlatform,
   lib,
+  common-updater-scripts,
   fetchFromGitHub,
+  genericUpdater,
+  gitUpdater,
   nixosTests,
   testers,
   cargo,
@@ -245,7 +248,29 @@ stdenv.mkDerivation (
         "mir-shell"
       ];
     }
-    // lib.optionalAttrs (!pinned) { updateScript = ./update.sh; };
+    // lib.optionalAttrs (!pinned) {
+      updateScript =
+        let
+          cusWithFlag = common-updater-scripts.overrideAttrs (oa: {
+            # Have to double-wrap it...
+            installPhase = oa.installPhase + ''
+              wrapProgram $out/bin/update-source-version \
+                --add-flag '--file=${lib.strings.removeSuffix "/common.nix" __curPos.file}/default.nix'
+            '';
+          });
+        in
+        # Attrs to update are in default.nix
+        (gitUpdater.override {
+          common-updater-scripts = cusWithFlag;
+          genericUpdater = genericUpdater.override {
+            common-updater-scripts = cusWithFlag;
+          };
+        })
+          {
+            rev-prefix = "v";
+            ignoredVersions = "-(dev|rc)$";
+          };
+    };
 
     meta = {
       description = "Display server and Wayland compositor developed by Canonical";
