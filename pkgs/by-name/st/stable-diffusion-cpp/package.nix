@@ -110,17 +110,17 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stable Diffusion inference in pure C/C++";
     homepage = "https://github.com/leejet/stable-diffusion.cpp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       dit7ya
       adriangl
     ];
-    platforms = platforms.unix;
-    badPlatforms = optionals (cudaSupport || openclSupport) platforms.darwin;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !stdenv.hostPlatform.isDarwin;
   };
 })

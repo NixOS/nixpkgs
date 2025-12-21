@@ -109,7 +109,7 @@ openvpn.overrideAttrs (
     meta = oldAttrs.meta or { } // {
       description = "OpenVPN with Mullvad-specific patches applied";
       homepage = "https://github.com/mullvad/openvpn";
-      maintainers = with lib; [ maintainers.cole-h ];
+      maintainers = with lib.maintainers; [ cole-h ];
     };
   }
 )

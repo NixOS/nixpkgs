@@ -28,9 +28,9 @@ let
 
   vendorHash = "sha256-VG1/6KadRC4jLBIOL39M6l8ZED1KLb+wKGHNQowAV1g=";
 
-  commonMeta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+  commonMeta = {
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
   decorate = buildGo125Module {

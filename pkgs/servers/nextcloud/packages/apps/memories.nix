@@ -23,11 +23,11 @@ let
     latestVersionForNc.${ncVersion}
       or (throw "memories currently does not support nextcloud version ${ncVersion}");
 
-  commonMeta = with lib; {
+  commonMeta = {
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 
   go-vod = buildGoModule rec {
