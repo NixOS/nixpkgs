@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs_24,
   makeWrapper,
   prisma-engines,
@@ -28,6 +30,8 @@ let
     PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
     PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
   };
+
+  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm';
     fetcherVersion = 2;
     hash = "sha256-JphaLunhwPdeKxlHdpMNGAl8um7wsOkNCCWYxQhLuBM=";
   };
@@ -58,7 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm'
     nodejs_24
     makeWrapper
     # for sharp build:

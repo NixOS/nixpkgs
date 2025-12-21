@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   vscode-utils,
   nix-update-script,
@@ -21,7 +23,7 @@ let
       hash = "sha256-k5dDgNUbOd+aOzPeub7P/uWDCeWO0ffyDaGtu2M87Wg=";
     };
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-YeCrmTPOeBfsSAMMv11ipHM8AgLzcy/sOW/Jg8H5H+w=";
@@ -29,7 +31,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpmConfigHook
       pnpm
     ];
 

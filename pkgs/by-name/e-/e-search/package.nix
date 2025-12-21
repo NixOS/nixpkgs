@@ -10,6 +10,8 @@
   makeWrapper,
   nodejs_20,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   atk,
   atkmm,
@@ -31,6 +33,7 @@
 }:
 
 let
+  pnpm' = pnpm_10.override { nodejs = nodejs_20; };
   eSearch-OCR-ch = fetchzip {
     url = "https://github.com/xushengfeng/eSearch-OCR/releases/download/4.0.0/ch.zip";
     hash = "sha256-0NCXuy8k9/AdpK4ie49S8032u37gNhX6Jc6bOGufrV4=";
@@ -60,19 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K4GFLUeq/IbJC3FZBgvKnZq7JrXkqe6eVGsUxxlpWF0=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    nativeBuildInputs = [ gitMinimal ];
+    pnpm = pnpm';
     fetcherVersion = 2;
-    prePnpmInstall = ''
-      export PATH=$PATH:${gitMinimal}/bin
-    '';
     hash = "sha256-wPwsFY7wvbE1LW5PMwMZKejELtqmdsYO2RVrEuOzdcg=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     gobject-introspection
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm'
     makeWrapper
     nodejs_20
   ];

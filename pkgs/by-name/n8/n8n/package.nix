@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   node-gyp,
   cctools,
@@ -14,7 +16,6 @@
   libpq,
   makeWrapper,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
   version = "1.119.2";
@@ -26,14 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vf2cjTwjN6gbLNtpjyj6X5XSlytH64TbXyqSvqi3E6k=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-0Dhw0VFIuANOa8Oq8eI1YeUQhuGBO+t56ywUlx8Z2jM=";
   };
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
