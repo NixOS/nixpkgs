@@ -123,7 +123,7 @@ let
       +
         lib.optionalString
           (
-            !stdenv.hostPlatform.isWindows
+            !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
             # LTO breaks exception handling on x86-64-darwin.
