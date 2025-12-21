@@ -45,6 +45,15 @@ let
   # Dependencies in dependency sets should be mutually exclusive.
   mergeDisjointAttrs = lib.foldl' lib.attrsets.unionOfDisjoint { };
 
+  # Workaround for losing `override` after using `overrideScope`
+  # https://github.com/NixOS/nixpkgs/issues/447012
+  overrideLlvmPackagesScope =
+    llvmPackages: f:
+    let
+      override = args: (llvmPackages.override args).overrideScope f;
+    in
+    lib.makeOverridable (lib.mirrorFunctionArgs llvmPackages.override override) { };
+
   commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
@@ -408,99 +417,95 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           }
         );
 
-        "llvmPackages_${llvmVersion}" =
-          (super."llvmPackages_${llvmVersion}".overrideScope (
-            selfLlvmPackages: _: {
-              libclang = self.stdenv.mkDerivation {
-                name = "bootstrap-stage0-clang";
-                version = "boot";
-                outputs = [
-                  "out"
-                  "lib"
-                ];
-                buildCommand = ''
-                  mkdir -p $out
-                  ln -s $out $lib
-                  ln -s ${bootstrapTools}/bin       $out/bin
-                  ln -s ${bootstrapTools}/include   $out
+        "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+          selfLlvmPackages: _: {
+            libclang = self.stdenv.mkDerivation {
+              name = "bootstrap-stage0-clang";
+              version = "boot";
+              outputs = [
+                "out"
+                "lib"
+              ];
+              buildCommand = ''
+                mkdir -p $out
+                ln -s $out $lib
+                ln -s ${bootstrapTools}/bin       $out/bin
+                ln -s ${bootstrapTools}/include   $out
 
-                  # The version of clang in the bootstrap tools may be different from the default, but that’s okay.
-                  # Symlink its resource-dir to the default version just to get past the first stage.
-                  if (( $(ls "$clangLib" | wc -l) > 1 )); then
-                    echo "Multiple LLVM versions were found at "$clangLib", but there must only be one used when building the stdenv." >&2
-                    exit 1
-                  fi
-                  mkdir -p $out/lib/clang
-                  ln -s ${bootstrapTools}/lib/clang/$(ls -1 ${bootstrapTools}/lib/clang) $out/lib/clang/${llvmVersion}
-                '';
-                passthru = {
-                  isClang = true;
-                  isFromBootstrapFiles = true;
-                  hardeningUnsupportedFlags = [
-                    "fortify3"
-                    "pacret"
-                    "shadowstack"
-                    "stackclashprotection"
-                    "zerocallusedregs"
-                  ];
-                };
-              };
-              libllvm = self.stdenv.mkDerivation {
-                name = "bootstrap-stage0-llvm";
-                outputs = [
-                  "out"
-                  "lib"
+                # The version of clang in the bootstrap tools may be different from the default, but that’s okay.
+                # Symlink its resource-dir to the default version just to get past the first stage.
+                if (( $(ls "$clangLib" | wc -l) > 1 )); then
+                  echo "Multiple LLVM versions were found at "$clangLib", but there must only be one used when building the stdenv." >&2
+                  exit 1
+                fi
+                mkdir -p $out/lib/clang
+                ln -s ${bootstrapTools}/lib/clang/$(ls -1 ${bootstrapTools}/lib/clang) $out/lib/clang/${llvmVersion}
+              '';
+              passthru = {
+                isClang = true;
+                isFromBootstrapFiles = true;
+                hardeningUnsupportedFlags = [
+                  "fortify3"
+                  "pacret"
+                  "shadowstack"
+                  "stackclashprotection"
+                  "zerocallusedregs"
                 ];
-                buildCommand = ''
-                  mkdir -p $out/bin $out/lib
-                  ln -s $out $lib
-                  for tool in ${toString super.darwin.binutils-unwrapped.llvm_cmds}; do
-                    cctoolsTool=''${tool//-/_}
-                    toolsrc="${bootstrapTools}/bin/$cctoolsTool"
-                    if [ -e "$toolsrc" ]; then
-                      ln -s "$toolsrc" $out/bin/llvm-$tool
-                    fi
-                  done
-                  ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
-                  ln -s ${bootstrapTools}/bin/llvm-readtapi $out/bin/llvm-readtapi
-                  ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
-                '';
-                passthru.isFromBootstrapFiles = true;
               };
-              lld = self.stdenv.mkDerivation {
-                name = "bootstrap-stage0-lld";
-                buildCommand = "";
-                passthru = {
-                  isLLVM = true;
-                  isFromBootstrapFiles = true;
-                };
+            };
+            libllvm = self.stdenv.mkDerivation {
+              name = "bootstrap-stage0-llvm";
+              outputs = [
+                "out"
+                "lib"
+              ];
+              buildCommand = ''
+                mkdir -p $out/bin $out/lib
+                ln -s $out $lib
+                for tool in ${toString super.darwin.binutils-unwrapped.llvm_cmds}; do
+                  cctoolsTool=''${tool//-/_}
+                  toolsrc="${bootstrapTools}/bin/$cctoolsTool"
+                  if [ -e "$toolsrc" ]; then
+                    ln -s "$toolsrc" $out/bin/llvm-$tool
+                  fi
+                done
+                ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
+                ln -s ${bootstrapTools}/bin/llvm-readtapi $out/bin/llvm-readtapi
+                ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
+              '';
+              passthru.isFromBootstrapFiles = true;
+            };
+            lld = self.stdenv.mkDerivation {
+              name = "bootstrap-stage0-lld";
+              buildCommand = "";
+              passthru = {
+                isLLVM = true;
+                isFromBootstrapFiles = true;
               };
-              compiler-rt = self.stdenv.mkDerivation {
-                name = "bootstrap-stage0-compiler-rt";
-                buildCommand = ''
-                  mkdir -p $out/lib $out/share
-                  ln -s ${bootstrapTools}/lib/libclang_rt* $out/lib
-                  ln -s ${bootstrapTools}/lib/darwin       $out/lib
-                '';
-                passthru.isFromBootstrapFiles = true;
+            };
+            compiler-rt = self.stdenv.mkDerivation {
+              name = "bootstrap-stage0-compiler-rt";
+              buildCommand = ''
+                mkdir -p $out/lib $out/share
+                ln -s ${bootstrapTools}/lib/libclang_rt* $out/lib
+                ln -s ${bootstrapTools}/lib/darwin       $out/lib
+              '';
+              passthru.isFromBootstrapFiles = true;
+            };
+            libcxx = self.stdenv.mkDerivation {
+              name = "bootstrap-stage0-libcxx";
+              buildCommand = ''
+                mkdir -p $out/lib $out/include
+                ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib
+                ln -s ${bootstrapTools}/include/c++      $out/include
+              '';
+              passthru = {
+                isLLVM = true;
+                isFromBootstrapFiles = true;
               };
-              libcxx = self.stdenv.mkDerivation {
-                name = "bootstrap-stage0-libcxx";
-                buildCommand = ''
-                  mkdir -p $out/lib $out/include
-                  ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib
-                  ln -s ${bootstrapTools}/include/c++      $out/include
-                '';
-                passthru = {
-                  isLLVM = true;
-                  isFromBootstrapFiles = true;
-                };
-              };
-            }
-          ))
-          // {
-            inherit (super."llvmPackages_${llvmVersion}") override;
-          };
+            };
+          }
+        );
       };
 
       extraPreHook = ''
@@ -630,13 +635,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           }
         );
 
-        "llvmPackages_${llvmVersion}" =
-          (super."llvmPackages_${llvmVersion}".overrideScope (
-            _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
-          ))
-          // {
-            inherit (super."llvmPackages_${llvmVersion}") override;
-          };
+        "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+          _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
+        );
       };
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
@@ -786,13 +787,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            "llvmPackages_${llvmVersion}" =
-              (super."llvmPackages_${llvmVersion}".overrideScope (
-                _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
-              ))
-              // {
-                inherit (super."llvmPackages_${llvmVersion}") override;
-              };
+            "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+              _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
+            );
           }
         ];
 
@@ -868,11 +865,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            "llvmPackages_${llvmVersion}" =
-              (super."llvmPackages_${llvmVersion}".overrideScope (_: _: llvmLibrariesPackages prevStage))
-              // {
-                inherit (super."llvmPackages_${llvmVersion}") override;
-              };
+            "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+              _: _: llvmLibrariesPackages prevStage
+            );
           }
         ];
 
@@ -939,13 +934,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            "llvmPackages_${llvmVersion}" =
-              (super."llvmPackages_${llvmVersion}".overrideScope (
-                _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
-              ))
-              // {
-                inherit (super."llvmPackages_${llvmVersion}") override;
-              };
+            "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+              _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
+            );
           }
         ];
 
@@ -1145,40 +1136,35 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # darwin.binutils is not yet ready to be target-independent.
             (lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage))
             {
-              "llvmPackages_${llvmVersion}" =
-                (super."llvmPackages_${llvmVersion}".overrideScope (
-                  finalLLVM: _:
-                  # These are defined explicitly to make sure that overriding their dependencies using `overrideScope`
-                  # still works. `llvmPackages.libcxx` is not included because it’s not part of the Darwin stdenv.
-                  {
-                    inherit (prevStage."llvmPackages_${llvmVersion}") libllvm;
-                    libclang = prevStage."llvmPackages_${llvmVersion}".libclang.override {
-                      inherit (finalLLVM) libllvm;
-                    };
-                    lld = prevStage."llvmPackages_${llvmVersion}".lld.override {
-                      inherit (finalLLVM) libllvm;
-                    };
-                  }
-                  # Avoid using the llvm-manpages package from the bootstrap, which won’t build due to needing curl.
-                  // {
-                    inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
-                  }
-                  // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
-                    # Make sure the following are all the same in the local == target case:
-                    # - clang
-                    # - llvmPackages.stdenv.cc
-                    # - llvmPackages.systemLibcxxClang.
-                    # - llvmPackages.clang
-                    # - stdenv.cc
-                    systemLibcxxClang = prevStage."llvmPackages_${llvmVersion}".systemLibcxxClang.override {
-                      cc = finalLLVM.clang-unwrapped;
-                    };
-                  }
-                ))
+              "llvmPackages_${llvmVersion}" = overrideLlvmPackagesScope super."llvmPackages_${llvmVersion}" (
+                finalLLVM: _:
+                # These are defined explicitly to make sure that overriding their dependencies using `overrideScope`
+                # still works. `llvmPackages.libcxx` is not included because it’s not part of the Darwin stdenv.
+                {
+                  inherit (prevStage."llvmPackages_${llvmVersion}") libllvm;
+                  libclang = prevStage."llvmPackages_${llvmVersion}".libclang.override {
+                    inherit (finalLLVM) libllvm;
+                  };
+                  lld = prevStage."llvmPackages_${llvmVersion}".lld.override {
+                    inherit (finalLLVM) libllvm;
+                  };
+                }
+                # Avoid using the llvm-manpages package from the bootstrap, which won’t build due to needing curl.
                 // {
-                  inherit (super."llvmPackages_${llvmVersion}") override;
-                  recurseForDerivations = true;
-                };
+                  inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                }
+                // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                  # Make sure the following are all the same in the local == target case:
+                  # - clang
+                  # - llvmPackages.stdenv.cc
+                  # - llvmPackages.systemLibcxxClang.
+                  # - llvmPackages.clang
+                  # - stdenv.cc
+                  systemLibcxxClang = prevStage."llvmPackages_${llvmVersion}".systemLibcxxClang.override {
+                    cc = finalLLVM.clang-unwrapped;
+                  };
+                }
+              );
             }
           ];
       };
