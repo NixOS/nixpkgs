@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "frederickjansen";
     repo = "polyline";
     tag = "v${version}";
-    hash = "sha256-HUdjebUMcYGW+7dyOpVgBnBcesmqDWpw1NgYigOxmQ8=";
+    hash = "sha256-PaQLHz256ZZ+0PdSSeGM+rjubSnT4fQfpD1Uj3JfBt8=";
   };
 
   nativeBuildInputs = [
