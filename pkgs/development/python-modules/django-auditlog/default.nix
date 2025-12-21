@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-auditlog";
     tag = "v${version}";
-    hash = "sha256-ZOCLlS9SUY8W3jfA+51gy5yUchJr+rpBzH+Sx1G/kUM=";
+    hash = "sha256-/IOzMGRR8EP/AGP7fcqwP4GeSKXPwE6NF6AZmiF1+lA=";
   };
 
   nativeBuildInputs = [
