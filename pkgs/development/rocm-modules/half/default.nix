@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "half";
-  version = "7.0.1";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";

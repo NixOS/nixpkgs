@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "7.0.1";
+  version = "7.0.2";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-MVPffQGKsF5gyb5eTEgj6H+ikLrQTPlRB7Eg/GYYvGI=";
+    hash = "sha256-/JFGqNA4weVgFuVtszYAxq65/+oZjiKC8zSxwvp964M=";
   };
 
   nativeBuildInputs = [

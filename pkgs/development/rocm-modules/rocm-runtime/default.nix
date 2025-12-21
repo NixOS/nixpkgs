@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.0.1";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-APFcC17JxTxTkJvaAeKezN70wXjWLTDpeIDj8e/mwhQ=";
+    hash = "sha256-oz2UCR4XEhNm1uDlCeDnDJrmysWKA6GKxlEuFu21es0=";
   };
 
   cmakeBuildType = "RelWithDebInfo";

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "7.0.1";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm_smi_lib";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-jhjdx3xF6hu+p99dFAGgUwQ2fIhNf5WzeZqeWW1fKc4=";
+    hash = "sha256-LzWKWiHmMDGO2ejvcT0BBg22HbYD9q0fxK/bq6JvcnQ=";
   };
 
   propagatedBuildInputs = [

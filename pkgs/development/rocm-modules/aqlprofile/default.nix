@@ -8,15 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "aqlprofile";
-  version = "6.4.3";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
-    # TODO: Will move to rocm-systems repo and have proper tags in 7.x
-    # pinned to oddly named tag for now
     owner = "ROCm";
     repo = "aqlprofile";
-    tag = "rocm-7.0.1";
-    hash = "sha256-avL78ZfB+rJ1TYaejSUzU6i5L9JeMawMwIxaTQINQdE=";
+    tag = "rocm-7.0.2";
+    hash = "sha256-A17SAkEUf3yAGwvZUWSdL7Tn5YAXB0YlD3T1DLTjDSg=";
   };
 
   env.CXXFLAGS = "-DROCP_LD_AQLPROFILE=1";

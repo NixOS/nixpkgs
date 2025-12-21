@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "7.0.1";
+  version = "7.0.2";
 
   outputs = [
     "out"
