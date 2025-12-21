@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridix";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "MCB-SMART-BOY";
     repo = "Gridix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ANeJ9r1tJz0JJEa474ybGl5DRTjTp9C3/f0dPWAIDlE=";
+    hash = "sha256-9Sxq1yKqeKbWzLc1YVidnR4enu2b3UaFz4XmwJJ/19o=";
   };
 
-  cargoHash = "sha256-DLoB7GJrZr9JYq3uW7w0Oi5DhQYf27lKSJVY6zSzJfE=";
+  cargoHash = "sha256-ZMe0SvOpzfrMLnnejIxuEXtmZZCgSaZIX75wfjvSf0k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/MCB-SMART-BOY/Gridix";
     changelog = "https://github.com/MCB-SMART-BOY/Gridix/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcb-smart-boy ];
     mainProgram = "gridix";
     platforms = lib.platforms.linux;
