@@ -527,6 +527,19 @@
               - pkgs/test/texlive/**
               - pkgs/tools/typesetting/tex/**/*
 
+"6.topic: tree-sitter":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/packages/python-tree-sitter.section.md
+              - pkgs/applications/editors/emacs/elisp-packages/manual-packages/tree-sitter-langs/**/*
+              - pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/**/*
+              - pkgs/applications/editors/vim/plugins/nvim-treesitter/**/*
+              - pkgs/by-name/*/*tree-sitter*/**/*
+              - pkgs/by-name/ne/neovim-unwrapped/treesitter-parsers.nix
+              - pkgs/development/python-modules/*tree-sitter*/**/*
+              - pkgs/development/tools/parsing/tree-sitter/**/*
+
 "6.topic: updaters":
   - any:
       - changed-files:
