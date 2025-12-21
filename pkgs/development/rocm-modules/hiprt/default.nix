@@ -9,17 +9,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprt";
-  version = "2.5.a21e075.3";
+  version = "3.0.3.a1525e7";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "HIPRT";
     tag = finalAttrs.version;
-    sha256 = "sha256-3yGhwIsFHlFMCEzuYnXuXNzs99m7f2LTkYaTGs0GEcI=";
+    hash = "sha256-7r7KO+WuXOeQQhYLYpJRrD4ZqVsBOqaD2NGD15CWnoo=";
   };
 
   postPatch = ''
-    rm -rf contrib/easy-encrypt # contains prebuilt easy-encrypt binaries, we disable encryption
     substituteInPlace contrib/Orochi/contrib/hipew/src/hipew.cpp --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib'
     substituteInPlace hiprt/hiprt_libpath.h --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib/'
   '';
@@ -40,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PRECOMPILE" true)
     # needs accelerator
     (lib.cmakeBool "NO_UNITTEST" true)
-    # we have no need to support baking encrypted kernels into object files
-    (lib.cmakeBool "NO_ENCRYPT" true)
     (lib.cmakeBool "FORCE_DISABLE_CUDA" true)
   ];
 
