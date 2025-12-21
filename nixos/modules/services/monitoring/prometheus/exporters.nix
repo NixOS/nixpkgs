@@ -64,6 +64,7 @@ let
         "ebpf"
         "elasticsearch"
         "fail2ban"
+        "fastcom"
         "fastly"
         "flow"
         "fritz"
