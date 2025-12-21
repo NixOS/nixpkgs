@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "3.1.1";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${version}";
-    hash = "sha256-U/JlwJoNlRUm7gMEw5AHuazl+qXeF+pnqfICbVuvnQQ=";
+    hash = "sha256-OQxUu944IiyA/uCqmM8i0ZfGJ6lSz7Q+TTRxMqkkxNk=";
   };
 
   postPatch = ''
