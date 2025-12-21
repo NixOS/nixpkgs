@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "toml-test";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "toml-lang";
     repo = "toml-test";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jOFkSEDNvvx8svgyYYpAbveQsclMsQRKJ2ocA6ty1Kw=";
+    hash = "sha256-QJ7rK4zdPN8c728fR9r4vXnSk4Y9T/XQJulO7kQaYFE=";
   };
 
-  vendorHash = "sha256-yt5rwpYzO38wEUhcyG4G367Byek20Uz3u+buAazq/5A=";
+  vendorHash = "sha256-aIGcv6qAQC3URQ/WIvg/+nRyrw1N2q5uBVpRH4fwgXk=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
