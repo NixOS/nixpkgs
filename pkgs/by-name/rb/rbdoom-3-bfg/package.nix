@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace neo/extern/nvrhi/tools/shaderCompiler/CMakeLists.txt \
+    substituteInPlace neo/extern/ShaderMake/CMakeLists.txt \
       --replace "AppleClang" "Clang"
   '';
 
