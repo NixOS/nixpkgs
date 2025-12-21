@@ -9,14 +9,13 @@
   libgsf,
   libheif,
   libjxl,
+  libopenraw,
   librsvg,
   poppler,
   gst_all_1,
   webp-pixbuf-loader,
   libxfce4util,
 }:
-
-# TODO: add libopenraw
 
 mkXfceDerivation {
   category = "xfce";
@@ -34,6 +33,7 @@ mkXfceDerivation {
     gst_all_1.gst-plugins-base
     libgepub # optional EPUB thumbnailer support
     libgsf
+    libopenraw
     poppler # technically the glib binding
   ];
 
