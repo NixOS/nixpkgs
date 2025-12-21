@@ -8,23 +8,26 @@
 
 buildGoModule (finalAttrs: {
   pname = "carapace-bridge";
-  version = "1.2.10";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQtbOQw2a2B5zhTgFiAuECtY/uM7AQnbwyRpzoKcF8I=";
+    hash = "sha256-6CCLSwbAYkMelaM5ac1I1kwOlWKPSOU9M9/2Dybt55I=";
   };
 
-  # buildGoModule try to run `go mod vendor` instead of `go work vendor` on the
-  # workspace if proxyVendor is off
+  # buildGoModule tries to run `go mod vendor` instead of `go work vendor` on
+  # the workspace if proxyVendor is off
   proxyVendor = true;
-  vendorHash = "sha256-01WRJJiAqxmb1grvz9gWdYJ4i9pVUYmxFg9BGEuUhdA=";
+  vendorHash = "sha256-DyFOCx+pCChbQRGRDou0QU2YTQzrcAgwO5Mc918Xm8k=";
 
   postPatch = ''
     substituteInPlace cmd/carapace-bridge/main.go \
       --replace-fail "var version = \"develop\"" "var version = \"$version\""
+
+    # Remove docker examples
+    rm -r .docker
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
