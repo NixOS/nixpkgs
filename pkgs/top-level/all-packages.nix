@@ -13942,10 +13942,6 @@ with pkgs;
 
   vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
 
-  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
-    ffmpeg = ffmpeg-full;
-  };
-
   py-wacz = with python3Packages; toPythonApplication wacz;
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
