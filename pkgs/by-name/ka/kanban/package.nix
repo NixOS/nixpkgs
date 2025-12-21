@@ -12,8 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fulsomenko";
     repo = "kanban";
-    rev = "6557b7343975b73e76f1289842597fc41c4900ba";
-    hash = "sha256-YJ9dUfZO8bWXexfX6Y3eTOW72qogVrGOLCVwaRoHlAA=";
+    rev = "2326b0ea27e999e8c46edc3a5f17055df4f7fec7";
+    hash = "sha256-xjw+OgoP+ZAmEnRqNCKeInJbl5etaWF/uVl8Gxs/+Xs=";
   };
 
   GIT_COMMIT_HASH = finalAttrs.src.rev;
