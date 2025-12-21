@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.5.0";
+  version = "0.5.1";
 in
 rustPlatform.buildRustPackage {
   pname = "lla";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "chaqchase";
     repo = "lla";
     tag = "v${version}";
-    hash = "sha256-xbXTiOr3c9PX0SRfjO+3Kib5S0fruFhjHO2Mf00BVBg=";
+    hash = "sha256-8zeBOv6ddtbPknexvtMBnJ6L4hta8wq8CziWrG4ltYY=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  cargoHash = "sha256-qKeNSaZMpyQpI7oGqn416pfBINMsIE+0sjzg38roxc8=";
+  cargoHash = "sha256-kBhHcL1VFl7gdtnWUJqEYCQBw44adKlLDLXQ4PKelG4=";
 
   cargoBuildFlags = [ "--workspace" ];
 
