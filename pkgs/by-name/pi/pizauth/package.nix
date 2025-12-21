@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 lib/systemd/user/pizauth{,-*}.service -t $out/lib/systemd/user
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";
