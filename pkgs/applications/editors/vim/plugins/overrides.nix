@@ -694,6 +694,11 @@ assertNoAdditions {
     ];
   };
 
+  codesettings-nvim = super.codesettings-nvim.overrideAttrs {
+    # This module is a build CLI and should not be `require`d directly!
+    nvimSkipModules = [ "codesettings.build.cli" ];
+  };
+
   windsurf-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
