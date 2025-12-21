@@ -18,7 +18,6 @@
   # tests
   runTests ? false,
   gettext,
-  muon,
   nasm,
   pkg-config,
   python3,
@@ -183,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # tests are run here in package tests, rather than enabling doCheck by
   # default, to reduce the number of required dependencies.
-  passthru.tests.test = (muon.overrideAttrs { pname = "muon-tests"; }).override {
+  passthru.tests.test = (finalAttrs.finalPackage.overrideAttrs { pname = "muon-tests"; }).override {
     buildDocs = false;
     embedSamurai = true;
     runTests = true;
