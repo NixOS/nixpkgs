@@ -21,17 +21,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringboard" + lib.optionalString (displayServer == "wayland") "-wayland";
 
   # release version needs nightly, so we use a custom tree, see:
-  # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3322075172
-  version = "0.12.2-unstable-2025-09-23";
+  # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
+  version = "0.13.2-unstable-2025-12-19";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "228a39dd8a9aece0bb06f68ad44906b297270628";
-    hash = "sha256-qA7wwvWnnZHN9edkmubEo37F+peU0LQGo/Zl8FpywuE=";
+    rev = "08a2a2a77fa38240dfc6a33adabb3a473ce6bcfd";
+    hash = "sha256-iG/pk6xizCv2sUqTA44nb4AnbaOuDsIONuUfJuOWnc8=";
   };
 
-  cargoHash = "sha256-MFfuUu/hpb6Uaqe21bvXNKRyJazAL5m+Vw/vAeeDYEk=";
+  cargoHash = "sha256-LuWUf37X/Z0xCbAQmaMY8lle7gGZWoz2bgYhe/uRonU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # To reopen the window, a special file can be deleted which wakes the GUI via inotify.
     # If, instead, a new instance of the GUI is opened, this special file is used to first check for a previously running instance of the GUI and kill it if it exists.
     # https://alexsaveau.dev/blog/projects/performance/clipboard/ringboard/ringboard#gui-startup-latency-and-long-lived-client-windows
-    sed -i "s|Exec=ringboard-egui|Exec=$(echo /bin/sh -c \"ps -p \`cat /tmp/.ringboard/\$USER.egui-sleep 2\> /dev/null\` \> /dev/null 2\>\\\&1 \\\&\\\& exec rm -f /tmp/.ringboard/\$USER.egui-sleep \\\|\\\| exec $out/bin/ringboard-egui\")|g" $out/share/applications/ringboard-egui.desktop
+    sed -i "s|Exec=ringboard-egui|Exec=$out/bin/ringboard-egui toggle|g" $out/share/applications/ringboard-egui.desktop
     sed -i "s|Icon=ringboard|Icon=$out/share/icons/hicolor/1024x1024/ringboard.jpeg|g" $out/share/applications/ringboard-egui.desktop
   '';
 
