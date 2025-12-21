@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanban";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "fulsomenko";
     repo = "kanban";
-    rev = "2326b0ea27e999e8c46edc3a5f17055df4f7fec7";
-    hash = "sha256-xjw+OgoP+ZAmEnRqNCKeInJbl5etaWF/uVl8Gxs/+Xs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WksL0AhooBTV+W1knU+tns/qvHDd0z6mE2HkC57BAcU=";
   };
 
   GIT_COMMIT_HASH = finalAttrs.src.rev;
