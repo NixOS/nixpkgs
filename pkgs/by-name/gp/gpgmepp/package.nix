@@ -16,11 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1HlgScBnCKJvMJb3SO8JU0fho8HlcFYXAf6VLD9WU4I=";
   };
 
-  postPatch = ''
-    substituteInPlace src/gpgmepp.pc.in \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-  '';
+  patches = [ ./0001-Fix-handling-of-absolute-install-dirs-in-.pc-install.patch ];
 
   nativeBuildInputs = [
     cmake
