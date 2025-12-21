@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/rcode/rcd_autogen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "wxWidgets-based EDID (Extended Display Identification Data) editor";
     homepage = "https://sourceforge.net/projects/wxedid";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "wxedid";
-    maintainers = [ maintainers.meanwhile131 ];
+    maintainers = [ lib.maintainers.meanwhile131 ];
     platforms = lib.platforms.linux;
   };
 }
