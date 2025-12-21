@@ -11,6 +11,7 @@
         {
           virtualisation.cores = 2;
 
+          networking.useDHCP = false;
           networking.firewall.allowedTCPPorts = [ 7233 ];
 
           environment.systemPackages = [
