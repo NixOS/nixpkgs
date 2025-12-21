@@ -16822,6 +16822,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-angry = buildVimPlugin {
+    pname = "vim-angry";
+    version = "0-unstable-2014-03-10";
+    src = fetchFromGitHub {
+      owner = "b4winckler";
+      repo = "vim-angry";
+      rev = "08e9e9a50e6683ac7b0c1d6fddfb5f1235c75700";
+      hash = "sha256-YKhVMYoFpa1vUQbNb5kVemJ/0nZ8ExmFxu8CNenfrjM=";
+    };
+    meta.homepage = "https://github.com/b4winckler/vim-angry/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-anzu = buildVimPlugin {
     pname = "vim-anzu";
     version = "0-unstable-2025-07-05";
@@ -17508,6 +17521,19 @@ final: prev: {
       hash = "sha256-uGtPMgMt+s0GSQvpvo97diYOfhIf+pNuOQiGQ17I9uQ=";
     };
     meta.homepage = "https://github.com/vim-crystal/vim-crystal/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-crystalline = buildVimPlugin {
+    pname = "vim-crystalline";
+    version = "1.1.4-unstable-2025-04-16";
+    src = fetchFromGitHub {
+      owner = "rbong";
+      repo = "vim-crystalline";
+      rev = "3d1b744439f5fcdae9b58d58639fc85c37e1e0a6";
+      hash = "sha256-XvEPEBCvJIocIu12ZF8aqncjoBd2H4JX365MnvsD3zI=";
+    };
+    meta.homepage = "https://github.com/rbong/vim-crystalline/";
     meta.hydraPlatforms = [ ];
   };
 
