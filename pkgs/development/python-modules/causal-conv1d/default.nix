@@ -19,14 +19,14 @@ assert rocmSupport -> !cudaSupport;
 
 buildPythonPackage rec {
   pname = "causal-conv1d";
-  version = "1.5.2";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "causal-conv1d";
     tag = "v${version}";
-    hash = "sha256-B2I5QiJl0p5d1BeQcMbJBAYUb10HzqFd88QMM8Rerm0=";
+    hash = "sha256-ELuvnKP2g1I2SuaWWiibXh/oDzp4n0vXkm4oeNPOdIw=";
   };
 
   build-system = [
