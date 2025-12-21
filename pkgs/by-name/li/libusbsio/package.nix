@@ -6,16 +6,22 @@
   fixDarwinDylibNames,
   libusb1,
   systemdMinimal,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libusbsio";
-  version = "2.1.11";
+  version = "2.2.0";
 
   src = fetchzip {
-    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-${version}-src.zip";
-    sha256 = "sha256-qgoeaGWTWdTk5XpJwoauckEQlqB9lp5x2+TN09vQttI=";
+    url = "https://www.nxp.com/downloads/en/libraries/libusbsio-Host-library.zip";
+    hash = "sha256-D92jOXLd4OKvOTPXhK7H2kubjSwYMkyQcIi5muorLD8=";
   };
+
+  postUnpack = ''
+    unzip "source/libusbsio-${version}-src.zip"
+    sourceRoot=libusbsio-${version}-src
+  '';
 
   postPatch = ''
     rm -r bin/*
@@ -28,6 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
