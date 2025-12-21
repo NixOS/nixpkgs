@@ -16,7 +16,10 @@
   pcre2,
   xfce4-panel,
   xfconf,
-  withIntrospection ? false,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
   gobject-introspection,
 }:
 
