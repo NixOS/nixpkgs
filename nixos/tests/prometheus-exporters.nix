@@ -420,10 +420,146 @@ let
         '';
       };
 
-    ebpf =
-      { ... }:
-      {
-        exporterConfig = {
+    ebpf = {
+      exporterConfig = {
+        enable = true;
+        names = [ "timers" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ebpf-exporter.service")
+        wait_for_open_port(9435)
+        succeed(
+            "curl -sSf http://localhost:9435/metrics | grep 'ebpf_exporter_enabled_configs{name=\"timers\"} 1'"
+        )
+      '';
+    };
+
+    fastcom = {
+      exporterConfig = {
+        enable = true;
+        debug = true;
+        refreshInterval = "1h";
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-fastcom-exporter.service")
+        wait_for_open_port(9877)
+        succeed("curl -sSf http://localhost:9877")
+      '';
+    };
+
+    fastly = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeText "fastly-exporter-env" "FASTLY_API_TOKEN=abc123";
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
+      '';
+    };
+
+    fritzbox = {
+      # TODO add proper test case
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-fritzbox-exporter.service")
+        wait_for_open_port(9133)
+        succeed(
+            "curl -sSf http://localhost:9133/metrics | grep 'fritzbox_exporter_collect_errors 0'"
+        )
+      '';
+    };
+
+    graphite = {
+      exporterConfig = {
+        enable = true;
+        port = 9108;
+        graphitePort = 9109;
+        mappingSettings.mappings = [
+          {
+            match = "test.*.*";
+            name = "testing";
+            labels = {
+              protocol = "$1";
+              author = "$2";
+            };
+          }
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-graphite-exporter.service")
+        wait_for_open_port(9108)
+        wait_for_open_port(9109)
+        succeed("echo test.tcp.foo-bar 1234 $(date +%s) | nc -w1 localhost 9109")
+        succeed("curl -sSf http://localhost:9108/metrics | grep 'testing{author=\"foo-bar\",protocol=\"tcp\"} 1234'")
+      '';
+    };
+
+    idrac = {
+      exporterConfig = {
+        enable = true;
+        port = 9348;
+        configuration = {
+          hosts = {
+            default = {
+              username = "username";
+              password = "password";
+            };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-idrac-exporter.service")
+        wait_for_open_port(9348)
+        wait_until_succeeds("curl localhost:9348")
+      '';
+    };
+
+    influxdb = {
+      exporterConfig = {
+        enable = true;
+        sampleExpiry = "3s";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-influxdb-exporter.service")
+        wait_for_open_port(9122)
+        succeed(
+          "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
+        )
+        succeed(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+        execute("sleep 5")
+        fail(
+          "curl -sSf http://localhost:9122/metrics | grep 'nixos'"
+        )
+      '';
+    };
+
+    ipmi = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-ipmi-exporter.service")
+        wait_for_open_port(9290)
+        succeed(
+          "curl -sSf http://localhost:9290/metrics | grep 'ipmi_scrape_duration_seconds'"
+        )
+      '';
+    };
+
+    jitsi = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
+        services.jitsi-videobridge = {
           enable = true;
           names = [ "timers" ];
         };
