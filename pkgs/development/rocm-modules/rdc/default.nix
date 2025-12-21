@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
+  pkg-config,
   amdsmi,
   rocm-smi,
   rocm-runtime,
@@ -67,8 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ztInmK3oCbvnLe7XQ55/hUHRyhuZ2M2XVTG1NcVHtGs=";
   };
 
+  patches = [
+    # https://github.com/ROCm/rocm-systems/pull/2423
+    ./fix-cmake-cxxflags.patch
+    # https://github.com/ROCm/rocm-systems/pull/2424
+    ./fix-libcap-pkgconfig.patch
+  ];
+
   nativeBuildInputs = [
     cmake
+    pkg-config
     protobuf
   ]
   ++ lib.optionals buildDocs [
@@ -90,10 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  CXXFLAGS = "-I${libcap.dev}/include";
-
   cmakeFlags = [
-    "-DCMAKE_VERBOSE_MAKEFILE=OFF"
+    "-DCMAKE_VERBOSE_MAKEFILE=ON"
     "-DRDC_INSTALL_PREFIX=${placeholder "out"}"
     "-DBUILD_RVS=OFF" # TODO: Needs RVS package
     "-DBUILD_ROCRTEST=ON"
@@ -114,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "file(STRINGS /etc/os-release LINUX_DISTRO LIMIT_COUNT 1 REGEX \"NAME=\")" "set(LINUX_DISTRO \"NixOS\")"
+      --replace-fail "file(STRINGS /etc/os-release LINUX_DISTRO LIMIT_COUNT 1 REGEX \"NAME=\")" "set(LINUX_DISTRO \"NixOS\")"
   '';
 
   postInstall = ''
