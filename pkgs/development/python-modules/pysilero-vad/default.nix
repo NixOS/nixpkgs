@@ -7,32 +7,23 @@
   # build-system
   setuptools,
 
-  # dependencies
-  numpy,
-  onnxruntime,
-
   # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "2.1.1";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${version}";
-    hash = "sha256-zxvYvPnL99yIVHrzbRbKmTazzlefOS+s2TAWLweRSYE=";
+    hash = "sha256-DZjinW4jXsygJSUq3iNt82mbnVj7DN8hUxUDe1NkpHM=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [
-    numpy
-    onnxruntime
-  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -40,8 +31,13 @@ buildPythonPackage rec {
 
   # aarch64-linux onnxruntime tries to get cpu information from /sys, which isn't available
   # inside the nix build sandbox.
-  doCheck = stdenv.buildPlatform.system != "aarch64-linux";
+  #doCheck = stdenv.buildPlatform.system != "aarch64-linux";
   dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
+  preCheck = ''
+    # don't shadow the build result during tests
+    rm -rf pysilero_vad
+  '';
 
   meta = {
     description = "Pre-packaged voice activity detector using silero-vad";
