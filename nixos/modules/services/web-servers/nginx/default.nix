@@ -163,7 +163,9 @@ let
       ''
         ${cfg.prependConfig}
 
-        pid /run/nginx/nginx.pid;
+        ${optionalString (cfg.pid != "") ''
+          pid ${cfg.pid};
+        ''}
         error_log ${cfg.logError};
         daemon off;
 
@@ -802,6 +804,14 @@ in
           increasing severity. Setting a certain log level will cause all
           messages of the specified and more severe log levels to be logged.
           If this parameter is omitted then error is used.
+        '';
+      };
+
+      pid = mkOption {
+        default = "/run/nginx/nginx.pid";
+        type = types.str;
+        description = ''
+          Defines a file that will store the process ID of the main process.
         '';
       };
 
@@ -1679,7 +1689,7 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
-      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+      postrotate = "[ ! -f ${cfg.pid} ] || kill -USR1 `cat ${cfg.pid}`";
     };
   };
 }
