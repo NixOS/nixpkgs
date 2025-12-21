@@ -47,6 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # remove unnecessary files
+    CI=true pnpm --ignore-scripts --prod prune
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+
+    # remove non-deterministic files
+    rm node_modules/{.modules.yaml,.pnpm-workspace-state-v1.json}
+  '';
+
   installPhase = ''
     runHook preInstall
 
