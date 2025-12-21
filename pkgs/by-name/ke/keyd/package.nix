@@ -7,40 +7,40 @@
   python3,
   nixosTests,
 }:
-
 let
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
-    rev = "v" + version;
+    rev = "v${version}";
     hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
   };
 
-  pypkgs = python3.pkgs;
+  appMap =
+    let
+      pname = "keyd-application-mapper";
+      pypkgs = python3.pkgs;
+    in
+    pypkgs.buildPythonApplication {
+      inherit pname version src;
+      format = "other";
 
-  appMap = pypkgs.buildPythonApplication rec {
-    pname = "keyd-application-mapper";
-    inherit version src;
-    format = "other";
+      postPatch = ''
+        substituteInPlace scripts/${pname} \
+          --replace-fail /bin/sh ${runtimeShell}
+      '';
 
-    postPatch = ''
-      substituteInPlace scripts/${pname} \
-        --replace-fail /bin/sh ${runtimeShell}
-    '';
+      propagatedBuildInputs = with pypkgs; [ xlib ];
 
-    propagatedBuildInputs = with pypkgs; [ xlib ];
+      dontBuild = true;
 
-    dontBuild = true;
+      installPhase = ''
+        install -Dm555 -t $out/bin scripts/${pname}
+      '';
 
-    installPhase = ''
-      install -Dm555 -t $out/bin scripts/${pname}
-    '';
-
-    meta.mainProgram = "keyd-application-mapper";
-  };
-
+      meta.mainProgram = "keyd-application-mapper";
+    };
 in
 stdenv.mkDerivation {
   pname = "keyd";
@@ -60,9 +60,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # post-2.4.2 may need this to unbreak the test
-  # makeFlags = [ "SOCKET_PATH/run/keyd/keyd.socket" ];
-
   postInstall = ''
     ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
     rm -rf $out/etc
@@ -72,6 +69,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Key remapping daemon for Linux";
+    mainProgram = "keyd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alfarel ];
     platforms = lib.platforms.linux;
