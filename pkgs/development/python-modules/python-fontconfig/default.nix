@@ -22,13 +22,13 @@ let
 in
 buildPythonPackage rec {
   pname = "python-fontconfig";
-  version = "0.6.1";
+  version = "0.6.2.post1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_fontconfig";
     inherit version;
-    sha256 = "sha256-qka4KksXW9LPn+Grmyng3kyrhwIEG7UEpVDeKfX89zM=";
+    sha256 = "sha256-SDcpAwVhNxDPbFFduJIyhNoG5PSKVJ0v6OLUJ2rtPnM=";
   };
 
   build-system = [
