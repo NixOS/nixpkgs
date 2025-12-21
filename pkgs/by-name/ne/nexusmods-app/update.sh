@@ -28,8 +28,8 @@ new_version=$(
 )
 
 if [ "$current_version" != "$new_version" ]; then
-  # Update vendored files
-  "$dir"/vendored/update.sh
+  # Update games.json
+  "$dir"/update-games-json.sh
 
   # Update game_hashes_db
   UPDATE_NIX_ATTR_PATH="$UPDATE_NIX_ATTR_PATH.gameHashes" \
