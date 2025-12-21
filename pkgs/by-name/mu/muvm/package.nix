@@ -24,24 +24,26 @@ let
       coreutils
     ];
     text = ''
-      if [[ ! -f /etc/NIXOS ]]; then exit; fi
-
-      ln -s /run/muvm-host/run/current-system /run/current-system
-      # Only create the symlink if that path exists on the host and is a directory.
-      if [[ -d /run/muvm-host/run/opengl-driver ]]; then ln -s /run/muvm-host/run/opengl-driver /run/opengl-driver; fi
+      if [[ -f /etc/NIXOS ]]; then
+        ln -s /run/muvm-host/run/current-system /run/current-system
+        if [[ -d /run/muvm-host/run/opengl-driver ]]; then
+           ln -s /run/muvm-host/run/opengl-driver /run/opengl-driver
+        fi
+      fi
     '';
   };
-  binPath = [
-    dhcpcd
-    passt
-    (placeholder "out")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ fex ];
   wrapArgs = lib.escapeShellArgs [
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath binPath)
+    (lib.makeBinPath (
+      [
+        dhcpcd
+        passt
+        (placeholder "out")
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ fex ]
+    ))
     "--add-flags"
     "--execute-pre=${lib.getExe initScript}"
   ];
