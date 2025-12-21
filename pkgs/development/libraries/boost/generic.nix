@@ -125,14 +125,16 @@ let
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
-          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+          "target-os=${
+            if stdenv.hostPlatform.isCygwin then "cygwin" else toString stdenv.hostPlatform.parsed.kernel.name
+          }"
 
           # adapted from table in boost manual
           # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
           "abi=${
             if stdenv.hostPlatform.parsed.cpu.family == "arm" then
               "aapcs"
-            else if stdenv.hostPlatform.isWindows then
+            else if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) then
               "ms"
             else if stdenv.hostPlatform.isMips32 then
               "o32"
