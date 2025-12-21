@@ -10,19 +10,16 @@
   urwid-readline,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2025.1.4";
+  version = "2025.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dAacEMmdINNsKQb+hV4A1QtmAgE8SIHbN0FuMnh66gY=";
+    hash = "sha256-5t7bgfw8jNzWbPYuhjN8uRNXDrssmUyatSAS0Fnghq0=";
   };
 
   build-system = [ hatchling ];

@@ -8,6 +8,9 @@
   zlib,
   runtimeShell,
 }:
+let
+  romkatv_libgit2 = callPackage ./romkatv_libgit2.nix { };
+in
 stdenv.mkDerivation rec {
   pname = "gitstatus";
   version = "1.5.5";
@@ -28,8 +31,8 @@ stdenv.mkDerivation rec {
   );
 
   buildInputs = [
+    romkatv_libgit2
     zlib
-    (callPackage ./romkatv_libgit2.nix { })
   ];
 
   postPatch = ''
@@ -114,6 +117,10 @@ stdenv.mkDerivation rec {
     ZDOTDIR=. zsh -d -i &
     wait $!
   '';
+
+  passthru = {
+    inherit romkatv_libgit2;
+  };
 
   meta = {
     description = "10x faster implementation of `git status` command";

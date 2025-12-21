@@ -5,22 +5,22 @@
   mwparserfromhell,
   requests,
   packaging,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pywikibot";
-  version = "10.7.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "10.7.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ujkPgXqq5h4vISeUXHKWnMR2Mtt0a26Qjz20qdufT/4=";
+    hash = "sha256-/hHfZRLoEgaPKZLus9x/d5O62GnwU/1A7PAsebGj634=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     mwparserfromhell
     requests
     packaging

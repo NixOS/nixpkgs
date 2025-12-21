@@ -67,19 +67,19 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-J1IhFF8HPpWfYmIaU1mot1dcuGyQm+IfE7goThaC9F0=";
+    hash = "sha256-4jnja4uGIH0+hua7YRIrsxWCRJLstCCcHodmaGZ0+x8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-hjN+pHMTWin6oXpy3PiH9rrRfM4P/KJ2VyenJHkWAkI=";
+    hash = "sha256-Vs/uoH6If8G5GoKpxnNC7HWBfP4VjLXb4ZziuAP63c8=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile

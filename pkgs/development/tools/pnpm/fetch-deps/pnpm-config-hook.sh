@@ -12,10 +12,7 @@ pnpmConfigHook() {
       exit 1
     fi
 
-    fetcherVersion=1
-    if [[ -e "${pnpmDeps}/.fetcher-version" ]]; then
-      fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version")
-    fi
+    fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version" || echo 1)
 
     echo "Using fetcherVersion: $fetcherVersion"
 
@@ -26,7 +23,12 @@ pnpmConfigHook() {
     export npm_config_arch="@npmArch@"
     export npm_config_platform="@npmPlatform@"
 
-    cp -Tr "$pnpmDeps" "$STORE_PATH"
+    if [[ $fetcherVersion -ge 3 ]]; then
+      tar --zstd -xf "$pnpmDeps/pnpm-store.tar.zst" -C "$STORE_PATH"
+    else
+      cp -Tr "$pnpmDeps" "$STORE_PATH"
+    fi
+
     chmod -R +w "$STORE_PATH"
 
 

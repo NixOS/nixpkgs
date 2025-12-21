@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viu";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "atanunq";
     repo = "viu";
     tag = "v${version}";
-    hash = "sha256-dI/o8gcl9s+p/8ECtgo136DMR5FkLddpdUj6uurLj04=";
+    hash = "sha256-+6oo6cJ0L3XuMWZL/8DEKMk6PI7D5IcfoemqIQiOJto=";
   };
 
   # tests need an interactive terminal
   doCheck = false;
 
-  cargoHash = "sha256-JAQTW/7qhQCEqleKLOP4Gi9GKX+nVqQkAwlEZxVP9ps=";
+  cargoHash = "sha256-gqMG3ATyGTx54Q43Hquc8A/H8fhdgVP1JLh5FGtWTTU=";
 
   buildFeatures = lib.optional withSixel "sixel";
   buildInputs = lib.optional withSixel libsixel;

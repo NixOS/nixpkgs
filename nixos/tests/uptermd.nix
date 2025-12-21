@@ -51,15 +51,14 @@ in
     client1.wait_until_succeeds("pgrep -u root bash")
 
     client1.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
-    client1.send_chars("TERM=xterm upterm host --server ssh://server:1337 --force-command hostname -- bash > /tmp/session-details\n")
+    client1.send_chars("TERM=xterm upterm host --server ssh://server:1337 --accept --force-command hostname -- bash > /tmp/session-details\n")
     client1.wait_for_file("/tmp/session-details")
-    client1.send_key("q")
 
     # uptermd can't connect if we don't have a keypair
     client2.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
 
     # Grep the ssh connect command from the output of 'upterm host'
-    ssh_command = client1.succeed("grep 'SSH Session' /tmp/session-details | cut -d':' -f2-").strip()
+    ssh_command = client1.succeed("grep 'SSH Command' /tmp/session-details | awk -F'│' '{print $3}'").strip()
 
     # Connect with client2. Because we used '--force-command hostname' we should get "client1" as the output
     output = client2.succeed(ssh_command)

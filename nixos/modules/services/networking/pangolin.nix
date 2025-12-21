@@ -44,7 +44,7 @@ let
       external_port = 3000;
       internal_port = 3001;
       next_port = 3002;
-      integration_port = 3004;
+      integration_port = 3003;
       # needs to be set, otherwise this fails silently
       # see https://github.com/fosrl/newt/issues/37
       internal_hostname = "localhost";
@@ -143,7 +143,7 @@ in
     gerbil = {
       port = lib.mkOption {
         type = lib.types.port;
-        default = 3003;
+        default = 3004;
         description = ''
           Specifies the port to listen on for Gerbil.
         '';

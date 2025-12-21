@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "encrypted-dns-server";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "encrypted-dns-server";
     tag = version;
-    hash = "sha256-un7607HQ7s7G2GPTmYVT3wK/ePLNVyV+A2mtKt0YGsw=";
+    hash = "sha256-YM9ow1j5G6AN91/YLnRy+jOlpQPBxZa+chNZNPGUfhs=";
   };
 
-  cargoHash = "sha256-qhY1LgtV0Kmj/at9EG7Y+swN1Oy0/SzRCr7U8xVh8KA=";
+  cargoHash = "sha256-cHARkL8gbNBlmjbJaHJ8w268KcXTJr2PvCF+I6+K0s8=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -4663,12 +4663,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

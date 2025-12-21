@@ -10,13 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytransportnswv2";
-  version = "2.0.8";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "PyTransportNSWv2";
-    inherit version;
-    hash = "sha256-+hE5onXQ/Isv+U7y9+CphpYTOW7CsMxR7M8jZS1djSs=";
+    inherit pname version;
+    hash = "sha256-gQhXq2ZnpXMYdicDN3QWenF+kezbA9ByrzATVdybMNM=";
   };
 
   build-system = [ setuptools ];

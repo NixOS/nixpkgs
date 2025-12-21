@@ -55,7 +55,7 @@
   },
   "beam": {
     "description": "Maintain BEAM-related packages and modules.",
-    "id": 4502493,
+    "id": 15530553,
     "maintainers": {
       "happysalada": 5317234
     },
@@ -139,7 +139,7 @@
   },
   "crystal-lang": {
     "description": "The Crystal Lang eco-system",
-    "id": 3806663,
+    "id": 15530580,
     "maintainers": {
       "peterhoeg": 722550
     },
@@ -726,9 +726,9 @@
     "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
-      "philiptaron": 43863,
       "MattSturgeon": 5046562,
       "Mic92": 96200,
+      "philiptaron": 43863,
       "zowoq": 59103226
     },
     "members": {},

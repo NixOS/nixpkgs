@@ -9,6 +9,8 @@
 
   # buildInputs
   fmt,
+  libbfd,
+  libunwind,
   rsync,
 
   versionCheckHook,
@@ -17,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.15.0";
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-frsq5OA3giLOJ/KPcAqVhme+0CtJuZrS3F4zHN1PnFM=";
+    hash = "sha256-SMSBUn6PtsdvK4u/UlWr82/YDoGK4MwA+bI9jgisHHA=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+    libbfd
+    libunwind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rsync

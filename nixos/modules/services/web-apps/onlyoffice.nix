@@ -34,6 +34,8 @@ in
         This file must be readable both by nginx and by the onlyoffice
         documentserver. Since nginx is added to the onlyoffice group,
         you may want to make the file readable to the onlyoffice group.
+
+        NOTE: The file must be a valid nginx configuration file. The secret must not contain `$` characters, as they will be interpreted as variables by nginx.
       '';
     };
 

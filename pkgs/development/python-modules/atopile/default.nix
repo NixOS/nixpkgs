@@ -185,11 +185,12 @@ buildPythonPackage rec {
   disabledTests = [
     # timeout
     "test_build_error_logging"
-    "test_performance_mifs_bus_params"
-    "test_resistor"
-    "test_reserved_attrs"
     "test_examples_build"
     "test_net_names_deterministic"
+    "test_performance_mifs_bus_params"
+    "test_regression_rp2040_usb_diffpair"
+    "test_reserved_attrs"
+    "test_resistor"
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"

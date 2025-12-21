@@ -8,28 +8,28 @@
   swagger-codegen3,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.0.62";
+stdenv.mkDerivation (finalAttrs: {
   pname = "swagger-codegen";
-
-  jarfilename = "${pname}-cli-${version}.jar";
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  version = "3.0.75";
 
   src = fetchurl {
-    url = "mirror://maven/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "sha256-23opx14BRfG7SjcSKXu59wmrrJsJiGebiMRvidV2gE8=";
+    url = "mirror://maven/io/swagger/codegen/v3/swagger-codegen-cli/${finalAttrs.version}/swagger-codegen-cli-${finalAttrs.version}.jar";
+    hash = "sha256-Na6aWKq1SU/zWfxRf4ZH73lJy/dwbzz7coXP61zFv+E=";
   };
 
   dontUnpack = true;
 
-  installPhase = ''
-    install -D $src $out/share/java/${jarfilename}
+  nativeBuildInputs = [ makeWrapper ];
 
-    makeWrapper ${jre}/bin/java $out/bin/${pname}3 \
-      --add-flags "-jar $out/share/java/${jarfilename}"
+  installPhase = ''
+    runHook preInstall
+
+    install -D $src $out/share/java/swagger-codegen-cli-${finalAttrs.version}.jar
+
+    makeWrapper ${jre}/bin/java $out/bin/swagger-codegen3 \
+      --add-flags "-jar $out/share/java/swagger-codegen-cli-${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     mainProgram = "swagger-codegen3";
     platforms = lib.platforms.all;
   };
-}
+})

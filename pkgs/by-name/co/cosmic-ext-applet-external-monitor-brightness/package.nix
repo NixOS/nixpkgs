@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-external-monitor-brightness";
-  version = "0.0.1-unstable-2025-11-27";
+  version = "0.0.1-unstable-2025-12-10";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ext-applet-external-monitor-brightness";
-    rev = "3cfba2bbe5e622f887b8236304823fda67c33b46";
-    hash = "sha256-UNfIH0Itm1fbRGfh8NdSGeOrm+H8t42yawcZmTjQLQ0=";
+    rev = "1d63ebe422428ae73fd9b7e2eafbb2649539b923";
+    hash = "sha256-ytZvjwqroIU5Sx65LPvAmHlcmKrInIyo6psCZjuHYK0=";
   };
 
   cargoHash = "sha256-ou7iukl1pHMfcJNemwLdZYYxugbJJQ53XpCYowUTj90=";

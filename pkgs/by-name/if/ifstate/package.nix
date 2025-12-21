@@ -33,7 +33,9 @@ let
       (
         [
           mkdocs-material
+          mike
           mkdocs-glightbox
+          mkdocs-macros-plugin
           mkdocs-minify-plugin
         ]
         ++ mkdocs-material.optional-dependencies.imaging

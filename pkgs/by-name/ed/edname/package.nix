@@ -1,14 +1,16 @@
 {
   stdenv,
   coreutils,
+  findutils,
+  gnused,
   lib,
   fetchFromGitea,
   makeWrapper,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "edname";
-  version = "1.0.1";
+  version = "1.0.2";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -16,8 +18,8 @@ stdenv.mkDerivation {
     domain = "git.tudbut.de";
     owner = "TudbuT";
     repo = "edname";
-    rev = "v1.0.1";
-    hash = "sha256-Bj7c18O+Z64KlpTNG3FvR17YM2GsTOUyFuapUyhgZ6M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8aT/xwdx/ORyCFfOu4LZuxUiErZ9ZiCdhJ/WKAiQwe0=";
   };
 
   installPhase = ''
@@ -27,6 +29,8 @@ stdenv.mkDerivation {
       --prefix PATH : "${
         lib.makeBinPath [
           coreutils
+          findutils
+          gnused
         ]
       }"
   '';
@@ -38,4 +42,4 @@ stdenv.mkDerivation {
     homepage = "https://git.tudbut.de/TudbuT/edname";
     mainProgram = "edname";
   };
-}
+})

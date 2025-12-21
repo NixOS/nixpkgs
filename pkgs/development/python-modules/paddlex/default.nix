@@ -19,6 +19,8 @@
   ujson,
   distutils,
   huggingface-hub,
+  modelscope,
+  aistudio-sdk,
   nix-update-script,
 }:
 
@@ -63,11 +65,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [
-    # unpackaged
-    "aistudio-sdk"
-    "modelscope"
-  ];
   pythonRelaxDeps = [
     "numpy"
     "pandas"
@@ -91,6 +88,8 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+    modelscope
+    aistudio-sdk
   ];
 
   passthru.updateScript = nix-update-script { };

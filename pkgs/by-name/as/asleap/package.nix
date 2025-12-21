@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "asleap";
-  version = "0-unstable-2021-06-20";
+  version = "0-unstable-2021-06-21";
 
   src = fetchFromGitHub {
     owner = "zackw";

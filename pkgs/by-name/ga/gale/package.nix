@@ -29,15 +29,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
   };
 
+  patches = [ ./fix-frontend-backend-tauri-version-mismatch.patch ];
+
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    fetcherVersion = 1;
+    hash = "sha256-ILhAhpY9a50a0KKWs5Y+G3jDyWuySHw8QcOJlYePzmc=";
+  };
+
   postPatch = ''
     jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
-
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
-  };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;

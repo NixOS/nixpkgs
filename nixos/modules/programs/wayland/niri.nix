@@ -43,10 +43,16 @@ in
         xdg.portal = {
           enable = lib.mkDefault true;
 
-          configPackages = [ cfg.package ];
-
-          config.niri = lib.mkIf (!cfg.useNautilus) {
-            "org.freedesktop.impl.portal.FileChooser" = lib.mkDefault "gtk";
+          # NOTE: `configPackages` is ignored when `xdg.portal.config.niri` is defined.
+          config.niri = {
+            default = [
+              "gnome"
+              "gtk"
+            ];
+            "org.freedesktop.impl.portal.Access" = "gtk";
+            "org.freedesktop.impl.portal.FileChooser" = lib.mkIf (!cfg.useNautilus) "gtk";
+            "org.freedesktop.impl.portal.Notification" = "gtk";
+            "org.freedesktop.impl.portal.Secret" = "gnome-keyring";
           };
 
           # Recommended by upstream, required for screencast support

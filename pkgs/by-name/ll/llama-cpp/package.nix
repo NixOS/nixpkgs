@@ -74,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "7356";
+  version = "7445";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-zrdnjiwM0gdy1wSWSR0AA6uZHYW1deVG3yRFlalAAZc=";
+    hash = "sha256-oHQtfGu1altWwHUl4z2ApLVp8ISfd+l9t+k5NqtbWgA=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -186,6 +186,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       dit7ya
       philiptaron
       xddxdd
+      yuannan
     ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  publicsuffix-list,
 }:
 let
   tagVersion = "2.2019-12-21";
@@ -27,6 +28,9 @@ buildPythonPackage {
     # only used to update the interal publicsuffix list
     substituteInPlace setup.py \
       --replace "'requests >= 2.7.0'," ""
+
+    rm src/publicsuffix2/public_suffix_list.dat
+    ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat src/publicsuffix2/public_suffix_list.dat
   '';
 
   pythonImportsCheck = [ "publicsuffix2" ];

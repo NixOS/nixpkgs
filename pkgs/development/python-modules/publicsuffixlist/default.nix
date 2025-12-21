@@ -6,6 +6,7 @@
   pytestCheckHook,
   requests,
   setuptools,
+  publicsuffix-list,
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-37hj0A37m8BxNAWWIpRoromnXWJUbqvOOOu9iw01DKk=";
   };
+
+  postPatch = ''
+    rm publicsuffixlist/public_suffix_list.dat
+    ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat publicsuffixlist/public_suffix_list.dat
+  '';
 
   build-system = [ setuptools ];
 

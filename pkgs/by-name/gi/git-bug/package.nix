@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   installShellFiles,
 }:
 
@@ -20,7 +21,24 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  checkFlags =
+    let
+      integrationTests = [
+        "TestValidateUsername/existing_organisation"
+        "TestValidateUsername/existing_organisation_with_bad_case"
+        "TestValidateUsername/existing_username"
+        "TestValidateUsername/existing_username_with_bad_case"
+        "TestValidateUsername/non_existing_username"
+        "TestValidateProject/public_project"
+      ];
+    in
+    [
+      "-skip=^${lib.concatStringsSep "$|^" integrationTests}$"
+    ];
 
   excludedPackages = [
     "doc"

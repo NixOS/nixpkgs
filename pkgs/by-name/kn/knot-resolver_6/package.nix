@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   # native deps.
   runCommand,
   pkg-config,
@@ -46,6 +47,15 @@ let
       "out"
       "dev"
       "config_py"
+    ];
+
+    patches = [
+      (fetchpatch {
+        name = "test-cache-aarch64-darwin.patch";
+        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/d155d0dbe408a3327b39f70e122aea6fb2b86684.diff";
+        excludes = [ "NEWS" ];
+        hash = "sha256-3w33v8UfhGdA50BlkfHpQLFxg+5ELk0lp7RzgvkSzK8=";
+      })
     ];
 
     # Path fixups for the NixOS service.

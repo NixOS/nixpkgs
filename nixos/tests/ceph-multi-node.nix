@@ -53,7 +53,7 @@ let
         sudo
         ceph
         xfsprogs
-        libressl.nc
+        netcat
       ];
 
       boot.kernelModules = [ "xfs" ];

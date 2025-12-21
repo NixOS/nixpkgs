@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "17.3.20251201";
+  version = "17.3.20251221";
 
   src =
     let
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-qHatD+W2SP9bLrOoIDXDNGdNKYoL52XdC6mVdelMFdc=";
+      hash = "sha256-N2REwBXhKBqyVPb9YfWCBSJfqFXDorsXvnHX+5gQrS4=";
     };
 
   nativeBuildInputs = [

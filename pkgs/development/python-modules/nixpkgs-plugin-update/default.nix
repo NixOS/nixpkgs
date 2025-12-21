@@ -3,6 +3,7 @@
   buildPythonPackage,
   uv-build,
   gitpython,
+  packaging,
   ruff,
   mypy,
 }:
@@ -18,6 +19,7 @@ buildPythonPackage {
 
   dependencies = [
     gitpython
+    packaging
   ];
 
   nativeCheckInputs = [
