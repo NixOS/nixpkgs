@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   python3Packages,
   sox,
   flac,
@@ -11,7 +12,7 @@
   vorbis-tools,
   pulseaudio,
   nodejs,
-  youtube-dl,
+  yt-dlp,
   opusTools,
   gst_all_1,
   enableSonos ? true,
@@ -27,22 +28,31 @@ let
     gst_all_1.gstreamer
     nodejs
     ffmpeg
-    youtube-dl
+    yt-dlp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2022-10-31";
+  version = "2025-06-01";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
-    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+    rev = "6e583366ae23b56a33c1ad4ca164e04d64174538";
+    hash = "sha256-CtmOkQAqUNn7+59mWEfAsgtWmGcXD3eE9j2t3sLnXms=";
   };
+
+  patches = [
+    # Update README to use yt-dlp instead of youtube-dl
+    # https://github.com/muammar/mkchromecast/pull/480
+    (fetchpatch2 {
+      url = "https://github.com/muammar/mkchromecast/commit/0a0eec9bf4a6c000c828b83a864cebe18ce64c2b.patch";
+      hash = "sha256-sLzL2/HDYfO0+N8v8aJX3dl7LBSE5yWa0zR89dZkg84=";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
   propagatedBuildInputs =
