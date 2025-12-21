@@ -13021,6 +13021,8 @@ self: super: with self; {
 
   pycairo = callPackage ../development/python-modules/pycairo { inherit (pkgs.buildPackages) meson; };
 
+  pycambia = callPackage ../development/python-modules/pycambia { };
+
   pycangjie = callPackage ../development/python-modules/pycangjie {
     inherit (pkgs.buildPackages) meson;
   };
@@ -14115,6 +14117,8 @@ self: super: with self; {
   pyowm = callPackage ../development/python-modules/pyowm { };
 
   pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
+
+  pyoxipng = callPackage ../development/python-modules/pyoxipng { };
 
   pypager = callPackage ../development/python-modules/pypager { };
 

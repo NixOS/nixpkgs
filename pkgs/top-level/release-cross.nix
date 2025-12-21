@@ -114,6 +114,7 @@ let
 
   cygwinCommon = {
     hello = nativePlatforms;
+    nixVersions.git = nativePlatforms;
   };
 
   wasiCommon = {
