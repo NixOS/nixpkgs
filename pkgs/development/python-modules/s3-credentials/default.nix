@@ -9,7 +9,6 @@
   moto,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "s3-credentials";
   version = "0.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -52,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python CLI utility for creating credentials for accessing S3 buckets";
     homepage = "https://github.com/simonw/s3-credentials";
-    changelog = "https://github.com/simonw/s3-credentials/releases/tag/${version}";
+    changelog = "https://github.com/simonw/s3-credentials/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "s3-credentials";
