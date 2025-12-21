@@ -8,6 +8,7 @@
   pnpm_8,
   fetchPnpmDeps,
   pnpmConfigHook,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "concurrently";
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/open-cli-tools/concurrently/releases/tag/v${finalAttrs.version}";
