@@ -42,13 +42,13 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.5.1";
+    version = "0.6.0";
     format = "setuptools";
     disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-0UtelZ3w0QUw825AGhSc8wfhYaL9FSYJXCvYZEefWPQ=";
+      hash = "sha256-ZXwyctTjKg1ssYE6Ehc1s1DPhWyc08dIQ4MQz6EQXGg=";
     };
 
     patches = [
