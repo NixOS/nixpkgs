@@ -35,7 +35,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zeule/asus-ec-sensors";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ nickhu ];
+    maintainers = with lib.maintainers; [
+      nickhu
+      mariolopjr
+    ];
     broken = kernel.kernelOlder "5.11";
   };
 }
