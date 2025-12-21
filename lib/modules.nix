@@ -1630,11 +1630,21 @@ let
 
     `from`
 
-    : 1\. Function argument
+    : The "from" option path as list of strings.
+      Option must not exist in the current module set.
 
     `to`
 
-    : 2\. Function argument
+    : The "to" option path as list of strings.
+      Option must already exist in the current module set.
+
+    # Limitations
+
+    - The "to" option must already be declared.
+    - The "from" option should not be declared, as this function will declare it.
+    - "to" Options whose types don't support merging at any level of their structure (like `types.raw`,
+      or `types.attrsOf types.raw` where the attribute values can't merge) are not well-supported
+      because this function wraps aliased definitions in `mkMerge`.
   */
   mkRenamedOptionModule =
     from: to:
