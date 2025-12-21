@@ -1255,6 +1255,7 @@
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/miredo.nix
+  ./services/networking/mitmdump.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/mmsd.nix
   ./services/networking/modemmanager.nix
