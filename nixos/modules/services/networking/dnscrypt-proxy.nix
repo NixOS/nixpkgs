@@ -79,11 +79,19 @@ in
           '';
       defaultText = lib.literalMD "TOML file generated from {option}`services.dnscrypt-proxy.settings`";
     };
+
+    resolveLocalQueries = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether DNSCrypt-proxy should resolve local queries (i.e. add 127.0.0.1 to /etc/resolv.conf).
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
 
-    networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
+    networking.nameservers = lib.optional cfg.resolveLocalQueries "127.0.0.1";
 
     systemd.services.dnscrypt-proxy = {
       description = "DNSCrypt-proxy client";
