@@ -95,9 +95,13 @@ in
       };
 
       extraJavaOptions = lib.mkOption {
-        type = lib.types.separatedString " ";
-        default = "";
-        example = "-Xmx2G -Xms2G -XX:MaxPermSize=512M";
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "-Xmx2G"
+          "-Xms2G"
+          "-XX:MaxPermSize=512M"
+        ];
         description = ''
           Add extra options here that you want to be sent to the
           Java runtime when the broker service is started.
@@ -142,7 +146,7 @@ in
               lib.mapAttrsToList (name: value: "-D${name}=${value}") cfg.javaProperties
             )
           } \
-          ${cfg.extraJavaOptions} ActiveMQBroker "${cfg.configurationURI}"
+          ${toString cfg.extraJavaOptions} ActiveMQBroker "${cfg.configurationURI}"
       '';
     };
 
