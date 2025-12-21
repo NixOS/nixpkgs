@@ -83,6 +83,7 @@ in
             "activemq.data" = "${cfg.baseDir}/data";
             "activemq.conf" = "${cfg.configurationDir}";
             "activemq.home" = "${cfg.package}";
+            "jolokia.conf" = "file:${cfg.configurationDir}/jolokia-access.xml";
           }
           // attrs;
         description = ''
@@ -97,11 +98,15 @@ in
       extraJavaOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [
-          "-Xmx2G"
-          "-Xms2G"
-          "-XX:MaxPermSize=512M"
-        ];
+        example = lib.literalExpression ''
+          [
+            "-Xmx2G"
+            "-Xms2G"
+            "-XX:MaxPermSize=512M"
+            "-Djava.util.logging.config.file=''${cfg.configurationDir}/logging.properties"
+            "-Djava.security.auth.login.config=''${cfg.configurationDir}/login.config"
+          ]
+        '';
         description = ''
           Add extra options here that you want to be sent to the
           Java runtime when the broker service is started.

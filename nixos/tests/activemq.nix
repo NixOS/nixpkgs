@@ -5,11 +5,14 @@
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
   nodes.machine =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
       services.activemq = {
         enable = true;
         package = pkgs.activemq;
+        extraJavaOptions = [
+          "-Djava.security.auth.login.config=${config.services.activemq.configurationDir}/login.config"
+        ];
       };
     };
 
