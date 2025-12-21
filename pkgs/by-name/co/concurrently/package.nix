@@ -7,6 +7,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  versionCheckHook,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
