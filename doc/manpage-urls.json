@@ -326,5 +326,7 @@
   "user@.service(5)": "https://www.freedesktop.org/software/systemd/man/user@.service.html",
   "userdbctl(1)": "https://www.freedesktop.org/software/systemd/man/userdbctl.html",
   "vconsole.conf(5)": "https://www.freedesktop.org/software/systemd/man/vconsole.conf.html",
-  "veritytab(5)": "https://www.freedesktop.org/software/systemd/man/veritytab.html"
+  "veritytab(5)": "https://www.freedesktop.org/software/systemd/man/veritytab.html",
+  "xl.cfg(5)": "https://xenbits.xen.org/docs/unstable/man/xl.cfg.5.html",
+  "xl.conf(5)": "https://xenbits.xen.org/docs/unstable/man/xl.conf.5.html"
 }

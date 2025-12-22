@@ -1975,7 +1975,7 @@
   ./virtualisation/waagent.nix
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
-  ./virtualisation/xen-dom0.nix
+  ./virtualisation/xen/dom0.nix
   # keep-sorted end
   {
     documentation.nixos.extraModules = [

@@ -1888,6 +1888,9 @@
   "pkgs-formats-php": [
     "index.html#pkgs-formats-php"
   ],
+  "pkgs-formats-xenLight": [
+    "index.html#pkgs-formats-xenLight"
+  ],
   "pkgs-formats-result": [
     "index.html#pkgs-formats-result"
   ],
