@@ -23,7 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # Fix build with gcc15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ glib ];
