@@ -18,3 +18,4 @@ fi
 nix-update --subpackage core --use-github-releases flclash
 
 curl --fail --location --silent https://raw.githubusercontent.com/chen08209/FlClash/${latestTag}/pubspec.lock | yq eval --output-format=json --prettyPrint >$PACKAGE_DIR/pubspec.lock.json
+$(nix eval --file . dart.fetchGitHashesScript) --input $PACKAGE_DIR/pubspec.lock.json --output $PACKAGE_DIR/git-hashes.json
