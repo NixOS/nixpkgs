@@ -13109,6 +13109,11 @@
     githubId = 589502;
     name = "James Szalay";
   };
+  juanbono = {
+    name = "Juan Bono";
+    github = "juanbono";
+    githubId = 2772065;
+  };
   juancmuller = {
     email = "nix@juancmuller.com";
     githubId = 208500;
@@ -13893,6 +13898,11 @@
     name = "Kacper Koniuszy";
     github = "kkoniuszy";
     githubId = 120419423;
+  };
+  klaus993 = {
+    name = "Klaus Lungwitz";
+    github = "klaus993";
+    githubId = 18153834;
   };
   klchen0112 = {
     name = "klchen0112";
@@ -14835,6 +14845,11 @@
     github = "lf-";
     githubId = 6652840;
     matrix = "@jade_:matrix.org";
+  };
+  lferrigno = {
+    name = "Leando Ferrigno";
+    github = "lferrigno";
+    githubId = 5018415;
   };
   lgbishop = {
     email = "lachlan.bishop@hotmail.com";
@@ -23253,6 +23268,11 @@
     github = "SamLukeYes";
     githubId = 12882091;
     name = "Sam L. Yes";
+  };
+  samoht9277 = {
+    name = "Tomas Casagrande";
+    github = "samoht9277";
+    githubId = 53660242;
   };
   samrose = {
     email = "samuel.rose@gmail.com";
