@@ -10198,7 +10198,7 @@
   };
   HarisDotParis = {
     name = "Haris";
-    email = "nix.dev@haris.paris";
+    email = "git@haris.paris";
     matrix = "@haris:haris.paris";
     github = "HarisDotParis";
     githubId = 67912527;
