@@ -1,0 +1,245 @@
+diff --git a/unproto/error.c b/unproto/error.c
+index 667d978cbb..2fbccacb4d 100644
+--- a/unproto/error.c
++++ b/unproto/error.c
+@@ -53,7 +53,7 @@
+ 
+ #include <stdio.h>
+ 
+-extern void exit();
++extern void exit(int status);
+ 
+ /* Application-specific stuff */
+ 
+diff --git a/unproto/error.h b/unproto/error.h
+index dfb27e9067..cb52ae646b 100644
+--- a/unproto/error.h
++++ b/unproto/error.h
+@@ -1,6 +1,6 @@
+ /* @(#) error.h 1.2 92/01/15 21:53:14 */
+ 
+ extern int errcount;			/* error counter */
+-extern void error();			/* default context */
+-extern void error_where();		/* user-specified context */
+-extern void fatal();			/* fatal error */
++extern void error(char *text);			/* default context */
++extern void error_where(char *path, int line, char *text);		/* user-specified context */
++extern void fatal(char *text);			/* fatal error */
+diff --git a/unproto/strsave.c b/unproto/strsave.c
+index 2ee00b4172..faa4e18686 100644
+--- a/unproto/strsave.c
++++ b/unproto/strsave.c
+@@ -28,7 +28,7 @@
+ #include <string.h>
+ 
+ extern int hash(register char *s, unsigned size);
+-extern char *malloc();
++extern char *malloc(long size);
+ 
+ /* Application-specific stuff */
+ 
+diff --git a/unproto/symbol.c b/unproto/symbol.c
+index 67a4bf0bc6..a4beab5e92 100644
+--- a/unproto/symbol.c
++++ b/unproto/symbol.c
+@@ -45,7 +45,7 @@
+ #include <string.h>
+ 
+ extern int hash(register char *s, unsigned size);
+-extern char *malloc();
++extern char *malloc(long size);
+ 
+ /* Application-specific stuff */
+ 
+diff --git a/unproto/symbol.h b/unproto/symbol.h
+index 0711c1f4dc..0e2b1d88f8 100644
+--- a/unproto/symbol.h
++++ b/unproto/symbol.h
+@@ -6,6 +6,6 @@
+     struct symbol *next;
+ };
+ 
+-extern void sym_enter();		/* add symbol to table */
+-extern struct symbol *sym_find();	/* locate symbol */
++extern void sym_enter(char *name, int type);		/* add symbol to table */
++extern struct symbol *sym_find(register char *name);	/* locate symbol */
+ extern void sym_init();			/* prime the table */
+diff --git a/unproto/tok_class.c b/unproto/tok_class.c
+index 04207a07f3..9af67188ca 100644
+--- a/unproto/tok_class.c
++++ b/unproto/tok_class.c
+@@ -51,8 +51,8 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
+-extern long time();
+-extern char* ctime();
++extern long time(long *tloc);
++extern char* ctime(long *clock);
+ 
+ /* Application-specific stuff */
+ 
+@@ -61,13 +61,13 @@
+ #include "token.h"
+ #include "symbol.h"
+ 
+-static struct token *tok_list();
+-static void tok_list_struct();
+-static void tok_list_append();
+-static void tok_strcat();
+-static void tok_time();
+-static void tok_date();
+-static void tok_space_append();
++static struct token *tok_list(struct token *t);
++static void tok_list_struct(register struct token *list, register struct token *t);
++static void tok_list_append(struct token *h, struct token *t);
++static void tok_strcat(register struct token *t1);
++static void tok_time(struct token *t);
++static void tok_date(struct token *t);
++static void tok_space_append(register struct token *list, register struct token *t);
+ 
+ #if defined(MAP_VOID_STAR) || defined(MAP_VOID)
+ static void tok_void();			/* rewrite void keyword */
+diff --git a/unproto/tok_io.c b/unproto/tok_io.c
+index 288950b3ac..773ca5bf4d 100644
+--- a/unproto/tok_io.c
++++ b/unproto/tok_io.c
+@@ -89,7 +89,7 @@
+ #include "vstring.h"
+ #include "error.h"
+ 
+-extern char *strsave();			/* XXX need include file */
++extern char *strsave(register char *str);			/* XXX need include file */
+ 
+ /* Stuff to keep track of original source file name and position */
+ 
+@@ -104,12 +104,12 @@
+ 
+ /* Forward declarations */
+ 
+-static int read_quoted();
+-static void read_comment();
++static int read_quoted(register struct vstring *vs, int ch);
++static void read_comment(register struct vstring *vs);
+ static int backslash_newline();
+-static char *read_hex();
+-static char *read_octal();
+-static void fix_line_control();
++static char *read_hex(struct vstring *vs, register char *cp);
++static char *read_octal(register struct vstring *vs, register char *cp, register int c);
++static void fix_line_control(register char *path, register int line);
+ 
+  /*
+   * Character input with one level of pushback. The INPUT() macro recursively
+diff --git a/unproto/tok_pool.c b/unproto/tok_pool.c
+index e2ed107ce7..bbe3d184c5 100644
+--- a/unproto/tok_pool.c
++++ b/unproto/tok_pool.c
+@@ -37,7 +37,7 @@
+ 
+ /* C library */
+ 
+-extern char *malloc();
++extern char *malloc(long size);
+ 
+ /* Application-specific stuff */
+ 
+diff --git a/unproto/token.h b/unproto/token.h
+index bb2f50a106..e3752a0eb3 100644
+--- a/unproto/token.h
++++ b/unproto/token.h
+@@ -27,11 +27,11 @@
+ /* Input/output functions and macros */
+ 
+ extern struct token *tok_get();		/* read next single token */
+-extern void tok_show();			/* display (composite) token */
++extern void tok_show(register struct token *t);			/* display (composite) token */
+ extern struct token *tok_class();	/* classify tokens */
+-extern void tok_unget();		/* stuff token back into input */
++extern void tok_unget(register struct token *t);		/* stuff token back into input */
+ extern void put_nl();			/* print newline character */
+-extern void tok_show_ch();		/* emit single-character token */
++extern void tok_show_ch(register struct token *t);		/* emit single-character token */
+ 
+ #define	tok_flush(t)	(tok_show(t), tok_free(t))
+ 
+@@ -46,7 +46,7 @@
+ /* Memory management */
+ 
+ struct token *tok_alloc();		/* allocate token storage */
+-extern void tok_free();			/* re-cycle storage */
++extern void tok_free(register struct token *t);			/* re-cycle storage */
+ 
+ /* Context */
+ 
+diff --git a/unproto/unproto.c b/unproto/unproto.c
+index 18fc2aaecf..802b91dd3e 100644
+--- a/unproto/unproto.c
++++ b/unproto/unproto.c
+@@ -140,7 +140,7 @@
+ #include <errno.h>
+ #include <string.h>
+ 
+-extern void exit();
++extern void exit(int status);
+ extern int optind;
+ extern char *optarg;
+ extern int getopt();
+@@ -159,16 +159,16 @@
+ 
+ /* Forward declarations. */
+ 
+-static struct token *dcl_flush();
+-static void block_flush();
++static struct token *dcl_flush(register struct token *t);
++static void block_flush(register struct token *t);
+ static void block_dcls();
+-static struct token *show_func_ptr_type();
+-static struct token *show_struct_type();
+-static void show_arg_name();
+-static void show_type();
+-static void pair_flush();
+-static void check_cast();
+-static void show_empty_list();
++static struct token *show_func_ptr_type(struct token *t1, struct token *t2);
++static struct token *show_struct_type(register struct token *p);
++static void show_arg_name(register struct token *s);
++static void show_type(register struct token *s);
++static void pair_flush(register struct token *t, register int start, register int stop);
++static void check_cast(struct token *t);
++static void show_empty_list(register struct token *t);
+ 
+ #define	check_cast_flush(t)	(check_cast(t), tok_free(t))
+ 
+diff --git a/unproto/vstring.c b/unproto/vstring.c
+index 220bd530fe..ef9bcffa3c 100644
+--- a/unproto/vstring.c
++++ b/unproto/vstring.c
+@@ -67,8 +67,8 @@
+ 
+ /* C library */
+ 
+-extern char *malloc();
+-extern char *realloc();
++extern char *malloc(long size);
++extern char *realloc(char *p, long size);
+ 
+ /* Application-specific stuff */
+ 
+diff --git a/unproto/vstring.h b/unproto/vstring.h
+index c2e1f88a77..16a17aa815 100644
+--- a/unproto/vstring.h
++++ b/unproto/vstring.h
+@@ -5,9 +5,9 @@
+     char   *last;			/* last position */
+ };
+ 
+-extern struct vstring *vs_alloc();	/* initial allocation */
+-extern char *vs_realloc();		/* string extension */
+-extern char *vs_strcpy();		/* copy string */
++extern struct vstring *vs_alloc(int len);	/* initial allocation */
++extern char *vs_realloc(register struct vstring *vp, char *cp);		/* string extension */
++extern char *vs_strcpy(register struct vstring *vp, register char *dst, register char *src);		/* copy string */
+ 
+ /* macro to add one character to auto-resized string */
+ 
