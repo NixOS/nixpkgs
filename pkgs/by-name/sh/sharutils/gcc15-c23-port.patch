@@ -1,0 +1,125 @@
+From: Petr Písař <ppisar@redhat.com>
+
+With GCC 15, which defaults to ISO 23, a build failed, for example like
+this:
+
+    gcc -DLOCALEDIR=\"/usr/local/share/locale\" -DHAVE_CONFIG_H -I. -I..  -I../libopts -I. -I.. -I../lib -I
+    ../lib -I../intl  -Wno-format-contains-nul -g -O2 -Wno-format-contains-nul -c -o shar.o shar.c
+    In file included from local.h:23,
+		     from shar-opts.h:354,
+		     from shar.c:46:
+    ../lib/system.h:78:7: error: conflicting types for â€˜fdopenâ€™; have â€˜FILE *(void)â€™
+       78 | FILE *fdopen ();
+	  |       ^~~~~~
+
+The cause is that ISO C23 changed a meaning of an empty argument list
+from an unspecified list to no arguments.
+
+Also K&R syntax is now deprecated and the compiler warned:
+
+    encode.c: In function â€˜write_encoded_bytesâ€™:
+    encode.c:33:1: warning: old-style function definition [-Wold-style-definition]
+       33 | write_encoded_bytes (group, file)
+	  | ^~~~~~~~~~~~~~~~~~~
+
+This patch fixes both the erros and the warnigs by specifying all the
+arguments in the modern syntax.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/system.h   |  6 +++---
+ src/encode.c   | 13 +++----------
+ src/shar.c     |  2 +-
+ src/uudecode.c |  2 +-
+ 4 files changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/lib/system.h b/lib/system.h
+index 2b9846b..811e8cf 100644
+--- a/lib/system.h
++++ b/lib/system.h
+@@ -52,7 +52,7 @@ typedef enum {false = 0, true = 1} bool;
+ #endif
+ 
+ #if !HAVE_DECL_STRTOIMAX && !defined strtoimax
+-intmax_t strtoimax ();
++intmax_t strtoimax (const char *nptr, char **endptr, int base);
+ #endif
+ 
+ #if HAVE_STRING_H
+@@ -75,8 +75,8 @@ intmax_t strtoimax ();
+ # include <unistd.h>
+ #endif
+ 
+-FILE *fdopen ();
+-FILE *popen ();
++FILE *fdopen (int fd, const char *mode);
++FILE *popen (const char *command, const char *type);
+ 
+ /* Global functions of the shar package.  */
+ 
+diff --git a/src/encode.c b/src/encode.c
+index 09e0c69..b1de8bd 100644
+--- a/src/encode.c
++++ b/src/encode.c
+@@ -30,9 +30,7 @@
+ `------------------------------------------*/
+ 
+ static void
+-write_encoded_bytes (group, file)
+-     char *group;
+-     FILE *file;
++write_encoded_bytes (char *group, FILE *file)
+ {
+   int c1, c2, c3, c4;
+ 
+@@ -52,10 +50,7 @@ write_encoded_bytes (group, file)
+ `--------------------------------------------------------------------*/
+ 
+ static int
+-read_raw_bytes (file, buffer, buffer_size)
+-     FILE *file;
+-     char *buffer;
+-     int buffer_size;
++read_raw_bytes (FILE *file, char *buffer, int buffer_size)
+ {
+   int character;
+   int counter;
+@@ -75,9 +70,7 @@ read_raw_bytes (file, buffer, buffer_size)
+ `----------------------------------------------------*/
+ 
+ void
+-copy_file_encoded (input, output)
+-     FILE *input;
+-     FILE *output;
++copy_file_encoded (FILE *input, FILE *output)
+ {
+   char buffer[LINE_BUFFER_SIZE];
+   int counter;
+diff --git a/src/shar.c b/src/shar.c
+index 6d7ed1d..2c6e2e1 100644
+--- a/src/shar.c
++++ b/src/shar.c
+@@ -109,7 +109,7 @@ static inline unsigned char to_uchar (char ch) { return ch; }
+ #define IS_GRAPH(_c) (isprint (to_uchar (_c)) && !isspace (to_uchar (_c)))
+ #endif
+ 
+-struct tm *localtime ();
++struct tm *localtime (const time_t *timep);
+ 
+ #if MSDOS
+           /* 1 extra for CR.  */
+diff --git a/src/uudecode.c b/src/uudecode.c
+index 0621c99..b8a316e 100644
+--- a/src/uudecode.c
++++ b/src/uudecode.c
+@@ -82,7 +82,7 @@ static char const cright_years_z[] =
+ #define UU_CHMOD(_n, _fd, _m)   chmod ((_n), UU_MODE_BITS(_m))
+ #endif
+ 
+-struct passwd *getpwnam ();
++struct passwd *getpwnam (const char *name);
+ 
+ static uudecode_exit_code_t read_stduu(
+         const char *inname, const char *outname);
+-- 
+2.48.1
