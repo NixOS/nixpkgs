@@ -6,7 +6,12 @@
     }
     {
       after = "19";
+      before = "22";
       path = ../19;
+    }
+    {
+      after = "22";
+      path = ../22;
     }
   ];
   "clang/purity.patch" = [
@@ -97,8 +102,13 @@
   ];
   "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
     {
+      after = "22";
+      path = ../22;
+    }
+    {
       after = "18";
       path = ../18;
+      before = "22";
     }
     {
       after = "16";
