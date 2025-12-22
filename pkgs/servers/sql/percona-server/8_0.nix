@@ -119,6 +119,15 @@ stdenv.mkDerivation (finalAttrs: {
     "static"
   ];
 
+  # Due to sandbox restriction, ps command detection fails on darwin in mysqld_safe.sh.
+  # As a workaround we set FIND_PROC here.
+  # Due to complicated escaping, it cannot be done in cmakeFlags.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DFIND_PROC=ps -ef | grep -v mysqld_safe | grep -- \$MYSQLD | grep \$PID > /dev/null"
+    )
+  '';
+
   cmakeFlags = [
     # Percona-specific flags.
     "-DPORTABLE=1"
