@@ -25,6 +25,8 @@ let
         ...
       }@args:
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         name = args.name or "denoDeps-transformedDenoLock-${finalAttrs.pname}-${finalAttrs.version}";
         src = denoLock;
         unpackCmd = ''
@@ -84,6 +86,8 @@ let
         defaultName = "denoDeps-fetched-${finalAttrs.pname}-${finalAttrs.version}";
       in
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         name =
           if enableAutoFodInvalidation then
             fodNameGenerator argsForFodInvalidation finalAttrs.pname finalAttrs.version
@@ -139,6 +143,8 @@ let
         ...
       }@args:
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         name = args.name or "denoDeps-final-${finalAttrs.pname}-${finalAttrs.version}";
         src = fetched;
         nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
