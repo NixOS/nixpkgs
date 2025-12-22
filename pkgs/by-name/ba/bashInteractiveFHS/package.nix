@@ -1,5 +1,2 @@
 { bashFHS }:
-let
-  bashInteractiveFHS = bashFHS;
-in
-bashInteractiveFHS
+bashFHS
