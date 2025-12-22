@@ -256,6 +256,10 @@ let
         nativeInstallCheckInputs = nativeCheckInputs;
         installCheckInputs = checkInputs;
 
+        preInstall = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+          export cleanPythonPath=${lib.escapeShellArg (lib.concatMapStringsSep ":" (p: "${p}/${python.sitePackages}") (python.pkgs.requiredPythonModules (self.propagatedBuildInputs ++ self.buildInputs)))}
+        '';
+
         postFixup =
           lib.optionalString (!dontWrapPythonPrograms) ''
             wrapPythonPrograms
