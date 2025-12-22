@@ -105,12 +105,6 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "slow" ];
 
-  disabledTests = [
-    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-    # https://github.com/lancedb/lancedb/issues/1539
-    "test_polars"
-  ];
-
   disabledTestPaths = [
     # touch the network
     "test_namespace_integration.py"
