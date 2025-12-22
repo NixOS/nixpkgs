@@ -29,7 +29,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.2-unstable-2025-09-06"; # fixes to non-static builds right after 4.1.2 release
+  version = "4.1.2"; # fixes to non-static builds right after 4.1.2 release
 
   src = fetchFromGitHub {
     owner = "linux-audit";
