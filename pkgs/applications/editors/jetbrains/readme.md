@@ -28,7 +28,6 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
    - Run these commands respectively:
      - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
      - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
-   - Update `brokenPlugins` timestamp and hash (from https://web.archive.org/web/*/https://plugins.jetbrains.com/files/brokenPlugins.json)
    - Make sure the Kotlin version used is correct.
      - Check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
    - Do a test build
