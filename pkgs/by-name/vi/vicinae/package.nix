@@ -2,6 +2,7 @@
   abseil-cpp,
   cmake,
   cmark-gfm,
+  coreutils,
   fetchFromGitHub,
   fetchNpmDeps,
   kdePackages,
@@ -91,6 +92,11 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
       ]
     }"
   ];
+
+  postFixup = ''
+    substituteInPlace $out/share/systemd/user/vicinae.service \
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+  '';
 
   passthru.updateScript = ./update.sh;
 
