@@ -138,6 +138,8 @@ in
 
   callPackages = lib.callPackagesWith pkgsForCall;
 
+  callPackageWithArgSelectors = lib.makeCallPackageWithArgSelectors pkgs.callPackage;
+
   newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
   pkgs = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
