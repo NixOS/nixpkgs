@@ -385,7 +385,7 @@ let
             "
             listen ${addr}${optionalString (port != null) ":${toString port}"} quic "
             + optionalString vhost.default "default_server "
-            + optionalString vhost.reuseport "reuseport "
+            + optionalString (vhost.reuseport && !(lib.hasPrefix "unix:" addr)) "reuseport "
             + optionalString (extraParameters != [ ]) (
               concatStringsSep " " (
                 let
@@ -411,7 +411,7 @@ let
           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
-          + optionalString vhost.reuseport "reuseport "
+          + optionalString (vhost.reuseport && !(lib.hasPrefix "unix:" addr)) "reuseport "
           + optionalString proxyProtocol "proxy_protocol "
           + optionalString (extraParameters != [ ]) (concatStringsSep " " extraParameters)
           + ";";
