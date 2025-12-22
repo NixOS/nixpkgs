@@ -19,8 +19,6 @@ makeScopeWithSplicing' {
 
       genericUpdater = pkgs.genericUpdater;
 
-      mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
-
       #### CORE
 
       exo = callPackage ./core/exo { };
@@ -168,6 +166,13 @@ makeScopeWithSplicing' {
       #### ALIASES
 
       automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
+
+      mkXfceDerivation = lib.warnOnInstantiate ''
+        xfce.mkXfceDerivation has been deprecated, please use stdenv.mkDerivation
+        directly. You can migrate by adding `pkg-config`, `xfce4-dev-tools`, and
+        `wrapGAppsHook3` to your nativeBuildInputs and `--enable-maintainer-mode`
+        to your configureFlags.
+      '' (callPackage ./mkXfceDerivation.nix { }); # added 2025-12-22
 
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
