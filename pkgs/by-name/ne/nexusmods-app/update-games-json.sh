@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash curl common-updater-scripts jq
+#! nix-shell -i bash -p bash brotli curl common-updater-scripts jq
 
 set -eu -o pipefail
 
@@ -67,6 +67,22 @@ prefetch_json=$(
 )
 file=$(jq -r .storePath <<<"$prefetch_json")
 hash=$(jq -r .hash <<<"$prefetch_json")
+
+# Handle possible Brotli compression
+if brotli --test "$file"; then
+  tmp=$(mktemp -t "games-json-xxxxxx")
+  trap 'rm -f "$tmp"' EXIT
+
+  echo "Decompressing games.json" >&2
+  brotli --decompress "$file" --output="$tmp"
+  file="$tmp"
+
+  echo "Rehashing decompressed file" >&2
+  hash=$(
+    nix --extra-experimental-features nix-command \
+      hash path --type sha256 --sri "$file"
+  )
+fi
 
 # Extra sanity check, validate the JSON:
 if ! jq -e . "$file" >/dev/null; then

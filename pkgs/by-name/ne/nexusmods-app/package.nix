@@ -1,5 +1,6 @@
 {
   _7zz,
+  brotli,
   buildDotnetModule,
   callPackage,
   desktop-file-utils,
@@ -39,6 +40,16 @@ buildDotnetModule (finalAttrs: {
     name = "games.json";
     url = "https://web.archive.org/web/20251221212501id_/https://data.nexusmods.com/file/nexus-data/games.json";
     hash = "sha256-OVy6b/n6n2/TdzfHCWDOTw2yai87ieki21fEp1IGamY=";
+    # The Internet Archive sometimes forces brotli compression, handle this manually for hash consistency
+    nativeBuildInputs = [ brotli ];
+    downloadToTemp = true;
+    postFetch = ''
+      if brotli --test "$downloadedFile"; then
+        brotli --decompress "$downloadedFile" --output="$out"
+      else
+        mv "$downloadedFile" "$out"
+      fi
+    '';
   };
 
   enableParallelBuilding = false;
