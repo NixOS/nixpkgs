@@ -9,7 +9,6 @@
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   toolz,
   typing-extensions,
   wrapt,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.14.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "psygnal";
     tag = "v${version}";
-    hash = "sha256-RQ53elonwvna5UDVell3JI1dcZSMHREyB51r+ddsW2M=";
+    hash = "sha256-v7TbsTss4E0JVH0C5YTfbon9GMixEVnkXMxxN1iUYi0=";
   };
 
   build-system = [
