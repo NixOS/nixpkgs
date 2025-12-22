@@ -17,12 +17,12 @@ let
     };
   };
 
-  version = "4.1.0";
+  version = "4.2.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-vZkqHlZ1aDOXcrdyV8BXmI95AmMalXOuVLS9XWB/YxU=";
+    hash = "sha256-BQ2vJIEXS51dBkqdmKUuLB6hM8QRJW0zVDayYt8Pe+w=";
   };
 
   mail-templates = stdenv.mkDerivation {
