@@ -42,8 +42,8 @@ let
                   SELECT CONCAT('jit result = ', SUM(id)) from demo;
                 ''} | sudo -u postgres psql"
             )
-            assert "JIT:" in output
-            assert "jit result = 15" in output
+            t.assertIn("JIT:", output)
+            t.assertIn("jit result = 15", output)
 
         machine.shutdown()
       '';

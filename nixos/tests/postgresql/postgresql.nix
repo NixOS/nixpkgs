@@ -236,13 +236,13 @@ let
                 )
               )
               print(clauses)
-              assert clauses['rolsuper'], 'expected user with clauses to have superuser clause'
-              assert clauses['rolinherit'], 'expected user with clauses to have inherit clause'
-              assert clauses['rolcreaterole'], 'expected user with clauses to have create role clause'
-              assert clauses['rolcreatedb'], 'expected user with clauses to have create db clause'
-              assert clauses['rolcanlogin'], 'expected user with clauses to have login clause'
-              assert clauses['rolreplication'], 'expected user with clauses to have replication clause'
-              assert clauses['rolbypassrls'], 'expected user with clauses to have bypassrls clause'
+              t.assertTrue(clauses["rolsuper"])
+              t.assertTrue(clauses["rolinherit"])
+              t.assertTrue(clauses["rolcreaterole"])
+              t.assertTrue(clauses["rolcreatedb"])
+              t.assertTrue(clauses["rolcanlogin"])
+              t.assertTrue(clauses["rolreplication"])
+              t.assertTrue(clauses["rolbypassrls"])
 
           with subtest("All user permissions default when ensureClauses is not provided"):
               clauses = json.loads(
@@ -250,13 +250,13 @@ let
                     "sudo -u postgres psql -tc \"${getClausesQuery "default-clauses"}\""
                 )
               )
-              assert not clauses['rolsuper'], 'expected user with no clauses set to have default superuser clause'
-              assert clauses['rolinherit'], 'expected user with no clauses set to have default inherit clause'
-              assert not clauses['rolcreaterole'], 'expected user with no clauses set to have default create role clause'
-              assert not clauses['rolcreatedb'], 'expected user with no clauses set to have default create db clause'
-              assert clauses['rolcanlogin'], 'expected user with no clauses set to have default login clause'
-              assert not clauses['rolreplication'], 'expected user with no clauses set to have default replication clause'
-              assert not clauses['rolbypassrls'], 'expected user with no clauses set to have default bypassrls clause'
+              t.assertFalse(clauses["rolsuper"])
+              t.assertTrue(clauses["rolinherit"])
+              t.assertFalse(clauses["rolcreaterole"])
+              t.assertFalse(clauses["rolcreatedb"])
+              t.assertTrue(clauses["rolcanlogin"])
+              t.assertFalse(clauses["rolreplication"])
+              t.assertFalse(clauses["rolbypassrls"])
 
           machine.shutdown()
         '';
