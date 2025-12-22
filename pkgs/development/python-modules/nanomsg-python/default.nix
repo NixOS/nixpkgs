@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "nanomsg-python";
-  version = "1.0.20190114";
+  version = "1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
