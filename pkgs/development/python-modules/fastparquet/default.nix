@@ -1,21 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  cramjam,
-  cython,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  gitMinimal,
+
+  # dependencies
+  cramjam,
   fsspec,
-  git,
   numpy,
   packaging,
   pandas,
-  pytestCheckHook,
+
+  # optional-dependencies
   python-lzo,
+
+  # tests
+  pytestCheckHook,
   python,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -23,25 +31,21 @@ buildPythonPackage rec {
   version = "2025.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-saTKmS0lhPvsxwNxTYwHtR7d85esPUyxzXYheVbaZsI=";
+    hash = "sha256-cebu3E2sbVWRUYbSeuslCZhaF+zWV7E56iSwB7Ms3ts=";
   };
 
   build-system = [
+    cython
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeBuildInputs = [
-    cython
-    git
-    numpy
+    gitMinimal
   ];
 
   dependencies = [
