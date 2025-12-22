@@ -5,29 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.programs.mangowc;
 in
 {
   options.programs.mangowc = {
-    enable = mkEnableOption "MangoWC, a Wayland compositor based on dwl and scenefx";
+    enable = lib.mkEnableOption "MangoWC, a Wayland compositor based on dwl and scenefx";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.mangowc;
-      defaultText = literalExpression "pkgs.mangowc";
-      description = "The MangoWC package to use.";
+    package = lib.mkPackageOption pkgs "mangowc" {
+      default = [ "mangowc" ];
+      example = "pkgs.mangowc.override { enableXWayland = false; }";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     # Necessary Wayland plumbing
     xdg.portal = {
-      enable = lib.mkDefault true;
+      enable = true;
 
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
