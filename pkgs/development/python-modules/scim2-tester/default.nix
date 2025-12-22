@@ -2,40 +2,41 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
-  hatchling,
+  fetchFromGitHub,
+  uv-build,
   scim2-client,
+  scim2-models,
   pytestCheckHook,
-  werkzeug,
-  scim2-server,
+  pytest-scim2-server,
   pytest-httpserver,
-  cacert,
 }:
 
 buildPythonPackage rec {
   pname = "scim2-tester";
-  version = "0.1.14";
+  version = "0.2.4";
 
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_tester";
-    hash = "sha256-QoqD0dgEuL0VJ6vc6K76G7ipl7rKjlzJuTwFCnfS/64=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-tester";
+    tag = version;
+    hash = "sha256-x8hoa9gx3Agtin1YWBH5uETkMyEnjr6FN8p6k7EyzMs=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
-  dependencies = [ scim2-client ];
+  dependencies = [
+    scim2-client
+    scim2-models
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    werkzeug
-    scim2-server
+    pytest-scim2-server
     pytest-httpserver
-    cacert
   ]
   ++ optional-dependencies.httpx;
 
