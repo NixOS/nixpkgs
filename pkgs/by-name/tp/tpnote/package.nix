@@ -71,6 +71,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://blog.getreu.net/projects/tp-note/";
     license = lib.licenses.mit;
     mainProgram = "tpnote";
-    maintainers = with lib.maintainers; [ getreu ];
+    maintainers = with lib.maintainers; [
+      getreu
+      starryreverie
+    ];
   };
 })
