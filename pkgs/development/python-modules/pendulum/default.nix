@@ -56,7 +56,9 @@ buildPythonPackage rec {
     python-dateutil
     tzdata
   ]
-  ++ lib.optional (!isPyPy) [ time-machine ]
+  ++ lib.optionals (!isPyPy) [
+    time-machine
+  ]
   ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
