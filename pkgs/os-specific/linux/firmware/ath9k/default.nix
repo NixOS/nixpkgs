@@ -175,15 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
     # release 1.4.0 vendors a GMP which uses an ancient version of
     # autotools that does not work on aarch64 or powerpc.
     # However, enableUnstable (unreleased upstream) works.
-    /*
-      # disabled until #195294 is merged
-      badPlatforms =
-        with lib.systems.inspect.patterns;
-        lib.optionals (!enableUnstable && lib.versionOlder finalAttrs.version "1.4.1") [
-          isAarch64
-          isPower64
-        ];
-    */
+    badPlatforms =
+      with lib.systems.inspect.patterns;
+      lib.optionals (!enableUnstable && lib.versionOlder finalAttrs.version "1.4.1") [
+        isAarch64
+        isPower64
+      ];
 
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     homepage = "http://lists.infradead.org/mailman/listinfo/ath9k_htc_fw";
