@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mistletoe";
-  version = "1.4.0";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "miyuchina";
     repo = "mistletoe";
     tag = "v${version}";
-    hash = "sha256-jFU16vdASGVSPq+TJ/6cN7IGkE/61SL9BWCOPsVqNaU=";
+    hash = "sha256-h2gKvh3P4pUUPwVYTIjz43/3CwZdWbhO3aJnwFBNR+Q=";
   };
 
   pythonImportsCheck = [ "mistletoe" ];
