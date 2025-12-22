@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "UR_HIP_ROCM_DIR" "${rocmtoolkit_joined}")
-    (lib.cmakeFeature "AMDGPU_TARGETS" rocmGpuTargets)
+    (lib.cmakeFeature "GPU_TARGETS" rocmGpuTargets)
   ];
 
   passthru.backends =
