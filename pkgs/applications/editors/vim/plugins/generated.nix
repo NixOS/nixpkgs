@@ -11946,6 +11946,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ocaml-nvim = buildVimPlugin {
+    pname = "ocaml.nvim";
+    version = "2025-12-02";
+    src = fetchFromGitHub {
+      owner = "tarides";
+      repo = "ocaml.nvim";
+      rev = "f13728bbedb02121ee54633465ac392bbf0a8e79";
+      sha256 = "140hh72x96ihzg766rv1nn8x4la27xycxxaqym3vv0wi5jd5v1sx";
+    };
+    meta.homepage = "https://github.com/tarides/ocaml.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   oceanic-material = buildVimPlugin {
     pname = "oceanic-material";
     version = "2023-06-22";
