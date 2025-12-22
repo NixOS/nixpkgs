@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pyrr";
-  version = "unstable-2022-07-22";
+  version = "0.10.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
