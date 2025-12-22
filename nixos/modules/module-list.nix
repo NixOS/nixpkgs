@@ -446,6 +446,7 @@
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
+  ./services/audio/upmpdcli.nix
   ./services/audio/ympd.nix
   ./services/autotierfs.nix
   ./services/backup/automysqlbackup.nix
