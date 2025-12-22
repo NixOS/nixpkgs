@@ -111,9 +111,9 @@ let
         ];
         SSL_CERT_FILE = args.SSL_CERT_FILE or "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        outputHashMode = args.outputHashMode or "recursive";
-        outputHash = args.outputHash or hash;
-        outputHashAlgo = args.outputHashAlgo or "sha256";
+        outputHashMode = "recursive";
+        outputHash = hash;
+        outputHashAlgo = "";
 
         meta = (args.meta or { }) // {
           maintainers = [ lib.maintainers.aMOPel ];
