@@ -31,28 +31,25 @@ let
           mkdir -p ./source;
           cat $curSrc > ./source/deno.lock;
         '';
-        buildPhase =
-          ''
-            runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-            mkdir -p $out
-            lockfile-transformer \
-              --deno-lock-path ./deno.lock \
-              --common-lock-jsr-path $out/jsr.json \
-              --common-lock-npm-path $out/npm.json \
-              --common-lock-https-path $out/https.json;
+          mkdir -p $out
+          lockfile-transformer \
+            --deno-lock-path ./deno.lock \
+            --common-lock-jsr-path $out/jsr.json \
+            --common-lock-npm-path $out/npm.json \
+            --common-lock-https-path $out/https.json;
 
-            runHook postBuild
-          '';
-        nativeBuildInputs =
-          (args.nativeBuildInputs or []) ++ [
-            fetch-deno-deps-scripts
-          ];
+          runHook postBuild
+        '';
+        nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+          fetch-deno-deps-scripts
+        ];
 
-        meta =
-          (args.meta or {}) // {
-            maintainers = [ lib.maintainers.aMOPel ];
-          };
+        meta = (args.meta or { }) // {
+          maintainers = [ lib.maintainers.aMOPel ];
+        };
       };
   };
 
@@ -93,35 +90,30 @@ let
           else
             args.name or defaultName;
         src = transformedDenoLock;
-        buildPhase =
-          ''
-            runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-            ls -lsa .
-            ls -lsa ..
-            single-fod-fetcher \
-              --common-lock-jsr-path ./jsr.json \
-              --common-lock-npm-path ./npm.json \
-              --common-lock-https-path ./https.json \
-              --out-path-prefix $out;
-            cp ${denoLock} $out/deno.lock
+          single-fod-fetcher \
+            --common-lock-jsr-path ./jsr.json \
+            --common-lock-npm-path ./npm.json \
+            --common-lock-https-path ./https.json \
+            --out-path-prefix $out;
+          cp ${denoLock} $out/deno.lock
 
-            runHook postBuild
-          '';
-        nativeBuildInputs =
-          (args.nativeBuildInputs or []) ++ [
-            fetch-deno-deps-scripts
-          ];
+          runHook postBuild
+        '';
+        nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+          fetch-deno-deps-scripts
+        ];
         SSL_CERT_FILE = args.SSL_CERT_FILE or "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
         outputHashMode = args.outputHashMode or "recursive";
         outputHash = args.outputHash or hash;
         outputHashAlgo = args.outputHashAlgo or "sha256";
 
-        meta =
-          (args.meta or {}) // {
-            maintainers = [ lib.maintainers.aMOPel ];
-          };
+        meta = (args.meta or { }) // {
+          maintainers = [ lib.maintainers.aMOPel ];
+        };
       };
   };
 
@@ -149,34 +141,31 @@ let
       {
         name = args.name or "denoDeps-final-${finalAttrs.pname}-${finalAttrs.version}";
         src = fetched;
-        nativeBuildInputs =
-          (args.nativeBuildInputs or []) ++ [
-            fetch-deno-deps-scripts
-            file-structure-transformer-vendor
-          ];
-        buildPhase =
-          ''
-            runHook preBuild;
+        nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+          fetch-deno-deps-scripts
+          file-structure-transformer-vendor
+        ];
+        buildPhase = ''
+          runHook preBuild;
 
-            export vendorDir="$out/${vendorDir}";
-            export DENO_DIR="$out/${denoDir}";
-            mkdir -p $DENO_DIR;
-            mkdir -p $vendorDir;
-            file-structure-transformer-npm \
-              --deno-dir-path $DENO_DIR \
-              --common-lock-npm-path "./npm.json";
-            file-structure-transformer-vendor \
-              --deno-dir-path $DENO_DIR \
-              --vendor-dir-path $vendorDir \
-              --common-lock-jsr-path "./jsr.json" \
-              --common-lock-https-path "./https.json";
+          export vendorDir="$out/${vendorDir}";
+          export DENO_DIR="$out/${denoDir}";
+          mkdir -p $DENO_DIR;
+          mkdir -p $vendorDir;
+          file-structure-transformer-npm \
+            --deno-dir-path $DENO_DIR \
+            --common-lock-npm-path "./npm.json";
+          file-structure-transformer-vendor \
+            --deno-dir-path $DENO_DIR \
+            --vendor-dir-path $vendorDir \
+            --common-lock-jsr-path "./jsr.json" \
+            --common-lock-https-path "./https.json";
 
-            runHook postBuild;
-          '';
-        meta =
-          (args.meta or {}) // {
-            maintainers = [ lib.maintainers.aMOPel ];
-          };
+          runHook postBuild;
+        '';
+        meta = (args.meta or { }) // {
+          maintainers = [ lib.maintainers.aMOPel ];
+        };
       };
   };
 
