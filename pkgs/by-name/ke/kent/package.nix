@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kent";
-  version = "488";
+  version = "491";
 
   src = fetchFromGitHub {
     owner = "ucscGenomeBrowser";
     repo = "kent";
     tag = "v${finalAttrs.version}_base";
-    hash = "sha256-7iapTrQBq0VvbSe+lEdf9lISRJ/uPGdnfjJiSA0NLN8=";
+    hash = "sha256-LDCf9t1mKj0xFkz3SoCjVxqJsi0CO92dnwDell6Q8QY=";
   };
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
