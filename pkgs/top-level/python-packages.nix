@@ -12593,10 +12593,6 @@ self: super: with self; {
 
   proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
-  proton-vpn-network-manager =
-    callPackage ../development/python-modules/proton-vpn-network-manager
-      { };
-
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   prov = callPackage ../development/python-modules/prov { };

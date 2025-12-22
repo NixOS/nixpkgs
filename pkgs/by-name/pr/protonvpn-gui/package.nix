@@ -49,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     proton-keyring-linux
     proton-vpn-api-core
     proton-vpn-local-agent
-    proton-vpn-network-manager
     pycairo
     pygobject3
   ];
