@@ -218,16 +218,19 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
     ) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") (
-      # Backport fix for NumPy 2 support.
-      (fetchpatch {
-        name = "boost-numpy-2-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
-      })
-    )
+    ++
+      lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87")
+        # Backport fix for NumPy 2 support.
+        (
+          fetchpatch {
+            name = "boost-numpy-2-compatibility.patch";
+            url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+            stripLen = 1;
+            extraPrefix = "libs/python/";
+            hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+          }
+        )
+
     ++ lib.optionals (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
