@@ -13,12 +13,12 @@
 }:
 let
   pname = "opencode";
-  version = "1.0.180";
+  version = "1.0.184";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${version}";
-    hash = "sha256-Jwniz/mxMrzR6FL5fL3JRG1mkMP57wxpdtPBpSFxNfY=";
+    hash = "sha256-qEVFORKMoaLTsBbs2D9aLaD1W4vbQppJ6fB+bHWLcgM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
