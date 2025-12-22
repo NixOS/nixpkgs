@@ -648,6 +648,16 @@ with haskellLib;
   # https://github.com/awakesecurity/nix-deploy/issues/35
   nix-deploy = doJailbreak super.nix-deploy;
 
+  call-stack = appendPatches [
+    # Fixes test suites with GHC >= 9.10
+    (pkgs.fetchpatch {
+      name = "call-stack-tests-normalize-pkg-name.patch";
+      url = "https://github.com/sol/call-stack/commit/cbbee23ce309d18201951e16a8b6d30b57e2bdf9.patch";
+      sha256 = "sha256-xkdjf8zXW+UMxot2Z8WYYmvAJsT+VGKXWGt19mZZwCg=";
+      includes = [ "test/Data/CallStackSpec.hs" ];
+    })
+  ] super.call-stack;
+
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
