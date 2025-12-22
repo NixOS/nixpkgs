@@ -12,16 +12,16 @@ let
 
   tsc-dyn = rustPlatform.buildRustPackage rec {
     pname = "tsc-dyn";
-    version = "0.18.0";
+    version = "0.19.3";
 
     src = fetchFromGitHub {
       owner = "emacs-tree-sitter";
       repo = "emacs-tree-sitter";
       tag = version;
-      hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
+      hash = "sha256-WBwM6nHD9/lrpxMa/bu+dZj1Ulp0uPb1VOPEb4eDxak=";
     };
 
-    cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
+    cargoHash = "sha256-AZJoOWBnAp+oUR9LpQUJsx9gs3K5B9N+WW8j8TgImd4=";
 
     sourceRoot = "${src.name}/core";
 
