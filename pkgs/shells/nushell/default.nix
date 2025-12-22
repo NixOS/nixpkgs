@@ -17,24 +17,25 @@
   nushell,
   nix-update-script,
   curlMinimal,
-}:
+  ...
+}@args:
 
 let
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
   version = "0.108.0";
-in
-rustPlatform.buildRustPackage {
-  pname = "nushell";
-  inherit version;
-
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = version;
     hash = "sha256-8OMTscMObV+IOSgOoTSzJvZTz6q/l2AjrOb9y3p2tZY=";
   };
+
+in
+rustPlatform.buildRustPackage {
+  pname = "nushell";
+  inherit version src;
 
   cargoHash = "sha256-M2wkhhaS3bVhwaa3O0CUK5hL757qFObr7EDtBFXXwxg=";
 
@@ -58,30 +59,18 @@ rustPlatform.buildRustPackage {
   buildFeatures = additionalFeatures [ ];
 
   preCheck = ''
-    export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
+    export HOME=$(mktemp -d)
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    (
-      # The skipped tests all fail in the sandbox because in the nushell test playground,
-      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
-      # user (/var/empty). The assertions however do respect the set $HOME.
-      set -x
-      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
-        --test-threads=$NIX_BUILD_CORES \
-        --skip=repl::test_config_path::test_default_config_path \
-        --skip=repl::test_config_path::test_xdg_config_bad \
-        --skip=repl::test_config_path::test_xdg_config_empty ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-          \
-                  --skip=plugins::config::some \
-                  --skip=plugins::stress_internals::test_exit_early_local_socket \
-                  --skip=plugins::stress_internals::test_failing_local_socket_fallback \
-                  --skip=plugins::stress_internals::test_local_socket
-        ''}
-    )
-    runHook postCheck
-  '';
+  NU_TEST_LOCALE_OVERRIDE = "en_US.UTF-8";
+  # Set the correct profile to use during the `build.rs` stage of `checkPhase`
+  NUSHELL_CARGO_PROFILE = args.checkType or "release";
+  # These check flags can be removed in 0.109.0 (nushell/nushell#16914)
+  checkFlags = [
+    "--skip=repl::test_config_path::test_default_config_path"
+    "--skip=repl::test_config_path::test_xdg_config_bad"
+    "--skip=repl::test_config_path::test_xdg_config_empty"
+  ];
 
   checkInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ curlMinimal ]
