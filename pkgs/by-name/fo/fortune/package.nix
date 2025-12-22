@@ -1,12 +1,16 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   recode,
   perl,
   rinutils,
   fortune,
+  shlomif-cmake-modules,
+  libxslt,
+  docbook-xsl-ns,
+  docbook-xsl-nons,
   withOffensive ? false,
 }:
 
@@ -14,16 +18,28 @@ stdenv.mkDerivation rec {
   pname = "fortune-mod";
   version = "3.24.0";
 
-  # We use fetchurl instead of fetchFromGitHub because the release pack has some
-  # special files.
-  src = fetchurl {
-    url = "https://github.com/shlomif/fortune-mod/releases/download/fortune-mod-${version}/fortune-mod-${version}.tar.xz";
-    sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
+  src = fetchFromGitHub {
+    owner = "shlomif";
+    repo = "fortune-mod";
+    tag = "fortune-mod-${version}";
+    hash = "sha256-kuaaSmTWR8HXIU/fRSrUChh4XFEUPIw1LeXvwagX8KY=";
   };
+
+  sourceRoot = "${src.name}/fortune-mod";
+
+  postPatch = ''
+    ln -s ${shlomif-cmake-modules}/lib/cmake/Shlomif_Common.cmake ./cmake/Shlomif_Common.cmake
+  '';
 
   nativeBuildInputs = [
     cmake
-    perl
+    libxslt
+    docbook-xsl-ns
+    docbook-xsl-nons
+    (perl.withPackages (p: [
+      p.PathTiny
+      p.AppXMLDocBookBuilder
+    ]))
     rinutils
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
