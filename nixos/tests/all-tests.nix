@@ -1291,7 +1291,10 @@ in
   privatebin = runTest ./privatebin.nix;
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
-  prometheus-exporters = handleTest ./prometheus-exporters.nix { };
+  prometheus-exporters = import ./prometheus-exporters.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   prowlarr = runTest ./prowlarr.nix;
