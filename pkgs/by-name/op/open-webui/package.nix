@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.42";
+  version = "0.6.43";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-nUrGF0IcIsU9JLyuyhzNldx948t7sNWWB6cIlBFxX8c=";
+    hash = "sha256-gkCG2SIYCF89IFi6neslvZNFyoC6PrMM2Vda/a3mc0k=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-BKQmeMV0NAgWgx9c+wL6GyrJb8agtmInlQidfzlEZZM=";
+    npmDepsHash = "sha256-bw0f6jlA09s7Ptd8+q8RHRFZgnyE+ecsfY30XdKlyRM=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -131,6 +131,7 @@ python3Packages.buildPythonApplication rec {
       langchain
       langchain-classic
       langchain-community
+      langchain-text-splitters
       langdetect
       ldap3
       loguru
