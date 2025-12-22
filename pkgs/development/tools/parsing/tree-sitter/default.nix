@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  newScope,
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
@@ -67,6 +68,14 @@ let
     Use pkgs.tree-sitter-grammars.<name> to access.
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
+
+  /**
+    # Extensible package set for tree-sitter grammars.
+    # Provides .override and .extend for customization.
+    # Note: Use builtGrammars (not this) when iterating over grammars,
+    # as this includes package set functions alongside derivations
+  */
+  grammarsScope = lib.makeScope newScope (self: builtGrammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -174,6 +183,7 @@ rustPlatform.buildRustPackage (final: {
       grammars
       buildGrammar
       builtGrammars
+      grammarsScope
       withPlugins
       allGrammars
       ;
