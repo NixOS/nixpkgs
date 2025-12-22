@@ -12589,6 +12589,8 @@ self: super: with self; {
 
   proton-vpn-api-core = callPackage ../development/python-modules/proton-vpn-api-core { };
 
+  proton-vpn-daemon = callPackage ../development/python-modules/proton-vpn-daemon { };
+
   proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
   proton-vpn-network-manager =
