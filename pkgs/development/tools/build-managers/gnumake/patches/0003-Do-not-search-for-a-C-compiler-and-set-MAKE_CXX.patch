@@ -1,7 +1,7 @@
-From 3317b3a78666e6073c63f62a322176e3dc680461 Mon Sep 17 00:00:00 2001
+From e63470a43889be3f61c71ca31e57b4e3c3da5961 Mon Sep 17 00:00:00 2001
 From: Ivan Trubach <mr.trubach@icloud.com>
 Date: Sat, 17 Aug 2024 22:35:03 +0300
-Subject: [PATCH 3/3] Do not search for a C++ compiler and set MAKE_CXX
+Subject: [PATCH 3/5] Do not search for a C++ compiler and set MAKE_CXX
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,5 +79,5 @@ index e396269b..78ba402f 100644
      /* This expands to $(CO) $(COFLAGS) $< $@ if $@ does not exist,
         and to the empty string if $@ does exist.  */
 -- 
-2.44.1
+2.51.2
 
