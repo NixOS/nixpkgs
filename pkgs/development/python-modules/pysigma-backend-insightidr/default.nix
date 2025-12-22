@@ -5,15 +5,12 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-insightidr";
   version = "0.2.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
@@ -22,11 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-dc25zDYQeU9W9qwrRz7zsM2wOl8kMapDvwFhB6VOwhY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pysigma ];
+  dependencies = [ pysigma ];
 
   pythonRelaxDeps = [ "pysigma" ];
 
@@ -40,7 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support the Rapid7 InsightIDR backend for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-insightidr";
-    license = with lib.licenses; [ lgpl21Only ];
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-insightidr/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
