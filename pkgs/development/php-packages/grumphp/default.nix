@@ -12,11 +12,11 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phpro";
     repo = "grumphp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g2V2clNI0+KzKAPStq1vJZ3gHpBV1EbduWBmzRnuzv8=";
   };
 
-  vendorHash = "sha256-wDxrLsBA8TMc6Fk+voeHlxQNfJaaef1ydg0ppuJgO2E=";
+  vendorHash = "sha256-lgXDxfBTCtGlrDzi+leeE8J8VIsaKpwyB1CUTUvdpMg=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
