@@ -26,9 +26,10 @@
   ultralytics-thop,
 
   # tests
-  pytestCheckHook,
+  aiohttp,
   onnx,
   onnxruntime,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -72,9 +73,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ultralytics" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aiohttp
     onnx
     onnxruntime
+    pytestCheckHook
   ];
 
   enabledTestPaths = [
