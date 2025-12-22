@@ -11638,6 +11638,8 @@ self: super: with self; {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovito = callPackage ../development/python-modules/ovito { };
+
   ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
