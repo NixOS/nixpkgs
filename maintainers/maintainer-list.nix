@@ -20908,6 +20908,12 @@
     githubId = 66107;
     name = "Daniel Poelzleithner";
   };
+  poeschel = {
+    email = "poeschel@mailbox.org";
+    github = "poeschel";
+    githubId = 703724;
+    name = "Lars Pöschel";
+  };
   pogobanane = {
     email = "mail@peter-okelmann.de";
     github = "pogobanane";
