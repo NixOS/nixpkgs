@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4x5Vqd81/ZFXDpPUnJeOzI2DprAD49saL+aZZMAxI3w=";
+    hash = "sha256-GptP8iw3yqXKJiYv7cJEdNCTib7HAhveFCwMKvfv+3I=";
   };
 
   vendorHash = "sha256-uhqa850dHRHNZLXUMGg9Hb8skEY/5CrGmxSmnBytW/s=";
