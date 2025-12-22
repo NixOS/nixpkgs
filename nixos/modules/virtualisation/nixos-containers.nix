@@ -111,7 +111,9 @@ let
       "/nix/var/nix/profiles/per-container/$INSTANCE" \
       "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
-    cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
+    if [ "$COPY_RESOLV_CONF" = 1 ]; then
+      cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
+    fi
 
     if [ -n "''${FLAKE-}" ] && [ ! -e "/nix/var/nix/profiles/per-container/$INSTANCE/system" ]; then
       # we create the etc/nixos-container config file, then if we utilize the update function, we can then build all the necessary system files for the container
@@ -690,6 +692,14 @@ in
                 '';
               };
 
+              copyResolvConf = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether to copy host /etc/resolv.conf into the container.
+                '';
+              };
+
               privateNetwork = mkOption {
                 type = types.bool;
                 default = false;
@@ -1088,6 +1098,7 @@ in
                 ${optionalString (cfg.flake != null) ''
                   FLAKE=${cfg.flake}
                 ''}
+                COPY_RESOLV_CONF=${if cfg.copyResolvConf then "1" else "0"}
                 ${optionalString cfg.privateNetwork ''
                   PRIVATE_NETWORK=1
                   ${optionalString (cfg.hostBridge != null) ''
