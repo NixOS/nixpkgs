@@ -11,6 +11,8 @@
   lsof,
   makeWrapper,
   sg3_utils,
+  glusterfs,
+  enable-glusterfs ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,11 +35,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd
     libaio
+  ]
+  ++ lib.optionals enable-glusterfs [
+    glusterfs
   ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "SD_NOTIFY=1"
+  ]
+  ++ lib.optionals enable-glusterfs [
+    "GLFS_BD=1"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -54,11 +62,16 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
+  patches = [
+    ./glfs-api.patch # https://github.com/fujita/tgt/pull/77
+  ];
+
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
     sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
     sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/glusterfs|${glusterfs}/include/glusterfs|' usr/Makefile
   '';
 
   postInstall = ''
