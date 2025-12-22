@@ -14,6 +14,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-QcypdeFIzEt2cx8PWWWhnMMhnc2oEWZUOm8kge4KJQY=";
   };
 
+  patches = [ ./remove-install-check.patch ];
+
   build-system = [ python3Packages.setuptools ];
 
   pythonRelaxDeps = true;
