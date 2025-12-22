@@ -34,10 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pvolok/mprocs";
     changelog = "https://github.com/pvolok/mprocs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      GaetanLepage
-      pyrox0
-    ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;
     mainProgram = "mprocs";
   };
