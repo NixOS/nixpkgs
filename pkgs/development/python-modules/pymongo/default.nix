@@ -1,12 +1,25 @@
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
+  lib,
+
+  # build system
   hatchling,
   hatch-requirements-txt,
   setuptools,
-  pythonOlder,
+
+  # dependencies
   dnspython,
+
+  # optional dependencies
+  cryptography,
+  pykerberos,
+  pymongo-auth-aws,
+  pyopenssl,
+  python-snappy,
+  requests,
+  service-identity,
+  zstandard,
 
   # for passthru.tests
   celery, # check-input only
@@ -22,8 +35,6 @@ buildPythonPackage rec {
   version = "4.13.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "pymongo";
@@ -37,6 +48,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ dnspython ];
+
+  optional-dependencies = {
+    aws = [ pymongo-auth-aws ];
+    gssapi = [ pykerberos ];
+    ocsp = [
+      cryptography
+      pyopenssl
+      requests
+      service-identity
+    ];
+    snappy = [ python-snappy ];
+    zstd = [ zstandard ];
+  };
 
   # Tests call a running mongodb instance
   doCheck = false;
