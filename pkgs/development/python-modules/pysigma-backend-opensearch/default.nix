@@ -7,7 +7,6 @@
   pysigma-backend-elasticsearch,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
@@ -50,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support OpenSearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-opensearch";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/v${version}";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-opensearch/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
