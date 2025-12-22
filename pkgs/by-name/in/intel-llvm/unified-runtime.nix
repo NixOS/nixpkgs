@@ -139,6 +139,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "AMDGPU_TARGETS" rocmGpuTargets)
   ];
 
+  passthru.backends =
+    lib.optionals levelZeroSupport [
+      "level_zero"
+      "level_zero_v2"
+    ]
+    ++ lib.optional cudaSupport "cuda"
+    ++ lib.optional rocmSupport "hip"
+    ++ lib.optional nativeCpuSupport "native_cpu"
+    ++ lib.optional openclSupport "opencl";
+
   meta = with lib; {
     description = "Intel LLVM-based compiler with SYCL support";
     longDescription = ''

@@ -33,14 +33,16 @@
     builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets
   ),
   config,
-  # TODO: Should there be a flag like config.levelZeroSupport?
-  levelZeroSupport ? true,
   # The cudaSupport flag currently just sets this package to broken,
   # as CUDA support is currently not implemented in this derivation.
   # Upstream supports CUDA, so if a user of the derivation were to use this package
   # with cudaSupport = true, they would not get the expected behavior.
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
+  # TODO: Should there be a flag like config.levelZeroSupport?
+  # NOTE: Level Zero does not always fail gracefully, so when not explicitly set by the user,
+  #       and other acceleration is already selected, disable it by default.
+  levelZeroSupport ? !(cudaSupport || rocmSupport),
   nativeCpuSupport ? true,
   enableManpages ? true,
 }:
@@ -260,6 +262,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_BUILD_DOCS" enableManpages)
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" enableManpages)
     (lib.cmakeBool "SPHINX_OUTPUT_MAN" enableManpages)
+
+    # The buildbot script always enables level-zero no matter what.
+    # To allow disabling level-zero, we override its flag here,
+    # so it gets excluded when not enabled.
+    (lib.cmakeFeature "SYCL_ENABLE_BACKENDS" (
+      lib.strings.concatStringsSep ";" unified-runtime.backends
+    ))
   ]
   ++ unified-runtime.cmakeFlags;
 
