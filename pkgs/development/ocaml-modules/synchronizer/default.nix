@@ -7,7 +7,7 @@
 
 buildDunePackage rec {
   pname = "synchronizer";
-  version = "0.1";
+  version = "0.2";
 
   minimalOCamlVersion = "5.1";
 
@@ -15,7 +15,7 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "synchronizer";
     tag = version;
-    hash = "sha256-VlKqORXTXafT88GXHIYkz+A1VkEL3jP9SMqDdMyEdrw=";
+    hash = "sha256-0XtPHpDlyH1h8W2ZlRvJbZjCN9WP5mzk2N01WFd8eLQ=";
   };
 
   propagatedBuildInputs = [
