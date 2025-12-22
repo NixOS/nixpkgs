@@ -1,10 +1,14 @@
 {
   buildPythonPackage,
+  coverage,
+  git,
   typing-extensions,
   fetchPypi,
   lib,
   nix-update-script,
   hatch-vcs,
+  pkg-metadata,
+  pytestCheckHook,
   pythonOlder,
   importlib-resources,
 }:
@@ -25,6 +29,12 @@ buildPythonPackage rec {
   propagatedBuildInputs =
     lib.optionals (pythonOlder "3.7") [ importlib-resources ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+  ];
+  checkInputs = coverage.optional-dependencies.toml ++ [ pkg-metadata ];
 
   passthru.updateScript = nix-update-script { };
 
