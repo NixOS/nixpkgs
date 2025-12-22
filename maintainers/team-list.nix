@@ -997,6 +997,7 @@ with lib.maintainers;
     ];
     scope = "Maintains the windows package set";
     shortName = "Windows";
+    github = "windows";
   };
 
   xen = {
