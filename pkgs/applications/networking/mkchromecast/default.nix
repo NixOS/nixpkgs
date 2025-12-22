@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   python3Packages,
   sox,
   flac,
@@ -35,24 +34,15 @@ let
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2025-06-01";
+  version = "2025-12-21";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "6e583366ae23b56a33c1ad4ca164e04d64174538";
-    hash = "sha256-CtmOkQAqUNn7+59mWEfAsgtWmGcXD3eE9j2t3sLnXms=";
+    rev = "9cdc5f3f9060ef4078522366ce896356515d8e52";
+    hash = "sha256-UMzOIxgeTpAFQZtYirOYPoVcKgiKdGx2zwVyWmo32w4=";
   };
-
-  patches = [
-    # Update README to use yt-dlp instead of youtube-dl
-    # https://github.com/muammar/mkchromecast/pull/480
-    (fetchpatch2 {
-      url = "https://github.com/muammar/mkchromecast/commit/0a0eec9bf4a6c000c828b83a864cebe18ce64c2b.patch";
-      hash = "sha256-sLzL2/HDYfO0+N8v8aJX3dl7LBSE5yWa0zR89dZkg84=";
-    })
-  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
   propagatedBuildInputs =
