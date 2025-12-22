@@ -34,6 +34,13 @@ cd "$dir"/../../../../
 echo "Fetching games.json Internet Archive URL" >&2
 url=$(curl "${curl_args[@]}")
 
+# If the Internet Archive is having issues, they usually redirect to /sry
+# but return status '200 OK'. Check this to avoid a bad url+hash:
+if [[ "$url" = https://web.archive.org/sry* ]]; then
+    echo "Internet Archive temporarily unavailable (redirected to /sry)" >&2
+    exit 1
+fi
+
 # Use raw replay mode to avoid rewritten links in the JSON content
 url=$(
   sed -E 's|^https://web\.archive\.org/web/([0-9]+)/|https://web.archive.org/web/\1id_/|' \
