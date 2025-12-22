@@ -152,7 +152,8 @@ let
     buildPhase = ''
       runHook preBuild
 
-      ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
+      BUILD_HOME=$(mktemp -d)
+      ant -Duser.home=${jpsRepo} -Dbuild.dir="$BUILD_HOME" -f jps-bootstrap-classpath.xml
 
       runHook postBuild
     '';
@@ -160,8 +161,8 @@ let
       runHook preInstall
 
       mkdir -p $out/share/java/
-      cp /build/out/jps-bootstrap.classes.jar $out/share/java/jps-bootstrap.jar
-      cp -r /build/out/jps-bootstrap.out.lib $out/share/java/jps-bootstrap-classpath
+      cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
+      cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
       makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
         --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
 
@@ -282,8 +283,8 @@ stdenvNoCC.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    ln -s "$repo"/.m2 /build/.m2
-    export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
+    ln -s "$repo"/.m2 ../.m2
+    export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
       -Djps.kotlin.home=${kotlin'} \
@@ -292,7 +293,7 @@ stdenvNoCC.mkDerivation rec {
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
       -Dintellij.build.unix.snaps=false \
       --java-argfile-target=java_argfile \
-      /build/source \
+      "$PWD" \
       ${targetClass} \
       ${targetName}
 

@@ -17,7 +17,7 @@ runCommand "jps-bootstrap-repository"
     ];
   }
   ''
-    ant -Duser.home=$out -Dbuild.dir=/build/tmp -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
+    ant -Duser.home=$out -Dbuild.dir=$(mktemp -d) -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
     find $out -type f \( \
       -name \*.lastUpdated \
       -o -name resolver-status.properties \
