@@ -1528,8 +1528,6 @@ with pkgs;
     bitwarden-directory-connector
     ;
 
-  bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
-
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
