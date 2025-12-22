@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "forceConsistentCasingInFileNames": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "ES2023",
+    "module": "commonjs",
+    "lib": ["esnext"],
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": [
+    "*.js"
+  ],
+  "exclude": ["node_modules"]
+}
