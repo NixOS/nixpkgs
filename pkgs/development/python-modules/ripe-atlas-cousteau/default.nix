@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-cousteau";
     tag = "v${version}";
-    hash = "sha256-z8ZXOiCVYughrbmXfnwtks7NPmYpII2BA0+8mr1cdSQ=";
+    hash = "sha256-HpxkS0zSxi1WHvpybrGtqYcSIZt7FsrMTBbDbqgt4z4=";
   };
 
   pythonRelaxDeps = [ "websocket-client" ];
