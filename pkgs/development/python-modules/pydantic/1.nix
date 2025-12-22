@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.24";
+  version = "1.10.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-eDmVpo6tI6a1lfBOU7Bvq9Wv/+I959c7krYPzZEoQig=";
+    hash = "sha256-aeKdGjjefEzYT9iYw+H/ozW7/DqKcv67WLV1KWwblgs=";
   };
 
   build-system = [
