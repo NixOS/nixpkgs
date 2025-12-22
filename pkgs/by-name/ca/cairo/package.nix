@@ -14,7 +14,7 @@
   libpng,
   pixman,
   zlib,
-  x11Support ? !stdenv.hostPlatform.isDarwin || true,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
   libXext,
   libXrender,
   gobjectSupport ? true,
