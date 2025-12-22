@@ -29,7 +29,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-panel";
   version = "1.28.7";
   outputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-panel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-8GS6JY5kS2YKscItAo8dzudgkZeG51JsSBUj0EfLiZQ=";
   };
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})
