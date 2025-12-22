@@ -202,6 +202,30 @@ rec {
     }
   ) { };
 
+  lua-resty-dns = callPackage (
+    { fetchFromGitHub }:
+    buildLuaPackage rec {
+      pname = "lua-resty-dns";
+      version = "0.23";
+
+      src = fetchFromGitHub {
+        owner = "openresty";
+        repo = "lua-resty-dns";
+        rev = "v${version}";
+        sha256 = "sha256-VQOVMja74kjPjhtqIAVy8S5cxdkNwTL6bmXTr/RUE/A=";
+      };
+
+      propagatedBuildInputs = [ lua-resty-lrucache ];
+
+      meta = with lib; {
+        description = "DNS resolver for the nginx lua module";
+        homepage = "https://github.com/openresty/lua-resty-dns";
+        license = licenses.bsd3;
+        maintainers = with maintainers; [ schra ];
+      };
+    }
+  ) { };
+
   luv = callPackage ../development/lua-modules/luv { };
   libluv = callPackage ../development/lua-modules/luv/lib.nix { };
 
