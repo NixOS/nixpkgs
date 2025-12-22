@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3bfbc5ef9043..2a25188f8f92 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,7 +26,7 @@ set ( CMAKE_INTERPROCEDURAL_OPTIMIZATION $ENV{CMAKE_INTERPROCEDURAL_OPTIMIZATION
+ set ( _CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} )
+ 
+ # The below version is used for versioning of the package and is replaced by the version from the pack workflow
+-project ( columnar VERSION 0.0.0 )
++project ( columnar VERSION @version@ )
+ 
+ # sometimes CMAKE_BUILD_TYPE became set after PROJECT statement, undo it.
+ if (NOT _CMAKE_BUILD_TYPE AND CMAKE_BUILD_TYPE)
+@@ -108,7 +108,7 @@ set (_includes include/manticore-columnar-api)
+ target_include_directories ( columnar_api INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>$<INSTALL_INTERFACE:${_includes}> )
+ 
+ # install columnar and secondary API (only headers, no packaging, don't build anything at all)
+-if (API_ONLY)
++# if (API_ONLY)
+ 	install ( TARGETS columnar_api EXPORT apiexport )
+ 	install ( TARGETS secondary_api EXPORT apiexport )
+ 	install ( TARGETS knn_api EXPORT apiexport )
+@@ -147,8 +147,8 @@ include(\"\${CMAKE_CURRENT_LIST_DIR}/columnar-targets.cmake\")" )
+ 	install ( FILES "${CMAKE_CURRENT_BINARY_DIR}/columnar-config-version.cmake" DESTINATION "${API_CMAKE_DIR}" )
+ 
+ 	# finish configuration, as it is API_ONLY
+-	return()
+-endif ()
++	# return()
++# endif ()
+ 
+ # here we came in case of full build (i.e. columnar and/or secondary and/or knn)
+ 
