@@ -348,7 +348,7 @@ in
         then
           SLURM_CONF="${cfg.etcSlurm}/slurm.conf" "$EXE" "\$@"
         else
-          "$EXE" "\$0"
+          "$EXE" "\$@"
         fi
         EOT
           chmod +x "$wrappername"
