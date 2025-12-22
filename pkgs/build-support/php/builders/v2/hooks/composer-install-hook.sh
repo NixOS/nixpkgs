@@ -5,6 +5,16 @@ declare -g pname
 declare -g composerVendor
 declare -g -i composerStrictValidation="${composerStrictValidation:-0}"
 
+declare -g composerNoDev
+declare -g composerNoPlugins
+declare -g composerNoScripts
+
+declare -ga composerFlags=()
+
+[[ 1 == "${composerNoDev:-1}" ]] && composerFlags+=(--no-dev)
+[[ 1 == "${composerNoPlugins:-1}" ]] && composerFlags+=(--no-plugins)
+[[ 1 == "${composerNoScripts:-1}" ]] && composerFlags+=(--no-scripts)
+
 preConfigureHooks+=(composerInstallConfigureHook)
 preBuildHooks+=(composerInstallBuildHook)
 preCheckHooks+=(composerInstallCheckHook)
@@ -14,12 +24,12 @@ preInstallHooks+=(composerInstallInstallHook)
 source @phpScriptUtils@
 
 composerInstallConfigureHook() {
-  echo "Executing composerInstallConfigureHook"
+  echo "Running phase: composerInstallConfigureHook"
 
   setComposerRootVersion
 
   if [[ ! -e "${composerVendor}" ]]; then
-    echo "No local composer vendor found." >&2
+    echo -e "\e[31mERROR: The 'composerVendor' attribute is missing or invalid.\e[0m" >&2
     exit 1
   fi
 
@@ -35,27 +45,39 @@ composerInstallConfigureHook() {
 
   chmod +w composer.json
 
-  echo "Finished composerInstallConfigureHook"
+  echo "Finished phase: composerInstallConfigureHook"
 }
 
 composerInstallBuildHook() {
-  echo "Executing composerInstallBuildHook"
+  echo "Running phase: composerInstallBuildHook"
 
-  echo "Finished composerInstallBuildHook"
+  setComposerEnvVariables
+
+  echo -e "\e[32mRestoring Composer vendor directory to '${COMPOSER_VENDOR_DIR}'...\e[0m"
+  cp -r "${composerVendor}/${COMPOSER_VENDOR_DIR}" .
+  chmod -R +w "${COMPOSER_VENDOR_DIR}"
+
+  echo -e "\e[32mGenerating optimized autoloader and restoring 'bin' directory...\e[0m"
+  COMPOSER_DISABLE_NETWORK=1 composer \
+    "${composerFlags[@]}" \
+    --no-interaction \
+    --no-progress \
+    --optimize-autoloader \
+    install
+
+  echo "Finished phase: composerInstallBuildHook"
 }
 
 composerInstallCheckHook() {
-  echo "Executing composerInstallCheckHook"
+  echo "Running phase: composerInstallCheckHook"
 
   checkComposerValidate
 
-  echo "Finished composerInstallCheckHook"
+  echo "Finished phase: composerInstallCheckHook"
 }
 
 composerInstallInstallHook() {
-  echo "Executing composerInstallInstallHook"
-
-  cp -ar "${composerVendor}"/* .
+  echo "Running phase: composerInstallInstallHook"
 
   # Copy the relevant files only in the store.
   mkdir -p "$out"/share/php/"${pname}"
@@ -64,10 +86,10 @@ composerInstallInstallHook() {
   # Create symlinks for the binaries.
   mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
   for bin in "${BINS[@]}"; do
-    echo -e "\e[32mCreating symlink ${bin}...\e[0m"
+    echo -e "\e[32mInstalling binary: ${bin}\e[0m"
     mkdir -p "$out/bin"
     ln -s "$out/share/php/${pname}/${bin}" "$out/bin/$(basename "$bin")"
   done
 
-  echo "Finished composerInstallInstallHook"
+  echo "Finished phase: composerInstallInstallHook"
 }
