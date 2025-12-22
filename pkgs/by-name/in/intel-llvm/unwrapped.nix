@@ -309,6 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
       and SYCL support for heterogeneous computing across CPUs, GPUs, and FPGAs.
     '';
     homepage = "https://github.com/intel/llvm";
+    mainProgram = "clang";
     license = with licenses; [
       ncsa
       asl20
