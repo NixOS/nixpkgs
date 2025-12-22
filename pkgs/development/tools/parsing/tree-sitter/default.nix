@@ -5,7 +5,6 @@
   fetchFromGitLab,
   fetchFromSourcehut,
   nix-update-script,
-  runCommand,
   which,
   rustPlatform,
   emscripten,
