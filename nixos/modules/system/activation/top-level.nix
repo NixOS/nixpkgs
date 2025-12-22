@@ -48,11 +48,6 @@ let
     ${config.system.systemBuilderCommands}
 
     cp "$extraDependenciesPath" "$out/extra-dependencies"
-
-    ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
-      ${config.boot.bootspec.writer}
-      ${optionalString config.boot.bootspec.enableValidation ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
-    ''}
   '';
 
   # Putting it all together.  This builds a store path containing
