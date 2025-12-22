@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
-  pythonOlder,
   setuptools,
   tenacity,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "yolink-api";
   version = "0.5.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
