@@ -28,25 +28,29 @@ let
         name = args.name or "denoDeps-transformedDenoLock-${finalAttrs.pname}-${finalAttrs.version}";
         src = denoLock;
         unpackCmd = ''
-          mkdir -p ./source
-          cat $curSrc > ./source/deno.lock
+          mkdir -p ./source;
+          cat $curSrc > ./source/deno.lock;
         '';
         buildPhase =
-          args.buildPhase or ''
+          ''
+            runHook preBuild
+
             mkdir -p $out
             lockfile-transformer \
               --deno-lock-path ./deno.lock \
               --common-lock-jsr-path $out/jsr.json \
               --common-lock-npm-path $out/npm.json \
               --common-lock-https-path $out/https.json;
+
+            runHook postBuild
           '';
         nativeBuildInputs =
-          args.nativeBuildInputs or [
+          (args.nativeBuildInputs or []) ++ [
             fetch-deno-deps-scripts
           ];
 
         meta =
-          args.meta or {
+          (args.meta or {}) // {
             maintainers = [ lib.maintainers.aMOPel ];
           };
       };
@@ -90,7 +94,9 @@ let
             args.name or defaultName;
         src = transformedDenoLock;
         buildPhase =
-          args.buildPhase or ''
+          ''
+            runHook preBuild
+
             ls -lsa .
             ls -lsa ..
             single-fod-fetcher \
@@ -99,9 +105,11 @@ let
               --common-lock-https-path ./https.json \
               --out-path-prefix $out;
             cp ${denoLock} $out/deno.lock
+
+            runHook postBuild
           '';
         nativeBuildInputs =
-          args.nativeBuildInputs or [
+          (args.nativeBuildInputs or []) ++ [
             fetch-deno-deps-scripts
           ];
         SSL_CERT_FILE = args.SSL_CERT_FILE or "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -111,7 +119,7 @@ let
         outputHashAlgo = args.outputHashAlgo or "sha256";
 
         meta =
-          args.meta or {
+          (args.meta or {}) // {
             maintainers = [ lib.maintainers.aMOPel ];
           };
       };
@@ -142,12 +150,14 @@ let
         name = args.name or "denoDeps-final-${finalAttrs.pname}-${finalAttrs.version}";
         src = fetched;
         nativeBuildInputs =
-          args.nativeBuildInputs or [
+          (args.nativeBuildInputs or []) ++ [
             fetch-deno-deps-scripts
             file-structure-transformer-vendor
           ];
         buildPhase =
-          args.buildPhase or ''
+          ''
+            runHook preBuild;
+
             export vendorDir="$out/${vendorDir}";
             export DENO_DIR="$out/${denoDir}";
             mkdir -p $DENO_DIR;
@@ -160,9 +170,11 @@ let
               --vendor-dir-path $vendorDir \
               --common-lock-jsr-path "./jsr.json" \
               --common-lock-https-path "./https.json";
+
+            runHook postBuild;
           '';
         meta =
-          args.meta or {
+          (args.meta or {}) // {
             maintainers = [ lib.maintainers.aMOPel ];
           };
       };
