@@ -230,11 +230,6 @@ let
     stripRoot = false;
   };
 
-  brokenPlugins = fetchurl {
-    url = "https://web.archive.org/web/20251222154957im_/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
-    hash = "sha256-Q46zOp5HiY7R8OV3odz5kOybKaLKhzb9rrxnUtEFNZo=";
-  };
-
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-oss";
@@ -254,6 +249,9 @@ stdenvNoCC.mkDerivation rec {
     ../patches/bump-jackson-core-in-source.patch
   ];
 
+  # Regarding brokenPlugins.json:
+  #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
+  #  downloaded without hash changes. The file is not important for the IDEs to function properly.
   postPatch = ''
     cp ${restarter}/bin/restarter bin/linux/amd64/restarter
     cp ${fsnotifier}/bin/fsnotifier bin/linux/amd64/fsnotifier
@@ -268,7 +266,7 @@ stdenvNoCC.mkDerivation rec {
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
-      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
