@@ -238,12 +238,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=nonnull"
-      # Default for release buildtype but passed manually because
-      # we're using plain
-      "-DG_DISABLE_CAST_CHECKS"
-    ];
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-error=nonnull"
+        # Default for release buildtype but passed manually because
+        # we're using plain
+        "-DG_DISABLE_CAST_CHECKS"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Increase number of fds supported by g_poll to 4096. Specifically useful
+        # for beefy nixpkgs qemu VMs with lots of services that mount nix store
+        # via 9p (each binary and shared library inside a VM allocating a fd).
+        #
+        # MR to the same effect posted upstream:
+        # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4953
+        "-D_DARWIN_UNLIMITED_SELECT"
+        "-DFD_SETSIZE=4096"
+      ]
+    );
   };
 
   postPatch = ''
