@@ -11,7 +11,7 @@
 }:
 
 python.pkgs.buildPythonApplication {
-  version = "1.0.5-unstable-2024-01-17";
+  version = "1.0.4";
   pname = "nix-visualize";
   pyproject = true;
 
