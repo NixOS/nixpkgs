@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Library to support sqlite for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-sqlite";
     changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/v${version}";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
