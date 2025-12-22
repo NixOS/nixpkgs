@@ -69,6 +69,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/Tetrd/tetrd \
       --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath buildInputs}
 
+    mkdir -p $out/bin
+    ln -s $out/opt/Tetrd/tetrd $out/bin/tetrd
+
     runHook postInstall
   '';
 
