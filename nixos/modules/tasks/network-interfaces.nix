@@ -1866,8 +1866,12 @@ in
               wlanListDeviceFirst =
                 device: interfaces:
                 if hasAttr device interfaces then
-                  mapAttrsToList (n: v: v // { _iName = n; }) (filterAttrs (n: _: n == device) interfaces)
-                  ++ mapAttrsToList (n: v: v // { _iName = n; }) (filterAttrs (n: _: n != device) interfaces)
+                  pipe interfaces [
+                    (mapAttrs (n: v: v // { _iName = n; }))
+                    attrsToList
+                    (partition ({ name, ... }: name == device))
+                    ({ right, wrong }: right ++ wrong)
+                  ]
                 else
                   mapAttrsToList (n: v: v // { _iName = n; }) interfaces;
 

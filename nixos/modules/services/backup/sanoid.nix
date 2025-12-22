@@ -250,7 +250,7 @@ in
   config = lib.mkIf cfg.enable {
     services.sanoid.settings = lib.mkMerge [
       (lib.mapAttrs' (d: v: lib.nameValuePair ("template_" + d) v) cfg.templates)
-      (lib.mapAttrs (d: v: v) cfg.datasets)
+      cfg.datasets
     ];
 
     systemd.services.sanoid = {
