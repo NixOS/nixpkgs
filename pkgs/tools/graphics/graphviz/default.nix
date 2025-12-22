@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "12.2.1";
+  version = "14.0.5";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
+    hash = "sha256-hAKt/vJaPL3QN/frmpmB5N2lSbGVEQBzNeYQDSxijts=";
   };
 
   nativeBuildInputs = [
