@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   gradle_8,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
   makeWrapper,
   jre,
 }:
@@ -12,19 +15,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "1.5.0";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IgzBWIYK3ps0WxBMkJK/vEyvgpEv3NurbNhaTwz25Bc=";
+    hash = "sha256-sYdUcrX0Fr04neDBsKApEg5GQ9aM7y1Jjf49gfWoudE=";
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
   ];
+
+  npmRoot = "frontend";
+
+  npmDeps = fetchNpmDeps {
+    name = "stirling-pdf-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    postPatch = "cd ${finalAttrs.npmRoot}";
+    hash = "sha256-379iWiMHHZfPDZ4ks4dchjdLekARS8KgZdjITWU6WMg=";
+  };
+
+  env.PUPPETEER_SKIP_DOWNLOAD = "1";
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -39,11 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-x"
     "spotlessApply"
     "-DDISABLE_ADDITIONAL_FEATURES=true"
+    "-PbuildWithFrontend=true"
   ];
 
   doCheck = true;
 
   nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
     gradle
     gradle.jdk # one of the tests also require that the `java` command is available on the command line
     makeWrapper
