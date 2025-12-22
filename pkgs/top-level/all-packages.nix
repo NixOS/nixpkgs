@@ -14131,6 +14131,8 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
+  yaziFlavors = recurseIntoAttrs (callPackage ../by-name/ya/yazi/flavors { });
+
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
