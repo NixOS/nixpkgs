@@ -9964,7 +9964,7 @@ with pkgs;
     else
       unixtools.procps;
 
-  qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
+  qemu_kvm = lowPrio (qemu.override { targetCpuOnly = true; });
   qemu_full = lowPrio (
     qemu.override {
       smbdSupport = lib.meta.availableOn stdenv.hostPlatform samba;
@@ -9977,7 +9977,7 @@ with pkgs;
 
   qemu_test = lowPrio (
     qemu.override {
-      hostCpuOnly = true;
+      targetCpuOnly = true;
       nixosTestRunner = true;
     }
   );

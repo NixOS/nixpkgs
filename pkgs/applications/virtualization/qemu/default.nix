@@ -98,16 +98,16 @@
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
   enableBlobs ? !minimal || toolsOnly,
-  hostCpuOnly ? false,
-  hostCpuTargets ? (
+  targetCpuOnly ? false,
+  targetList ? (
     if toolsOnly then
       [ ]
     else if xenSupport then
       [ "i386-softmmu" ]
-    else if hostCpuOnly then
+    else if targetCpuOnly then
       (
-        lib.optional stdenv.hostPlatform.isx86_64 "i386-softmmu"
-        ++ [ "${stdenv.hostPlatform.qemuArch}-softmmu" ]
+        [ "${stdenv.targetPlatform.qemuArch}-softmmu" ]
+        ++ lib.optional stdenv.targetPlatform.isx86_64 "i386-softmmu"
       )
     else
       null
@@ -121,18 +121,18 @@
 }:
 
 assert lib.assertMsg (
-  xenSupport -> hostCpuTargets == [ "i386-softmmu" ]
+  xenSupport -> targetList == [ "i386-softmmu" ]
 ) "Xen should not use any other QEMU architecture other than i386.";
 
 let
-  hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+  hexagonSupport = targetList == null || lib.elem "hexagon" targetList;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname =
     "qemu"
     + lib.optionalString xenSupport "-xen"
-    + lib.optionalString hostCpuOnly "-host-cpu-only"
+    + lib.optionalString targetCpuOnly "-target-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
@@ -309,7 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional smartcardSupport "--enable-smartcard"
   ++ lib.optional spiceSupport "--enable-spice"
   ++ lib.optional usbredirSupport "--enable-usb-redir"
-  ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
+  ++ lib.optional (targetList != null) "--target-list=${lib.concatStringsSep "," targetList}"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--enable-cocoa"
     "--enable-hvf"
@@ -407,7 +407,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = lib.optionalString (!minimal && !xenSupport) ''
-    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    ln -s $out/bin/qemu-system-${stdenv.targetPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
