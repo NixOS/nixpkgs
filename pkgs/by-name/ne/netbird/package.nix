@@ -68,13 +68,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.60.8";
+  version = "0.60.9";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XM4pUYimxbO3ZCmTPbg7dwDB3x2TnL9PUgbMfjHjxmo=";
+    hash = "sha256-H1gXdi119SPJ63I8MDZNZwfdJimCaI8YObx3cZ7JnMc=";
   };
 
   vendorHash = "sha256-b3Wl9jsAdYC91JM/kDo4yIF05hqbivtrcn1aRuZzP3s=";
