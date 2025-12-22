@@ -3563,6 +3563,8 @@ self: super: with self; {
 
   datashaper = callPackage ../development/python-modules/datashaper { };
 
+  datasketch = callPackage ../development/python-modules/datasketch { };
+
   datatable = callPackage ../development/python-modules/datatable { };
 
   datauri = callPackage ../development/python-modules/datauri { };
