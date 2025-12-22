@@ -25,6 +25,7 @@
   nftables,
   ninja,
   openssh,
+  passt,
   perl,
   perlPackages,
   polkit,
@@ -96,6 +97,7 @@ let
       numactl
       numad
       openssh
+      passt
       pmutils
       systemd
     ]
