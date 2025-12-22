@@ -300,11 +300,15 @@ in
     let
       linuxTools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       freebsdTools = import ../stdenv/freebsd/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+      cygwinTools = import ../stdenv/cygwin/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
       linuxMeta = {
         maintainers = [ maintainers.dezgeg ];
       };
       freebsdMeta = {
         maintainers = [ maintainers.rhelmot ];
+      };
+      cygwinMeta = {
+        maintainers = [ maintainers.corngood ];
       };
       mkBootstrapToolsJob =
         meta: drv:
@@ -331,8 +335,11 @@ in
       freebsd = mapAttrsRecursiveCond (as: !isDerivation as) (
         name: mkBootstrapToolsJob freebsdMeta
       ) freebsdTools;
+      cygwin = mapAttrsRecursiveCond (as: !isDerivation as) (
+        name: mkBootstrapToolsJob cygwinMeta
+      ) cygwinTools;
     in
-    linux // freebsd;
+    linux // freebsd // cygwin;
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

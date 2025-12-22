@@ -5,6 +5,16 @@
   config,
   overlays,
   crossOverlays ? [ ],
+  bootstrapFiles ?
+    let
+      table = {
+        x86_64-cygwin = import ./bootstrap-files/x86_64-pc-cygwin.nix;
+      };
+      files =
+        table.${localSystem.system}
+          or (throw "unsupported platform ${localSystem.system} for the cygwin stdenv");
+    in
+    files,
 }:
 
 assert crossSystem == localSystem;
