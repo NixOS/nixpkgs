@@ -28,6 +28,7 @@
           - any-glob-to-any-file:
               - .github/actions/*
               - .github/workflows/*
+              - .github/labeler*.yml
               - ci/**/*.*
               - maintainers/github-teams.json
       - base-branch: ['master']
@@ -38,6 +39,7 @@
           - any-glob-to-any-file:
               - .github/actions/*
               - .github/workflows/*
+              - .github/labeler*.yml
               - ci/**/*.*
               - maintainers/github-teams.json
       - base-branch: ['master']
