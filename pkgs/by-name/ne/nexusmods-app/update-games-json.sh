@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash curl common-updater-scripts
+#! nix-shell -i bash -p bash curl common-updater-scripts jq
 
 set -eu -o pipefail
 
@@ -61,11 +61,21 @@ if [ "$current_url" = "$url" ]; then
 fi
 
 echo "Downloading and hashing games.json" >&2
-hash=$(
+prefetch_json=$(
   nix --extra-experimental-features nix-command \
-    hash convert --hash-algo sha256 --to sri \
-    "$(nix-prefetch-url "$url" --type sha256)"
+    store prefetch-file --json "$url"
 )
+file=$(jq -r .storePath <<<"$prefetch_json")
+hash=$(jq -r .hash <<<"$prefetch_json")
+
+# Extra sanity check, validate the JSON:
+if ! jq -e . "$file" >/dev/null; then
+  {
+    echo "Fetched file is not valid JSON (likely Internet Archive replay error):"
+    echo "$file"
+  } >&2
+  exit 1
+fi
 
 # `update-source-version` needs the package version,
 # even though we're updating the games.json source
