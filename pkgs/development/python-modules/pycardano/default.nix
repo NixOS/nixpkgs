@@ -38,14 +38,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
     tag = "v${version}";
-    hash = "sha256-W5N254tND7mI0oR82YhMFWn4zVVs3ygYOqXOBMO3sXY=";
+    hash = "sha256-L2os608HozCH/5uo4tiqEm+JY3lRIEfAPrBvrAhWrfI=";
   };
 
   build-system = [
