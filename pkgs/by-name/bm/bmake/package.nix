@@ -91,7 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./boot-strap --prefix=$out -o . op=install
+    ${
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+        ''
+          ./boot-strap --prefix=$out -o . op=install
+        ''
+      else
+        ''
+          # Manual install for cross-compilation (boot-strap tries to execute the cross-compiled binary)
+          install -Dm755 bmake $out/bin/bmake
+          install -Dm644 bmake.1 $man/share/man/man1/bmake.1
+          mkdir -p $out/share/mk
+          cp -r mk/* $out/share/mk/
+        ''
+    }
 
     runHook postInstall
   '';
