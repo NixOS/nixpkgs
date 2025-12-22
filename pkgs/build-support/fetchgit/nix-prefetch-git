@@ -287,9 +287,9 @@ clone(){
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
     fi
 
-    # Name "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
+    # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
     # Name only when not leaving `.git` for compatibility purposes.
-    if [[ -n "$ref" ]] && [[ -z "$leaveDotGit" ]]; then
+    if [[ "$ref" =~ ^refs/tags/ ]] && [[ -z "$leaveDotGit" ]]; then
         echo "refer to FETCH_HEAD as its original name $ref"
         clean_git update-ref "$ref" FETCH_HEAD
     fi
