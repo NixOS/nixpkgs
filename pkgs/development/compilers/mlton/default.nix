@@ -21,8 +21,10 @@ rec {
     sha256 = "sha256-rqL8lnzVVR+5Hc7sWXK8dCXN92dU76qSoii3/4StODM=";
   };
 
+  mlton20241230Binary = callPackage ./20241230-binary.nix { };
+
   mlton20241230 = callPackage ./from-git-source.nix {
-    mltonBootstrap = mlton20210117Binary;
+    mltonBootstrap = mlton20241230Binary;
     version = "20241230";
     rev = "on-20241230-release";
     sha256 = "sha256-gJUzav2xH8C4Vy5FuqN73Z6lPMSPQgJApF8LgsJXRWo=";
@@ -31,7 +33,7 @@ rec {
   };
 
   mltonHEAD = callPackage ./from-git-source.nix {
-    mltonBootstrap = mlton20210117Binary;
+    mltonBootstrap = mlton20241230Binary;
     version = "HEAD";
     rev = "61baac7108fbd91413f0537b7a42d9a1023455f4";
     sha256 = "sha256-nWR7ZaXfKxeXfZ9IHipAQ39ASVtva4BeDHP3Zq8mqPo=";
