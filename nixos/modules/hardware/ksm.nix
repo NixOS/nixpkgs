@@ -18,6 +18,14 @@ in
         Setting it to `null` uses the kernel's default time.
       '';
     };
+    scan = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
+      default = null;
+      description = ''
+        How many pages ksmd should scan.
+        Setting it to `null` uses the kernel's default value.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,6 +37,9 @@ in
       ''
       + lib.optionalString (cfg.sleep != null) ''
         echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
+      ''
+      + lib.optionalString (cfg.scan != null) ''
+        echo ${toString cfg.scan} > /sys/kernel/mm/ksm/pages_to_scan
       '';
     };
   };
