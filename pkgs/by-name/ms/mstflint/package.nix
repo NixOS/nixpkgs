@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   pname = "mstflint";
 
   # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.34.0-1";
+  version = "4.34.1-2";
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-MOFfbrjwnWXVskFCF2pgjf1Z8nkZV0l+CLfGWzxmmIg=";
+    hash = "sha256-NQ5PAlMXszrpDEoNeIC82HBoi5bgqOLDMu311oS1gWU=";
   };
 
   nativeBuildInputs = [
