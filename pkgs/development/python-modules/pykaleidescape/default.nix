@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pykaleidescape";
-  version = "2022.2.3";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "SteveEasley";
     repo = "pykaleidescape";
     tag = "v${version}";
-    hash = "sha256-h5G7wV4Z+sf8Qq4GNFsp8DVDSgQgS0dLGf+DzK/egYM=";
+    hash = "sha256-HhHlgQ94aPac6zRgXBSsHxXuAj2OnGdWkJHMOqTwKcI=";
   };
 
   nativeBuildInputs = [ setuptools ];
