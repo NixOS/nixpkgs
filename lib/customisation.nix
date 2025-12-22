@@ -156,8 +156,25 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+      # Recover overrider and additional attributes for f
+      # When f is a callable attribute set,
+      # it may contain its own `f.override` and additional attributes.
+      # This helper function recovers those attributes and decorate the overrider.
+      recoverMetadata =
+        if isAttrs f then
+          fDecorated:
+          # Preserve additional attributes for f
+          f
+          // fDecorated
+          # Decorate f.override if presented
+          // lib.optionalAttrs (f ? override) {
+            override = fdrv: makeOverridable (f.override fdrv);
+          }
+        else
+          id;
+      decorate = f': recoverMetadata (mirrorArgs f');
     in
-    mirrorArgs (
+    decorate (
       origArgs:
       let
         result = f origArgs;
