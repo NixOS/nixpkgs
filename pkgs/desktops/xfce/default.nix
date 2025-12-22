@@ -15,10 +15,6 @@ makeScopeWithSplicing' {
       inherit (self) callPackage;
     in
     {
-      #### NixOS support
-
-      genericUpdater = pkgs.genericUpdater;
-
       #### CORE
 
       exo = callPackage ./core/exo { };
@@ -166,6 +162,8 @@ makeScopeWithSplicing' {
       #### ALIASES
 
       automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
+
+      genericUpdater = throw "xfce.genericUpdater has been removed: use pkgs.genericUpdater directly"; # added 2025-12-22
 
       mkXfceDerivation = lib.warnOnInstantiate ''
         xfce.mkXfceDerivation has been deprecated, please use stdenv.mkDerivation
