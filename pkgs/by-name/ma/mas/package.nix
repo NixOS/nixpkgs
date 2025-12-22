@@ -26,7 +26,8 @@ stdenvNoCC.mkDerivation rec {
             hash = "sha256-8zaZOPOCyLHOFmHhviJXIy5SB5trqQM/MFHhB9ygilQ=";
           };
         }
-        .${stdenvNoCC.hostPlatform.system};
+        .${stdenvNoCC.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
     in
     fetchurl {
       url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}-${sources.arch}.pkg";
