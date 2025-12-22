@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+  fetchFromGitea,
   nix-update-script,
   which,
   rustPlatform,
@@ -56,6 +57,7 @@ let
       fetchFromGitHub
       fetchFromGitLab
       fetchFromSourcehut
+      fetchFromGitea
       ;
   };
 
