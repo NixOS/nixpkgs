@@ -118,6 +118,7 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      anthonyroussel
       sebtm
       rapiteanu
     ];
