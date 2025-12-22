@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "helmsman";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "mkubaczyk";
     repo = "helmsman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-URIJLt2LshtNwZ7xA/YAtYovL5FQJIIBs//P3JHSpA4=";
+    sha256 = "sha256-gaX9Pa5p/zqKLfEUVTKd3tIYX5DkndyVmuZBG5rT4qs=";
   };
 
   subPackages = [ "cmd/helmsman" ];
