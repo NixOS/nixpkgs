@@ -18,19 +18,19 @@
 
 let
   dochash =
-    if stdenv.hostPlatform.isLinux then
-      "sha256-d2YQUBWRlDROwiDMJ5mQAR9o+cYsbv1jiulsr1SAaik="
-    else if stdenv.hostPlatform.isDarwin then
-      "sha256-eIzTsn4wYz7TEyWN8QssM7fxpMfz/ENlxDVUMz0Cm4c="
+    if stdenv.hostPlatform.isDarwin then
+      "sha256-VYhXZtwjU5TtZNh9TQw6Q1NPnccwetgqWKVa/16jWZ0="
+    else if stdenv.hostPlatform.isLinux then
+      "sha256-stGsowdt53RoV/5tR66ECvsYx+VkuaI1Jgb/JEwhD/A="
     else if stdenv.hostPlatform.isWindows then
-      "sha256-+iagR5jvpHi8WDh4/DO+GDP6jajEpZ6G1ROhM+zkSiw="
+      "sha256-l5J5nD6UqbIS71e/iCWaiVASMbJNdzdx+JZAN7VTRKc="
     else
       throw "PySDL3 does not support ${stdenv.hostPlatform.uname.system}";
   lib_ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 buildPythonPackage rec {
   pname = "pysdl3";
-  version = "0.9.8b9";
+  version = "0.9.9b0";
   pyproject = true;
 
   pythonImportsCheck = [ "sdl3" ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Aermoss";
     repo = "PySDL3";
     tag = "v${version}";
-    hash = "sha256-TpfMpp8CGb8lYALCWlMtyucxObDg1VYEvBW+mVHN9JM=";
+    hash = "sha256-E4eCgN8xorjY7usSWu7hWdnsvz7TUvi3fCZ/3GZ/nSQ=";
   };
 
   docfile = fetchurl {
