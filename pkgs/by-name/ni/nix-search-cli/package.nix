@@ -7,16 +7,16 @@
 
 buildGoModule {
   pname = "nix-search-cli";
-  version = "0.2-unstable-2024-09-24";
+  version = "v0.3+commit.8ecb614";
 
   src = fetchFromGitHub {
     owner = "peterldowns";
     repo = "nix-search-cli";
-    rev = "7d6b4c501ee448dc2e5c123aa4c6d9db44a6dd12";
-    hash = "sha256-0Zms/QVCUKxILLLJYsaodSW64DJrVr/yB13SnNL8+Wg=";
+    rev = "8ecb6143a2bb95e44d0d1357e4387923b79ef51d";
+    hash = "sha256-CoPshsDV1kHGKF5aEc/VOGjf8aNLnTYx2sO3jK+5bhE=";
   };
 
-  vendorHash = "sha256-RZuB0aRiMSccPhX30cGKBBEMCSvmC6r53dWaqDYbmyA=";
+  vendorHash = "sha256-VlJ2OuHOTqIJeGUm2NbBiz33i8QTxaZnnm0JkVGkw1U=";
 
   passthru.updateScript = unstableGitUpdater { };
 
