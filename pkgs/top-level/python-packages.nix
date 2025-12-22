@@ -3048,6 +3048,8 @@ self: super: with self; {
 
   conda-package-streaming = callPackage ../development/python-modules/conda-package-streaming { };
 
+  conda-souschef = callPackage ../development/python-modules/conda-souschef { };
+
   condense-json = callPackage ../development/python-modules/condense-json { };
 
   conduit = callPackage ../development/python-modules/conduit { };
@@ -16686,6 +16688,8 @@ self: super: with self; {
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
+
+  ruamel-yaml-jinja2 = callPackage ../development/python-modules/ruamel-yaml-jinja2 { };
 
   ruamel-yaml-string = callPackage ../development/python-modules/ruamel-yaml-string { };
 
