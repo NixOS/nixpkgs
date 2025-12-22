@@ -4,7 +4,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  grapheme,
+  graphemeu,
   pytestCheckHook,
   python,
   pythonOlder,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     about-time
-    grapheme
+    graphemeu
   ];
 
   pythonRelaxDeps = [ "about_time" ];
