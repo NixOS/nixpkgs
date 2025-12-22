@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.41";
+  version = "0.6.42";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-/RpLiTz8WiI2fTJuLcksbB0pa5HOR13ci4G2LjdZu7Y=";
+    hash = "sha256-nUrGF0IcIsU9JLyuyhzNldx948t7sNWWB6cIlBFxX8c=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-n31+P5QU0XsuyNvipUU2A9f7CE3jKQa8ZAfwFuS3SXg=";
+    npmDepsHash = "sha256-BKQmeMV0NAgWgx9c+wL6GyrJb8agtmInlQidfzlEZZM=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -74,8 +74,6 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   build-system = with python3Packages; [ hatchling ];
-
-  patches = [ ./langchain-v1.patch ];
 
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
@@ -173,6 +171,7 @@ python3Packages.buildPythonApplication rec {
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
