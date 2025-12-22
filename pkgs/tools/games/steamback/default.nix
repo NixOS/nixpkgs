@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonApplication,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
   wheel,
@@ -11,21 +11,25 @@
   timeago,
   platformdirs,
   sv-ttk,
+  poetry-core,
 }:
 
 buildPythonApplication rec {
   pname = "steamback";
-  version = "0.3.6";
+  version = "1.1.2-unstable-2024-08-20";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hvMPSxIfwwQqo80JCpYhcbVY4kXs5jWtjjafVSMrw6o=";
+  src = fetchFromGitHub {
+    owner = "geeksville";
+    repo = "steamback";
+    rev = "a4cb7c080f26830d7528ca5d37ba080c860dd040";
+    hash = "sha256-R4ydFrg6xzoQ289sg+9P3CRcBw4MEiRsIHHcZeQOwXs=";
   };
 
   build-system = [
     setuptools-scm
     wheel
+    poetry-core
   ];
 
   buildInputs = [
@@ -39,12 +43,13 @@ buildPythonApplication rec {
     timeago
     platformdirs
     sv-ttk
+    pillow
   ];
 
   pythonRelaxDeps = [
     "async-tkinter-loop"
     "platformdirs"
-    "Pillow"
+    "pillow"
     "psutil"
   ];
 
