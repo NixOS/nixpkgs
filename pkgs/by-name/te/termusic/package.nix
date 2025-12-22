@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  cmake,
   dbus,
   fetchFromGitHub,
   glib,
@@ -11,7 +12,9 @@
   protobuf,
   rustPlatform,
   sqlite,
+  libopus,
   stdenv,
+  withOpus ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,10 +32,15 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
+  buildFeatures = lib.optional withOpus [ "rusty-libopus" ];
+
   nativeBuildInputs = [
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals withOpus [
+    cmake
   ];
 
   buildInputs = [
@@ -45,13 +53,19 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+  ]
+  ++ lib.optionals withOpus [
+    libopus
   ];
 
   meta = {
     description = "Terminal Music Player TUI written in Rust";
     homepage = "https://github.com/tramhao/termusic";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ devhell ];
+    maintainers = with lib.maintainers; [
+      devhell
+      theeasternfurry
+    ];
     mainProgram = "termusic";
   };
 }
