@@ -17,23 +17,25 @@
 
   # optional-dependencies
   crc32c,
+  pyzstd,
 
   # tests
   msgpack,
   pytestCheckHook,
   importlib-metadata,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.16.1";
+  version = "0.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xH8g1lZFRWjGtGl84CCB5ru1EvGYc4xqVvr+gCnJf7E=";
+    hash = "sha256-U9cFhl+q8KeSfJc683d1MgAcj7tlPeEZwehEYIYU15k=";
   };
 
   build-system = [
@@ -51,6 +53,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     crc32c = [ crc32c ];
     msgpack = [ msgpack ];
+    pyzstd = [ pyzstd ];
     # zfpy = [ zfpy ];
   };
 
@@ -61,6 +64,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     importlib-metadata
+    zstd
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
