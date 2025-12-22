@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     noneprompt
     nonestorage
+    packaging
     pydantic
     pyfiglet
     textual
