@@ -101,7 +101,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A focused launcher for your desktop — native, fast, extensible";
+    description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
