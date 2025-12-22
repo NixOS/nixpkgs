@@ -92,6 +92,7 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "protonvpn-app";
     maintainers = with lib.maintainers; [
+      anthonyroussel
       sebtm
       rapiteanu
     ];
