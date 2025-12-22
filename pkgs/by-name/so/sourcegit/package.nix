@@ -80,6 +80,7 @@ buildDotnetModule (finalAttrs: {
       exec = "SourceGit";
       icon = "SourceGit";
       desktopName = "SourceGit";
+      categories = [ "Development" ];
       terminal = false;
       comment = finalAttrs.meta.description;
     })
