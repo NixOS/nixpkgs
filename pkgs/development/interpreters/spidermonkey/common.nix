@@ -68,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
         hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
       })
+    ]
+    ++ [
+      # Add support for --rust-{host,target}-triplet
+      ./add-rust-triplet-options.patch
     ];
 
   nativeBuildInputs = [
@@ -132,8 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-tests"
     # Spidermonkey seems to use different host/build terminology for cross
     # compilation here.
+    # Rust also uses slightly different triplets in some cases.
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
+    "--rust-host-triplet=${stdenv.buildPlatform.rust.rustcTarget}"
+    "--rust-target-triplet=${stdenv.hostPlatform.rust.rustcTarget}"
   ];
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
