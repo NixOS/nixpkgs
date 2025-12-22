@@ -26,13 +26,16 @@ let
       }@args:
       {
         name = args.name or "denoDeps-transformedDenoLock-${finalAttrs.pname}-${finalAttrs.version}";
-        src = args.src or null;
-        dontUnpack = args.dontUnpack or true;
+        src = denoLock;
+        unpackCmd = ''
+          mkdir -p ./source
+          cat $curSrc > ./source/deno.lock
+        '';
         buildPhase =
           args.buildPhase or ''
             mkdir -p $out
             lockfile-transformer \
-              --deno-lock-path ${denoLock} \
+              --deno-lock-path ./deno.lock \
               --common-lock-jsr-path $out/jsr.json \
               --common-lock-npm-path $out/npm.json \
               --common-lock-https-path $out/https.json;
@@ -85,14 +88,15 @@ let
             fodNameGenerator argsForFodInvalidation finalAttrs.pname finalAttrs.version
           else
             args.name or defaultName;
-        src = args.src or null;
-        dontUnpack = args.dontUnpack or true;
+        src = transformedDenoLock;
         buildPhase =
           args.buildPhase or ''
+            ls -lsa .
+            ls -lsa ..
             single-fod-fetcher \
-              --common-lock-jsr-path ${transformedDenoLock}/jsr.json \
-              --common-lock-npm-path ${transformedDenoLock}/npm.json \
-              --common-lock-https-path ${transformedDenoLock}/https.json \
+              --common-lock-jsr-path ./jsr.json \
+              --common-lock-npm-path ./npm.json \
+              --common-lock-https-path ./https.json \
               --out-path-prefix $out;
             cp ${denoLock} $out/deno.lock
           '';
@@ -136,8 +140,7 @@ let
       }@args:
       {
         name = args.name or "denoDeps-final-${finalAttrs.pname}-${finalAttrs.version}";
-        src = args.src or null;
-        dontUnpack = args.dontUnpack or true;
+        src = fetched;
         nativeBuildInputs =
           args.nativeBuildInputs or [
             fetch-deno-deps-scripts
@@ -151,14 +154,13 @@ let
             mkdir -p $vendorDir;
             file-structure-transformer-npm \
               --deno-dir-path $DENO_DIR \
-              --common-lock-npm-path "${fetched}/npm.json";
+              --common-lock-npm-path "./npm.json";
             file-structure-transformer-vendor \
               --deno-dir-path $DENO_DIR \
               --vendor-dir-path $vendorDir \
-              --common-lock-jsr-path "${fetched}/jsr.json" \
-              --common-lock-https-path "${fetched}/https.json";
+              --common-lock-jsr-path "./jsr.json" \
+              --common-lock-https-path "./https.json";
           '';
-
         meta =
           args.meta or {
             maintainers = [ lib.maintainers.aMOPel ];
