@@ -54,25 +54,25 @@ let
   # Zoom versions are released at different times per platform and often with different versions.
   # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.6.11.70003";
-  versions.x86_64-darwin = "6.6.11.70003";
+  versions.aarch64-darwin = "6.7.0.71075";
+  versions.x86_64-darwin = "6.7.0.71075";
 
   # This is the fallback version so that evaluation can produce a meaningful result.
-  versions.x86_64-linux = "6.6.11.6052";
+  versions.x86_64-linux = "6.7.0.6313";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-meWo9KusBHO76oZERli1JKOEQFMrfCVOHUR3dh5pvPg=";
+      hash = "sha256-Jj6Ikxk7W77sv6g6yYR9ttTRF3kooQgVJnExNaU5aAA=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-OWPlZl40TICl14wnHnySSJqPLDmvkDREz42/Hv1nJY8=";
+      hash = "sha256-OaF3cbJZcXKKPkvdfjMuL1Va944N/TOAlqCLdA1fl64=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-pFDxCVPVE4m7mhsyAWg62WOo7MX6cdVe/j8nNHKHpvs=";
+      hash = "sha256-Bm5LEGmGN0iUwzKdVzicxfx6K3g9FGevvR/gUIBaPj8=";
     };
   };
 
