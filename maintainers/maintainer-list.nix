@@ -23160,6 +23160,12 @@
     github = "s1341";
     githubId = 5682183;
   };
+  sagehefring = {
+    name = "Sage";
+    email = "gijs@hefringmarine.com";
+    github = "sagehefring";
+    githubId = 224581354;
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
