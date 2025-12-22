@@ -1869,6 +1869,15 @@ let
       };
     });
 
+    rvisidata = old.rvisidata.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/main.r --replace-fail \
+          "system(\"vd" "system(\"${lib.getBin pkgs.visidata}/bin/vd"
+        substituteInPlace R/tmux.r --replace-fail \
+          "return(\"vd\")" "return(\"${lib.getBin pkgs.visidata}/bin/vd\")"
+      '';
+    });
+
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
