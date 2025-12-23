@@ -12,7 +12,7 @@
   xorg,
   makeWrapper,
   enableXfcePanelApplet ? false,
-  xfce,
+  xfce4-panel,
   gtk3,
   gitUpdater,
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableXfcePanelApplet [
     gtk3
     libxfce4util
-    xfce.xfce4-panel
+    xfce4-panel
   ];
 
   configureFlags = [

@@ -160,7 +160,7 @@ in
         xfce.xfwm4-themes
       ]
       ++ lib.optionals (!cfg.noDesktop) [
-        xfce.xfce4-panel
+        xfce4-panel
         xfce.xfdesktop
       ]
       ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver

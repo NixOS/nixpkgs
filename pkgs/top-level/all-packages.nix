@@ -12466,9 +12466,7 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
-    inherit (xfce) xfce4-panel;
-  };
+  xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet { };
 
   xmonad_log_applet_mate = xmonad_log_applet.override {
     desktopSupport = "mate";

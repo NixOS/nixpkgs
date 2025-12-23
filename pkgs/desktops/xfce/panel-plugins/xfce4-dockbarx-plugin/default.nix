@@ -10,7 +10,7 @@
   pkg-config,
   python3Packages,
   wrapGAppsHook3,
-  xfce,
+  xfce4-panel,
   xfconf,
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     keybinder3
     python3Packages.python
-    xfce.xfce4-panel
+    xfce4-panel
     xfconf
   ]
   ++ pythonPath;
