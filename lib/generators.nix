@@ -223,11 +223,16 @@ rec {
     ```nix
     generators.toINI {} {
       foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
-      baz = { "also, integers" = 42; };
+      baz = [
+        { "also, integers" = 42; }
+        { duplicate = "section"; }
+      ];
     }
 
     > [baz]
     > also, integers=42
+    > [baz]
+    > duplicate=section
     >
     > [foo]
     > ciao=bar
@@ -255,10 +260,15 @@ rec {
         concatStringsSep sep (mapAttrsToList mapFn attrs);
       mkSection =
         sectName: sectValues:
-        ''
-          [${mkSectionName sectName}]
-        ''
-        + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
+        concatStringsSep "" (
+          map (
+            attrList:
+            ''
+              [${mkSectionName sectName}]
+            ''
+            + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } attrList
+          ) (if isList sectValues then sectValues else [ sectValues ])
+        );
     in
     # map input to ini sections
     mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
@@ -300,13 +310,18 @@ rec {
       };
       sections = {
         foo = { hi = "${pkgs.hello}"; ciao = "bar"; };
-        baz = { "also, integers" = 42; };
+        baz = [
+          { "also, integers" = 42; }
+          { duplicate = "section"; }
+        ];
     }
 
     > someGlobalKey=hi
     >
     > [baz]
     > also, integers=42
+    > [baz]
+    > duplicate=section
     >
     > [foo]
     > ciao=bar

@@ -2577,6 +2577,27 @@ runTests {
     '';
   };
 
+  testToINIDuplicatesSections = {
+    expr = generators.toINI { } {
+      foo = [
+        { bar = "baz"; }
+        { bar = "qux"; }
+      ];
+      quux = {
+        corge = true;
+      };
+    };
+    expected = ''
+      [foo]
+      bar=baz
+      [foo]
+      bar=qux
+
+      [quux]
+      corge=true
+    '';
+  };
+
   testToINIDefaultEscapes = {
     expr = generators.toINI { } {
       "no [ and ] allowed unescaped" = {
