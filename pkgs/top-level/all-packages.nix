@@ -3714,7 +3714,7 @@ with pkgs;
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
-  rucio = callPackage ../by-name/ru/rucio/package.nix {
+  rucio = (with python312Packages; toPythonApplication rucio).override {
     # Pinned to python 3.12 while python313Packages.future does not evaluate and
     # until https://github.com/CZ-NIC/pyoidc/issues/649 is resolved
     python3Packages = python312Packages;
@@ -7944,6 +7944,73 @@ with pkgs;
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
+
+  aggregate6 = with python3Packages; toPythonApplication aggregate6;
+  atopile = with python3Packages; toPythonApplication atopile;
+  badsecrets = with python3Packages; toPythonApplication badsecrets;
+  bump-my-version = with python3Packages; toPythonApplication bump-my-version;
+  beets = with python3Packages; toPythonApplication beets;
+  beets-minimal = with python3Packages; toPythonApplication beets-minimal;
+  ble-serial = with python3Packages; toPythonApplication ble-serial;
+  cardimpose = with python3Packages; toPythonApplication cardimpose;
+  cairosvg = with python3Packages; toPythonApplication cairosvg;
+  certbot = with python3Packages; toPythonApplication certbot;
+  cloudcheck = with python3Packages; toPythonApplication cloudcheck;
+  colcon = with python3Packages; toPythonApplication colcon;
+  controku = with python3Packages; toPythonApplication (controku.override { buildApplication = true; });
+  copier = with python3Packages; toPythonApplication python3Packages.copier;
+  crewai = with python3Packages; toPythonApplication crewai;
+  crypt4gh = with python3Packages; toPythonApplication crypt4gh;
+  cryptolyzer = with python3Packages; toPythonApplication cryptolyzer;
+  csaf-tool = with python3Packages; toPythonApplication csaf-tool;
+  cynthion = with python3Packages; toPythonApplication cynthion;
+  datamodel-code-generator = with python3Packages; toPythonApplication datamodel-code-generator;
+  docling = with python3Packages; toPythonApplication docling;
+  eyed3 = with python3Packages; toPythonApplication eyed3;
+  fava = with python3Packages; toPythonApplication fava;
+  fastapi-cli = with python3Packages; toPythonApplication fastapi-cli;
+  fava-investor = with python3Packages; toPythonApplication fava-investor;
+  files-to-prompt = with python3Packages; toPythonApplication files-to-prompt;
+  flask-unsign = with python3Packages; toPythonApplication flask-unsign;
+  gfal2-util = with python3Packages; toPythonApplication gfal2-util;
+  gitingest = with python3Packages; toPythonApplication gitingest;
+  granian = with python3Packages; toPythonApplication granian;
+  icdiff = with python3Packages; toPythonApplication icdiff;
+  isort = with python3Packages; toPythonApplication isort;
+  json-repair = with python3Packages; toPythonApplication json-repair;
+  kubernetes-validate = with python3Packages; toPythonApplication kubernetes-validate;
+  langgraph-cli = with python3Packages; toPythonApplication langgraph-cli;
+  lastversion = with python3Packages; toPythonApplication lastversion;
+  litestar = with python3Packages; toPythonApplication litestar;
+  mallard-ducktype = with python3Packages; toPythonApplication mallard-ducktype;
+  mat2 = with python3Packages; toPythonApplication mat2;
+  mcdreforged = with python3Packages; toPythonApplication mcdreforged;
+  mike = with python3Packages; toPythonApplication mike;
+  myjwt = with python3Packages; toPythonApplication myjwt;
+  nipap = with python3Packages; toPythonApplication nipap;
+  nodeenv = with python3Packages; toPythonApplication nodeenv;
+  nose2pytest = with python3Packages; toPythonApplication nose2pytest;
+  oddsprout = with python3Packages; toPythonApplication oddsprout;
+  online-judge-verify-helper = with python3Packages; toPythonApplication online-judge-verify-helper;
+  phart = with python3Packages; toPythonApplication phart;
+  pyglossary = with python3Packages; toPythonApplication (pyglossary.override { enableCmd = true; });
+  pyglossary-gui = with python3Packages; toPythonApplication (pyglossary.override { enableGui = true; enableCmd = true; });
+  pynitrokey = with python3Packages; toPythonApplication pynitrokey;
+  rdbtools = with python3Packages; toPythonApplication rdbtools;
+  rembg = with python3Packages; toPythonApplication (rembg.override { withCli = true; });
+  rns = with python3Packages; toPythonApplication rns;
+  sarif-tools = with python3Packages; toPythonApplication sarif-tools;
+  sbom2dot = with python3Packages; toPythonApplication sbom2dot;
+  sbom4files = with python3Packages; toPythonApplication sbom4files;
+  scspell = with python3Packages; toPythonApplication scspell;
+  snappy-topology = with python3Packages; toPythonApplication snappy;
+  touying = with python3Packages; toPythonApplication touying;
+  trevorproxy = with python3Packages; toPythonApplication trevorproxy;
+  unicodeit = with python3Packages; toPythonApplication unicodeit;
+  ufmt = with python3Packages; toPythonApplication ufmt;
+  whisperx = with python3Packages; toPythonApplication whisperx;
+  zpp = with python3Packages; toPythonApplication zpp;
+  yamlfix = with python3Packages; toPythonApplication yamlfix;
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
