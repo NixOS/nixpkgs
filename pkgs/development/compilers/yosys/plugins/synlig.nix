@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
+    broken = true; # expected headers not found in yosys 0.58
   };
 })
