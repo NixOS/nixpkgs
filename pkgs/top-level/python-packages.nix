@@ -8157,7 +8157,7 @@ self: super: with self; {
 
   kubernetes-asyncio = callPackage ../development/python-modules/kubernetes-asyncio { };
 
-  kubernetes-validate = callPackage ../by-name/ku/kubernetes-validate/unwrapped.nix { };
+  kubernetes-validate = callPackage ../development/python-modules/kubernetes-validate { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
