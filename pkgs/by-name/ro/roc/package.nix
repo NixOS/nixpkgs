@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage {
     hash = "sha256-pPnOM4hpbAkGCV47aw5eHbpOujjFtJa3v/3/D8gybO8=";
   };
 
+  dontUseZigBuild = true;
+  dontUseZigCheck = true;
+  dontUseZigInstall = true;
+
   nativeBuildInputs = [
     cmake
     zig_0_13
@@ -52,9 +56,6 @@ rustPlatform.buildRustPackage {
   ];
 
   cargoHash = "sha256-wJViSHcezoIchWe4Py9j+9U+YJUA5ja/x94UipuWO2g=";
-
-  # prevents zig AccessDenied error github.com/ziglang/zig/issues/6810
-  XDG_CACHE_HOME = "xdg_cache";
 
   preBuild =
     let
