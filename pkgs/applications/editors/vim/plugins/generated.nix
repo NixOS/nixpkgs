@@ -3182,6 +3182,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  codesettings-nvim = buildVimPlugin {
+    pname = "codesettings.nvim";
+    version = "1.5.3-unstable-2025-12-21";
+    src = fetchFromGitHub {
+      owner = "mrjones2014";
+      repo = "codesettings.nvim";
+      rev = "67d59b4a5735477817a9cd34fe94a01d386da272";
+      hash = "sha256-XbcSAZbTc19NEtP2bW7ULEV0QJpghGY4Kt7KRjSqjsk=";
+    };
+    meta.homepage = "https://github.com/mrjones2014/codesettings.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   codewindow-nvim = buildVimPlugin {
     pname = "codewindow.nvim";
     version = "0-unstable-2025-05-22";

@@ -135,10 +135,10 @@ in
         ];
 
         LoadCredential = [
-          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE=${cfg.passwordFile}")
+          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE:${cfg.passwordFile}")
           (lib.optionalString (
             cfg.databasePasswordFile != null
-          ) "PHOTOPRISM_DATABASE_PASSWORD=${cfg.databasePasswordFile}")
+          ) "PHOTOPRISM_DATABASE_PASSWORD:${cfg.databasePasswordFile}")
         ];
 
         LockPersonality = true;

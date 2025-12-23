@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "libgbm";
+    owner = "Mesa";
     repo = "waffle";
     rev = "v${version}";
     sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";

@@ -73,7 +73,7 @@ let
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
   #
   # or for all grammars:
-  # pkgs.tree-sitter.withPlugins (_: allGrammars)
+  # pkgs.tree-sitter.withPlugins (_: pkgs.tree-sitter.allGrammars)
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
   withPlugins =
@@ -98,7 +98,7 @@ let
       ) grammars
     );
 
-  allGrammars = builtins.attrValues builtGrammars;
+  allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
 in
 rustPlatform.buildRustPackage (final: {

@@ -911,6 +911,12 @@ in
 
       # Wait for PostgreSQL to be ready to accept connections.
       script = ''
+        # If we're in standby mode, don't perform any setup
+        if [[ -f "${cfg.dataDir}/standby.signal" ]]; then
+          echo "Skipping setup because PostgreSQL is in standby mode"
+          exit 0
+        fi
+
         check-connection() {
           psql -d postgres -v ON_ERROR_STOP=1 <<-'  EOF'
             SELECT pg_is_in_recovery() \gset

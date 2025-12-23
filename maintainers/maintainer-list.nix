@@ -1599,6 +1599,13 @@
     githubId = 754494;
     name = "Anders Asheim Hennum";
   };
+  anderscs = {
+    email = "anders@sorby.xyz";
+    github = "anderssorby";
+    githubId = 6331075;
+    matrix = "@anders:sorby.xyz";
+    name = "Anders C. Sørby";
+  };
   andershus = {
     email = "anders.husebo@eviny.no";
     github = "andershus";
@@ -6890,6 +6897,12 @@
     githubId = 53937537;
     keys = [ { fingerprint = "BBC4 C071 516B A147 8D07  F9DC D2FD E6EC 2E8C 2BF4"; } ];
   };
+  doprz = {
+    name = "Diego Perez";
+    github = "doprz";
+    githubId = 52579214;
+    keys = [ { fingerprint = "B423 DDC0 5EAC 14B4 67A6  F826 0323 AA44 BA23 6DF7"; } ];
+  };
   doronbehar = {
     email = "me@doronbehar.com";
     github = "doronbehar";
@@ -10198,7 +10211,7 @@
   };
   HarisDotParis = {
     name = "Haris";
-    email = "nix.dev@haris.paris";
+    email = "git@haris.paris";
     matrix = "@haris:haris.paris";
     github = "HarisDotParis";
     githubId = 67912527;
@@ -18159,6 +18172,12 @@
     github = "nadiaholmquist";
     githubId = 893884;
   };
+  Nadim147c = {
+    email = "theephemeral.txt@gmail.com";
+    github = "Nadim147c";
+    githubId = 90786729;
+    name = "Ephemeral";
+  };
   nadir-ishiguro = {
     github = "nadir-ishiguro";
     githubId = 23151917;
@@ -23068,6 +23087,11 @@
     github = "ryneeverett";
     githubId = 3280280;
     name = "Ryne Everett";
+  };
+  ryoppippi = {
+    github = "ryoppippi";
+    githubId = 1560508;
+    name = "ryoppippi";
   };
   ryota-ka = {
     email = "ok@ryota-ka.me";

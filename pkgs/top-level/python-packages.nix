@@ -13117,8 +13117,6 @@ self: super: with self; {
 
   pycrashreport = callPackage ../development/python-modules/pycrashreport { };
 
-  pycrc = callPackage ../development/python-modules/pycrc { };
-
   pycrdt = callPackage ../development/python-modules/pycrdt { };
 
   pycrdt-store = callPackage ../development/python-modules/pycrdt-store { };
@@ -13977,6 +13975,8 @@ self: super: with self; {
   pyngrok = callPackage ../development/python-modules/pyngrok { };
 
   pynina = callPackage ../development/python-modules/pynina { };
+
+  pynintendoauth = callPackage ../development/python-modules/pynintendoauth { };
 
   pynintendoparental = callPackage ../development/python-modules/pynintendoparental { };
 

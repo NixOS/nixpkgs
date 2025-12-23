@@ -942,6 +942,7 @@
   ./services/misc/servarr/sonarr.nix
   ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
+  ./services/misc/shoko.nix
   ./services/misc/sickbeard.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
@@ -1589,7 +1590,6 @@
   ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cook-cli.nix
-  ./services/web-apps/crabfit.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dashy.nix
   ./services/web-apps/davis.nix

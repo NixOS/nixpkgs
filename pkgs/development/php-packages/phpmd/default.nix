@@ -19,7 +19,7 @@ php.buildComposerProject2 (finalAttrs: {
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/phpmd/phpmd/issues/1056
   composerLock = ./composer.lock;
-  vendorHash = "sha256-tiL8PL6Muc/i4Il1rCeEKenCmIEVn3rHFZInbUGQW9o=";
+  vendorHash = "sha256-Vx5JolyOeCRst+wzqPB7bZopBa2LU7SOJmA4tEvWj1c=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

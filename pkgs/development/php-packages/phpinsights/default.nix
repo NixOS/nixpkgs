@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-uy8/bkgjDXnt544S70IOwX9I8U0lMLAkbiBDYXyJBcY=";
+  vendorHash = "sha256-/Kvj3vd2YG7DFvodtvEkWdAsbMazBHJHmUTBexxFsII=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -26,7 +26,6 @@ php.buildComposerProject2 (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/nunomaduro/phpinsights/releases/tag/v${finalAttrs.version}";
     description = "Instant PHP quality checks from your console";
     homepage = "https://phpinsights.com/";

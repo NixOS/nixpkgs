@@ -326,6 +326,7 @@ mapAliases {
   pybind11-protobuf = throw "'pybind11-protobuf' was only used by or-tools, and with some overrides, so vendored in there until it's used in other places."; # Converted to throw 2025-11-06
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
+  pycrc = throw "'pycrc' has been removed because its source is unavailable"; # Added 2025-12-22
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyezviz = throw "pyeziz has been removed in favor of pyevizapi, where development continues"; # added 2025-06-11

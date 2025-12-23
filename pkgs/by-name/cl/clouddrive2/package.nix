@@ -11,16 +11,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clouddrive2";
-  version = "0.9.16";
+  version = "0.9.17";
 
   src = fetchurl {
     url = "https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v${finalAttrs.version}/clouddrive-2-${os}-${arch}-${finalAttrs.version}.tgz";
     hash =
       {
-        x86_64-linux = "sha256-CNB0nUMWpCFy/44meHZ9q4wqaQOK3KgV4cwlZeku+o4=";
-        aarch64-linux = "sha256-OOpLh0VPycfEcmaYLlayirgQohZQx1f6LBJgRZRaLTk=";
-        x86_64-darwin = "sha256-ijdUxs9cc9M4WRn0T8oWrThO/irD4ZT5d5TRlgrddzs=";
-        aarch64-darwin = "sha256-/xu6Q7TteqwEvMKc5VMYfz7wQAUjBc8qH3SCP+YbugY=";
+        x86_64-linux = "sha256-AAGgtofApbyW/4TiqmC5tAPsiBIz1G2nYkbcvoKMO6k=";
+        aarch64-linux = "sha256-r0Bx0sf4chVBbxZsg3AoaF+CmTjFniIFb3Fa4BNpk4E=";
+        x86_64-darwin = "sha256-MtmYWGmv7+LimuWBlXdtBy1utkaDrjCjMrqtxlLSb/o=";
+        aarch64-darwin = "sha256-/tfkjWXpzE8cxx665KHR4T+VAbymd0loEGLNK206Yag=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };

@@ -2,8 +2,10 @@
   abseil-cpp,
   cmake,
   cmark-gfm,
+  coreutils,
   fetchFromGitHub,
   fetchNpmDeps,
+  glaze,
   kdePackages,
   lib,
   libqalculate,
@@ -20,13 +22,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.14";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G9zuw0IuzOxCeAcLE+IXcsdp0vAGMXBBdlfjBISnL90=";
+    hash = "sha256-xKEfWYf3gJ5wEYd8krT5w70rr0QYEu+7rqJ/IZmCHeQ=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -43,6 +45,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
+    "USE_SYSTEM_GLAZE" = "ON";
     "CMAKE_INSTALL_PREFIX" = placeholder "out";
     "CMAKE_INSTALL_DATAROOTDIR" = "share";
     "CMAKE_INSTALL_BINDIR" = "bin";
@@ -63,6 +66,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     abseil-cpp
     cmark-gfm
+    glaze
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
     libqalculate
@@ -92,10 +96,15 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     }"
   ];
 
+  postFixup = ''
+    substituteInPlace $out/share/systemd/user/vicinae.service \
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A focused launcher for your desktop — native, fast, extensible";
+    description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

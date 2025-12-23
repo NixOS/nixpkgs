@@ -1225,8 +1225,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.60.0";
-          hash = "sha256-Buwa63HahT96qhhuvARW7p1u9kbkoEyA9usoh60m3KE=";
+          version = "0.61.1";
+          hash = "sha256-3O4ii6RUuw35pv95zJwJhgnI/8ryAnSKfnHC01l3FDw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -3596,8 +3596,8 @@ let
         mktplcRef = {
           name = "dark-molokai-theme";
           publisher = "nonylene";
-          version = "1.0.8";
-          hash = "sha256-GQNv3QWzb0xSnaR8GOnAOZF/wOg0LaWHN3goIYq7JmI=";
+          version = "1.0.10";
+          hash = "sha256-YBYlcf6TUPEQvmhL7mYfN59itKQvtWt9003/Bup15eg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/nonylene.dark-molokai-theme/changelog";
@@ -3624,6 +3624,8 @@ let
           maintainers = [ lib.maintainers.d3vil0p3r ];
         };
       };
+
+      nsd.vscode-epics = callPackage ./nsd.vscode-epics { };
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {

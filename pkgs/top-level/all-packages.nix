@@ -918,7 +918,7 @@ with pkgs;
   };
 
   wrapGAppsNoGuiHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
-    makeWrapper = buildPackages.makeBinaryWrapper;
+    makeWrapper = makeBinaryWrapper;
   };
 
   separateDebugInfo = makeSetupHook {
@@ -5740,7 +5740,7 @@ with pkgs;
     mkRuby
     ruby_3_3
     ruby_3_4
-    ruby_3_5
+    ruby_4_0
     ;
 
   ruby = ruby_3_3;
@@ -5748,7 +5748,7 @@ with pkgs;
 
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
-  rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
+  rubyPackages_4_0 = recurseIntoAttrs ruby_4_0.gems;
 
   inherit (callPackages ../applications/networking/cluster/spark { })
     spark_4_0
@@ -13941,10 +13941,6 @@ with pkgs;
   vimb = wrapFirefox vimb-unwrapped { };
 
   vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
-
-  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
-    ffmpeg = ffmpeg-full;
-  };
 
   py-wacz = with python3Packages; toPythonApplication wacz;
 
