@@ -21,8 +21,6 @@
   pulsectl-asyncio,
   pygobject3,
   pytz,
-  pywayland,
-  pywlroots,
   pyxdg,
   setuptools,
   setuptools-scm,
@@ -33,7 +31,6 @@
   xcbutilcursor,
   xcbutilwm,
   xcffib,
-  xkbcommon,
   nixosTests,
   extraPackages ? [ ],
 }:
@@ -82,11 +79,8 @@ buildPythonPackage rec {
     pulsectl-asyncio
     pygobject3
     pytz
-    pywayland
-    pywlroots
     pyxdg
     xcffib
-    xkbcommon
   ];
 
   buildInputs = [
