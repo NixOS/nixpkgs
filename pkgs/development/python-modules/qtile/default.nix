@@ -60,7 +60,8 @@ buildPythonPackage rec {
     "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
     "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
     "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
-    "QTILE_WLROOTS_PATH" = "${lib.getDev wlroots}/include/wlroots-0.19";
+    "QTILE_WLROOTS_PATH" =
+      "${lib.getDev wlroots}/include/wlroots-${lib.versions.majorMinor wlroots.version}";
   };
 
   pypaBuildFlags = [
