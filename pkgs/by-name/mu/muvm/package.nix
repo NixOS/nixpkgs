@@ -6,6 +6,7 @@
   libkrun,
   passt,
   dhcpcd,
+  socat,
   systemd,
   udev,
   pkg-config,
@@ -40,6 +41,7 @@ let
       [
         dhcpcd
         passt
+        socat
         (placeholder "out")
       ]
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [ fex ]
