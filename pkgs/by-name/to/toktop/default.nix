@@ -22,4 +22,9 @@ pkgs.rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-F4yVcDmw9HMGzpALjwqu8J0Z7brLT8sUxpp/5bP1oHs=";
-}
+  meta = {
+    description = "llm usage monitor in terminal";
+    homepage = "https://crates.io/crates/toktop";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ /* consider  adding yourself :) */ ];
+  };
