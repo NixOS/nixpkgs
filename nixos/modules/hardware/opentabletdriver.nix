@@ -8,7 +8,10 @@ let
   cfg = config.hardware.opentabletdriver;
 in
 {
-  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+  meta.maintainers = with lib.maintainers; [
+    gepbird
+    thiagokokada
+  ];
 
   options = {
     hardware.opentabletdriver = {
