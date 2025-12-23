@@ -1,4 +1,9 @@
-{pkgs, ...}:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+}:
 pkgs.rustPlatform.buildRustPackage {
   pname = "toktop";
   version = "0.1.4";
