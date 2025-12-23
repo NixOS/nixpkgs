@@ -108,7 +108,9 @@ let
 
       options {
         listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-        listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
+        ${lib.optionalString config.networking.enableIPv6 "listen-on-v6 { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+        } };"}
         allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
