@@ -24,16 +24,19 @@
   # RDW only works with NetworkManager, and thus is optional with default off
   enableRDW ? false,
   networkmanager,
+  enablePD ? false,
+  python3,
+  glib,
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
+    hash = "sha256-aM/4+cgtUe6qv3MNT4moXvNzqG5gKvwMbg14L8ifWlc=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -46,7 +49,18 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace-fail ' ?= /usr/' ' ?= /'
   '';
 
-  buildInputs = [ perl ];
+  buildInputs = [
+    perl
+  ]
+  ++ lib.optional enablePD (
+    python3.withPackages (
+      ps: with ps; [
+        dbus-python
+        pygobject3
+      ]
+    )
+  );
+
   nativeBuildInputs = [
     makeWrapper
     udevCheckHook
@@ -74,7 +88,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableRDW [
     "install-rdw"
     "install-man-rdw"
-  ];
+  ]
+  ++ lib.optional enablePD "install-pd";
 
   doCheck = true;
   nativeCheckInputs = [
@@ -106,6 +121,7 @@ stdenv.mkDerivation rec {
           util-linux
         ]
         ++ lib.optional enableRDW networkmanager
+        ++ lib.optional enablePD glib
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
       );
     in
@@ -129,11 +145,15 @@ stdenv.mkDerivation rec {
         $out/share/tlp/tlp-func-base
       )
       for f in "''${fixup_bash[@]}"; do
+        [[ "$f" =~ bin/(tlp-pd|tlpctl)$ ]] && continue
         sed -i '2iexport PATH=${paths}:$PATH' "$f"
       done
 
       rm -rf $out/var
       rm -rf $out/share/metainfo
+    ''
+    + lib.optionalString enablePD ''
+      wrapProgram $out/sbin/tlp-pd --prefix PATH : "$out/bin"
     '';
 
   meta = {
