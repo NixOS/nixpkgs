@@ -47,57 +47,58 @@ in
   config =
     let
       getEnabled = s: builtins.filter (value: value.enable) (lib.attrValues s);
-      mkBoreService = kind: v:
-      let
-        isServer = (kind == "server");
-      in
-      {
-        name = "bore-${kind}-${v.name}";
-        value = {
-          description = "bore remote proxy service for ${v.name}";
-          enable = true;
-          after = [
-            "network-online.target"
-            "nss-lookup.target"
-          ];
+      mkBoreService =
+        kind: v:
+        let
+          isServer = (kind == "server");
+        in
+        {
+          name = "bore-${kind}-${v.name}";
+          value = {
+            description = "bore remote proxy service for ${v.name}";
+            enable = true;
+            after = [
+              "network-online.target"
+              "nss-lookup.target"
+            ];
 
-          requires = [
-            "network-online.target"
-            "nss-lookup.target"
-          ];
+            requires = [
+              "network-online.target"
+              "nss-lookup.target"
+            ];
 
-          wantedBy = [ "multi-user.target" ];
+            wantedBy = [ "multi-user.target" ];
 
-          environment =
-            if isServer then
-              {
-                BORE_MIN_PORT = toString v.min-port;
-                BORE_MAX_PORT = toString v.max-port;
-              }
-            else
-              {
-                BORE_SERVER = v.to;
-                BORE_LOCAL_PORT = toString v.local-port;
-              };
+            environment =
+              if isServer then
+                {
+                  BORE_MIN_PORT = toString v.min-port;
+                  BORE_MAX_PORT = toString v.max-port;
+                }
+              else
+                {
+                  BORE_SERVER = v.to;
+                  BORE_LOCAL_PORT = toString v.local-port;
+                };
 
-          script = ''
-            ${optionalString (v.secretFile != null) ''export BORE_SECRET="$(<${v.secretFile})"''}
+            script = ''
+              ${optionalString (v.secretFile != null) ''export BORE_SECRET="$(<${v.secretFile})"''}
 
-            ${lib.getExe' cfg.package "bore"} ${kind} \
-          ''
-          + (
-            if isServer then
-              ''--bind-addr="${v.bind-addr}" --bind-tunnels="${v.bind-tunnels}"''
-            else
-              ''--local-host="${v.local-host}" --port=${toString v.remote-port}''
-          );
+              ${lib.getExe' cfg.package "bore"} ${kind} \
+            ''
+            + (
+              if isServer then
+                ''--bind-addr="${v.bind-addr}" --bind-tunnels="${v.bind-tunnels}"''
+              else
+                ''--local-host="${v.local-host}" --port=${toString v.remote-port}''
+            );
 
-          serviceConfig = {
-            Restart = "on-failure";
-            RestartSec = 10;
+            serviceConfig = {
+              Restart = "on-failure";
+              RestartSec = 10;
+            };
           };
         };
-      };
     in
     {
       systemd.services =
@@ -118,7 +119,7 @@ in
           findDuplicates =
             list:
             lib.mapAttrsToList (_: x: builtins.elemAt x 0) (
-              lib.filterAttrs (_: x: (builtins.length x) > 1) (builtins.groupBy (toString) list)
+              lib.filterAttrs (_: x: (builtins.length x) > 1) (builtins.groupBy toString list)
             );
         in
         [

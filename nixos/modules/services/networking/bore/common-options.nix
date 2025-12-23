@@ -14,6 +14,7 @@ in
       type = str;
       default = name;
       defaultText = literalMD "the attribute name";
+      description = "name of the service";
     };
 
     secretFile = mkOption {

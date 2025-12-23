@@ -307,6 +307,7 @@ in
   boot-stage1 = runTest ./boot-stage1.nix;
   boot-stage2 = runTest ./boot-stage2.nix;
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
+  bore = runTest ./bore.nix;
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
   botamusique = runTest ./botamusique.nix;
