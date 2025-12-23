@@ -97,8 +97,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gappsWrapperArgs+=(
       --set FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf"
       --set TAURI_DIST_DIR "$out/share/deadlock-modmanager/dist"
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set DISABLE_UPDATE_DESKTOP_DATABASE 1
       --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
       --add-flags "--disable-auto-update"
