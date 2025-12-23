@@ -11,7 +11,7 @@ pkgs.rustPlatform.buildRustPackage {
     owner = "htin1";
     hash = "sha256-7XeBDvGZDiw4syOrO13Lg9JfdgAciY0s56RYQC/aX9I=";
     repo = "toktop";
-    rev = "acb4ce23ec0ba86bafda049ace6267bfb410e5c1";
+    tag = "v${finalAttrs.version}";
   };
   nativeBuildInputs = with pkgs; [pkg-config];
   buildInputs = with pkgs; [openssl];
