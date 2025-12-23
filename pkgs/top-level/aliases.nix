@@ -307,6 +307,7 @@ mapAliases {
   apple-sdk_11 = throw "apple-sdk_11 was removed as Nixpkgs no longer supports macOS 11; see the 25.11 release notes"; # Added 2025-05-10
   apple-sdk_12 = throw "apple-sdk_12 was removed as Nixpkgs no longer supports macOS 12; see the 25.11 release notes"; # Added 2025-05-10
   apple-sdk_13 = throw "apple-sdk_13 was removed as Nixpkgs no longer supports macOS 13; see the 25.11 release notes"; # Added 2025-05-10
+  applgrid = throw "'applgrid' has been removed as it is no longer maintained"; # Added 2025-12-23
   appthreat-depscan = throw "'appthreat-depscan' has been renamed to/replaced by 'dep-scan'"; # Converted to throw 2025-10-27
   arangodb = throw "arangodb has been removed, as it was unmaintained and the packaged version does not build with supported GCC versions"; # Added 2025-08-12
   arc-browser = throw "arc-browser was removed due to being unmaintained"; # Added 2025-09-03
