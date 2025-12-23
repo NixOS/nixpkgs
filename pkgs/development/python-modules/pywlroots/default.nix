@@ -65,6 +65,9 @@ buildPythonPackage rec {
     description = "Python bindings to wlroots using cffi";
     license = lib.licenses.ncsa;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chvp ];
+    maintainers = with lib.maintainers; [
+      chvp
+      doronbehar
+    ];
   };
 }
