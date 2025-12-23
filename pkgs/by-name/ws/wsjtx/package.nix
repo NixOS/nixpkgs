@@ -5,6 +5,7 @@
   asciidoc,
   asciidoctor,
   cmake,
+  gitUpdater,
   pkg-config,
   fftw,
   fftwFloat,
@@ -12,22 +13,18 @@
   hamlib_4,
   libtool,
   libusb1,
-  qtbase,
-  qtmultimedia,
-  qtserialport,
-  qttools,
+  qt5,
   boost,
   texinfo,
-  wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
   version = "2.7.0";
 
   src = fetchgit {
-    url = "http://git.code.sf.net/p/wsjt/wsjtx";
-    rev = "wsjtx-${version}";
+    url = "https://git.code.sf.net/p/wsjt/wsjtx";
+    rev = "wsjtx-${finalAttrs.version}";
     hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
@@ -39,22 +36,27 @@ stdenv.mkDerivation rec {
     hamlib_4 # rigctl
     libtool
     pkg-config
-    qttools
+    qt5.qttools
     texinfo
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     fftw
     fftwFloat
     hamlib_4
     libusb1
-    qtbase
-    qtmultimedia
-    qtserialport
+    qt5.qtbase
+    qt5.qtmultimedia
+    qt5.qtserialport
     boost
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "wsjtx-";
+    ignoredVersions = "(-rc).*";
+  };
 
   meta = {
     description = "Weak-signal digital communication modes for amateur radio";
@@ -73,4 +75,4 @@ stdenv.mkDerivation rec {
       numinit
     ];
   };
-}
+})

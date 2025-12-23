@@ -60,8 +60,10 @@ else
         case "$1" in
             beta|canary|stable)
                 updateChannel "$1" ;;
+            dev)
+                echo "no autoupdate for dev" >&2 && exit 0 ;;
             *)
-                echo "unknown channel: $1" && exit 1 ;;
+                echo "unknown channel: $1" >&2 && exit 1 ;;
         esac
         shift 1
     done

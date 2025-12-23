@@ -19,6 +19,9 @@ wsjtx.overrideAttrs (
       mv $out/bin/wsjtx_app_version $out/bin/wsjtz_app_version
     '';
 
+    # Source isn't available in Git.
+    passthru = lib.removeAttrs old.passthru [ "updateScript" ];
+
     meta = {
       description = "WSJT-X fork, primarily focused on automation and enhanced functionality";
       homepage = "https://sourceforge.net/projects/wsjt-z/";
