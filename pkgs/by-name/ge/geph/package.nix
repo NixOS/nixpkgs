@@ -3,17 +3,11 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  libxkbcommon,
   openssl,
   rust-jemalloc-sys-unprefixed,
   sqlite,
-  vulkan-loader,
-  wayland,
   iproute2,
   iptables,
-  libglvnd,
-  copyDesktopItems,
-  makeDesktopItem,
   nix-update-script,
 }:
 let
@@ -24,29 +18,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.86";
+  version = "0.2.91";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-68b6czefoqLskdqhc9kDIoS8eDCKu56lqvX8Jz47C3k=";
+    hash = "sha256-rz+vuOCdeoYing1RkXvitwSFJWx2osJ8qcW0f+yg8fk=";
   };
 
-  cargoHash = "sha256-CoYnP83Ci5Jp3Hunm2+xdXBu0mlhADf4jyfLSIXZ0jI=";
+  cargoHash = "sha256-Q4AZBhSzMoBU01koziTXIBrYkzHXnC+ZwZlI08qaQ+4=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
-
-    # This setting is dumped from https://github.com/geph-official/gephgui-wry/blob/a85a632448e548f69f9d1eea3d06a4bdc8be3d57/src/daemon.rs#L230
-    cat ${./settings_default.yaml} | base32 -w 0  | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567' '0123456789ABCDEFGHJKMNPQRSTVWXYZ' | sed 's/=//g' > binaries/geph5-client-gui/src/settings_default.yaml.base32
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -74,33 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::test_generate_secret_key"
     "--skip=tests::ping_pong"
   ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Geph5";
-      desktopName = "Geph5";
-      icon = "geph5";
-      exec = "geph5-client-gui";
-      categories = [ "Network" ];
-      comment = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
-    })
-  ];
-
-  postInstall = ''
-    install -m 444 -D binaries/geph5-client-gui/icon.png $out/share/icons/hicolor/512x512/apps/geph5.png
-  '';
-
-  postFixup = ''
-    # Add required but not explicitly requested libraries
-    patchelf --add-rpath '${
-      lib.makeLibraryPath [
-        wayland
-        libxkbcommon
-        vulkan-loader
-        libglvnd
-      ]
-    }' "$out/bin/geph5-client-gui"
-  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
