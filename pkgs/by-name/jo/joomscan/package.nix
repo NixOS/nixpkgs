@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "joomscan";
-  version = "unstable-2021-06-08";
+  version = "0.0.7-unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "owasp";
     repo = "joomscan";
-    rev = "79315393509caa39895e553c489667636ac31b85";
-    sha256 = "Yg91iUhqbKZyPghiX0UZ7S1ql0DZLtPHOk9VEY1ZZOg=";
+    rev = "2ea8cc7792b3893b80a52e4ad7cc32a1a9dbf7fc";
+    sha256 = "sha256-Rmcp6Z2Na5Ro2C6GP8RWCpXDwEu75sJDMfcQyFDGPLQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
