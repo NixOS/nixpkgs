@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "toktop";
     tag = "v${finalAttrs.version}";
   };
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [openssl];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "llm usage monitor in terminal";
     homepage = "https://crates.io/crates/toktop";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [valyntyler];
+    maintainers = with lib.maintainers; [ valyntyler ];
   };
 })
