@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mbaeten ];
+    maintainers = with lib.maintainers; [];
     platforms = lib.platforms.unix;
   };
 })
