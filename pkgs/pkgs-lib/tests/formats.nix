@@ -282,6 +282,28 @@ runBuildTests {
     '';
   };
 
+  iniDuplicateSections = shouldPass {
+    format = formats.ini { };
+    input = {
+      foo = [
+        { bar = "baz"; }
+        { qux = "quux"; }
+      ];
+      corge = {
+        grault = "garply";
+      };
+    };
+    expected = ''
+      [corge]
+      grault=garply
+
+      [foo]
+      bar=baz
+      [foo]
+      qux=quux
+    '';
+  };
+
   iniListToValue = shouldPass {
     format = formats.ini {
       listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
