@@ -1,13 +1,15 @@
 {
+  lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
+  ...
 }:
-pkgs.rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toktop";
   version = "0.1.4";
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "htin1";
     hash = "sha256-7XeBDvGZDiw4syOrO13Lg9JfdgAciY0s56RYQC/aX9I=";
     repo = "toktop";
@@ -26,5 +28,6 @@ pkgs.rustPlatform.buildRustPackage {
     description = "llm usage monitor in terminal";
     homepage = "https://crates.io/crates/toktop";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ /* consider  adding yourself :) */ ];
+    maintainers = with lib.maintainers; [valyntyler];
   };
+})
