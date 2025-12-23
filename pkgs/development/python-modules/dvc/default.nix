@@ -65,7 +65,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.64.1";
+  version = "3.65.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
-    hash = "sha256-zbqxJ6rlxiYZWFYmdqAlu00jkMLS0aIabVqMy5NAvUk=";
+    hash = "sha256-PiU5ZtjnR7q34HafUJzoI5pDBAa9u/RjRA5lFiF2LcQ=";
   };
 
   pythonRelaxDeps = [
