@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "2.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
     tag = "v${version}";
-    hash = "sha256-WYgT0tRXdSR4qJA7UHotPn9qfnpaIJaqASBXVDG1kOU=";
+    hash = "sha256-c7+4/55rrVVVdw2Yy8emoiWkyKlCgP4PKdAa1XW+aYM=";
   };
 
   pythonRelaxDeps = [ "pysigma" ];
