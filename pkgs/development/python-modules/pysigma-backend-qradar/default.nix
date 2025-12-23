@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Library to support Qradar for pySigma";
     homepage = "https://github.com/nNipsx-Sec/pySigma-backend-qradar";
     changelog = "https://github.com/nNipsx-Sec/pySigma-backend-qradar/releases/tag/${src.tag}";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
