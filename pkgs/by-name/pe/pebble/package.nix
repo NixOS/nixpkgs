@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "pebble";
-  version = "2.6.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "pebble";
     rev = "v${version}";
-    hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
+    hash = "sha256-W3XYxQyxSKVE6LCSTvwgTHKaWwmwBcC2MFYjG4Md0yo=";
   };
 
   vendorHash = null;
