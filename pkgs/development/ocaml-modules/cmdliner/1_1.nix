@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdliner";
-  version = "1.3.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-joGA9XO0QPanqMII2rLK5KgjhP7HMtInhNG7bmQWjLs=";
+    sha256 = "sha256-iBTGFM1D1S/R68ivWjHZElwhTEmPpgVmDk7Rlf+ENOk=";
   };
 
   nativeBuildInputs = [ ocaml ];
