@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-uK+nJFXDVPYFbosAUxqu+mmNsD7AnZ18NnIN9FYAaPQ=";
+  vendorHash = "sha256-IowPh4CymahgfbnvLS2QWu8e+TXya9AszTK+mlR/DTY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

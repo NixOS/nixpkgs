@@ -66,6 +66,16 @@ stdenv.mkDerivation rec {
     # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
     # https://github.com/intel/intel-graphics-compiler/pull/364
     ./bump-cmake.patch
+
+    # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
+    # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
+    # on https://github.com/intel/intel-graphics-compiler/pull/383.
+    ./gcc15-llvm-header-fixes.patch
+
+    # Fix for GCC 15 by disabling `-Werror` for `-Wfree-nonheap-object`
+    # warnings within LLVM. This is in accordance with IGC disabling warnings
+    # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
+    ./gcc15-allow-llvm-free-nonheap-object-warning.patch
   ];
 
   sourceRoot = ".";

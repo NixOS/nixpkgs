@@ -18,8 +18,8 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-dVCDIKqLbYHlVwv5wveXG0oHc2g3Zl6J6LG1/e8IIZw=";
   };
 
-  vendorHash = "sha256-cGSOsASv3UlzSXDP2KgrlzBIMWLB25j9LFkJZsEbTTQ=";
   composerNoPlugins = false;
+  vendorHash = "sha256-CAntERLTmR9Gf/e+qBLJqqebdXZ0E9k8ifDh75ASoRo=";
 
   passthru = {
     tests = {
