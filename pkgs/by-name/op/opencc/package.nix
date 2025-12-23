@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3,
   opencc,
@@ -19,6 +20,18 @@ stdenv.mkDerivation rec {
     rev = "ver.${version}";
     sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
+
+  patches = [
+    # fix build with gcc15 by adding cstdint include
+    (fetchpatch {
+      url = "https://github.com/BYVoid/OpenCC/commit/3d3adca2dbee0da7d33eb3c3563299fcbd2255e3.patch";
+      hash = "sha256-4ZQxVnEHnNBKtEu0IPnSC/ZX7gm2cJ1Ss00PvCZr5P8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/BYVoid/OpenCC/commit/72cae18cfe4272f2b11c9ec1c44d6af7907abcab.patch";
+      hash = "sha256-Cd95AsW/tLk2l8skxqfEfQUm0t23G4ocoirauwMbuwk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
