@@ -17,8 +17,6 @@ makeScopeWithSplicing' {
     {
       #### CORE
 
-      garcon = callPackage ./core/garcon { };
-
       thunar-unwrapped = callPackage ./core/thunar { };
 
       thunar = callPackage ./core/thunar/wrapper.nix { };
@@ -167,6 +165,7 @@ makeScopeWithSplicing' {
 // lib.optionalAttrs config.allowAliases {
   # These aliases need to be placed outside the scope or they will shadow the attributes from parent scope.
   exo = lib.warnOnInstantiate "‘xfce.exo’ was moved to top-level. Please use ‘pkgs.xfce4-exo’ directly" pkgs.xfce4-exo; # Added on 2025-12-23
+  garcon = lib.warnOnInstantiate "‘xfce.garcon’ was moved to top-level. Please use ‘pkgs.garcon’ directly" pkgs.garcon; # Added on 2025-12-23
   libxfce4ui = lib.warnOnInstantiate "‘xfce.libxfce4ui’ was moved to top-level. Please use ‘pkgs.libxfce4ui’ directly" pkgs.libxfce4ui; # Added on 2025-12-23
   libxfce4util = lib.warnOnInstantiate "‘xfce.libxfce4util’ was moved to top-level. Please use ‘pkgs.libxfce4util’ directly" pkgs.libxfce4util; # Added on 2025-12-23
   libxfce4windowing = lib.warnOnInstantiate "‘xfce.libxfce4windowing’ was moved to top-level. Please use ‘pkgs.libxfce4windowing’ directly" pkgs.libxfce4windowing; # Added on 2025-12-23

@@ -130,7 +130,7 @@ in
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
         xfce4-exo
-        xfce.garcon
+        garcon
         libxfce4ui
 
         xfce.mousepad
