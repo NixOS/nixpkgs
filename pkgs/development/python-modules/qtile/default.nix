@@ -125,6 +125,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
+      doronbehar
     ];
   };
 }
