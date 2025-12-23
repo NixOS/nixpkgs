@@ -17,10 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) ./fix-cross-build.patch;
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace DINO/Makefile.in
-      --replace-fail ../SPRUT/sprut "${buildPackages.cocom-tool-set}"/bin/sprut
-  '';
+  ${if (stdenv.buildPlatform != stdenv.hostPlatform) then "preConfigure" else null} =
+    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+      ''
+        substituteInPlace DINO/Makefile.in \
+          --replace-fail ../SPRUT/sprut "${buildPackages.cocom-tool-set}"/bin/sprut \
+          --replace-fail ../MSTA/msta "${buildPackages.cocom-tool-set}"/bin/msta \
+          --replace-fail ../SHILKA/shilka "${buildPackages.cocom-tool-set}"/bin/shilka
+      '';
 
   env = {
     RANLIB = "${stdenv.cc.targetPrefix}gcc-ranlib";
