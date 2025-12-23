@@ -1326,6 +1326,14 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Enable all available thermal governors
+        THERMAL_GOV_BANG_BANG = yes;
+        THERMAL_GOV_FAIR_SHARE = yes;
+        THERMAL_GOV_POWER_ALLOCATOR = yes;
+        THERMAL_GOV_STEP_WISE = yes;
+        THERMAL_GOV_USER_SPACE = yes;
+        DEVFREQ_THERMAL = yes;
+
         # Enable AMD's ROCm GPU compute stack
         HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
         ZONE_DEVICE = lib.mkIf (
