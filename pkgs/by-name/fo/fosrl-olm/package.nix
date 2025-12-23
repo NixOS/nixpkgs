@@ -32,6 +32,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       jackr
       sigmasquadron
+      water-sucks
     ];
     mainProgram = "olm";
   };
