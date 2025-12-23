@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     mainProgram = "sawfish";
   };
 })
