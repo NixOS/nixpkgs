@@ -1403,6 +1403,7 @@ in
   snipe-it = runTest ./web-apps/snipe-it.nix;
   snips-sh = runTest ./snips-sh.nix;
   snmpd = runTest ./snmpd.nix;
+  snmptrapd = runTest ./snmptrapd.nix;
   soapui = runTest ./soapui.nix;
   soft-serve = runTest ./soft-serve.nix;
   sogo = runTest ./sogo.nix;
