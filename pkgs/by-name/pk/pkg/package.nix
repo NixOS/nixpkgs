@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
-  version = "2.1.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
-    hash = "sha256-aqNJGor6gH/7XjwuT2uD7L89wn1kzsFKBMlitSVjUCM=";
+    hash = "sha256-bx/BPldUZHX7KYM8bYRT/p/RcLKqAXqlnCihP8Ec7NY=";
   };
 
   setOutputFlags = false;
