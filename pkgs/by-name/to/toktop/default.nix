@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toktop";
-  version = "0.1.4";
+  version = "0.1.5";
   src = fetchFromGitHub {
     owner = "htin1";
     hash = "sha256-7XeBDvGZDiw4syOrO13Lg9JfdgAciY0s56RYQC/aX9I=";
