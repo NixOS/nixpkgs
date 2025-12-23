@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0f242n8w88rikg1srimdifadhggrb2r1z0g65id60ahb4bjm8a0x";
   };
 
+  patches = [
+    ./0002-trailing-semicolon-in-macro.patch
+  ];
+
   cargoPatches = [
     (fetchpatch {
       url = "https://github.com/Svetlitski/fcp/commit/1988f88be54a507b804b037cb3887fecf11bb571.patch";
