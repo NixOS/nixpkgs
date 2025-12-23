@@ -14,17 +14,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "avalanche-cli";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanche-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jNDzN2kWjnY9yQaGjhIEvpoc+k1Q1tnDQkQtZvxBTSw=";
+    hash = "sha256-bAZJRFlry7vYTTf95kTOJwcjYelN40n264oeykx7nxc=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-reL1ZJc/Wuh0LH+S+ZV4eVgVP5gvv3tFqLWNNTL5CDI=";
+  vendorHash = "sha256-0+YwlCHjiU46y333RSuaha4pLKFTYlj+M9+TFAALamY=";
 
   # Fix error: 'Caught SIGILL in blst_cgo_init'
   # https://github.com/bnb-chain/bsc/issues/1521
