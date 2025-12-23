@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "polar-bookshelf1";
-  version = "1.100.14";
+  version = "1.100.13";
 
   src = fetchurl {
-    url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-bookshelf-${version}-amd64.deb";
-    hash = "sha256-5xa+Nwu0p1x5DLn1GNI0HDt7GtBGoFQ/9qGTeq9uBgU=";
+    url = "mirror://sourceforge/polar-bookshelf.mirror/v${version}/polar-bookshelf-${version}-amd64.deb";
+    hash = "sha256-TeegAq3x8LZ01KEPIlP4lTGC0a9ilnf1xX/Dqci1wEQ=";
   };
 
   buildInputs = [

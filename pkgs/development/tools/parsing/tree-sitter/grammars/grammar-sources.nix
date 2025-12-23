@@ -421,9 +421,9 @@
   };
 
   nickel = {
-    version = "0.3.0";
-    url = "github:nickel-lang/tree-sitter-nickel?ref=0.3";
-    hash = "sha256-jL054OJj+1eXksNYOTTTFzZjwPqTFp06syC3TInN8rc=";
+    version = "0.5.0";
+    url = "github:nickel-lang/tree-sitter-nickel";
+    hash = "sha256-2la/9XxL2dN+rzTotgDXQFz9ktDXQ3Og9svX5Din2zo=";
   };
 
   nix = {
@@ -647,9 +647,9 @@
   };
 
   sql = {
-    version = "0.3.9";
+    version = "0.3.11";
     url = "github:derekstride/tree-sitter-sql";
-    hash = "sha256-DC7cZs8ePQmj5t/6GgnmgT5ubuOBaaS3Xch/f76/ZWM=";
+    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
     generate = true;
   };
 
