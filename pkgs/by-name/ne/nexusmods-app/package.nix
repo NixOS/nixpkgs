@@ -5,7 +5,6 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  fetchurl,
   imagemagick,
   lib,
   xdg-utils,
@@ -34,12 +33,6 @@ buildDotnetModule (finalAttrs: {
   };
 
   gameHashes = callPackage ./game-hashes { };
-
-  gamesJson = fetchurl {
-    name = "games.json";
-    url = "https://web.archive.org/web/20251221212501id_/https://data.nexusmods.com/file/nexus-data/games.json";
-    hash = "sha256-OVy6b/n6n2/TdzfHCWDOTw2yai87ieki21fEp1IGamY=";
-  };
 
   enableParallelBuilding = false;
 
@@ -73,9 +66,9 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
 
-    # Use a pinned version of the nexus API's games.json data
+    # Use a vendored version of the nexus API's games.json data
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
-      --replace-fail '$(BaseIntermediateOutputPath)games.json' "$gamesJson"
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
 
     ${lib.optionalString finalAttrs.doCheck ''
       # For some reason these tests fail (intermittently?) with a zero timestamp

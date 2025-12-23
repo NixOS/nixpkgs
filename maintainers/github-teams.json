@@ -153,11 +153,12 @@
     "id": 5704451,
     "maintainers": {
       "ConnorBaker": 3880346,
+      "GaetanLepage": 33058747,
       "SomeoneSerge": 9720532,
+      "YorikSar": 428074,
       "samuela": 226872
     },
     "members": {
-      "GaetanLepage": 33058747,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"

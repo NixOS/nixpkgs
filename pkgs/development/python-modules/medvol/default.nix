@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "medvol";
-  version = "0.0.16";
+  version = "0.0.17";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MIC-DKFZ";
     repo = "medvol";
     rev = "v${version}";
-    hash = "sha256-MMYBPyXXS6hTehyWUcvQso9HBLhWMGWzRDGSTtT1iZc=";
+    hash = "sha256-AuVTJvKalRXf/ObxXFk0aBVkqRffo4Ph5/LJ2vDK1nU=";
   };
 
   build-system = [ setuptools ];
