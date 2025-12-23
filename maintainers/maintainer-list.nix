@@ -4830,13 +4830,6 @@
     githubId = 12386805;
     name = "Chua Hou";
   };
-  chuangzhu = {
-    name = "Chuang Zhu";
-    email = "nixos@chuang.cz";
-    github = "chuangzhu";
-    githubId = 31200881;
-    keys = [ { fingerprint = "5D03 A5E6 0754 A3E3 CA57 5037 E838 CED8 1CFF D3F9"; } ];
-  };
   chvp = {
     email = "nixpkgs@cvpetegem.be";
     matrix = "@charlotte:vanpetegem.me";
