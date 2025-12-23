@@ -50,6 +50,8 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
+  ];
+  nativeBuildInputs = [
     pkg-config
   ];
 
