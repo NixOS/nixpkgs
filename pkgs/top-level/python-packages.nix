@@ -19223,6 +19223,8 @@ self: super: with self; {
 
   transaction = callPackage ../development/python-modules/transaction { };
 
+  transformer-engine = callPackage ../development/python-modules/transformer-engine { };
+
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
