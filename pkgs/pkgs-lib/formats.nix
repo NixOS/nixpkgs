@@ -266,12 +266,21 @@ optionalAttrs allowAliases aliases
             }
           else
             singleIniAtom;
-        iniSection =
+        singleIniSection =
           atom:
           attrsOf atom
           // {
             description = "section of an INI file (attrs of " + atom.description + ")";
           };
+        iniSection =
+          { atom, listsAsDuplicateSections }:
+          if listsAsDuplicateSections then
+            either (singleIniSection atom) (listOf (singleIniSection atom))
+            // {
+              description = (singleIniSection atom).description + " or a list of them for duplicate sections";
+            }
+          else
+            singleIniSection atom;
 
         maybeToList =
           listToValue:
@@ -285,6 +294,8 @@ optionalAttrs allowAliases aliases
           {
             # Represents lists as duplicate keys
             listsAsDuplicateKeys ? false,
+            # Represents lists as duplicate sections
+            listsAsDuplicateSections ? false,
             # Alternative to listsAsDuplicateKeys, converts list to non-list
             # listToValue :: [IniAtom] -> IniAtom
             listToValue ? null,
@@ -303,7 +314,9 @@ optionalAttrs allowAliases aliases
           in
           {
 
-            type = attrsOf (iniSection atom);
+            type = attrsOf (iniSection {
+              inherit atom listsAsDuplicateSections;
+            });
             lib.types.atom = atom;
 
             generate =
@@ -324,6 +337,8 @@ optionalAttrs allowAliases aliases
           {
             # Represents lists as duplicate keys
             listsAsDuplicateKeys ? false,
+            # Represents lists as duplicate sections
+            listsAsDuplicateSections ? false,
             # Alternative to listsAsDuplicateKeys, converts list to non-list
             # listToValue :: [IniAtom] -> IniAtom
             listToValue ? null,
@@ -344,12 +359,14 @@ optionalAttrs allowAliases aliases
             type = submodule {
               options = {
                 sections = mkOption rec {
-                  type = attrsOf (iniSection atom);
+                  type = attrsOf (iniSection {
+                    inherit atom listsAsDuplicateSections;
+                  });
                   default = { };
                   description = type.description;
                 };
                 globalSection = mkOption rec {
-                  type = iniSection atom;
+                  type = singleIniSection atom;
                   default = { };
                   description = "global " + type.description;
                 };
