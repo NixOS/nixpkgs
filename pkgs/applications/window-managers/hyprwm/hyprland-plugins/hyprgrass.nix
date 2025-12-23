@@ -12,7 +12,7 @@
 
 mkHyprlandPlugin {
   pluginName = "hyprgrass";
-  version = "0.8.2-unstable-2025-10-08";
+  version = "hl-0.52.2";
 
   src = fetchFromGitHub {
     owner = "horriblename";
