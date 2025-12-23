@@ -11651,6 +11651,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  pear-desktop = callPackage ../applications/audio/pear-desktop { };
+
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
@@ -12485,8 +12487,6 @@ with pkgs;
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
-
-  youtube-music = callPackage ../applications/audio/youtube-music { };
 
   yt-dlp-light = yt-dlp.override {
     atomicparsleySupport = false;
