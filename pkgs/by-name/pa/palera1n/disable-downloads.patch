@@ -1,0 +1,50 @@
+diff --git a/Makefile b/Makefile
+index ea691e3..b9938fe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,7 +80,7 @@ clean:
+ 	$(MAKE) -C docs clean
+ 
+ download-deps:
+-	$(MAKE) -C src $(patsubst %, resources/%, checkra1n-macos checkra1n-linux-arm64 checkra1n-linux-armel checkra1n-linux-x86 checkra1n-linux-x86_64 checkra1n-kpf-pongo ramdisk.dmg binpack.dmg Pongo.bin)
++	@echo "All dependencies already provided in resources directory"
+ 
+ docs:
+ 	$(MAKE) -C docs
+diff --git a/src/Makefile b/src/Makefile
+index 11ba5f8..fe72611 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -108,7 +108,8 @@ endif
+ endif
+ 
+ $(RESOURCES_DIR)/checkra1n-%:
+-	curl -Lfo $@ https://assets.checkra.in/downloads/preview/$(CHECKRA1N_VERSION)/$$(echo $@ | cut -d/ -f2)
++	@echo "checkra1n binary for $(patsubst $(RESOURCES_DIR)/checkra1n-%,%,$@) already provided"
++	@test -f $@ || (echo "Error: $@ not found" && exit 1)
+ 	chmod 755 $@
+ 
+ $(RESOURCES_DIR)/checkra1n: $(RESOURCES_DIR)/checkra1n-macos usb.xml
+@@ -140,7 +141,7 @@ $(RESOURCES_DIR)/libcheckra1nhelper.dylib: chkstk.S
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -shared chkstk.S -o $@
+ 
+ $(RESOURCES_DIR)/checkra1n-kpf-pongo:
+-	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/artifacts/kpf/iOS15/checkra1n-kpf-pongo
++	@echo "checkra1n-kpf-pongo already provided"
+ 
+ $(RESOURCES_DIR)/ramdisk.dmg.lzma: $(RESOURCES_DIR)/ramdisk.dmg
+ 	xz --format=lzma -vfc6ekT 0 $< > $@
+@@ -149,11 +150,11 @@ $(RESOURCES_DIR)/checkra1n-kpf-pongo.lzma: $(RESOURCES_DIR)/checkra1n-kpf-pongo
+ 	xz --format=lzma -vfc6ekT 0 $< > $@
+ 
+ $(RESOURCES_DIR)/ramdisk.dmg:
+-	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/c-rewrite/deps/ramdisk.dmg
++	@echo "ramdisk.dmg already provided"
+ 
+ $(RESOURCES_DIR)/binpack.dmg:
+-	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/c-rewrite/deps/binpack.dmg
++	@echo "binpack.dmg already provided"
+ 
+ $(RESOURCES_DIR)/Pongo.bin:
+-	curl -Lfo $@ https://cdn.nickchan.lol/palera1n/artifacts/kpf/iOS15/Pongo.bin
++	@echo "Pongo.bin already provided"
