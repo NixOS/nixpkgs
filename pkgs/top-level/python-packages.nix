@@ -2912,6 +2912,8 @@ self: super: with self; {
 
   colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
 
+  colcon-ed = callPackage ../development/python-modules/colcon-ed { };
+
   colcon-installed-package-information =
     callPackage ../development/python-modules/colcon-installed-package-information
       { };
