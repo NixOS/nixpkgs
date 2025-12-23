@@ -10,6 +10,7 @@
   wrapGAppsNoGuiHook,
   glib,
   python3Packages,
+  wrapGAppsNoGuiHook,
 }:
 
 let
