@@ -19606,6 +19606,18 @@ self: super: with self; {
 
   transaction = callPackage ../development/python-modules/transaction { };
 
+  transformer-engine = callPackage ../development/python-modules/transformer-engine { };
+
+  transformer-engine-jax = transformer-engine.override {
+    withJax = true;
+    withPytorch = false;
+  };
+
+  transformer-engine-pytorch = transformer-engine.override {
+    withJax = false;
+    withPytorch = true;
+  };
+
   transformers = callPackage ../development/python-modules/transformers { };
 
   transformers_4 = callPackage ../development/python-modules/transformers/4.nix { };
