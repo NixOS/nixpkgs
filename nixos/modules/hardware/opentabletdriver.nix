@@ -60,6 +60,12 @@ in
 
       serviceConfig = {
         Type = "simple";
+        # workaround for https://github.com/NixOS/nixpkgs/issues/469340
+        ExecStartPre = pkgs.writeShellScript "disable-for-gdm-greeter" ''
+          if [[ "$USER" = "gdm-greeter"* ]]; then
+            exit 1
+          fi
+        '';
         ExecStart = lib.getExe' cfg.package "otd-daemon";
         Restart = "on-failure";
       };
