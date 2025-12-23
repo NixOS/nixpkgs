@@ -17,7 +17,14 @@ buildFHSEnv {
   # TODO: I'm pretty suspicious of this list of additional required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
-    [ pkgs.envision-unwrapped ]
+    [
+      (pkgs.envision-unwrapped.overrideAttrs (finalAttrs: {
+        patches = (finalAttrs.patches or [ ]) ++ [
+          # Add link to tracking issue when there's a missing dependency
+          ./report-url.patch
+        ];
+      }))
+    ]
     ++ (with pkgs; [
       stdenv.cc.libc
       gcc
