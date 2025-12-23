@@ -1,60 +1,53 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
-
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";
-  version = "7.4.4";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
-    rev = "v${version}";
-    hash = "sha256-5jiqR3gn3X+klcYr1zTEB9omxWwHKQNLKCVXhry1jjY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h8gd91Nc35jTQ4u9YyQGOB+rkgRAos8lsjX+bWzvpDs=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-AUtTk98izmFgMK7xpwaObzc+lFB9OjjgdCdXtwTS6JQ=";
+  cargoHash = "sha256-zl1L8q1AJwVn0o2BazJ30FyBCMq5F5nAQ0FGuEAPGms=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      SystemConfiguration
-    ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
-  OPENSSL_NO_VENDOR = "1";
+  env.OPENSSL_NO_VENDOR = true;
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/rojo";
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/rojo-rbx/rojo/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Project management tool for Roblox";
-    mainProgram = "rojo";
-    longDescription = ''
-      Rojo is a tool designed to enable Roblox developers to use professional-grade software engineering tools.
-    '';
+    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${finalAttrs.version}";
     homepage = "https://rojo.space";
-    downloadPage = "https://github.com/rojo-rbx/rojo/releases/tag/v${version}";
-    changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ wackbyte ];
+    license = lib.licenses.mpl20;
+    longDescription = ''
+      Tool designed to enable Roblox developers to use professional-grade software engineering tools.
+    '';
+    mainProgram = "rojo";
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
   };
-}
+})

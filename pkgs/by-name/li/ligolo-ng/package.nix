@@ -1,38 +1,68 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  pkgsCross ? { },
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ligolo-ng";
-  version = "0.7.5";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "tnpitsecurity";
+    owner = "nicocha30";
     repo = "ligolo-ng";
-    tag = "v${version}";
-    hash = "sha256-BU3gBUNOTjpAANkvzPcgsZrly+TkbG86LHtZf93uxeY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ND0SFB0xj4WK6okNzChZWfK5bhNc4PTWuZoq/PodTW0=";
   };
 
-  vendorHash = "sha256-v6lHY3s1TJh8u4JaTa9kcCj+1pl01zckvTVeLk8TZ+w=";
+  vendorHash = "sha256-oc85xNPMFeaPC7TMcSh3i3Msd8sCJ5QGFmi2fKjcyvk=";
 
-  postConfigure = ''
-    export CGO_ENABLED=0
-  '';
+  env.CGO_ENABLED = 0;
+
+  subPackages = [
+    "cmd/agent"
+    "cmd/proxy"
+  ];
 
   ldflags = [
     "-s"
     "-w"
     "-extldflags '-static'"
+    "-X main.version=${finalAttrs.version}"
   ];
+
+  # This will prefix all the binaries with ligolo-
+  postInstall = ''
+    for f in $out/bin/*; do
+      mv "$f" "$(dirname "$f")/ligolo-$(basename "$f")"
+    done
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/ligolo-agent";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = {
+      win = pkgsCross.mingwW64.ligolo-ng or null;
+      linux64 = pkgsCross.gnu64.ligolo-ng or null;
+    };
+    updateScript = nix-update-script { };
+  };
 
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
-    description = "Tunneling/pivoting tool that uses a TUN interface";
-    homepage = "https://github.com/tnpitsecurity/ligolo-ng";
-    changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+  meta = {
+    description = "Advanced TUN-based tunneling/pivoting tool";
+    homepage = "https://github.com/nicocha30/ligolo-ng";
+    changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ letgamer ];
+    platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
-}
+})

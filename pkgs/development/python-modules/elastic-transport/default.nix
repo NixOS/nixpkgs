@@ -4,11 +4,13 @@
   buildPythonPackage,
   certifi,
   fetchFromGitHub,
+  fetchpatch,
   mock,
   opentelemetry-api,
   opentelemetry-sdk,
   orjson,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.17.0";
+  version = "8.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,17 +32,20 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     tag = "v${version}";
-    hash = "sha256-ZCzG7a/SWvUDWiIWwzVfj4JG/w7XUa25yKuuR53XCEQ=";
+    hash = "sha256-LWSvE88wEwMxRi6IZsMkIRP8UTRfImC9QZnuka1oiso=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov-report=term-missing --cov=elastic_transport" ""
-  '';
+  # FIXME: backport fix for pytest-asyncio 1.2.0, as updating this entire ecosystem is painful
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/elastic/elastic-transport-python/commit/d749d0be54821e81979888ff34b1451354548863.patch";
+      hash = "sha256-FrabqeLn3Sr1sg/lWWYsMPd0CZS/6BZYLnaK66T93BQ=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     urllib3
     certifi
   ];
@@ -52,6 +57,7 @@ buildPythonPackage rec {
     opentelemetry-sdk
     orjson
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpserver
     pytestCheckHook
     requests
@@ -61,9 +67,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -85,11 +90,11 @@ buildPythonPackage rec {
     "test_async_transport_httpbin"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
-    homepage = "https://github.com/elasticsearch/elastic-transport-python";
+    homepage = "https://github.com/elastic/elastic-transport-python";
     changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

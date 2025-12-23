@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "quart-schema";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-schema";
     tag = version;
-    hash = "sha256-FpjnhSTkjskCxT874ABrD3Zew4g4R977xaYvJhVTDxw=";
+    hash = "sha256-saKV8iasc9ZynmUQI4bAYS9h8nGXgXR0Vm5oIDHedB4=";
   };
 
   build-system = [ pdm-backend ];

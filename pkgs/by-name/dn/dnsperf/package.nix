@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
     changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     mainProgram = "dnsperf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       mfrw
     ];

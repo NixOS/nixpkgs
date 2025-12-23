@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.34.4";
+  version = "1.34.5";
 
   src = fetchurl {
     # Note: tag name varies in some versions, e.g. v1.30.0, c-ares-1_17_0.
-    url = "https://github.com/c-ares/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-+jjb7WWe5MxaMt9eJ97aV1+mhSx5pyuhr4XeNaauIi8=";
+    url = "https://github.com/c-ares/c-ares/releases/download/v${version}/c-ares-${version}.tar.gz";
+    hash = "sha256-fZNXkOmvCBwlxJX9E8LPzaR5KYNBjpY1jvbnMg7gY0Y=";
   };
 
   outputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libcares.pc --replace-fail \''${prefix}/ ""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
     changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

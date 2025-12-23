@@ -45,24 +45,23 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      aiofiles
-      blinker
-      click
-      flask
-      hypercorn
-      itsdangerous
-      jinja2
-      markupsafe
-      pydata-sphinx-theme
-      python-dotenv
-      werkzeug
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    aiofiles
+    blinker
+    click
+    flask
+    hypercorn
+    itsdangerous
+    jinja2
+    markupsafe
+    pydata-sphinx-theme
+    python-dotenv
+    werkzeug
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "quart" ];
 
@@ -75,12 +74,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.9.4";
+  version = "4.9.8";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ysRm18sFZDTGBjLlVL5QVDywzs2dOzO7V4XBSbWXn8E=";
+    hash = "sha256-GAtmrjMtMWaWjgE7/3y/bwxyhp1r5pfbdKAt86xuipE=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
         "tinydns"
       ]
     ))
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns"
   ];
 
@@ -99,13 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       mic92
       disassembler
       nickcao

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PGP packet visualizer";
     mainProgram = "pgpdump";
     longDescription = ''
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       OpenPGP (RFC 4880) and PGP version 2 (RFC 1991).
     '';
     homepage = "http://www.mew.org/~kazu/proj/pgpdump/en/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

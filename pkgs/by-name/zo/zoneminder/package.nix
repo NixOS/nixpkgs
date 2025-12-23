@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   cmake,
   makeWrapper,
@@ -83,17 +84,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.35";
+  version = "1.36.36";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
-    rev = version;
-    hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
+    tag = version;
+    hash = "sha256-q+LpM8JSjcroGa04CqQ7PUU/WvZ9YCVhGOhwBAhOFY0=";
     fetchSubmodules = true;
   };
 
   patches = [
+    # Fix building against FFmpeg 8.0
+    # https://github.com/ZoneMinder/zoneminder/pull/4466
+    (fetchpatch {
+      url = "https://github.com/peat-psuwit/zoneminder/commit/15241687e9ccd97d7866cc7245324472ff6c7f0e.patch";
+      hash = "sha256-DXeoYOMI3Hcpwshg6wiBxaoTPOswLVV3Weq3Mh5Vaw0=";
+    })
+
     ./default-to-http-1dot1.patch
     ./0001-Don-t-use-file-timestamp-in-cache-filename.patch
   ];
@@ -161,44 +169,43 @@ stdenv.mkDerivation rec {
       --subst-var-by srcHash "`basename $out`"
   '';
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      glib
-      libjpeg
-      libselinux
-      libsepol
-      mp4v2
-      libmysqlclient
-      mariadb
-      pcre
-      perl
-      polkit
-      x264
-      zlib
-      util-linuxMinimal # for libmount
-    ]
-    ++ (with perlPackages; [
-      # build-time dependencies
-      DateManip
-      DBI
-      DBDmysql
-      LWP
-      SysMmap
-      # run-time dependencies not checked at build-time
-      ClassStdFast
-      DataDump
-      DeviceSerialPort
-      JSONMaybeXS
-      LWPProtocolHttps
-      NumberBytesHuman
-      SysCPU
-      SysMemInfo
-      TimeDate
-      CryptEksblowfish
-      DataEntropy # zmupdate.pl
-    ]);
+  buildInputs = [
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb
+    pcre
+    perl
+    polkit
+    x264
+    zlib
+    util-linuxMinimal # for libmount
+  ]
+  ++ (with perlPackages; [
+    # build-time dependencies
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
+    # run-time dependencies not checked at build-time
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
+  ]);
 
   nativeBuildInputs = [
     cmake
@@ -241,11 +248,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.linux;
   };
 }

@@ -56,7 +56,7 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper CLI";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpander";
   };

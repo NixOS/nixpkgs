@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bino";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchgit {
     url = "https://git.marlam.de/git/bino.git";
     rev = "bino-${finalAttrs.version}";
-    hash = "sha256-h7sS+5he8dKl9ipdM1Vs1WC6U+Pi/QMVSdTbT9E59lU=";
+    hash = "sha256-vGPbSYTfRy414xVcLIvOnN4Te36HWVz7DQegNhYb3u4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bino3d.org/";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.orivej ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "bino";
   };

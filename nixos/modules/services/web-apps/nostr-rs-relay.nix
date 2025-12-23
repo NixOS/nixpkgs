@@ -40,7 +40,7 @@ in
     settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = "See https://git.sr.ht/~gheartsfield/nostr-rs-relay/#configuration for documentation.";
+      description = "See <https://git.sr.ht/~gheartsfield/nostr-rs-relay/#configuration> for documentation.";
     };
   };
 

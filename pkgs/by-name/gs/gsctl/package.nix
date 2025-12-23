@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "giantswarm";
-    repo = pname;
+    repo = "gsctl";
     rev = version;
     sha256 = "sha256-eemPsrSFwgUR1Jz7283jjwMkoJR38QiaiilI9G0IQuo=";
   };
@@ -40,11 +40,11 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Giant Swarm command line interface";
     homepage = "https://github.com/giantswarm/gsctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ joesalisbury ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ joesalisbury ];
     mainProgram = "gsctl";
   };
 }

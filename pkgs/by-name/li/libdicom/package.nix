@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-  ] ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
+  ]
+  ++ lib.optionals (finalAttrs.finalPackage.doCheck) [ check ];
 
   mesonBuildType = "release";
 
@@ -44,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C library for reading DICOM files";
     homepage = "https://github.com/ImagingDataCommons/libdicom";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lromor ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lromor ];
+    platforms = lib.platforms.unix;
   };
 })

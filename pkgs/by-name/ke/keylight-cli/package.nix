@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "versality";
     repo = "keylight-cli";
     tag = "v${version}";
-    sha256 = "sha256-gzTvMBa7JVckxLnltlR5XOj6BBbfPXZei7Wj3f1n4Kw=";
+    hash = "sha256-boL6Sg+C9OxMEcr5tAFCn8NxCDrJ6I2nMn9/2yMOYRI=";
   };
 
   buildInputs = [ babashka ];
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to control Elgato Key Light devices";
     homepage = "https://github.com/versality/keylight-cli";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ versality ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ versality ];
     mainProgram = "keylight";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

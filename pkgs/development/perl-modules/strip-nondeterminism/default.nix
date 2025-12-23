@@ -45,15 +45,14 @@ buildPerlPackage rec {
     patchShebangs ./bin
   '';
 
-  postInstall =
-    ''
-      # we don’t need the debhelper script
-      rm $out/bin/dh_strip_nondeterminism
-      rm $out/share/man/man1/dh_strip_nondeterminism.1
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang $out/bin/strip-nondeterminism
-    '';
+  postInstall = ''
+    # we don’t need the debhelper script
+    rm $out/bin/dh_strip_nondeterminism
+    rm $out/share/man/man1/dh_strip_nondeterminism.1
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
+  '';
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -69,12 +68,12 @@ buildPerlPackage rec {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Perl module for stripping bits of non-deterministic information";
     mainProgram = "strip-nondeterminism";
     homepage = "https://reproducible-builds.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       pSub
       artturin
     ];

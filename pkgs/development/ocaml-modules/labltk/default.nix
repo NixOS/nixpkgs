@@ -4,7 +4,6 @@
   lib,
   makeWrapper,
   fetchzip,
-  Cocoa,
   ocaml,
   findlib,
   tcl,
@@ -102,7 +101,7 @@ param.stdenv.mkDerivation {
   buildInputs = [
     tcl
     tk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   configureFlags = [
     "--use-findlib"
@@ -135,5 +134,6 @@ param.stdenv.mkDerivation {
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = !(params ? ${lib.versions.majorMinor ocaml.version});
   };
 }

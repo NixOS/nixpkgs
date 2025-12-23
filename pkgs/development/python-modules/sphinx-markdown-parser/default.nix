@@ -56,10 +56,10 @@ buildPythonPackage {
     "test_integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Write markdown inside of docutils & sphinx projects";
     homepage = "https://github.com/clayrisser/sphinx-markdown-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ FlorianFranzen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

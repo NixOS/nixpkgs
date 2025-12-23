@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    patch -p1 -i ${../avy/minisat-fenv.patch} -d minisat
+    patch -p1 -i ${./minisat-fenv.patch} -d minisat
   '';
 
   preConfigure = ''

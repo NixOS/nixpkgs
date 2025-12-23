@@ -65,7 +65,7 @@ let
 
       # The set of libraries that comes with idris
 
-      builtins = pkgs.lib.mapAttrsToList (name: value: value) builtins_;
+      builtins = pkgs.lib.attrValues builtins_;
 
       # Libraries
 
@@ -96,8 +96,6 @@ let
       cube = callPackage ./cube.nix { };
 
       derive = callPackage ./derive.nix { };
-
-      descncrunch = callPackage ./descncrunch.nix { };
 
       dict = callPackage ./dict.nix { };
 
@@ -227,6 +225,7 @@ let
     // builtins_
     // pkgs.lib.optionalAttrs config.allowAliases {
       # removed packages
+      descncrunch = throw "descncrunch has been removed because it has been marked as broken since 2018."; # Added 2025-10-11
       protobuf = throw "idrisPackages.protobuf has been removed: abandoned by upstream"; # Added 2022-02-06
       sdl = throw "'idrisPackages.sdl' has been removed, as it was broken and unmaintained"; # added 2024-05-09
     };

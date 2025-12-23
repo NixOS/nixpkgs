@@ -17,11 +17,11 @@ stdenvNoCC.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "System for automatically configuring mutt and isync";
     homepage = "https://github.com/LukeSmithxyz/mutt-wizard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.unix;
   };
 }

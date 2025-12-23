@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.15.9";
+  version = "0.17.4";
 in
 buildGoModule {
   pname = "heimdall-proxy";
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "dadrus";
     repo = "heimdall";
     tag = "v${version}";
-    hash = "sha256-nrYeNVSDvGTRywhTLFLylnSz1jhR/1OSKDaRj2sDe5o=";
+    hash = "sha256-0/2q+ci6bvat8oI3MW/QfI747RDuk55LNciy7RSNLZE=";
   };
 
-  vendorHash = "sha256-Rz1v2jusP9edDpoFaiwb7ZatuSeg9sqFS7j2JZtNJio=";
+  vendorHash = "sha256-3ecwQ6CHPbOouDJzDZA0S/8aJ0lUbhVnZcGby/iCxDk=";
 
   tags = [ "sqlite" ];
 
@@ -34,7 +34,7 @@ buildGoModule {
   ];
 
   meta = {
-    description = "A cloud native Identity Aware Proxy and Access Control Decision service";
+    description = "Cloud native Identity Aware Proxy and Access Control Decision service";
     homepage = "https://dadrus.github.io/heimdall";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ albertilagan ];

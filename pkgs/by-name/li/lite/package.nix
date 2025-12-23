@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rxi";
-    repo = pname;
+    repo = "lite";
     rev = "v${version}";
     sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
   };
@@ -52,18 +52,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib/${pname}
-    cp -a lite $out/lib/${pname}
-    cp -a data $out/lib/${pname}
-    makeWrapper $out/lib/${pname}/lite $out/bin/lite
+    mkdir -p $out/bin $out/lib/lite
+    cp -a lite $out/lib/lite
+    cp -a data $out/lib/lite
+    makeWrapper $out/lib/lite/lite $out/bin/lite
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight text editor written in Lua";
     homepage = "https://github.com/rxi/lite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     mainProgram = "lite";
   };
 }

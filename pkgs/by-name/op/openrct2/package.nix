@@ -30,33 +30,34 @@
   pkg-config,
   speexdsp,
   zlib,
+  withDiscordRpc ? false,
 }:
 
 let
-  openrct2-version = "0.4.20";
+  openrct2-version = "0.4.29";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.5.1";
-  openmsx-version = "1.6";
-  opensfx-version = "1.0.5";
-  title-sequences-version = "0.4.14";
+  objects-version = "1.7.5";
+  openmsx-version = "1.6.1";
+  opensfx-version = "1.0.6";
+  title-sequences-version = "0.4.26";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-xrgAy817G5xwfzZX+8Xy2508/Zwq32aKzMndus14Qd8=";
+    hash = "sha256-yLnTA5qSD2fK8VsJ6DEsxPgNWe1/4CiGJbnM7e9gZ5c=";
   };
   openmsx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
-    hash = "sha256-8JfTpMzTn3VG+X2z7LG4vnNkj1O3p1lbhszL3Bp1V+Q=";
+    hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
   };
   opensfx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${opensfx-version}/opensound.zip";
-    hash = "sha256-qVIUi+FkwSjk/TrqloIuXwUe3ZoLHyyE3n92KM47Lhg=";
+    hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
   };
   title-sequences = fetchurl {
     url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
-    hash = "sha256-FA33FOgG/tQRzEl2Pn8WsPzypIelcAHR5Q/Oj5FIqfM=";
+    hash = "sha256-2ruXh7FXY0L8pN2fZLP4z6BKfmzpwruWEPR7dikFyFg=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -66,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
-    rev = "v${openrct2-version}";
-    hash = "sha256-G/uD3t8m7C74pjSA6dbz4gzu9CwEpmyFwtYpoFIiRjM=";
+    tag = "v${openrct2-version}";
+    hash = "sha256-Udwqn8RFXaUmgbA3rXH/WZTK88HbHEQucsbDP51Oe7g=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
-    discord-rpc
     duktape
     expat
     flac
@@ -100,13 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     speexdsp
     zlib
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
-    "-DDOWNLOAD_OBJECTS=OFF"
-    "-DDOWNLOAD_OPENMSX=OFF"
-    "-DDOWNLOAD_OPENSFX=OFF"
-    "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
+    (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
+    (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
+    (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
+    (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ];
 
   postUnpack = ''
@@ -147,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       oxzi
       keenanweaver
+      kylerisse
     ];
   };
 })

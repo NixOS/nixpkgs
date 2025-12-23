@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-javascript";
-  version = "0.23.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-javascript";
     tag = "v${version}";
-    hash = "sha256-apgWWYD0XOvH5c3BY7kAF7UYtwPJaEvJzC5aWvJ9YQ8=";
+    hash = "sha256-2Jj/SUG+k8lHlGSuPZvHjJojvQFgDiZHZzH8xLu7suE=";
   };
 
   build-system = [
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tree_sitter_javascript" ];
 
-  meta = with lib; {
+  meta = {
     description = "JavaScript and JSX grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

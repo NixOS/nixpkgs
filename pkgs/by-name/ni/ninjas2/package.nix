@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "clearly-broken-software";
     repo = "ninjas2";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1kwp6pmnfar2ip9693gprfbcfscklgri1k1ycimxzlqr61nkd2k9";
     fetchSubmodules = true;
   };
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/clearly-broken-software/ninjas2";
-    description = "sample slicer plugin for LV2, VST, and jack standalone";
-    license = with licenses; [ gpl3 ];
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    description = "Sample slicer plugin for LV2, VST, and jack standalone";
+    license = with lib.licenses; [ gpl3 ];
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "ninjas2";
   };
 }

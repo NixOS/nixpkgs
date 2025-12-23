@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SIFalcon";
     repo = "confluencePot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-jIbL6prOUII8o9FghIYa80BytJ9SSuyj/TZmAxwAbJk=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   '';
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mv $out/bin/confluencePot $out/bin/${pname}
+    mv $out/bin/confluencePot $out/bin/confluencepot
   '';
 
   preFixup = ''
@@ -32,15 +32,15 @@ buildGoModule rec {
     install -vD confluence.html -t $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Honeypot for the Atlassian Confluence OGNL injection vulnerability";
     homepage = "https://github.com/SIFalcon/confluencePot";
     longDescription = ''
       ConfluencePot is a simple honeypot for the Atlassian Confluence unauthenticated
       and remote OGNL injection vulnerability (CVE-2022-26134).
     '';
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "confluencepot";
   };
 }

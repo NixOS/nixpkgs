@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NiklasRosenstein/hatch-babel";
     changelog = "https://github.com/NiklasRosenstein/hatch-babel/blob/${src.tag}/.changelog/${src.tag}.toml";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

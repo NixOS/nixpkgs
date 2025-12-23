@@ -13,7 +13,13 @@ function manifestCheckPhase() {
         args+=" --ignore-version-requirement ${package}"
     done
 
-    readarray -d '' manifests < <(find . -type f -name "manifest.json" -print0)
+    readarray -d '' manifests < <(
+      find . -type f \( \
+        -path ./manifest.json \
+        -o -path './custom_components/*/manifest.json' \
+        -o -path './custom_components/*/integrations/*/manifest.json' \
+      \) -print0
+    )
 
     if [ "${#manifests[@]}" -gt 0 ]; then
         # shellcheck disable=SC2068

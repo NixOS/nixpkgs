@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mate-desktop/mate-indicator-applet";
     description = "MATE panel indicator applet";
     longDescription = ''
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
       Existing indicators include the Message Menu, Battery Menu and Sound
       menu.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl2Plus
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

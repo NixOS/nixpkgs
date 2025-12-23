@@ -3,19 +3,22 @@
   lib,
   fetchFromGitiles,
   libcap,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "2024.05.22";
+  version = "2025.07.02";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/minijail";
     rev = "linux-v${version}";
-    sha256 = "sha256-1NNjNEC0pNb0WW0PG5smltT1/dGYNRfhNxJtW0hngI8=";
+    sha256 = "sha256-GRnr2O6ZpWtRDGJ6Am0XPT426Xh7wxTJsoEqyTUECYY=";
   };
 
   buildInputs = [ libcap ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   makeFlags = [
     "ECHO=echo"
@@ -40,20 +43,22 @@ stdenv.mkDerivation rec {
     cp -v *.pc $out/lib/pkgconfig
     cp -v libminijail.h scoped_minijail.h $out/include/chromeos
     cp -v minijail0 $out/bin
+
+    installManPage minijail0.1 minijail0.5
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
     changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       pcarrier
       qyliss
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "minijail0";
   };
 }

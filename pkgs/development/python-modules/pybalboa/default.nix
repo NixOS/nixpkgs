@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   poetry-dynamic-versioning,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
 }:
 
@@ -27,17 +27,22 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # async def functions are not natively supported.
+    "test_cancel_task"
   ];
 
   pythonImportsCheck = [ "pybalboa" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to communicate with a Balboa spa wifi adapter";
     homepage = "https://github.com/garbled1/pybalboa";
     changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

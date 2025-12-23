@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.5.6.1";
+  version = "1.5.7.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZKAeedjZWSzTX53i68A3bg+U3IFQ1uOuiRpV8ZDTSQ4=";
+    hash = "sha256-bYaExpAJvknhsY7CUaXrDX4k+TYkmQqKEkodpmqS/Io=";
   };
 
   postPatch = ''
@@ -43,10 +43,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple python bindings to Yann Collet ZSTD compression library";
     homepage = "https://github.com/sergey-dryabzhinsky/python-zstd";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ eadwu ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ eadwu ];
   };
 }

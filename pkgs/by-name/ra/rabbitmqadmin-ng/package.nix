@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rabbitmqadmin-ng";
-  version = "0.27.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "rabbitmq";
     repo = "rabbitmqadmin-ng";
     tag = "v${version}";
-    hash = "sha256-PSG//vyhNFUVDf9XfIuqm0mGcDo0B02+x0Sesj3ggAA=";
+    hash = "sha256-Qz6wfATt7BU1IlrThQpu3UetUWuLz/Y1WKBvsqisUxY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hMFawT1m8VNRWENvJtoi5Ysw7k3iNRB7y5wgNAJCxX8=";
+  cargoHash = "sha256-spGJUY99jF/aZPDxoplPJ+1XHIreqDzxzlD0Ti4IZ68=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -32,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Command line tool for RabbitMQ that uses the HTTP API";
-    maintainers = lib.teams.flyingcircus.members;
+    teams = [ lib.teams.flyingcircus ];
     homepage = "https://www.rabbitmq.com/docs/management-cli";
     license = with lib.licenses; [
       mit

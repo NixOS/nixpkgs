@@ -3,19 +3,17 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  postgresqlTestHook,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_roaringbitmap";
-  version = "0.5.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ChenHuajun";
     repo = "pg_roaringbitmap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E6vqawnsRsAIajGDgJcTUWV1H8GFFboTjhmVfemUGbs=";
+    hash = "sha256-XX68Kgx9uFhnWSUIhErw3yOjo7K/seP/6oca3vS7b84=";
   };
 
   meta = {

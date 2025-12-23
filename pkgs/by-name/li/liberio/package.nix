@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liberio";
-  version = "unstable-2019-12-11";
+  version = "0-unstable-2019-12-11";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ettus Research DMA I/O Library";
     homepage = "https://github.com/EttusResearch/liberio";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.doronbehar ];
+    platforms = lib.platforms.all;
   };
 })

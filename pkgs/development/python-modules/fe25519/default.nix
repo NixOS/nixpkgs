@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "fe25519";
-  version = "1.5.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-la+17tPHjceMTe7Wk8DGVaSptk8XJa+l7GTeqLIFDvs=";
+    hash = "sha256-Kf5OCTG3IL2dYGvzFngoS+OMZPqq/O//8Gf0a2McgPc=";
   };
 
   build-system = [ setuptools ];
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fe25519" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python field operations for Curve25519's prime";
     homepage = "https://github.com/BjoernMHaase/fe25519";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ cc0 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

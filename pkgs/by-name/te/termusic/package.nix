@@ -16,17 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.10.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
     rev = "v${version}";
-    hash = "sha256-Yd23Jk2BFuLtxgF8vgat0wTGq6ahHHBd/HjGI9BY9z4=";
+    hash = "sha256-e+D7ykqGX2UprakCZc9Gmaxct+b19DMfTRMkeIANXqg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1WomL0O5QS2NHu4k6TuA2jLtDKyxlY0iVCgH9pb6CHI=";
+  cargoHash = "sha256-0JVKY3A3W3vJgDtlZE6gtrXQa2e+4YA6R6mFUYhuQkk=";
 
   useNextest = true;
 
@@ -36,18 +35,17 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gst_all_1.gstreamer
-      mpv-unwrapped
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    dbus
+    glib
+    gst_all_1.gstreamer
+    mpv-unwrapped
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Terminal Music Player TUI written in Rust";

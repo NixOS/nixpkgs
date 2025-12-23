@@ -2,35 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "s5";
-  version = "0.1.15";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
-    repo = pname;
+    repo = "s5";
     rev = "v${version}";
-    hash = "sha256-QQMnzDRWdW0awwNx2vqtzrOW9Ua7EmJ9YFznQoK33J0=";
+    hash = "sha256-aNNf7ntGg2A84jD6UeoF4gFv8S/FonbIhV3ZOd/P4bw=";
   };
 
-  vendorHash = "sha256-axcZ4XzgsPVU9at/g3WS8Hv92P2hmZRb+tUfw+h9iH0=";
+  vendorHash = "sha256-NmnYv0yAHmlOY9UK7GQtb5e9DwbyEbqQ2O6cpqkwtww=";
 
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/s5" ];
 
   ldflags = [
-    "-X main.version=v${version}"
+    "-X github.com/mvisonneau/s5/internal/app.Version=v${version}"
   ];
 
   doCheck = true;
 
-  meta = with lib; {
-    description = "cipher/decipher text within a file";
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    description = "Cipher/decipher text within a file";
     mainProgram = "s5";
     homepage = "https://github.com/mvisonneau/s5";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ mvisonneau ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ mvisonneau ];
   };
 }

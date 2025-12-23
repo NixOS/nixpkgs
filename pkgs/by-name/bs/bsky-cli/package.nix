@@ -6,21 +6,18 @@
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.0.73";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "bsky-cli";
-  inherit version;
+  version = "0.0.74";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "bsky";
-    tag = "v${version}";
-    hash = "sha256-GTuF/ZbZ84tTcbjp8eXKdpUGCsOkg2rxEcslKTsgpu4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pLgPQYL4+BErqRe09Pj94gLt/OoxEt9r4n+gZtZSS4Y=";
   };
 
-  vendorHash = "sha256-dLhrPHjhEHEJOokkjll1Z+zhDlBXuhlJJBtCFXfhyws=";
+  vendorHash = "sha256-f9LZHJ5yXWUUh6HdF2JPEBucWuVud3YX5l2MkHs6UXc=";
 
   buildInputs = [
     libpcap
@@ -33,17 +30,17 @@ buildGoModule {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/bsky";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   nativeBuildInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A cli application for bluesky social";
+    description = "Cli application for bluesky social";
     homepage = "https://github.com/mattn/bsky";
-    changelog = "https://github.com/mattn/bsky/releases/tag/v${version}";
+    changelog = "https://github.com/mattn/bsky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];
     mainProgram = "bsky";
   };
-}
+})

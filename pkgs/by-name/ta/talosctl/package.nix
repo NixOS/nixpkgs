@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +9,16 @@
 
 buildGoModule rec {
   pname = "talosctl";
-  version = "1.9.5";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${version}";
-    hash = "sha256-2YKZfW62yOA8uV3bn6at/9YV3OHjiMuqA1SUupyAAx4=";
+    hash = "sha256-RPmveQ52PqpD/OG/7SsJbKlZjggRU8uBqJyNmOszWtg=";
   };
 
-  vendorHash = "sha256-f2hOAF746nMAZe1KEopdpFHfRMEZQdy4VoVUi49CBJo=";
+  vendorHash = "sha256-tGlGlTMIsBLQGvIYU/zEE0devM0j31ER8L8hacXvTz4=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd talosctl \
       --bash <($out/bin/talosctl completion bash) \
       --fish <($out/bin/talosctl completion fish) \
@@ -41,13 +42,13 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "CLI for out-of-band management of Kubernetes nodes created by Talos";
     mainProgram = "talosctl";
     homepage = "https://www.talos.dev/";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

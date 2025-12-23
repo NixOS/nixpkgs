@@ -31,14 +31,18 @@ buildPythonPackage rec {
     regex
   ];
 
-  pytestFlagsArray = [ "--fixtures tests/" ];
+  pytestFlags = [ "--fixtures" ];
+
+  enabledTestPaths = [
+    "tests/"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Akuukis/beancount_plugin_utils";
     description = "Utils for beancount plugin writers - BeancountError, mark, metaset, etc";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ alapshin ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ alapshin ];
   };
 }

@@ -8,7 +8,7 @@ die() {
 
 fetch() {
     local url="https://dl.google.com/android/repository/$1"
-    echo "$url -> $2"
+    echo "$url -> $2" >&2
     curl -s "$url" -o "$2" || die "Failed to fetch $url"
 }
 

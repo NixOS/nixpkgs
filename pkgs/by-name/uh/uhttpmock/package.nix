@@ -33,30 +33,29 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib
     libsoup_2_4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Project for mocking web service APIs which use HTTP or HTTPS";
     homepage = "https://gitlab.freedesktop.org/pwithnall/uhttpmock/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

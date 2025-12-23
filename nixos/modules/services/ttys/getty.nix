@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,15 +11,20 @@ let
   cfg = config.services.getty;
 
   baseArgs = [
-    "--login-program" "${cfg.loginProgram}"
-  ] ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
-    "--autologin" cfg.autologinUser
-  ] ++ optionals (cfg.loginOptions != null) [
-    "--login-options" cfg.loginOptions
-  ] ++ cfg.extraArgs;
+    "--login-program"
+    "${cfg.loginProgram}"
+  ]
+  ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
+    "--autologin"
+    cfg.autologinUser
+  ]
+  ++ optionals (cfg.loginOptions != null) [
+    "--login-options"
+    cfg.loginOptions
+  ]
+  ++ cfg.extraArgs;
 
-  gettyCmd = args:
-    "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
+  gettyCmd = args: "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
 
   autologinScript = ''
     otherArgs="--noclear --keep-baud $TTY 115200,38400,9600 $TERM";
@@ -36,7 +46,9 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
-    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
+    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ]
+      ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];''
+    )
   ];
 
   options = {
@@ -117,14 +129,15 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.console.enable {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
-    services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
+    services.getty.helpLine = mkIf (
+      config.documentation.nixos.enable && config.documentation.doc.enable
+    ) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.additionalUpstreamSystemUnits = [
       "getty.target"
@@ -135,59 +148,68 @@ in
       "container-getty@.service"
     ];
 
-    systemd.services."getty@" =
-      { serviceConfig.ExecStart = [
-          # override upstream default with an empty ExecStart
-          ""
-          (pkgs.writers.writeDash "getty" autologinScript)
+    # We can't just rely on 'Conflicts=autovt@tty1.service' because
+    # 'switch-to-configuration switch' will start 'autovt@tty1.service'
+    # and kill the display manager.
+    systemd.targets.getty.wants =
+      lib.mkIf (!(config.systemd.services.display-manager.enable or false))
+        [
+          "autovt@tty1.service"
         ];
-        environment.TTY = "%I";
-        restartIfChanged = false;
-      };
 
-    systemd.services."serial-getty@" =
-      { serviceConfig.ExecStart = [
-          "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I --keep-baud $TERM")
-        ];
-        restartIfChanged = false;
-      };
+    systemd.services."getty@" = {
+      serviceConfig.ExecStart = [
+        # override upstream default with an empty ExecStart
+        ""
+        (pkgs.writers.writeDash "getty" autologinScript)
+      ];
+      environment.TTY = "%I";
+      restartIfChanged = false;
+    };
 
-    systemd.services."autovt@" =
-      { serviceConfig.ExecStart = [
-          "" # override upstream default with an empty ExecStart
-          (gettyCmd "--noclear %I $TERM")
-        ];
-        restartIfChanged = false;
-      };
+    systemd.services."serial-getty@" = {
+      serviceConfig.ExecStart = [
+        "" # override upstream default with an empty ExecStart
+        (gettyCmd "%I --keep-baud $TERM")
+      ];
+      restartIfChanged = false;
+    };
 
-    systemd.services."container-getty@" =
-      { serviceConfig.ExecStart = [
-          "" # override upstream default with an empty ExecStart
-          (gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM")
-        ];
-        restartIfChanged = false;
-      };
+    systemd.services."autovt@" = {
+      serviceConfig.ExecStart = [
+        "" # override upstream default with an empty ExecStart
+        (gettyCmd "--noclear %I $TERM")
+      ];
+      restartIfChanged = false;
+    };
 
-    systemd.services.console-getty =
-      { serviceConfig.ExecStart = [
-          "" # override upstream default with an empty ExecStart
-          (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")
-        ];
-        serviceConfig.Restart = "always";
-        restartIfChanged = false;
-        enable = mkDefault config.boot.isContainer;
-      };
+    systemd.services."container-getty@" = {
+      serviceConfig.ExecStart = [
+        "" # override upstream default with an empty ExecStart
+        (gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM")
+      ];
+      restartIfChanged = false;
+    };
 
-    environment.etc.issue = mkDefault
-      { # Friendly greeting on the virtual consoles.
-        source = pkgs.writeText "issue" ''
+    systemd.services.console-getty = {
+      serviceConfig.ExecStart = [
+        "" # override upstream default with an empty ExecStart
+        (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")
+      ];
+      serviceConfig.Restart = "always";
+      restartIfChanged = false;
+      enable = mkDefault config.boot.isContainer;
+    };
 
-          [1;32m${config.services.getty.greetingLine}[0m
-          ${config.services.getty.helpLine}
+    environment.etc.issue = mkDefault {
+      # Friendly greeting on the virtual consoles.
+      source = pkgs.writeText "issue" ''
 
-        '';
-      };
+        [1;32m${config.services.getty.greetingLine}[0m
+        ${config.services.getty.helpLine}
+
+      '';
+    };
 
   };
 

@@ -1,0 +1,8 @@
+use "std/testing"
+
+#test
+fn testPi(t: &testing::T) {
+		if getPi() != 3.14 {
+				t.Errorf("PI not precise enough")
+		}
+}

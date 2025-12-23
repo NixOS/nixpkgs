@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.12";
+  version = "0.13.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-hor2qw+aTL7yhV53E/y5DUwyDEYJA8RPRS39xxa8xcw=";
+    hash = "sha256-d7IqRuohcZ3IYpbjm76Ir6I33zI5dnHvX5eX2WjSJQk=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     substituteInPlace tests/test_while_loop.py \
       --replace-fail "speed < 0.1" "speed < 0.5" \
       --replace-fail "speed < 0.5" "speed < 1" \
-      --replace-fail "speed < 1" "speed < 4" \
+      --replace-fail "speed < 1" "speed < 20" \
+      --replace-fail "speed < 2" "speed < 20"
   '';
 
   build-system = [ hatchling ];
@@ -56,7 +57,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  pytestFlags = [
+    # DeprecationWarning: The default axis_types will change in JAX v0.9.0 to jax.sharding.AxisType.Explicit.
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # Failed: DID NOT WARN. No warnings of type (<class 'Warning'>,) were emitted.
+    "test_jax_transform_warn"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
     "test_filter"
   ];

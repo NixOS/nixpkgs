@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   disabledTests = [
     # Broken tests
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Create Python data objects";
     homepage = "https://github.com/mwilliamson/python-cobble";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

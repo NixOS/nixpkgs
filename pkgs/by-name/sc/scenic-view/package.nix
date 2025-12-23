@@ -21,7 +21,7 @@ let
 
   src = fetchFromGitHub {
     owner = "JonathanGiles";
-    repo = pname;
+    repo = "scenic-view";
     rev = version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
@@ -29,9 +29,9 @@ let
   gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = pname;
-    exec = pname;
+    name = "scenic-view";
+    desktopName = "scenic-view";
+    exec = "scenic-view";
     comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
     mimeTypes = [
       "application/java"
@@ -61,16 +61,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp build/libs/scenicview.jar $out/share/${pname}/${pname}.jar
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
+    mkdir -p $out/bin $out/share/scenic-view
+    cp build/libs/scenicview.jar $out/share/scenic-view/scenic-view.jar
+    makeWrapper ${jdk}/bin/java $out/bin/scenic-view --add-flags "-jar $out/share/scenic-view/scenic-view.jar"
 
     runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications";
     mainProgram = "scenic-view";
@@ -80,12 +80,12 @@ stdenv.mkDerivation rec {
       This lets you find bugs and get things pixel perfect without having to do the compile-check-compile dance.
     '';
     homepage = "https://github.com/JonathanGiles/scenic-view/";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wirew0rm ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wirew0rm ];
+    platforms = lib.platforms.all;
   };
 }

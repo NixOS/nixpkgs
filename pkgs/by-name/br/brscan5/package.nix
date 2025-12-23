@@ -9,6 +9,7 @@
   glib,
   libredirect,
   nixosTests,
+  udevCheckHook,
 }:
 let
   myPatchElf = file: ''
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     patchelf
+    udevCheckHook
   ];
   buildInputs = [
     libusb1
@@ -79,6 +81,9 @@ stdenv.mkDerivation rec {
       # driver is hardcoded to look in /opt/brother/scanner/brscan5/models for model metadata.
       # patch it to look in /etc/opt/brother/scanner/models instead, so nixos environment.etc can make it available
       printf '/etc/opt/brother/scanner/models\x00' | dd of=opt/brother/scanner/brscan5/libsane-brother5.so.1.0.7 bs=1 seek=${toString patchOffsetBytes} conv=notrunc
+
+      # remove deprecated SYSFS udev rule
+      sed -i -e '/^SYSFS/d' opt/brother/scanner/brscan5/udev-rules/*.rules
     '';
 
   installPhase = ''
@@ -111,7 +116,7 @@ stdenv.mkDerivation rec {
     echo "brother5" > $out/etc/sane.d/dll.d/brother5.conf
 
     mkdir -p $out/etc/udev/rules.d
-    cp -p $PATH_TO_BRSCAN5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules \
+    install -m 0444 $PATH_TO_BRSCAN5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules \
       $out/etc/udev/rules.d/49-brother-mfp-brscan5-1.0.2-2.rules
 
     ETCDIR=$out/etc/opt/brother/scanner/brscan5
@@ -120,6 +125,9 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # We want to run the udevCheckHook
+  doInstallCheck = true;
 
   dontPatchELF = true;
 

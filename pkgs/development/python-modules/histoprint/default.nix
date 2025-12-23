@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pretty print histograms to the console";
     mainProgram = "histoprint";
     homepage = "https://github.com/scikit-hep/histoprint";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -25,10 +25,10 @@ buildPythonPackage rec {
     "pmsensor.serial_pm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read data from environment sensors";
     homepage = "https://github.com/open-homeautomation/pmsensor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

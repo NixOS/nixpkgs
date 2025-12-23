@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "xcffib";
-  version = "1.7.1";
+  version = "1.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M3dcHQRh8ZJV/FTiLOkU4QoT+2W8e7oOq6/ufwh4z9s=";
+    hash = "sha256-K6xgY2lnVOiHHC9AcwR7Uz792Cx33fhnYgEWcJfMUlM=";
   };
 
   postPatch = ''
@@ -45,12 +45,12 @@ buildPythonPackage rec {
   # Tests use xvfb
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
-    maintainers = with maintainers; [ kamilchm ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [ kamilchm ];
   };
 }

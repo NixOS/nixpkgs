@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "upscaler";
-  version = "1.4.1";
+  version = "1.6.2";
 
   pyproject = false; # meson instead of pyproject
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "Upscaler";
     rev = version;
-    hash = "sha256-WjhefFyd1hnngD/uIvgjAI4i6AyoldDJKWocvotGw9g=";
+    hash = "sha256-Mt0bFPidg0/bxd3NP+1jVgWzRemaGKlU/l5orKbziB0=";
   };
 
   passthru.updateScript = gitUpdater { };

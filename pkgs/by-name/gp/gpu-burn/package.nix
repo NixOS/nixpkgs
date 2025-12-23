@@ -6,7 +6,6 @@
   lib,
 }:
 let
-  inherit (lib.attrsets) getBin;
   inherit (lib.lists) last map optionals;
   inherit (lib.trivial) boolToString;
   inherit (config) cudaSupport;
@@ -17,11 +16,11 @@ let
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot isJetsonBuild;
+  inherit (cudaPackages.flags) cudaCapabilities dropDots isJetsonBuild;
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "unstable-2024-04-09";
+  version = "0-unstable-2024-04-09";
 
   strictDeps = true;
 
@@ -36,7 +35,11 @@ backendStdenv.mkDerivation {
     substituteInPlace gpu_burn-drv.cpp \
       --replace-fail \
         '#define COMPARE_KERNEL "compare.ptx"' \
-        "#define COMPARE_KERNEL \"$out/share/compare.ptx\""
+        '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.ptx"'
+    substituteInPlace Makefile \
+      --replace-fail \
+        '${''''${CUDAPATH}/bin/nvcc''}' \
+        '${lib.getExe cuda_nvcc}'
   '';
 
   nativeBuildInputs = [
@@ -52,8 +55,9 @@ backendStdenv.mkDerivation {
   ];
 
   makeFlags = [
-    "CUDAPATH=${getBin cuda_nvcc}"
-    "COMPUTE=${last (map dropDot cudaCapabilities)}"
+    # NOTE: CUDAPATH assumes cuda_cudart is a single output containing all of lib, dev, and stubs.
+    "CUDAPATH=${cuda_cudart}"
+    "COMPUTE=${last (map dropDots cudaCapabilities)}"
     "IS_JETSON=${boolToString isJetsonBuild}"
   ];
 

@@ -7,20 +7,20 @@
 
 let
   pname = "sudachidict";
-  version = "20241021";
+  version = "20251022";
 
   srcs = {
     core = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-core.zip";
-      hash = "sha256-wLcRhR4TCazRxDMKXYZ8T5Vn+rnY6aJmwExIpTIAyeE=";
+      hash = "sha256-kfYGjDO7kO0Gy0YhBceetl2B51iH3myCVt3MCo9nYq0=";
     };
     small = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-small.zip";
-      hash = "sha256-Qhp9seFCnLnLLWoQ2izDVKcdca+xZE1s+SCqfj0d3sU=";
+      hash = "sha256-Y8vX4+G5JB0AmiKP5lGYh/t3NeXSgyGd0Wvv6qFpikE=";
     };
     full = fetchzip {
       url = "https://github.com/WorksApplications/SudachiDict/releases/download/v${version}/sudachi-dictionary-${version}-full.zip";
-      hash = "sha256-8nlUDGHUKrZ0ZFEnnL4rHiu2ybyW25G6Bm6vF4smxWE=";
+      hash = "sha256-w/yBWslxIIdniR9c3LN4G4n94VqT73506u/knL9/Pj8=";
     };
   };
 in
@@ -47,15 +47,16 @@ lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type 
 
     passthru = {
       dict-type = dict-type;
+      updateScript = ./update.sh;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Lexicon for Sudachi";
       homepage = "https://github.com/WorksApplications/SudachiDict";
       changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ natsukium ];
-      platforms = platforms.all;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ natsukium ];
+      platforms = lib.platforms.all;
       # it is a waste of space and time to build this package in hydra since it is just data
       hydraPlatforms = [ ];
     };

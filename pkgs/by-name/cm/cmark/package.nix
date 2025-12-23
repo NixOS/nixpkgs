@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
       export ${lib_path}=$(readlink -f ./src)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CommonMark parsing and rendering library and program in C";
     mainProgram = "cmark";
     homepage = "https://github.com/commonmark/cmark";
     changelog = "https://github.com/commonmark/cmark/raw/${version}/changelog.txt";
-    maintainers = [ maintainers.michelk ];
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    maintainers = [ lib.maintainers.michelk ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

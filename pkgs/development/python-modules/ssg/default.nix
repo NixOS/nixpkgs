@@ -47,11 +47,11 @@ buildPythonPackage {
 
   postInstall = "rm -rf $out/${python.sitePackages}/scripts";
 
-  meta = with lib; {
+  meta = {
     description = "TCRF syllable segmenter for Thai";
     homepage = "https://github.com/ponrawee/ssg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ vizid ];
     mainProgram = "ssg-cli";
   };
 }

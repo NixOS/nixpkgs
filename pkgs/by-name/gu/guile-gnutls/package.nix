@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, gnutls
-, guile
-, libtool
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  gnutls,
+  guile,
+  libtool,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
   pname = "guile-gnutls";
-  version = "4.0.1";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
-    hash = "sha256-AfC6O+qDe7RNyxs//M48Lr6IaZ0KO92sHYeeR1qXh+Q=";
+    hash = "sha256-zABn8+60IbwXJHFAlipJCG31RQ8NPnHFW/VBotK57ys=";
   };
 
   strictDeps = true;
@@ -38,16 +39,16 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-guile-site-dir=${builtins.placeholder "out"}/${guile.siteDir}"
-    "--with-guile-site-ccache-dir=${builtins.placeholder "out"}/${guile.siteCcacheDir}"
-    "--with-guile-extension-dir=${builtins.placeholder "out"}/lib/guile/${guile.effectiveVersion}/extensions"
+    "--with-guile-site-dir=${placeholder "out"}/${guile.siteDir}"
+    "--with-guile-site-ccache-dir=${placeholder "out"}/${guile.siteCcacheDir}"
+    "--with-guile-extension-dir=${placeholder "out"}/lib/guile/${guile.effectiveVersion}/extensions"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/gnutls/guile/";
     description = "Guile bindings for GnuTLS library";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
 }

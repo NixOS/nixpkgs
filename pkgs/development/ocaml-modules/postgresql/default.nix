@@ -1,14 +1,21 @@
-{ lib, fetchurl, buildDunePackage, pkg-config, dune-configurator, libpq }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  pkg-config,
+  dune-configurator,
+  libpq,
+}:
 
 buildDunePackage rec {
   pname = "postgresql";
-  version = "5.1.3";
+  version = "5.2.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/mmottl/postgresql-ocaml/releases/download/${version}/postgresql-${version}.tbz";
-    hash = "sha256-RipVP8mj+tYwO8LrVASvVc36ZAJYjMI4x6Uj5J50Eww=";
+    hash = "sha256-uU/K7hvQljGnUzClPRdod32tpVAGd/sGqh3NqIygJ4A=";
   };
 
   nativeBuildInputs = [ pkg-config ];

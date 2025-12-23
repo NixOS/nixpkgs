@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-nightlight";
     rev = version;
     sha256 = "sha256-77+JGJ0/Y9UJwOuKfJAqjNnmZfBy/YiEwCybx6yoVwM=";
   };
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Night Light Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-nightlight";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

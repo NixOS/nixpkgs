@@ -13,29 +13,30 @@
   numpy,
   editdistance,
   munkres,
+  pandas,
   levenshtein,
 }:
 
 buildPythonPackage rec {
   pname = "panphon";
-  version = "0.21.2";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FpYHbkEeQzyPfbpigZ1EMNlzLLFWB/wNcGHYFYiEE2k=";
+    hash = "sha256-OD1HfVh/66HKWoKHjiT+d8FkXW++ngHJ6X1JjYopujU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    setuptools # need for pkg_resources
     unicodecsv
     pyyaml
     regex
     numpy
     editdistance
     munkres
+    pandas
     levenshtein # need for align_wordlists.py script
   ];
 
@@ -52,10 +53,10 @@ buildPythonPackage rec {
     "panphon.distance"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for using the International Phonetic Alphabet with phonological features";
     homepage = "https://github.com/dmort27/panphon";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

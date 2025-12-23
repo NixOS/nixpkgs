@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "(mainly) Chinese Unicode font";
+    description = "Chinese Unicode font optimized for screen display";
     homepage = "http://wenq.org";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.pkmx ];

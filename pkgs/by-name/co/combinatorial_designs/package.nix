@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mv * "$out/share/combinatorial_designs"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Data for Combinatorial Designs";
     longDescription = ''
       Current content:
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       - The table of MOLS (10 000 integers) from the Handbook of Combinatorial
         Designs, 2ed.
     '';
-    license = licenses.publicDomain;
-    platforms = platforms.all;
-    maintainers = teams.sage.members;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.sage ];
   };
 }

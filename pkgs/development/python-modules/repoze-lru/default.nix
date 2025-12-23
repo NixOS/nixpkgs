@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "repoze/lru/tests.py" ];
+  enabledTestPaths = [ "repoze/lru/tests.py" ];
 
   disabledTests = [
     # time sensitive tests
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "repoze" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny LRU cache implementation and decorator";
     homepage = "http://www.repoze.org/";
     changelog = "https://github.com/repoze/repoze.lru/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
 }

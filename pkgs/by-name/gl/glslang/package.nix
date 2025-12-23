@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "15.1.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    hash = "sha256-E1Zenf7XSGoozx4hxdOlMu+XZ6mJROSu7jIVYPWe3go=";
+    hash = "sha256-/DwdyuSGCx22zsXZrcZGTECfsIqvzPQzTZ2mU8EkjxY=";
   };
 
   outputs = [
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ralith ];
   };
 }

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   tenacity,
 }:
@@ -16,14 +17,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "basnijholt";
-    repo = pname;
+    repo = "aiokef";
     rev = "v${version}";
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
       --replace "--mypy" ""
   '';
 
@@ -32,15 +32,18 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for KEF speakers";
     homepage = "https://github.com/basnijholt/aiokef";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

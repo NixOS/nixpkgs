@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Parser for the lightweight Ducktype syntax for Mallard";
     homepage = "https://github.com/projectmallard/mallard-ducktype";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

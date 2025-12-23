@@ -32,16 +32,16 @@ let
     };
   };
   pname = "dep-tree";
-  version = "0.23.3";
+  version = "0.23.4";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "gabotechs";
-    repo = pname;
+    repo = "dep-tree";
     rev = "v${version}";
-    hash = "sha256-xS/8ech4ZhkMMyXbMQmCg+4oKg/jULhqgiNooYf5y8k=";
+    hash = "sha256-m+afcnwVvPrD+S7c/kfE8mqlD7kO+VPI6sSXCCjXWZM=";
   };
 
   vendorHash = "sha256-KoVOjZq+RrJ2gzLnANHPPtbEY1ztC0rIXWD9AXAxqMg=";

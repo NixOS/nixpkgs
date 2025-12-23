@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gosmore";
-  version = "unstable-2014-03-17";
+  version = "0-unstable-2014-03-17";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
@@ -41,14 +41,14 @@ stdenv.mkDerivation rec {
     "--binary"
   ]; # patch has dos style eol
 
-  meta = with lib; {
+  meta = {
     description = "Open Street Map viewer";
     mainProgram = "gosmore";
     homepage = "https://sourceforge.net/projects/gosmore/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
-    license = licenses.bsd2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd2;
   };
 }

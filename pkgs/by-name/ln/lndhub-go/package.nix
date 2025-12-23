@@ -19,11 +19,11 @@ buildGoModule rec {
 
   doCheck = false; # tests require networking
 
-  meta = with lib; {
+  meta = {
     description = "Accounting wrapper for the Lightning Network";
     homepage = "https://github.com/getAlby/lndhub.go";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "lndhub.go";
   };
 }

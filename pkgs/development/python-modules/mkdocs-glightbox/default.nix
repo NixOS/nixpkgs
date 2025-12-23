@@ -2,37 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
+  selectolax,
   pytestCheckHook,
   pytest-click,
+  pytest-timeout,
   mkdocs-material,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-glightbox";
-  version = "0.4.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blueswen";
     repo = "mkdocs-glightbox";
     tag = "v${version}";
-    hash = "sha256-9HgXK7cE2z0fvKwEpCG5PTaaqGiet9KMNN2Ys9VJgeE=";
+    hash = "sha256-6HkBeZHBLR3HqWh3WjjCqxR85nQuQqq9+7UwbXOZHRk=";
   };
 
   build-system = [
-    setuptools
+    hatchling
+  ];
+
+  dependencies = [
+    selectolax
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-click
+    pytest-timeout
     mkdocs-material
   ];
 
   disabledTests = [
     # Checks compatible with material privacy plugin, which is currently not packaged in nixpkgs.
     "privacy"
+  ];
+
+  disabledTestPaths = [
+    # dont execute benchmarks on hydra
+    "tests/test_perf.py"
   ];
 
   pythonImportsCheck = [

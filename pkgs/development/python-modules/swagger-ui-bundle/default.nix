@@ -31,9 +31,9 @@ buildPythonPackage rec {
   # package contains no tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "bundled swagger-ui pip package";
+  meta = {
+    description = "Bundled swagger-ui pip package";
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

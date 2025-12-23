@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "reviewdog";
-  version = "0.20.3";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "reviewdog";
+    repo = "reviewdog";
     rev = "v${version}";
-    hash = "sha256-B0gu6vhbnhMx2CNQzQlIIwsycBup6bnmAk/1C6F/AWE=";
+    hash = "sha256-VYhn98tDyUS2HNd7sEJD/M8kln9/AMeGxm84SxSSOy8=";
   };
 
-  vendorHash = "sha256-k7o2r9CQNDVGgCGoYZ02nK443eolN+UGdEp2ItEkURg=";
+  vendorHash = "sha256-V4hL4PHtpLV6SHg7sCbs5tHIEuosRMr7jynTFdD1eZ8=";
 
   doCheck = false;
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X github.com/reviewdog/reviewdog/commands.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";
     mainProgram = "reviewdog";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/blob/v${version}/CHANGELOG.md";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

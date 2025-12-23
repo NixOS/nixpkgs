@@ -20,56 +20,46 @@
   nixosTests,
   nix-update-script,
   darwin,
+  versionCheckHook,
   zlib,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.45.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ixBB0rMHeeEAGbazRAXiWMZOOf4nFC8iY0qZ4fmARWk=";
+    repo = "vector";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jwEJ+myovZYcohvxH1VvvOW8xok3HSLvhtMsLC2M3KY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qEo8GYGwUWtfMT6m9TaQzneV+tglUnapjFtuxL5yudw=";
+  cargoHash = "sha256-EfgDL5asygFqr8pVcTR9BsYU3fcG28xhrCn5nCkVfcA=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      perl
-      git
-      rustPlatform.bindgenHook
-    ]
-    # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-  buildInputs =
-    [
-      oniguruma
-      openssl
-      protobuf
-      rdkafka
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rust-jemalloc-sys
-      libiconv
-      coreutils
-      zlib
-    ];
-
-  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
-  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
-  # TODO remove when upgrading Vector
-  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    perl
+    git
+    rustPlatform.bindgenHook
+  ]
+  # Provides the mig command used by the build scripts
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  buildInputs = [
+    oniguruma
+    openssl
+    protobuf
+    rdkafka
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rust-jemalloc-sys
+    libiconv
+    coreutils
+    zlib
+  ];
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
@@ -122,6 +112,12 @@ rustPlatform.buildRustPackage {
       --replace-fail "#[tokio::test]" ""
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       inherit (nixosTests) vector;
@@ -129,15 +125,16 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       happysalada
     ];
-    platforms = with platforms; all;
+    platforms = with lib.platforms; all;
     mainProgram = "vector";
   };
-}
+})

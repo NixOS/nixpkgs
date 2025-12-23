@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.mate-terminal;
 
-  meta = with lib; {
+  meta = {
     description = "MATE desktop terminal emulator";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

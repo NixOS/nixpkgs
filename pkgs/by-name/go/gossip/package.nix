@@ -1,6 +1,5 @@
 {
   cmake,
-  darwin,
   fetchFromGitHub,
   SDL2,
   ffmpeg_6,
@@ -10,6 +9,7 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
+  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
@@ -18,6 +18,7 @@
   wayland-scanner,
   nix-update-script,
   libX11,
+  libxcb,
   libXcursor,
   libXi,
   libXrandr,
@@ -25,17 +26,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gossip";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "mikedilger";
     repo = "gossip";
     tag = "v${version}";
-    hash = "sha256-GhkILnt573deQU42uN4YnhzDxirEvCpsvBnp6hF06v4=";
+    hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gKyGDk64EJMSFovBLFhkOHRoWrYRERTH2O2McHe2fMM=";
+  cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
   RUSTFLAGS = "--cfg tokio_unstable";
@@ -46,41 +46,33 @@ rustPlatform.buildRustPackage rec {
     "lang-cjk"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    rustPlatform.bindgenHook
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      ffmpeg_6
-      fontconfig
-      libGL
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.ForceFeedback
-      darwin.apple_sdk.frameworks.AVFoundation
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ];
+  buildInputs = [
+    SDL2
+    ffmpeg_6
+    fontconfig
+    libGL
+    libxkbcommon
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libX11
+    libxcb
+    libXcursor
+    libXi
+    libXrandr
+  ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;
@@ -120,6 +112,7 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
+      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 

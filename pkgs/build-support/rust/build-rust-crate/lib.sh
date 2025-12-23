@@ -60,7 +60,11 @@ build_bin() {
     --color ${colors} \
 
   if [ "$crate_name_" != "$crate_name" ]; then
-    mv target/bin/$crate_name_ target/bin/$crate_name
+    if [ -f "target/bin/$crate_name_.wasm" ]; then
+      mv target/bin/$crate_name_.wasm target/bin/$crate_name.wasm
+    else
+      mv target/bin/$crate_name_ target/bin/$crate_name
+    fi
   fi
 }
 

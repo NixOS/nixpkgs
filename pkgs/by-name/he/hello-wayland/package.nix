@@ -34,20 +34,20 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     mkdir -p $out/bin
     install hello-wayland $out/bin
-    runHook postBuild
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Hello world Wayland client";
     homepage = "https://github.com/emersion/hello-wayland";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "hello-wayland";
   };
 }

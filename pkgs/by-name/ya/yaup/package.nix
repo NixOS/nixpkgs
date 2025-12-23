@@ -30,6 +30,12 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Replace GNU ld's --export-dynamic with macOS linker equivalent
+    substituteInPlace src/Makefile.in \
+      --replace-fail '-Wl,--export-dynamic' '-Wl,-export_dynamic'
+  '';
+
   nativeBuildInputs = [
     intltool
     pkg-config
@@ -41,7 +47,7 @@ stdenv.mkDerivation {
     miniupnpc
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Holarse-Linuxgaming/yaup";
     description = "Yet Another UPnP Portmapper";
     longDescription = ''
@@ -49,11 +55,9 @@ stdenv.mkDerivation {
       Portforward your incoming traffic to a specified local ip.
       Mostly used for IPv4.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-    # ld: unknown option: --export-dynamic
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "yaup";
   };
 }

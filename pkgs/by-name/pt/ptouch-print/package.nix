@@ -47,12 +47,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to print labels on Brother P-Touch printers on Linux";
     homepage = "https://dominic.familie-radermacher.ch/projekte/ptouch-print/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "ptouch-print";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "localstack";
-  version = "4.2.0";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     tag = "v${version}";
-    hash = "sha256-cmBorHlYL7xmq4SIdyGu11/byCJK+OzrJsqVZHJDDTE=";
+    hash = "sha256-vyk86iuYI6dGUCtijauwT7p4hSWNXluz5cHHRm8zdOE=";
   };
 
   build-system = with python3.pkgs; [
@@ -65,10 +65,10 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fully functional local Cloud stack";
     homepage = "https://github.com/localstack/localstack";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "localstack";
   };

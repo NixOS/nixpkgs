@@ -103,14 +103,14 @@ llvmPackages.stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modified version of uClibc for KLEE";
     longDescription = ''
       klee-uclibc is a bitcode build of uClibc meant for compatibility with the
       KLEE symbolic virtual machine.
     '';
     homepage = "https://github.com/klee/klee-uclibc";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ numinit ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ numinit ];
   };
 }

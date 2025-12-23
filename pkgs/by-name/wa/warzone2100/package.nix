@@ -27,6 +27,8 @@
   vulkan-headers,
   vulkan-loader,
   shaderc,
+  protobuf,
+  libzip,
 
   testers,
   warzone2100,
@@ -47,34 +49,35 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "4.5.5";
+  version = "4.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-B/YbrnIWh+3rYtpId+hQMKA6BTpZPWRRlPxld44EgP8=";
+    hash = "sha256-JqxVOEYCQ/ihSdMSZNpxyqTTPvaoAQA37/JOdyeMpQs=";
   };
 
-  buildInputs =
-    [
-      SDL2
-      libtheora
-      libvorbis
-      libopus
-      openal
-      openalSoft
-      physfs
-      miniupnpc
-      libsodium
-      curl
-      libpng
-      freetype
-      harfbuzz
-      sqlite
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      vulkan-headers
-      vulkan-loader
-    ];
+  buildInputs = [
+    SDL2
+    libtheora
+    libvorbis
+    libopus
+    openal
+    openalSoft
+    physfs
+    miniupnpc
+    libsodium
+    curl
+    libpng
+    freetype
+    harfbuzz
+    sqlite
+    protobuf
+    libzip
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    vulkan-headers
+    vulkan-loader
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -91,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CONFIGURE_WZ_COMPILER_WARNINGS()" ""
   '';
 
   cmakeFlags = [
@@ -105,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
@@ -124,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/Warzone2100/warzone2100";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free RTS game, originally developed by Pumpkin Studios";
     mainProgram = "warzone2100";
     longDescription = ''
@@ -139,12 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
       variety of possible units and tactics.
     '';
     homepage = "https://wz2100.net";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      astsmtl
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
     broken = stdenv.hostPlatform.isDarwin;

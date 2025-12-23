@@ -1,22 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
-  callPackage,
   callPackages,
   fetchFromGitHub,
+  installShellFiles,
 }:
 buildGoModule rec {
   pname = "treefmt";
-  version = "2.1.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "treefmt";
     rev = "v${version}";
-    hash = "sha256-XD61nZhdXYrFzprv/YuazjXK/NWP5a9oCF6WBO2XTY0=";
+    hash = "sha256-Okwwu5ls3BwLtm8qaq+QX3P+6uwuodV82F3j38tuszk=";
   };
 
-  vendorHash = "sha256-0qCOpLMuuiYNCX2Lqa/DUlkmDoPIyUzUHIsghoIaG1s=";
+  vendorHash = "sha256-fiBpyhbkzyhv7i4iHDTsgFcC/jx6onOzGP/YMcUAe9I=";
 
   subPackages = [ "." ];
 
@@ -29,40 +30,46 @@ buildGoModule rec {
     "-X github.com/numtide/treefmt/v2/build.Version=v${version}"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd treefmt \
+      --bash <($out/bin/treefmt --completion bash) \
+      --fish <($out/bin/treefmt --completion fish) \
+      --zsh <($out/bin/treefmt --completion zsh)
+  '';
+
   passthru = {
-    /**
-      Wrap treefmt, configured  using structured settings.
-
-      # Type
-
-      ```
-      AttrSet -> Derivation
-      ```
-
-      # Inputs
-
-      - `name`: `String` (default `"treefmt-configured"`)
-      - `settings`: `Module` (default `{ }`)
-      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
-    */
-    withConfig = callPackage ./with-config.nix { };
-
-    /**
-      Build a treefmt config file from structured settings.
-
-      # Type
-
-      ```
-      Module -> Derivation
-      ```
-    */
-    buildConfig = callPackage ./build-config.nix { };
+    inherit (callPackages ./lib.nix { })
+      evalConfig
+      withConfig
+      buildConfig
+      ;
 
     tests = callPackages ./tests.nix { };
+
+    # Documentation for functions defined in `./lib.nix`
+    functionsDoc = callPackages ./functions-doc.nix { };
+
+    # Documentation for options declared in `treefmt.evalConfig` configurations
+    optionsDoc = callPackages ./options-doc.nix { };
   };
 
   meta = {
-    description = "one CLI to format the code tree";
+    description = "One CLI to format the code tree";
+    longDescription = ''
+      [treefmt](${meta.homepage}) streamlines the process of applying formatters
+      to your project, making it a breeze with just one command line.
+
+      The `treefmt` package provides functions for configuring treefmt using
+      the module system, which are documented in the [treefmt section] of the
+      Nixpkgs Manual.
+
+      Alternatively, treefmt can be configured using [treefmt-nix].
+
+      [treefmt section]: https://nixos.org/manual/nixpkgs/unstable#treefmt
+      [treefmt-nix]: https://github.com/numtide/treefmt-nix
+    '';
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

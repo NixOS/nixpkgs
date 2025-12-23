@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T4NbblrjDv9gBLslwV/Y9Pbs0RBVluhtsYcf730YET0=";
+    hash = "sha256-MaSSe437tcl+38lWnNo7Zze7/YQwiB6MxIoLCIztYUc=";
   };
 
   # tests make dns requests and fails
@@ -30,12 +30,12 @@ python3Packages.buildPythonApplication rec {
     git-filter-repo
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       qyliss
       mfrw

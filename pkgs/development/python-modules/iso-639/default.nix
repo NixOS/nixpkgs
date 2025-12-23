@@ -17,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/noumar/iso639";
     description = "ISO 639 library for Python";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ zraexy ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ zraexy ];
   };
 }

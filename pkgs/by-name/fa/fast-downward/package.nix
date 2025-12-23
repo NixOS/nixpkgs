@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     python build.py release
+
+    runHook postConfigure
   '';
 
   postPatch = ''
@@ -64,12 +68,12 @@ stdenv.mkDerivation rec {
       --replace 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Domain-independent planning system";
     mainProgram = "fast-downward";
     homepage = "https://www.fast-downward.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

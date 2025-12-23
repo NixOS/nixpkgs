@@ -24,17 +24,13 @@ the host. This enables apiserver, controllerManager, scheduler,
 addonManager, kube-proxy and etcd:
 
 ```nix
-{
-  services.kubernetes.roles = [ "master" ];
-}
+{ services.kubernetes.roles = [ "master" ]; }
 ```
 
 While this will enable the kubelet and kube-proxy only:
 
 ```nix
-{
-  services.kubernetes.roles = [ "node" ];
-}
+{ services.kubernetes.roles = [ "node" ]; }
 ```
 
 Assigning both the master and node roles is usable if you want a single
@@ -42,7 +38,10 @@ node Kubernetes cluster for dev or testing purposes:
 
 ```nix
 {
-  services.kubernetes.roles = [ "master" "node" ];
+  services.kubernetes.roles = [
+    "master"
+    "node"
+  ];
 }
 ```
 
@@ -54,7 +53,7 @@ to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
 ::: {.note}
 It is mandatory to configure:
 [](#opt-services.kubernetes.masterAddress).
-The masterAddress must be resolveable and routeable by all cluster nodes.
+The masterAddress must be resolvable and routable by all cluster nodes.
 In single node clusters, this can be set to `localhost`.
 :::
 

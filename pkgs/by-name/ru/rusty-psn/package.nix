@@ -13,64 +13,64 @@
   openssl,
   xorg,
   libGL,
+  libxkbcommon,
+  wayland,
   withGui ? false, # build GUI version
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.5.7";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     tag = "v${version}";
-    hash = "sha256-ldGbEsKK2l7d3V7pWtDij0tS2fPrNhvxdIw8N8GvqaY=";
+    hash = "sha256-3sy3PBiV7ioRnYwI2vF6lGVj3Q/Ls6GmENyGePCgQ3k=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-fOG01cTwbBddSKCC7YObcbxYRIs548HtPnIYF7lvKwg=";
+  cargoHash = "sha256-orsCExYx9ZGtda13mmFk7665WFwZ7E7rr5wEcDxc+vY=";
 
   # Tests require network access
   doCheck = false;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals withGui [
-      copyDesktopItems
-      cmake
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals withGui [
+    copyDesktopItems
+    cmake
+  ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals withGui [
-      fontconfig
-      glib
-      gtk3
-      freetype
-      openssl
-      xorg.libxcb
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
-      xorg.libxcb
-      libGL
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals withGui [
+    fontconfig
+    glib
+    gtk3
+    freetype
+    openssl
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libxcb
+    libGL
+    libxkbcommon
+    wayland
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ (if withGui then "egui" else "cli") ];
 
-  postFixup =
-    ''
-      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
-    ''
-    + lib.optionalString withGui ''
-      mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
-    '';
+  postFixup = ''
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
+  ''
+  + lib.optionalString withGui ''
+    mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
+  '';
 
   desktopItem = lib.optionalString withGui (makeDesktopItem {
     name = "rusty-psn";
@@ -96,6 +96,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ AngryAnt ];
-    mainProgram = "rusty-psn";
+    mainProgram = if withGui then "rusty-psn-gui" else "rusty-psn";
   };
 }

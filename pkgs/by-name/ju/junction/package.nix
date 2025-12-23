@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "junction";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
-    rev = "v${version}";
-    hash = "sha256-0zY6Dp0aKHtBHSTiGbI5o6876BsARbo8/BbArl0RaMY=";
+    tag = "v${version}";
+    hash = "sha256-gnFig8C46x73gAUl9VVx3Y3hrhEVeP/DvaYHYuv9RTg=";
     fetchSubmodules = true;
   };
 
@@ -68,12 +68,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "re.sonny.Junction";
     description = "Choose the application to open files and links";
     homepage = "https://apps.gnome.org/Junction/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hqurve ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hqurve ];
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
   };
 }

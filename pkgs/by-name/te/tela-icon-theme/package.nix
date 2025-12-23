@@ -4,6 +4,8 @@
   fetchFromGitHub,
   gtk3,
   jdupes,
+  adwaita-icon-theme,
+  libsForQt5,
   hicolor-icon-theme,
 }:
 
@@ -23,13 +25,18 @@ stdenvNoCC.mkDerivation rec {
     jdupes
   ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    libsForQt5.breeze-icons
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall
@@ -42,13 +49,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
     changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${src.rev}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
-    platforms = subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ figsoda ];
+    platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+    maintainers = [ ];
   };
 }

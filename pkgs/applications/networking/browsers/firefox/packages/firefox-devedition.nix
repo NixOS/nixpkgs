@@ -9,15 +9,24 @@
 
 buildMozillaMach rec {
   pname = "firefox-devedition";
-  binaryName = pname;
-  version = "137.0b6";
+  binaryName = "firefox-devedition";
+  version = "146.0b9";
   applicationName = "Firefox Developer Edition";
   requireSigning = false;
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "91fb3e010d62805ec29758bb46b3d520dc3a3e2b0f040de4e284aeb5fe812b5b084563f560a229f54a404a5130429d60b35eac15d89f1cb586fd364b61a7f8be";
+    sha512 = "6fac88325150620388f49ffe1ba0385216184b98e0faa54e01804292563798a032a8cef375dbc78a41b9ba3e18d1e9258aca5e090bc827f2e7e842f76ee34c25";
   };
+
+  # buildMozillaMach sets MOZ_APP_REMOTINGNAME during configuration, but
+  # unfortunately if the branding file also defines MOZ_APP_REMOTINGNAME, the
+  # branding file takes precedence. ("aurora" is the only branding to do this,
+  # so far.) We remove it so that the name set in buildMozillaMach takes
+  # effect.
+  extraPostPatch = ''
+    sed -i '/^MOZ_APP_REMOTINGNAME=/d' browser/branding/aurora/configure.sh
+  '';
 
   meta = {
     changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";

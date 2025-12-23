@@ -1,0 +1,26 @@
+diff --git i/doc/conf.py w/doc/conf.py
+index 8d042818b..b4f0572bd 100644
+--- i/doc/conf.py
++++ w/doc/conf.py
+@@ -8,10 +8,6 @@ import yaml
+ from git import Repo
+ import filecmp
+ 
+-# Download and link swagger-ui files
+-if not os.path.isdir('.sphinx/deps/swagger-ui'):
+-    Repo.clone_from('https://github.com/swagger-api/swagger-ui', '.sphinx/deps/swagger-ui', depth=1)
+-
+ os.makedirs('.sphinx/_static/swagger-ui/', exist_ok=True)
+ 
+ if not os.path.islink('.sphinx/_static/swagger-ui/swagger-ui-bundle.js'):
+@@ -151,10 +147,6 @@ if os.path.exists("./related_topics.yaml"):
+     with open("./related_topics.yaml", "r") as fd:
+         myst_substitutions.update(yaml.safe_load(fd.read()))
+ 
+-intersphinx_mapping = {
+-    'cloud-init': ('https://cloudinit.readthedocs.io/en/latest/', None)
+-}
+-
+ if ("LOCAL_SPHINX_BUILD" in os.environ) and (os.environ["LOCAL_SPHINX_BUILD"] == "True"):
+     swagger_url_scheme = "/api/#{{path}}"
+ else:

@@ -13,13 +13,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "lkrg";
-  version = "0.9.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lkrg-org";
     repo = "lkrg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dxgkEj8HGOX4AMZRNbhv3utrNjKDFpp7kZmj17Wp2HE=";
+    hash = "sha256-Eb0+rgbI+gbY1NjVyPLB6kZgDsYoSCxjy162GophiMI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "LKRG Linux Kernel module";
     longDescription = "LKRG performs runtime integrity checking of the Linux kernel and detection of security vulnerability exploits against the kernel.";
     homepage = "https://lkrg.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ chivay ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ chivay ];
+    platforms = lib.platforms.linux;
     broken = kernel.kernelOlder "5.10" || isKernelRT;
   };
 })

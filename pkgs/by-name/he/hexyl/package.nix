@@ -17,12 +17,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TmFvv+jzOSM8kKCxBbUoDsUjKRPTplhWheVfIjS5nsY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-QjQoGtLF5BAxWFiLZZYCpwrYCdiVfvG/lAukCNZGsec=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
@@ -42,7 +41,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       dywedir
-      figsoda
       SuperSandro2000
     ];
     mainProgram = "hexyl";

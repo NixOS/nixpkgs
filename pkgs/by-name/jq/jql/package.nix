@@ -1,28 +1,45 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jql";
-  version = "8.0.4";
+  version = "8.0.9";
 
   src = fetchFromGitHub {
     owner = "yamafaktory";
     repo = "jql";
-    rev = "jql-v${version}";
-    hash = "sha256-J+Zqmfev2DyD0SLFGaI0egVgmEC+a2nqBrNDGX4zNnE=";
+    tag = "jql-v${finalAttrs.version}";
+    hash = "sha256-1gkKOOR2mIUKrbVb1BlFxVuskL6y7s6mrI99xTfjjTI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tMxy0bi3518VjzJuy4Agpq+UydMEyJRqavX5kIsBYjY=";
+  cargoHash = "sha256-7pSvHZqvPW9SXwU0AtQHIjgHQCSKPzrBhNxLY5ZAcMw=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "JSON Query Language CLI tool built with Rust";
     homepage = "https://github.com/yamafaktory/jql";
-    changelog = "https://github.com/yamafaktory/jql/releases/tag/${src.rev}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ akshgpt7 figsoda ];
+    changelog = "https://github.com/yamafaktory/jql/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      akshgpt7
+    ];
     mainProgram = "jql";
   };
-}
+})

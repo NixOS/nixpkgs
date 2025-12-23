@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-loader";
-  version = "1.4.304.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-qPknv8BvfJoewFfORXsFZlUnae36czHfOPXmtGccrOk=";
+    hash = "sha256-+cuKdhdCMIL4b+GzIpCNrDBmC7cVX0iX2QW7BQIj9Tc=";
   };
 
   patches = [ ./fix-pkgconfig.patch ];
@@ -32,26 +32,26 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [ vulkan-headers ]
-    ++ lib.optionals enableX11 [
-      libX11
-      libxcb
-      libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  buildInputs = [
+    vulkan-headers
+  ]
+  ++ lib.optionals enableX11 [
+    libX11
+    libxcb
+    libXrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include"
-      (lib.cmakeBool "BUILD_WSI_XCB_SUPPORT" enableX11)
-      (lib.cmakeBool "BUILD_WSI_XLIB_SUPPORT" enableX11)
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
-    ++ lib.optional stdenv.hostPlatform.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include"
+    (lib.cmakeBool "BUILD_WSI_XCB_SUPPORT" enableX11)
+    (lib.cmakeBool "BUILD_WSI_XLIB_SUPPORT" enableX11)
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
+  ++ lib.optional stdenv.hostPlatform.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
+  ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
 
   outputs = [
     "out"
@@ -73,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "LunarG Vulkan loader";
     homepage = "https://www.lunarg.com";
-    platforms = platforms.unix ++ platforms.windows;
-    license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
     broken = finalAttrs.version != vulkan-headers.version;
     pkgConfigModules = [ "vulkan" ];
   };

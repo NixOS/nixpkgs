@@ -13,17 +13,18 @@ let
     mkOption
     types
     recursiveUpdate
+    optionalAttrs
     ;
 
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
-  defaults = {
-    # without UseDefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
-    # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
-    General.UseDefaultInterface =
-      with config.networking.networkmanager;
-      (enable && (wifi.backend == "iwd"));
-  };
+  defaults =
+    with config.networking.networkmanager;
+    optionalAttrs (enable && (wifi.backend == "iwd")) {
+      # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
+      # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
+      DriverQuirks.DefaultInterface = "?*";
+    };
   configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
 
 in
@@ -59,6 +60,12 @@ in
         assertion = !config.networking.wireless.enable;
         message = ''
           Only one wireless daemon is allowed at the time: networking.wireless.enable and networking.wireless.iwd.enable are mutually exclusive.
+        '';
+      }
+      {
+        assertion = !(cfg.settings ? General && cfg.settings.General ? UseDefaultInterface);
+        message = ''
+          `networking.wireless.iwd.settings.General.UseDefaultInterface` has been deprecated. Use `networking.wireless.iwd.settings.DriverQuirks.DefaultInterface` instead.
         '';
       }
     ];

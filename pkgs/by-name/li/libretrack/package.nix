@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  flutterPackages-source,
+  flutter329,
   libappindicator,
 }:
 
-flutterPackages-source.stable.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "libretrack";
   version = "1.7.0";
 
@@ -30,6 +30,9 @@ flutterPackages-source.stable.buildFlutterApplication rec {
   nativeBuildInputs = [
     libappindicator
   ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
 
   postInstall = ''
     substituteInPlace snap/gui/org.proninyaroslav.libretrack.desktop \

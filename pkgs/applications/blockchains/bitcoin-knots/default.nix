@@ -2,111 +2,203 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
-  autoreconfHook,
+  fetchFromGitHub,
+  cmake,
   pkg-config,
-  util-linux,
-  hexdump,
+  installShellFiles,
   autoSignDarwinBinariesHook,
   wrapQtAppsHook ? null,
   boost,
   libevent,
-  miniupnpc,
+  libsodium,
   zeromq,
   zlib,
   db48,
   sqlite,
   qrencode,
+  libsystemtap,
   qtbase ? null,
   qttools ? null,
   python3,
+  versionCheckHook,
   withGui,
   withWallet ? true,
+  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+  gnupg,
+  imagemagick,
+  librsvg,
+  libicns,
+  # Signatures from the following GPG public keys checked during verification of the source code.
+  # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
+  builderKeys ? [
+    "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
+    "DAED928C727D3E613EC46635F5073C4F4882FFFC" # leo-haf.gpg
+  ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "26.1.knots20240325";
+  version = "29.2.knots20251110";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
-    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
+    url = "https://bitcoinknots.org/files/29.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
+    # hash retrieved from signed SHA256SUMS
+    hash = "sha256-ZoFQsrNSkIFdSkiwMX64UnWtjVZu+g+64AV7OjtCcBI=";
   };
 
-  patches = [
-    # upnp: add compatibility for miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
-      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+    gnupg
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals withGui [
+    imagemagick # for convert
+    librsvg # for rsvg-convert
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && withGui) [
+    libicns # for png2icns
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals withGui [ wrapQtAppsHook ];
+  buildInputs = [
+    boost
+    libevent
+    libsodium
+    zeromq
+    zlib
+  ]
+  ++ lib.optionals enableTracing [ libsystemtap ]
+  ++ lib.optionals withWallet [ sqlite ]
+  # building with db48 (for legacy descriptor wallet support) is broken on Darwin
+  ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
+  ++ lib.optionals withGui [
+    qrencode
+    qtbase
+    qttools
+  ];
 
-  buildInputs =
-    [
-      boost
-      libevent
-      miniupnpc
-      zeromq
-      zlib
-    ]
-    ++ lib.optionals withWallet [ sqlite ]
-    ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
-    ++ lib.optionals withGui [
-      qrencode
-      qtbase
-      qttools
-    ];
+  preUnpack =
+    let
+      majorVersion = lib.versions.major finalAttrs.version;
 
-  configureFlags =
-    [
-      "--with-boost-libdir=${boost.out}/lib"
-      "--disable-bench"
-    ]
-    ++ lib.optionals (!doCheck) [
-      "--disable-tests"
-      "--disable-gui-tests"
-    ]
-    ++ lib.optionals (!withWallet) [
-      "--disable-wallet"
-    ]
-    ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-    ];
+      publicKeys = fetchFromGitHub {
+        owner = "bitcoinknots";
+        repo = "guix.sigs";
+        rev = "cc710f4715ff5ff74a9e89d8b6798884fe1e9d40";
+        sha256 = "sha256-PVvsqY//75dv+VrtapCNroD1z1zUaA/UBGvfq3zNySo=";
+      };
+
+      checksums = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
+        hash = "sha256-A6UPWZtdm3/P62JmEvzIxHC8zdPpHdLnbdD/xXMMo+I=";
+      };
+
+      signatures = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
+        hash = "sha256-tEw/GnnwDf1G16fx6NzXPCvAnOzWY16iW93CowoFfA8=";
+      };
+
+      verifyBuilderKeys =
+        let
+          script = publicKey: ''
+            echo "Checking if public key ${publicKey} signed the checksum file..."
+            grep "^\[GNUPG:\] VALIDSIG .* ${publicKey}$" verify.log > /dev/null
+            echo "OK"
+          '';
+        in
+        builtins.concatStringsSep "\n" (map script builderKeys);
+    in
+    ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      gpg --no-autostart --batch --import ${publicKeys}/builder-keys/*
+      ln -s ${checksums} ./SHA256SUMS
+      ln -s ${signatures} ./SHA256SUMS.asc
+      ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
+      gpg --no-autostart --batch --verify --status-fd 1 SHA256SUMS.asc SHA256SUMS > verify.log
+      ${verifyBuilderKeys}
+      echo "Checking ${checksums} for bitcoin-${finalAttrs.version}.tar.gz..."
+      grep bitcoin-${finalAttrs.version}.tar.gz SHA256SUMS > SHA256SUMS.filtered
+      echo "Verifying the checksum of bitcoin-${finalAttrs.version}.tar.gz..."
+      sha256sum -c SHA256SUMS.filtered
+      popd
+    '';
+
+  postInstall = ''
+    cd ..
+    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
+
+    installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoind.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
+  ''
+  + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_BENCH" false)
+    (lib.cmakeBool "WITH_ZMQ" true)
+    # building with db48 (for legacy wallet support) is broken on Darwin
+    (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "WITH_USDT" enableTracing)
+  ]
+  ++ lib.optionals (!finalAttrs.doCheck) [
+    (lib.cmakeBool "BUILD_TESTS" false)
+    (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
+    (lib.cmakeBool "BUILD_GUI_TESTS" false)
+  ]
+  ++ lib.optionals (!withWallet) [
+    (lib.cmakeBool "ENABLE_WALLET" false)
+  ]
+  ++ lib.optionals withGui [
+    (lib.cmakeBool "BUILD_GUI" true)
+  ];
+
+  NIX_LDFLAGS = lib.optionals (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+  ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 
   doCheck = true;
 
-  checkFlags =
-    [ "LC_ALL=en_US.UTF-8" ]
-    # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
-    # See also https://github.com/NixOS/nixpkgs/issues/24256
-    ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
+  checkFlags = [
+    "LC_ALL=en_US.UTF-8"
+  ]
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "Derivative of Bitcoin Core with a collection of improvements";
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/bitcoin-cli";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  meta = {
+    description = "Derivative of Bitcoin Core";
     homepage = "https://bitcoinknots.org/";
-    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${finalAttrs.version}/doc/release-notes.md";
+    maintainers = with lib.maintainers; [
       prusnak
       mmahut
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

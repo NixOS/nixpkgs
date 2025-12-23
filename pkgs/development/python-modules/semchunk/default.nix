@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   mpire,
   tqdm,
@@ -9,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "semchunk";
-  version = "3.1.2";
+  version = "3.2.5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JF/7/sj/IJ6gwtTIQ1BCb6jUYKJaRgzB7Y7rNrtjKVw=";
+  src = fetchFromGitHub {
+    owner = "isaacus-dev";
+    repo = "semchunk";
+    tag = "v${version}";
+    hash = "sha256-LUMpERJ8bZkpRn0Tay0BoDXmRgPaV7z0LulpTILHgjk=";
   };
 
   build-system = [
@@ -31,8 +33,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A fast, lightweight and easy-to-use Python library for splitting text into semantically meaningful chunks";
-    homepage = "https://pypi.org/project/semchunk/";
+    description = "Fast, lightweight and easy-to-use Python library for splitting text into semantically meaningful chunks";
+    changelog = "https://github.com/isaacus-dev/semchunk/releases/tag/v${version}";
+    homepage = "https://github.com/isaacus-dev/semchunk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ booxter ];
   };

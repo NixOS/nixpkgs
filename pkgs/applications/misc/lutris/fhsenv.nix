@@ -21,7 +21,8 @@ let
       gtksourceview
       gnome-desktop
       libgnome-keyring
-      webkitgtk_4_0
+      webkitgtk_4_1
+      adwaita-icon-theme
     ];
   xorgDeps =
     pkgs: with pkgs.xorg; [
@@ -78,7 +79,6 @@ buildFHSEnv {
 
       # Adventure Game Studio
       allegro
-      dumb
 
       # Battle.net
       jansson
@@ -102,7 +102,7 @@ buildFHSEnv {
       gettext
       portaudio
       miniupnpc
-      mbedtls_2
+      mbedtls
       lzo
       sfml
       gsm

@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "gcc" "$CC"
+      --replace-fail "gcc" "$CC"
+    sed -i '40i #include <time.h>' dog.c
   '';
 
   installPhase = ''
@@ -27,12 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lwn.net/Articles/421072/";
-    description = "cat replacement";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qknight ];
-    platforms = platforms.all;
+    description = "'cat' replacement";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = lib.platforms.all;
     mainProgram = "dog";
   };
 }

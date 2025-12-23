@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-potr";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,10 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycrypto ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python OTR implementation";
     homepage = "http://python-otr.pentabarf.de/";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

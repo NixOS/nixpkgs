@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "scim2-server";
-  version = "0.1.4";
+  version = "0.1.7";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "scim2_server";
-    hash = "sha256-5BPkRVon70BWVL2Pvh9kISVnyP2FXR2s3FOWCpcBiZQ=";
+    hash = "sha256-nMS6vjMZ/Lyu0kiVH+IlmxZsuu7McY7AZS/xamfZSlk=";
   };
 
   build-system = [ hatchling ];
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scim2_server" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight SCIM2 server prototype";
     homepage = "https://github.com/python-scim/scim2-server";
     changelog = "https://github.com/python-scim/scim2-server/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

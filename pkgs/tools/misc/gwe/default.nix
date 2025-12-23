@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System utility designed to provide information, control the fans and overclock your NVIDIA card";
     homepage = "https://gitlab.com/leinardi/gwe";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "gwe";
   };

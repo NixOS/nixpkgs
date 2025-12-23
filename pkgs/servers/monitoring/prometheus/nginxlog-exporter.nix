@@ -22,11 +22,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginxlog; };
 
-  meta = with lib; {
+  meta = {
     description = "Export metrics from Nginx access log files to Prometheus";
     mainProgram = "prometheus-nginxlog-exporter";
     homepage = "https://github.com/martin-helmich/prometheus-nginxlog-exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mmahut ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

@@ -12,18 +12,18 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.18.3";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    hash = "sha256-ByKj9rnRGS3B+BEqeo7QJvjSxVXytOXydmZMx7lK8Xc=";
+    hash = "sha256-C6ez20eTMGGvORqB00F3mSciExlOmcG7iKvz9F3Sls8=";
   };
 
   modRoot = "./agent";
 
-  vendorHash = "sha256-L+oww1HlPWgAYK16OG5bWiDb/OW7uarY8LZyw9b85ac=";
+  vendorHash = "sha256-sXyM9tPsIW+x5zjiah1sr+iGq2JC2VcLHKvoFW6yr3M=";
 
   ldflags = [
     "-s"
@@ -48,7 +48,7 @@ buildGoModule rec {
     wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables easy access any Linux device behind firewall and NAT";
     longDescription = ''
       ShellHub is a modern SSH server for remotely accessing Linux devices via
@@ -57,9 +57,9 @@ buildGoModule rec {
       edge and cloud computing.
     '';
     homepage = "https://shellhub.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ otavio ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ otavio ];
+    platforms = lib.platforms.linux;
     mainProgram = "agent";
   };
 }

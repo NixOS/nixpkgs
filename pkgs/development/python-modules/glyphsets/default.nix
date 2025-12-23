@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-jza6VQ3PZAQPku2hyo0KeO59r64Q9TpqLCI0dIX/URU=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm>=8.1.0,<8.2" setuptools_scm
+  '';
+
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   build-system = [
@@ -61,12 +66,12 @@ buildPythonPackage rec {
     "test_definitions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Fonts glyph set metadata";
     homepage = "https://github.com/googlefonts/glyphsets";
     changelog = "https://github.com/googlefonts/glyphsets/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "glyphsets";
   };
 }

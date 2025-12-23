@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xca";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "chris2511";
     repo = "xca";
     rev = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-2TqqHTutG+5YU2mJNTS3pvtEqV7qKVB+j/dipdmEkIk=";
+    hash = "sha256-28K6luMuYcDuNKd/aQG9HX9VN5YkKArl/GQn5spQ+Sg=";
   };
 
   buildInputs = [
@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$out/xca.app" "$out/Applications/xca.app"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "X509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
     mainProgram = "xca";
     homepage = "https://hohnstaedt.de/xca/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       offline
       peterhoeg
     ];

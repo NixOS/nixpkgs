@@ -8,23 +8,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakefmt";
-  version = "0.10.2";
+  version = "0.11.2";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8.1";
+  disabled = python3.pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QoalkDtm2n5SdjxegYTaTtyVETt1j0RIUogE+1T5t1o=";
+    hash = "sha256-6a03WEAeApH3pFNgB1xXODhrWKGxYNOIJ7QGMNn3NeE=";
   };
 
-  build-system = [ python3.pkgs.poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     black
     click
-    importlib-metadata
-    toml
+  ];
+
+  pythonRelaxDeps = [
+    "black"
+    "click"
   ];
 
   pythonImportsCheck = [ "snakefmt" ];

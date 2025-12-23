@@ -2,37 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   chromadb,
   langchain-core,
-  langchain-tests,
   numpy,
-  pdm-backend,
+
+  # tests
+  langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-GFDaUA0E25YDHYLwrpsAuOiBWFvHByl61XhwK5NmJbg=";
+    hash = "sha256-fKFcl4NiNaypJGoV8bDrH7MwnsXNtnm7Hkxp/+SLc2c=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
-  patches = [ ./001-async-test.patch ];
-
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
   ];
@@ -51,20 +57,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Bad integration test, not used or vetted by the langchain team
-    "test_chroma_update_document"
-  ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-chroma==([0-9.]+)$"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-chroma==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-chroma==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting Chroma and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/chroma";
     license = lib.licenses.mit;

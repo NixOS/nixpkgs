@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   '';
   installTargets = "install-no-doc";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://s48.org/";
     description = "Scheme 48 interpreter for R5RS";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.siraben ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.siraben ];
   };
 }

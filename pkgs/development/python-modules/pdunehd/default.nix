@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdunehd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Dune HD media player API";
     homepage = "https://github.com/valentinalexeev/pdunehd";
     changelog = "https://github.com/valentinalexeev/pdunehd/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

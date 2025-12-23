@@ -35,11 +35,11 @@ let
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with lib; {
+      meta = {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
-        license = licenses.g4sl;
-        platforms = platforms.all;
+        license = lib.licenses.g4sl;
+        platforms = lib.platforms.all;
       };
     };
 in

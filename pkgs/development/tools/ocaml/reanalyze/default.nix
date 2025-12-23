@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchFromGitHub,
   cppo,
@@ -26,5 +27,6 @@ buildDunePackage rec {
     changelog = "https://github.com/rescript-lang/reanalyze/blob/v${version}/Changes.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = lib.versionAtLeast ocaml.version "5.3";
   };
 }

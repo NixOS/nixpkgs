@@ -14,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "opentsne";
-    version = "1.0.2";
+    version = "1.0.4";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ let
       owner = "pavlin-policar";
       repo = "openTSNE";
       tag = "v${version}";
-      hash = "sha256-e1YXF9cdguzcEW0KanIHYlZQiUc+FH8IVOaPshAswco=";
+      hash = "sha256-cGnhdGpDiBlTeeveCtnveslDytpNO8vtYkxQQ7FhsuA=";
     };
 
     build-system = [
@@ -60,12 +60,12 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Modular Python implementation of t-Distributed Stochasitc Neighbor Embedding";
       homepage = "https://github.com/pavlin-policar/openTSNE";
       changelog = "https://github.com/pavlin-policar/openTSNE/releases/tag/v${version}";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ lucasew ];
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ lucasew ];
     };
   };
 in

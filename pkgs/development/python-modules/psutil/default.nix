@@ -2,27 +2,25 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  IOKit,
   pytestCheckHook,
   python,
-  pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.1.1";
+  version = "7.1.2";
   pyproject = true;
 
   inherit stdenv;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-z4SWcowY8tC0UZjwaJW+UvNmEXEXRrfzDEZLQitQ4vU=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
   };
 
   postPatch = ''
@@ -35,11 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Segfaults on darwin:
@@ -50,7 +43,7 @@ buildPythonPackage rec {
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sandboxing (missing specific errors)
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
     "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];
@@ -70,11 +63,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -1,30 +1,28 @@
 {
-  fetchurl,
   lib,
   stdenv,
+  fetchFromGitLab,
   pkg-config,
-  boost,
-  lua,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ansifilter";
-  version = "2.21";
+  version = "2.22";
 
-  src = fetchurl {
-    url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    hash = "sha256-XqfP39B1LVoWklnaAFwYuQN2KANv2J2LgmJLrOycE5A=";
+  src = fetchFromGitLab {
+    owner = "saalen";
+    repo = "ansifilter";
+    tag = finalAttrs.version;
+    hash = "sha256-jCgucC5mHkDwVtTKP92RBStxpouQCR7PHWkDt0y+9BM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    boost
-    lua
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   postPatch = ''
     # avoid timestamp non-determinism with '-n'
-    substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
+    substituteInPlace makefile --replace-fail 'gzip -9f' 'gzip -9nf'
   '';
 
   makeFlags = [
@@ -32,16 +30,17 @@ stdenv.mkDerivation rec {
     "conf_dir=/etc/ansifilter"
   ];
 
-  meta = with lib; {
-    description = "Tool to convert ANSI to other formats";
+  meta = {
+    description = "ANSI sequence filter";
     mainProgram = "ansifilter";
     longDescription = ''
-      Tool to remove ANSI or convert them to another format
-      (HTML, TeX, LaTeX, RTF, Pango or BBCode)
+      Ansifilter handles text files containing ANSI terminal escape codes.
+      The command sequences may be stripped or be interpreted to generate formatted
+      output (HTML, RTF, TeX, LaTeX, BBCode, Pango).
     '';
-    homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.html";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.Adjective-Object ];
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://gitlab.com/saalen/ansifilter";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

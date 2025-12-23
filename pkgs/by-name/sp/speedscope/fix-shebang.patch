@@ -1,0 +1,13 @@
+diff --git a/scripts/prepack.sh b/scripts/prepack.sh
+index 2172706..1f8f152 100755
+--- a/scripts/prepack.sh
++++ b/scripts/prepack.sh
+@@ -41,7 +41,7 @@ mkdir -p "$OUTDIR"
+ # Place info about the current commit into the build dir to easily identify releases
+ npm ls -depth -1 | head -n 1 | cut -d' ' -f 1 > "$OUTDIR"/release.txt
+ date >> "$OUTDIR"/release.txt
+-git rev-parse HEAD >> "$OUTDIR"/release.txt
++cp COMMIT "$OUTDIR"/release.txt
+ 
+ # Place a json schema for the file format into the build directory too
+ node scripts/generate-file-format-schema-json.js > "$OUTDIR"/file-format-schema.json

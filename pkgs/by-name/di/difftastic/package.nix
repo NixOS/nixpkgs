@@ -2,23 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
   versionCheckHook,
   nix-update-script,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "difftastic";
-  version = "0.63.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = "difftastic";
     tag = finalAttrs.version;
-    hash = "sha256-BxWCSkSeDyiiGBY2u0ahPrIhYq2lbujoPPtZGq/OkI0=";
+    hash = "sha256-AgY/v1z4ETHawT+yEwTEaPOLC9GmhR8bGUUBKHY/meQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kIqaZ8truDivMV6uo1+j9bmXQReREZjHSr89ZvVDWCw=";
+  cargoHash = "sha256-TTg5Cky1exlvJokIw1IFGbPq4eJe2xSAPsGgI7BU+Jw=";
+
+  buildInputs = [ rust-jemalloc-sys ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };
 
   # skip flaky tests
   checkFlags = [ "--skip=options::tests::test_detect_display_width" ];
@@ -37,7 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ethancedwards8
-      figsoda
       matthiasbeyer
       defelo
     ];

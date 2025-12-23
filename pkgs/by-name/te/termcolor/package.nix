@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
@@ -15,6 +16,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-2RXQ8sn2VNhQ2WZfwCCeQuM6x6C+sLA6ulAaFtaDMZw=";
   };
+
+  patches = [
+    # bump minimal required cmake version
+    (fetchpatch {
+      url = "https://github.com/ikalnytskyi/termcolor/commit/89f20096bef51de347ec6f99345f65147359bd7c.patch?full_index=1";
+      hash = "sha256-xouiacA+Kpjz+KOw6PgNRCXHAMENiqMww2WTvAvUpCE=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -32,11 +41,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ library for printing colored messages";
     homepage = "https://github.com/ikalnytskyi/termcolor";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

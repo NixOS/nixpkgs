@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-multiselectfield";
-  version = "0.1.13";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_multiselectfield";
     inherit version;
-    hash = "sha256-Q31yYy9MDKQWlRkXYyUpw9HUK2K7bDwD4zlvpQJlvpQ=";
+    hash = "sha256-P4tP/z4H1Kkci7S4Cbw1yusitBdptgb0ye3FO41ypmc=";
   };
 
   build-system = [ setuptools ];

@@ -5,6 +5,7 @@
   gawk,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,9 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "TUI Application launcher with Desktop Entry support";
     mainProgram = "sway-launcher-desktop";
     longDescription = ''
@@ -50,8 +53,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Biont/sway-launcher-desktop";
     changelog = "https://github.com/Biont/sway-launcher-desktop/releases/tag/v${version}";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.pyrox0 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.pyrox0 ];
   };
 }

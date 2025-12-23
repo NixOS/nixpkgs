@@ -18,9 +18,9 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  meta = {
     description = "Binary addon for steam controller";
-    platforms = platforms.all;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.kodi ];
   };
 }

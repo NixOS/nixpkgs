@@ -25,11 +25,11 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";
     homepage = "https://github.com/fullstorydev/grpcurl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ knl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ knl ];
     mainProgram = "grpcurl";
   };
 }

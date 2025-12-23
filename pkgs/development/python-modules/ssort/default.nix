@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ssort";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bwhmather";
     repo = "ssort";
     tag = version;
-    hash = "sha256-TINktjuTdyRYkqIs3Jyv6vobSBqV1iPoHrG36sBHah8=";
+    hash = "sha256-QVodBJsYryVue0QXaZbjo1JtwuCBUiuZ+XU+I7jJCq8=";
   };
 
   build-system = [ setuptools ];

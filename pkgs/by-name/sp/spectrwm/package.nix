@@ -4,49 +4,59 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  xorg,
+  libXrandr,
+  libXcursor,
+  libXft,
+  libXt,
+  xcbutil,
+  xcbutilkeysyms,
+  xcbutilwm,
+  writeShellScript,
+  curl,
+  jq,
+  nix-update,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spectrwm";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
-    rev = "SPECTRWM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-Dnn/iIrceiAVuMR8iMGcc7LqNhWC496eT5gNrYOInRU=";
+    tag = "SPECTRWM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-wuBF+gCoqg5xIcb42rygS+lglghWqoNe0uAzyhe76eI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = (
-    with xorg;
-    [
-      libXrandr
-      libXcursor
-      libXft
-      libXt
-      xcbutil
-      xcbutilkeysyms
-      xcbutilwm
-    ]
-    ++ [ libbsd ]
-  );
+  buildInputs = [
+    libXrandr
+    libXcursor
+    libXft
+    libXt
+    xcbutil
+    xcbutilkeysyms
+    xcbutilwm
+    libbsd
+  ];
 
-  prePatch =
-    let
-      subdir = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
-    in
-    "cd ${subdir}";
+  sourceRoot = finalAttrs.src.name + (if stdenv.hostPlatform.isDarwin then "/osx" else "/linux");
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  passthru.updateScript = writeShellScript "update-spectrwm" ''
+    latestVersion=$(${lib.getExe curl} ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --silent --fail --location https://api.github.com/repos/conformal/spectrwm/releases/latest | ${lib.getExe jq} --raw-output .tag_name | grep -oP '\d+' | paste -sd.)
+    ${lib.getExe nix-update} spectrwm --version=$latestVersion
+  '';
+
+  meta = {
     description = "Tiling window manager";
     homepage = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ rake5k ];
-    license = licenses.isc;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      rake5k
+    ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
 
     longDescription = ''
       spectrwm is a small dynamic tiling window manager for X11. It

@@ -29,10 +29,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://smondet.gitlab.io/genspio-doc/";
     description = "Typed EDSL to generate POSIX Shell scripts";
-    license = licenses.asl20;
-    maintainers = [ maintainers.alexfmpe ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.alexfmpe ];
   };
 }

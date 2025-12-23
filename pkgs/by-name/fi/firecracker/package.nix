@@ -4,23 +4,24 @@
   fetchFromGitHub,
   cmake,
   gcc,
+  libseccomp,
   rust-bindgen,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firecracker";
-  version = "1.10.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firecracker";
-    rev = "v${version}";
-    hash = "sha256-kLQPAHbj8Q425Z5zdwofyHz+sd3bf7zGmcMjKn9yTKc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-J44D6LeIq/0HDLw/vd1AII+pSJMcligJkyvpQPZun4U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TnEPNTeeX1KP+9HLD/oGF0sZGcXDHpc1Q1wCWw3L6mU=";
+  cargoHash = "sha256-HG0HZes01shEtuVK7QCYmy/zsU0snbwsqCtev7u3/WI=";
 
   # For aws-lc-sys@0.22.0: use external bindgen.
   AWS_LC_SYS_EXTERNAL_BINDGEN = "true";
@@ -30,20 +31,35 @@ rustPlatform.buildRustPackage rec {
   #   inlined from 'OPENSSL_memcpy' at aws-lc/crypto/asn1/../internal.h
   #   inlined from 'aws_lc_0_22_0_i2c_ASN1_BIT_STRING' at aws-lc/crypto/asn1/a_bitstr.c
   # glibc/.../string_fortified.h: error: '__builtin_memcpy' specified bound exceeds maximum object size [-Werror=stringop-overflow=]
+  #
+  # For cpu-template-helper: patch build.rs to use stdenv's cc which ensures the correct compiler is used across all stdenv's.
+  #
+  # For seccompiler: fix hardcoded /usr/local/lib path to libseccomp.lib, this makes sure rustc can find seccomp across stdenv's(including pkgsStatic).
   postPatch = ''
     substituteInPlace $cargoDepsCopy/aws-lc-sys-*/aws-lc/crypto/asn1/a_bitstr.c \
       --replace-warn '(len > INT_MAX - 1)' '(len < 0 || len > INT_MAX - 1)'
+
+    substituteInPlace src/cpu-template-helper/build.rs \
+      --replace-warn '"gcc"' "\"$CC\""
+
+    substituteInPlace src/seccompiler/build.rs \
+      --replace-warn "/usr/local/lib" "${lib.getLib libseccomp}/lib"
   '';
 
   nativeBuildInputs = [
     cmake
     gcc
-    rust-bindgen  # for aws-lc-sys@0.22.0
+    rust-bindgen # for aws-lc-sys@0.22.0
     rustPlatform.bindgenHook
   ];
 
   cargoBuildFlags = [ "--workspace" ];
-  cargoTestFlags = [ "--package" "firecracker" "--package" "jailer" ];
+  cargoTestFlags = [
+    "--package"
+    "firecracker"
+    "--package"
+    "jailer"
+  ];
 
   checkFlags = [
     # basic tests to skip in sandbox
@@ -63,6 +79,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=resource_limits::tests::test_set_resource_limits"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -75,18 +96,18 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
-    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${finalAttrs.version}";
     mainProgram = "firecracker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       usertam
       thoughtpolice
       qjoly
       techknowlogick
     ];
   };
-}
+})

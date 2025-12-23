@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
-  version = "2.13.15";
+  version = "2.13.22";
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
     rev = "v${version}";
-    hash = "sha256-cEiv1EjsEvyreRERrCGKKpJdA1IKvuyVmgA7S3EkEnU=";
+    hash = "sha256-0fHjJBG/nTjXX8MVArvKDvn2ho9GLEodqAv/DcHLWis=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -32,16 +32,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel modules for LTTng tracing";
     homepage = "https://lttng.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       gpl2Only
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     broken =
       (lib.versions.majorMinor kernel.modDirVersion) == "5.10"
       || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";

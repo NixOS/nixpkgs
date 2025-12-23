@@ -16,12 +16,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jesopo";
-    repo = pname;
+    repo = "ircstates";
     rev = "v${version}";
     hash = "sha256-Mq9aOj6PXzPjaz3ofoPcAbur59oUWffmEg8aHt0v+0Q=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "pendulum" ];
 
   dependencies = [
     irctokens
@@ -35,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ircstates" ];
 
-  meta = with lib; {
+  meta = {
     description = "sans-I/O IRC session state parsing library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/ircstates";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

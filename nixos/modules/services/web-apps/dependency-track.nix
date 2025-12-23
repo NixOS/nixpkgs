@@ -76,8 +76,12 @@ in
 
     javaArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "-Xmx4G" ];
-      description = "Java options passed to JVM";
+      default = [ ];
+      example = lib.literalExpression ''[ "-Xmx16G" ] '';
+      description = ''
+        Java options passed to JVM. Configuring this is usually not necessary, but for small systems
+        it can be useful to tweak the JVM heap size.
+      '';
     };
 
     database = {
@@ -509,17 +513,35 @@ in
       upstreams.dependency-track.servers."localhost:${toString cfg.port}" = { };
       virtualHosts.${cfg.nginx.domain} = {
         locations = {
-          "/".alias = "${cfg.package.frontend}/dist/";
+          "/" = {
+            alias = "${cfg.package.frontend}/dist/";
+            index = "index.html";
+            tryFiles = "$uri $uri/ /index.html";
+            extraConfig = ''
+              location ~ (index\.html)$ {
+                add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+                add_header Pragma "no-cache";
+                add_header Expires 0;
+              }
+            '';
+          };
           "/api".proxyPass = "http://dependency-track";
-          "= /static/config.json".alias = frontendConfigFile;
+          "= /static/config.json" = {
+            alias = frontendConfigFile;
+            extraConfig = ''
+              add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+              add_header Pragma "no-cache";
+              add_header Expires 0;
+            '';
+          };
         };
       };
     };
 
     systemd.services.dependency-track-postgresql-init = lib.mkIf cfg.database.createLocally {
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [ "dependency-track.service" ];
-      bindsTo = [ "postgresql.service" ];
+      bindsTo = [ "postgresql.target" ];
       path = [ config.services.postgresql.package ];
       serviceConfig = {
         Type = "oneshot";
@@ -554,7 +576,7 @@ in
           if cfg.database.createLocally then
             [
               "dependency-track-postgresql-init.service"
-              "postgresql.service"
+              "postgresql.target"
             ]
           else
             [ ];
@@ -567,15 +589,18 @@ in
         # provide settings via env vars to allow overriding default settings.
         environment = {
           HOME = "%S/dependency-track";
-        } // renderSettings cfg.settings;
+        }
+        // renderSettings cfg.settings;
         serviceConfig = {
           User = "dependency-track";
           Group = "dependency-track";
           DynamicUser = true;
           StateDirectory = "dependency-track";
-          LoadCredential =
-            [ "db_password:${cfg.database.passwordFile}" ]
-            ++ lib.optional cfg.settings."alpine.ldap.enabled"
+          LoadCredential = [
+            "db_password:${cfg.database.passwordFile}"
+          ]
+          ++
+            lib.optional cfg.settings."alpine.ldap.enabled"
               "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
         };
         script = ''

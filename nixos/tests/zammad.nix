@@ -21,7 +21,7 @@
 
   testScript = ''
     start_all()
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     machine.wait_for_unit("redis-zammad.service")
     machine.wait_for_unit("zammad-web.service")
     machine.wait_for_unit("zammad-websocket.service")

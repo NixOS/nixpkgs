@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
   version = "1.1.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "obfusk";
@@ -24,7 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     click
   ];
 
@@ -37,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /bin/bash ${bash}/bin/bash
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   postBuild = ''
@@ -56,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Copy/extract/patch android apk signatures & compare APKs";
     mainProgram = "apksigcopier";
     longDescription = ''
@@ -71,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
       * compare two APKs with different signatures (requires apksigner)
     '';
     homepage = "https://github.com/obfusk/apksigcopier";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ obfusk ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ obfusk ];
   };
 }

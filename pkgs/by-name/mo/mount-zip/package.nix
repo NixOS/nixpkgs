@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   boost,
   icu,
   libzip,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mount-zip";
-  version = "1.6";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mount-zip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-akiZwuwrsj+62TmZEJamlvQ1rSyFA4hrH0TcZ8T97z4=";
+    hash = "sha256-d6cjqsqIYFPuAWKxjlLXCWNKT33xbMW8gLriZWj0SSc=";
   };
 
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fuse
+    fuse3
     icu
     libzip
   ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

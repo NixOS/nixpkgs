@@ -2,23 +2,26 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.70.1";
+  version = "3.87.2";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FIqEVChYxtFqD9RcOttSk1QTPzG3HUBZmFI0wWY2BTQ=";
+    hash = "sha256-IPBMi8Bln99zcCxkNPGKWSUQMvtxHlRq4BwuoMCXkYw=";
   };
 
-  # Upstream doesn't provide a composer.lock.
-  # More info at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-4MrmdAiBruOF68KVrsnDPTKe9hrHvUmzfvyrG6rt7L0=";
+  vendorHash = "sha256-iQRY9DY2AEHuP3KJKC9ei8xcXgMvzxvyFl/9FwtN+kE=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
@@ -26,6 +29,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://cs.symfony.com/";
     license = lib.licenses.mit;
     mainProgram = "php-cs-fixer";
-    maintainers = lib.teams.php.members;
+    maintainers = [ lib.maintainers.patka ];
   };
 })

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
+    repo = "git-delete-merged-branches";
     tag = version;
     sha256 = "sha256-2MSdUpToOiurtiL0Ws2dLEWqd6wj4nQ2RsEepBytgAk=";
   };
@@ -26,10 +26,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ git ] ++ (with python3Packages; [ parameterized ]);
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to delete merged Git branches";
     homepage = "https://github.com/hartwork/git-delete-merged-branches/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

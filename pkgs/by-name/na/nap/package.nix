@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "maaslalani";
-    repo = pname;
+    repo = "nap";
     rev = "v${version}";
     sha256 = "0b3sz8zp1nwcjl02b3lli5yjc7vfay1ig6fs8bgxwz22imfx076p";
   };
@@ -20,7 +20,7 @@ buildGoModule rec {
   excludedPackages = ".nap";
 
   meta = {
-    description = "Code snippets in your terminal 🛌";
+    description = "Code snippets in your terminal";
     mainProgram = "nap";
     homepage = "https://github.com/maaslalani/nap";
     license = lib.licenses.mit;

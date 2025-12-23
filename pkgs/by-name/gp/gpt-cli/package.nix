@@ -4,16 +4,17 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "gpt-cli";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kharvd";
     repo = "gpt-cli";
     tag = "v${version}";
-    hash = "sha256-VUDkY0r1/2kSJ0afEIsuWg6JSZpKPVuRgUcmoucWBps=";
+    hash = "sha256-BNSMxf3rhKieXYnFqVdpiHmNCDjotJUflwa6mAgsVCc=";
   };
 
   build-system = with python3Packages; [
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     attrs
     black
     cohere
+    google-genai
     google-generativeai
     openai
     prompt-toolkit
@@ -46,13 +48,15 @@ python3Packages.buildPythonApplication rec {
     ++ [
       versionCheckHook
     ];
+
   versionCheckProgram = "${placeholder "out"}/bin/gpt";
+
   versionCheckProgramArg = "--version";
 
   meta = {
     description = "Command-line interface for ChatGPT, Claude and Bard";
     homepage = "https://github.com/kharvd/gpt-cli";
-    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/v${version}";
+    changelog = "https://github.com/kharvd/gpt-cli/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _404wolf ];
     mainProgram = "gpt";

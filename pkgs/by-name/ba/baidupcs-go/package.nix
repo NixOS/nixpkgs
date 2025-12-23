@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "baidupcs-go";
-  version = "3.9.7";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "qjfoidnh";
     repo = "BaiduPCS-Go";
     rev = "v${version}";
-    hash = "sha256-C88q2tNNuX+tIvYKHbRE76xfPe81UHqfezyRXzrxzlc=";
+    hash = "sha256-synfJtYZmIiK2SoTG0rt+qZ0ixXIXDXnrNL2s5eDtQY=";
   };
 
-  vendorHash = "sha256-msTlXtidxLTe3xjxTOWCqx/epFT0XPdwGPantDJUGpc=";
+  vendorHash = "sha256-oOZeBCHpAasi9K77xA+8HxZErGWKwb4OaWzWhHagtQE=";
 
   doCheck = false;
 
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   postInstall = ''
     rm -f $out/bin/AndroidNDKBuild
-    ln -s $out/bin/BaiduPCS-Go $out/bin/baidupcs-go
+    ln -s $out/bin/BaiduPCS-Go $out/bin/baidupcs-go || true
   '';
 
   postVersionCheck = ''

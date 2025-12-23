@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -11,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "quarkslab";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kdigger";
+    tag = "v${version}";
     hash = "sha256-hpLhtTENtOBQjm+CZRAcx1BG9831JUFIsLL57wZIrso=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -41,7 +42,7 @@ buildGoModule rec {
     ldflags+=" -X github.com/quarkslab/kdigger/commands.GITCOMMIT=$(cat COMMIT)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kdigger \
       --bash <($out/bin/kdigger completion bash) \
       --fish <($out/bin/kdigger completion fish) \
@@ -57,7 +58,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/quarkslab/kdigger";
     changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
     description = "In-pod context discovery tool for Kubernetes penetration testing";
@@ -68,8 +69,12 @@ buildGoModule rec {
       plugins called buckets to facilitate pentesting Kubernetes from inside a
       pod.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

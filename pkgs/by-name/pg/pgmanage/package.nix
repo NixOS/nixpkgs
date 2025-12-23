@@ -33,9 +33,13 @@ stdenv.mkDerivation {
     openssl
   ];
 
+  nativeBuildInputs = [
+    libpq.pg_config
+  ];
+
   passthru.tests.sign-in = nixosTests.pgmanage;
 
-  meta = with lib; {
+  meta = {
     description = "Fast replacement for PGAdmin";
     longDescription = ''
       At the heart of pgManage is a modern, fast, event-based C-binary, built in
@@ -44,8 +48,8 @@ stdenv.mkDerivation {
       which is no longer maintained.)
     '';
     homepage = "https://github.com/pgManage/pgManage";
-    license = licenses.postgresql;
-    maintainers = [ maintainers.basvandijk ];
+    license = lib.licenses.postgresql;
+    maintainers = [ lib.maintainers.basvandijk ];
     mainProgram = "pgmanage";
   };
 }

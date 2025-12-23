@@ -1,26 +1,29 @@
 {
   lib,
-  flutter327,
+  flutter335,
   fetchFromGitHub,
+  alsa-lib,
   mpv-unwrapped,
   libass,
+  libnotify,
   pulseaudio,
   musicpod,
   runCommand,
   _experimental-update-script-combinators,
   yq,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "2.9.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
     tag = "v${version}";
-    hash = "sha256-jq133GdeuEENPb2igNWkjeFTpI5qqxF2RuCu78y6L8o=";
+    hash = "sha256-AUggxf6qveyLiEhXeA9orVzy03bl6eBHHEh15zZQ0wE=";
   };
 
   postPatch = ''
@@ -30,18 +33,13 @@ flutter327.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    audio_service_mpris = "sha256-QRZ4a3w4MZP8/A4yXzP4P9FPwEVNXlntmBwE8I+s2Kk=";
-    media_kit = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    media_kit_libs_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    media_kit_video = "sha256-uRQmrV1jAxsWXFm5SimAY/VYMHBB9fPSnRXvUCvEI8g=";
-    phoenix_theme = "sha256-HGMRQ5wdhoqYNkrjLTfz6mE/dh45IRyuQ79/E4oo+9w=";
-    yaru = "sha256-lwyl5aRf5HzWHk7aXYXFj6a9QiFpDN9piHYXzVccYWY=";
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   buildInputs = [
+    alsa-lib
     mpv-unwrapped
     libass
+    libnotify
   ];
 
   runtimeDependencies = [ pulseaudio ];
@@ -62,8 +60,23 @@ flutter327.buildFlutterApplication rec {
           cat $src/pubspec.lock | yq > $out
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "musicpod.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
     ];
   };
 

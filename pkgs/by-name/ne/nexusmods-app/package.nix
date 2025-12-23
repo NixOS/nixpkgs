@@ -1,15 +1,13 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
-  copyDesktopItems,
+  callPackage,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchgit,
+  fetchFromGitHub,
   imagemagick,
   lib,
   xdg-utils,
-  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -24,15 +22,17 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.8.2";
+  version = "0.21.1";
 
-  src = fetchgit {
-    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qRo+s1Wf6WXR1kFqvGA6n+Bsp6qTzpK8/W9fuiaA+Yo=";
+  src = fetchFromGitHub {
+    owner = "Nexus-Mods";
+    repo = "NexusMods.App";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RTQ3EwfA7hRfnCJoRubWtaqFVHhRdbWfLTBORVc+kss=";
     fetchSubmodules = true;
-    fetchLFS = true;
   };
+
+  gameHashes = callPackage ./game-hashes { };
 
   enableParallelBuilding = false;
 
@@ -44,15 +44,9 @@ buildDotnetModule (finalAttrs: {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
-
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     imagemagick # For resizing SVG icon in postInstall
   ];
 
@@ -63,14 +57,23 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    # Specify a fixed date to improve build reproducibility
+    echo "1970-01-01T00:00:00Z" >buildDate.txt
+    substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
 
-    # Bump StrawberryShake so we can drop .NET 8
-    # See https://github.com/Nexus-Mods/NexusMods.App/pull/2830
-    substituteInPlace Directory.Packages.props \
-      --replace-fail 'Include="StrawberryShake.Server" Version="14.1.0"' \
-                     'Include="StrawberryShake.Server" Version="15.0.3"'
+    # Use a pinned version of the game hashes db
+    substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
+
+    # Use a vendored version of the nexus API's games.json data
+    substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
+      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+    ''}
   '';
 
   makeWrapperArgs = [
@@ -78,11 +81,18 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postInstall = ''
+    ${lib.strings.toShellVars {
+      inherit (finalAttrs.meta) mainProgram;
+      INSTALL_EXEC = "\${INSTALL_EXEC}";
+      INSTALL_TRYEXEC = "\${INSTALL_TRYEXEC}";
+    }}
+
     # Desktop entry
     # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
     install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
     substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
-      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
+      --replace-fail "$INSTALL_EXEC" "$mainProgram" \
+      --replace-fail "$INSTALL_TRYEXEC" "$mainProgram"
 
     # AppStream metadata
     install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
@@ -93,8 +103,8 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
       magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
@@ -116,11 +126,20 @@ buildDotnetModule (finalAttrs: {
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
-  doCheck = true;
+  # Avoid running `dotnet test` in the main package:
+  # - The test-suite is slow
+  # - Some tests fail intermittently
+  # - The package is often uncached; especially the unfree variant
+  # - We can enable tests in a `passthru.tests` override
+  doCheck = false;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
+    "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
+
+    # Disable native apphosts for tests; they fail in checkPhase as the wrapper env (DOTNET_ROOT, libs) isn't applied
+    "--property:UseAppHost=false"
   ];
 
   testFilters = [
@@ -129,29 +148,55 @@ buildDotnetModule (finalAttrs: {
     "RequiresNetworking!=True"
   ];
 
-  disabledTests =
-    [
-      # Fails attempting to download game hashes DB from github:
-      # HttpRequestException : Resource temporarily unavailable (github.com:443)
-      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
-      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
+  disabledTests = [
+    # Fails attempting to fetch SMAPI version data from github:
+    # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+    "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
+  ]
+  ++ lib.optionals (!_7zz.meta.unfree) [
+    "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+  ];
 
-      # Fails attempting to fetch SMAPI version data from github:
-      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
-      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
-    ]
-    ++ lib.optionals (!_7zz.meta.unfree) [
-      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-    ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  nativeInstallCheckInputs = [
+    desktop-file-utils
+  ];
+
+  # Upstream use ${...} templates in the desktop entry, so assert that we haven't missed any
+  # See https://github.com/NixOS/nixpkgs/issues/421241
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'Checking for issues in $out/share/applications/com.nexusmods.app.desktop'
+    (
+      cd $out/share/applications
+      desktop-file-validate com.nexusmods.app.desktop
+      if grep '\$' com.nexusmods.app.desktop \
+        --with-filename --line-number
+      then
+        echo 'error: unexpected "$"'
+        exit 1
+      fi
+    ) &>/dev/stderr
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests = {
+    # Build the package and run `dotnet test`
+    app = finalAttrs.finalPackage.overrideAttrs {
+      pname = "${finalAttrs.pname}-tested";
+      doCheck = true;
+    };
+  };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

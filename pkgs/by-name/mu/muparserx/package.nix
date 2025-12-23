@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  patches = [
+    # must be applied in order
+
+    # cmake min required 2.8.12 -> 3.3
+    (fetchpatch {
+      url = "https://github.com/beltoforion/muparserx/commit/d671af0882d4ba09a4bba810877b796f1877d41e.patch?full_index=1";
+      hash = "sha256-4pJrPTMVpTLZWu+PpTtgmtzryObw6vY/kjgsrPDqljw=";
+    })
+
+    # cmake min required 3.3 -> 3.17
+    (fetchpatch {
+      url = "https://github.com/beltoforion/muparserx/commit/c605872591d542e1630e3fcc4b292d8a0702acd2.patch?full_index=1";
+      hash = "sha256-CZPh/+vBhuUXGGEE1fPQiaojpInWhGmFk1HG9pGuAPw=";
+    })
+  ];
+
   doCheck = true;
   checkPhase = ''
     echo "***Muparserx self-test***"
@@ -31,10 +48,10 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ Library for Parsing Expressions with Strings, Complex Numbers, Vectors, Matrices and more";
     homepage = "https://beltoforion.de/en/muparserx/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

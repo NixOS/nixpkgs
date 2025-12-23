@@ -1,10 +1,7 @@
 {
-  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libobjc,
-  IOKit,
 }:
 
 buildGoModule rec {
@@ -36,21 +33,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-pcIydpKWZt3vwShwzGlPKGq+disdxYFOB8gxHou3mVU=";
 
-  # Fix for usb-related segmentation faults on darwin
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libobjc
-    IOKit
-  ];
-
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "";
     homepage = "https://github.com/ethereum-optimism/op-geth";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -101,6 +101,7 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _coerceResult
     _singleton
     _coerceMany
     _toSourceFilter
@@ -112,7 +113,6 @@ let
     _intersection
     _difference
     _fromFetchGit
-    _fetchGitSubmodulesMinver
     _emptyWithoutBase
     ;
 
@@ -703,7 +703,7 @@ in
     # Type
 
     ```
-    union :: FileSet -> FileSet -> FileSet
+    difference :: FileSet -> FileSet -> FileSet
     ```
 
     # Examples
@@ -1000,16 +1000,55 @@ in
     path:
     if !isBool recurseSubmodules then
       throw "lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it's a ${typeOf recurseSubmodules} instead."
-    else if recurseSubmodules && versionOlder nixVersion _fetchGitSubmodulesMinver then
-      throw "lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version ${_fetchGitSubmodulesMinver} and after, but Nix version ${nixVersion} is used."
     else
       _fromFetchGit "gitTrackedWith" "second argument" path
         # This is the only `fetchGit` parameter that makes sense in this context.
-        # We can't just pass `submodules = recurseSubmodules` here because
-        # this would fail for Nix versions that don't support `submodules`.
-        (
-          lib.optionalAttrs recurseSubmodules {
-            submodules = true;
-          }
-        );
+        {
+          submodules = recurseSubmodules;
+        };
+
+  /**
+    The empty fileset. It can be useful as a default value or as starting accumulator for a folding operation.
+
+    # Type
+
+    ```
+    empty :: FileSet
+    ```
+  */
+  empty = _emptyWithoutBase;
+
+  /**
+    Tests whether a given value is a fileset, or can be used in place of a fileset.
+
+    # Inputs
+
+    `value`
+
+    : The value to test
+
+    # Type
+
+    ```
+    isFileset :: Any -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.fileset.isFileset` usage example
+
+    ```nix
+    isFileset ./.
+    => true
+
+    isFileset (unions [  ])
+    => true
+
+    isFileset 1
+    => false
+    ```
+
+    :::
+  */
+  isFileset = x: (_coerceResult "" x).success;
 }

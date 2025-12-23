@@ -11,18 +11,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ictree";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-77Wo6jN8VUGTXBuGL0a9kvSIixdyEQoxqqNsHq9jcWw=";
     fetchSubmodules = true;
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Like tree but interactive";
     homepage = "https://github.com/NikitaIvanovV/ictree";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     mainProgram = "ictree";
   };
 }

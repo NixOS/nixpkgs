@@ -12,24 +12,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "brush";
-  version = "0.2.15";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "reubeno";
     repo = "brush";
     tag = "brush-shell-v${version}";
-    hash = "sha256-hPF2nXYXAM+5Lz2VJw9vZ6RFZ40y+YkO94Jc/sLUYsg=";
+    hash = "sha256-Ib7IRjehcftCETUAT1+otXRdTFFOOwMN4mjnArYLP7Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-A4v4i6U6BwUMNTI/TO7wTQvNVtQYKGiQfDXOCy8hFTE=";
+  cargoHash = "sha256-mD6zrYX5xlEfV56syb0jqxE3jUO28asugOHKz27hTC4=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;

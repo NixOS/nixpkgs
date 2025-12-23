@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "minify-html";
-  version = "0.15.0";
+  version = "0.18.1";
 
   pyproject = true;
 
@@ -15,13 +15,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "minify_html";
-    hash = "sha256-z0w2tvmvOwkBvSoKKds7CcDN8MONPd4o5oNbzg9gXTc=";
+    hash = "sha256-Q5mFMO9TdwHwA6jpCLdW147/MDyGsEGpWFXikFGLp5w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-f93gKKQRkjxQJ49EK/0UI+BzFEa6iSfDX/0gNysSDmc=";
+    inherit pname version src;
+    hash = "sha256-K0m+rM0dcosAOl5jYdh9CSRrL/Vuk1ATWHPQJbLxvRw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wilsonzlin/minify-html/tree/master/minify-html-python";
     changelog = "https://github.com/wilsonzlin/minify-html/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

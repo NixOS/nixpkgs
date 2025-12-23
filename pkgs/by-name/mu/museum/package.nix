@@ -5,23 +5,24 @@
   libsodium,
   buildGoModule,
   nix-update-script,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "museum";
-  version = "0.9.98";
+  version = "1.2.28";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
-    rev = "photos-v${version}";
-    hash = "sha256-yC0bt7TUO4agvkWtd7Q0DuPlgFngQynSKaCZ4eaBWdE=";
+    tag = "photos-v${finalAttrs.version}";
+    hash = "sha256-t0GYaIce5fmQfwpI1cqZEL3OXPmdIet+i1BegIbpU3s=";
   };
 
-  vendorHash = "sha256-loq/YPf+oMWJ6FgtZsgJqkUQhCG8wL7F3kDblKbrc/c=";
+  vendorHash = "sha256-napF55nA/9P8l5lddnEHQMjLXWSyTzgblIQCbSZ20MA=";
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,25 +39,30 @@ buildGoModule rec {
     cp -R configurations \
       migrations \
       mail-templates \
+      web-templates \
       $out/share/museum
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "photos-v(.*)"
-    ];
+  passthru = {
+    tests.ente = nixosTests.ente;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "photos-v(.*)"
+      ];
+    };
   };
 
   meta = {
     description = "API server for ente.io";
     homepage = "https://github.com/ente-io/ente/tree/main/server";
+    changelog = "https://github.com/ente-io/ente/releases/tag/photos-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      surfaceflinger
       pinpox
+      oddlama
     ];
     mainProgram = "museum";
     platforms = lib.platforms.linux;
   };
-}
+})

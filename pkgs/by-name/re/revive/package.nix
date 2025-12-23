@@ -1,14 +1,20 @@
-{ buildGoModule, fetchFromGitHub, go, lib, makeWrapper }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  go,
+  lib,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "revive";
-  version = "1.7.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-omG3fLsrl8wrfp4EFBYdagKEBn2SRPE/MVrLMs6gGds=";
+    repo = "revive";
+    tag = "v${version}";
+    hash = "sha256-89BlSc2tgxAJUGZM951fF+0H+SOsl0+xz/G18neRZxI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -18,7 +24,7 @@ buildGoModule rec {
       rm -rf $out/.git
     '';
   };
-  vendorHash = "sha256-emR8QR/OYQIWZBMcSU2VzWb5kazSVGGudLAJL9uGDNw=";
+  vendorHash = "sha256-ZxTBGcGSRWlYFBz0+5wR/9d8p7lvjJjyId5VNIVW9rQ=";
 
   ldflags = [
     "-s"
@@ -42,11 +48,11 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
     mainProgram = "revive";
     homepage = "https://revive.run";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maaslalani ];
   };
 }

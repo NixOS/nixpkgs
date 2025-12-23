@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chemaaa";
-    repo = pname;
+    repo = "homepluscontrol";
     rev = version;
     hash = "sha256-COOGqfYiR4tueQHXuCvVxShrYS0XNltcW4mclbFWcfA=";
   };
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homepluscontrol" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to interact with the Legrand Eliot Home and Control";
     homepage = "https://github.com/chemaaa/homepluscontrol";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

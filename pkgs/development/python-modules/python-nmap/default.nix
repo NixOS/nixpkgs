@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library which helps in using nmap";
     longDescription = ''
       python-nmap is a Python library which helps in using nmap port scanner. It
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       It also supports nmap script outputs.
     '';
     homepage = "https://xael.org/pages/python-nmap-en.html";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

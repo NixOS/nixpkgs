@@ -9,15 +9,14 @@
 
 buildPythonPackage rec {
   pname = "apycula";
-  version = "0.15";
+  version = "0.28";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit version;
-    pname = "Apycula";
-    hash = "sha256-Bg5nHvUaW+cHZEzmZ08YuXwecVx6R8tys8ZBuqUEhTg=";
+    inherit pname version;
+    hash = "sha256-AfNjHQkDrZ9oULuEmgXhqr063NWDZCpVW5pE6chnnFI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -29,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apycula" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source tools for Gowin FPGAs";
     homepage = "https://github.com/YosysHQ/apicula";
     changelog = "https://github.com/YosysHQ/apicula/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

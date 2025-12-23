@@ -24,12 +24,12 @@ buildGoModule rec {
     "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper to export Prometheus metrics for Dependency-Track";
     homepage = "https://github.com/jetstack/dependency-track-exporter";
     changelog = "https://github.com/jetstack/dependency-track-exporter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dependency-track-exporter";
   };
 }

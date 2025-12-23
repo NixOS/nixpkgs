@@ -24,14 +24,14 @@
 
 let
   pname = "libvmi";
-  version = "0.14.0-unstable-2025-02-27";
+  version = "0.14.0-unstable-2025-12-14";
   libVersion = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "libvmi";
     repo = "libvmi";
-    rev = "f02aeb751fd27bd4ae753dcd5904a4ef3232821e";
-    hash = "sha256-h5kevP8B1iKJBZMaEaxkrAIgnUy7yOCnN3G3oYf/eNo=";
+    rev = "b196d72af1c549a494a321a15f725fbd90cd4686";
+    hash = "sha256-JxATmUI/rsWUF/ChavD0lHNNSeblzV5xtG/4BDcJ9T4=";
   };
 in
 
@@ -52,15 +52,14 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      json_c
-      libvirt
-    ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals (!legacyKVM) [ libkvmi ]
-    ++ lib.optionals withVMIFS [ fuse ];
+  buildInputs = [
+    glib
+    json_c
+    libvirt
+  ]
+  ++ lib.optionals xenSupport [ xen ]
+  ++ lib.optionals (!legacyKVM) [ libkvmi ]
+  ++ lib.optionals withVMIFS [ fuse ];
 
   configureFlags =
     lib.optionals (!xenSupport) [ "--disable-xen" ]

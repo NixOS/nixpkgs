@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyface" ];
 
-  meta = with lib; {
+  meta = {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
     changelog = "https://github.com/enthought/pyface/releases/tag/${version}";
-    maintainers = with maintainers; [ ];
-    license = licenses.bsdOriginal;
+    maintainers = [ ];
+    license = lib.licenses.bsdOriginal;
   };
 }

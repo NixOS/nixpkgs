@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals alsaSupport [
-      alsa-lib
-      udev
-    ]
-    ++ lib.optionals pulseaudioSupport [
-      libpulseaudio
-    ];
+  buildInputs = [
+    glib
+  ]
+  ++ lib.optionals alsaSupport [
+    alsa-lib
+    udev
+  ]
+  ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
 
   configureFlags = lib.optional ossSupport "--enable-oss";
 
@@ -47,11 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.mate ];
   };
 }

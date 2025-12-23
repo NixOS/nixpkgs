@@ -28,13 +28,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flake8_length" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flake8 plugin for a smart line length validation";
     homepage = "https://github.com/orsinium-labs/flake8-length";
     changelog = "https://github.com/orsinium-labs/flake8-length/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sauyon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sauyon ];
   };
 }

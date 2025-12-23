@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-szKVZhWcd8p4307irNqgSAK2+hl8AW+gCPyf0EEco8A=";
+  vendorHash = "sha256-IowPh4CymahgfbnvLS2QWu8e+TXya9AszTK+mlR/DTY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -35,6 +35,6 @@ php.buildComposerProject2 (finalAttrs: {
       maintainability.
     ";
     mainProgram = "pdepend";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

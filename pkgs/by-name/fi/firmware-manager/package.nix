@@ -10,8 +10,8 @@
   udev,
   gtk3,
   wrapGAppsHook3,
+  xz, # for liblzma
 }:
-
 stdenv.mkDerivation rec {
   pname = "firmware-manager";
   version = "0.1.5";
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
+    xz
   ];
 
   buildInputs = [

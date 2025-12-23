@@ -18,19 +18,18 @@
   expecttest,
   pytestCheckHook,
   pytest-timeout,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.15";
+  version = "1.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${version}";
-    hash = "sha256-TXc+D8GRrO46q88fOH44ZHKOGnCdP47ipEcobnGTxWU=";
+    hash = "sha256-ilOnC1tqSb4TuSGRafMNl8hi9P2qdsBWbv3G9azy6Gs=";
   };
 
   build-system = [ pdm-backend ];
@@ -49,22 +48,14 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
-  disabledTests =
-    lib.optionals
-      (
-        # RuntimeError: Dynamo is not supported on Python 3.13+
-        (pythonAtLeast "3.13")
-
-        # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-        # CppCompileError: C++ compile error
-        # OpenMP support not found.
-        || stdenv.hostPlatform.isDarwin
-      )
-      [
-        "test_kron"
-      ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+    # CppCompileError: C++ compile error
+    # OpenMP support not found.
+    "test_kron"
+  ];
 
   disabledTestPaths = [
     # Takes too long and also tries to download models

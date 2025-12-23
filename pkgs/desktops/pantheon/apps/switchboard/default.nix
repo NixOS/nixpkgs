@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard";
     rev = version;
-    sha256 = "sha256-iRxxXAUuSJzhX6uj1YeEzMUihWmrVZ6BFfayfteg/c8=";
+    hash = "sha256-pVXcY/QSjgBcTr0sFQnPxICoQ0tpy2fEJ687zHEDXA0=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible System Settings app for Pantheon";
     homepage = "https://github.com/elementary/switchboard";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.settings";
   };
 }

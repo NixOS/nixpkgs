@@ -1,0 +1,80 @@
+From 1fb59eb42f4bef229b953de313c7e78f0857ea42 Mon Sep 17 00:00:00 2001
+From: Philip Wilk <p.wilk@student.reading.ac.uk>
+Date: Sun, 23 Mar 2025 16:14:51 +0000
+Subject: [PATCH] StackingCVClassifier/fit: ensure compatibility with
+ *scikit-learn* versions 1.4 and above by dynamically selecting between
+ `fit_params` and `params`
+
+---
+ mlxtend/classifier/stacking_cv_classification.py | 5 ++++-
+ mlxtend/regressor/stacking_cv_regression.py      | 6 +++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/mlxtend/classifier/stacking_cv_classification.py b/mlxtend/classifier/stacking_cv_classification.py
+index 5bff6907..f4c45b8c 100644
+--- a/mlxtend/classifier/stacking_cv_classification.py
++++ b/mlxtend/classifier/stacking_cv_classification.py
+@@ -15,6 +15,7 @@ from sklearn.base import TransformerMixin, clone
+ from sklearn.model_selection import cross_val_predict
+ from sklearn.model_selection._split import check_cv
+ from sklearn.preprocessing import LabelEncoder
++from sklearn import __version__ as sklearn_version
+ 
+ from ..externals.estimator_checks import check_is_fitted
+ from ..externals.name_estimators import _name_estimators
+@@ -266,6 +267,8 @@ class StackingCVClassifier(
+             if self.verbose > 1:
+                 print(_name_estimators((model,))[0][1])
+ 
++            param_name = "fit_params" if sklearn_version < "1.4" else "params"
++
+             prediction = cross_val_predict(
+                 model,
+                 X,
+@@ -273,10 +276,10 @@ class StackingCVClassifier(
+                 groups=groups,
+                 cv=final_cv,
+                 n_jobs=self.n_jobs,
+-                fit_params=fit_params,
+                 verbose=self.verbose,
+                 pre_dispatch=self.pre_dispatch,
+                 method="predict_proba" if self.use_probas else "predict",
++                **{param_name: fit_params},
+             )
+ 
+             if not self.use_probas:
+diff --git a/mlxtend/regressor/stacking_cv_regression.py b/mlxtend/regressor/stacking_cv_regression.py
+index a1faf2ff..d2fb1c49 100644
+--- a/mlxtend/regressor/stacking_cv_regression.py
++++ b/mlxtend/regressor/stacking_cv_regression.py
+@@ -19,6 +19,7 @@ from sklearn.base import RegressorMixin, TransformerMixin, clone
+ from sklearn.model_selection import cross_val_predict
+ from sklearn.model_selection._split import check_cv
+ from sklearn.utils import check_X_y
++from sklearn import __version__ as sklearn_version
+ 
+ from ..externals.estimator_checks import check_is_fitted
+ from ..externals.name_estimators import _name_estimators
+@@ -211,6 +212,9 @@ class StackingCVRegressor(_BaseXComposition, RegressorMixin, TransformerMixin):
+             fit_params = None
+         else:
+             fit_params = dict(sample_weight=sample_weight)
++
++        param_name = "fit_params" if sklearn_version < "1.4" else "params"
++
+         meta_features = np.column_stack(
+             [
+                 cross_val_predict(
+@@ -221,8 +225,8 @@ class StackingCVRegressor(_BaseXComposition, RegressorMixin, TransformerMixin):
+                     cv=kfold,
+                     verbose=self.verbose,
+                     n_jobs=self.n_jobs,
+-                    fit_params=fit_params,
+                     pre_dispatch=self.pre_dispatch,
++                    **{param_name: fit_params},
+                 )
+                 for regr in self.regr_
+             ]
+-- 
+2.47.1
+

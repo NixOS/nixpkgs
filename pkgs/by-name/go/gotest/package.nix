@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rakyll";
-    repo = pname;
+    repo = "gotest";
     rev = "v${version}";
     sha256 = "1v11ccrjghq7nsz0f91r17di14yixsw28vs0m3dwzwqkh1a20img";
   };
@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "go test with colors";
     mainProgram = "gotest";
     homepage = "https://github.com/rakyll/gotest";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -16,20 +16,21 @@
   colorlog,
   crcmod,
   pillow,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.14.0";
+  version = "1.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "liquidctl";
+    repo = "liquidctl";
     tag = "v${version}";
-    hash = "sha256-HkMxYULeWcAYdlEI4N4qv7AGh/+xY0zuvV2mFPStPq8=";
+    hash = "sha256-ifYPUAF0lR9aCwiseNQZXbq+d+CXD/MwnZQhAM1TRLI=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+    udevCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -74,14 +76,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liquidctl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
-    changelog = "https://github.com/liquidctl/liquidctl/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       arturcygan
-      evils
     ];
     mainProgram = "liquidctl";
   };

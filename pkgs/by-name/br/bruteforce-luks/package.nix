@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "glv2";
     repo = "bruteforce-luks";
-    rev = version;
+    tag = version;
     hash = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
   };
 

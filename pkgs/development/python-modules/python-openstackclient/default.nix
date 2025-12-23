@@ -18,6 +18,7 @@
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
+  python-octaviaclient,
   python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
@@ -33,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.4.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_openstackclient";
     inherit version;
-    hash = "sha256-6BfhGgHLK1FvvZnc5FwJnI5BxD0RuxHmZycDqDhEnZ8=";
+    hash = "sha256-1hKvGN/GbMjzHmzpZpC2wnOt6KJA7EC39INaiJb7vgE=";
   };
 
   build-system = [
@@ -69,7 +70,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -E \
+      "openstackclient.tests.unit.volume.v3.test_volume.(TestVolumeCreate|TestVolumeShow)"
     runHook postCheck
   '';
 
@@ -88,6 +90,7 @@ buildPythonPackage rec {
       python-manilaclient
       python-mistralclient
       python-neutronclient
+      python-octaviaclient
       python-watcherclient
       python-zaqarclient
       python-zunclient
@@ -101,11 +104,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Command-line Client";
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

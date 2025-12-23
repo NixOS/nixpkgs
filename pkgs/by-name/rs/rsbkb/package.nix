@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   cargoPatches = [
     ./time.patch
   ];
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-fg8LQXqmw5GXiQe7ZVciORWI/yhKAhywolpapNpHXZY=";
 
   # Setup symlinks for all the utilities,
@@ -33,11 +33,11 @@ rustPlatform.buildRustPackage {
     for i in $(./rsbkb list) ; do ln -s $path $i ; done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tools to encode/decode things";
     homepage = "https://github.com/trou/rsbkb";
     changelog = "https://github.com/trou/rsbkb/releases/tag/release-${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ProducerMatt ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ProducerMatt ];
   };
 }

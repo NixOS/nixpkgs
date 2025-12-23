@@ -6,6 +6,7 @@
   intltool,
   ntfs3g,
   util-linux,
+  cryptsetup,
   mediaDir ? "/media/",
   lockDir ? "/var/lock/pmount",
   whiteList ? "/etc/pmount.allow",
@@ -30,25 +31,41 @@ stdenv.mkDerivation rec {
         { name, hash }:
         fetchpatch {
           inherit name hash;
-          url = "https://salsa.debian.org/debian/pmount/-/raw/ba05283d4a53aba5349d4397a98d9f45206fb29f/debian/patches/${name}";
+          url = "https://salsa.debian.org/debian/pmount/-/raw/430e4634aa7a2e6a5a91852c5b0fd3698b186000/debian/patches/${name}";
         };
     in
     map fetchDebPatch [
       {
-        name = "10_fix-spelling-binary-errors.patch";
-        hash = "sha256-G4GsUe1ZdYB7Qv333X1hUjOELITR8A2pqyfEnMDTwHI=";
+        name = "02-fix-spelling-binary-errors.patch";
+        hash = "sha256-ukGHDqsG3Eo/0bhv2GPwX0N6uZOI+3BowMY+l1wtd9o=";
       }
       {
-        name = "20_fix-spelling-manpage-error.patch";
-        hash = "sha256-9phF8s7MFSjkhPP24cipeBUps5W1L7YmAE0B1QPx5jk=";
+        name = "03-fix-spelling-manpage-error.patch";
+        hash = "sha256-rsa3t165+yWBOnRV3SnOMmYSuNuydZtnOdydUzcjDaQ=";
       }
       {
-        name = "fix-implicit-function-declaration.patch";
-        hash = "sha256-kdwdS9G1X5RtQFKzF6oMIUubGNP7n1ZQNHu8sN1oV4Q=";
+        name = "04-fix-implicit-function-declaration.patch";
+        hash = "sha256-Le8gVIW72oZGymN7gM5uOGNEhrzOTirnilNedUkSpco=";
       }
       {
-        name = "30_exfat-support.patch";
-        hash = "sha256-kg9gLhOtdrEDlZfUnT910xI5rNR1zgKKRx2kvFQjbi8=";
+        name = "05-exfat-support.patch";
+        hash = "sha256-Yl9QuA8tMIej4nQIbYibcUVFJdgnVaN+34/xoJp5NbU=";
+      }
+      {
+        name = "06-C99-implicit-function-declaration-fixes.patch";
+        hash = "sha256-xFFfl9BkBqbUSAKaJwvKNgHyWbxUO5wKyEpwz3anwdM=";
+      }
+      {
+        name = "07-Add-probing-for-Btrfs.patch";
+        hash = "sha256-9SKyLAVmZTGgsAi9aCxkw1OzWVcegoZy2DaupiS9kPA=";
+      }
+      {
+        name = "08-Support-btlkOpen-alongside-of-luksOpen.patch";
+        hash = "sha256-2PJky3lRUKkOB2Js86XN8gqmYMxpsUbLJ39XnrirCDw=";
+      }
+      {
+        name = "09-Probe-for-f2fs.patch";
+        hash = "sha256-VMnrSEaIPwEfbUi+Q88vQdSBQgq4+jJ19Bjc/ueemnw=";
       }
     ];
 
@@ -65,6 +82,7 @@ stdenv.mkDerivation rec {
     "--with-mount-prog=${util-linux}/bin/mount"
     "--with-umount-prog=${util-linux}/bin/umount"
     "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
+    "--with-cryptsetup-prog=${cryptsetup}/bin/cryptsetup"
   ];
 
   postConfigure = ''
@@ -81,5 +99,6 @@ stdenv.mkDerivation rec {
     description = "Mount removable devices as normal user";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ratakor ];
   };
 }

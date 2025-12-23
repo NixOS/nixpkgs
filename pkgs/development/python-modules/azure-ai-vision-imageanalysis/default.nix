@@ -5,19 +5,19 @@
   setuptools,
   azure-core,
   isodate,
-  pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-ai-vision-imageanalysis";
-  version = "1.0.0b3";
+  version = "39.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    rev = "refs/tags/azure-ai-vision-imageanalysis_${version}";
-    hash = "sha256-Hkj9mrjCc8Li8z6e1BjpzANRVx6+DjN0MhTLANMT78E=";
+    tag = "azure-mgmt-containerservice_${version}";
+    hash = "sha256-zufXc8LR4STHi/jjV0bcLsifcHIif2m+3Q/KZlsSkRw=";
   };
 
   sourceRoot = "${src.name}/sdk/vision/azure-ai-vision-imageanalysis";
@@ -27,6 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     azure-core
     isodate
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "azure.ai.vision.imageanalysis" ];
@@ -34,9 +35,9 @@ buildPythonPackage rec {
   doCheck = false; # cannot import 'devtools_testutils'
 
   meta = {
-    homepage = "https://github.com/Kalmat/PyMonCtl";
-    license = lib.licenses.bsd3;
-    description = "Cross-Platform toolkit to get info on and control monitors connected";
+    description = "Azure Image Analysis client library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/vision/azure-ai-vision-imageanalysis";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   fetchPypi,
   lxml,
@@ -10,15 +11,18 @@
 
 buildPythonPackage rec {
   pname = "prosemirror";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-COjCU//frJf2MNgaAz5aQizbjRsF3ypYFXS6aDjqrIU=";
+    hash = "sha256-cZwqoKQ+B7d07R20dXTiDsiBIYYTyaWa2SnGs8o8Hl8=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     lxml

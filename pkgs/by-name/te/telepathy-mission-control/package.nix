@@ -29,18 +29,17 @@ stdenv.mkDerivation rec {
 
   # TODO: optional build inputs missing
 
-  nativeBuildInputs =
-    [
-      telepathy-glib # glib-genmarshal
-      pkg-config
-      python3
-      libxslt
-      makeWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoreconfHook
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    telepathy-glib # glib-genmarshal
+    pkg-config
+    python3
+    libxslt
+    makeWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    autoreconfHook
+    gtk-doc
+  ];
 
   propagatedBuildInputs = [
     telepathy-glib
@@ -56,11 +55,13 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

@@ -9,15 +9,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.27";
+  version = "0.3.31";
   format = "setuptools";
   pname = "pyaxmlparser";
 
   src = fetchFromGitHub {
     owner = "appknox";
-    repo = pname;
+    repo = "pyaxmlparser";
     rev = "v${version}";
-    hash = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
+    hash = "sha256-ZV2PyWQfK9xidzGUz7XPAReaVjlB8tMUKQiXoGcFCGs=";
   };
 
   propagatedBuildInputs = [
@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python3 Parser for Android XML file and get Application Name without using Androguard";
     mainProgram = "apkinfo";
     homepage = "https://github.com/appknox/pyaxmlparser";
     # Files from Androguard are licensed ASL 2.0
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];

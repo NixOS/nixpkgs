@@ -12,7 +12,7 @@ project(
             '-DCCTB_PROJECT=cctools',
             '-DCCTB_PROJVERS=cctools-@version@',
             '-DCCTB_VERSION=@version@',
-            '-DCURRENT_PROJECT_VERSION="@version@"',
+            '-DCURRENT_PROJECT_VERSION="cctools-@version@"',
             '-DCODEDIRECTORY_SUPPORT',
             '-DLTO_SUPPORT',
         ],

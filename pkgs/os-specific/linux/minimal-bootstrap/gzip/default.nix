@@ -34,12 +34,12 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU zip compression program";
       homepage = "https://www.gnu.org/software/gzip";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
     };
   }
   ''

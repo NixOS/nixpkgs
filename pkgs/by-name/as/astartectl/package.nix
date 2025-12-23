@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -19,18 +20,18 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd astartectl \
       --bash <($out/bin/astartectl completion bash) \
       --fish <($out/bin/astartectl completion fish) \
       --zsh <($out/bin/astartectl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/astarte-platform/astartectl";
     description = "Astarte command line client utility";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "astartectl";
-    maintainers = with maintainers; [ noaccos ];
+    maintainers = with lib.maintainers; [ noaccos ];
   };
 }

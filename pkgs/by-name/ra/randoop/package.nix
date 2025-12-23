@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.3.3";
+  version = "4.3.4";
   pname = "randoop";
 
   src = fetchurl {
     url = "https://github.com/randoop/randoop/releases/download/v${version}/${pname}-${version}.zip";
-    sha256 = "sha256-x9kAoVa4wvUp3gpg9GCodvjwql3CBtn5EqJIZYSSqVI=";
+    sha256 = "sha256-yzQw9l3uAq51SHXJ4rsZNRCiFdhOEoSrwv9iPvD2i9c=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     cp README.txt $out/doc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic test generation for Java";
     homepage = "https://randoop.github.io/randoop/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

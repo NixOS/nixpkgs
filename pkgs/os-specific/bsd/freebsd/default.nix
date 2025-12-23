@@ -3,7 +3,7 @@
   generateSplicesForMkScope,
   callPackage,
   attributePathToSplice ? [ "freebsd" ],
-  branch ? "release/14.1.0",
+  branch ? "release/15.0.0",
 }:
 
 let
@@ -42,10 +42,10 @@ makeScopeWithSplicing' {
     {
       inherit branch;
     }
-    // callPackage ./package-set.nix ({
+    // callPackage ./package-set.nix {
       sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
       versionData = self.sourceData.version;
       buildFreebsd = otherSplices.selfBuildHost;
       patchesRoot = ./patches + "/${self.versionData.revision}";
-    }) self;
+    } self;
 }

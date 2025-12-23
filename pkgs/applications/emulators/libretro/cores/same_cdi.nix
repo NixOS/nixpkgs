@@ -2,7 +2,7 @@
   lib,
   alsa-lib,
   fetchFromGitHub,
-  gcc12Stdenv,
+  fetchpatch2,
   libGL,
   libGLU,
   mkLibretroCore,
@@ -21,6 +21,15 @@ mkLibretroCore {
     hash = "sha256-EGE3NuO0gpZ8MKPypH8rFwJiv4QsdKuIyLKVuKTcvws=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/libretro/same_cdi/pull/19
+      name = "Fixes_compilation_errors_as_per_issue_9.patch";
+      url = "https://github.com/libretro/same_cdi/commit/bf3212315546cdd514118a4f3ea764fd9c401091.patch?full_index=1";
+      hash = "sha256-1vrMxnRtEWUt+6I/4PSfCPDIUAGKkXFd2UVr9473ngo=";
+    })
+  ];
+
   extraNativeBuildInputs = [ python3 ];
   extraBuildInputs = [
     alsa-lib
@@ -29,9 +38,6 @@ mkLibretroCore {
     portaudio
     xorg.libX11
   ];
-  # FIXME = build fail with GCC13:
-  # error = 'uint8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
-  stdenv = gcc12Stdenv;
 
   meta = {
     description = "SAME_CDI is a libretro core to play CD-i games";

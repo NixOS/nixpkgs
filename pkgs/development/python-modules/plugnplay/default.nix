@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plugnplay" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generic plug-in system for python applications";
     homepage = "https://github.com/daltonmatos/plugnplay";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
 }

@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webull-desktop";
-  version = "8.2.0";
+  version = "8.9.0";
 
   src = fetchurl {
-    url = "https://u1sweb.webullfintech.com/us/Webull%20Desktop_8.2.0_800200_global_x64signed.deb";
-    hash = "sha256-/KVY6I9gYWWZSJhsTW5GECCeOsx+6XAVIRpghlJUK4k=";
+    url = "https://u1sweb.webullfintech.com/us/Webull%20Desktop_8.9.0_80009000_global_x64signed.deb";
+    hash = "sha256-brt5EXUE9g72vN2Kx9/jf4P/lkVfWLsbzJIf13phgdI=";
   };
 
   nativeBuildInputs = [
@@ -79,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webull desktop trading application";
     homepage = "https://www.webull.com/trading-platforms/desktop-app";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ fauxmight ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ fauxmight ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "webull-desktop";
   };

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "umoci";
-  version = "0.4.7";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "umoci";
     rev = "v${version}";
-    sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
+    sha256 = "sha256-KgKrJcdYPwY6bSxa/r5HCUCeMnJ0GXSgNo8MKLDooFQ=";
   };
 
   vendorHash = null;
@@ -37,11 +37,10 @@ buildGoModule rec {
     installManPage doc/man/*.[1-9]
   '';
 
-  meta = with lib; {
-    description = "umoci modifies Open Container images";
+  meta = {
+    description = "Modifies Open Container images";
     homepage = "https://umo.ci";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zokrezyl ];
+    license = lib.licenses.asl20;
     mainProgram = "umoci";
   };
 }

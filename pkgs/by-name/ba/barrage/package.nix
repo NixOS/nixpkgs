@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Destructive action game";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "barrage";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };

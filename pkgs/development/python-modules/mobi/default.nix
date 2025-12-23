@@ -6,6 +6,7 @@
   poetry-core,
   pythonOlder,
   setuptools,
+  standard-imghdr,
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,8 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "loguru" ];
 
+  dependencies = [ standard-imghdr ];
+
   nativeBuildInputs = [
     poetry-core
     setuptools
@@ -33,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mobi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for unpacking unencrypted mobi files";
     mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 }

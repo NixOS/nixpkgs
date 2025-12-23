@@ -39,14 +39,14 @@ buildDunePackage rec {
   buildInputs = [
     arg-complete
     camlidl
-    flint
-    libclang
     mpfr
-    pplite
   ];
 
   propagatedBuildInputs = [
     apron
+    flint
+    libclang
+    pplite
     yojson
     zarith
   ];
@@ -75,7 +75,7 @@ buildDunePackage rec {
   meta = {
     license = lib.licenses.lgpl3Plus;
     homepage = "https://mopsa.lip6.fr/";
-    description = "A Modular and Open Platform for Static Analysis using Abstract Interpretation";
+    description = "Modular and Open Platform for Static Analysis using Abstract Interpretation";
     maintainers = [ lib.maintainers.vbgl ];
   };
 

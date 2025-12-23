@@ -1,0 +1,13 @@
+diff --git a/gui/src-tauri/src/main.rs b/gui/src-tauri/src/main.rs
+index 8191f0ed..01e764d8 100644
+--- a/gui/src-tauri/src/main.rs
++++ b/gui/src-tauri/src/main.rs
+@@ -188,7 +188,7 @@ fn setup_webview2() -> Result<()> {
+ 
+ fn check_environment_variables() {
+ 	use itertools::Itertools;
+-	const ENVS_TO_CHECK: &[&str] = &["_JAVA_OPTIONS", "JAVA_TOOL_OPTIONS"];
++	const ENVS_TO_CHECK: &[&str] = &["_JAVA_OPTIONS"];
+ 	let checked_envs = ENVS_TO_CHECK
+ 		.into_iter()
+ 		.filter_map(|e| {

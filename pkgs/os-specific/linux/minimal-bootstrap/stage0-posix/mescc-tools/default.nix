@@ -33,11 +33,14 @@ let
           ''${M2} --architecture ${m2libcArch} \
             -f ''${m2libc}/sys/types.h \
             -f ''${m2libc}/stddef.h \
+            -f ''${m2libc}/sys/utsname.h \
             -f ''${m2libc}/${m2libcArch}/linux/fcntl.c \
             -f ''${m2libc}/fcntl.c \
             -f ''${m2libc}/${m2libcArch}/linux/unistd.c \
             -f ''${m2libc}/${m2libcArch}/linux/sys/stat.c \
+            -f ''${m2libc}/ctype.c \
             -f ''${m2libc}/stdlib.c \
+            -f ''${m2libc}/stdarg.h \
             -f ''${m2libc}/stdio.h \
             -f ''${m2libc}/stdio.c \
             -f ''${m2libc}/string.c \
@@ -106,11 +109,11 @@ derivationWithMeta {
     endianFlag
     ;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit platforms;
   };
 }

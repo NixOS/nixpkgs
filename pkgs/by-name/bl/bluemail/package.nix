@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  dpkg,
+  squashfsTools,
   autoPatchelfHook,
   copyDesktopItems,
   pango,
@@ -22,14 +22,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bluemail";
-  version = "1.140.8-1922";
+  version = "1.140.93";
 
-  # Taking a snapshot of the DEB release because there are no tagged version releases.
-  # For new versions, download the upstream release, extract it and check for the version string.
-  # In case there's a new version, create a snapshot of it on https://archive.org before updating it here.
+  # To update, check https://search.apps.ubuntu.com/api/v1/package/bluemail and copy the anon_download_url and version.
   src = fetchurl {
-    url = "https://web.archive.org/web/20240208120704/https://download.bluemail.me/BlueMail/deb/BlueMail.deb";
-    hash = "sha256-dnYOb3Q/9vSDssHGS2ywC/Q24Oq96/mvKF+eqd/4dVw=";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/ZVlj0qw0GOFd5JgTfL8kk2Y5eIG1IpiH_178.snap";
+    hash = "sha512-xv7fn+VrtrxauejhgEMdTnmnDXb17TwanXZR6Lqfg5N40MbyDu76XQAWRB8xFU/+GdCTmjv47EaOC7SnnOw4EA==";
   };
 
   desktopItems = [
@@ -43,6 +41,7 @@ stdenv.mkDerivation rec {
       mimeTypes = [
         "x-scheme-handler/me.blueone.linux"
         "x-scheme-handler/mailto"
+        "x-scheme-handler/bluemail-notif"
       ];
       categories = [ "Office" ];
     })
@@ -52,9 +51,23 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
-    dpkg
+    squashfsTools
     wrapGAppsHook3
   ];
+
+  unpackPhase = ''
+    runHook preUnpack
+
+    unsquashfs $src
+
+    runHook postUnpack
+  '';
+
+  sourceRoot = "squashfs-root";
+
+  postPatch = ''
+    rm -rf usr libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+  '';
 
   buildInputs = [
     pango
@@ -75,12 +88,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mv opt/BlueMail/* $out
-    ln -s $out/bluemail $out/bin/bluemail
+    mkdir -p $out/{bin,opt/bluemail}
+    mv * $out/opt/bluemail
+    ln -s $out/opt/bluemail/bluemail $out/bin/bluemail
 
-    mkdir -p $out/share/icons
-    mv usr/share/icons/hicolor $out/share/icons/
+    mkdir -p $out/share/icons/hicolor/1024x1024/apps
+    ln -s $out/opt/bluemail/resources/assets/icons/bluemailx-icon.png $out/share/icons/hicolor/1024x1024/apps/bluemail.png
 
     runHook postInstall
   '';
@@ -97,17 +110,19 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    wrapProgram $out/bin/bluemail \
+    wrapProgram $out/opt/bluemail/bluemail \
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
-    description = "Free, secure, universal email app, capable of managing an unlimited number of mail accounts";
+  meta = {
+    description = "Cross platform email and calendar app, with AI features and a modern design";
     homepage = "https://bluemail.me";
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    # Vendored copy of Electron.
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = [ ];
+    mainProgram = "bluemail";
   };
 }

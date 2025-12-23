@@ -11,21 +11,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.20.2";
+  version = "2.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_datastore";
     inherit version;
-    hash = "sha256-lmXQCXKdlVEynZR29NW9qcEdNGkkPqiiwNlJC2WqiZ8=";
+    hash = "sha256-gASYg6Suko/cxmG6aAPsJnZl3A5vPOLakUQQeaa7Y4c=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +32,8 @@ buildPythonPackage rec {
     google-cloud-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];
@@ -69,11 +67,11 @@ buildPythonPackage rec {
     "google.cloud.datastore_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
     changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

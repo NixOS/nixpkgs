@@ -23,13 +23,13 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.64.4";
+  version = "2.87.5";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BvDR0hLKxJ5XEcIRrH9fdONam5JAjAwWbfrZogiNq5U=";
+    hash = "sha256-0lsDNXdZTmhH+rODGi4qVjX8dQNypkiVnqGoYvENbQM=";
   };
 
   postPatch = ''
@@ -50,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  makeFlags =
-    [ "GIT_VERSION=\"v${finalAttrs.version}\"" ]
-    ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
-    ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
-    ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
-    ++ lib.optionals enableThreads [ "THREADS=1" ];
+  makeFlags = [
+    "GIT_VERSION=\"v${finalAttrs.version}\""
+  ]
+  ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
+  ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
+  ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
+  ++ lib.optionals enableThreads [ "THREADS=1" ];
 
   enableParallelBuilding = true;
 
@@ -99,6 +100,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "tpl";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

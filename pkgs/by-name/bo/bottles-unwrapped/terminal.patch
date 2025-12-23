@@ -1,0 +1,13 @@
+diff --git a/bottles/backend/utils/terminal.py b/bottles/backend/utils/terminal.py
+index 1f28e093..cca8018a 100644
+--- a/bottles/backend/utils/terminal.py
++++ b/bottles/backend/utils/terminal.py
+@@ -138,7 +138,7 @@ class TerminalUtils:
+                 full_cmd = f"{template} {cmd_for_shell}"
+
+         elif term_bin in ["kitty", "foot", "konsole", "gnome-terminal"]:
+-            cmd_for_shell = shlex.quote(f"sh -c {command}")
++            cmd_for_shell = f"sh -c {command}"
+             try:
+                 full_cmd = template % cmd_for_shell
+             except Exception:

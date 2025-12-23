@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "idank";
-    repo = pname;
+    repo = "bashlex";
     rev = version;
     hash = "sha256-ddZN91H95RiTLXx4lpES1Dmz7nNsSVUeuFuOEpJ7LQI=";
   };
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bashlex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python parser for bash";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/idank/bashlex";
-    maintainers = with maintainers; [ multun ];
+    maintainers = with lib.maintainers; [ multun ];
   };
 }

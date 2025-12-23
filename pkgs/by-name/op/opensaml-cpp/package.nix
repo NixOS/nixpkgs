@@ -4,7 +4,6 @@
   fetchgit,
   autoreconfHook,
   pkg-config,
-  darwin,
   boost,
   openssl,
   log4shib,
@@ -24,23 +23,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
   };
 
-  buildInputs =
-    [
-      boost
-      openssl
-      log4shib
-      xercesc
-      xml-security-c
-      xml-tooling-c
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    boost
+    openssl
+    log4shib
+    xercesc
+    xml-security-c
+    xml-tooling-c
+    zlib
+  ];
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -52,12 +43,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://shibboleth.net/products/opensaml-cpp.html";
     description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
     mainProgram = "samlsign";
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

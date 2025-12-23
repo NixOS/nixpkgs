@@ -16,6 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "menulibre";
   version = "2.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bluesabre";
@@ -53,12 +54,12 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced menu editor with an easy-to-use interface";
     homepage = "https://bluesabre.org/projects/menulibre";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "menulibre";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

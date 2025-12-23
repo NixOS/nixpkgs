@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     "--enable-libusb10"
   ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
     cat > $out/etc/udev/rules.d/69-libsane.rules << EOF
@@ -64,15 +66,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      siraben
-      clevor
-    ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

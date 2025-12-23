@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Instagram/MonkeyType/";
     changelog = "https://github.com/Instagram/MonkeyType/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

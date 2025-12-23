@@ -1,0 +1,89 @@
+name: "Request: documentation"
+description: "Report missing or incorrect documentation in the NixOS or Nixpkgs manuals."
+title: "Missing Documentation: PACKAGENAME"
+labels: ["0.kind: enhancement", "9.needs: documentation"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        Welcome to Nixpkgs. Please replace the **`Missing Documentation: PACKAGENAME`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)) or module name (As seen in the [NixOS Option Search](https://search.nixos.org/options)).
+
+        > [!TIP]
+        > For instance, if you were filing an issue against the [`hello`](https://search.nixos.org/packages?channel=unstable&from=0&size=1&buckets=%7B%22package_attr_set%22%3A%5B%22No%20package%20set%22%5D%2C%22package_license_set%22%3A%5B%22GNU%20General%20Public%20License%20v3.0%20or%20later%22%5D%2C%22package_maintainers_set%22%3A%5B%5D%2C%22package_platforms%22%3A%5B%5D%7D&sort=relevance&type=packages&query=hello) package about it not having any NixOS-specific documentation, your title would be as follows:
+        > ```
+        > Missing Documentation: hello
+        > ```
+
+        ---
+  - type: "textarea"
+    id: "description"
+    attributes:
+      label: "Describe the problem"
+      description: "Please include a clear and concise description of what the issue is."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "proposal"
+    attributes:
+      label: "Proposed solution"
+      description: |
+        If possible, please draft a tentative documentation chapter to resolve this issue.
+        Your proposal should be written in CommonMark Markdown, optionally enhanced with [Nix-specific extensions](https://github.com/NixOS/nixpkgs/tree/master/doc#syntax).
+      render: "markdown"
+    validations:
+      required: false
+  - type: "textarea"
+    id: "maintainers"
+    attributes:
+      label: "Notify maintainers"
+      description: |
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+      value: |2
+
+
+        ---
+
+        **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)
+    validations:
+      required: false
+  - type: "checkboxes"
+    id: "sanity-check"
+    attributes:
+      label: "I assert that this issue is relevant for Nixpkgs"
+      options:
+        - label: "I assert that this request is not already implemented in the latest [NixOS](https://nixos.org/manual/nixos/unstable/) or [Nixpkgs](https://nixos.org/manual/nixpkgs/unstable/) manuals."
+          required: true
+        - label: "I assert that this is not a [duplicate of an existing documentation issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+label%3A%229.needs%3A+documentation%22)."
+          required: true
+        - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+  - type: "markdown"
+    attributes:
+      value: |
+        # Thank you for helping improve Nixpkgs!
+
+        ---
+  - type: "textarea"
+    id: "priorisation"
+    attributes:
+      label: "Is this issue important to you?"
+      description: |
+        **Please do not modify this text area!**
+
+        This template helps Nixpkgs developers know which issues should be prioritised by allowing users to vote with a :+1: reaction.
+        This is not a guarantee that highly-requested issues will be fixed first, but it helps us to figure out what's important to users. Please react on other users' issues if you find them important.
+      value: |
+        Add a :+1: [reaction] to [issues you find important].
+
+        [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+        [issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

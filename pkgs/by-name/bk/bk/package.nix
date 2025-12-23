@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rSMvx/zUZqRRgj48TVVG7RwQT8e70m0kertRJysDY4Y=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-i62vUvR/iX0zKD29WsIvlcn49lcFvv2uN05oTexvPMc=";
 
   nativeBuildInputs = [
@@ -33,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     installManPage bk.?
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aeosynth/bk";
     description = "Terminal epub reader written in rust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vuimuich ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vuimuich ];
     mainProgram = "bk";
   };
 }

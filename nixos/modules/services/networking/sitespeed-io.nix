@@ -18,12 +18,7 @@ in
       description = "User account under which sitespeed-io runs.";
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.sitespeed-io;
-      defaultText = "pkgs.sitespeed-io";
-      description = "Sitespeed.io package to use.";
-    };
+    package = lib.mkPackageOption pkgs "sitespeed-io" { };
 
     dataDir = lib.mkOption {
       default = "/var/lib/sitespeed-io";

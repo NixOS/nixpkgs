@@ -58,35 +58,35 @@ stdenv.mkDerivation rec {
     gtk-doc
     autoconf-archive
     yelp-tools
+    libpq.pg_config
   ];
 
-  buildInputs =
-    [
-      gtk3
-      openssl
-      libgee
-    ]
-    ++ lib.optionals mysqlSupport [
-      libmysqlclient
-    ]
-    ++ lib.optionals postgresSupport [
-      libpq
-    ];
+  buildInputs = [
+    gtk3
+    openssl
+    libgee
+  ]
+  ++ lib.optionals mysqlSupport [
+    libmysqlclient
+  ]
+  ++ lib.optionals postgresSupport [
+    libpq
+  ];
 
   propagatedBuildInputs = [
     libxml2
   ];
 
   configureFlags = [
-    "--with-mysql=${if mysqlSupport then "yes" else "no"}"
-    "--with-postgres=${if postgresSupport then "yes" else "no"}"
+    "--with-mysql=${lib.boolToYesNo mysqlSupport}"
+    "--with-postgres=${lib.boolToYesNo postgresSupport}"
 
     # macOS builds use the sqlite source code that comes with libgda,
     # as opposed to using the system or brewed sqlite3, which is not supported on macOS,
     # as mentioned in https://github.com/GNOME/libgda/blob/95eeca4b0470f347c645a27f714c62aa6e59f820/libgda/sqlite/README#L31,
     # which references the paper https://web.archive.org/web/20100610151539/http://lattice.umiacs.umd.edu/files/functions_tr.pdf
     # See also https://github.com/Homebrew/homebrew-core/blob/104f9ecd02854a82372b64d63d41356555378a52/Formula/libgda.rb
-    "--enable-system-sqlite=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
+    "--enable-system-sqlite=${lib.boolToYesNo (!stdenv.hostPlatform.isDarwin)}"
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";

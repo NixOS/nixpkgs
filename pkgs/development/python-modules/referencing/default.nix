@@ -16,7 +16,7 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.36.1";
+    version = "0.36.2";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ let
       repo = "referencing";
       tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-kMYn41tlBMPb2hMMwHg+o6sNrwp3CHRQwmBzQHsgG1I=";
+      hash = "sha256-VwViFiquacwJlELNDp01DRbtYQHOY4qXS2CjD7YmS6g=";
     };
 
     build-system = [
@@ -53,12 +53,12 @@ let
 
     pythonImportsCheck = [ "referencing" ];
 
-    meta = with lib; {
+    meta = {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
       changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fab ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

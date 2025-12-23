@@ -6,20 +6,22 @@
   libcosmicAppHook,
   just,
   nix-update-script,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-applibrary";
-  version = "1.0.0-alpha.6";
 
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-applibrary";
+  version = "1.0.0";
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applibrary";
-    tag = "epoch-${version}";
-    hash = "sha256-hJOM5dZdLq6uYfhfspZzpbHgUOK/FWuIXuFPoisS8DU=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-A3OWgTgNeuNqMN4WBVJcAXogL9jHABDRIsN0QjgcPDY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-95jTSn0yYj2PNVtfumfD1rPf1yLXHUi60FBqENK8CSw=";
+  cargoHash = "sha256-M3zyBsNFUQ5dwzJRlaC8m6o5U4teIgwl6jTDYSqW8qw=";
 
   nativeBuildInputs = [
     just
@@ -34,32 +36,34 @@ rustPlatform.buildRustPackage rec {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-app-library"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-app-library";
   };
-}
+})

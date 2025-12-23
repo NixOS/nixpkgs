@@ -10,12 +10,17 @@ let
 in
 pythonPackages.buildPythonApplication {
   version = "0.1.0";
+  format = "pyproject";
   pname = "flatten-references-graph";
 
   # Note: this uses only ./src/.gitignore
   src = nix-gitignore.gitignoreSource [ ] ./src;
 
-  propagatedBuildInputs = with pythonPackages; [
+  build-system = with pythonPackages; [
+    setuptools
+  ];
+
+  dependencies = with pythonPackages; [
     igraph
     toolz
   ];

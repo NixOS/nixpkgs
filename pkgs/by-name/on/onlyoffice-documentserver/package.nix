@@ -10,23 +10,24 @@
   liberation_ttf_v1,
   writeScript,
   xorg,
+  nixosTests,
 }:
 
 let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "8.1.3";
+    version = "9.2.1";
 
     src = fetchurl (
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-          sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
+          sha256 = "sha256-1hSGR68v2azRT2PsthXKjEekGekgAv0FFESrXK6vGs0=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-          sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
+          sha256 = "sha256-/H/x069JA9MtrfILos5KRT0IKOHKOuS7nI1ZspizvvA=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
@@ -42,7 +43,7 @@ let
 
     installPhase = ''
       # replace dangling symlinks which are not copied into fhs with actually files
-      rm lib/*.so*
+      mkdir lib
       for file in var/www/onlyoffice/documentserver/server/FileConverter/bin/*.so* ; do
         ln -rs "$file" lib/$(basename "$file")
       done
@@ -60,6 +61,11 @@ let
       # required for bwrap --bind
       mkdir -p var/lib/onlyoffice/ var/www/onlyoffice/documentserver/fonts/
 
+      # see usr/bin/documentserver-flush-cache.sh
+      cp var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js{.tpl,}
+      substituteInPlace var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js \
+        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
+
       mv * $out/
     '';
 
@@ -67,6 +73,7 @@ let
     dontStrip = true;
 
     passthru = {
+      tests = nixosTests.onlyoffice;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 
@@ -150,7 +157,7 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
@@ -158,13 +165,13 @@ let
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
       homepage = "https://github.com/ONLYOFFICE/DocumentServer";
-      license = licenses.agpl3Plus;
+      license = lib.licenses.agpl3Plus;
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
       ];
-      sourceProvenance = [ sourceTypes.binaryNativeCode ];
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+      maintainers = with lib.maintainers; [ raboof ];
     };
   };
 in

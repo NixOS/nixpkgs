@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
   substitute,
   cmake,
   coreutils,
@@ -31,22 +30,23 @@
   libiconv,
   ninja,
   prometheus-cpp,
-  darwin,
   buildClient ? true,
   buildServer ? true,
   SDL2,
-  useSDL2 ? false,
+  useSDL2 ? true,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luanti";
-  version = "5.11.0";
+  version = "5.14.0";
 
   src = fetchFromGitHub {
-    owner = "minetest";
-    repo = "minetest";
+    owner = "luanti-org";
+    repo = "luanti";
     tag = finalAttrs.version;
-    hash = "sha256-0PJK7sS2oFTNWex9rLTgVIqaRhwuUb6H5HIlVOGA08k=";
+    hash = "sha256-y4Bnlq3nE2u4PN0VPyBP31YORrG6LPPoSb7T5i9JnVM=";
   };
 
   patches = [
@@ -94,48 +94,42 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      gettext
-      freetype
-      sqlite
-      curl
-      bzip2
-      ncurses
-      gmp
-      libspatialindex
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.frameworks.OpenAL
-      darwin.apple_sdk.frameworks.Carbon
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Kernel
-    ]
-    ++ lib.optionals buildClient [
-      libpng
-      libjpeg
-      libGLU
-      openal
-      libogg
-      libvorbis
-    ]
-    ++ lib.optionals (buildClient && useSDL2) [
-      SDL2
-    ]
-    ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin && !useSDL2) [
-      xorg.libX11
-      xorg.libXi
-    ]
-    ++ lib.optionals buildServer [
-      leveldb
-      libpq
-      hiredis
-      prometheus-cpp
-    ];
+  buildInputs = [
+    jsoncpp
+    gettext
+    freetype
+    sqlite
+    curl
+    bzip2
+    ncurses
+    gmp
+    libspatialindex
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals buildClient [
+    libpng
+    libjpeg
+    libGLU
+    openal
+    libogg
+    libvorbis
+  ]
+  ++ lib.optionals (buildClient && useSDL2) [
+    SDL2
+  ]
+  ++ lib.optionals (buildClient && !stdenv.hostPlatform.isDarwin) [
+    xorg.libX11
+    xorg.libXi
+  ]
+  ++ lib.optionals buildServer [
+    leveldb
+    libpq
+    hiredis
+    prometheus-cpp
+  ];
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -148,17 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = gitUpdater {
-    allowedVersions = "\\.";
-    ignoredVersions = "-android$";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.luanti.org/";
-    description = "An open source voxel game engine (formerly Minetest)";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    description = "Open source voxel game engine (formerly Minetest)";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       fpletz
       fgaz
       jk

@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
-    homepage = "http://www.doof.me.uk/xcowsay";
+  meta = {
+    homepage = "https://www.doof.me.uk/xcowsay";
     description = "Tool to display a cute cow and messages";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ das_j ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ das_j ];
   };
 }

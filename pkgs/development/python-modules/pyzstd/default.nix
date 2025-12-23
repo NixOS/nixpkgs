@@ -3,19 +3,22 @@
   fetchFromGitHub,
   lib,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
+  typing-extensions,
   zstd-c,
 }:
+
 buildPythonPackage rec {
   pname = "pyzstd";
-  version = "0.16.2";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
     tag = version;
-    hash = "sha256-Az+0m1XUFxExBZK8bcjK54Zt2d5ZlAKRMZRdr7rPcss=";
+    hash = "sha256-15+GqJ/AMYs1R9ywo+muNVVbPkkzTMj//Zn/PPI+MCI=";
   };
 
   postPatch = ''
@@ -23,6 +26,9 @@ buildPythonPackage rec {
     # required for Python 3.9 under Windows
     substituteInPlace pyproject.toml \
         --replace-fail '"setuptools>=64,<74"' '"setuptools"'
+
+    # pyzst needs a copy of upstream zstd's license
+    ln -s ${zstd-c.src}/LICENSE zstd
   '';
 
   nativeBuildInputs = [
@@ -31,6 +37,14 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+  ];
+
+  dependencies = lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
+
+  pythonRelaxDeps = [
+    "typing-extensions"
   ];
 
   buildInputs = [

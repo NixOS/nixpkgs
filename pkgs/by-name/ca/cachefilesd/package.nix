@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Local network file caching management daemon";
     mainProgram = "cachefilesd";
     homepage = "https://people.redhat.com/dhowells/fscache/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

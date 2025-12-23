@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "viraptor";
-    repo = pname;
+    repo = "arpy";
     rev = version;
     hash = "sha256-jD1XJJhcpJymn0CwZ65U06xLKm1JjHffmx/umEO7a5s=";
   };
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for accessing the archive files and reading the contents";
     homepage = "https://github.com/viraptor/arpy";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

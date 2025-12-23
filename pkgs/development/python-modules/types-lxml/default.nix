@@ -5,48 +5,58 @@
   cssselect,
   fetchFromGitHub,
   html5lib,
+  hypothesis,
   lxml,
+  mypy,
   pdm-backend,
+  pook,
   pyright,
   pytestCheckHook,
-  pythonOlder,
   typeguard,
-  types-beautifulsoup4,
+  types-html5lib,
   typing-extensions,
-  hypothesis,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2025.02.24";
+  version = "2025.11.25";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-LkE4APp1r8mTofaTfOvrc8qRHQYRs3VQhRrdXKdBW/Q=";
+    hash = "sha256-WCG+jCkNPb6Mv7Mn1ivA5iwteR+vsfdGeo77HiQiQYc=";
   };
+
+  pythonRelaxDeps = [ "beautifulsoup4" ];
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     cssselect
-    types-beautifulsoup4
+    beautifulsoup4
+    types-html5lib
     typing-extensions
   ];
+
+  optional-dependencies = {
+    mypy = [ mypy ];
+    pyright = [ pyright ];
+  };
 
   nativeCheckInputs = [
     beautifulsoup4
     html5lib
     hypothesis
     lxml
-    pyright
+    pook
     pytestCheckHook
     typeguard
-  ];
+    urllib3
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "lxml-stubs" ];
 
@@ -63,13 +73,18 @@ buildPythonPackage rec {
   disabledTests = [
     "test_single_ns_all_tag_2"
     "test_default_ns"
+    # Tests require network access
+    "TestRelaxNGInput"
+    "TestXmldtdid"
+    "TestIddict"
+    "TestParseid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
     changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

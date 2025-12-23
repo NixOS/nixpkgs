@@ -12,7 +12,7 @@
   libclang,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
   fetchpatch,
@@ -23,22 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir $out
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
-      cp -r ${monorepoSrc}/third-party "$out"
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } ''
+    mkdir $out
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+    cp -r ${monorepoSrc}/third-party "$out"
 
-      # BOLT re-runs tablegen against LLVM sources, so needs them available.
-      cp -r ${monorepoSrc}/llvm/ "$out"
-      chmod -R +w $out/llvm
-    ''
-  );
+    # BOLT re-runs tablegen against LLVM sources, so needs them available.
+    cp -r ${monorepoSrc}/llvm/ "$out"
+    chmod -R +w $out/llvm
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 
@@ -65,8 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-  ] ++ devExtraCmakeFlags;
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+  ]
+  ++ devExtraCmakeFlags;
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..
@@ -92,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";
-    description = "LLVM post-link optimizer.";
+    description = "LLVM post-link optimizer";
   };
 })

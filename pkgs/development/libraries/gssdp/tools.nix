@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     cd tools
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Device Sniffer tool based on GSSDP framework";
     mainProgram = "gssdp-device-sniffer";
     homepage = "http://www.gupnp.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = gssdp_1_6.meta.maintainers;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    teams = gssdp_1_6.meta.teams;
+    platforms = lib.platforms.all;
   };
 }

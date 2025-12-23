@@ -3,6 +3,7 @@
   cups,
   fetchFromGitHub,
   ghostscript,
+  lib,
   libcupsfilters,
   libz,
   mupdf,
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libppd";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "OpenPrinting";
     repo = "libppd";
     rev = version;
-    hash = "sha256-vT4h3dnMu4yHNk0ExGZjuChdu0kAcxsla7vJupZpLaY=";
+    hash = "sha256-8ofCv+tKgBk9GoGD4lmBPB/S4ABZ6cWGOk/KqDsEzNk=";
   };
 
   nativeBuildInputs = [
@@ -46,4 +47,11 @@ stdenv.mkDerivation rec {
     "CUPS_DATADIR=$(out)/share/cups"
     "CUPS_SERVERROOT=$(out)/etc/cups"
   ];
+
+  meta = {
+    description = "Library designed to support legacy printer drivers by handling PostScript Printer Description (PPD) file";
+    homepage = "https://github.com/OpenPrinting/libppd";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+  };
 }

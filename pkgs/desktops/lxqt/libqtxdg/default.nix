@@ -8,23 +8,23 @@
   lxqt-build-tools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "4.1.0",
+  version ? "4.3.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqtxdg";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
+    repo = "libqtxdg";
+    tag = finalAttrs.version;
     hash =
       {
         "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-        "4.1.0" = "sha256-Efn08a8MkR459Ww0WiEb5GXKgQzJwKupIdL2TySpivE=";
+        "4.3.0" = "sha256-aec+NjKkaH8dI0cFVxGehdRGO2aH6BD+aix+IvD+2LI=";
       }
-      ."${version}";
+      ."${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -46,13 +46,18 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  postPatch = lib.optionals (version == "3.12.0") ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/libqtxdg";
     description = "Qt implementation of freedesktop.org xdg specs";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

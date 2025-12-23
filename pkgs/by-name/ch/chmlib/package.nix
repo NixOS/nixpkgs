@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
+  env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     "--enable-devel"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.jedrea.com/chmlib";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     description = "Library for dealing with Microsoft ITSS/CHM format files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

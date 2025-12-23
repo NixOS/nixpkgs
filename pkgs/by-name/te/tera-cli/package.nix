@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
@@ -10,19 +11,20 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chevdor";
     repo = "tera-cli";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-TN3zkxZC0Y9lev2wmvzwyLU+t4rNwut/dQILIA7+qbw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+qf/MlifpVXzDpADJoTqxU40wDntcPu+bW7eq6/iubk=";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command line utility to render templates from json|toml|yaml and ENV, using the tera templating engine";
     homepage = "https://github.com/chevdor/tera-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _365tuwe ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers._365tuwe ];
     mainProgram = "tera";
-    platforms = platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

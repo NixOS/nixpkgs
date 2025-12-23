@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
+  fetchFromGitea,
   python,
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # build-time dependencies
   gettext,
@@ -17,6 +17,7 @@
 
   # optional-dependencies
   fido2,
+  oauthlib,
   python3-openid,
   python3-saml,
   requests,
@@ -40,21 +41,23 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.4.1";
+  version = "65.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitHub {
-    owner = "pennersr";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-z5vaNopIk1CAV+TpH/V3Y6lXf7ztU4QeHZ9OTSPCgc0=";
+    hash = "sha256-tmCOJ15l8UnvFZFCiqH2ACBeIEDqYKNwf9gkCUHTKPE=";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asgiref
@@ -62,10 +65,20 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.interpreter} -m django compilemessages
+    ${python.pythonOnBuildForHost.interpreter} -m django compilemessages
   '';
 
   optional-dependencies = {
+    headless = [
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
+    headless-spec = [ pyyaml ];
+    idp-oidc = [
+      oauthlib
+      pyjwt
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     mfa = [
       fido2
       qrcode
@@ -76,7 +89,8 @@ buildPythonPackage rec {
       requests
       requests-oauthlib
       pyjwt
-    ] ++ pyjwt.optional-dependencies.crypto;
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
     steam = [ python3-openid ];
   };
 
@@ -91,7 +105,8 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
     pyyaml
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Tests require network access
@@ -101,10 +116,10 @@ buildPythonPackage rec {
   passthru.tests = { inherit dj-rest-auth; };
 
   meta = {
-    changelog = "https://github.com/pennersr/django-allauth/blob/${version}/ChangeLog.rst";
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
-    downloadPage = "https://github.com/pennersr/django-allauth";
-    homepage = "https://www.intenct.nl/projects/django-allauth";
+    changelog = "https://codeberg.org/allauth/django-allauth/src/tag/${src.tag}/ChangeLog.rst";
+    downloadPage = "https://codeberg.org/allauth/django-allauth";
+    homepage = "https://allauth.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

@@ -33,10 +33,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://python-requests.org";
     description = "Python HTTP for Humans";
-    license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

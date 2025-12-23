@@ -16,17 +16,17 @@
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.17.0.75948";
+  version = "3.25.0.76263";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-9ZZPAkfYnHYaPFGo/WfOhUIZ+Aq7SNsVmyXgDwe68gk=";
+    hash = "sha256-bnR6h2NRdGwmx04ydQIlE2VMe/C23YRqNxdbbb19yzE=";
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-tsYkp6Zr9gCgb0l6vQViSB7zcbf6JX+JwO4ZYqeG52c=";
+  mvnHash = "sha256-Fk6JPMmzz7YnPWOdWKOXQ8z6bdYuXSgQdWBOaIlpd4A=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
@@ -49,7 +49,7 @@ maven.buildMavenPackage rec {
 
     makeWrapper ${jre_headless}/bin/java $out/bin/sonarlint-ls \
       --add-flags "-jar $out/share/sonarlint-ls.jar" \
-      --add-flags "-analyzers $(ls -1 $out/share/plugins | tr '\n' ' ')"
+      --add-flags "-analyzers $(find $out/share/plugins/ -type f -name '*.jar' | sort | tr '\n' ' ')"
 
     runHook postInstall
   '';
@@ -63,7 +63,7 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript =
     let
-      pkgFile = builtins.toString ./package.nix;
+      pkgFile = toString ./package.nix;
     in
     lib.getExe (writeShellApplication {
       name = "update-${pname}";

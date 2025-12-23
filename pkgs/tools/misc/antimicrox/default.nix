@@ -9,6 +9,7 @@
   xorg,
   fetchFromGitHub,
   itstool,
+  udevCheckHook,
 }:
 
 mkDerivation rec {
@@ -27,6 +28,7 @@ mkDerivation rec {
     extra-cmake-modules
     pkg-config
     itstool
+    udevCheckHook
   ];
   buildInputs = [
     SDL2
@@ -39,12 +41,14 @@ mkDerivation rec {
         --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ sbruder ];
-    license = licenses.gpl3Plus;
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ sbruder ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
     mainProgram = "antimicrox";
   };
 }

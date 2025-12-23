@@ -35,12 +35,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ fuse ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/edolstra/aefs";
     description = "Cryptographic filesystem implemented in userspace using FUSE";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recoverdm";
-  version = "0.20-8";
+  version = "0.20-9";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "recoverdm";
     rev = "debian/${finalAttrs.version}";
-    hash = "sha256-1iW3Ug85ZLGpvG29N5zJt8oooSQGnLsr+8XIcp4aSSM=";
+    hash = "sha256-HLaiTeeqXn0mgRnG5FZflkPiDiB8CGzq4FR7lDj5oHI=";
   };
 
   patches =
@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       (patch "20_fix-typo-binary.patch")
       (patch "30-fix-BTS-mergebad-crash.patch")
       (patch "40_dev-c.patch")
+      (patch "50_ftbfs-with-gcc-14.patch")
       ./0001-darwin-build-fixes.patch
     ];
 
@@ -46,13 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage recoverdm.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recover damaged CD DVD and disks with bad sectors";
     mainProgram = "recoverdm";
     homepage = "https://salsa.debian.org/pkg-security-team/recoverdm";
     changelog = "https://salsa.debian.org/pkg-security-team/recoverdm/-/blob/debian/master/debian/changelog";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl1Only;
   };
 })

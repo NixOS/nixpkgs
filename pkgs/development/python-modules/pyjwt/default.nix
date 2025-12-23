@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   optional-dependencies.crypto = [ cryptography ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ (lib.flatten (lib.attrValues optional-dependencies));
+  nativeCheckInputs = [ pytestCheckHook ] ++ (lib.concatAttrValues optional-dependencies);
 
   disabledTests = [
     # requires internet connection
@@ -51,11 +51,11 @@ buildPythonPackage rec {
     inherit oauthlib;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prikhi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
 }

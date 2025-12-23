@@ -1,4 +1,11 @@
-{ pkgs, lib, cmake, ninja, sphinx, python3Packages, ... }:
+{
+  pkgs,
+  lib,
+  cmake,
+  ninja,
+  sphinx,
+  python3Packages,
+}:
 
 pkgs.stdenv.mkDerivation {
   pname = "ckdl";
@@ -11,7 +18,13 @@ pkgs.stdenv.mkDerivation {
     hash = "sha256-qEfRZzoUQZ8umdWgx+N4msjPBbuwDtkN1kNDfZicRjY=";
   };
 
-  outputs = [ "bin" "dev" "lib" "doc" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "doc"
+    "out"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -44,9 +57,8 @@ pkgs.stdenv.mkDerivation {
     touch $out
   '';
 
-
   meta = {
-    description = "ckdl is a C (C11) library that implements reading and writing the KDL Document Language.";
+    description = "C library that implements reading and writing the KDL Document Language";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

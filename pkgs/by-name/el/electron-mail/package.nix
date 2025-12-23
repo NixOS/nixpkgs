@@ -7,11 +7,11 @@
 
 let
   pname = "electron-mail";
-  version = "5.2.3";
+  version = "5.3.3";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
+    hash = "sha256-i1oJ/DNGspE7ELuN7MI0e8/69SZwirqahBa7Jf5kP7s=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
@@ -33,12 +33,12 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
+  meta = {
+    description = "Unofficial Election-based ProtonMail desktop client";
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.princemachiavelli ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };

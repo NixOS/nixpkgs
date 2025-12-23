@@ -31,8 +31,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ libpq ];
-  # To find pg_config
-  nativeBuildInputs = [ libpq ];
+  nativeBuildInputs = [ libpq.pg_config ];
 
   build-system = [
     setuptools
@@ -63,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psycopg2cffi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the psycopg2 module using cffi";
     homepage = "https://pypi.org/project/psycopg2cffi/";
-    license = with licenses; [ lgpl3Plus ];
-    maintainers = with maintainers; [ lovesegfault ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }

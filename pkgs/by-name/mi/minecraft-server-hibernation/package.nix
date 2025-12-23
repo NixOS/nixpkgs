@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gekware";
-    repo = pname;
+    repo = "minecraft-server-hibernation";
     rev = "v${version}";
     hash = "sha256-b6LeqjIraIasHBpaVgy8esl4NV8rdBrfO7ewgeIocS8=";
   };
@@ -37,11 +37,11 @@ buildGoModule rec {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Autostart and stop minecraft-server when players join/leave";
     mainProgram = "msh";
     homepage = "https://github.com/gekware/minecraft-server-hibernation";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ squarepear ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ squarepear ];
   };
 }

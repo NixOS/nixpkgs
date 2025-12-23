@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildPythonApplication,
   colorclass,
   fetchPypi,
@@ -16,7 +17,7 @@
 }:
 
 let
-  hash = "sha256-ITsZUjk0O7SvXOsj/sUD99pJPOZvOcLV1I6avV6Jeds=";
+  hash = "sha256-QQxadKVEIh1PvD8FdYgJ/U1iyWdy6FvO+LUELQ70KKw=";
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
   specVersion = "4.176.0";
   specHash = "sha256-P1E8Ga5ckrsw/CX0kxFef5fe8/p/pDCLuleX9wR5l48=";
@@ -29,7 +30,7 @@ in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.54.0";
+  version = "5.56.2";
   pyproject = true;
 
   src = fetchPypi {
@@ -71,7 +72,7 @@ buildPythonApplication rec {
     $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish; do
       installShellCompletion --cmd linode-cli \
         --$shell <($out/bin/linode-cli --skip-config completion $shell)

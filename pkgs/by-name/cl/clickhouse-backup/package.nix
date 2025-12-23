@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "clickhouse-backup";
-  version = "2.6.6";
+  version = "2.6.41";
 
   src = fetchFromGitHub {
     owner = "Altinity";
     repo = "clickhouse-backup";
     rev = "v${version}";
-    hash = "sha256-kWJpySeyeEje7tntnImT7UpOgQMsrfVxIvQ+2/uB6Ko=";
+    hash = "sha256-o7twdOyd53rP95Pi+l5MIo+U/lDqB0cynqONokfy8do=";
   };
 
-  vendorHash = "sha256-HB9BntvoUNrw23m4T+9p65aWUvQNpz3+ff1ydVqNfQM=";
+  vendorHash = "sha256-UxbQ/Q4HsTBkbIMBdeKns6t8tZnfdBRaHDMOA2RYDLI=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -31,11 +31,11 @@ buildGoModule rec {
     package = clickhouse-backup;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";
     mainProgram = "clickhouse-backup";
     homepage = "https://github.com/Altinity/clickhouse-backup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devusb ];
   };
 }

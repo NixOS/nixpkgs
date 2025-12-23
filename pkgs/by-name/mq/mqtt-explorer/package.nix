@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     typescript
     fixup-yarn-lock
     makeWrapper
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -130,7 +131,7 @@ stdenv.mkDerivation rec {
 
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
-      mv "build/mac/MQTT Explorer.app" $out/Applications
+      mv build/mac*/MQTT\ Explorer.app $out/Applications
 
       makeWrapper "$out/Applications/MQTT Explorer.app/Contents/MacOS/MQTT Explorer" \
         $out/bin/mqtt-explorer
@@ -168,12 +169,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "An all-round MQTT client that provides a structured topic overview";
+  meta = {
+    description = "All-round MQTT client that provides a structured topic overview";
     homepage = "https://github.com/thomasnordquist/MQTT-Explorer";
     changelog = "https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/v${version}";
-    license = licenses.cc-by-nd-40;
-    maintainers = with maintainers; [ tsandrini ];
+    license = lib.licenses.cc-by-nd-40;
+    maintainers = with lib.maintainers; [ tsandrini ];
     platforms = electron.meta.platforms;
     mainProgram = "mqtt-explorer";
   };

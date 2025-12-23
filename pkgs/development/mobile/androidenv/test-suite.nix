@@ -2,6 +2,7 @@
   callPackage,
   lib,
   stdenv,
+  meta,
 }:
 let
   examples-shell = callPackage ./examples/shell.nix { licenseAccepted = true; };
@@ -17,7 +18,8 @@ let
 in
 stdenv.mkDerivation {
   name = "androidenv-test-suite";
-  buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
+  version = (lib.importJSON ./repo.json).latest.fingerprint or "0000000000000000";
+  buildInputs = lib.attrValues all-tests;
 
   buildCommand = ''
     touch $out
@@ -25,5 +27,13 @@ stdenv.mkDerivation {
 
   passthru.tests = all-tests;
 
-  meta.timeout = 60;
+  passthru.updateScript = {
+    command = [ ./update.rb ];
+    attrPath = "androidenv.test-suite";
+    supportedFeatures = [ "commit" ];
+  };
+
+  meta = meta // {
+    timeout = 60;
+  };
 }

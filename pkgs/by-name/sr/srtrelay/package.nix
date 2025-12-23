@@ -8,25 +8,25 @@
 
 buildGoModule rec {
   pname = "srtrelay";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "voc";
     repo = "srtrelay";
     rev = "v${version}";
-    sha256 = "sha256-llBPlfvW9Bvm9nL8w4BTOgccsQNAAb3omRBXBISNBcc=";
+    sha256 = "sha256-idWAJD6dvvM5OHox5+MI8q3knyl2ANqBiXfQ0VlF67Q=";
   };
 
-  vendorHash = "sha256-z9sBrSGEHPLdC79hsNKZiI9+w8t0JrVQ8pRdBykaI5Q=";
+  vendorHash = "sha256-a4Efva0nWeyHjftuky76znbHOrZYXaIVENKbHK9xnb8=";
 
   buildInputs = [ srt ];
   nativeCheckInputs = [ ffmpeg ];
 
-  meta = with lib; {
+  meta = {
     description = "Streaming-Relay for the SRT-protocol";
     homepage = "https://github.com/voc/srtrelay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "srtrelay";
   };
 }

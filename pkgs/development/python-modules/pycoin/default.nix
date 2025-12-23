@@ -25,8 +25,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  dontUseSetuptoolsCheck = true;
-
   # Disable tests depending on online services
   disabledTests = [
     "ServicesTest"
@@ -35,10 +33,10 @@ buildPythonPackage rec {
     "test_tx_with_gpg"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nyanloutre ];
   };
 }

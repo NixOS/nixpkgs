@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qudida" ];
 
-  meta = with lib; {
+  meta = {
     description = "QUick and DIrty Domain Adaptation";
     homepage = "https://github.com/arsenyinfo/qudida";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Network packet analyzer";
     longDescription = ''
       ngrep strives to provide most of GNU grep's common features, applying
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
       free = true;
       redistributable = true;
     };
-    platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "ngrep";
   };
 }

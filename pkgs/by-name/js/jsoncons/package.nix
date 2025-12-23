@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncons";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "danielaparker";
     repo = "jsoncons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EafFoS54svxY9zaFqzWYQ8QUxN2dHy2wI5UugxKnyUk=";
+    hash = "sha256-brcOFD6EO6lVL4A+LrZp6CxZFY2mu+i10IQmjwf4XMo=";
   };
 
   nativeBuildInputs = [ cmake ];

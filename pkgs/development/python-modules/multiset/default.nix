@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multiset" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of a multiset";
     homepage = "https://github.com/wheerd/multiset";
     changelog = "https://github.com/wheerd/multiset/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

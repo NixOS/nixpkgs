@@ -23,15 +23,14 @@ stdenvNoCC.mkDerivation {
 
   postPatch =
     let
-      substitutions =
-        [
-          ''--replace-fail "convert" "${lib.getExe imagemagick}"''
-          ''--replace-fail "qrencode" "${lib.getExe qrencode}"''
-        ]
-        ++ lib.optionals testQR [
-          ''--replace-fail "hash zbarimg" "true"'' # hash does not work on NixOS
-          ''--replace-fail "$(zbarimg --raw" "$(${zbar}/bin/zbarimg --raw"''
-        ];
+      substitutions = [
+        ''--replace-fail "convert" "${lib.getExe imagemagick}"''
+        ''--replace-fail "qrencode" "${lib.getExe qrencode}"''
+      ]
+      ++ lib.optionals testQR [
+        ''--replace-fail "hash zbarimg" "true"'' # hash does not work on NixOS
+        ''--replace-fail "$(zbarimg --raw" "$(${zbar}/bin/zbarimg --raw"''
+      ];
     in
     ''
       substituteInPlace asc-to-gif.sh ${lib.concatStringsSep " " substitutions}

@@ -18,6 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-RWjR12ns1+tLuDZfBO7G42TF9w7sezdl9UPa67E1/PU=";
   };
 
+  patches = [ ./fix-httpx-proxies.patch ];
+
   propagatedBuildInputs = [ httpx ];
 
   pythonImportsCheck = [ "youtubesearchpython" ];
@@ -25,10 +27,10 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

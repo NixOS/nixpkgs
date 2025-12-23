@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "avfs";
-  version = "1.1.5";
+  version = "1.2.0";
   src = fetchurl {
     url = "mirror://sourceforge/avf/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rZ87ZBBNYAmgWMcPZwiPeZMJv4UZsUsVSvrSJqRScs8=";
+    sha256 = "sha256-olqOxDwe4XJiThpMec5mobkwhBzbVFtyXx7GS8q+iJw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,5 +32,7 @@ stdenv.mkDerivation rec {
     description = "Virtual filesystem that allows browsing of compressed files";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

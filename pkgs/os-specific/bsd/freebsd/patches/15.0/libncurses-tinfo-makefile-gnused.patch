@@ -1,0 +1,22 @@
+diff --git a/lib/ncurses/tinfo/Makefile b/lib/ncurses/tinfo/Makefile
+index 08c2311cd7a9..9efadea9bee0 100644
+--- a/lib/ncurses/tinfo/Makefile
++++ b/lib/ncurses/tinfo/Makefile
+@@ -269,7 +269,7 @@ curses.h: curses.head MKkey_defs.sh Caps Caps-ncurses
+ 	cat curses.head > $@.new
+ 	AWK=${AWK} _POSIX2_VERSION=199209 sh ${NCURSES_DIR}/include/MKkey_defs.sh \
+ 	    ${NCURSES_DIR}/include/Caps ${NCURSES_DIR}/include/Caps-ncurses >> $@.new
+-	sed -i '' 's|${SRCTOP}|${NCURSES_SRCTOP}|g' $@.new
++	sed -i 's|${SRCTOP}|${NCURSES_SRCTOP}|g' $@.new
+ 	cat ${NCURSES_DIR}/include/curses.wide >> $@.new
+ 	cat ${NCURSES_DIR}/include/curses.tail >> $@.new
+ 	mv -f $@.new $@
+@@ -394,7 +394,7 @@ unctrl.h: unctrl.h.in
+ terminfo.5: MKterminfo.sh terminfo.head Caps
+ 	sh ${NCURSES_DIR}/man/MKterminfo.sh ${NCURSES_DIR}/man/terminfo.head \
+ 	    ${NCURSES_DIR}/include/Caps ${NCURSES_DIR}/man/terminfo.tail >$@
+-	sed -i '' 's|${SRCTOP}|${NCURSES_SRCTOP}|g' $@
++	sed -i 's|${SRCTOP}|${NCURSES_SRCTOP}|g' $@
+ 
+ CLEANFILES+=	terminfo.5
+ 

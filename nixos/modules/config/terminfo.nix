@@ -8,7 +8,7 @@
 }:
 {
 
-  options = with lib; {
+  options = {
     environment.enableAllTerminfo = lib.mkOption {
       default = false;
       type = lib.types.bool;

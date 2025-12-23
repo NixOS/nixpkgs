@@ -23,21 +23,23 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     flit-core
     setuptools-scm
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   propagatedBuildInputs = [
     flit-core
     setuptools-scm
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "flit_scm" ];
 
   doCheck = false; # no tests
 
-  meta = with lib; {
+  meta = {
     description = "PEP 518 build backend that uses setuptools_scm to generate a version file from your version control system, then flit to build the package";
     homepage = "https://gitlab.com/WillDaSilva/flit_scm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

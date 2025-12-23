@@ -15,6 +15,7 @@
   glow,
   imagemagick,
   jq,
+  poppler-utils,
   ueberzug,
 }:
 
@@ -52,16 +53,20 @@ stdenv.mkDerivation rec {
           glow # for markdown files
           imagemagick
           jq # for json files
+          poppler-utils # for pdf files
           ueberzug # for image files on X11
         ]
       }";
   '';
 
-  meta = with lib; {
+  # Until https://github.com/NikitaIvanovV/ctpv/pull/90 is merged
+  patches = [ ./use-polite-flag.patch ];
+
+  meta = {
     description = "File previewer for a terminal";
     homepage = "https://github.com/NikitaIvanovV/ctpv";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wesleyjrz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wesleyjrz ];
   };
 }

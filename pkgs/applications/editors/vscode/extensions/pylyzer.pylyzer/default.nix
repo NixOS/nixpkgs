@@ -9,10 +9,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
   };
 
   meta = {
-    description = "A VS Code extension for Pylyzer, a fast static code analyzer & language server for Python";
+    description = "VS Code extension for Pylyzer, a fast static code analyzer & language server for Python";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=pylyzer.pylyzer";
     homepage = "https://github.com/mtshiba/pylyzer/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

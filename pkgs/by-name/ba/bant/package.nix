@@ -3,7 +3,7 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   nix-update-script,
   cctools,
@@ -14,19 +14,19 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "b03f4f95d8ba67873843eae80a73fef8ebf1522e";
-    hash = "sha256-gJr5bJ6Kj7jiUhnCC+YOUh3ChFR/55eUbwpP2srsVvM=";
+    rev = "1f55d91e1be0e4863a698b9d7582cf097ad456ee";
+    hash = "sha256-ESHF5FhLvn4u4j//6AFiSJRJYSKrI4EKr4oDwvsrcPM=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-Qq35WhRFpmQwWPupcjnUo/SEFRSRynVIx+PiHEsGED8=";
+    hash = "sha256-0RWR793+qXc5QYIc7wIL323iDkNts9w4e90FCdHT6t4=";
   };
 
   bazelFlags = [
@@ -39,12 +39,13 @@ buildBazelPackage rec {
     patchShebangs scripts/create-workspace-status.sh
   '';
 
+  removeRulesCC = false;
+
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-ibv49Y0VjAvfTUwxRUH4BmzUvz8J/qfYPGnI5Tw51HA=";
-        x86_64-linux = "sha256-VHR08FB4G0LlczWtBb8AdU5tNEzBDNUZpHoB6e3HB1M=";
-        aarch64-darwin = "sha256-5uKCLDJs0tzOJ7YiKP90RIfIYrken3XFyhT5HHdzft0=";
+        aarch64-linux = "sha256-aGfFbeosrWhNqiHV9ng59DeMZSGjaylPRfolxatauJE";
+        x86_64-linux = "sha256-nbHHkgN4O8bWZzrpQUMZbm4+iRffqdfu7C1kkLJ3GDQ=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -52,7 +53,7 @@ buildBazelPackage rec {
   nativeBuildInputs = [
     jdk
   ];
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   bazelBuildFlags = [ "-c opt" ];
   bazelTestTargets = [ "//..." ];

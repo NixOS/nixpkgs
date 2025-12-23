@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e16";
-  version = "1.0.30";
+  version = "1.0.31";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    hash = "sha256-JKBmBgC5cN4XO03r0NR78Ly9tpI733/sUEPL0GLU5B0=";
+    hash = "sha256-ZQTsIy/BiO/xUiCu+bc2n406F0unAinxyYLjVRfUSiQ=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.enlightenment.org/e16";
     description = "Enlightenment DR16 window manager";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

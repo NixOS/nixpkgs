@@ -23,7 +23,7 @@ index 04b0a77f3..2330ea921 100644
  protobuf>=3.12
  qdarkstyle>=2.7
 -aiorpcx>=0.22.0,<0.23
-+aiorpcx>=0.22.0,<0.24
++aiorpcx>=0.22.0
  aiohttp>=3.3.0,<4.0.0
  aiohttp_socks>=0.3
  certifi
@@ -31,14 +31,12 @@ diff --git a/run_electrum b/run_electrum
 index a1b30f29e..cb22f8724 100755
 --- a/run_electrum
 +++ b/run_electrum
-@@ -67,8 +67,8 @@ def check_imports():
+@@ -67,8 +67,6 @@ def check_imports():
          import aiorpcx
      except ImportError as e:
          sys.exit(f"Error: {str(e)}. Try 'sudo python3 -m pip install <module-name>'")
 -    if not ((0, 22, 0) <= aiorpcx._version < (0, 23)):
 -        raise RuntimeError(f'aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.23')
-+    if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):
-+        raise RuntimeError(f'aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24')
      # the following imports are for pyinstaller
      from google.protobuf import descriptor
      from google.protobuf import message

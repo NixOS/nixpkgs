@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "apfs-fuse";
-  version = "unstable-2023-03-12";
+  version = "0-unstable-2023-03-12";
 
   src = fetchFromGitHub {
     owner = "sgan81";
@@ -21,6 +21,12 @@ stdenv.mkDerivation {
     hash = "sha256-uYAlqnQp0K880XEWuH1548DUA3ii53+hfsuh/T3Vwzg=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix for CMake v4
+    # https://github.com/sgan81/apfs-fuse/pull/211
+    ./cmake-v4.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -33,7 +39,8 @@ stdenv.mkDerivation {
     (if stdenv.hostPlatform.isDarwin then fuse else fuse3)
     bzip2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isLinux attr;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux attr;
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DUSE_FUSE3=OFF";
 
@@ -43,12 +50,12 @@ stdenv.mkDerivation {
     ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "apfs-fuse";
-    maintainers = with maintainers; [ ealasu ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ealasu ];
+    platforms = lib.platforms.unix;
   };
 }

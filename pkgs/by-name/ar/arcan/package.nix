@@ -2,9 +2,9 @@
   lib,
   SDL2,
   callPackage,
-  fetchpatch2,
   cmake,
   espeak-ng,
+  fetchpatch2,
   ffmpeg,
   file,
   freetype,
@@ -28,6 +28,7 @@
   libvncserver,
   libxcb,
   libxkbcommon,
+  luajit,
   makeWrapper,
   libgbm,
   mupdf,
@@ -48,12 +49,13 @@
   xz,
   # Boolean flags
   buildManPages ? true,
-  useBuiltinLua ? true,
+  useBuiltinLua ? false,
   useEspeak ? !stdenv.hostPlatform.isDarwin,
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
-  useTracy ? true,
+  # For debugging only, disabled by upstream
+  useTracy ? false,
   # Configurable options
   sources ? callPackage ./sources.nix { },
 }:
@@ -61,20 +63,13 @@
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.letoram-arcan) pname version src;
 
-  patches = [
-    # (encode) remove deprecated use of pts/channel-layout
-    (fetchpatch2 {
-      url = "https://github.com/letoram/arcan/commit/e717c1b5833bdc2dea7dc6f64eeaf39c683ebd26.patch?full_index=1";
-      hash = "sha256-nUmOWfphGtGiLehUa78EJWqTlD7SvqJgl8lnn90vTFU=";
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkg-config
     wayland-scanner
-  ] ++ lib.optionals buildManPages [ ruby ];
+  ]
+  ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -114,7 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     xz
-  ] ++ lib.optionals useEspeak [ espeak-ng ];
+  ]
+  ++ lib.optionals (!useBuiltinLua) [ luajit ]
+  ++ lib.optionals useEspeak [ espeak-ng ];
 
   cmakeFlags = [
     # The upstream project recommends tagging the distribution
@@ -167,6 +164,17 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     '';
 
+  patches = [
+    # Upstream patch to support ffmpeg 8
+    (fetchpatch2 {
+      name = "0001-build-fix-build-with-latest-ffmpeg.patch";
+      url = "https://chiselapp.com/user/letoram/repository/arcan/vpatch?from=cc6f24de2134282a&to=25bbde5eec7033d3";
+      hash = "sha256-i8d/X/xmEGWpO9fG6BerW//JnosPwDolXvMFsuv39IM=";
+      stripLen = 1;
+      extraPrefix = "src/";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace ./src/platform/posix/paths.c \
       --replace-fail "/usr/bin" "$out/bin" \
@@ -202,7 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
   };
 })

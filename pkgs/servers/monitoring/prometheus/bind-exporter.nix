@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "bind_exporter";
@@ -15,11 +20,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bind; };
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for bind9 server";
     mainProgram = "bind_exporter";
     homepage = "https://github.com/digitalocean/bind_exporter";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rtreffer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rtreffer ];
   };
 }

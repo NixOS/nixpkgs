@@ -40,7 +40,8 @@ buildPythonPackage rec {
     six
     twisted
     pyopenssl
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     i2p = [ txi2p-tahoe ];
@@ -50,11 +51,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "foolscap" ];
 
-  meta = with lib; {
+  meta = {
     description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol, intended to
@@ -62,7 +64,7 @@ buildPythonPackage rec {
       implement a distributed object-capabilities model in Python.
     '';
     homepage = "https://github.com/warner/foolscap";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

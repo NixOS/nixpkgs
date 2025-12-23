@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "17-6.0.0";
+  version = "17-6.1.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     tag = version;
-    hash = "sha256-hwF3kowuMmc1eXMdvhoCpBxT6++wp29MRYhy4S5Jhfg=";
+    hash = "sha256-UXba2WYyIO7RcFcNZeLL+Q9CwlloMZ5oFfHfL7+j4dU=";
   };
 
   nativeBuildInputs = [ which ];

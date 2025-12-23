@@ -64,7 +64,8 @@ let
       meta = {
         mainProgram = pname;
         inherit (ruby.meta) platforms;
-      } // meta;
+      }
+      // meta;
       passthru =
         basicEnv.passthru
         // {

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
   ];
@@ -29,12 +30,12 @@ stdenv.mkDerivation rec {
     install asus-ec-sensors.ko -Dm444 -t ${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux HWMON sensors driver for ASUS motherboards to read sensor data from the embedded controller";
     homepage = "https://github.com/zeule/asus-ec-sensors";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with lib.maintainers; [ nickhu ];
     broken = kernel.kernelOlder "5.11";
   };
 }

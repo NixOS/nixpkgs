@@ -1,43 +1,75 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   libcosmicAppHook,
+  just,
   pulseaudio,
+  pipewire,
+  libinput,
   udev,
   nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
-    tag = "epoch-${version}";
-    hash = "sha256-ezOeRgqI/GOWFknUVZI7ZLEy1GYaBI+/An83HWKL6ho=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-InQdJ3ddyDg8SfkIaK2T4r+gS5Cr0h93afwBGmI40fk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vYehF2RjPrTZiuGcRUe4XX3ftRo7f+SIoKizD/kOtR8=";
+  cargoHash = "sha256-DNQvmE/2swrDybjcQfCAjMRkAttjl+ibbLG0HSlcZwU=";
 
-  nativeBuildInputs = [ libcosmicAppHook ];
+  nativeBuildInputs = [
+    just
+    libcosmicAppHook
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     pulseaudio
     udev
+    libinput
+    pipewire
+  ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -45,10 +77,7 @@ rustPlatform.buildRustPackage rec {
     description = "OSD for the COSMIC Desktop Environment";
     mainProgram = "cosmic-osd";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
-}
+})

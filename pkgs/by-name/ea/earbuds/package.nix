@@ -4,11 +4,10 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
   pkg-config,
+  bluez,
   dbus,
   libpulseaudio,
-  bluez,
 }:
 rustPlatform.buildRustPackage {
   pname = "earbuds";
@@ -26,28 +25,21 @@ rustPlatform.buildRustPackage {
     ./fix-daemon.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Y1pMmWxfXGcEFPj05/BpXQvd199O5l6hJmePNxMQc/Y=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
+    bluez
     dbus
     libpulseaudio
-    bluez
   ];
 
   # package does not contain any tests
   doCheck = false;
-
-  # nativeInstallCheckInputs = [
-  #   versionCheckHook
-  # ];
-  # versionCheckProgramArg = [ "--version" ];
-  # doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd earbuds \

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "plasma-overdose-kde-theme";
-  version = "unstable-2022-05-30";
+  version = "0-unstable-2022-05-30";
 
   src = fetchFromGitHub {
     owner = "Notify-ctrl";
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cute KDE theme inspired by the game Needy Girl Overdose";
     homepage = "https://github.com/Notify-ctrl/Plasma-Overdose";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ takagiy ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ takagiy ];
   };
 }

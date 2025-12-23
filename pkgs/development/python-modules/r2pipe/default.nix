@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "r2pipe";
-  version = "1.9.4";
+  version = "1.9.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ah3kb+Hk1pMlQ8D1SMPAISbL2n6TDG0Ih9ezmW7oIRk=";
+    hash = "sha256-OAS3Yr1CmMMuhEP/tRO9YAdYZ3emib0huXl3/rjLLJk=";
   };
 
   # Tiny sanity check to make sure r2pipe finds radare2 (since r2pipe doesn't
@@ -47,10 +47,10 @@ buildPythonPackage rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interact with radare2";
     homepage = "https://github.com/radare/radare2-r2pipe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ timokau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ timokau ];
   };
 }

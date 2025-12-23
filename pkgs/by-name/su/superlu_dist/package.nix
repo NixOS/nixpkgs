@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
+  llvmPackages,
   cmake,
+  pkg-config,
   gfortran,
   blas,
   lapack,
@@ -10,16 +13,18 @@
   mpiCheckPhaseHook,
   metis,
   parmetis,
-
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
-}:
+  isILP64 ? false,
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+  # passthru.tests
+  mpich,
+  superlu_dist,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu_dist";
-  version = "9.1.0";
+  version = "9.2.0";
 
   __structuredAttrs = true;
 
@@ -29,52 +34,76 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Remove non‐free files.
     postFetch = "rm $out/SRC/prec-independent/mc64ad_dist.c";
-    hash = "sha256-NMAEtTmTY189p8BlmsTugwMuxKZh+Bs1GyuwUHkLA1U=";
+    hash = "sha256-i/Gg+9oMNNRlviwXUSRkWNaLRZLPWZRtA1fGYqh2X0k=";
   };
+
+  # --oversubscribe unrecognized by mpich
+  # see https://github.com/xiaoyeli/superlu_dist/issues/208
+  postPatch = ''
+    substituteInPlace TEST/CMakeLists.txt \
+      --replace-fail "-oversubscribe" ""
+  '';
 
   patches = [
     ./mc64ad_dist-stub.patch
   ];
 
-  postPatch = ''
-    substituteInPlace SRC/prec-independent/util.c \
-      --replace-fail "LargeDiag_MC64" "NOROWPERM"
-  '';
-
   nativeBuildInputs = [
     cmake
+    pkg-config
     gfortran
   ];
 
-  buildInputs =
-    [
-      mpi
-      lapack
-    ]
-    ++ lib.optionals withParmetis [
-      metis
-      parmetis
-    ];
+  buildInputs = [
+    mpi
+    # always build with lp64 BLAS/LAPACK.
+    # see https://github.com/xiaoyeli/superlu_dist/issues/132#issuecomment-2323093701
+    (blas.override { isILP64 = false; })
+    (lapack.override { isILP64 = false; })
+  ]
+  ++ lib.optionals withParmetis [
+    metis
+    parmetis
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    gfortran.cc.lib
+    llvmPackages.openmp
+  ];
 
-  propagatedBuildInputs = [ blas ];
-
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-      (lib.cmakeBool "enable_fortran" true)
-      (lib.cmakeBool "enable_complex16" true)
-      (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
-      (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
-      (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
-    ]
-    ++ lib.optionals withParmetis [
-      (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
-      (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "enable_examples" false)
+    (lib.cmakeBool "enable_openmp" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "XSDK_ENABLE_Fortran" true)
+    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
+    (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
+    (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
+    (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
+    (lib.cmakeFeature "XSDK_INDEX_SIZE" (if isILP64 then "64" else "32"))
+  ]
+  ++ lib.optionals withParmetis [
+    (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
+    (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
+  ];
 
   doCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [ mpiCheckPhaseHook ];
+
+  passthru = {
+    inherit isILP64;
+    tests = {
+      ilp64 = superlu_dist.override { isILP64 = true; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      mpich = superlu_dist.override {
+        mpi = mpich;
+      };
+    };
+  };
 
   meta = {
     homepage = "https://portal.nersc.gov/project/sparse/superlu/";
@@ -96,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
     ];
     description = "Library for the solution of large, sparse, nonsymmetric systems of linear equations";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };
 })

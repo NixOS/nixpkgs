@@ -8,15 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "orocos-kdl";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "orocos";
     repo = "orocos_kinematics_dynamics";
-    rev = "v${version}";
-    sha256 = "15ky7vw461005axx96d0f4zxdnb9dxl3h082igyd68sbdb8r1419";
-    # Needed to build Python bindings
-    fetchSubmodules = true;
+    tag = "${version}";
+    hash = "sha256-4pPU+6uMMYLGq2V46wmg6lHFVhwFXrEg7PfnWGAI2is=";
+    fetchSubmodules = true; # Needed to build Python bindings
   };
 
   sourceRoot = "${src.name}/orocos_kdl";
@@ -24,11 +23,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ eigen ];
 
-  meta = with lib; {
+  meta = {
     description = "Kinematics and Dynamics Library";
     homepage = "https://www.orocos.org/kdl.html";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
   };
 }

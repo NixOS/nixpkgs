@@ -7,19 +7,18 @@
   pkg-config,
   sail,
   ninja,
-  zlib,
   z3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sail-riscv";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "riscv";
-    repo = pname;
+    repo = "sail-riscv";
     rev = version;
-    hash = "sha256-cO0ZOr2frMMLE9NUGDxy9+KpuyBnixw6wcNzUArxDiE=";
+    hash = "sha256-50ATe3DQcdyNOqP85mEMyEwxzpBOplzRN9ulaJNo9zo=";
   };
 
   nativeBuildInputs = [
@@ -30,31 +29,17 @@ stdenv.mkDerivation rec {
     sail
   ];
   buildInputs = [
-    zlib
     gmp
   ];
   strictDeps = true;
 
-  postPatch = ''
-    rm -r prover_snapshots
-  '';
+  # sail-riscv 0.8 fails to install without compressed_changelog
+  ninjaFlags = [ "compressed_changelog" ];
 
-  preBuild = ''
-    ninja \
-      riscv_sim_rv32d      \
-      riscv_sim_rv32d_rvfi \
-      riscv_sim_rv32f      \
-      riscv_sim_rv32f_rvfi \
-      riscv_sim_rv64d      \
-      riscv_sim_rv64d_rvfi \
-      riscv_sim_rv64f      \
-      riscv_sim_rv64f_rvfi
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/riscv/sail-riscv";
     description = "Formal specification of the RISC-V architecture, written in Sail";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = lib.licenses.bsd2;
   };
 }

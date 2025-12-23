@@ -7,11 +7,28 @@
   pythonOlder,
   numpy,
   lxml,
+  trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.4";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,12 +37,34 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-kkIGAeWFrgOIbvBnZFRQue7Fh7REKF/CHgJLBEZliLM=";
+    hash = "sha256-HOSmV55RRZkIk1YppWfYvSm0hURSKUsDeeWtVBrH7Rs=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
+
+  optional-dependencies = {
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+      # embreex # not packaged
+    ];
+  };
 
   nativeCheckInputs = [
     lxml
@@ -37,9 +76,21 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
-  pythonImportsCheck = [ "trimesh" ];
+  pythonImportsCheck = [
+    "trimesh"
+    "trimesh.ray"
+    "trimesh.path"
+    "trimesh.path.exchange"
+    "trimesh.scene"
+    "trimesh.voxel"
+    "trimesh.visual"
+    "trimesh.viewer"
+    "trimesh.exchange"
+    "trimesh.resources"
+    "trimesh.interfaces"
+  ];
 
   meta = {
     description = "Python library for loading and using triangular meshes";

@@ -6,6 +6,7 @@
   boca,
   smooth,
   systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,17 +24,18 @@ stdenv.mkDerivation rec {
     boca
     smooth
     systemd
+    wrapGAppsHook3
   ];
 
   makeFlags = [
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio converter and CD ripper with support for various popular formats and encoders";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.freac.org/";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     mkfontdir "$out/share/fonts"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monospaced font based on terminus and tamsyn";
     homepage = "https://sourceforge.net/projects/termsyn/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sophrosyne ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sophrosyne ];
   };
 }

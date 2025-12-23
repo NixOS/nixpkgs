@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "monday15";
-    repo = pname;
+    repo = "lounge-gtk-theme";
     rev = version;
     sha256 = "0ima0aa5j296xn4y0d1zj6vcdrdpnihqdidj7bncxzgbnli1vazs";
   };
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/Lounge-aux;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and clean GTK theme with vintage scrollbars, inspired by Absolute, based on Adwaita";
     homepage = "https://github.com/monday15/lounge-gtk-theme";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

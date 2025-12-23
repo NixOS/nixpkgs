@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "model-bakery";
-  version = "1.20.4";
+  version = "1.20.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "model-bakers";
     repo = "model_bakery";
     tag = version;
-    hash = "sha256-OVeBMDLV7vPDKr+aLYH0B3X+80Z69jzTSxuRG3unxgc=";
+    hash = "sha256-Rf1QpIjo94h3lfZCBJfzaOMggPqy37NUOFWUbLROcec=";
   };
 
   build-system = [ hatchling ];
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "model_bakery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Object factory for Django";
     homepage = "https://github.com/model-bakers/model_bakery";
     changelog = "https://github.com/model-bakers/model_bakery/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dogsheep";
-    repo = pname;
+    repo = "github-to-sqlite";
     rev = version;
     hash = "sha256-KwLaaZxBBzRhiBv4p8Imb5XI1hyka9rmr/rxA6wDc7Q=";
   };
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_scrape_dependents" ];
 
-  meta = with lib; {
+  meta = {
     description = "Save data from GitHub to a SQLite database";
     mainProgram = "github-to-sqlite";
     homepage = "https://github.com/dogsheep/github-to-sqlite";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
 }

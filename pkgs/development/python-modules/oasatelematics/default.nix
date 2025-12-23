@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "panosmz";
-    repo = pname;
+    repo = "oasatelematics";
     rev = "v${version}";
     hash = "sha256-3O7XbNVj1S3ZwheklEhm0ivw16Tj7drML/xYC9383Kg=";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oasatelematics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OASA Telematics API";
     homepage = "https://github.com/panosmz/oasatelematics";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

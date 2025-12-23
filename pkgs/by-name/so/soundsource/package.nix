@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundsource";
-  version = "5.7.5";
+  version = "5.8.10";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20241208194405/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
-    hash = "sha256-KjyhccLAAa/atSpw/H2IVt23huEY6lxC5BVAaqSG3JI=";
+    url = "https://web.archive.org/web/20251119083726/https://cdn.rogueamoeba.com/soundsource/download/SoundSource.zip";
+    hash = "sha256-kIGpIxlX+qyiXeOWq9DjKLZL4fPZdgsro9P6SqrPQHo=";
   };
 
   dontUnpack = true;
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       emilytrau
-      donteatoreo
+      FlameFlag
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

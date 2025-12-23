@@ -13,25 +13,22 @@
   libglvnd,
   libgbm,
   nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-player";
-    tag = "epoch-${version}";
-    hash = "sha256-Ebjj+C+yLCRomZy2W8mYDig1pv7aQcD3A9V2M53RM5U=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-+DFMBMJuKPZ8T9PdR3/Qt9lF688TYS1AhbkVK2yudU4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-p1ylYB6xuF0UrhUO+QbGIgxqvZeQ6+GIbSNijTDXyRE=";
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-Z0+6jtvJ3z/ptcqrbvSuXgjH2liASNJwBIKiHbrVBT8=";
 
   nativeBuildInputs = [
     just
@@ -63,32 +60,38 @@ rustPlatform.buildRustPackage rec {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-player"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postInstall = ''
     libcosmicAppWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-player";
     description = "Media player for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      ahoneybun
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-player";
   };
-}
+})

@@ -1,17 +1,6 @@
-{
-  system ? builtins.currentSystem,
-  handleTestOn,
-}:
-
-let
-  supportedSystems = [
-    "x86_64-linux"
-    "i686-linux"
-    "aarch64-linux"
-  ];
-in
-{
-  basic = handleTestOn supportedSystems ./basic.nix { inherit system; };
-  mruby = handleTestOn supportedSystems ./mruby.nix { inherit system; };
-  tls-recommendations = handleTestOn supportedSystems ./tls-recommendations.nix { inherit system; };
+{ lib, runTest }:
+lib.recurseIntoAttrs {
+  basic = runTest ./basic.nix;
+  mruby = runTest ./mruby.nix;
+  tls-recommendations = runTest ./tls-recommendations.nix;
 }

@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
 
+  installShellFiles,
   makeWrapper,
   perl,
   strace,
@@ -14,7 +15,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "pvs-studio";
-  version = "7.33.85330.89";
+  version = "7.38.97034.608";
 
   src =
     let
@@ -23,27 +24,36 @@ stdenv.mkDerivation rec {
     in
     fetchzip {
       url = selectSystem {
-        x86_64-darwin = "https://web.archive.org/web/20241115155106/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-macos.tgz";
-        x86_64-linux = "https://web.archive.org/web/20241115155538/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-x86_64.tgz";
+        aarch64-darwin = "https://web.archive.org/web/20251002123729/https://files.pvs-studio.com/pvs-studio-${version}-macos-arm64.zip";
+        x86_64-darwin = "https://web.archive.org/web/20251002121955/https://files.pvs-studio.com/pvs-studio-${version}-macos-x86_64.zip";
+        x86_64-linux = "https://web.archive.org/web/20251002124032/https://files.pvs-studio.com/pvs-studio-${version}-x86_64.tgz";
       };
       hash = selectSystem {
-        x86_64-darwin = "sha256-jhfW+uBexzYzzf3JVqRYqtDjE5+OoT3RcuRPJEOEs18=";
-        x86_64-linux = "sha256-rJQc8B2B7J0bcEI00auwIO/4PH2YMkuzSK/OyAnhdBA=";
+        aarch64-darwin = "sha256-nZwG2qFnpWnJBVmfdIqT/y3gVs66NUKy4BifFCgA3aE=";
+        x86_64-darwin = "sha256-Q48i518jNQYTGGW7ihcyk7/DauHH1/fWniEvdsp7rSU=";
+        x86_64-linux = "sha256-Dw9PasnbUbBsVCPZoUHHcRIBzq1XqFzThaVY6NB3qFE=";
       };
     };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  nativeRuntimeInputs = lib.makeBinPath [
-    perl
-    strace
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
   ];
+
+  nativeRuntimeInputs = lib.makeBinPath (
+    [
+      perl
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform strace) [
+      strace
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
 
     install -D -m 0755 bin/* -t $out/bin
-    install -D -m 0644 etc/bash_completion.d/* -t $out/etc/bash_completion.d
+    installShellCompletion --bash etc/bash_completion.d/*
 
     runHook postInstall
   '';
@@ -62,10 +72,11 @@ stdenv.mkDerivation rec {
     homepage = "https://pvs-studio.com/en/pvs-studio";
     license = lib.licenses.unfreeRedistributable;
     platforms = [
+      "aarch64-darwin"
       "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

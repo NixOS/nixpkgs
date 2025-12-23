@@ -16,13 +16,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xnec2c";
-  version = "4.4.16";
+  version = "4.4.17";
 
   src = fetchFromGitHub {
     owner = "KJ7LNW";
     repo = "xnec2c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W8JwbCSXt5cjgncOzV1wltPnJxwWC6B29eaT8emIU9Y=";
+    hash = "sha256-ZxKpClB5IBfcpIOJsGVSiZU8WGu/8Yzeru96uCKkCGQ=";
   };
 
   nativeBuildInputs = [

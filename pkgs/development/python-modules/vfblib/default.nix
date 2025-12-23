@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.9.1";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
-    rev = "v${version}";
-    hash = "sha256-D37i4dJPWGruwhLVEEPY3mzu0ONM38JTbC3Pt+/35lQ=";
+    tag = "v${version}";
+    hash = "sha256-fAczRejHDe02iWMWXQzNHLmxRX5ApIPvUzsYnwqrKn8=";
   };
 
   build-system = [
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Converter and deserializer for FontLab Studio 5 VFB files";
     homepage = "https://github.com/LucasFonts/vfbLib";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

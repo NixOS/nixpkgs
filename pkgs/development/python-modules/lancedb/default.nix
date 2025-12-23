@@ -13,45 +13,49 @@
   protobuf,
 
   # dependencies
-  attrs,
-  cachetools,
   deprecation,
-  nest-asyncio,
-  overrides,
+  lance-namespace,
+  numpy,
   packaging,
+  pyarrow,
   pydantic,
-  pylance,
-  requests,
-  retry,
   tqdm,
+  pythonOlder,
+  overrides,
 
   # tests
   aiohttp,
+  boto3,
+  datafusion,
+  duckdb,
   pandas,
   polars,
+  pylance,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  duckdb,
+  tantivy,
+
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.19.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-AvISt9YpnHFrxRQYkkycXmsHSRs9QcBUe0DLXMYGrEI=";
+    hash = "sha256-urOHHuPFce7Ms1EqjM4n72zx0APVrIQ1bLIkmrp/Dec=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0mBCBQTv9nsHiQDUrZfm5+ZUGp3A2k8+DH/T85Vq2KA=";
+    hash = "sha256-03p1mDsE//YafUGImB9xMqqUzKlBD9LCiV1RGP2L5lw=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -66,61 +70,56 @@ buildPythonPackage rec {
     openssl
   ];
 
-  pythonRelaxDeps = [
-    # pylance is pinned to a specific release
-    "pylance"
-  ];
-
   dependencies = [
-    attrs
-    cachetools
     deprecation
-    nest-asyncio
-    overrides
+    lance-namespace
+    numpy
     packaging
+    pyarrow
     pydantic
-    pylance
-    requests
-    retry
     tqdm
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    overrides
   ];
 
   pythonImportsCheck = [ "lancedb" ];
 
   nativeCheckInputs = [
     aiohttp
+    boto3
+    datafusion
     duckdb
     pandas
     polars
+    pylance
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
+    tantivy
   ];
 
   preCheck = ''
     cd python/python/tests
   '';
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
-    "test_fts_native"
-
     # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
     # https://github.com/lancedb/lancedb/issues/1539
     "test_polars"
   ];
 
-  disabledTestPaths =
-    [
-      # touch the network
-      "test_s3.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-      "test_remote_db.py"
-    ];
+  disabledTestPaths = [
+    # touch the network
+    "test_namespace_integration.py"
+    "test_s3.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_remote_db.py"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

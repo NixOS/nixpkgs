@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-compliance-checker";
-    rev = version;
+    tag = version;
     sha256 = "1f1f9j2nf9j83sfl2ljadch99v6ha8rq8xm7ax5akc05hjpyckij";
   };
 
@@ -28,12 +28,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lvc.github.io/abi-compliance-checker";
     description = "Tool for checking backward API/ABI compatibility of a C/C++ library";
     mainProgram = "abi-compliance-checker";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.bhipple ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
   };
 }

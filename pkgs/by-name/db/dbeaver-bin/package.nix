@@ -4,36 +4,37 @@
   fetchurl,
   undmg,
   makeWrapper,
-  openjdk17,
+  openjdk21,
   gnused,
   autoPatchelfHook,
+  autoSignDarwinBinariesHook,
   wrapGAppsHook3,
   gtk3,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.0.0";
+  version = "25.3.1";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64-nojdk.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
+        x86_64-linux = "linux.gtk.x86_64.tar.gz";
+        aarch64-linux = "linux.gtk.aarch64.tar.gz";
         x86_64-darwin = "macos-x86_64.dmg";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-9pwHoQWyy/piv5QUELbVJc+MXatrY7zsinu0X5FVmds=";
-        aarch64-linux = "sha256-Evvah8a+rUQchMORbrYTVuBqzXTk/kqpP8tTH/12zBU=";
-        x86_64-darwin = "sha256-r/d07oISifXJlnNbCD8Hlo8+2zvTZmdP6eXkx8shAnA=";
-        aarch64-darwin = "sha256-h0v2q59RqG5BrqX576Gt7EcHNii7N/zx6MLalvSDlzI=";
+        x86_64-linux = "sha256-+9bKKfLFR+9iBv/Sgwbd/gVpUa2c4uvkZGzx61x5bJ8=";
+        aarch64-linux = "sha256-sfrytO39RnqODECo0CPj2tusvZBIo5I9KuRqzoLbE0M=";
+        x86_64-darwin = "sha256-74EMwaG2xmH2gEyhcwqZKgVzNOup81DG8T8DmELN53g=";
+        aarch64-darwin = "sha256-cJ9hS/jQySoGbXd0yLmBNlVak8OOnMW2ToXojnx9Th4=";
       };
     in
     fetchurl {
@@ -43,14 +44,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    undmg
+    autoSignDarwinBinariesHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -58,14 +63,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   prePatch = ''
     substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
       --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  ''
+  # remove the bundled JRE configuration on Darwin
+  # dont use substituteInPlace here because it would match "-vmargs"
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
   '';
 
   preInstall = ''
     # most directories are for different architectures, only keep what we need
     shopt -s extglob
-    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
+
+    # remove the bundled JRE
+    rm -r ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}jre/
   '';
 
   installPhase =
@@ -76,23 +89,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         mkdir -p $out/opt/dbeaver $out/bin
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}" \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
               gtk3
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
               glib-networking
             ]
           }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
-        # for some reason it's missing from the aarch64 build
-        if [ -e $out/opt/dbeaver/dbeaver.png ]; then
-          ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
-        fi
+        ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
 
         mkdir -p $out/share/applications
         ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop
@@ -111,9 +121,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}"
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   premake4,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -16,12 +17,18 @@ stdenv.mkDerivation {
     sha256 = "1njdj6nvmwf7j2fwqbyvd1cf5l52797vk2wnsliylqdzqcjmfpij";
   };
 
+  enableParallelBuilding = true;
+
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
     substituteInPlace projects/premake4.lua \
-      --replace 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
+      --replace-fail 'location ( os.get() .. "/" .. _ACTION )' 'location ( ".." )'
     substituteInPlace projects/bootil.lua \
-      --replace 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+      --replace-fail 'targetdir ( "../lib/" .. os.get() .. "/" .. _ACTION )' 'targetdir ( ".." )'
+
+    rm src/3rdParty/zlib -rf
+    mkdir src/3rdParty/zlib
+    cp -r ${zlib.dev}/include/z{conf,lib}.h src/3rdParty/zlib
   '';
 
   nativeBuildInputs = [ premake4 ];
@@ -33,14 +40,14 @@ stdenv.mkDerivation {
     cp -r include $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Garry Newman's personal utility library";
     homepage = "https://github.com/garrynewman/bootil";
     # License unsure - see https://github.com/garrynewman/bootil/issues/21
-    license = licenses.free;
-    maintainers = with maintainers; [ abigailbuccaneer ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ abigailbuccaneer ];
     # Build uses `-msse` and `-mfpmath=sse`
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
   };
 }

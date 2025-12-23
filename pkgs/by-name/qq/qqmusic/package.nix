@@ -21,6 +21,7 @@
   libdbusmenu,
   libglvnd,
   libpulseaudio,
+  mesa,
   nspr,
   nss,
   pango,
@@ -34,10 +35,11 @@
 ################################################################################
 stdenv.mkDerivation (finalAttrs: {
   pname = "qqmusic";
-  version = "1.1.7";
+  version = "1.1.8";
   src = fetchurl {
-    url = "https://dldir1.qq.com/music/clntupate/linux/qqmusic_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-NPJHH7VwTzdNY87jFh28GaPjT7kRMweGI/XTOBAzM5E=";
+    url = "https://c.y.qq.com/cgi-bin/file_redirect.fcg?bid=dldir&file=ecosfile_plink%2Fmusic_clntupate%2Flinux%2Fother%2Fqqmusic_${finalAttrs.version}_amd64.deb&sign=1-d1ca4d5c5a8369b26af88e881ba3ac544066a899dcaea29778b35c9f648e6fee-68cb7c1c";
+    name = "qqmusic.deb";
+    hash = "sha256-QtGNaow8F0FOW228DDrIk7slQMHFwJzpDSQYQ8xZN4g=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdbusmenu
     libglvnd
     libpulseaudio
+    mesa
     nspr
     nss
     pango
@@ -119,9 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
       categories = [ "AudioVideo" ];
       extraConfig = {
         "Name[zh_CN]" = "QQ音乐";
-        "Name[zh_TW]" = "QQ音乐";
+        "Name[zh_TW]" = "QQ音樂";
         "Comment[zh_CN]" = "腾讯QQ音乐";
-        "Comment[zh_TW]" = "腾讯QQ音乐";
+        "Comment[zh_TW]" = "騰訊QQ音樂";
       };
     })
   ];
@@ -133,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "qqmusic";
   };
 })

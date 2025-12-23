@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "manicmaniac";
-    repo = pname;
+    repo = "arc4";
     rev = version;
     hash = "sha256-DlZIygf5v3ZNY2XFmrKOA15ccMo3Rv0kf6hZJ0CskeQ=";
   };
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arc4" ];
 
-  meta = with lib; {
+  meta = {
     description = "ARCFOUR (RC4) cipher implementation";
     homepage = "https://github.com/manicmaniac/arc4";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

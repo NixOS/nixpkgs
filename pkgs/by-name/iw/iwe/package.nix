@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -7,22 +8,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.27";
+  version = "0.0.57";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-4qKZnJa7rBMReWJO7iutp9SOKKL5BrxbZQySdogD03s=";
+    hash = "sha256-BtNeTMDttAbozFHIe/hlOkEfIFPUFSDvWsJWY9+hKfk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-pakgzQ268WNjIM0ykKm9s3x0uCj4Z+H3/c9+2hWjx10=";
+  cargoHash = "sha256-TvWoleEhjsV73Qfi/yTeje1CawhdETB/dFPlah6aDwY=";
 
   cargoBuildFlags = [
     "--package=iwe"
     "--package=iwes"
   ];
+
+  postPatch = ''
+    substituteInPlace crates/iwe/tests/common/mod.rs --replace-fail \
+      'binary_path.push("target");' \
+      'binary_path.push("target/${stdenv.hostPlatform.rust.rustcTarget}");'
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

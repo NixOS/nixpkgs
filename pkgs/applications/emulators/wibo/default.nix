@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       file test.o | grep "ELF 32-bit"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Quick-and-dirty wrapper to run 32-bit windows EXEs on linux";
     longDescription = ''
       A minimal, low-fuss wrapper that can run really simple command-line
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       than WINE.
     '';
     homepage = "https://github.com/decompals/WiBo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ r-burns ];
     platforms = [ "i686-linux" ];
     mainProgram = "wibo";
   };

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "doorbirdpy";
-  version = "3.0.8";
+  version = "3.0.11";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "klikini";
     repo = "doorbirdpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UayXJhfiiwB2aXCa5V1U/LnNiV7KX4lpIG9hNG6iCm0=";
+    tag = version;
+    hash = "sha256-2CKjcE3ABjSKWalsXggHFgilhDMAbP4VfkzVNzp7QoY=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "doorbirdpy" ];
 
-  meta = with lib; {
-    changelog = "https://gitlab.com/klikini/doorbirdpy/-/tags/${version}";
+  meta = {
+    changelog = "https://gitlab.com/klikini/doorbirdpy/-/tags/${src.tag}";
     description = "Python wrapper for the DoorBird LAN API";
     homepage = "https://gitlab.com/klikini/doorbirdpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

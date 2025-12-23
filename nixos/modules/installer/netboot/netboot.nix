@@ -1,7 +1,13 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 with lib;
 
@@ -36,43 +42,51 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    fileSystems."/" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-      };
+    fileSystems."/" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+    };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" = mkImageMediaOverride
-      { fsType = "squashfs";
-        device = "../nix-store.squashfs";
-        options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
-        neededForBoot = true;
+    fileSystems."/nix/.ro-store" = mkImageMediaOverride {
+      fsType = "squashfs";
+      device = "../nix-store.squashfs";
+      options = [
+        "loop"
+      ]
+      ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/.rw-store" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/store" = mkImageMediaOverride {
+      overlay = {
+        lowerdir = [ "/nix/.ro-store" ];
+        upperdir = "/nix/.rw-store/store";
+        workdir = "/nix/.rw-store/work";
       };
+      neededForBoot = true;
+    };
 
-    fileSystems."/nix/.rw-store" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-        neededForBoot = true;
-      };
+    boot.initrd.availableKernelModules = [
+      "squashfs"
+      "overlay"
+    ];
 
-    fileSystems."/nix/store" = mkImageMediaOverride
-      { overlay = {
-          lowerdir = [ "/nix/.ro-store" ];
-          upperdir = "/nix/.rw-store/store";
-          workdir = "/nix/.rw-store/work";
-        };
-        neededForBoot = true;
-      };
-
-    boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
-
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [
+      "loop"
+      "overlay"
+    ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
-    netboot.storeContents =
-      [ config.system.build.toplevel ];
+    netboot.storeContents = [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
@@ -80,17 +94,17 @@ with lib;
       comp = config.netboot.squashfsCompression;
     };
 
-
     # Create the initrd
     system.build.netbootRamdisk = pkgs.makeInitrdNG {
-      inherit (config.boot.initrd) compressor;
+      inherit (config.boot.initrd) compressor compressorArgs;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
-      contents =
-        [ { source = config.system.build.squashfsStore;
-            target = "/nix-store.squashfs";
-          }
-        ];
+      contents = [
+        {
+          source = config.system.build.squashfsStore;
+          target = "/nix-store.squashfs";
+        }
+      ];
     };
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
@@ -137,16 +151,18 @@ with lib;
     image.filePath = "tarball/${config.image.fileName}";
     system.nixos.tags = [ "kexec" ];
     system.build.image = config.system.build.kexecTarball;
-    system.build.kexecTarball = pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix" {
-      fileName = config.image.baseName;
-      storeContents = [
+    system.build.kexecTarball =
+      pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix"
         {
-          object = config.system.build.kexecScript;
-          symlink = "/kexec_nixos";
-        }
-      ];
-      contents = [];
-    };
+          fileName = config.image.baseName;
+          storeContents = [
+            {
+              object = config.system.build.kexecScript;
+              symlink = "/kexec_nixos";
+            }
+          ];
+          contents = [ ];
+        };
 
     boot.loader.timeout = 10;
 

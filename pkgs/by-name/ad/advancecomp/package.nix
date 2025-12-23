@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "advancecomp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MwXdXT/ZEvTcYV4DjhCUFflrPKBFu0fk5PmaWt4MMOU=";
   };
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     echo "${version}" >.version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of tools to optimize deflate-compressed files";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://github.com/amadvance/advancecomp";
     changelog = "https://github.com/amadvance/advancecomp/blob/v${version}/HISTORY";
   };

@@ -3,34 +3,41 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "0.25.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
-    rev = "v${version}";
-    hash = "sha256-nH1DyWGJMYiisdS4YRw+kUIJLX4twB9ZJ7OWH+QLlIA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EyS07pkPvXaC5PVHt7T/w3et3Zfbqw4nPQNdif/8I4Y=";
   };
 
   buildAndTestSubdir = "harper-ls";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-C5+5cxsnyM6cZ724C2czuoCfmIE0nQJXCwYCjfW7sgE=";
+
+  cargoHash = "sha256-vNUsos2kI7jitS+1373npE/wS1VkcrFq3h4LvsnXne0=";
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Grammar Checker for Developers";
     homepage = "https://github.com/Automattic/harper";
-    changelog = "https://github.com/Automattic/harper/releases/tag/v${version}";
+    changelog = "https://github.com/Automattic/harper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       pbsds
       sumnerevans
+      ddogfoodd
     ];
     mainProgram = "harper-ls";
   };
-}
+})

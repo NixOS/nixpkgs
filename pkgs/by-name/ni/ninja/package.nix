@@ -1,39 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, asciidoc
-, docbook_xml_dtd_45
-, docbook_xsl
-, installShellFiles
-, libxslt
-, python3
-, re2c
-, buildPackages
-, buildDocs ? true
-, nix-update-script
-, ninjaRelease ? "latest"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  installShellFiles,
+  libxslt,
+  python3,
+  re2c,
+  buildPackages,
+  buildDocs ? true,
+  nix-update-script,
+  ninjaRelease ? "latest",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ninja";
-  version = lib.removePrefix "v" finalAttrs.src.rev;
+  version =
+    {
+      "1.11" = "1.11.1";
+      latest = "1.13.1";
+    }
+    .${ninjaRelease};
 
-  src = {
-    # TODO: Remove Ninja 1.11 as soon as possible.
-    "1.11" = fetchFromGitHub {
-      owner = "ninja-build";
-      repo = "ninja";
-      rev = "v1.11.1";
-      hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
-    };
-
-    latest = fetchFromGitHub {
-      owner = "ninja-build";
-      repo = "ninja";
-      rev = "v1.12.1";
-      hash = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
-    };
-  }.${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
+  src = fetchFromGitHub {
+    owner = "ninja-build";
+    repo = "ninja";
+    rev = "v${finalAttrs.version}";
+    hash =
+      {
+        # TODO: Remove Ninja 1.11 as soon as possible.
+        "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+        latest = "sha256-GhAF5wUT19E02ZekW+ywsCMVGYrt56hES+MHCH4lNG4=";
+      }
+      .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
+  };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -47,6 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     docbook_xsl
     libxslt.bin
+  ];
+
+  patches = [
+    ./0001-spawn-sh-instead-of-bin-sh.patch
+  ]
+  # TODO: remove together with ninja 1.11
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
+    (fetchpatch {
+      name = "ninja1.11-python3.13-compat.patch";
+      url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
+      hash = "sha256-zlMs9LDJ2thtiSUjbsONyqoyYxrB/Ilt2Ljr0nCU6nQ=";
+    })
   ];
 
   postPatch = ''
@@ -68,11 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
     python configure.py
 
     source rebuild_args
-  '' + lib.optionalString buildDocs ''
+  ''
+  + lib.optionalString buildDocs ''
     # "./ninja -vn manual" output copied here to support cross compilation.
     asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
     xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
-  '' + ''
+  ''
+  + ''
 
     runHook postBuild
   '';
@@ -84,16 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --name ninja \
       --bash misc/bash-completion \
       --zsh misc/zsh-completion
-  '' + lib.optionalString buildDocs ''
+  ''
+  + lib.optionalString buildDocs ''
     install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
-  '' + ''
+  ''
+  + ''
 
     runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Small build system with a focus on speed";
@@ -107,6 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ninja-build.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice bjornfor orivej ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      bjornfor
+    ];
   };
 })

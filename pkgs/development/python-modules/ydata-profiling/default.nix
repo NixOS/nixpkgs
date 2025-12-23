@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   dacite,
-  htmlmin,
+  filetype,
   imagehash,
   jinja2,
   matplotlib,
+  minify-html,
   multimethod,
   numba,
   numpy,
@@ -20,6 +20,7 @@
   requests,
   scipy,
   setuptools,
+  setuptools-scm,
   seaborn,
   statsmodels,
   tqdm,
@@ -30,35 +31,47 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.12.1";
+  version = "4.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
     tag = "v${version}";
-    hash = "sha256-K2axhkshKnJO8sKqSWW4AbdQXsVlR6xwuhRP3Q5J08E=";
+    hash = "sha256-fzHKIojgFlyYH27z0NwCkf0nIkoIyGj5IoKIdy82Da4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.0.0,<80.0.0" "setuptools" \
+      --replace-fail "setuptools-scm>=8.0.0,<9.0.0" "setuptools-scm"
+  '';
 
   preBuild = ''
     echo ${version} > VERSION
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "imagehash"
+    "matplotlib"
+    "multimethod"
+    "numba"
+    "numpy"
     "scipy"
   ];
 
   dependencies = [
     dacite
-    htmlmin
+    filetype
     imagehash
     jinja2
     matplotlib
+    minify-html
     multimethod
     numba
     numpy
@@ -69,6 +82,7 @@ buildPythonPackage rec {
     requests
     scipy
     seaborn
+    setuptools
     statsmodels
     tqdm
     typeguard
@@ -84,6 +98,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # needs Spark:
     "tests/backends/spark_backend"
+
     # try to download data:
     "tests/issues"
     "tests/unit/test_console.py"
@@ -101,12 +116,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ydata_profiling" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
     changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
   };
 }

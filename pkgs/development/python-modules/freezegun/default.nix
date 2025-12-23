@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "1.5.1";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sp3t/NptXo4IPOcbK1QnU61Iz+xEA3s/x5cC4pgKiek=";
+    hash = "sha256-eYuTcv3U2QfzPotqWLxk5oLZ/6jUlM5g94AZfugfrtE=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freezegun" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that allows your Python tests to travel through time";
     homepage = "https://github.com/spulec/freezegun";
     changelog = "https://github.com/spulec/freezegun/blob/${version}/CHANGELOG";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

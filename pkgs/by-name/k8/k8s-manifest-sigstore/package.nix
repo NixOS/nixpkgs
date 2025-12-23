@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -14,7 +15,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sigstore";
-    repo = pname;
+    repo = "k8s-manifest-sigstore";
     rev = "v${version}";
     hash = "sha256-BDBkPXDg9DruIt5f7RrpStFeuTGiOOpsb6JiKaCTOOk=";
   };
@@ -39,7 +40,7 @@ buildGoModule rec {
       "-X ${prefix}.GitVersion=v${version}"
     ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubectl-sigstore \
       --bash <($out/bin/kubectl-sigstore completion bash) \
       --fish <($out/bin/kubectl-sigstore completion fish) \
@@ -55,12 +56,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/k8s-manifest-sigstore";
     changelog = "https://github.com/sigstore/k8s-manifest-sigstore/releases/tag/v${version}";
     description = "Kubectl plugin for signing Kubernetes manifest YAML files with sigstore";
     mainProgram = "kubectl-sigstore";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bbigras ];
   };
 }

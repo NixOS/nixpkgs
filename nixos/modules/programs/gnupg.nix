@@ -77,7 +77,7 @@ in
         Which pinentry package to use. The path to the mainProgram as defined in
         the package's meta attributes will be set in /etc/gnupg/gpg-agent.conf.
         If not set by the user, it'll pick an appropriate flavor depending on the
-        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce,
+        system configuration (qt flavor for lxqt and plasma, gtk2 for xfce,
         gnome3 on all other systems with X enabled, curses otherwise).
       '';
     };

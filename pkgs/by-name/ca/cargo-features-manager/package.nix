@@ -14,15 +14,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NjXJCrLsX52M7CBg8wdgwlK3gaGiznfdRGz7BAbVVPk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1/bCyScvWQYeGZRitvksww4uvrzhifRBYcYPgGY2GRo=";
 
   meta = {
-    description = "Command-line tool for managing Architectural Decision Records";
+    description = "TUI-like cli tool to manage the features of your rust-projects dependencies";
     homepage = "https://github.com/ToBinio/cargo-features-manager";
     changelog = "https://github.com/ToBinio/cargo-features-manager/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
-    mainProgram = "cargo-features-manager";
+    mainProgram = "cargo-features";
   };
 }

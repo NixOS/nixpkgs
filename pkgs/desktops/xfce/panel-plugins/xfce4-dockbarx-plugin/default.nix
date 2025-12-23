@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     python3Packages.python
     xfce.xfce4-panel
     xfce.xfconf
-  ] ++ pythonPath;
+  ]
+  ++ pythonPath;
 
   postPatch = ''
     # We execute the wrapped xfce4-panel-plug directly.
@@ -61,11 +62,11 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/dockbarx" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/xuzhen/xfce4-dockbarx-plugin";
     description = "Plugins to embed DockbarX into xfce4-panel";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
 }

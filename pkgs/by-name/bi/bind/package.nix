@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   removeReferencesTo,
-  darwin,
   perl,
   pkg-config,
   libcap,
@@ -24,15 +23,17 @@
   cmocka,
   tzdata,
   gitUpdater,
+  fstrm,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.6";
+  version = "9.20.16";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7X9UtE+EpyAaL6epSfMCHqVoUpv62Q/KZk/VXAUQQTQ=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-A//Mek/LfDm4KzS+G6K1n2wZG8eVxZNVMNXr5jCjUtY=";
   };
 
   outputs = [
@@ -51,34 +52,35 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    protobufc
     removeReferencesTo
   ];
-  buildInputs =
-    [
-      libidn2
-      libtool
-      libxml2
-      openssl
-      liburcu
-      libuv
-      nghttp2
-      jemalloc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libcap
-    ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = [
+    libidn2
+    libtool
+    libxml2
+    openssl
+    liburcu
+    libuv
+    nghttp2
+    jemalloc
+    fstrm
+    protobufc
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libcap
+  ++ lib.optional enableGSSAPI libkrb5
+  ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-      "--without-lmdb"
-      "--with-libidn2"
-    ]
-    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--without-lmdb"
+    "--enable-dnstap"
+    "--with-libidn2"
+  ]
+  ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -106,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   doCheck = false;
   # TODO: investigate failures; see this and linked discussions:
@@ -116,13 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
       && !is32bit;
   */
   checkTarget = "unit";
-  checkInputs =
-    [
-      cmocka
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-      tzdata
-    ];
+  checkInputs = [
+    cmocka
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    tzdata
+  ];
   preCheck =
     lib.optionalString stdenv.hostPlatform.isMusl ''
       # musl doesn't respect TZDIR, skip timezone-related tests
@@ -142,6 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
       withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       inherit (nixosTests) bind;
       prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
       kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
     };
@@ -155,15 +159,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
 
     outputsToInstall = [
       "out"

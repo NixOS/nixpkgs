@@ -4,15 +4,17 @@
   fetchPypi,
   pytest-asyncio,
   pytest-trio,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   trio,
 }:
 
 buildPythonPackage rec {
   pname = "siosocks";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -21,10 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-uja79vWhPYOhhTUBIh+XpS4GnrYJy0/XpDXXQjnyHWM=";
   };
 
-  propagatedBuildInputs = [ trio ];
+  build-system = [ setuptools ];
+
+  dependencies = [ trio ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
     pytest-trio
   ];
@@ -45,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "siosocks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python socks 4/5 client/server library/framework";
     homepage = "https://github.com/pohmelie/siosocks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

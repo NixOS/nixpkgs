@@ -154,10 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tiling window manager";
     homepage = "https://i3wm.org";
-    maintainers = with lib.maintainers; [
-      modulistic
-      fpletz
-    ];
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "i3";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

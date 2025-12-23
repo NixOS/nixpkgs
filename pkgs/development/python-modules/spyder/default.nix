@@ -13,12 +13,14 @@
   aiohttp,
   asyncssh,
   atomicwrites,
+  bcrypt,
   chardet,
   cloudpickle,
   cookiecutter,
   diff-match-patch,
   fzf,
   intervaltree,
+  ipython-pygments-lexers,
   jedi,
   jellyfish,
   keyring,
@@ -26,6 +28,7 @@
   nbconvert,
   numpy,
   numpydoc,
+  packaging,
   pickleshare,
   psutil,
   pygithub,
@@ -34,6 +37,7 @@
   pyls-spyder,
   pyopengl,
   python-lsp-black,
+  python-lsp-ruff,
   python-lsp-server,
   pyuca,
   pyzmq,
@@ -55,34 +59,37 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.4";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4AsaO75mAH0rRDnrHGiwwfuQS7A/0/nQ7YPot6y0y+Y=";
+    hash = "sha256-bgkiihfqqIHnYes5gvIvAdQ7arUAm7NmGLaqnP/Ml40=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [
-    pyqtwebengine.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
-  build-system = [
-    setuptools
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "ipython"
+    "python-lsp-server"
   ];
 
   dependencies = [
     aiohttp
     asyncssh
     atomicwrites
+    bcrypt
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
     fzf
     intervaltree
+    ipython-pygments-lexers
     jedi
     jellyfish
     keyring
@@ -90,6 +97,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    packaging
     pickleshare
     psutil
     pygithub
@@ -99,6 +107,7 @@ buildPythonPackage rec {
     pyopengl
     pyqtwebengine
     python-lsp-black
+    python-lsp-ruff
     python-lsp-server
     pyuca
     pyzmq
@@ -116,7 +125,8 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
-  ] ++ python-lsp-server.optional-dependencies.all;
+  ]
+  ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
@@ -143,9 +153,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

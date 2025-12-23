@@ -10,18 +10,18 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "geofffranks";
-    repo = pname;
+    repo = "spruce";
     rev = "v${version}";
     hash = "sha256-wLxPHaCU0fciSIdK26dV4XOnJsp5EKKEXzgspWC1GvA=";
   };
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "BOSH template merge tool";
     mainProgram = "spruce";
     homepage = "https://github.com/geofffranks/spruce";
-    license = licenses.mit;
-    maintainers = with maintainers; [ risson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ risson ];
   };
 }

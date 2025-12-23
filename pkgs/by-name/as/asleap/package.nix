@@ -5,17 +5,18 @@
   openssl,
   libpcap,
   libxcrypt,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "asleap";
-  version = "unstable-2021-06-20";
+  version = "0-unstable-2021-06-21";
 
   src = fetchFromGitHub {
     owner = "zackw";
     repo = "asleap";
     rev = "eb3bd42098cba42b65f499c9d8c73d890861b94f";
-    sha256 = "sha256-S6jS0cg9tHSfmP6VHyISkXJxczhPx3HDdxT46c+YmE8=";
+    hash = "sha256-S6jS0cg9tHSfmP6VHyISkXJxczhPx3HDdxT46c+YmE8=";
   };
 
   buildInputs = [
@@ -33,11 +34,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=zack/no-external-crypto" ];
+  };
+
   meta = {
     homepage = "https://github.com/zackw/asleap";
     description = "Recovers weak LEAP and PPTP passwords";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pyrox0 ];
+    mainProgram = "asleap";
     platforms = lib.platforms.linux;
   };
 }

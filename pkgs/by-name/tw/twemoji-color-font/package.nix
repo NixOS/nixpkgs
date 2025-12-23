@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,19 +11,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
-  src = fetchurl {
-    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-yKUwLuTkwhiM54Xt2ExQxhagf26Z/huRrsuk4ds0EpU=";
+  src = fetchzip {
+    url = "https://github.com/13rac1/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Xy6Lkm340ldm9ssQWn/eRFIJ5kyhYaXPNy/Y/9vUt40=";
   };
 
-  dontBuild = true;
-
   installPhase = ''
+    runHook preInstall
     install -Dm755 TwitterColorEmoji-SVGinOT.ttf $out/share/fonts/truetype/TwitterColorEmoji-SVGinOT.ttf
     install -Dm644 fontconfig/46-twemoji-color.conf $out/etc/fonts/conf.d/46-twemoji-color.conf
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
@@ -35,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       systems and applications. Regular B&W outline emoji are included for
       backwards/fallback compatibility.
     '';
-    homepage = "https://github.com/eosrei/twemoji-color-font";
-    downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
-    license = with licenses; [
+    homepage = "https://github.com/13rac1/twemoji-color-font";
+    downloadPage = "https://github.com/13rac1/twemoji-color-font/releases";
+    license = with lib.licenses; [
       cc-by-40
       mit
     ];
-    maintainers = [ maintainers.fgaz ];
+    maintainers = [ lib.maintainers.fgaz ];
   };
 })

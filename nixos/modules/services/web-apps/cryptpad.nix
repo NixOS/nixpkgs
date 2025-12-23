@@ -75,12 +75,12 @@ in
             description = "Address on which the Node.js server should listen";
           };
           httpPort = mkOption {
-            type = types.int;
+            type = types.port;
             default = 3000;
             description = "Port on which the Node.js server should listen";
           };
           websocketPort = mkOption {
-            type = types.int;
+            type = types.port;
             default = 3003;
             description = "Port for the websocket that needs to be separate";
           };
@@ -134,7 +134,7 @@ in
       systemd.services.cryptpad = {
         description = "Cryptpad service";
         wantedBy = [ "multi-user.target" ];
-        after = [ "networking.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           BindReadOnlyPaths = [
             cryptpadConfigFile
@@ -195,10 +195,12 @@ in
           SystemCallFilter = [
             "@pkey"
             "@system-service"
-            "@chown"
+            # /!\ order matters: @privileged contains @chown, so we need
+            # @privileged negated before we re-list @chown for libuv copy
+            "~@privileged"
+            "~@chown:EPERM"
             "~@keyring"
             "~@memlock"
-            "~@privileged"
             "~@resources"
             "~@setuid"
             "~@timer"

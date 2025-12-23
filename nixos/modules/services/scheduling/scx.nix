@@ -38,7 +38,10 @@ in
 
     scheduler = lib.mkOption {
       type = lib.types.enum [
+        "scx_beerland"
         "scx_bpfland"
+        "scx_chaos"
+        "scx_cosmos"
         "scx_central"
         "scx_flash"
         "scx_flatcg"
@@ -46,14 +49,18 @@ in
         "scx_layered"
         "scx_mitosis"
         "scx_nest"
+        "scx_p2dq"
         "scx_pair"
+        "scx_prev"
         "scx_qmap"
         "scx_rlfifo"
         "scx_rustland"
         "scx_rusty"
         "scx_sdt"
         "scx_simple"
+        "scx_tickless"
         "scx_userland"
+        "scx_wd40"
       ];
       default = "scx_rustland";
       example = "scx_bpfland";
@@ -95,13 +102,14 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = utils.escapeSystemdExecArgs (
-          [
-            (lib.getExe' cfg.package cfg.scheduler)
-          ]
-          ++ cfg.extraArgs
-        );
+        ExecStart = ''
+          ${pkgs.runtimeShell} -c 'exec ${cfg.package}/bin/''${SCX_SCHEDULER_OVERRIDE:-$SCX_SCHEDULER} ''${SCX_FLAGS_OVERRIDE:-$SCX_FLAGS}'
+        '';
         Restart = "on-failure";
+      };
+      environment = {
+        SCX_SCHEDULER = cfg.scheduler;
+        SCX_FLAGS = lib.escapeShellArgs cfg.extraArgs;
       };
 
       wantedBy = [ "multi-user.target" ];
@@ -115,5 +123,7 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ johnrtitor ];
+  meta = {
+    inherit (pkgs.scx.full.meta) maintainers;
+  };
 }

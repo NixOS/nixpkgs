@@ -32,7 +32,8 @@ let
 
   knownHostsFiles = [
     "/etc/ssh/ssh_known_hosts"
-  ] ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
+  ]
+  ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
 
 in
 {
@@ -47,6 +48,15 @@ in
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
         description = "Whether to configure SSH_ASKPASS in the environment.";
+      };
+
+      systemd-ssh-proxy.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable systemd's ssh proxy plugin.
+          See {manpage}`systemd-ssh-proxy(1)`.
+        '';
       };
 
       askPassword = lib.mkOption {
@@ -310,50 +320,56 @@ in
       || config.services.openssh.settings.X11Forwarding
     );
 
-    assertions =
-      [
-        {
-          assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ]
-      ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
-        name: data: {
-          assertion =
-            (data.publicKey == null && data.publicKeyFile != null)
-            || (data.publicKey != null && data.publicKeyFile == null);
-          message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-        }
-      );
+    assertions = [
+      {
+        assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }
+    ]
+    ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
+      name: data: {
+        assertion =
+          (data.publicKey == null && data.publicKeyFile != null)
+          || (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      }
+    );
+
+    environment.corePackages = [ cfg.package ];
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
-    environment.etc."ssh/ssh_config".text = ''
+    environment.etc."ssh/ssh_config".text = lib.concatStringsSep "\n" (
       # Custom options from `extraConfig`, to override generated options
-      ${cfg.extraConfig}
-
-      # Generated options from other settings
-      Host *
-      GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
-
-      ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}
-      ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
-      ${lib.optionalString (cfg.forwardX11 != null)
-        "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"
-      }
-
-      ${lib.optionalString (
+      lib.optional (cfg.extraConfig != "") cfg.extraConfig
+      ++ [
+        ''
+          # Generated options from other settings
+          Host *
+        ''
+      ]
+      ++ lib.optional cfg.systemd-ssh-proxy.enable ''
+        # See systemd-ssh-proxy(1)
+        Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
+      ''
+      ++ [
+        "GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}"
+      ]
+      ++ lib.optional (!config.networking.enableIPv6) "AddressFamily inet"
+      ++ lib.optional cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"
+      ++ lib.optional (cfg.forwardX11 != null) "ForwardX11 ${lib.boolToYesNo cfg.forwardX11}"
+      ++ lib.optional (
         cfg.pubkeyAcceptedKeyTypes != [ ]
-      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-      ${lib.optionalString (
+      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"
+      ++ lib.optional (
         cfg.hostKeyAlgorithms != [ ]
-      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
-      ${lib.optionalString (
+      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"
+      ++ lib.optional (
         cfg.kexAlgorithms != null
-      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
-      ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
-      ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
-    '';
+      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"
+      ++ lib.optional (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"
+      ++ lib.optional (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"
+    );
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
@@ -366,8 +382,8 @@ in
         ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
         ExecStart =
           "${cfg.package}/bin/ssh-agent "
-          + lib.optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ")
-          + lib.optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ")
+          + lib.optionalString (cfg.agentTimeout != null) "-t ${cfg.agentTimeout} "
+          + lib.optionalString (cfg.agentPKCS11Whitelist != null) "-P ${cfg.agentPKCS11Whitelist} "
           + "-a %t/ssh-agent";
         StandardOutput = "null";
         Type = "forking";

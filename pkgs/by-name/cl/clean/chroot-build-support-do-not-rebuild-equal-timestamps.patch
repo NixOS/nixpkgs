@@ -1,11 +1,15 @@
-The clean command line compiler clm checks modules for freshness by comparing timestamps.
-However, in chroot builds all files installed have the same timestamp.  This leads to clm
-trying to rebuild the library modules distributed with the Clean install every time a user
-compiles any file.  This patch changes the freshness check to use less than instead of less
-than or equal to in order to avoid this.
+The clean command line compiler clm uses timestamps of dcl, icl, abc and o files
+to decide what must be rebuild.  However as for chroot builds, all of the
+library files will have equal timestamps, this leads to clm trying to rebuild
+the library modules distributed with the Clean installation every time a user
+compiles any file, which fails ue to the absence of write permission on the Nix
+store.
 
---- clean-upstream/src/tools/clm/clm.c	2010-12-10 06:12:17.000000000 -0430
-+++ clean/src/tools/clm/clm.c	2010-12-25 10:29:09.840675925 -0430
+This patch changes the freshness check to use less than instead of less than or
+equal to in order to avoid this.
+
+--- b/src/clm/clm.c
++++ a/src/clm/clm.c
 @@ -250,7 +250,7 @@
  		|| (t1.dwHighDateTime==t2.dwHighDateTime && (unsigned)(t1.dwLowDateTime)<=(unsigned)(t2.dwLowDateTime)))
  #else

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "strpdatetime";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "strpdatetime";
     tag = "v${version}";
-    hash = "sha256-a+KUM9gQAcNg3ju+YyQXafDlADYCV6B+Wy7EBtcO3S4=";
+    hash = "sha256-p/iLq+x+dRW2QPva/VEA9emtxb0k3hnL91l1itTsYSc=";
   };
 
   build-system = [ hatchling ];

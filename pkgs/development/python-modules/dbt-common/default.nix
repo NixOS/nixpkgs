@@ -1,13 +1,14 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
+  writeScript,
 
   # build-system
   hatchling,
 
   # dependencies
+  dbt-protos,
   agate,
   colorama,
   deepdiff,
@@ -29,32 +30,27 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.14.0";
+  version = "1.36.0-unstable-2025-11-10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    # Unfortunately, upstream doesn't tag commits on GitHub, and the pypi source
-    # doesn't include tests. TODO: Write an update script that will detect the
-    # version from `dbt_common/__about__.py`.
-    rev = "965ad815f0dd546678d2595a3010d81f344f8b73";
-    hash = "sha256-63gWkETi52uOrO0FTPwM831UHECqcyCtb7wVHQuujnc=";
+    rev = "e306773b935738838cedd52de762224330f9840e"; # They don't tag releases
+    hash = "sha256-LuM9St90M7yGIqYJZTNLNYGZ1Dva2o2z3Q6ZPw4HP8g=";
   };
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "agate"
-    "deepdiff"
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
   ];
 
   dependencies = [
+    dbt-protos
     agate
     colorama
     deepdiff
@@ -67,7 +63,8 @@ buildPythonPackage rec {
     python-dateutil
     requests
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -76,18 +73,37 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion errors (TODO: Notify upstream)
-    "test_create_print_json"
-    "test_events"
-    "test_extra_dict_on_event"
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
 
+  passthru.updateScript = writeScript "update-dbt-common" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git common-updater-scripts perl
+
+    tmpdir="$(mktemp -d)"
+    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+
+    pushd "$tmpdir"
+
+    newVersionNumber=$(perl -pe 's/version = "([\d.]+)"/$1/' dbt_common/__about__.py | tr -d '\n')
+    newRevision=$(git show -s --pretty='format:%H')
+    newDate=$(git show -s --pretty='format:%cs')
+    newVersion="$newVersionNumber-unstable-$newDate"
+    popd
+
+    rm -rf "$tmpdir"
+    update-source-version --rev="$newRevision" "python3Packages.dbt-common" "$newVersion"
+    perl -pe 's/^(.*version = ")([\d\.]+)(.*)$/''${1}'"''${newVersion}"'";/' \
+      -i 'pkgs/development/python-modules/dbt-common/default.nix'
+  '';
+
   meta = {
     description = "Shared common utilities for dbt-core and adapter implementations use";
     homepage = "https://github.com/dbt-labs/dbt-common";
-    changelog = "https://github.com/dbt-labs/dbt-common/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-common/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

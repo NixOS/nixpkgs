@@ -1,8 +1,18 @@
+# shellcheck shell=bash
+
+# shellcheck source=/dev/null
 source @phpScriptUtils@
 
-declare -g composerNoDev="${composerNoDev:+--no-dev}"
-declare -g composerNoPlugins="${composerNoPlugins:+--no-plugins}"
-declare -g composerNoScripts="${composerNoScripts:+--no-scripts}"
+declare -g out
+declare -g composerLock
+declare -g composerNoDev
+declare -g composerNoPlugins
+declare -g composerNoScripts
+
+declare -ga composerFlags=()
+[[ 1 == "${composerNoDev:-1}" ]] && composerFlags+=(--no-dev)
+[[ 1 == "${composerNoPlugins:-1}" ]] && composerFlags+=(--no-plugins)
+[[ 1 == "${composerNoScripts:-1}" ]] && composerFlags+=(--no-scripts)
 
 preConfigureHooks+=(composerVendorConfigureHook)
 preBuildHooks+=(composerVendorBuildHook)
@@ -10,111 +20,115 @@ preCheckHooks+=(composerVendorCheckHook)
 preInstallHooks+=(composerVendorInstallHook)
 
 composerVendorConfigureHook() {
-    echo "Executing composerVendorConfigureHook"
+  echo "Running phase: composerVendorConfigureHook"
 
-    setComposerRootVersion
+  setComposerRootVersion
 
-    if [[ -f "composer.lock" ]]; then
-        echo -e "\e[32mUsing \`composer.lock\` file from the source package\e[0m"
-    fi
+  if [[ -f "composer.lock" ]]; then
+    echo -e "\e[32mFound 'composer.lock' in source root.\e[0m"
+  fi
 
-    if [[ -e "$composerLock" ]]; then
-        echo -e "\e[32mUsing user provided \`composer.lock\` file from \`$composerLock\`\e[0m"
-        install -Dm644 $composerLock ./composer.lock
-    fi
+  if [[ -e "$composerLock" ]]; then
+    echo -e "\e[32mUsing provided 'composer.lock' from: $composerLock\e[0m"
+    install -Dm644 "$composerLock" ./composer.lock
+  fi
 
-    if [[ ! -f "composer.lock" ]]; then
-        composer \
-            --no-cache \
-            --no-install \
-            --no-interaction \
-            --no-progress \
-            --optimize-autoloader \
-            ${composerNoDev} \
-            ${composerNoPlugins} \
-            ${composerNoScripts} \
-            update
-
-        if [[ -f "composer.lock" ]]; then
-            install -Dm644 composer.lock -t $out/
-
-            echo
-            echo -e "\e[31mERROR: No composer.lock found\e[0m"
-            echo
-            echo -e '\e[31mNo composer.lock file found, consider adding one to your repository to ensure reproducible builds.\e[0m'
-            echo -e "\e[31mIn the meantime, a composer.lock file has been generated for you in $out/composer.lock\e[0m"
-            echo
-            echo -e '\e[31mTo fix the issue:\e[0m'
-            echo -e "\e[31m1. Copy the composer.lock file from $out/composer.lock to the project's source:\e[0m"
-            echo -e "\e[31m  cp $out/composer.lock <path>\e[0m"
-            echo -e '\e[31m2. Add the composerLock attribute, pointing to the copied composer.lock file:\e[0m'
-            echo -e '\e[31m  composerLock = ./composer.lock;\e[0m'
-            echo
-
-            exit 1
-        fi
-    fi
+  if [[ ! -f "composer.lock" ]]; then
+    echo "No 'composer.lock' found. Updating dependencies to generate one..."
+    composer \
+      --no-cache \
+      --no-install \
+      --no-interaction \
+      --no-progress \
+      --optimize-autoloader \
+      "${composerFlags[@]}" \
+      update
 
     if [[ -f "composer.lock" ]]; then
-        chmod +w composer.lock
+      install -Dm644 composer.lock -t "$out"/
+
+      echo
+      echo -e "\e[31mERROR: Missing 'composer.lock' file.\e[0m"
+      echo
+      echo -e "\e[31mA 'composer.lock' file is required to ensure reproducible builds, but it was not found in the source.\e[0m"
+      echo -e "\e[31mA temporary lock file has been generated for you at:\e[0m"
+      echo -e "\e[31m  $out/composer.lock\e[0m"
+      echo
+      echo -e "\e[31mTo fix this issue:\e[0m"
+      echo -e "\e[31m1. Copy the generated lock file to your project source:\e[0m"
+      echo -e "\e[31m     cp $out/composer.lock <path/to/project_root>/\e[0m"
+      echo -e "\e[31m2. Register the lock file in your Nix expression:\e[0m"
+      echo -e "\e[31m     composerLock = ./composer.lock;\e[0m"
+      echo
+
+      exit 1
     fi
+  fi
 
-    chmod +w composer.json
+  if [[ -f "composer.lock" ]]; then
+    chmod +w composer.lock
+  fi
 
-    echo "Finished composerVendorConfigureHook"
+  chmod +w composer.json
+
+  echo "Finished phase: composerVendorConfigureHook"
 }
 
 composerVendorBuildHook() {
-    echo "Executing composerVendorBuildHook"
+  echo "Running phase: composerVendorBuildHook"
 
-    setComposerEnvVariables
+  setComposerEnvVariables
 
-    composer \
-        --no-cache \
-        --no-interaction \
-        --no-progress \
-        --optimize-autoloader \
-        ${composerNoDev} \
-        ${composerNoPlugins} \
-        ${composerNoScripts} \
-        install
+  echo -e "\e[32mInstalling Composer dependencies to '${COMPOSER_VENDOR_DIR}'...\e[0m"
+  composer \
+    --no-cache \
+    --no-interaction \
+    --no-progress \
+    --no-autoloader \
+    "${composerFlags[@]}" \
+    install
 
-    echo "Finished composerVendorBuildHook"
+  # Clarified: We remove it because we only want the 'vendor' folder here, not the bins yet.
+  echo -e "\e[32mCleaning up Composer 'bin' directory (will be regenerated during install).\e[0m"
+  rm -rf "$(composer config bin-dir)"
+
+  echo "Finished phase: composerVendorBuildHook"
 }
 
 composerVendorCheckHook() {
-    echo "Executing composerVendorCheckHook"
+  echo "Running phase: composerVendorCheckHook"
 
-    checkComposerValidate
+  checkComposerValidate
 
-    echo "Finished composerVendorCheckHook"
+  echo "Finished phase: composerVendorCheckHook"
 }
 
 composerVendorInstallHook() {
-    echo "Executing composerVendorInstallHook"
+  echo "Running phase: composerVendorInstallHook"
 
-    mkdir -p $out
+  mkdir -p "$out"
 
-    cp -ar composer.json $(composer config vendor-dir) $out/
-    mapfile -t installer_paths < <(jq -r -c 'try((.extra."installer-paths") | keys[])' composer.json)
+  echo -e "\e[32mPreserving Composer vendor directory from '${COMPOSER_VENDOR_DIR}'...\e[0m"
+  cp -ar composer.json "${COMPOSER_VENDOR_DIR}" "$out"/
+  mapfile -t installer_paths < <(jq -r -c 'try((.extra."installer-paths") | keys[])' composer.json)
 
-    for installer_path in "${installer_paths[@]}"; do
-        # Remove everything after {$name} placeholder
-        installer_path="${installer_path/\{\$name\}*/}";
-        out_installer_path="$out/${installer_path/\{\$name\}*/}";
-        # Copy the installer path if it exists
-        if [[ -d "$installer_path" ]]; then
-            mkdir -p $(dirname "$out_installer_path")
-            echo -e "\e[32mCopying installer path $installer_path to $out_installer_path\e[0m"
-            cp -ar "$installer_path" "$out_installer_path"
-            # Strip out the git repositories
-            find $out_installer_path -name .git -type d -prune -print -exec rm -rf {} ";"
-        fi
-    done
-
-    if [[ -f "composer.lock" ]]; then
-        cp -ar composer.lock $out/
+  for installer_path in "${installer_paths[@]}"; do
+    # Remove everything after {$name} placeholder
+    installer_path="${installer_path/\{\$name\}*/}"
+    out_installer_path="$out/${installer_path/\{\$name\}*/}"
+    # Copy the installer path if it exists
+    if [[ -d "$installer_path" ]]; then
+      mkdir -p "$(dirname "$out_installer_path")"
+      echo -e "\e[32mPreserving custom installer path: $installer_path\e[0m"
+      cp -ar "$installer_path" "$out_installer_path"
+      # Strip out the git repositories
+      find "$out_installer_path" -name .git -type d -prune -print -exec rm -rf {} ";"
     fi
+  done
 
-    echo "Finished composerVendorInstallHook"
+  if [[ -f "composer.lock" ]]; then
+    cp -ar composer.lock "$out"/
+  fi
+
+  echo "Finished phase: composerVendorInstallHook"
 }

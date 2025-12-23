@@ -7,16 +7,16 @@
 
 buildDunePackage {
   pname = "readline";
-  version = "0.1";
+  version = "0.2";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
-    owner = "vtourneu";
-    repo = "readline-ocaml";
-    rev = "b3f84c8a006439142884d3e0df51b395d963f9fe";
-    hash = "sha256-h4kGbzwM88rPGj/KkHKgGyfyvkAYHP83ZY1INZzTaIE=";
+    owner = "acg";
+    repo = "dev/readline-ocaml";
+    tag = "v0.2";
+    hash = "sha256-qWxciodgINCFCxAVLdoU4z+ypWPYjrUwq8pU80saclw=";
   };
 
   patches = [ ./dune.patch ];
@@ -30,8 +30,8 @@ buildDunePackage {
 
   meta = {
     description = "OCaml bindings for GNU Readline";
-    homepage = "https://vtourneu.gitlabpages.inria.fr/readline-ocaml/readline/index.html";
+    homepage = "https://acg.gitlabpages.inria.fr/dev/readline-ocaml/readline/index.html";
     license = lib.licenses.cecill20;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.tournev ];
   };
 }

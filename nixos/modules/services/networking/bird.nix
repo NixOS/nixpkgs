@@ -86,7 +86,7 @@ in
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird.conf
         ${cfg.preCheckConfig}
-        bird -d -p -c bird.conf
+        bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
       '';
     };
 

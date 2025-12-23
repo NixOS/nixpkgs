@@ -87,7 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.gnome.org/World/gfeeds";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      pbogdan
       aleksana
     ];
     platforms = lib.platforms.linux;

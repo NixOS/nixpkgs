@@ -5,29 +5,23 @@
   installShellFiles,
   mkShell,
   nix,
-  nixosTests,
   python3,
   python3Packages,
   runCommand,
   scdoc,
-  withNgSuffix ? true,
-  withReexec ? false,
   withShellFiles ? true,
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
+  # passthru.tests
+  nixosTests,
 }:
 let
-  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
-  # This version is kind of arbitrary, we use some features that were
-  # implemented in newer versions of Nix, but not necessary 2.18.
-  # However, Lix is a fork of Nix 2.18, so this looks like a good version
-  # to cut specific functionality.
-  withNix218 = lib.versionAtLeast nix.version "2.18";
+  executable = "nixos-rebuild";
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
-  version = "0.0.0";
+  version = lib.trivial.release;
   src = ./src;
   pyproject = true;
 
@@ -56,12 +50,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
-      --subst-var-by withNix218 ${lib.boolToString withNix218} \
-      --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
-
-    substituteInPlace pyproject.toml \
-      --replace-fail nixos-rebuild ${executable}
   '';
 
   postInstall = lib.optionalString withShellFiles ''
@@ -77,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-vv" ];
+  pytestFlags = [ "-vv" ];
 
   makeWrapperArgs = lib.optionals (withTmpdir != null) [
     "--set TMPDIR ${withTmpdir}"
@@ -106,22 +95,26 @@ python3Packages.buildPythonApplication rec {
 
       tests = {
         inherit (nixosTests)
-          nixos-rebuild-install-bootloader-ng
-          nixos-rebuild-specialisations-ng
-          nixos-rebuild-target-host-ng
+          # FIXME: this test is disabled since it times out in @ofborg
+          # nixos-rebuild-install-bootloader
+          nixos-rebuild-specialisations
+          nixos-rebuild-target-host
           ;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
         linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+          export MYPY_CACHE_DIR="$(mktemp -d)"
           export RUFF_CACHE_DIR="$(mktemp -d)"
 
+          pushd ${src}
           echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy ${src}
+          mypy .
           echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check ${src}
+          ruff check .
           echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check ${src}
+          ruff format --check .
+          popd
 
           touch $out
         '';
@@ -132,7 +125,8 @@ python3Packages.buildPythonApplication rec {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-rebuild-ng";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.thiagokokada ];
+    maintainers = [ ];
+    teams = [ lib.teams.nixos-rebuild ];
     mainProgram = executable;
   };
 }

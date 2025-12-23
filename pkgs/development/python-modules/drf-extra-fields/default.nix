@@ -44,19 +44,21 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytz
-  ] ++ optional-dependencies.Base64ImageField;
+  ]
+  ++ optional-dependencies.Base64ImageField;
 
   pythonImportsCheck = [ "drf_extra_fields" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/Hipo/drf-extra-fields/issues/210
-    "test_read_source_with_context"
-
+  disabledTests = [
     # pytz causes the following tests to fail
     "test_create"
     "test_create_with_base64_prefix"
     "test_create_with_webp_image"
     "test_remove_with_empty_string"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/Hipo/drf-extra-fields/issues/210
+    "test_read_source_with_context"
   ];
 
   meta = {

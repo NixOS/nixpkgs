@@ -20,19 +20,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "requests";
-    repo = pname;
+    repo = "requests-kerberos";
     rev = "v${version}";
     hash = "sha256-s1Q3zqKPSuTkiFExr+axai9Eta1xjw/cip8xzfDGR88=";
   };
 
-  propagatedBuildInputs =
-    [
-      cryptography
-      requests
-      pyspnego
-    ]
-    # Avoid broken Python krb5 package on Darwin
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) pyspnego.optional-dependencies.kerberos;
+  propagatedBuildInputs = [
+    cryptography
+    requests
+    pyspnego
+  ]
+  # Avoid broken Python krb5 package on Darwin
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) pyspnego.optional-dependencies.kerberos;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -41,10 +40,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_kerberos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Authentication handler for using Kerberos with Python Requests";
     homepage = "https://github.com/requests/requests-kerberos";
-    license = licenses.isc;
-    maintainers = with maintainers; [ catern ];
+    license = lib.licenses.isc;
   };
 }

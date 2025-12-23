@@ -64,7 +64,7 @@ rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
@@ -85,7 +85,6 @@ rec {
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
-        (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
 
         # Way too many manual retries required on Hydra.
@@ -99,9 +98,9 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onFullSupported "nixos.tests.gitlab")
+        (onFullSupported "nixos.tests.gitlab.gitlab")
+        (onFullSupported "nixos.tests.gitlab.runner")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
@@ -145,7 +144,7 @@ rec {
         (onFullSupported "nixos.tests.networking.scripted.macvlan")
         (onFullSupported "nixos.tests.networking.scripted.privacy")
         (onFullSupported "nixos.tests.networking.scripted.routes")
-        (onFullSupported "nixos.tests.networking.scripted.sit")
+        (onFullSupported "nixos.tests.networking.scripted.sit-fou")
         (onFullSupported "nixos.tests.networking.scripted.static")
         (onFullSupported "nixos.tests.networking.scripted.virtual")
         (onFullSupported "nixos.tests.networking.scripted.vlan")
@@ -159,7 +158,7 @@ rec {
         #(onFullSupported "nixos.tests.networking.networkd.macvlan")
         (onFullSupported "nixos.tests.networking.networkd.privacy")
         (onFullSupported "nixos.tests.networking.networkd.routes")
-        (onFullSupported "nixos.tests.networking.networkd.sit")
+        (onFullSupported "nixos.tests.networking.networkd.sit-fou")
         (onFullSupported "nixos.tests.networking.networkd.static")
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
@@ -172,7 +171,7 @@ rec {
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
         (onFullSupported "nixos.tests.php.pcre")
-        (onFullSupported "nixos.tests.plasma5")
+        (onFullSupported "nixos.tests.plasma6")
         (onSystems [ "x86_64-linux" ] "nixos.tests.podman")
         (onFullSupported "nixos.tests.predictable-interface-names.predictableNetworkd")
         (onFullSupported "nixos.tests.predictable-interface-names.predictable")

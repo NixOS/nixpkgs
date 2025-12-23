@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install-system";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://plugin.org.uk";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
       chorus, flanger, decimater, oscillator, gverb, phasers, harmonic
       generators, surround encoders and more.
     '';
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

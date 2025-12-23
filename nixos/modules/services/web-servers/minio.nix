@@ -1,17 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.minio;
 
-  legacyCredentials = cfg: pkgs.writeText "minio-legacy-credentials" ''
-    MINIO_ROOT_USER=${cfg.accessKey}
-    MINIO_ROOT_PASSWORD=${cfg.secretKey}
-  '';
+  legacyCredentials =
+    cfg:
+    pkgs.writeText "minio-legacy-credentials" ''
+      MINIO_ROOT_USER=${cfg.accessKey}
+      MINIO_ROOT_PASSWORD=${cfg.secretKey}
+    '';
 in
 {
-  meta.maintainers = [ maintainers.bachp ];
+  meta.maintainers = with maintainers; [
+    bachp
+    ryan4yin
+  ];
 
   options.services.minio = {
     enable = mkEnableOption "Minio Object Storage";
@@ -95,35 +105,80 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
+    warnings =
+      optional ((cfg.accessKey != "") || (cfg.secretKey != ""))
+        "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
-    systemd = lib.mkMerge [{
-      tmpfiles.rules = [
-        "d '${cfg.configDir}' - minio minio - -"
-      ] ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
+    systemd = lib.mkMerge [
+      {
+        tmpfiles.rules = [
+          "d '${cfg.configDir}' - minio minio - -"
+        ]
+        ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
 
-      services.minio = {
-        description = "Minio Object Storage";
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} --certs-dir=${cfg.certificatesDir} ${toString cfg.dataDir}";
-          Type = "simple";
-          User = "minio";
-          Group = "minio";
-          LimitNOFILE = 65536;
-          EnvironmentFile =
-            if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-            else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-            else null;
+        services.minio = {
+          description = "Minio Object Storage";
+          wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} --certs-dir=${cfg.certificatesDir} ${toString cfg.dataDir}";
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            LimitNOFILE = 65536;
+            EnvironmentFile =
+              if (cfg.rootCredentialsFile != null) then
+                cfg.rootCredentialsFile
+              else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then
+                (legacyCredentials cfg)
+              else
+                null;
+
+            # hardening
+            DevicePolicy = "closed";
+            CapabilityBoundingSet = "";
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK"
+              "AF_UNIX"
+            ];
+            DeviceAllow = "";
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            MemoryDenyWriteExecute = true;
+            LockPersonality = true;
+            RemoveIPC = true;
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+            ];
+            ProtectProc = "invisible";
+            ProtectHostname = true;
+            UMask = "0077";
+            # minio opens /proc/mounts on startup
+            ProcSubset = "all";
+          };
+          environment = {
+            MINIO_REGION = "${cfg.region}";
+            MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+          };
         };
-        environment = {
-          MINIO_REGION = "${cfg.region}";
-          MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-        };
-      };
-    }
+      }
 
       (lib.mkIf (cfg.rootCredentialsFile != null) {
         # The service will fail if the credentials file is missing
@@ -153,7 +208,8 @@ in
             RestartSec = 5;
           };
         };
-      })];
+      })
+    ];
 
     users.users.minio = {
       group = "minio";

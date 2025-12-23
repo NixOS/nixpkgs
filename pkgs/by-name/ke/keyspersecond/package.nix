@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_7,
+  gradle_8,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
@@ -17,7 +17,7 @@
 }:
 
 let
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   libPath = lib.makeLibraryPath [
     # used by the Java2D OpenGL backend
@@ -41,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-DGpXbCInq+RS56Ae5Y6xzyWqwXAm26c0vOYrFqDvl+8=";
   };
+
+  patches = [
+    # deprecated shadowJar.archiveName, application.mainClassName
+    # patches already in `master` branch, but no new release yet
+    # and would be spread along multiple cherry-picks
+    ./gradleShadowJar.patch
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/KeysPerSecond";
 

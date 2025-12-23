@@ -6,6 +6,7 @@
   dnspython,
   eval-type-backport,
   fetchFromGitHub,
+  orjson,
   playwrightcapture,
   poetry-core,
   pydantic,
@@ -17,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.13.0";
+  version = "1.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${version}";
-    hash = "sha256-4+YA+kWdohroFO1EMw7Nwy5w+bTGRrkaOwv1iaV9pZ0=";
+    hash = "sha256-q/JVvhI1NZTuX8vRWi/Q9ANE8ZTaTFNfb94n0NpH+/0=";
   };
 
   pythonRelaxDeps = [
+    "dnspython"
+    "orjson"
     "pydantic"
     "redis"
     "requests"
@@ -37,32 +38,32 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      defang
-      dnspython
-      playwrightcapture
-      pydantic
-      redis
-      requests
-      ua-parser
-    ]
-    ++ playwrightcapture.optional-dependencies.recaptcha
-    ++ redis.optional-dependencies.hiredis
-    ++ ua-parser.optional-dependencies.regex
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
-    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  dependencies = [
+    defang
+    dnspython
+    orjson
+    playwrightcapture
+    pydantic
+    redis
+    requests
+    ua-parser
+  ]
+  ++ playwrightcapture.optional-dependencies.recaptcha
+  ++ redis.optional-dependencies.hiredis
+  ++ ua-parser.optional-dependencies.regex
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ]
+  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "lacuscore" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
-    changelog = "https://github.com/ail-project/LacusCore/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ail-project/LacusCore/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  autoreconfHook,
   flex,
   bison,
   readline,
@@ -9,19 +10,24 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bird";
-  version = "2.16.1";
+  version = "2.17.3";
 
-  src = fetchurl {
-    url = "https://bird.network.cz/download/bird-${version}.tar.gz";
-    hash = "sha256-9uWcvMrKYmaK6gIGhyS9QnuexEnH4PD8VoFQOYjHNbQ=";
+  src = fetchFromGitLab {
+    domain = "gitlab.nic.cz";
+    owner = "labs";
+    repo = "bird";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Uwvb5u12Hwsv0uouEpGQiTgMgprWUpghbwD3TmKBoOM=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     flex
     bison
   ];
+
   buildInputs = [
     readline
     libssh
@@ -38,14 +44,14 @@ stdenv.mkDerivation rec {
     "--runstatedir=/run/bird"
   ];
 
-  passthru.tests = nixosTests.bird;
+  passthru.tests = nixosTests.bird2;
 
-  meta = with lib; {
-    changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
+  meta = {
+    changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${finalAttrs.version}/NEWS";
     description = "BIRD Internet Routing Daemon";
     homepage = "https://bird.network.cz";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ herbetom ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ herbetom ];
+    platforms = lib.platforms.linux;
   };
-}
+})

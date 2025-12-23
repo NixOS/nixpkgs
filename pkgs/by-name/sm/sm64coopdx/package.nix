@@ -3,6 +3,9 @@
   lib,
   makeWrapper,
   writeTextFile,
+  copyDesktopItems,
+  makeDesktopItem,
+  imagemagick,
 
   curl,
   hexdump,
@@ -10,6 +13,7 @@
   SDL2,
   stdenv,
   zlib,
+  libGL,
 
   sm64baserom,
   enableCoopNet ? true,
@@ -36,16 +40,22 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.2.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QWxhu7wGIjOIJyqjqakUzhhF+WxQslZdX3aEWYdDZbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ct7X6LCitk1QID00guvYOMfIwnZccMeXqXwUB3ioKh8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [ ./no-update-check.patch ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+    imagemagick
+  ];
 
   buildInputs = [
     curl
@@ -54,6 +64,18 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     SDL2
     zlib
+    libGL
+  ];
+
+  icon = "${finalAttrs.src}/res/icon.ico";
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "Super Mario 64 Coop Deluxe";
+      exec = "sm64coopdx";
+      icon = finalAttrs.pname;
+      categories = [ "Game" ];
+    })
   ];
 
   enableParallelBuilding = true;
@@ -88,6 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp $built/libdiscord_game_sdk* $share
     ''}
 
+    magick ${finalAttrs.icon} icon.png
+    for size in 16 24 32 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${finalAttrs.pname}.png
+    done
+
     # coopdx always tries to load resources from the binary's directory, with no obvious way to change. Thus this small wrapper script to always run from the /share directory that has all the resources
     mkdir -p $out/bin
     makeWrapper $share/sm64coopdx $out/bin/sm64coopdx \
@@ -114,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.shelvacu ];
     mainProgram = "sm64coopdx";
     homepage = "https://sm64coopdx.com/";
-    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/coop-deluxe/sm64coopdx/releases/tag/v1.3";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       # The lua engine, discord sdk, and coopnet library are vendored pre-built. See https://github.com/coop-deluxe/sm64coopdx/tree/v1.0.3/lib

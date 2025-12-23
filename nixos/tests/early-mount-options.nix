@@ -1,5 +1,5 @@
 # Test for https://github.com/NixOS/nixpkgs/pull/193469
-import ./make-test-python.nix {
+{
   name = "early-mount-options";
 
   nodes.machine = {

@@ -23,7 +23,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.20.1";
+  version = "0.24.1";
 in
 buildPythonPackage {
   inherit version;
@@ -34,7 +34,7 @@ buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
 
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs =
@@ -78,6 +78,9 @@ buildPythonPackage {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

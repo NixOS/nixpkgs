@@ -8,13 +8,13 @@
   pytestCheckHook,
   pythonOlder,
   requests,
-  setuptools,
+  hatchling,
   testers,
 }:
 
 buildPythonPackage rec {
   pname = "cvelib";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,16 +23,10 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
     tag = version;
-    hash = "sha256-AhA+2lEI/hsbIVCfSWO0vI6eWkObjsq5xYOSqVvUPkU=";
+    hash = "sha256-lbwrZSzJaP+nKFwt7xiq/LTzgOuf8aELxjrxEKkYpfc=";
   };
 
-  postPatch = ''
-    # collective.checkdocs is unmaintained for over 10 years
-    substituteInPlace pyproject.toml \
-      --replace-fail '"collective.checkdocs",' ""
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -46,12 +40,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = cve; };
 
-  meta = with lib; {
+  meta = {
     description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
-    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raboof ];
+    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raboof ];
     mainProgram = "cve";
   };
 }

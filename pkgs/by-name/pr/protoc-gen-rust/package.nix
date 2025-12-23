@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yGZ4auZHGtcsN6n4/FEzabsSXproyhNTJHIwujt7ijg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cj+/X3soc//lMOmBjfjQT+QhY/EWP92gChiDQ7b2fsM=";
 
   cargoBuildFlags = [
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating Rust code";
     mainProgram = "protoc-gen-rust";
     homepage = "https://github.com/stepancheg/rust-protobuf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
 }

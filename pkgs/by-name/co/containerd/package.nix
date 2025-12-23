@@ -16,21 +16,30 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.0.3";
+  version = "2.2.0";
 
   outputs = [
     "out"
     "doc"
-  ] ++ lib.optional withMan "man";
+  ]
+  ++ lib.optional withMan "man";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     tag = "v${version}";
-    hash = "sha256-MPzC7X4r3zrDM6Ej8lICDIB29X+s6jQ1sHQmnk9Zc10=";
+    hash = "sha256-LXBGA03FTrrbxlH+DxPBFtp3/AYQf096YE2rpe6A+WM=";
   };
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # When cross-compiling with CGO_ENABLED=0, we can't use -extldflags "-static"
+    # Remove it from SHIM_GO_LDFLAGS to avoid linking errors
+    substituteInPlace Makefile \
+      --replace-fail '-extldflags "-static"' ""
+  '';
 
   vendorHash = null;
 
@@ -38,7 +47,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     util-linux
-  ] ++ lib.optional withMan go-md2man;
+  ]
+  ++ lib.optional withMan go-md2man;
 
   buildInputs = lib.optional btrfsSupport btrfs-progs;
 
@@ -55,7 +65,8 @@ buildGoModule rec {
   installTargets = [
     "install"
     "install-doc"
-  ] ++ lib.optional withMan "install-man";
+  ]
+  ++ lib.optional withMan "install-man";
 
   buildPhase = ''
     runHook preBuild

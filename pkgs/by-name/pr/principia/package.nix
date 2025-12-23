@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2024.07.12";
+  version = "2025.04.05";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
     rev = finalAttrs.version;
-    hash = "sha256-JZXarRXScn7/0uve3Ul9dxMz0TE3N8E1VR1nasl051Q=";
+    hash = "sha256-cXtc1E4iJf3//UyzZzhky/NV7zk4959xSwGLHdCeyk0=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://principia-web.se/wiki/Changelog#${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

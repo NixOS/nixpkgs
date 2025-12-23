@@ -8,28 +8,36 @@
 
 buildPythonPackage rec {
   pname = "pyglm";
-  version = "2.7.3";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zuzu-Typ";
     repo = "PyGLM";
     tag = version;
-    hash = "sha256-5NXueFZ4+hIP1xd30Dt7sv/oxEqh6ejJoJtQv2rpGyQ=";
+    hash = "sha256-7IN/kqFCwAMeVUrBB/CfCm9bSt1dHMbbLtqVInRFCk0=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "glm" ];
+  # Having the source root in `sys.path` causes import issues
+  preCheck = ''
+    cd test
+  '';
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "pyglm"
+    "glm"
+  ];
+
+  meta = {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";
     description = "OpenGL Mathematics (GLM) library for Python written in C++";
     changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${src.tag}";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ sund3RRR ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ sund3RRR ];
   };
 }

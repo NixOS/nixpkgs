@@ -23,8 +23,7 @@ insert_final_newline = false
 
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
-# Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
-[*.{bash,json,lock,md,nix,pl,pm,py,rb,sh,xml}]
+[*.{bash,css,js,json,lock,md,nix,pl,pm,py,rb,sh,xml}]
 indent_style = space
 
 # Match docbook files, set indent width of one
@@ -32,11 +31,15 @@ indent_style = space
 indent_size = 1
 
 # Match json/lockfiles/markdown/nix/ruby files, set indent width of two
-[*.{json,lock,md,nix,rb}]
+[*.{js,json,lock,md,nix,rb}]
 indent_size = 2
 
-# Match perl/python/shell scripts, set indent width of four
-[*.{bash,pl,pm,py,sh}]
+# Match all the Bash code in Nix files, set indent width of two
+[*.{bash,sh}]
+indent_size = 2
+
+# Match Perl and Python scripts, set indent width of four
+[*.{pl,pm,py}]
 indent_size = 4
 
 # Match gemfiles, set indent to spaces with width of two
@@ -44,9 +47,10 @@ indent_size = 4
 indent_size = 2
 indent_style = space
 
-# Match package.json, which are generally pulled from upstream and accept them as they are
-[package.json]
+# Match package.json and package-lock.json, which are generally pulled from upstream and accept them as they are
+[package{,-lock}.json]
 indent_style = unset
+insert_final_newline = unset
 
 # Disable file types or individual files
 # some of these files may be auto-generated and/or require significant changes
@@ -81,42 +85,17 @@ charset = unset
 [eggs.nix]
 trim_trailing_whitespace = unset
 
-[nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
-trim_trailing_whitespace = unset
-
-[pkgs/build-support/dotnetenv/Wrapper/**]
-end_of_line = unset
-indent_style = unset
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-
 [registry.dat]
 end_of_line = unset
 insert_final_newline = unset
 
-[pkgs/development/haskell-modules/hackage-packages.nix]
-indent_style = unset
-trim_trailing_whitespace = unset
-
-[pkgs/misc/documentation-highlighter/**]
-insert_final_newline = unset
-
-[pkgs/servers/dict/wordnet_structures.py]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/misc/timidity/timidity.cfg]
-trim_trailing_whitespace = unset
-
-[pkgs/tools/virtualization/ovftool/*.ova]
-end_of_line = unset
-insert_final_newline = unset
-trim_trailing_whitespace = unset
-charset = unset
-
-[lib/tests/*.plist]
+# see https://manual.jule.dev/project/code-style.html#indentions
+[*.jule]
 indent_style = tab
+
+[jule.mod]
 insert_final_newline = unset
 
-[pkgs/kde/generated/**]
-insert_final_newline = unset
-end_of_line = unset
+# Keep this hint at the bottom:
+# Please don't add entries for subfolders here.
+# Create <subfolder>/.editorconfig instead.

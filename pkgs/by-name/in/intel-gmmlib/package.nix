@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.7.0";
+  version = "22.9.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     tag = "intel-gmmlib-${version}";
-    hash = "sha256-SR66UaoPQYGz4Nda99ASZEfTtNlLQTqtZgDM5hlV/1w=";
+    hash = "sha256-hgVdUTbPLEKVZpg+73kxpeMQ5gOjBHeRAJgTYds9lYQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime intel-media-driver;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/gmmlib";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Intel Graphics Memory Management Library";
     longDescription = ''
       The Intel(R) Graphics Memory Management Library provides device specific
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

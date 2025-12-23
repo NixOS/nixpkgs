@@ -1,17 +1,37 @@
-{ lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
-, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
-, help2man
-, fetchzip
-, fetchpatch
-, buildPackages
-, nixosTests
-, fuse # only needed for grub-mount
-, runtimeShell
-, zfs ? null
-, efiSupport ? false
-, zfsSupport ? false
-, xenSupport ? false
-, kbdcompSupport ? false, ckbcomp
+{
+  lib,
+  stdenv,
+  fetchgit,
+  flex,
+  bison,
+  python3,
+  autoconf,
+  automake,
+  libtool,
+  bash,
+  gettext,
+  ncurses,
+  libusb-compat-0_1,
+  freetype,
+  qemu,
+  lvm2,
+  unifont,
+  pkg-config,
+  help2man,
+  fetchzip,
+  fetchpatch,
+  buildPackages,
+  nixosTests,
+  fuse, # only needed for grub-mount
+  runtimeShell,
+  zfs ? null,
+  efiSupport ? false,
+  ieee1275Support ? false,
+  zfsSupport ? false,
+  xenSupport ? false,
+  xenPvhSupport ? false,
+  kbdcompSupport ? false,
+  ckbcomp,
 }:
 
 let
@@ -25,6 +45,7 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "aarch64";
+    loongarch64-linux.target = "loongarch64";
     riscv32-linux.target = "riscv32";
     riscv64-linux.target = "riscv64";
   };
@@ -36,24 +57,33 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "arm64";
+    loongarch64-linux.target = "loongarch64";
     riscv32-linux.target = "riscv32";
     riscv64-linux.target = "riscv64";
   };
 
-  canEfi = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.mapAttrsToList (name: _: name) pcSystems);
+  ieee1275SystemsBuild = {
+    x86_64-linux.target = "i386";
+    powerpc64-linux.target = "powerpc";
+  };
 
-  gnulib = fetchFromSavannah {
-    repo = "gnulib";
+  xenSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+  };
+
+  xenPvhSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
+  };
+
+  inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
+
+  gnulib = fetchgit {
+    url = "https://git.savannah.gnu.org/git/gnulib.git";
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
-  };
-
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "grub-2.12";
-    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
   # The locales are fetched from translationproject.org at build time,
@@ -63,16 +93,29 @@ let
     url = "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz";
     hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
   };
-in (
+in
 
-assert efiSupport -> canEfi;
 assert zfsSupport -> zfs != null;
-assert !(efiSupport && xenSupport);
+assert lib.asserts.assertMsg (
+  lib.lists.length (
+    lib.lists.filter (x: x) [
+      efiSupport
+      ieee1275Support
+      xenSupport
+      xenPvhSupport
+    ]
+  ) <= 1 # (0 == pc)
+) "Only <= 1 of grub2's platform-related *Support options may be enabled at the same time";
 
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
-  inherit src;
+
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/grub.git";
+    tag = "grub-${version}";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
+  };
 
   patches = [
     ./fix-bash-completion.patch
@@ -164,11 +207,8 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=048777bc29043403d077d41a81d0183767b8bc71";
       hash = "sha256-Mm49MSLqCq143r8ruLJm1QoyCoLtOlCBfqoAPwPlv8E=";
     })
-    (fetchpatch {
-      name = "18_fs_ntfs_implement_attribute_verification.patch";
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=067b6d225d482280abad03944f04e30abcbdafa1";
-      hash = "sha256-u1+K7WIw3uJG4OhMVP5aYsgJoXpgA5rcp3nJ0/aDU6I=";
-    })
+    # Patch 18 (067b6d225d482280abad03944f04e30abcbdafa1) has been removed because it causes regressions
+    # https://lists.gnu.org/archive/html/grub-devel/2025-03/msg00067.html
     (fetchpatch {
       name = "19_fs_xfs_fix_out-of-bounds_read.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=6ccc77b59d16578b10eaf8a4fe85c20b229f0d8a";
@@ -193,7 +233,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_prerequisite_1_key_protector_add_key_protectors_framework.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=5d260302da672258444b01239803c8f4d753e3f3";
-      hash = "sha256-9WnFN6xMiv+1XMhNHgVEegkhwzp9KpRZI6MIZY/Ih3Q=";
+      hash = "sha256-5aFHzc5qXBNLEc6yzI17AH6J7EYogcXdLxk//1QgumY=";
     })
     (fetchpatch {
       name = "23_prerequisite_2_disk_cryptodisk_allow_user_to_retry_failed_passphrase.patch";
@@ -223,7 +263,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "23_CVE-2024-49504.patch";
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=13febd78db3cd85dcba67d8ad03ad4d42815f11e";
-      hash = "sha256-U7lNUb4iVAyQ1yEg5ECHCQGE51tKvY13T9Ji09Q1W9Y=";
+      hash = "sha256-GejDL9IKbmbSUmp8F1NuvBcFAp2/W04jxmOatI5dKn8=";
     })
     (fetchpatch {
       name = "24_disk_loopback_reference_tracking_for_the_loopback.patch";
@@ -479,20 +519,106 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=348cd416a3574348f4255bf2b04ec95938990997";
       hash = "sha256-WBLYQxv8si2tvdPAvbm0/4NNqYWBMJpFV4GC0HhN/kE=";
     })
+    (fetchpatch {
+      name = "CVE-2025-4382.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
+      hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
+    })
+    # https://lists.gnu.org/archive/html/grub-devel/2025-11/msg00155.html
+    (fetchpatch {
+      name = "1_commands_test_fix_error_in_recursion_depth_calculation.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=cc9d621dd06bfa12eac511b37b4ceda5bd2f8246";
+      hash = "sha256-GpLpqTKr2ke/YaxnZIO1Kh9wpde44h2mvwcODcAL/nk=";
+    })
+    (fetchpatch {
+      name = "2_CVE-2025-54771.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c4fb4cbc941981894a00ba8e75d634a41967a27f";
+      hash = "sha256-yWowlAMVXdfIyC+BiB00IZvTwIybvaPhxAyz0MPjQuY=";
+    })
+    (fetchpatch {
+      name = "3_CVE-2025-54770.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=10e58a14db20e17d1b6a39abe38df01fef98e29d";
+      hash = "sha256-1ROc5n7sApw7aGr+y8gygFqVkifLdgOD3RPaW9b8aQQ=";
+    })
+    (fetchpatch {
+      name = "4_CVE-2025-61662.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=8ed78fd9f0852ab218cc1f991c38e5a229e43807";
+      hash = "sha256-mG+vcZHbF4duY2YoYAzPBQRHfWvp5Fvgtm0XBk7JqqM=";
+    })
+    (fetchpatch {
+      name = "5_CVE-2025-61663_CVE-2025-61664.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=05d3698b8b03eccc49e53491bbd75dba15f40917";
+      hash = "sha256-kgtXhZmAQpassEf8+RzqkghAzLrCcRoRMMnfunF/0J8=";
+    })
+    (fetchpatch {
+      name = "6_tests_lib_functional_test_unregister_commands_on_module_unload.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=9df1e693e70c5a274b6d60dc76efe2694b89c2fc";
+      hash = "sha256-UzyYkpP7vivx2jzxi7BMP9h9OB2yraswrMW4g9UWsbI=";
+    })
+    (fetchpatch {
+      name = "7_CVE-2025-61661.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=549a9cc372fd0b96a4ccdfad0e12140476cc62a3";
+      hash = "sha256-2mlDoVXY7Upwx4QBeAMOHUtoUlyx1MDDmabnrwK1gEY=";
+    })
+    (fetchpatch {
+      name = "8_commands_usbtest_ensure_string_length_is_sufficient_in_usb_string_processing.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7debdce1e98907e65223a4b4c53a41345ac45e53";
+      hash = "sha256-2ALvrmwxvpjQYjGNrQ0gyGotpk0kgmYlJXMF1xXrnEw=";
+    })
+    # Required to apply the GCC-15 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_1.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=bba7dd7363402157034e9c94ee3d9ea82e37861d";
+      hash = "sha256-KO9rE/9xRkIGi/Y6jv1gVPiAJZUejwaUW6kIWthPUhw=";
+    })
+    # Required to apply the GCC-11 patch
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_0_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=db506b3b83640ab166a782e1ca47c47836afddcd";
+      hash = "sha256-4ucCu+9OZ8NoicLF9hCgUpX4xgJk4Gzu6F3P4zl9J3U=";
+    })
+    # Required to build grub 2.12 with GCC 15
+    (fetchpatch {
+      name = "gnulib_Add_patch_to_allow_GRUB_w_GCC-15_compile_1_2.patch";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac1512b872af8567b408518a7efa01607a0219ae";
+      hash = "sha256-deyp6Yatlgv86bYMt7WcWhKg8J6StDPUEy4UPHqJYIc=";
+    })
   ];
 
-  postPatch = if kbdcompSupport then ''
-    sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
-  '' else ''
-    echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
-    echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
-  '';
+  postPatch =
+    if kbdcompSupport then
+      ''
+        sed -i util/grub-kbdcomp.in -e 's@\bckbcomp\b@${ckbcomp}/bin/ckbcomp@'
+      ''
+    else
+      ''
+        echo '#! ${runtimeShell}' > util/grub-kbdcomp.in
+        echo 'echo "Compile grub2 with { kbdcompSupport = true; } to enable support for this command."' >> util/grub-kbdcomp.in
+      '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake help2man ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
-    ++ lib.optional doCheck qemu
-    ++ lib.optional zfsSupport zfs;
+  nativeBuildInputs = [
+    bison
+    flex
+    python3
+    pkg-config
+    gettext
+    freetype
+    autoconf
+    automake
+    help2man
+  ];
+  buildInputs = [
+    ncurses
+    libusb-compat-0_1
+    freetype
+    lvm2
+    fuse
+    libtool
+    bash
+  ]
+  ++ lib.optional doCheck qemu
+  ++ lib.optional zfsSupport zfs;
 
   strictDeps = true;
 
@@ -501,41 +627,41 @@ stdenv.mkDerivation rec {
   separateDebugInfo = !xenSupport;
 
   preConfigure = ''
-       for i in "tests/util/"*.in
-       do
-         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
-       done
+     for i in "tests/util/"*.in
+     do
+       sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
+     done
 
-       # Apparently, the QEMU executable is no longer called
-       # `qemu-system-i386', even on i386.
-       #
-       # In addition, use `-nodefaults' to avoid errors like:
-       #
-       #  chardev: opening backend "stdio" failed
-       #  qemu: could not open serial device 'stdio': Invalid argument
-       #
-       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
-       sed -i "tests/util/grub-shell.in" \
-           -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+     # Apparently, the QEMU executable is no longer called
+     # `qemu-system-i386', even on i386.
+     #
+     # In addition, use `-nodefaults' to avoid errors like:
+     #
+     #  chardev: opening backend "stdio" failed
+     #  qemu: could not open serial device 'stdio': Invalid argument
+     #
+     # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+     sed -i "tests/util/grub-shell.in" \
+         -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
 
-      unset CPP # setting CPP intereferes with dependency calculation
+    unset CPP # setting CPP intereferes with dependency calculation
 
-      patchShebangs .
+    patchShebangs .
 
-      GNULIB_REVISION=$(. bootstrap.conf; echo $GNULIB_REVISION)
-      if [ "$GNULIB_REVISION" != ${gnulib.rev} ]; then
-        echo "This version of GRUB requires a different gnulib revision!"
-        echo "We have: ${gnulib.rev}"
-        echo "GRUB needs: $GNULIB_REVISION"
-        exit 1
-      fi
+    GNULIB_REVISION=$(. bootstrap.conf; echo $GNULIB_REVISION)
+    if [ "$GNULIB_REVISION" != ${gnulib.rev} ]; then
+      echo "This version of GRUB requires a different gnulib revision!"
+      echo "We have: ${gnulib.rev}"
+      echo "GRUB needs: $GNULIB_REVISION"
+      exit 1
+    fi
 
-      cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
+    cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
 
-      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
+    ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
-      substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
-    '';
+    substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
+  '';
 
   postConfigure = ''
     # make sure .po files are up to date to workaround
@@ -546,7 +672,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-grub-mount" # dep of os-prober
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # grub doesn't do cross-compilation as usual and tries to use unprefixed
     # tools to target the host. Provide toolchain information explicitly for
     # cross builds.
@@ -557,14 +684,34 @@ stdenv.mkDerivation rec {
     "TARGET_OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
     "TARGET_RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "TARGET_STRIP=${stdenv.cc.targetPrefix}strip"
-  ] ++ lib.optional zfsSupport "--enable-libzfs"
-    ++ lib.optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
-    ++ lib.optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
+  ]
+  ++ lib.optional zfsSupport "--enable-libzfs"
+  ++ lib.optionals efiSupport [
+    "--with-platform=efi"
+    "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+    "--program-prefix="
+  ]
+  ++ lib.optionals ieee1275Support [
+    "--with-platform=ieee1275"
+    "--target=${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
+  ++ lib.optionals xenSupport [
+    "--with-platform=xen"
+    "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ]
+  ++ lib.optionals xenPvhSupport [
+    "--with-platform=xen_pvh"
+    "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
+  ];
 
   # save target that grub is compiled for
-  grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
-               else lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
+  grubTarget =
+    if efiSupport then
+      "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
+    else if ieee1275Support then
+      "${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}-ieee1275"
+    else
+      lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
   doCheck = false;
   enableParallelBuilding = true;
@@ -584,7 +731,7 @@ stdenv.mkDerivation rec {
     nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GNU GRUB, the Grand Unified Boot Loader";
 
     longDescription = ''
@@ -601,10 +748,20 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/grub/";
 
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
+    platforms =
+      if efiSupport then
+        lib.attrNames efiSystemsBuild
+      else if ieee1275Support then
+        lib.attrNames ieee1275SystemsBuild
+      else if xenSupport then
+        lib.attrNames xenSystemsBuild
+      else if xenPvhSupport then
+        lib.attrNames xenPvhSystemsBuild
+      else
+        lib.platforms.gnu ++ lib.platforms.linux;
 
     maintainers = [ ];
   };
-})
+}

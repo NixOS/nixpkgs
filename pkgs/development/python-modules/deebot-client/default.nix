@@ -7,6 +7,7 @@
   defusedxml,
   docker,
   fetchFromGitHub,
+  orjson,
   pkg-config,
   pycountry,
   pytest-asyncio,
@@ -14,13 +15,14 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
+  syrupy,
   testfixtures,
   xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "12.3.1";
+  version = "17.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -29,17 +31,16 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-2ZdWe9fVmQq7YGKzBut6hec3OeR9iXDkoDmYFYHX90A=";
+    hash = "sha256-QreF2ivdPfu2KiYY4At3zpif8bx7d7AzbpXNgL3zXzE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-PrHm85Tzfd3jS5ofKKpECkWhL44yKBc8Hvrh0zbl7lw=";
+    hash = "sha256-n3lvezBP7oT9jLqPCFZ7hwdBGuSJYos+hob9HBX2zIY=";
   };
 
   pythonRelaxDeps = [
     "aiohttp"
-    "defusedxml"
   ];
 
   nativeBuildInputs = [
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     aiomqtt
     cachetools
     defusedxml
+    orjson
   ];
 
   nativeCheckInputs = [
@@ -63,6 +65,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-codspeed
     pytestCheckHook
+    syrupy
     testfixtures
   ];
 
@@ -87,11 +90,11 @@ buildPythonPackage rec {
     "test_client_reconnect_on_broker_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deebot client library";
     homepage = "https://github.com/DeebotUniverse/client.py";
     changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

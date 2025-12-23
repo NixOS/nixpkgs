@@ -6,6 +6,7 @@
   fetchFromGitHub,
   libtapi,
   llvm,
+  libxml2,
   meson,
   ninja,
   openssl,
@@ -113,9 +114,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     llvm
+    libxml2
     openssl
     xar
   ];
+
+  # ld built with this fails to link glib's gio on x86_64 darwin
+  hardeningDisable = [ "libcxxhardeningfast" ];
 
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 
@@ -170,11 +175,11 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = lib.licenses.apple-psl20;
     mainProgram = "ld";
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
   };
 })

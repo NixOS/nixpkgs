@@ -1,15 +1,21 @@
 # Static arguments
-{ lib, runCommand, pkg-config }:
+{
+  lib,
+  runCommand,
+  pkg-config,
+}:
 
 # Tester arguments
-{ package,
+{
+  package,
   moduleNames ? package.meta.pkgConfigModules,
   testName ? "check-pkg-config-${package.pname or package.name}",
   version ? package.version or null,
   versionCheck ? false,
 }:
 
-runCommand testName {
+runCommand testName
+  {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ package ];
     inherit moduleNames version versionCheck;
@@ -19,19 +25,19 @@ runCommand testName {
     # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
     # as hydra can't check this meta info in dependencies.
     # The test itself is just Nixpkgs, with MIT license.
-    // builtins.intersectAttrs
-        {
-          available = throw "unused";
-          broken = throw "unused";
-          insecure = throw "unused";
-          license = throw "unused";
-          maintainers = throw "unused";
-          platforms = throw "unused";
-          unfree = throw "unused";
-          unsupported = throw "unused";
-        }
-        package.meta;
-  } ''
+    // builtins.intersectAttrs {
+      available = throw "unused";
+      broken = throw "unused";
+      insecure = throw "unused";
+      license = throw "unused";
+      maintainers = throw "unused";
+      teams = throw "unused";
+      platforms = throw "unused";
+      unfree = throw "unused";
+      unsupported = throw "unused";
+    } package.meta;
+  }
+  ''
     touch "$out"
     notFound=0
     versionMismatch=0
@@ -45,7 +51,9 @@ runCommand testName {
         if [[ "$moduleVersion" == "$version" ]]; then
           echo "✅ pkg-config module $moduleName exists and has version $moduleVersion"
         else
-          echo "${if versionCheck then "❌" else "ℹ️"} pkg-config module $moduleName exists at version $moduleVersion != $version (drv version)"
+          echo "${
+            if versionCheck then "❌" else "ℹ️"
+          } pkg-config module $moduleName exists at version $moduleVersion != $version (drv version)"
           ((versionMismatch+=1))
         fi
         printf '%s\t%s\n' "$moduleName" "$version" >> "$out"

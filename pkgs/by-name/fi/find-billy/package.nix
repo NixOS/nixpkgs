@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "find-billy";
-  version = "1.0.13";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "Find-Billy";
     rev = "v${version}";
-    hash = "sha256-VpQpAODasJpHLU1UQ3NoVnrO+tvwdMNpPDNkg/NDM+4=";
+    hash = "sha256-jKN3lEnLy0aN98S8BN3dcoOgc0RrxNoqfQdeCawKQaU=";
   };
 
   strictDeps = true;
@@ -69,14 +69,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "2 dimensional Pixel Art Jump & Run";
     homepage = "https://codeberg.org/annaaurora/Find-Billy";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.annaaurora ];
+    maintainers = [ lib.maintainers.annaaurora ];
   };
 }

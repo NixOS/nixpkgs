@@ -9,6 +9,7 @@
   makeDesktopItem,
   copyDesktopItems,
   libgcc,
+  cairo,
   dbus,
   xorg_sys_opengl,
   systemd,
@@ -17,6 +18,7 @@
   pulseaudio,
   libsndfile,
   flac,
+  glib,
   libvorbis,
   libopus,
   mpg123,
@@ -24,60 +26,61 @@
   libGL,
   vulkan-loader,
   libasyncns,
+  pango,
   xorg,
+  wayland,
 }:
 
 let
   pname = "legends-of-equestria";
-  version = "2024.06.02";
+  version = "2025.05.001";
   description = "Free-to-play MMORPG";
 
   srcOptions = {
     x86_64-linux = {
-      url = "https://mega.nz/file/Z3oAGYDa#01EfQICR4k5BK56hWFckYKsfgdV36KoU91TvSBwKgxY";
-      outputHash = "vpVIaRPrZih+ydWszsBF/JgO0AXh2rF/yOpBuI+V0m4=";
+      url = "https://mega.nz/file/cjhDAZ5S#dsCHHfZ3rhmGBynu4FxooK5kf2w7oHYwgzf4E7vzerM";
+      outputHash = "WbJL/+T/BNrk4GllCM4C4K2OymHmjzf5BuFR4V1N5Ds=";
     };
     x86_64-darwin = {
-      url = "https://mega.nz/file/p6JQUDYC#lBRUK7lmxMHh4OvEyKjfl0W1mOL2VVzAH9rXL5ViiN0";
-      outputHash = "bvFg4wjltiilCP1oKfgUWThcEq8tzCIP3W/eAd3SxFo=";
+      url = "https://mega.nz/file/dqQyjaSC#Aazc0tyu3v5WZcGet8ouHWlBB4to6Eu1SADYa3iSmAw";
+      outputHash = "V8qGABS1uNnj/0CVLsFNXLjzBAjq/UXAT11gczVP298=";
     };
     aarch64-darwin = {
-      url = "https://mega.nz/file/cvxSzZ4b#eJHLvVHz_zxBiRxGMCBcsl1gV6M6ebQf2tQbNpEqCvk";
-      outputHash = "1aZGuOgXTLFxwF2FcYEwKA/LRT26uiXupBoqmzq9pFM=";
+      url = "https://mega.nz/file/I6QCSZqL#by23SjXBl0EMtgxex9Fhv5FO4qkhFX4uWSr3l5N4f-M";
+      outputHash = "ISmtCw35kA4p6nWcDWIk4UucVT7fIGS9XC73rzwSigo=";
     };
   };
 
-  runtimeDeps =
-    [
-      dbus.lib
-      xorg_sys_opengl
-      systemd
-      libcap.lib
-      libdrm
-      pulseaudio
-      libsndfile
-      flac
-      libvorbis
-      mpg123
-      lame.lib
-      libGL
-      vulkan-loader
-      libasyncns
-    ]
-    ++ (with xorg; [
-      libX11
-      libxcb
-      libXau
-      libXdmcp
-      libXext
-      libXcursor
-      libXrender
-      libXfixes
-      libXinerama
-      libXi
-      libXrandr
-      libXScrnSaver
-    ]);
+  runtimeDeps = [
+    dbus.lib
+    xorg_sys_opengl
+    systemd
+    libcap.lib
+    libdrm
+    pulseaudio
+    libsndfile
+    flac
+    libvorbis
+    mpg123
+    lame.lib
+    libGL
+    vulkan-loader
+    libasyncns
+  ]
+  ++ (with xorg; [
+    libX11
+    libxcb
+    libXau
+    libXdmcp
+    libXext
+    libXcursor
+    libXrender
+    libXfixes
+    libXinerama
+    libXi
+    libXrandr
+    libXScrnSaver
+  ]);
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -108,15 +111,21 @@ stdenv.mkDerivation {
   dontBuild = true;
   buildInputs = [
     libgcc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cairo
+    dbus
+    glib
+    pango
+    wayland
   ];
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+    autoPatchelfHook
+  ];
 
   installPhase =
     if stdenv.hostPlatform.isLinux then
@@ -125,8 +134,9 @@ stdenv.mkDerivation {
 
         loeHome=$out/lib/${pname}
         mkdir -p $loeHome
-        cp -r Linux/* $loeHome
+        cp -r LoE/* $loeHome
 
+        chmod +x $loeHome/LoE.x86_64
         makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \
           --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 

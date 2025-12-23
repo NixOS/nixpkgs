@@ -30,6 +30,7 @@ in
   spaceTimeSupport ? false,
   unsafeStringSupport ? false,
   framePointerSupport ? false,
+  noNakedPointers ? false,
 }:
 
 assert useX11 -> safeX11 stdenv;
@@ -38,6 +39,7 @@ assert flambdaSupport -> lib.versionAtLeast version "4.03";
 assert spaceTimeSupport -> lib.versionAtLeast version "4.04" && lib.versionOlder version "4.12";
 assert unsafeStringSupport -> lib.versionAtLeast version "4.06" && lib.versionOlder version "5.0";
 assert framePointerSupport -> lib.versionAtLeast version "4.01";
+assert noNakedPointers -> lib.versionAtLeast version "4.02" && lib.versionOlder version "5.0";
 
 let
   src =
@@ -49,7 +51,7 @@ let
 in
 
 let
-  useNativeCompilers = !stdenv.hostPlatform.isMips;
+  useNativeCompilers = !stdenv.hostPlatform.isMips && !stdenv.hostPlatform.isLoongArch64;
   inherit (lib)
     optional
     optionals
@@ -112,7 +114,8 @@ stdenv.mkDerivation (
       ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
         "-host ${stdenv.hostPlatform.config}"
         "-target ${stdenv.targetPlatform.config}"
-      ];
+      ]
+      ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
     # on aarch64-darwin using --host and --target causes the build to invoke
@@ -131,8 +134,7 @@ stdenv.mkDerivation (
         ];
     # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
     hardeningDisable =
-      lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
-      ++ lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
+      lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
       ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
     # Older versions have some race:
@@ -187,10 +189,10 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
-      license = with licenses; [
+      license = with lib.licenses; [
         qpl # compiler
         lgpl2 # library
       ];
@@ -213,7 +215,7 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
-      platforms = with platforms; linux ++ darwin;
+      platforms = with lib.platforms; linux ++ darwin;
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

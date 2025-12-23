@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.7";
+  version = "1.8";
   pname = "siphash24";
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dnicolodi";
     repo = "python-siphash24";
     tag = "v${version}";
-    hash = "sha256-/7XrRD4e7jLTUY/8mBbJ4dSo5P6pj8GRpSreIOZpKp0=";
+    hash = "sha256-51LgmB30MDTBRoZttIESopWMdrozvLFwlxYELmqu5UQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "siphash24"
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

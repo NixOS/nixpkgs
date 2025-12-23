@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vala-lang";
-    repo = pname;
+    repo = "vala-language-server";
     rev = version;
     sha256 = "sha256-Vl5DjKBdpk03aPD+0xGoTwD9Slg1rREorqZGX5o10cY=";
   };
@@ -30,17 +30,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      scdoc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # GNOME Builder Plugin
-      gnome-builder
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # GNOME Builder Plugin
+    gnome-builder
+  ];
 
   buildInputs = [
     glib
@@ -50,12 +49,12 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code Intelligence for Vala & Genie";
     mainProgram = "vala-language-server";
     homepage = "https://github.com/vala-lang/vala-language-server";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ andreasfelix ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ andreasfelix ];
+    platforms = lib.platforms.unix;
   };
 }

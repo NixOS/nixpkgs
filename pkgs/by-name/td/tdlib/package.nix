@@ -11,6 +11,8 @@
   common-updater-scripts,
   jq,
   buildPackages,
+
+  tde2eOnly ? false,
 }:
 
 let
@@ -35,8 +37,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "tdlib";
-  version = "1.8.46";
+  pname = if tde2eOnly then "tde2e" else "tdlib";
+  version = "1.8.58";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -45,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "207f3be7b58b2a2b9f0a066b5b6ef18782b8b517";
-    hash = "sha256-+cqdRp+J/W1Cyh+TqbglaerN4w3AVGp5NC5JLVK5e3k=";
+    rev = "282f96ca66421c348ed75aaca84471b3e39e64dd";
+    hash = "sha256-Qry/jL/7pyPribh1Nn6L5hx5BfNNn+EG0YeOs5Z0M9Q=";
   };
 
   buildInputs = [
@@ -73,30 +75,33 @@ stdenv.mkDerivation {
     cmake --build native-build -j $NIX_BUILD_CORES
   '';
 
+  cmakeFlags = [
+    (lib.cmakeBool "TD_E2E_ONLY" tde2eOnly)
+  ];
+
   # https://github.com/tdlib/td/issues/1974
-  postPatch =
-    ''
-      substituteInPlace CMake/GeneratePkgConfig.cmake \
-        --replace 'function(generate_pkgconfig' \
-                  'include(GNUInstallDirs)
-                   function(generate_pkgconfig' \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-        --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      sed -i "/vptr/d" test/CMakeLists.txt
-    '';
+  postPatch = ''
+    substituteInPlace CMake/GeneratePkgConfig.cmake \
+      --replace 'function(generate_pkgconfig' \
+                'include(GNUInstallDirs)
+                 function(generate_pkgconfig' \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    sed -i "/vptr/d" test/CMakeLists.txt
+  '';
 
   passthru.updateScript = lib.getExe updateScript;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
-    license = [ licenses.boost ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.boost ];
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.vyorkin
-      maintainers.vonfry
+      lib.maintainers.vyorkin
+      lib.maintainers.vonfry
     ];
   };
 }

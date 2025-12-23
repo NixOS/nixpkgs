@@ -51,8 +51,11 @@ python.pkgs.buildPythonApplication rec {
     mdit-py-plugins
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-vvrP"
+  ];
+
+  enabledTestPaths = [
     "tests/"
   ];
 
@@ -77,10 +80,10 @@ python.pkgs.buildPythonApplication rec {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Renderer for NixOS manual and option docs";
     mainProgram = "nixos-render-docs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

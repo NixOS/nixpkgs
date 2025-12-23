@@ -1,5 +1,5 @@
 let
-  ides = builtins.fromJSON (builtins.readFile ./ides.json);
+  ides = builtins.fromJSON (builtins.readFile ./sources.json);
 in
 {
   callPackage,

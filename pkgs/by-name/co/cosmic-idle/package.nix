@@ -11,20 +11,22 @@
   just,
   bash,
   nix-update-script,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-idle";
-  version = "1.0.0-alpha.6";
 
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-idle";
+  version = "1.0.0";
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-idle";
-    tag = "epoch-${version}";
-    hash = "sha256-hORU+iMvWA4XMSWmzir9EwjpLK5vOLR8BgMZz+aIZ4U=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-qVrcMI7sr0mWyYW1fM6oP/6qKEhlqqyQ/WiJaWfCQPU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-iFR0kFyzawlXrWItzFQbG/tKGd3Snwk/0LYkPzCkJUQ=";
+  cargoHash = "sha256-vfuhXT/MJHchJdW+3GPuvZbYVdClpsbNfOzLKWW4LPY=";
 
   nativeBuildInputs = [
     just
@@ -39,21 +41,30 @@ rustPlatform.buildRustPackage rec {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-idle"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   postPatch = ''
     substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
@@ -61,8 +72,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-idle";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-idle";
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

@@ -33,18 +33,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11
     imlib2
-  ] ++ lib.optionals enableXinerama [ libXinerama ];
+  ]
+  ++ lib.optionals enableXinerama [ libXinerama ];
 
   buildFlags = [ (if enableXinerama then "xinerama=1" else "xinerama=0") ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple X background setter inspired by imlibsetroot and feh";
     homepage = "https://github.com/ttzhou/setroot";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vyp ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "setroot";
   };
 }

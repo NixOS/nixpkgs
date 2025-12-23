@@ -16,11 +16,10 @@ let
       nodes.machine =
         { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.pg-dump-anon ];
+          environment.systemPackages = [ (pkgs.pg-dump-anon.override { postgresql = package; }) ];
           services.postgresql = {
             inherit package;
             enable = true;
-            enableJIT = lib.hasInfix "-jit-" package.name;
             extensions = ps: [ ps.anonymizer ];
             settings.shared_preload_libraries = [ "anon" ];
           };
@@ -29,7 +28,7 @@ let
       testScript = ''
         start_all()
         machine.wait_for_unit("multi-user.target")
-        machine.wait_for_unit("postgresql.service")
+        machine.wait_for_unit("postgresql.target")
 
         with subtest("Setup"):
             machine.succeed("sudo -u postgres psql --command 'create database demo'")
@@ -40,7 +39,7 @@ let
                   create table player(id serial, name text, points int);
                   insert into player(id,name,points) values (1,'Foo', 23);
                   insert into player(id,name,points) values (2,'Bar',42);
-                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name();';
+                  security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name()';
                   security label for anon on column player.points is 'MASKED WITH VALUE NULL';
                 ''}"
             )
@@ -51,9 +50,9 @@ let
             ]
 
         def check_anonymized_row(row, id, original_name):
-            assert row[0] == id, f"Expected first row to have ID {id}, but got {row[0]}"
-            assert row[1] != original_name, f"Expected first row to have a name other than {original_name}"
-            assert not bool(row[2]), "Expected points to be NULL in first row"
+            t.assertEqual(row[0], id)
+            t.assertNotEqual(row[1], original_name)
+            t.assertFalse(bool(row[2]))
 
         def find_xsv_in_dump(dump, sep=','):
             """
@@ -62,7 +61,7 @@ let
                 COPY public.player ...
                 1,Shields,
                 2,Salazar,
-                \.
+                \\.
 
             in the given dump (the commas are tabs in case of pg_dump).
                   Extract the CSV lines and split by `sep`.
@@ -82,8 +81,8 @@ let
                 raise
 
         def check_original_data(output):
-            assert output[0] == ['1','Foo','23'], f"Expected first row from player table to be 1,Foo,23; got {output[0]}"
-            assert output[1] == ['2','Bar','42'], f"Expected first row from player table to be 2,Bar,42; got {output[1]}"
+            t.assertEqual(output[0], ["1", "Foo", "23"])
+            t.assertEqual(output[1], ["2", "Bar", "42"])
 
         def check_anonymized_rows(output):
             check_anonymized_row(output[0], '1', 'Foo')

@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Place GUI applications into systemd scopes for systemd-oomd compatibility";
     mainProgram = "assign-cgroups.py";
     longDescription = ''
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
       Therefore it's recommended to supplement the script with use of systemd user
       services for such background apps.
     '';
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

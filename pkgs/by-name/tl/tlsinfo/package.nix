@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "tlsinfo";
-  version = "0.1.45";
+  version = "0.1.51";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "tlsinfo";
     tag = "v${version}";
-    hash = "sha256-gVKB03Tv00c+vO9IgwESWCU1Vqh3iwkVuQLk3BEHlUk=";
+    hash = "sha256-UD/dy8pEulsoNOC5W+hkC+n4y8SjpZ0QOOECGPVy1ws=";
   };
 
-  vendorHash = "sha256-FFefmnXPCyTEOUkM8A0UCz0nZ0Ors8scxZIwVPnSiac=";
+  vendorHash = "sha256-SkCuyYUwVcbCDSN0NtX29BNP/pPlFHqo0jU0Qo02mNk=";
 
   ldflags = [
     "-s"

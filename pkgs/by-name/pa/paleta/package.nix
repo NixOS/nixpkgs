@@ -22,14 +22,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nate-xyz";
-    repo = pname;
+    repo = "paleta";
     rev = "v${version}";
     hash = "sha256-c+X49bMywstRg7cSAbbpG/vd8OUB7RhdQVRumTIBDDk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-RuzqU06iyK+IN7aO+Lq/IaRLh2oFpWM1rz69Koiicgg=";
   };
 
@@ -51,12 +50,12 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract the dominant colors from any image";
     mainProgram = "paleta";
     homepage = "https://github.com/nate-xyz/paleta";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

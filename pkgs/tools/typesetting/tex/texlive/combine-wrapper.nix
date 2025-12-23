@@ -67,7 +67,7 @@ let
       tlOutputName = tlTypeToOut.${tlType};
     };
   all = lib.filter pkgFilter combined ++ lib.filter (pkg: pkg.tlType == "tlpkg") combined;
-  converted = builtins.map toSpecified all;
+  converted = map toSpecified all;
 in
 buildTeXEnv {
   __extraName = extraName;

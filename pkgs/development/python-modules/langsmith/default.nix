@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
@@ -13,6 +13,7 @@
   pydantic,
   requests,
   requests-toolbelt,
+  uuid-utils,
   zstandard,
 
   # tests
@@ -21,7 +22,9 @@
   fastapi,
   freezegun,
   instructor,
+  opentelemetry-sdk,
   pytest-asyncio,
+  pytest-vcr,
   pytestCheckHook,
   uvicorn,
   attr,
@@ -29,21 +32,21 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.10";
+  version = "0.4.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-kiKauRYqKEJZaKjL2YgOCgMmuw3UgSQx9+xHOdylCAQ=";
+    hash = "sha256-IL1lwV+WkIpYAlx+n08XlzbvzyDMUQCCZKmA+ImBIqU=";
   };
 
   sourceRoot = "${src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx
@@ -51,6 +54,7 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    uuid-utils
     zstandard
   ];
 
@@ -60,10 +64,13 @@ buildPythonPackage rec {
     fastapi
     freezegun
     instructor
+    opentelemetry-sdk
     pytest-asyncio
+    pytest-vcr
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -83,15 +90,16 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # due to circular import
-    "tests/integration_tests/test_client.py"
-    "tests/integration_tests/test_prompts.py"
-    "tests/unit_tests/evaluation/test_runner.py"
+    # Circular import
+    "tests/integration_tests/"
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    # Tests require a Langsmith API key
+    "tests/unit_tests/evaluation/test_runner.py"
+    # Require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
+    # Marked as flaky in source
+    "tests/unit_tests/test_run_helpers.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];

@@ -68,7 +68,8 @@ stdenv.mkDerivation {
     gtk2
     libgnomecanvas
     gtksourceview
-  ] ++ param.buildInputs or [ ];
+  ]
+  ++ param.buildInputs or [ ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];
@@ -80,12 +81,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml interface to GTK";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
-      maggesi
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       roconnor
       vbgl
     ];

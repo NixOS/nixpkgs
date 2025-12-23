@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "CANToolz";
@@ -29,7 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     flask
     pyserial
     mido
@@ -51,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     "cantoolz"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Black-box CAN network analysis framework";
     mainProgram = "cantoolz";
     longDescription = ''
@@ -65,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
       implemented with a new module.
     '';
     homepage = "https://github.com/CANToolz/CANToolz";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

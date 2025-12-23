@@ -1,34 +1,41 @@
 {
-  rustPlatform,
   lib,
   fetchFromGitHub,
+  rustPlatform,
   nixosTests,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envfs";
-  version = "1.0.6";
+  version = "1.1.0";
+
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
-    rev = version;
-    hash = "sha256-kOfnKguvJQHW/AfQOetxVefjoEj7ec5ew6fumhOwP08=";
+    rev = finalAttrs.version;
+    hash = "sha256-bpATdm/lB+zomPYGCxA7omWK/SKPIaqr94J+fjMaXfE=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-VvdvYxNBzwJJy09npC30VaOzOU9Fwi++qon9Od4juHE=";
 
-  passthru.tests = {
-    envfs = nixosTests.envfs;
-  };
+  cargoHash = "sha256-nMUdAFRHJZDwvLASBVykzzkwk3HxslDehqqm1U99qYg=";
 
   postInstall = ''
     ln -s envfs $out/bin/mount.envfs
     ln -s envfs $out/bin/mount.fuse.envfs
   '';
-  meta = with lib; {
+
+  passthru = {
+    tests = {
+      envfs = nixosTests.envfs;
+    };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Fuse filesystem that returns symlinks to executables based on the PATH of the requesting process";
     homepage = "https://github.com/Mic92/envfs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

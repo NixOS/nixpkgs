@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gtkmm3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PulseAudio Preferences";
     mainProgram = "paprefs";
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://freedesktop.org/software/pulseaudio/paprefs/";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ maintainers.abbradar ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

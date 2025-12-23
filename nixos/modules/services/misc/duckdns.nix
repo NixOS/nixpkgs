@@ -105,7 +105,8 @@ in
         Type = "simple";
         LoadCredential = [
           "DUCKDNS_TOKEN_FILE:${cfg.tokenFile}"
-        ] ++ lib.optionals (cfg.domainsFile != null) [ "DUCKDNS_DOMAINS_FILE:${cfg.domainsFile}" ];
+        ]
+        ++ lib.optionals (cfg.domainsFile != null) [ "DUCKDNS_DOMAINS_FILE:${cfg.domainsFile}" ];
         DynamicUser = true;
       };
       script = ''

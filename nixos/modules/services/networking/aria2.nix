@@ -85,7 +85,7 @@ in
         example = "/run/secrets/aria2-rpc-token.txt";
         description = ''
           A file containing the RPC secret authorization token.
-          Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
+          Read <https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth> to know how this option value is used.
         '';
       };
       downloadDirPermission = lib.mkOption {
@@ -121,7 +121,7 @@ in
           Generates the `aria2.conf` file. Refer to [the documentation][0] for
           all possible settings.
 
-          [0]: https://aria2.github.io/manual/en/html/aria2c.html#synopsis
+          [0]: <https://aria2.github.io/manual/en/html/aria2c.html#synopsis>
         '';
         default = { };
         type = lib.types.submodule {

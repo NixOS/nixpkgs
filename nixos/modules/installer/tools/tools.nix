@@ -68,11 +68,8 @@ let
   };
 
   nixos-install = pkgs.nixos-install.override { };
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
-    withNgSuffix = false;
-    withReexec = true;
   };
 
   defaultFlakeTemplate = ''
@@ -108,9 +105,9 @@ let
 
     $bootLoaderConfig
       # networking.hostName = "nixos"; # Define your hostname.
-      # Pick only one of the below networking options.
-      # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-      # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
 
       # Set your time zone.
       # time.timeZone = "Europe/Amsterdam";
@@ -159,8 +156,8 @@ let
 
       # programs.firefox.enable = true;
 
-      # List packages installed in system profile. To search, run:
-      # \$ nix search wget
+      # List packages installed in system profile.
+      # You can use https://search.nixos.org/ to find more packages (and options).
       # environment.systemPackages = with pkgs; [
       #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       #   wget
@@ -274,15 +271,8 @@ in
     description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
-      read-only systems which are not expected to be rebuild or
+      read-only systems which are not expected to rebuild or
       reconfigure themselves. Use at your own risk!
-    '';
-  };
-
-  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
-    description = ''
-      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
-      Python-based re-implementation of the original in Bash.
     '';
   };
 
@@ -325,6 +315,10 @@ in
         name = "nixos-version";
         package = nixos-version;
       })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
     ];
 
   config = {
@@ -333,9 +327,7 @@ in
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+      nixos-rebuild = nixos-rebuild-ng;
     };
   };
 }

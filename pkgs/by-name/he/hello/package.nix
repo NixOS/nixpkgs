@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hello";
-  version = "2.12.1";
+  version = "2.12.2";
 
   src = fetchurl {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+    hash = "sha256-WpqZbcKSzCTc9BHO6H6S9qrluNE72caBm0x6nc4IGKs=";
   };
 
   # The GNU Hello `configure` script detects how to link libiconv but fails to actually make use of that.
@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "hello";
     platforms = lib.platforms.all;
+    identifiers.cpeParts.vendor = "gnu";
   };
 })

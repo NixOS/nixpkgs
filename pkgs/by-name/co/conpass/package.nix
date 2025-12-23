@@ -31,12 +31,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "conpass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Continuous password spraying tool";
     homepage = "https://github.com/login-securite/conpass";
     changelog = "https://github.com/login-securite/conpass/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "conpass";
   };
 }

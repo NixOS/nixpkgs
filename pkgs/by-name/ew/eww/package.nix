@@ -15,17 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.6.0-unstable-2025-02-16";
+  version = "0.6.0-unstable-2025-06-30";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "5b4cc3e7a8055afb758421f4a114ef4032806e39";
-    hash = "sha256-iA/OTtsymhuCMRDC0IJE7YXuCeFJbkuMwPaj7tAVbQw=";
+    rev = "fddb4a09b107237819e661151e007b99b5cab36d";
+    hash = "sha256-PJW4LvW9FmkG9HyUtgXOq7MDjYtBc/iJuOxyf29nD0Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tjhF4D5WFw6qBUXRWcWjaB57zyXeWBDULsOcr2MJJgA=";
+  cargoHash = "sha256-Kf99eojqXvdbZ3eRS8GBgyLYNpZKJGIJtsOsvhhSVDk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -72,8 +71,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       coffeeispower
-      figsoda
-      lom
       w-lfchen
     ];
     mainProgram = "eww";

@@ -10,17 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-concentratord";
-  version = "4.4.7";
+  version = "4.5.3";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-concentratord";
     rev = "v${version}";
-    hash = "sha256-RFjBeFGK0HzRPeCCU5Un3c3XSg8hmXo+7DWP6tfsDgw=";
+    hash = "sha256-D/zp3stjV0EUnUZlEVQ7YwFlczTxG0f0ABPban0JhPM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-phTYdiVxeC6eOBzz6RvgrSN56+RRcXUiktxNzy/qLY0=";
+  cargoHash = "sha256-7l/42l1rFX7HXdhgA34FXWpQjksGCnHeARC5YupA2nE=";
 
   buildInputs = [
     libloragw-2g4

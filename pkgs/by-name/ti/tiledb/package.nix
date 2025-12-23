@@ -2,94 +2,96 @@
   lib,
   stdenv,
   fetchFromGitHub,
-
+  fetchpatch,
   cmake,
   zlib,
   lz4,
   bzip2,
   zstd,
   spdlog,
-  tbb,
+  onetbb,
   openssl,
   boost,
   libpqxx,
   clang-tools,
   catch2_3,
   python3,
-  gtest,
   doxygen,
   fixDarwinDylibNames,
+  gtest,
+  rapidcheck,
+  libpng,
+  file,
+  runCommand,
+  curl,
+  capnproto,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 let
-  # pre-fetch ExternalProject from cmake/Modules/FindMagic_EP.cmake
-  ep-file-windows = fetchFromGitHub {
-    owner = "TileDB-Inc";
-    repo = "file-windows";
-    rev = "5.38.2.tiledb";
-    hash = "sha256-TFn30VCuWZr252VN1T5NNCZe2VEN3xQSomS7XxxKGF8=";
-    fetchSubmodules = true;
-  };
-
+  rapidcheck' = runCommand "rapidcheck" { } ''
+    cp -r ${rapidcheck.out} $out
+    chmod -R +w $out
+    cp -r ${rapidcheck.dev}/* $out
+  '';
+  catch2 = catch2_3;
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.18.2";
+  version = "2.28.1";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
-    rev = version;
-    hash = "sha256-uLiXhigYz3v7NgY38twot3sBHxZS5QCrOiPfME4wWzE=";
+    tag = version;
+    hash = "sha256-Cs3Lr8I/Mu02x78d7IySG0XX4u/VAjBs4p4b00XDT5k=";
   };
 
   patches = [
-    ./FindMagic_EP.cmake.patch
-  ];
+    # capnproto was updated to 1.2 in Nixpkgs, bring TileDB codebase up to speed
+    # patch only affects serialization related code, extracted from https://github.com/TileDB-Inc/TileDB/pull/5616
+    (fetchpatch {
+      url = "https://github.com/TileDB-Inc/TileDB/pull/5616.patch";
+      relative = "tiledb/sm/serialization";
+      extraPrefix = "tiledb/sm/serialization/";
+      hash = "sha256-5z/eJEHl+cnWRf1sMULodJyhmNh5KinDLlL1paMNiy4=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
 
-  postPatch =
-    ''
-      # copy pre-fetched external project to directory where it is expected to be
-      mkdir -p build/externals/src
-      cp -a ${ep-file-windows} build/externals/src/ep_magic
-      chmod -R u+w build/externals/src/ep_magic
+  # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
+  # without the -fexperimental-library flag. Tiledb adds its own
+  # implementations in the std namespace which conflict with libcxx. This
+  # test can be re-enabled once libcxx supports stop_token and jthread.
+  postPatch = lib.optionalString (stdenv.cc.libcxx != null) ''
+    truncate -s0 tiledb/stdx/test/CMakeLists.txt
+  '';
 
-      # add openssl on path
-      sed -i '49i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
-        cmake/Modules/FindOpenSSL_EP.cmake
-    ''
-    # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
-    # without the -fexperimental-library flag. Tiledb adds its own
-    # implementations in the std namespace which conflict with libcxx. This
-    # test can be re-enabled once libcxx supports stop_token and jthread.
-    + lib.optionalString (stdenv.cc.libcxx != null) ''
-      truncate -s0 tiledb/stdx/test/CMakeLists.txt
-    '';
-
-  # upstream will hopefully fix this in some newer release
-  env.CXXFLAGS = "-include random";
+  env.TILEDB_DISABLE_AUTO_VCPKG = "1";
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [
-    "-DTILEDB_VCPKG=OFF"
     "-DTILEDB_WEBP=OFF"
     "-DTILEDB_WERROR=OFF"
-  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
+    "-DTILEDB_SERIALIZATION=ON"
+    # https://github.com/NixOS/nixpkgs/issues/144170
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    ep-file-windows
-    catch2_3
+    catch2
     clang-tools
     cmake
     python3
     doxygen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-
-  nativeCheckInputs = [
-    gtest
-  ];
+    # Required for serialization
+    curl
+    capnproto
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     zlib
@@ -97,23 +99,34 @@ stdenv.mkDerivation rec {
     bzip2
     zstd
     spdlog
-    tbb
+    onetbb
     openssl
     boost
     libpqxx
+    libpng
+    file
+    rapidcheck'
+    catch2
+  ];
+
+  nativeCheckInputs = [
+    gtest
+    catch2
   ];
 
   # test commands taken from
   # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml
   checkPhase = ''
     runHook preCheck
-    make -C tiledb tests -j$NIX_BUILD_CORES
-    make -C tiledb test ARGS="-R '^unit_'" -R "test_assert"
-    make -C tiledb test ARGS="-R 'test_ci_asserts'"
+
+    pushd ..
+    cmake --build build --target tests
+    ctest --test-dir build -R '(^unit_|test_assert)' --no-tests=error
+    ctest --test-dir build -R 'test_ci_asserts'
+    popd
+
     runHook postCheck
   '';
-
-  doCheck = true;
 
   installTargets = [
     "install-tiledb"
@@ -121,14 +134,14 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
+    install_name_tool -add_rpath ${onetbb}/lib $out/lib/libtiledb.dylib
   '';
 
-  meta = with lib; {
-    description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
+  meta = {
+    description = "Allows you to manage massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

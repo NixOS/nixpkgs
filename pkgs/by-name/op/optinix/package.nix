@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitLab,
   buildGoModule,
   installShellFiles,
@@ -20,12 +21,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
-      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
-  '';
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd optinix \
       --bash <($out/bin/optinix completion bash) \
       --fish <($out/bin/optinix completion fish) \

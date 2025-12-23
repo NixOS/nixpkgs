@@ -1,11 +1,13 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
   setuptools,
+
+  # tests
+  pytestCheckHook,
   tree-sitter-python,
   tree-sitter-rust,
   tree-sitter-html,
@@ -15,23 +17,16 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.24.0";
+  version = "0.25.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     tag = "v${version}";
-    hash = "sha256-ZDt/8suteaAjGdk71l8eej7jDkkVpVDBIZS63SA8tsU=";
+    hash = "sha256-MgiVxq9MUaOkNNgn46g2Cy7/IUx/yatKSR1vE6LscKg=";
     fetchSubmodules = true;
   };
-
-  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
-  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-    ./segfault-patch.diff
-  ];
 
   build-system = [ setuptools ];
 
@@ -52,7 +47,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # test fails in nix sandbox
+    # Test fails only in the Nix sandbox, with:
+    #
+    #    AssertionError: Lists differ: ['', '', ''] != ['graph {\n', 'label="new_parse"\n', '}\n']
     "test_dot_graphs"
   ];
 

@@ -245,6 +245,7 @@ in
               RestrictSUIDSGID = true;
               SystemCallArchitectures = "native";
               SystemCallFilter = [
+                "@chown"
                 "@system-service"
                 "~@privileged"
               ];

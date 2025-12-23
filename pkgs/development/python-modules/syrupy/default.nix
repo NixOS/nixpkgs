@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.9.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${version}";
-    hash = "sha256-zG+dKCfJex4Njg0WludqQcgRU1BCf4HQhzd31/kCeCI=";
+    hash = "sha256-TRwU9+2RvZB2gbVm82DzLge8QoDflxjavcRdYZUgVfs=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/syrupy-project/syrupy/blob/${src.tag}/CHANGELOG.md";
     description = "Pytest Snapshot Test Utility";
     homepage = "https://github.com/syrupy-project/syrupy";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

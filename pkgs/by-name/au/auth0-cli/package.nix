@@ -1,20 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
   pname = "auth0-cli";
-  version = "1.9.2";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
     tag = "v${version}";
-    hash = "sha256-P+V/OQ40iFfDVEtiZcp0TqjcSX+K7s4bPtqaslK9+PI=";
+    hash = "sha256-w0v73ZebUssDZ5mvFri9kcFVk7AXDfhSjEO48jTuRJc=";
   };
 
-  vendorHash = "sha256-S/K65q6glfHZslns1A2zplefC1kGzd9OCNMdvH8CZGM=";
+  vendorHash = "sha256-WN71xEU9GBNj0M5tnVthBdxh13UH78zUOaCEtczFDck=";
 
   ldflags = [
     "-s"
@@ -33,14 +36,25 @@ buildGoModule rec {
       --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd auth0 \
+      --bash <($out/bin/auth0 completion bash) \
+      --fish <($out/bin/auth0 completion fish) \
+      --zsh <($out/bin/auth0 completion zsh)
+  '';
+
   subPackages = [ "cmd/auth0" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Supercharge your developer workflow";
     homepage = "https://auth0.github.io/auth0-cli";
     changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "auth0";
   };
 }

@@ -9,12 +9,9 @@
   url,
   patches,
   runtimeModes,
-  isOptimized ? null,
   lib,
   stdenv,
-  dart,
-  mainRuntimeMode ? null,
-  altRuntimeMode ? null,
+  ...
 }@args:
 let
   mainRuntimeMode = args.mainRuntimeMode or builtins.elemAt runtimeModes 0;
@@ -41,37 +38,41 @@ in
 stdenv.mkDerivation (
   {
     pname = "flutter-engine";
-    inherit url runtimeModes;
-    inherit (runtimeModesBuilds.${mainRuntimeMode})
-      meta
-      src
-      version
-      dartSdkVersion
-      isOptimized
-      runtimeMode
-      outName
-      dart
-      swiftshader
-      ;
-    inherit altRuntimeMode;
+    inherit url runtimeModes altRuntimeMode;
+    inherit (runtimeModesBuilds.${mainRuntimeMode}) version src meta;
 
     dontUnpack = true;
     dontBuild = true;
 
-    installPhase =
+    installPhase = ''
+      runHook preInstall
+
+      mkdir --parents $out/out
+    ''
+    + lib.concatMapStrings (
+      runtimeMode:
+      let
+        runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
+        runtimeModeOut = runtimeModeBuild.outName;
+      in
       ''
-        mkdir -p $out/out
+        ln --symbolic --force ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
       ''
-      + lib.concatMapStrings (
-        runtimeMode:
-        let
-          runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
-          runtimeModeOut = runtimeModeBuild.outName;
-        in
-        ''
-          ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
-        ''
-      ) runtimeModes;
+    ) runtimeModes
+    + ''
+      runHook postInstall
+    '';
+
+    passthru = {
+      inherit (runtimeModesBuilds.${mainRuntimeMode})
+        dartSdkVersion
+        isOptimized
+        runtimeMode
+        outName
+        dart
+        swiftshader
+        ;
+    };
   }
   // runtimeModesBuilds
 )

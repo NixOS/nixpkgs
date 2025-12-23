@@ -1,10 +1,9 @@
 {
   lib,
-  SDL2,
   alsa-lib,
-  apple-sdk_14,
+  apple-sdk,
   cmake,
-  fetchFromGitHub,
+  fetchzip,
   gtk3,
   gtksourceview3,
   libGL,
@@ -19,6 +18,8 @@
   moltenvk,
   openal,
   pkg-config,
+  replaceVars,
+  sdl3,
   stdenv,
   udev,
   vulkan-loader,
@@ -28,57 +29,56 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "143";
+  version = "146";
 
-  src = fetchFromGitHub {
-    owner = "ares-emulator";
-    repo = "ares";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-uuFKbS7WvxkTyyQfuQ6iKPvRt+54zUPdjUlQ/ohBAr8=";
+  src = fetchzip {
+    url = "https://github.com/ares-emulator/ares/releases/download/v${finalAttrs.version}/ares-source.tar.gz";
+    hash = "sha256-D4N0u9NNlhs4nMoUrAY+sg6Ybt1xQPMiH1u0cV0Qixs=";
+    stripRoot = false;
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-      librashader
-      vulkan-loader
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-      moltenvk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      gtksourceview3
-      libGL
-      libGLU
-      libX11
-      libXv
-      libpulseaudio
-      openal
-      udev
-    ];
+  buildInputs = [
+    sdl3
+    libao
+    librashader
+    vulkan-loader
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    gtksourceview3
+    libGL
+    libGLU
+    libX11
+    libXv
+    libpulseaudio
+    openal
+    udev
+  ];
 
   patches = [
-    ./darwin-build-fixes.patch
+    (replaceVars ./darwin-build-fixes.patch {
+      sdkVersion = apple-sdk.version;
+    })
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "ARES_BUILD_LOCAL" false)
     (lib.cmakeBool "ARES_SKIP_DEPS" true)
+    (lib.cmakeBool "ARES_BUILD_OFFICIAL" true)
   ];
 
   postInstall =
@@ -120,9 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = lib.licenses.isc;
     mainProgram = "ares";
-    maintainers = with lib.maintainers; [
-      Madouura
-    ];
     platforms = lib.platforms.unix;
   };
 })

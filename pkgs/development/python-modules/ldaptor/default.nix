@@ -27,7 +27,8 @@ buildPythonPackage rec {
     six
     twisted
     zope-interface
-  ] ++ twisted.optional-dependencies.tls;
+  ]
+  ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [ twisted ];
 
@@ -40,10 +41,10 @@ buildPythonPackage rec {
     trial -j$NIX_BUILD_CORES ldaptor
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

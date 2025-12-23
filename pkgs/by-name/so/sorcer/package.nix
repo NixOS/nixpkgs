@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     # Fix build with lv2 1.18: https://github.com/brummer10/guitarix/commit/c0334c72
     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   installPhase = ''
@@ -45,12 +48,12 @@ stdenv.mkDerivation rec {
     cp -a ../presets/* "$out/lib/lv2"
   '';
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "http://openavproductions.com/sorcer/";
     description = "Wavetable LV2 plugin synth, targeted at the electronic / dubstep genre";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

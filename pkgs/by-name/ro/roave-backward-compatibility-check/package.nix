@@ -7,21 +7,21 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "roave-backward-compatibility-check";
-  version = "8.13.0";
+  version = "8.15.0";
 
   src = fetchFromGitHub {
     owner = "Roave";
     repo = "BackwardCompatibilityCheck";
     tag = finalAttrs.version;
-    hash = "sha256-bxjrk//n8HdHyYJpsW4qwgHptyeaNqCbiR3wWKJwPiM=";
+    hash = "sha256-vhoV8AkkcL1pDmHkpPYs5lD6TUcvMC6BXkQF1T2esIE=";
   };
 
-  vendorHash = "sha256-fhSByQzSwFrNCKr7KwJ7CYFt4zqbk4iW5JXK3iSVTnM=";
+  vendorHash = "sha256-LBvqnBcSpjffS3cjgVgql8eNmaP45uNx9BKr72Mr+ZY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -30,6 +30,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/Roave/BackwardCompatibilityCheck";
     license = lib.licenses.mit;
     mainProgram = "roave-backward-compatibility-check";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

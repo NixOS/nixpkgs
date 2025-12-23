@@ -25,13 +25,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    security.wrappers.espanso = lib.mkIf (cfg.package.waylandSupport or false) {
+      capabilities = "cap_dac_override+p";
+      owner = "root";
+      group = "root";
+      source = lib.getExe (cfg.package.override { securityWrapperPath = config.security.wrapperDir; });
+    };
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} daemon";
+        ExecStart = "${
+          if (cfg.package.waylandSupport or false) then
+            "${config.security.wrapperDir}/espanso"
+          else
+            lib.getExe cfg.package
+        } daemon";
         Restart = "on-failure";
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
     };
 
     environment.systemPackages = [ cfg.package ];

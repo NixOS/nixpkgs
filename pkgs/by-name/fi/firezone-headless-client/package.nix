@@ -6,16 +6,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "firezone-headless-client";
-  version = "1.4.4";
+  version = "1.5.4";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "headless-client-${version}";
-    hash = "sha256-2MDQyMCQIqV1Kbem53jnE8DGUZ6SrZqp2LpGJXvLBgA=";
+    hash = "sha256-dVqZs5Xie9lc3F6wVMdxRHeoM7y/e9TvwjzfikenQ6w=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Yz9xuH8Eph1pzv0siTpvdSXZLj/AjS5PR06CitK9NdE=";
+  cargoHash = "sha256-J2IqqFBuoTkbO0nMJbY680G2HTAtC1To/nMra2PCopY=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "headless-client";
   RUSTFLAGS = "--cfg system_certs";
@@ -46,5 +45,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-headless-client";
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "gdmap";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "sjohannes";
     repo = "gdmap";
-    tag = "v1.2.0";
-    sha256 = "1p96pps4yflj6a42g61pcqpllx7vcjlh417kwjy0b4mqp16vmrzr";
+    tag = "v1.3.1";
+    sha256 = "sha256-dgZ+EDk7O+nuqrBsTPVW7BHufvkqLnWbXrIOOn7YlW4=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ stdenv.mkDerivation {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/sjohannes/gdmap";
-    description = "A tool to visualize disk space (GTK 3 port of Original)";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    description = "Tool to visualize disk space (GTK 3 port of Original)";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "gdmap";
   };
 }

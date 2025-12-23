@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "michaelwillis";
     repo = "dragonfly-reverb";
-    rev = version;
+    tag = version;
     hash = "sha256-YXJ4U5J8Za+DlXvp6QduvCHIVC2eRJ3+I/KPihCaIoY=";
     fetchSubmodules = true;
   };
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/michaelwillis/dragonfly-reverb";
     description = "Hall-style reverb based on freeverb3 algorithms";
-    maintainers = [ maintainers.magnetophon ];
-    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
   };
 }

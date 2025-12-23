@@ -4,17 +4,19 @@
   fetchFromGitHub,
   makeWrapper,
   gforth,
+  writableTmpDirAsHomeHook,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "gbforth";
-  version = "unstable-2023-03-02";
+  version = "unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "ams-hackers";
     repo = "gbforth";
-    rev = "428fcf5054fe301e90ac74b1d920ee3ecc375b5b";
-    hash = "sha256-v1bdwT15Wg1VKpo74Cc3tsTl1uOKvKdlHWtbZkJ/qbA=";
+    rev = "39ec80520bf7bedf881eca01909cc9eeb7334a60";
+    hash = "sha256-3Zky+ZKA0FPhO1l5pFdmDQgdwvvO3QgPGsgVracY5xw=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +36,20 @@ stdenv.mkDerivation {
   '';
 
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/gbforth examples/simon/simon.fs
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     homepage = "https://gbforth.org/";
     description = "Forth-based Game Boy development kit";
     mainProgram = "gbforth";
@@ -49,8 +58,8 @@ stdenv.mkDerivation {
       It features a Forth-based assembler, a cross-compiler with support for
       lazy code generation and a library of useful words.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

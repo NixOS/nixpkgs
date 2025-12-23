@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "aixlog";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Xhle7SODRZlHT3798mYIzBi1Mqjz8ai74/UnbVWetiY=";
   };
 
@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Header-only C++ logging library";
     homepage = "https://github.com/badaix/aixlog";
     changelog = "https://github.com/badaix/aixlog/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

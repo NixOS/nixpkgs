@@ -9,9 +9,7 @@ Instead of using a custom perl script to activate `/etc`, you activate it via an
 overlay filesystem:
 
 ```nix
-{
-  system.etc.overlay.enable = true;
-}
+{ system.etc.overlay.enable = true; }
 ```
 
 Using an overlay has two benefits:
@@ -24,9 +22,7 @@ upper layer). However, you can also mount `/etc` immutably (i.e. read-only) by
 setting:
 
 ```nix
-{
-  system.etc.overlay.mutable = false;
-}
+{ system.etc.overlay.mutable = false; }
 ```
 
 The overlay is atomically replaced during system switch. However, files that

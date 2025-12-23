@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "4.0.1";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tTNhRNkClYuSywi8Hna/pHGZuK/UVDA2k4lN79L6UMU=";
+    hash = "sha256-+G4Y8T4rlsHB7t4Le5AJW7th2Z/twUgTxE3C82HbuuE=";
   };
 
   build-system = [
@@ -42,10 +42,10 @@ buildPythonPackage rec {
     "test_thing_with_submodule"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
     downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -13,25 +13,17 @@
   libstartup_notification,
   libxml2,
   pkg-config,
-  replaceVars,
   wrapGAppsHook3,
-  zenity,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "metacity";
-  version = "3.54.0";
+  version = "3.58.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor version}/metacity-${version}.tar.xz";
-    hash = "sha256-WHifKLbzhSL9iMIkKRChB9ppNCF7LH3VKn1RLTlB1kM=";
+    url = "mirror://gnome/sources/metacity/${lib.versions.majorMinor finalAttrs.version}/metacity-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5DDIqSQJ7y+RpNq9UKcePTu8xHSj3sHK7DgTs4HX0bA=";
   };
-
-  patches = [
-    (replaceVars ./fix-paths.patch {
-      inherit zenity;
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -44,13 +36,13 @@ stdenv.mkDerivation rec {
     xorg.libXres
     xorg.libXpresent
     xorg.libXdamage
+    xorg.libX11
     glib
     gsettings-desktop-schemas
     gtk3
     libcanberra-gtk3
     libgtop
     libstartup_notification
-    zenity
   ];
 
   enableParallelBuilding = true;
@@ -64,12 +56,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Window manager used in Gnome Flashback";
     homepage = "https://gitlab.gnome.org/GNOME/metacity";
-    changelog = "https://gitlab.gnome.org/GNOME/metacity/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl2;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/GNOME/metacity/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = lib.licenses.gpl2;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

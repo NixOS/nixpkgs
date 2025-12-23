@@ -1,17 +1,21 @@
-{ lib, fetchFromGitHub, buildGo123Module }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "webdav";
-  version = "5.7.3";
+  version = "5.10.1";
 
   src = fetchFromGitHub {
     owner = "hacdias";
     repo = "webdav";
     tag = "v${version}";
-    hash = "sha256-f/EYuaLuF9HuoC2S4JHjtgau2ZmOocRIAtxXqnUpUE8=";
+    hash = "sha256-V4PNDtKyB0uoMY4ehWQUeTa1ZqIYAvL3Xm2rWw9zKTE=";
   };
 
-  vendorHash = "sha256-x5CUy46c4SunzMw/v2DWpdahuXFZnJdGInQ0lSho/es=";
+  vendorHash = "sha256-nrvL+glI4kVFUELege8q7z62AsvrLMw5JxigZkZ8kkY=";
 
   __darwinAllowLocalNetworking = true;
 

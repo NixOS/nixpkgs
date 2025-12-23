@@ -1,8 +1,12 @@
 {
   stdenv,
-  mkXfceDerivation,
   lib,
+  fetchFromGitLab,
+  gettext,
   perl,
+  pkg-config,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
   libICE,
   libSM,
   libepoxy,
@@ -18,23 +22,37 @@
   buildPackages,
   gobject-introspection,
   vala,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxfce4ui";
-  version = "4.20.0";
+  version = "4.20.2";
 
-  sha256 = "sha256-M+OapPHQ/WxlkUzHPx+ELstVyGoZanCxCL0N8hDWSN8=";
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs =
-    [
-      perl
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala # vala bindings require GObject introspection
-    ];
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "libxfce4ui";
+    tag = "libxfce4ui-${finalAttrs.version}";
+    hash = "sha256-NsTrJ2271v8vMMyiEef+4Rs0KBOkSkKPjfoJdgQU0ds=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    perl
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala # vala bindings require GObject introspection
+  ];
 
   buildInputs = [
     libICE
@@ -52,16 +70,26 @@ mkXfceDerivation {
   ];
 
   configureFlags = [
+    "--enable-maintainer-mode"
     "--with-vendor-info=NixOS"
   ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libxfce4ui-";
+    odd-unstable = true;
+  };
+
+  meta = {
     description = "Widgets library for Xfce";
+    homepage = "https://gitlab.xfce.org/xfce/libxfce4ui";
     mainProgram = "xfce4-about";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

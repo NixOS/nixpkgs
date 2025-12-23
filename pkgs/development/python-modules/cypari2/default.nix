@@ -15,12 +15,12 @@
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.2.1";
+  version = "2.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qqAXpqKAWBkC9zz1zhaVcStlmKAyvhTPq4H5fEdfg7g=";
+    hash = "sha256-E6M4c16iIcEGj4/EFVYb93fYxoclcCvHSVRyZP0JFyA=";
   };
 
   preBuild = ''
@@ -46,10 +46,10 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cython bindings for PARI";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
     homepage = "https://github.com/defeo/cypari2";
   };
 }

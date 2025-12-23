@@ -1,44 +1,44 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
-  qtbase,
-  qtmultimedia,
+  qt6,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coretime";
-  version = "4.5.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0x3014UG861lXRwIBpYiiYVPmhln9Q20jJ4tIO50Tjs=";
+    repo = "coretime";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RgaIYZ410/M/PHTJC3ja7wEb3HqPrNkBpEIsUK102qw=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
+    qt6.qtbase
+    qt6.qtmultimedia
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Time related task manager from the C Suite";
     mainProgram = "coretime";
     homepage = "https://gitlab.com/cubocore/coreapps/coretime";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

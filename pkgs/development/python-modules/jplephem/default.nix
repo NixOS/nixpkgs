@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "jplephem";
-  version = "2.22";
+  version = "2.23";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DZrMche0gG/rqT5yl0zurVYREEvOZ4mvONTyfc96WSw=";
+    hash = "sha256-0/uUd+S/TDnRBJfU/xXlJxt6wD+hAeGCGqxSfWRuzPk=";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jplephem" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brandon-rhodes/python-jplephem/";
     description = "Python version of NASA DE4xx ephemerides, the basis for the Astronomical Alamanac";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zane ];
   };
 }

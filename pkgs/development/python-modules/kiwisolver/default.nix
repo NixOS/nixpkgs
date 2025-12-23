@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   stdenv,
-  libcxx,
   cppy,
   setuptools-scm,
   pythonOlder,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-I9XwI73Ix+VOtl8Dyl1bsltgHqxNfxoEKIih9FI3mH4=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -29,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiwisolver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Cassowary constraint solver";
     homepage = "https://github.com/nucleic/kiwi";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

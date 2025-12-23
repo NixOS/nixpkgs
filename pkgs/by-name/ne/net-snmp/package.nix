@@ -6,10 +6,9 @@
   file,
   openssl,
   perl,
-  nettools,
+  net-tools,
   autoreconfHook,
   withPerlTools ? false,
-  darwin,
 }:
 let
 
@@ -66,10 +65,11 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--disable-embedded-perl"
     "--without-perl-modules"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
-    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
+    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${net-tools}/bin/netstat"
   '';
 
   postConfigure = ''
@@ -80,19 +80,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    nettools
+    net-tools
     file
     autoreconfHook
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional withPerlTools perlWithPkgs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.ApplicationServices
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.DiskArbitration
-    ];
+  buildInputs = [ openssl ] ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:
@@ -108,10 +100,10 @@ stdenv.mkDerivation rec {
     mv $bin/bin/net-snmp-config $dev/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = "http://www.net-snmp.org/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    homepage = "https://www.net-snmp.org/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

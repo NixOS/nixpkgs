@@ -6,19 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "soco-cli";
-  version = "0.4.73";
-  format = "setuptools";
+  version = "0.4.81";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "avantrec";
-    repo = pname;
+    repo = "soco-cli";
     rev = "v${version}";
-    hash = "sha256-WxBwHjh5tCXclQXqrHrpvZdcQU93RObteAfZyyVvKf0=";
+    hash = "sha256-Be/NzaO6EmpJC5NjNXhcp1K2ObXUduheqPWhsXI/Jc8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     fastapi
     rangehttpserver
     soco

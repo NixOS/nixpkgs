@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [
       unfreeRedistributable
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

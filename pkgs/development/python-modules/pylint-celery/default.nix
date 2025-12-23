@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
+    repo = "pylint-celery";
     rev = version;
     sha256 = "05fhwraq12c2724pn4py1bjzy5rmsrb1x68zck73nlp5icba6yap";
   };
@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # Testing requires a very old version of pylint, incompatible with other dependencies
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pylint plugin to analyze Celery applications";
     homepage = "https://github.com/PyCQA/pylint-celery";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

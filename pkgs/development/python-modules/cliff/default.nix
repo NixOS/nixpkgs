@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.9.1";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WzkhmCk8C5Il1Fm+i6cQz4JI8e4zAGves9kvsAElkrQ=";
+    hash = "sha256-jB9baCdBoDsMRgfILor0HU6cKFkCRkZWL4bN6ylZqG0=";
   };
 
   build-system = [
@@ -54,10 +54,10 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

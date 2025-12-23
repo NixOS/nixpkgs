@@ -45,19 +45,18 @@ buildPythonPackage rec {
     "test_explicit_table"
   ];
 
-  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+  pytestFlags = lib.optionals (pythonAtLeast "3.12") [
     # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "flask_sqlalchemy" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
     changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gerschtli ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gerschtli ];
   };
 }

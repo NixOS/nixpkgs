@@ -2,30 +2,30 @@
   lib,
   php,
   fetchFromGitHub,
-  testers,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "pretty-php";
-  version = "0.4.92";
+  version = "0.4.95";
 
   src = fetchFromGitHub {
     owner = "lkrms";
     repo = "pretty-php";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rKL6ViBEJf+GGxWood0DXVF8U7wuz22Z26SEdgDAJww=";
+    hash = "sha256-V+xncL02fY0olGxqjWBWqD6N1J0XOeOPe55aULuN2bA=";
   };
 
-  vendorHash = "sha256-V1oqMnDJgWujQXJJqyc2cvEvBbFv+KdXjXfb+sxs8/8=";
+  vendorHash = "sha256-r5LhN2OjEpiHR0RtK7d/pMd8bqFJbM8CuCXEDGjgG4A=";
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "HOME=$TMPDIR pretty-php --version";
-    };
-  };
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
-    description = "The opinionated PHP code formatter";
+    description = "Opinionated PHP code formatter";
     homepage = "https://github.com/lkrms/pretty-php";
     license = lib.licenses.mit;
     mainProgram = "pretty-php";

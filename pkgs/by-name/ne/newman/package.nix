@@ -19,12 +19,12 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.getpostman.com";
     description = "Command-line collection runner for Postman";
     mainProgram = "newman";
     changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
-    maintainers = with maintainers; [ freezeboy ];
-    license = licenses.asl20;
+    maintainers = [ ];
+    license = lib.licenses.asl20;
   };
 }

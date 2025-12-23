@@ -6,10 +6,11 @@
   which,
   fetchzip,
   fetchurl,
+  dune,
 }@args:
 
 let
-  lib = import ../coq/extra-lib.nix {
+  lib = import ./extra-lib.nix {
     inherit (args) lib;
   };
 
@@ -156,13 +157,11 @@ let
   append-version = p: n: p + display-pkg n "" rocqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
   useDune = args.useDune or (useDuneifVersion fetched.version);
-  rocqlib-flags =
-      [
-        "COQLIBINSTALL=$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib"
-        "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
-      ];
-  docdir-flags =
-      [ "COQDOCINSTALL=$(out)/share/coq/${rocq-core.rocq-version}/user-contrib" ];
+  rocqlib-flags = [
+    "COQLIBINSTALL=$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib"
+    "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
+  ];
+  docdir-flags = [ "COQDOCINSTALL=$(out)/share/coq/${rocq-core.rocq-version}/user-contrib" ];
 in
 
 stdenv.mkDerivation (
@@ -176,7 +175,7 @@ stdenv.mkDerivation (
       nativeBuildInputs =
         args.overrideNativeBuildInputs or (
           [ which ]
-          ++ optional useDune rocq-core.ocamlPackages.dune_3
+          ++ optional useDune dune
           ++ optionals (useDune || mlPlugin) [
             rocq-core.ocamlPackages.ocaml
             rocq-core.ocamlPackages.findlib

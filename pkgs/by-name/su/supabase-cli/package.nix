@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "2.20.1";
+  version = "2.67.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-AfRO1dFXy5uvMJR09OWc+TfK6PUQi+fC1ZC5FATKmoU=";
+    hash = "sha256-IRgDCLAClF7Wwmhf1Ba6ulpyDZW3DSZSGj+oIptXImw=";
   };
 
-  vendorHash = "sha256-3n2j8zGWudnYLOWn8p/vc4sD/WB7rQxNzZU6CY4Ybik=";
+  vendorHash = "sha256-CRUt2wjPCzIQ2/RDXvwJ5xW3KTJNYf/7Kzkhh4Z9NfI=";
 
   ldflags = [
     "-s"
@@ -27,12 +27,13 @@ buildGoModule rec {
     "-X=github.com/supabase/cli/internal/utils.Version=${version}"
   ];
 
+  subPackages = [ "." ];
+
   doCheck = false; # tests are trying to connect to localhost
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    rm $out/bin/{docs,listdep}
     mv $out/bin/{cli,supabase}
 
     installShellCompletion --cmd supabase \
@@ -45,14 +46,18 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = supabase-cli;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # Fetch versions from GitHub releases to detect pre-releases and
+      # avoid updating to them.
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       kashw2
     ];

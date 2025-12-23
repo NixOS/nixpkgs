@@ -83,7 +83,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.orthanc.settings = options.services.orthanc.settings.default;
+    services.orthanc.settings = opt.settings.default;
 
     systemd.services.orthanc = {
       description = "Orthanc is a lightweight, RESTful DICOM server for healthcare and medical research";
@@ -130,5 +130,5 @@ in
     time.timeZone = lib.mkDefault "UTC";
   };
 
-  meta.maintainers = with lib.maintainers; [ drupol ];
+  meta.maintainers = [ ];
 }

@@ -4,13 +4,13 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppi";
   version = "1.18";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1jk42cjaggk71rimjnx3qpmb6hivps0917vl3z7wbxk3i2whb98j";
+    url = "mirror://gnu/cppi/cppi-${finalAttrs.version}.tar.xz";
+    hash = "sha256-EqUFuYhj9sXPH3SfkIC+O0Kz6sWjW1ljDme+pyQTZMo=";
   };
 
   doCheck = true;
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
-}
+})

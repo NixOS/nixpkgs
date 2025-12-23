@@ -44,25 +44,24 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests =
-    [
-      # sensitive to platform, causes false negatives on darwin
-      "test_import"
-    ]
-    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
-      # InvalidPythonEnvironment: The python binary is potentially unsafe.
-      "test_create_environment_executable"
-      # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
-      "test_dict_keys_completions"
-      # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
-      "test_dict_completion"
-    ];
+  disabledTests = [
+    # sensitive to platform, causes false negatives on darwin
+    "test_import"
+  ]
+  ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    # InvalidPythonEnvironment: The python binary is potentially unsafe.
+    "test_create_environment_executable"
+    # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+    "test_dict_keys_completions"
+    # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
+    "test_dict_completion"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Autocompletion tool for Python that can be used for text editors";
     homepage = "https://github.com/davidhalter/jedi";
     changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

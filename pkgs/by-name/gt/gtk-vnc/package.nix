@@ -53,20 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs =
-    [
-      gnutls
-      cairo
-      gdk-pixbuf
-      zlib
-      glib
-      gmp
-      cyrus_sasl
-      gtk3
-    ]
-    ++ lib.optionals pulseaudioSupport [
-      libpulseaudio
-    ];
+  buildInputs = [
+    gnutls
+    cairo
+    gdk-pixbuf
+    zlib
+    glib
+    gmp
+    cyrus_sasl
+    gtk3
+  ]
+  ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
 
   mesonFlags = lib.optionals (!pulseaudioSupport) [
     "-Dpulseaudio=disabled"
@@ -84,15 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GTK VNC widget";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       raskin
       offline
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gvnccapture";
   };
 })

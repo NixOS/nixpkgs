@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
@@ -27,6 +27,7 @@
   libuuid,
   libxkbcommon,
   libgbm,
+  muparser,
   pango,
   pciutils,
   pkgconf,
@@ -41,13 +42,13 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  legacyRenderer ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
   hidpiXWayland ? false,
   enableNvidiaPatches ? false,
+  legacyRenderer ? false,
 }:
 let
   inherit (builtins)
@@ -62,8 +63,7 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
-    mesonBool
-    mesonEnable
+    cmakeBool
     ;
   inherit (lib.trivial)
     importJSON
@@ -73,27 +73,32 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  adapters = [
+  # Condition on darwin to avoid breaking eval for darwin in CI,
+  # even though darwin is not supported anyway.
+  adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
-  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
+  customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
 in
 assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
+assert assertMsg (
+  !legacyRenderer
+) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.47.2";
+  version = "0.52.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dSKR1VpjpdJVZ5dmLgIvAu3K+DYrSbohZkqxSQhjw8U=";
+    hash = "sha256-R2Hm7XbW8CTLEIeYCAlSQ3U5bFhn76FC17hEy/ws8EM=";
   };
 
   postPatch = ''
@@ -102,20 +107,18 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
-
-    substituteInPlace protocols/meson.build --replace-fail \
-      "wayland_scanner = dependency('wayland-scanner')" \
-      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
-  # variables used by generateVersion.sh script, and shown in `hyprctl version`
-  BRANCH = info.branch;
-  COMMITS = info.commit_hash;
-  DATE = info.date;
-  DIRTY = "";
-  HASH = info.commit_hash;
-  MESSAGE = info.commit_message;
-  TAG = info.tag;
+  # variables used by CMake, and shown in `hyprctl version`
+  env = {
+    GIT_BRANCH = info.branch;
+    GIT_COMMITS = info.commit_hash;
+    GIT_COMMIT_DATE = info.date;
+    GIT_DIRTY = "clean";
+    GIT_COMMIT_HASH = info.commit_hash;
+    GIT_COMMIT_MESSAGE = info.commit_message;
+    GIT_TAG = info.tag;
+  };
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -125,12 +128,13 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     makeWrapper
+    cmake
+    # meson + ninja are used to build the hyprland-protocols submodule
     meson
     ninja
     pkg-config
     wayland-scanner
     # for udis86
-    cmake
     python3
   ];
 
@@ -156,6 +160,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libuuid
       libxkbcommon
       libgbm
+      muparser
       pango
       pciutils
       re2
@@ -176,23 +181,20 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  mesonBuildType = if debug then "debugoptimized" else "release";
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
   strictDeps = true;
 
-  mesonFlags = concatLists [
-    (mapAttrsToList mesonEnable {
-      "xwayland" = enableXWayland;
-      "legacy_renderer" = legacyRenderer;
-      "systemd" = withSystemd;
-    })
-    (mapAttrsToList mesonBool {
-      # PCH provides no benefits when building with Nix
-      "b_pch" = false;
-      "tracy_enable" = false;
-    })
-  ];
+  cmakeFlags = mapAttrsToList cmakeBool {
+    "NO_XWAYLAND" = !enableXWayland;
+    "NO_SYSTEMD" = !withSystemd;
+    "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
+    "NO_UWSM" = true;
+    "NO_HYPRPM" = true;
+    "TRACY_ENABLE" = false;
+    "BUILD_HYPRTESTER" = true;
+  };
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''
@@ -217,7 +219,7 @@ customStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };

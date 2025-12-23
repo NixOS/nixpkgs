@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyemoncms";
-  version = "0.1.1";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Open-Building-Management";
     repo = "pyemoncms";
     tag = "v${version}";
-    hash = "sha256-IBrYys0i9pTAw9ul8bqni0H3KNSvKQYNU6D4OSfR6ZE=";
+    hash = "sha256-Bvcnl3av9SF0CNUjg/QDdvENIEgPg26fAJ522jBrL7Q=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Open-Building-Management/pyemoncms/releases/tag/v${version}";
+    changelog = "https://github.com/Open-Building-Management/pyemoncms/releases/tag/${src.tag}";
     description = "Python library for emoncms API";
     homepage = "https://github.com/Open-Building-Management/pyemoncms";
     license = lib.licenses.mit;

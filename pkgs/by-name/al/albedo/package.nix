@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "albedo";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "albedo";
     tag = "v${version}";
-    hash = "sha256-Yx8C44/Dy4hlmCxpuTjhqwwvEZq6HOdvq1AeNRd17MM=";
+    hash = "sha256-H/ViMVzuuQYORDiNXBgs7imy+c4IaL2pY5KVN6ecJoo=";
   };
 
-  vendorHash = "sha256-qZga699UjBsPmOUSN66BFInl8Bmk42HiVn0MfPlxRE4=";
+  vendorHash = "sha256-FBkHpTn4jG6iw1GYAuGHh2WCRro4mRgumYoGMkmv6qU=";
 
   ldflags = [
     "-s"

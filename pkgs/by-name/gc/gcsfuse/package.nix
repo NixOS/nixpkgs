@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gcsfuse";
-  version = "2.10.0";
+  version = "3.5.5";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    hash = "sha256-gKKsUihV/YiIYbdTPjOXl/SEmi7dTAncNEAnAS/42VY=";
+    hash = "sha256-Nfrbs46F7a+oELxnUWpi3v/KKSUGFhp4Xy7bLBur3z8=";
   };
 
-  vendorHash = "sha256-/9LhIZ/KThuTI1OYfdZHfV9Ad70gw4Yii3MsE5ZVLSI=";
+  vendorHash = "sha256-v+71MA4x+WUj6ROuIbuhP1S+f8UbKFjkS8XpFFM3qyk=";
 
   subPackages = [
     "."
@@ -44,11 +44,11 @@ buildGoModule rec {
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.fuse.gcsfuse
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
     changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     # internal/cache/file/downloader/job.go:386:77: undefined: syscall.O_DIRECT
     broken = stdenv.hostPlatform.isDarwin;

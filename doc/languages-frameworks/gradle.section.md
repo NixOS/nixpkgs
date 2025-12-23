@@ -7,7 +7,7 @@ record dependencies so they can be restored in a reproducible fashion.
 
 ## Building a Gradle package {#building-a-gradle-package}
 
-Here's how a typical derivation will look like:
+Here's how a typical derivation will look:
 
 ```nix
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   # if the package has dependencies, mitmCache must be set
   mitmCache = gradle.fetchDeps {
@@ -66,17 +69,18 @@ If your package can't be evaluated using a simple `pkgs.<pname>`
 expression (for example, if your package isn't located in nixpkgs, or if
 you want to override some of its attributes), you will usually have to
 pass `pkg` instead of `pname` to `gradle.fetchDeps`. There are two ways
-of doing it.
+of doing so.
 
 The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:
 
 ```nix
-{ lib
-, stdenv
-, gradle
-# ...
-, pdftk
+{
+  lib,
+  stdenv,
+  gradle,
+  # ...
+  pdftk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -125,7 +129,7 @@ The update script does the following:
 `fetchDeps` takes the following arguments:
 
 - `attrPath` - the path to the package in nixpkgs (for example,
-  `"javaPackages.openjfx22"`). Used for update script metadata.
+  `"javaPackages.openjfx25"`). Used for update script metadata.
 - `pname` - an alias for `attrPath` for convenience. This is what you
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults
@@ -134,7 +138,7 @@ The update script does the following:
   downstream, non-nixpkgs projects)
 - `data` - path to the dependencies lockfile (can be relative to the
   package, can be absolute). In nixpkgs, it's discouraged to have the
-  lockfiles be named anything other `deps.json`, consider creating
+  lockfiles be named anything other than `deps.json`. Consider creating
   subdirectories if your package requires multiple `deps.json` files.
 
 ## Environment {#gradle-environment}

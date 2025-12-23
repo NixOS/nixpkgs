@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "evmdis";
-  version = "unstable-2022-05-09";
+  version = "0-unstable-2022-05-09";
 
   src = fetchFromGitHub {
     owner = "Arachnid";
@@ -23,11 +23,11 @@ buildGoModule {
 
   ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Arachnid/evmdis";
     description = "Ethereum EVM disassembler";
     mainProgram = "evmdis";
-    license = [ licenses.asl20 ];
-    maintainers = with maintainers; [ asymmetric ];
+    license = [ lib.licenses.asl20 ];
+    maintainers = with lib.maintainers; [ asymmetric ];
   };
 }

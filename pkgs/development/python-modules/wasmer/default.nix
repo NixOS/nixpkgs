@@ -9,7 +9,7 @@
   libiconv,
   libffi,
   libxml2,
-  llvm_14,
+  llvm,
   ncurses,
   zlib,
 }:
@@ -38,8 +38,7 @@ let
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
-        inherit src;
-        name = "${pname}-${version}";
+        inherit pname version src;
         hash = cargoHash;
       };
 
@@ -72,13 +71,13 @@ let
 
       pythonImportsCheck = [ "${lib.replaceStrings [ "-" ] [ "_" ] pname}" ];
 
-      meta = with lib; {
+      meta = {
         # https://github.com/wasmerio/wasmer-python/issues/778
         broken = pythonAtLeast "3.12";
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
-        license = licenses.mit;
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        platforms = lib.platforms.unix;
         maintainers = [ ];
       };
     };
@@ -100,7 +99,7 @@ in
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
-    extraNativeBuildInputs = [ llvm_14 ];
+    extraNativeBuildInputs = [ llvm ];
     extraBuildInputs = [
       libffi
       libxml2.out

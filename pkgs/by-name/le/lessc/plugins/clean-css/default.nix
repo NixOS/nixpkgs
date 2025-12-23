@@ -54,7 +54,7 @@ buildNpmPackage {
 
   meta = {
     homepage = "https://github.com/less/less-plugin-clean-css";
-    description = " Post-process and compress CSS using clean-css";
+    description = "Post-process and compress CSS using clean-css";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lelgenio ];
   };

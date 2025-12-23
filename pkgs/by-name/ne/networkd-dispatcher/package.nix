@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
+  installShellFiles,
   python3Packages,
+  python3,
   asciidoc,
   wrapGAppsNoGuiHook,
   iw,
@@ -36,60 +38,51 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix paths in systemd unit file
     substituteInPlace networkd-dispatcher.service \
-      --replace "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher"
+      --replace-fail "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher"
     # Remove conditions on existing rules path
     sed -i '/ConditionPathExistsGlob/g' networkd-dispatcher.service
   '';
 
   nativeBuildInputs = [
-    asciidoc
+    asciidoc # for a2x
+    installShellFiles
     wrapGAppsNoGuiHook
-    python3Packages.wrapPython
   ];
 
-  dontWrapGApps = true;
+  buildInputs = [
+    (python3.withPackages (ps: [
+      ps.dbus-python
+      ps.pygobject3
+    ]))
+  ];
 
   checkInputs = with python3Packages; [
-    dbus-python
-    iw
     mock
-    pygobject3
     pytestCheckHook
-  ];
-
-  pythonPath = with python3Packages; [
-    configparser
-    dbus-python
-    pygobject3
   ];
 
   installPhase = ''
     runHook preInstall
     install -D -m755 -t $out/bin networkd-dispatcher
+    patchShebangs --host $out/bin/networkd-dispatcher
     install -Dm644 networkd-dispatcher.service $out/lib/systemd/system/networkd-dispatcher.service
     install -Dm644 networkd-dispatcher.conf $out/etc/conf.d/networkd-dispatcher.conf
-    install -D networkd-dispatcher.8 -t $out/share/man/man8/
+    installManPage networkd-dispatcher.8
     runHook postInstall
   '';
 
   doCheck = true;
 
   preFixup = ''
-    makeWrapperArgs+=( \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : "${lib.makeBinPath [ iw ]}" \
-    )
-  '';
-  postFixup = ''
-    wrapPythonPrograms
+    gappsWrapperArgs+=("--prefix" "PATH" ":" "${lib.makeBinPath [ iw ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dispatcher service for systemd-networkd connection status changes";
     mainProgram = "networkd-dispatcher";
     homepage = "https://gitlab.com/craftyguy/networkd-dispatcher";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

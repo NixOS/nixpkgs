@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keychain";
-  version = "2.8.5";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
     rev = version;
-    sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
+    sha256 = "sha256-xk3ooFhBkgv93Po5oC4TZRmMhJJXDv7yekoE102FQd8=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       }" \
   '';
 
-  meta = with lib; {
-    description = "Keychain management tool";
+  meta = {
+    description = "Manage SSH and GPG keys in a convenient and secure manner";
     longDescription = ''
       Keychain helps you to manage SSH and GPG keys in a convenient and secure
       manner. It acts as a frontend to ssh-agent and ssh-add, but allows you
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       process, allowing your scripts to take advantage of key-based logins.
     '';
     homepage = "https://www.funtoo.org/Keychain";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sigma ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sigma ];
     mainProgram = "keychain";
   };
 }

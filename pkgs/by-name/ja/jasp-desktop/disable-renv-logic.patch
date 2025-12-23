@@ -1,0 +1,30 @@
+diff --git a/Tools/CMake/R.cmake b/Tools/CMake/R.cmake
+index 42e7b88..405b434 100644
+--- a/Tools/CMake/R.cmake
++++ b/Tools/CMake/R.cmake
+@@ -867,14 +867,6 @@ else()
+ configure_file(${PROJECT_SOURCE_DIR}/Modules/install-renv.R.in
+                 ${SCRIPT_DIRECTORY}/install-renv.R @ONLY)
+ 
+-              
+-execute_process(
+-  COMMAND_ECHO STDOUT
+-  #ERROR_QUIET OUTPUT_QUIET
+-  WORKING_DIRECTORY ${R_HOME_PATH}
+-  COMMAND 
+-    ${R_EXECUTABLE} --slave --no-restore --no-save --file=${SCRIPT_DIRECTORY}/install-renv.R
+-)
+ 
+ if(APPLE)
+   # Patch renv
+@@ -937,8 +929,8 @@ execute_process(
+           
+ include(FindRPackagePath)
+ 
+-find_package_path(RCPP_PATH       ${R_CPP_INCLUDES_LIBRARY} "Rcpp")
+-find_package_path(RINSIDE_PATH    ${R_CPP_INCLUDES_LIBRARY} "RInside")
++find_package_path(RCPP_PATH       ${R_LIBRARY_PATH} "Rcpp")
++find_package_path(RINSIDE_PATH    ${R_LIBRARY_PATH} "RInside")
+ 
+ set(RENV_PATH "${RENV_LIBRARY}/renv")
+ 

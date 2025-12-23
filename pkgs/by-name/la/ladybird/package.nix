@@ -2,16 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  cacert,
   unicode-emoji,
   unicode-character-database,
+  unicode-idna,
+  publicsuffix-list,
   cmake,
   ninja,
   pkg-config,
-  curl,
+  curlFull, # Websocket support
   libavif,
-  libGL,
+  angle, # libEGL
   libjxl,
   libpulseaudio,
   libwebp,
@@ -20,42 +20,26 @@
   python3,
   qt6Packages,
   woff2,
+  fast-float,
   ffmpeg,
   fontconfig,
   simdutf,
   skia,
   nixosTests,
   unstableGitUpdater,
-  apple-sdk_14,
+  libtommath,
+  sdl3,
 }:
 
-let
-  unicode-idna = fetchurl {
-    url = "https://www.unicode.org/Public/idna/${unicode-character-database.version}/IdnaMappingTable.txt";
-    hash = "sha256-QCy9KF8flS/NCDS2NUHVT2nT2PG4+Fmb9xoaFJNfgsQ=";
-  };
-  adobe-icc-profiles = fetchurl {
-    url = "https://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesCS4Win_end-user.zip";
-    hash = "sha256-kgQ7fDyloloPaXXQzcV9tgpn3Lnr37FbFiZzEb61j5Q=";
-    name = "adobe-icc-profiles.zip";
-  };
-  public_suffix_commit = "9094af5c6cb260e69137c043c01be18fee01a540";
-  public-suffix-list = fetchurl {
-    url = "https://raw.githubusercontent.com/publicsuffix/list/${public_suffix_commit}/public_suffix_list.dat";
-    hash = "sha256-0szHUz1T0MXOQ9tcXoKY2F/bI3s7hsYCjURqywZsf1w=";
-  };
-  # Note: The cacert version is synthetic and must match the version in the package's CMake
-  cacert_version = "2023-12-12";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-03-16";
+  version = "0-unstable-2025-12-03";
 
   src = fetchFromGitHub {
-    owner = "LadybirdWebBrowser";
+    owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7a2cc28932a7b0f85e7bde6bae273fba8155f573";
-    hash = "sha256-yJ51v30Mh9S93ZInafm9kxr0c9hg7LoBufmwyevX/FY=";
+    rev = "9b4d9966da96b7f6421b59eb0adfe90d484ee920";
+    hash = "sha256-dqTxW1ENc3k9pk8z2BFPsVJVren9ZkFovKKhNAcs1eo=";
   };
 
   postPatch = ''
@@ -72,28 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
 
-    # Check that the versions match
-    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
-
     mkdir -p build/Caches
 
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
     chmod +w build/Caches/UCD
     cp ${unicode-emoji}/share/unicode/emoji/emoji-test.txt build/Caches/UCD
-    cp ${unicode-idna} build/Caches/UCD/IdnaMappingTable.txt
+    cp ${unicode-idna}/share/unicode/idna/IdnaMappingTable.txt build/Caches/UCD
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
 
-    mkdir build/Caches/CACERT
-    cp ${cacert}/etc/ssl/certs/ca-bundle.crt build/Caches/CACERT/cacert-${cacert_version}.pem
-    echo -n ${cacert_version} > build/Caches/CACERT/version.txt
-
     mkdir build/Caches/PublicSuffix
-    cp ${public-suffix-list} build/Caches/PublicSuffix/public_suffix_list.dat
-
-    mkdir build/Caches/AdobeICCProfiles
-    cp ${adobe-icc-profiles} build/Caches/AdobeICCProfiles/adobe-icc-profiles.zip
-    chmod +w build/Caches/AdobeICCProfiles
+    cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
   '';
 
   nativeBuildInputs = [
@@ -102,56 +75,56 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     qt6Packages.wrapQtAppsHook
+    libtommath
   ];
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      fontconfig
-      libavif
-      libGL
-      libjxl
-      libwebp
-      libxcrypt
-      openssl
-      qt6Packages.qtbase
-      qt6Packages.qtmultimedia
-      simdutf
-      (skia.overrideAttrs (prev: {
-        gnFlags = prev.gnFlags ++ [
-          # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
-          # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
-          # Remove when/if this gets upstreamed in skia.
-          "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
-        ];
-      }))
-      woff2
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      libpulseaudio.dev
-      qt6Packages.qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  buildInputs = [
+    curlFull
+    fast-float
+    ffmpeg
+    fontconfig
+    libavif
+    angle # libEGL
+    libjxl
+    libwebp
+    libxcrypt
+    openssl
+    qt6Packages.qtbase
+    qt6Packages.qtmultimedia
+    sdl3
+    simdutf
+    (skia.overrideAttrs (prev: {
+      gnFlags = prev.gnFlags ++ [
+        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+        # Remove when/if this gets upstreamed in skia.
+        "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
+      ];
+    }))
+    woff2
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    libpulseaudio.dev
+    qt6Packages.qtwayland
+  ];
 
-  cmakeFlags =
-    [
-      # Disable network operations
-      "-DSERENITY_CACHE_DIR=Caches"
-      "-DENABLE_NETWORK_DOWNLOADS=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    ];
+  cmakeFlags = [
+    # Takes an enormous amount of resources, even with mold
+    (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
+    # Disable network operations
+    "-DLADYBIRD_CACHE_DIR=Caches"
+    "-DENABLE_NETWORK_DOWNLOADS=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+  ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
-  env.NIX_LDFLAGS = "-lGL";
+  env.NIX_LDFLAGS = "-lGL -lfontconfig";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
@@ -168,11 +141,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.org";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      fgaz
+      jk
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -180,5 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

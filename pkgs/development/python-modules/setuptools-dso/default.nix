@@ -1,21 +1,27 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # tests
   nose2,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-dso";
-  version = "2.11";
+  version = "2.12.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "setuptools_dso";
-    inherit version;
-    hash = "sha256-lT5mp0TiHbvkrXPiK5/uLke65znya8Y6s3RzpFuXVFY=";
+  src = fetchFromGitHub {
+    owner = "epics-base";
+    repo = "setuptools_dso";
+    tag = version;
+    hash = "sha256-YYm3mTA443vcD/4vHa7EgPzvDDzBic64NWWJDQYQHKs=";
   };
 
   build-system = [ setuptools ];
@@ -25,10 +31,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
-    description = "setuptools extension for building non-Python Dynamic Shared Objects";
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # distutils.compilers.C.errors.CompileError: command '/nix/store/...-clang-wrapper-21.1.2/bin/clang' failed with exit code 1
+    # fatal error: 'string' file not found
+    "test_cxx"
+  ];
+
+  meta = {
+    description = "Setuptools extension for building non-Python Dynamic Shared Objects";
     homepage = "https://github.com/mdavidsaver/setuptools_dso";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

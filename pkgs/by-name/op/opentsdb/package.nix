@@ -10,7 +10,7 @@
   git,
   jdk8,
   makeWrapper,
-  nettools,
+  net-tools,
   python3,
 }:
 
@@ -324,7 +324,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     jdk
-    nettools
+    net-tools
     python3
     git
   ];
@@ -350,12 +350,12 @@ stdenv.mkDerivation rec {
       --set JAVA "${jre}/bin/java"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time series database with millisecond precision";
     homepage = "http://opentsdb.net";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # maven dependencies
     ];

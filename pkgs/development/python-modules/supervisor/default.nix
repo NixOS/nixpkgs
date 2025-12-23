@@ -5,23 +5,24 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+let
   pname = "supervisor";
-  version = "4.2.5";
-  format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  version = "4.3.0";
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NHYbrhojxYGSKBpRFfsH+/IsmwEzwIFmvv/HD+0+vBI=";
+    hash = "sha256-SivxSa30KZfhu0S3DEO2EydeyYUsPtrMqGqRZrJ+lF4=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # wants to write to /tmp/foo which is likely already owned by another
   # nixbld user on hydra
@@ -34,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "supervisor" ];
 
-  meta = with lib; {
+  meta = {
     description = "System for controlling process state under UNIX";
-    homepage = "http://supervisord.org/";
+    homepage = "https://supervisord.org/";
     changelog = "https://github.com/Supervisor/supervisor/blob/${version}/CHANGES.rst";
-    license = licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.free; # http://www.repoze.org/LICENSE.txt
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

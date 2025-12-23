@@ -25,12 +25,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone utility for service discovery on open ports";
     mainProgram = "fingerprintx";
     homepage = "https://github.com/praetorian-inc/fingerprintx";
     changelog = "https://github.com/praetorian-inc/fingerprintx/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

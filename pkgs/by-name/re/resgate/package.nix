@@ -10,18 +10,18 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "resgateio";
-    repo = pname;
+    repo = "resgate";
     rev = "v${version}";
     hash = "sha256-HQgBWH6dqfmAfKMezUjPbwXif8bqAClns589la2lBVA=";
   };
 
   vendorHash = "sha256-1yQScWjlqYvFmuqG4TLmImlCjFPrLcYcmZ1a3QUnSXY=";
 
-  meta = with lib; {
+  meta = {
     description = "Realtime API Gateway used with NATS to build REST, real time, and RPC APIs";
     homepage = "https://resgate.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ farcaller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ farcaller ];
     mainProgram = "resgate";
   };
 }

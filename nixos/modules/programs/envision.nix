@@ -34,7 +34,6 @@ in
     services.udev = {
       enable = true;
       packages = with pkgs; [
-        android-udev-rules
         xr-hardware
       ];
     };

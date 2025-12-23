@@ -3,17 +3,16 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_ed25519";
   version = "0.2";
 
   src = fetchFromGitLab {
     owner = "dwagin";
     repo = "pg_ed25519";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IOL3ogbPCMNmwDwpeaCZSoaFLJRX0Oah+ysgyUfHg5s=";
   };
 
@@ -26,4 +25,4 @@ postgresqlBuildExtension rec {
     # Broken with no upstream fix available.
     broken = lib.versionAtLeast postgresql.version "16";
   };
-}
+})

@@ -3,23 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tencentcloud-sdk-python";
-  version = "3.0.1340";
+  version = "3.1.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
     tag = version;
-    hash = "sha256-CbGYPoliqc3RuKC1vMaUwopqrGe/9T/E4i9a0w33UTE=";
+    hash = "sha256-DtYEBRKd3qH+ZJMWTALcVlRPBMs6mhr5fgxyTvdOofo=";
   };
 
   build-system = [ setuptools ];
@@ -30,13 +27,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tencentcloud" ];
 
-  pytestFlagsArray = [ "tests/unit/" ];
+  enabledTestPaths = [ "tests/unit/" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # KeyError
+    "test_sts_credential_with_default_endpoint"
+    "test_sts_credential_with_set_endpoint"
+  ];
+
+  meta = {
     description = "Tencent Cloud API 3.0 SDK for Python";
     homepage = "https://github.com/TencentCloud/tencentcloud-sdk-python";
     changelog = "https://github.com/TencentCloud/tencentcloud-sdk-python/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

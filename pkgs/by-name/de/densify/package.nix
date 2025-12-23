@@ -8,6 +8,7 @@
   xorg,
   gnugrep,
   ghostscript,
+  libnotify,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication rec {
           ghostscript
           gnugrep
           xorg.xrandr
+          libnotify
         ]
       }"
     )

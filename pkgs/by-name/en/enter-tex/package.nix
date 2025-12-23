@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
   desktop-file-utils,
   docbook-xsl-nons,
   gettext,
@@ -21,16 +21,20 @@
   libgedit-gtksourceview,
   libgedit-tepl,
   libgee,
-  gnome,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enter-tex";
-  version = "3.47.0";
+  version = "3.48.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/enter-tex/${lib.versions.majorMinor finalAttrs.version}/enter-tex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-oIyuySdcCruVNWdN9bnBa5KxSWjNIZFtb/wvoMud12o=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
+    repo = "enter-tex";
+    tag = finalAttrs.version;
+    hash = "sha256-OnkP4E1kNWuE9k7SQ/ujnxnFgVyAqIhqHAw04ZA0Tno=";
   };
 
   nativeBuildInputs = [
@@ -60,25 +64,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     # Workaround the use case of C code mixed with Vala code.
-    # https://gitlab.gnome.org/swilmet/enter-tex/-/blob/3.47.0/docs/more-information.md#install-procedure
+    # https://gitlab.gnome.org/World/gedit/enter-tex/-/blob/3.48.0/docs/more-information.md#install-procedure
     ninja src/gtex/Gtex-1.gir
   '';
 
   doCheck = true;
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = "enter-tex";
-  };
+  passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    homepage = "https://gitlab.gnome.org/swilmet/enter-tex";
+  meta = {
+    homepage = "https://gitlab.gnome.org/World/gedit/enter-tex";
     description = "LaTeX editor for the GNOME desktop";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       manveru
       bobby285271
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "enter-tex";
   };
 })

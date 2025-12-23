@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
-  version = "1.6.20";
+  version = "1.6.22";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
-    sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
+    sha256 = "sha256-iCZoK9is3Zpew0q61ZpG/OK3RLU4Fb6XCh7eVaVrTEY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     installShellCompletion completion/kubetail.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bash script to tail Kubernetes logs from multiple pods at the same time";
     mainProgram = "kubetail";
     longDescription = ''
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
       -f " but for multiple pods.
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kalbasit
       qjoly
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

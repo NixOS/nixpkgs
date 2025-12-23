@@ -18,10 +18,10 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "interval" ] "This option has been removed.")
-    ({
+    {
       options.warnings = options.warnings;
       options.assertions = options.assertions;
-    })
+    }
   ];
 
   port = 9617;

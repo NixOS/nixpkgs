@@ -9,6 +9,7 @@
 
   # runtime
   packaging,
+  platformdirs,
 
   # tests
   pytestCheckHook,
@@ -16,33 +17,34 @@
 
 let
   pname = "findpython";
-  version = "0.6.2";
+  version = "0.7.1";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4MdbqfNaf5u0Qj6zG9FzWMzPFXYbaDcxdxkXeu/0ZyM=";
+    hash = "sha256-nynmo9q9t18rOclJdywO0m6rFTCABmafNHjNqw2GfHg=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [
+    packaging
+    platformdirs
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "findpython" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to find python versions on your system";
     mainProgram = "findpython";
     homepage = "https://github.com/frostming/findpython";
     changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

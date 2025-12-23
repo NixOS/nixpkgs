@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and easy focus stacking";
     homepage = "https://github.com/PetteriAimonen/focus-stack";
-    license = licenses.mit;
-    maintainers = with maintainers; [ paperdigits ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "focus-stack";
   };
 }

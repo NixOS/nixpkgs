@@ -26,11 +26,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sqls-server/sqls";
     description = "SQL language server written in Go";
     mainProgram = "sqls";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
   };
 }

@@ -60,11 +60,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8JpD1rSGG+BswOKEnFMpZBPU5SyOMfUvyV6epfHFmjY=";
+    sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
   };
 
   nativeBuildInputs = [
@@ -211,21 +211,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       lgpl2Only
-      licenses.zlib
+      lib.licenses.zlib
     ];
-    platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mimalloc";
-  version = "2.1.8";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
     rev = "v${version}";
-    sha256 = "sha256-C0cqYiXxx8tW3plUZrfAJYKeY36opGKymkZ/CWrVuEI=";
+    sha256 = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
   };
 
   doCheck = !stdenv.hostPlatform.isStatic;
@@ -34,11 +34,12 @@ stdenv.mkDerivation rec {
     cmake
     ninja
   ];
-  cmakeFlags =
-    [ "-DMI_INSTALL_TOPLEVEL=ON" ]
-    ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
-    ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DMI_INSTALL_TOPLEVEL=ON"
+  ]
+  ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
+  ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
 
   postInstall =
     let
@@ -65,12 +66,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Compact, fast, general-purpose memory allocator";
     homepage = "https://github.com/microsoft/mimalloc";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       kamadorueda
       thoughtpolice
     ];

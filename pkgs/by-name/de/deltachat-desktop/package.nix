@@ -1,54 +1,67 @@
-{ lib
-, copyDesktopItems
-, electron_34
-, fetchFromGitHub
-, deltachat-rpc-server
-, makeDesktopItem
-, makeWrapper
-, nodejs
-, pkg-config
-, pnpm_9
-, python3
-, rustPlatform
-, stdenv
-, darwin
-, testers
-, deltachat-desktop
-, yq
+{
+  lib,
+  copyDesktopItems,
+  electron_37,
+  fetchFromGitHub,
+  fetchpatch,
+  deltachat-rpc-server,
+  makeDesktopItem,
+  makeWrapper,
+  nodejs,
+  pkg-config,
+  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  python3,
+  rustPlatform,
+  stdenv,
+  testers,
+  deltachat-desktop,
+  yq,
 }:
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.156.2";
+    version = "2.33.0";
     src = fetchFromGitHub {
-      owner = "deltachat";
-      repo = "deltachat-core-rust";
+      owner = "chatmail";
+      repo = "core";
       tag = "v${version}";
-      hash = "sha256-CpFnO8stLLTH/XOZZS3j9nVrf2FRekjkQ/R1pmw5o9A=";
+      hash = "sha256-4cnYTtm5bQ86BgMOOH5d881ahjuFFOxVuGffRp3Nbw4=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "deltachat-core-rust";
+      pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-jrsGMNgKglk+Rq/ZGiZgSZrT4uSA5RjbTYaDtW0Ijyg=";
+      hash = "sha256-TOGSvvFKsWshfMqGNEOtjhHcpTJ0FAiK6RigmlT4AFA=";
     };
   };
-  electron = electron_34;
-  pnpm = pnpm_9;
+  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.54.2";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KN8VO03/f143qMBv9Z6K75Mb3S1QQjgzt0psTnBFLyw=";
+    hash = "sha256-PA2Faq1AmFxxizN1+NDYRB3uFI2bXdGshtyfHwY2btM=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  patches = [
+    # https://github.com/deltachat/deltachat-desktop/pull/5854
+    (fetchpatch {
+      name = "dont-load-env-file-in-production.patch";
+      url = "https://github.com/deltachat/deltachat-desktop/commit/e0eca1672b2f0c951b96c1e921219d2a4a4dbcb0.patch";
+      hash = "sha256-/Dc8VjdF10qJOrEa0dJeBib+R+8kb5yD4/iKt9/VnBA=";
+    })
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-dRnmu5tEqrWn2AizLvd/ZMsiQJP4qtq/+SOSidpzLbY=";
+    pnpm = pnpm_9;
+    fetcherVersion = 2;
+    hash = "sha256-4BAcCzPZbCjUfHTnJ98TzcfI5UnfMmGdbdvCFaQNNsk=";
   };
 
   nativeBuildInputs = [
@@ -56,18 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    SKIP_FUSES = true; # EACCES: permission denied
     VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 
@@ -84,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       = ${lib.versions.major electron.version} \
       || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
 
-    pnpm -w build:electron
+    pnpm --filter=@deltachat-desktop/target-electron build4production
 
     pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
     pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
@@ -113,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
+    install -Dt "$out/share/icons/hicolor/scalable/apps" images/tray/deltachat.svg
+
     runHook postInstall
   '';
 
@@ -123,7 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = finalAttrs.meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"

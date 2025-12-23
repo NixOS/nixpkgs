@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "15.6.0";
+  version = "15.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "hhursev";
     repo = "recipe-scrapers";
     tag = version;
-    hash = "sha256-s/ocJi7NidebFkd724p/k7njOzELsdh7n9nQXaeVXV8=";
+    hash = "sha256-S0/RPVeEr/lAPJZSUwCippuXyirYnmaAuesWGYwg6kE=";
   };
 
   build-system = [ setuptools ];
@@ -61,11 +61,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
-    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 }

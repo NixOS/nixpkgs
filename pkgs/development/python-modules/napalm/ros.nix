@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.2.6";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
-
   src = fetchFromGitHub {
     owner = "napalm-automation-community";
     repo = "napalm-ros";
@@ -44,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/napalm-automation-community/napalm-ros/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ felbinger ];
+    teams = with lib.teams; [ secshell ];
   };
 }

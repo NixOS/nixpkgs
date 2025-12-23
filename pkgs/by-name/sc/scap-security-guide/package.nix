@@ -15,15 +15,15 @@
   yamllint,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scap-security-guide";
-  version = "0.1.76";
+  version = "0.1.78";
 
   src = fetchFromGitHub {
     owner = "ComplianceAsCode";
     repo = "content";
-    tag = "v${version}";
-    hash = "sha256-M1o9UG2pKtkFByp37UP++am8lJFfnoDBkRh1fos+ED0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4A/nM2aJcmWMxvK8/3isyDn/wPS9V+1CHO6Pfy+0FTc=";
   };
 
   postPatch = ''
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     with python3Packages;
     [
+      setuptools
       sphinx
       sphinxcontrib-jinjadomain
       sphinx-rtd-theme
@@ -53,7 +54,6 @@ stdenv.mkDerivation rec {
       myst-parser
       mypy
       openpyxl
-      pcre2-py
       pygithub
       pyyaml
       pandas
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     platforms = lib.platforms.all;
   };
-}
+})

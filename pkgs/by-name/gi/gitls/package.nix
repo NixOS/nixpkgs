@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hahwul";
-    repo = pname;
+    repo = "gitls";
     rev = "v${version}";
     hash = "sha256-kLkH/nNidd1QNPKvo7fxZwMhTgd4AVB8Ofw0Wo0z6c0=";
   };
@@ -25,12 +25,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools to enumerate git repository URL";
     homepage = "https://github.com/hahwul/gitls";
     changelog = "https://github.com/hahwul/gitls/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gitls";
   };
 }

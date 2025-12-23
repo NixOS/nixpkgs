@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # giving up for now
 
-  meta = with lib; {
+  meta = {
     description = "Telepathy Qt bindings";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-qt/";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
   };
 }

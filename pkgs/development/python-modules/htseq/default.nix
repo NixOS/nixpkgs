@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-  ] ++ optional-dependencies.htseq-qa;
+  ]
+  ++ optional-dependencies.htseq-qa;
 
   preCheck = ''
     rm -r src HTSeq
@@ -61,9 +62,9 @@ buildPythonPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://htseq.readthedocs.io/";
     description = "Framework to work with high-throughput sequencing data";
-    maintainers = with maintainers; [ unode ];
+    maintainers = with lib.maintainers; [ unode ];
   };
 }

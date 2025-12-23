@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "videos";
     rev = version;
-    hash = "sha256-3TpPgMd4dABhvnnmHHQCHDvuSdC5rWxGvaXPg20/Mrs=";
+    hash = "sha256-lvIsLjsb4HqwXDsH2krBlxmy7kJdadpjDcw+svaWV+Q=";
   };
 
   nativeBuildInputs = [
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Video player and library app designed for elementary OS";
     homepage = "https://github.com/elementary/videos";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.videos";
   };
 }

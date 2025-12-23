@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
   ];
 
   # tests get stuck on aarch64-linux
-  doCheck = stdenv.isx86_64 && stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be
       used to extract hidden data from files.
     '';
     homepage = "https://github.com/RickdeJager/stegseek";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "stegseek";
   };
 }

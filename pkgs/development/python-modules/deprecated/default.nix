@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.15";
+  version = "1.2.18";
   pyproject = true;
 
   outputs = [
@@ -23,13 +23,8 @@ buildPythonPackage rec {
     owner = "tantale";
     repo = "deprecated";
     tag = "v${version}";
-    hash = "sha256-slMPL2L0TZ7L19nfHMOM4jQlkJ7HIyyDPlfC9yhhd98=";
+    hash = "sha256-gx5D1KAPELKfb2U93lvuztv3Ea3V+PshcfshIS6uwCo=";
   };
-
-  patches = [
-    # https://github.com/laurent-laporte-pro/deprecated/pull/79
-    ./sphinx8-compat.patch
-  ];
 
   build-system = [ setuptools ];
 
@@ -47,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deprecated" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tilpner ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tilpner ];
   };
 }

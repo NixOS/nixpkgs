@@ -20,11 +20,11 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ tinyxml ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro";
     description = "Libretro wrapper for Kodi's Game API";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

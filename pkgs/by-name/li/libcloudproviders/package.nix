@@ -36,19 +36,18 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-      gtk-doc
-      docbook_xsl
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [ glib ];
 
@@ -58,11 +57,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "DBus API that allows cloud storage sync clients to expose their services";
     homepage = "https://gitlab.gnome.org/World/libcloudproviders";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 }

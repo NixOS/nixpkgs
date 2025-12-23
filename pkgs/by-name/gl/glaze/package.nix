@@ -3,27 +3,37 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  enableAvx2 ? false,
+  openssl,
+  enableSIMD ? stdenv.hostPlatform.avx2Support,
+  enableSSL ? true,
+  enableInterop ? true,
 }:
 
 stdenv.mkDerivation (final: {
   pname = "glaze";
-  version = "5.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
-    rev = "v${final.version}";
-    hash = "sha256-NjR/MsjnnLH2jVHrQXyWnyWOvsDQYbP/V9mWSII8mnc=";
+    tag = "v${final.version}";
+    hash = "sha256-gxSmCKzehnDfoexEm1V2cs91qDUzRJrtFjCsM1NHI9Y=";
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ (lib.cmakeBool "glaze_ENABLE_AVX2" enableAvx2) ];
+  buildInputs = lib.optionals enableSSL [ openssl ];
 
-  meta = with lib; {
+  # https://github.com/stephenberry/glaze/blob/main/CMakeLists.txt
+  cmakeFlags = [
+    (lib.cmakeBool "glaze_DISABLE_SIMD_WHEN_SUPPORTED" (!enableSIMD))
+    (lib.cmakeBool "glaze_ENABLE_SSL" enableSSL)
+    (lib.cmakeBool "glaze_BUILD_INTEROP" enableInterop)
+  ];
+
+  meta = {
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.mit;
   };
 })

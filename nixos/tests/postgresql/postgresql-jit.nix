@@ -29,7 +29,7 @@ let
 
       testScript = ''
         machine.start()
-        machine.wait_for_unit("postgresql.service")
+        machine.wait_for_unit("postgresql.target")
 
         with subtest("JIT is enabled"):
             machine.succeed("sudo -u postgres psql <<<'show jit;' | grep 'on'")
@@ -42,8 +42,8 @@ let
                   SELECT CONCAT('jit result = ', SUM(id)) from demo;
                 ''} | sudo -u postgres psql"
             )
-            assert "JIT:" in output
-            assert "jit result = 15" in output
+            t.assertIn("JIT:", output)
+            t.assertIn("jit result = 15", output)
 
         machine.shutdown()
       '';
@@ -51,5 +51,4 @@ let
 in
 genTests {
   inherit makeTestFor;
-  filter = n: _: lib.hasSuffix "_jit" n;
 }

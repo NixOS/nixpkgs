@@ -12,13 +12,13 @@ runCommand "documentation-highlighter"
       src = ./.;
       filter =
         path: type:
-        lib.elem (baseNameOf path) ([
+        lib.elem (baseNameOf path) [
           "highlight.pack.js"
           "LICENSE"
           "loader.js"
           "mono-blue.css"
           "README.md"
-        ]);
+        ];
     };
   }
   ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       and the Atari 5200 game console. The emulator is auto-configurable and
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.unix;
   };

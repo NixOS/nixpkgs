@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.12.1";
+  version = "7.14.3";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    hash = "sha256-3RsFtU2C3XxBddyW5liAwia9I7Fc8f2+TsziiJy6rHg=";
+    hash = "sha256-u7peGYGMFkRO77y43BDT2myfFQDv7xmhq/brVaThZSg=";
   };
 
-  vendorHash = "sha256-up77TV/A/C39LjgQ+1uQExWfMlbruLhY3H6820cRnt0=";
+  vendorHash = "sha256-32O13ILWApqQ6DoFSXkO6egpZXao3MOuK1FcG+9Muk4=";
 
   subPackages = [ "fly" ];
 
@@ -38,12 +38,12 @@ buildGoModule rec {
       --zsh <($out/bin/fly completion --shell zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to Concourse CI";
     mainProgram = "fly";
     homepage = "https://concourse-ci.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ivanbrennan
       SuperSandro2000
     ];

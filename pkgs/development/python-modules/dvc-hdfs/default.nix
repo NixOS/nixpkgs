@@ -31,18 +31,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dvc
     fsspec
-  ] ++ fsspec.optional-dependencies.arrow;
+  ]
+  ++ fsspec.optional-dependencies.arrow;
 
   # Circular dependency with dvc
   doCheck = false;
 
   pythonImportsCheck = [ "dvc_hdfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "HDFS/WebHDFS plugin for dvc";
     homepage = "https://github.com/iterative/dvc-hdfs";
     changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

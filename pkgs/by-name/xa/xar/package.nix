@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];
-  sourceRoot = "source/xar";
+  sourceRoot = "${finalAttrs.src.name}/xar";
 
   outputs = [
     "out"
@@ -83,18 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  buildInputs =
-    [
-      # NB we use OpenSSL instead of CommonCrypto on Darwin.
-      openssl
-      zlib
-      libxml2
-      bzip2
-      xz
-      e2fsprogs
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux acl
-    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs = [
+    # NB we use OpenSSL instead of CommonCrypto on Darwin.
+    openssl
+    zlib
+    libxml2
+    bzip2
+    xz
+    e2fsprogs
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux acl
+  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let
@@ -181,11 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/apple-oss-distributions/xar";
-    description = "An easily extensible archive format";
+    description = "Easily extensible archive format";
     license = lib.licenses.bsd3;
-    maintainers =
-      lib.teams.darwin.members
-      ++ lib.attrValues { inherit (lib.maintainers) copumpkin tie; };
+    maintainers = lib.attrValues { inherit (lib.maintainers) tie; };
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.unix;
     mainProgram = "xar";
   };

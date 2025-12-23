@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv -v $out/share/man/man1/coan.1.{1,gz}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C preprocessor chainsaw";
     mainProgram = "coan";
     longDescription = ''
@@ -44,7 +44,9 @@ stdenv.mkDerivation rec {
       application of this sort.
     '';
     homepage = "https://coan2.sourceforge.net/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    # The last successful Darwin Hydra build was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

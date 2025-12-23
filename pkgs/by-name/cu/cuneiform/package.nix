@@ -7,6 +7,7 @@
   testers,
 }:
 
+# Deprecated: unmaintained, no consumers in nixpkgs as of 2025-10-05, and doesn't compile with gcc 15.
 stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
   version = "1.1.0";
@@ -36,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6.2)' \
+      'cmake_minimum_required(VERSION 3.10)'
   '';
 
   # make the install path match the rpath
@@ -55,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     command = "cuneiform";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-language OCR system";
     homepage = "https://launchpad.net/cuneiform-linux";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.raskin ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
     mainProgram = "cuneiform";
   };
 })

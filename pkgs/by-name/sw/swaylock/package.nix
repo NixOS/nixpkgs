@@ -14,18 +14,18 @@
   gdk-pixbuf,
   pam,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaylock";
-  version = "1.8.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
     tag = "v${version}";
-    hash = "sha256-1+AXxw1gH0SKAxUa0JIhSzMbSmsfmBPCBY5IKaYtldg=";
+    hash = "sha256-l3fu04cw2Jin2F6UcDK0kWRJLKuwXpxuImUjoLk32Fc=";
   };
 
   strictDeps = true;
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     mainProgram = "swaylock";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
 }

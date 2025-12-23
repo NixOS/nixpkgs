@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sixhop";
     repo = "automysqlbackup";
-    rev = version;
+    tag = version;
     sha256 = "sha256-C0p1AY4yIxybQ6a/HsE3ZTHumtvQw5kKM51Ap+Se0ZI=";
   };
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script to run daily, weekly and monthly backups for your MySQL database";
     mainProgram = "automysqlbackup";
     homepage = "https://github.com/sixhop/AutoMySQLBackup";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.aanderse ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.aanderse ];
+    license = lib.licenses.gpl2Plus;
   };
 }

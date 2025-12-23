@@ -3,6 +3,7 @@
   qtbase,
   qtsvg,
   libsForQt5,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "breeze";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "resolvelib";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
-    rev = version;
-    hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
+    tag = version;
+    hash = "sha256-8ffJ1Jlb/hzKY4pfE3B95ip2e1CxUByiR0cul/ZnxxA=";
   };
 
   build-system = [ setuptools ];
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resolvelib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
-    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.isc;
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
 }

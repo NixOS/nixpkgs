@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,54 +22,68 @@ let
     known_hosts = entry.knownHosts;
   }) cfg.sharedFolders;
 
-  configFile = pkgs.writeText "config.json" (builtins.toJSON ({
-    device_name = cfg.deviceName;
-    storage_path = cfg.storagePath;
-    listening_port = cfg.listeningPort;
-    use_gui = false;
-    check_for_updates = cfg.checkForUpdates;
-    use_upnp = cfg.useUpnp;
-    download_limit = cfg.downloadLimit;
-    upload_limit = cfg.uploadLimit;
-    lan_encrypt_data = cfg.encryptLAN;
-  } // optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
-    // optionalAttrs cfg.enableWebUI {
-    webui = { listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}"; } //
-      (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; }) //
-      (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; }) //
-      (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
-  } // optionalAttrs (sharedFoldersRecord != []) {
-    shared_folders = sharedFoldersRecord;
-  }));
+  configFile = pkgs.writeText "config.json" (
+    builtins.toJSON (
+      {
+        device_name = cfg.deviceName;
+        storage_path = cfg.storagePath;
+        listening_port = cfg.listeningPort;
+        use_gui = false;
+        check_for_updates = cfg.checkForUpdates;
+        use_upnp = cfg.useUpnp;
+        download_limit = cfg.downloadLimit;
+        upload_limit = cfg.uploadLimit;
+        lan_encrypt_data = cfg.encryptLAN;
+      }
+      // optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
+      // optionalAttrs cfg.enableWebUI {
+        webui = {
+          listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}";
+        }
+        // (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; })
+        // (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; })
+        // (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
+      }
+      // optionalAttrs (sharedFoldersRecord != [ ]) {
+        shared_folders = sharedFoldersRecord;
+      }
+    )
+  );
 
   sharedFoldersSecretFiles = map (entry: {
     dir = entry.directory;
-    secretFile = if builtins.hasAttr "secret" entry then
-      toString (pkgs.writeTextFile {
-        name = "secret-file";
-        text = entry.secret;
-      })
-    else
-      entry.secretFile;
+    secretFile =
+      if builtins.hasAttr "secret" entry then
+        toString (
+          pkgs.writeTextFile {
+            name = "secret-file";
+            text = entry.secret;
+          }
+        )
+      else
+        entry.secretFile;
   }) cfg.sharedFolders;
 
   runConfigPath = "/run/rslsync/config.json";
 
   createConfig = pkgs.writeShellScriptBin "create-resilio-config" (
-    if cfg.sharedFolders != [ ] then ''
-      ${pkgs.jq}/bin/jq \
-        '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
-        ${
-          lib.concatMapStringsSep " \\\n  "
-          (entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"'')
-          sharedFoldersSecretFiles
-        } \
-        <${configFile} \
-        >${runConfigPath}
-    '' else ''
-      # no secrets, passing through config
-      cp ${configFile} ${runConfigPath};
-    ''
+    if cfg.sharedFolders != [ ] then
+      ''
+        ${pkgs.jq}/bin/jq \
+          '.shared_folders |= map(.secret = $ARGS.named[.dir])' \
+          ${
+            lib.concatMapStringsSep " \\\n  " (
+              entry: ''--arg '${entry.dir}' "$(cat '${entry.secretFile}')"''
+            ) sharedFoldersSecretFiles
+          } \
+          <${configFile} \
+          >${runConfigPath}
+      ''
+    else
+      ''
+        # no secrets, passing through config
+        cp ${configFile} ${runConfigPath};
+      ''
   );
 
 in
@@ -94,7 +113,7 @@ in
       };
 
       listeningPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
         example = 44444;
         description = ''
@@ -120,7 +139,7 @@ in
       };
 
       downloadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''
@@ -129,7 +148,7 @@ in
       };
 
       uploadLimit = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 1024;
         description = ''
@@ -147,7 +166,7 @@ in
       };
 
       httpListenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9000;
         description = ''
           HTTP port to bind on.
@@ -185,7 +204,7 @@ in
           Enable Web UI for administration. Bound to the specified
           `httpListenAddress` and
           `httpListenPort`.
-          '';
+        '';
       };
 
       storagePath = mkOption {
@@ -212,22 +231,23 @@ in
       };
 
       sharedFolders = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf (types.attrsOf types.anything);
-        example =
-          [ { secretFile     = "/run/resilio-secret";
-              directory      = "/home/user/sync_test";
-              useRelayServer = true;
-              useTracker     = true;
-              useDHT         = false;
-              searchLAN      = true;
-              useSyncTrash   = true;
-              knownHosts     = [
-                "192.168.1.2:4444"
-                "192.168.1.3:4444"
-              ];
-            }
-          ];
+        example = [
+          {
+            secretFile = "/run/resilio-secret";
+            directory = "/home/user/sync_test";
+            useRelayServer = true;
+            useTracker = true;
+            useDHT = false;
+            searchLAN = true;
+            useSyncTrash = true;
+            knownHosts = [
+              "192.168.1.2:4444"
+              "192.168.1.3:4444"
+            ];
+          }
+        ];
         description = ''
           Shared folder list. If enabled, web UI must be
           disabled. Secrets can be generated using `rslsync --generate-secret`.
@@ -252,36 +272,39 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [ { assertion = cfg.deviceName != "";
-          message   = "Device name cannot be empty.";
-        }
-        { assertion = cfg.enableWebUI -> cfg.sharedFolders == [];
-          message   = "If using shared folders, the web UI cannot be enabled.";
-        }
-        { assertion = cfg.apiKey != "" -> cfg.enableWebUI;
-          message   = "If you're using an API key, you must enable the web server.";
-        }
-      ];
+    assertions = [
+      {
+        assertion = cfg.deviceName != "";
+        message = "Device name cannot be empty.";
+      }
+      {
+        assertion = cfg.enableWebUI -> cfg.sharedFolders == [ ];
+        message = "If using shared folders, the web UI cannot be enabled.";
+      }
+      {
+        assertion = cfg.apiKey != "" -> cfg.enableWebUI;
+        message = "If you're using an API key, you must enable the web server.";
+      }
+    ];
 
     users.users.rslsync = {
-      description     = "Resilio Sync Service user";
-      home            = cfg.storagePath;
-      createHome      = true;
-      uid             = config.ids.uids.rslsync;
-      group           = "rslsync";
+      description = "Resilio Sync Service user";
+      home = cfg.storagePath;
+      createHome = true;
+      uid = config.ids.uids.rslsync;
+      group = "rslsync";
     };
 
     users.groups.rslsync.gid = config.ids.gids.rslsync;
 
-    systemd.services.resilio = with pkgs; {
+    systemd.services.resilio = {
       description = "Resilio Sync Service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        Restart   = "on-abort";
-        UMask     = "0002";
-        User      = "rslsync";
+        Restart = "on-abort";
+        UMask = "0002";
+        User = "rslsync";
         RuntimeDirectory = "rslsync";
         ExecStartPre = "${createConfig}/bin/create-resilio-config";
         ExecStart = ''

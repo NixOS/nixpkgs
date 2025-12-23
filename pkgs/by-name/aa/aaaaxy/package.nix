@@ -17,21 +17,22 @@
   advancecomp,
   makeWrapper,
   nixosTests,
+  strip-nondeterminism,
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.6.0";
+  version = "1.6.301";
 
   src = fetchFromGitHub {
     owner = "divVerent";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-WQcvvNG4EM3XJbjAu0iBIm7+51/fufj2td+QESZkOuI=";
+    repo = "aaaaxy";
+    tag = "v${version}";
+    hash = "sha256-MWJ1k7Ps9jZa+AVNrvqRGMr3Mb0jd54NxGGylDI8VXo=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-ZL6jqsAbxHKX6wVTrDNsSRlYtcSuKubpFFjEgiVWCSY=";
+  vendorHash = "sha256-2tx+Uba2x2jYiEUUiHkr2nTp0BB6BgiAdW7UgRBQqSU=";
 
   buildInputs = [
     alsa-lib
@@ -51,6 +52,7 @@ buildGoModule rec {
     zip
     advancecomp
     makeWrapper
+    strip-nondeterminism
   ];
 
   outputs = [
@@ -126,12 +128,12 @@ buildGoModule rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Luflosi ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
   };
 }

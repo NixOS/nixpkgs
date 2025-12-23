@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "buildkit-nix";
@@ -6,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
-    repo = pname;
+    repo = "buildkit-nix";
     rev = "v${version}";
     sha256 = "sha256-i8KQLLL36iP26jIj10fZLtYpS57Xni4eIQEJG4ixWy8=";
   };
@@ -15,14 +19,17 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Nix frontend for BuildKit";
     homepage = "https://github.com/reproducible-containers/buildkit-nix/";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "buildkit-nix";
   };
 }

@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://chunksync.florz.de/";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ yayayayaka ];
   };
 }

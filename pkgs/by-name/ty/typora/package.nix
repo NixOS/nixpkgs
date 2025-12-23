@@ -22,11 +22,27 @@
 
 let
   pname = "typora";
-  version = "1.10.8";
-  src = fetchurl {
-    url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
-    hash = "sha256-7auxTtdVafvM2fIpQVvEey1Q6eLVG3mLdjdZXcqSE/Q=";
-  };
+  version = "1.12.4";
+
+  src =
+    fetchurl
+      {
+        x86_64-linux = {
+          urls = [
+            "https://download.typora.io/linux/typora_${version}_amd64.deb"
+            "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
+          ];
+          hash = "sha256-P3wgzMVcyvmXM/w24kPgYGOfSaAh+SFzgeoJoasEmH8=";
+        };
+        aarch64-linux = {
+          urls = [
+            "https://download.typora.io/linux/typora_${version}_arm64.deb"
+            "https://downloads.typoraio.cn/linux/typora_${version}_arm64.deb"
+          ];
+          hash = "sha256-tQFCppOeeWJK8ovf71LPJRVteOJ8XbbNojhV4QLmVJ0=";
+        };
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   typoraBase = stdenv.mkDerivation {
     inherit pname version src;
@@ -113,7 +129,7 @@ let
 
 in
 stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version src;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -129,11 +145,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "Markdown editor, a markdown reader";
+    description = "A minimal Markdown editor and reader.";
     homepage = "https://typora.io/";
+    changelog = "https://typora.io/releases/all";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ npulidomateo ];
+    maintainers = with lib.maintainers; [
+      npulidomateo
+      chillcicada
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "typora";
   };

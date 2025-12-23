@@ -30,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-SFp9YCmneOll2pItWmg2b2jrpRqPnvV9vwz4mjjvwM4=";
   };
 
@@ -55,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Track your time without being tracked";
     mainProgram = "furtherance";
     homepage = "https://github.com/lakoliu/Furtherance";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ CaptainJawZ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ CaptainJawZ ];
   };
 })

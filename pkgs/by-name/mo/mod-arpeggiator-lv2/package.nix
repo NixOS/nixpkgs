@@ -9,7 +9,7 @@
 stdenv.mkDerivation {
 
   pname = "mod-arpeggiator-lv2";
-  version = "unstable-2021-11-09";
+  version = "0-unstable-2021-11-09";
 
   src = fetchFromGitHub {
     owner = "moddevices";
@@ -23,11 +23,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "LV2 arpeggiator";
     homepage = "https://github.com/moddevices/mod-arpeggiator-lv2";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

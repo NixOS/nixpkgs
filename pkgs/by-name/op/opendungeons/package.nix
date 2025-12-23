@@ -13,7 +13,7 @@
   boost183,
   ois,
   openal,
-  sfml,
+  sfml_2,
 
   # passthru
   unstableGitUpdater,
@@ -46,9 +46,14 @@ stdenv.mkDerivation {
   ];
 
   # source/utils/StackTraceUnix.cpp:122:2: error: #error Unsupported architecture.
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    cp source/utils/StackTrace{Stub,Unix}.cpp
-  '';
+  postPatch =
+    lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      cp source/utils/StackTrace{Stub,Unix}.cpp
+    ''
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    '';
 
   strictDeps = true;
 
@@ -63,7 +68,7 @@ stdenv.mkDerivation {
     ogre'
     ois
     openal
-    sfml
+    sfml_2
   ];
 
   cmakeFlags = [

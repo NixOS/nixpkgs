@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "draftjs_exporter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to convert Draft.js ContentState to HTML";
     homepage = "https://github.com/springload/draftjs_exporter";
     changelog = "https://github.com/springload/draftjs_exporter/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

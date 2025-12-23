@@ -32,13 +32,13 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
-    hash = "sha256-Jb+Y/Cbapw2ZCXMwXMw1hsy0vT/K8mM/A/Z1all7y+A=";
+    hash = "sha256-x3c9TKrCF3tsEFofYAXfK6DWdirEUxWWTttNqU/sJSc=";
   };
 
   buildTools = [ hpack ];
@@ -46,6 +46,7 @@ mkDerivation rec {
   prePatch = ''
     substituteInPlace package.yaml \
         --replace -Werror ""
+    hpack
   '';
 
   isLibrary = false;
@@ -82,7 +83,6 @@ mkDerivation rec {
     hspec-expectations
     quickcheck-instances
   ];
-  preConfigure = "hpack";
   homepage = "https://github.com/channable/vaultenv#readme";
   description = "Runs processes with secrets from HashiCorp Vault";
   license = lib.licenses.bsd3;

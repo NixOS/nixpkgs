@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux Kernel Stream Control Transmission Protocol Tools";
     homepage = "https://github.com/sctp/lksctp-tools/wiki";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21
     ]; # library is lgpl21
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Async MTProto proxy for Telegram";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/alexbers/mtprotoproxy";
     platforms = python.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "mtprotoproxy";
   };
 }

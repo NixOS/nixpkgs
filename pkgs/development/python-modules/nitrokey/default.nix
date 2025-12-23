@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   poetry-core,
   cryptography,
@@ -9,7 +8,7 @@
   requests,
   tlv8,
   pyserial,
-  protobuf5,
+  protobuf,
   semver,
   crcmod,
   hidapi,
@@ -17,15 +16,18 @@
 
 buildPythonPackage rec {
   pname = "nitrokey";
-  version = "0.2.4";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XDlcOfOTGgYsg5DLsy1wJd3AzuvWSvqyFSEYrDOp0Ic=";
+    hash = "sha256-ZyB5gNZc5HxohZypc/198PPBxqG9URscQfXYAWzs7n8=";
   };
 
-  disabled = pythonOlder "3.9";
+  pythonRelaxDeps = [
+    "protobuf"
+    "hidapi"
+  ];
 
   build-system = [ poetry-core ];
 
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     crcmod
     cryptography
     hidapi
-    protobuf5
+    protobuf
     pyserial
   ];
 
@@ -46,14 +48,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nitrokey" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-sdk-py";
     changelog = "https://github.com/Nitrokey/nitrokey-sdk-py/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ panicgh ];
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

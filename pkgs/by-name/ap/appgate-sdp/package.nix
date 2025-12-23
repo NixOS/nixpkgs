@@ -155,13 +155,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ymatsiuk ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ymatsiuk ];
     mainProgram = "appgate";
   };
 }

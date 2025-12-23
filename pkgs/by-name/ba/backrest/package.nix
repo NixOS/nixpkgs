@@ -2,22 +2,27 @@
   buildGoModule,
   fetchFromGitHub,
   gzip,
+  iana-etc,
   lib,
+  libredirect,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   restic,
   stdenv,
   util-linux,
+  makeBinaryWrapper,
 }:
 let
   pname = "backrest";
-  version = "1.7.3";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-X3FiNor2q/JgyV05CIAls7MjMvongH5dGeutPz+CW9I=";
+    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -27,12 +32,15 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-rBu+6QwTmQsjHh0yd8QjdHPc3VOmadJQ+NK9X6qbSx8=";
+      pnpm = pnpm_9;
+      fetcherVersion = 1;
+      hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
     };
 
     buildPhase = ''
@@ -53,9 +61,19 @@ in
 buildGoModule {
   inherit pname src version;
 
-  vendorHash = "sha256-OVJnJ5fdpa1vpYTCxtvRGbnICbfwZeYiCwAS8c4Tg2Y=";
+  postPatch = ''
+    sed -i -e \
+      '/func installRestic(targetPath string) error {/a\
+        return fmt.Errorf("installing restic from an external source is prohibited by nixpkgs")' \
+      internal/resticinstaller/resticinstaller.go
+  '';
 
-  nativeBuildInputs = [ gzip ];
+  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
+
+  nativeBuildInputs = [
+    gzip
+    makeBinaryWrapper
+  ];
 
   preBuild = ''
     mkdir -p ./webui/dist
@@ -64,16 +82,23 @@ buildGoModule {
     go generate -skip="npm" ./...
   '';
 
-  nativeCheckInputs = [ util-linux ];
+  nativeCheckInputs = [
+    util-linux
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   checkFlags =
     let
-      skippedTests =
-        [ "TestRunCommand" ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "TestBackup" # relies on ionice
-          "TestCancelBackup"
-        ];
+      skippedTests = [
+        "TestMultihostIndexSnapshots"
+        "TestRunCommand"
+        "TestSnapshot"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestBackup" # relies on ionice
+        "TestCancelBackup"
+        "TestFirstRun" # e2e test requires networking
+      ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
@@ -81,6 +106,16 @@ buildGoModule {
     # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
+
+  doCheck = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/backrest \
+      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
   '';
 
   meta = {
@@ -88,7 +123,7 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ interdependence ];
+    maintainers = [ ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

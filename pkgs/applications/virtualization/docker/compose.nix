@@ -1,24 +1,31 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.34.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
-    rev = "v${version}";
-    hash = "sha256-AoYm2gRqNgXTc7ksQeSPVo+gTkxaFwhfLhue3Z8a4Wo=";
+    tag = "v${version}";
+    hash = "sha256-7g9l9SBxPY3jMS3DWZNI/fhOZN1oZo1qkUfhMfbzAaM=";
   };
 
-  postPatch = ''
-    # entirely separate package that breaks the build
-    rm -rf e2e/
+  vendorHash = "sha256-EFbEd1UwrBnH6pSh+MvupYdie8SnKr8y6K9lQflBSlk=";
+
+  modPostBuild = ''
+    patch -d vendor/github.com/docker/cli/ -p1 < ${./cli-system-plugin-dir-from-env.patch}
   '';
 
-  vendorHash = "sha256-ISX+PpjapST9d/rFP0SPlFYyPb5NcwwQT6mhb1H1qEE=";
-
-  ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
+  ldflags = [
+    "-X github.com/docker/compose/v2/internal.Version=${version}"
+    "-s"
+    "-w"
+  ];
 
   doCheck = false;
   installPhase = ''
@@ -30,11 +37,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

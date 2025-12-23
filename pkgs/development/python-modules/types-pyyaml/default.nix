@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-pyyaml";
-  version = "6.0.12.20241230";
+  version = "6.0.12.20250516";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pyyaml";
     inherit version;
-    hash = "sha256-fwdiLb00u5yLJk/oYKF+DvytANULXyfpOYSQnZNjSYw=";
+    hash = "sha256-nyGnAhb8D6GyFqgXbbX54K9us10vKTKsuHaJ0Dpb9ro=";
   };
 
   build-system = [ setuptools ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaml-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for PyYAML";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dnr ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dnr ];
   };
 }

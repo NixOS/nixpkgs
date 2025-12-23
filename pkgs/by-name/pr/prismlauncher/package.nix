@@ -55,20 +55,20 @@ let
 in
 
 symlinkJoin {
-  name = "prismlauncher-${prismlauncher'.version}";
+  pname = "prismlauncher";
+  inherit (prismlauncher') version;
 
   paths = [ prismlauncher' ];
 
   nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      kdePackages.qtbase
-      kdePackages.qtsvg
-    ]
-    ++ lib.optional (
-      lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
-    ) kdePackages.qtwayland;
+  buildInputs = [
+    kdePackages.qtbase
+    kdePackages.qtsvg
+  ]
+  ++ lib.optional (
+    lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
+  ) kdePackages.qtwayland;
 
   postBuild = ''
     wrapQtAppsHook
@@ -76,41 +76,41 @@ symlinkJoin {
 
   qtWrapperArgs =
     let
-      runtimeLibs =
-        [
-          (lib.getLib stdenv.cc.cc)
-          ## native versions
-          glfw3-minecraft
-          openal
+      runtimeLibs = [
+        (lib.getLib stdenv.cc.cc)
+        ## native versions
+        glfw3-minecraft
+        openal
 
-          ## openal
-          alsa-lib
-          libjack2
-          libpulseaudio
-          pipewire
+        ## openal
+        alsa-lib
+        libjack2
+        libpulseaudio
+        pipewire
 
-          ## glfw
-          libGL
-          libX11
-          libXcursor
-          libXext
-          libXrandr
-          libXxf86vm
+        ## glfw
+        libGL
+        libX11
+        libXcursor
+        libXext
+        libXrandr
+        libXxf86vm
 
-          udev # oshi
+        udev # oshi
 
-          vulkan-loader # VulkanMod's lwjgl
-        ]
-        ++ lib.optional textToSpeechSupport flite
-        ++ lib.optional gamemodeSupport gamemode.lib
-        ++ lib.optional controllerSupport libusb1
-        ++ additionalLibs;
+        vulkan-loader # VulkanMod's lwjgl
+      ]
+      ++ lib.optional textToSpeechSupport flite
+      ++ lib.optional gamemodeSupport gamemode.lib
+      ++ lib.optional controllerSupport libusb1
+      ++ additionalLibs;
 
       runtimePrograms = [
         mesa-demos
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      ] ++ additionalPrograms;
+      ]
+      ++ additionalPrograms;
 
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]

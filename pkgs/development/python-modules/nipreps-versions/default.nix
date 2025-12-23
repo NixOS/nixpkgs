@@ -35,11 +35,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "nipreps_versions" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools_scm plugin for nipreps version schemes";
     homepage = "https://github.com/nipreps/version-schemes";
     changelog = "https://github.com/nipreps/version-schemes/blob/${src.rev}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

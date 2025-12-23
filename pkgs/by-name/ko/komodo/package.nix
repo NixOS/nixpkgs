@@ -3,28 +3,32 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "komodo";
-  version = "1.17.0-dev-7";
+  version = "1.19.5";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
     tag = "v${version}";
-    hash = "sha256-OcxSXNPyHbE8aUqs0REQrt7bZXHuuoNmf+LnPCDwe7w=";
+    hash = "sha256-dLBgdcrIp5QM2TVIa86qX7m1c5n+qOIQJtqJPGvIZ+0=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-j4C8fQ4+AhZS+lEHPx+X8dWyygFdnCPEAhuW/67hkSw=";
+  cargoHash = "sha256-jf/Jp28g3inGn5jQp3cACdhl//tbXTMc1vP1K3g/CyQ=";
 
   # disable for check. document generation is fail
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) komodo-periphery;
+    };
+  };
 
   meta = {
     description = "Tool to build and deploy software on many servers";

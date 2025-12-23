@@ -1,8 +1,8 @@
-diff --git a/bottles/frontend/windows/main_window.py b/bottles/frontend/windows/main_window.py
-index 79bf0d72..e3a15cb5 100644
---- a/bottles/frontend/windows/main_window.py
-+++ b/bottles/frontend/windows/main_window.py
-@@ -104,29 +104,29 @@ class MainWindow(Adw.ApplicationWindow):
+diff --git a/bottles/frontend/windows/window.py b/bottles/frontend/windows/window.py
+index 802b08b5..e3de0536 100644
+--- a/bottles/frontend/windows/window.py
++++ b/bottles/frontend/windows/window.py
+@@ -102,29 +102,30 @@ class BottlesWindow(Adw.ApplicationWindow):
  
              def response(dialog, response, *args):
                  if response == "close":
@@ -15,15 +15,15 @@ index 79bf0d72..e3a15cb5 100644
              )
 -            download_url = "usebottles.com/download"
 +            bugtracker_url = "github.com/NixOS/nixpkgs/issues"
++
  
              error_dialog = Adw.AlertDialog.new(
                  _("Unsupported Environment"),
 -                f"{body} <a href='https://{download_url}' title='https://{download_url}'>{download_url}.</a>",
-+                f"{body} <a href='https://{bugtracker_url}' title='https://{bugtracker_url}'>{bugtracker_url}.</a>",
++                f"{body} <a href='https://{bugtracker_url}' title='https://{bugtracker_url}'>{bugtracker_url}.</a> \nThis warning can be disabled by overriding the package: `(pkgs.bottles.override {{ removeWarningPopup = true; }})`",
              )
  
--            error_dialog.add_response("close", _("Close"))
-+            error_dialog.add_response("close", _("Understood"))
+             error_dialog.add_response("close", _("Close"))
              error_dialog.set_body_use_markup(True)
              error_dialog.connect("response", response)
              error_dialog.present(self)

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-models";
-  version = "0.3.1";
+  version = "0.4.1";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "scim2_models";
-    hash = "sha256-oV6OGgsIHEvekc39TqS2egQ1tUz8BL2dTADNWNwdrxE=";
+    hash = "sha256-SRUPO67otfZsrdjGQyTul5vIrYRU2WFaL0fvAtVd/1c=";
   };
 
   build-system = [ hatchling ];
@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scim2_models" ];
 
-  meta = with lib; {
+  meta = {
     description = "SCIM2 models serialization and validation with pydantic";
     homepage = "https://github.com/python-scim/scim2-models";
     changelog = "https://github.com/python-scim/scim2-models/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

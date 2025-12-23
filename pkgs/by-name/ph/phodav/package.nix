@@ -8,6 +8,7 @@
   meson,
   ninja,
   gnome,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lintl";
 
+  doInstallCheck = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -56,11 +60,11 @@ stdenv.mkDerivation rec {
     install -vDt $out/lib/udev/rules.d/ data/*-spice-webdavd.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://gitlab.gnome.org/GNOME/phodav";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

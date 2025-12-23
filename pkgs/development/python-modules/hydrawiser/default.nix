@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ptcryan";
-    repo = pname;
+    repo = "hydrawiser";
     rev = "v${version}";
     sha256 = "161hazlpvd71xcl2ja86560wm5lnrjv210ki3ji37l6c6gwmhjdj";
   };
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hydrawiser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Hydrawise API";
     homepage = "https://github.com/ptcryan/hydrawiser";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

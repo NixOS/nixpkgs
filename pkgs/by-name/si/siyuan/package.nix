@@ -2,21 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
 }:
 
 let
-  pnpm = pnpm_9;
-
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
@@ -35,20 +36,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.25";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZLhLuRj5gdqca9Sbty7BEUBB/+8SgPYhnhoSOR5j4YE=";
+    hash = "sha256-INwbp6gGqrmOtrM5d/8iEv1nlTUDSuo9AVN0EwNhW9Y=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-pW52K3nvIdhpeBj2CtJwwsihcV10+FEf2mgAX61s5nM=";
+    vendorHash = "sha256-kt5fnkF/bxpeY9d86zKr9VlShvLy1gtaICfA0PGVGKI=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -75,21 +76,31 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [ "fts5" ];
   };
 
+  # this should contain a 'packages' key, but it doesn't...
+  # we can remove it because it's not needed to build
+  postPatch = ''
+    rm pnpm-workspace.yaml
+  '';
+
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
+      postPatch
       ;
-    hash = "sha256-01UyupFLr82w0LmainA/7u6195Li/QoTzz/tVxXSVQE=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-bteZZ9sgYLLvOPSVbqm9E0Hb5x1UdWMu8DtpQHGjbPU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -130,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2025-03-07";
+  version = "0-unstable-2025-03-20";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "744bd48eccb536d6e9c782f635130dbf322e8a32";
-    hash = "sha256-pjFqq5KeG1ptTEo8ENiqC/QkDPqQG4VPR2GDvcBPwH8=";
+    rev = "8c6a3ffc09265bd44ed89b75c400ef97959d1aff";
+    hash = "sha256-TQ8WaGvMcvyeZC4B9gSjJ2k5NOxpTaV4n7Qi36aA78Q=";
   };
 
   postPatch = ''
@@ -69,11 +69,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "BPF-based auto-tuning of Linux system parameters";
     mainProgram = "bpftune";
     homepage = "https://github.com/oracle-samples/bpftune";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

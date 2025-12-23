@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
-    repo = pname;
+    repo = "jiq";
     rev = "v${version}";
     sha256 = "sha256-txhttYngN+dofA3Yp3gZUZPRRZWGug9ysXq1Q0RP7ig=";
   };
@@ -28,10 +28,10 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ jq ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fiatjaf/jiq";
-    license = licenses.mit;
-    description = "jid on jq - interactive JSON query tool using jq expressions";
+    license = lib.licenses.mit;
+    description = "Interactive JSON query tool using jq expressions";
     mainProgram = "jiq";
     maintainers = [ ];
   };

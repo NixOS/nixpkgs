@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, nix
-, nix-prefetch-git
-, installShellFiles
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/crate2nix";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Du6RAe4Ax3KK90h6pQEtF75Wdniz+IqF2/TXHA9Ytbw=";
 
   nativeBuildInputs = [
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nix build file generator for Rust crates";
     mainProgram = "crate2nix";
     longDescription = ''
@@ -59,8 +58,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/nix-community/crate2nix";
     changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kolloch
       cole-h
       kranzes

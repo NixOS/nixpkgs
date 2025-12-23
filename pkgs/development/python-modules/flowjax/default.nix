@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "flowjax";
-  version = "17.1.1";
+  version = "17.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielward27";
     repo = "flowjax";
     tag = "v${version}";
-    hash = "sha256-CLtkO7Lr+FpC/RHnqDSmevpJ3/3EfuILrQSbcdNTqsI=";
+    hash = "sha256-gaHlXm1M41njtgQt+f77Wd7q+PQ+1ipZiLtv59z1ma4=";
   };
 
   build-system = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = {
     description = "Distributions, bijections and normalizing flows using Equinox and JAX";
     homepage = "https://github.com/danielward27/flowjax";
-    changelog = "https://github.com/danielward27/flowjax/releases/tag/v${version}";
+    changelog = "https://github.com/danielward27/flowjax/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

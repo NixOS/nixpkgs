@@ -1,18 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ab-av1";
-  version = "0.9.3";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "alexheretic";
     repo = "ab-av1";
-    rev = "v${version}";
-    hash = "sha256-rj02Opkwi4M249Ya4uBl4u1l8Mx+FBcRcxDgD6ng9kg=";
+    tag = "v${version}";
+    hash = "sha256-HSWu3gHpgCUkmr63mAi2Hd67Rap5vDZ/oHRh6O7y6uA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Vi38eNn+SnhQx7Gp1T2RPIBeu3bUAZ74dr0mMG5Mha0=";
+  cargoHash = "sha256-jzEwblYsA7tgoJE6HhdtdDyOS50DyL87/J/T+cNKB3M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,11 +28,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/ab-av1 print-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AV1 re-encoding using ffmpeg, svt-av1 & vmaf";
     homepage = "https://github.com/alexheretic/ab-av1";
     changelog = "https://github.com/alexheretic/ab-av1/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ab-av1";
   };

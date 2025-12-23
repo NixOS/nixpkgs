@@ -62,6 +62,16 @@ buildPythonPackage rec {
 
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
+
+    # Can be removed with the next SDL3 bump.
+    ./skip-rle-tests.patch
+
+    # https://github.com/pygame/pygame/pull/4497
+    ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
+    ./0002-Don-t-assume-that-touch-devices-support-get_num_fing.patch
+
+    # https://github.com/pygame/pygame/pull/4651
+    ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
   ];
 
   postPatch = ''
@@ -87,7 +97,7 @@ buildPythonPackage rec {
     libX11
     portmidi
     SDL2
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
   ];
@@ -106,6 +116,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
 
     ${python.interpreter} -m pygame.tests -v \
       --exclude opengl,timing \

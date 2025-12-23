@@ -36,7 +36,7 @@ buildGoModule rec {
     version = src.rev;
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       A tool to watch and follow Kubernetes resources in CI/CD deployment
       pipelines
@@ -44,7 +44,7 @@ buildGoModule rec {
     mainProgram = "kubedog";
     homepage = "https://github.com/werf/kubedog";
     changelog = "https://github.com/werf/kubedog/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ azahi ];
   };
 }

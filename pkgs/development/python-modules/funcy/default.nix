@@ -20,11 +20,11 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Collection of fancy functional tools focused on practicality";
     homepage = "https://funcy.readthedocs.org/";
     changelog = "https://github.com/Suor/funcy/blob/2.0/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

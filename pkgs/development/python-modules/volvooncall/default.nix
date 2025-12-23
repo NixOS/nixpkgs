@@ -9,7 +9,7 @@
   fetchpatch,
   geopy,
   mock,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -53,18 +53,19 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
-  ] ++ optional-dependencies.mqtt;
+  ]
+  ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
     changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     mainProgram = "voc";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -52,12 +52,12 @@ buildPythonPackage rec {
     "enocean.utils"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kipe/enocean/releases/tag/${version}";
     description = "EnOcean serial protocol implementation";
     mainProgram = "enocean_example.py";
     homepage = "https://github.com/kipe/enocean";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

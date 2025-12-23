@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "evohome-async";
-  version = "1.0.4";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = version;
-    hash = "sha256-nQEnhm70BseurCX3SR6jZvgq2TRI1DtmY6ygyalsZKY=";
+    hash = "sha256-8oeW6NWqYcZF+s2kRfeoVAp8JBbuDn+NQ0RU6nxVTAc=";
   };
 
   build-system = [ hatchling ];
@@ -55,16 +55,17 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     syrupy
-  ] ++ optional-dependencies.cli;
+  ]
+  ++ optional-dependencies.cli;
 
   pythonImportsCheck = [ "evohomeasync2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for connecting to Honeywell's TCC RESTful API";
     homepage = "https://github.com/zxdavb/evohome-async";
     changelog = "https://github.com/zxdavb/evohome-async/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evo-client";
   };
 }

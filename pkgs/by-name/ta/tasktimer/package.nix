@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "caarlos0";
-    repo = pname;
+    repo = "tasktimer";
     rev = "v${version}";
     sha256 = "sha256-CAqOsxmJxDgQRMx8cN23TajHd6BNiCFraFvhf5kKnzc=";
   };
@@ -21,11 +21,11 @@ buildGoModule rec {
     mv $out/bin/tasktimer $out/bin/tt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Task Timer (tt) is a dead simple TUI task timer";
     homepage = "https://github.com/caarlos0/tasktimer";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       abbe
       caarlos0
     ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.6.7";
+  version = "0.6.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PennyDreadfulMTG";
     repo = "pystache";
     tag = "v${version}";
-    hash = "sha256-kfR3ZXbrCDrIVOh4bcOTXqg9D56YQrIyV0NthStga5U=";
+    hash = "sha256-UVmDpg7wCPnY+1BZqujIYdgt/AT4gZ+RTYdD+ORQhzE=";
   };
 
   build-system = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Framework-agnostic, logic-free templating system inspired by ctemplate and et";
-    homepage = "https://github.com/defunkt/pystache";
+    homepage = "https://github.com/PennyDreadfulMTG/pystache";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nickcao ];
   };

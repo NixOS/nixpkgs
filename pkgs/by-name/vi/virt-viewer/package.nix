@@ -62,33 +62,32 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
+  buildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    bash-completion
+    glib
+    gsettings-desktop-schemas
+    gtk-vnc
+    gtk3
+    libvirt
+    libvirt-glib
+    libxml2
+    vte
+  ]
+  ++ lib.optionals ovirtSupport [
+    libgovirt
+  ]
+  ++ lib.optionals spiceSupport (
     [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      bash-completion
-      glib
-      gsettings-desktop-schemas
-      gtk-vnc
-      gtk3
-      libvirt
-      libvirt-glib
-      libxml2
-      vte
+      gdbm
+      spice-gtk
+      spice-protocol
     ]
-    ++ lib.optionals ovirtSupport [
-      libgovirt
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
     ]
-    ++ lib.optionals spiceSupport (
-      [
-        gdbm
-        spice-gtk
-        spice-protocol
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libcap
-      ]
-    );
+  );
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = lib.optional spiceSupport spice-gtk;
@@ -103,14 +102,16 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://virt-manager.org/";
     description = "Viewer for remote virtual machines";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       atemu
     ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl2;
+    mainProgram = "virt-viewer";
   };
   passthru = {
     updateInfo = {

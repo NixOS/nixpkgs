@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "XTuner";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1i5chfnf3hcivwzni9z6cn9pb68qmwsx8bf4z7d29a5vig8kbhrv";
     fetchSubmodules = true;
   };
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brummer10/XTuner";
     description = "Tuner for Jack Audio Connection Kit";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "xtuner";
   };
 }

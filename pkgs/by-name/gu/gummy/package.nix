@@ -15,6 +15,7 @@
   fmt,
   nlohmann_json,
   spdlog,
+  udevCheckHook,
   nix-update-script,
 }:
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -68,17 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
 
+  doInstallCheck = true;
+
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/fusco/gummy";
     description = "Brightness and temperature manager for X11";
     longDescription = ''
       CLI screen manager for X11 that allows automatic and manual brightness/temperature adjustments,
       via backlight (currently only for embedded displays) and gamma. Multiple monitors are supported.
     '';
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 })

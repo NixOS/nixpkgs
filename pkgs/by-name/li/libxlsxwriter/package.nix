@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
     tag = "v${version}";
-    hash = "sha256-PlKUDJEYQ2LThdq8F3ylFTgusZ9wTaL9pdAznAXpwI0=";
+    hash = "sha256-1FUJLsnx0ZNTT66sK7/gbZVo6Se85nbYvtEyoxeOHTI=";
   };
 
   buildInputs = [
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  meta = with lib; {
+  meta = {
     description = "C library for creating Excel XLSX files";
     homepage = "https://libxlsxwriter.github.io/";
     changelog = "https://github.com/jmcnamara/libxlsxwriter/blob/${src.rev}/Changes.txt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
   };
 }

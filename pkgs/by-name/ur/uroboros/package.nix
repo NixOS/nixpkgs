@@ -11,17 +11,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "evilsocket";
-    repo = pname;
+    repo = "uroboros";
     inherit rev;
     hash = "sha256-JB4KMjD0ldJkKWKkArA/vfIdeX/TwxWPPOteob5gK6g=";
   };
 
   vendorHash = "sha256-FJTmnkPMXolNijRc4ZqCsi/ykReTE2WOC5LP/wHog9Y=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for monitoring and profiling single processes";
     homepage = "https://github.com/evilsocket/uroboros";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

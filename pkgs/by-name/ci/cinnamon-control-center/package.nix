@@ -12,19 +12,15 @@
   libxml2,
   colord,
   polkit,
-  libxkbfile,
   cinnamon-menus,
-  libgnomekbd,
-  libxklavier,
   networkmanager,
   libgudev,
   libwacom,
   wrapGAppsHook3,
-  glibc,
   libnma,
+  libXi,
   modemmanager,
-  xorg,
-  gdk-pixbuf,
+  xorgproto,
   meson,
   ninja,
   cinnamon-translations,
@@ -34,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "6.4.1";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-control-center";
-    rev = version;
-    hash = "sha256-1Z+kXvBmENNXIqdZgPDx7ZSwJMFAm2oMih6eFFAsA/A=";
+    tag = version;
+    hash = "sha256-TjTwtTFbiC4A4qe9TIyZJtGrSymujhEgM8SpZQ92RZA=";
   };
 
   buildInputs = [
@@ -50,19 +46,15 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     libnotify
     cinnamon-menus
-    libxml2
     polkit
-    libgnomekbd
-    libxklavier
     colord
     libgudev
     libwacom
     networkmanager
     libnma
+    libXi
     modemmanager
-    xorg.libXxf86misc
-    xorg.libxkbfile
-    gdk-pixbuf
+    xorgproto
     upower
   ];
 
@@ -76,6 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    libxml2 # xmllint
     pkg-config
     meson
     ninja
@@ -84,12 +77,12 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "Collection of configuration plugins used in cinnamon-settings";
     mainProgram = "cinnamon-control-center";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

@@ -11,28 +11,16 @@ mkCoqDerivation {
   owner = "fblanqui";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.version [
-      {
-        case = range "8.14" "9.0";
-        out = "1.8.5";
-      }
-      {
-        case = range "8.12" "8.16";
-        out = "1.8.2";
-      }
-      {
-        case = range "8.10" "8.11";
-        out = "1.7.0";
-      }
-      {
-        case = range "8.8" "8.9";
-        out = "1.6.0";
-      }
-      {
-        case = range "8.6" "8.7";
-        out = "1.4.0";
-      }
+      (case (range "8.14" "9.1") "1.8.5")
+      (case (range "8.12" "8.16") "1.8.2")
+      (case (range "8.10" "8.11") "1.7.0")
+      (case (range "8.8" "8.9") "1.6.0")
+      (case (range "8.6" "8.7") "1.4.0")
     ] null;
 
   release."1.8.5".sha256 = "sha256-zKAyj6rKAasDF+iKExmpVHMe2WwgAwv2j1mmiVAl7ys=";
@@ -47,7 +35,7 @@ mkCoqDerivation {
   release."1.4.0".rev = "168c6b86c7d3f87ee51791f795a8828b1521589a";
   release."1.4.0".sha256 = "1d2whsgs3kcg5wgampd6yaqagcpmzhgb6a0hp6qn4lbimck5dfmm";
 
-  mlPlugin = true;  /* uses coq-bignums.plugin */
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [ bignums ];
   enableParallelBuilding = false;

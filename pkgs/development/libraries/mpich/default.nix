@@ -9,7 +9,6 @@
   openssh,
   hwloc,
   python3,
-  darwin,
   # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
   # these libraries currently build so this argument is ignored on Darwin.
   ch4backend,
@@ -33,11 +32,11 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation rec {
   pname = "mpich";
-  version = "4.3.0";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    hash = "sha256-XgQTKYStg8q5zFP3YHLSte9abSSwqf+QR6j/lhIbzGM=";
+    hash = "sha256-R9d0WHpxVqU3UiGMgRyFLnCsRNucUC3D85m0y4F+OBg=";
   };
 
   patches = [
@@ -54,18 +53,17 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  configureFlags =
-    [
-      "--enable-shared"
-      "--with-pm=${withPmStr}"
-    ]
-    ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-      "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-      "FCFLAGS=-fallow-argument-mismatch"
-    ]
-    ++ lib.optionals pmixSupport [
-      "--with-pmix"
-    ];
+  configureFlags = [
+    "--enable-shared"
+    "--with-pm=${withPmStr}"
+  ]
+  ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
+    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
+    "FCFLAGS=-fallow-argument-mismatch"
+  ]
+  ++ lib.optionals pmixSupport [
+    "--with-pmix"
+  ];
 
   enableParallelBuilding = true;
 
@@ -75,15 +73,13 @@ stdenv.mkDerivation rec {
     autoconf
     automake
   ];
-  buildInputs =
-    [
-      perl
-      openssh
-      hwloc
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
-    ++ lib.optional pmixSupport pmix
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation;
+  buildInputs = [
+    perl
+    openssh
+    hwloc
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
+  ++ lib.optional pmixSupport pmix;
 
   # test_double_serializer.test fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

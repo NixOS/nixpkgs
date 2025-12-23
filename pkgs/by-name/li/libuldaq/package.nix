@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   libusb1,
-  ...
 }:
 
 stdenv.mkDerivation rec {
@@ -27,15 +26,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     description = "Library to talk to uldaq devices";
     longDescription = ''
       Library used to communicate with USB data acquisition (DAQ)
       devices from Measurement Computing
     '';
     homepage = "https://github.com/mccdaq/uldaq";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.simonkampe ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.simonkampe ];
   };
 }

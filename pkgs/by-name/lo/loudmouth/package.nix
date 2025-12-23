@@ -7,7 +7,6 @@
   glib,
   pkg-config,
   zlib,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,18 +29,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    lib.optionals
-      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11")
-      [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.Foundation
-      ];
-
-  meta = with lib; {
+  meta = {
     description = "Lightweight C library for the Jabber protocol";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     downloadPage = "http://mcabber.com/files/loudmouth/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 }

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "crudini";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "crudini";
-    rev = version;
-    hash = "sha256-BU4u7uBsNyDOwWUjOIlBWcf1AeUXXZ+johAe+bjws1U=";
+    tag = version;
+    hash = "sha256-XW9pdP+aie6v9h35gLYM0wVrcsh+dcEB7EueATOV4w4=";
   };
 
   postPatch = ''
@@ -50,11 +50,11 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for manipulating ini files";
     homepage = "https://www.pixelbeat.org/programs/crudini/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "crudini";
   };
 }

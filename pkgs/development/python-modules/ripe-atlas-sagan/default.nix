@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
-    repo = pname;
+    repo = "ripe-atlas-sagan";
     rev = "v${version}";
     hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
   };
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   disabledTests = [
     # This test fail for unknown reason, I suspect it to be flaky.
@@ -45,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ripe.atlas.sagan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parsing library for RIPE Atlas measurements results";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-sagan";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

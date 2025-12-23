@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-autosuggestions-abbreviations-strategy";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "olets";
     repo = "zsh-autosuggestions-abbreviations-strategy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j2Xx8EWcSRntY7gqK9X1/rn3siZgNdL7ht4CyfAA+yY=";
+    hash = "sha256-eW3k183Y3+FERw5VHKf/T0huJl9hfMY+6Wu/WifI7gw=";
   };
 
   installPhase = ''

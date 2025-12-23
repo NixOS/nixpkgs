@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetrio-desktop";
-  version = "9";
+  version = "10";
 
   src = fetchzip {
     url = "https://tetr.io/about/desktop/builds/${finalAttrs.version}/TETR.IO%20Setup.deb";
-    hash = "sha256-TgegFy+sHjv0ILaiLO1ghyUhKXoj8v43ACJOJhKyI0c=";
+    hash = "sha256-2FtFCajNEj7O8DGangDecs2yeKbufYLx1aZb3ShnYvw=";
     nativeBuildInputs = [ dpkg ];
   };
 
@@ -61,10 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       Play multiplayer games against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
-    maintainers = with lib.maintainers; [
-      wackbyte
-      huantian
-    ];
+    maintainers = with lib.maintainers; [ huantian ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };

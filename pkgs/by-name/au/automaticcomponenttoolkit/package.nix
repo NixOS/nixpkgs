@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   go,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "1r0sbw82cf9dbcj3vgnbd4sc1lklzvijic2z5wgkvs21azcm0yzh";
   };
 
-  nativeBuildInputs = [ go ];
+  nativeBuildInputs = [
+    go
+    writableTmpDirAsHomeHook
+  ];
 
   buildPhase = ''
     cd Source
-    export HOME=/tmp
     go build -o act *.go
   '';
 
@@ -28,12 +31,12 @@ stdenv.mkDerivation rec {
     install -Dm0755 act $out/bin/act
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit to automatically generate software components: abstract API, implementation stubs and language bindings";
     mainProgram = "act";
     homepage = "https://github.com/Autodesk/AutomaticComponentToolkit";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

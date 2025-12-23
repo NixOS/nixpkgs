@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Easily capture stdout/stderr of the current process and subprocesses";
     homepage = "https://github.com/xolox/python-capturer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   orjson,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   schema,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
     tag = version;
-    hash = "sha256-zfqQLABn//qktrFSCm42WClRYAe3yWZoxnWjI9n1jWQ=";
+    hash = "sha256-o4l4jkh9ZNqc3Jovd10KUQLDBLn0sPWdgScq5Q2qd14=";
   };
 
   build-system = [ setuptools ];
@@ -42,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "policy_sentry" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for generating IAM least privilege policies";
     homepage = "https://github.com/salesforce/policy_sentry";
     changelog = "https://github.com/salesforce/policy_sentry/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "policy_sentry";
   };
 }

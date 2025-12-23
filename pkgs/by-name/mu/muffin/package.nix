@@ -43,7 +43,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.4.1";
+  version = "6.6.0";
 
   outputs = [
     "out"
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "muffin";
     rev = version;
-    hash = "sha256-cGC1yGft3uEqefm2DvZrMaROoZKYd6LNY0IJ+58f6vs=";
+    hash = "sha256-yGbnqIKw+Ouk1onr2H+KckO/YQob1N1beLmfqQhOheU=";
   };
 
   patches = [
@@ -111,7 +111,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     # Based on Mint's debian/rules.
-    "-Degl_device=true"
     "-Dwayland_eglstream=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
   ];
@@ -120,12 +119,12 @@ stdenv.mkDerivation rec {
     patchShebangs src/backends/native/gen-default-modes.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/muffin";
     description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     mainProgram = "muffin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

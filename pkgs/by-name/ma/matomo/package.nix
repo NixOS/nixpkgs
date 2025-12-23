@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matomo";
-  version = "5.2.2";
+  version = "5.5.2";
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZEwz/KKZZwTFsKfwR0iKZM1ta4CUXJsWgBXika+pjb0=";
+    hash = "sha256-1cUIKSrV5IgCdi3AvIxliJY0kWdaT+S+w8pEi2KoDjE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -95,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [
         "--url"
         "https://github.com/matomo-org/matomo"
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -109,15 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://matomo.org/";
     changelog = "https://github.com/matomo-org/matomo/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.all;
-    maintainers =
-      with lib.maintainers;
-      [
-        florianjacob
-        sebbel
-        twey
-        boozedog
-        niklaskorz
-      ]
-      ++ lib.teams.flyingcircus.members;
+    maintainers = with lib.maintainers; [
+      florianjacob
+      sebbel
+      twey
+      boozedog
+      niklaskorz
+    ];
+    teams = [ lib.teams.flyingcircus ];
   };
 })

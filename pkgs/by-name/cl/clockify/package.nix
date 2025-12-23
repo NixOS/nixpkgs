@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "clockify";
-  version = "2.2.9.2224";
+  version = "2.3.2.2633";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20241218115559/https://clockify.me/downloads/Clockify_Setup.AppImage";
-    hash = "sha256-/L70C+sTFJPzXkt1NSak2wVTRtFy2zInIlmLPG5LqeY=";
+    url = "https://web.archive.org/web/20250419021523/https://clockify.me/downloads/Clockify_Setup.AppImage";
+    hash = "sha256-cQP1QkF2uWGsCjYjVdxPFLL8atAjT6rPQbPqeNX0QqQ=";
   };
 
   extraInstallCommands =

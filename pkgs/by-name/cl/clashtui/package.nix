@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/clashtui";
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-8oDnumyn0Ry1AIWNLO2+1HSPsxkVLRLItgEVEXqSRFI=";
 
   cargoBuildFlags = [ "--all-features" ];
@@ -47,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clashtui";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

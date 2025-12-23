@@ -45,7 +45,8 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
@@ -62,11 +63,11 @@ buildPythonPackage rec {
   # to start a daemon on the builder.
   # pythonImportsCheck = [ "fipy" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ctcms.nist.gov/fipy/";
     description = "Finite Volume PDE Solver Using Python";
     changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
-    license = licenses.free;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

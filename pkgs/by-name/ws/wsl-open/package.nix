@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wsl-open";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "4U6U57";
     repo = "wsl-open";
-    rev = "v${version}";
-    sha256 = "sha256-amqkDXdgIqGjRZMkltwco0UAI++G0RY/MxLXwtlxogE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-amqkDXdgIqGjRZMkltwco0UAI++G0RY/MxLXwtlxogE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     installManPage wsl-open.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open files with xdg-open from Windows Subsystem for Linux (WSL) in Windows applications";
     homepage = "https://gitlab.com/4U6U57/wsl-open";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "wsl-open";
   };
-}
+})

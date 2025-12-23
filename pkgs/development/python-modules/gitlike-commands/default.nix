@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitlike_commands" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy python module for creating git-style subcommand handling";
     homepage = "https://github.com/unixorn/gitlike-commands";
     changelog = "https://github.com/unixorn/gitlike-commands/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

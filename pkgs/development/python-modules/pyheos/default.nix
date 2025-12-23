@@ -5,19 +5,20 @@
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
+  stdenv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pyheos";
-  version = "1.0.3";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
     tag = version;
-    hash = "sha256-1Jv1889RSjuediG5RGRcNdr1OmlOhpzqodgjnNmE2RY=";
+    hash = "sha256-CqUeDIHRD+stIVr9nMqfKUExVHPq8gbIzsZg8U36E7I=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +32,13 @@ buildPythonPackage rec {
   disabledTests = [
     # accesses network
     "test_connect_timeout"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: could not bind on any address out of [('127.0.0.2', 1255)]
+    "test_failover"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyheos" ];
 

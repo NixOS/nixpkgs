@@ -2,15 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   # runtime dependencies
-  layoutparser,
-  python-multipart,
-  huggingface-hub,
-  opencv-python,
-  onnxruntime,
-  transformers,
+  accelerate,
   detectron2,
+  huggingface-hub,
+  layoutparser,
+  onnx,
+  onnxruntime,
+  opencv-python,
   paddleocr,
+  python-multipart,
+  rapidfuzz,
+  transformers,
   # check inputs
   pytestCheckHook,
   coverage,
@@ -23,30 +27,34 @@
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
-  version = "0.8.9";
-  format = "setuptools";
+  version = "1.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     tag = version;
-    hash = "sha256-4wfZFu0551jbpeSYq6RHrDpThm+B2tygVwLlggPkbog=";
+    hash = "sha256-/vWyywsnNzkwcl2L5BcS6qqaCk2LPxaNlCPeMnDIHPU=";
   };
 
-  propagatedBuildInputs =
-    [
-      layoutparser
-      python-multipart
-      huggingface-hub
-      opencv-python
-      onnxruntime
-      transformers
-      # detectron2 # fails to build
-      # paddleocr # 3.12 not yet supported
-      # yolox
-    ]
-    ++ layoutparser.optional-dependencies.layoutmodels
-    ++ layoutparser.optional-dependencies.tesseract;
+  build-system = [ setuptools ];
+
+  dependencies = [
+    accelerate
+    huggingface-hub
+    layoutparser
+    onnx
+    onnxruntime
+    opencv-python
+    python-multipart
+    rapidfuzz
+    transformers
+    # detectron2 # fails to build
+    # paddleocr # 3.12 not yet supported
+    # yolox
+  ]
+  ++ layoutparser.optional-dependencies.layoutmodels
+  ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -87,12 +95,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unstructured_inference" ];
 
-  meta = with lib; {
-    description = "hosted model inference code for layout parsing models";
+  meta = {
+    description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

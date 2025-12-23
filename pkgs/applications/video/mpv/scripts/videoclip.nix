@@ -10,34 +10,35 @@
 }:
 buildLua {
   pname = "videoclip";
-  version = "0-unstable-2024-08-20";
+  version = "0-unstable-2025-11-20";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "249122d245bc5ec2a0687346af730b1cc2273b21";
-    hash = "sha256-VSMFddi8Lvmipo8Un79v+LXGNiKeaSxHQ44HddJgTkE=";
+    rev = "1c6531b649d3ee526cc7aa360e726aeedf43beb9";
+    hash = "sha256-lBXlvFrDC1Drz5JIiI6488UoFsXz18LAxqRpQmy1G0k=";
   };
 
-  patchPhase =
-    ''
-      substituteInPlace platform.lua \
-      --replace \'curl\' \'${lib.getExe curl}\' \
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      --replace xclip ${lib.getExe xclip} \
-      --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
-    '';
+  patchPhase = ''
+    substituteInPlace platform.lua \
+    --replace \'curl\' \'${lib.getExe curl}\' \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    --replace xclip ${lib.getExe xclip} \
+    --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+  '';
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Easily create videoclips with mpv";
     homepage = "https://github.com/Ajatt-Tools/videoclip";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ BatteredBunny ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ BatteredBunny ];
   };
 }

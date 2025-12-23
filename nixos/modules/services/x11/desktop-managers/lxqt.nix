@@ -1,10 +1,15 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
 let
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.lxqt;
+  cfg = config.services.xserver.desktopManager.lxqt;
 
 in
 
@@ -15,16 +20,27 @@ in
 
   options = {
 
-    services.xserver.desktopManager.lxqt.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the LXQt desktop manager";
+    services.xserver.desktopManager.lxqt.enable = mkEnableOption "the LXQt desktop manager";
+
+    services.xserver.desktopManager.lxqt.iconThemePackage =
+      lib.mkPackageOption pkgs [ "kdePackages" "breeze-icons" ] { }
+      // {
+        description = "The package that provides a default icon theme.";
+      };
+
+    services.xserver.desktopManager.lxqt.extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [ ];
+      defaultText = lib.literalExpression "[ ]";
+      example = lib.literalExpression "with pkgs; [ xscreensaver ]";
+      description = "Extra packages to be installed system wide.";
     };
 
     environment.lxqt.excludePackages = mkOption {
-      default = [];
-      example = literalExpression "[ pkgs.lxqt.qterminal ]";
-      type = types.listOf types.package;
+      type = with lib.types; listOf package;
+      default = [ ];
+      defaultText = lib.literalExpression "[ ]";
+      example = lib.literalExpression "with pkgs; [ lxqt.qterminal ]";
       description = "Which LXQt packages to exclude from the default environment";
     };
 
@@ -53,11 +69,11 @@ in
     };
 
     environment.systemPackages =
-      pkgs.lxqt.preRequisitePackages ++
-      pkgs.lxqt.corePackages ++
-      (utils.removePackagesByName
-        pkgs.lxqt.optionalPackages
-        config.environment.lxqt.excludePackages);
+      pkgs.lxqt.preRequisitePackages
+      ++ pkgs.lxqt.corePackages
+      ++ [ cfg.iconThemePackage ]
+      ++ (utils.removePackagesByName pkgs.lxqt.optionalPackages config.environment.lxqt.excludePackages)
+      ++ cfg.extraPackages;
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
@@ -65,7 +81,7 @@ in
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
-    services.gvfs.enable = true;
+    services.gvfs.enable = mkDefault true;
 
     services.upower.enable = config.powerManagement.enable;
 
@@ -74,7 +90,10 @@ in
     xdg.portal.lxqt.enable = mkDefault true;
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
-    xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];
+    xdg.portal.config.lxqt.default = mkDefault [
+      "lxqt"
+      "gtk"
+    ];
   };
 
 }

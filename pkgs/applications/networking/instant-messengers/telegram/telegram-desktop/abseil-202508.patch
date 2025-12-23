@@ -1,0 +1,554 @@
+diff --git a/src/api/environment/environment.h b/src/api/environment/environment.h
+index d86b7ae78..cc2761f71 100644
+--- a/src/api/environment/environment.h
++++ b/src/api/environment/environment.h
+@@ -99,10 +99,10 @@ class RTC_EXPORT Environment final {
+  private:
+   friend class EnvironmentFactory;
+   Environment(scoped_refptr<const rtc::RefCountedBase> storage,
+-              absl::Nonnull<const FieldTrialsView*> field_trials,
+-              absl::Nonnull<Clock*> clock,
+-              absl::Nonnull<TaskQueueFactory*> task_queue_factory,
+-              absl::Nonnull<RtcEventLog*> event_log)
++              const FieldTrialsView* absl_nonnull field_trials,
++              Clock* absl_nonnull clock,
++              TaskQueueFactory* absl_nonnull task_queue_factory,
++              RtcEventLog* absl_nonnull event_log)
+       : storage_(std::move(storage)),
+         field_trials_(field_trials),
+         clock_(clock),
+@@ -117,10 +117,10 @@ class RTC_EXPORT Environment final {
+   // `storage_` is alive.
+   scoped_refptr<const rtc::RefCountedBase> storage_;
+ 
+-  absl::Nonnull<const FieldTrialsView*> field_trials_;
+-  absl::Nonnull<Clock*> clock_;
+-  absl::Nonnull<TaskQueueFactory*> task_queue_factory_;
+-  absl::Nonnull<RtcEventLog*> event_log_;
++  const FieldTrialsView* absl_nonnull field_trials_;
++  Clock* absl_nonnull clock_;
++  TaskQueueFactory* absl_nonnull task_queue_factory_;
++  RtcEventLog* absl_nonnull event_log_;
+ };
+ 
+ //------------------------------------------------------------------------------
+diff --git a/src/api/environment/environment_factory.cc b/src/api/environment/environment_factory.cc
+index c0b681aa0..ded3effe8 100644
+--- a/src/api/environment/environment_factory.cc
++++ b/src/api/environment/environment_factory.cc
+@@ -25,12 +25,12 @@ namespace webrtc {
+ namespace {
+ 
+ template <typename T>
+-void Store(absl::Nonnull<std::unique_ptr<T>> value,
++void Store(std::unique_ptr<T> absl_nonnull value,
+            scoped_refptr<const rtc::RefCountedBase>& leaf) {
+   class StorageNode : public rtc::RefCountedBase {
+    public:
+     StorageNode(scoped_refptr<const rtc::RefCountedBase> parent,
+-                absl::Nonnull<std::unique_ptr<T>> value)
++                std::unique_ptr<T> absl_nonnull value)
+         : parent_(std::move(parent)), value_(std::move(value)) {}
+ 
+     StorageNode(const StorageNode&) = delete;
+@@ -40,7 +40,7 @@ void Store(absl::Nonnull<std::unique_ptr<T>> value,
+ 
+    private:
+     scoped_refptr<const rtc::RefCountedBase> parent_;
+-    absl::Nonnull<std::unique_ptr<T>> value_;
++    std::unique_ptr<T> absl_nonnull value_;
+   };
+ 
+   // Utilities provided with ownership form a tree:
+@@ -63,14 +63,14 @@ EnvironmentFactory::EnvironmentFactory(const Environment& env)
+       event_log_(env.event_log_) {}
+ 
+ void EnvironmentFactory::Set(
+-    absl::Nullable<std::unique_ptr<const FieldTrialsView>> utility) {
++    std::unique_ptr<const FieldTrialsView> absl_nullable utility) {
+   if (utility != nullptr) {
+     field_trials_ = utility.get();
+     Store(std::move(utility), leaf_);
+   }
+ }
+ 
+-void EnvironmentFactory::Set(absl::Nullable<std::unique_ptr<Clock>> utility) {
++void EnvironmentFactory::Set(std::unique_ptr<Clock> absl_nullable utility) {
+   if (utility != nullptr) {
+     clock_ = utility.get();
+     Store(std::move(utility), leaf_);
+@@ -78,7 +78,7 @@ void EnvironmentFactory::Set(absl::Nullable<std::unique_ptr<Clock>> utility) {
+ }
+ 
+ void EnvironmentFactory::Set(
+-    absl::Nullable<std::unique_ptr<TaskQueueFactory>> utility) {
++    std::unique_ptr<TaskQueueFactory> absl_nullable utility) {
+   if (utility != nullptr) {
+     task_queue_factory_ = utility.get();
+     Store(std::move(utility), leaf_);
+@@ -86,7 +86,7 @@ void EnvironmentFactory::Set(
+ }
+ 
+ void EnvironmentFactory::Set(
+-    absl::Nullable<std::unique_ptr<RtcEventLog>> utility) {
++    std::unique_ptr<RtcEventLog> absl_nullable utility) {
+   if (utility != nullptr) {
+     event_log_ = utility.get();
+     Store(std::move(utility), leaf_);
+diff --git a/src/api/environment/environment_factory.h b/src/api/environment/environment_factory.h
+index a0fc3effd..b6be04f6a 100644
+--- a/src/api/environment/environment_factory.h
++++ b/src/api/environment/environment_factory.h
+@@ -54,15 +54,15 @@ class RTC_EXPORT EnvironmentFactory final {
+ 
+   ~EnvironmentFactory() = default;
+ 
+-  void Set(absl::Nullable<std::unique_ptr<const FieldTrialsView>> utility);
+-  void Set(absl::Nullable<std::unique_ptr<Clock>> utility);
+-  void Set(absl::Nullable<std::unique_ptr<TaskQueueFactory>> utility);
+-  void Set(absl::Nullable<std::unique_ptr<RtcEventLog>> utility);
++  void Set(std::unique_ptr<const FieldTrialsView> absl_nullable utility);
++  void Set(std::unique_ptr<Clock> absl_nullable utility);
++  void Set(std::unique_ptr<TaskQueueFactory> absl_nullable utility);
++  void Set(std::unique_ptr<RtcEventLog> absl_nullable utility);
+ 
+-  void Set(absl::Nullable<const FieldTrialsView*> utility);
+-  void Set(absl::Nullable<Clock*> utility);
+-  void Set(absl::Nullable<TaskQueueFactory*> utility);
+-  void Set(absl::Nullable<RtcEventLog*> utility);
++  void Set(const FieldTrialsView* absl_nullable utility);
++  void Set(Clock* absl_nullable utility);
++  void Set(TaskQueueFactory* absl_nullable utility);
++  void Set(RtcEventLog* absl_nullable utility);
+ 
+   Environment Create() const;
+ 
+@@ -71,10 +71,10 @@ class RTC_EXPORT EnvironmentFactory final {
+ 
+   scoped_refptr<const rtc::RefCountedBase> leaf_;
+ 
+-  absl::Nullable<const FieldTrialsView*> field_trials_ = nullptr;
+-  absl::Nullable<Clock*> clock_ = nullptr;
+-  absl::Nullable<TaskQueueFactory*> task_queue_factory_ = nullptr;
+-  absl::Nullable<RtcEventLog*> event_log_ = nullptr;
++  const FieldTrialsView* absl_nullable field_trials_ = nullptr;
++  Clock* absl_nullable clock_ = nullptr;
++  TaskQueueFactory* absl_nullable task_queue_factory_ = nullptr;
++  RtcEventLog* absl_nullable event_log_ = nullptr;
+ };
+ 
+ // Helper for concise way to create an environment.
+@@ -97,25 +97,25 @@ Environment CreateEnvironment(Utilities&&... utilities);
+ //------------------------------------------------------------------------------
+ 
+ inline void EnvironmentFactory::Set(
+-    absl::Nullable<const FieldTrialsView*> utility) {
++    const FieldTrialsView* absl_nullable utility) {
+   if (utility != nullptr) {
+     field_trials_ = utility;
+   }
+ }
+ 
+-inline void EnvironmentFactory::Set(absl::Nullable<Clock*> utility) {
++inline void EnvironmentFactory::Set(Clock* absl_nullable utility) {
+   if (utility != nullptr) {
+     clock_ = utility;
+   }
+ }
+ 
+-inline void EnvironmentFactory::Set(absl::Nullable<TaskQueueFactory*> utility) {
++inline void EnvironmentFactory::Set(TaskQueueFactory* absl_nullable utility) {
+   if (utility != nullptr) {
+     task_queue_factory_ = utility;
+   }
+ }
+ 
+-inline void EnvironmentFactory::Set(absl::Nullable<RtcEventLog*> utility) {
++inline void EnvironmentFactory::Set(RtcEventLog* absl_nullable utility) {
+   if (utility != nullptr) {
+     event_log_ = utility;
+   }
+diff --git a/src/api/rtc_event_log/rtc_event_log_factory.cc b/src/api/rtc_event_log/rtc_event_log_factory.cc
+index bfe272d2a..2196c31cd 100644
+--- a/src/api/rtc_event_log/rtc_event_log_factory.cc
++++ b/src/api/rtc_event_log/rtc_event_log_factory.cc
+@@ -23,7 +23,7 @@
+ 
+ namespace webrtc {
+ 
+-absl::Nonnull<std::unique_ptr<RtcEventLog>> RtcEventLogFactory::Create(
++std::unique_ptr<RtcEventLog> absl_nonnull RtcEventLogFactory::Create(
+     const Environment& env) const {
+ #ifndef WEBRTC_ENABLE_RTC_EVENT_LOG
+   return std::make_unique<RtcEventLogNull>();
+diff --git a/src/api/rtc_event_log/rtc_event_log_factory.h b/src/api/rtc_event_log/rtc_event_log_factory.h
+index 1deb0612b..7f868a552 100644
+--- a/src/api/rtc_event_log/rtc_event_log_factory.h
++++ b/src/api/rtc_event_log/rtc_event_log_factory.h
+@@ -31,7 +31,7 @@ class RTC_EXPORT RtcEventLogFactory : public RtcEventLogFactoryInterface {
+ 
+   ~RtcEventLogFactory() override = default;
+ 
+-  absl::Nonnull<std::unique_ptr<RtcEventLog>> Create(
++  std::unique_ptr<RtcEventLog> absl_nonnull Create(
+       const Environment& env) const override;
+ };
+ 
+diff --git a/src/api/rtc_event_log/rtc_event_log_factory_interface.h b/src/api/rtc_event_log/rtc_event_log_factory_interface.h
+index 313558496..d39766955 100644
+--- a/src/api/rtc_event_log/rtc_event_log_factory_interface.h
++++ b/src/api/rtc_event_log/rtc_event_log_factory_interface.h
+@@ -26,7 +26,7 @@ class RtcEventLogFactoryInterface {
+  public:
+   virtual ~RtcEventLogFactoryInterface() = default;
+ 
+-  virtual absl::Nonnull<std::unique_ptr<RtcEventLog>> Create(
++  virtual std::unique_ptr<RtcEventLog> absl_nonnull Create(
+       const Environment& env) const = 0;
+ };
+ 
+diff --git a/src/api/task_queue/pending_task_safety_flag.cc b/src/api/task_queue/pending_task_safety_flag.cc
+index 4d8fc2b9f..4b521ea04 100644
+--- a/src/api/task_queue/pending_task_safety_flag.cc
++++ b/src/api/task_queue/pending_task_safety_flag.cc
+@@ -37,7 +37,7 @@ PendingTaskSafetyFlag::CreateDetached() {
+ rtc::scoped_refptr<PendingTaskSafetyFlag>
+ PendingTaskSafetyFlag::CreateAttachedToTaskQueue(
+     bool alive,
+-    absl::Nonnull<TaskQueueBase*> attached_queue) {
++    TaskQueueBase* absl_nonnull attached_queue) {
+   RTC_DCHECK(attached_queue) << "Null TaskQueue provided";
+   return rtc::scoped_refptr<PendingTaskSafetyFlag>(
+       new PendingTaskSafetyFlag(alive, attached_queue));
+diff --git a/src/api/task_queue/pending_task_safety_flag.h b/src/api/task_queue/pending_task_safety_flag.h
+index 12b1e00ee..1a002e0ad 100644
+--- a/src/api/task_queue/pending_task_safety_flag.h
++++ b/src/api/task_queue/pending_task_safety_flag.h
+@@ -73,7 +73,7 @@ class RTC_EXPORT PendingTaskSafetyFlag final
+   // a given task queue and the `alive()` flag specified.
+   static rtc::scoped_refptr<PendingTaskSafetyFlag> CreateAttachedToTaskQueue(
+       bool alive,
+-      absl::Nonnull<TaskQueueBase*> attached_queue);
++      TaskQueueBase* absl_nonnull attached_queue);
+ 
+   // Same as `CreateDetached()` except the initial state of the returned flag
+   // will be `!alive()`.
+@@ -103,7 +103,7 @@ class RTC_EXPORT PendingTaskSafetyFlag final
+  protected:
+   explicit PendingTaskSafetyFlag(bool alive) : alive_(alive) {}
+   PendingTaskSafetyFlag(bool alive,
+-                        absl::Nonnull<TaskQueueBase*> attached_queue)
++                        TaskQueueBase* absl_nonnull attached_queue)
+       : alive_(alive), main_sequence_(attached_queue) {}
+ 
+  private:
+diff --git a/src/api/test/create_time_controller.cc b/src/api/test/create_time_controller.cc
+index cbf1f09aa..049451bf5 100644
+--- a/src/api/test/create_time_controller.cc
++++ b/src/api/test/create_time_controller.cc
+@@ -44,8 +44,8 @@ void EnableMediaWithDefaultsAndTimeController(
+   class TimeControllerBasedFactory : public MediaFactory {
+    public:
+     TimeControllerBasedFactory(
+-        absl::Nonnull<Clock*> clock,
+-        absl::Nonnull<std::unique_ptr<MediaFactory>> media_factory)
++        Clock* absl_nonnull clock,
++        std::unique_ptr<MediaFactory> absl_nonnull media_factory)
+         : clock_(clock), media_factory_(std::move(media_factory)) {}
+ 
+     std::unique_ptr<Call> CreateCall(const CallConfig& config) override {
+@@ -64,8 +64,8 @@ void EnableMediaWithDefaultsAndTimeController(
+     }
+ 
+    private:
+-    absl::Nonnull<Clock*> clock_;
+-    absl::Nonnull<std::unique_ptr<MediaFactory>> media_factory_;
++    Clock* absl_nonnull clock_;
++    std::unique_ptr<MediaFactory> absl_nonnull media_factory_;
+   };
+ 
+   EnableMediaWithDefaults(deps);
+diff --git a/src/logging/rtc_event_log/fake_rtc_event_log_factory.cc b/src/logging/rtc_event_log/fake_rtc_event_log_factory.cc
+index bacc3cd1c..c5a43e7dd 100644
+--- a/src/logging/rtc_event_log/fake_rtc_event_log_factory.cc
++++ b/src/logging/rtc_event_log/fake_rtc_event_log_factory.cc
+@@ -17,7 +17,7 @@
+ 
+ namespace webrtc {
+ 
+-absl::Nonnull<std::unique_ptr<RtcEventLog>> FakeRtcEventLogFactory::Create(
++std::unique_ptr<RtcEventLog> absl_nonnull FakeRtcEventLogFactory::Create(
+     const Environment& /*env*/) const {
+   auto fake_event_log = std::make_unique<FakeRtcEventLog>();
+   const_cast<FakeRtcEventLog*&>(last_log_created_) = fake_event_log.get();
+diff --git a/src/logging/rtc_event_log/fake_rtc_event_log_factory.h b/src/logging/rtc_event_log/fake_rtc_event_log_factory.h
+index 0d6d07603..08017432a 100644
+--- a/src/logging/rtc_event_log/fake_rtc_event_log_factory.h
++++ b/src/logging/rtc_event_log/fake_rtc_event_log_factory.h
+@@ -25,7 +25,7 @@ class FakeRtcEventLogFactory : public RtcEventLogFactoryInterface {
+   FakeRtcEventLogFactory() = default;
+   ~FakeRtcEventLogFactory() override = default;
+ 
+-  absl::Nonnull<std::unique_ptr<RtcEventLog>> Create(
++  std::unique_ptr<RtcEventLog> absl_nonnull Create(
+       const Environment& env) const override;
+ 
+   FakeRtcEventLog* last_log_created() { return last_log_created_; }
+diff --git a/src/modules/audio_processing/aec_dump/aec_dump_factory.h b/src/modules/audio_processing/aec_dump/aec_dump_factory.h
+index 0d258a9eb..89435d62c 100644
+--- a/src/modules/audio_processing/aec_dump/aec_dump_factory.h
++++ b/src/modules/audio_processing/aec_dump/aec_dump_factory.h
+@@ -29,18 +29,18 @@ class RTC_EXPORT AecDumpFactory {
+   // The AecDump takes responsibility for `handle` and closes it in the
+   // destructor. A non-null return value indicates that the file has been
+   // sucessfully opened.
+-  static absl::Nullable<std::unique_ptr<AecDump>> Create(
++  static std::unique_ptr<AecDump> absl_nullable Create(
+       FileWrapper file,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue);
+-  static absl::Nullable<std::unique_ptr<AecDump>> Create(
++      TaskQueueBase* absl_nonnull worker_queue);
++  static std::unique_ptr<AecDump> absl_nullable Create(
+       absl::string_view file_name,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue);
+-  static absl::Nullable<std::unique_ptr<AecDump>> Create(
+-      absl::Nonnull<FILE*> handle,
++      TaskQueueBase* absl_nonnull worker_queue);
++  static std::unique_ptr<AecDump> absl_nullable Create(
++      FILE* absl_nonnull handle,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue);
++      TaskQueueBase* absl_nonnull worker_queue);
+ };
+ 
+ }  // namespace webrtc
+diff --git a/src/modules/audio_processing/aec_dump/aec_dump_impl.cc b/src/modules/audio_processing/aec_dump/aec_dump_impl.cc
+index 8484fcc6e..76b59d0e5 100644
+--- a/src/modules/audio_processing/aec_dump/aec_dump_impl.cc
++++ b/src/modules/audio_processing/aec_dump/aec_dump_impl.cc
+@@ -60,7 +60,7 @@ void CopyFromConfigToEvent(const webrtc::InternalAPMConfig& config,
+ 
+ AecDumpImpl::AecDumpImpl(FileWrapper debug_file,
+                          int64_t max_log_size_bytes,
+-                         absl::Nonnull<TaskQueueBase*> worker_queue)
++                         TaskQueueBase* absl_nonnull worker_queue)
+     : debug_file_(std::move(debug_file)),
+       num_bytes_left_for_log_(max_log_size_bytes),
+       worker_queue_(worker_queue) {}
+@@ -255,10 +255,10 @@ void AecDumpImpl::PostWriteToFileTask(std::unique_ptr<audioproc::Event> event) {
+   });
+ }
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
+     FileWrapper file,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   RTC_DCHECK(worker_queue);
+   if (!file.is_open())
+     return nullptr;
+@@ -267,18 +267,18 @@ absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
+                                        worker_queue);
+ }
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
+     absl::string_view file_name,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   return Create(FileWrapper::OpenWriteOnly(file_name), max_log_size_bytes,
+                 worker_queue);
+ }
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
+-    absl::Nonnull<FILE*> handle,
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
++    FILE* absl_nonnull handle,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   return Create(FileWrapper(handle), max_log_size_bytes, worker_queue);
+ }
+ 
+diff --git a/src/modules/audio_processing/aec_dump/aec_dump_impl.h b/src/modules/audio_processing/aec_dump/aec_dump_impl.h
+index d5af31b01..e3fb25469 100644
+--- a/src/modules/audio_processing/aec_dump/aec_dump_impl.h
++++ b/src/modules/audio_processing/aec_dump/aec_dump_impl.h
+@@ -39,7 +39,7 @@ class AecDumpImpl : public AecDump {
+   // `max_log_size_bytes == -1` means the log size will be unlimited.
+   AecDumpImpl(FileWrapper debug_file,
+               int64_t max_log_size_bytes,
+-              absl::Nonnull<TaskQueueBase*> worker_queue);
++              TaskQueueBase* absl_nonnull worker_queue);
+   AecDumpImpl(const AecDumpImpl&) = delete;
+   AecDumpImpl& operator=(const AecDumpImpl&) = delete;
+   ~AecDumpImpl() override;
+@@ -74,7 +74,7 @@ class AecDumpImpl : public AecDump {
+   FileWrapper debug_file_;
+   int64_t num_bytes_left_for_log_ = 0;
+   rtc::RaceChecker race_checker_;
+-  absl::Nonnull<TaskQueueBase*> worker_queue_;
++  TaskQueueBase* absl_nonnull worker_queue_;
+   CaptureStreamInfo capture_stream_info_;
+ };
+ }  // namespace webrtc
+diff --git a/src/modules/audio_processing/aec_dump/null_aec_dump_factory.cc b/src/modules/audio_processing/aec_dump/null_aec_dump_factory.cc
+index 63929afac..2902c1bbc 100644
+--- a/src/modules/audio_processing/aec_dump/null_aec_dump_factory.cc
++++ b/src/modules/audio_processing/aec_dump/null_aec_dump_factory.cc
+@@ -16,24 +16,24 @@
+ 
+ namespace webrtc {
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
+     FileWrapper file,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   return nullptr;
+ }
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
+     absl::string_view file_name,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   return nullptr;
+ }
+ 
+-absl::Nullable<std::unique_ptr<AecDump>> AecDumpFactory::Create(
+-    absl::Nonnull<FILE*> handle,
++std::unique_ptr<AecDump> absl_nullable AecDumpFactory::Create(
++    FILE* absl_nonnull handle,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   return nullptr;
+ }
+ }  // namespace webrtc
+diff --git a/src/modules/audio_processing/audio_processing_impl.cc b/src/modules/audio_processing/audio_processing_impl.cc
+index 0d11e418e..0a579f7dd 100644
+--- a/src/modules/audio_processing/audio_processing_impl.cc
++++ b/src/modules/audio_processing/audio_processing_impl.cc
+@@ -2087,7 +2087,7 @@ void AudioProcessingImpl::UpdateRecommendedInputVolumeLocked() {
+ bool AudioProcessingImpl::CreateAndAttachAecDump(
+     absl::string_view file_name,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   std::unique_ptr<AecDump> aec_dump =
+       AecDumpFactory::Create(file_name, max_log_size_bytes, worker_queue);
+   if (!aec_dump) {
+@@ -2101,7 +2101,7 @@ bool AudioProcessingImpl::CreateAndAttachAecDump(
+ bool AudioProcessingImpl::CreateAndAttachAecDump(
+     FILE* handle,
+     int64_t max_log_size_bytes,
+-    absl::Nonnull<TaskQueueBase*> worker_queue) {
++    TaskQueueBase* absl_nonnull worker_queue) {
+   std::unique_ptr<AecDump> aec_dump =
+       AecDumpFactory::Create(handle, max_log_size_bytes, worker_queue);
+   if (!aec_dump) {
+diff --git a/src/modules/audio_processing/audio_processing_impl.h b/src/modules/audio_processing/audio_processing_impl.h
+index 2c0ab198d..4cea151cd 100644
+--- a/src/modules/audio_processing/audio_processing_impl.h
++++ b/src/modules/audio_processing/audio_processing_impl.h
+@@ -76,11 +76,11 @@ class AudioProcessingImpl : public AudioProcessing {
+   bool CreateAndAttachAecDump(
+       absl::string_view file_name,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue) override;
++      TaskQueueBase* absl_nonnull worker_queue) override;
+   bool CreateAndAttachAecDump(
+       FILE* handle,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue) override;
++      TaskQueueBase* absl_nonnull worker_queue) override;
+   // TODO(webrtc:5298) Deprecated variant.
+   void AttachAecDump(std::unique_ptr<AecDump> aec_dump) override;
+   void DetachAecDump() override;
+diff --git a/src/modules/audio_processing/include/audio_processing.h b/src/modules/audio_processing/include/audio_processing.h
+index dd484be4f..f7c115e58 100644
+--- a/src/modules/audio_processing/include/audio_processing.h
++++ b/src/modules/audio_processing/include/audio_processing.h
+@@ -633,11 +633,11 @@ class RTC_EXPORT AudioProcessing : public RefCountInterface {
+   virtual bool CreateAndAttachAecDump(
+       absl::string_view file_name,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue) = 0;
++      TaskQueueBase* absl_nonnull worker_queue) = 0;
+   virtual bool CreateAndAttachAecDump(
+-      absl::Nonnull<FILE*> handle,
++      FILE* absl_nonnull handle,
+       int64_t max_log_size_bytes,
+-      absl::Nonnull<TaskQueueBase*> worker_queue) = 0;
++      TaskQueueBase* absl_nonnull worker_queue) = 0;
+ 
+   // TODO(webrtc:5298) Deprecated variant.
+   // Attaches provided webrtc::AecDump for recording debugging
+diff --git a/src/modules/audio_processing/include/mock_audio_processing.h b/src/modules/audio_processing/include/mock_audio_processing.h
+index dfe7d84e0..fad0a5b83 100644
+--- a/src/modules/audio_processing/include/mock_audio_processing.h
++++ b/src/modules/audio_processing/include/mock_audio_processing.h
+@@ -157,13 +157,13 @@ class MockAudioProcessing : public AudioProcessing {
+               CreateAndAttachAecDump,
+               (absl::string_view file_name,
+                int64_t max_log_size_bytes,
+-               absl::Nonnull<TaskQueueBase*> worker_queue),
++               TaskQueueBase* absl_nonnull worker_queue),
+               (override));
+   MOCK_METHOD(bool,
+               CreateAndAttachAecDump,
+               (FILE * handle,
+                int64_t max_log_size_bytes,
+-               absl::Nonnull<TaskQueueBase*> worker_queue),
++               TaskQueueBase* absl_nonnull worker_queue),
+               (override));
+   MOCK_METHOD(void, AttachAecDump, (std::unique_ptr<AecDump>), (override));
+   MOCK_METHOD(void, DetachAecDump, (), (override));
+diff --git a/src/pc/test/enable_fake_media.cc b/src/pc/test/enable_fake_media.cc
+index 5497c6072..5c10fd8d5 100644
+--- a/src/pc/test/enable_fake_media.cc
++++ b/src/pc/test/enable_fake_media.cc
+@@ -29,11 +29,11 @@ using ::cricket::MediaEngineInterface;
+ 
+ void EnableFakeMedia(
+     PeerConnectionFactoryDependencies& deps,
+-    absl::Nonnull<std::unique_ptr<FakeMediaEngine>> fake_media_engine) {
++    std::unique_ptr<FakeMediaEngine> absl_nonnull fake_media_engine) {
+   class FakeMediaFactory : public MediaFactory {
+    public:
+     explicit FakeMediaFactory(
+-        absl::Nonnull<std::unique_ptr<FakeMediaEngine>> fake)
++        std::unique_ptr<FakeMediaEngine> absl_nonnull fake)
+         : fake_(std::move(fake)) {}
+ 
+     std::unique_ptr<Call> CreateCall(const CallConfig& config) override {
+@@ -49,7 +49,7 @@ void EnableFakeMedia(
+     }
+ 
+    private:
+-    absl::Nullable<std::unique_ptr<FakeMediaEngine>> fake_;
++    std::unique_ptr<FakeMediaEngine> absl_nullable fake_;
+   };
+ 
+   deps.media_factory =
+diff --git a/src/pc/test/enable_fake_media.h b/src/pc/test/enable_fake_media.h
+index 82c55ad08..5fc339d29 100644
+--- a/src/pc/test/enable_fake_media.h
++++ b/src/pc/test/enable_fake_media.h
+@@ -28,7 +28,7 @@ namespace webrtc {
+ // Enables media support backed by the 'fake_media_engine'.
+ void EnableFakeMedia(
+     PeerConnectionFactoryDependencies& deps,
+-    absl::Nonnull<std::unique_ptr<cricket::FakeMediaEngine>> fake_media_engine);
++    std::unique_ptr<cricket::FakeMediaEngine> absl_nonnull fake_media_engine);
+ 
+ // Enables media support backed by unspecified lightweight fake implementation.
+ void EnableFakeMedia(PeerConnectionFactoryDependencies& deps);
+

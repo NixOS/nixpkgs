@@ -13,21 +13,18 @@
   nipype,
   pydicom,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.3.2";
+  version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z7HaouhNuFX16RSY4gsF8gQJIJfmSiBVUANwMM113ds=";
+    hash = "sha256-zT/xy9f0GBmhGJm4Gd0ZEKNSifBBjx0RmTOqq6qN4ao=";
   };
 
   postPatch = ''
@@ -66,13 +63,16 @@ buildPythonPackage rec {
   disabledTests = [
     # No such file or directory
     "test_bvals_are_zero"
+
+    # tries to access internet
+    "test_partial_xa_conversion"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
     changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

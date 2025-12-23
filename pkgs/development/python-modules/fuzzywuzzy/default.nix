@@ -25,10 +25,10 @@ buildPythonPackage rec {
     pytest
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fuzzy string matching for Python";
     homepage = "https://github.com/seatgeek/fuzzywuzzy";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

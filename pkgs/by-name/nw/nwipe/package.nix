@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nwipe";
-  version = "0.38";
+  version = "0.39";
 
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
     rev = "v${version}";
-    sha256 = "sha256-idSIdq7DKhSwuR1xe9JEws0jIh1juCaz2eSeKvd85D4=";
+    sha256 = "sha256-uWsN4DWzmipx/+gfMl8GXTg3pSKT0UPOkqVfdHfUPdA=";
   };
 
   nativeBuildInputs = [
@@ -49,15 +49,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Securely erase disks";
     mainProgram = "nwipe";
     homepage = "https://github.com/martijnvanbrummelen/nwipe";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       vifino
       woffs
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

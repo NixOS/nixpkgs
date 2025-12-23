@@ -148,8 +148,21 @@ in
     settings = lib.mkOption {
       type = format.type;
       default = { };
+      example = {
+        bootstrap = {
+          initdb = [
+            "encoding=UTF-8"
+            "data-checksums"
+          ];
+        };
+        postgresql = {
+          parameters = {
+            unix_socket_directories = "/tmp";
+          };
+        };
+      };
       description = ''
-        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html)
+        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/yaml_configuration.html)
         for possible values.
         Secrets should be passed in by using the `environmentFiles` option.
       '';
@@ -175,6 +188,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          !(
+            cfg.enable
+            && config.services.postgresql.enable
+            && cfg.postgresqlDataDir == config.services.postgresql.dataDir
+          );
+        message = ''
+          Both services.patroni and services.postgresql are enabled and
+          services.patroni.postgresqlDataDir == services.postgresql.dataDir
+          Disable one or the other, or configure them to use different directories.
+        '';
+      }
+    ];
 
     services.patroni.settings = {
       scope = cfg.scope;

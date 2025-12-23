@@ -1,67 +1,76 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  python3,
+  nix-update-script,
+  php,
+  python3Packages,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.2";
+  version = "3.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = version;
-    hash = "sha256-sa4bXZiY5yd0wynUjdLnuuX7Ee0w4APd1G/oGy5AUDk=";
+    hash = "sha256-/w5t/BcMPewl0Wp6vx9kZamqHArb7+fnfktfEIUDL8Y=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      aiocache
-      aiohttp
-      aiosqlite
-      arsenic
-      beautifulsoup4
-      browser-cookie3
-      dnspython
-      h11
-      httpcore
-      httpx
-      httpx-ntlm
-      humanize
-      loguru
-      mako
-      markupsafe
-      mitmproxy
-      prance
-      pyasn1
-      six
-      sqlalchemy
-      tld
-      yaswfp
-    ]
-    ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.socks
-    ++ prance.optional-dependencies.osv;
+  dependencies = with python3Packages; [
+    aiocache
+    aiohttp
+    aiosqlite
+    beautifulsoup4
+    browser-cookie3
+    dnspython
+    h11
+    httpcore
+    httpx
+    httpx-ntlm
+    humanize
+    loguru
+    mako
+    markupsafe
+    mitmproxy
+    msgpack
+    packaging
+    playwright
+    pyasn1
+    sqlalchemy
+    tld
+    typing-extensions
+    urwid
+    yaswfp
+    wapiti-arsenic
+    wapiti-swagger
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3.pkgs; [
-    respx
-    pytest-asyncio
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      respx
+      pytest-asyncio
+      pytest-cov-stub
+      pytestCheckHook
+    ]
+    ++ [
+      php
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Tests requires network access
@@ -89,6 +98,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_meta_detection"
     "test_multi_detection"
     "test_no_crash"
+    "test_ns_takeover"
     "test_options"
     "test_out_of_band"
     "test_partial_tag_name_escape"
@@ -131,16 +141,28 @@ python3.pkgs.buildPythonApplication rec {
     "test_persister_upload"
     # Requires creating a socket to an external URL
     "test_attack_unifi"
+    # AssertionError
+    "test_comment_in_noscript_context"
+    "test_noscript_context"
+    "test_title_context"
   ];
 
   disabledTestPaths = [
     # Requires sslyze which is obsolete and was removed
     "tests/attack/test_mod_ssl.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
+    "tests/web/test_persister.py"
   ];
 
   pythonImportsCheck = [ "wapitiCore" ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Web application vulnerability scanner";
     longDescription = ''
       Wapiti allows you to audit the security of your websites or web applications.
@@ -151,8 +173,9 @@ python3.pkgs.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${src.tag}/doc/ChangeLog_Wapiti";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "wapiti";
   };
 }

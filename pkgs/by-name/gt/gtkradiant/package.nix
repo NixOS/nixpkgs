@@ -272,15 +272,15 @@ stdenv.mkDerivation rec {
     ln -s ../../lib/gtkradiant/bitmaps/icon.png $out/share/pixmaps/gtkradiant.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Level editor for idTech games";
     homepage = "https://icculus.org/gtkradiant/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsdOriginal
       lgpl21Only
     ];
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.unix;
   };
 }

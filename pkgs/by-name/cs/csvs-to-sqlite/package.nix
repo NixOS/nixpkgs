@@ -5,15 +5,14 @@
   fetchpatch,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.3";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
+    repo = "csvs-to-sqlite";
     rev = version;
     hash = "sha256-wV6htULG3lg2IhG2bXmc/9vjcK8/+WA7jm3iJu4ZoOE=";
   };
@@ -32,10 +31,11 @@ buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3.pkgs; [
     click
     dateparser
     pandas
@@ -47,7 +47,7 @@ buildPythonApplication rec {
     "click"
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     cogapp
     pytestCheckHook
   ];
@@ -57,11 +57,11 @@ buildPythonApplication rec {
     "test_if_cog_needs_to_be_run"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert CSV files into a SQLite database";
     homepage = "https://github.com/simonw/csvs-to-sqlite";
-    license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.costrouc ];
     mainProgram = "csvs-to-sqlite";
   };
 }

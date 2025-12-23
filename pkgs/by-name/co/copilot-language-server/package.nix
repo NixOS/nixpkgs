@@ -1,53 +1,47 @@
 {
   lib,
   stdenvNoCC,
+  makeWrapper,
   fetchzip,
   nix-update-script,
+  nodejs,
+
+  testers,
 }:
-
-let
-  arch =
-    {
-      aarch64-darwin = "arm64";
-      aarch64-linux = "arm64";
-      x86_64-darwin = "x64";
-      x86_64-linux = "x64";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-  os =
-    {
-      aarch64-darwin = "darwin";
-      aarch64-linux = "linux";
-      x86_64-darwin = "darwin";
-      x86_64-linux = "linux";
-    }
-    ."${stdenvNoCC.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
-in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.280.0";
+  version = "1.406.0";
 
   src = fetchzip {
-    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-native-${finalAttrs.version}.zip";
-    hash = "sha256-s47WaWH0ov/UazQCOFBUAO6ZYgCmCpQ1o79KjAVJFh4=";
+    url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
+    hash = "sha256-GGTERNSfg/XgM+5URVin05ocNe3JuH6+8JB7hBOqPrE=";
     stripRoot = false;
   };
 
-  npmDepsHash = "sha256-PLX/mN7xu8gMh2BkkyTncP3+rJ3nBmX+pHxl0ONXbe4=";
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    nodejs
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dt "$out"/bin "${os}-${arch}"/copilot-language-server
+    mkdir -p $out/share/copilot-language-server
+    cp -r ./* $out/share/copilot-language-server/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/copilot-language-server \
+      --add-flags $out/share/copilot-language-server/main.js
 
     runHook postInstall
   '';
 
-  dontStrip = true;
-
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Use GitHub Copilot with any editor or IDE via the Language Server Protocol";

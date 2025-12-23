@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtorganizer-mkcal";
-  version = "0-unstable-2025-02-19";
+  version = "0-unstable-2025-04-24";
 
   src = fetchFromGitHub {
     owner = "dcaliste";
     repo = "qtorganizer-mkcal";
-    rev = "312412de3f810fbedc7c4f27bd33adb2c3fbe967";
-    hash = "sha256-uv2cEs84bM614vg5K+t4vyXas+1b5Jm39tfGSwWj6n0=";
+    rev = "45906b1df8ad758a824369873f423d9e0c457fbf";
+    hash = "sha256-sgYCO8LxBFhMkjGnKVvOx2d4hyw9Oa5lbu6LKhuwl8s=";
   };
 
   postPatch = ''
@@ -31,19 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
   ];
 
-  buildInputs =
-    [
-      extra-cmake-modules
-      mkcal
-    ]
-    ++ (with libsForQt5; [
-      kcalendarcore
-      qtbase
-      qtpim
-    ]);
+  buildInputs = [
+    mkcal
+  ]
+  ++ (with libsForQt5; [
+    kcalendarcore
+    qtbase
+    qtpim
+  ]);
 
   nativeCheckInputs = [
     tzdata
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QtOrganizer plugin using sqlite via mKCal";
     homepage = "https://github.com/dcaliste/qtorganizer-mkcal";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

@@ -19,11 +19,11 @@ buildGoModule rec {
   proxyVendor = true;
   vendorHash = "sha256-8xUJcsZuZ1KpFDM1AMTRggl7A7C/YaXYDzRKNFKE+ww=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/go-gorm/gen";
     description = "Gen: Friendly & Safer GORM powered by Code Generation";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gentool";
-    maintainers = with maintainers; [ tembleking ];
+    maintainers = with lib.maintainers; [ tembleking ];
   };
 }

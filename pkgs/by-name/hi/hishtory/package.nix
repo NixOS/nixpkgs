@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ddworken";
-    repo = pname;
+    repo = "hishtory";
     rev = "v${version}";
     hash = "sha256-nh3dNm+5h+3moeO1PUS6tPkftojMSSWSr0m/5n2iO2w=";
   };
@@ -30,10 +30,10 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Your shell history: synced, queryable, and in context";
     homepage = "https://github.com/ddworken/hishtory";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "hishtory";
   };

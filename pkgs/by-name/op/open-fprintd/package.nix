@@ -8,13 +8,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "open-fprintd";
-  version = "0.6";
+  version = "0.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "uunicorn";
-    repo = pname;
+    repo = "open-fprintd";
     rev = version;
-    hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
+    hash = "sha256-4TraOKvBc7ddqcY73aCuKgfwx4fNoaPHVG8so8Dc5Bw=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +52,10 @@ python3Packages.buildPythonPackage rec {
     wrapPythonProgramsIn "$out/lib/open-fprintd" "$out $pythonPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fprintd replacement which allows you to have your own backend as a standalone service";
     homepage = "https://github.com/uunicorn/open-fprintd";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }

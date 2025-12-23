@@ -7,7 +7,6 @@
   curl,
   libgit2,
   openssl,
-  darwin,
 }:
 let
   version = "0.16.1";
@@ -29,7 +28,6 @@ rustPlatform.buildRustPackage {
   # See #310673 and #310125 for similar fixes
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-unx2XGi16aWvw5dceAuReMEMLGcO/JwYpx9Ewvrw3KE=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,7 +35,7 @@ rustPlatform.buildRustPackage {
     libgit2
     openssl
     curl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
+  ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin issue: Os { code: 24, kind: Uncategorized, message: "Too many open files" }

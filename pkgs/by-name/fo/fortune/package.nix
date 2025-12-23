@@ -21,22 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      perl
-      rinutils
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      # "strfile" must be in PATH for cross-compiling builds.
-      fortune
-    ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    rinutils
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # "strfile" must be in PATH for cross-compiling builds.
+    fortune
+  ];
 
   buildInputs = [ recode ];
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-  ] ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
+  ]
+  ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
 
   patches = [
     (builtins.toFile "not-a-game.patch" ''
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
     rm $out/share/games/fortunes/men-women*
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "fortune";
     description = "Program that displays a pseudorandom message from a database of quotations";
-    license = licenses.bsdOriginal;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vonfry ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vonfry ];
   };
 }

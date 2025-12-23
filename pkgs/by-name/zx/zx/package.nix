@@ -1,12 +1,11 @@
 {
   lib,
   buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-
-  esbuild,
   buildGoModule,
+  fetchFromGitHub,
+  esbuild,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -15,45 +14,57 @@ let
       args:
       buildGoModule (
         args
-        // rec {
-          version = "0.25.0";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
+        // (
+          let
+            version = "0.25.10";
+          in
+          {
+            inherit version;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              tag = "v${version}";
+              hash = "sha256-EkQOIHqVrULig7s3w4nI8/yVIz2NZA5DCrMof0HHvHM=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        )
       );
   };
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "zx";
-  version = "8.4.1";
+  version = "8.8.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
-    rev = version;
-    hash = "sha256-jajkHUz+3ujKXbcsfN7y3pwHqAofTgdQHEC29srzs1M=";
+    tag = finalAttrs.version;
+    hash = "sha256-TB4TDGvrMqJgLGm2E3wGLg/uJv3YmbAuxTuZGerj7vM=";
   };
 
-  npmDepsHash = "sha256-OZuJ5akf6l+aVfoPNfYjWDLt1kUgZJv0qMpK/uiRl2Y=";
+  npmDepsHash = "sha256-yr4oPr4tTFfl+uUc2RJnVkmzSVHrw2adzWuZ+R2bQaU=";
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  makeCacheWritable = true;
+
+  npmFlags = [ "--legacy-peer-deps" ];
+
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
+
   doInstallCheck = true;
 
-  ESBUILD_BINARY_PATH = lib.getExe esbuild';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for writing scripts using JavaScript";
     homepage = "https://github.com/google/zx";
-    changelog = "https://github.com/google/zx/releases/tag/${version}";
+    changelog = "https://github.com/google/zx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jlbribeiro ];
     mainProgram = "zx";
   };
-}
+})

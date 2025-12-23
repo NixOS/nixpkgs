@@ -96,12 +96,13 @@ bash.runCommand "${pname}-${version}"
           mkdir $out
         '';
 
-    meta = with lib; {
+    meta = {
       description = "GNU Compiler Collection, version ${version}";
       homepage = "https://gcc.gnu.org";
-      license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = platforms.unix;
+      license = lib.licenses.gpl3Plus;
+      teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''

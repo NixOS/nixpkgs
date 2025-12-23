@@ -14,7 +14,7 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytest-randomly,
   faker,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytest-randomly
     faker
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PerchunPak/nonbloat-db";
     changelog = "https://github.com/PerchunPak/nonbloat-db/blob/v${version}/CHANGES.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ perchun ];
+    maintainers = with lib.maintainers; [ PerchunPak ];
   };
 }

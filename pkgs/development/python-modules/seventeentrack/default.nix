@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "McSwindler";
-    repo = pname;
+    repo = "seventeentrack";
     rev = version;
     hash = "sha256-vMdRXcd0es/LjgsVyWItSLFzlSTEa3oaA6lr/NL4i8U=";
   };
@@ -64,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seventeentrack" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to track package info from 17track.com";
     homepage = "https://github.com/McSwindler/seventeentrack";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

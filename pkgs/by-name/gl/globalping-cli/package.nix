@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
-    repo = pname;
+    repo = "globalping-cli";
     rev = "v${version}";
-    hash = "sha256-UB2vYdyJ2+H8rFyJn1KBNnWoGUlRjwYorWXqoB9WDu0=";
+    hash = "sha256-muWhiKqPdNVhy7c7MSRHACGzOn5pIVRdqSdfdCJw2CA=";
   };
 
   vendorHash = "sha256-dJAuN5srL5EvMaRg8rHaTsurjYrdH45p965DeubpB0E=";
@@ -49,24 +49,23 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "|^" skippedTests}" ];
 
-  postInstall =
-    ''
-      mv $out/bin/globalping-cli $out/bin/globalping
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd globalping \
-        --bash <($out/bin/globalping completion bash) \
-        --fish <($out/bin/globalping completion fish) \
-        --zsh <($out/bin/globalping completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/globalping-cli $out/bin/globalping
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd globalping \
+      --bash <($out/bin/globalping completion bash) \
+      --fish <($out/bin/globalping completion fish) \
+      --zsh <($out/bin/globalping completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI tool to run networking commands remotely from hundreds of globally distributed servers";
     homepage = "https://www.jsdelivr.com/globalping/cli";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ xyenon ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ xyenon ];
     mainProgram = "globalping";
   };
 }

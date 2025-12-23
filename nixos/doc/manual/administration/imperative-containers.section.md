@@ -2,7 +2,7 @@
 
 We'll cover imperative container management using `nixos-container`
 first. Be aware that container management is currently only possible as
-`root`.
+`root`, and that you need to enable [](#opt-boot.enableContainers) explicitly.
 
 You create a container with identifier `foo` as follows:
 

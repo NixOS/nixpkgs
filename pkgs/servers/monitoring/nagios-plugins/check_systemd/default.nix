@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "check-systemd";
-  version = "4.1.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Josef-Friedrich";
     repo = "check_systemd";
     tag = "v${version}";
-    hash = "sha256-1e1WtWRTmOxozuOP2ndfsozuiy9LCT/Lsvb+yKH+8eY=";
+    hash = "sha256-i9lMF8SZwTxVCQaHQcEWqdKiOQ4ghcp5H/S+frfZXRw=";
   };
 
   postPatch = ''

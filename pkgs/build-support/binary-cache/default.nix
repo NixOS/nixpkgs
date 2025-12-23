@@ -36,15 +36,14 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  nativeBuildInputs =
-    [
-      coreutils
-      jq
-      python3
-      nix
-    ]
-    ++ lib.optional (compression == "xz") xz
-    ++ lib.optional (compression == "zstd") zstd;
+  nativeBuildInputs = [
+    coreutils
+    jq
+    python3
+    nix
+  ]
+  ++ lib.optional (compression == "xz") xz
+  ++ lib.optional (compression == "zstd") zstd;
 
   buildCommand = ''
     mkdir -p $out/nar

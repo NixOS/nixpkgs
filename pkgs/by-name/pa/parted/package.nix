@@ -45,11 +45,12 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  buildInputs =
-    [ libuuid ]
-    ++ lib.optional (readline != null) readline
-    ++ lib.optional (gettext != null) gettext
-    ++ lib.optional (lvm2 != null) lvm2;
+  buildInputs = [
+    libuuid
+  ]
+  ++ lib.optional (readline != null) readline
+  ++ lib.optional (gettext != null) gettext
+  ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
     (if (readline != null) then [ "--with-readline" ] else [ "--without-readline" ])

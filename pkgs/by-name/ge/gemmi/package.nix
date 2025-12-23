@@ -12,25 +12,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.7.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XOu//yY5CnnzjvGu7IIC5GvecYsnZQV3Y2wvGVTwWzU=";
+    hash = "sha256-0MAY3mNHTv0ydtoVcJQKbOcSxCTvzH5S/5O82PjumKE=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals enablePython (
-      with python3Packages;
-      [
-        nanobind
-        python
-        pythonImportsCheckHook
-      ]
-    );
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enablePython (
+    with python3Packages;
+    [
+      nanobind
+      python
+      pythonImportsCheckHook
+    ]
+  );
 
   buildInputs = [ zlib ];
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       addBinToPathHook
       versionCheckHook
     ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Numerical precision error
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     "test_reading"
   ];
 
-  pytestFlagsArray = [ "../tests" ];
+  enabledTestPaths = [ "../tests" ];
 
   meta = {
     description = "Macromolecular crystallography library and utilities";

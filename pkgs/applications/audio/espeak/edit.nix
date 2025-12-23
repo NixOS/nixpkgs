@@ -45,21 +45,20 @@ stdenv.mkDerivation rec {
     ./espeakedit-wxgtk30.patch
   ];
 
-  postPatch =
-    ''
-      # Disable -Wall flag because it's noisy
-      sed -i "s/-Wall//g" src/Makefile
+  postPatch = ''
+    # Disable -Wall flag because it's noisy
+    sed -i "s/-Wall//g" src/Makefile
 
-      # Fixup paths (file names from above espeak-configurable* patches)
-      for file in src/compiledata.cpp src/readclause.cpp src/speech.h; do
-          sed -e "s|@sox@|${sox}/bin/sox|" \
-              -e "s|@prefix@|$out|" \
-              -i "$file"
-      done
-    ''
-    + lib.optionalString (portaudio.api_version == 19) ''
-      cp src/portaudio19.h src/portaudio.h
-    '';
+    # Fixup paths (file names from above espeak-configurable* patches)
+    for file in src/compiledata.cpp src/readclause.cpp src/speech.h; do
+        sed -e "s|@sox@|${sox}/bin/sox|" \
+            -e "s|@prefix@|$out|" \
+            -i "$file"
+    done
+  ''
+  + lib.optionalString (portaudio.api_version == 19) ''
+    cp src/portaudio19.h src/portaudio.h
+  '';
 
   buildPhase = ''
     make -C src
@@ -70,11 +69,11 @@ stdenv.mkDerivation rec {
     cp src/espeakedit "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Phoneme editor for espeak";
     mainProgram = "espeakedit";
     homepage = "https://espeak.sourceforge.net/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

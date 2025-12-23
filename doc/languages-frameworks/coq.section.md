@@ -2,7 +2,7 @@
 
 ## Coq derivation: `coq` {#coq-derivation-coq}
 
-The Coq derivation is overridable through the `coq.override overrides`, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following
+The Coq derivation is overridable through the `coq.override overrides`, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following:
 
 * `version` (optional, defaults to the latest version of Coq selected for nixpkgs, see `pkgs/top-level/coq-packages` to witness this choice), which follows the conventions explained in the `coqPackages` section below,
 * `customOCamlPackages` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
@@ -54,35 +54,78 @@ It also takes other standard `mkDerivation` attributes, they are added as such, 
 Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes some `mathcomp` derivations as `extraBuildInputs`.
 
 ```nix
-{ lib, mkCoqDerivation, version ? null
-, coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
+{
+  lib,
+  mkCoqDerivation,
+  version ? null,
+  coq,
+  mathcomp,
+  mathcomp-finmap,
+  mathcomp-bigenough,
+}:
 
 mkCoqDerivation {
-  /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
-  namePrefix = [ "coq" "mathcomp" ];
+  # namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2`
+  namePrefix = [
+    "coq"
+    "mathcomp"
+  ];
   pname = "multinomials";
   owner = "math-comp";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.7" "8.12") (isEq "1.11") ];        out = "1.5.2"; }
-      { cases = [ (range "8.7" "8.11") (range "1.8" "1.10") ]; out = "1.5.0"; }
-      { cases = [ (range "8.7" "8.10") (range "1.8" "1.10") ]; out = "1.4"; }
-      { cases = [ (isEq "8.6")         (range "1.6" "1.7") ];  out = "1.1"; }
-    ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.version mathcomp.version ]
+      [
+        {
+          cases = [
+            (range "8.7" "8.12")
+            (isEq "1.11")
+          ];
+          out = "1.5.2";
+        }
+        {
+          cases = [
+            (range "8.7" "8.11")
+            (range "1.8" "1.10")
+          ];
+          out = "1.5.0";
+        }
+        {
+          cases = [
+            (range "8.7" "8.10")
+            (range "1.8" "1.10")
+          ];
+          out = "1.4";
+        }
+        {
+          cases = [
+            (isEq "8.6")
+            (range "1.6" "1.7")
+          ];
+          out = "1.1";
+        }
+      ]
+      null;
   release = {
     "1.5.2".hash = "sha256-mjCx9XKa38Nz9E6wNK7YSqHdJ7YTua5fD3d6J4e7WpU=";
     "1.5.1".hash = "sha256-Q8tm0y2FQAt2V1kZYkDlHWRia/lTvXAMVjdmzEV11I4=";
     "1.5.0".hash = "sha256-HIK0f21G69oEW8JG46gSBde/Q2LR3GiBCv680gHbmRg=";
-    "1.5.0".rev  = "1.5";
-    "1.4".hash   = "sha256-F9g3MSIr3B6UZ3p8QWjz3/Jpw9sudJ+KRlvjiHSO024=";
-    "1.3".hash   = "sha256-BPJTlAL0ETHvLMBslE0KFVt3DNoaGuMrHt2SBGyJe1A=";
-    "1.2".hash   = "sha256-mHXBXSLYO4BN+jfN50y/+XCx0Qq5g4Ac2Y/qlsbgAdY=";
-    "1.1".hash   = "sha256-ejAsMQbB/LtU9j+g160VdGXULrCe9s0gBWzyhKqmCuE=";
-    "1.0".hash   = "sha256-tZTOltEBBKWciDxDMs/Ye4Jnq/33CANrHJ4FBMPtq+I=";
+    "1.5.0".rev = "1.5";
+    "1.4".hash = "sha256-F9g3MSIr3B6UZ3p8QWjz3/Jpw9sudJ+KRlvjiHSO024=";
+    "1.3".hash = "sha256-BPJTlAL0ETHvLMBslE0KFVt3DNoaGuMrHt2SBGyJe1A=";
+    "1.2".hash = "sha256-mHXBXSLYO4BN+jfN50y/+XCx0Qq5g4Ac2Y/qlsbgAdY=";
+    "1.1".hash = "sha256-ejAsMQbB/LtU9j+g160VdGXULrCe9s0gBWzyhKqmCuE=";
+    "1.0".hash = "sha256-tZTOltEBBKWciDxDMs/Ye4Jnq/33CANrHJ4FBMPtq+I=";
   };
 
-  propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
+  propagatedBuildInputs = [
+    mathcomp.ssreflect
+    mathcomp.algebra
+    mathcomp-finmap
+    mathcomp-bigenough
+  ];
 
   meta = {
     description = "Coq/SSReflect Library for Monoidal Rings and Multinomials";
@@ -102,17 +145,13 @@ There are three distinct ways of changing a Coq package by overriding one of its
 For example, assuming you have a special `mathcomp` dependency you want to use, here is how you could override the `mathcomp` dependency:
 
 ```nix
-multinomials.override {
-  mathcomp = my-special-mathcomp;
-}
+multinomials.override { mathcomp = my-special-mathcomp; }
 ```
 
 In Nixpkgs, all Coq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
 
 ```nix
-coqPackages.multinomials.override {
-  version = "1.5.1";
-}
+coqPackages.multinomials.override { version = "1.5.1"; }
 ```
 
 Refer to [](#coq-packages-attribute-sets-coqpackages) for all the different formats that you can potentially pass to `version`, as well as the restrictions.
@@ -124,12 +163,10 @@ The `overrideCoqDerivation` function lets you easily change arguments to `mkCoqD
 For example, here is how you could locally add a new release of the `multinomials` library, and set the `defaultVersion` to use this release:
 
 ```nix
-coqPackages.lib.overrideCoqDerivation
-  {
-    defaultVersion = "2.0";
-    release."2.0".hash = "sha256-czoP11rtrIM7+OLdMisv2EF7n/IbGuwFxHiPtg3qCNM=";
-  }
-  coqPackages.multinomials
+coqPackages.lib.overrideCoqDerivation {
+  defaultVersion = "2.0";
+  release."2.0".hash = "sha256-czoP11rtrIM7+OLdMisv2EF7n/IbGuwFxHiPtg3qCNM=";
+} coqPackages.multinomials
 ```
 
 ### `.overrideAttrs` {#coq-overrideAttrs}

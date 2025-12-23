@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qt5,
@@ -18,45 +19,42 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appimageupdate";
-  version = "2.0.0-alpha-1-20230526";
+  version = "2.0.0-alpha-1-20251018";
 
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "AppImageUpdate";
     rev = finalAttrs.version;
-    hash = "sha256-b2RqSw0Ksn9OLxQV9+3reBiqrty+Kx9OwV93jlvuPnY=";
+    hash = "sha256-S3MRBTtPc4S6lqvAZpbZFgOVgsX6GpHZ8PkwEtipT1M=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'VERSION 1-alpha' 'VERSION ${finalAttrs.version}' \
       --replace-fail 'env LC_ALL=C date -u "+%Y-%m-%d %H:%M:%S %Z"' 'bash -c "echo 1970-01-01 00:00:01 UTC"' \
       --replace-fail 'git rev-parse --short HEAD' 'bash -c "echo unknown"' \
       --replace-fail '<local dev build>' '<nixpkgs build>'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      zsync2
-      libcpr
-      libgcrypt
-      libappimage
-      argagg
-      nlohmann_json
-      gpgme
-    ]
-    ++ lib.optionals withQtUI [
-      qt5.qtbase
-    ];
+  buildInputs = [
+    zsync2
+    libcpr
+    libgcrypt
+    libappimage
+    argagg
+    nlohmann_json
+    gpgme
+  ]
+  ++ lib.optionals withQtUI [
+    qt5.qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ZSYNC2" true)

@@ -1,5 +1,4 @@
 {
-  lib,
   buildDunePackage,
   dream-pure,
   lwt_ppx,

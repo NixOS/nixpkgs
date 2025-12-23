@@ -8,6 +8,7 @@ REPO="yandex-music-linux"
 URL="https://api.github.com/repos/$OWNER/$REPO"
 RAW="https://raw.githubusercontent.com/$OWNER/$REPO"
 
+attrname="yandex-music"
 latest_release="$(curl --silent "$URL/releases/latest")"
 latest_tag="$(curl --silent "$URL/tags?per_page=1")"
 commit_hash="$(jq -r '.[0].commit.sha' <<<"$latest_tag")"
@@ -19,8 +20,32 @@ date=$(jq -r '.created_at' <<<"$latest_release")
 # truncate time
 date=${date%T*}
 
+importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
+
+# Old version with rc part (e.g. 5.61.1rc3)
+oldVersion=$(nix-instantiate --eval -E "with $importTree; $attrname.version" | tr -d '"')
+# Rc part of old version (without "rc) (e.g. 3)
+oldVersionRc="${oldVersion##*rc}"
+
+# If old version does not have "rc" part - assume rc is 0
+if [ "$oldVersionRc" == "$oldVersion" ]; then
+  oldVersionRc="0"
+fi
+# Old version w/o rc part (e.g 5.61.1)
+oldVersion="${oldVersion%%rc*}"
+# Remove "rc" part from new version. There should be no "rc" part at all but
+# better to play it safe.
+version="${version%%rc*}"
+
+rc=""
+
+# If new version is the same as old version - increase rc and format rc part
+if [ "$version" == "$oldVersion" ]; then
+  rc="rc$((oldVersionRc + 1))";
+fi
+
 # update version; otherwise fail
-update-source-version yandex-music "$version" --ignore-same-hash
+update-source-version "$attrname" "$version$rc" --ignore-same-hash --rev="$commit_hash"
 
 # set yandex-music dir
 dir="pkgs/by-name/ya/yandex-music"

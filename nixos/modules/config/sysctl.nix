@@ -9,7 +9,7 @@ let
         checkType = x: lib.isBool x || lib.isString x || lib.isInt x || x == null;
       in
       checkType val || (val._type or "" == "override" && checkType val.content);
-    merge = loc: defs: lib.mergeOneOption loc (lib.filterOverrides defs);
+    merge = loc: defs: lib.mergeOneOption loc defs;
   };
 
 in
@@ -22,9 +22,7 @@ in
       type =
         let
           highestValueType = lib.types.ints.unsigned // {
-            merge =
-              loc: defs:
-              lib.foldl (a: b: if b.value == null then null else lib.max a b.value) 0 (lib.filterOverrides defs);
+            merge = loc: defs: lib.foldl (a: b: if b.value == null then null else lib.max a b.value) 0 defs;
           };
         in
         lib.types.submodule {
@@ -74,12 +72,21 @@ in
       restartTriggers = [ config.environment.etc."sysctl.d/60-nixos.conf".source ];
     };
 
-    # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
-    # users as these make it easier to exploit kernel vulnerabilities.
-    boot.kernel.sysctl."kernel.kptr_restrict" = lib.mkDefault 1;
+    # NixOS wide defaults
+    boot.kernel.sysctl = {
+      # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
+      # users as these make it easier to exploit kernel vulnerabilities.
+      "kernel.kptr_restrict" = lib.mkDefault 1;
 
-    # Improve compatibility with applications that allocate
-    # a lot of memory, like modern games
-    boot.kernel.sysctl."vm.max_map_count" = lib.mkDefault 1048576;
+      # Improve compatibility with applications that allocate
+      # a lot of memory, like modern games
+      "vm.max_map_count" = lib.mkDefault 1048576;
+
+      # The default max inotify watches is 8192.
+      # Nowadays most apps require a good number of inotify watches,
+      # the value below is used by default on several other distros.
+      "fs.inotify.max_user_instances" = lib.mkDefault 524288;
+      "fs.inotify.max_user_watches" = lib.mkDefault 524288;
+    };
   };
 }

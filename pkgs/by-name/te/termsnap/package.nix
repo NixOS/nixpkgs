@@ -15,14 +15,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bYqhrMmgkEAiA1eiDbIOwH/PktwtIfxmYJRwDrFsNIc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lfWQ7VzFYhbEjrhKxPT8quhxbL+5pTzIPUVjBBHRk7Q=";
 
-  meta = with lib; {
+  meta = {
     description = "Create SVGs from terminal output";
     homepage = "https://github.com/tomcur/termsnap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yash-garg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yash-garg ];
     mainProgram = "termsnap";
   };
 }

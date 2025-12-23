@@ -1,35 +1,46 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
-  hatchling,
   cachecontrol,
   cryptography,
   google-api-python-client,
   google-cloud-firestore,
   google-cloud-storage,
+  h2,
+  httpx,
   pyjwt,
   requests,
+  respx,
   pytestCheckHook,
+  pytest-asyncio,
   pytest-localserver,
   pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "firebase-admin";
-  version = "6.7.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
     tag = "v${version}";
-    hash = "sha256-MQFGgWQ2YgAii+IVP/78JKU1Q7QgEvMXz5WvXGoyw7g=";
+    hash = "sha256-xlKrtH8f9UzY9OGYrpNH0i2OAlcxTrpzPC5JEuL8plM=";
   };
 
   build-system = [ setuptools ];
+
+  patches = [
+    (fetchpatch {
+      name = "remove-asyncio-default-fixture-loop-scope.patch";
+      url = "https://github.com/firebase/firebase-admin-python/commit/de713d21da83b1f50c24c5a23132ffc442700448.patch";
+      hash = "sha256-D4edbVHMejpnSmIYblrq9E5+YdbBzLe/VWbObvMNGdk=";
+    })
+  ];
 
   dependencies = [
     cachecontrol
@@ -37,14 +48,18 @@ buildPythonPackage rec {
     google-api-python-client
     google-cloud-firestore
     google-cloud-storage
+    httpx
     pyjwt
     requests
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-localserver
     pytest-mock
+    h2
+    respx
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -54,6 +69,10 @@ buildPythonPackage rec {
     # >       assert delta <= timedelta(seconds=15)
     # E       assert datetime.timedelta(seconds=17, microseconds=28239) <= datetime.timedelta(seconds=15)
     "test_task_options"
+
+    # Flaky / timing sensitive
+    "test_expired_cookie_with_tolerance"
+    "test_expired_token_with_tolerance"
   ];
 
   meta = {
@@ -61,6 +80,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/firebase/firebase-admin-python";
     changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jhahn ];
+    maintainers = with lib.maintainers; [
+      jhahn
+      sarahec
+    ];
   };
 }

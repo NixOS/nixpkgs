@@ -7,24 +7,25 @@
   glibcLocales,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
   canExecuteHost = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "argc";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
-    rev = "v${version}";
-    hash = "sha256-sviGDwxbCBsNY5viV7Qim6B/COd1Uz0Wj/6n/Ge+A50=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-in2ymxiSZbs3wZwo/aKfu11x8SLx4OHOoa/tVxr3FyM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uyUwmTDa1RcgQbc/6wMwRK6932CatuGMr0FPd2rAufk=";
+  cargoHash = "sha256-2UmI9CMa130T7ML9iVNQ8Zh/stiFg05eBtF1sprmwk8=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
@@ -39,15 +40,19 @@ rustPlatform.buildRustPackage rec {
 
   disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
 
-  env =
-    {
-      LANG = "C.UTF-8";
-    }
-    // lib.optionalAttrs (glibcLocales != null) {
-      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-    };
+  env = {
+    LANG = "C.UTF-8";
+  }
+  // lib.optionalAttrs (glibcLocales != null) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--argc-version";
 
   passthru = {
+    update-script = nix-update-script { };
     tests = {
       cross =
         (
@@ -61,16 +66,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line options, arguments and sub-commands parser for bash";
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
-    changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/sigoden/argc/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       mit
       # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

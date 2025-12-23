@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veryfasttree";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "citiususc";
     repo = "veryfasttree";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S4FW91VEdTPOIwRamz62arLSN9inxoKXpKsen2ISXMo=";
+    hash = "sha256-xoz2mK72gvNRpA4kGInAb3WHa/D8HvXprUQiJClLwh8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "VeryFastTree";
     homepage = "https://github.com/citiususc/veryfasttree";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ thyol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

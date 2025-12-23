@@ -115,11 +115,11 @@ stdenv.mkDerivation rec {
   # Upstream ships broken symlinks in docs
   dontCheckForBrokenSymlinks = true;
 
-  meta = with lib; {
+  meta = {
     description = "Allows to receive and send infrared signals";
     homepage = "https://www.lirc.org/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

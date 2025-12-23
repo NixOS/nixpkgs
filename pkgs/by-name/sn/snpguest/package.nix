@@ -9,25 +9,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snpguest";
-  version = "0.8.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snpguest";
     tag = "v${version}";
-    hash = "sha256-Fu8A3n1vzA8y5ccyo785udOTTqumLQWCOy0RL/mQ/us=";
+    hash = "sha256-311divpV+c/3/7pP9R7wr+dKabVb1zu4QWDEPGHKZrE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6AXpdm4Ge8j8w74YGEQYpj6r8gKp+Bim/6xA2WLjSC0=";
+  cargoHash = "sha256-Vzb7gIKvEF0a3a/0O+osawigrRF5+QXkKxV75+FX1hE=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
-  };
+  env.OPENSSL_NO_VENDOR = true;
 
   passthru.updateScript = nix-update-script { };
 

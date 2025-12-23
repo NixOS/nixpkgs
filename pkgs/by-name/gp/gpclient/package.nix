@@ -8,25 +8,24 @@
   perl,
   pkg-config,
   vpnc-scripts,
-  fetchFromGitHub,
+  glib,
+  pango,
+  cairo,
+  atk,
+  gtk3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "gpclient";
-  version = "2.4.1";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    rev = "v${version}";
-    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
-  };
-
-  inherit (gpauth) meta;
+  inherit (gpauth)
+    src
+    version
+    cargoHash
+    meta
+    ;
 
   buildAndTestSubdir = "apps/gpclient";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [
     perl
@@ -38,6 +37,11 @@ rustPlatform.buildRustPackage rec {
     openconnect
     openssl
     glib-networking
+    glib
+    pango
+    cairo
+    atk
+    gtk3
   ];
 
   preConfigure = ''

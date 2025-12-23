@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "amiri";
-  version = "1.001";
+  version = "1.003";
 
   src = fetchzip {
-    url = "https://github.com/alif-type/amiri/releases/download/${version}/Amiri-${version}.zip";
-    hash = "sha256-YwiDY5/Ty5Pwj3d8+UafUNLVZ3omRtFRWQCLn2RkheM=";
+    url = "https://github.com/aliftype/amiri/releases/download/${version}/Amiri-${version}.zip";
+    hash = "sha256-BsYPMBlRdzlkvyleZIxGDuGjmqhDlEJ4udj8zoKUSzA=";
   };
 
   installPhase = ''
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classical Arabic typeface in Naskh style";
     homepage = "https://www.amirifont.org/";
-    license = licenses.ofl;
-    maintainers = [ maintainers.vbgl ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.vbgl ];
+    platforms = lib.platforms.all;
   };
 }

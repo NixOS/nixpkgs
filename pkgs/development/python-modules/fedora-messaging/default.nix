@@ -1,8 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   blinker,
   click,
   crochet,
@@ -13,6 +18,8 @@
   service-identity,
   tomli,
   twisted,
+
+  # tests
   pytest-mock,
   pytest-twisted,
   pytestCheckHook,
@@ -20,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "fedora-messaging";
-  version = "3.7.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fedora-infra";
     repo = "fedora-messaging";
     tag = "v${version}";
-    hash = "sha256-MBvFrOUrcPhsFR9yD7yqRM4Yf2StcNvL3sqFIn6XbMc=";
+    hash = "sha256-eQ0grcp/Cd9yKNbeUtftSmqv3uwOJCh36E6CC1Si1aY=";
   };
 
   build-system = [ poetry-core ];
@@ -53,7 +60,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
+
+  disabledTests = [
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_no_conf"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: module 'errno' has no attribute 'EREMOTEIO'. Did you mean: 'EREMOTE'?
+    "test_publish_rejected_message"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for sending AMQP messages with JSON schema in Fedora infrastructure";

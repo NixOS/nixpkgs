@@ -33,12 +33,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "42.0.0";
+  version = "46.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
+    hash = "sha256-ddm1OE7BDwDM4T9GIB0+qK8WvU/+aC+FBIGWDm3ObHM=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
@@ -93,11 +93,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tempest" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tempest";
-    maintainers = teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

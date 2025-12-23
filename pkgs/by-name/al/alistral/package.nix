@@ -10,26 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bt0WCmnk/DAEuQeEvBe5Vdk/AxpfRAafPiEJ7v8HK8Y=";
+    hash = "sha256-lbdyE/k28fJzrOQEKDL8ZLnm6tNcAM4tsfHpcGlJB9s=";
   };
 
-  # remove if updating to rust 1.85
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]'\
-      --replace-fail 'rust-version = "1.85.0"' ""
-  '';
+  cargoHash = "sha256-smoUGJSMmRKdnUz4L+LvPOH/A6CHVmkiHxdyesu+BTw=";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BxJmoJbnGfsA+YCvzUvgnkoHl/ClrwHoE3NjlctjCxA=";
-
-  env.RUSTC_BOOTSTRAP = 1;
+  buildNoDefaultFeatures = true;
+  # Would be cleaner with an "--all-features" option
+  buildFeatures = [ "full" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -49,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/RustyNova016/Alistral/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Power tools for Listenbrainz";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [
+      jopejoe1
+      RustyNova
+    ];
     mainProgram = "alistral";
   };
 })

@@ -1,30 +1,36 @@
 {
   lib,
-  autoreconfHook,
-  coreutils,
-  curl,
+  stdenv,
   fetchFromGitHub,
+
+  # native
+  autoreconfHook,
   installShellFiles,
   ldc,
-  libnotify,
   pkg-config,
+
+  # host
+  coreutils,
+  curl,
+  dbus,
+  libnotify,
   sqlite,
-  stdenv,
   systemd,
   testers,
+
   # Boolean flags
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.4";
+  version = "2.5.9";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-KJ+6Yo5tod36yMihBamdzCGzVOTItN9OgUd05pAyTxc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vrr7KR4yMH+IZ56IUTp9eAhxEtiXx+ppleUd7jSLzxc=";
   };
 
   outputs = [
@@ -42,9 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    dbus
     libnotify
     sqlite
-  ] ++ lib.optionals withSystemd [ systemd ];
+  ]
+  ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
     (lib.enableFeature true "notifications")
@@ -55,12 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
   postInstall = ''
-    installShellCompletion --bash --name onedrive contrib/completions/complete.bash
-    installShellCompletion --fish --name onedrive contrib/completions/complete.fish
-    installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
+    installShellCompletion --cmd onedrive \
+      --bash contrib/completions/complete.bash \
+      --fish contrib/completions/complete.fish \
+      --zsh contrib/completions/complete.zsh
 
-    substituteInPlace $out/lib/systemd/user/onedrive.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
-    substituteInPlace $out/lib/systemd/system/onedrive@.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    substituteInPlace $out/lib/systemd/user/onedrive.service $out/lib/systemd/system/onedrive@.service \
+      --replace-fail "/bin/sh -c 'sleep 15'" "${coreutils}/bin/sleep 15"
   '';
 
   passthru = {
@@ -78,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       peterhoeg
       bertof
+      guylamar2006
     ];
     platforms = lib.platforms.linux;
   };

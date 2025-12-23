@@ -26,7 +26,7 @@ let
   # bit absurd - repo doesn't even have a license.
   idl-serial = stdenv.mkDerivation {
     pname = "idl-serial";
-    version = "unstable-2023-09-28";
+    version = "0-unstable-2023-09-28";
 
     src = fetchFromGitHub {
       owner = "nanomq";
@@ -49,20 +49,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.22.1";
+  version = "0.24.5";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
-    rev = finalAttrs.version;
-    hash = "sha256-aB1gEzo2dX8NY+e0Dq4ELgkUpL/NtvvuY/l539BPIng=";
+    tag = finalAttrs.version;
+    hash = "sha256-tyhAEYdYCO0Tur7HDXXbBSQ8tzTHCbW9B8aBu0sMEEI=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "DESTINATION /etc" "DESTINATION $out/etc"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -89,8 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "NNG_ENABLE_SQLITE" true)
     (lib.cmakeBool "NNG_ENABLE_TLS" true)
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
   # disabled by default - not 100% reliable and making nanomq depend on
   # mosquitto would annoy people
@@ -133,11 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultra-lightweight and blazing-fast MQTT broker for IoT edge";
     homepage = "https://nanomq.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })

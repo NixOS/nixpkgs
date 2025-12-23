@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "viw";
-  version = "unstable-20171029";
+  version = "0-unstable-2017-10-29";
 
   src = fetchFromGitHub {
     owner = "lpan";
@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     install -Dm 644 -t $out/share/doc/viw README.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "VI Worsened, a fun and light clone of VI";
     homepage = "https://github.com/lpan/viw";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     mainProgram = "viw";
   };
 }

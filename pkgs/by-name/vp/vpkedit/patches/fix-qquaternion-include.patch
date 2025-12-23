@@ -1,0 +1,10 @@
+--- a/src/gui/previews/MDLPreview.h
++++ b/src/gui/previews/MDLPreview.h
+@@ -1,6 +1,7 @@
+ #pragma once
+
+ #include <QOpenGLWidget>
++#include <QQuaternion>
+
+ #include "../FileViewer.h"
+

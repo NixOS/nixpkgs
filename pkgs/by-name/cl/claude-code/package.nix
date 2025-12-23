@@ -1,19 +1,24 @@
+# NOTE: Use the following command to update the package
+# ```sh
+# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# ```
 {
   lib,
   buildNpmPackage,
   fetchzip,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "0.2.48";
+  version = "2.0.76";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-zocgUMHWAPhA9ebqfeVCMHuJ1QBX3q8Y/dDjsxKhPv4=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-46IqiGJZrZM4vVcanZj/vY4uxFH3/4LxNA+Qb6iIHDk=";
   };
 
-  npmDepsHash = "sha256-kwq08sKDZDH0eM5gAj+HllQkadDqgyNxMd2xmiTZvq8=";
+  npmDepsHash = "sha256-mDErPWWqOe+3fKriTBLNCzXP48pmmlOMoB+kCP4FoT8=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -21,16 +26,39 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  AUTHORIZED = "1";
+  env.AUTHORIZED = "1";
+
+  # `claude-code` tries to auto-update by default, this disables that functionality.
+  # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
+  # The DEV=true env var causes claude to crash with `TypeError: window.WebSocket is not a constructor`
+  postInstall = ''
+    wrapProgram $out/bin/claude \
+      --set DISABLE_AUTOUPDATER 1 \
+      --unset DEV
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "An agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
+    description = "Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster";
     homepage = "https://github.com/anthropics/claude-code";
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.malo ];
+    maintainers = with lib.maintainers; [
+      adeci
+      malo
+      markus1189
+      omarjatoi
+      xiaoxiangmoe
+    ];
     mainProgram = "claude";
   };
-}
+})

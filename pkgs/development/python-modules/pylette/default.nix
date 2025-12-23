@@ -14,14 +14,14 @@
 }:
 buildPythonPackage rec {
   pname = "pylette";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qTipTip";
     repo = "Pylette";
     tag = version;
-    hash = "sha256-i8+QQpYoRfgoV9Nm/FvXSJV+TEvmaaPsPIeG+PU838Q=";
+    hash = "sha256-6OZeCcF47xjj266+IasJYub042R46KRaNXGCv+hlWdY=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/qTipTip/Pylette/releases/tag/${version}";
+    changelog = "https://github.com/qTipTip/Pylette/releases/tag/${src.tag}";
     description = "Python library for extracting color palettes from images";
     homepage = "https://qtiptip.github.io/Pylette/";
     license = lib.licenses.mit;

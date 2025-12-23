@@ -4,20 +4,18 @@
   fetchFromGitHub,
   cmake,
   asmjit,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "blend2d";
-  # Note: this is an outdated version for pdf4qt, but vcpkg also uses it
-  # See 'Commit Hashes' in https://blend2d.com/download.html for newest
-  # If the newest version is needed, we can rename this package.
-  version = "0.10";
+  version = "0.21.2-unstable-2025-11-03";
 
   src = fetchFromGitHub {
     owner = "blend2d";
     repo = "blend2d";
-    rev = "452d549751188b04367b5af46c040cb737f5f76c";
-    hash = "sha256-LDhnXsp/V1A3YqVyjBVaL7/V6Nhts/1E9hRhl2P293o=";
+    rev = "def0d1238c3e5d0983bb848e5676049d829e435b";
+    hash = "sha256-b9DlgJNpMSLMM+xrM7sKVRH/DAoGHhOrwq5sw4OKH+k=";
   };
 
   outputs = [
@@ -28,6 +26,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ (lib.cmakeFeature "ASMJIT_DIR" (toString asmjit.src)) ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "2D Vector Graphics Engine Powered by a JIT Compiler";

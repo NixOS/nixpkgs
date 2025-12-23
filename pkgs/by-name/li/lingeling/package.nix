@@ -18,16 +18,20 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure.sh
 
     # Rather than patch ./configure, just sneak in use of aiger here, since it
     # doesn't handle real build products very well (it works on a build-time
     # dir, not installed copy)... This is so we can build 'blimc'
     substituteInPlace ./makefile \
-      --replace 'targets: liblgl.a' 'targets: liblgl.a blimc'      \
-      --replace '$(AIGER)/aiger.o'  '${aiger.lib}/lib/aiger.o'     \
-      --replace '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
-      --replace '-I$(AIGER)'        '-I${aiger.dev}/include'
+      --replace-fail 'targets: liblgl.a' 'targets: liblgl.a blimc'      \
+      --replace-fail '$(AIGER)/aiger.o'  '${aiger.lib}/lib/libaiger.a'     \
+      --replace-fail '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
+      --replace-fail '-I$(AIGER)'        '-I${aiger.dev}/include'
+
+    runHook postConfigure
   '';
 
   installPhase = ''
@@ -45,11 +49,11 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast SAT solver";
     homepage = "http://fmv.jku.at/lingeling/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

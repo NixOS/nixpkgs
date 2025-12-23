@@ -16,17 +16,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-k/EA327AsRHgUYu7QqSF5yzOyO6h5XcE9Uv4l1VcIPI=";
   };
 
+  postPatch = ''
+    # Inline https://github.com/ku1ik/stderred/pull/95
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.0)' \
+      'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
 
   sourceRoot = "${src.name}/src";
 
-  meta = with lib; {
-    description = "stderr in red";
+  meta = {
+    description = "Colorize all stderr output that goes to terminal, making it distinguishable from stdout";
     homepage = "https://github.com/sickill/stderred";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vojta001 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vojta001 ];
+    platforms = lib.platforms.unix;
   };
 }

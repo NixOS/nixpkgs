@@ -1,35 +1,59 @@
-{ stdenv
-, lib
-, mkXfceDerivation
-, cairo
-, exo
-, garcon
-, gtk-layer-shell
-, gtk3
-, libdbusmenu-gtk3
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxfce4windowing
-, tzdata
-, wayland
-, xfconf
-, withIntrospection ?
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  python3,
+  xfce4-dev-tools,
+  wrapGAppsHook3,
+  cairo,
+  exo,
+  garcon,
+  gtk-layer-shell,
+  gtk3,
+  libdbusmenu-gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  tzdata,
+  wayland,
+  xfconf,
+  withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
-, vala
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  vala,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-panel";
-  version = "4.20.3";
+  version = "4.20.5";
 
-  sha256 = "sha256-tLWjU0M7tuE+qqDwaE1CtnOjDiPWno8Mf7hhxYxbvjo=";
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = lib.optionals withIntrospection [
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfce4-panel";
+    tag = "xfce4-panel-${finalAttrs.version}";
+    hash = "sha256-Jftj+EmmsKfK9jk8rj5uMjpteFUHFgOpoEol8JReDNI=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    python3
+    xfce4-dev-tools
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
     vala # vala bindings require GObject introspection
   ];
@@ -54,12 +78,26 @@ mkXfceDerivation {
   ];
 
   postPatch = ''
+    patchShebangs xdt-gen-visibility
+
     substituteInPlace plugins/clock/clock.c \
        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
-  meta = with lib; {
-    description = "Panel for the Xfce desktop environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "xfce4-panel-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Panel for the Xfce desktop environment";
+    homepage = "https://gitlab.xfce.org/xfce/xfce4-panel";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-panel";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

@@ -43,7 +43,7 @@ gccStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "the3dfxdude";
     repo = "7kaa";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kkM+kFQ+tGHS5NrVPeDMRWFQb7waESt8xOLfFGaGdgo=";
   };
 
@@ -79,11 +79,11 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   # Multiplayer is auto-disabled for non-x86 system
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.7kfans.com";
     description = "GPL release of the Seven Kingdoms with multiplayer (available only on x86 platforms)";
-    license = licenses.gpl2Only;
-    platforms = platforms.x86_64 ++ platforms.aarch64;
-    maintainers = with maintainers; [ _1000101 ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.x86_64 ++ lib.platforms.aarch64;
+    maintainers = with lib.maintainers; [ _1000101 ];
   };
 })

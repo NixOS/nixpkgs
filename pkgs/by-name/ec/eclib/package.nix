@@ -1,20 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, pari
-, ntl
-, gmp
-# "FLINT is optional and only used for one part of sparse matrix reduction,
-# which is used in the modular symbol code but not mwrank or other elliptic
-# curve programs." -- https://github.com/JohnCremona/eclib/blob/master/README
-, withFlint ? false, flint ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pari,
+  ntl,
+  gmp,
+  # "FLINT is optional and only used for one part of sparse matrix reduction,
+  # which is used in the modular symbol code but not mwrank or other elliptic
+  # curve programs." -- https://github.com/JohnCremona/eclib/blob/master/README
+  withFlint ? false,
+  flint ? null,
 }:
 
 assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
   pname = "eclib";
-  version = "20250122"; # upgrade might break the sage interface
+  version = "20250627"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
@@ -29,31 +32,25 @@ stdenv.mkDerivation rec {
     # see https://github.com/JohnCremona/eclib/issues/64#issuecomment-789788561
     # for upstream's explanation of the above
     url = "https://github.com/JohnCremona/eclib/releases/download/${version}/eclib-${version}.tar.bz2";
-    sha256 = "sha256-n4wrMuJKTyDXzC0zbqMMjqA7WwlTwtMq3aDEludhaJk=";
+    hash = "sha256-uI1LUmEuSRxUFZRtnjXyBiyhAV7n+74LYfFY+nTLS8k=";
   };
   buildInputs = [
     pari
     ntl
     gmp
-  ] ++ lib.optionals withFlint [
+  ]
+  ++ lib.optionals withFlint [
     flint
   ];
   nativeBuildInputs = [
     autoreconfHook
   ];
-
-  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
-  postConfigure = ''
-    substituteInPlace libtool \
-      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
-  '';
-
   doCheck = true;
-  meta = with lib; {
+  meta = {
     description = "Elliptic curve tools";
     homepage = "https://github.com/JohnCremona/eclib";
-    license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.all;
   };
 }

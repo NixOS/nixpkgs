@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 src/gtimelog/gtimelog-large.png $out/share/icons/hicolor/256x256/apps/gtimelog.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking app";
     mainProgram = "gtimelog";
     longDescription = ''
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
       - programs.dconf.enable = true;
     '';
     homepage = "https://gtimelog.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

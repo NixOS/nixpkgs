@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qgv";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "gepetto";
     repo = "qgv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NUMCVqXw7euwxm4vISU8qYFfvV5HbAJsj/IjyxEjCPw=";
+    hash = "sha256-602+CQAScZPNkuudwbRS1NJYYSoQCDwcRJcj8cS/10Q=";
   };
 
   buildInputs = [

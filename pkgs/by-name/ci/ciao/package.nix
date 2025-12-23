@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ciao";
-  version = "1.24.0-m1";
+  version = "1.25.0-m1";
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
-    sha256 = "sha256-vjDiYL6yVfLo7NrVKdYRxMUrg7aqQHTezqNoDJcsEuI=";
+    sha256 = "sha256-jsHz50+R/bs19ees3kKYalYk72ET9eSAAUY7QogI0go=";
   };
 
   configurePhase = ''
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     ./ciao-boot.sh install
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ciao-lang.org/";
     description = "General purpose, multi-paradigm programming language in the Prolog family";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ suhr ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ suhr ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/ciao.x86_64-darwin
   };
 }

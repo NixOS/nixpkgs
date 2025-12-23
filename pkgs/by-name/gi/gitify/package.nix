@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   electron,
   makeDesktopItem,
@@ -11,37 +13,39 @@
   makeWrapper,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.1.0";
+  version = "6.14.1";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3vpt8irwDYdWqX4Vt7WdmQfePqIRkv07LootFLaQGZI=";
+    hash = "sha256-nZoWqfocEg33C22CfVIkayUWkkZ29A8FcAEXx+tJGUU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HW8v5DhbWXmMU2vD2NutbY7eMVzeW1FzYXOs3NRsUw0=";
+    pnpm = pnpm_10;
+    fetcherVersion = 2;
+    hash = "sha256-LnYwUXwGm/2yx7QrMcPu32oPtRJKnuqysecwwH25QIg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail '"Emmanouil Konstantinidis (3YP8SXP3BF)"' null \
-      --replace-fail '"scripts/notarize.js"' null
+    substituteInPlace config/electron-builder.js \
+      --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
+      --replace-fail "'scripts/afterSign.js'" "null"
   '';
 
   buildPhase = ''
@@ -53,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
+        --config config/electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \
@@ -94,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Gitify";
       exec = "gitify %U";
       icon = "gitify";
-      comment = "GitHub Notifications on your menu bar.";
+      comment = "GitHub notifications on your menu bar";
       categories = [ "Development" ];
       startupWMClass = "Gitify";
     })
@@ -103,9 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://www.gitify.io/";
+    homepage = "https://gitify.io/";
     changelog = "https://github.com/gitify-app/gitify/releases/tag/v${finalAttrs.version}";
-    description = "GitHub Notifications on your menu bar";
+    description = "GitHub notifications on your menu bar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;

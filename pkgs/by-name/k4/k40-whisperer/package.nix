@@ -6,6 +6,7 @@
   fetchzip,
   inkscape,
   lib,
+  udevCheckHook,
   udevGroup ? "k40",
 }:
 
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pc6iqBQUoI0dsrf+2dA1ZbxX+4Eks/lVgMGC4SR+oFI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    udevCheckHook
+  ];
 
   patchPhase = ''
     substituteInPlace svg_reader.py \
@@ -43,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = "";
+
+  doInstallCheck = true;
 
   installPhase = ''
     mkdir -p $out
@@ -58,7 +64,7 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Control software for the stock K40 Laser controller
     '';
@@ -70,8 +76,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.scorchworks.com/K40whisperer/k40whisperer.html";
     downloadPage = "https://www.scorchworks.com/K40whisperer/k40whisperer.html#download";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fooker ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fooker ];
+    platforms = lib.platforms.all;
   };
 }

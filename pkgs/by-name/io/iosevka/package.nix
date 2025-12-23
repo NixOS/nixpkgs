@@ -47,35 +47,36 @@
   #   sequence = "+>"
   # '';
   extraParameters ? null,
-  # Custom font set name. Required if any custom settings above.
-  set ? null,
+  # Custom font set name. Required if `extraParameters` is used and/or
+  # if `privateBuildPlan` is a TOML string.
+  set ? privateBuildPlan.family or null,
 }:
 
+assert (builtins.isAttrs privateBuildPlan) -> builtins.hasAttr "family" privateBuildPlan;
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.0.1";
+  version = "33.3.6";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-Yosl6dqbYLsX1whkSazHHlbZ4zhJ5jSZmrdi22BLBJM=";
+    hash = "sha256-/Bex4N+3xnYwteO85UaqrIKL5qGnYgSJYO9ET/WEUjM=";
   };
 
-  npmDepsHash = "sha256-/a2VVz8w2a2KfOgWAg0AWmdbPqQ7bN6rBHhv6b1TwYg=";
+  npmDepsHash = "sha256-6TTcXFf9z3ebL4l+++0DS26BJVnwzIi7hU2R1H0DF44=";
 
-  nativeBuildInputs =
-    [
-      remarshal
-      ttfautohint-nox
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # libtool
-      cctools
-    ];
+  nativeBuildInputs = [
+    remarshal
+    ttfautohint-nox
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # libtool
+    cctools
+  ];
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -84,11 +85,12 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile =
-    [ "extraParameters" ]
-    ++ lib.optionals (
-      !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
-    ) [ "buildPlan" ];
+  passAsFile = [
+    "extraParameters"
+  ]
+  ++ lib.optionals (
+    !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
+  ) [ "buildPlan" ];
 
   configurePhase = ''
     runHook preConfigure
@@ -119,7 +121,7 @@ buildNpmPackage rec {
     runHook preBuild
 
     # pipe to cat to disable progress bar
-    npm run build --no-update-notifier --targets ttf::$pname -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
+    npm run build --no-update-notifier --targets ttf::"$pname" -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
 
     runHook postBuild
   '';
@@ -133,8 +135,9 @@ buildNpmPackage rec {
   '';
 
   enableParallelBuilding = true;
+  requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://typeof.net/Iosevka/";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = "Versatile typeface for code, from code";
@@ -143,11 +146,10 @@ buildNpmPackage rec {
       quasi‑proportional typeface family, designed for writing code, using in
       terminals, and preparing technical documents.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       ttuegel
-      rileyinman
       lunik1
     ];
   };

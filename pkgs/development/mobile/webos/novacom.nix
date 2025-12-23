@@ -24,15 +24,20 @@ stdenv.mkDerivation rec {
     webos.cmake-modules
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall = ''
     install -Dm755 -t $out/bin ../scripts/novaterm
     substituteInPlace $out/bin/novaterm --replace "exec novacom" "exec $out/bin/novacom"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility for communicating with WebOS devices";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

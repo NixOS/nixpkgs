@@ -13,11 +13,11 @@ let
     types
     concatStringsSep
     concatMapStringsSep
-    any
+    elem
     optionals
     ;
-  collectorIsEnabled = final: any (collector: (final == collector)) cfg.enabledCollectors;
-  collectorIsDisabled = final: any (collector: (final == collector)) cfg.disabledCollectors;
+  collectorIsEnabled = final: elem final cfg.enabledCollectors;
+  collectorIsDisabled = final: elem final cfg.disabledCollectors;
 in
 {
   port = 9100;
@@ -54,12 +54,13 @@ in
           # needs access to dbus via unix sockets (logind/systemd)
           "AF_UNIX"
         ]
-        ++ optionals
-          (collectorIsEnabled "network_route" || collectorIsEnabled "wifi" || !collectorIsDisabled "netdev")
-          [
-            # needs netlink sockets for wireless collector
-            "AF_NETLINK"
-          ];
+        ++
+          optionals
+            (collectorIsEnabled "network_route" || collectorIsEnabled "wifi" || !collectorIsDisabled "netdev")
+            [
+              # needs netlink sockets for wireless collector
+              "AF_NETLINK"
+            ];
       # The timex collector needs to access clock APIs
       ProtectClock = collectorIsDisabled "timex";
       # Allow space monitoring under /home

@@ -4,18 +4,19 @@
   fetchPypi,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pipreqs";
   version = "0.4.13";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-oX8WeIC2khvjdTPOTIHdxuIrRlwQeq1VfbQ7Gt1WqZs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     yarg
     docopt
   ];
@@ -23,11 +24,13 @@ buildPythonApplication rec {
   # Tests requires network access. Works fine without sandboxing
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pipreqs" ];
+
+  meta = {
     description = "Generate requirements.txt file for any project based on imports";
     homepage = "https://github.com/bndr/pipreqs";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psyanticy ];
     mainProgram = "pipreqs";
   };
 }

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dQ3wzBTjteqk9rju+FMAO+ydimnGu24Y2DEDLX/P+1A=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-X/O1Lg1llyRz+d5MC1xO4qKU1+mDIlZhgj6qQ9kLH4k=";
 
   # Package requires a non reproducible submodule
@@ -29,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = nixel; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lexer, Parser, Abstract Syntax Tree and Concrete Syntax Tree for the Nix Expressions Language";
     mainProgram = "nixel";
     homepage = "https://github.com/kamadorueda/nixel";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

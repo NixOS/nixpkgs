@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "libasyncns-python";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/libasyncns-python/trunk/${version}/+download/libasyncns-python-${version}.tar.bz2";
@@ -29,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libasyncns" ];
 
-  meta = with lib; {
-    description = "libasyncns-python is a python binding for the asynchronous name service query library";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.mic92 ];
+  meta = {
+    description = "Libasyncns-python is a python binding for the asynchronous name service query library";
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.mic92 ];
     homepage = "https://launchpad.net/libasyncns-python";
   };
 }

@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "tinymist";
     publisher = "myriad-dreamin";
-    inherit (tinymist) version;
-    hash = "sha256-OB+e4lerPONs7QDqHJO3pqU1yQ3BvM2k+Tz998ibmHo=";
+    version = "0.14.4";
+    hash = "sha256-Y8yIAIT0TrrM8ZQSZl4QnVG6uE0F+AwWFvmhLe0ZPto=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist";
     homepage = "https://github.com/myriad-dreamin/tinymist";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.drupol ];
+    maintainers = [ ];
   };
 }

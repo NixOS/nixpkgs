@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
       lgpl21Plus
     ];
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ dotlambda ]);
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "spatialite_tool";
   };
 }

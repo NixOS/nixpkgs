@@ -6,13 +6,14 @@
   qtbase,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "hue-plus";
   version = "1.4.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kusti8";
-    repo = pname;
+    repo = "hue-plus";
     rev = "7ce7c4603c6d0ab1da29b0d4080aa05f57bd1760";
     sha256 = "sha256-dDIJXhB3rmKnawOYJHE7WK38b0M5722zA+yLgpEjDyI=";
   };
@@ -36,13 +37,13 @@ python3Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kusti8/hue-plus";
     description = "Windows and Linux driver in Python for the NZXT Hue+";
     longDescription = ''
       A cross-platform driver in Python for the NZXT Hue+. Supports all functionality except FPS, CPU, and GPU lighting.
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ garaiza-93 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ garaiza-93 ];
   };
 }

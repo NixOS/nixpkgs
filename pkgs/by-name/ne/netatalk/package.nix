@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -22,17 +23,17 @@
   openldap,
   glib,
   dbus,
-  docbook-xsl-nons,
-  libxslt,
+  iniparser,
+  pandoc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.1.2";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qCX2/37+2wm7nKdXJ6tDEmeXAA+Jd123LI2VIL9IHpw=";
+    hash = "sha256-KXe0/RExgvDMGDM3uiPVcB+yvk4N/Ox+5XW01zpzjTo=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
@@ -58,29 +60,33 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     perl
     dbus
-    docbook-xsl-nons
-    libxslt
+    iniparser
+    pandoc
   ];
 
   mesonFlags = [
     "-Dwith-appletalk=true"
+    "-Dwith-statedir-path=/var/lib"
     "-Dwith-bdb-path=${db.out}"
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"
     "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
+    "-Dwith-lockfile-path=/run/lock"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
-    "-Dwith-docbook-path=${docbook-xsl-nons.out}/share/xml/docbook-xsl-nons/"
+    "-Dwith-statedir-creation=false"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Apple Filing Protocol Server";
     homepage = "https://netatalk.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jcumming
+      nulleric
+    ];
   };
 })

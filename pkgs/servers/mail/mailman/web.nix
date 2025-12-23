@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) mailman; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
     mainProgram = "mailman-web";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       qyliss
       m1cr0man
     ];

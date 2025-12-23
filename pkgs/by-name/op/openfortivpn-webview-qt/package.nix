@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}-electron";
     hash = "sha256-jGDCFdqRfnYwUgVs3KO1pDr52JgkYVRHi2KvABaZFl4=";
   };
-  sourceRoot = "source/openfortivpn-webview-qt";
+  sourceRoot = "${src.name}/openfortivpn-webview-qt";
 
   nativeBuildInputs = [
     qt6Packages.wrapQtAppsHook
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Perform the SAML single sign-on and easily retrieve the SVPNCOOKIE needed by openfortivpn";
     homepage = "https://github.com/gm-vm/openfortivpn-webview/tree/main";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jonboh ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "openfortivpn-webview";
   };
 }

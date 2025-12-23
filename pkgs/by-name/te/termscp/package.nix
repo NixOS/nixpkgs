@@ -13,17 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.16.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
     tag = "v${version}";
-    hash = "sha256-tR+jfFdCSsf+WR8VUX60/mdfsp7cX9jUDI+CKIZkgEE=";
+    hash = "sha256-wmoZneXmhstEX1Ocd9gkVRaZ9UGaYJERU5FlIUoHOI4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-13M5p988ziI3bcOHR7lsSrjT4JkyqCJF9Tm7YznO6N8=";
+  cargoHash = "sha256-EZJszeFAo9vjtk+RJ8nqFqpKD7BpQ/mCImD472NXZNM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,18 +43,18 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   checkFeatures = [ "isolated-tests" ];
-  checkFlags =
-    [
-      # requires networking
-      "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
-      "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
-      "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-      "--skip=system::watcher::test::should_poll_file_removed"
-      "--skip=system::watcher::test::should_poll_file_update"
-      "--skip=system::watcher::test::should_poll_nothing"
-    ];
+  checkFlags = [
+    # requires networking
+    "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
+    "--skip=system::auto_update::test::test_should_check_whether_github_api_is_reachable"
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    "--skip=system::watcher::test::should_poll_file_removed"
+    "--skip=system::watcher::test::should_poll_file_update"
+    "--skip=system::watcher::test::should_poll_nothing"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

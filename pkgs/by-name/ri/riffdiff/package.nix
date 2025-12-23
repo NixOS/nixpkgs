@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "riffdiff";
-  version = "3.3.8";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "riff";
     tag = version;
-    hash = "sha256-KJ+2MdhBW0og6uj9eTUsoKcpenQj7tp3fZzgCNfdrqI=";
+    hash = "sha256-2C1aD9sXh/+spNxbLbw13WAJ6ijdYqkWgPbKrw3zTm0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0D/jJsPjxDqD5xjqET+Y4iXAvNzOu1c3meaFkXVtSDw=";
+  cargoHash = "sha256-Jg9c7tSjluhHSl2GoZkZlkBs+ojCGjjQ3dheROUC60g=";
 
   passthru = {
     tests.version = testers.testVersion { package = riffdiff; };

@@ -23,8 +23,8 @@ let
     ;
 
   finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
-    propagatedBuildInputs =
-      oldAttrs.propagatedBuildInputs
+    dependencies =
+      oldAttrs.dependencies
       # for audio enhancements like auto-gain, noise suppression
       ++ cfg.package.optional-dependencies.webrtc
       # vad is currently optional, because it is broken on aarch64-linux

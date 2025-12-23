@@ -15,12 +15,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-aBX3RXfDhlXVMV8aPO0pu3527nDoYrUDUbH6crWO/W8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kMY+esMOsQZC979jntcqF35KVJCBuNLXHb0WYOV5YHA=";
 
   postPatch = "patchShebangs moduletests/run";
 
-  meta = with lib; {
+  meta = {
     description = "Corrective bash syntax highlighter";
     mainProgram = "shellharden";
     longDescription = ''
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       rewriting of scripts to ShellCheck conformance, mainly focused on quoting.
     '';
     homepage = "https://github.com/anordal/shellharden";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ oxzi ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

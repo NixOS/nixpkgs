@@ -38,17 +38,16 @@ stdenv.mkDerivation rec {
     sha256 = "1vran8583hbwrr5dciji4zkhz3f88w4mn8n9sdpr6zw0plpf1whj";
   };
 
-  buildInputs =
-    [
-      ncurses
-      fontconfig
-    ]
-    ++ (with xorg; [
-      libX11.dev
-      libXt.dev
-      libXaw.dev
-      libXext.dev
-    ]);
+  buildInputs = [
+    ncurses
+    fontconfig
+  ]
+  ++ (with xorg; [
+    libX11.dev
+    libXt.dev
+    libXaw.dev
+    libXext.dev
+  ]);
 
   nativeBuildInputs = [
     file

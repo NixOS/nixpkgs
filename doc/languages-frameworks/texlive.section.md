@@ -10,7 +10,13 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
 - Packages cannot be used directly but must be assembled in an environment. To create or add packages to an environment, use
   ```nix
-  texliveSmall.withPackages (ps: with ps; [ collection-langkorean algorithms cm-super ])
+  texliveSmall.withPackages (
+    ps: with ps; [
+      collection-langkorean
+      algorithms
+      cm-super
+    ]
+  )
   ```
   The function `withPackages` can be called multiple times to add more packages.
 
@@ -18,12 +24,14 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
 - `texlive.withPackages` uses the same logic as `buildEnv`. Only parts of a package are installed in an environment: its 'runtime' files (`tex` output), binaries (`out` output), and support files (`tlpkg` output). Moreover, man and info pages are assembled into separate `man` and `info` outputs. To add only the TeX files of a package, or its documentation (`texdoc` output), just specify the outputs:
   ```nix
-  texlive.withPackages (ps: with ps; [
-    texdoc # recommended package to navigate the documentation
-    perlPackages.LaTeXML.tex # tex files of LaTeXML, omit binaries
-    cm-super
-    cm-super.texdoc # documentation of cm-super
-  ])
+  texlive.withPackages (
+    ps: with ps; [
+      texdoc # recommended package to navigate the documentation
+      perlPackages.LaTeXML.tex # tex files of LaTeXML, omit binaries
+      cm-super
+      cm-super.texdoc # documentation of cm-super
+    ]
+  )
   ```
 
 - All packages distributed by TeX Live, which contains most of CTAN, are available and can be found under `texlive.pkgs`:
@@ -40,7 +48,7 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```
   This can be applied before or after calling `withPackages`.
 
-  The function currently support the parameters `withDocs`, `withSources`, and `requireTeXPackages`.
+  The function currently supports the parameters `withDocs`, `withSources`, and `requireTeXPackages`.
 
 ## User's guide {#sec-language-texlive-user-guide}
 
@@ -50,7 +58,12 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
   ```nix
   texlive.combine {
-    inherit (texlive) scheme-small collection-langkorean algorithms cm-super;
+    inherit (texlive)
+      scheme-small
+      collection-langkorean
+      algorithms
+      cm-super
+      ;
   }
   ```
 
@@ -61,8 +74,8 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```nix
   texlive.combine {
     # inherit (texlive) whatever-you-want;
-    pkgFilter = pkg:
-      pkg.tlType == "run" || pkg.tlType == "bin" || pkg.hasManpages || pkg.pname == "cm-super";
+    pkgFilter =
+      pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.hasManpages || pkg.pname == "cm-super";
     # elem tlType [ "run" "bin" "doc" "source" ]
     # there are also other attributes: version, name
   }
@@ -76,23 +89,23 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   nix-repl> texlive.collection-[TAB]
   ```
 
-- Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example `scheme-basic`, into the combination.
+- Note that the wrapper assumes that the result has a chance to be useful. For example, the core executables should be present, as well as some core data files. The supported way of ensuring this is by including some scheme, for example, `scheme-basic`, into the combination.
 
 - TeX Live packages are also available under `texlive.pkgs` as derivations with outputs `out`, `tex`, `texdoc`, `texsource`, `tlpkg`, `man`, `info`. They cannot be installed outside of `texlive.combine` but are available for other uses. To repackage a font, for instance, use
 
   ```nix
-  stdenvNoCC.mkDerivation rec {
+  stdenvNoCC.mkDerivation (finalAttrs: {
     src = texlive.pkgs.iwona;
     dontUnpack = true;
 
-    inherit (src) pname version;
+    inherit (finalAttrs.src) pname version;
 
     installPhase = ''
       runHook preInstall
       install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
       runHook postInstall
     '';
-  }
+  })
   ```
 
   See `biber`, `iwona` for complete examples.
@@ -114,14 +127,17 @@ When using `pkgFilter`, `texlive.combine` will assign `tlType` respectively `"bi
 Here is a (very verbose) example. See also the packages `auctex`, `eukleides`, `mftrace` for more examples.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
   foiltex = stdenvNoCC.mkDerivation {
     pname = "latex-foiltex";
     version = "2.1.4b";
 
-    outputs = [ "tex" "texdoc" ];
+    outputs = [
+      "tex"
+      "texdoc"
+    ];
     passthru.tlDeps = with texlive; [ latex ];
 
     srcs = [
@@ -146,11 +162,18 @@ let
     '';
 
     nativeBuildInputs = [
-      (texliveSmall.withPackages (ps: with ps; [ cm-super hypdoc latexmk ]))
+      (texliveSmall.withPackages (
+        ps: with ps; [
+          cm-super
+          hypdoc
+          latexmk
+        ]
+      ))
       # multiple-outputs.sh fails if $out is not defined
       (writeShellScript "force-tex-output.sh" ''
         out="''${tex-}"
       '')
+      writableTmpDirAsHomeHook # Need a writable $HOME for latexmk
     ];
 
     dontConfigure = true;
@@ -162,7 +185,6 @@ let
       latex foiltex.ins
 
       # Generate the documentation
-      export HOME=.
       latexmk -pdf foiltex.dtx
 
       runHook postBuild
@@ -192,21 +214,19 @@ let
 
   latex_with_foiltex = texliveSmall.withPackages (_: [ foiltex ]);
 in
-  runCommand "test.pdf" {
-    nativeBuildInputs = [ latex_with_foiltex ];
-  } ''
-cat >test.tex <<EOF
-\documentclass{foils}
+runCommand "test.pdf" { nativeBuildInputs = [ latex_with_foiltex ]; } ''
+  cat >test.tex <<EOF
+  \documentclass{foils}
 
-\title{Presentation title}
-\date{}
+  \title{Presentation title}
+  \date{}
 
-\begin{document}
-\maketitle
-\end{document}
-EOF
-  pdflatex test.tex
-  cp test.pdf $out
+  \begin{document}
+  \maketitle
+  \end{document}
+  EOF
+    pdflatex test.tex
+    cp test.pdf $out
 ''
 ```
 
@@ -215,9 +235,7 @@ EOF
 The font cache for LuaLaTeX is written to `$HOME`.
 Therefore, it is necessary to set `$HOME` to a writable path, e.g. [before using LuaLaTeX in nix derivations](https://github.com/NixOS/nixpkgs/issues/180639):
 ```nix
-runCommandNoCC "lualatex-hello-world" {
-  buildInputs = [ texliveFull ];
-} ''
+runCommand "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
   mkdir $out
   echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
   env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex

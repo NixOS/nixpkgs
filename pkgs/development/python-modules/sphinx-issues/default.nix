@@ -3,17 +3,11 @@
   buildPythonPackage,
   sphinx,
   fetchFromGitHub,
-  pandoc,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-issues";
   version = "3.0.1";
   format = "setuptools";
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   src = fetchFromGitHub {
     owner = "sloria";
@@ -26,21 +20,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sphinx ];
 
-  nativeBuildInputs = [ pandoc ];
-
-  postBuild = ''
-    pandoc -f rst -t html --standalone < README.rst > README.html
-  '';
-
-  postInstall = ''
-    mkdir -p $doc/share/doc/$name/html
-    cp README.html $doc/share/doc/$name/html
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sloria/sphinx-issues";
     description = "Sphinx extension for linking to your project's issue tracker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  tcp_wrappers,
   flex,
   bison,
   perl,
   libnsl,
+  # --with-libwrap=yes is currently broken, TODO unbreak
+  withLibWrap ? false,
+  tcp_wrappers,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,16 +25,22 @@ stdenv.mkDerivation rec {
     bison
   ];
   buildInputs = [
-    tcp_wrappers
     perl
     libnsl
+  ]
+  ++ lib.optionals withLibWrap [
+    tcp_wrappers
   ];
 
-  meta = with lib; {
+  configureFlags = lib.optionals (!withLibWrap) [
+    "--with-libwrap=no"
+  ];
+
+  meta = {
     description = "Protocol for authentication, authorization and accounting (AAA) services for routers and network devices";
     homepage = "http://www.shrubbery.net/tac_plus/";
-    license = licenses.free;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = with platforms; linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = with lib.platforms; linux;
   };
 }

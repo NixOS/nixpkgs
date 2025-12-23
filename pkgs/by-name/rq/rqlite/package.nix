@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rqlite";
-  version = "8.36.13";
+  version = "9.3.2";
 
   src = fetchFromGitHub {
     owner = "rqlite";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-1yDz9rbjJCzl0pXvrMoAHdv4O9DAnE9HN6LQm3wp6kI=";
+    repo = "rqlite";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-35wW/on76G51/U/9DTyeXKIxPsYZiISIHBDSeUCM/A4=";
   };
 
-  vendorHash = "sha256-kdBYU0+8G/XspBXWPXTUy3vwbM90irM8xIpQgTMtRrA=";
+  vendorHash = "sha256-ieJ5D5CPMPVyPGvMx6suiaj9ah4i1bDzAxHQtRDDYWo=";
 
   subPackages = [
     "cmd/rqlite"
@@ -28,16 +28,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rqlite/rqlite/cmd.Version=${src.rev}"
+    "-X github.com/rqlite/rqlite/cmd.Version=${finalAttrs.version}"
   ];
 
   # Tests are in a different subPackage which fails trying to access the network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, distributed relational database built on SQLite";
     homepage = "https://github.com/rqlite/rqlite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/rqlite/rqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

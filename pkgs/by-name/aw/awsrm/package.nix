@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jckuester";
-    repo = pname;
+    repo = "awsrm";
     rev = "v${version}";
     sha256 = "sha256-KAujqYDtZbCBRO5WK9b9mxqe84ZllbBoO2tLnDH/bdo=";
   };
@@ -31,11 +31,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Remove command for AWS resources";
     homepage = "https://github.com/jckuester/awsrm";
-    license = licenses.mit;
-    maintainers = [ maintainers.markus1189 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "awsrm";
   };
 }

@@ -6,7 +6,6 @@
   fetchFromGitLab,
   imagemagick,
   libarchive,
-  libdevil,
   libraw,
   mpv,
   pkg-config,
@@ -18,44 +17,46 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "3.0";
+  version = "4.0";
 
   src = fetchFromGitLab {
-    name = "previewqt-sources-${finalAttrs.version}";
     owner = "lspies";
     repo = "previewqt";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cDtqgezKGgSdhw8x1mM4cZ0H3SfUPEyWP6rRD+kRwXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wzMo5igLTVxUo3E8X2mRbOTuhW3CS4fISgVntgPbZlY=";
   };
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      exiv2
-      extra-cmake-modules
-      imagemagick
-      libarchive
-      libdevil
-      libraw
-      mpv
-      resvg
-      vips
-    ]
-    ++ [
-      qt6Packages.poppler
-      qt6Packages.qtmultimedia
-      qt6Packages.qtquick3d
-      qt6Packages.qtsvg
-      qt6Packages.qttools
-      qt6Packages.qtwebengine
-    ];
+  buildInputs = [
+    exiv2
+    imagemagick
+    libarchive
+    libraw
+    mpv
+    resvg
+    vips
+  ]
+  ++ [
+    qt6Packages.poppler
+    qt6Packages.qtmultimedia
+    qt6Packages.qtquick3d
+    qt6Packages.qtsvg
+    qt6Packages.qttools
+    qt6Packages.qtwebengine
+  ];
 
   strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_DEVIL" false)
+    (lib.cmakeBool "WITH_FREEIMAGE" false)
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications

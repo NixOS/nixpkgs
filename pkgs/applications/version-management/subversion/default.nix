@@ -16,8 +16,6 @@
   openssl,
   lz4,
   utf8proc,
-  CoreServices,
-  Security,
   autoconf,
   libtool,
   apacheHttpd ? null,
@@ -29,6 +27,7 @@
   perl ? null,
   sasl ? null,
   serf ? null,
+  nixosTests,
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -66,23 +65,22 @@ let
           python3
         ];
 
-        buildInputs =
-          [
-            zlib
-            apr
-            aprutil
-            sqlite
-            openssl
-            lz4
-            utf8proc
-          ]
-          ++ lib.optional httpSupport serf
-          ++ lib.optionals pythonBindings [
-            python3
-            py3c
-          ]
-          ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl;
+        buildInputs = [
+          zlib
+          apr
+          aprutil
+          sqlite
+          openssl
+          lz4
+          utf8proc
+        ]
+        ++ lib.optional httpSupport serf
+        ++ lib.optionals pythonBindings [
+          python3
+          py3c
+        ]
+        ++ lib.optional perlBindings perl
+        ++ lib.optional saslSupport sasl;
 
         patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -101,22 +99,21 @@ let
           ./autogen.sh
         '';
 
-        configureFlags =
-          [
-            (lib.withFeature bdbSupport "berkeley-db")
-            (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-            (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-            (lib.withFeatureAs saslSupport "sasl" sasl)
-            (lib.withFeatureAs httpSupport "serf" serf)
-            "--with-zlib=${zlib.dev}"
-            "--with-sqlite=${sqlite.dev}"
-            "--with-apr=${apr.dev}"
-            "--with-apr-util=${aprutil.dev}"
-          ]
-          ++ lib.optionals javahlBindings [
-            "--enable-javahl"
-            "--with-jdk=${jdk}"
-          ];
+        configureFlags = [
+          (lib.withFeature bdbSupport "berkeley-db")
+          (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+          (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+          (lib.withFeatureAs saslSupport "sasl" sasl)
+          (lib.withFeatureAs httpSupport "serf" serf)
+          "--with-zlib=${zlib.dev}"
+          "--with-sqlite=${sqlite.dev}"
+          "--with-apr=${apr.dev}"
+          "--with-apr-util=${aprutil.dev}"
+        ]
+        ++ lib.optionals javahlBindings [
+          "--enable-javahl"
+          "--with-jdk=${jdk}"
+        ];
 
         preBuild = ''
           makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
@@ -160,13 +157,15 @@ let
         nativeCheckInputs = [ python3 ];
         doCheck = false; # fails 10 out of ~2300 tests
 
-        meta = with lib; {
+        passthru.tests = { inherit (nixosTests) svnserve; };
+
+        meta = {
           description = "Version control system intended to be a compelling replacement for CVS in the open source community";
-          license = licenses.asl20;
+          license = lib.licenses.asl20;
           homepage = "https://subversion.apache.org/";
           mainProgram = "svn";
-          maintainers = with maintainers; [ lovek323 ];
-          platforms = platforms.linux ++ platforms.darwin;
+          maintainers = with lib.maintainers; [ lovek323 ];
+          platforms = lib.platforms.linux ++ lib.platforms.darwin;
         };
 
       }

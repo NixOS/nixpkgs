@@ -8,7 +8,7 @@ test fails.
      )
 -    test(
 -        'x11comp',
--        executable('test-x11comp', 'test/x11comp.c', dependencies: x11_test_dep),
+-        executable('test-x11comp', 'test/x11comp.c', dependencies: x11_xvfb_test_dep),
 -        env: test_env,
 -        is_parallel : false,
 -    )

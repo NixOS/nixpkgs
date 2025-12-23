@@ -1,0 +1,246 @@
+From cbb90f0c9f4b684d1934380288553cc22f95babe Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Fri, 12 Dec 2025 21:40:50 -0500
+Subject: [PATCH ovn] tests: Ignore AT_CHECK stderr for `grep ... | grep -q`.
+
+When `grep -q` is used in a pipeline, it will exit on a first match and
+not wait for its upstream pipeline component to complete. The upstream
+command may keep producing stdout. If the upstream command attempts to
+write to its stdout after `grep -q` exited, it will receive SIGPIPE. In
+this scenario, the upstream command may print an error to stderr.
+
+Specifically, `grep` may write: `grep: write error: Broken pipe`.
+
+Since AT_CHECK with implicit stderr argument expects empty stderr,
+running AT_CHECK on a pipeline that chains multiple `grep` calls, with
+the last component being `grep -q`, may result in a spurious test
+failure, depending on the order of `close` calls on stdin and stdout of
+the pipeline component commands.
+
+When `grep -q` is used and we expect it to return 0, we usually don't
+care if its upstream command produces more output (either stdout or
+stderr). As long as there's a match, `grep -q` - and the AT_CHECK check
+- should succeed.
+
+This patch updates all AT_CHECK calls that:
+
+- use a pipeline with multiple `grep` components;
+- with the last pipeline component being `grep -q`;
+- expect a match (making `grep -q` exit early).
+
+These calls are updated to explicitly `[ignore]` stderr from the
+pipeline.
+
+Signed-off-by: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+---
+ tests/ovn-controller.at  | 14 +++++++-------
+ tests/ovn-northd.at      | 28 ++++++++++++++--------------
+ tests/system-ovn-kmod.at |  6 +++---
+ 3 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/tests/ovn-controller.at b/tests/ovn-controller.at
+index 0ba1357b2..d7cc06d00 100644
+--- a/tests/ovn-controller.at
++++ b/tests/ovn-controller.at
+@@ -862,7 +862,7 @@ check ovn-nbctl meter-add event-elb drop 100 pktps 10
+ check ovn-nbctl --wait=hv copp-add copp0 event-elb event-elb
+ check ovn-nbctl --wait=hv ls-copp-add copp0 ls1
+ 
+-AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.0f | grep -q meter_id=1])
++AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.0f | grep -q meter_id=1], [0], [], [ignore])
+ 
+ check ovn-nbctl copp-del copp0
+ AT_CHECK([ovn-nbctl copp-list copp0], [0], [dnl
+@@ -875,13 +875,13 @@ check ovn-nbctl --wait=hv copp-add copp1 reject acl-meter
+ check ovn-nbctl ls-copp-add copp1 ls1
+ check ovn-nbctl --wait=hv acl-add ls1 from-lport 1002 'inport == "lsp1" && ip && udp' reject
+ 
+-AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.16 | grep -q meter_id=1])
++AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.16 | grep -q meter_id=1], [0], [], [ignore])
+ 
+ # arp metering
+ check ovn-nbctl meter-add arp-meter drop 200 pktps 0
+ check ovn-nbctl --wait=hv copp-add copp2 arp-resolve arp-meter
+ check ovn-nbctl --wait=hv lr-copp-add copp2 lr1
+-AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.00 | grep -q meter_id=2])
++AT_CHECK([as hv1 ovs-ofctl dump-flows br-int | grep controller | grep userdata=00.00.00.00 | grep -q meter_id=2], [0], [], [ignore])
+ 
+ OVN_CLEANUP([hv1])
+ AT_CLEANUP
+@@ -2099,7 +2099,7 @@ check ovn-nbctl --wait=hv sync
+ check ovn-nbctl remove address_set as1 addresses 10.0.0.1/32
+ check ovn-nbctl --wait=hv sync
+ 
+-AT_CHECK([grep "already references desired flow" hv1/ovn-controller.log | grep -q "nw_src=10.0.0.1"])
++AT_CHECK([grep "already references desired flow" hv1/ovn-controller.log | grep -q "nw_src=10.0.0.1"], [0], [], [ignore])
+ 
+ # Same for duplicate IPv6 addresses.
+ check ovn-nbctl add address_set as2 addresses '["::01"]'
+@@ -2107,7 +2107,7 @@ check ovn-nbctl --wait=hv sync
+ check ovn-nbctl remove address_set as2 addresses '["::01"]'
+ check ovn-nbctl --wait=hv sync
+ 
+-AT_CHECK([grep "already references desired flow" hv1/ovn-controller.log | grep -q "ipv6_src=::1"])
++AT_CHECK([grep "already references desired flow" hv1/ovn-controller.log | grep -q "ipv6_src=::1"], [0], [], [ignore])
+ 
+ OVN_CLEANUP([hv1
+ /already references desired flow/d
+@@ -2471,8 +2471,8 @@ AT_CHECK([ovn-nbctl --wait=hv sync])
+ # Check if ovn-controller is still alive
+ AT_CHECK([ps $pid], [0], [ignore])
+ # Check if we got warnings for invalid
+-AT_CHECK([grep "Parsing of ovn-chassis-mac-mappings failed" hv1/ovn-controller.log | grep -q invalid1])
+-AT_CHECK([grep "Parsing of ovn-chassis-mac-mappings failed" hv1/ovn-controller.log | grep -q invalid2])
++AT_CHECK([grep "Parsing of ovn-chassis-mac-mappings failed" hv1/ovn-controller.log | grep -q invalid1], [0], [], [ignore])
++AT_CHECK([grep "Parsing of ovn-chassis-mac-mappings failed" hv1/ovn-controller.log | grep -q invalid2], [0], [], [ignore])
+ AT_CHECK([grep "Parsing of ovn-chassis-mac-mappings failed" hv1/ovn-controller.log | grep -q br1], [1])
+ 
+ OVN_CLEANUP([hv1
+diff --git a/tests/ovn-northd.at b/tests/ovn-northd.at
+index d425cfb7a..5b1a8b6f8 100644
+--- a/tests/ovn-northd.at
++++ b/tests/ovn-northd.at
+@@ -4151,7 +4151,7 @@ check as northd ovn-appctl -t ovn-northd inc-engine/clear-stats
+ 
+ check ovn-nbctl --bfd=$uuid lr-route-add r0 100.0.0.0/8 192.168.1.2
+ wait_column down bfd status logical_port=r0-sw1
+-AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.1.2 | grep -q bfd],[0])
++AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.1.2 | grep -q bfd], [0], [], [ignore])
+ 
+ check_engine_stats northd recompute nocompute
+ check_engine_stats bfd recompute nocompute
+@@ -4163,11 +4163,11 @@ check as northd ovn-appctl -t ovn-northd inc-engine/clear-stats
+ 
+ check ovn-nbctl --bfd lr-route-add r0 200.0.0.0/8 192.168.2.2
+ wait_column down bfd status logical_port=r0-sw2
+-AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.2.2 | grep -q bfd],[0])
++AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.2.2 | grep -q bfd], [0], [], [ignore])
+ 
+ check ovn-nbctl --bfd lr-route-add r0 240.0.0.0/8 192.168.5.2 r0-sw5
+ wait_column down bfd status logical_port=r0-sw5
+-AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.5.2 | grep -q bfd],[0])
++AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.5.2 | grep -q bfd], [0], [], [ignore])
+ 
+ check_engine_stats northd recompute nocompute
+ check_engine_stats bfd recompute nocompute
+@@ -4179,7 +4179,7 @@ check as northd ovn-appctl -t ovn-northd inc-engine/clear-stats
+ 
+ check ovn-nbctl --bfd --policy=src-ip lr-route-add r0 192.168.6.1/32 192.168.10.10 r0-sw6
+ wait_column down bfd status logical_port=r0-sw6
+-AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.6.1 | grep -q bfd],[0])
++AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.6.1 | grep -q bfd], [0], [], [ignore])
+ 
+ check_engine_stats northd recompute nocompute
+ check_engine_stats bfd recompute nocompute
+@@ -4191,7 +4191,7 @@ check as northd ovn-appctl -t ovn-northd inc-engine/clear-stats
+ 
+ check ovn-nbctl --bfd --policy=src-ip lr-route-add r0 192.168.7.1/32 192.168.10.10 r0-sw7
+ wait_column down bfd status logical_port=r0-sw7
+-AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.7.1 | grep -q bfd],[0])
++AT_CHECK([ovn-nbctl lr-route-list r0 | grep 192.168.7.1 | grep -q bfd], [0], [], [ignore])
+ 
+ route_uuid=$(fetch_column nb:logical_router_static_route _uuid ip_prefix="100.0.0.0/8")
+ check ovn-nbctl clear logical_router_static_route $route_uuid bfd
+@@ -4266,7 +4266,7 @@ AT_CHECK([ovn-nbctl copp-list copp0], [0], [dnl
+ event-elb: meter0
+ ])
+ 
+-AT_CHECK([ovn-sbctl list logical_flow | grep trigger_event -A 2 | grep -q meter0])
++AT_CHECK([ovn-sbctl list logical_flow | grep trigger_event -A 2 | grep -q meter0], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=hv meter-add meter1 drop 300 pktps 10
+ AT_CHECK([ovn-nbctl meter-list |grep meter1 -A 1], [0], [dnl
+@@ -4284,7 +4284,7 @@ AT_CHECK([ovn-nbctl copp-list copp1], [0], [dnl
+ arp: meter1
+ ])
+ 
+-AT_CHECK([ovn-sbctl list logical_flow | grep arp -A 2 | grep -q meter1])
++AT_CHECK([ovn-sbctl list logical_flow | grep arp -A 2 | grep -q meter1], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=hv copp-del copp1 arp
+ AT_CHECK([ovn-nbctl copp-list copp1], [0], [dnl
+@@ -4298,7 +4298,7 @@ AT_CHECK([ovn-nbctl copp-list copp2], [0], [dnl
+ icmp4-error: meter2
+ ])
+ 
+-AT_CHECK([ovn-sbctl list logical_flow | grep icmp4 -A 2 | grep -q meter2])
++AT_CHECK([ovn-sbctl list logical_flow | grep icmp4 -A 2 | grep -q meter2], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=hv copp-del copp2 icmp4-error
+ AT_CHECK([ovn-nbctl copp-list copp2], [0], [dnl
+@@ -4310,7 +4310,7 @@ AT_CHECK([ovn-nbctl copp-list copp3], [0], [dnl
+ icmp6-error: meter2
+ ])
+ 
+-AT_CHECK([ovn-sbctl list logical_flow | grep icmp6 -A 2 | grep -q meter2])
++AT_CHECK([ovn-sbctl list logical_flow | grep icmp6 -A 2 | grep -q meter2], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=hv copp-del copp3 icmp6-error
+ AT_CHECK([ovn-nbctl copp-list copp3], [0], [dnl
+@@ -4322,7 +4322,7 @@ AT_CHECK([ovn-nbctl copp-list copp4], [0], [dnl
+ tcp-reset: meter2
+ ])
+ 
+-AT_CHECK([ovn-sbctl list logical_flow | grep tcp -A 2 | grep -q meter2])
++AT_CHECK([ovn-sbctl list logical_flow | grep tcp -A 2 | grep -q meter2], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=hv copp-del copp4 tcp-reset
+ AT_CHECK([ovn-nbctl copp-list copp4], [0], [dnl
+@@ -4351,7 +4351,7 @@ check ovn-nbctl --wait=hv lr-copp-add copp7 r0
+ AT_CHECK([ovn-nbctl copp-list copp7], [0], [dnl
+ bfd: meter0
+ ])
+-AT_CHECK([ovn-sbctl list logical_flow | grep bfd -A 2 | grep -q meter0])
++AT_CHECK([ovn-sbctl list logical_flow | grep bfd -A 2 | grep -q meter0],[0],[],[ignore])
+ 
+ check ovn-nbctl --wait=hv set Logical_Switch sw1 \
+     other_config:mcast_querier="false" \
+@@ -4361,7 +4361,7 @@ check ovn-nbctl --wait=hv ls-copp-add copp8 sw1
+ AT_CHECK([ovn-nbctl copp-list copp8], [0], [dnl
+ igmp: meter1
+ ])
+-AT_CHECK([ovn-sbctl list logical_flow | grep igmp -A 2 | grep -q meter1])
++AT_CHECK([ovn-sbctl list logical_flow | grep igmp -A 2 | grep -q meter1],[0],[],[ignore])
+ 
+ check ovn-nbctl copp-del copp8
+ AT_CHECK([ovn-nbctl copp-list copp8], [0], [dnl
+@@ -7901,7 +7901,7 @@ AT_CHECK([ovn-sbctl lflow-list S1 | grep ls_in_l2_lkup | grep -q 'match=(eth.mca
+ check ovn-nbctl --wait=sb set Logical_Switch S1 \
+     other_config:broadcast-arps-to-all-routers=false
+ 
+-AT_CHECK([ovn-sbctl lflow-list S1 | grep ls_in_l2_lkup | grep -q 'match=(eth.mcast && (arp.op == 1 || nd_ns)), action=(outport = "_MC_flood_l2"; output;)'], [0])
++AT_CHECK([ovn-sbctl lflow-list S1 | grep ls_in_l2_lkup | grep -q 'match=(eth.mcast && (arp.op == 1 || nd_ns)), action=(outport = "_MC_flood_l2"; output;)'], [0], [], [ignore])
+ 
+ check ovn-nbctl --wait=sb set Logical_Switch S1 \
+     other_config:broadcast-arps-to-all-routers=true
+@@ -17201,7 +17201,7 @@ check ovn-nbctl --wait=sb sync
+ 
+ ovn-sbctl dump-flows lr0 > lrflows
+ AT_CAPTURE_FILE([lrflows])
+-AT_CHECK([! ovn_strip_lflows < lrflows | grep priority=105 | grep -q "flags.force_snat_for_lb == 1"])
++AT_CHECK([! ovn_strip_lflows < lrflows | grep priority=105 | grep -q "flags.force_snat_for_lb == 1"], [0], [], [ignore])
+ 
+ check ovn-nbctl lrp-del lrp0 -- lrp-add lr0 lrp0 02:00:00:00:00:01 4242::4242/64
+ check ovn-nbctl --wait=sb sync
+diff --git a/tests/system-ovn-kmod.at b/tests/system-ovn-kmod.at
+index 4e264cca8..53fc45734 100644
+--- a/tests/system-ovn-kmod.at
++++ b/tests/system-ovn-kmod.at
+@@ -1641,11 +1641,11 @@ check_flow_assured() {
+     echo Check if a conntrack entry exists for src=$src_ip, dst=$dst_ip, zone=$zone
+ 
+     if test -n "$src_ip" && test -n "$dst_ip"; then
+-        AT_CHECK([grep -F "$src_ip" conntrack_file | grep -F "$dst_ip" | grep "zone=$zone" | grep -q "ASSURED"])
++        AT_CHECK([grep -F "$src_ip" conntrack_file | grep -F "$dst_ip" | grep "zone=$zone" | grep -q "ASSURED"], [0], [], [ignore])
+     elif test -n "$src_ip"; then
+-        AT_CHECK([grep -F "$src_ip" conntrack_file | grep "zone=$zone" | grep -q "ASSURED"])
++        AT_CHECK([grep -F "$src_ip" conntrack_file | grep "zone=$zone" | grep -q "ASSURED"], [0], [], [ignore])
+     else
+-        AT_CHECK([grep -F "$dst_ip" conntrack_file | grep "zone=$zone" | grep -q "ASSURED"])
++        AT_CHECK([grep -F "$dst_ip" conntrack_file | grep "zone=$zone" | grep -q "ASSURED"], [0], [], [ignore])
+     fi
+ }
+ 
+-- 
+2.51.2
+

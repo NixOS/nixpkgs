@@ -12,8 +12,8 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
-    rev = version;
+    repo = "brutalmaze";
+    tag = version;
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
@@ -29,11 +29,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # there's no test
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist thrilling shoot 'em up game";
     mainProgram = "brutalmaze";
     homepage = "https://brutalmaze.rtfd.io";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.McSinyx ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.McSinyx ];
   };
 }

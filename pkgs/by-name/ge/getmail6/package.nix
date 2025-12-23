@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.19.07";
+  version = "6.19.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
     tag = "v${version}";
-    hash = "sha256-uu+soEYC12LWx0aLbPupoK7g/rnD47dp32w7jpRj/38=";
+    hash = "sha256-W9B6+riHsE5Hu2J8QnhPKhpRlXsQyg3ThP4ADp/0UhI=";
   };
 
   build-system = with python3.pkgs; [
@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program for retrieving mail";
     homepage = "https://getmail6.org";
-    changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/getmail6/getmail6/blob/${src.tag}/docs/CHANGELOG";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       abbe
       dotlambda
     ];

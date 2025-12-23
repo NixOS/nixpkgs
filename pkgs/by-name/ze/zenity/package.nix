@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "4.0.5";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ij/+d1G+1JenWCKezge+kRStTkagZquuTl8x1tpMDp4=";
+    hash = "sha256-Wp/Y2DFvkMsuGlqPDUEeufyvhZV6ginqPoA+gQBKHr0=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "zenity";
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://gitlab.gnome.org/GNOME/zenity";
     changelog = "https://gitlab.gnome.org/GNOME/zenity/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 })

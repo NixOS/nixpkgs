@@ -4,6 +4,7 @@
   fetchFromGitHub,
   numactl,
   pkg-config,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ numactl ];
 
   makeFlags = [
@@ -25,6 +29,8 @@ stdenv.mkDerivation rec {
     # on fresh toolchains like gcc-11.
     "WERROR="
   ];
+
+  doInstallCheck = true;
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -44,14 +50,16 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/intel/opa-psm2";
     description = "PSM2 library supports a number of fabric media and stacks";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [ lib.maintainers.bzizou ];
+    # uses __off64_t, srand48_r, lrand48_r, drand48_r
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

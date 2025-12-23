@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "advanced-camera-card";
-  version = "7.3.6";
+  version = "7.25.4";
 
   src = fetchzip {
     url = "https://github.com/dermotduffy/advanced-camera-card/releases/download/v${version}/advanced-camera-card.zip";
-    hash = "sha256-+sDIs1r3668FrpnJ3qcQlrfDvtapODj5LVOb6yStSA8=";
+    hash = "sha256-IpuZfHUrIxyDTcQcKv6+xApiXO3eNgwgJ5rZvpCMs3s=";
   };
 
   # TODO: build from source once yarn berry support lands in nixpkgs
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/dermotduffy/advanced-camera-card/releases/tag/v${version}";
-    description = "A comprehensive camera card for Home Assistant";
+    description = "Comprehensive camera card for Home Assistant";
     homepage = "https://github.com/dermotduffy/advanced-camera-card";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];

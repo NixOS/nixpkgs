@@ -45,8 +45,8 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tldr \
-      --bash <($out/bin/tldr --print-completion bash) \
-      --zsh <($out/bin/tldr --print-completion zsh)
+      --bash <($out/bin/tldr --print-completion bash | sed -E "s#\"/nix/store/[^\"]+/bin/python[^\"]*\" -m tldr#\"$out/bin/tldr\"#g") \
+      --zsh <($out/bin/tldr --print-completion zsh | sed -E "s#\"/nix/store/[^\"]+/bin/python[^\"]*\" -m tldr#\"$out/bin/tldr\"#g") \
   '';
 
   meta = {

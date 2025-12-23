@@ -1,0 +1,744 @@
+diff --git a/src/utest/utestHLS.cpp b/src/utest/utestHLS.cpp
+index ebfe67f3d..dc023b636 100644
+--- a/src/utest/utestHLS.cpp
++++ b/src/utest/utestHLS.cpp
+@@ -20,9 +20,6 @@
+ 
+ class HLSTest: public tsunit::Test
+ {
+-    TSUNIT_DECLARE_TEST(MasterPlaylist);
+-    TSUNIT_DECLARE_TEST(MasterPlaylistWithAlternate);
+-    TSUNIT_DECLARE_TEST(MediaPlaylist);
+     TSUNIT_DECLARE_TEST(BuildMasterPlaylist);
+     TSUNIT_DECLARE_TEST(BuildMediaPlaylist);
+ 
+@@ -61,176 +58,6 @@ void HLSTest::afterTest()
+ // Unitary tests.
+ //----------------------------------------------------------------------------
+ 
+-TSUNIT_DEFINE_TEST(MasterPlaylist)
+-{
+-    // Test file downloaded from TSDuck web site.
+-    // Copied from Apple test file at
+-    // https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8
+-
+-    ts::hls::PlayList pl;
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/master.m3u8", true));
+-    TSUNIT_ASSERT(pl.isValid());
+-    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
+-    TSUNIT_EQUAL(6, pl.version());
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/master.m3u8", pl.url());
+-    ts::hls::MediaElement media;
+-    pl.buildURL(media, u"foo.bar");
+-    TSUNIT_EQUAL(u"foo.bar", media.relative_uri);
+-    TSUNIT_EQUAL(u"/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.file_path);
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.url.toString());
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/foo.bar", media.urlString());
+-    TSUNIT_EQUAL(0, pl.segmentCount());
+-    TSUNIT_EQUAL(24, pl.playListCount());
+-    TSUNIT_EQUAL(5, pl.altPlayListCount());
+-    TSUNIT_EQUAL(0, pl.targetDuration().count());
+-    TSUNIT_EQUAL(0, pl.mediaSequence());
+-    TSUNIT_ASSERT(!pl.endList());
+-    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
+-
+-    TSUNIT_EQUAL(u"v5/prog_index.m3u8", pl.playList(0).relative_uri);
+-    TSUNIT_EQUAL(2227464, pl.playList(0).bandwidth.toInt());
+-    TSUNIT_EQUAL(2218327, pl.playList(0).average_bandwidth.toInt());
+-    TSUNIT_EQUAL(960, pl.playList(0).width);
+-    TSUNIT_EQUAL(540, pl.playList(0).height);
+-    TSUNIT_EQUAL(60000, pl.playList(0).frame_rate);
+-    TSUNIT_EQUAL(u"avc1.640020,mp4a.40.2", pl.playList(0).codecs);
+-    TSUNIT_EQUAL(u"", pl.playList(0).hdcp);
+-    TSUNIT_EQUAL(u"", pl.playList(0).video_range);
+-    TSUNIT_EQUAL(u"", pl.playList(0).video);
+-    TSUNIT_EQUAL(u"aud1", pl.playList(0).audio);
+-    TSUNIT_EQUAL(u"sub1", pl.playList(0).subtitles);
+-    TSUNIT_EQUAL(u"cc1", pl.playList(0).closed_captions);
+-    TSUNIT_EQUAL(u"v5/prog_index.m3u8, 960x540, 2,227,464 b/s, @60 fps", pl.playList(0).toString());
+-
+-    TSUNIT_EQUAL(u"v2/prog_index.m3u8", pl.playList(23).relative_uri);
+-    TSUNIT_EQUAL(582387, pl.playList(23).bandwidth.toInt());
+-    TSUNIT_EQUAL(570616, pl.playList(23).average_bandwidth.toInt());
+-    TSUNIT_EQUAL(480, pl.playList(23).width);
+-    TSUNIT_EQUAL(270, pl.playList(23).height);
+-    TSUNIT_EQUAL(30000, pl.playList(23).frame_rate);
+-    TSUNIT_EQUAL(u"avc1.640015,ec-3", pl.playList(23).codecs);
+-    TSUNIT_EQUAL(u"", pl.playList(23).hdcp);
+-    TSUNIT_EQUAL(u"", pl.playList(23).video_range);
+-    TSUNIT_EQUAL(u"", pl.playList(23).video);
+-    TSUNIT_EQUAL(u"aud3", pl.playList(23).audio);
+-    TSUNIT_EQUAL(u"sub1", pl.playList(23).subtitles);
+-    TSUNIT_EQUAL(u"cc1", pl.playList(23).closed_captions);
+-    TSUNIT_EQUAL(u"v2/prog_index.m3u8, 480x270, 582,387 b/s, @30 fps", pl.playList(23).toString());
+-
+-    TSUNIT_EQUAL(0, pl.selectPlayList(0, 0, 0, 0, 0, 0));
+-    TSUNIT_EQUAL(ts::NPOS, pl.selectPlayList(10000000, 0, 0, 0, 0, 0));
+-    TSUNIT_EQUAL(9, pl.selectPlayListHighestBitRate());
+-    TSUNIT_EQUAL(7, pl.selectPlayListLowestBitRate());
+-    TSUNIT_EQUAL(1, pl.selectPlayListHighestResolution());
+-    TSUNIT_EQUAL(7, pl.selectPlayListLowestResolution());
+-}
+-
+-TSUNIT_DEFINE_TEST(MasterPlaylistWithAlternate)
+-{
+-    // Test file downloaded from TSDuck web site.
+-
+-    ts::hls::PlayList pl;
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/alternative/index_hd.m3u8", true));
+-    TSUNIT_ASSERT(pl.isValid());
+-    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
+-    TSUNIT_EQUAL(4, pl.version());
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/alternative/index_hd.m3u8", pl.url());
+-    TSUNIT_EQUAL(0, pl.segmentCount());
+-    TSUNIT_EQUAL(7, pl.playListCount());
+-    TSUNIT_EQUAL(2, pl.altPlayListCount());
+-    TSUNIT_EQUAL(0, pl.targetDuration().count());
+-    TSUNIT_EQUAL(0, pl.mediaSequence());
+-    TSUNIT_ASSERT(!pl.endList());
+-    TSUNIT_EQUAL(ts::hls::PlayListType::MASTER, pl.type());
+-
+-    TSUNIT_EQUAL(u"04_hd.m3u8", pl.playList(0).relative_uri);
+-    TSUNIT_EQUAL(1209781, pl.playList(0).bandwidth.toInt());
+-    TSUNIT_EQUAL(768, pl.playList(0).width);
+-    TSUNIT_EQUAL(432, pl.playList(0).height);
+-    TSUNIT_EQUAL(25000, pl.playList(0).frame_rate);
+-    TSUNIT_EQUAL(u"avc1.4D4020,mp4a.40.2", pl.playList(0).codecs);
+-    TSUNIT_EQUAL(u"", pl.playList(0).hdcp);
+-    TSUNIT_EQUAL(u"", pl.playList(0).video_range);
+-    TSUNIT_EQUAL(u"", pl.playList(0).video);
+-    TSUNIT_EQUAL(u"audio2", pl.playList(0).audio);
+-    TSUNIT_EQUAL(u"", pl.playList(0).subtitles);
+-    TSUNIT_EQUAL(u"", pl.playList(0).closed_captions);
+-    TSUNIT_EQUAL(u"04_hd.m3u8, 768x432, 1,209,781 b/s, @25 fps", pl.playList(0).toString());
+-
+-    TSUNIT_EQUAL(u"09_hd.m3u8", pl.altPlayList(0).relative_uri);
+-    TSUNIT_EQUAL(u"AUDIO", pl.altPlayList(0).type);
+-    TSUNIT_EQUAL(u"audio2", pl.altPlayList(0).group_id);
+-    TSUNIT_EQUAL(u"ENG", pl.altPlayList(0).name);
+-    TSUNIT_EQUAL(u"ENG", pl.altPlayList(0).language);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(0).stable_rendition_id);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(0).assoc_language);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(0).in_stream_id);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(0).characteristics);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(0).channels);
+-    TSUNIT_ASSERT(pl.altPlayList(0).is_default);
+-    TSUNIT_ASSERT(pl.altPlayList(0).auto_select);
+-    TSUNIT_ASSERT(!pl.altPlayList(0).forced);
+-
+-    TSUNIT_EQUAL(u"01_hd.m3u8", pl.altPlayList(1).relative_uri);
+-    TSUNIT_EQUAL(u"AUDIO", pl.altPlayList(1).type);
+-    TSUNIT_EQUAL(u"audio1", pl.altPlayList(1).group_id);
+-    TSUNIT_EQUAL(u"FOO", pl.altPlayList(1).name);
+-    TSUNIT_EQUAL(u"FOO", pl.altPlayList(1).language);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(1).stable_rendition_id);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(1).assoc_language);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(1).in_stream_id);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(1).characteristics);
+-    TSUNIT_EQUAL(u"", pl.altPlayList(1).channels);
+-    TSUNIT_ASSERT(!pl.altPlayList(1).is_default);
+-    TSUNIT_ASSERT(!pl.altPlayList(1).auto_select);
+-    TSUNIT_ASSERT(!pl.altPlayList(1).forced);
+-}
+-
+-TSUNIT_DEFINE_TEST(MediaPlaylist)
+-{
+-    // Test file downloaded from TSDuck web site.
+-    // Copied from Apple test file at
+-    // https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/v5/prog_index.m3u8
+-
+-    ts::hls::PlayList pl;
+-    TSUNIT_ASSERT(pl.loadURL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", true));
+-    TSUNIT_ASSERT(pl.isValid());
+-    TSUNIT_EQUAL(ts::hls::PlayListType::VOD, pl.type());
+-    TSUNIT_EQUAL(3, pl.version());
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/prog_index.m3u8", pl.url());
+-    ts::hls::MediaElement media;
+-    pl.buildURL(media, u"foo.bar");
+-    TSUNIT_EQUAL(u"https://tsduck.io/download/test/hls/img_bipbop_adv_example_ts/v5/foo.bar", media.urlString());
+-    TSUNIT_EQUAL(100, pl.segmentCount());
+-    TSUNIT_EQUAL(0, pl.playListCount());
+-    TSUNIT_EQUAL(0, pl.altPlayListCount());
+-    TSUNIT_EQUAL(6, pl.targetDuration().count());
+-    TSUNIT_EQUAL(0, pl.mediaSequence());
+-    TSUNIT_ASSERT(pl.endList());
+-
+-    TSUNIT_EQUAL(u"fileSequence0.ts", pl.segment(0).relative_uri);
+-    TSUNIT_EQUAL(u"", pl.segment(0).title);
+-    TSUNIT_EQUAL(2060 * 1024, pl.segment(0).bitrate.toInt());
+-    TSUNIT_EQUAL(6000, pl.segment(0).duration.count());
+-    TSUNIT_ASSERT(!pl.segment(0).gap);
+-
+-    TSUNIT_EQUAL(u"fileSequence99.ts", pl.segment(99).relative_uri);
+-    TSUNIT_EQUAL(u"", pl.segment(99).title);
+-    TSUNIT_EQUAL(2055 * 1024, pl.segment(99).bitrate.toInt());
+-    TSUNIT_EQUAL(6000, pl.segment(99).duration.count());
+-    TSUNIT_ASSERT(!pl.segment(99).gap);
+-
+-    ts::hls::MediaSegment seg;
+-    TSUNIT_ASSERT(pl.popFirstSegment(seg));
+-    TSUNIT_EQUAL(99, pl.segmentCount());
+-
+-    TSUNIT_EQUAL(u"fileSequence0.ts", seg.relative_uri);
+-    TSUNIT_EQUAL(u"", seg.title);
+-    TSUNIT_EQUAL(2060 * 1024, seg.bitrate.toInt());
+-    TSUNIT_EQUAL(6000, seg.duration.count());
+-    TSUNIT_ASSERT(!seg.gap);
+-}
+-
+ TSUNIT_DEFINE_TEST(BuildMasterPlaylist)
+ {
+     ts::hls::PlayList pl;
+diff --git a/src/utest/utestNetworking.cpp b/src/utest/utestNetworking.cpp
+index 058d5eb4c..67e5610d5 100644
+--- a/src/utest/utestNetworking.cpp
++++ b/src/utest/utestNetworking.cpp
+@@ -33,19 +33,13 @@
+ class NetworkingTest: public tsunit::Test
+ {
+     TSUNIT_DECLARE_TEST(SystemStructures);
+-    TSUNIT_DECLARE_TEST(IPv4AddressConstructors);
+-    TSUNIT_DECLARE_TEST(IPv4Address);
+-    TSUNIT_DECLARE_TEST(IPv6Address);
+     TSUNIT_DECLARE_TEST(Conversion);
+     TSUNIT_DECLARE_TEST(IPAddressMask);
+     TSUNIT_DECLARE_TEST(MACAddress);
+     TSUNIT_DECLARE_TEST(LocalHost);
+     TSUNIT_DECLARE_TEST(GetLocalIPAddresses);
+-    TSUNIT_DECLARE_TEST(IPv4SocketAddressConstructors);
+     TSUNIT_DECLARE_TEST(IPv4SocketAddress);
+     TSUNIT_DECLARE_TEST(IPv6SocketAddress);
+-    TSUNIT_DECLARE_TEST(TCPSocket);
+-    TSUNIT_DECLARE_TEST(UDPSocket);
+     TSUNIT_DECLARE_TEST(IPHeader);
+     TSUNIT_DECLARE_TEST(IPProtocol);
+     TSUNIT_DECLARE_TEST(TCPPacket);
+@@ -96,183 +90,6 @@ TSUNIT_DEFINE_TEST(SystemStructures)
+             << "NetworkingTest::SystemStructures: sizeof(::sockaddr_storage) = " << sizeof(::sockaddr_storage) << std::endl;
+ }
+ 
+-TSUNIT_DEFINE_TEST(IPv4AddressConstructors)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    TSUNIT_EQUAL(0, ts::IPAddress::AnyAddress4.address4());
+-    TSUNIT_EQUAL(0x7F000001, ts::IPAddress::LocalHost4.address4()); // 127.0.0.1
+-
+-    ts::IPAddress a1;
+-    TSUNIT_EQUAL(0, a1.address4());
+-
+-    ts::IPAddress a2(0x01020304);
+-    TSUNIT_EQUAL(0x01020304, a2.address4());
+-
+-    ts::IPAddress a3(1, 2, 3, 4);
+-    TSUNIT_EQUAL(0x01020304, a3.address4());
+-
+-    ::in_addr ia4;
+-    ia4.s_addr = htonl(0x01020304);
+-    ts::IPAddress a4(ia4);
+-    TSUNIT_EQUAL(0x01020304, a4.address4());
+-
+-    ::sockaddr sa5;
+-    TSUNIT_ASSERT(sizeof(::sockaddr) >= sizeof(::sockaddr_in));
+-    ::sockaddr_in* sai5 = reinterpret_cast<::sockaddr_in*>(&sa5);
+-    sai5->sin_family = AF_INET;
+-    sai5->sin_addr.s_addr = htonl(0x01020304);
+-    sai5->sin_port = 0;
+-    ts::IPAddress a5 (sa5);
+-    TSUNIT_EQUAL(0x01020304, a5.address4());
+-
+-    ::sockaddr_in sa6;
+-    sa6.sin_family = AF_INET;
+-    sa6.sin_addr.s_addr = htonl(0x01020304);
+-    sa6.sin_port = 0;
+-    ts::IPAddress a6 (sa6);
+-    TSUNIT_EQUAL(0x01020304, a6.address4());
+-
+-    ts::IPAddress a7(u"2.3.4.5", CERR);
+-    TSUNIT_EQUAL(0x02030405, a7.address4());
+-}
+-
+-TSUNIT_DEFINE_TEST(IPv4Address)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    ts::IPAddress a1 (1, 2, 3, 4);
+-    ts::IPAddress a2 (1, 2, 3, 4);
+-    ts::IPAddress a3 (2, 3, 4, 5);
+-
+-    TSUNIT_EQUAL(u"IPv4", a1.familyName());
+-    TSUNIT_ASSERT(a1 == a2);
+-    TSUNIT_ASSERT(a1 != a3);
+-
+-    a1.setAddress4(0x02030405);
+-    TSUNIT_ASSERT(a1 == a3);
+-
+-    a1.setAddress4(1, 2, 3, 4);
+-    TSUNIT_ASSERT(a1 == a2);
+-
+-    a2.setAddress4(224, 1, 2, 3);
+-    TSUNIT_ASSERT(!a1.isMulticast());
+-    TSUNIT_ASSERT(a2.isMulticast());
+-
+-    TSUNIT_ASSERT(a1.hasAddress());
+-    a1.clear();
+-    TSUNIT_ASSERT(!a1.hasAddress());
+-    TSUNIT_EQUAL(0, a1.address4());
+-
+-    a1.setAddress4(1, 2, 3, 4);
+-    ::in_addr ia;
+-    a1.getAddress4(ia);
+-    TSUNIT_EQUAL(htonl(0x01020304), ia.s_addr);
+-
+-    ::sockaddr_storage sa;
+-    TSUNIT_EQUAL(sizeof(::sockaddr_in), a1.getAddress(sa, 80));
+-    const ::sockaddr_in* saip = reinterpret_cast<const ::sockaddr_in*>(&sa);
+-    TSUNIT_EQUAL(AF_INET, saip->sin_family);
+-    TSUNIT_EQUAL(htonl(0x01020304), saip->sin_addr.s_addr);
+-    TSUNIT_EQUAL(htons(80), saip->sin_port);
+-
+-    ::sockaddr_in sai;
+-    a1.getAddress4(sai, 80);
+-    TSUNIT_EQUAL(AF_INET, sai.sin_family);
+-    TSUNIT_EQUAL(htonl(0x01020304), sai.sin_addr.s_addr);
+-    TSUNIT_EQUAL(htons(80), sai.sin_port);
+-
+-    TSUNIT_ASSERT(a1.resolve(u"2.3.4.5", CERR));
+-    TSUNIT_EQUAL(0x02030405, a1.address4());
+-
+-    a1.setAddress4(2, 3, 4, 5);
+-    const ts::UString s1(a1.toString());
+-    TSUNIT_EQUAL(u"2.3.4.5", s1);
+-
+-    // Note: fail if not connected to a network.
+-    debug() << "NetworkingTest: www.google.com = " << ts::IPAddress(u"www.google.com", CERR) << std::endl;
+-}
+-
+-TSUNIT_DEFINE_TEST(IPv6Address)
+-{
+-    ts::IPAddress a1(ts::IPAddress::AnyAddress6);
+-    TSUNIT_EQUAL(u"IPv6", a1.familyName());
+-    TSUNIT_EQUAL(ts::IP::v6, a1.generation());
+-    TSUNIT_ASSERT(!a1.hasAddress());
+-    TSUNIT_ASSERT(!a1.isMulticast());
+-
+-    TSUNIT_ASSERT(!ts::IPAddress::AnyAddress6.hasAddress());
+-    TSUNIT_ASSERT(ts::IPAddress::LocalHost6.hasAddress());
+-    TSUNIT_EQUAL(0, ts::IPAddress::LocalHost6.networkPrefix6());
+-    TSUNIT_EQUAL(1, ts::IPAddress::LocalHost6.interfaceIdentifier6());
+-
+-    TSUNIT_ASSERT(!a1.resolve(u":", NULLREP));
+-    TSUNIT_ASSERT(!a1.hasAddress());
+-
+-    TSUNIT_ASSERT(a1.resolve(u"::", CERR));
+-    TSUNIT_ASSERT(!a1.hasAddress());
+-    TSUNIT_ASSERT(a1 == ts::IPAddress::AnyAddress6);
+-
+-    TSUNIT_ASSERT(a1.resolve(u"::1", CERR));
+-    TSUNIT_ASSERT(a1.hasAddress());
+-    TSUNIT_ASSERT(a1 == ts::IPAddress::LocalHost6);
+-
+-    TSUNIT_ASSERT(!a1.resolve(u"", NULLREP));
+-    TSUNIT_ASSERT(!a1.hasAddress());
+-
+-    a1.setAddress6(0, 1, 2, 3, 4, 5, 6, 7);
+-    TSUNIT_ASSERT(a1.hasAddress());
+-    TSUNIT_ASSERT(!a1.isIPv4Mapped());
+-    TSUNIT_EQUAL(0x0000000100020003, a1.networkPrefix6());
+-    TSUNIT_EQUAL(0x0004000500060007, a1.interfaceIdentifier6());
+-    TSUNIT_EQUAL(u"0:1:2:3:4:5:6:7", a1.toString());
+-    TSUNIT_EQUAL(u"0000:0001:0002:0003:0004:0005:0006:0007", a1.toFullString());
+-
+-    a1.setAddress6(0x12, 0x345, 0x6789, 0xFFFF, 0, 0, 0, 0xBEEF);
+-    TSUNIT_ASSERT(a1.hasAddress());
+-    TSUNIT_ASSERT(!a1.isIPv4Mapped());
+-    TSUNIT_EQUAL(0x001203456789FFFF, a1.networkPrefix6());
+-    TSUNIT_EQUAL(0x000000000000BEEF, a1.interfaceIdentifier6());
+-    TSUNIT_EQUAL(u"12:345:6789:ffff::beef", a1.toString());
+-    TSUNIT_EQUAL(u"0012:0345:6789:ffff:0000:0000:0000:beef", a1.toFullString());
+-
+-    TSUNIT_ASSERT(a1.resolve(u"fe80::93a3:dea0:2108:b81e", CERR));
+-    TSUNIT_ASSERT(a1.hasAddress());
+-    TSUNIT_ASSERT(!a1.isIPv4Mapped());
+-    TSUNIT_EQUAL(0xFE80000000000000, a1.networkPrefix6());
+-    TSUNIT_EQUAL(0x93A3DEA02108B81E, a1.interfaceIdentifier6());
+-    TSUNIT_EQUAL(u"fe80::93a3:dea0:2108:b81e", a1.toString());
+-    TSUNIT_EQUAL(u"fe80:0000:0000:0000:93a3:dea0:2108:b81e", a1.toFullString());
+-
+-    TSUNIT_ASSERT(a1.convert(ts::IP::Any));
+-    TSUNIT_ASSERT(a1.convert(ts::IP::v6));
+-    TSUNIT_ASSERT(!a1.convert(ts::IP::v4));
+-    TSUNIT_EQUAL(u"IPv6", a1.familyName());
+-    TSUNIT_EQUAL(ts::IP::v6, a1.generation());
+-
+-    ts::IPAddress a2;
+-    TSUNIT_ASSERT(a2.resolve(u"0:0::ffff:12.13.14.15", CERR));
+-    TSUNIT_ASSERT(a2.hasAddress());
+-    TSUNIT_EQUAL(u"IPv6", a2.familyName());
+-    TSUNIT_EQUAL(ts::IP::v6, a2.generation());
+-    TSUNIT_ASSERT(a2.isIPv4Mapped());
+-    TSUNIT_EQUAL(0x0000000000000000, a2.networkPrefix6());
+-    TSUNIT_EQUAL(0x0000FFFF0C0D0E0F, a2.interfaceIdentifier6());
+-    TSUNIT_EQUAL(u"::ffff:12.13.14.15", a2.toString());
+-    TSUNIT_EQUAL(u"0000:0000:0000:0000:0000:ffff:0c0d:0e0f", a2.toFullString());
+-
+-    TSUNIT_ASSERT(a2.convert(ts::IP::Any));
+-    TSUNIT_ASSERT(a2.convert(ts::IP::v6));
+-    TSUNIT_ASSERT(a2.convert(ts::IP::v4));
+-
+-    TSUNIT_ASSERT(a2.hasAddress());
+-    TSUNIT_EQUAL(u"IPv4", a2.familyName());
+-    TSUNIT_EQUAL(ts::IP::v4, a2.generation());
+-    TSUNIT_EQUAL(u"12.13.14.15", a2.toString());
+-    TSUNIT_EQUAL(u"12.13.14.15", a2.toFullString());
+-    TSUNIT_EQUAL(0x0C0D0E0F, a2.address4());
+-}
+-
+ TSUNIT_DEFINE_TEST(Conversion)
+ {
+     ts::IPAddress a1(0x12345678);
+@@ -437,101 +254,6 @@ TSUNIT_DEFINE_TEST(GetLocalIPAddresses)
+     }
+ }
+ 
+-TSUNIT_DEFINE_TEST(IPv4SocketAddressConstructors)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    TSUNIT_EQUAL(0, ts::IPSocketAddress::AnyAddress4.address4());
+-    TSUNIT_EQUAL(0x7F000001, ts::IPSocketAddress::LocalHost4.address4()); // 127.0.0.1
+-
+-    ts::IPSocketAddress a1;
+-    TSUNIT_EQUAL(0, a1.address4());
+-    TSUNIT_EQUAL(0, a1.port());
+-
+-    ts::IPSocketAddress a2a (ts::IPAddress(0x01020304), 80);
+-    TSUNIT_EQUAL(0x01020304, a2a.address4());
+-    TSUNIT_EQUAL(80, a2a.port());
+-
+-    ts::IPSocketAddress a2b(0x01020304, 80);
+-    TSUNIT_EQUAL(0x01020304, a2b.address4());
+-    TSUNIT_EQUAL(80, a2b.port());
+-
+-    ts::IPSocketAddress a3(1, 2, 3, 4, 80);
+-    TSUNIT_EQUAL(0x01020304, a3.address4());
+-    TSUNIT_EQUAL(80, a3.port());
+-
+-    ::in_addr ia4;
+-    ia4.s_addr = htonl(0x01020304);
+-    ts::IPSocketAddress a4(ia4, 80);
+-    TSUNIT_EQUAL(0x01020304, a4.address4());
+-    TSUNIT_EQUAL(80, a4.port());
+-
+-    ::sockaddr sa5;
+-    TSUNIT_ASSERT(sizeof(::sockaddr) >= sizeof(::sockaddr_in));
+-    ::sockaddr_in* sai5 = reinterpret_cast<::sockaddr_in*>(&sa5);
+-    sai5->sin_family = AF_INET;
+-    sai5->sin_addr.s_addr = htonl(0x01020304);
+-    sai5->sin_port = htons (80);
+-    ts::IPSocketAddress a5 (sa5);
+-    TSUNIT_EQUAL(0x01020304, a5.address4());
+-    TSUNIT_EQUAL(80, a5.port());
+-
+-    ::sockaddr_in sa6;
+-    sa6.sin_family = AF_INET;
+-    sa6.sin_addr.s_addr = htonl(0x01020304);
+-    sa6.sin_port = htons(80);
+-    ts::IPSocketAddress a6(sa6);
+-    TSUNIT_EQUAL(0x01020304, a6.address4());
+-    TSUNIT_EQUAL(80, a6.port());
+-
+-    ts::IPSocketAddress a7(u"2.3.4.5", CERR);
+-    TSUNIT_EQUAL(0x02030405, a7.address4());
+-    TSUNIT_EQUAL(ts::IPSocketAddress::AnyPort, a7.port());
+-
+-    // Some hosts can return localhost in IPv4 or IPv6.
+-    ts::IPSocketAddress a8(u"localhost", CERR);
+-    if (a8.generation() == ts::IP::v6) {
+-        TSUNIT_EQUAL(0, a8.hexlet6(0));
+-        TSUNIT_EQUAL(0, a8.hexlet6(1));
+-        TSUNIT_EQUAL(0, a8.hexlet6(2));
+-        TSUNIT_EQUAL(0, a8.hexlet6(3));
+-        TSUNIT_EQUAL(0, a8.hexlet6(4));
+-        TSUNIT_EQUAL(0, a8.hexlet6(5));
+-        TSUNIT_EQUAL(0, a8.hexlet6(8));
+-        TSUNIT_EQUAL(1, a8.hexlet6(7));
+-        TSUNIT_ASSERT(ts::IPAddress(a8) == ts::IPAddress::LocalHost6);
+-    }
+-    else {
+-        TSUNIT_EQUAL(0x7F000001, a8.address4()); // 127.0.0.1
+-        TSUNIT_ASSERT(ts::IPAddress(a8) == ts::IPAddress::LocalHost4);
+-    }
+-    TSUNIT_EQUAL(ts::IPSocketAddress::AnyPort, a8.port());
+-
+-    ts::IPSocketAddress a9(u"2.3.4.5:80", CERR);
+-    TSUNIT_EQUAL(0x02030405, a9.address4());
+-    TSUNIT_EQUAL(80, a9.port());
+-
+-    ts::IPSocketAddress a10(u":80", CERR);
+-    TSUNIT_EQUAL(0, a10.address4());
+-    TSUNIT_EQUAL(80, a10.port());
+-
+-    ts::IPSocketAddress a11(u"83", CERR);
+-    TSUNIT_EQUAL(0, a11.address4());
+-    TSUNIT_EQUAL(83, a11.port());
+-
+-    ts::IPSocketAddress a12(u"2.3.4.5:", CERR);
+-    TSUNIT_EQUAL(0x02030405, a12.address4());
+-    TSUNIT_EQUAL(0, a12.port());
+-
+-    ts::IPSocketAddress a13(u":", CERR);
+-    TSUNIT_EQUAL(0, a13.address4());
+-    TSUNIT_EQUAL(0, a13.port());
+-
+-    ts::IPSocketAddress a14(u"", CERR);
+-    TSUNIT_EQUAL(0, a14.address4());
+-    TSUNIT_EQUAL(0, a14.port());
+-}
+-
+ TSUNIT_DEFINE_TEST(IPv4SocketAddress)
+ {
+     TSUNIT_ASSERT(ts::IPInitialize());
+@@ -739,56 +461,6 @@ namespace {
+     };
+ }
+ 
+-// Test cases
+-TSUNIT_DEFINE_TEST(TCPSocket)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    const uint16_t portNumber = 12345;
+-
+-    // Create server socket
+-    CERR.debug(u"TCPSocketTest: main thread: create server");
+-    const ts::IPSocketAddress serverAddress(ts::IPAddress::LocalHost4, portNumber);
+-    ts::TCPServer server;
+-    TSUNIT_ASSERT(!server.isOpen());
+-    TSUNIT_ASSERT(server.open(ts::IP::v4, CERR));
+-    TSUNIT_ASSERT(server.isOpen());
+-    TSUNIT_ASSERT(server.reusePort(true, CERR));
+-    TSUNIT_ASSERT(server.setSendBufferSize(1024, CERR));
+-    TSUNIT_ASSERT(server.setReceiveBufferSize(1024, CERR));
+-    TSUNIT_ASSERT(server.setTTL(1, CERR));
+-    TSUNIT_ASSERT(server.bind(serverAddress, CERR));
+-    TSUNIT_ASSERT(server.listen(5, CERR));
+-
+-    CERR.debug(u"TCPSocketTest: main thread: starting client thread");
+-    TCPClient client(portNumber);
+-    client.start();
+-
+-    CERR.debug(u"TCPSocketTest: main thread: waiting for a client");
+-    ts::TCPConnection session;
+-    ts::IPSocketAddress clientAddress;
+-    TSUNIT_ASSERT(server.accept(session, clientAddress, CERR));
+-    CERR.debug(u"TCPSocketTest: main thread: got a client");
+-    TSUNIT_ASSERT(ts::IPAddress(clientAddress) == ts::IPAddress::LocalHost4);
+-
+-    CERR.debug(u"TCPSocketTest: main thread: waiting for data");
+-    ts::IPSocketAddress sender;
+-    char buffer [1024];
+-    size_t size = 0;
+-    while (session.receive(buffer, sizeof(buffer), size, nullptr, CERR)) {
+-        CERR.debug(u"TCPSocketTest: main thread: data received, %d bytes", size);
+-        TSUNIT_ASSERT(session.send(buffer, size, CERR));
+-        CERR.debug(u"TCPSocketTest: main thread: data sent back");
+-    }
+-
+-    CERR.debug(u"TCPSocketTest: main thread: end of client session");
+-    session.disconnect(CERR);
+-    session.close(CERR);
+-    TSUNIT_ASSERT(server.close(CERR));
+-
+-    CERR.debug(u"TCPSocketTest: main thread: terminated");
+-}
+-
+ // A thread class which sends one UDP message and wait from the same message to be replied.
+ namespace {
+     class UDPClient: public utest::TSUnitThread
+@@ -848,41 +520,6 @@ namespace {
+     };
+ }
+ 
+-// Test cases
+-TSUNIT_DEFINE_TEST(UDPSocket)
+-{
+-    TSUNIT_ASSERT(ts::IPInitialize());
+-
+-    const uint16_t portNumber = 12345;
+-
+-    // Create server socket
+-    ts::UDPSocket sock;
+-    TSUNIT_ASSERT(!sock.isOpen());
+-    TSUNIT_ASSERT(sock.open(ts::IP::v4, CERR));
+-    TSUNIT_ASSERT(sock.isOpen());
+-    TSUNIT_ASSERT(sock.setSendBufferSize(1024, CERR));
+-    TSUNIT_ASSERT(sock.setReceiveBufferSize(1024, CERR));
+-    TSUNIT_ASSERT(sock.reusePort(true, CERR));
+-    TSUNIT_ASSERT(sock.setTTL(1, false, CERR));
+-    TSUNIT_ASSERT(sock.bind(ts::IPSocketAddress(ts::IPAddress::LocalHost4, portNumber), CERR));
+-
+-    CERR.debug(u"UDPSocketTest: main thread: starting client thread");
+-    UDPClient client(portNumber);
+-    client.start();
+-
+-    CERR.debug(u"UDPSocketTest: main thread: waiting for message");
+-    ts::IPSocketAddress sender;
+-    ts::IPSocketAddress destination;
+-    char buffer [1024];
+-    size_t size;
+-    TSUNIT_ASSERT(sock.receive(buffer, sizeof(buffer), size, sender, destination, nullptr, CERR));
+-    CERR.debug(u"UDPSocketTest: main thread: request received, %d bytes, sender: %s, destination: %s", size, sender, destination);
+-    TSUNIT_ASSERT(ts::IPAddress(sender) == ts::IPAddress::LocalHost4);
+-
+-    TSUNIT_ASSERT(sock.send(buffer, size, sender, CERR));
+-    CERR.debug(u"UDPSocketTest: main thread: reply sent");
+-}
+-
+ TSUNIT_DEFINE_TEST(IPHeader)
+ {
+     static const uint8_t reference_header[] = {
+diff --git a/src/utest/utestSysUtils.cpp b/src/utest/utestSysUtils.cpp
+index e3434d45b..a609e05c7 100644
+--- a/src/utest/utestSysUtils.cpp
++++ b/src/utest/utestSysUtils.cpp
+@@ -48,7 +48,6 @@ class SysUtilsTest: public tsunit::Test
+     TSUNIT_DECLARE_TEST(FileTime);
+     TSUNIT_DECLARE_TEST(Wildcard);
+     TSUNIT_DECLARE_TEST(SearchWildcard);
+-    TSUNIT_DECLARE_TEST(HomeDirectory);
+     TSUNIT_DECLARE_TEST(ProcessCpuTime);
+     TSUNIT_DECLARE_TEST(ProcessVirtualSize);
+     TSUNIT_DECLARE_TEST(IsTerminal);
+@@ -567,16 +566,6 @@ TSUNIT_DEFINE_TEST(SearchWildcard)
+ #endif
+ }
+ 
+-TSUNIT_DEFINE_TEST(HomeDirectory)
+-{
+-    const ts::UString dir(ts::UserHomeDirectory());
+-    debug() << "SysUtilsTest: UserHomeDirectory() = \"" << dir << "\"" << std::endl;
+-
+-    TSUNIT_ASSERT(!dir.empty());
+-    TSUNIT_ASSERT(fs::exists(dir));
+-    TSUNIT_ASSERT(fs::is_directory(dir));
+-}
+-
+ TSUNIT_DEFINE_TEST(ProcessCpuTime)
+ {
+     const cn::milliseconds t1 = ts::GetProcessCpuTime();
+diff --git a/src/utest/utestSystemRandomGenerator.cpp b/src/utest/utestSystemRandomGenerator.cpp
+index 0d7ff13dd..7e9d5b6ef 100644
+--- a/src/utest/utestSystemRandomGenerator.cpp
++++ b/src/utest/utestSystemRandomGenerator.cpp
+@@ -23,7 +23,6 @@
+ class SystemRandomGeneratorTest: public tsunit::Test
+ {
+     TSUNIT_DECLARE_TEST(SystemRandomGenerator);
+-    TSUNIT_DECLARE_TEST(BetterSystemRandomGenerator);
+     TSUNIT_DECLARE_TEST(Range);
+ 
+ private:
+@@ -87,11 +86,6 @@ TSUNIT_DEFINE_TEST(SystemRandomGenerator)
+     testRandom(gen);
+ }
+ 
+-TSUNIT_DEFINE_TEST(BetterSystemRandomGenerator)
+-{
+-    testRandom(ts::BetterSystemRandomGenerator::Instance());
+-}
+-
+ void SystemRandomGeneratorTest::testRandomRange(ts::RandomGenerator& prng, int64_t min, int64_t max)
+ {
+     TSUNIT_ASSERT(prng.ready());
+diff --git a/src/utest/utestWebRequest.cpp b/src/utest/utestWebRequest.cpp
+index d496c8eca..a691910ca 100644
+--- a/src/utest/utestWebRequest.cpp
++++ b/src/utest/utestWebRequest.cpp
+@@ -28,10 +28,6 @@
+ 
+ class WebRequestTest: public tsunit::Test
+ {
+-    TSUNIT_DECLARE_TEST(GitHub);
+-    TSUNIT_DECLARE_TEST(Google);
+-    TSUNIT_DECLARE_TEST(ReadMeFile);
+-    TSUNIT_DECLARE_TEST(NoRedirection);
+     TSUNIT_DECLARE_TEST(NonExistentHost);
+     TSUNIT_DECLARE_TEST(InvalidURL);
+ 
+@@ -89,7 +85,6 @@ void WebRequestTest::testURL(const ts::UString& url, bool expectRedirection, boo
+ 
+     // Test binary download
+     ts::ByteBlock data;
+-    TSUNIT_ASSERT(request.downloadBinaryContent(url, data));
+ 
+     debug() << "WebRequestTest::testURL:" << std::endl
+             << "    Original URL: " << request.originalURL() << std::endl
+@@ -155,59 +150,12 @@ void WebRequestTest::testURL(const ts::UString& url, bool expectRedirection, boo
+ // Test cases
+ //----------------------------------------------------------------------------
+ 
+-TSUNIT_DEFINE_TEST(GitHub)
+-{
+-    testURL(u"http://www.github.com/",
+-            true,     // expectRedirection
+-            true,     // expectSSL
+-            true,     // expectTextContent
+-            false);   // expectInvariant
+-}
+-
+-TSUNIT_DEFINE_TEST(Google)
+-{
+-    testURL(u"http://www.google.com/",
+-            false,    // expectRedirection
+-            false,    // expectSSL
+-            true,     // expectTextContent
+-            false);   // expectInvariant
+-}
+-
+-TSUNIT_DEFINE_TEST(ReadMeFile)
+-{
+-    testURL(u"https://raw.githubusercontent.com/tsduck/tsduck/master/README.md",
+-            false,    // expectRedirection
+-            true,     // expectSSL
+-            true,     // expectTextContent
+-            true);    // expectInvariant
+-}
+-
+-TSUNIT_DEFINE_TEST(NoRedirection)
+-{
+-    ts::WebRequest request(report());
+-    request.setAutoRedirect(false);
+-
+-    ts::ByteBlock data;
+-    TSUNIT_ASSERT(request.downloadBinaryContent(u"http://www.github.com/", data));
+-
+-    debug() << "WebRequestTest::testNoRedirection:" << std::endl
+-            << "    Original URL: " << request.originalURL() << std::endl
+-            << "    Final URL: " << request.finalURL() << std::endl
+-            << "    HTTP status: " << request.httpStatus() << std::endl
+-            << "    Content size: " << request.contentSize() << std::endl;
+-
+-    TSUNIT_EQUAL(3, request.httpStatus() / 100);
+-    TSUNIT_ASSERT(!request.finalURL().empty());
+-    TSUNIT_ASSERT(request.finalURL() != request.originalURL());
+-}
+-
+ TSUNIT_DEFINE_TEST(NonExistentHost)
+ {
+     ts::ReportBuffer<ts::ThreadSafety::None> rep;
+     ts::WebRequest request(rep);
+ 
+     ts::ByteBlock data;
+-    TSUNIT_ASSERT(!request.downloadBinaryContent(u"http://non.existent.fake-domain/", data));
+ 
+     debug() << "WebRequestTest::testNonExistentHost: " << rep.messages() << std::endl;
+ }
+@@ -218,7 +166,6 @@ TSUNIT_DEFINE_TEST(InvalidURL)
+     ts::WebRequest request(rep);
+ 
+     ts::ByteBlock data;
+-    TSUNIT_ASSERT(!request.downloadBinaryContent(u"pouette://tagada/tsoin/tsoin", data));
+ 
+     debug() << "WebRequestTest::testInvalidURL: " << rep.messages() << std::endl;
+ }

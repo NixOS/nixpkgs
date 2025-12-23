@@ -7,18 +7,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.51";
+  version = "0.54";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = "friture";
     rev = "v${version}";
-    hash = "sha256-1Swkk7bhQTSo17Gj0i1VNiIt+fSXgDIeWfJ9LpoUEHg=";
+    hash = "sha256-KWj2AhPloomjYwd7besX5QIG8snZe1L2hATEfm/HaIE=";
   };
 
   postPatch = ''
     sed -i -e 's/==.*"/"/' -e '/packages=\[/a "friture.playback",' pyproject.toml
+    sed -i -e 's/tostring/tobytes/' friture/spectrogram_image.py
   '';
 
   nativeBuildInputs =
@@ -33,6 +34,8 @@ python3Packages.buildPythonApplication rec {
   buildInputs = with qt5; [ qtquickcontrols2 ];
 
   propagatedBuildInputs = with python3Packages; [
+    platformdirs
+    pyinstaller
     sounddevice
     pyopengl
     pyopengl-accelerate
@@ -60,15 +63,15 @@ python3Packages.buildPythonApplication rec {
     cp $src/resources/images-src/window-icon.svg $out/share/icons/hicolor/scalable/apps/friture.svg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time audio analyzer";
     mainProgram = "friture";
     homepage = "https://friture.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux; # fails on Darwin
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux; # fails on Darwin
+    maintainers = with lib.maintainers; [
       laikq
-      alyaeanyx
+      pentane
     ];
   };
 }

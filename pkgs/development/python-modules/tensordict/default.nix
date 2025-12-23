@@ -1,47 +1,68 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
+  pybind11,
   setuptools,
-  torch,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
+  importlib-metadata,
   numpy,
   orjson,
   packaging,
+  pyvers,
+  torch,
 
   # tests
   h5py,
   pytestCheckHook,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.7.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-ZDfRvfyBashU4kIoo8JX/EoCv4tpDOyggOlpdVCudT8=";
+    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
+
   build-system = [
+    pybind11
     setuptools
-    torch
+    setuptools-scm
   ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    importlib-metadata
     numpy
     orjson
     packaging
+    pyvers
     torch
   ];
 
@@ -64,17 +85,27 @@ buildPythonPackage rec {
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs due to the use of a pool
+    "test_chunksize_num_chunks"
+    "test_index_with_generator"
+    "test_map_exception"
+    "test_map"
+    "test_multiprocessing"
   ];
 
-  disabledTestPaths =
-    [
-      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-      "test/test_compile.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      "test/test_distributed.py"
-    ];
+  disabledTestPaths = [
+    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+    "test/test_compile.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/test_distributed.py"
+    # Hangs after testing due to pool usage
+    "test/test_h5.py"
+    "test/test_memmap.py"
+  ];
 
   meta = {
     description = "Pytorch dedicated tensor container";

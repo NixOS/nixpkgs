@@ -19,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mergedict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python dict with a merge() method";
     homepage = "https://github.com/schettino72/mergedict";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

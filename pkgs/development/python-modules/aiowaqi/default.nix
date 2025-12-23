@@ -51,13 +51,13 @@ buildPythonPackage rec {
     "test_search"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the WAQI API";
     homepage = "https://github.com/joostlek/python-waqi";
     changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

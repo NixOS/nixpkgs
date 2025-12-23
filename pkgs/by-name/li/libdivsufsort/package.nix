@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DIVSUFSORT64=YES"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   nativeBuildInputs = [ cmake ];

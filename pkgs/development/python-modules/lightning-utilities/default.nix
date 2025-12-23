@@ -3,12 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build
+  # build-system
   setuptools,
 
-  # runtime
+  # dependencies
+  jsonargparse,
   looseversion,
   packaging,
+  tomlkit,
   typing-extensions,
 
   # tests
@@ -18,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.14.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-QHE2ksoINQ0sfTSxXxM9ZVEIhEOncaq1i8ZNqznISJw=";
+    hash = "sha256-0unIL5jylunxTJxFTN+Q4aCFtD5zIHRNWEAWSbw+Fsk=";
   };
 
   postPatch = ''
@@ -36,8 +38,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonargparse
     looseversion
     packaging
+    tomlkit
     typing-extensions
   ];
 

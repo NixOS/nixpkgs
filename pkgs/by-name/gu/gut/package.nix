@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gut";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
     rev = version;
-    hash = "sha256-pjjeA0Nwc5M3LwxZLpBPnFqXJX0b6KDaj4YCPuGoUuU=";
+    hash = "sha256-3A6CwGIZGnTFkMRxDdDg/WpUQezNmGjjSz4Rj/6t1GI=";
   };
 
-  vendorHash = "sha256-G9oDMHLmdv/vQfofTqKAf21xaGp+lvW+sedLmaj+A5A=";
+  vendorHash = "sha256-EL+fsh603ydZfc3coI8VXkvAStQ0fwzBsJIOztB/VHc=";
 
   ldflags = [
     "-s"
@@ -29,10 +29,10 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Alternative git CLI";
     homepage = "https://gut-cli.dev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gut";
   };

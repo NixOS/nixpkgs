@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mjolnir;
 
@@ -23,12 +28,19 @@ let
   };
 
   moduleConfigFile = pkgs.writeText "module-config.yaml" (
-    lib.generators.toYAML { } (lib.filterAttrs (_: v: v != null)
-      (lib.fold lib.recursiveUpdate { } [ yamlConfig cfg.settings ])));
+    lib.generators.toYAML { } (
+      lib.filterAttrs (_: v: v != null) (
+        lib.foldr lib.recursiveUpdate { } [
+          yamlConfig
+          cfg.settings
+        ]
+      )
+    )
+  );
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/lib/node_modules/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -36,7 +48,9 @@ let
   # replace all secret strings using replace-secret
   generateConfig = pkgs.writeShellScript "mjolnir-generate-config" (
     let
-      yqEvalStr = lib.concatImapStringsSep " * " (pos: _: "select(fileIndex == ${toString (pos - 1)})") configFiles;
+      yqEvalStr = lib.concatImapStringsSep " * " (
+        pos: _: "select(fileIndex == ${toString (pos - 1)})"
+      ) configFiles;
       yqEvalArgs = lib.concatStringsSep " " configFiles;
     in
     ''
@@ -190,15 +204,22 @@ in
     # which breaks older configs using pantalaimon or access tokens
     services.mjolnir.settings.encryption.use = lib.mkDefault false;
 
-    services.pantalaimon-headless.instances."mjolnir" = lib.mkIf cfg.pantalaimon.enable
-      {
+    services.pantalaimon-headless.instances."mjolnir" =
+      lib.mkIf cfg.pantalaimon.enable {
         homeserver = cfg.homeserverUrl;
-      } // cfg.pantalaimon.options;
+      }
+      // cfg.pantalaimon.options;
 
     systemd.services.mjolnir = {
       description = "mjolnir - a moderation tool for Matrix";
-      wants = [ "network-online.target" ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
-      after = [ "network-online.target" ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -215,15 +236,16 @@ in
         User = "mjolnir";
         Restart = "on-failure";
 
-        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
-        DynamicUser = true;
-        LoadCredential = [] ++
-          lib.optionals (cfg.accessTokenFile != null) [
-            "access_token:${cfg.accessTokenFile}"
-          ] ++
-          lib.optionals (cfg.pantalaimon.passwordFile != null) [
-            "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
-          ];
+        /*
+          TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
+          DynamicUser = true;
+          LoadCredential = [] ++
+            lib.optionals (cfg.accessTokenFile != null) [
+              "access_token:${cfg.accessTokenFile}"
+            ] ++
+            lib.optionals (cfg.pantalaimon.passwordFile != null) [
+              "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
+            ];
         */
       };
     };

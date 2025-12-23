@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pykmtronic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to interface with KM-Tronic web relays";
     homepage = "https://github.com/dgomes/pykmtronic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

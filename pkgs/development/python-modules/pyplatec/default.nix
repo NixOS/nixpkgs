@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyplatec";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPlatec";
@@ -16,9 +17,9 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=c++11";
 
-  meta = with lib; {
+  meta = {
     description = "Library to simulate plate tectonics with Python bindings";
     homepage = "https://github.com/Mindwerks/plate-tectonics";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
   };
 }

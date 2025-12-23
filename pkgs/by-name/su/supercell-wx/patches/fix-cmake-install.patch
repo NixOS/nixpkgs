@@ -1,0 +1,56 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index 648b6578..4833b9c2 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -776,6 +776,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      Boost::timer
+                                      Boost::atomic
+                                      QMapLibre::Core
++                                     QMapLibre::Widgets
+                                      $<$<CXX_COMPILER_ID:MSVC>:opengl32>
+                                      $<$<CXX_COMPILER_ID:MSVC>:SetupAPI>
+                                      Fontconfig::Fontconfig
+@@ -793,18 +794,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+ target_link_libraries(supercell-wx PRIVATE scwx-qt
+                                            wxdata)
+ 
+-if (LINUX)
+-    # Set DT_RUNPATH for Linux targets
+-    set_target_properties(MLNQtCore    PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib") # QMapLibre::Core
+-    set_target_properties(supercell-wx PROPERTIES INSTALL_RPATH "\$ORIGIN/../lib")
+-endif()
+-
+ install(TARGETS supercell-wx
+-                MLNQtCore # QMapLibre::Core
+-        RUNTIME_DEPENDENCIES
+-          PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-" "qt6"
+-          POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+-                               "^(/usr)?/lib/.*\\.so(\\..*)?"
+         RUNTIME
+           COMPONENT supercell-wx
+         BUNDLE
+@@ -819,24 +809,6 @@ install(TARGETS supercell-wx
+           COMPONENT supercell-wx
+           OPTIONAL)
+ 
+-# NO_TRANSLATIONS is needed for Qt 6.5.0 (will be fixed in 6.5.1)
+-# https://bugreports.qt.io/browse/QTBUG-112204
+-qt_generate_deploy_app_script(TARGET MLNQtCore # QMapLibre::Core
+-                              OUTPUT_SCRIPT deploy_script_qmaplibre_core
+-                              NO_TRANSLATIONS
+-                              NO_UNSUPPORTED_PLATFORM_ERROR)
+-
+-qt_generate_deploy_app_script(TARGET supercell-wx
+-                              OUTPUT_SCRIPT deploy_script_scwx
+-                              NO_TRANSLATIONS
+-                              NO_UNSUPPORTED_PLATFORM_ERROR)
+-
+-install(SCRIPT ${deploy_script_qmaplibre_core}
+-        COMPONENT supercell-wx)
+-
+-install(SCRIPT ${deploy_script_scwx}
+-        COMPONENT supercell-wx)
+-
+ if (APPLE)
+     # Install additional script to fix up the bundle
+     install(CODE [[

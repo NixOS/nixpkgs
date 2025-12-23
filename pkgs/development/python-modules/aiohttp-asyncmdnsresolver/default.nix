@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-asyncmdnsresolver";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp-asyncmdnsresolver";
     rev = "v${version}";
-    hash = "sha256-z0m8dlzl6mglTOW9BwLbFcRjxcF14yz8+SE8SqjNu+c=";
+    hash = "sha256-gtB5vnlOVeAFACnhR5DIS5p3caZkOXrollXFINl/7hQ=";
   };
 
   build-system = [ setuptools ];

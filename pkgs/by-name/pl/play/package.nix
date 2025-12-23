@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "play";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "paololazzari";
     repo = "play";
     tag = "v${version}";
-    hash = "sha256-31naTjYwCytytKXg9tQo2qx0hVoBwBwL7nVeoAV+/go=";
+    hash = "sha256-0ew8iYpNzSsE4fhAIB7NZYDIJitmpS5npJ74Hp6l0E0=";
   };
 
   vendorHash = "sha256-9eP0rhsgpTttYrBG/BNk/ICtaM+zKNBz2H2cHuTSt30=";
@@ -24,7 +24,7 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
 
   passthru = {

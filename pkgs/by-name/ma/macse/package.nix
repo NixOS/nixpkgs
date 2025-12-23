@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multiple alignment of coding sequences";
     mainProgram = "macse";
     homepage = "https://bioweb.supagro.inra.fr/macse/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.all;
   };
 }

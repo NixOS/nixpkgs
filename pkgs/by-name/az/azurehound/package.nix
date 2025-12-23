@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "azurehound";
-  version = "2.3.0";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${version}";
-    hash = "sha256-BbwQ3u1SD4AjNjHzT6QB0x7QJAZ59m1DtvhjZapLIx4=";
+    hash = "sha256-eXcHBwWjZhpKwUK+sSXEDFiiBlBD+b6E50cV3QX38fw=";
   };
 
-  vendorHash = "sha256-FG3207OTzkMEoSvQsTH7Ky9T3ur7glG7k0ERfd12SO0=";
+  vendorHash = "sha256-+iNFWKFNON4HX2mf4O29zAdElEkIGIx55Wi9MRtg1dg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Azure Data Exporter for BloodHound";
@@ -37,5 +38,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "azurehound";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

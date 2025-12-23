@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "securisec";
-    repo = pname;
+    repo = "cliam";
     rev = version;
     hash = "sha256-59nPoH0+k1umMwFg95hQHOr/SRGKqr1URFG7xtVRiTs=";
   };
@@ -33,18 +34,18 @@ buildGoModule rec {
     mv $GOPATH/bin/{cli,cliam}
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cliam \
       --bash <($out/bin/cliam completion bash) \
       --fish <($out/bin/cliam completion fish) \
       --zsh <($out/bin/cliam completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cloud agnostic IAM permissions enumerator";
     mainProgram = "cliam";
     homepage = "https://github.com/securisec/cliam";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

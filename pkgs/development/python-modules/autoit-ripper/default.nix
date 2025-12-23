@@ -28,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoit_ripper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to extract AutoIt scripts embedded in PE binaries";
     mainProgram = "autoit-ripper";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
     changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

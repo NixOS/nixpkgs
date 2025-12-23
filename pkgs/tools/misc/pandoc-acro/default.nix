@@ -20,6 +20,7 @@ let
   };
 in
 buildPythonApplication {
+  format = "setuptools";
   inherit pname version src;
 
   propagatedBuildInputs = [
@@ -60,11 +61,11 @@ buildPythonApplication {
       ! grep -q "\+afaik" $out/example.txt
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pandoc-acro/";
     description = "Pandoc filter which manages acronyms in Pandoc flavored Markdown sources";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ tfc ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ tfc ];
     mainProgram = "pandoc-acro";
   };
 }

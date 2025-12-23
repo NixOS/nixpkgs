@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FAIOtGfGow+0DrPPEBEfvaiinNZLQlGWKJ4DkMj63OA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Xw+heCEwQePyU2gElpG8PTIUZA7y+Onx+2AX2NZzDGs=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -32,11 +31,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/elf2nucleus --completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Integrate micronucleus into the cargo buildsystem, flash an AVR firmware from an elf file";
     mainProgram = "elf2nucleus";
     homepage = "https://github.com/kpcyrd/elf2nucleus";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marble ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.marble ];
   };
 }

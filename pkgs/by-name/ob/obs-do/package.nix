@@ -5,24 +5,21 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "obs-do";
-  version = "0.1.7";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "obs-do";
-    tag = "v${version}";
-    hash = "sha256-aeFUgwbB1sGD6n+WT4GJpQURk/xKvL0w+6DtF1VQsCM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BYZI8XirNon7P2ckyXaLkFiU4OuwK2y9eLccj0D/2W4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uiQnWe/yni++czOwHXbXjQTdg2nOdI3FxUag+aKP69c=";
+  cargoHash = "sha256-V5j+zi7ogwxs2kCMRjDD7pF8yBWE6p7J2UAOXeJGbFw=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -39,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "obs-do";
   };
-}
+})

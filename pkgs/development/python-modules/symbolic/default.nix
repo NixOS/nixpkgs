@@ -9,31 +9,26 @@
   milksnake,
   cffi,
   pytestCheckHook,
-  nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "symbolic";
-  version = "10.2.1"; # glitchtip currently only works with symbolic 10.x
+  version = "12.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolic";
     tag = version;
-    hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-    # for some reason the `py` directory in the tarball is empty, so we fetch the source via git instead
+    # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
+    hash = "sha256-+V7Hel+03ktmf0IHcllBDyD46yQEyrcfKV9iuIHF7a4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      postPatch
-      ;
-    hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
+    inherit pname version src;
+    hash = "sha256-eLW+vCdhd4A7SU84Z9BO+sbFryMDSOUSewpqNw9d9Yc=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +41,6 @@ buildPythonPackage rec {
 
   dependencies = [ cffi ];
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
   preBuild = ''
     cd py
   '';
@@ -60,11 +51,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "py" ];
+  enabledTestPaths = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
 
-  passthru.tests = { inherit (nixosTests) glitchtip; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for dealing with symbol files and more";

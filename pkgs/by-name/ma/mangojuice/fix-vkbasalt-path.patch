@@ -6,7 +6,7 @@ index 8c2cbef..46e7f73 100644
      }
  
      async bool check_vkbasalt_installed_async () {
--        string[] paths = { "/usr/lib/libvkbasalt.so", "/usr/lib/x86_64-linux-gnu/libvkbasalt.so", "/usr/local/lib/libvkbasalt.so" };
+-        string[] paths = { "/usr/lib/libvkbasalt.so", "/usr/lib/x86_64-linux-gnu/libvkbasalt.so", "/usr/local/lib/libvkbasalt.so", "/usr/lib64/vkbasalt/libvkbasalt.so" };
 +        string[] paths = { "@vkbasalt@" };
          foreach (var path in paths) {
              if (FileUtils.test (path, FileTest.EXISTS)) {

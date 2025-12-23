@@ -1,31 +1,33 @@
 {
-  stdenv,
   lib,
-  fetchurl,
-  gtk2,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
   pkg-config,
   lm_sensors,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsensors";
-  version = "0.70";
-  src = fetchurl {
-    url = "http://www.linuxhardware.org/xsensors/xsensors-${version}.tar.gz";
-    sha256 = "1siplsfgvcxamyqf44h71jx6jdfmvhfm7mh0y1q8ps4zs6pj2zwh";
+  version = "0.80";
+
+  src = fetchFromGitHub {
+    owner = "Mystro256";
+    repo = "xsensors";
+    tag = finalAttrs.version;
+    hash = "sha256-dITnIMvOYL1gmoDP2w4ZlxcBdAqA/+D3ojm5cP+tTFQ=";
   };
+
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    gtk2
+    gtk3
     lm_sensors
   ];
-  patches = [
-    ./remove-unused-variables.patch
-    ./replace-deprecated-gtk.patch
-  ];
-  meta = with lib; {
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+
+  meta = {
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

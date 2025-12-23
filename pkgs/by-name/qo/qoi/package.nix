@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qoi";
-  version = "unstable-2023-08-10"; # no upstream version yet.
+  version = "0-unstable-2023-08-10"; # no upstream version yet.
 
   src = fetchFromGitHub {
     owner = "phoboslab";
@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "'Quite OK Image Format' for fast, lossless image compression";
     mainProgram = "qoiconv";
     homepage = "https://qoiformat.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hzeller ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hzeller ];
+    platforms = lib.platforms.all;
   };
 })

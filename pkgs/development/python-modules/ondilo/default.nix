@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ondilo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to access Ondilo ICO APIs";
     homepage = "https://github.com/JeromeHXP/ondilo";
     changelog = "https://github.com/JeromeHXP/ondilo/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

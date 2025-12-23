@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/lib/amidst/amidst.jar"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/toolbox4minecraft/amidst";
     description = "Advanced Minecraft Interface and Data/Structure Tracking";
     mainProgram = "amidst";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

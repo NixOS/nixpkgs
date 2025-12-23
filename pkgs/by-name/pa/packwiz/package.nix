@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -24,18 +25,18 @@ buildGoModule {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd packwiz \
       --bash <($out/bin/packwiz completion bash) \
       --fish <($out/bin/packwiz completion fish) \
       --zsh <($out/bin/packwiz completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for editing and distributing Minecraft modpacks, using a git-friendly TOML format";
     homepage = "https://packwiz.infra.link/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ infinidoge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ infinidoge ];
     mainProgram = "packwiz";
   };
 }

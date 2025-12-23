@@ -30,7 +30,8 @@ symlinkJoin {
         "$out/bin/obs"
         ''--set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
         ''--set OBS_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
-      ] ++ lib.lists.unique pluginArguments;
+      ]
+      ++ lib.lists.unique pluginArguments;
     in
     ''
       ${lib.concatStringsSep " " wrapCommandLine}

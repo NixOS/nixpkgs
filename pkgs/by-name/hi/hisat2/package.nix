@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
        $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graph based aligner";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://daehwankimlab.github.io/hisat2/";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with lib.maintainers; [ jbedo ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

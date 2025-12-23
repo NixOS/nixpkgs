@@ -1,7 +1,7 @@
 {
   lib,
   fetchurl,
-  nettools,
+  net-tools,
   openssl,
   readline,
   stdenv,
@@ -38,13 +38,11 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  hardeningEnable = [ "pie" ];
-
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
     which
-    nettools
+    net-tools
   ];
   doCheck = false; # fails a bunch, hangs
 
@@ -52,12 +50,12 @@ stdenv.mkDerivation rec {
     musl = buildPackages.pkgsMusl.socat;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility for bidirectional data transfer between two independent data channels";
     homepage = "http://www.dest-unreach.org/socat/";
-    platforms = platforms.unix;
-    license = with licenses; [ gpl2Only ];
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ ryan4yin ];
     mainProgram = "socat";
   };
 }

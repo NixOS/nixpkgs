@@ -4,7 +4,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  fetchFromSavannah,
   zlib,
   gdbm,
   ncurses,
@@ -17,9 +16,7 @@
   bison,
   autoconf,
   libiconv,
-  libobjc,
   libunwind,
-  Foundation,
   buildEnv,
   bundler,
   bundix,
@@ -40,7 +37,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems {
     inherit
       stdenv
@@ -61,14 +57,9 @@ let
     }:
     let
       ver = version;
-      atLeast31 = lib.versionAtLeast ver.majMin "3.1";
-      atLeast32 = lib.versionAtLeast ver.majMin "3.2";
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        atLeast32
-        && (
-          stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
-        );
+        stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64);
       rubyDrv = lib.makeOverridable (
         {
           stdenv,
@@ -76,7 +67,6 @@ let
           lib,
           fetchurl,
           fetchpatch,
-          fetchFromSavannah,
           rubygemsSupport ? true,
           zlib,
           zlibSupport ? true,
@@ -121,9 +111,7 @@ let
           bundler,
           bundix,
           libiconv,
-          libobjc,
           libunwind,
-          Foundation,
           makeBinaryWrapper,
           buildRubyGem,
           defaultGemConfig,
@@ -150,46 +138,51 @@ let
 
           strictDeps = true;
 
-          nativeBuildInputs =
-            [
-              autoreconfHook
-              bison
-              removeReferencesTo
-            ]
-            ++ (op docSupport groff)
-            ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [
-              systemtap
-              libsystemtap
-            ])
-            ++ ops yjitSupport [
-              rustPlatform.cargoSetupHook
-              cargo
-              rustc
-            ]
-            ++ op useBaseRuby baseRuby;
-          buildInputs =
-            [ autoconf ]
-            ++ (op fiddleSupport libffi)
-            ++ (ops cursesSupport [
-              ncurses
-              readline
-            ])
-            ++ (op zlibSupport zlib)
-            ++ (op opensslSupport openssl)
-            ++ (op gdbmSupport gdbm)
-            ++ (op yamlSupport libyaml)
-            # Looks like ruby fails to build on darwin without readline even if curses
-            # support is not enabled, so add readline to the build inputs if curses
-            # support is disabled (if it's enabled, we already have it) and we're
-            # running on darwin
-            ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
-            ++ ops stdenv.hostPlatform.isDarwin [
-              libiconv
-              libobjc
-              libunwind
-              Foundation
-            ];
+          nativeBuildInputs = [
+            autoreconfHook
+            bison
+            removeReferencesTo
+          ]
+          ++ (op docSupport groff)
+          ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [
+            systemtap
+            libsystemtap
+          ])
+          ++ ops yjitSupport [
+            rustPlatform.cargoSetupHook
+            cargo
+            rustc
+          ]
+          ++ op useBaseRuby baseRuby;
+          buildInputs = [
+            autoconf
+          ]
+          ++ (op fiddleSupport libffi)
+          ++ (ops cursesSupport [
+            ncurses
+            readline
+          ])
+          ++ (op zlibSupport zlib)
+          ++ (op opensslSupport openssl)
+          ++ (op gdbmSupport gdbm)
+          ++ (op yamlSupport libyaml)
+          # Looks like ruby fails to build on darwin without readline even if curses
+          # support is not enabled, so add readline to the build inputs if curses
+          # support is disabled (if it's enabled, we already have it) and we're
+          # running on darwin
+          ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
+          ++ ops stdenv.hostPlatform.isDarwin [
+            libiconv
+            libunwind
+          ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
+
+          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+            # The ruby build system will use a bare `rust` command by default for its rust.
+            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+            # for cross-compilation output for the build target by default.
+            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+          };
 
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
@@ -197,34 +190,20 @@ let
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
-          patches =
-            op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-            ++ op useBaseRuby (
-              if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch else ./do-not-update-gems-baseruby.patch
-            )
-            ++ ops (ver.majMin == "3.0") [
-              # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
-              (fetchpatch {
-                url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-                hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-              })
-            ]
-            ++ ops atLeast31 [
-              # When using a baseruby, ruby always sets "libdir" to the build
-              # directory, which nix rejects due to a reference in to /build/ in
-              # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compliation.
-              ./dont-refer-to-build-dir.patch
-            ];
+          patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
+            # When using a baseruby, ruby always sets "libdir" to the build
+            # directory, which nix rejects due to a reference in to /build/ in
+            # the final product. Removing this reference doesn't seem to break
+            # anything and fixes cross compilation.
+            ./dont-refer-to-build-dir.patch
+          ];
 
           cargoRoot = opString yjitSupport "yjit";
 
           cargoDeps =
             if yjitSupport then
               rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) src;
-                sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-                allowGitDependencies = false;
+                inherit (finalAttrs) src cargoRoot;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -237,42 +216,41 @@ let
             cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           '';
 
+          # Ruby >= 2.1.0 tries to download config.{guess,sub}; copy it from autoconf instead.
           postPatch = ''
             sed -i configure.ac -e '/config.guess/d'
-            cp --remove-destination ${config}/config.guess tool/
-            cp --remove-destination ${config}/config.sub tool/
+            cp --remove-destination ${autoconf}/share/autoconf/build-aux/config.{guess,sub} tool/
           '';
 
-          configureFlags =
-            [
-              (lib.enableFeature (!stdenv.hostPlatform.isStatic) "shared")
-              (lib.enableFeature true "pthread")
-              (lib.withFeatureAs true "soname" "ruby-${version}")
-              (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
-              (lib.enableFeature dtraceSupport "dtrace")
-              (lib.enableFeature jitSupport "jit-support")
-              (lib.enableFeature yjitSupport "yjit")
-              (lib.enableFeature docSupport "install-doc")
-              (lib.withFeature jemallocSupport "jemalloc")
-              (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
-              # ruby enables -O3 for gcc, however our compiler hardening wrapper
-              # overrides that by enabling `-O2` which is the minimum optimization
-              # needed for `_FORTIFY_SOURCE`.
-            ]
-            ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3"
-            ++ [
-            ]
-            ++ ops stdenv.hostPlatform.isDarwin [
-              # on darwin, we have /usr/include/tk.h -- so the configure script detects
-              # that tk is installed
-              "--with-out-ext=tk"
-              # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-              "--with-setjmp-type=setjmp"
-            ]
-            ++ ops stdenv.hostPlatform.isFreeBSD [
-              "rb_cv_gnu_qsort_r=no"
-              "rb_cv_bsd_qsort_r=yes"
-            ];
+          configureFlags = [
+            (lib.enableFeature (!stdenv.hostPlatform.isStatic) "shared")
+            (lib.enableFeature true "pthread")
+            (lib.withFeatureAs true "soname" "ruby-${version}")
+            (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+            (lib.enableFeature dtraceSupport "dtrace")
+            (lib.enableFeature jitSupport "jit-support")
+            (lib.enableFeature yjitSupport "yjit")
+            (lib.enableFeature docSupport "install-doc")
+            (lib.withFeature jemallocSupport "jemalloc")
+            (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+            # ruby enables -O3 for gcc, however our compiler hardening wrapper
+            # overrides that by enabling `-O2` which is the minimum optimization
+            # needed for `_FORTIFY_SOURCE`.
+          ]
+          ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3"
+          ++ [
+          ]
+          ++ ops stdenv.hostPlatform.isDarwin [
+            # on darwin, we have /usr/include/tk.h -- so the configure script detects
+            # that tk is installed
+            "--with-out-ext=tk"
+            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
+            "--with-setjmp-type=setjmp"
+          ]
+          ++ ops stdenv.hostPlatform.isFreeBSD [
+            "rb_cv_gnu_qsort_r=no"
+            "rb_cv_bsd_qsort_r=yes"
+          ];
 
           preConfigure = opString docSupport ''
             # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
@@ -293,67 +271,66 @@ let
 
           installFlags = lib.optional docSupport "install-doc";
           # Bundler tries to create this directory
-          postInstall =
-            ''
-              rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
-              # Remove references to the build environment from the closure
-              sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
-              # Remove unnecessary groff reference from runtime closure, since it's big
-              sed -i '/NROFF/d' $rbConfig
-              ${lib.optionalString (!jitSupport) ''
-                # Get rid of the CC runtime dependency
-                remove-references-to \
-                  -t ${stdenv.cc} \
-                  $out/lib/libruby*
-                remove-references-to \
-                  -t ${stdenv.cc} \
-                  $rbConfig
-                sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
-              ''}
-
-              # Allow to override compiler. This is important for cross compiling as
-              # we need to set a compiler that is different from the build one.
-              sed -i "$rbConfig" \
-                -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
-                -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
-
-              # Remove unnecessary external intermediate files created by gems
-              extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)
-              for makefile in $extMakefiles; do
-                make -C "$(dirname "$makefile")" distclean
-              done
-              find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log -o -name exts.mk \) -delete
-              # Bundler tries to create this directory
-              mkdir -p $out/nix-support
-              cat > $out/nix-support/setup-hook <<EOF
-              addGemPath() {
-                addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
-              }
-              addRubyLibPath() {
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
-                addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
-              }
-
-              addEnvHooks "$hostOffset" addGemPath
-              addEnvHooks "$hostOffset" addRubyLibPath
-              EOF
-            ''
-            + opString docSupport ''
-              # Prevent the docs from being included in the closure
-              sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
-              sed -i "s|'--with-ridir=$devdoc/share/ri'||" $rbConfig
-
-              # Add rbconfig shim so ri can find docs
-              mkdir -p $devdoc/lib/ruby/site_ruby
-              cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
-            ''
-            + opString useBaseRuby ''
-              # Prevent the baseruby from being included in the closure.
+          postInstall = ''
+            rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+            # Remove references to the build environment from the closure
+            sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
+            # Remove unnecessary groff reference from runtime closure, since it's big
+            sed -i '/NROFF/d' $rbConfig
+            ${lib.optionalString (!jitSupport) ''
+              # Get rid of the CC runtime dependency
               remove-references-to \
-                -t ${baseRuby} \
-                $rbConfig $out/lib/libruby*
-            '';
+                -t ${stdenv.cc} \
+                $out/lib/libruby*
+              remove-references-to \
+                -t ${stdenv.cc} \
+                $rbConfig
+              sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
+            ''}
+
+            # Allow to override compiler. This is important for cross compiling as
+            # we need to set a compiler that is different from the build one.
+            sed -i "$rbConfig" \
+              -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
+              -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
+
+            # Remove unnecessary external intermediate files created by gems
+            extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)
+            for makefile in $extMakefiles; do
+              make -C "$(dirname "$makefile")" distclean
+            done
+            find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log -o -name exts.mk \) -delete
+            # Bundler tries to create this directory
+            mkdir -p $out/nix-support
+            cat > $out/nix-support/setup-hook <<EOF
+            addGemPath() {
+              addToSearchPath GEM_PATH \$1/${finalAttrs.passthru.gemPath}
+            }
+            addRubyLibPath() {
+              addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby
+              addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}
+              addToSearchPath RUBYLIB \$1/lib/ruby/site_ruby/${ver.libDir}/${stdenv.hostPlatform.system}
+            }
+
+            addEnvHooks "$hostOffset" addGemPath
+            addEnvHooks "$hostOffset" addRubyLibPath
+            EOF
+          ''
+          + opString docSupport ''
+            # Prevent the docs from being included in the closure
+            sed -i "s|\$(DESTDIR)$devdoc|\$(datarootdir)/\$(RI_BASE_NAME)|" $rbConfig
+            sed -i "s|'--with-ridir=$devdoc/share/ri'||" $rbConfig
+
+            # Add rbconfig shim so ri can find docs
+            mkdir -p $devdoc/lib/ruby/site_ruby
+            cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
+          ''
+          + opString useBaseRuby ''
+            # Prevent the baseruby from being included in the closure.
+            remove-references-to \
+              -t ${baseRuby} \
+              $rbConfig $out/lib/libruby*
+          '';
 
           installCheckPhase = ''
             overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
@@ -372,48 +349,47 @@ let
 
           disallowedRequisites = op (!jitSupport) stdenv.cc ++ op useBaseRuby baseRuby;
 
-          meta = with lib; {
+          meta = {
             description = "Object-oriented language for quick and easy programming";
             homepage = "https://www.ruby-lang.org/";
-            license = licenses.ruby;
-            maintainers = with maintainers; [ manveru ];
-            platforms = platforms.all;
+            license = lib.licenses.ruby;
+            maintainers = with lib.maintainers; [ manveru ];
+            platforms = lib.platforms.all;
             mainProgram = "ruby";
             knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
           };
 
-          passthru =
-            rec {
-              version = ver;
-              rubyEngine = "ruby";
-              libPath = "lib/${rubyEngine}/${ver.libDir}";
-              gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
-              devEnv = import ./dev.nix {
-                inherit buildEnv bundler bundix;
-                ruby = finalAttrs.finalPackage;
-              };
-
-              inherit rubygems;
-              inherit
-                (import ../../ruby-modules/with-packages {
-                  inherit
-                    lib
-                    stdenv
-                    makeBinaryWrapper
-                    buildRubyGem
-                    buildEnv
-                    ;
-                  gemConfig = defaultGemConfig;
-                  ruby = finalAttrs.finalPackage;
-                })
-                withPackages
-                buildGems
-                gems
-                ;
-            }
-            // lib.optionalAttrs useBaseRuby {
-              inherit baseRuby;
+          passthru = rec {
+            version = ver;
+            rubyEngine = "ruby";
+            libPath = "lib/${rubyEngine}/${ver.libDir}";
+            gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
+            devEnv = import ./dev.nix {
+              inherit buildEnv bundler bundix;
+              ruby = finalAttrs.finalPackage;
             };
+
+            inherit rubygems;
+            inherit
+              (import ../../ruby-modules/with-packages {
+                inherit
+                  lib
+                  stdenv
+                  makeBinaryWrapper
+                  buildRubyGem
+                  buildEnv
+                  ;
+                gemConfig = defaultGemConfig;
+                ruby = finalAttrs.finalPackage;
+              })
+              withPackages
+              buildGems
+              gems
+              ;
+          }
+          // lib.optionalAttrs useBaseRuby {
+            inherit baseRuby;
+          };
         })
       ) args;
     in
@@ -424,26 +400,22 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "6" "";
-    hash = "sha256-DQ2vuFnnZ2NDJXGjEJ0VN9l2JmvjCDRFZR3Gje7SXCI=";
-  };
-
-  ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "6" "";
-    hash = "sha256-2ctl7N8/GGaWOfJji2M3ntb7sX2Trk5ybU6yv2ikg3A=";
-    cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
-  };
-
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "6" "";
-    hash = "sha256-jcSP/68nD4bxAZBT8o5R5NpMzjKjZ2CgYDqa7mfX/Y0=";
+    version = rubyVersion "3" "3" "10" "";
+    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "2" "";
-    hash = "sha256-QTKKwh8r/dfeazVl708N11QzVNN+lvFXoVUqa9DrNks=";
+    version = rubyVersion "3" "4" "8" "";
+    hash = "sha256-U8TdrUH7thifH17g21elHVS9H4f4dVs9aGBBVqNbBFs=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_4_0 = generic {
+    version = rubyVersion "4" "0" "0" "preview3";
+    hash = "sha256-Q9CSbndvvVWZrcx7zLTMyAThCfQCogaGB6KoZWLCzcA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }

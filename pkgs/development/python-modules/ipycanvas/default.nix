@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ipycanvas";
-  version = "0.13.3";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ToZ8UJsB9cTPwAn32SHjLloSoCmshW54wE/xW2VpLEo=";
+    hash = "sha256-OFNwRHcRlN2jFjbEEHh4RxZyp6y1hLfotRgrIpsXBtU=";
   };
 
   # We relax dependencies here instead of pulling in a patch because upstream
@@ -43,11 +43,11 @@ buildPythonPackage rec {
   doCheck = false; # tests are in Typescript and require `npx` and `chromium`
   pythonImportsCheck = [ "ipycanvas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Expose the browser's Canvas API to IPython";
     homepage = "https://ipycanvas.readthedocs.io";
     changelog = "https://github.com/jupyter-widgets-contrib/ipycanvas/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

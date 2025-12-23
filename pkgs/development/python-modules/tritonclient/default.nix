@@ -35,8 +35,11 @@ buildPythonPackage rec {
       inherit pname version format;
       python = "py3";
       dist = "py3";
-      platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system} or { };
+      platform =
+        platforms.${stdenv.hostPlatform.system}
+          or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      sha256 =
+        hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     };
 
   propagatedBuildInputs = [
@@ -59,11 +62,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Triton Python client";
     homepage = "https://github.com/triton-inference-server/client";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = lib.platforms.linux;
   };
 }

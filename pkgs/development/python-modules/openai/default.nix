@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -19,10 +17,20 @@
   tqdm,
   typing-extensions,
 
+  # optional-dependencies (aiohttp)
+  aiohttp,
+  httpx-aiohttp,
+
+  # optional-dependencies (datalib)
   numpy,
   pandas,
   pandas-stubs,
+
+  # optional-dependencies (realtime)
   websockets,
+
+  # optional-dependencies (voice-helpers)
+  sounddevice,
 
   # check deps
   pytestCheckHook,
@@ -31,22 +39,29 @@
   nest-asyncio,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
+
+  # optional-dependencies toggle
+  withAiohttp ? true,
+  withDatalib ? false,
+  withRealtime ? true,
+  withVoiceHelpers ? true,
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.66.3";
+  version = "2.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-T9ZW/93ovzJgLEjLgzp/4bPezONxqlYNFpe6U8a7q/A=";
+    hash = "sha256-f4d6gz4W04NPu43u0ovORzvF8ZW7oIYO8DJIqUGIEdE=";
   };
+
+  postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
 
   build-system = [
     hatchling
@@ -62,9 +77,17 @@ buildPythonPackage rec {
     sniffio
     tqdm
     typing-extensions
-  ] ++ optional-dependencies.realtime;
+  ]
+  ++ lib.optionals withAiohttp optional-dependencies.aiohttp
+  ++ lib.optionals withDatalib optional-dependencies.datalib
+  ++ lib.optionals withRealtime optional-dependencies.realtime
+  ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
     datalib = [
       numpy
       pandas
@@ -72,6 +95,10 @@ buildPythonPackage rec {
     ];
     realtime = [
       websockets
+    ];
+    voice-helpers = [
+      numpy
+      sounddevice
     ];
   };
 
@@ -84,36 +111,24 @@ buildPythonPackage rec {
     nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
   ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  disabledTests =
-    [
-      # Tests make network requests
-      "test_copy_build_request"
-      "test_basic_attribute_access_works"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-      "test_multi_byte_character_multiple_chunks"
-    ];
 
   disabledTestPaths = [
     # Test makes network requests
     "tests/api_resources"
+    # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
+    # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
+    "tests/lib/chat/test_completions_streaming.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";
   };
 }

@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "fluidd";
-  version = "1.32.4";
+  version = "1.34.4";
 
   src = fetchFromGitHub {
     owner = "fluidd-core";
     repo = "fluidd";
     tag = "v${version}";
-    hash = "sha256-5siU1BunQ1tcF8pg0trKkynJXmLdCS1rFo7J0WX8V30=";
+    hash = "sha256-EixAax+Bd0IoGdk6Q9FoMQoWAa1U+O3SYeYEnuonHEI=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildNpmPackage rec {
     })
   ];
 
-  npmDepsHash = "sha256-+MfqmMZ2fiijr4X2S2TQfo25mVGpnZtZYOxCfPH4gFY=";
+  npmDepsHash = "sha256-08tm+NuDLwilwo7SCmncIGAbEIW0tJLZi1HaoWGgAJA=";
 
   installPhase = ''
     mkdir -p $out/share/fluidd
@@ -32,10 +32,10 @@ buildNpmPackage rec {
 
   passthru.tests = { inherit (nixosTests) fluidd; };
 
-  meta = with lib; {
+  meta = {
     description = "Klipper web interface";
     homepage = "https://docs.fluidd.xyz";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

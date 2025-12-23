@@ -48,11 +48,11 @@ buildPythonPackage rec {
     semantic-version
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/maxcountryman/flask-login/blob/${version}/CHANGES.md";
     description = "User session management for Flask";
     homepage = "https://github.com/maxcountryman/flask-login";
-    license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

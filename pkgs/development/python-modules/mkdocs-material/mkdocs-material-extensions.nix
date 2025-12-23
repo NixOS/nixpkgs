@@ -12,8 +12,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "facelessuser";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "mkdocs-material-extensions";
+    tag = version;
     hash = "sha256-/jU30Ol10/4haR3ZPJWZ3iWRfXG/RUOU1oclOYGjjAY=";
   };
 
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "materialx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Markdown extension resources for MkDocs Material";
     homepage = "https://github.com/facelessuser/mkdocs-material-extensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

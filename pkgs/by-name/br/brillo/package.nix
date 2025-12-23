@@ -5,17 +5,18 @@
   go-md2man,
   coreutils,
   replaceVars,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
-  version = "1.4.12";
+  version = "1.4.13";
 
   src = fetchFromGitLab {
     owner = "cameronnemo";
     repo = "brillo";
     rev = "v${version}";
-    hash = "sha256-dKGNioWGVAFuB4kySO+QGTnstyAD0bt4/6FBVwuRxJo=";
+    hash = "sha256-+BUyM3FFnsk87NFaD9FBwdLqf6wsNhX+FDB7nqhgAmM=";
   };
 
   patches = [
@@ -26,24 +27,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ go-md2man ];
+  nativeBuildInputs = [
+    go-md2man
+    udevCheckHook
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "AADIR=$(out)/etc/apparmor.d"
   ];
 
+  doInstallCheck = true;
+
   installTargets = [ "install-dist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
-      licenses.gpl3
-      licenses.bsd0
+      lib.licenses.gpl3Only
+      lib.licenses.bsd0
     ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.alexarice ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.alexarice ];
   };
 }

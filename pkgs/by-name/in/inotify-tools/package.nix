@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-tools";
-  version = "4.23.9.0";
+  version = "4.25.9.0";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
     rev = finalAttrs.version;
-    hash = "sha256-6kM2JzxRcwUjUmbUWGnQ+gAvZcn7C32/enRwiYiuQGU=";
+    hash = "sha256-u7bnFmSEXNGVZTJ71kOTscQLymbjJblJCIY9Uj7/3mM=";
   };
 
   configureFlags = [
@@ -28,14 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/inotify-tools/inotify-tools/wiki";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       marcweber
       pSub
       shamilton
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

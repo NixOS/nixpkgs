@@ -10,4 +10,6 @@ mkKdeDerivation {
     qtsvg
     qttools
   ];
+
+  meta.mainProgram = "kirigami2gallery";
 }

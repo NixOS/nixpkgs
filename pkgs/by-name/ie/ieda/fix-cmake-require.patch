@@ -1,0 +1,96 @@
+diff --git a/src/operation/iPNP/CMakeLists.txt b/src/operation/iPNP/CMakeLists.txt
+index b8f308a6e..4749d5024 100644
+--- a/src/operation/iPNP/CMakeLists.txt
++++ b/src/operation/iPNP/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ set (CMAKE_CXX_STANDARD 20)
+ 
+ add_subdirectory(api)
+diff --git a/src/third_party/pybind11/CMakeLists.txt b/src/third_party/pybind11/CMakeLists.txt
+index 0d9320388..5b5967713 100644
+--- a/src/third_party/pybind11/CMakeLists.txt
++++ b/src/third_party/pybind11/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ # All rights reserved. Use of this source code is governed by a
+ # BSD-style license that can be found in the LICENSE file.
+ 
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.22)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/CMakeLists.txt b/src/third_party/pybind11/tests/CMakeLists.txt
+index 9beb268ed..417cd04d0 100644
+--- a/src/third_party/pybind11/tests/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ # All rights reserved. Use of this source code is governed by a
+ # BSD-style license that can be found in the LICENSE file.
+ 
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/installed_embed/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/installed_embed/CMakeLists.txt
+index f7d693998..2847142a4 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/installed_embed/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/installed_embed/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/installed_function/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/installed_function/CMakeLists.txt
+index d7ca4db55..74322f598 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/installed_function/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/installed_function/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ project(test_installed_module CXX)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/installed_target/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/installed_target/CMakeLists.txt
+index bc5e101f1..2d21a21de 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/installed_target/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/installed_target/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_embed/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_embed/CMakeLists.txt
+index 58cdd7cfd..f9835f31e 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_embed/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_embed/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_function/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_function/CMakeLists.txt
+index 01557c439..6d96cc3b3 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_function/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_function/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate
+diff --git a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_target/CMakeLists.txt b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_target/CMakeLists.txt
+index ba82fdee2..6f8e04429 100644
+--- a/src/third_party/pybind11/tests/test_cmake_build/subdirectory_target/CMakeLists.txt
++++ b/src/third_party/pybind11/tests/test_cmake_build/subdirectory_target/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ 
+ # The `cmake_minimum_required(VERSION 3.4...3.18)` syntax does not work with
+ # some versions of VS that have a patched CMake 3.11. This forces us to emulate

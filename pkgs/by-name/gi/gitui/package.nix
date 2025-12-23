@@ -8,12 +8,12 @@
   pkg-config,
   cmake,
   xclip,
-  darwin,
   nix-update-script,
+  fetchpatch,
 }:
 let
   pname = "gitui";
-  version = "0.27.0";
+  version = "0.28.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,25 +22,23 @@ rustPlatform.buildRustPackage {
     owner = "extrawurst";
     repo = "gitui";
     rev = "v${version}";
-    hash = "sha256-jKJ1XnF6S7clyFGN2o3bHnYpC4ckl/lNXscmf6GRLbI=";
+    hash = "sha256-B3Cdhhu8ECfpc57TKe6u08Q/Kl4JzUlzw4vtJJ1YAUQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Le/dD8bTd5boz1IeEq4ItJZYC3MRW8uiT/3Zy1yv5L0=";
+  cargoHash = "sha256-dq5F7NJ0XcJ9x6hVWOboQQn8Liw8n8vkFgQSmTYIkSw=";
 
   nativeBuildInputs = [
     pkg-config
     cmake
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isLinux xclip
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux xclip
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postPatch = ''
     # The cargo config overrides linkers for some targets, breaking the build
@@ -71,7 +69,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     mainProgram = "gitui";
     maintainers = with lib.maintainers; [
-      Br1ght0ne
       yanganto
       mfrw
     ];

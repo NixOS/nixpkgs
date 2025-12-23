@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   importlib-resources,
   jsonschema,
@@ -14,14 +14,13 @@
 }:
 buildPythonPackage rec {
   pname = "kubernetes-validate";
-  version = "1.31.0";
+  version = "1.34.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "willthames";
-    repo = "kubernetes-validate";
-    tag = "v${version}";
-    hash = "sha256-vxsftuipw0rHQIngxKlPHwBIW+rYAjfnEEaJDKmPyfQ=";
+  src = fetchPypi {
+    pname = "kubernetes_validate";
+    inherit version;
+    hash = "sha256-uC2kR6QG/EdauD4PZ4tkQixZX8EHcN0nMyDCRMm0AxU=";
   };
 
   build-system = [
@@ -38,10 +37,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "kubernetes_validate" ];
 

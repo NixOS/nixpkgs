@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   ninja,
   qtbase,
@@ -12,19 +13,20 @@
   libXtst,
   qtwayland,
   wayland,
+  pkg-config,
   wrapQtAppsHook,
   kdePackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "9.1.0";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-WBJyLfiPPEQ/Cj5uuwy9KhVc1kw4Hv5TeEuRFDydlGk=";
+    hash = "sha256-wxjUL5mGXAMNVGP+dAh1NrE9tw71cJW9zmLsaCVphTo=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +34,7 @@ stdenv.mkDerivation rec {
     ninja
     kdePackages.extra-cmake-modules
     wrapQtAppsHook
+    pkg-config
   ];
 
   buildInputs = [
@@ -46,22 +49,28 @@ stdenv.mkDerivation rec {
     kdePackages.kconfig
     kdePackages.kstatusnotifieritem
     kdePackages.knotifications
+    kdePackages.kguiaddons
   ];
 
-  postPatch = ''
-    substituteInPlace shared/com.github.hluk.copyq.desktop.in \
-      --replace copyq "$out/bin/copyq"
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_QT6" true)
+  ];
 
-  cmakeFlags = [ "-DWITH_QT6=ON" ];
+  patches = [
+    # https://github.com/hluk/CopyQ/pull/3268
+    (fetchpatch2 {
+      url = "https://github.com/hluk/CopyQ/commit/103903593c37c9db5406d276e0097fbf18d2a8c4.patch?full_index=1";
+      hash = "sha256-zywE6ntMw+WvTyilXwvd4lfQRAAB9R/AGpwtwwPFZZE=";
+    })
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
 }

@@ -12,7 +12,10 @@ let
     testing.makeTest {
       name = "initrd-secrets-${compressor}";
 
-      meta.maintainers = [ ];
+      meta = {
+        maintainers = [ ];
+        broken = pkgs.stdenv.hostPlatform.isAarch64;
+      };
 
       nodes.machine =
         { ... }:

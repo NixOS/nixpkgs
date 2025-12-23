@@ -70,26 +70,25 @@ in
           };
         }) requiredStratisFilesystems;
       };
-      availableKernelModules =
-        [
-          "dm-thin-pool"
-          "dm-crypt"
-        ]
-        ++ [
-          "aes"
-          "aes_generic"
-          "blowfish"
-          "twofish"
-          "serpent"
-          "cbc"
-          "xts"
-          "lrw"
-          "sha1"
-          "sha256"
-          "sha512"
-          "af_alg"
-          "algif_skcipher"
-        ];
+      availableKernelModules = [
+        "dm-thin-pool"
+        "dm-crypt"
+      ]
+      ++ [
+        "aes"
+        "aes_generic"
+        "blowfish"
+        "twofish"
+        "serpent"
+        "cbc"
+        "xts"
+        "lrw"
+        "sha1"
+        "sha256"
+        "sha512"
+        "af_alg"
+        "algif_skcipher"
+      ];
       services.udev.packages = [
         pkgs.stratisd.initrd
         pkgs.lvm2

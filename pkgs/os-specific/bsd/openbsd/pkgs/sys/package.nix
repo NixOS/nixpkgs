@@ -61,12 +61,12 @@
         ln -s ${pkgsBuildTarget.binutils}/bin/${pkgsBuildTarget.binutils.targetPrefix}ld $TMP/bin/ld
       ''
       +
-        # The Makefile claims it needs includes, but it really doesn't.
-        # Tell it includes aren't real and can't hurt it.
-        ''
-          cd compile/${baseConfig}/obj
-          echo 'includes:' >>Makefile
-        '';
+      # The Makefile claims it needs includes, but it really doesn't.
+      # Tell it includes aren't real and can't hurt it.
+      ''
+        cd compile/${baseConfig}/obj
+        echo 'includes:' >>Makefile
+      '';
 
     # stand is in a separate package
     env.SKIPDIR = "stand";

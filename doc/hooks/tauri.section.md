@@ -23,16 +23,15 @@ In Nixpkgs, `cargo-tauri.hook` overrides the default build and install phases.
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
-  # . . .
+rustPlatform.buildRustPackage (finalAttrs: {
+  # ...
 
-  useFetchCargoVendor = true;
   cargoHash = "...";
 
   # Assuming our app's frontend uses `npm` as a package manager
   npmDeps = fetchNpmDeps {
-    name = "${pname}-npm-deps-${version}";
-    inherit src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
     hash = "...";
   };
 
@@ -46,23 +45,22 @@ rustPlatform.buildRustPackage rec {
 
     # Make sure we can find our libraries
     pkg-config
-    wrapGAppsHook4
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking # Most Tauri apps need networking
-      webkitgtk_4_1
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking # Most Tauri apps need networking
+    openssl
+    webkitgtk_4_1
+  ];
 
   # Set our Tauri source directory
   cargoRoot = "src-tauri";
   # And make sure we build there too
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  # . . .
-}
+  # ...
+})
 ```
 
 ## Variables controlling cargo-tauri {#tauri-hook-variables-controlling}

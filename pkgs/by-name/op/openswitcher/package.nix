@@ -11,18 +11,19 @@
   pkg-config,
   scdoc,
   wrapGAppsHook3,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "openswitcher";
-  version = "0.11.0";
+  version = "0.13.0";
   format = "other";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
     rev = version;
-    hash = "sha256-VBuOnUVB6n8ahVtunubgao9jHPu9ncX0dhDT0PdSFhU=";
+    hash = "sha256-eEn09e+ZED4DGEWTUou9CRgazngHIXZv51CLhX9YuBI=";
   };
 
   outputs = [
@@ -43,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     scdoc
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   dontWrapGApps = true;
@@ -71,11 +73,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Blackmagic Design mixer control application";
     downloadPage = "https://git.sr.ht/~martijnbraam/pyatem";
     homepage = "https://openswitcher.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "switcher-control";
   };
 }

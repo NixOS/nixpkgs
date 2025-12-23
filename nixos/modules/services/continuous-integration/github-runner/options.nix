@@ -26,7 +26,7 @@
     default = { };
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        { name, config, ... }:
         {
           options = {
             enable = lib.mkOption {
@@ -186,7 +186,9 @@
               default = { };
             };
 
-            package = lib.mkPackageOption pkgs "github-runner" { };
+            package = lib.mkPackageOption pkgs "github-runner" { } // {
+              apply = pkg: pkg.override { inherit (config) nodeRuntimes; };
+            };
 
             ephemeral = lib.mkOption {
               type = lib.types.bool;
@@ -256,8 +258,16 @@
             };
 
             nodeRuntimes = lib.mkOption {
-              type = with lib.types; nonEmptyListOf (enum [ "node20" ]);
-              default = [ "node20" ];
+              type =
+                with lib.types;
+                nonEmptyListOf (enum [
+                  "node20"
+                  "node24"
+                ]);
+              default = [
+                "node20"
+                "node24"
+              ];
               description = ''
                 List of Node.js runtimes the runner should support.
               '';

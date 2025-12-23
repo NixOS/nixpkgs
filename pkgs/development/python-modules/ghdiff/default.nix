@@ -23,11 +23,11 @@ buildPythonPackage rec {
     chardet
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kilink/ghdiff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Generate Github-style HTML for unified diffs";
     mainProgram = "ghdiff";
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

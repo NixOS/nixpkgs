@@ -1,4 +1,5 @@
 {
+  lib ? pkgs.lib,
   pkgs,
 }:
 
@@ -12,5 +13,9 @@
 # See also: https://github.com/NixOS/nix/issues/7582
 
 builtins.mapAttrs (
-  _: pkg: if builtins.isAttrs pkg then pkg.override { withAWS = false; } else pkg
+  attr: pkg:
+  if lib.versionAtLeast pkg.version "2.29pre" then
+    pkg.overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
+  else
+    pkg.override { withAWS = false; }
 ) pkgs.nixVersions

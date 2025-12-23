@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ianny";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
     rev = "v${version}";
-    hash = "sha256-F8Uc2BsQ5f7yaUXXDhLvyyYKUDAuvP9cCR2h3vblr0g=";
+    hash = "sha256-XwwfBOx+5l5KjthL69nLpIVc7ilA4rKGBeRvE9BEQPU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QqdcOftbVt/yNzmvvy6AI66oTZvTgWHfY3Q/ikWGaLM=";
+  cargoHash = "sha256-A5ZInR6gXvDPpa2azF1ZmVANzm3v1YAvxJjJ7h32J2A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus.dev ];
@@ -34,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     cp io.github.zefr0x.ianny.desktop $out/etc/xdg/autostart/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop utility that helps preventing repetitive strain injuries by keeping track of usage patterns and periodically informing the user to take breaks";
     homepage = "https://github.com/zefr0x/ianny";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "ianny";
-    maintainers = with maintainers; [ max-amb ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ max-amb ];
+    platforms = lib.platforms.linux;
   };
 }

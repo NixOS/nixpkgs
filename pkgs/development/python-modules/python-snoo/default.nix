@@ -4,20 +4,21 @@
   fetchFromGitHub,
   poetry-core,
   aiohttp,
+  aiomqtt,
   freenub,
   mashumaro,
 }:
 
 buildPythonPackage rec {
   pname = "python-snoo";
-  version = "0.6.3";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "python-snoo";
     tag = "v${version}";
-    hash = "sha256-kY8LetiY5wMJ6BMeoWK8al1PDC00ODU8B4CXesxBZSU=";
+    hash = "sha256-p0cKIDdSQwryagvHGjydSTR4O5lAPO7UMhw+tSIxZrY=";
   };
 
   postPatch = ''
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    aiomqtt
     freenub
     mashumaro
   ];

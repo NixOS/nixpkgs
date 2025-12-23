@@ -42,26 +42,25 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ boost ];
-  nativeBuildInputs =
-    [
-      cmake
-      perl
-      python3
-    ]
-    ++ lib.optionals fortranSupport [ gfortran ]
-    ++ lib.optionals buildJavaBindings [ openjdk ]
-    ++ lib.optionals buildPythonBindings [ python3Packages.pybind11 ]
-    ++ lib.optionals buildDocumentation [
-      fig2dev
-      ghostscript
-      doxygen
-    ]
-    ++ lib.optionals bmfSupport [ eigen ]
-    ++ lib.optionals modelCheckingSupport [
-      libunwind
-      libevent
-      elfutils
-    ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    python3
+  ]
+  ++ lib.optionals fortranSupport [ gfortran ]
+  ++ lib.optionals buildJavaBindings [ openjdk ]
+  ++ lib.optionals buildPythonBindings [ python3Packages.pybind11 ]
+  ++ lib.optionals buildDocumentation [
+    fig2dev
+    ghostscript
+    doxygen
+  ]
+  ++ lib.optionals bmfSupport [ eigen ]
+  ++ lib.optionals modelCheckingSupport [
+    libunwind
+    libevent
+    elfutils
+  ];
 
   outputs = [ "out" ] ++ lib.optionals buildPythonBindings [ "python" ];
 
@@ -132,7 +131,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = lib.optionals debug [ "fortify" ];
   dontStrip = debug;
 
-  meta = with lib; {
+  meta = {
     description = "Framework for the simulation of distributed applications";
     longDescription = ''
       SimGrid is a toolkit that provides core functionalities for the
@@ -143,12 +142,12 @@ stdenv.mkDerivation rec {
       network of workstations to Computational Grids.
     '';
     homepage = "https://simgrid.org/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
       mickours
       mpoquet
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

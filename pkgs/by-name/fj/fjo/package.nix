@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KjH78yqfZoN24TBYyFZuxf7z9poRov0uFYQ8+eq9p/o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iF2hIeRnyYYyyg45c1E3NIR9m7oonY18JlGvFSXy/Lc=";
 
   buildInputs = [ openssl ];
@@ -30,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/VoiDD/fjo";
     license = lib.licenses.agpl3Only;
     mainProgram = "berg";
-    maintainers = with lib.maintainers; [ ehmry ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

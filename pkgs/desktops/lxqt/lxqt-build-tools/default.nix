@@ -4,13 +4,12 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  pcre,
   qtbase,
   glib,
   perl,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.1.0",
+  version ? "2.3.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -19,12 +18,12 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-build-tools";
     rev = version;
     hash =
       {
         "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-        "2.1.0" = "sha256-fZ5DbXnYm6oWDZdwiw2DpWFQMYd7VZ4oKkGIzQkaV94=";
+        "2.3.0" = "sha256-lbDcIOrOkGU/n0bPPAlZSsdBYMlBh3afXwwTkTWQLpo=";
       }
       ."${version}";
   };
@@ -34,6 +33,10 @@ stdenv.mkDerivation rec {
     # Without this, dependants fail to link.
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
       --replace-fail AppleClang Clang
+  ''
+  + lib.optionalString (lib.versionOlder version "2.3.0") ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -46,7 +49,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     glib
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -63,12 +65,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-build-tools";
     description = "Various packaging tools and scripts for LXQt applications";
     mainProgram = "lxqt-transupdate";
-    license = licenses.lgpl21Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

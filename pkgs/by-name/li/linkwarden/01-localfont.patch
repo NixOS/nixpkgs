@@ -1,0 +1,42 @@
+diff --git i/apps/web/components/Preservation/ReadableView.tsx w/apps/web/components/Preservation/ReadableView.tsx
+index 64f14186..daff3636 100644
+--- i/apps/web/components/Preservation/ReadableView.tsx
++++ w/apps/web/components/Preservation/ReadableView.tsx
+@@ -20,13 +20,13 @@ import {
+ } from "@linkwarden/router/highlights";
+ import { Highlight } from "@linkwarden/prisma/client";
+ import { useUser } from "@linkwarden/router/user";
+-import { Caveat } from "next/font/google";
+-import { Bentham } from "next/font/google";
++import localFont from "next/font/local";
+ import { Separator } from "../ui/separator";
+ import { Button } from "../ui/button";
+ 
+-const caveat = Caveat({ subsets: ["latin"] });
+-const bentham = Bentham({ subsets: ["latin"], weight: "400" });
++
++const caveat = localFont({ src: "../../public/caveat.ttf" });
++const bentham = localFont({ src: "../../public/bentham.ttf" });
+ 
+ type Props = {
+   link: LinkIncludingShortenedCollectionAndTags;
+diff --git i/apps/web/components/TextStyleDropdown.tsx w/apps/web/components/TextStyleDropdown.tsx
+index a84587d9..59a291e4 100644
+--- i/apps/web/components/TextStyleDropdown.tsx
++++ w/apps/web/components/TextStyleDropdown.tsx
+@@ -13,12 +13,11 @@ import {
+ import { Button } from "@/components/ui/button";
+ import { FitWidth, FormatLineSpacing, FormatSize } from "@/components/ui/icons";
+ import { useUpdateUserPreference, useUser } from "@linkwarden/router/user";
+-import { Caveat } from "next/font/google";
+-import { Bentham } from "next/font/google";
++import localFont from "next/font/local";
+ import { useTranslation } from "next-i18next";
+ 
+-const caveat = Caveat({ subsets: ["latin"] });
+-const bentham = Bentham({ subsets: ["latin"], weight: "400" });
++const caveat = localFont({ src: "../public/caveat.ttf" });
++const bentham = localFont({ src: "../public/bentham.ttf" });
+ 
+ const fontSizes = [
+   "12px",

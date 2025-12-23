@@ -28,15 +28,14 @@ let
 
     setOutputFlags = false;
 
-    postPatch =
-      ''
-        substituteInPlace library/clock.tcl \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-          --replace "/usr/share/lib/zoneinfo" "" \
-          --replace "/usr/lib/zoneinfo" "" \
-          --replace "/usr/local/etc/zoneinfo" ""
-      ''
-      + extraPatch;
+    postPatch = ''
+      substituteInPlace library/clock.tcl \
+        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+        --replace "/usr/share/lib/zoneinfo" "" \
+        --replace "/usr/lib/zoneinfo" "" \
+        --replace "/usr/local/etc/zoneinfo" ""
+    ''
+    + extraPatch;
 
     nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       # Only used to detect the presence of zlib. Could be replaced with a stub.
@@ -109,12 +108,12 @@ let
         ''}
       '';
 
-    meta = with lib; {
+    meta = {
       description = "Tcl scripting language";
       homepage = "https://www.tcl.tk/";
-      license = licenses.tcltk;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ agbrooks ];
+      license = lib.licenses.tcltk;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ agbrooks ];
     };
 
     passthru = rec {

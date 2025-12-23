@@ -10,6 +10,7 @@
   claripy,
   cle,
   cppheaderparser,
+  cxxheaderparser,
   dpkt,
   fetchFromGitHub,
   gitpython,
@@ -33,12 +34,11 @@
   sympy,
   unicorn-angr,
   unique-log-filter,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.146";
+  version = "9.2.154";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-bBjD+rhS8VS7JKXJyqwlxl6hmi34grO9HCuZ06SFLh0=";
+    hash = "sha256-aOgZXHk6GTWZAEraZQahEXUYs8LWAWv1n9GfX+2XTPU=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
@@ -63,6 +63,7 @@ buildPythonPackage rec {
     claripy
     cle
     cppheaderparser
+    cxxheaderparser
     dpkt
     gitpython
     itanium-demangler
@@ -79,14 +80,13 @@ buildPythonPackage rec {
     rich
     rpyc
     sortedcontainers
-    sqlalchemy
     sympy
-    unicorn-angr
     unique-log-filter
   ];
 
   optional-dependencies = {
-    AngrDB = [ sqlalchemy ];
+    angrdb = [ sqlalchemy ];
+    unicorn = [ unicorn-angr ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -106,12 +106,10 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

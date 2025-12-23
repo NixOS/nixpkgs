@@ -1,49 +1,56 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cython,
-  pytestCheckHook,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.10";
-  format = "pyproject";
+  version = "0.1.12";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dGh2D3LB9BB74bKyhUvAAEAeo2pp2u02+5ZqHhmnoSQ=";
+  src = fetchFromGitHub {
+    owner = "sebastinas";
+    repo = "cwcwidth";
+    tag = "v${version}";
+    hash = "sha256-mkyBtqAFqu7dxpb46qMOnXmXpUV3qtpknfIgVQQt5nY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  preCheck = ''
-    # Hack needed to make pytest + cython work
-    # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
-    export HOME=$(mktemp -d)
-    cp -r $TMP/$sourceRoot/tests $HOME
-    pushd $HOME
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-    # locale settings used by upstream, has the effect of skipping
-    # otherwise-failing tests on darwin
+  preCheck = ''
+    # prevent import shadow
+    rm -rf cwcwidth
+
+    # locale settings used by upstream, has the effect of skipping otherwise-failing tests on darwin
     export LC_ALL='C.UTF-8'
     export LANG='C.UTF-8'
   '';
-  postCheck = "popd";
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Despite setting the locales above, this test fails with:
+    # AssertionError: Tuples differ: (1, 1, 1, 1) != (1, 1, 1, 0)
+    "test_combining_spacing"
+  ];
 
   pythonImportsCheck = [ "cwcwidth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for wc(s)width";
     homepage = "https://github.com/sebastinas/cwcwidth";
-    changelog = "https://github.com/sebastinas/cwcwidth/blob/main/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/sebastinas/cwcwidth/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

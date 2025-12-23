@@ -38,7 +38,7 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     (
       langFortran
       && (
-        with stdenv;
+
         (!lib.systems.equals buildPlatform hostPlatform) && (lib.systems.equals hostPlatform targetPlatform)
       )
     )

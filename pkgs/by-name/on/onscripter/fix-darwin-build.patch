@@ -1,0 +1,23 @@
+diff --git a/Makefile.MacOSX b/Makefile.MacOSX
+index 878ebf9..03f83c3 100644
+--- a/Makefile.MacOSX
++++ b/Makefile.MacOSX
+@@ -6,12 +6,17 @@
+ 
+ INCS = `sdl-config --cflags` `smpeg-config --cflags`
+ 
+-LIBS = `sdl-config --libs` `smpeg-config --libs` `freetype-config --libs` -lSDL_ttf -lSDL_image -lSDL_mixer -lbz2 -lm -ljpeg -framework QuickTime -framework CoreFoundation
++LIBS = `sdl-config --libs` `smpeg-config --libs` `freetype-config --libs` -lSDL_ttf -lSDL_image -lSDL_mixer -lbz2 -lm -ljpeg
+ DEFS = -DMACOSX -DUSE_CDROM -DUTF8_CAPTION -DUTF8_FILESYSTEM
+ 
+ EXESUFFIX =
+ OBJSUFFIX = .o
+ 
++# optional: lua
++DEFS += -DUSE_LUA
++LIBS += -llua
++EXT_OBJS += LUAHandler$(OBJSUFFIX)
++
+ .SUFFIXES:
+ .SUFFIXES: $(OBJSUFFIX) .cpp .h
+ 

@@ -5,6 +5,7 @@
   build,
   click,
   fetchPypi,
+  fetchpatch,
   pep517,
   pip,
   pytest-xdist,
@@ -20,7 +21,7 @@
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "7.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -29,18 +30,34 @@ buildPythonPackage rec {
     hash = "sha256-hkgm9Qc4ZEUOJNvuuFzjkgzfsJhIo9aev1N7Uh8UvMk=";
   };
 
-  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
+  patches = [
+    ./fix-setup-py-bad-syntax-detection.patch
 
-  nativeBuildInputs = [ setuptools-scm ];
+    # Backport click 8.2 + 8.3 compatibility from 7.5.1
+    # We can't update to 7.5.1 because of https://github.com/jazzband/pip-tools/issues/2231,
+    # which breaks home-assisstant-chip-wheels.
+    (fetchpatch {
+      url = "https://github.com/jazzband/pip-tools/commit/c7f128e7c533033c2436b52c972eee521fe3890c.diff";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-cIFAE/VKyyDWVQktPtPPuxY85DtTvH6pK539WD2cDn4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/jazzband/pip-tools/commit/816ee196c543be53ddba0ea33fb4c7e84217b3b3.diff";
+      hash = "sha256-3GTUNWoy/AmpWv7NUCWIZ+coxb1vUgg6CZhwh6FehZo=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     build
     click
     pep517
     pip
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -68,15 +85,28 @@ buildPythonPackage rec {
     "test_cli_compile_all_extras_with_multiple_packages"
     # Deprecations
     "test_error_in_pyproject_toml"
+
+    # pip 25.0 compat issues
+    # https://github.com/jazzband/pip-tools/issues/2112
+    # requirement doesn't end with semicolon
+    "test_resolver"
+    "test_resolver__custom_unsafe_deps"
+    # constraints.txt is now in a tmpdir
+    "test_preserve_via_requirements_constrained_dependencies_when_run_twice"
+    "test_annotate_option"
+    # TypeError("'<' not supported between instances of 'InstallationCandidate' and 'InstallationCandidate'")>.exit_code
+    "test_no_candidates"
+    "test_no_candidates_pre"
+    "test_failure_of_legacy_resolver_prompts_for_backtracking"
   ];
 
   pythonImportsCheck = [ "piptools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
     changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

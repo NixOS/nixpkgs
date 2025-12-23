@@ -12,6 +12,10 @@
   stdenvNoCC,
   xdg-utils,
   zbar,
+  coreutils,
+  gnused,
+  gnugrep,
+  file,
 }:
 stdenvNoCC.mkDerivation (finalAttr: {
   pname = "wifi-qr";
@@ -37,6 +41,12 @@ stdenvNoCC.mkDerivation (finalAttr: {
     qrencode
     xdg-utils
     zbar
+    # needed for cross
+    # TODO: somehow splice the packages in stdenvNoCC.initialPath and use that
+    coreutils
+    gnugrep
+    gnused
+    file
   ];
 
   nativeBuildInputs = [
@@ -74,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttr: {
     runHook preFixup
 
     patchShebangs $out/bin/wifi-qr
-    patsh -f $out/bin/wifi-qr -s ${builtins.storeDir}
+    patsh -f $out/bin/wifi-qr -s ${builtins.storeDir} --path "$HOST_PATH"
 
     runHook postFixup
   '';

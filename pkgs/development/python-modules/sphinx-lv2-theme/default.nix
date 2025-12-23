@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-lv2-theme";
-  version = "1.4.2";
+  version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "LV2";
     repo = "sphinx_lv2_theme";
     rev = "v${version}";
-    hash = "sha256-x3h2hOQIyzOmnh58WMHjuOARdML1sDiVAf7m0YghhJ4=";
+    hash = "sha256-WOunukFWa4AMrLpeKjuvmFT+3GhCzV3k/hl4mQXN0GQ=";
   };
 
   build-system = [ setuptools ];

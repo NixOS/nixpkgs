@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -31,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-url-dispatcher";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-url-dispatcher";
-    rev = finalAttrs.version;
-    hash = "sha256-kde/HzhBHxTeyc2TCUJwpG7IfC8doDd/jNMF8KLM7KU=";
+    tag = finalAttrs.version;
+    hash = "sha256-+3/C6z8wyiNSpt/eyMl+j/TGJW0gZ5T3Vd1NmghK67k=";
   };
 
   outputs = [
@@ -46,40 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  patches = [
-    # Fix case-sensitivity in tests
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/merge_requests/8 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/sunweaver/lomiri-url-dispatcher/-/commit/ebdd31b9640ca243e90bc7b8aca7951085998bd8.patch";
-      hash = "sha256-g4EohB3oDcWK4x62/3r/g6CFxqb7/rdK51+E/Fji1Do=";
-    })
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
 
-    # Make lomiri-url-dispatcher-gui wrappable
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/merge_requests/28 merged & in release
-    (fetchpatch {
-      url = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/commit/6512937e2b388ad1350072b8ed3b4140439b2321.patch";
-      hash = "sha256-P1A3hi8l7fJWFjGeK5hWYl8BoZMzRfo44MUTeM7vG2A=";
-    })
-  ];
+    substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+    substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
+      --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
-      substituteInPlace gui/lomiri-url-dispatcher-gui.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATADIR@/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg' 'lomiri-url-dispatcher-gui'
-
-      substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-        --replace-fail "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
-
-      # Update URI handler database whenever new url-handler is installed system-wide
-      substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/test-sql.sh
-    '';
+    # Update URI handler database whenever new url-handler is installed system-wide
+    substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/test-sql.sh
+  '';
 
   strictDeps = true;
 
@@ -174,11 +156,14 @@ stdenv.mkDerivation (finalAttrs: {
       starting them inside its own Application Confinement.
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only
       gpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-url-dispatcher"

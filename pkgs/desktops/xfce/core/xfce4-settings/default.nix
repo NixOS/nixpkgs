@@ -1,37 +1,54 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, exo
-, garcon
-, gtk3
-, gtk-layer-shell
-, glib
-, libnotify
-, libX11
-, libXext
-, libxfce4ui
-, libxfce4util
-, libxklavier
-, upower
-# Disabled by default on upstream and actually causes issues:
-# https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
-, withUpower ? false
-, wlr-protocols
-, xfconf
-, xf86inputlibinput
-, colord
-, withColord ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  pkg-config,
+  xfce4-dev-tools,
+  wayland-scanner,
+  wrapGAppsHook3,
+  exo,
+  garcon,
+  gtk3,
+  gtk-layer-shell,
+  glib,
+  libnotify,
+  libX11,
+  libXext,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  withXrandr ? true,
+  upower,
+  # Disabled by default on upstream and actually causes issues:
+  # https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
+  withUpower ? false,
+  wlr-protocols,
+  xfconf,
+  xf86inputlibinput,
+  colord,
+  withColord ? true,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-settings";
-  version = "4.20.1";
+  version = "4.20.2";
 
-  sha256 = "sha256-9BFO1cN0etDHJzkGHl5GKL2qzJTlpaP/qfvfz6KWaMI=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfce4-settings";
+    tag = "xfce4-settings-${finalAttrs.version}";
+    hash = "sha256-hx1ilXPcwWWDwNR/k2b+9vR5aCv9UlPR0d42OE6JxEk=";
+  };
 
   nativeBuildInputs = [
+    gettext
+    pkg-config
+    xfce4-dev-tools
     wayland-scanner
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,14 +71,27 @@ mkXfceDerivation {
   ++ lib.optionals withColord [ colord ];
 
   configureFlags = [
+    "--enable-maintainer-mode"
     "--enable-pluggable-dialogs"
     "--enable-sound-settings"
+    (lib.enableFeature withXrandr "xrandr")
   ]
   ++ lib.optionals withUpower [ "--enable-upower-glib" ]
   ++ lib.optionals withColord [ "--enable-colord" ];
 
-  meta = with lib; {
-    description = "Settings manager for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "xfce4-settings-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Settings manager for Xfce";
+    homepage = "https://gitlab.xfce.org/xfce/xfce4-settings";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-settings-manager";
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

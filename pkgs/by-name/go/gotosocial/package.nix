@@ -1,29 +1,30 @@
 {
   lib,
   fetchurl,
-  fetchFromGitHub,
-  buildGoModule,
+  fetchFromGitea,
+  buildGo124Module,
   nixosTests,
 }:
 let
+  domain = "codeberg.org";
   owner = "superseriousbusiness";
   repo = "gotosocial";
 
-  version = "0.18.2";
+  version = "0.20.2";
 
   web-assets = fetchurl {
-    url = "https://github.com/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
-    hash = "sha256-36UwUhf3FZ+/DMI0L/g88prbEwyj2ApoRdMK8f57KCU=";
+    url = "https://${domain}/${owner}/${repo}/releases/download/v${version}/${repo}_${version}_web-assets.tar.gz";
+    hash = "sha256-85tFn3LsuMbLoiH6FFtBK60GhclfTsSiI7K/iNLadjY=";
   };
 in
-buildGoModule rec {
+buildGo124Module rec {
   inherit version;
   pname = repo;
 
-  src = fetchFromGitHub {
-    inherit owner repo;
+  src = fetchFromGitea {
+    inherit domain owner repo;
     tag = "v${version}";
-    hash = "sha256-GHUHtTE8KQtm+sWr5K+WmOr3KY7gA9hDINIBTioXNlw=";
+    hash = "sha256-H5+1BZ1jIISU6EPszIuOhqowoMe9WF36BGwV7TpAqj8=";
   };
 
   vendorHash = null;
@@ -61,9 +62,9 @@ buildGoModule rec {
 
   passthru.tests.gotosocial = nixosTests.gotosocial;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gotosocial.org";
-    changelog = "https://github.com/superseriousbusiness/gotosocial/releases/tag/v${version}";
+    changelog = "https://codeberg.org/superseriousbusiness/gotosocial/releases/tag/v${version}";
     description = "Fast, fun, ActivityPub server, powered by Go";
     longDescription = ''
       ActivityPub social network server, written in Golang.
@@ -72,7 +73,10 @@ buildGoModule rec {
       advertised to! A light-weight alternative to Mastodon
       and Pleroma, with support for clients!
     '';
-    maintainers = with maintainers; [ blakesmith ];
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      blakesmith
+      cherrykitten
+    ];
+    license = lib.licenses.agpl3Only;
   };
 }

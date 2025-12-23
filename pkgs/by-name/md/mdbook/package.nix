@@ -2,14 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   nix,
   rustPlatform,
-  darwin,
-  CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
   installShellFiles,
 }:
 let
-  version = "0.4.47";
+  version = "0.4.52";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -19,18 +18,20 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-XTvC2pGRVat0kOybNb9TziG32wDVexnFx2ahmpUFmaA=";
+    hash = "sha256-a3GSMz1+8Ve5cp4x1NjBlsCU/wMC4Jl3/H9qx7+1XlI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    allowGitDependencies = false;
-    hash = "sha256-ASPRBAB+elJuyXpPQBm3WI97wD3mjoO1hw0fNHc+KAw=";
-  };
+  cargoHash = "sha256-wvTixSVHXglJM+nBMulZNZKF8pZfNd2G8Z+1PlAWmpk=";
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-rust-1.91-tests.patch";
+      url = "https://github.com/rust-lang/mdBook/commit/841c68d05e763b031524a2b4d679f033cd15e64c.patch?full_index=1";
+      hash = "sha256-KDQhmFX2TWamtdyssFL69MP3vg9LABb+bF8/7vaFsew=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mdbook \
@@ -52,7 +53,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ lib.licenses.mpl20 ];
     maintainers = with lib.maintainers; [
-      havvy
       Frostman
       matthiasbeyer
     ];

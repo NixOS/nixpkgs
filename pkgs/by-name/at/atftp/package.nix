@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Advanced tftp tools";
     changelog = "https://sourceforge.net/p/atftp/code/ci/v${version}/tree/Changelog";
     homepage = "https://sourceforge.net/projects/atftp/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 }

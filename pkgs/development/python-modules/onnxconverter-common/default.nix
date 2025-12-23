@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "onnxconverter-common";
-  version = "1.14.0";
+  version = "0.16.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "onnxconverter-common";
     tag = "v${version}";
-    hash = "sha256-NbHyjLcr/Gq1zRiJW3ZBpEVQGVQGhp7SmfVd5hBIi2o=";
+    hash = "sha256-M62mbIqFwnPdRlf6J8DrNRhLH0uHns51K/pWnWLxI5Q=";
   };
 
   build-system = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "ONNX Converter and Optimization Tools";
     homepage = "https://github.com/microsoft/onnxconverter-common";
-    changelog = "https://github.com/microsoft/onnxconverter-common/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/onnxconverter-common/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
   };
 }

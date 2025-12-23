@@ -42,13 +42,13 @@ assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
 
 stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "15.1.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
-    repo = pname;
+    repo = "openmoji";
     rev = version;
-    hash = "sha256-k37MsBbRUZ4vIEPAgVMiCK8gz377DWwAfjjjOassNMY=";
+    hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
   };
 
   patches = [
@@ -66,8 +66,7 @@ stdenvNoCC.mkDerivation rec {
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
   methods_color = builtins.filter (m: builtins.elem m fontFormats) methods.color;
   saturations =
-    lib.optional (methods_black != [ ]) "black"
-    ++ lib.optional (methods_color != [ ]) "color";
+    lib.optional (methods_black != [ ]) "black" ++ lib.optional (methods_color != [ ]) "color";
   maximumColorVersions = lib.optionals (buildMaximumColorFonts != "none") (
     lib.optional (builtins.elem "glyf_colr_0" fontFormats) "0"
     ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"
@@ -96,13 +95,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [
+  meta = {
+    license = lib.licenses.cc-by-sa-40;
+    maintainers = with lib.maintainers; [
       _999eagle
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";
     description = "Open-source emojis for designers, developers and everyone else";

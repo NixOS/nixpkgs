@@ -50,11 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versionfinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Find the version of another package, whether installed via pip, setuptools or git";
     homepage = "https://github.com/jantman/versionfinder";
     changelog = "https://github.com/jantman/versionfinder/blob/${version}/CHANGES.rst";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ zakame ];
+    license = lib.licenses.agpl3Plus;
   };
 }

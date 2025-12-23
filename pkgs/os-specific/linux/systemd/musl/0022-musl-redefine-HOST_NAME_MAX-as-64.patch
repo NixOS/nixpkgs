@@ -1,0 +1,29 @@
+From 4a06464ea72d06859c54fca4d7bc361e2f4b069c Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Sun, 7 Sep 2025 06:16:02 +0900
+Subject: [PATCH 22/30] musl: redefine HOST_NAME_MAX as 64
+
+glibc defines HOST_NAME_MAX as 64 and our code rely on that, but musl
+defines the constant as 255. Let's redefine it.
+---
+ src/include/musl/limits.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 src/include/musl/limits.h
+
+diff --git a/src/include/musl/limits.h b/src/include/musl/limits.h
+new file mode 100644
+index 0000000000..fadf71d66f
+--- /dev/null
++++ b/src/include/musl/limits.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <limits.h>
++
++/* HOST_NAME_MAX should be 64 on linux, but musl uses the one by POSIX (255). */
++#undef HOST_NAME_MAX
++#define HOST_NAME_MAX 64
+-- 
+2.51.0
+

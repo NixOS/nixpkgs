@@ -12,40 +12,36 @@ in
 python3Packages.buildPythonApplication {
   pname = "mimeo";
   inherit version;
+  pyproject = true;
 
   src = fetchurl {
     url = "https://xyne.dev/projects/mimeo/src/mimeo-${version}.tar.xz";
     hash = "sha256-CahvSypwR1aHVDHTdtty1ZfaKBWPolxc73uZ5OyeqZA=";
   };
 
-  buildInputs = [
-    file
-    desktop-file-utils
-  ];
+  build-system = [ python3Packages.setuptools ];
 
-  propagatedBuildInputs = [ python3Packages.pyxdg ];
+  dependencies = [ python3Packages.pyxdg ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace Mimeo.py \
-      --replace "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
-                "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
-      --replace "EXE_FILE = 'file'" \
-                "EXE_FILE = '${file}/bin/file'"
+      --replace-fail "EXE_UPDATE_DESKTOP_DATABASE = 'update-desktop-database'" \
+                     "EXE_UPDATE_DESKTOP_DATABASE = '${desktop-file-utils}/bin/update-desktop-database'" \
+      --replace-fail "EXE_FILE = 'file'" \
+                     "EXE_FILE = '${file}/bin/file'"
   '';
-
-  installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
 
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/mimeo --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open files by MIME-type or file name using regular expressions";
     homepage = "https://xyne.dev/projects/mimeo/";
-    license = [ licenses.gpl2Only ];
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.unix;
+    license = [ lib.licenses.gpl2Only ];
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.unix;
     mainProgram = "mimeo";
   };
 }

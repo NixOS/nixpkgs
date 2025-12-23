@@ -4,31 +4,39 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  openssl,
+  pkg-config,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codesnap";
-  version = "0.10.5";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
-    owner = "mistricky";
-    repo = "CodeSnap";
-    tag = "v${version}";
-    hash = "sha256-g2Xu/PKRSYrHKDJ5/MZRUkDQeYuxvNWPTuymhI8Iu5Q=";
+    owner = "codesnap-rs";
+    repo = "codesnap";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-baTIxqfxxoHl7h81pboFlze5m/EMiEx9YOMfV0UPESI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-bQT+tpoSZ54yppyNJxbOEqQoIKqYZAnRo0j42Ti+EJo=";
+  cargoHash = "sha256-bi5vvUDMI4WxIpv0sHESmLg3vwAIbNQ11pbJDuSe8z4=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "-p"
     "codesnap-cli"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  env.OPENSSL_NO_VENDOR = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -36,9 +44,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line tool for generating beautiful code snippets";
     homepage = "https://github.com/mistricky/CodeSnap";
-    changelog = "https://github.com/mistricky/CodeSnap/releases/tag/v${version}";
+    changelog = "https://github.com/mistricky/CodeSnap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "codesnap";
   };
-}
+})

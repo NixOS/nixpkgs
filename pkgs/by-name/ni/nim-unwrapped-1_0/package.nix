@@ -16,7 +16,7 @@ nim-unwrapped-2.overrideAttrs (
     patches =
       builtins.filter (
         p:
-        builtins.elem (builtins.baseNameOf p) [
+        builtins.elem (baseNameOf p) [
           "NIM_CONFIG_DIR.patch"
           "nixbuild.patch"
         ]

@@ -4,37 +4,37 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  ninja,
   obs-studio,
-  libuiohook,
   qtbase,
   xorg,
   libxkbcommon,
   libxkbfile,
-  SDL2,
+  sdl3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-input-overlay";
-  version = "5.0.6";
+  version = "5.1.0-unstable-2025-09-23";
 
   src = fetchFromGitHub {
     owner = "univrsal";
     repo = "input-overlay";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ju4u7hhx+hTuq7Oh0DBPV8RRM8zqyyvYV74KymU0+2c=";
+    rev = "4d62e7d0c55f8ff62c3a0e7b1a8f3092086b23b7";
+    hash = "sha256-cUULaOoV4fffEvsHkcG3lnFCIHSvnv3LHg+SDuuVLao=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    ninja
   ];
 
   buildInputs = [
     obs-studio
-    libuiohook
     qtbase
-    SDL2
+    sdl3
     xorg.libX11
     xorg.libXau
     xorg.libXdmcp
@@ -47,12 +47,17 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  cmakeFlags = [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isx86 [
     "-DCMAKE_CXX_FLAGS=-msse4.1"
   ];
 
   postUnpack = ''
     sed -i '/set(CMAKE_CXX_FLAGS "-march=native")/d' 'source/CMakeLists.txt'
+  '';
+
+  preFixup = ''
+    # Remove broken uiohook development files
+    rm -r $out/lib/cmake $out/lib/pkgconfig
   '';
 
   dontWrapQtApps = true;
@@ -62,8 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with lib.maintainers; [ glittershark ];
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    inherit (obs-studio.meta) platforms;
   };
-}
+})

@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Solarized version of the Arc theme";
     homepage = "https://github.com/schemar/solarc-theme";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

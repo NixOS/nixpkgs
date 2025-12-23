@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rC0lfWZpiiAAShyVDqr1gKTeWmWC+gVp4UmL96Y81mE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-911ARjYvTNqLVVUWxATbtiKXOC9AqalFvDvp/qAef1Q=";
 
   OPENSSL_NO_VENDOR = true;
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal UI to list, browse and run APIs defined with openapi spec";
     homepage = "https://github.com/zaghaghi/openapi-tui";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "openapi-tui";
   };
 }

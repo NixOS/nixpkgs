@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     libev
   ];
   nativeBuildInputs = [ pkg-config ];
-  meta = with lib; {
+  meta = {
     description = "Middle mouse button primary X selection/clipboard paste disabler";
     homepage = "https://github.com/milaq/XMousePasteBlock";
     license = lib.licenses.gpl2Only;
-    maintainers = [ maintainers.petercommand ];
+    maintainers = [ ];
     mainProgram = "xmousepasteblock";
   };
 }

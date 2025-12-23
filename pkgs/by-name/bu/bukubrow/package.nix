@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mCPJE9WW14NtahbMnDcE+0xXl5w25dzerPy3wv78l20=";
 
   buildInputs = [ sqlite ];
@@ -55,10 +54,10 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
-  meta = with lib; {
+  meta = {
     description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "bukubrow";
   };

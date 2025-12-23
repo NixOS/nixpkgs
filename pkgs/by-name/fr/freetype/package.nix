@@ -58,19 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
   ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs =
-    [
-      pkg-config
-      which
-      __flattenIncludeHackHook
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
-    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
+  nativeBuildInputs = [
+    pkg-config
+    which
+    __flattenIncludeHackHook
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
 
   patches = [
     ./enable-table-validation.patch
-  ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
+  ]
+  ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [
     "out"
@@ -96,16 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # pkgsCross.mingwW64.pkg-config doesn't build
   # makeWrapper doesn't cross-compile to windows #120726
-  postInstall =
-    ''
-      substituteInPlace $dev/bin/freetype-config \
-        --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
+  postInstall = ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
 
-      wrapProgram "$dev/bin/freetype-config" \
-        --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
-    '';
+    wrapProgram "$dev/bin/freetype-config" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+  '';
 
   passthru.tests = {
     inherit
@@ -126,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Font rendering engine";
     mainProgram = "freetype-config";
     longDescription = ''
@@ -140,9 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/freetype/freetype/-/raw/VER-${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/docs/CHANGES";
-    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "freetype2" ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

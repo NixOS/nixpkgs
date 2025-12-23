@@ -2,37 +2,41 @@
   lib,
   stdenv,
   buildNpmPackage,
-  nodejs_20,
   fetchFromGitHub,
-  cctools,
-  nix-update-script,
-  nixosTests,
+  nodejs_22,
   perl,
   xcbuild,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nixosTests,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.2.0";
+  version = "2025.11.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    tag = "cli-v${version}";
-    hash = "sha256-Ls30yeqMDBA4HjQdnICJy0HVHm7VfZarsKUHn3KTatA=";
+    tag = "cli-v${finalAttrs.version}";
+    hash = "sha256-wG0JKQKjNAEoQt/8BFIzISNNUrBqKQHPZ8DRJ69eA5s=";
   };
+
+  patches = [
+    ./fix-lockfile.patch
+  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-V77I2ZzmcCo06vq76lGkRa+NmTEUe2urD0D1HQ/gBJA=";
+  npmDepsHash = "sha256-/57+ch1d1VMGIMO0Kzu6o3tUX/3adgLkONNRgtyARtQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
     perl
     xcbuild.xcrun
   ];
@@ -61,9 +65,6 @@ buildNpmPackage rec {
     rm -r node_modules/**/prebuilds
     shopt -u globstar
 
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
-
     npm rebuild --verbose
   '';
 
@@ -79,7 +80,18 @@ buildNpmPackage rec {
     # leave dangling symlinks behind. They can be safely removed, because their source is
     # bundled via webpack and thus not needed at run-time.
     rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
@@ -87,7 +99,6 @@ buildNpmPackage rec {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--commit"
         "--version=stable"
         "--version-regex=^cli-v(.*)$"
       ];
@@ -95,11 +106,14 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      dotlambda
+    ];
   };
-}
+})

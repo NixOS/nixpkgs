@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dv5svXv/MZg+DUFt8ENnZ2ZcxM1w0njAbODoPg7qtds=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "Userspace library for anyone who wants to use the ALSA compressed APIs";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ k900 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ k900 ];
   };
 }

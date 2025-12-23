@@ -6,13 +6,13 @@
 
   # build-system
   cython,
-  poetry-core,
+  pdm-backend,
   setuptools,
 
   # dependencies
-  cairocffi,
   igraph,
   leidenalg,
+  matplotlib,
   pandas,
   pyarrow,
   scipy,
@@ -29,33 +29,30 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.5";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jboynyc";
     repo = "textnets";
     tag = "v${version}";
-    hash = "sha256-MdKPxIshSx6U2EFGDTUS4EhoByyuVf0HKqvm9cS2KNY=";
+    hash = "sha256-GbJH+6EqfP+miqpYitnBwNDO6uQQq3h9Fy58nVaF1vw=";
   };
 
   build-system = [
     cython
-    poetry-core
+    pdm-backend
     setuptools
   ];
 
   pythonRelaxDeps = [
-    "igraph"
-    "leidenalg"
-    "pyarrow"
     "toolz"
   ];
 
   dependencies = [
-    cairocffi
     igraph
     leidenalg
+    matplotlib
     pandas
     pyarrow
     scipy
@@ -71,26 +68,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/jboynyc/textnets/issues/66
+    "test_textnet_save_and_load"
+  ];
+
   pythonImportsCheck = [ "textnets" ];
 
-  # Enables the package to find the cythonized .so files during testing. See #255262
+  # Enable the package to find the cythonized .so files during testing. See #255262
+  # Set MPLBACKEND=agg for headless matplotlib on darwin. See #350784
   preCheck = ''
     rm -r textnets
+    export MPLBACKEND=agg
   '';
-
-  disabledTests =
-    [
-      # Test fails: Throws a UserWarning asking the user to install `textnets[fca]`.
-      "test_context"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # MemoryError: ("cairo returned CAIRO_STATUS_NO_MEMORY: b'out of memory'", 1)
-      "test_plot_backbone"
-      "test_plot_filtered"
-      "test_plot_layout"
-      "test_plot_projected"
-      "test_plot_scaled"
-    ];
 
   meta = {
     description = "Text analysis with networks";

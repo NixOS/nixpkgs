@@ -3,30 +3,25 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pydantic,
   pytestCheckHook,
   pytest-mock,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "4.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jodal";
-    repo = pname;
+    repo = "pykka";
     tag = "v${version}";
-    hash = "sha256-n9TgXcmUEIQdqtrY+9T+EtPys+7OzXCemRwNPj1xPDw=";
+    hash = "sha256-OwY8EKCRuc9Tli7Q+rHieqEAYxb7KNBHiPUuycNO8J4=";
   };
 
-  build-system = [ poetry-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pydantic
@@ -36,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykka" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pykka.org/";
     description = "Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

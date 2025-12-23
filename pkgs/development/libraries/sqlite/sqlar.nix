@@ -26,21 +26,21 @@ stdenv.mkDerivation {
   buildFlags = [
     "CFLAGS=-Wno-error"
     "sqlar"
-  ] ++ lib.optional withFuse "sqlarfs";
+  ]
+  ++ lib.optional withFuse "sqlarfs";
 
-  installPhase =
-    ''
-      install -D -t $out/bin sqlar
-    ''
-    + lib.optionalString withFuse ''
-      install -D -t $out/bin sqlarfs
-    '';
+  installPhase = ''
+    install -D -t $out/bin sqlar
+  ''
+  + lib.optionalString withFuse ''
+    install -D -t $out/bin sqlarfs
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sqlite.org/sqlar";
     description = "SQLite Archive utilities";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ dtzWill ];
   };
 }

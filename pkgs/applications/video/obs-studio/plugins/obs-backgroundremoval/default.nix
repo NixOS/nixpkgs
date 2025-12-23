@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     obs-studio
     onnxruntime
-    opencv
+    opencv.cxxdev
     qt6.qtbase
     curl
   ];
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     cmake --install build_x86_64 --prefix "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS plugin to replace the background in portrait images and video";
     homepage = "https://github.com/royshil/obs-backgroundremoval";
-    maintainers = with maintainers; [ zahrun ];
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ zahrun ];
+    license = lib.licenses.mit;
+    inherit (obs-studio.meta) platforms;
   };
 }

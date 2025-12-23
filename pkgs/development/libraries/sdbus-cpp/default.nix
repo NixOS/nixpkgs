@@ -35,7 +35,9 @@ let
       ];
 
       cmakeFlags = [
-        (lib.cmakeBool "BUILD_CODE_GEN" true)
+        (lib.cmakeBool (
+          if lib.versionOlder finalAttrs.version "2.0.0" then "BUILD_CODE_GEN" else "SDBUSCPP_BUILD_CODEGEN"
+        ) true)
       ];
 
       meta = {
@@ -52,7 +54,7 @@ let
           inherent design complexities and limitations.
         '';
         license = lib.licenses.lgpl2Only;
-        maintainers = [ ];
+        maintainers = with lib.maintainers; [ etwas ];
         platforms = lib.platforms.linux;
         mainProgram = "sdbus-c++-xml2cpp";
       };
@@ -65,7 +67,7 @@ in
   };
 
   sdbus-cpp_2 = generic {
-    version = "2.0.0";
-    hash = "sha256-W8V5FRhV3jtERMFrZ4gf30OpIQLYoj2yYGpnYOmH2+g=";
+    version = "2.1.0";
+    hash = "sha256-JnjabBr7oELLsUV9a+dAAaRyUzaMIriu90vkaVJg2eY=";
   };
 }

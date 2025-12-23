@@ -1,46 +1,112 @@
-{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texliveSmall, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
-, withRecommendedPackages ? true
-, enableStrictBarrier ? false
-, enableMemoryProfiling ? false
-# R as of writing does not support outputting both .so and .a files; it outputs:
-#     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
-, static ? false
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bzip2,
+  gfortran,
+  libX11,
+  libXmu,
+  libXt,
+  libjpeg,
+  libpng,
+  libtiff,
+  ncurses,
+  pango,
+  pcre2,
+  perl,
+  readline,
+  tcl,
+  texlive,
+  texliveSmall,
+  tk,
+  xz,
+  zlib,
+  less,
+  texinfo,
+  graphviz,
+  icu,
+  pkg-config,
+  bison,
+  which,
+  jdk,
+  blas,
+  lapack,
+  curl,
+  tzdata,
+  withRecommendedPackages ? true,
+  enableStrictBarrier ? false,
+  enableMemoryProfiling ? false,
+  # R as of writing does not support outputting both .so and .a files; it outputs:
+  #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
+  static ? false,
+  testers,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.4.3";
+  version = "4.5.2";
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-DZPSJEQt6iU8KwhvCI220NPP2bWSzVSW6MshQ+kPyeg=";
-  };
+  src =
+    let
+      inherit (finalAttrs) pname version;
+    in
+    fetchurl {
+      url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+      hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
+    };
 
-  outputs = [ "out" "tex" ];
-
-  dontUseImakeConfigure = true;
+  outputs = [
+    "out"
+    "tex"
+  ];
 
   nativeBuildInputs = [
     bison
-    imake
     perl
     pkg-config
     tzdata
     which
   ];
   buildInputs = [
-    bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre2 readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
-    which blas lapack curl tcl tk jdk
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    bzip2
+    gfortran
+    libX11
+    libXmu
+    libXt
+    libXt
+    libjpeg
+    libpng
+    libtiff
+    ncurses
+    pango
+    pcre2
+    readline
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        inconsolata
+        helvetic
+        ps.texinfo
+        fancyvrb
+        cm-super
+        rsfs
+      ]
+    ))
+    xz
+    zlib
+    less
+    texinfo
+    graphviz
+    icu
+    which
+    blas
+    lapack
+    curl
+    tcl
+    tk
+    jdk
+  ];
   strictDeps = true;
 
   patches = [
@@ -86,19 +152,25 @@ stdenv.mkDerivation (finalAttrs: {
       CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"
       r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      --disable-R-framework
-      --without-x
-      OBJC="clang"
-      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
-      LDFLAGS="-L${lib.getLib libcxx}/lib"
-  '' + ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    --disable-R-framework
+    --without-x
+    OBJC="clang"
+    CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
+  ''
+  + ''
     )
     echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
     echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
   '';
 
-  installTargets = [ "install" "install-info" "install-pdf" ];
+  installTargets = [
+    "install"
+    "install-info"
+    "install-pdf"
+  ];
 
   # move tex files to $tex for use with texlive.combine
   # add link in $out since ${R_SHARE_DIR}/texmf is hardcoded in several places
@@ -128,12 +200,26 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.pkgs = [ finalAttrs.finalPackage.tex ];
   passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
-  passthru.tlDeps = with texlive; [ amsfonts amsmath fancyvrb graphics hyperref iftex jknapltx latex lm tools upquote url ];
+  passthru.tlDeps = with texlive; [
+    amsfonts
+    amsmath
+    fancyvrb
+    graphics
+    hyperref
+    iftex
+    jknapltx
+    latex
+    lm
+    tools
+    upquote
+    url
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
-    license = licenses.gpl2Plus;
+    mainProgram = "R";
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -155,8 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

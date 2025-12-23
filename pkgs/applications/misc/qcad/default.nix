@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, qmake
-, qttools
-, boost
-, libGLU
-, muparser
-, qtbase
-, qtscript
-, qtsvg
-, qtxmlpatterns
-, qtmacextras
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  qmake,
+  qttools,
+  boost,
+  libGLU,
+  muparser,
+  qtbase,
+  qtscript,
+  qtsvg,
+  qtxmlpatterns,
+  qtmacextras,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.32.1.0";
+  version = "3.32.3.4";
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    hash = "sha256-3P6iudD/swpNDPL4G8isJI6zxqc6/rmHAMpPnEwnuiM=";
+    hash = "sha256-6incOmg4AilVfoPu+crbvm/SFek3yptxrfHn7RGFF4o=";
   };
 
   patches = [
@@ -58,7 +59,8 @@ stdenv.mkDerivation rec {
     qtscript
     qtsvg
     qtxmlpatterns
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
@@ -69,20 +71,25 @@ stdenv.mkDerivation rec {
     "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
-  ];
+  qtWrapperArgs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
+    ];
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
-  '' + ''
+  ''
+  + ''
     install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}

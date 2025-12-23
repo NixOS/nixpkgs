@@ -20,24 +20,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Kr7WG8bSuexJiXPARAuLgEt6ctcUQGm1qSCbKtaTooI=";
   };
 
-  postPatch =
-    ''
-      patchShebangs gdisk_test.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Makefile.mac --replace \
-        "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
-      substituteInPlace Makefile.mac --replace \
-        " -arch i386" ""
-      substituteInPlace Makefile.mac --replace \
-        "-arch x86_64" ""
-      substituteInPlace Makefile.mac --replace \
-        "-arch arm64" ""
-      substituteInPlace Makefile.mac --replace \
-        " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
-      substituteInPlace Makefile.mac --replace \
-        "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
-    '';
+  postPatch = ''
+    patchShebangs gdisk_test.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile.mac --replace \
+      "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
+    substituteInPlace Makefile.mac --replace \
+      " -arch i386" ""
+    substituteInPlace Makefile.mac --replace \
+      "-arch x86_64" ""
+    substituteInPlace Makefile.mac --replace \
+      "-arch arm64" ""
+    substituteInPlace Makefile.mac --replace \
+      " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
+    substituteInPlace Makefile.mac --replace \
+      "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
+  '';
 
   buildPhase = lib.optionalString stdenv.hostPlatform.isDarwin "make -f Makefile.mac";
   buildInputs = [
@@ -61,11 +60,10 @@ stdenv.mkDerivation rec {
     installer-simpleLabels = nixosTests.installer.simpleLabels;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.rodsbooks.com/gdisk/";
-    platforms = platforms.all;
-    maintainers = [ maintainers.ehmry ];
+    platforms = lib.platforms.all;
   };
 }

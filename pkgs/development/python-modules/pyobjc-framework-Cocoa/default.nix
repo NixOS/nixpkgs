@@ -9,23 +9,18 @@
 
 buildPythonPackage rec {
   pname = "pyobjc-framework-Cocoa";
-  version = "11.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ronaldoussoren";
-    repo = "pyobjc";
-    tag = "v${version}";
-    hash = "sha256-RhB0Ht6vyDxYwDGS+A9HZL9ySIjWlhdB4S+gHxvQQBg=";
-  };
+  inherit (pyobjc-core) version src;
 
-  sourceRoot = "source/pyobjc-framework-Cocoa";
+  patches = pyobjc-core.patches or [ ];
+
+  sourceRoot = "${src.name}/pyobjc-framework-Cocoa";
 
   build-system = [ setuptools ];
 
   buildInputs = [
     darwin.libffi
-    darwin.DarwinTools
   ];
 
   nativeBuildInputs = [
@@ -37,7 +32,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyobjc_setup.py \
       --replace-fail "-buildversion" "-buildVersion" \
-      --replace-fail "-productversion" "-productVersion"
+      --replace-fail "-productversion" "-productVersion" \
+      --replace-fail "/usr/bin/sw_vers" "sw_vers" \
+      --replace-fail "/usr/bin/xcrun" "xcrun"
   '';
 
   dependencies = [ pyobjc-core ];
@@ -47,13 +44,19 @@ buildPythonPackage rec {
     "-Wno-error=unused-command-line-argument"
   ];
 
-  pythonImportsCheck = [ "Cocoa" ];
+  pythonImportsCheck = [
+    "Cocoa"
+    "CoreFoundation"
+    "Foundation"
+    "AppKit"
+    "PyObjCTools"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "PyObjC wrappers for the Cocoa frameworks on macOS";
-    homepage = "https://github.com/ronaldoussoren/pyobjc";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ samuela ];
+    homepage = "https://github.com/ronaldoussoren/pyobjc/tree/main/pyobjc-framework-Cocoa";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

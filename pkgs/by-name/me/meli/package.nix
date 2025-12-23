@@ -21,11 +21,14 @@
   # runtime deps
   gpgme,
   gnum4,
+
+  withNotmuch ? true,
+  notmuch,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchzip {
     urls = [
@@ -33,11 +36,10 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-MGnCX/6pnKNxDEqCcVWTl/fteMypk+N2PrJYRMP0sL0=";
+    hash = "sha256-Dp0WI1Cl+m7oxZ/4zEi0TtOwqRX681jZht9bNMFnmsU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OyOLAw3HzXY85Jwolh4Wqjmm6au6wRwGq5WkicOt5eg=";
+  cargoHash = "sha256-DJtk8xLppXdl9sSt6GcaXwZ5MEIY/s/z/bdcdr8YdLw=";
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
@@ -66,7 +68,9 @@ rustPlatform.buildRustPackage rec {
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath ([ gpgme ] ++ lib.optional withNotmuch notmuch)
+      } \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 
@@ -74,16 +78,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_cli_subcommands" # panicking due to sandbox
   ];
 
-  meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  meta = {
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
     homepage = "https://meli.delivery";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       _0x4A6F
       matthiasbeyer
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

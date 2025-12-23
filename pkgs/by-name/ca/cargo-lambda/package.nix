@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.8.0";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
     tag = "v${version}";
-    hash = "sha256-mgGmqenCizrP3KHOE6t0Yk6ARuMH4tLo4FyyRzDe7dQ=";
+    hash = "sha256-ocFD2FK1nlEJ8xXhDSxpSKYU8oZk/QwfojveypVt1GU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XfznyrSc1J31hZf0lUJCnqFlmiTl+lD2XCX/aabPhHc=";
+  cargoHash = "sha256-yE0pr7RZb015d51QtwVNfqXd8yEETvDdKJ5M7Oqc4Ds=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -33,11 +32,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   # Remove files that don't make builds reproducible:
   # - Remove build.rs file that adds the build date to the version.
@@ -52,6 +52,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+
+  cargoBuildFlags = [ "--features=skip-build-banner" ];
+  cargoCheckFlags = [ "--features=skip-build-banner" ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in darwin sandbox, first because of trying to listen to a port on

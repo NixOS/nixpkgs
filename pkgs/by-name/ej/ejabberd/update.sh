@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}" erlang autoconf automake nixfmt-rfc-style
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts "rebar3WithPlugins {globalPlugins = [beamPackages.rebar3-nix];}" erlang autoconf automake
 #shellcheck shell=bash
 
 set -eu -o pipefail

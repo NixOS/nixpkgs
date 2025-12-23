@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
       unfree
     ];
     maintainers = with lib.maintainers; [
-      abbradar
       griffi-gh
     ];
     platforms = lib.platforms.linux;

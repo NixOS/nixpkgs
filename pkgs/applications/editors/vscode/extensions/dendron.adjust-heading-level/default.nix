@@ -8,7 +8,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-u50RJ7ETVFUC43mp94VJsR931b9REBaTyRhZE7muoLw=";
   };
   meta = {
-    description = "A VSCode extension to adjust the heading level of the selected text";
+    description = "VSCode extension to adjust the heading level of the selected text";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=dendron.adjust-heading-level";
     homepage = "https://github.com/kevinslin/adjust-heading-level";
     license = lib.licenses.asl20;

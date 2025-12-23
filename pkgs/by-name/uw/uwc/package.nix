@@ -15,16 +15,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Qv8vMjCMhpVxkJyH1uTsFXu2waO8oaLPuoBETaWOUqI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9inL/z19lbZY8OxIjut3d/HJJXQzZi/cL750Cx98Kcg=";
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Like wc, but unicode-aware, and with per-line mode";
     mainProgram = "uwc";
     homepage = "https://github.com/dead10ck/uwc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 }

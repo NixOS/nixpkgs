@@ -219,6 +219,10 @@ let
           replaceDefaultConfig "11-lcdfilter-default.conf" "11-lcdfilter-${cfg.subpixel.lcdfilter}.conf"
         )}
 
+        ${lib.optionalString cfg.allowBitmaps ''
+          rm -f $dst/70-no-bitmaps-except-emoji.conf
+        ''}
+
         # 00-nixos-cache.conf
         ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
@@ -258,44 +262,43 @@ let
   fontconfigNote = "Consider manually configuring fonts.fontconfig according to personal preference.";
 in
 {
-  imports =
-    [
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ]
-        [ "fonts" "fontconfig" "allowBitmaps" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "allowType1" ]
-        [ "fonts" "fontconfig" "allowType1" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ]
-        [ "fonts" "fontconfig" "useEmbeddedBitmaps" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "forceAutohint" ]
-        [ "fonts" "fontconfig" "forceAutohint" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ]
-        [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ]
-      )
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
-      (lib.mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
-      (lib.mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
-    ]
-    ++ lib.forEach [ "enable" "substitutions" "preset" ] (
-      opt:
-      lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
-        The fonts.fontconfig.ultimate module and configuration is obsolete.
-        The repository has since been archived and activity has ceased.
-        https://github.com/bohoomil/fontconfig-ultimate/issues/171.
-        No action should be needed for font configuration, as the fonts.fontconfig
-        module is already used by default.
-      ''
-    );
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ]
+      [ "fonts" "fontconfig" "allowBitmaps" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "allowType1" ]
+      [ "fonts" "fontconfig" "allowType1" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ]
+      [ "fonts" "fontconfig" "useEmbeddedBitmaps" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "forceAutohint" ]
+      [ "fonts" "fontconfig" "forceAutohint" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ]
+      [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ]
+    )
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+    (lib.mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
+    (lib.mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
+  ]
+  ++ lib.forEach [ "enable" "substitutions" "preset" ] (
+    opt:
+    lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+      The fonts.fontconfig.ultimate module and configuration is obsolete.
+      The repository has since been archived and activity has ceased.
+      https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+      No action should be needed for font configuration, as the fonts.fontconfig
+      module is already used by default.
+    ''
+  );
 
   options = {
 

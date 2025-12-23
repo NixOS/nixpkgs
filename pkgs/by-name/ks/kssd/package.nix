@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kssd";
-  version = "2.21";
+  version = "2.21-unstable-2024-05-27";
 
   src = fetchFromGitHub {
     owner = "yhg926";
     repo = "public_kssd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-D/s1jL2oKE0rSdRMVljskYFsw5UPOv1L95Of+K+e17w=";
+    rev = "ce96b66dddc2d6c1ce611ad84cdf4c7ba62b4aa5";
+    hash = "sha256-qafPyDl+pDfnJ7S6mHBHht2OcQEQeV2kQM+ir5LTGFA=";
   };
 
   patches = [
@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "K-mer substring space decomposition";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/yhg926/public_kssd";
-    maintainers = with maintainers; [ unode ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ unode ];
+    platforms = lib.platforms.linux;
     mainProgram = "kssd";
   };
 })

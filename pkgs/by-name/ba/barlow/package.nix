@@ -1,17 +1,18 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "barlow";
   version = "1.422";
 
-  src = fetchzip {
-    url = "https://tribby.com/fonts/barlow/download/barlow-${version}.zip";
-    stripRoot = false;
-    hash = "sha256-aHAGPEgBkH41r7HR0D74OGCa7ta7Uo8Mgq4YVtYOwU8=";
+  src = fetchFromGitHub {
+    owner = "jpt";
+    repo = "barlow";
+    tag = "${version}";
+    hash = "sha256-FG68o6qN/296RhSNDHFXYXbkhlXSZJgGhVjzlJqsksY=";
   };
 
   installPhase = ''
@@ -26,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Grotesk variable font superfamily";
     homepage = "https://tribby.com/fonts/barlow/";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

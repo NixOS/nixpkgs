@@ -24,11 +24,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "bottombar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Context manager that prints a status line at the bottom of a terminal window";
     homepage = "https://github.com/evalf/bottombar";
     changelog = "https://github.com/evalf/bottombar/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ conni2461 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ conni2461 ];
   };
 }

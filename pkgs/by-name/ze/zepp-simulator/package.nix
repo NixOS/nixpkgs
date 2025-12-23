@@ -6,7 +6,7 @@
   copyDesktopItems,
   autoPatchelfHook,
 
-  # Upstream is officialy built with Electron 18
+  # Upstream is officially built with Electron 18
   # (but it works with latest Electron with minor changes, see HACK below)
   electron,
   asar,
@@ -77,34 +77,33 @@ stdenv.mkDerivation {
     asar
   ];
 
-  buildInputs =
-    [
-      # QEMU deps (runtime):
-      glib
-      libgcc
-      libcxx
-      zlib
-      libepoxy
-      libpng
-      libaio
-      xorg.libX11
-      libvterm
-      vte
-      gsasl
-      numactl
-      cyrus_sasl
-      gtk3
-      cairo
-      gdk-pixbuf
-      SDL2
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      libjpeg8
-      dtc
-      capstone_4
-      libgbm
-      curlWithGnuTls
-    ];
+  buildInputs = [
+    # QEMU deps (runtime):
+    glib
+    libgcc
+    libcxx
+    zlib
+    libepoxy
+    libpng
+    libaio
+    xorg.libX11
+    libvterm
+    vte
+    gsasl
+    numactl
+    cyrus_sasl
+    gtk3
+    cairo
+    gdk-pixbuf
+    SDL2
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    libjpeg8
+    dtc
+    capstone_4
+    libgbm
+    curlWithGnuTls
+  ];
 
   dontBuild = true;
 

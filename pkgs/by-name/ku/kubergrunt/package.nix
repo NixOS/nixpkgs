@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "kubergrunt";
-  version = "0.17.1";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
-    sha256 = "sha256-g2XDrDCnbDKNcMM82BUbQ6+a0RlfHtKldcBHlYdEgTQ=";
+    sha256 = "sha256-aze/Cq5hFTRRGE1F3LLcZpWPTjpBlc2RHVkoBiP4RaU=";
   };
 
-  vendorHash = "sha256-gJrZ0iQTRUypbYaeTYNxH3AlT5J65uzKpKNtylwEApk=";
+  vendorHash = "sha256-CNvYn/d26V0fqmPh2BbkzMgv3jWwWpGtOqowrND+igk=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
@@ -26,11 +26,11 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/kubergrunt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of commands to fill in the gaps between Terraform, Helm, and Kubectl";
     mainProgram = "kubergrunt";
     homepage = "https://github.com/gruntwork-io/kubergrunt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psibi ];
   };
 }

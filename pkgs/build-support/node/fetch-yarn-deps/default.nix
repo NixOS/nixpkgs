@@ -18,7 +18,6 @@
   makeSetupHook,
   cacert,
   callPackage,
-  nixForLinking,
 }:
 
 let
@@ -55,7 +54,6 @@ in
           lib.makeBinPath [
             coreutils
             nix-prefetch-git
-            nixForLinking
           ]
         }
 
@@ -196,6 +194,9 @@ in
     ];
     substitutions = {
       jq = lib.getExe jq;
+    };
+    meta = {
+      description = "Prune yarn dependencies and install files for packages using Yarn 1";
     };
   } ./yarn-install-hook.sh;
 }

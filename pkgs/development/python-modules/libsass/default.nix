@@ -33,7 +33,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  pytestFlagsArray = [ "sasstests.py" ];
+  enabledTestPaths = [ "sasstests.py" ];
 
   pythonImportsCheck = [ "sass" ];
 

@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
   bpftools,
   lib,
   nspr,
@@ -18,21 +17,25 @@
   bash,
   zsh,
   nix-update-script,
+  llvmPackages,
+  withNonBTF ? false,
+  kernel ? null,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "0.9.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-aubGM7kJMtfCRBeFgISuyXS9CkDwBC9hB3d6VA9mG2E=";
+    hash = "sha256-ODs6xey90XVQ+cc5qNciWdETW1N5hDBTjxpANCHeWsg=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    llvmPackages.libllvm
     clang
     fd
     bpftools
@@ -100,7 +103,13 @@ buildGoModule rec {
 
     substituteInPlace Makefile \
       --replace-fail '/bin/bash' '${lib.getExe bash}'
-
+  ''
+  + lib.optionalString withNonBTF ''
+    substituteInPlace variables.mk \
+      --replace-fail "-emit-llvm" "-emit-llvm -I${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include -Wno-error=implicit-function-declaration"
+    KERN_BUILD_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build KERN_SRC_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source make ebpf_noncore
+  ''
+  + ''
     make ebpf
     go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
   '';
@@ -113,7 +122,7 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-8ilfqPt5Phuj5Uaf90+Ir/DFN27oW5Fd+Wsp34/EU9M=";
+  vendorHash = "sha256-esBALagv8J4UPYAzV2x3joF0MUxco4OHDFlL32yXe6E=";
 
   passthru.updateScript = nix-update-script { };
 

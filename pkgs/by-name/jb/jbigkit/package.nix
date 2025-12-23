@@ -15,6 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Archlinux patch: this helps users to reduce denial-of-service risks, as in CVE-2017-9937
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0013-new-jbig.c-limit-s-maxmem-maximum-decoded-image-size.patch";
+      hash = "sha256-Yq5qCTF7KZTrm4oeWbpctb+QLt3shJUGEReZvd0ey9k=";
+    })
+    # Archlinux patch: fix heap overflow
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0015-jbg_newlen-check-for-end-of-file-within-MARKER_NEWLE.patch";
+      hash = "sha256-F3qA/btR9D9NfzrNY76X4Z6vG6NrisI36SjCDjS+F5s=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Archlinux patch: build shared object
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-shared_lib.patch";
@@ -33,16 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/jbigkit-2.1-build_warnings.patch";
       hash = "sha256-lDEJ1bvZ+zR7K4CiTq+aXJ8PGjILE3W13kznLLlGOOg=";
-    })
-    # Archlinux patch: this helps users to reduce denial-of-service risks, as in CVE-2017-9937
-    (fetchpatch {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0013-new-jbig.c-limit-s-maxmem-maximum-decoded-image-size.patch";
-      hash = "sha256-Yq5qCTF7KZTrm4oeWbpctb+QLt3shJUGEReZvd0ey9k=";
-    })
-    # Archlinux patch: fix heap overflow
-    (fetchpatch {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/jbigkit/-/raw/main/0015-jbg_newlen-check-for-end-of-file-within-MARKER_NEWLE.patch";
-      hash = "sha256-F3qA/btR9D9NfzrNY76X4Z6vG6NrisI36SjCDjS+F5s=";
     })
   ];
 
@@ -67,20 +69,28 @@ stdenv.mkDerivation (finalAttrs: {
     install -vDm 644 libjbig/*.h -t "$out/include/"
     install -vDm 755 pbmtools/{jbgtopbm{,85},pbmtojbg{,85}} -t "$out/bin/"
     install -vDm 644 pbmtools/*.1* -t "$out/share/man/man1/"
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -vDm 644 libjbig/libjbig*.a -t "$out/lib/"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -vDm 755 libjbig/*.so.* -t "$out/lib/"
+
     for lib in libjbig.so libjbig85.so; do
       ln -sv "$lib.${finalAttrs.version}" "$out/lib/$lib"
       ln -sv "$out/lib/$lib.${finalAttrs.version}" "$out/lib/$lib.0"
     done
-
+  ''
+  + ''
     runHook postInstall
   '';
 
   doCheck = true;
 
+  # Testing deletes all files on each test, causes test failures.
+  enableParallelChecking = false;
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Software implementation of the JBIG1 data compression standard";
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
     license = lib.licenses.gpl2Plus;

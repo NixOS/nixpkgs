@@ -6,12 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offensive-azure";
+  # nixpkgs-update: no auto update
   version = "0.4.10";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
-    repo = pname;
+    repo = "offensive-azure";
     rev = "v${version}";
     hash = "sha256-5JHix+/uGGhXM89VLimI81g4evci5ZUtNV1c1xopjuI=";
   };
@@ -47,10 +48,10 @@ python3.pkgs.buildPythonApplication rec {
     "offensive_azure"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of offensive tools targeting Microsoft Azure";
     homepage = "https://github.com/blacklanternsecurity/offensive-azure";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

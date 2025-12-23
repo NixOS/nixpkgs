@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dfaker";
-    repo = pname;
+    repo = "vr-reversal";
     rev = "v${version}";
     sha256 = "1wn2ngcvn7wcsl3kmj782x5q9130qw951lj6ilrkafp6q6zscpqr";
   };
@@ -32,11 +32,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.scriptName = "360plugin.lua";
 
-  meta = with lib; {
+  meta = {
     description = "Script for mpv to play VR video with optional saving of head tracking data";
     homepage = "https://github.com/dfaker/VR-reversal";
-    license = licenses.unlicense;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ schnusch ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ schnusch ];
   };
 }

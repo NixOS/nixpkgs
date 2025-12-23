@@ -9,7 +9,6 @@
   cairo,
   fontconfig,
   libsigcxx30,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,14 +31,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      boost # for tests
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-    ];
+  buildInputs = [
+    boost # for tests
+    fontconfig
+  ];
 
   propagatedBuildInputs = [
     cairo
@@ -53,14 +48,14 @@ stdenv.mkDerivation rec {
   # Tests fail on Darwin, possibly because of sandboxing.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "C++ bindings for the Cairo vector graphics library";
     homepage = "https://www.cairographics.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       mpl10
     ];
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

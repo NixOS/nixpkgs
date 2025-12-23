@@ -51,8 +51,8 @@
   },
   {
     "pname": "Expecto",
-    "version": "10.2.1",
-    "hash": "sha256-DgwHFsPMySlnMag4kPTviTwrNOD7uPnnJLi9DCZif5s="
+    "version": "10.2.3",
+    "hash": "sha256-klv7QbGwd0ClMSe+wJ38URVmIawV2ksyrjzQbGhVUPg="
   },
   {
     "pname": "Expecto.Diff",
@@ -61,8 +61,8 @@
   },
   {
     "pname": "fantomas",
-    "version": "7.0.0",
-    "hash": "sha256-v4bXmvjZOYxl5RSIHuqVfDzBQdRz5SrmzZtD6SeEYTY="
+    "version": "7.0.3",
+    "hash": "sha256-0XlfV7SxXPDnk/CjkUesJSaH0cxlNHJ+Jj86zNUhkNA="
   },
   {
     "pname": "Fantomas.Client",
@@ -76,8 +76,8 @@
   },
   {
     "pname": "fsharp-analyzers",
-    "version": "0.28.0",
-    "hash": "sha256-BqGk9MzHHA3oRPNfWuANcM1YELsdhzWI+kLF4mUDUx8="
+    "version": "0.33.0",
+    "hash": "sha256-inPKPeLTaImrj4uiEy/vpru1cestNr/s/qgyRsgvwPc="
   },
   {
     "pname": "FSharp.Analyzers.Build",
@@ -86,13 +86,13 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
-    "version": "0.29.0",
-    "hash": "sha256-hhyLzVyNO7lAm9RbQao15+d8gt9yYK2+Rem3yAoA+zw="
+    "version": "0.33.1",
+    "hash": "sha256-bx4DTUakeLlwbAUxZZpNK8E0sGa7B6UvN1rX6nFOZf0="
   },
   {
     "pname": "FSharp.Compiler.Service",
-    "version": "43.9.201",
-    "hash": "sha256-YYo2O873Za3uXXdeOFCkIAToF8Txae1W2d5PuJ3dy/Y="
+    "version": "43.9.300",
+    "hash": "sha256-dBo6juX2cLAAEIlGwRdYrR13dMTtbvBPhyFpUj+Rogc="
   },
   {
     "pname": "FSharp.Control.AsyncSeq",
@@ -106,8 +106,8 @@
   },
   {
     "pname": "FSharp.Core",
-    "version": "9.0.201",
-    "hash": "sha256-38Y0QFg/knogSJtxDVpVXKo5n4zAo8zaffeT6tbhahk="
+    "version": "9.0.300",
+    "hash": "sha256-eBGcd/OwlGuW2009Fb/ym813OWI9tHJXCY6oi4iGOyA="
   },
   {
     "pname": "FSharp.Data.Adaptive",
@@ -206,8 +206,8 @@
   },
   {
     "pname": "Ionide.Analyzers",
-    "version": "0.13.0",
-    "hash": "sha256-PQ118rNahGoK7CPMv+NKDAPwm68p71vzMqmX71eu8E8="
+    "version": "0.14.9",
+    "hash": "sha256-41vXbwlwWbM/iwbrqA+lhsxpMochokM9xsOsgKlKqXg="
   },
   {
     "pname": "Ionide.KeepAChangelog.Tasks",
@@ -216,23 +216,23 @@
   },
   {
     "pname": "Ionide.LanguageServerProtocol",
-    "version": "0.6.0",
-    "hash": "sha256-4CUMAzICBpp621nh3zTnIGrKH9YYvyflbXA3HFKtkpc="
+    "version": "0.7.0",
+    "hash": "sha256-fGkfG6OImLcHeLoG6/TvzNTDOYtR8FWZn4Zu7xlbYUg="
   },
   {
     "pname": "Ionide.ProjInfo",
-    "version": "0.70.2",
-    "hash": "sha256-Y606emyiJ+ZgS5NH578WURySaVc/yo2OA7rWbOH57jA="
+    "version": "0.72.0",
+    "hash": "sha256-zu9ssScreEgwFQb0YOgVfAFxTEoGLjsLiMbWIdf2zkg="
   },
   {
     "pname": "Ionide.ProjInfo.FCS",
-    "version": "0.70.2",
-    "hash": "sha256-ufDkvztQZCtGTdegsIFIbixWTvIJwmNwhis2kb2OFU8="
+    "version": "0.72.0",
+    "hash": "sha256-udtCva1gKPo6rJpsCCVI+DCY2ilUwSFQ9P9XCysNcto="
   },
   {
     "pname": "Ionide.ProjInfo.ProjectSystem",
-    "version": "0.70.2",
-    "hash": "sha256-3C+vn7ROgGWxjaHaACaUENYcAt9jYrnquBebQ2eo1y0="
+    "version": "0.72.0",
+    "hash": "sha256-ilUr29oAONpGm76Dc1ocSfu33p0Gyr9VhiNfMoxyKfI="
   },
   {
     "pname": "LinkDotNet.StringBuilder",
@@ -470,6 +470,11 @@
     "hash": "sha256-rf8Sh0fQq44Sneuvs64unkkIHg8kOjDGWE35j9iLx5I="
   },
   {
+    "pname": "Microsoft.TestPlatform.TranslationLayer",
+    "version": "17.13.0",
+    "hash": "sha256-F9s0dPTsmtHN+Khn4F0ybvjdJptH0M3sRE3oJDO1TBs="
+  },
+  {
     "pname": "Microsoft.VisualStudio.SolutionPersistence",
     "version": "1.0.28",
     "hash": "sha256-7BmeidGDb19wfvpaYA91luCFE1CStb8iLlnyJhVCJ6w="
@@ -503,6 +508,16 @@
     "pname": "Nerdbank.Streams",
     "version": "2.11.79",
     "hash": "sha256-1bzibVcSH8LJMR8Nb6Q0q/7fieTgxRnVY4C1RvRbrrI="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.0",
+    "hash": "sha256-Pp7fRylai8JrE1O+9TGfIEJrAOmnWTJRLWE+qJBahK0="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -658,6 +673,11 @@
     "pname": "Serilog",
     "version": "4.1.0",
     "hash": "sha256-r89nJ5JE5uZlsRrfB8QJQ1byVVfCWQbySKQ/m9PYj0k="
+  },
+  {
+    "pname": "Serilog.Extensions.Logging",
+    "version": "8.0.0",
+    "hash": "sha256-GoWxCpkdahMvYd7ZrhwBxxTyjHGcs9ENNHJCp0la6iA="
   },
   {
     "pname": "Serilog.Sinks.Async",

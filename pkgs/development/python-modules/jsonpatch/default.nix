@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonpatch" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -6,17 +6,18 @@
   intel-compute-runtime,
   openvino,
   stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.20.2";
+  version = "1.26.3";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     tag = "v${version}";
-    hash = "sha256-IqnEjlKBB3nx2rOTBG+rrJ078z8+kkg52hFV2+5lJV0=";
+    hash = "sha256-AFdACq4oooxv9XMrFjDwSXO+dIoGETqhuqgc0qENkNI=";
   };
 
   nativeBuildInputs = [
@@ -28,16 +29,21 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/lib/libze_loader.so
   '';
 
-  passthru.tests = {
-    inherit intel-compute-runtime openvino;
+  setupHook = ./setup-hook.sh;
+
+  passthru = {
+    tests = {
+      inherit intel-compute-runtime openvino;
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "oneAPI Level Zero Specification Headers and Loader";
     homepage = "https://github.com/oneapi-src/level-zero";
     changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ziguana ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.ziguana ];
   };
 }

@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://patch-diff.githubusercontent.com/raw/vmware/tdnf/pull/410.patch";
       hash = "sha256-p/ix5O1J/lj2fw7qJokT+wPN4ROoulnVqByfxgFvuEo=";
     })
+    # Bump minimal cmake version
+    (fetchpatch2 {
+      url = "https://github.com/vmware/tdnf/commit/24211f2077d2423e511c43f21cd5ee5b53fa4021.patch?full_index=1";
+      hash = "sha256-twzyVV+VgtRljj1E70Tq5U0sNEiSWU/rG9buoAYDF0o=";
+    })
   ];
 
   nativeBuildInputs = [

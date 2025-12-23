@@ -47,11 +47,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Kludex/python-multipart/blob/${src.tag}/CHANGELOG.md";
     description = "Streaming multipart parser for Python";
     homepage = "https://github.com/Kludex/python-multipart";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

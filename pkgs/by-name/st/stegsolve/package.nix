@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = finalAttrs.pname;
+      name = "stegsolve";
       desktopName = "Stegsolve";
       comment = "A steganographic image analyzer, solver and data extractor for challanges";
-      exec = finalAttrs.pname;
+      exec = "stegsolve";
       categories = [ "Graphics" ];
     })
   ];
@@ -47,18 +47,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Steganographic image analyzer, solver and data extractor for challanges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = {
       fullName = "Cronos License";
       url = "http://www.caesum.com/legal.php";
       free = false;
       redistributable = true;
     };
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.all;
     mainProgram = "stegsolve";
   };
 })

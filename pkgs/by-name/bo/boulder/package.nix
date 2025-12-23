@@ -4,16 +4,18 @@
   buildGoModule,
   testers,
   boulder,
+  minica,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2024-07-16";
+  version = "0.20251118.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
-    rev = "release-${version}";
+    tag = "v${version}";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -21,10 +23,15 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-mIUT9qVBPWrL0ySORwgEH6azaQmzMCl7ha/eYRtvAg4=";
+    hash = "sha256-JVkIu8Fh5F8WQXa45I0hnSedAaIQIOFidtWVpVHbAWA=";
   };
 
   vendorHash = null;
+
+  postPatch = ''
+    # We already built the application with custom settings. This fails, so we have to disable it.
+    substituteInPlace test/certs/generate.sh --replace-fail 'make build' ""
+  '';
 
   subPackages = [ "cmd/boulder" ];
 
@@ -39,9 +46,14 @@ buildGoModule rec {
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
 
+  nativeCheckInputs = [ minica ];
+
   preCheck = ''
     # Test all targets.
     unset subPackages
+    # Generate integration test certificates, but skip webpki certificates that are hard to make without errors and are currently unneeded.
+    mkdir test/certs/webpki
+    bash test/certs/generate.sh
   '';
 
   # Tests that fail or require additional services.
@@ -57,7 +69,9 @@ buildGoModule rec {
     "TestAddPrecertificateIncomplete"
     "TestAddPrecertificateKeyHash"
     "TestAddPrecertificateNoOCSP"
+    "TestAddRateLimitOverride"
     "TestAddRegistration"
+    "TestAddReplacementOrder"
     "TestAddSerial"
     "TestAdministrativelyRevokeCertificate"
     "TestAuthorization500"
@@ -81,6 +95,7 @@ buildGoModule rec {
     "TestCheckCertReturnsDNSNames"
     "TestCheckExactCertificateLimit"
     "TestCheckFQDNSetRateLimitOverride"
+    "TestCheckIdentifiersPaused"
     "TestCheckWildcardCert"
     "TestCheckWildcardCert"
     "TestClientTransportCredentials"
@@ -99,6 +114,7 @@ buildGoModule rec {
     "TestDeactivateAuthorization"
     "TestDeactivateRegistration"
     "TestDedupOnRegistration"
+    "TestDialerTimeout"
     "TestDirectory"
     "TestDontFindRevokedCert"
     "TestEarlyOrderRateLimiting"
@@ -106,8 +122,11 @@ buildGoModule rec {
     "TestEnforceJWSAuthType"
     "TestExactPublicSuffixCertLimit"
     "TestExtractJWK"
+    "TestExtractRequestTarget"
+    "TestFQDNSetExists"
     "TestFQDNSetTimestampsForWindow"
     "TestFQDNSets"
+    "TestFQDNSetsExists"
     "TestFQDNSetsExists"
     "TestFailExit"
     "TestFasterGetOrderForNames"
@@ -116,6 +135,7 @@ buildGoModule rec {
     "TestFinalizeOrderWildcard"
     "TestFinalizeOrderWithMixedSANAndCN"
     "TestFinalizeSCTError"
+    "TestFinalizeWithMustStaple"
     "TestFindCertsAtCapacity"
     "TestFindExpiringCertificates"
     "TestFindIDs"
@@ -145,6 +165,8 @@ buildGoModule rec {
     "TestGetOrder"
     "TestGetOrderExpired"
     "TestGetOrderForNames"
+    "TestGetPausedIdentifiers"
+    "TestGetPausedIdentifiersOnlyUnpausesOneAccount"
     "TestGetPendingAuthorization2"
     "TestGetRevokedCerts"
     "TestGetSerialMetadata"
@@ -221,12 +243,15 @@ buildGoModule rec {
     "TestPOST404"
     "TestPanicStackTrace"
     "TestParseJWSRequest"
+    "TestPauseIdentifiers"
     "TestPendingAuthorizationsUnlimited"
     "TestPerformValidationAlreadyValid"
     "TestPerformValidationBadChallengeType"
     "TestPerformValidationExpired"
     "TestPerformValidationSuccess"
     "TestPerformValidationVAError"
+    "TestPerformValidation_FailedThenSuccessfulValidationResetsPauseIdentifiersRatelimit"
+    "TestPerformValidation_FailedValidationsTriggerPauseIdentifiersRatelimit"
     "TestPrepAuthzForDisplay"
     "TestPreresolvedDialerTimeout"
     "TestProcessCerts"
@@ -237,11 +262,14 @@ buildGoModule rec {
     "TestRecheckCAAFail"
     "TestRecheckCAAInternalServerError"
     "TestRecheckCAASuccess"
+    "TestRecheckInvalidIdentifierType"
+    "TestRecheckSkipIPAddress"
     "TestRedisSource_BatchSetAndGet"
     "TestRedisSource_Ping"
     "TestRegistrationsPerIPOverrideUsage"
     "TestRehydrateHostPort"
     "TestRelativeDirectory"
+    "TestReplacementOrderExists"
     "TestReplicationLagRetries"
     "TestResolveContacts"
     "TestRevokeCertByApplicant_Controller"
@@ -260,6 +288,7 @@ buildGoModule rec {
     "TestSerialsFromPrivateKey"
     "TestSetAndGet"
     "TestSetOrderProcessing"
+    "TestSetReplacementOrderFinalized"
     "TestSingleton"
     "TestStart"
     "TestStatusForOrder"
@@ -268,6 +297,7 @@ buildGoModule rec {
     "TestTLSALPN01DialTimeout"
     "TestTLSConfigLoad"
     "TestTimeouts"
+    "TestUnpauseAccount"
     "TestUpdateCRLShard"
     "TestUpdateChallengeFinalizedAuthz"
     "TestUpdateChallengeRAError"
@@ -275,6 +305,8 @@ buildGoModule rec {
     "TestUpdateMissingAuthorization"
     "TestUpdateNowWithAllFailingSRV"
     "TestUpdateNowWithOneFailingSRV"
+    "TestUpdateRegistrationContact"
+    "TestUpdateRegistrationKey"
     "TestUpdateRegistrationSame"
     "TestUpdateRevokedCertificate"
     "TestValidJWSForKey"
@@ -302,12 +334,15 @@ buildGoModule rec {
     done
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = boulder;
-    inherit version;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = boulder;
+      inherit version;
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/letsencrypt/boulder";
     description = "ACME-based certificate authority, written in Go";
     longDescription = ''
@@ -317,8 +352,8 @@ buildGoModule rec {
       revoke certificates for their domains. Boulder is the software that runs
       Let's Encrypt.
     '';
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     mainProgram = "boulder";
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

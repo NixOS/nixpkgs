@@ -13,8 +13,8 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Freed-Wu";
-    repo = pname;
-    rev = version;
+    repo = "bitbake-language-server";
+    tag = version;
     hash = "sha256-NLDQ2P5peweugkoNYskpCyCEgBwVFA7RTs8+NvH8fj8=";
   };
 

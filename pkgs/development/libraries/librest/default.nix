@@ -24,20 +24,19 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/rest/${lib.versions.majorMinor version}/rest-${version}.tar.xz";
     sha256 = "0513aad38e5d3cedd4ae3c551634e3be1b9baaa79775e53b2dba9456f15b01c9";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      gobject-introspection
-    ]
-    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -61,18 +60,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "rest";
       attrPath = "librest";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Helper library for RESTful services";
     homepage = "https://gitlab.gnome.org/GNOME/librest";
-    license = licenses.lgpl21Only;
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
 }

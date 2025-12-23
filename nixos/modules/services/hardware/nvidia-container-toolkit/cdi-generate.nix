@@ -1,25 +1,18 @@
 {
-  deviceNameStrategy,
+  csv-files,
+  device-name-strategy,
+  discovery-mode,
+  mounts,
   glibc,
   jq,
   lib,
-  mounts,
   nvidia-container-toolkit,
   nvidia-driver,
   runtimeShell,
   writeScriptBin,
+  extraArgs,
 }:
 let
-  mkMount =
-    {
-      hostPath,
-      containerPath,
-      mountOptions,
-    }:
-    {
-      inherit hostPath containerPath;
-      options = mountOptions;
-    };
   mountToCommand =
     mount:
     "additionalMount \"${mount.hostPath}\" \"${mount.containerPath}\" '${builtins.toJSON mount.mountOptions}'";
@@ -36,10 +29,19 @@ writeScriptBin "nvidia-cdi-generator" ''
   function cdiGenerate {
     ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
       --format json \
-      --device-name-strategy ${deviceNameStrategy} \
+      ${
+        if (builtins.length csv-files) > 0 then
+          lib.concatMapStringsSep "\n" (file: "--csv.file ${file} \\") csv-files
+        else
+          "\\"
+      }
+      --discovery-mode ${discovery-mode} \
+      --device-name-strategy ${device-name-strategy} \
+      --disable-hook create-symlinks \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
-      --nvidia-ctk-path ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"}
+      --nvidia-cdi-hook-path ${lib.getOutput "tools" nvidia-container-toolkit}/bin/nvidia-cdi-hook \
+      ${lib.escapeShellArgs extraArgs}
   }
 
   function additionalMount {

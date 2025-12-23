@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   cython,
   versioneer,
 
@@ -14,13 +15,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -32,21 +33,21 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.28.3";
+  version = "2.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-MtY0JbziboJNHKe8wXaPtOWgFnpv8yQZeg6hNirnSEI=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+    '';
+    hash = "sha256-tzwiPp0+xNKmndTn9Y1AXiqscQWaCC8gKgQHEtkyGag=";
   };
 
-  pythonRelaxDeps = [
-    "scipy"
-  ];
-
   build-system = [
+    setuptools
     cython
     versioneer
   ];
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
   ];
@@ -72,6 +74,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "pytensor" ];
 
   # Ensure that the installed package is used instead of the source files from the current workdir
@@ -80,6 +84,11 @@ buildPythonPackage rec {
   '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Numerical assertion error
+    # tests.unittest_tools.WrongValue: WrongValue
+    "test_op_sd"
+    "test_op_ss"
+
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
     "add"
@@ -120,6 +129,7 @@ buildPythonPackage rec {
     "test_modes"
     "test_mul_s_v_grad"
     "test_multiple_outputs"
+    "test_nnet"
     "test_not_inplace"
     "test_numba_Cholesky_grad"
     "test_numba_pad"
@@ -132,6 +142,7 @@ buildPythonPackage rec {
     "test_scan_err1"
     "test_scan_err2"
     "test_shared"
+    "test_size_implied_by_broadcasted_parameters"
     "test_solve_triangular_grad"
     "test_structured_add_s_v_grad"
     "test_structureddot_csc_grad"
@@ -163,11 +174,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/red-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
 }

@@ -13,11 +13,15 @@ This is an example of using `warnings`.
 {
   config = lib.mkIf config.services.foo.enable {
     warnings =
-      if config.services.foo.bar
-      then [ ''You have enabled the bar feature of the foo service.
-               This is known to cause some specific problems in certain situations.
-               '' ]
-      else [];
+      if config.services.foo.bar then
+        [
+          ''
+            You have enabled the bar feature of the foo service.
+                           This is known to cause some specific problems in certain situations.
+          ''
+        ]
+      else
+        [ ];
   };
 }
 ```
@@ -30,11 +34,12 @@ This example, extracted from the [`syslogd` module](https://github.com/NixOS/nix
 { config, lib, ... }:
 {
   config = lib.mkIf config.services.syslogd.enable {
-    assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
-          message = "rsyslogd conflicts with syslogd";
-        }
-      ];
+    assertions = [
+      {
+        assertion = !config.services.rsyslogd.enable;
+        message = "rsyslogd conflicts with syslogd";
+      }
+    ];
   };
 }
 ```

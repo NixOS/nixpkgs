@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-Ht4LkcNmxPEvzFHXeS/XhPt/xo+0sE4RBcLCn9N/zwE=";
   };
 
+  patches = [
+    # https://github.com/trendmicro/tlsh/pull/152
+    ./cmake-4-compat.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   build-system = [ setuptools ];
@@ -31,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tlsh" ];
 
-  meta = with lib; {
+  meta = {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
     changelog = "https://github.com/trendmicro/tlsh/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

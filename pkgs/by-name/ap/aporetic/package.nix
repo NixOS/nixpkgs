@@ -14,12 +14,12 @@ let
     "serif"
   ];
   pname = "aporetic";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "protesilaos";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
+    repo = "aporetic";
+    tag = version;
+    hash = "sha256-1BbuC/mWEcXJxzDppvsukhNtdOLz0QosD6QqI/93Khc=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont =
@@ -40,26 +40,27 @@ let
             src = fetchFromGitHub {
               owner = "be5invis";
               repo = "iosevka";
-              rev = "v32.5.0";
-              hash = "sha256-MzsAkq5l4TP19UJNPW/8hvIqsJd94pADrrv8wLG6NMQ=";
+              tag = "v33.2.2";
+              hash = "sha256-dhMTcceHru/uLHRY4eWzFV+73ckCBBnDlizP3iY5w5w=";
             };
 
-            npmDepsHash = "sha256-HeqwpZyHLHdMhd/UfXVBonMu+PhStrLCxAMuP/KuTT8=";
-
-            meta = with lib; {
-              inherit (src.meta) homepage;
-              description = ''
-                Customised build of the Iosevka typeface, with a consistent rounded style and overrides for almost all individual glyphs in both roman (upright) and italic (slanted) variants.
-              '';
-              license = licenses.ofl;
-              platforms = iosevka.meta.platforms;
-              maintainers = [ maintainers.DamienCassou ];
-            };
+            npmDepsHash = "sha256-5DcMV9N16pyQxRaK6RCoeghZqAvM5EY1jftceT/bP+o=";
           }
         );
     });
 in
 symlinkJoin {
   inherit pname version;
-  paths = (builtins.map makeIosevkaFont sets);
+
+  paths = (map makeIosevkaFont sets);
+
+  meta = {
+    inherit (src.meta) homepage;
+    description = ''
+      Custom build of Iosevka with different style and metrics than the default, successor to my "Iosevka Comfy" fonts
+    '';
+    license = lib.licenses.ofl;
+    platforms = iosevka.meta.platforms;
+    maintainers = [ lib.maintainers.DamienCassou ];
+  };
 }

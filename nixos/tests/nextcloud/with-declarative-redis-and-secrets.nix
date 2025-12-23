@@ -14,12 +14,7 @@ runTest (
   in
   {
     inherit name;
-    meta = with lib.maintainers; {
-      maintainers = [
-        eqyiel
-        ma27
-      ];
-    };
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -40,7 +35,6 @@ runTest (
               logLevel = "debug";
             };
             extraAppsEnable = true;
-            extraApps.notify_push = config.services.nextcloud.package.packages.apps.notify_push;
             # This test also validates that we can use an "external" database
             database.createLocally = false;
             config = {
@@ -70,14 +64,14 @@ runTest (
           };
 
           systemd.services.nextcloud-setup = {
-            requires = [ "postgresql.service" ];
-            after = [ "postgresql.service" ];
+            requires = [ "postgresql.target" ];
+            after = [ "postgresql.target" ];
           };
 
           services.postgresql = {
             enable = true;
           };
-          systemd.services.postgresql.postStart = lib.mkAfter ''
+          systemd.services.postgresql-setup.postStart = ''
             password=$(cat ${config.services.nextcloud.config.dbpassFile})
             ${config.services.postgresql.package}/bin/psql <<EOF
               CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
@@ -89,13 +83,12 @@ runTest (
           # This file is meant to contain secret options which should
           # not go into the nix store. Here it is just used to set the
           # redis password.
-          environment.etc."nextcloud-secrets.json".text = ''
-            {
-              "redis": {
-                "password": "secret"
-              }
-            }
-          '';
+          environment.etc."nextcloud-secrets.json" = {
+            mode = "0600";
+            text = builtins.toJSON {
+              redis.password = "secret";
+            };
+          };
         };
     };
 

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confy";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromSourcehut {
     owner = "~fabrixxm";
     repo = "confy";
     rev = finalAttrs.version;
-    hash = "sha256-lQZ9joLK6w+sIjCVOEHstnnQomUl2E4F8FXCZukMUkI=";
+    hash = "sha256-rkVem9bPjp68Pk8fVPMDZLFFQsqeeRsynWciCk6xWhU=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
     homepage = "https://confy.kirgroup.net/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "confy";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
   };
 })

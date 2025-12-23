@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amber-lang";
     repo = "amber";
-    rev = version;
+    tag = version;
     hash = "sha256-N9G/2G8+vrpr1/K7XLwgW+X2oAyAaz4qvN+EbLOCU1Q=";
   };
 
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     ./fix_gnused_detection.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e5+L7Qgd6hyqT1Pb9X7bVtRr+xm428Z5J4hhsYNnGtU=";
 
   preConfigure = ''
@@ -54,14 +53,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::formatter::all_exist"
   ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd amber \
-        --bash <($out/bin/amber completion)
-    '';
+  postInstall = ''
+    wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd amber \
+      --bash <($out/bin/amber completion)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -71,16 +69,15 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language compiled to bash";
     homepage = "https://amber-lang.com";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "amber";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cafkafk
-      uncenter
       aleksana
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

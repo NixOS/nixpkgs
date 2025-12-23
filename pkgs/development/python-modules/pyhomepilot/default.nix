@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nico0302";
-    repo = pname;
+    repo = "pyhomepilot";
     rev = "v${version}";
     sha256 = "00gmqx8cwsd15iccnlr8ypgqrdg6nw9ha518cfk7pyp8vhw1ziwy";
   };
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomepilot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with the Rademacher HomePilot API";
     homepage = "https://github.com/nico0302/pyhomepilot";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

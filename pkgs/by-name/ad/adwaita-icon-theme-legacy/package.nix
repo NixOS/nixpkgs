@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fullcolor icon theme providing fallback for legacy apps";
     homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme-legacy";
     changelog = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme-legacy/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.cc-by-sa-30;
-    maintainers = teams.gnome.members;
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-sa-30;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.all;
   };
 })

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  auditwheel,
   buildPythonPackage,
   gitMinimal,
   greenlet,
@@ -22,7 +21,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.50.0";
+  version = "1.56.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
-    hash = "sha256-g32QwEA4Ofzh7gVEsC++uA/XqT1eIrUH+fQi15SRxko=";
+    hash = "sha256-46+UxHimmmyQMTe+G2ootSbVX9pAzdfdyTO2qrWd9l8=";
   };
 
   patches = [
@@ -51,9 +50,7 @@ buildPythonPackage rec {
     git config --global user.name "nixpkgs"
     git commit -m "workaround setuptools-scm"
 
-    substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["setuptools==75.6.0", "setuptools-scm==8.1.0", "wheel==0.45.1", "auditwheel==6.2.0"]' \
-                     'requires = ["setuptools", "setuptools-scm", "wheel"]'
+    sed -i -e 's/requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]/requires = ["setuptools", "setuptools-scm", "wheel"]/' pyproject.toml
 
     # setup.py downloads and extracts the driver.
     # This is done manually in postInstall instead.
@@ -69,7 +66,7 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ];
 
   pythonRelaxDeps = [
     "greenlet"
@@ -92,26 +89,25 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests =
-      {
-        driver = playwright-driver;
-        browsers = playwright-driver.browsers;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) playwright-python;
-      };
+    tests = {
+      driver = playwright-driver;
+      browsers = playwright-driver.browsers;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) playwright-python;
+    };
     # Package and playwright driver versions are tightly coupled.
     # Use the update script to ensure synchronized updates.
     skipBulkUpdate = true;
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python version of the Playwright testing and automation library";
     mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       techknowlogick
       yrd
     ];

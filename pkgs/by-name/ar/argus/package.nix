@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/snmpwalk ${lib.getBin net-snmp}/bin/snmpwalk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audit Record Generation and Utilization System for networks";
     longDescription = ''
       The Argus Project is focused on developing all
@@ -70,8 +70,7 @@ stdenv.mkDerivation rec {
       you will find Argus a useful tool.
     '';
     homepage = "http://qosient.com/argus";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     diff -u input output
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Create resilient backups with Reed-Solomon error correction and byte-spreading";
     homepage = "https://www.thanassis.space/rsbep.html";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.erikarvstedt ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.erikarvstedt ];
   };
 }

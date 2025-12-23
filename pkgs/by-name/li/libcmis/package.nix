@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tdf";
-    repo = pname;
+    repo = "libcmis";
     rev = "v${version}";
     sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
@@ -46,17 +46,18 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-werror"
     "DOCBOOK2MAN=${docbook2x}/bin/docbook2man"
+    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C++ client library for the CMIS interface";
     homepage = "https://github.com/tdf/libcmis";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "cmis-client";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

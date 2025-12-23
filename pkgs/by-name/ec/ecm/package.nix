@@ -26,8 +26,13 @@ stdenv.mkDerivation {
     substituteInPlace test.ecm --replace /bin/rm rm
   '';
 
-  # See https://trac.sagemath.org/ticket/19233
-  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
+  configureFlags = [
+    # Otherwise, undesired flags from gmp (such as -std=c99) are leaking
+    "-enable-gmp-cflags=false"
+  ]
+  ++
+    # See https://trac.sagemath.org/ticket/19233
+    lib.optional stdenv.hostPlatform.isDarwin "--disable-asm-redc";
 
   buildInputs = [
     m4

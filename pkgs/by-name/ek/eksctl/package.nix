@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.205.0";
+  version = "0.221.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = pname;
+    repo = "eksctl";
     rev = version;
-    hash = "sha256-MAD+Z5hXquwuTnr87UU1IBTmbJ80exK64UbHgNyBhRI=";
+    hash = "sha256-q+4TTwgUxP1U7sKFH7Sy1wInE8neLE3R5MhgfW4V+64=";
   };
 
-  vendorHash = "sha256-CpNHVqhdrxtGnYaWfFNRTuEi1WyBMxSV7RbfqtYpcmw=";
+  vendorHash = "sha256-Bz4C+JyPZI+7LhmtUNyo/PJ+AkeGVQ+VrpHWnRqrIoE=";
 
   doCheck = false;
 
@@ -36,21 +37,22 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd eksctl \
       --bash <($out/bin/eksctl completion bash) \
       --fish <($out/bin/eksctl completion fish) \
       --zsh  <($out/bin/eksctl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     changelog = "https://github.com/eksctl-io/eksctl/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       xrelkd
       Chili-Man
+      ryan4yin
     ];
     mainProgram = "eksctl";
   };

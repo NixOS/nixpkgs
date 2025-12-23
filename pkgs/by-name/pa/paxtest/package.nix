@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
   ];
   installFlags = [ "DESTDIR=\"\"" ];
 
-  meta = with lib; {
+  meta = {
     description = "Test various memory protection measures";
     mainProgram = "paxtest";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      copumpkin
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       joachifm
     ];
   };

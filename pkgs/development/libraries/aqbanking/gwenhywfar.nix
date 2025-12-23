@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/gwenhywfar-${version}.tar.gz";
     inherit hash;
   };
 
@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "OS abstraction functions used by aqbanking and related tools";
     homepage = "https://www.aquamaniac.de/rdm/projects/gwenhywfar";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

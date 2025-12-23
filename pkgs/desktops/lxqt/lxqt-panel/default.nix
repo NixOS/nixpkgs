@@ -23,7 +23,6 @@
   lxqt-build-tools,
   lxqt-globalkeys,
   lxqt-menu-data,
-  menu-cache,
   pcre,
   qtbase,
   qtsvg,
@@ -34,15 +33,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel";
-  version = "2.1.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-WS+rPiPB/BBmg4yNkpZ2cFJG/1awdjCN0ziWtcESRP4=";
+    repo = "lxqt-panel";
+    tag = finalAttrs.version;
+    hash = "sha256-cwemHe092vNRDeseXkGoWAEXawNTVbSiB87owfaLeAo=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     lm_sensors
     lxqt-globalkeys
     lxqt-menu-data
-    menu-cache
     pcre
     qtbase
     qtsvg
@@ -82,12 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-panel";
     description = "LXQt desktop panel";
     mainProgram = "lxqt-panel";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

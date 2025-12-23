@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   perl,
-  ...
 }:
 
 let
@@ -41,16 +40,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text hyphenation library";
     mainProgram = "substrings.pl";
     homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       gpl2
       lgpl21
       mpl11
     ];
-    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

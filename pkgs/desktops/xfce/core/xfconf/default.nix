@@ -1,41 +1,70 @@
 {
   stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
   gobject-introspection,
   perl,
+  pkg-config,
   vala,
+  xfce4-dev-tools,
+  wrapGAppsNoGuiHook,
   libxfce4util,
   glib,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "xfce";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfconf";
   version = "4.20.0";
 
-  sha256 = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs =
-    [
-      perl
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala # vala bindings require GObject introspection
-    ];
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "xfce";
+    repo = "xfconf";
+    tag = "xfconf-${finalAttrs.version}";
+    hash = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    perl
+    pkg-config
+    xfce4-dev-tools
+    wrapGAppsNoGuiHook
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala # vala bindings require GObject introspection
+  ];
 
   buildInputs = [ libxfce4util ];
 
   propagatedBuildInputs = [ glib ];
 
-  meta = with lib; {
-    description = "Simple client-server configuration storage and query system for Xfce";
-    mainProgram = "xfconf-query";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  configureFlags = [ "--enable-maintainer-mode" ];
+  enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "xfconf-";
+    odd-unstable = true;
   };
-}
+
+  meta = {
+    description = "Simple client-server configuration storage and query system for Xfce";
+    homepage = "https://gitlab.xfce.org/xfce/xfconf";
+    mainProgram = "xfconf-query";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.xfce ];
+  };
+})

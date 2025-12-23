@@ -159,7 +159,8 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = [
           "network-online.target"
-        ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
+        ]
+        ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
         after = [ "network-online.target" ];
         preStart = lib.mkIf envConfig ''
           umask 077

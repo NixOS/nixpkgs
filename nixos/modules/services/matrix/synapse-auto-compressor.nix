@@ -30,7 +30,7 @@ in
   options = {
     services.synapse-auto-compressor = {
       enable = lib.mkEnableOption "synapse-auto-compressor";
-      package = lib.mkPackageOption pkgs "rust-synapse-state-compress" { };
+      package = lib.mkPackageOption pkgs "rust-synapse-compress-state" { };
       postgresUrl = lib.mkOption {
         default =
           let
@@ -119,7 +119,7 @@ in
     systemd.services.synapse-auto-compressor = {
       description = "synapse-auto-compressor";
       requires = lib.optionals synapseUsesLocalPostgresql [
-        "postgresql.service"
+        "postgresql.target"
       ];
       inherit (cfg) startAt;
       serviceConfig = {

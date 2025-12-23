@@ -4,15 +4,15 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libreelec-dvb-firmware";
   version = "1.5.0";
 
   src = fetchFromGitHub {
-    repo = "dvb-firmware";
     owner = "LibreElec";
-    rev = version;
-    sha256 = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
+    repo = "dvb-firmware";
+    tag = finalAttrs.version;
+    hash = "sha256-uEobcv5kqGxIOfSVVKH+iT7DHPF13OFiRF7c1GIUqtU=";
   };
 
   installPhase = ''
@@ -25,11 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DVB firmware from LibreELEC";
     homepage = "https://github.com/LibreELEC/dvb-firmware";
-    license = licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ kittywitch ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributableFirmware;
+    maintainers = with lib.maintainers; [ kittywitch ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

@@ -37,28 +37,48 @@
 
 attrs:
 let
-  args = attrs.drvAttrs or attrs;
-  name = args.name or "${args.pname}-${args.version}";
-  stdenv = args.stdenv or (lib.warn "srcOnly: stdenv not provided, using stdenvNoCC" stdenvNoCC);
-  drv = stdenv.mkDerivation (
-    args
-    // {
-      name = "${name}-source";
+  argsToOverride = args: {
+    name = "${args.name or "${args.pname}-${args.version}"}-source";
 
-      outputs = [ "out" ];
+    outputs = [ "out" ];
 
-      phases = [
-        "unpackPhase"
-        "patchPhase"
-        "installPhase"
-      ];
-      separateDebugInfo = false;
+    phases = [
+      "unpackPhase"
+      "patchPhase"
+      "installPhase"
+    ];
+    separateDebugInfo = false;
 
-      dontUnpack = false;
+    dontUnpack = lib.warnIf (args.dontUnpack or false
+    ) "srcOnly: derivation has dontUnpack set, overriding" false;
 
-      dontInstall = false;
-      installPhase = "cp -pr --reflink=auto -- . $out";
-    }
-  );
+    dontInstall = false;
+    installPhase = "cp -pr --reflink=auto -- . $out";
+  };
 in
-lib.warnIf (args.dontUnpack or false) "srcOnly: derivation has dontUnpack set, overriding" drv
+
+# If we are passed a derivation (based on stdenv*), we can use overrideAttrs to
+# update the arguments to mkDerivation. This gives us the proper awareness of
+# what arguments were effectively passed *to* mkDerivation as opposed to
+# builtins.derivation (by mkDerivation). For example, stdenv.mkDerivation
+# accepts an `env` attribute set which is postprocessed before being passed to
+# builtins.derivation. This can lead to evaluation failures, if we assume
+# that drvAttrs is equivalent to the arguments passed to mkDerivation.
+# See https://github.com/NixOS/nixpkgs/issues/269539.
+if lib.isDerivation attrs && attrs ? overrideAttrs then
+  attrs.overrideAttrs (_finalAttrs: prevAttrs: argsToOverride prevAttrs)
+else
+  let
+    # If we don't have overrideAttrs, it is extremely unlikely that we are seeing
+    # a derivation constructed by stdenv.mkDerivation. Since srcOnly assumes
+    # that we are using stdenv's setup.sh, it therefore doesn't make sense to
+    # have derivation specific logic in this branch.
+    # TODO(@sternenseemann): remove drvAttrs special casing in NixOS 26.05
+    args =
+      lib.warnIf (lib.isDerivation attrs)
+        "srcOnly: derivations not created by a variant of stdenv.mkDerivation are not supported. Code relying on behaviour of srcOnly with non-stdenv derivations may break in the future."
+        attrs.drvAttrs or attrs;
+    stdenv = args.stdenv or (lib.warn "srcOnly: stdenv not provided, using stdenvNoCC" stdenvNoCC);
+    drv = stdenv.mkDerivation (args // argsToOverride args);
+  in
+  drv

@@ -10,7 +10,6 @@
   glibmm,
   cairomm,
   gnome,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "2.46.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
     sha256 = "sha256-uSAWZhUmQk3kuTd/FRL1l4H0H7FsnAJn1hM7oc1o2yI=";
   };
 
@@ -27,16 +26,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
   propagatedBuildInputs = [
     pango
     glibmm
@@ -47,24 +42,24 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "pangomm";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ interface to the Pango text rendering library";
     homepage = "https://www.pango.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2
       lgpl21
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovek323
       raskin
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an

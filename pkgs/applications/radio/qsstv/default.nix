@@ -45,11 +45,11 @@ mkDerivation rec {
     install -D qsstv.desktop $out/share/applications/qsstv.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based slow-scan TV and fax";
     mainProgram = "qsstv";
     homepage = "https://www.qsl.net/on4qz/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ hax404 ];
   };

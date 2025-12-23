@@ -26,14 +26,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "piccolo_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean and modern Sphinx theme";
     homepage = "https://piccolo-theme.readthedocs.io";
     changelog = "https://github.com/piccolo-orm/piccolo_theme/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ loicreynier ];
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

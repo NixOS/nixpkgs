@@ -14,12 +14,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.37.3";
+  version = "0.39.3";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-2tam+3vYLC216Q78GIUI3fGnE5FJ/lECJAUQMSxz46w=";
+    hash = "sha256-LLy4gemj3oiMbZKc9ZUWY3g2fyY1Rvxjtzx/sbAp8JE=";
   };
 in
 mixRelease {
@@ -30,32 +30,15 @@ mixRelease {
     elixir
     ;
 
+  escriptBinName = "ex_doc";
+
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-s4b6wuBJPdN0FPn76zbLCHzqJNEZ6E4nOyB1whUM2VY=";
+    hash = "sha256-TknrENa0Nb1Eobd4oTBl6TilPVEsw9+XjPdF3Ntq+DI=";
   };
-
-  configurePhase = ''
-    runHook preConfigure
-    mix deps.compile --no-deps-check
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    mix do escript.build
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -v ex_doc $out/bin
-    runHook postInstall
-  '';
 
   passthru = {
     tests = {
@@ -67,14 +50,14 @@ mixRelease {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [ chiroptical ];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

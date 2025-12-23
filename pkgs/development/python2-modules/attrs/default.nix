@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "attrs";
   version = "21.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,10 +33,10 @@ buildPythonPackage rec {
   # Instead, we do this as a passthru.tests test.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/hynek/attrs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

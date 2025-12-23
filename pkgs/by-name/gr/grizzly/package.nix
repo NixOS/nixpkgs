@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
@@ -9,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "grafana";
-    repo = pname;
+    repo = "grizzly";
     rev = "v${version}";
     hash = "sha256-1caG2QIBfbCgg9TLsW4XB0w+4dqUkQEsdWwRazbWeQA=";
   };
@@ -18,12 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/grr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility for managing Jsonnet dashboards against the Grafana API";
     homepage = "https://grafana.github.io/grizzly/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nrhtr ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "grr";
   };
 }

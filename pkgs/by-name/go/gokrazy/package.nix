@@ -25,11 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/gok" ];
 
-  meta = with lib; {
-    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs!";
+  meta = {
+    description = "Turn your Go program(s) into an appliance running on the Raspberry Pi 3, Pi 4, Pi Zero 2 W, or amd64 PCs";
     homepage = "https://github.com/gokrazy/gokrazy";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ shayne ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ shayne ];
     mainProgram = "gok";
   };
 }

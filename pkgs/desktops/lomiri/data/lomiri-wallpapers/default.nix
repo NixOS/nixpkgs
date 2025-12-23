@@ -37,13 +37,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Wallpapers for the Lomiri Operating Environment, gathered from people of the Ubuntu Touch / UBports community";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-wallpapers";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-wallpapers/-/blob/${finalAttrs.version}/ChangeLog";
     # On update, recheck debian/copyright for which licenses apply to the installed images
-    license = with licenses; [ cc-by-sa-30 ];
-    maintainers = teams.lomiri.members;
-    platforms = platforms.all;
+    license = with lib.licenses; [ cc-by-sa-30 ];
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.all;
   };
 })

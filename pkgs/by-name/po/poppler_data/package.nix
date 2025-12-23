@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://poppler.freedesktop.org/";
     description = "Encoding files for Poppler, a PDF rendering library";
-    platforms = platforms.all;
-    license = licenses.free; # more free licenses combined
-    maintainers = poppler.meta.maintainers;
+    platforms = lib.platforms.all;
+    license = lib.licenses.free; # more free licenses combined
+    inherit (poppler.meta) teams maintainers;
   };
 }

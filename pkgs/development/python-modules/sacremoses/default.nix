@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alvations";
-    repo = pname;
+    repo = "sacremoses";
     rev = version;
     sha256 = "1gzr56w8yx82mn08wax5m0xyg15ym4ri5l80gmagp8r53443j770";
   };
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     pytest -k 'not truecase'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alvations/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     mainProgram = "sacremoses";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pashashocky ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pashashocky ];
   };
 }

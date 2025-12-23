@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mkdocs";
-    repo = pname;
+    repo = "mkdocs-redirects";
     tag = "v${version}";
     hash = "sha256-YsMA00yajeGSqSB6CdKxGqyClC9Cgc3ImRBTucHEHhs=";
   };
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_redirects" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source plugin for Mkdocs page redirects";
     homepage = "https://github.com/mkdocs/mkdocs-redirects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tfc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tfc ];
   };
 }

@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT Place Name Dictionary is a dictionary converted from the Japan Post's ZIP code data for Mozc.";
+    description = "Dictionary converted from the Japan Post's ZIP code data for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-place-names";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];

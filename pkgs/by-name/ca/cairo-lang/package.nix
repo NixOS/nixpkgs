@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-e2Nire1TLcliq5KxoINJIZJdgohHRTXqIZPj1GNIe2A=";
 
   # openssl crate requires perl during build process
@@ -42,10 +41,10 @@ rustPlatform.buildRustPackage rec {
     cp -r corelib $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Turing-complete language for creating provable programs for general computation";
     homepage = "https://github.com/starkware-libs/cairo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

@@ -4,7 +4,9 @@
   fetchpatch,
   fetchurl,
   unzip,
-  gdc,
+  ldc,
+  libGL,
+  libGLU,
   SDL,
   SDL_mixer,
   bulletml,
@@ -15,8 +17,8 @@ let
     patchname: hash:
     fetchpatch {
       name = "${patchname}.patch";
-      url = "https://sources.debian.org/data/main/t/titanion/0.3.dfsg1-7/debian/patches/${patchname}";
-      sha256 = hash;
+      url = "https://sources.debian.org/data/main/t/titanion/0.3.dfsg1-8/debian/patches/${patchname}";
+      inherit hash;
     };
 
 in
@@ -28,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://abagames.sakura.ne.jp/windows/ttn${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
-    sha256 = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
+    hash = "sha256-fR0cufi6dU898wP8KGl/vxbfQJzMmMxlYZ3QNGLajfM=";
   };
 
   patches = [
@@ -41,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     (debianPatch "makefile.patch" "sha256-g0jDPmc0SWXkTLhiczeTse/WGCtgMUsbyPNZzwK3U+o=")
     (debianPatch "dlang_v2.patch" "sha256-tfTAAKlPFSjbfAK1EjeB3unj9tbMlNaajJ+VVSMMiYw=")
     (debianPatch "gdc-8.patch" "sha256-BxkPfSEymq7TDA+yjJHaYsjtGr0Tuu1/sWLwRBAMga4=")
+    (debianPatch "gcc12.patch" "sha256-Kqmb6hRn6lAHLJMoZ5nGCmHcqfbTUIDq5ahALI2f4a4=")
   ];
 
   postPatch = ''
@@ -50,31 +53,42 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $f \
         --replace "/usr/" "$out/"
     done
+    # GDC → DMD/LDC flag compatibility
+    substituteInPlace Makefile \
+      --replace-fail "-o " -of= \
+      --replace-fail -Wdeprecated "" \
+      --replace-fail -l -L-l
   '';
 
   nativeBuildInputs = [
     unzip
-    gdc
+    ldc
   ];
 
   buildInputs = [
+    libGL
+    libGLU
     SDL
     SDL_mixer
     bulletml
   ];
 
+  makeFlags = [ "GDC=ldc2" ];
+
   installPhase = ''
+    runHook preInstall
     install -Dm755 titanion $out/bin/titanion
     mkdir -p $out/share/games/titanion
     cp -r sounds images $out/share/games/titanion/
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/ttn_e.html";
     description = "Strike down super high-velocity swooping insects";
     mainProgram = "titanion";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 })

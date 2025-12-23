@@ -23,13 +23,15 @@ gccStdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-    substituteInPlace Makefile --replace "/usr/local" "$out"
+    substituteInPlace Makefile \
+      --replace-fail "/usr/local" "$out" \
+      --replace-fail "strip " "${gccStdenv.cc.targetPrefix}strip "
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIME alteration tool";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
     license.fullName = "alterMIME LICENSE";
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";

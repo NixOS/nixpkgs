@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   mpv,
@@ -38,7 +39,7 @@ buildGoModule rec {
     wrapProgram $out/bin/radioboat --prefix PATH ":" "${lib.makeBinPath [ mpv ]}";
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd radioboat \
       --bash <($out/bin/radioboat completion bash) \
       --fish <($out/bin/radioboat completion fish) \
@@ -53,12 +54,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal web radio client";
     mainProgram = "radioboat";
     homepage = "https://github.com/slashformotion/radioboat";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

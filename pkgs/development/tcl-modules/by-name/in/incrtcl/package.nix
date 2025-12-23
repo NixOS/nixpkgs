@@ -13,13 +13,13 @@ mkTclDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
-    sha256 = "sha256-idOs2GXP3ZY7ECtF+K9hg5REyK6sQ0qk+666gUQPjCY=";
+    hash = "sha256-idOs2GXP3ZY7ECtF+K9hg5REyK6sQ0qk+666gUQPjCY=";
   };
 
   enableParallelBuilding = true;
 
   patchPhase = ''
-    substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
+    substituteInPlace configure --replace-fail "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
   '';
 
   postInstall = ''
@@ -40,11 +40,11 @@ mkTclDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
-    license = licenses.tcltk;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

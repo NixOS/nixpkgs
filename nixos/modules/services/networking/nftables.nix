@@ -67,6 +67,9 @@ in
         There are other programs that use iptables internally too, such as
         libvirt. For information on how the two firewalls interact, see
         <https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F>.
+
+        Some network configurations may prevent VMs from having network access, see
+        <https://wiki.nixos.org/wiki/Networking#Virtualization>.
       '';
     };
 

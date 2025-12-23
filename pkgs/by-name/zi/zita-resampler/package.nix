@@ -1,44 +1,35 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zita-resampler";
-  version = "1.8.0";
+  version = "1.11.2";
 
-  src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-5XRPI8VN0Vs/eDpoe9h57uKmkKRUWhW0nEzwN6pGSqI=";
+  src = fetchzip {
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-resampler-${finalAttrs.version}.tar.xz";
+    hash = "sha256-0lgpTOxf8y32GgYtcVbLDUDzyKvbsSZx3LKaDcdID6A=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/source";
 
   makeFlags = [
     "PREFIX=$(out)"
     "SUFFIX="
   ];
 
-  postPatch =
-    ''
-      cd source
-      substituteInPlace Makefile \
-        --replace 'ldconfig' ""
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace Makefile \
-        --replace '-DENABLE_SSE2' ""
-    '';
-
-  fixupPhase = ''
-    ln -s $out/lib/libzita-resampler.so.$version $out/lib/libzita-resampler.so.1
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace Makefile \
+      --replace-fail '-DENABLE_SSE2' ""
   '';
 
   meta = {
     description = "Resample library by Fons Adriaensen";
-    version = version;
-    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
-    license = lib.licenses.gpl2;
+    homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

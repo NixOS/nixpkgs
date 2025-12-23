@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./configure-log-compiler-errors-to-stderr.patch
+    ./fix-gcc-complaining-about-invalid-configure-example-code.patch
+
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-misc/bfr/files/bfr-1.6-perl.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "1pk9jm3c1qzs727lh0bw61w3qbykaqg4jblywf9pvq5bypk88qfj";
@@ -23,10 +26,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "General-purpose command-line pipe buffer";
     license = lib.licenses.gpl2Only;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
   };
 }

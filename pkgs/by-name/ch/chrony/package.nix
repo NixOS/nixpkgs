@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.6.1";
+  version = "4.8";
 
   src = fetchurl {
     url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-Vx/3P78K4wl/BgTsouALHYuy6Rr/4aNJR4X/IdYZnFw=";
+    hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
   };
 
   outputs = [
@@ -28,23 +28,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      gnutls
-      libedit
-      texinfo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libseccomp
-      pps-tools
-    ];
+  buildInputs = [
+    gnutls
+    libedit
+    texinfo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libseccomp
+    pps-tools
+  ];
 
   configureFlags = [
     "--enable-ntp-signd"
     "--sbindir=$(out)/bin"
     "--chronyrundir=/run/chrony"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
 
   patches = [
     # Cleanup the installation script
@@ -61,8 +61,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
-
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   passthru.tests = {
     inherit (nixosTests) chrony chrony-ptp;
@@ -82,7 +80,6 @@ stdenv.mkDerivation rec {
         illumos
       ];
     maintainers = with lib.maintainers; [
-      fpletz
       thoughtpolice
       vifino
     ];

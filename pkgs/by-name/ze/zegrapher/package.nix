@@ -1,6 +1,6 @@
 {
   lib,
-  boost,
+  boost186,
   fetchFromGitHub,
   qt5,
   stdenv,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
   ];
 
   strictDeps = true;
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ZeGrapher";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

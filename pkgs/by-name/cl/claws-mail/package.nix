@@ -55,7 +55,7 @@
   enablePluginClamd ? true,
   enablePluginDillo ? true,
   enablePluginFancy ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   enablePluginFetchInfo ? true,
   enablePluginKeywordWarner ? true,
   enablePluginLibravatar ? enablePluginRavatar,
@@ -147,7 +147,7 @@ let
     {
       flags = [ "fancy-plugin" ];
       enabled = enablePluginFancy;
-      deps = [ webkitgtk_4_0 ];
+      deps = [ webkitgtk_4_1 ];
     }
     {
       flags = [ "fetchinfo-plugin" ];
@@ -319,17 +319,17 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     glib-networking
     gtk3
-  ] ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features);
+  ]
+  ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features);
 
-  configureFlags =
-    [
-      "--disable-manual" # Missing docbook-tools, e.g., docbook2html
-      "--disable-compface" # Missing compface library
-      "--disable-jpilot" # Missing jpilot library
-    ]
-    ++ (map (
-      feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
-    ) features);
+  configureFlags = [
+    "--disable-manual" # Missing docbook-tools, e.g., docbook2html
+    "--disable-compface" # Missing compface library
+    "--disable-jpilot" # Missing jpilot library
+  ]
+  ++ (map (
+    feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
+  ) features);
 
   enableParallelBuilding = true;
 
@@ -343,16 +343,14 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
-      orivej
       oxzi
       ajs124
     ];

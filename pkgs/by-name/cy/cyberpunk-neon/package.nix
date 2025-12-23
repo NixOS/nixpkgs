@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "cyberpunk-neon";
-  version = "0-unstable-2025-02-01";
+  version = "0-unstable-2025-05-05";
 
   src = fetchFromGitHub {
     owner = "Roboron3042";
     repo = "Cyberpunk-Neon";
-    rev = "eb7595459c0d4164262e0ccaf8d6e5c1936a6f67";
-    hash = "sha256-whHBIxEGGvTPVUaE/HQDb/Qyl5sPMGlOmofgNCBaNng=";
+    rev = "e74c25c8507bbbb23d81d075402bd983a61ebe07";
+    hash = "sha256-LzoSC9O6173YcKvMWkSKkxsUVCZYMA844FnDfdr1gVc=";
   };
 
   outputs = [
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/Roboron3042/Cyberpunk-Neon";
     description = "Neon themes for many programs";
     license = lib.licenses.cc-by-sa-40;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

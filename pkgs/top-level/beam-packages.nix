@@ -1,26 +1,29 @@
 {
   lib,
   beam,
-  beam_nodocs,
   callPackage,
-  wxGTK32,
-  buildPackages,
   stdenv,
-  ex_docSupport ? true,
   wxSupport ? true,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  __splicedPackages,
 }:
 
 let
   self = beam;
 
+  pkgs = __splicedPackages;
+  callErlang =
+    drv: args:
+    let
+      genericBuilder =
+        versionArgs: import ../development/interpreters/erlang/generic-builder.nix (versionArgs // args);
+    in
+    pkgs.callPackage (import drv genericBuilder) { };
 in
 
 {
-  beamLib = callPackage ../development/beam-modules/lib.nix { };
-
-  latestVersion = "erlang_27";
+  latestVersion = "erlang_28";
 
   # Each
   interpreters = {
@@ -31,33 +34,15 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
-    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      # ex_doc failing to build with erlang 28
-      inherit (beam_nodocs.packages.erlang_27) ex_doc;
-      inherit ex_docSupport wxSupport systemdSupport;
-    };
-
-    erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit (beam_nodocs.packages.erlang_27) ex_doc;
-      inherit ex_docSupport wxSupport systemdSupport;
-    };
-
-    erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
+    erlang_28 = callErlang ../development/interpreters/erlang/28.nix {
       inherit wxSupport systemdSupport;
     };
 
-    erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
+    erlang_27 = callErlang ../development/interpreters/erlang/27.nix {
+      inherit wxSupport systemdSupport;
+    };
+
+    erlang_26 = callErlang ../development/interpreters/erlang/26.nix {
       inherit wxSupport systemdSupport;
     };
 
@@ -66,14 +51,13 @@ in
     # `beam.packages.erlang_27.elixir`.
     inherit (self.packages.erlang)
       elixir
+      elixir_1_19
       elixir_1_18
       elixir_1_17
       elixir_1_16
       elixir_1_15
-      elixir_1_14
       elixir-ls
       lfe
-      lfe_2_1
       ;
   };
 
@@ -87,8 +71,5 @@ in
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
-    erlang_25 = self.packagesWith self.interpreters.erlang_25;
   };
-
-  __attrsFailEvaluation = true;
 }

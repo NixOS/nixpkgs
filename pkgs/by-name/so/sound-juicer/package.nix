@@ -14,7 +14,7 @@
   gnome,
   adwaita-icon-theme,
   gst_all_1,
-  libmusicbrainz5,
+  libmusicbrainz,
   libdiscid,
   isocodes,
   gsettings-desktop-schemas,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     adwaita-icon-theme
     gsettings-desktop-schemas
-    libmusicbrainz5
+    libmusicbrainz
     libdiscid
     isocodes
     gst_all_1.gstreamer
@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gnome CD Ripper";
     mainProgram = "sound-juicer";
     homepage = "https://gitlab.gnome.org/GNOME/sound-juicer";
-    maintainers = [ maintainers.bdimcheff ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.bdimcheff ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

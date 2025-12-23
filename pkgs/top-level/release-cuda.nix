@@ -2,10 +2,7 @@
     Test CUDA packages.
 
     This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
-
-    Cf. https://github.com/nix-community/infra/pull/1335
+    because it requires unfree software.
 
     Test for example like this:
 
@@ -14,19 +11,7 @@
 
 let
   lib = import ../../lib;
-  ensureList = x: if builtins.isList x then x else [ x ];
-  allowUnfreePredicate =
-    p:
-    builtins.all (
-      license:
-      license.free
-      || builtins.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (ensureList p.meta.license);
+  cudaLib = (import ../development/cuda-modules/_cuda).lib;
 in
 
 {
@@ -39,7 +24,7 @@ in
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
-      inherit allowUnfreePredicate;
+      allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
       "${variant}Support" = true;
       inHydra = true;
 
@@ -98,15 +83,27 @@ let
       colmap = linux;
       ctranslate2 = linux;
       ffmpeg-full = linux;
+      firefox = linux;
+      firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
+      firefox-devedition = linux;
+      firefox-devedition-unwrapped = linux;
+      freecad = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
+      kdePackages.kdenlive = linux;
+      krita = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
+      mistral-rs = linux;
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -118,6 +115,9 @@ let
       rtabmap = linux;
       saga = linux;
       suitesparse = linux;
+      sunshine = linux;
+      thunderbird = linux;
+      thunderbird-unwrapped = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
@@ -129,6 +129,7 @@ let
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
+        flashinfer = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;
@@ -143,6 +144,7 @@ let
         triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
+        opencv4Full = linux;
         opensfm = linux;
         pycuda = linux;
         pymc = linux;

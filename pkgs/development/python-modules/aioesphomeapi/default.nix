@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -11,11 +11,11 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
-  async-timeout,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzlocal,
   zeroconf,
 
   # tests
@@ -26,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "29.4.0";
+  version = "43.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-KBQYLaE2J/5/VYquajknF3gCJEwRENjgkxiZahqnRZA=";
+    hash = "sha256-x6X1iqTrmBfPA6/gy/qBIUYtr0jv0hPO26pWaONAV3c=";
   };
 
   build-system = [
@@ -52,14 +50,19 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzlocal
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
+
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed
@@ -70,12 +73,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioesphomeapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       hexa
     ];

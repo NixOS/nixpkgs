@@ -1,22 +1,17 @@
 {
   lib,
-  awesomeversion,
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   pyserial,
-  pyserial-asyncio,
   pyserial-asyncio-fast,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  python-slugify,
   pythonOlder,
   setuptools,
-  universal-silabs-flasher,
-  wheel,
   zha-quirks,
   zigpy,
   zigpy-deconz,
@@ -27,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.52";
+  version = "0.0.81";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +31,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     tag = version;
-    hash = "sha256-tGVRlYUoXS3uEAis9NE3gYBjbY5KzMvx8+J67BgU3kI=";
+    hash = "sha256-MsuCzb2jIjZh24tXUz0fE9MgstuvmUOIWEC0s1jRoow=";
   };
 
   postPatch = ''
@@ -47,17 +42,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
-    awesomeversion
     bellows
     pyserial
-    pyserial-asyncio
     pyserial-asyncio-fast
-    python-slugify
-    universal-silabs-flasher
     zha-quirks
     zigpy
     zigpy-deconz
@@ -68,7 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -105,11 +95,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
     changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

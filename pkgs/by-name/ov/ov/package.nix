@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.39.0";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     tag = "v${version}";
-    hash = "sha256-fjFQM1+K+ZOPqwDgqQAK43NqXTpH8CoLv95IhDDkJmA=";
+    hash = "sha256-Ptzlz+9mBKSPmogT4PVnimHw/wsQMQpfPo8MX1AocdM=";
   };
 
-  vendorHash = "sha256-OJ3ZsDI0g6mOtt7vpyze52/kH9RS8dSJ3432fB6w7/k=";
+  vendorHash = "sha256-iAwlD6G+80Ci9pGANqbcmVjoRto7FMBSSDKsI6lpv/k=";
 
   ldflags = [
     "-s"
@@ -68,14 +68,14 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich terminal-based text viewer";
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       farcaller
-      figsoda
     ];
+    mainProgram = "ov";
   };
 }

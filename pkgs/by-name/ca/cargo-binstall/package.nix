@@ -6,37 +6,31 @@
   bzip2,
   xz,
   zstd,
-  stdenv,
-  darwin,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.12.0";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    rev = "v${version}";
-    hash = "sha256-EAJUscywbxYucqZEJ147FiNOHTO5umAwm5YHKC0g6yw=";
+    tag = "v${version}";
+    hash = "sha256-BDXGv3oXruz+g6Y3pqvNYfeiDVM9JEfrHm0uCqeF7VA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jOrnfJUxyrBfAKW/khc3w5eFauuCjN6c5GMns1eGUag=";
+  cargoHash = "sha256-yS3nq6vzPWZLPqQZkXGT8bPweFpS6KyoY1NpBeHvT3M=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    xz
+    zstd
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -64,12 +58,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
+
+  meta = {
     description = "Tool for installing rust binaries as an alternative to building from source";
     mainProgram = "cargo-binstall";
     homepage = "https://github.com/cargo-bins/cargo-binstall";
     changelog = "https://github.com/cargo-bins/cargo-binstall/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

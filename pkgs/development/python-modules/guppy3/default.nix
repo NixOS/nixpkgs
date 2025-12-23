@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guppy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Programming Environment & Heap analysis toolset";
     homepage = "https://zhuyifei1999.github.io/guppy3/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

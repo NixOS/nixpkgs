@@ -5,9 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  libgit2,
-  openssl,
-  zlib,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -18,27 +15,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.13.8";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dKLHZyFkTo6iCw/s73asJqXoNBpYx7UC/r2qVp5dLjs=";
+    hash = "sha256-TbiihruRF5N0d9VQ/9NB320q4Hf1YlfAfkMhhTOOBGo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-XbPqddmVv5zubnbT5IewAcvPJWQMIumWgGI+q/r1Ip4=";
+  cargoHash = "sha256-rg2PSQL3oHMvL/QMusF0hfxvrlv3ZxYh28FD1JZJDbE=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
   ];
 
   checkFlags = [
@@ -46,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Require internet access
     "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::fletcher"
     "--skip=docs::package::tests::tidy"
     "--skip=docs::package::tests::touying"
 
@@ -65,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=semantic_tokens_full::tests::test"
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -74,7 +65,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/tinymist completion bash) \
         --fish <(${emulator} $out/bin/tinymist completion fish) \
         --zsh <(${emulator} $out/bin/tinymist completion zsh)
-    '';
+    ''
+  );
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -90,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Tinymist is an integrated language service for Typst";
+    description = "Integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;

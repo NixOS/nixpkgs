@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libusb1,
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
   ];
 
+  patches = [
+    # CMake < 3.5 fix. Remove upon next version bump.
+    (fetchpatch {
+      url = "https://github.com/greatscottgadgets/hackrf/commit/5c394520403c40b656a7400681e4ae167943e43f.patch";
+      hash = "sha256-FRzb+Bt5fQm94d1EDbMv8oUFwD93VZQHFpQpMDe/BAA=";
+    })
+  ];
+
   cmakeFlags = [
     "-DUDEV_RULES_GROUP=plugdev"
     "-DUDEV_RULES_PATH=lib/udev/rules.d"
@@ -38,16 +47,18 @@ stdenv.mkDerivation rec {
     cd host
   '';
 
+  doInstallCheck = true;
+
   postPatch = ''
     substituteInPlace host/cmake/modules/FindFFTW.cmake \
       --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source SDR platform";
     homepage = "https://greatscottgadgets.com/hackrf/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ sjmackenzie ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sjmackenzie ];
   };
 }

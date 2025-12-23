@@ -16,14 +16,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BYE+GGwf84zENf+lPS98OzZQbXxd7kykWL+B3guyVNI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2ixdugxgc6lyLd06BeXxlrSqpVGJJ9SkFKwnAsol7V4=";
 
-  meta = with lib; {
+  meta = {
     description = "Print the duration between two times";
     homepage = "https://codeberg.org/annaaurora/dabet";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "dabet";
   };
 }

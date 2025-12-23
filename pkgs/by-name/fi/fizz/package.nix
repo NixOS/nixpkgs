@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   openssl,
   glog,
@@ -14,6 +13,7 @@
   zstd,
   gflags,
   libevent,
+  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2025.02.10.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "bin"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookincubator";
     repo = "fizz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-czGCQNigLveQu0lvu1Dbamk6Upngr2i3njvLSNKSNj0=";
+    hash = "sha256-MNkPf289QGZ1x6Yr2E8vnlCFan94Opjiw6RItodWGaw=";
   };
 
   patches = [
@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -58,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     gflags
     libevent
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [
@@ -101,18 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
 
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -126,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
   };
 })

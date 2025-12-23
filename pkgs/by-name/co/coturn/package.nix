@@ -9,17 +9,18 @@
   libmicrohttpd,
   sqlite,
   nixosTests,
+  systemdMinimal,
 }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     tag = version;
-    hash = "sha256-GG8aQJoCBV5wolPEzSuZhqNn//ytaTAptjY42YKga4E=";
+    hash = "sha256-nvImelAvcbHpv6JTxX+sKpldVXG6u9Biu+VDt95r9I4=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,9 @@ stdenv.mkDerivation rec {
     libprom
     libmicrohttpd
     sqlite.dev
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
+    systemdMinimal
   ];
 
   patches = [
@@ -56,13 +60,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests.coturn = nixosTests.coturn;
 
-  meta = with lib; {
+  meta = {
     description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
-    license = with licenses; [ bsd3 ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = with lib.licenses; [ bsd3 ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
 }

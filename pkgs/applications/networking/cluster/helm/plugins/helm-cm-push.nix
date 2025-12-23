@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -25,7 +26,10 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     install -Dm644 plugin.yaml $out/helm-cm-push/plugin.yaml
@@ -35,10 +39,10 @@ buildGoModule rec {
   # Tests require the ChartMuseum service.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Helm plugin to push chart package to ChartMuseum";
     homepage = "https://github.com/chartmuseum/helm-push";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

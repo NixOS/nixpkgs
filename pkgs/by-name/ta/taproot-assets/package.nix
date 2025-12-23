@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "taproot-assets";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
     rev = "v${version}";
-    hash = "sha256-R6x8M69HM7mC0XG5cAH5SwTzeoSicNwZx0ExAKwcI80=";
+    hash = "sha256-z4lNeVmy0AEDM8ivdfXfXqi/V1LIDHV2KtS5/19+Jlk=";
   };
 
-  vendorHash = "sha256-aak2TNwAXpQLsMgOkeAyQM9f6logR5U+LS10g2Jtq1U=";
+  vendorHash = "sha256-p75eZoM6tSayrxcKTCoXR8Jlc3y2UyzfPCtRJmDy9ew=";
 
   subPackages = [
     "cmd/tapcli"
@@ -27,10 +27,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
-    description = "Daemon for the Taro protocol specification";
-    homepage = "https://github.com/lightninglabs/taro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+  meta = {
+    description = "Daemon for the Taproot Assets protocol specification";
+    homepage = "https://github.com/lightninglabs/taproot-assets";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

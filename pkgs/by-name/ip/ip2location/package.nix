@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Look up locations of host names and IP addresses";
     longDescription = ''
       A command-line tool to find the country, region, city,coordinates,
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
       any IP address or host name in the IP2Location databases.
     '';
     homepage = "https://www.ip2location.com/free/applications";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "ip2location";
   };
 }

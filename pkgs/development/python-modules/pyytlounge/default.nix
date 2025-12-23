@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyytlounge";
-  version = "2.2.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FabioGNR";
     repo = "pyytlounge";
     tag = "v${version}";
-    hash = "sha256-ZK52xh6IGhINQMakfjG759earUgvNoTNeBcUlFBSALo=";
+    hash = "sha256-8cdahP1u8Rf4m/167ie9aKcELLiWNvZOx7tV9YLK4nU=";
   };
 
   build-system = [ hatchling ];
@@ -33,10 +33,10 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python YouTube Lounge API";
     homepage = "https://github.com/FabioGNR/pyytlounge";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.lukegb ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.lukegb ];
   };
 }

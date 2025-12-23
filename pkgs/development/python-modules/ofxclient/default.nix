@@ -34,10 +34,10 @@ buildPythonPackage rec {
     keyring
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/captin411/ofxclient";
     description = "OFX client for dowloading transactions from banks";
     mainProgram = "ofxclient";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

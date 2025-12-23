@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "evolve-core";
   version = "1.7";
 

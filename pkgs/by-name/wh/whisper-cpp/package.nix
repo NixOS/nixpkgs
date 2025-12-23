@@ -2,17 +2,19 @@
   lib,
   stdenv,
   cmake,
-  apple-sdk_11,
+  git,
   ninja,
   fetchFromGitHub,
   SDL2,
   wget,
   which,
+  ffmpeg,
   autoAddDriverRunpath,
   makeWrapper,
+  nix-update-script,
 
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  coreMLSupport ? stdenv.hostPlatform.isDarwin && false, # FIXME currently broken
+  coreMLSupport ? stdenv.hostPlatform.isDarwin && true,
 
   config,
   cudaSupport ? config.cudaSupport,
@@ -28,26 +30,25 @@
   vulkan-loader,
 
   withSDL ? true,
+
+  withFFmpegSupport ? false,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
 assert coreMLSupport -> stdenv.hostPlatform.isDarwin;
+assert withFFmpegSupport -> stdenv.hostPlatform.isLinux;
 
 let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
-  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  # cuda imposes an upper bound on the gcc version
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
   inherit (lib)
     cmakeBool
     cmakeFeature
     optional
     optionals
-    optionalString
-    forEach
     ;
-
-  darwinBuildInputs = [ apple-sdk_11 ];
 
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
@@ -73,13 +74,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.2";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
-    owner = "ggerganov";
+    owner = "ggml-org";
     repo = "whisper.cpp";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OU5mDnLZHmtdSEN5u0syJcU91L+NCO45f9eG6OsgFfU=";
   };
 
   # The upstream download script tries to download the models to the
@@ -89,83 +90,84 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   patches = [ ./download-models.patch ];
 
   postPatch = ''
-    for target in examples/{bench,command,main,quantize,server,stream,talk}/CMakeLists.txt; do
+    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
+        ${lib.optionalString stdenv.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
       fi
     done
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      which
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    ninja
+    which
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
   buildInputs =
     optional withSDL SDL2
-    ++ optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
+    ++ optional withFFmpegSupport ffmpeg
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals vulkanSupport vulkanBuildInputs;
 
-  cmakeFlags =
-    [
-      (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
-      (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIPBLAS" rocmSupport)
-      (cmakeBool "GGML_VULKAN" vulkanSupport)
-      (cmakeBool "WHISPER_SDL2" withSDL)
-      (cmakeBool "GGML_LTO" true)
-      (cmakeBool "GGML_NATIVE" false)
-      (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
-    ]
-    ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
-      (cmakeBool "GGML_BACKEND_DL" true)
-      (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
-    ]
-    ++ optionals cudaSupport [
-      (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ optionals rocmSupport [
-      (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
-      (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
+  cmakeFlags = [
+    (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
+    (cmakeBool "GGML_CUDA" cudaSupport)
+    (cmakeBool "GGML_HIPBLAS" rocmSupport)
+    (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeBool "WHISPER_SDL2" withSDL)
+    (cmakeBool "GGML_LTO" true)
+    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
+  ]
+  ++ optionals effectiveStdenv.hostPlatform.isLinux [
+    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
+  ]
+  ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
+    (cmakeBool "GGML_BACKEND_DL" true)
+    (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+  ]
+  ++ optionals cudaSupport [
+    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ optionals rocmSupport [
+    (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
+    (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
 
-      # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
-      # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
-      # and select the line that matches the current nixpkgs version of rocBLAS.
-      "-DAMDGPU_TARGETS=${rocmGpuTargets}"
-    ]
-    ++ optionals coreMLSupport [
-      (cmakeBool "WHISPER_COREML" true)
-      (cmakeBool "WHISPER_COREML_ALLOW_FALLBACK" true)
-    ]
-    ++ optionals metalSupport [
-      (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-      (cmakeBool "GGML_METAL" true)
-      (cmakeBool "GGML_METAL_EMBED_LIBRARY" true)
-    ];
+    # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
+    # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
+    # and select the line that matches the current nixpkgs version of rocBLAS.
+    "-DAMDGPU_TARGETS=${rocmGpuTargets}"
+  ]
+  ++ optionals coreMLSupport [
+    (cmakeBool "WHISPER_COREML" true)
+    (cmakeBool "WHISPER_COREML_ALLOW_FALLBACK" true)
+  ]
+  ++ optionals metalSupport [
+    (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+    (cmakeBool "GGML_METAL" true)
+    (cmakeBool "GGML_METAL_EMBED_LIBRARY" true)
+  ];
 
   postInstall = ''
     # Add "whisper-cpp" prefix before every command
-    mv -v $out/bin/{main,whisper-cpp}
+    mv -v "$out/bin/"{quantize,whisper-quantize}
 
-    for file in $out/bin/*; do
-      if [[ -x "$file" && -f "$file" && "$(basename $file)" != "whisper-cpp" ]]; then
-        mv -v "$file" "$out/bin/whisper-cpp-$(basename $file)"
-      fi
-    done
+    install -v -D -m755 "$src/models/download-ggml-model.sh" "$out/bin/whisper-cpp-download-ggml-model"
 
-    install -v -D -m755 $src/models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
-
-    wrapProgram $out/bin/whisper-cpp-download-ggml-model \
+    wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
+  ''
+  + lib.optionalString withFFmpegSupport ''
+    wrapProgram "$out/bin/whisper-server" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
@@ -174,9 +176,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/whisper-cpp --help >/dev/null
+    "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Port of OpenAI's Whisper model in C/C++";
@@ -186,9 +190,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
     license = lib.licenses.mit;
-    mainProgram = "whisper-cpp";
+    mainProgram = "whisper-cli";
     platforms = lib.platforms.all;
-    broken = coreMLSupport;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       dit7ya

@@ -20,11 +20,11 @@ buildPythonPackage rec {
     inherit flit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distribution-building parts of Flit. See flit package for more information";
     homepage = "https://github.com/pypa/flit";
     changelog = "https://github.com/pypa/flit/blob/${src.rev}/doc/history.rst";
-    license = licenses.bsd3;
-    maintainers = teams.python.members;
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.python ];
   };
 }

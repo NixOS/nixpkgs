@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oddsprout" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/oddsprout/blob/${src.rev}/CHANGELOG.md";
     description = "Generate random JSON with no schemas involved";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/oddsprout";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       itepastra
       sigmanificient
     ];

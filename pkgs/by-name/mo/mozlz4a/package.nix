@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/mozlz4a"
   '';
 
-  meta = with lib; {
-    description = "MozLz4a compression/decompression utility";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+  meta = {
+    description = "Compression/decompression utility";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       pshirshov
       raskin

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   pooch,
@@ -13,20 +12,19 @@
 
 buildPythonPackage rec {
   pname = "geodatasets";
-  version = "2024.8.0";
+  version = "2025.12.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
     tag = version;
-    hash = "sha256-GJ7RyFlohlRz0RbQ80EewZUmIX9CJkSfUMY/uMNTtEM=";
+    hash = "sha256-F5cGmcUKbIy35Lx50WFV7hVDmWwWCk66EScx8YW2OTE=";
   };
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ pooch ];
+  dependencies = [ pooch ];
 
   nativeCheckInputs = [
     geopandas
@@ -38,9 +36,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # disable tests which require network access
-    "-m 'not request'"
+    "request"
   ];
 
   pythonImportsCheck = [ "geodatasets" ];
@@ -49,6 +47,6 @@ buildPythonPackage rec {
     description = "Spatial data examples";
     homepage = "https://geodatasets.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -44,12 +44,16 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8
   '';
 
+  postCheck = ''
+    unset LC_ALL
+  '';
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

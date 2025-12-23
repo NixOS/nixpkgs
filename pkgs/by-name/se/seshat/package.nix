@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/seshat_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/files/fonts/seshat_${majorVersion}${minorVersion}.zip";
     hash = "sha256-XgprDhzAbcTzZw2QOwpCnzusYheYmSlM+ApU+Y0wO2Q=";
     stripRoot = false;
   };
@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://dotcolon.net/font/seshat/";
+  meta = {
+    homepage = "https://dotcolon.net/font/seshat/";
     description = "Roman body font designed for main text by Sora Sagano";
     longDescription = ''
       Seshat is a Roman body font designed for the main text. By
@@ -39,11 +39,10 @@ stdenvNoCC.mkDerivation {
 
       It incorporates symbols and ligatures used in the European region.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [
-      leenaars
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       minijackson
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

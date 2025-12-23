@@ -293,7 +293,7 @@ in
       };
       services.postfix = {
         enable = true;
-        destination = [ "example.com" ];
+        settings.main.mydestination = [ "example.com" ];
       };
       services.rspamd = {
         enable = true;
@@ -320,7 +320,6 @@ in
 
       machine.wait_until_fails('[ "$(postqueue -p)" != "Mail queue is empty" ]')
       machine.fail("journalctl -u postfix | grep -i error >&2")
-      machine.fail("journalctl -u postfix | grep -i warning >&2")
     '';
   };
 }

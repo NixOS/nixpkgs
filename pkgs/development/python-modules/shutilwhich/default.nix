@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mbr";
-    repo = pname;
+    repo = "shutilwhich";
     rev = version;
     sha256 = "05fwcjn86w8wprck04iv1zccfi39skdf0lhwpb4b9gpvklyc9mj0";
   };
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     pytest -rs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backport of shutil.which";
-    license = licenses.psfl;
+    license = lib.licenses.psfl;
     homepage = "https://github.com/mbr/shutilwhich";
-    maintainers = with maintainers; [ multun ];
+    maintainers = with lib.maintainers; [ multun ];
   };
 }

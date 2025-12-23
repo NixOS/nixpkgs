@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "holocm";
-    repo = pname;
+    repo = "holo-build";
     rev = "v${version}";
     sha256 = "0lypbgf96bcc4m3968xa4il1zwprsdyc0pw6pl9mqq7djxabikd0";
   };
@@ -64,10 +64,10 @@ buildGoModule rec {
     cp src/holo-build.sh $out/bin/holo-build
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-distribution system package compiler";
     homepage = "https://holocm.org/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "holo-build";
   };

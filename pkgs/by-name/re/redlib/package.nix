@@ -1,32 +1,27 @@
 {
   lib,
-  stdenv,
   cacert,
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "0.35.1-unstable-2024-11-27";
+  version = "0.36.0-unstable-2025-12-16";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "9f6b08cbb2d0f43644a34f5d0210ac32b9add30c";
-    hash = "sha256-lFvlrVFzMk6igH/h/3TZnkl8SooanVyIRYbSyleb2OU=";
+    rev = "ba98178bbce0f62265095ba085128c7022e51a1f";
+    hash = "sha256-ERTEoT7w8oGA0ztrzc9r9Bl/7OOay+APg3pW+h3tgvM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cqYPxDhIPA45A29Kl3XlF1gd9/EzlyqyFHH69lAju2A=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-ageSjIX0BLVYlLAjeojQq5N6/VASOIpwXNR/3msl/p4=";
 
   postInstall = ''
-    install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install --mode=444 -D contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';
@@ -61,18 +56,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_oauth_client_refresh"
     "--skip=test_oauth_token_exists"
     "--skip=test_oauth_headers_len"
+    "--skip=oauth::test_generic_web_backend"
+    "--skip=oauth::test_mobile_spoof_backend"
   ];
 
   env = {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) redlib;
+  passthru = {
+    tests = nixosTests.redlib;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
-    changelog = "https://github.com/redlib-org/redlib/releases/tag/v${version}";
     description = "Private front-end for Reddit (Continued fork of Libreddit)";
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;

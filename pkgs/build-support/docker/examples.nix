@@ -77,6 +77,8 @@ let
           "${nginxPort}/tcp" = { };
         };
       };
+
+      meta.description = "Basic nginx docker image example";
     };
 
 in
@@ -91,6 +93,8 @@ rec {
       paths = [ pkgs.bashInteractive ];
       pathsToLink = [ "/bin" ];
     };
+
+    meta.description = "Basic example image";
   };
 
   # 2. service example, layered on another image
@@ -138,6 +142,8 @@ rec {
         Retries = 3;
       };
     };
+
+    meta.description = "Service example, layered on another image";
   };
 
   # 3. another service example
@@ -204,6 +210,8 @@ rec {
         "USER=nobody"
       ];
     };
+
+    meta.description = "nix example to play with the container nix store";
   };
 
   # 7. example of adding something on top of an image pull by our
@@ -619,15 +627,14 @@ rec {
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
       tag = "latest";
-      contents =
-        [
-          pkgs.bash
-          pkgs.coreutils
-        ]
-        ++ nonRootShadowSetup {
-          uid = 999;
-          user = "somebody";
-        };
+      contents = [
+        pkgs.bash
+        pkgs.coreutils
+      ]
+      ++ nonRootShadowSetup {
+        uid = 999;
+        user = "somebody";
+      };
     };
 
   # basic example, with cross compilation
@@ -700,7 +707,7 @@ rec {
               " --program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
-            versionCheckProgram = "${builtins.placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+            versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
             meta = prevAttrs.meta // {
               mainProgram = "layeredImageWithFakeRootCommands-hello";
             };

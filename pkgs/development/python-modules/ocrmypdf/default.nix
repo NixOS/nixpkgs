@@ -28,20 +28,20 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.10.0";
+  version = "16.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    rev = "v${version}";
+    tag = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
+    hash = "sha256-1KaSUitQG/c49s7X17+4x29lRM9mvA8F1EX/2I7dE0E=";
   };
 
   patches = [
@@ -89,17 +89,17 @@ buildPythonPackage rec {
       --fish misc/completion/ocrmypdf.fish
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.tag}/docs/release_notes.md";
     mainProgram = "ocrmypdf";
   };
 }

@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bodoni fonts adapted for today's web requirements";
     longDescription = ''
       The Libre Bodoni fonts are based on the 19th century Morris Fuller
@@ -38,8 +38,8 @@ stdenvNoCC.mkDerivation rec {
       Bold Italic.
     '';
     homepage = "https://github.com/impallari/Libre-Bodoni";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ cmfwyp ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

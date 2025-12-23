@@ -5,7 +5,7 @@
   fetchpatch,
   autoreconfHook,
   pkg-config,
-  libiconv,
+  libtool,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Remove `gettext` requirement
+    # https://github.com/WizardMac/ReadStat/issues/341
+    (fetchpatch {
+      url = "https://github.com/WizardMac/ReadStat/pull/342/commits/b5512b32d3b3c39e2f0c322df1339a3c61f73712.patch";
+      hash = "sha256-k1yeplrx3pFPl5qzLfsAaj+qunv1BqOZypA05xSolaQ=";
+    })
+
+    # Add (void) to remove -Wstrict-prototypes warnings
     (fetchpatch {
       url = "https://github.com/WizardMac/ReadStat/commit/211c342a1cfe46fb7fb984730dd7a29ff4752f35.patch";
       hash = "sha256-nkaEgusylVu7NtzSzBklBuOnqO9qJPovf0qn9tTE6ls=";
@@ -36,9 +44,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    libtool
   ];
-
-  buildInputs = [ libiconv ];
 
   enableParallelBuilding = true;
 

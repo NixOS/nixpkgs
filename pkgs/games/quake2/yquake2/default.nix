@@ -11,13 +11,9 @@
   curl,
   openalSupport ? true,
   openal,
-  Cocoa,
-  OpenAL,
 }:
 
 let
-  mkFlag = b: if b then "yes" else "no";
-
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
   wrapper = import ./wrapper.nix {
@@ -34,39 +30,33 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.41";
+    version = "8.60";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-8xvY8XYZJa/gAVcxR+ffpE8naUTbGyM8AyAdpG6nKtA=";
+      sha256 = "sha256-XD0Fnx3TZwZUvjLOpzM5oWoIQFykDuBOddQXudkiyB0=";
     };
 
-    postPatch =
-      ''
-        substituteInPlace src/client/curl/qcurl.c \
-          --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
-      ''
-      + lib.optionalString (openalSupport && !stdenv.hostPlatform.isDarwin) ''
-        substituteInPlace Makefile \
-          --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
-      '';
+    postPatch = ''
+      substituteInPlace src/client/curl/qcurl.c \
+        --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
+    ''
+    + lib.optionalString (openalSupport && !stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace Makefile \
+        --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
+    '';
 
-    buildInputs =
-      [
-        SDL2
-        libGL
-        curl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Cocoa
-        OpenAL
-      ]
-      ++ lib.optional openalSupport openal;
+    buildInputs = [
+      SDL2
+      libGL
+      curl
+    ]
+    ++ lib.optional openalSupport openal;
 
     makeFlags = [
-      "WITH_OPENAL=${mkFlag openalSupport}"
+      "WITH_OPENAL=${lib.boolToYesNo openalSupport}"
       "WITH_SYSTEMWIDE=yes"
       "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
     ];
@@ -102,12 +92,12 @@ let
       })
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2Plus;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ tadfisher ];
     };
   };
 

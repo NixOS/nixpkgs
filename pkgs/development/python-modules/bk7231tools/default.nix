@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bk7231tools";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuya-cloudcutter";
     repo = "bk7231tools";
     tag = "v${version}";
-    hash = "sha256-Ag63VNBSKEPDaxhS40SVB8rKIJRS1IsrZ9wSD0FglSU=";
+    hash = "sha256-+gjcXSkPb6BI3rSZekGWgQcFtAN23tyvZLEKQvtUlFU=";
   };
 
   pythonRelaxDeps = [

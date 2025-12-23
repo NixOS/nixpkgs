@@ -30,17 +30,16 @@
   threadSupport ? (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.isDarwin),
   x11Support ? (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.isDarwin),
   dllSupport ? true,
-  withModules ?
-    [
-      "asdf"
-      "pcre"
-      "rawsock"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "bindings/glibc"
-      "zlib"
-    ]
-    ++ lib.optional x11Support "clx/new-clx",
+  withModules ? [
+    "asdf"
+    "pcre"
+    "rawsock"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "bindings/glibc"
+    "zlib"
+  ]
+  ++ lib.optional x11Support "clx/new-clx",
 }:
 
 assert
@@ -75,26 +74,25 @@ stdenv.mkDerivation {
     automake
     libtool
   ];
-  buildInputs =
-    [
-      bash
-      libsigsegv
-    ]
-    ++ lib.optional (gettext != null) gettext
-    ++ lib.optional (ncurses != null) ncurses
-    ++ lib.optional (pcre != null) pcre
-    ++ lib.optional (zlib != null) zlib
-    ++ lib.optional (readline != null) readline
-    ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
-    ++ lib.optional ffcallAvailable libffcall
-    ++ lib.optionals x11Support [
-      libX11
-      libXau
-      libXt
-      libXpm
-      xorgproto
-      libXext
-    ];
+  buildInputs = [
+    bash
+    libsigsegv
+  ]
+  ++ lib.optional (gettext != null) gettext
+  ++ lib.optional (ncurses != null) ncurses
+  ++ lib.optional (pcre != null) pcre
+  ++ lib.optional (zlib != null) zlib
+  ++ lib.optional (readline != null) readline
+  ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
+  ++ lib.optional ffcallAvailable libffcall
+  ++ lib.optionals x11Support [
+    libX11
+    libXau
+    libXt
+    libXpm
+    xorgproto
+    libXext
+  ];
 
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
@@ -106,16 +104,17 @@ stdenv.mkDerivation {
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
 
-  configureFlags =
-    [ "builddir" ]
-    ++ lib.optional (!dllSupport) "--without-dynamic-modules"
-    ++ lib.optional (readline != null) "--with-readline"
-    # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
-    ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
-    ++ lib.optional ffcallAvailable "--with-ffcall"
-    ++ lib.optional (!ffcallAvailable) "--without-ffcall"
-    ++ builtins.map (x: " --with-module=" + x) withModules
-    ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
+  configureFlags = [
+    "builddir"
+  ]
+  ++ lib.optional (!dllSupport) "--without-dynamic-modules"
+  ++ lib.optional (readline != null) "--with-readline"
+  # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
+  ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
+  ++ lib.optional ffcallAvailable "--with-ffcall"
+  ++ lib.optional (!ffcallAvailable) "--without-ffcall"
+  ++ map (x: " --with-module=" + x) withModules
+  ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d
@@ -123,17 +122,18 @@ stdenv.mkDerivation {
     cd builddir
   '';
 
-  # ;; Loading file ../src/defmacro.lisp ...
-  # *** - handle_fault error2 ! address = 0x8 not in [0x1000000c0000,0x1000000c0000) !
-  # SIGSEGV cannot be cured. Fault address = 0x8.
-  hardeningDisable = [ "pie" ];
-
   doCheck = true;
 
-  postInstall = lib.optionalString (withModules != [ ]) (
-    ''bash ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
-    + lib.concatMapStrings (x: " " + x) withModules
-  );
+  postInstall = lib.optionalString (withModules != [ ]) ''
+    bash ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full \
+      ${lib.concatMapStrings (x: " " + x) withModules}
+
+    find "$out"/lib/clisp*/full -type l -name "*.o" | while read -r symlink; do
+      if [[ "$(readlink "$symlink")" =~ (.*\/builddir\/)(.*) ]]; then
+        ln -sf "../''${BASH_REMATCH[2]}" "$symlink"
+      fi
+    done
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-O0 -falign-functions=${
     if stdenv.hostPlatform.is64bit then "8" else "4"
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     description = "ANSI Common Lisp Implementation";
     homepage = "http://clisp.org";
     mainProgram = "clisp";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;
   };

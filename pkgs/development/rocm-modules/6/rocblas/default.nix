@@ -7,121 +7,131 @@
   cmake,
   rocm-cmake,
   clr,
+  diffutils,
   python3,
   tensile,
-  msgpack,
+  boost,
+  msgpack-cxx,
   libxml2,
   gtest,
   gfortran,
   openmp,
+  gitMinimal,
   amd-blis,
+  zstd,
+  roctracer,
+  hipblas-common,
+  hipblaslt,
   python3Packages,
+  rocm-smi,
+  pkg-config,
+  removeReferencesTo,
   buildTensile ? true,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  tensileLogic ? "asm_full",
-  tensileCOVersion ? "default",
-  # https://github.com/ROCm/Tensile/issues/1757
-  # Allows gfx101* users to use rocBLAS normally.
-  # Turn the below two values to `true` after the fix has been cherry-picked
-  # into a release. Just backporting that single fix is not enough because it
-  # depends on some previous commits.
-  tensileSepArch ? false,
-  tensileLazyLib ? false,
-  tensileLibFormat ? "msgpack",
-  # `gfx940`, `gfx941` are not present in this list because they are early
-  # engineering samples, and all final MI300 hardware are `gfx942`:
-  # https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2032791130
-  #
-  # `gfx1012` is not present in this list because the ISA compatibility patches
-  # would force all `gfx101*` GPUs to run as `gfx1010`, so `gfx101*` GPUs will
-  # always try to use `gfx1010` code objects, hence building for `gfx1012` is
-  # useless: https://github.com/NixOS/nixpkgs/pull/298388#issuecomment-2076327152
-  gpuTargets ? [
-    "gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx942;gfx1010;gfx1030;gfx1100;gfx1101;gfx1102"
-  ],
+  buildTests ? true,
+  buildBenchmarks ? true,
+  tensileSepArch ? true,
+  tensileLazyLib ? true,
+  withHipBlasLt ? true,
+  gpuTargets ? (clr.localGpuTargets or clr.gpuTargets),
 }:
 
+let
+  gpuTargets' = lib.concatStringsSep ";" gpuTargets;
+in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocblas";
-  version = "6.0.2";
-
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ];
+  pname = "rocblas${clr.gpuArchSuffix}";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-G68d/gvBbTdNx8xR3xY+OkBm5Yxq1NFjxby9BbpOcUk=";
+    hash = "sha256-FCzo/BOk4xLEFkdOdqcCXh4a9t3/OIIBEy8oz6oOMWg=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      clr
-    ]
-    ++ lib.optionals buildTensile [
-      tensile
-    ];
+  outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
 
-  buildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals buildTensile [
-      msgpack
-      libxml2
-      python3Packages.msgpack
-      python3Packages.joblib
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      gfortran
-      openmp
-      amd-blis
-    ]
-    ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
-      python3Packages.pyyaml
-    ];
+  nativeBuildInputs = [
+    cmake
+    # no ninja, it buffers console output and nix times out long periods of no output
+    rocm-cmake
+    clr
+    gitMinimal
+    pkg-config
+    removeReferencesTo
+  ]
+  ++ lib.optionals buildTensile [
+    tensile
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_C_COMPILER" "hipcc")
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
-      (lib.cmakeFeature "python" "python3")
-      (lib.cmakeFeature "AMDGPU_TARGETS" (lib.concatStringsSep ";" gpuTargets))
-      (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
-      (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
-      (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
-      (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
-      (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
-      # rocblas header files are not installed unless we set this
-      (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-    ]
-    ++ lib.optionals buildTensile [
-      (lib.cmakeBool "BUILD_WITH_PIP" false)
-      (lib.cmakeFeature "Tensile_LOGIC" tensileLogic)
-      (lib.cmakeFeature "Tensile_CODE_OBJECT_VERSION" tensileCOVersion)
-      (lib.cmakeBool "Tensile_SEPARATE_ARCHITECTURES" tensileSepArch)
-      (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
-      (lib.cmakeFeature "Tensile_LIBRARY_FORMAT" tensileLibFormat)
-      (lib.cmakeBool "Tensile_PRINT_DEBUG" true)
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${amd-blis}/include/blis")
-    ];
+  buildInputs = [
+    python3
+    hipblas-common
+    roctracer
+    openmp
+    amd-blis
+  ]
+  ++ lib.optionals withHipBlasLt [
+    hipblaslt
+  ]
+  ++ lib.optionals buildTensile [
+    zstd
+    msgpack-cxx
+    libxml2
+    python3Packages.msgpack
+    python3Packages.zstandard
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
+    gfortran
+    rocm-smi
+  ]
+  ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
+    python3Packages.pyyaml
+  ];
+
+  env.CXXFLAGS = "-fopenmp -I${lib.getDev boost}/include -I${hipblas-common}/include -I${roctracer}/include";
+  # Fails to link tests with undefined symbol: cblas_*
+  env.LDFLAGS = lib.optionalString (buildTests || buildBenchmarks) "-Wl,--as-needed -lcblas";
+  env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
+
+  cmakeFlags = [
+    (lib.cmakeFeature "Boost_INCLUDE_DIR" "${lib.getDev boost}/include") # msgpack FindBoost fails to find boost
+    (lib.cmakeFeature "CMAKE_EXECUTE_PROCESS_COMMAND_ECHO" "STDERR")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getBin gfortran}/bin/gfortran")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER_AR" "${lib.getBin gfortran}/bin/ar")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER_RANLIB" "${lib.getBin gfortran}/bin/ranlib")
+    (lib.cmakeFeature "python" "python3")
+    (lib.cmakeFeature "SUPPORTED_TARGETS" gpuTargets')
+    (lib.cmakeFeature "AMDGPU_TARGETS" gpuTargets')
+    (lib.cmakeFeature "GPU_TARGETS" gpuTargets')
+    (lib.cmakeBool "BUILD_WITH_TENSILE" buildTensile)
+    (lib.cmakeBool "ROCM_SYMLINK_LIBS" false)
+    (lib.cmakeFeature "ROCBLAS_TENSILE_LIBRARY_DIR" "lib/rocblas")
+    (lib.cmakeBool "BUILD_WITH_HIPBLASLT" withHipBlasLt)
+    (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+    (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+    (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildBenchmarks)
+    (lib.cmakeBool "BUILD_OFFLOAD_COMPRESS" true)
+    # # Temporarily set variables to work around upstream CMakeLists issue
+    # # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ lib.optionals buildTensile [
+    "-DCPACK_SET_DESTDIR=OFF"
+    "-DLINK_BLIS=ON"
+    "-DBLIS_LIB=${amd-blis}/lib/libblis-mt.so"
+    "-DBLIS_INCLUDE_DIR=${amd-blis}/include/blis/"
+    "-DBLA_PREFER_PKGCONFIG=ON"
+    "-DTensile_CODE_OBJECT_VERSION=default"
+    "-DTensile_LOGIC=asm_full"
+    "-DTensile_LIBRARY_FORMAT=msgpack"
+    (lib.cmakeBool "BUILD_WITH_PIP" false)
+    (lib.cmakeBool "Tensile_SEPARATE_ARCHITECTURES" tensileSepArch)
+    (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
+  ];
 
   patches = [
     (fetchpatch {
@@ -129,30 +139,64 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/GZGavinZhao/rocBLAS/commit/89b75ff9cc731f71f370fad90517395e117b03bb.patch";
       hash = "sha256-W/ohOOyNCcYYLOiQlPzsrTlNtCBdJpKVxO8s+4G7sjo=";
     })
+    ./hiplaslt-unstable-compat.patch
   ];
 
   # Pass $NIX_BUILD_CORES to Tensile
   postPatch = ''
     substituteInPlace cmake/build-options.cmake \
       --replace-fail 'Tensile_CPU_THREADS ""' 'Tensile_CPU_THREADS "$ENV{NIX_BUILD_CORES}"'
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "4.43.0" "4.44.0" \
+      --replace-fail '0.10' '1.0'
+  ''
+  # Fixes sh: line 1: /usr/bin/diff: No such file or directory
+  # /build/source/clients/gtest/../include/testing_logging.hpp:1117: Failure
+  + lib.optionals buildTests ''
+    substituteInPlace clients/include/testing_logging.hpp \
+      --replace-fail "/usr/bin/diff" "${lib.getExe' diffutils "diff"}"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+  postInstall =
+    # tensile isn't needed at runtime and pulls in ~400MB of python deps
+    ''
+      remove-references-to -t ${tensile} \
+        "$out/lib/librocblas.so."*
+    ''
+    + lib.optionalString buildBenchmarks ''
+      moveToOutput "bin/*-tune" "$benchmark"
+      moveToOutput "bin/*-bench" "$benchmark"
+      moveToOutput "bin/*example*" "$benchmark"
+      cp "$out/bin/"*.{yaml,txt} "$benchmark/bin"
+    ''
+    + lib.optionalString buildTests ''
+      moveToOutput "bin/*test*" "$test"
+      cp "$out/bin/"*.{yaml,txt} "$test/bin"
+    ''
+    + ''
+      if [ -d $out/bin ]; then
+        rm $out/bin/*.{yaml,txt} || true
+        rmdir $out/bin
+      fi
+    '';
+
+  passthru = {
+    amdgpu_targets = gpuTargets';
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
+    };
   };
 
+  enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCm/rocBLAS";
-    license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
-    platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    license = with lib.licenses; [ mit ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

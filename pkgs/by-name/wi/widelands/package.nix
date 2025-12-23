@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config, # needed to find minizip
   SDL2,
   SDL2_image,
@@ -25,7 +26,6 @@
   libSM,
   libICE,
   libXext,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +38,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-/MEeb0KnefK812w5y238Icd4gW85d/pvZ08xnlVXDdk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "modern-asio.patch";
+      url = "https://codeberg.org/wl/widelands/pulls/5025.patch";
+      sha256 = "sha256-ip9ZG9u/z7G+yG7xrEvi+DH9vsjRzYWhEe0rEjxHzzY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace xdg/org.widelands.Widelands.desktop \
@@ -62,32 +70,25 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs =
-    [
-      SDL2
-      SDL2_image
-      SDL2_mixer
-      SDL2_net
-      SDL2_ttf
-      curl
-      glew
-      icu
-      libpng
-      lua
-      python3
-      zlib
-      minizip
-      asio
-      libSM # XXX: these should be propagated by SDL2?
-      libICE
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libXext
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-      ]
-    );
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    curl
+    glew
+    icu
+    libpng
+    lua
+    python3
+    zlib
+    minizip
+    asio
+    libSM # XXX: these should be propagated by SDL2?
+    libICE
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libXext;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
       installManPage ../xdg/widelands.6
     '';
 
-  meta = with lib; {
+  meta = {
     description = "RTS with multiple-goods economy";
     homepage = "https://widelands.org/";
     longDescription = ''
@@ -111,12 +112,12 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/widelands/widelands/releases/tag/v${version}";
     mainProgram = "widelands";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       raskin
       jcumming
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     hydraPlatforms = [ ];
   };
 }

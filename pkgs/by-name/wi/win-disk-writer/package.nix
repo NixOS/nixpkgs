@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Windows Bootable USB creator for macOS";
     homepage = "https://github.com/TechUnRestricted/WinDiskWriter";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ donteatoreo ];
+    maintainers = with lib.maintainers; [ FlameFlag ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -72,3 +72,11 @@ diff -ur a/src/aatest.c b/src/aatest.c
  #include "aalib.h"
  int main(int argc, char **argv)
  {
+diff -ur a/src/aalib.c b/src/aalib.c
+--- a/src/aalib.c   2001-04-26 10:37:31.000000000 -0400
++++ b/src/aalib.c   2025-06-02 00:52:04.119364652 -0400
+@@ -1,3 +1,4 @@
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <malloc.h>

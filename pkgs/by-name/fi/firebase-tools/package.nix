@@ -7,34 +7,33 @@
   xcbuild,
   nix-update-script,
 }:
+
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "13.34.0";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-2Zyg7D0/JYQ/PSYsoOIa/aSjGibySP+XZNWpT+dct8k=";
+    hash = "sha256-5bxcocw20zzjEh5kGLEUMW/xuAaAvX1goYP5JesFfm0=";
   };
 
-  npmDepsHash = "sha256-3JaafJIfqhS7c8krdXwARufuVV/PG4emvbVv8H3gy8Q=";
+  npmDepsHash = "sha256-a46vqu39pVKpu1kpP7+EiYUg2DK/fHTWTX+qZ1j+744=";
 
+  # No more package-lock.json in upstream src
   postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
+    cp ./npm-shrinkwrap.json ./package-lock.json
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  env = {
-    PUPPETEER_SKIP_DOWNLOAD = true;
-  };
+  env.PUPPETEER_SKIP_DOWNLOAD = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -17,6 +17,10 @@ in
     services.qdrant = {
       enable = lib.mkEnableOption "Vector Search Engine for the next generation of AI applications";
 
+      package = lib.mkPackageOption pkgs "qdrant" { };
+
+      webUIPackage = lib.mkPackageOption pkgs "qdrant-web-ui" { };
+
       settings = lib.mkOption {
         description = ''
           Configuration for Qdrant
@@ -64,7 +68,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.qdrant.settings = {
-      service.static_content_dir = lib.mkDefault pkgs.qdrant-web-ui;
+      service.static_content_dir = lib.mkDefault cfg.webUIPackage;
       storage.storage_path = lib.mkDefault "/var/lib/qdrant/storage";
       storage.snapshots_path = lib.mkDefault "/var/lib/qdrant/snapshots";
       # The following default values are the same as in the default config,
@@ -106,7 +110,7 @@ in
 
       serviceConfig = {
         LimitNOFILE = 65536;
-        ExecStart = "${pkgs.qdrant}/bin/qdrant --config-path ${configFile}";
+        ExecStart = "${cfg.package}/bin/qdrant --config-path ${configFile}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "qdrant";

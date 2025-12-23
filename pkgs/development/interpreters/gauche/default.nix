@@ -12,7 +12,6 @@
   zlib,
   mbedtls,
   cacert,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "shirok";
-    repo = pname;
+    repo = "gauche";
     rev = "release${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-M2vZqTMkob+WxUnCo4NDxS4pCVNleVBqkiiRp9nG/KA=";
   };
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     zlib
     mbedtls
     cacert
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  ];
 
   autoreconfPhase = ''
     ./DIST gen
@@ -67,12 +66,12 @@ stdenv.mkDerivation rec {
   # TODO: Fix tests that fail in sandbox build
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "R7RS Scheme scripting engine";
     homepage = "https://practical-scheme.net/gauche/";
     mainProgram = "gosh";
-    maintainers = with maintainers; [ mnacamura ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ mnacamura ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

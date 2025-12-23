@@ -14,7 +14,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
+    repo = "cachey";
     rev = version;
     hash = "sha256-5USmuufrrWtmgibpfkjo9NtgN30hdl8plJfythmxM4s=";
   };
@@ -24,10 +24,10 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "cachey" ];
-  meta = with lib; {
+  meta = {
     description = "Caching based on computation time and storage space";
     homepage = "https://github.com/dask/cachey/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -10,35 +10,42 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.0.24";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3EuZXP4CTUcc9tlIdfAQfvwK5RZXcBe/8YkyjL/ZOVg=";
+    hash = "sha256-pLiSidcuRTcykHDgW2pw+h0t/42g6u3LlioSEDA0lIo=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-0mjflUoqVJzshgpmyk32+Br61nkvcSjmjN7nf+7ZXJE=";
+    pnpm = pnpm_9;
+    fetcherVersion = 1;
+    hash = "sha256-TcoyNIVb/aDgXIsNDvzTMfsewmefU9ck+uSHv/tbH/k=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-QFIDiuoT4J4pv1VrU5twrcb9Eqo77bgsWQl1DURpghE=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-R6lU4BPFlFxQqxmP5EWQsYwe1QGIlKVhp/iNiD9pKQo=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];
@@ -69,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Beautiful Private and Secure Desktop Investment Tracking Application";
+    description = "Beautiful Private and Secure Desktop Investment Tracking Application";
     homepage = "https://wealthfolio.app/";
     license = lib.licenses.agpl3Only;
     mainProgram = "wealthfolio";

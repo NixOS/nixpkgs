@@ -1,6 +1,6 @@
 {
   lib,
-  apple-sdk_14,
+  apple-sdk_15,
   buildGoModule,
   darwin,
   fetchFromGitHub,
@@ -12,23 +12,16 @@
 
 buildGoModule rec {
   pname = "vfkit";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "vfkit";
     rev = "v${version}";
-    hash = "sha256-uBFL3iZLpGcVUSgZSoq8FI87CDAr3NI8uu+u5UsrZCc=";
+    hash = "sha256-+ds9GIa3q2ck4D3sjUHz7e9w00XgD6/jq4L8QkBpCJg=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/crc-org/vfkit/pull/276/commits/97ad151b208593d2fa0227ef5117f1ff2667b562.patch?full_index=1";
-      hash = "sha256-rcKLMXk5B2JoDpsNH4+aBmOidh9HtVQeYhx5q1raFJU=";
-    })
-  ];
-
-  vendorHash = "sha256-+5QZcoI+/98hyd87NV6uX/VZqd5z38fk7K7RibX/9vw=";
+  vendorHash = "sha256-YvrcEPyAvuECUVgQoHKveMoFOeh4M3k5ngsP2w46+vY=";
 
   subPackages = [ "cmd/vfkit" ];
 
@@ -43,7 +36,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    apple-sdk_14
+    apple-sdk_15
   ];
 
   postFixup = ''

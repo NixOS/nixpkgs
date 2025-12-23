@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjodycode";
-  version = "3.1.1";
+  version = "4.1.1";
 
   outputs = [
     "out"
@@ -21,12 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jbruchon";
     repo = "libjodycode";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sVEa2gNvgRJK1Ycmv4inbViTBPQFjzcZ8XHlAdsNzOk=";
+    hash = "sha256-vuFANaQLJjyRTw+0ggye4TpFiqVa50GaRVKboagsJ7Q=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   env.PREFIX = placeholder "out";
+
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit jdupes;

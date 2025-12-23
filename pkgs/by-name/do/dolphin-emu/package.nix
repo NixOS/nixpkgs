@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
   pkg-config,
   qt6,
+  wrapGAppsHook3,
   # darwin-only
   xcbuild,
 
@@ -16,7 +18,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
   gtest,
   hidapi,
   libXdmcp,
@@ -25,12 +27,12 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
   pugixml,
-  SDL2,
+  sdl3,
   sfml,
   xxHash,
   xz,
@@ -53,102 +55,119 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2503";
+  version = "2509";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
+    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
     fetchSubmodules = true;
-    hash = "sha256-oqJKXFcsFgoYjUqdk3Z/CIFhOa8w0drcF4JwtHRI1Hs=";
+    leaveDotGit = true;
+    postFetch = ''
+      pushd $out
+      git rev-parse HEAD 2>/dev/null >$out/COMMIT
+      find $out -name .git -print0 | xargs -0 rm -rf
+      popd
+    '';
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
+      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
+    })
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild # for plutil
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild # for plutil
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      cubeb
-      curl
-      enet
-      ffmpeg
-      fmt_10
-      gtest
-      hidapi
-      libXdmcp
-      libpulseaudio
-      libspng
-      libusb1
-      lz4
-      lzo
-      mbedtls_2
-      miniupnpc
-      minizip-ng
-      openal
-      pugixml
-      qt6.qtbase
-      qt6.qtsvg
-      SDL2
-      sfml
-      xxHash
-      xz
-      # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-      #zlib-ng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      bluez
-      libGL
-      libXext
-      libXrandr
-      libevdev
-      # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
-      #mgba # Derivation doesn't support Darwin
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    bzip2
+    cubeb
+    curl
+    enet
+    ffmpeg
+    fmt
+    gtest
+    hidapi
+    libXdmcp
+    libpulseaudio
+    libspng
+    libusb1
+    lz4
+    lzo
+    mbedtls
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qt6.qtbase
+    qt6.qtsvg
+    sdl3
+    sfml
+    xxHash
+    xz
+    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
+    #zlib-ng
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    bluez
+    libGL
+    libXext
+    libXrandr
+    libevdev
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
-      (lib.cmakeFeature "DOLPHIN_WC_REVISION" finalAttrs.src.rev)
-      (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
-      (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
-      (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
-      (lib.cmakeBool "MACOS_CODE_SIGNING" false)
-      # Bundles the application folder into a standalone executable, so we cannot devendor libraries
-      (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
-      # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-      # Note: The updater isn't available on linux, so we don't need to disable it there.
-      (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
+    (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
+    (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
+    (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
+    (lib.cmakeBool "MACOS_CODE_SIGNING" false)
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
+    (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
+  ];
+  preConfigure = ''
+    appendToVar cmakeFlags "-DDOLPHIN_WC_REVISION=$(cat COMMIT)"
+    rm COMMIT
+  '';
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-    # https://bugs.dolphin-emu.org/issues/11807
-    # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
   ];
+
+  doInstallCheck = true;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+      install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Only gets installed automatically if the standalone executable is used
@@ -156,6 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ./Binaries/Dolphin.app $out/Applications
       ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
     '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests = {
@@ -180,6 +205,10 @@ stdenv.mkDerivation (finalAttrs: {
     branch = "master";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
+      lib.systems.inspect.patterns.isDarwin
+    ];
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })

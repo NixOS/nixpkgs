@@ -8,36 +8,32 @@
   glib,
   gtk3,
   nemo,
-  cmake,
   dbus-glib,
   libcryptui,
   gcr,
   libnotify,
   gnupg,
   gpgme,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nemo-seahorse";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     tag = version;
-    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
+    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
   sourceRoot = "${src.name}/nemo-seahorse";
 
-  patches = [ ./fix-schemas.patch ];
-
   nativeBuildInputs = [
+    glib
     meson
     pkg-config
     ninja
-    cmake
   ];
 
   buildInputs = [
@@ -52,9 +48,11 @@ stdenv.mkDerivation rec {
     gnupg
   ];
 
-  PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  env.PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
 
   meta = {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-seahorse";
@@ -74,7 +72,7 @@ stdenv.mkDerivation rec {
           libcryptui
         ];
 
-        services.xserver.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
+        services.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
           nemo
           gcr
           libcryptui
@@ -85,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.cinnamon.members;
+    teams = [ lib.teams.cinnamon ];
   };
 }

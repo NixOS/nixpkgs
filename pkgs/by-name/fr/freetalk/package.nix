@@ -30,32 +30,31 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ];
-  buildInputs =
-    [
-      guile
-      glib
-      loudmouth
-      gmp
-      libidn
-      readline
-      libtool
-      libunwind
-      ncurses
-      curl
-      jansson
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      argp-standalone
-    ];
+  buildInputs = [
+    guile
+    glib
+    loudmouth
+    gmp
+    libidn
+    readline
+    libtool
+    libunwind
+    ncurses
+    curl
+    jansson
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-largp";
 
-  meta = with lib; {
+  meta = {
     description = "Console XMPP client";
     mainProgram = "freetalk";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
     downloadPage = "https://www.gnu.org/software/freetalk/";
   };
 }

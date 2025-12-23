@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GuitarML";
     repo = "Proteus";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-WhJh+Sx64JYxQQ1LXpDUwXeodFU1EZ0TmMhn+6w0hQg=";
   };
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Guitar amp and pedal capture plugin using neural networks";
     homepage = "https://github.com/GuitarML/Proteus";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "Proteus";
   };
 }

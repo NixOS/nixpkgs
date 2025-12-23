@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycddl";
-  version = "0.6.3";
+  version = "0.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lVybSr+QvyepdTZfiTjqU0ENu6TT87ZZXIECBA8nMV4=";
+    hash = "sha256-aUa6Q3e1RwvWN0NPqbJtWW3o/yzJxUc0g7gUGKUlOXo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -40,9 +40,8 @@ buildPythonPackage rec {
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-Qep5YD4LQ+r118L5H+hUqeS00SibyvsbtLWDrJJBNc0=";
+    inherit pname version src;
+    hash = "sha256-cEpvkSqe/wRCxEajmM148jbo6a346x2t81pMRpKEJyE=";
   };
 
   nativeCheckInputs = [
@@ -59,11 +58,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycddl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Rust cddl crate";
     homepage = "https://gitlab.com/tahoe-lafs/pycddl";
     changelog = "https://gitlab.com/tahoe-lafs/pycddl/-/tree/v${version}#release-notes";
-    license = licenses.mit;
-    maintainers = [ maintainers.exarkun ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.exarkun ];
   };
 }

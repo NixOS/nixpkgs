@@ -59,25 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     go-md2man
     pkg-config
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional fuseSupport fuse3
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
-      libcap
-    ]);
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional fuseSupport fuse3
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+    libcap
+  ];
 
   doCheck = true;
-  nativeCheckInputs =
-    [
-      python3
-      which
-    ]
-    ++ lib.optional enableValgrindCheck valgrind
-    ++ lib.optional fuseSupport fuse3
-    ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [
-      erofs-utils
-      fsverity-utils
-    ];
+  nativeCheckInputs = [
+    python3
+    which
+  ]
+  ++ lib.optional enableValgrindCheck valgrind
+  ++ lib.optional fuseSupport fuse3
+  ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [
+    erofs-utils
+    fsverity-utils
+  ];
 
   mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
 

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.21";
+  version = "1.22.2";
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
-    hash = "sha256-YOJJmHJ9RTpc8CxUZkuXU23kais0zR9PZ8HBphu7rXU=";
+    hash = "sha256-9Y0VJCBW4Vr3bxPzTGDYkPoqLVywq++RwRXk2DeU/+M=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ed";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

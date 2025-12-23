@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/excalidraw/virgil";
     description = "Font that powers Excalidraw";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     license = lib.licenses.ofl;
   };
 })

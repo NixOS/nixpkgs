@@ -4,23 +4,19 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "opti";
   version = "1.0.3";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.02";
-
   src = fetchurl {
-    url = "https://github.com/magnusjonsson/opti/releases/download/${version}/opti-${version}.tbz";
-    sha256 = "ed9ba56dc06e9d2b1bf097964cc65ea37db787d4f239c13d0dd74693f5b50a1e";
+    url = "https://github.com/magnusjonsson/opti/releases/download/${finalAttrs.version}/opti-${finalAttrs.version}.tbz";
+    hash = "sha256-7ZulbcBunSsb8JeWTMZeo323h9TyOcE9DddGk/W1Ch4=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "DSL to generate fast incremental C code from declarative specifications";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.jmagnusj ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jmagnusj ];
     homepage = "https://github.com/magnusjonsson/opti";
   };
-}
+})

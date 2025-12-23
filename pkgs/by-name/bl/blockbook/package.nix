@@ -1,47 +1,53 @@
-{ lib
-, buildGoModule
-, bzip2
-, fetchFromGitHub
-, lz4
-, nixosTests
-, pkg-config
-, rocksdb_7_10
-, snappy
-, stdenv
-, zeromq
-, zlib
+{
+  lib,
+  buildGoModule,
+  bzip2,
+  fetchFromGitHub,
+  lz4,
+  nixosTests,
+  pkg-config,
+  rocksdb_9_10,
+  snappy,
+  stdenv,
+  zeromq,
+  zlib,
 }:
 
 let
-  rocksdb = rocksdb_7_10;
+  rocksdb = rocksdb_9_10;
 in
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.4.0";
-  commit = "b227dfe";
+  version = "0.5.0";
+  commit = "657cbcf";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    hash = "sha256-98tp3QYaHfhVIiJ4xkA3bUanXwK1q05t+YNroFtBUxE=";
+    hash = "sha256-8/tyqmZE9NJWGg7zYcdei0f1lpXfehy6LM6k5VHW33g=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-n03eWWy+58KAbYnKxI3/ulWIpmR+ivtImQSqbe2kpYU=";
+  vendorHash = "sha256-W29AvzfleCYC2pgHj2OB00PWBTcD2UUDbDH/z5A3bQ4=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
+  buildInputs = [
+    bzip2
+    lz4
+    rocksdb
+    snappy
+    zeromq
+    zlib
+  ];
 
   ldflags = [
     "-X github.com/trezor/blockbook/common.version=${version}"
     "-X github.com/trezor/blockbook/common.gitcommit=${commit}"
     "-X github.com/trezor/blockbook/common.buildDate=unknown"
   ];
-
-  tags = [ "rocksdb_7_10" ];
 
   CGO_LDFLAGS = [
     "-L${lib.getLib stdenv.cc.cc}/lib"
@@ -70,12 +76,14 @@ buildGoModule rec {
     smoke-test = nixosTests.blockbook-frontend;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mmahut _1000101 ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      mmahut
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "blockbook";
   };
 }

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "berkeleydb";
-  version = "18.1.13";
+  version = "18.1.14";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PPxNayvSqi8iMDnvh3dzys+RaSyYb9GuFKU/kT7nSrg=";
+    hash = "sha256-jCYCgvV+vVucPOU9oOt1vllXrdswPjGQk1txZEjzL30=";
   };
 
   build-system = [ setuptools ];
@@ -34,10 +34,10 @@ buildPythonPackage rec {
     BERKELEYDB_LIBDIR = "${lib.getLib pkgs.db}/lib";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
-    license = with licenses; [ bsd3 ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
   };
 }

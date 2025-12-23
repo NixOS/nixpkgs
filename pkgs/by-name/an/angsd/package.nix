@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "ANGSD";
     repo = "angsd";
     sha256 = "sha256-Ppxgy54pAnqJUzNX5c12NHjKTQyEEcPSpCEEVOyZ/LA=";
-    rev = version;
+    tag = version;
   };
 
   patches = [
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Program for analysing NGS data";
     homepage = "http://www.popgen.dk/angsd";
-    maintainers = [ maintainers.bzizou ];
-    license = licenses.gpl2;
+    maintainers = [ lib.maintainers.bzizou ];
+    license = lib.licenses.gpl2;
   };
 }

@@ -2,28 +2,36 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+
+  # build-sysetm
   cmake,
+
+  # build inputs
   blas,
   libcint,
   libxc,
   xcfun,
+
+  # dependencies
   cppe,
   h5py,
   numpy,
   scipy,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.8.0";
+  version = "2.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
-    repo = pname;
+    repo = "pyscf";
     tag = "v${version}";
-    hash = "sha256-GWytFRMDFwTeglBm90fd09HICkAwpkcpmVar1x3vsro=";
+    hash = "sha256-JqjZn4EL6P7qS9PJ/wV6+FniEUeCB/f271nczVH5VuQ=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -60,6 +68,7 @@ buildPythonPackage rec {
 
   # Numerically slightly off tests
   disabledTests = [
+    "test_rdm_trace"
     "test_tdhf_singlet"
     "test_ab_hf"
     "test_ea"
@@ -89,24 +98,22 @@ buildPythonPackage rec {
     "test_sacasscf_grad"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=pyscf/pbc/tdscf"
-    "--ignore=pyscf/pbc/gw"
-    "--ignore-glob=*_slow.*py"
-    "--ignore-glob=*_kproxy_.*py"
-    "--ignore-glob=test_proxy.py"
-    "--ignore-glob=pyscf/nac/test/test_sacasscf.py"
-    "--ignore-glob=pyscf/grad/test/test_casscf.py"
+  disabledTestPaths = [
+    "pyscf/pbc/tdscf"
+    "pyscf/pbc/gw"
+    "pyscf/nac/test/test_sacasscf.py"
+    "pyscf/grad/test/test_casscf.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

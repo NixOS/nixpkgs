@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
   ];
-  buildInputs = lib.optionals (stdenv.isLinux) [ stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [ stdenv.cc.libc.static ];
 
   src = fetchFromGitHub {
     owner = "0vercl0k";
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp rp-${if stdenv.isDarwin then "osx" else "lin"} $out/bin/rp
+    cp rp-${if stdenv.hostPlatform.isDarwin then "osx" else "lin"} $out/bin/rp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast C++ ROP gadget finder for PE/ELF/Mach-O x86/x64/ARM/ARM64 binaries";
     homepage = "https://github.com/0vercl0k/rp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sportshead ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sportshead ];
+    platforms = lib.platforms.all;
     mainProgram = "rp";
   };
 }

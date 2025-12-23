@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
 
   pname = "tracefilegen";
-  version = "unstable-2017-05-13";
+  version = "0-unstable-2017-05-13";
 
   src = fetchFromGitHub {
     owner = "GarCoSim";
@@ -27,13 +27,18 @@ stdenv.mkDerivation rec {
     cp -ar $src/Documentation/html $out/share/doc/${pname}-${version}/.
   '';
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Automatically generate all types of basic memory management operations and write into trace files";
     mainProgram = "TraceFileGen";
     homepage = "https://github.com/GarCoSim";
-    maintainers = [ maintainers.cmcdragonkai ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 
 }

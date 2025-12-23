@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "astyle";
-  version = "3.6.7";
+  version = "3.6.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-rDCgQ+zlkg5SHCVgBVh3JRv+uOECxYnGXFBVDx6yXO8=";
+    hash = "sha256-BIt0sUxuAff66OY7dn2jMwOrOdkCKv4zBVzkueVvFi0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = !asLibrary;
 
-  meta = with lib; {
+  meta = {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
     mainProgram = "astyle";
     homepage = "https://astyle.sourceforge.net/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ carlossless ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ carlossless ];
+    platforms = lib.platforms.unix;
   };
 }

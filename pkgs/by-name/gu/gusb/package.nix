@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
     "bin"
     "out"
     "dev"
-  ] ++ lib.optionals withIntrospection [ "devdoc" ];
+  ]
+  ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -57,17 +58,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+    vala
+  ];
 
   # all required in gusb.pc
   propagatedBuildInputs = [
@@ -95,12 +95,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GLib libusb wrapper";
     mainProgram = "gusbcmd";
     homepage = "https://github.com/hughsie/libgusb";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ycd";
-    repo = pname;
+    repo = "dstp";
     rev = "v${version}";
     sha256 = "sha256-QODp9IbIc2Z7N/xfRd0UV9r8t6RndOjdGe9hQXJyiN0=";
   };
@@ -20,11 +20,11 @@ buildGoModule rec {
   # Tests require network connection, but is not allowed by nix
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Run common networking tests against your site";
     mainProgram = "dstp";
     homepage = "https://github.com/ycd/dstp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jlesquembre ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jlesquembre ];
   };
 }

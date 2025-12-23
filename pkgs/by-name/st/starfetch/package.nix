@@ -15,13 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/starfetch.cpp --replace /usr/local/ $out/
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace makefile --replace g++ clang++
-    '';
+  postPatch = ''
+    substituteInPlace src/starfetch.cpp --replace-fail /usr/local/ $out/
+  ''
+  + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile --replace-warn g++ clang++
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -34,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI star constellations displayer";
     homepage = "https://github.com/Haruno19/starfetch";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "starfetch";
   };
 }

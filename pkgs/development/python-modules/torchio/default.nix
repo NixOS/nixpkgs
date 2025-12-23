@@ -5,11 +5,12 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   deprecated,
-  matplotlib,
+  einops,
+  humanize,
   nibabel,
   numpy,
   packaging,
@@ -20,30 +21,37 @@
   tqdm,
   typer,
 
+  # optional dependencies
+  colorcet,
+  matplotlib,
+  pandas,
+  ffmpeg-python,
+  scikit-learn,
+
   # tests
-  humanize,
   parameterized,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.4";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fepegar";
+    owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-pcUc0pnpb3qQLMOYU9yh7cljyCQ+Ngf8fJDcrRrK8LQ=";
+    hash = "sha256-y3p5LdBC/O82GVroA5B0PNC5qRwVjNbiNroJrV1iU/A=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   dependencies = [
     deprecated
+    einops
     humanize
     nibabel
     numpy
@@ -56,21 +64,30 @@ buildPythonPackage rec {
     typer
   ];
 
+  optional-dependencies = {
+    csv = [ pandas ];
+    plot = [
+      colorcet
+      matplotlib
+    ];
+    video = [ ffmpeg-python ];
+    sklearn = [ scikit-learn ];
+  };
+
   nativeCheckInputs = [
     matplotlib
     parameterized
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # tries to download models:
-      "test_load_all"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-      "test_queue_multiprocessing"
-    ];
+  disabledTests = [
+    # tries to download models:
+    "test_load_all"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_queue_multiprocessing"
+  ];
 
   pythonImportsCheck = [
     "torchio"
@@ -79,8 +96,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://torchio.readthedocs.io";
-    changelog = "https://github.com/TorchIO-project/torchio/blob/v${version}/CHANGELOG.md";
+    homepage = "https://docs.torchio.org";
+    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

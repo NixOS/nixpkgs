@@ -7,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -22,17 +23,20 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
+  pylatexenc,
   pypdfium2,
   python-docx,
   python-pptx,
-  rapidocr-onnxruntime,
+  rapidocr,
   requests,
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -48,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.26.0";
+  version = "2.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-MFMOxNXA/QwQJt/WZmtmmD+OxYxY2LCnutPT4PkZzkw=";
+    hash = "sha256-U82hGvWXkKwZ4um0VevVoYiIfzswu5hLDYvxtqJqmHU=";
   };
 
   build-system = [
@@ -63,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -78,23 +83,27 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
+    pylatexenc
     pypdfium2
     python-docx
     python-pptx
-    rapidocr-onnxruntime
+    rapidocr
     requests
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 
   pythonRelaxDeps = [
+    "lxml"
+    "pypdfium2"
     "pillow"
-    "typer"
   ];
 
   optional-dependencies = {
@@ -103,7 +112,7 @@ buildPythonPackage rec {
     ];
     rapidocr = [
       onnxruntime
-      rapidocr-onnxruntime
+      rapidocr
     ];
     tesserocr = [
       tesserocr
@@ -152,9 +161,16 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+    "test_formula_conversion_with_page_range"
 
     # requires network access
     "test_page_range"
+    "test_parser_backends"
+    "test_confidence"
+    "test_e2e_webp_conversions"
+    "test_asr_pipeline_conversion"
+    "test_threaded_pipeline"
+    "test_pipeline_comparison"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

@@ -10,13 +10,13 @@
 buildKodiAddon rec {
   pname = "youtube";
   namespace = "plugin.video.youtube";
-  version = "7.1.1.6";
+  version = "7.3.0.1";
 
   src = fetchFromGitHub {
     owner = "anxdpanic";
     repo = "plugin.video.youtube";
     rev = "v${version}";
-    hash = "sha256-fcr7FDTaStr9EaEaC3QG3uJQav0YuEITa62Y1kW1vlM=";
+    hash = "sha256-e9V58R6hMaDGS0RKqtAU5IAjY9HED6bYMBz6hQJ606o=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +29,10 @@ buildKodiAddon rec {
     pythonPath = "resources/lib";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anxdpanic/plugin.video.youtube";
     description = "YouTube is one of the biggest video-sharing websites of the world";
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

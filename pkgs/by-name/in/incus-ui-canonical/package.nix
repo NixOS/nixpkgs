@@ -20,19 +20,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "incus-ui-canonical";
-  version = "0.15.0";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
     tag = "incus-${version}";
-    hash = "sha256-I0t2ShMkc/zYn7I6Vcd9A31ZAscY0D7cWAdF80NwRGg=";
+    hash = "sha256-IzXmW5MZZgHXnTGs85TQYvLETsamBxuBAgBUST4Q5m0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-O7oEAjmCEmPpsO/rdkZVhUkxhFzhHpPRbmci3yRBA7g=";
+    hash = "sha256-eiK6dyvRbttxC7rESgpYRsYkkrzLZq4RWOiUf7fsAk8=";
   };
 
   patchPhase = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "Web user interface for Incus";
     homepage = "https://github.com/zabbly/incus-ui-canonical";
     license = lib.licenses.gpl3;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
   };
 }

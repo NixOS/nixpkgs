@@ -20,22 +20,24 @@
   openssl,
   buildPackages,
   replaceVars,
+  udevCheckHook,
   writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    hash = "sha256-xpbj15GzpGS0d1UjzvYiZ1nmmTjNIyv0ST2blmi7ZSk=";
+    hash = "sha256-QVugWtAk8xBn+/fRFqCoi072Q2q8OlB0LRhavrHC5MI=";
   };
 
   nativeBuildInputs = [
     jam
+    udevCheckHook
     unzip
   ];
 
@@ -164,6 +166,8 @@ stdenv.mkDerivation rec {
 
   '';
 
+  doInstallCheck = true;
+
   passthru = {
     updateScript = writeScript "update-argyllcms" ''
       #!/usr/bin/env nix-shell
@@ -178,11 +182,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

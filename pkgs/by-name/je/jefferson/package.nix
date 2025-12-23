@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
-    repo = pname;
+    repo = "jefferson";
     rev = "v${version}";
     hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
   };
@@ -39,11 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];

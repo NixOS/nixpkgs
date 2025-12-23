@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pysmhi";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pysmhi";
     tag = "v${version}";
-    hash = "sha256-QwL4WkKrp1CWvJQK/H0iua2Eupe3FvZ4WkYV8OtONhI=";
+    hash = "sha256-n2eDQ9fbELGvO/SYqdrwT+lZNIZs5GgihmrimvI3a1w=";
   };
 
   build-system = [ poetry-core ];
@@ -38,6 +38,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/gjohansson-ST/pysmhi/releases/tag/${src.tag}";

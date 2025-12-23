@@ -3,28 +3,40 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfspeedtest";
-  version = "1.3.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
     repo = "cfspeedtest";
-    tag = "v${version}";
-    hash = "sha256-86PZlTwqplKCVZl6IG2Qch+IMdfiTfpBhdNf00XIXbU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MWVWYA++gxcKcCvBynVmm+l3qoSb6JKUtGUbRWEGrP8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-54gIhBuVl77NDGotbgcOJsPxZL3XdJBnDEDbNpbVSNk=";
+  cargoHash = "sha256-Oa+k+iBkKFdDcMAxrDdLNWhy2CakbX1G+AMlwGQFBsk=";
 
-  meta = with lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd cfspeedtest \
+      --bash <($out/bin/cfspeedtest --generate-completion bash) \
+      --fish <($out/bin/cfspeedtest --generate-completion fish) \
+      --zsh <($out/bin/cfspeedtest --generate-completion zsh)
+  '';
+
+  meta = {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
-    license = with licenses; [ mit ];
-    broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ colemickens ];
+    changelog = "https://github.com/code-inflation/cfspeedtest/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
+      colemickens
+      stepbrobd
+    ];
     mainProgram = "cfspeedtest";
   };
-}
+})

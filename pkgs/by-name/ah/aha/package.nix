@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     sha256 = "1gywad0rvvz3c5balz8cxsnx0562hj2ngzqyr8zsy2mb4pn0lpgv";
-    rev = version;
+    tag = version;
     repo = "aha";
     owner = "theZiz";
   };
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "ANSI HTML Adapter";
     mainProgram = "aha";
     longDescription = ''
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/theZiz/aha";
     changelog = "https://github.com/theZiz/aha/blob/${version}/CHANGELOG";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       mpl11
     ];
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.all;
   };
 }

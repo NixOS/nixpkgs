@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.videolan.org/developers/libbdplus.html";
     description = "Library to access BD+ protected Blu-Ray disks";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = with platforms; unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }

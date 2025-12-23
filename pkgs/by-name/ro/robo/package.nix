@@ -7,21 +7,21 @@
 
 php82.buildComposerProject2 (finalAttrs: {
   pname = "robo";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "consolidation";
     repo = "robo";
     tag = finalAttrs.version;
-    hash = "sha256-bAT4jHvqWeYcACeyGtBwVBA2Rz+AvkZcUGLDwSf+fLg=";
+    hash = "sha256-OYuP56KlS9onuYcy9xL0XrH9hqf/njwVUju1pDyRgKM=";
   };
 
-  vendorHash = "sha256-vketnTu5VEgt3HBbtnTppWl3+sSSIsCB2MpvL27bxv4=";
+  vendorHash = "sha256-HGVeoy6duUfRLtx05mlZc3wCOeRTzNXJXxXurZDzZFs=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -30,6 +30,6 @@ php82.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/consolidation/robo";
     license = lib.licenses.mit;
     mainProgram = "robo";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 })

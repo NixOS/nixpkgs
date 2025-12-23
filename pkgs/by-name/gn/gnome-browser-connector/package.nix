@@ -56,14 +56,14 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native host connector for the GNOME Shell browser extension";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-browser-connector";
     longDescription = ''
       To use the integration, install the [browser extension](https://gitlab.gnome.org/GNOME/gnome-browser-extension), and then set `services.gnome.gnome-browser-connector.enable` to `true`.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

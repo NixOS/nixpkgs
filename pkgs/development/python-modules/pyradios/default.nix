@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyradios";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XTpw8bgFZo35PJngr9oweU6fY3KAphJsrEhkKzWHLIA=";
+    hash = "sha256-FRAd1M8JZIsogLa/W78IQddMxG0Z8tAP+IiVtHU9fp4=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   # Tests and pythonImportsCheck require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the https://api.radio-browser.info";
     homepage = "https://github.com/andreztz/pyradios";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

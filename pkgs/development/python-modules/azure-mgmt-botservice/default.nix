@@ -38,11 +38,11 @@ buildPythonPackage rec {
     "azure.mgmt.botservice"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure API Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/botservice/azure-mgmt-botservice";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-botservice_${version}/sdk/botservice/azure-mgmt-botservice";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

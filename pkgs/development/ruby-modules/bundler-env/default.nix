@@ -90,7 +90,8 @@ else
 
       meta = {
         platforms = ruby.meta.platforms;
-      } // meta;
+      }
+      // meta;
       passthru =
         basicEnv.passthru
         // {

@@ -230,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
           rpath='@loader_path/..'
           ;;
         *)
-          echo unkown executable $1 >&2
+          echo unknown executable $1 >&2
           exit 1
           ;;
         esac
@@ -292,6 +292,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    maintainers = [ lib.maintainers.copumpkin ];
+    teams = [ lib.teams.darwin ];
   };
 })

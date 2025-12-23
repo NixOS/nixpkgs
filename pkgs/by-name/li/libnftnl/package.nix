@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.8";
+  version = "1.3.0";
   pname = "libnftnl";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    hash = "sha256-N/6l1rXJsI3nkg0pjePNyULnrmSxo+i4gLLTkK5nrZU=";
+    hash = "sha256-D0vkeou4t3o1DuWMvUtfrmJgrUhqUncGqxXP4d1Vo8Q=";
   };
 
   configureFlags = lib.optional (
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "libnftnl-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
     homepage = "https://netfilter.org/projects/libnftnl/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

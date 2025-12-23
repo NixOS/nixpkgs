@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
-    repo = pname;
+    repo = "changelogger";
     rev = "v${version}";
     sha256 = "sha256-XDiO8r1HpdsfBKzFLnsWdxte2EqL1blPH21137fNm5M=";
   };
@@ -27,19 +28,19 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd changelogger \
       --bash <($out/bin/changelogger completion bash) \
       --fish <($out/bin/changelogger completion fish) \
       --zsh <($out/bin/changelogger completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to manage your changelog file in Markdown";
     homepage = "https://github.com/MarkusFreitag/changelogger";
     changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomsiewert ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomsiewert ];
     mainProgram = "changelogger";
   };
 }

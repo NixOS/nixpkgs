@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Small configuration file parser library for C";
     longDescription = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       with a gazillion of features. Instead, it aims to be easy to use and
       quick to integrate with your code.
     '';
-    license = licenses.isc;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

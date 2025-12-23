@@ -35,16 +35,17 @@ buildPythonPackage rec {
     jaraco-context
     jaraco-functools
     inflect
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (pythonOlder "3.10") [ pathlib2 ];
 
   pythonImportsCheck = [ "jaraco.text" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for text manipulation";
     homepage = "https://github.com/jaraco/jaraco.text";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

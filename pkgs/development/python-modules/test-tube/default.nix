@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "williamFalcon";
-    repo = pname;
+    repo = "test-tube";
     rev = version;
     sha256 = "0w60xarmcw06gc4002sy7bjfykdz34gbgniswxkl0lw8a1v0xn2m";
   };
@@ -37,10 +37,10 @@ buildPythonPackage rec {
     tensorboard
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/williamFalcon/test-tube";
     description = "Framework-agnostic library to track and parallelize hyperparameter search in machine learning experiments";
-    license = licenses.mit;
-    maintainers = [ maintainers.tbenst ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.tbenst ];
   };
 }

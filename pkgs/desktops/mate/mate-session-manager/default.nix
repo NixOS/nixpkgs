@@ -71,14 +71,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
-  meta = with lib; {
+  meta = {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
     ];
-    platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.mate ];
   };
 }

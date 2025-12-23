@@ -10,29 +10,23 @@
 
 buildGoModule rec {
   pname = "aws-nuke";
-  version = "3.48.2";
+  version = "3.61.0";
 
   src = fetchFromGitHub {
     owner = "ekristen";
     repo = "aws-nuke";
     tag = "v${version}";
-    hash = "sha256-1uNZy4XN2hscsvPGWO/dDRToX94lo9HZpU4AKsZ4ATU=";
+    hash = "sha256-XP/bJfrzo2GxjHyqcapCVteNlAzzL5Fn5XF1wPF50G8=";
   };
 
-  vendorHash = "sha256-YLk560F2YBwWsWFhQ8KsUuW/kIAlWBkihynREppQ+40=";
-
-  overrideModAttrs = _: {
-    preBuild = ''
-      go generate ./...
-    '';
-  };
+  vendorHash = "sha256-4/FHINd+xeHgaJmEP54KiP2AQo+3L4p4/QO0GqIspvQ=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
+    "-X=github.com/ekristen/aws-nuke/v${lib.versions.major version}/pkg/common.SUMMARY=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -63,7 +57,7 @@ buildGoModule rec {
   meta = {
     description = "Remove all the resources from an AWS account";
     homepage = "https://github.com/ekristen/aws-nuke";
-    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/v${version}";
+    changelog = "https://github.com/ekristen/aws-nuke/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ grahamc ];
     mainProgram = "aws-nuke";

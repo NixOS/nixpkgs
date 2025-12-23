@@ -70,7 +70,7 @@ in
           $ sudo chown -R tabby:tabby /var/lib/tabby/models/
 
           See for Model Options:
-          > https://github.com/TabbyML/registry-tabby
+          > <https://github.com/TabbyML/registry-tabby>
         '';
       };
 
@@ -114,7 +114,7 @@ in
           Enable sending anonymous usage data.
 
           See for more details:
-          > https://tabby.tabbyml.com/docs/configuration#usage-collection
+          > <https://tabby.tabbyml.com/docs/configuration#usage-collection>
         '';
       };
     };

@@ -26,7 +26,7 @@ stdenv.mkDerivation (
 
     meta = {
       homepage = "https://github.com/prometheus/jmx_exporter";
-      description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
+      description = "Process for exposing JMX Beans via HTTP for Prometheus consumption";
       sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
       license = lib.licenses.asl20;
       maintainers = [ lib.maintainers.srhb ];

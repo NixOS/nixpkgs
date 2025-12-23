@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = " A bold, painted face for the rocker within";
+    description = "Bold, painted face for the rocker within";
     longDescription = ''
       Knewave is bold, painted face. Get it? Git it.
     '';
