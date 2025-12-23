@@ -1,4 +1,28 @@
 {
+  "module-hardware-facter": [
+    "index.html#module-hardware-facter"
+  ],
+  "module-hardware-facter-debugging": [
+    "index.html#module-hardware-facter-debugging"
+  ],
+  "module-hardware-facter-debugging-nix-diff": [
+    "index.html#module-hardware-facter-debugging-nix-diff"
+  ],
+  "module-hardware-facter-debugging-nvd": [
+    "index.html#module-hardware-facter-debugging-nvd"
+  ],
+  "module-hardware-facter-features": [
+    "index.html#module-hardware-facter-features"
+  ],
+  "module-hardware-facter-generating": [
+    "index.html#module-hardware-facter-generating"
+  ],
+  "module-hardware-facter-options": [
+    "index.html#module-hardware-facter-options"
+  ],
+  "module-hardware-facter-usage": [
+    "index.html#module-hardware-facter-usage"
+  ],
   "module-security-tpm2": [
     "index.html#module-security-tpm2"
   ],
