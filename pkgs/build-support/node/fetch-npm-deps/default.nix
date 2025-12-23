@@ -211,6 +211,7 @@
       hash ? "",
       forceGitDeps ? false,
       forceEmptyCache ? false,
+      gitDepsLockfiles ? { },
       nativeBuildInputs ? [ ],
       # A string with a JSON attrset specifying registry mirrors, for example
       #   {"registry.example.org": "my-mirror.local/registry.example.org"}
@@ -231,9 +232,12 @@
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
+      gitDepsLockfiles_ = lib.mapAttrs' (
+        name: value: lib.nameValuePair ("NIX_NODEJS_BUILDNPMPACKAGE_LOCKFILE_" + name) value
+      ) gitDepsLockfiles;
     in
     stdenvNoCC.mkDerivation (
-      args
+      (lib.removeAttrs args [ "gitDepsLockfiles" ])
       // {
         inherit name;
 
@@ -290,5 +294,6 @@
       // hash_
       // forceGitDeps_
       // forceEmptyCache_
+      // gitDepsLockfiles_
     );
 }
