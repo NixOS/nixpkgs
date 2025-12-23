@@ -7,16 +7,16 @@
 let
   finalAttrs = {
     pname = "fm";
-    version = "1.1.0";
+    version = "1.2.0";
 
     src = fetchFromGitHub {
       owner = "mistakenelf";
       repo = "fm";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-m0hjLXgaScJydwiV00b8W7f1y1Ka7bbYqcMPAOw1j+c=";
+      hash = "sha256-5+hwubyMgnyYPR7+UdK8VEyk2zo4kniBu7Vj4QarvMg=";
     };
 
-    vendorHash = "sha256-/tUL08Vo3W7PMPAnJA9RPdMl0AwZj8BzclYs2257nqM=";
+    vendorHash = "sha256-uhrE8ZuUeQSm+Jg1xi83RsBrzjex+aBlElJRT61k0BU=";
 
     meta = {
       homepage = "https://github.com/mistakenelf/fm";
