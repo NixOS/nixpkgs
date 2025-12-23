@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     libpulseaudio
   ]
-  ++ (with xorg; [
-    libX11
-    libXi
-    libXcursor
-  ]);
+  ++ [
+    xorg.libX11
+    xorg.libXi
+    xorg.libXcursor
+  ];
 
   desktopItems = [
     (makeDesktopItem {
