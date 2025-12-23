@@ -11051,10 +11051,10 @@
     name = "Balázs Lengyel";
   };
   ilarvne = {
-    email = "ilarvne@proton.me";
+    email = "nix@ilarvne.dev";
     github = "ilarvne";
     githubId = 99905590;
-    name = "Nurali Aslanbekov";
+    name = "Nurali A.";
   };
   ilaumjd = {
     email = "ilaumjd@gmail.com";
