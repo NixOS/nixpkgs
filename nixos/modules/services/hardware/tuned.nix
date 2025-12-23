@@ -198,11 +198,10 @@ in
             sections = { };
             globalSection = cfg.settings;
           };
-
-          "tuned/ppd.conf".source = lib.mkIf cfg.ppdSupport (
-            ppdSettingsFormat.generate "ppd.conf" cfg.ppdSettings
-          );
         }
+        (lib.mkIf cfg.ppdSupport {
+          "tuned/ppd.conf".source = ppdSettingsFormat.generate "ppd.conf" cfg.ppdSettings;
+        })
 
         (lib.mapAttrs' (
           name: value:
