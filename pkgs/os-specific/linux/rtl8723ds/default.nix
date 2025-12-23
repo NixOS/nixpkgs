@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/lwfinger/rtl8723ds";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     broken = kernel.kernelAtLeast "6.17";
   };
 }
