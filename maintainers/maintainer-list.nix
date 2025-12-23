@@ -16625,11 +16625,6 @@
     githubId = 22836301;
     name = "Mateusz Mazur";
   };
-  mbaeten = {
-    github = "mbaeten";
-    githubId = 2649304;
-    name = "M. Baeten";
-  };
   mbaillie = {
     email = "martin@baillie.id";
     github = "martinbaillie";
