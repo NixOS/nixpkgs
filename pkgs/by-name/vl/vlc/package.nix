@@ -103,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.23";
+  version = "3.0.23-2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
