@@ -35,6 +35,7 @@
   libmtp,
   withMtp ? false, # experimental
   xfce,
+  xfce4-dev-tools,
   withXfce4ui ? false,
   totem-pl-parser,
   withTotemPlParser ? false,
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     intltool
     pkg-config
-    xfce.xfce4-dev-tools
+    xfce4-dev-tools
     desktop-file-utils
     installShellFiles
     libsForQt5.wrapQtAppsHook

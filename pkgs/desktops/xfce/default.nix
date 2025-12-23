@@ -59,8 +59,6 @@ makeScopeWithSplicing' {
 
       xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
 
-      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools { };
-
       #### APPLICATIONS
 
       catfish = callPackage ./applications/catfish { };
@@ -175,4 +173,8 @@ makeScopeWithSplicing' {
       ''; # Added 2025-05-20
     }
   );
+}
+// lib.optionalAttrs config.allowAliases {
+  # These aliases need to be placed outside the scope or they will shadow the attributes from parent scope.
+  xfce4-dev-tools = lib.warnOnInstantiate "‘xfce.xfce4-dev-tools’ was moved to top-level. Please use ‘pkgs.xfce4-dev-tools’ directly" pkgs.xfce4-dev-tools; # Added on 2025-12-23
 }
