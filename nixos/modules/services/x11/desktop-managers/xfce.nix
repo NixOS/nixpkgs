@@ -131,7 +131,7 @@ in
 
         xfce.exo
         xfce.garcon
-        xfce.libxfce4ui
+        libxfce4ui
 
         xfce.mousepad
         xfce.parole

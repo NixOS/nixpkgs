@@ -34,7 +34,7 @@
   withGudev ? false, # experimental
   libmtp,
   withMtp ? false, # experimental
-  xfce,
+  libxfce4ui,
   xfce4-dev-tools,
   withXfce4ui ? false,
   totem-pl-parser,
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGlyr glyr
     ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp
-    ++ lib.optional withXfce4ui xfce.libxfce4ui
+    ++ lib.optional withXfce4ui libxfce4ui
     ++ lib.optional withTotemPlParser totem-pl-parser
   # ++ lib.optional withGrilo grilo
   # ++ lib.optional withRygel rygel
