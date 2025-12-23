@@ -6,6 +6,7 @@
   python3Packages,
   pango,
   librsvg,
+  libxfce4util,
   libxml2,
   menu-cache,
   xorg,
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableXfcePanelApplet [
     gtk3
-    xfce.libxfce4util
+    libxfce4util
     xfce.xfce4-panel
   ];
 
