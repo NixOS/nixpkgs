@@ -601,6 +601,7 @@ self: super: with self; {
   albucore = callPackage ../development/python-modules/albucore { };
 
   albumentations = callPackage ../development/python-modules/albumentations { };
+  albumentations_1 = callPackage ../development/python-modules/albumentations { version2 = false; };
 
   ale-py = callPackage ../development/python-modules/ale-py { };
 
