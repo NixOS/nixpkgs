@@ -130,7 +130,9 @@ in
     pname = "saxon";
     version = "6.5.3";
     src = fetchurl {
-      url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
+      url = "mirror://sourceforge/saxon/OldFiles/${version}/saxon${
+        builtins.replaceStrings [ "." ] [ "_" ] version
+      }.zip";
       hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";
