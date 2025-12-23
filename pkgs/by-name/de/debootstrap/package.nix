@@ -46,14 +46,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.140_bpo12+1";
+  version = "1.0.142";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
+    hash = "sha256-fnjwdwcKmrwNVdEQ9x5kz3MTcUnx6+cQN8vc05Uf+mc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
