@@ -13435,8 +13435,8 @@
   };
   kedry = {
     name = "Kevin Edry";
-    github = "kedry";
-    githubId = 12020122;
+    github = "KevinEdry";
+    githubId = 42734162;
   };
   keegancsmith = {
     email = "keegan.csmith@gmail.com";
