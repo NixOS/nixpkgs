@@ -33,25 +33,23 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  runtimeLibs = lib.makeLibraryPath (
-    [
-      gtk2
-      sqlite
-      openal
-      cairo
-      libGLU
-      SDL2
-      freealut
-      libglvnd
-      pipewire
-      libpulseaudio
-    ]
-    ++ (with xorg; [
-      libX11
-      libXi
-      libXcursor
-    ])
-  );
+  runtimeLibs = [
+    gtk2
+    sqlite
+    openal
+    cairo
+    libGLU
+    SDL2
+    freealut
+    libglvnd
+    pipewire
+    libpulseaudio
+  ]
+  ++ (with xorg; [
+    libX11
+    libXi
+    libXcursor
+  ]);
 
   desktopItems = [
     (makeDesktopItem {
@@ -85,22 +83,26 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = ''
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/Vintagestory.dll
+  preFixup =
+    let
+      runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
+    in
+    ''
+      makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
+        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+      makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
+        --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
-    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-      local filename="$(basename -- "$file")"
-      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-    done
-  '';
+      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+        local filename="$(basename -- "$file")"
+        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+      done
+    '';
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
