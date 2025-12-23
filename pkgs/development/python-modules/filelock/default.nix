@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   hatch-vcs,
   hatchling,
   pytest-asyncio,
@@ -21,6 +22,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-rbyI6ruZ0v7IycGyKbFx8Yr6ZVQAFz3cZT1dAVAfufI=";
   };
+
+  patches = [
+    # Fix TOCTOU symlink vulnerability in lock file creation
+    # https://github.com/tox-dev/filelock/commit/4724d7f8c3393ec1f048c93933e6e3e6ec321f0e
+    (fetchpatch {
+      url = "https://github.com/tox-dev/filelock/commit/4724d7f8c3393ec1f048c93933e6e3e6ec321f0e.patch";
+      hash = "sha256-c46m/2f5KKhJ9zYlFauqZm64dCYU3Rivib6zIyt3EFM=";
+    })
+  ];
 
   build-system = [
     hatch-vcs
