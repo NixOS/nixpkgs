@@ -6,6 +6,9 @@
   ninja,
   pkg-config,
   libsigcxx30,
+  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform,
+  expat ? doCheck,
+  dbus ? doCheck,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cxx";
@@ -29,6 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-GNinja"
   ];
+
+  checkInputs = [ expat ];
+  nativeCheckInputs = [ dbus ];
+  inherit doCheck;
+  checkPhase = ''
+    runHook preCheck
+
+    DBUS_DIR=$(mktemp -d)
+    DBUS_CONFIG=$DBUS_DIR/session.conf
+    DBUS_SESSION_BUS_ADDRESS=unix:path=$DBUS_DIR/bus
+    cat <<-EOF > $DBUS_CONFIG
+!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig></busconfig>
+    EOF
+    dbus-daemon --address=DBUS_SESSION_BUS_ADDRESS --fork --config-file=$DBUS_CONFIG
+    ctest
+    runHook postCheck
+  '';
 
   buildInputs = [ libsigcxx30 ];
 
