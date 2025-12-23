@@ -117,17 +117,13 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UUHsylDmMWRcr1gGiXuYnno7D6uMjLqTYd9ak4FnZis=";
+    hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
-
-  patches = [
-    ./fix-hip-path.patch # https://projects.blender.org/blender/blender/pulls/150321
-  ];
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
