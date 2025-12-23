@@ -5,7 +5,6 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  xorg,
   gtk2,
   sqlite,
   openal,
@@ -17,7 +16,17 @@
   pipewire,
   libpulseaudio,
   dotnet-runtime_8,
+  x11Support ? true,
+  xorg ? null,
+  waylandSupport ? false,
+  wayland ? null,
+  libxkbcommon ? null,
 }:
+
+assert x11Support || waylandSupport;
+assert x11Support -> xorg != null;
+assert waylandSupport -> wayland != null;
+assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
@@ -45,10 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     libpulseaudio
   ]
-  ++ [
+  ++ lib.optionals x11Support [
     xorg.libX11
     xorg.libXi
     xorg.libXcursor
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    libxkbcommon
   ];
 
   desktopItems = [
@@ -91,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
         --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
         --set-default mesa_glthread true \
+        ${lib.strings.optionalString waylandSupport ''
+          --set-default OPENTK_4_USE_WAYLAND 1 \
+        ''} \
         --add-flags $out/share/vintagestory/Vintagestory.dll
 
       makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
