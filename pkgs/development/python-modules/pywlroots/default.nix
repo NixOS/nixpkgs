@@ -14,7 +14,6 @@
   wayland,
   pywayland,
   xkbcommon,
-  xorg,
   pytestCheckHook,
   qtile,
 }:
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     libinput
     libxkbcommon
     pixman
-    xorg.libxcb
-    xorg.xcbutilwm
     udev
     wayland
     wlroots
