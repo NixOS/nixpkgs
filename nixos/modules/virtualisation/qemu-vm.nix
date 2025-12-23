@@ -99,6 +99,8 @@ let
       device =
         if cfg.qemu.diskInterface == "scsi" then
           "-device lsi53c895a -device scsi-hd,${deviceOpts}"
+        else if cfg.qemu.diskInterface == "xhci" then
+          "-device nec-usb-xhci,id=xhci -device usb-storage,bus=xhci.0,${deviceOpts}"
         else
           "-device virtio-blk-pci,${deviceOpts}";
     in
@@ -863,6 +865,7 @@ in
           "virtio"
           "scsi"
           "ide"
+          "xhci"
         ];
         default = "virtio";
         example = "scsi";
