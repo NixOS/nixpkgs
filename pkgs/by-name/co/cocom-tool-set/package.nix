@@ -4,6 +4,7 @@
   fetchurl,
   autoreconfHook,
   bison,
+  buildPackages,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cocom";
@@ -13,6 +14,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/cocom/cocom-${finalAttrs.version}.tar.gz";
     hash = "sha256-4UOrVW15o17zHsHiQIl8m4qNC2aT5QorbkfX/UsgBRk=";
   };
+
+  patches = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) ./fix-cross-build.patch;
+
+  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace DINO/Makefile.in
+      --replace-fail ../SPRUT/sprut "${buildPackages.cocom-tool-set}"/bin/sprut
+  '';
 
   env = {
     RANLIB = "${stdenv.cc.targetPrefix}gcc-ranlib";
