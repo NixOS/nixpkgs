@@ -6,9 +6,10 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
   exiftool,
+  zoxide,
 }:
 let
-  version = "1.3.3";
+  version = "1.4.0";
   tag = "v${version}";
 in
 buildGoModule {
@@ -19,17 +20,20 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
+    hash = "sha256-famFzCmernwgY70UIhJEbN2ERe4DMuSyf/DbM3e0LQA=";
   };
 
-  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
+  vendorHash = "sha256-quobh++hsMbofbjXfquSzMgLtuLP3aLG+fcMnZiZ2Cg=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  nativeBuildInputs = [ exiftool ];
+  nativeBuildInputs = [
+    exiftool
+    zoxide
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
