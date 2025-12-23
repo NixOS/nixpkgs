@@ -193,6 +193,13 @@ checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
 checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
 
+checkConfigOutput 'true' config.result ./set-with-submodule.nix ./set-with-submodule-explicit-keys.nix
+checkConfigOutput 'true' config.result ./set-with-submodule.nix ./set-with-submodule-default-keys.nix
+checkConfigError 'The option .*\[definition 1-entry 1\].* was accessed but has no value defined.*' config.set ./set-with-submodule.nix ./set-with-submodule-key-with-merge-error.nix
+
+checkConfigOutput 'true' config.result ./set-with-str.nix ./set-with-str-mergable.nix
+checkConfigError 'The option .set\."\[definition key:.A.\]". has conflicting definition values' config.set ./set-with-str-non-mergable.nix
+
 # https://github.com/NixOS/nixpkgs/pull/131205
 # We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
