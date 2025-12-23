@@ -11,6 +11,7 @@
   python3Packages,
   wrapGAppsHook3,
   xfce,
+  xfconf,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     keybinder3
     python3Packages.python
     xfce.xfce4-panel
-    xfce.xfconf
+    xfconf
   ]
   ++ pythonPath;
 

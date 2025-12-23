@@ -49,8 +49,6 @@ makeScopeWithSplicing' {
 
       xfce4-power-manager = callPackage ./core/xfce4-power-manager { };
 
-      xfconf = callPackage ./core/xfconf { };
-
       xfdesktop = callPackage ./core/xfdesktop { };
 
       xfwm4 = callPackage ./core/xfwm4 { };
@@ -176,4 +174,5 @@ makeScopeWithSplicing' {
   # These aliases need to be placed outside the scope or they will shadow the attributes from parent scope.
   libxfce4util = lib.warnOnInstantiate "‘xfce.libxfce4util’ was moved to top-level. Please use ‘pkgs.libxfce4util’ directly" pkgs.libxfce4util; # Added on 2025-12-23
   xfce4-dev-tools = lib.warnOnInstantiate "‘xfce.xfce4-dev-tools’ was moved to top-level. Please use ‘pkgs.xfce4-dev-tools’ directly" pkgs.xfce4-dev-tools; # Added on 2025-12-23
+  xfconf = lib.warnOnInstantiate "‘xfce.xfconf’ was moved to top-level. Please use ‘pkgs.xfconf’ directly" pkgs.xfconf; # Added on 2025-12-23
 }
