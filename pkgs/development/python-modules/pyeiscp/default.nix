@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pyeiscp";
-  version = "0.0.7";
+  version = "1.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
