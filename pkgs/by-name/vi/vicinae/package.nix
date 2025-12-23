@@ -2,6 +2,7 @@
   abseil-cpp,
   cmake,
   cmark-gfm,
+  coreutils,
   fetchFromGitHub,
   fetchNpmDeps,
   kdePackages,
@@ -92,10 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     }"
   ];
 
+  postFixup = ''
+    substituteInPlace $out/share/systemd/user/vicinae.service \
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A focused launcher for your desktop — native, fast, extensible";
+    description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

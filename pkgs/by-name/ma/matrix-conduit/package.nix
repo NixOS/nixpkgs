@@ -21,6 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-rJyuR8Ie/JiNKNjQL21+Q1PWliEAm+lwGraGeDxEHyY=";
   };
 
+  patches = [
+    # https://gitlab.com/famedly/conduit/-/merge_requests/784
+    ./fix_validate_event_fields_for_invites_over_federation.patch
+  ];
+
   cargoHash = "sha256-4ZA+3f8Kt+1JAm9KXnMRxAF+X9z8HSJoJe6Ny63SlnA=";
 
   # Conduit enables rusqlite's bundled feature by default, but we'd rather use our copy of SQLite.
