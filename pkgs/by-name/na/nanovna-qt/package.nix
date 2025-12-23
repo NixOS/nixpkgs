@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     mainProgram = "vna_qt";
     license = lib.licenses.gpl2Only;
     changelog = "https://github.com/nanovna-v2/NanoVNA-QT/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

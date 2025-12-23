@@ -88,7 +88,6 @@ stdenv.mkDerivation {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       mgregoire
-      chuangzhu
       squalus
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

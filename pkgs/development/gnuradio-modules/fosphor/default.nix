@@ -85,7 +85,7 @@ mkDerivation {
     '';
     homepage = "https://projects.osmocom.org/projects/sdr/wiki/Fosphor";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/eigenein/protobuf";
     changelog = "https://github.com/eigenein/protobuf/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     description = "GStreamer plugin for streaming videos from websites";
     homepage = "https://rafostar.github.io/gtuber/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Python libzfs bindings";
     homepage = "https://github.com/truenas/py-libzfs";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     # The project also supports macOS (OpenZFS on OSX, O3X), FreeBSD and OpenSolaris
     # I don't have a machine to test out, thus only packaged for Linux
     platforms = lib.platforms.linux;

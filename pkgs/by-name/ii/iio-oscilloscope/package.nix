@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "osc";
     license = lib.licenses.gpl2Only;
     changelog = "https://github.com/analogdevicesinc/iio-oscilloscope/releases/tag/v${finalAttrs.version}-master";
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

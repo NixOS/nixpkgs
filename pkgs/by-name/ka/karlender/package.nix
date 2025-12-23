@@ -73,7 +73,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "karlender";
     maintainers = with lib.maintainers; [
-      chuangzhu
       bot-wxt1221
     ];
     platforms = lib.platforms.linux;

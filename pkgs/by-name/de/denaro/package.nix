@@ -70,7 +70,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
     maintainers = with lib.maintainers; [
-      chuangzhu
       kashw2
     ];
     platforms = lib.platforms.linux;

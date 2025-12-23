@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/atanunq/viu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      chuangzhu
       sigmanificient
     ];
     mainProgram = "viu";

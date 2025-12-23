@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/caveman250/Headlines";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = [ ];
     mainProgram = "headlines";
   };
 }

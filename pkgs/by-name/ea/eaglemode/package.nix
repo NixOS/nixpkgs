@@ -144,9 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Zoomable User Interface";
     changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      chuangzhu
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

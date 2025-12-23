@@ -40,7 +40,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      chuangzhu
       wentam
     ];
   };

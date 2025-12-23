@@ -58,7 +58,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      chuangzhu
       Luflosi
     ];
     platforms = lib.platforms.linux;

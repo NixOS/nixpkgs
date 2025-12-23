@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       austinbutler
-      chuangzhu
     ];
     teams = [ lib.teams.gnome-circle ];
   };

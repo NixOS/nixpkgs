@@ -81,7 +81,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "dev.tchx84.Portfolio";
     maintainers = with lib.maintainers; [
       dotlambda
-      chuangzhu
     ];
   };
 }

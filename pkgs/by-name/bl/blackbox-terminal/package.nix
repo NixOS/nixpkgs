@@ -67,9 +67,7 @@ stdenv.mkDerivation {
     description = "Elegant and customizable terminal for GNOME";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      chuangzhu
-    ];
+    maintainers = [ ];
     mainProgram = "blackbox";
     platforms = lib.platforms.linux;
   };

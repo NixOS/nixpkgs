@@ -130,7 +130,6 @@ buildPythonPackage rec {
     homepage = "https://curl-cffi.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      chuangzhu
       sarahec
     ];
   };

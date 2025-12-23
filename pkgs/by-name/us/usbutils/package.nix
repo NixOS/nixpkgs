@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
     description = "Tools for working with USB devices, such as lsusb";
     maintainers = with lib.maintainers; [
       cafkafk
-      chuangzhu
     ];
     license = with lib.licenses; [
       gpl2Only # manpages, usbreset
