@@ -20,6 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-NBgpLP3/UUrW/qM24jUyV4MH5c/uCVAfInZ6AKcl1X0=";
   };
 
+  pythonRelaxDeps = [ "pysigma" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];
