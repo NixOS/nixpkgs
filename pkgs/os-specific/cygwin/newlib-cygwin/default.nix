@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   stdenvNoCC,
   stdenvNoLibc,
   autoreconfHook,
   bison,
   buildPackages,
-  cocom-tool-set,
   flex,
   perl,
   w32api,
@@ -24,13 +22,17 @@ let
         noLibc = false;
       };
     in
-    stdenvNoLibc.override {
-      cc = stdenvNoLibc.cc.override {
-        libc = newlib-cygwin-headers;
-        noLibc = false;
-        inherit bintools;
-      };
-    };
+    # we only want to do this on cygwin because newlib-cygwin-headers doesn't
+    # evaluate on other platforms
+    stdenvNoLibc.override (
+      lib.optionalAttrs stdenvNoLibc.hostPlatform.isCygwin {
+        cc = stdenvNoLibc.cc.override {
+          libc = newlib-cygwin-headers;
+          noLibc = false;
+          inherit bintools;
+        };
+      }
+    );
 
 in
 (if headersOnly then stdenvNoCC else stdenv).mkDerivation (
@@ -40,9 +42,10 @@ in
     version = "3.6.4";
 
     src = buildPackages.fetchgit {
-      url = "https://cygwin.com/git/newlib-cygwin.git";
+      url = "git://cygwin.com/git/newlib-cygwin";
       rev = "cygwin-${finalAttrs.version}";
       hash = "sha256-+WYKwqcDAc7286GzbgKKAxNJCOf3AeNnF8XEVPoor+g=";
+      fetchSubmodules = false;
     };
 
     outputs = [
@@ -135,7 +138,6 @@ in
         nativeBuildInputs = [
           autoreconfHook
           bison
-          cocom-tool-set
           flex
           perl
         ];

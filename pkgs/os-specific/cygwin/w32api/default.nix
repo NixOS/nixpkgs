@@ -17,13 +17,17 @@ let
         noLibc = false;
       };
     in
-    stdenvNoLibc.override {
-      cc = stdenvNoLibc.cc.override {
-        libc = newlib-cygwin-headers;
-        noLibc = false;
-        inherit bintools;
-      };
-    };
+    # we only want to do this on cygwin because newlib-cygwin-headers doesn't
+    # evaluate on other platforms
+    stdenvNoLibc.override (
+      lib.optionalAttrs stdenvNoLibc.hostPlatform.isCygwin {
+        cc = stdenvNoLibc.cc.override {
+          libc = newlib-cygwin-headers;
+          noLibc = false;
+          inherit bintools;
+        };
+      }
+    );
 
 in
 (if headersOnly then stdenvNoCC else stdenv).mkDerivation (
@@ -69,7 +73,7 @@ in
       }
     else
       {
-        nativeBuildInputs = [ autoreconfHook ];
+        # nativeBuildInputs = [ autoreconfHook ];
 
         hardeningDisable = [
           "stackprotector"
