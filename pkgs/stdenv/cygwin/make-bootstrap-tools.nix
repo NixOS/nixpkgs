@@ -4,92 +4,96 @@
 let
   inherit (pkgs) runCommand;
   # splicing doesn't seem to work right here
-  inherit (pkgs.buildPackages) dumpnar rsync;
+  inherit (pkgs.buildPackages) dumpnar rsync nukeReferences;
 
-  pack-env =
-    paths:
-    pkgs.buildEnv {
-      name = "pack-env";
-      paths = paths;
-      includeClosures = true;
-      ignoreCollisions = true;
-    };
+  unpacked =
+    let
+      inherit (pkgs)
+        bashNonInteractive
+        binutils-unwrapped
+        bzip2
+        coreutils
+        diffutils
+        file
+        findutils
+        gawk
+        gcc-unwrapped
+        gitMinimal # for fetchgit (newlib-cygwin)
+        gnugrep
+        gnumake
+        gnused
+        gnutar
+        gzip
+        patch
+        xz
+        ;
 
-  pack-all =
-    packCmd: name: pkgs: fixups:
-    (runCommand name
+      inherit (pkgs.cygwin)
+        newlib-cygwin
+        w32api
+        ;
+
+      curl = pkgs.curl.overrideAttrs (old: {
+        # these use the build shebang
+        # TODO: fix in curl
+        postFixup = old.postFixup or "" + ''
+          rm "$dev"/bin/curl-config "$bin"/bin/wcurl
+        '';
+      });
+
+    in
+    runCommand "unpacked"
       {
-        nativeBuildInputs = [
-          rsync
-          dumpnar
-        ];
+        nativeBuildInputs = [ nukeReferences ];
+        # The result should not contain any references (store paths) so
+        # that we can safely copy them out of the store and to other
+        # locations in the store.
+        allowedReferences = [ ];
+        strictDeps = true;
       }
-      (
-        let
-        in
-        ''
-          rsync --chmod="+w" -av -L --exclude=cygwin1.dll "${pack-env pkgs}"/ .
+      ''
+        mkdir -p "$out"/{bin,include,lib,libexec}
+        cp -d "${bashNonInteractive}"/bin/* "$out"/bin/
+        cp -d "${binutils-unwrapped}"/bin/* "$out"/bin/
+        cp -d "${bzip2}"/bin/* "$out"/bin/
+        cp -d "${coreutils}"/bin/* "$out"/bin/
+        cp -d "${curl}"/bin/* "$out"/bin/
+        cp -d "${diffutils}"/bin/* "$out"/bin/
+        cp -d "${file}"/bin/* "$out"/bin/
+        cp -d "${findutils}"/bin/* "$out"/bin/
+        cp -d "${gawk}"/bin/* "$out"/bin/
+        cp -d "${gcc-unwrapped}"/bin/* "$out"/bin/
+        cp -rd ${gcc-unwrapped}/include/* $out/include/
+        cp -rd ${gcc-unwrapped}/lib/* $out/lib/
+        cp -rd ${gcc-unwrapped}/libexec/* $out/libexec/
+        cp -frd ${gcc-unwrapped.lib}/bin/* $out/bin/
+        cp -rd ${gcc-unwrapped.lib}/lib/* $out/lib/
+        cp -d "${gitMinimal}"/bin/* "$out"/bin/
+        cp -d "${gnugrep}"/bin/* "$out"/bin/
+        cp -d "${gnumake}"/bin/* "$out"/bin/
+        cp -d "${gnused}"/bin/* "$out"/bin/
+        cp -d "${gnutar}"/bin/* "$out"/bin/
+        (shopt -s dotglob; cp -d "${gzip}"/bin/* "$out"/bin/)
+        cp -rd ${newlib-cygwin.dev}/include/* $out/include/
+        cp -rd ${newlib-cygwin}/lib/* "$out"/lib/
+        cp -d "${patch}"/bin/* "$out"/bin/
+        cp -d "${w32api}"/lib/w32api/lib{advapi,shell,user,kernel}32.a "$out"/lib/
+        cp -d "${xz}"/bin/* "$out"/bin/
 
-          base=$PWD
-          rm -rf nix nix-support
-          mkdir nix-support
-          for dir in $requisites; do
-            cd "$dir/nix-support" 2>/dev/null || continue
-            for f in $(find . -type f); do
-              mkdir -p "$base/nix-support/$(dirname $f)"
-              cat $f >>"$base/nix-support/$f"
-            done
-          done
-          rm -f $base/nix-support/propagated-build-inputs
-          cd $base
+        chmod -R +w "$out"
 
-          ${fixups}
+        find "$out" -type l -print0 | while read -d $'\0' link; do
+          [[ -L "$link" && -e "$link" ]] || continue
+          [[ $(realpath "$link") != "$out"* ]] || continue
+          cp "$link" "$link"~
+          mv "$link"~ "$link"
+        done
 
-          ${packCmd}
-        ''
-      )
-    );
-  nar-all = pack-all "dumpnar . | xz -9 -e -T $NIX_BUILD_CORES >$out";
-  tar-all = pack-all "XZ_OPT=\"-9 -e -T $NIX_BUILD_CORES\" tar cJf $out --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 .";
-  coreutils-big = pkgs.coreutils.override { singleBinary = false; };
-  mkdir = runCommand "mkdir" { coreutils = coreutils-big; } ''
-    mkdir -p $out/bin
-    cp $coreutils/bin/mkdir.exe $out/bin
-  '';
-
-  curl = pkgs.curl.overrideAttrs (old: {
-    # these use the build shebang
-    # TODO: fix in curl
-    postFixup = old.postFixup or "" + ''
-      rm "$dev"/bin/curl-config "$bin"/bin/wcurl
-    '';
-  });
+        find "$out" -print0 | xargs -0 nuke-refs -e "$out"
+      '';
 in
-rec {
-  unpack = nar-all "unpack.nar.xz" (with pkgs; [
-    bashNonInteractive
-    mkdir
-    xz
-    gnutar
-  ]) "";
-  bootstrap-tools = tar-all "bootstrap-tools.tar.xz" (with pkgs; [
-    gcc
-    # gcc.lib
-    curl
-    curl.dev
-    cygwin.newlib-cygwin
-    cygwin.newlib-cygwin.bin
-    cygwin.newlib-cygwin.dev
-    cygwin.w32api
-    cygwin.w32api.dev
-    # bintools-unwrapped
-    gnugrep
-    coreutils
-    expand-response-params
-  ]) "";
-  build = runCommand "build" { } ''
-    mkdir -p $out/on-server
-    ln -s ${unpack} $out/on-server/unpack.nar.xz
-    ln -s ${bootstrap-tools} $out/on-server/bootstrap-tools.tar.xz
-  '';
+{
+  unpack = runCommand "unpack.nar.xz" {
+    nativeBuildInputs = [ dumpnar ];
+  } "dumpnar ${unpacked} | xz -9 -e -T $NIX_BUILD_CORES >$out";
 }
