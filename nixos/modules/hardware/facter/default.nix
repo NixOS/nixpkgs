@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./boot.nix
     ./bluetooth.nix
     ./camera
     ./debug.nix
