@@ -50,16 +50,6 @@
       "source": "hosted",
       "version": "2.0.3"
     },
-    "archive": {
-      "dependency": "transitive",
-      "description": {
-        "name": "archive",
-        "sha256": "cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.6.1"
-    },
     "args": {
       "dependency": "direct main",
       "description": {
@@ -200,16 +190,6 @@
       "source": "hosted",
       "version": "1.4.0"
     },
-    "charcode": {
-      "dependency": "transitive",
-      "description": {
-        "name": "charcode",
-        "sha256": "fb0f1107cac15a5ea6ef0a6ef71a807b9e4267c713bb93e00e92d737cc8dbd8a",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.4.0"
-    },
     "checked_yaml": {
       "dependency": "transitive",
       "description": {
@@ -229,16 +209,6 @@
       },
       "source": "hosted",
       "version": "0.5.0"
-    },
-    "cli_pkg": {
-      "dependency": "direct dev",
-      "description": {
-        "name": "cli_pkg",
-        "sha256": "f812467b5d6a5f26ad0fba5dcfc95133df02edbae47dfa4ade3df5d2b5afdcf2",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.10.0"
     },
     "cli_util": {
       "dependency": "transitive",
@@ -640,26 +610,6 @@
       "source": "hosted",
       "version": "1.0.4"
     },
-    "native_stack_traces": {
-      "dependency": "transitive",
-      "description": {
-        "name": "native_stack_traces",
-        "sha256": "64d2f4bcf3b69326fb9bc91b4dd3a06f94bb5bbc3a65e25ae6467ace0b34bfd3",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.5.7"
-    },
-    "node_interop": {
-      "dependency": "transitive",
-      "description": {
-        "name": "node_interop",
-        "sha256": "4848ac408c0cdd0f70136b755df816a8e4c96c244e5377a3fb3b8f8950666150",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.2.0"
-    },
     "node_preamble": {
       "dependency": "transitive",
       "description": {
@@ -689,16 +639,6 @@
       },
       "source": "hosted",
       "version": "1.9.1"
-    },
-    "petitparser": {
-      "dependency": "transitive",
-      "description": {
-        "name": "petitparser",
-        "sha256": "07c8f0b1913bcde1ff0d26e57ace2f3012ccbf2b204e070290dad3bb22797646",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "6.1.0"
     },
     "platform": {
       "dependency": "transitive",
@@ -759,16 +699,6 @@
       },
       "source": "hosted",
       "version": "1.5.0"
-    },
-    "retry": {
-      "dependency": "transitive",
-      "description": {
-        "name": "retry",
-        "sha256": "822e118d5b3aafed083109c72d5f484c6dc66707885e07c0fbcb8b986bba7efc",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "3.1.2"
     },
     "scope": {
       "dependency": "direct main",
@@ -940,16 +870,6 @@
       "source": "hosted",
       "version": "0.6.8"
     },
-    "test_process": {
-      "dependency": "transitive",
-      "description": {
-        "name": "test_process",
-        "sha256": "ea79c090deffc87d8276a5d28bb498d080a9873be6b1074d9dcfb82eb87e138e",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.1.1"
-    },
     "timing": {
       "dependency": "transitive",
       "description": {
@@ -1069,16 +989,6 @@
       },
       "source": "hosted",
       "version": "5.10.1"
-    },
-    "xml": {
-      "dependency": "transitive",
-      "description": {
-        "name": "xml",
-        "sha256": "b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "6.5.0"
     },
     "yaml": {
       "dependency": "direct main",
