@@ -25,6 +25,7 @@
   SDL2_net,
   spdlog,
   tinyxml-2,
+  tomlplusplus,
   zenity,
   sdl_gamecontrollerdb,
   spaghettikart,
@@ -66,6 +67,12 @@ let
     repo = "prism-processor";
     rev = "bbcbc7e3f890a5806b579361e7aa0336acd547e7";
     hash = "sha256-jRPwO1Vub0cH12YMlME6kd8zGzKmcfIrIJZYpQJeOks=";
+  };
+
+  semver = fetchurl {
+    name = "semver.hpp";
+    url = "https://raw.githubusercontent.com/Neargye/semver/refs/tags/v1.0.0-rc/include/semver.hpp";
+    hash = "sha256-rywMUxJNx/UsWKcgXkWK0++6wvYc5Vrd+cj5QzigQYI=";
   };
 
   stb_impl = writeTextFile {
@@ -117,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
-  version = "0.9.9.1-unstable-2025-11-14";
+  version = "0.9.9.1-unstable-2025-12-23";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "SpaghettiKart";
-    rev = "fffd3f7fe92c6eb45b68c0ca522066bf9c54abb2";
-    hash = "sha256-cYFNkVPthqTGT3YiK2MxepAzfVpV8/o2xnZ/zrmmZog=";
+    rev = "b0582b5c32914a815fe6a2ffc41f3eb9c24a3a2b";
+    hash = "sha256-TTsW49jo8yNxuL5GFStiQRWOBw/X8Pt2hMKmDZPpEVI=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -160,6 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
       };
       tinyxml2_src = srcOnly tinyxml-2;
     })
+
+    # Can't fetch in the sandbox
+    ./semver.patch
   ];
 
   # Recent builds enabled LTO which won't build with nix
@@ -185,6 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_net
     spdlog
     tinyxml-2
+    tomlplusplus
     zenity
   ];
 
@@ -197,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TINYXML2" "${tinyxml-2}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TOMLPLUSPLUS" "${tomlplusplus.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-patched}")
   ];
 
@@ -211,6 +223,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
+
+    mkdir semver
+    cp ${semver} ./semver/semver.hpp
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${SEMVER_DIR}" "$(readlink -f ./semver)"
+
   '';
 
   postPatch = ''
@@ -232,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
     installBin Spaghettify
     mkdir -p $out/share/spaghettikart
     cp -r ../yamls $out/share/spaghettikart/
+    cp -r ../meta $out/share/spaghettikart/
     install -Dm644 -t $out/share/spaghettikart {spaghetti.o2r,config.yml,gamecontrollerdb.txt}
     install -Dm644 ../icon.png $out/share/pixmaps/spaghettikart.png
     install -Dm644 -t $out/share/licenses/spaghettikart/libgfxd ${libgfxd}/LICENSE
@@ -249,6 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
       --run "ln -sf $out/share/spaghettikart/spaghetti.o2r ~/.local/share/spaghettikart/spaghetti.o2r" \
       --run "ln -sf $out/share/spaghettikart/config.yml ~/.local/share/spaghettikart/config.yml" \
       --run "ln -sfT $out/share/spaghettikart/yamls ~/.local/share/spaghettikart/yamls" \
+      --run "ln -sfT $out/share/spaghettikart/meta ~/.local/share/spaghettikart/meta" \
       --run "ln -sf $out/share/spaghettikart/gamecontrollerdb.txt ~/.local/share/spaghettikart/gamecontrollerdb.txt" \
       --run 'cd ~/.local/share/spaghettikart'
   '';
