@@ -7,6 +7,7 @@
   wrapGAppsHook3,
   cairo,
   dblatex,
+  ghostscript,
   gnumake,
   gobject-introspection,
   graphicsmagick,
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         Gtk3
         HashMerge
         LocaleGettext
+        NetCUPS
         OpenOfficeOODoc
         PerlMagick
         TextCSV
@@ -94,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-    --prefix PATH : "$out/bin" \
+    --prefix PATH : "$out/bin:${ghostscript}/bin:${netpbm}/bin" \
     --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
