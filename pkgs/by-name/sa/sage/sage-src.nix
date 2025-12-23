@@ -82,6 +82,12 @@ stdenv.mkDerivation rec {
       hash = "sha256-PZyOXRsgcsPvgceGGZXet5URJgWiIlCfFx8tvwpLk5A=";
       excludes = [ "src/doc/zh/constructions/rep_theory.rst" ];
     })
+    # https://github.com/sagemath/sage/pull/41233, landed in 10.8.rc0
+    (fetchpatch2 {
+      name = "flint-3.4-update.patch";
+      url = "https://github.com/sagemath/sage/commit/9bd5304f1a222e215d7006a04854ff66616748bf.patch?full_index=1";
+      hash = "sha256-7bgouXV3pM20IX5PM24ZpJWOBlZjQksGtjopgouEbyg=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
