@@ -1916,6 +1916,7 @@ mapAliases {
   xf86videovmware = xf86-video-vmware; # Added 2026-01-19
   xf86videovoodoo = xf86-video-voodoo; # Added 2026-01-19
   xf86videowsfb = throw "The Xorg BSD wsdisplay framebuffer video driver is broken and hasn't had a release since 2012"; # added 2025-12-13
+  xfitter = throw "'xfitter' has been removed"; # Added 2025-12-23
   xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
