@@ -104,6 +104,11 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
 
+  postInstall = ''
+    # Remove redundant AppImage artifacts
+    rm -rf "$out/appdir"
+  '';
+
   meta = {
     description = "Flight simulator";
     maintainers = with lib.maintainers; [ raskin ];
