@@ -12382,6 +12382,8 @@ self: super: with self; {
 
   pony = callPackage ../development/python-modules/pony { };
 
+  ponytail = callPackage ../development/python-modules/ponytail { };
+
   ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
 
   pooch = callPackage ../development/python-modules/pooch { };
