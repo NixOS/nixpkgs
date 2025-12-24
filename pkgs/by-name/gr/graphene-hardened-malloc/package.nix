@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "2025092700";
+  version = "2025121700";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
     rev = finalAttrs.version;
-    hash = "sha256-t7PnBwpGh53+ZqTbnm8lYaNBtUgLev9kbvFlbfSCBrU=";
+    hash = "sha256-nc6NP9Sya/DO1oFT27unIaP8Xdzs78/ETrEFukWl+Is=";
   };
 
   nativeCheckInputs = [ python3 ];
