@@ -53,7 +53,12 @@ rustPlatform.buildRustPackage {
     installManPage git-gamble.1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "version/(.*)"
+    ];
+  };
 
   meta = {
     description = "Tool that blends TDD (Test Driven Development) + TCR (`test && commit || revert`)";
