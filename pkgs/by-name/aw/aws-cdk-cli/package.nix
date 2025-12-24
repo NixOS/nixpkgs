@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontFixup = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.package; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
