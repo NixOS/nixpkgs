@@ -116,5 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [ "CVE-2025-68613" ];
   };
 })
