@@ -7,30 +7,20 @@
 let
   cfg = config.services.spotifyd;
   toml = pkgs.formats.toml { };
-  warnConfig =
-    if cfg.config != "" then
-      lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
-    else
-      lib.id;
-  spotifydConf =
-    if cfg.settings != { } then
-      toml.generate "spotify.conf" cfg.settings
-    else
-      warnConfig (pkgs.writeText "spotifyd.conf" cfg.config);
+  spotifydConf = toml.generate "spotify.conf" cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "spotifyd"
+      "config"
+    ] "Use the TOML typed `services.spotifyd.settings` instead.")
+  ];
+
   options = {
     services.spotifyd = {
       enable = lib.mkEnableOption "spotifyd, a Spotify playing daemon";
-
-      config = lib.mkOption {
-        default = "";
-        type = lib.types.lines;
-        description = ''
-          (Deprecated) Configuration for Spotifyd. For syntax and directives, see
-          <https://docs.spotifyd.rs/configuration/index.html#config-file>.
-        '';
-      };
 
       settings = lib.mkOption {
         default = { };
@@ -47,13 +37,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.config == "" || cfg.settings == { };
-        message = "At most one of the .config attribute and the .settings attribute may be set";
-      }
-    ];
-
     systemd.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
