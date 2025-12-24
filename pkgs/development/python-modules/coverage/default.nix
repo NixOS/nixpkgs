@@ -4,6 +4,7 @@
   buildPythonPackage,
   isPy312,
   fetchFromGitHub,
+  fetchpatch,
   flaky,
   hypothesis,
   pytest-xdist,
@@ -24,6 +25,17 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-2i01Jlk4oj/0WhoYE1BgeKKjZK3YpEOrGHEgNhTruR4=";
   };
+
+  patches = [
+    # test: correctly default the core being tested
+    # This fixes test_coverage_stop_in_threads
+    # https://github.com/coveragepy/coveragepy/issues/2109
+    (fetchpatch {
+      url = "https://github.com/coveragepy/coveragepy/commit/2f2e540709371f6184c2731f6d076bc782d37a3d.patch";
+      hash = "sha256-lwQ8OM9OWZAwrjExuPeGKSLEF+pYhgDHyAlgXzHiQ0M=";
+      excludes = [ "CHANGES.rst" ];
+    })
+  ];
 
   build-system = [ setuptools ];
 
