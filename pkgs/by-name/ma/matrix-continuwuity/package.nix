@@ -77,22 +77,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.0-rc.8.1";
+  version = "0.5.0";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UHlKAYgIkVtZJV+H2Xl7HssV03Q3XNxluMfLRY2e+Do=";
+    hash = "sha256-k+B7OjOoVd/vcy/jKBEXAXOolnWt4RoPhJucMwYxyEk=";
   };
 
-  # https://forgejo.ellis.link/continuwuation/continuwuity/commit/b2bead67ac8bc45de9a612578f295e5b7fc6c2b5
-  # https://forgejo.ellis.link/continuwuation/continuwuity/commit/7fa4fa98628593c1a963f5aa8dbc3657d604b047
-  # this patch is probably unneeded with the next release
-  patches = [ ./continuwuity-exploit-fix.diff ];
-
-  cargoHash = "sha256-imfpl+72zlqeEREdTGFG3bsMdPTXe/sb1uGvMC6BGT0=";
+  cargoHash = "sha256-xqP2wOaGJEcn/ZF8u1Ol6j7zyr/3dLHKU6eYQfIBr7o=";
 
   nativeBuildInputs = [
     pkg-config
