@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pylxd";
-  version = "2.3.2";
+  version = "2.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "pylxd";
     tag = version;
-    hash = "sha256-Q4GMz7HFpJNPYlYgLhE0a7mVCwNpdbw4XVcUGQ2gUJ0=";
+    hash = "sha256-UbDkau3TLwFxWZxJGNF5hgtGn6JgVq5L2CvUgnb4IC8=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
