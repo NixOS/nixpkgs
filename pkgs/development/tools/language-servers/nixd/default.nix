@@ -22,13 +22,13 @@
 let
   nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.7.0";
+    version = "2.8.0";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
+      hash = "sha256-7B6jRkgqX5UCFXd0Bz7JFNG9ce3xeRNwXZyPR4nm4h0=";
     };
 
     nativeBuildInputs = [
@@ -73,6 +73,7 @@ in
       ];
 
       buildInputs = [
+        nixComponents.nix-expr
         gtest
         boost
         nlohmann_json
