@@ -11177,7 +11177,11 @@ self: super: with self; {
     };
   };
 
-  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
+  onnx2pytorch = callPackage ../development/python-modules/onnx2pytorch { };
+
+  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
+    inherit (pkgs) protobuf;
+  };
 
   onnxmltools = callPackage ../development/python-modules/onnxmltools { };
 
