@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildDotnetModule,
   fetchFromGitHub,
@@ -72,7 +73,7 @@ buildDotnetModule rec {
       let
         steam-run =
           (steam.override {
-            extraPkgs = pkgs: [ pkgs.libunwind ];
+            extraPkgs = pkgs: [ pkgs.libunwind ] ++ lib.optional config.programs.gamemode.enable pkgs.gamemode;
             extraProfile = ''
               unset TZ
             '';
