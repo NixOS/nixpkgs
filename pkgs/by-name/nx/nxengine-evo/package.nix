@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   strictDeps = true;
 
   # Allow finding game assets.
