@@ -102,10 +102,11 @@ let
   cleanAttrs = flip removeAttrs [
     "disabled"
     "checkPhase"
+    "preCheck"
+    "postCheck"
     "checkInputs"
     "nativeCheckInputs"
     "doCheck"
-    "doInstallCheck"
     "pyproject"
     "format"
     "stdenv"
@@ -123,10 +124,10 @@ in
   # Run-time dependencies for the package
   buildInputs ? [ ],
 
-  # Dependencies needed for running the checkPhase.
-  # These are added to buildInputs when doCheck = true.
-  checkInputs ? [ ],
-  nativeCheckInputs ? [ ],
+  # Dependencies needed for running the installCheckPhase.
+  # These are added to buildInputs when doInstallCheck = true.
+  installCheckInputs ? [ ],
+  nativeInstallCheckInputs ? [ ],
 
   # propagate build dependencies so in case we have A -> B -> C,
   # C can import package A propagated by B
@@ -192,7 +193,7 @@ in
 
   meta ? { },
 
-  doCheck ? true,
+  doInstallCheck ? attrs.doCheck or true,
 
   ...
 }@attrs:
@@ -358,7 +359,7 @@ let
         )
       ]
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-        # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+        # This is a test, however, it should be ran independent of the installCheckPhase and installCheckInputs
         pythonImportsCheckHook
       ]
       ++ optionals (python.pythonAtLeast "3.3") [
@@ -390,9 +391,9 @@ let
 
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
-      doInstallCheck = attrs.doCheck or true;
-      nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
-      installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
+      inherit doInstallCheck;
+      nativeInstallCheckInputs = attrs.nativeCheckInputs or [ ] ++ nativeInstallCheckInputs;
+      installCheckInputs = attrs.checkInputs or [ ] ++ installCheckInputs;
 
       inherit dontWrapPythonPrograms;
 
@@ -431,7 +432,18 @@ let
     // optionalAttrs (attrs ? checkPhase) {
       # If given use the specified checkPhase, otherwise use the setup hook.
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
+      installCheckPhase =
+        attrs.installCheckPhase or (lib.replaceStrings
+          [ "runHook preCheck\n" "runHook postCheck\n" ]
+          [ "runHook preInstallCheck\n" "runHook postInstallCheck\n" ]
+          attrs.checkPhase
+        );
+    }
+    // optionalAttrs (attrs ? preCheck) {
+      preInstallCheck = attrs.preInstallCheck or attrs.preCheck;
+    }
+    // optionalAttrs (attrs ? postCheck) {
+      postInstallCheck = attrs.postInstallCheck or attrs.postCheck;
     }
     //
       lib.mapAttrs
