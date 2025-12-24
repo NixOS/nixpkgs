@@ -15,15 +15,15 @@
   xorg,
   xwayland,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waywall";
-  version = "0-unstable-2025-08-03";
+  version = "0.2025.12.20";
 
   src = fetchFromGitHub {
     owner = "tesselslate";
     repo = "waywall";
-    rev = "d77f51926a203b7ddfe095971e7c6c740dad0ffc";
-    hash = "sha256-ev/A5ksqmWz6hpwUIoxg2k9BwzE4BNCZO4tpXq790zo=";
+    tag = finalAttrs.version;
+    hash = "sha256-sGb/dxXBlzXBvv2IWjgwSE8WM5qB04mYATl0uhSozMQ=";
   };
 
   nativeBuildInputs = [
@@ -68,4 +68,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "waywall";
   };
-}
+})
