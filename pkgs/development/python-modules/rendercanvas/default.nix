@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
-  version = "2.4.2";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
     tag = "v${version}";
-    hash = "sha256-42jnCD0jSGkz6zLokzF1lXjnVP8E2yrPu8AQ80EKEI4=";
+    hash = "sha256-fOjiGNxEUVI+jddrwqrlBYT+CAMDQCIPNHwGonBH4Hk=";
   };
 
   postPatch = ''
