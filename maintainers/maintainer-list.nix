@@ -7194,6 +7194,12 @@
       { fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A"; }
     ];
   };
+  dunderrrrrr = {
+    email = "emil.bjorkroth@gmail.com";
+    github = "dunderrrrrr";
+    githubId = 25280555;
+    name = "Emil Björkroth";
+  };
   dunxen = {
     email = "git@dunxen.dev";
     matrix = "@dunxen:x0f.org";
