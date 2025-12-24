@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://couchdb.apache.org";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lostnet ];
+    maintainers = [ ];
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
