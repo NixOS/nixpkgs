@@ -277,6 +277,7 @@ in
         };
 
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
+        linux_6_17_hardened = hardenedKernelFor kernels.linux_6_17 { };
 
         linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
       }
@@ -779,6 +780,7 @@ in
       linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
+      linux_6_17_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_17_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
