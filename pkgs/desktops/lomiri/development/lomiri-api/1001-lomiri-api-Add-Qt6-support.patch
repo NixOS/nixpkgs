@@ -1,0 +1,329 @@
+From 8c3809a4d1d86d04a36ded9189ba467c984ea40a Mon Sep 17 00:00:00 2001
+From: Guido Berhoerster <guido+ubports@berhoerster.name>
+Date: Mon, 10 Nov 2025 13:20:26 +0100
+Subject: [PATCH] Add optional support for building against Qt 6
+
+---
+ CMakeLists.txt                                | 22 +++++++++++++++++++
+ .../lomiri/shell/application/CMakeLists.txt   |  2 +-
+ include/lomiri/shell/launcher/CMakeLists.txt  |  2 +-
+ .../lomiri/shell/notifications/CMakeLists.txt |  2 +-
+ test/gtest/CMakeLists.txt                     |  2 --
+ .../lomiri/util/GObjectMemory/CMakeLists.txt  |  2 --
+ .../lomiri/util/GioMemory/CMakeLists.txt      | 22 ++++++-------------
+ .../plugins/Lomiri/Application/CMakeLists.txt | 14 ++++--------
+ .../plugins/Lomiri/Launcher/CMakeLists.txt    | 16 ++++----------
+ .../Lomiri/Notifications/CMakeLists.txt       | 14 ++++--------
+ .../Lomiri/Notifications/Mocks/CMakeLists.txt |  6 +----
+ test/qmltest/modules/TestUtil/CMakeLists.txt  |  6 +----
+ 12 files changed, 46 insertions(+), 64 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 18858be7..aacf4f11 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,6 +14,13 @@ endif()
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+ 
++option(ENABLE_QT6 "Enable Qt6 build" OFF)
++if(ENABLE_QT6)
++    set(QT_VERSION_MAJOR 6)
++else()
++    set(QT_VERSION_MAJOR 5)
++endif()
++
+ string(TOLOWER "${CMAKE_BUILD_TYPE}" cmake_build_type_lower) # Build types should always be lowercase but sometimes they are not.
+ 
+ include(PrecompiledHeaders)
+@@ -150,6 +157,21 @@ set(LIB_INSTALL_PREFIX lib/${CMAKE_LIBRARY_ARCHITECTURE})
+ 
+ # Tests
+ if (NOT NO_TESTS)
++    if (ENABLE_QT6)
++        find_package(Qt6 REQUIRED COMPONENTS Core DBus Gui Quick Qml)
++        pkg_check_modules(QDBUSTEST REQUIRED libqtdbustest-qt6)
++    else()
++        find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui Quick Qml)
++        pkg_check_modules(QDBUSTEST REQUIRED libqtdbustest-1)
++    endif()
++    add_definitions(-DQT_NO_KEYWORDS)
++
++    find_package(Threads REQUIRED)
++    find_package(GMock REQUIRED)
++
++    pkg_check_modules(GOBJECT REQUIRED gobject-2.0)
++    pkg_check_modules(GIO REQUIRED gio-2.0)
++
+     include(CTest)
+     enable_testing()
+     add_subdirectory(test)
+diff --git a/include/lomiri/shell/application/CMakeLists.txt b/include/lomiri/shell/application/CMakeLists.txt
+index 49cfb0a0..8aa2207d 100644
+--- a/include/lomiri/shell/application/CMakeLists.txt
++++ b/include/lomiri/shell/application/CMakeLists.txt
+@@ -13,7 +13,7 @@ set(LOMIRI_API_LIB_HDRS ${LOMIRI_API_LIB_HDRS} ${headers} ${internal_headers} PA
+ set(VERSION 28)
+ set(PKGCONFIG_NAME "lomiri-shell-application")
+ set(PKGCONFIG_DESCRIPTION "Lomiri shell Application APIs")
+-set(PKGCONFIG_REQUIRES "Qt5Core")
++set(PKGCONFIG_REQUIRES "Qt${QT_VERSION_MAJOR}Core")
+ set(PKGCONFIG_FILE lomiri-shell-application.pc)
+ 
+ configure_file(${CMAKE_SOURCE_DIR}/data/lomiri-shell-api.pc.in
+diff --git a/include/lomiri/shell/launcher/CMakeLists.txt b/include/lomiri/shell/launcher/CMakeLists.txt
+index 6ed34657..02b37fc3 100644
+--- a/include/lomiri/shell/launcher/CMakeLists.txt
++++ b/include/lomiri/shell/launcher/CMakeLists.txt
+@@ -10,7 +10,7 @@ set(LOMIRI_API_LIB_HDRS ${LOMIRI_API_LIB_HDRS} ${headers} ${internal_headers} PA
+ set(VERSION 13)
+ set(PKGCONFIG_NAME "lomiri-shell-launcher")
+ set(PKGCONFIG_DESCRIPTION "Lomiri shell Launcher APIs")
+-set(PKGCONFIG_REQUIRES "Qt5Core")
++set(PKGCONFIG_REQUIRES "Qt${QT_VERSION_MAJOR}Core")
+ set(PKGCONFIG_FILE lomiri-shell-launcher.pc)
+ 
+ configure_file(${CMAKE_SOURCE_DIR}/data/lomiri-shell-api.pc.in
+diff --git a/include/lomiri/shell/notifications/CMakeLists.txt b/include/lomiri/shell/notifications/CMakeLists.txt
+index a893219e..5c00cf62 100644
+--- a/include/lomiri/shell/notifications/CMakeLists.txt
++++ b/include/lomiri/shell/notifications/CMakeLists.txt
+@@ -10,7 +10,7 @@ set(LOMIRI_API_LIB_HDRS ${LOMIRI_API_LIB_HDRS} ${headers} ${internal_headers} PA
+ set(VERSION 3)
+ set(PKGCONFIG_NAME "lomiri-shell-notifications")
+ set(PKGCONFIG_DESCRIPTION "Lomiri shell Notifications APIs")
+-set(PKGCONFIG_REQUIRES "Qt5Core")
++set(PKGCONFIG_REQUIRES "Qt${QT_VERSION_MAJOR}Core")
+ set(PKGCONFIG_FILE lomiri-shell-notifications.pc)
+ 
+ configure_file(${CMAKE_SOURCE_DIR}/data/lomiri-shell-api.pc.in
+diff --git a/test/gtest/CMakeLists.txt b/test/gtest/CMakeLists.txt
+index 68c5596e..8f0e917b 100644
+--- a/test/gtest/CMakeLists.txt
++++ b/test/gtest/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-find_package(Threads REQUIRED)
+-find_package(GMock REQUIRED)
+ set(TESTLIBS ${TESTLIBS} ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+ 
+ # gtest does weird things with its own implementation of tr1::tuple. For clang, we need to
+diff --git a/test/gtest/lomiri/util/GObjectMemory/CMakeLists.txt b/test/gtest/lomiri/util/GObjectMemory/CMakeLists.txt
+index b03eaa4a..c952d263 100644
+--- a/test/gtest/lomiri/util/GObjectMemory/CMakeLists.txt
++++ b/test/gtest/lomiri/util/GObjectMemory/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-pkg_check_modules(GOBJECT REQUIRED gobject-2.0)
+-
+ include_directories(${GOBJECT_INCLUDE_DIRS})
+ 
+ add_executable(GObjectMemory_test
+diff --git a/test/gtest/lomiri/util/GioMemory/CMakeLists.txt b/test/gtest/lomiri/util/GioMemory/CMakeLists.txt
+index d556c66a..df701dc8 100644
+--- a/test/gtest/lomiri/util/GioMemory/CMakeLists.txt
++++ b/test/gtest/lomiri/util/GioMemory/CMakeLists.txt
+@@ -1,30 +1,22 @@
+-pkg_check_modules(GIO REQUIRED gio-2.0)
+-pkg_check_modules(QDBUSTEST REQUIRED libqtdbustest-1)
+-
+-find_package(Qt5Core REQUIRED)
+-find_package(Qt5DBus REQUIRED)
++add_executable(GioMemory_test
++    GioMemory_test.cpp
++    )
+ 
+ include_directories(
+-    ${Qt5Core_INCLUDE_DIRS}
+-    ${Qt5DBus_INCLUDE_DIRS}
+     ${GIO_INCLUDE_DIRS}
+     ${QDBUSTEST_INCLUDE_DIRS}
+     )
+ 
+-add_definitions(
+-    -DQT_NO_KEYWORDS=1
+-    )
+-
+-add_executable(GioMemory_test
+-    GioMemory_test.cpp
++target_compile_definitions(GioMemory_test
++    PUBLIC QT_NO_KEYWORDS=1
+     )
+ 
+ target_link_libraries(GioMemory_test
+     ${TESTLIBS}
+     ${GIO_LDFLAGS}
+     ${QDBUSTEST_LDFLAGS}
+-    Qt5::Core
+-    Qt5::DBus
++    Qt::Core
++    Qt::DBus
+     )
+ 
+ add_test(GioMemory_test GioMemory_test)
+diff --git a/test/qmltest/mocks/plugins/Lomiri/Application/CMakeLists.txt b/test/qmltest/mocks/plugins/Lomiri/Application/CMakeLists.txt
+index 4c73b68e..a9a2c427 100644
+--- a/test/qmltest/mocks/plugins/Lomiri/Application/CMakeLists.txt
++++ b/test/qmltest/mocks/plugins/Lomiri/Application/CMakeLists.txt
+@@ -1,16 +1,10 @@
++set(CMAKE_AUTOMOC ON)
++
+ include_directories(
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application
+     ${CMAKE_CURRENT_SOURCE_DIR}
+ )
+ 
+-add_definitions(-DQT_NO_KEYWORDS)
+-set(CMAKE_AUTOMOC ON)
+-
+-find_package(Qt5Core REQUIRED)
+-find_package(Qt5Gui REQUIRED)
+-find_package(Qt5Quick REQUIRED)
+-find_package(Qt5Qml REQUIRED)
+-
+ set(ApplicationMocks_SOURCES
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/ApplicationManagerInterface.h
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/ApplicationInfoInterface.h
+@@ -20,7 +14,7 @@ set(ApplicationMocks_SOURCES
+ 
+ add_library(ApplicationMocks SHARED ${ApplicationMocks_SOURCES})
+ 
+-target_link_libraries(ApplicationMocks Qt5::Core Qt5::Gui)
++target_link_libraries(ApplicationMocks Qt::Core Qt::Gui)
+ 
+ set(TestApplicationPlugin_SOURCES
+     TestApplicationPlugin.cpp
+@@ -28,7 +22,7 @@ set(TestApplicationPlugin_SOURCES
+ 
+ add_library(TestApplicationPlugin MODULE ${TestApplicationPlugin_SOURCES})
+ 
+-target_link_libraries(TestApplicationPlugin Qt5::Core Qt5::Gui Qt5::Quick)
++target_link_libraries(TestApplicationPlugin Qt::Core Qt::Gui Qt::Quick)
+ 
+ target_link_libraries(TestApplicationPlugin ApplicationMocks)
+ 
+diff --git a/test/qmltest/mocks/plugins/Lomiri/Launcher/CMakeLists.txt b/test/qmltest/mocks/plugins/Lomiri/Launcher/CMakeLists.txt
+index f9576ac9..d16c1fb4 100644
+--- a/test/qmltest/mocks/plugins/Lomiri/Launcher/CMakeLists.txt
++++ b/test/qmltest/mocks/plugins/Lomiri/Launcher/CMakeLists.txt
+@@ -1,3 +1,5 @@
++set(CMAKE_AUTOMOC ON)
++
+ include_directories(
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application
+@@ -5,13 +7,6 @@ include_directories(
+     ${CMAKE_CURRENT_SOURCE_DIR}/../Application/
+ )
+ 
+-add_definitions(-DQT_NO_KEYWORDS)
+-set(CMAKE_AUTOMOC ON)
+-
+-find_package(Qt5Core REQUIRED)
+-find_package(Qt5Quick REQUIRED)
+-find_package(Qt5Qml REQUIRED)
+-
+ set(LauncherMocks_SOURCES
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherModelInterface.h
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/launcher/LauncherItemInterface.h
+@@ -29,8 +24,7 @@ set(LauncherMocks_SOURCES
+ 
+ add_library(LauncherMocks SHARED ${LauncherMocks_SOURCES})
+ 
+-#find_package(Qt5Gui REQUIRED)
+-target_link_libraries(LauncherMocks Qt5::Core Qt5::Gui)
++target_link_libraries(LauncherMocks Qt::Core Qt::Gui)
+ 
+ set(TestLauncherPlugin_SOURCES
+     TestLauncherPlugin.cpp
+@@ -38,9 +32,7 @@ set(TestLauncherPlugin_SOURCES
+ 
+ add_library(TestLauncherPlugin MODULE ${TestLauncherPlugin_SOURCES})
+ 
+-target_link_libraries(TestLauncherPlugin Qt5::Core Qt5::Quick)
+-
+-target_link_libraries(TestLauncherPlugin LauncherMocks)
++target_link_libraries(TestLauncherPlugin Qt::Core Qt::Quick LauncherMocks)
+ 
+ add_custom_target(TestLauncherPluginQmldir ALL
+     COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/qmldir" "${CMAKE_CURRENT_BINARY_DIR}"
+diff --git a/test/qmltest/mocks/plugins/Lomiri/Notifications/CMakeLists.txt b/test/qmltest/mocks/plugins/Lomiri/Notifications/CMakeLists.txt
+index 2b9224fa..b7a11b36 100644
+--- a/test/qmltest/mocks/plugins/Lomiri/Notifications/CMakeLists.txt
++++ b/test/qmltest/mocks/plugins/Lomiri/Notifications/CMakeLists.txt
+@@ -1,13 +1,9 @@
++set(CMAKE_AUTOMOC ON)
++
+ include_directories(
+     ${CMAKE_CURRENT_SOURCE_DIR}
+ )
+ 
+-add_definitions(-DQT_NO_KEYWORDS)
+-set(CMAKE_AUTOMOC ON)
+-
+-find_package(Qt5Core REQUIRED)
+-find_package(Qt5Quick REQUIRED)
+-
+ set(NotificationsMocks_SOURCES
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/notifications/Enums.h
+     ${CMAKE_SOURCE_DIR}/include/lomiri/shell/notifications/ModelInterface.h
+@@ -21,7 +17,7 @@ set(NotificationsMocks_SOURCES
+ 
+ add_library(NotificationsMocks SHARED ${NotificationsMocks_SOURCES})
+ 
+-target_link_libraries(NotificationsMocks Qt5::Core)
++target_link_libraries(NotificationsMocks Qt::Core)
+ 
+ set(TestNotificationsPlugin_SOURCES
+     TestNotificationsPlugin.cpp
+@@ -29,9 +25,7 @@ set(TestNotificationsPlugin_SOURCES
+ 
+ add_library(TestNotificationsPlugin MODULE ${TestNotificationsPlugin_SOURCES})
+ 
+-target_link_libraries(TestNotificationsPlugin Qt5::Core Qt5::Quick)
+-
+-target_link_libraries(TestNotificationsPlugin NotificationsMocks)
++target_link_libraries(TestNotificationsPlugin Qt::Core Qt::Quick NotificationsMocks)
+ 
+ add_custom_target(TestNotificationsPluginQmldir ALL
+     COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/qmldir" "${CMAKE_CURRENT_BINARY_DIR}"
+diff --git a/test/qmltest/mocks/plugins/Lomiri/Notifications/Mocks/CMakeLists.txt b/test/qmltest/mocks/plugins/Lomiri/Notifications/Mocks/CMakeLists.txt
+index d8b85c02..c0183d24 100644
+--- a/test/qmltest/mocks/plugins/Lomiri/Notifications/Mocks/CMakeLists.txt
++++ b/test/qmltest/mocks/plugins/Lomiri/Notifications/Mocks/CMakeLists.txt
+@@ -4,11 +4,7 @@ set(MockNotificationsPlugin_SOURCES
+ 
+ add_library(MockNotificationsPlugin MODULE ${MockNotificationsPlugin_SOURCES})
+ 
+-#find_package(Qt5Core REQUIRED)
+-#find_package(Qt5Quick REQUIRED)
+-target_link_libraries(MockNotificationsPlugin Qt5::Core Qt5::Quick)
+-
+-target_link_libraries(MockNotificationsPlugin NotificationsMocks)
++target_link_libraries(MockNotificationsPlugin Qt::Core Qt::Quick NotificationsMocks)
+ 
+ add_custom_target(MockNotificationsPluginQmldir ALL
+     COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/qmldir" "${CMAKE_CURRENT_BINARY_DIR}"
+diff --git a/test/qmltest/modules/TestUtil/CMakeLists.txt b/test/qmltest/modules/TestUtil/CMakeLists.txt
+index 8a812f57..03173653 100644
+--- a/test/qmltest/modules/TestUtil/CMakeLists.txt
++++ b/test/qmltest/modules/TestUtil/CMakeLists.txt
+@@ -1,8 +1,4 @@
+-find_package(Qt5Core REQUIRED)
+-find_package(Qt5Quick REQUIRED)
+-
+ set(CMAKE_AUTOMOC ON)
+-add_definitions(-DQT_NO_KEYWORDS)
+ 
+ set(TestUtilQML_SOURCES
+     TestUtil.cpp
+@@ -15,7 +11,7 @@ include_directories(
+ 
+ add_library(TestUtilQml MODULE ${TestUtilQML_SOURCES})
+ 
+-target_link_libraries(TestUtilQml Qt5::Core Qt5::Quick)
++target_link_libraries(TestUtilQml Qt::Core Qt::Quick)
+ 
+ # copy qmldir file into build directory for shadow builds
+ file(GLOB QML_JS_FILES qmldir *.js *.qml)
+-- 
+GitLab
+

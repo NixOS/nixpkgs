@@ -13049,6 +13049,7 @@ with pkgs;
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
+  lomiri-qt6 = recurseIntoAttrs (callPackage ../desktops/lomiri { useQt6 = true; });
 
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
