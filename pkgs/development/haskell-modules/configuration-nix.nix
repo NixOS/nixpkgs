@@ -1905,7 +1905,7 @@ builtins.intersectAttrs super {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
         postInstall = (old.postInstall or "") + ''
           nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+          for p in "$out" "${pkgs.postcss}" $plugins; do
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"

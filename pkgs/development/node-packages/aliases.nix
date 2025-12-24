@@ -283,6 +283,7 @@ mapAliases {
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   poor-mans-t-sql-formatter-cli = throw "'poor-mans-t-sql-formatter-cli' has been removed because it was unmaintained upstream"; # Added 2025-11-14
+  inherit (pkgs) postcss; # Added 2025-12-24
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
   prebuild-install = throw "prebuild-install was removed because it appeared to be unmaintained upstream. See upstream's recommendations for alternatives here: https://github.com/prebuild/prebuild-install#note"; # Added 2025-12-14
   inherit (pkgs) prettier; # added 2025-05-31
