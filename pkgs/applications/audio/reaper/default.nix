@@ -11,7 +11,7 @@
   curl,
   gtk3,
   lame,
-  libxml2,
+  libxml2_13,
   ffmpeg,
   vlc,
   xdg-utils,
@@ -110,13 +110,13 @@ stdenv.mkDerivation rec {
         # Setting the rpath of the plugin shared object files does not
         # seem to have an effect for some plugins.
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
-        # Note that libcurl and libxml2 are needed for ReaPack to run.
+        # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
               lame
-              libxml2
+              libxml2_13
               ffmpeg
               vlc
               xdotool
