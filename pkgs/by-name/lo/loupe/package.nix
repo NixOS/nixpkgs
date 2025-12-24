@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We should eventually use a cargo vendor patch hook instead
     pushd ../$(stripHash $cargoDeps)/glycin-3.*
       patch -p3 < ${libglycin.passthru.glycin3PathsPatch}
+      patch -p3 < ${libglycin.passthru.glycin3OptionalUsrPatch}
     popd
   '';
 

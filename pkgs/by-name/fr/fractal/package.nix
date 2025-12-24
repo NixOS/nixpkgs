@@ -29,6 +29,7 @@
   libseccomp,
   glycin-loaders,
   libwebp,
+  libglycin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
       "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
+  preConfigure = ''
+    # Dirty approach to add patches after cargoSetupPostUnpackHook
+    # We should eventually use a cargo vendor patch hook instead
+    pushd ../$(stripHash $cargoDeps)/glycin-3.*
+      patch -p3 < ${libglycin.passthru.glycin3PathsPatch}
+      patch -p3 < ${libglycin.passthru.glycin3OptionalUsrPatch}
+    popd
+  '';
   nativeBuildInputs = [
     glib
     grass-sass
@@ -102,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
     )
   '';
 
