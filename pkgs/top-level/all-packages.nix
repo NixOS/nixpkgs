@@ -1865,9 +1865,12 @@ with pkgs;
 
   dune_2 = callPackage ../by-name/du/dune/package.nix {
     version = "2.9.3";
+    inherit ocamlPackages;
   };
 
-  dune_3 = callPackage ../by-name/du/dune/package.nix { };
+  dune_3 = callPackage ../by-name/du/dune/package.nix {
+    inherit ocamlPackages;
+  };
 
   dvc = with python3.pkgs; toPythonApplication dvc;
 
@@ -2068,6 +2071,8 @@ with pkgs;
       { };
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
+
+  opaline = callPackage ../by-name/op/opaline/package.nix { inherit ocamlPackages; };
 
   inherit (ocamlPackages) patdiff;
 
