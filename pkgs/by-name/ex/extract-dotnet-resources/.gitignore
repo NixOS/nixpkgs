@@ -1,0 +1,20 @@
+# Build results
+bin/
+obj/
+artifacts/
+
+# User-specific files
+*.user
+.env
+
+# MSBuild Binary and Structured Log
+*.binlog
+
+# JetBrains Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
