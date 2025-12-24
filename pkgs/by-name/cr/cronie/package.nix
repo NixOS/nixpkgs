@@ -2,6 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
+  fetchpatch,
   stdenv,
 }:
 
@@ -15,6 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "cronie-${finalAttrs.version}";
     hash = "sha256-WrzdpE9t7vWpc8QFoFs+S/HgHwsidRNmfcHp7ltSWQw=";
   };
+
+  patches = [
+    # Fix build with GCC 15
+    (fetchpatch {
+      url = "https://github.com/cronie-crond/cronie/commit/09c630c654b2aeff06a90a412cce0a60ab4955a4.patch";
+      hash = "sha256-OU6pCFeEPC32cPE3K9Uq9HuvpwdUZpaBtyxNOaJkFVM=";
+    })
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
