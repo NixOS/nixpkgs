@@ -6,7 +6,6 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "alex"
-, "aws-cdk"
 , "browserify"
 , "browser-sync"
 , "coc-go"
