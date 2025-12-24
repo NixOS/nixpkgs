@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.7.1";
+  version = "1.7.2.dev0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bw2";
     repo = "ConfigArgParse";
     tag = version;
-    hash = "sha256-wrWfQzr0smM83helOEJPbayrEpAtXJYYXIw4JnGLNho=";
+    hash = "sha256-9Iwx7sJ4BBag9FxZ87A4b3wGVxSQv+eNIAtXewjau9Q=";
   };
 
   optional-dependencies = {
