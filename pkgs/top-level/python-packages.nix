@@ -13758,6 +13758,8 @@ self: super: with self; {
 
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
 
+  pylint-quotes = callPackage ../development/python-modules/pylint-quotes { };
+
   pylint-venv = callPackage ../development/python-modules/pylint-venv { };
 
   pylion = callPackage ../development/python-modules/pylion { };
