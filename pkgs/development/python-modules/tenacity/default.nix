@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -15,11 +15,13 @@ buildPythonPackage rec {
   version = "9.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EWnTdsKX5944jRi0SBdg1Hiw6Zp3fK06nIblVvS2l8s=";
+  src = fetchFromGitHub {
+    owner = "jd";
+    repo = "tenacity";
+    tag = version;
+    hash = "sha256-RmoW3gwblwoM4L9QTuc/7gLJJOSxMUYv7FmWxdf/KxE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -35,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jd/tenacity";
-    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${src.tag}";
     description = "Retrying library for Python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
