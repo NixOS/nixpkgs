@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
 
   # build system
   meson,
@@ -71,27 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # XQuartz patchset
-    (fetchpatch {
-      url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
-      sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
-      name = "use-cppflags-not-cflags.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/XQuartz/xorg-server/commit/75ee9649bcfe937ac08e03e82fd45d9e18110ef4.patch";
-      sha256 = "1vlfylm011y00j8mig9zy6gk9bw2b4ilw2qlsc6la49zi3k0i9fg";
-      name = "use-old-mitrapezoids-and-mitriangles-routines.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/XQuartz/xorg-server/commit/c58f47415be79a6564a9b1b2a62c2bf866141e73.patch";
-      sha256 = "19sisqzw8x2ml4lfrwfvavc2jfyq2bj5xcf83z89jdxg8g1gdd1i";
-      name = "revert-fb-changes-1.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/XQuartz/xorg-server/commit/56e6f1f099d2821e5002b9b05b715e7b251c0c97.patch";
-      sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
-      name = "revert-fb-changes-2.patch";
-    })
     ./darwin/bundle_main.patch
     ./darwin/find-cpp.patch
     ./darwin/stub.patch
