@@ -111,7 +111,9 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
-      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) (
+        whenAtLeast "6.15" yes
+      );
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -564,7 +566,7 @@ let
 
         # Required for Nova
         # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
-        RUST_FW_LOADER_ABSTRACTIONS = whenAtLeast "6.12" yes;
+        RUST_FW_LOADER_ABSTRACTIONS = lib.mkIf withRust (whenAtLeast "6.12" yes);
       }
       //
         lib.optionalAttrs
@@ -954,7 +956,7 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
-      HIGHMEM64G = {
+      HIGHMEM64G = whenOlder "6.15" {
         optional = true;
         tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";
       };
