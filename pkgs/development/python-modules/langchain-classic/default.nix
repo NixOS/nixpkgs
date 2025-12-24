@@ -35,6 +35,9 @@
   responses,
   syrupy,
   toml,
+
+  # update
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -106,7 +109,9 @@ buildPythonPackage rec {
   # Bulk updater selects wrong tag (there is no tag for this yet)
   passthru = {
     skipBulkUpdate = true;
-    updateScript = false;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-classic==";
+    };
   };
 
   pythonImportsCheck = [ "langchain_classic" ];
