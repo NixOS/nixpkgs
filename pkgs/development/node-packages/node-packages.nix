@@ -19471,24 +19471,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  aws-cdk = nodeEnv.buildNodePackage {
-    name = "aws-cdk";
-    packageName = "aws-cdk";
-    version = "2.1004.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/aws-cdk/-/aws-cdk-2.1004.0.tgz";
-      sha512 = "3E5ICmSc7ZCZCwLX7NY+HFmmdUYgRaL+67h/BDoDQmkhx9StC8wG4xgzHFY9k8WQS0+ib/MP28f2d9yzHtQLlQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "AWS CDK CLI, the command line tool for CDK apps";
-      homepage = "https://github.com/aws/aws-cdk";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   browserify = nodeEnv.buildNodePackage {
     name = "browserify";
     packageName = "browserify";

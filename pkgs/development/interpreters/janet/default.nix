@@ -5,6 +5,7 @@
   meson,
   ninja,
   nix-update-script,
+  pkgsBuildBuild,
   runCommand,
 }:
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "'test/suite-ev.janet'," ""
   '';
 
+  depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
   nativeBuildInputs = [
     meson
     ninja

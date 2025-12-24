@@ -80,12 +80,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "5.4.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-AvGqmuk5See8VMNO61/5LCuH+V0lR4Zd9VxgRnVk7hE=";
+    hash = "sha256-K/C66njSeUXPCcM9iATxeeA6g+4Z0ukn/WYOpGrKOxY=";
   };
 
   nativeBuildInputs = [
