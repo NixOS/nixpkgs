@@ -25,29 +25,62 @@ let
     })
   );
 
-  systemActivationScript =
-    set: onlyDry:
+  makeScriptPackage =
+    name: scriptConfig: onlyDry:
     let
-      set' = mapAttrs (
-        _: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v
-      ) set;
-      withHeadlines = addAttributeName set';
+      isStringScript = isString scriptConfig;
+      scriptText = if isStringScript then scriptConfig else scriptConfig.text;
+      supportsDry = if isStringScript then false else (scriptConfig.supportsDryActivation or false);
+
+      wrappedText = ''
+        #### Activation script snippet ${name}:
+        _localstatus=0
+        ${scriptText}
+
+        if (( _localstatus > 0 )); then
+          printf "Activation script snippet '%s' failed (%s)\n" "${name}" "$_localstatus"
+          exit $_localstatus
+        fi
+      '';
+
       # When building a dry activation script, this replaces all activation scripts
       # that do not support dry mode with a comment that does nothing. Filtering these
       # activation scripts out so they don't get generated into the dry activation script
       # does not work because when an activation script that supports dry mode depends on
       # an activation script that does not, the dependency cannot be resolved and the eval
       # fails.
-      withDrySnippets = mapAttrs (
-        a: v:
-        if onlyDry && !v.supportsDryActivation then
-          v
-          // {
-            text = "#### Activation script snippet ${a} does not support dry activation.";
-          }
-        else
-          v
-      ) withHeadlines;
+      dryText = ''
+        #### Activation script snippet ${name} does not support dry activation.
+      '';
+
+      finalText = if onlyDry && !supportsDry then dryText else wrappedText;
+    in
+    pkgs.writeScript "activation-${name}" ''
+      #!${pkgs.runtimeShell}
+      ${finalText}
+    '';
+
+  systemActivationScript =
+    set: onlyDry:
+    let
+      set' = mapAttrs (
+        _: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v
+      ) set;
+
+      scriptPackages = mapAttrs (name: cfg: makeScriptPackage name cfg onlyDry) set';
+
+      withSourceCommands = mapAttrs (
+        name: cfg:
+        cfg
+        // {
+          text = ''
+            # Execute activation script: ${name}
+            source ${scriptPackages.${name}}
+          '';
+        }
+      ) set';
+
+      scriptSources = textClosureMap id withSourceCommands (attrNames withSourceCommands);
     in
     ''
       #!${pkgs.runtimeShell}
@@ -67,11 +100,8 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${lib.concatStringsSep "\n" (
-        lib.filter (v: v != "") (
-          textClosureList withDrySnippets (attrNames (lib.filterAttrs (_: v: v.text != "") withDrySnippets))
-        )
-      )}
+      ${scriptSources}
+
     ''
     + optionalString (!onlyDry) ''
       # Make this configuration the current configuration.
