@@ -5,6 +5,7 @@
   python3,
   rdfind,
   which,
+  parallel,
   writeShellScriptBin,
 }:
 let
@@ -40,6 +41,7 @@ stdenvNoCC.mkDerivation {
     python3
     rdfind
     which
+    parallel
   ];
 
   installTargets = [
