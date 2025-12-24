@@ -691,8 +691,8 @@ in
       zfsPackage = mkOption {
         type = types.package;
         internal = true;
-        default = pkgs.zfs;
-        defaultText = literalExpression "pkgs.zfs";
+        default = config.boot.zfs.package;
+        defaultText = literalExpression "config.boot.zfs.package";
         description = ''
           Which ZFS package to use if `config.boot.loader.grub.zfsSupport` is true.
         '';
