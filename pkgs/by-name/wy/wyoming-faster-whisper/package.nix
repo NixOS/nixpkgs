@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-faster-whisper";
-  version = "2.5.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-faster-whisper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MKB6gZdGdAYoNK8SRiDHG8xtMZ5mXdaSn+bH4T6o/K4=";
+    hash = "sha256-3/NXnb+huh3LdarFnVg4tTbs8P3JlDMdtrRn9nrsBOw=";
   };
 
   build-system = with python3Packages; [
