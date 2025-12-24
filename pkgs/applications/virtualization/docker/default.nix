@@ -277,7 +277,12 @@ let
         };
 
         patches = [
-          ./cli-system-plugin-dir-from-env.patch
+          (
+            if lib.versionOlder version "26.0.0" then
+              ./cli-system-plugin-dir-from-env-25.patch
+            else
+              ./cli-system-plugin-dir-from-env.patch
+          )
         ];
 
         vendorHash = null;
