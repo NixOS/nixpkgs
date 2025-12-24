@@ -103,8 +103,13 @@ builder rec {
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
-  # don't have "libgcc_s.so.1" on clang
-  LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+  }
+  // lib.optionalAttrs (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) {
+    # don't have "libgcc_s.so.1" on clang
+    LDFLAGS = "-lgcc_s";
+  };
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
@@ -125,9 +130,6 @@ builder rec {
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.hostPlatform.isDarwin) "--disable-lto";
-
-  # Fix build with gcc15
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
