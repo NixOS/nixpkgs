@@ -879,6 +879,7 @@ mapAliases {
   gnome-passwordsafe = throw "'gnome-passwordsafe' has been renamed to/replaced by 'gnome-secrets'"; # Converted to throw 2025-10-27
   gnome-recipes = throw "'gnome-recipes' has been removed due to lack of upstream maintenance and dependency on insecure libraries"; # Added 2025-09-06
   gnome-resources = throw "'gnome-resources' has been renamed to/replaced by 'resources'"; # Converted to throw 2025-10-27
+  gnome-screenshot = throw "'gnome-screenshot' has been removed in favor of native screeshot support of gnome-shell"; # Added 2025-12-24
   gnome-settings-daemon46 = throw "'gnome-settings-daemon46' has been removed, no longer used by Pantheon"; # Added 2026-01-24
   gns3Packages = throw "'gns3Packages' has been removed. Use 'gns3-gui' and 'gns3-server' instead."; # Added 2026-01-18
   gnu-cobol = throw "'gnu-cobol' has been renamed to/replaced by 'gnucobol'"; # Converted to throw 2025-10-27
