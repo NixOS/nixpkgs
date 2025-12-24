@@ -10,19 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "5.9";
+  version = "5.11";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
-    rev = "v${version}";
-    hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
+    rev = "v.${version}";
+    hash = "sha256-QmuyaCzbNNubVRAqjhP/E0ACaf5dEfVPbiT0U41qT+A=";
   };
-
-  patches = [
-    # Fix Qt 6.10 compatibility: QString::arg() no longer accepts Euro type directly
-    ./fix-qt610-euro-arg.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
