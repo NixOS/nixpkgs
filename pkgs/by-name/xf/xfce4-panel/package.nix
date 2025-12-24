@@ -8,7 +8,7 @@
   xfce4-dev-tools,
   wrapGAppsHook3,
   cairo,
-  exo,
+  xfce4-exo,
   garcon,
   gtk-layer-shell,
   gtk3,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    exo
+    xfce4-exo
     garcon
     gtk-layer-shell
     libdbusmenu-gtk3

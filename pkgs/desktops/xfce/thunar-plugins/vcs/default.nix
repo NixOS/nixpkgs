@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   thunar,
-  exo,
+  xfce4-exo,
   libxfce4ui,
   libxfce4util,
   gtk3,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     thunar
-    exo
+    xfce4-exo
     libxfce4ui
     libxfce4util
     gtk3

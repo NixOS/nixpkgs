@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  exo,
+  xfce4-exo,
   gtk3,
   libcanberra,
   libpulseaudio,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     glib
     gtk3
     keybinder3
