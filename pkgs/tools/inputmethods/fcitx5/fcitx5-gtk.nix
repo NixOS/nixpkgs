@@ -7,7 +7,6 @@
   fcitx5,
   gobject-introspection,
   glib,
-  gtk2,
   gtk3,
   gtk4,
   fmt,
@@ -45,8 +44,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-  ]
-  ++ lib.optional (!withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
+    "-DENABLE_GTK2_IM_MODULE=off"
+  ];
 
   buildInputs = [
     glib
@@ -66,8 +65,7 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
-  ]
-  ++ lib.optional withGTK2 gtk2;
+  ];
 
   nativeBuildInputs = [
     cmake
