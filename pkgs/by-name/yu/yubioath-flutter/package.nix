@@ -6,7 +6,6 @@
   pcre2,
   libnotify,
   libappindicator,
-  gnome-screenshot,
   removeReferencesTo,
   runCommand,
   yq-go,
@@ -71,11 +70,6 @@ flutter335.buildFlutterApplication rec {
     substituteInPlace "$out/share/applications/com.yubico.yubioath.desktop" \
       --replace-fail '"@EXEC_PATH/authenticator"' "yubioath-flutter" \
       --replace-fail "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "com.yubico.yubioath"
-  '';
-
-  # Needed for QR scanning to work
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
   passthru = {
