@@ -10,7 +10,6 @@
   cmake,
   ninja,
   python3,
-  libllvm,
   jq,
   libcxx,
   linuxHeaders,
@@ -61,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
         + ''
           cp -r ${monorepoSrc}/compiler-rt "$out"
+          cp -r ${monorepoSrc}/llvm "$out"
         ''
       )
     else
@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python3
-    libllvm.dev
     ninja
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
