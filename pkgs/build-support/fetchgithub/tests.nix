@@ -8,6 +8,14 @@
     hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
   };
 
+  simple-tag = testers.invalidateFetcherByDrvHash fetchFromGitHub {
+    name = "simple-tag-nix-source";
+    owner = "NixOS";
+    repo = "nix";
+    rev = "2.3.15";
+    hash = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
+  };
+
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchFromGitHub {
     name = "sparse-checkout-nix-source";
     owner = "NixOS";
