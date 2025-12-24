@@ -2200,7 +2200,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  circus = with python310Packages; toPythonApplication circus;
+  circus = with python3Packages; toPythonApplication circus;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_11_0
@@ -6497,7 +6497,7 @@ with pkgs;
 
   inherit (regclient) regbot regctl regsync;
 
-  reno = with python312Packages; toPythonApplication reno;
+  reno = with python3Packages; toPythonApplication reno;
 
   replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
 
