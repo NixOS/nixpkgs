@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # https://github.com/svaarala/duktape/issues/2464
-  LDFLAGS = [ "-lm" ];
+  env.LDFLAGS = "-lm";
 
   nativeBuildInputs = [
     validatePkgConfig
