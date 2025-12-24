@@ -1,12 +1,12 @@
 {
-    lib,
-    stdenv,
-    fetchFromGitHub,
-    cmake,
-    qt6,
-    pkg-config,
-    libevdev,
-    qrcodegencpp,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
+  pkg-config,
+  libevdev,
+  qrcodegencpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,10 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-      owner = "kitswas";
-      repo = "VirtualGamePad-PC";
-      tag = "v${finalAttrs.version}";
-      sha256 = "sha256-IsUNF+YjBGSuxrxn9CZrq7UWODeAocDwOtm9L1HxeHE=";
+    owner = "kitswas";
+    repo = "VirtualGamePad-PC";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-IsUNF+YjBGSuxrxn9CZrq7UWODeAocDwOtm9L1HxeHE=";
   };
 
   VGP_Data_Exchange = fetchFromGitHub {
