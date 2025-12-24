@@ -2,7 +2,9 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  jq,
   makeWrapper,
+  moreutils,
   nix-update-script,
   nodejs,
   fetchPnpmDeps,
@@ -16,17 +18,19 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typespec";
     tag = "typespec-stable@${finalAttrs.version}";
-    hash = "sha256-huyEQA+XhlGVxnxUzQH1aIZUE4EbCN6HakitzuDyR18=";
+    hash = "sha256-Y1Ij2o0SmR/5UnhgDKZcHTjRdSym+yVa5xDn9w7MAyM=";
   };
 
   nativeBuildInputs = [
+    jq
     makeWrapper
+    moreutils
     nodejs
     pnpmConfigHook
     pnpm
@@ -42,14 +46,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 2;
-    hash = "sha256-ztig1B10cQQy+4XKZjwwlCxGenwcU+C28TfTWHqZ59Y=";
+    hash = "sha256-mceyG5vSkOOiBZ1KJJhsRON7qSd0efTZXtKw3m4W5NA=";
   };
 
   postPatch = ''
     # The `packageManager` attribute matches the version _exactly_, which makes
     # the build fail if it doesn't match exactly.
-    substituteInPlace package.json \
-      --replace-fail '"packageManager": "pnpm@10.11.0"' '"packageManager": "pnpm"'
+    jq 'del(.packageManager)' package.json | sponge package.json
     # `fetchFromGitHub` doesn't clone via git and thus installing would otherwise fail.
     substituteInPlace packages/compiler/scripts/generate-manifest.js \
       --replace-fail 'execSync("git rev-parse HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
