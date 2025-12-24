@@ -20,7 +20,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 
 import nixpkgs_plugin_update  # type: ignore
-from nixpkgs_plugin_update import FetchConfig, Redirects, update_plugins
+from nixpkgs_plugin_update import FetchConfig, Redirects, commit, update_plugins
 
 
 class ColoredFormatter(logging.Formatter):
@@ -213,23 +213,69 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
         return plugins
 
+    def add(self, args):
+        if not args.add_plugins:
+            return
+
+        fieldnames = ["name", "rockspec", "ref", "server", "version", "luaversion", "maintainers"]
+        fetch_config = FetchConfig(args.proc, args.github_token)
+
+        for plugin_name in args.add_plugins:
+            log.info(f"Adding {plugin_name} to CSV")
+
+            existing_entries = []
+            with open(self.default_in, "r", newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                existing_entries = list(reader)
+
+            new_entry = {
+                "name": plugin_name,
+                "rockspec": "",
+                "ref": "",
+                "server": "",
+                "version": "",
+                "luaversion": "",
+                "maintainers": "",
+            }
+            existing_entries.append(new_entry)
+
+            existing_entries.sort(key=lambda x: x["name"].lower())
+
+            with open(self.default_in, "w", newline="") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames, lineterminator="\n")
+                writer.writeheader()
+                writer.writerows(existing_entries)
+
+            update = self.get_update(str(self.default_in), str(args.outfile), fetch_config, to_update=[plugin_name])
+            redirects, updated_plugins = update()
+
+            if not args.no_commit and updated_plugins:
+                for name, old_ver, new_ver in updated_plugins:
+                    if old_ver == "init":
+                        msg = f"{self.attr_path}.{name}: init at {new_ver}"
+                    else:
+                        msg = f"{self.attr_path}.{name}: {old_ver} -> {new_ver}"
+
+                    commit(self.nixpkgs_repo, msg, [args.outfile, self.default_in])
+
     def get_update(
         self,
         input_file: str,
         output_file: str,
         config: FetchConfig,
-        # TODO: implement support for adding/updating individual plugins
         to_update: list[str] | None,
     ):
-        if to_update is not None:
-            raise NotImplementedError("For now, lua updater doesn't support updating individual packages.")
-        _prefetch = generate_pkg_nix
-
         def update() -> tuple[Redirects, list[tuple[str, str, str]]]:
-            plugin_specs = self.load_plugin_spec(config, input_file)
-            sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
+            all_plugin_specs = self.load_plugin_spec(config, input_file)
+            sorted_all_specs = sorted(all_plugin_specs, key=lambda v: v.name.lower())
 
-            # Load existing plugins to preserve them if update fails
+            specs_to_process = sorted_all_specs
+            if to_update:
+                specs_to_process = [
+                    p for p in sorted_all_specs if p.normalized_name in to_update or p.name in to_update
+                ]
+
+            # Load existing plugins to preserve them if update fails or skipped
             existing_plugins = self.parse_generated_nix(output_file)
 
             old_versions = {}
@@ -241,7 +287,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
             try:
                 pool = Pool(processes=config.proc)
-                results = pool.map(_prefetch, sorted_plugin_specs)
+                results = pool.map(generate_pkg_nix, specs_to_process)
             finally:
                 pass
 
@@ -253,23 +299,32 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             errors = []
             updated_plugins: list[tuple[str, str, str]] = []
 
-            for plug in sorted_plugin_specs:
-                nix_expr, error = results_map.get(plug.normalized_name, (None, "Unknown error"))
-
+            # Iterate over ALL specs to rebuild the full file
+            for plug in sorted_all_specs:
                 final_expr = None
-                if nix_expr:
-                    final_expr = nix_expr
-                    successful_results.append((plug, nix_expr))
+
+                # Check if this plugin was processed in this run
+                if plug.normalized_name in results_map:
+                    nix_expr, error = results_map[plug.normalized_name]
+
+                    if nix_expr:
+                        final_expr = nix_expr
+                    elif plug.normalized_name in existing_plugins:
+                        # Update failed, fallback to existing
+                        log.warning(f"Update failed for {plug.name}, keeping existing version. Error: {error}")
+                        final_expr = existing_plugins[plug.normalized_name]
+                        errors.append((plug, error))
+                    else:
+                        # Update failed with no fallback
+                        log.error(f"Update failed for {plug.name} and no existing version found. Error: {error}")
+                        errors.append((plug, error))
                 else:
-                    # Failed
-                    log.error(f"Update failed for {plug.name}. Error: {error}")
-                    errors.append((plug, error))
-                
+                    # Not processed this run, use existing if available
+                    final_expr = existing_plugins.get(plug.normalized_name)
+
                 if final_expr:
-                    new_ver = extract_version(final_expr)
-                    old_ver = old_versions.get(plug.normalized_name)
-                    if new_ver and old_ver and new_ver != old_ver:
-                        updated_plugins.append((plug.normalized_name, old_ver, new_ver))
+                    successful_results.append((plug, final_expr))
+                    track_version_change(plug, final_expr, old_versions, updated_plugins)
 
             self.generate_nix(successful_results, output_file)
 
@@ -296,6 +351,24 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         #         plugin = LuaPlugin(**row)
         #         luaPackages.append(plugin)
         pass
+
+
+def track_version_change(
+    plug: LuaPlugin, nix_expr: str, old_versions: dict[str, str], updated_plugins: list[tuple[str, str, str]]
+) -> None:
+    """Track version changes for a plugin."""
+    v = extract_version(nix_expr)
+    if not v:
+        return
+
+    r = extract_rev(nix_expr)
+    new_ver = f"{v}-{r}" if r else v
+    old_ver = old_versions.get(plug.normalized_name)
+
+    if old_ver is None:
+        updated_plugins.append((plug.normalized_name, "init", new_ver))
+    elif new_ver != old_ver:
+        updated_plugins.append((plug.normalized_name, old_ver, new_ver))
 
 
 def generate_pkg_nix(plug: LuaPlugin):
