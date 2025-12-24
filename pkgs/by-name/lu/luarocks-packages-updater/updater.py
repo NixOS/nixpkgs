@@ -20,7 +20,7 @@ from multiprocessing.dummy import Pool
 from pathlib import Path
 
 import nixpkgs_plugin_update  # type: ignore
-from nixpkgs_plugin_update import FetchConfig, Redirects, commit, update_plugins
+from nixpkgs_plugin_update import FetchConfig, Redirects, commit, retry, update_plugins
 
 
 class ColoredFormatter(logging.Formatter):
@@ -371,6 +371,11 @@ def track_version_change(
         updated_plugins.append((plug.normalized_name, old_ver, new_ver))
 
 
+@retry(subprocess.CalledProcessError, tries=3, delay=3, backoff=2)
+def run_luarocks(cmd: list[str]) -> str:
+    return subprocess.check_output(cmd, text=True)
+
+
 def generate_pkg_nix(plug: LuaPlugin):
     """
     Generate nix expression for a luarocks package
@@ -409,7 +414,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
         log.debug("running %s", " ".join(cmd))
 
-        output = subprocess.check_output(cmd, text=True)
+        output = run_luarocks(cmd)
         ## FIXME: luarocks nix command output isn't formatted properly
         output = "callPackage(\n" + output.strip() + ") {};\n\n"
         return (plug, output, None)
