@@ -73,6 +73,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
+  aws-cdk = pkgs.aws-cdk-cli; # Added 2025-12-23
   awesome-lint = throw "'awesome-lint' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   inherit (pkgs) bash-language-server; # added 2024-06-07
