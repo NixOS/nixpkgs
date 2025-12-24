@@ -21,19 +21,18 @@
   beamDeps ? [ ],
   propagatedBuildInputs ? [ ],
   postPatch ? "",
+  prePatch ? "",
+  preConfigure ? "",
   compilePorts ? false,
   meta ? { },
   enableDebugInfo ? false,
   mixEnv ? "prod",
   mixTarget ? "host",
-  removeConfig ? true,
   # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
   appConfigPath ? null,
   ...
 }@attrs:
-
-assert appConfigPath != null -> removeConfig;
 
 let
   shell =
@@ -82,27 +81,32 @@ let
         ];
         propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
+        # We don't want to include whatever config a dependency brings; per
+        # https://hexdocs.pm/elixir/main/Config.html, config is application specific.
+        prePatch = ''
+          rm -rf config
+        ''
+        + prePatch
+        + lib.optionalString (!isNull appConfigPath) ''
+          cp -r ${appConfigPath} config
+        '';
+
+        preConfigure =
+          preConfigure
+          +
+          # Copy the source so it can be used by mix projects
+          # do this before building to avoid build artifacts but after patching
+          # to include any modifications
+          ''
+            mkdir -p $out/src
+            cp -r "." "$out/src"
+          '';
+
         configurePhase =
           attrs.configurePhase or ''
             runHook preConfigure
 
             ${./mix-configure-hook.sh}
-            ${lib.optionalString (removeConfig && isNull appConfigPath)
-              # By default, we don't want to include whatever config a dependency brings; per
-              # https://hexdocs.pm/elixir/main/Config.html, config is application specific.
-              ''
-                rm -rf config
-                mkdir config
-              ''
-            }
-            ${lib.optionalString (!isNull appConfigPath)
-              # Some more tightly-coupled dependencies do depend on the config of the application
-              # they're being built for.
-              ''
-                rm -rf config
-                cp -r ${appConfigPath} config
-              ''
-            }
 
             runHook postConfigure
           '';
@@ -134,12 +138,6 @@ let
                 cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
               fi
             done
-
-            # Copy the source so it can be used by dependent packages. For example,
-            # phoenix applications need the source of phoenix and phoenix_html to
-            # build javascript and css assets.
-            mkdir -p $out/src
-            cp -r "$src/." "$out/src"
 
             runHook postInstall
           '';
