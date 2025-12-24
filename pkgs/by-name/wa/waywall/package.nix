@@ -6,6 +6,7 @@
   libspng,
   libxkbcommon,
   luajit,
+  makeWrapper,
   meson,
   ninja,
   pkg-config,
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -48,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 waywall/waywall -t $out/bin
+
+    wrapProgram $out/bin/waywall \
+      --prefix PATH : ${lib.makeBinPath [ xwayland ]}
 
     runHook postInstall
   '';
