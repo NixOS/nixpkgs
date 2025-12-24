@@ -6,6 +6,7 @@
   nix-update-script,
   pkg-config,
   openssl,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -37,6 +39,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # alistral tries to write to its config dir on invocation, and fails if it can't find a writable one
+    export XDG_CONFIG_HOME="$(mktemp -d)"
+    mkdir -p "$XDG_CONFIG_HOME"
+
+    installShellCompletion --cmd alistral \
+      --bash <($out/bin/alistral --generate bash) \
+      --fish <($out/bin/alistral --generate fish) \
+      --zsh <($out/bin/alistral --generate zsh)
+  '';
 
   meta = {
     homepage = "https://rustynova016.github.io/Alistral/";
