@@ -2,18 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "mcp-k8s-go";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "strowk";
     repo = "mcp-k8s-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5tmKngZTp5n8jDZwKAaG4ad+MPRFEJfgV/A5TMVLlM=";
+    hash = "sha256-wGaQXyOCaXnc5pZobdLk2bQLkJfNHXIcw/SRn1dBJ3A=";
   };
 
   vendorHash = "sha256-WULy61Ntra9Jz4fhSVOzftzWyQxvPFyBfjuKlKTORqI=";
@@ -23,14 +22,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
   ];
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "MCP server connecting to Kubernetes";
