@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "peacock";
-  version = "8.3.0";
+  version = "8.5.0-unstable-2025-12-02";
 
   src = fetchFromGitHub {
     owner = "thepeacockproject";
     repo = "Peacock";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-AegJ5h2sxs8iheBLbIBwZXjjZLk5GdcDVLbF4ldcmZ0=";
+    rev = "1c4315ab6e9ef215b2a9675d639d4fbbf18551c1";
+    hash = "sha256-vOSbp4y19ofo/qI9u/LX9S9KTDlIQdz53T6aQJHsSZo=";
   };
 
   nativeBuildInputs = [
@@ -76,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-sB0oag0sheimho8pn25HSc8GMeuS1RTmHLZUPiSSDqE=";
+    hash = "sha256-cbm/ADCFx/3pCBv2OuZyE7kRGqIod8i2M77qenP/9TY=";
   };
 
   meta = {
     description = "Server replacement for the HITMAN™ World of Assassination trilogy";
     homepage = "https://thepeacockproject.org/";
-    changelog = "https://github.com/thepeacockproject/Peacock/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/thepeacockproject/Peacock/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ marie ];
     mainProgram = "peacock";
