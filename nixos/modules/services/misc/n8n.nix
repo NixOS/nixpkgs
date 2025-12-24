@@ -61,7 +61,7 @@ in
             readOnly = true;
           };
           N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               Whether to share selected, anonymous telemetry with n8n.
@@ -69,7 +69,7 @@ in
             '';
           };
           N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
-            type = with lib.types; coercedTo bool toString str;
+            type = with lib.types; coercedTo bool builtins.toJSON str;
             default = false;
             description = ''
               When enabled, n8n sends notifications of new versions and security updates.
