@@ -89,8 +89,6 @@ makeScopeWithSplicing' {
 
       #### PANEL PLUGINS
 
-      xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
-
       xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
       xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
@@ -161,5 +159,6 @@ makeScopeWithSplicing' {
   xfce4-eyes-plugin = lib.warnOnInstantiate "‘xfce.xfce4-eyes-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-eyes-plugin’ directly" pkgs.xfce4-eyes-plugin; # Added on 2025-12-19
   xfce4-fsguard-plugin = lib.warnOnInstantiate "‘xfce.xfce4-fsguard-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-fsguard-plugin’ directly" pkgs.xfce4-fsguard-plugin; # Added on 2025-12-19
   xfce4-genmon-plugin = lib.warnOnInstantiate "‘xfce.xfce4-genmon-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-genmon-plugin’ directly" pkgs.xfce4-genmon-plugin; # Added on 2025-12-19
+  xfce4-i3-workspaces-plugin = lib.warnOnInstantiate "‘xfce.xfce4-i3-workspaces-plugin’ was moved to top-level. Please use ‘pkgs.xfce4-i3-workspaces-plugin’ directly" pkgs.xfce4-i3-workspaces-plugin; # Added on 2025-12-19
 
 }
