@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       monkieeboi
+      uku3lig
     ];
     platforms = lib.platforms.linux;
     mainProgram = "waywall";
