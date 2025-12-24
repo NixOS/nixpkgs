@@ -1234,6 +1234,8 @@ self: super: with self; {
 
   autopxd2 = callPackage ../development/python-modules/autopxd2 { };
 
+  autoray = callPackage ../development/python-modules/autoray { };
+
   autoslot = callPackage ../development/python-modules/autoslot { };
 
   av = callPackage ../development/python-modules/av { };
@@ -3798,6 +3800,8 @@ self: super: with self; {
   };
 
   diagrams = callPackage ../development/python-modules/diagrams { };
+
+  diastatic-malt = callPackage ../development/python-modules/diastatic-malt { };
 
   diceware = callPackage ../development/python-modules/diceware { };
 
@@ -11966,6 +11970,14 @@ self: super: with self; {
 
   pendulum = callPackage ../development/python-modules/pendulum { };
 
+  pennylane = callPackage ../development/python-modules/pennylane { };
+
+  pennylane-catalyst-bin = callPackage ../development/python-modules/pennylane-catalyst { };
+
+  pennylane-lightning-bin =
+    callPackage ../development/python-modules/pennylane-lightning/package-bin.nix
+      { };
+
   pentapy = callPackage ../development/python-modules/pentapy { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
@@ -16898,6 +16910,8 @@ self: super: with self; {
   scipp = callPackage ../development/python-modules/scipp { };
 
   scipy = callPackage ../development/python-modules/scipy { };
+
+  scipy-openblas32 = callPackage ../development/python-modules/scipy-openblas32 { };
 
   scipy-stubs = callPackage ../development/python-modules/scipy-stubs { };
 
