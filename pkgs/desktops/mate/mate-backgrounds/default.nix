@@ -5,15 +5,15 @@
   meson,
   ninja,
   gettext,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mate-backgrounds";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-backgrounds-${finalAttrs.version}.tar.xz";
     sha256 = "UNGv0CSGvQesIqWmtu+jAxFI8NSKguSI2QmtVwA6aUM=";
   };
 
@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation rec {
     ninja
   ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-backgrounds";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Background images and data for MATE";
@@ -35,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

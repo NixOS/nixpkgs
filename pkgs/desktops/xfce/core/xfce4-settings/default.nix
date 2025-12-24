@@ -7,7 +7,7 @@
   xfce4-dev-tools,
   wayland-scanner,
   wrapGAppsHook3,
-  exo,
+  xfce4-exo,
   garcon,
   gtk3,
   gtk-layer-shell,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     garcon
     glib
     gtk3

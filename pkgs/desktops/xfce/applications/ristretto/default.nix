@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   cairo,
-  exo,
+  xfce4-exo,
   gtk3,
   libexif,
   libxfce4ui,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    exo
+    xfce4-exo
     glib
     gtk3
     libexif
