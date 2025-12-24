@@ -126,7 +126,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       canndrew
       kwohlfahrt
-      pedohorse
+      permahorse
     ];
   };
 }
