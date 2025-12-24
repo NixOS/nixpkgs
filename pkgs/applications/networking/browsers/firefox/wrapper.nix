@@ -2,7 +2,8 @@
   stdenv,
   lib,
   makeDesktopItem,
-  makeWrapper,
+  makeShellWrapper,
+  makeBinaryWrapper,
   lndir,
   config,
   buildPackages,
@@ -295,11 +296,22 @@ let
         )
       );
 
-      nativeBuildInputs = [
-        makeWrapper
-        lndir
-        jq
-      ];
+      nativeBuildInputs =
+        [
+          lndir
+          jq
+        ]
+        ++ lib.optionals (!isDarwin) [
+          # Use shell wrapper because it supports --run.
+          makeShellWrapper
+        ]
+        ++ lib.optionals isDarwin [
+          # Use binary wrapper because it e.g. allows to avoid granting
+          # permissions for Screen Recording to bash for Google Meets.
+          # Note: we don't care about --run not supported because the wrapper
+          # doesn't support wrapping native messaging hosts at the moment.
+          makeBinaryWrapper
+        ];
       buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
 
       makeWrapperArgs = [
