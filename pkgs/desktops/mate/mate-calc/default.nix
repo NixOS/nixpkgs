@@ -10,15 +10,15 @@
   libxml2,
   mpfr,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-calc";
   version = "1.28.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-calc-${finalAttrs.version}.tar.xz";
     sha256 = "gEsSXR4oZLHnSvgW2psquLGUcrmvl0Q37nNVraXmKPU=";
   };
 
@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-calc";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Calculator for the MATE desktop";
@@ -50,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.mate ];
   };
-}
+})
