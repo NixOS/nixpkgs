@@ -106,7 +106,16 @@
   runCommand,
 }:
 
-buildPythonPackage rec {
+let
+  # Avoid using `rec`, so that using e.g `passthru` or any other attributes
+  # defined inside, will have to be done via the beets argument, which can be
+  # overriden. Until `finalAttrs` support reaches `buildPythonPackage`, there
+  # is no way to avoid this. See:
+  #
+  # https://github.com/NixOS/nixpkgs/issues/258246
+  version = "2.5.1";
+in
+buildPythonPackage {
   pname = "beets";
   version = "2.5.1";
   src = fetchFromGitHub {
@@ -145,7 +154,7 @@ buildPythonPackage rec {
     typing-extensions
     lap
   ]
-  ++ (lib.concatMap (p: p.propagatedBuildInputs) (lib.attrValues passthru.plugins.enabled));
+  ++ (lib.concatMap (p: p.propagatedBuildInputs) (lib.attrValues beets.passthru.plugins.enabled));
 
   nativeBuildInputs = [
     gobject-introspection
@@ -186,7 +195,7 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
     "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
-    "--prefix PATH : ${lib.makeBinPath passthru.plugins.wrapperBins}"
+    "--prefix PATH : ${lib.makeBinPath beets.passthru.plugins.wrapperBins}"
   ];
 
   nativeCheckInputs = [
@@ -199,12 +208,12 @@ buildPythonPackage rec {
     pillow
     writableTmpDirAsHomeHook
   ]
-  ++ passthru.plugins.wrapperBins;
+  ++ beets.passthru.plugins.wrapperBins;
 
   __darwinAllowLocalNetworking = true;
 
   disabledTestPaths =
-    passthru.plugins.disabledTestPaths
+    beets.passthru.plugins.disabledTestPaths
     ++ [
       # touches network
       "test/plugins/test_aura.py"
@@ -246,14 +255,14 @@ buildPythonPackage rec {
       \( -name '*.py' -o -path 'beetsplug/*/__init__.py' \) -print \
       | sed -n -re 's|^beetsplug/([^/.]+).*|\1|p' \
       | sort -u > plugins_available
-    ${diffPlugins (lib.attrNames passthru.plugins.builtins) "plugins_available"}
+    ${diffPlugins (lib.attrNames beets.passthru.plugins.builtins) "plugins_available"}
 
     export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}
       cat > "$1" <<CFG
-      plugins: ${lib.concatStringsSep " " (lib.attrNames passthru.plugins.enabled)}
+      plugins: ${lib.concatStringsSep " " (lib.attrNames beets.passthru.plugins.enabled)}
       CFG
     ''}" "$out/bin/beet" config -e
     env EDITOR=true "$out/bin/beet" config -e
@@ -433,10 +442,10 @@ buildPythonPackage rec {
           testPaths = [ ];
         };
       };
-      base = lib.mapAttrs (_: a: { builtin = true; } // a) passthru.plugins.builtins;
+      base = lib.mapAttrs (_: a: { builtin = true; } // a) beets.passthru.plugins.builtins;
       overrides = lib.mapAttrs (
         plugName:
-        lib.throwIf (passthru.plugins.builtins.${plugName}.deprecated or false)
+        lib.throwIf (beets.passthru.plugins.builtins.${plugName}.deprecated or false)
           "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
       ) pluginOverrides;
       all = lib.mapAttrs (
@@ -450,13 +459,13 @@ buildPythonPackage rec {
           wrapperBins = [ ];
         }
         // a
-      ) (lib.recursiveUpdate passthru.plugins.base passthru.plugins.overrides);
-      enabled = lib.filterAttrs (_: p: p.enable) passthru.plugins.all;
-      disabled = lib.filterAttrs (_: p: !p.enable) passthru.plugins.all;
+      ) (lib.recursiveUpdate beets.passthru.plugins.base beets.passthru.plugins.overrides);
+      enabled = lib.filterAttrs (_: p: p.enable) beets.passthru.plugins.all;
+      disabled = lib.filterAttrs (_: p: !p.enable) beets.passthru.plugins.all;
       disabledTestPaths = lib.flatten (
-        lib.attrValues (lib.mapAttrs (_: v: v.testPaths) passthru.plugins.disabled)
+        lib.attrValues (lib.mapAttrs (_: v: v.testPaths) beets.passthru.plugins.disabled)
       );
-      wrapperBins = lib.concatMap (p: p.wrapperBins) (lib.attrValues passthru.plugins.enabled);
+      wrapperBins = lib.concatMap (p: p.wrapperBins) (lib.attrValues beets.passthru.plugins.enabled);
     };
     tests = {
       gstreamer =
