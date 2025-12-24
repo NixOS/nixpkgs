@@ -73,6 +73,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Prone to failure when langchain-core is newer than the tests
+    "test_serdes"
+  ];
+
   passthru = {
     # python updater script sets the wrong tag
     skipBulkUpdate = true;
