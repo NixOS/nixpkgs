@@ -7,7 +7,7 @@
   xfce4-dev-tools,
   wrapGAppsHook3,
   polkit,
-  exo,
+  xfce4-exo,
   libxfce4util,
   libxfce4ui,
   libxfce4windowing,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gtk3
     gtk-layer-shell
     glib
