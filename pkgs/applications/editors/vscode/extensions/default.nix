@@ -5234,6 +5234,8 @@ let
 
       wgsl-analyzer.wgsl-analyzer = callPackage ./wgsl-analyzer.wgsl-analyzer { };
 
+      washan.cargo-appraiser = callPackage ./washan.cargo-appraiser { };
+
       wholroyd.jinja = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "jinja";
