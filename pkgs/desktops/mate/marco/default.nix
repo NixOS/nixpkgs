@@ -18,15 +18,15 @@
   mate-desktop,
   mate-settings-daemon,
   wrapGAppsHook3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marco";
   version = "1.28.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/marco-${finalAttrs.version}.tar.xz";
     sha256 = "JJbl5A7pgM1oSUk6w+D4/Q3si4HGdNqNm6GaV38KwuE=";
   };
 
@@ -61,7 +61,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/marco";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "MATE default window manager";
@@ -70,4 +74,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})
