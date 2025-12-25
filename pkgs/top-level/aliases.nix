@@ -971,6 +971,7 @@ mapAliases {
   linuxPackages_xen_dom0 = throw "'linuxPackages_xen_dom0' has been renamed to/replaced by 'linuxPackages'"; # Converted to throw 2025-10-27
   linuxPackages_xen_dom0_hardened = throw "'linuxPackages_xen_dom0_hardened' has been renamed to/replaced by 'linuxPackages_hardened'"; # Converted to throw 2025-10-27
   linuxstopmotion = throw "'linuxstopmotion' has been renamed to/replaced by 'stopmotion'"; # Converted to throw 2025-10-27
+  liquidfun = throw "liquidfun has been removed, as it has failed to build (and so presumed unused) for 10 years"; # Added 2025-12-19
   Literate = throw "'Literate' has been renamed to/replaced by 'literate'"; # Converted to throw 2025-10-27
   littlenavmap = throw "littlenavmap has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   live-chart = throw "live-chart has been removed as it is no longer used in Nixpkgs. livechart-2 (elementary's fork) is available as pantheon.live-chart"; # Added 2025-10-10

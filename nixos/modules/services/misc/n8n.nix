@@ -34,7 +34,13 @@ in
         See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
       '';
       type = lib.types.submodule {
-        freeformType = with lib.types; attrsOf str;
+        freeformType =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            (coercedTo int toString str)
+            (coercedTo bool builtins.toJSON str)
+          ]);
         options = {
           GENERIC_TIMEZONE = lib.mkOption {
             type = with lib.types; nullOr str;

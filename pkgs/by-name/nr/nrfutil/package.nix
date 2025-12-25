@@ -115,6 +115,7 @@ symlinkJoin {
           ''--prefix PATH : "$out/bin"''
           ''--prefix PATH : "$out"/lib/nrfutil-npm''
           ''--prefix PATH : "$out"/lib/nrfutil-nrf5sdk-tools''
+          ''--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libusb1 ]}''
           ''--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/lib/libjlinkarm.so''
           ''--set NRFUTIL_BLE_SNIFFER_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-shim''
           ''--set NRFUTIL_BLE_SNIFFER_HCI_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-hci-shim''

@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast Python library to work with IPLD: DAG-CBOR, CID, CAR, multibase";
     homepage = "https://github.com/MarshalX/python-libipld";
-    changelog = "https://github.com/MarshalX/python-libipld/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/MarshalX/python-libipld/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vji ];
   };
