@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "5.0.4";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-f7+/OXdQEyN9XSkVRDRVUUdNGGEgyu3e/Y2oS7De96Y=";
+    hash = "sha256-AQAyxNVt8PCDCU/jViYY3IlPdNiesgx5kT9W7yrNJ4I=";
   };
 
   nativeBuildInputs = [

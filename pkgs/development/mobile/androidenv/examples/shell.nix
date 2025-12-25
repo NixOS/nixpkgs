@@ -37,6 +37,8 @@ let
     };
   */
 
+  inherit (pkgs) lib;
+
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
     inherit pkgs licenseAccepted;
@@ -109,8 +111,12 @@ let
 
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
-  firstSdk = pkgs.lib.foldl' pkgs.lib.min 100 androidComposition.platformVersions;
-  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
+  firstSdkVersion = lib.foldl' (
+    s: x: if lib.strings.compareVersions (toString x) s < 0 then toString x else s
+  ) "100" androidComposition.platformVersions;
+  latestSdkVersion = lib.foldl' (
+    s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
+  ) "0" androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
@@ -181,15 +187,11 @@ pkgs.mkShell rec {
             "extras;google;gcm"
           )
 
-          for x in $(seq ${toString firstSdk} ${toString latestSdk}); do
-            if [ $x -ne 34 ]; then
-              # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
-              packages+=("platforms;android-$x")
-            fi
+          for x in $(seq ${toString firstSdkVersion} ${toString latestSdkVersion}); do
             packages+=("sources;android-$x")
           done
 
-          ${pkgs.lib.optionalString includeAuto ''packages+=("extras;google;auto")''}
+          ${lib.optionalString includeAuto ''packages+=("extras;google;auto")''}
 
           for package in "''${packages[@]}"; do
             if [[ ! $installed_packages_section =~ "$package" ]]; then
