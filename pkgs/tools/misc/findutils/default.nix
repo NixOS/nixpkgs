@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findutils";
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
+    url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   passthru.updateScript = directoryListingUpdater {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     url = "https://ftp.gnu.org/gnu/findutils/";
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     mainProgram = "find";
     maintainers = [ lib.maintainers.mdaniels5757 ];
   };
-}
+})
