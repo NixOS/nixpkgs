@@ -495,7 +495,7 @@ in
                     "DEBUG3"
                   ]
                 );
-                default = "INFO"; # upstream default
+                default = null;
                 description = ''
                   Gives the verbosity level that is used when logging messages from {manpage}`sshd(8)`. Logging with a DEBUG level
                   violates the privacy of users and is not recommended.
@@ -507,7 +507,7 @@ in
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                default = false;
+                default = null;
                 description = ''
                   Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for
                   the remote IP address maps back to the very same IP address.
@@ -517,7 +517,7 @@ in
               };
               X11Forwarding = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                default = false;
+                default = null;
                 description = ''
                   Whether to allow X11 connections to be forwarded.
                 '';
@@ -530,7 +530,7 @@ in
                 '';
               };
               PermitRootLogin = lib.mkOption {
-                default = "prohibit-password";
+                default = null;
                 type = lib.types.nullOr (
                   lib.types.enum [
                     "yes"
@@ -546,14 +546,14 @@ in
               };
               KbdInteractiveAuthentication = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                default = true;
+                default = null;
                 description = ''
                   Specifies whether keyboard-interactive authentication is allowed.
                 '';
               };
               GatewayPorts = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = "no";
+                default = null;
                 description = ''
                   Specifies whether remote hosts are allowed to connect to
                   ports forwarded for the client.  See
@@ -597,7 +597,7 @@ in
               };
               StrictModes = lib.mkOption {
                 type = lib.types.nullOr (lib.types.bool);
-                default = true;
+                default = null;
                 description = ''
                   Whether sshd should check file modes and ownership of directories
                 '';
@@ -867,7 +867,7 @@ in
 
       assertions = [
         {
-          assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
+          assertion = if cfg.settings.X11Forwarding == true then cfgc.setXAuthLocation else true;
           message = "cannot enable X11 forwarding without setting xauth location";
         }
         {
