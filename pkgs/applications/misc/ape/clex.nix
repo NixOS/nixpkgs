@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "attempto-clex";
-  version = "5133afe";
+  version = "6.5-090528";
 
   src = fetchFromGitHub {
     owner = "Attempto";
     repo = "Clex";
     tag = version;
-    sha256 = "0p9s64g1jic213bwm6347jqckszgnni9szrrz31qjgaf32kf7nkp";
+    hash = "sha256-Oa1AMBaYpjd+U2k9lBnou4+4IgBwU8fojJ8bY9tf9ZE=";
   };
 
   installPhase = ''
