@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hexdino";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Luz";
     repo = "hexdino";
     rev = version;
-    hash = "sha256-glbyftCJiP0/5trW7DOcVCU2q4ZH3zFK96eyGuYR8eY=";
+    hash = "sha256-M1lUm8rJj9c+9MgU7AJvk/ZVuTC1QYPsHRQxCQTc3WI=";
   };
 
-  cargoHash = "sha256-NfVtNoTDGx3MGOe+bUOCgjSs8ZTfxMSCTp09sXOfUPs=";
+  cargoHash = "sha256-IZhQ80iDO6l1FLAbq2l7QLpjoenkri3wBdQ6Mnz+BOI=";
 
   meta = {
     description = "Hex editor with vim like keybindings written in Rust";
