@@ -20867,6 +20867,8 @@ self: super: with self; {
 
   yamale = callPackage ../development/python-modules/yamale { };
 
+  yamlcore = callPackage ../development/python-modules/yamlcore { };
+
   yamlfix = callPackage ../development/python-modules/yamlfix { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
