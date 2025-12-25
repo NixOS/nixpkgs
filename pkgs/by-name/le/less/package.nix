@@ -1,7 +1,6 @@
 {
   lib,
   fetchurl,
-  fetchpatch,
   ncurses,
   pcre2,
   stdenv,
