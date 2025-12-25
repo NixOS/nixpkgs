@@ -25,6 +25,8 @@
   copyDesktopItems,
 
   nix-update-script,
+
+  icnsify,
 }:
 let
   inherit (dotnetCorePackages) fetchNupkg;
@@ -70,6 +72,9 @@ buildDotnetModule (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    icnsify
   ];
 
   buildInputs = [
@@ -78,6 +83,7 @@ buildDotnetModule (finalAttrs: {
       version = "3.2.52";
       hash = "sha256-sKVCXtd5qD86D2FOgjMXh37P6IrcmqmaoJregAhLFGY=";
     })
+
   ];
 
   nugetDeps = ./deps.json;
@@ -85,15 +91,20 @@ buildDotnetModule (finalAttrs: {
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnetFlags =
-    lib.optionals stdenv.hostPlatform.isx86_64 [ "-p:Runtimeidentifier=linux-x64" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-p:Runtimeidentifier=linux-arm64" ];
+  dotnetFlags = "-p:Runtimeidentifier=${if stdenv.hostPlatform.isLinux then "linux" else "osx"}-${
+    if stdenv.hostPlatform.isx86_64 then "x64" else "arm64"
+  }";
 
   buildType = "ReleaseNoUpdate";
   projectFile = [
     "src/PixiEditor.Desktop/PixiEditor.Desktop.csproj"
     "src/PixiEditor/PixiEditor.csproj"
-    "src/PixiEditor.Linux/PixiEditor.Linux.csproj"
+    (
+      if stdenv.hostPlatform.isLinux then
+        "src/PixiEditor.Linux/PixiEditor.Linux.csproj"
+      else
+        "src/PixiEditor.MacOs/PixiEditor.MacOs.csproj"
+    )
     "src/PixiEditor.Platform.Standalone/PixiEditor.Platform.Standalone.csproj"
   ];
   executables = [ "PixiEditor.Desktop" ];
@@ -161,7 +172,17 @@ buildDotnetModule (finalAttrs: {
 
   postFixup = ''
     mv $out/bin/PixiEditor.Desktop $out/bin/pixieditor
-  '';
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/PixiEditor.app/Contents/MacOS
+    ln -s $out/bin/pixieditor $out/Applications/PixiEditor.app/Contents/MacOS/pixieditor
+
+    install -Dm644 ${./info.plist} $out/Applications/PixiEditor.app/Contents/Info.plist
+
+    mkdir $out/Applications/PixiEditor.app/Contents/Resources/
+    icnsify src/PixiEditor/Images/favicon.ico \
+      -o $out/Applications/PixiEditor.app/Contents/Resources/PixiEditorLogo.icns
+  '');
 
   passthru = {
     updateScript = nix-update-script { };
@@ -183,6 +204,8 @@ buildDotnetModule (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 })
