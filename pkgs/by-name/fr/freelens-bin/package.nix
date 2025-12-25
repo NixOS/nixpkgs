@@ -5,7 +5,8 @@
   lib,
   appimageTools,
   makeWrapper,
-  undmg,
+  _7zz,
+  darwin,
 }:
 
 let
@@ -58,8 +59,9 @@ if stdenv.hostPlatform.isDarwin then
       version
       src
       meta
-      undmg
+      _7zz
       ;
+    autoSignDarwinBinariesHook = darwin.autoSignDarwinBinariesHook;
   }
 else
   import ./linux.nix {
