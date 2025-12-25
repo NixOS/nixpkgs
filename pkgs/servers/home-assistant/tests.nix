@@ -88,6 +88,7 @@ let
     miele = getComponentDeps "cloud";
     mjpeg = getComponentDeps "camera";
     mobile_app = getComponentDeps "frontend";
+    mopeka = getComponentDeps "switchbot";
     motioneye = getComponentDeps "camera";
     mqtt = getComponentDeps "camera";
     nest = getComponentDeps "camera" ++ [
