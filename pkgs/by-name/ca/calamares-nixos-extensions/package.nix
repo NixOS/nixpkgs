@@ -12,10 +12,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/{etc,lib,share}/calamares
     cp -r modules $out/lib/calamares/
     cp -r config/* $out/etc/calamares/
     cp -r branding $out/share/calamares/
+
+    # Nixpkgs doesn't like having files with `@` symbols in them.
+    mv $out/share/calamares/branding/nixos/notesqml{-,@}unfree.qml
 
     substituteInPlace $out/etc/calamares/settings.conf --replace-fail @out@ $out
     substituteInPlace $out/etc/calamares/modules/locale.conf --replace-fail @glibcLocales@ ${glibcLocales}
