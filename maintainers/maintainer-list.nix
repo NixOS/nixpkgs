@@ -29119,6 +29119,12 @@
     githubId = 37774475;
     name = "Yusuf Duran";
   };
+  yusufraji = {
+    name = "Yusuf Raji";
+    github = "yusufraji";
+    githubId = 22890520;
+    matrix = "@yusufraji49:matrix.org";
+  };
   yvan-sraka = {
     email = "yvan@sraka.xyz";
     github = "yvan-sraka";
