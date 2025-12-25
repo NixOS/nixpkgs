@@ -9,11 +9,11 @@
     "vendorHash": "sha256-n01cHzyG9FvxCb92sFccKY1h7Pa0zmi+CUxSYHM5Elc="
   },
   "a10networks_thunder": {
-    "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
+    "hash": "sha256-RX3mP5btzyvuBjoMNiUL6ZeFLEo5SqmwwSK/eE0gWEw=",
     "homepage": "https://registry.terraform.io/providers/a10networks/thunder",
     "owner": "a10networks",
     "repo": "terraform-provider-thunder",
-    "rev": "v1.4.2",
+    "rev": "v1.5.0",
     "spdx": "BSD-2-Clause",
     "vendorHash": null
   },
