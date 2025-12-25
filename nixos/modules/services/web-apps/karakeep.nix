@@ -169,11 +169,15 @@ in
         "karakeep-workers.service"
       ];
       partOf = [ "karakeep.service" ];
-      environment = karakeepEnv;
+      environment = {
+        NEXT_CACHE_DIR = "%C/karakeep";
+      }
+      // karakeepEnv;
       serviceConfig = {
         ExecStart = "${cfg.package}/lib/karakeep/start-web";
         User = "karakeep";
         Group = "karakeep";
+        CacheDirectory = "karakeep";
         StateDirectory = "karakeep";
         EnvironmentFile = environmentFiles;
         PrivateTmp = "yes";
