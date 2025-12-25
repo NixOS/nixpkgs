@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "cexprtk";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QhftIybufVPO/YbLFycR4qYEAtQMcRPP5jKS6o6dFZg=";
+    hash = "sha256-sBLkHco0u2iEsdUxmPW2ONP/Fe08p0fOVJLmzz3t4os=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
