@@ -107,6 +107,7 @@ in
           binPath = "/run/current-system/sw/bin/sway";
         };
       '';
+      default = { };
     };
   };
 
@@ -123,7 +124,7 @@ in
         services.displayManager.enable = true;
       }
 
-      (lib.mkIf cfg.waylandCompositors != {} {
+      (lib.mkIf (cfg.waylandCompositors != { }) {
         services.displayManager.sessionPackages = lib.mapAttrsToList (
           name: value:
           mk_uwsm_desktop_entry {
