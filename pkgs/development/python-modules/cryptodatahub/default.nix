@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-taYpSYkfucc9GQpVDiAZgCt/D3Akld20LkFEhsdKH0Q=";
+    hash = "sha256-NxLUy16u8UL6klvVuXPIIlNuiehlomPsmiS4K5QT9cE=";
   };
 
   build-system = [
