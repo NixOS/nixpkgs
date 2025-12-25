@@ -17,13 +17,14 @@ let
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
   inherit (lib)
-    concatMapStrings
     attrNames
+    concatMapStrings
     getAttr
     mkIf
     mkOption
     mkEnableOption
     mkPackageOption
+    optionalAttrs
     ;
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
@@ -37,6 +38,7 @@ let
     shutdown_cmd = "/run/current-system/systemd/bin/systemctl poweroff";
     restart_cmd = "/run/current-system/systemd/bin/systemctl reboot";
     service_name = "ly";
+    auto_login_service = "ly-autologin";
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
@@ -45,6 +47,10 @@ let
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
     setup_cmd = dmcfg.sessionData.wrapper;
+  }
+  // optionalAttrs dmcfg.autoLogin.enable {
+    auto_login_session = dmcfg.sessionData.autologinSession;
+    auto_login_user = dmcfg.autoLogin.user;
   };
 
   finalConfig = defaultConfig // cfg.settings;
@@ -82,17 +88,31 @@ in
 
     assertions = [
       {
-        assertion = !dmcfg.autoLogin.enable;
+        assertion = dmcfg.autoLogin.enable -> dmcfg.sessionData.autologinSession != null;
         message = ''
-          ly doesn't support auto login.
+          ly auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];
 
-    security.pam.services.ly = {
-      startSession = true;
-      unixAuth = true;
-      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+    security.pam.services = {
+      ly = {
+        startSession = true;
+        unixAuth = true;
+        enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+      };
+
+      ly-autologin.text = ''
+        auth      requisite pam_nologin.so
+        auth      required  pam_succeed_if.so uid >= 1000 quiet
+        auth      required  pam_permit.so
+
+        account   include   ly
+
+        password  include   ly
+
+        session   include   ly
+      '';
     };
 
     environment = {
