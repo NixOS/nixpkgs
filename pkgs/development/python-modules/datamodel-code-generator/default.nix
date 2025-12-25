@@ -23,18 +23,21 @@
   pytestCheckHook,
   pyyaml,
   toml,
+  time-machine,
+  inline-snapshot,
+  watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.35.0";
+  version = "0.46.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-whhyTkX3R76idVNmY/6O9aVDU7DSvDtLq7JK0NJXn0U=";
+    hash = "sha256-IjewCwdrmdgxJEQ/4ATTM+i9XZuGHBtzopISiAmBPDQ=";
   };
 
   pythonRelaxDeps = [
@@ -75,6 +78,9 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
+    time-machine
+    inline-snapshot
+    watchfiles
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
