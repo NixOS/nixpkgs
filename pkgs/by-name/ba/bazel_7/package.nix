@@ -43,7 +43,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.6.0",
+  version ? "7.7.1",
 }:
 
 let
@@ -51,7 +51,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-eQKNB38G8ziDuorzoj5Rne/DZQL22meVLrdK0z7B2FI=";
+    hash = "sha256-YYGzVwwvZX2YmxFB+wwaCOtfCBBspXfcfcUufQI4N5o=";
   };
 
   defaultShellUtils =
@@ -108,24 +108,24 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-94KFvsS7fInXFTQZPzMq6DxnHQrRktljwACyAz8adSw=";
+          hash = "sha256-Rym9S7ZEPXeUDYDtWQPDIvJU9Q1SWqBrfcGI/9Hc6Xg=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
+          hash = "sha256-8cFuQA/cSRzMBH5WicXoXkXSrO+s4QhdFgWq86UFQ4M=";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
+          hash = "sha256-hYKupe4tjQRIu9oQ/XA0c02xohy+TqNRoQASuWmqXTE=";
         }
-      else
+      else if stdenv.hostPlatform.system == "aarch64-darwin" then
         fetchurl {
-          # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
-          hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
-        };
+          hash = "sha256-/ooe6QZOlK+uB1wN1O+0U9ucE3O53xL+y/+EedQI6wg=";
+        }
+      else (throw "Unsupported system by bazelBootstrap: ${stdenv.hostPlatform.system}");
 
     nativeBuildInputs = defaultShellUtils;
     buildInputs = [
@@ -361,11 +361,6 @@ stdenv.mkDerivation rec {
     # I do not know yet how to allow IOPMAssertion{CreateWithName,Release}
     ./darwin_sleep.patch
 
-    # Fix DARWIN_XCODE_LOCATOR_COMPILE_COMMAND by removing multi-arch support.
-    # Nixpkgs toolcahins do not support that (yet?) and get confused.
-    # Also add an explicit /usr/bin prefix that will be patched below.
-    ./xcode_locator.patch
-
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -436,6 +431,9 @@ stdenv.mkDerivation rec {
         sedVerbose compile.sh \
           -e "/bazel_build /a\  --macos_sdk_version=${stdenv.hostPlatform.darwinMinVersion} \\\\" \
 
+        # Fix DARWIN_XCODE_LOCATOR_COMPILE_COMMAND by removing multi-arch support.
+        substituteInPlace tools/osx/BUILD \
+          --replace-fail "-framework Foundation -arch arm64 -arch x86_64" "-framework Foundation"
       '';
 
       genericPatches = ''
@@ -589,6 +587,11 @@ stdenv.mkDerivation rec {
     # Note that .bazelversion is always correct and is based on bazel-*
     # executable name, version checks should work fine
     export EMBED_LABEL="${version}- (@non-git)"
+
+    # bootstrap bazel doesn't set correct bazel_version for bazel_features by default
+    # https://github.com/bazelbuild/bazel/issues/27401
+    # https://github.com/bazelbuild/bazel/issues/27474
+    export BAZEL_DEV_VERSION_OVERRIDE="${version}"
 
     echo "Stage 1 - Running bazel bootstrap script"
     ${bash}/bin/bash ./bazel_src/compile.sh
