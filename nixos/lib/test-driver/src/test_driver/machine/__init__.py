@@ -97,15 +97,16 @@ def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
+    deadline = time.monotonic() + timeout
 
-    for _ in range(timeout):
+    while deadline > time.monotonic():
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
         raise RequestedAssertionFailed(
-            f"action timed out after {timeout} tries with one-second pause in-between"
+            f"action timed out after {timeout} seconds with one-second pause in-between"
         )
 
 
