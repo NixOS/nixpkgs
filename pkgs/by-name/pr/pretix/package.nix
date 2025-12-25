@@ -156,6 +156,7 @@ python.pkgs.buildPythonApplication rec {
       cryptography
       css-inline
       defusedcsv
+      dictlib
       django
       django-bootstrap3
       django-compressor
