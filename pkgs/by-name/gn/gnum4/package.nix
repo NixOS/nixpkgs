@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  gnum4,
+  texinfo,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -69,4 +71,23 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
+  passthru = {
+    # Separate derivation due bootstrapping and cyclic dependencies.
+    doc = stdenv.mkDerivation {
+      # Mimic look and feel of multiple outputs.
+      name = "${gnum4.name}-doc";
+      inherit (gnum4) src;
+      dontConfigure = true;
+
+      nativeBuildInputs = [ texinfo ];
+      buildPhase = ''
+        makeinfo --html --no-split doc/m4.texi
+      '';
+
+      installPhase = ''
+        mkdir -p $out/share/doc/${gnum4.name}
+        cp ./m4.html $out/share/doc/${gnum4.name}/index.html
+      '';
+    };
+  };
 })

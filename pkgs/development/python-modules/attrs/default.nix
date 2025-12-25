@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   callPackage,
   buildPythonPackage,
@@ -6,6 +7,12 @@
   pythonOlder,
   replaceVars,
   hatchling,
+  sphinxHook,
+  attrs,
+  furo,
+  sphinx-notfound-page,
+  myst-parser,
+  sphinxcontrib-towncrier,
 }:
 
 buildPythonPackage rec {
@@ -45,8 +52,29 @@ buildPythonPackage rec {
   # Instead, we do this as a passthru.tests test.
   doCheck = false;
 
-  passthru.tests = {
-    pytest = callPackage ./tests.nix { };
+  passthru = {
+    # Separate derivation; `sphinx` indirectly depends on `attrs`
+    doc = stdenv.mkDerivation {
+      inherit (attrs) src;
+      name = "${attrs.name}-doc";
+
+      nativeBuildInputs = [
+        attrs
+        furo
+        myst-parser
+        sphinx-notfound-page
+        sphinxHook
+        sphinxcontrib-towncrier
+      ];
+
+      postInstallSphinx = ''
+        mv $out/share/doc/${attrs.name}-doc $out/share/doc/${attrs.name}
+      '';
+    };
+
+    tests = {
+      pytest = callPackage ./tests.nix { };
+    };
   };
 
   meta = {
