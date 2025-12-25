@@ -6,7 +6,6 @@
   version ? null,
 }:
 
-with lib;
 mkRocqDerivation {
   pname = "parseque";
   repo = "parseque";
@@ -14,12 +13,11 @@ mkRocqDerivation {
 
   inherit version;
   defaultVersion =
-    with versions;
-    switch
+    lib.switch
       [ rocq-core.rocq-version ]
       [
         {
-          cases = [ (range "9.0" "9.1") ];
+          cases = [ (lib.versions.range "9.0" "9.1") ];
           out = "0.3.0";
         }
       ]
@@ -33,7 +31,7 @@ mkRocqDerivation {
 
   meta = {
     description = "Total parser combinators in Rocq";
-    maintainers = with maintainers; [ womeier ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ womeier ];
+    license = lib.licenses.mit;
   };
 }

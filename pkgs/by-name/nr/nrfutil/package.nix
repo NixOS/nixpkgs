@@ -24,14 +24,14 @@ let
   platformSources =
     sources.${stdenvNoCC.system} or (throw "unsupported platform ${stdenvNoCC.system}");
 
-  sharedMeta = with lib; {
+  sharedMeta = {
     description = "CLI tool for managing Nordic Semiconductor devices";
     homepage = "https://www.nordicsemi.com/Products/Development-tools/nRF-Util";
     changelog = "https://docs.nordicsemi.com/bundle/nrfutil/page/guides/revision_history.html";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = lib.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       h7x4
       ezrizhu
     ];

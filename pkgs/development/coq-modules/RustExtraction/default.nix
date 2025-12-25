@@ -7,7 +7,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "RustExtraction";
   repo = "coq-rust-extraction";
@@ -25,15 +24,14 @@ mkCoqDerivation {
         inherit out;
       };
     in
-    with versions;
-    switch
+    lib.switch
       [
         coq.coq-version
         metacoq.version
       ]
       [
-        (case (range "8.20" "9.0") (range "1.3.2" "1.3.4") "0.1.1")
-        (case (range "8.17" "8.19") (range "1.3.1" "1.3.3") "0.1.0")
+        (case (lib.versions.range "8.20" "9.0") (lib.versions.range "1.3.2" "1.3.4") "0.1.1")
+        (case (lib.versions.range "8.17" "8.19") (lib.versions.range "1.3.1" "1.3.3") "0.1.0")
       ]
       null;
 
@@ -56,7 +54,7 @@ mkCoqDerivation {
 
   meta = {
     description = "Framework for extracting Coq programs to Rust";
-    maintainers = with maintainers; [ _4ever2 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ _4ever2 ];
+    license = lib.licenses.mit;
   };
 }
