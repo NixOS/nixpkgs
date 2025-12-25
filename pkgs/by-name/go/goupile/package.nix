@@ -28,6 +28,12 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-fvWWjNxiXhGqbJhdH6GeXr7jKHnxjr36g6kkHhLm6Z0=";
   };
 
+  patches = [
+    ./0001-try-debug-prune-bug.patch
+    ./0002-goupile-wild-logs-patch.patch
+    ./0003-sandbox-vm-bug-debug.patch
+  ];
+
   nativeBuildInputs = [
     installShellFiles
   ]
