@@ -1,5 +1,6 @@
 {
   fetchzip,
+  fetchpatch,
   lib,
   rustPlatform,
   mdbook,
@@ -25,6 +26,17 @@ rustPlatform.buildRustPackage (final: {
     stripRoot = false;
   };
 
+  patches = [
+    # Support mdbook 0.5.x: escape HTML tags in command descriptions
+    ./mdbook-0.5-support.patch
+  ];
+
+  postPatch = ''
+    # mdbook 0.5 uses asset hashing for CSS/JS files
+    # Remove custom theme to use default mdbook theme with correct asset references
+    rm -f book/theme/index.hbs
+  '';
+
   cargoHash = "sha256-Mf0nrgMk1MlZkSyUN6mlM5lmTcrOHn3xBNzmVGtApEU=";
 
   nativeBuildInputs = [
@@ -49,7 +61,7 @@ rustPlatform.buildRustPackage (final: {
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
     cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
-    cp -r book-html $doc/share/doc/$name
+    cp -r ../book-html $doc/share/doc/$name
   '';
 
   nativeInstallCheckInputs = [
