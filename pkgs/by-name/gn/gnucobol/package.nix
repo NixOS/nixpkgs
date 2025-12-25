@@ -143,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       lgpl3Only
     ];
+    mainProgram = "cobc";
     maintainers = with lib.maintainers; [
       lovesegfault
       techknowlogick
