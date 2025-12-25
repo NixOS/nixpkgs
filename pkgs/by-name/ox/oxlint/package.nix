@@ -38,7 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxlint_v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";
