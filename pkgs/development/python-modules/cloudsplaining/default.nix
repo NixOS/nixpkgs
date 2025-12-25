@@ -11,7 +11,6 @@
   markdown,
   policy-sentry,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   schema,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "cloudsplaining";
   version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
