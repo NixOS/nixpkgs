@@ -7,7 +7,6 @@
 
 let
   cfg = config.programs.thunar;
-
 in
 {
   meta = {
@@ -18,35 +17,41 @@ in
     programs.thunar = {
       enable = lib.mkEnableOption "Thunar, the Xfce file manager";
 
+      package = lib.mkPackageOption pkgs "xfce.thunar" {
+        default = [ "xfce" "thunar" ];
+      };
+
+
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        default = cfg.package.override { thunarPlugins = cfg.plugins; };
+        visible = false;
+        readOnly = true;
+        description = "The resulting Thunar package, bundled with plugins";
+      };
+
       plugins = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.package;
         description = "List of thunar plugins to install.";
         example = lib.literalExpression "with pkgs.xfce; [ thunar-archive-plugin thunar-volman ]";
       };
-
     };
   };
 
-  config = lib.mkIf cfg.enable (
-    let
-      package = pkgs.xfce.thunar.override { thunarPlugins = cfg.plugins; };
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.finalPackage
+    ];
 
-    in
-    {
-      environment.systemPackages = [
-        package
-      ];
+    services.dbus.packages = [
+      cfg.finalPackage
+    ];
 
-      services.dbus.packages = [
-        package
-      ];
+    systemd.packages = [
+      cfg.finalPackage
+    ];
 
-      systemd.packages = [
-        package
-      ];
-
-      programs.xfconf.enable = true;
-    }
-  );
+    programs.xfconf.enable = true;
+  };
 }
