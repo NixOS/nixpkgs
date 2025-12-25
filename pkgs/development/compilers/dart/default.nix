@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
-  bintools,
+  buildPackages,
   versionCheckHook,
   runCommand,
   cctools,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R . $out
   ''
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
+    find $out/bin -executable -type f -exec patchelf --set-interpreter ${buildPackages.bintools.dynamicLinker} {} \;
   ''
   + ''
     runHook postInstall
