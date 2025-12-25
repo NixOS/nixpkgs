@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sleuthkit";
-  version = "4.12.1"; # Note: when updating don't forget to also update the rdeps outputHash
+  version = "4.14.0"; # Note: when updating don't forget to also update the rdeps outputHash
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "sleuthkit-${finalAttrs.version}";
-    hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
+    hash = "sha256-WvGVEDuhpmcyPOaihDruBbQbcj7s+Zkt2/D5CIsu0u8=";
   };
 
   # Fetch libraries using a fixed output derivation
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-mc/KQrwn3xpPI0ngOLcpoQDaJJm/rM8XgaX//5PiRZk=";
+    outputHash = "sha256-HfO8yWlL16NuXQ+NWIHwii69Vfb1vvSmNC3+6p0ALdg=";
   };
 
   postUnpack = ''

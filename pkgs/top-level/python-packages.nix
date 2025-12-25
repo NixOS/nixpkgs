@@ -3871,6 +3871,8 @@ self: super: with self; {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
+
   disnake = callPackage ../development/python-modules/disnake { };
 
   disposable-email-domains = callPackage ../development/python-modules/disposable-email-domains { };
@@ -18203,6 +18205,8 @@ self: super: with self; {
   streamlit-avatar = callPackage ../development/python-modules/streamlit-avatar { };
 
   streamlit-card = callPackage ../development/python-modules/streamlit-card { };
+
+  streamlit-echarts = callPackage ../development/python-modules/streamlit-echarts { };
 
   streamlit-folium = callPackage ../development/python-modules/streamlit-folium { };
 
