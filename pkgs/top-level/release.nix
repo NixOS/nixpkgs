@@ -354,24 +354,6 @@ let
         if attrNamesOnly then id else release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
-        # Build selected packages (HLS) for multiple Haskell compilers to rebuild
-        # the cache after a staging merge
-        haskell = packagePlatforms pkgs.haskell // {
-          packages =
-            genAttrs
-              [
-                "ghc96"
-                "ghc98"
-                "ghc910"
-                "ghc912"
-              ]
-              (compilerName: {
-                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
-                  haskell-language-server
-                  ;
-              });
-        };
-
         pkgsLLVM.stdenv = [
           "x86_64-linux"
           "aarch64-linux"
