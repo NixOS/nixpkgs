@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.42.2";
+  version = "0.42.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "kvesteri";
     repo = "sqlalchemy-utils";
     tag = version;
-    hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
+    hash = "sha256-lqtuIOeRqjaDohejZOQv6uXQ6JG/WpdcfrSBK8q4wVs=";
   };
 
   patches = [ ./skip-database-tests.patch ];
