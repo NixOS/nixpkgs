@@ -3174,6 +3174,8 @@ self: super: with self; {
 
   cpe = callPackage ../development/python-modules/cpe { };
 
+  cpe-search = callPackage ../development/python-modules/cpe-search { };
+
   cppe = callPackage ../development/python-modules/cppe { inherit (pkgs) cppe; };
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
