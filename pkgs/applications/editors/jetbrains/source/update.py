@@ -6,6 +6,7 @@ import pprint
 import pathlib
 import requests
 import json
+import re
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump, loads
@@ -69,7 +70,11 @@ def jar_repositories(root_path: str) -> list[str]:
     for option in ensure_is_list(options):
         for item in option['option']:
             if item['@name'] == 'url':
-                repositories.append(item['@value'])
+                repositories.append(
+                    # Remove protocol and cache-redirector server, we only want the original URL. We try both the original
+                    # URL and the URL via the cache-redirector for download in build.nix
+                    re.sub(r'^https?://', '', item['@value']).removeprefix("cache-redirector.jetbrains.com/")
+                )
 
     return repositories
 
