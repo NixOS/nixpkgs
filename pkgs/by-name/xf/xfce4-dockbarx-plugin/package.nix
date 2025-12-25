@@ -16,16 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xfce4-dockbarx-plugin";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "xuzhen";
     repo = "xfce4-dockbarx-plugin";
-    rev = "v${version}";
-    sha256 = "sha256-ZxaWORqA8LiM4CzakxClg5C6AsyHrzCGydgboCrC45g=";
+    tag = "v${version}";
+    hash = "sha256-pgWKHKJGeiMPryoEC3zt6DnzadzoHvS4mVeWkVxiMVQ=";
   };
-
-  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
 
   pythonPath = [
     dockbarx
