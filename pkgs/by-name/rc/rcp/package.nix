@@ -1,22 +1,21 @@
 {
   lib,
-  stdenv,
+  pkgsStatic,
   fetchFromGitHub,
-  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+pkgsStatic.rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-ayT8lp8XqkvtUaff2Iy+5IVyJ/ukKl0qruEWjBlgAvo=";
+    hash = "sha256-GdWFS1hKs1POSrnZ5Ilqe+x16DWMaB9rYyxivbV7W88=";
   };
 
-  cargoHash = "sha256-AcH5V5hapVQgGrwWAEN6Xpj00RRNqZiCSn+/onpmd50=";
+  cargoHash = "sha256-mQd8msIEZdI0lJcvjV1baPkzjJV5wMXV3UrvND2ixp0=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -27,6 +26,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_edge_case_special_permissions"
     # these tests require network access to determine local IP address
     "--skip=test_remote"
+    # these tests expect git_describe from build.rs which isn't available in nix build
+    "--skip=version::tests::test_current_version"
+    "--skip=test_protocol_version_has_git_info"
+    "--skip=test_rcpd_protocol_version_has_git_info"
   ];
 
   meta = {
@@ -36,8 +39,7 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     mainProgram = "rcp";
     maintainers = with lib.maintainers; [ wykurz ];
-    # Building procfs on an for a unsupported platform. Currently only linux and android are supported
-    # (Your current target_os is macos)
-    broken = stdenv.hostPlatform.isDarwin;
+    # procfs only supports Linux and Android
+    broken = pkgsStatic.stdenv.hostPlatform.isDarwin;
   };
 }
