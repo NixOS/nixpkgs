@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "drf-orjson-renderer";
-  version = "1.7.3";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
