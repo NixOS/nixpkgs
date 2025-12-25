@@ -4,6 +4,7 @@
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
   coreutils,
+  directoryListingUpdater,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -74,6 +75,11 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
   # or you can check libc/include/sys/cdefs.h in bionic source code
   hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+
+  passthru.updateScript = directoryListingUpdater {
+    inherit pname version;
+    url = "https://ftp.gnu.org/gnu/findutils/";
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
