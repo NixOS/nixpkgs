@@ -98,6 +98,7 @@ let
       cp /bin/test-script /test-script
       bin/setcap 'cap_net_bind_service=+ep' /test-script
     '';
+    preserveXAttrsInRootLayer = true;
   };
 
   layeredXattrsTestImage = pkgs.dockerTools.streamLayeredImage {
@@ -111,6 +112,7 @@ let
       cp bin/test-script test-script
       bin/setcap 'cap_net_bind_service=+ep' test-script
     '';
+    preserveXAttrsInRootLayer = true;
   };
 in
 {
