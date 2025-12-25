@@ -350,6 +350,9 @@ let
         toLower
         toUpper
         toCamelCase
+        toSnakeCase
+        toPascalCase
+        toKebabCase
         toSentenceCase
         addContextFrom
         splitString
