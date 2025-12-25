@@ -173,7 +173,7 @@ buildPythonPackage rec {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {
         src = fetchurl {
-          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          url = "mirror://sourceforge/freetype/freetype-2.6.1.tar.gz";
           hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
         };
         patches = [ ];
