@@ -91,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
+
+    # Linking against static aalib needs libm
+    # TODO submit upstream
+    ./1001-gst-plugins-good-Fix-aalib-ppc64.patch
   ];
 
   strictDeps = true;

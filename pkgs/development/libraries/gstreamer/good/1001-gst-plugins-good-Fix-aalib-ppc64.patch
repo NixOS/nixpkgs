@@ -1,0 +1,12 @@
+diff '--color=auto' -ruN a/ext/aalib/meson.build b/ext/aalib/meson.build
+--- a/ext/aalib/meson.build	2025-08-07 20:06:46.000000000 +0200
++++ b/ext/aalib/meson.build	2025-12-16 03:37:14.470649713 +0100
+@@ -38,7 +38,7 @@
+       c_args : gst_plugins_good_args,
+       link_args : noseh_link_args,
+       include_directories : [configinc],
+-      dependencies : [gstvideo_dep, gstbase_dep, libaa_dep],
++      dependencies : [gstvideo_dep, gstbase_dep, libaa_dep, libm],
+       install : true,
+       install_dir : plugins_install_dir
+     )
