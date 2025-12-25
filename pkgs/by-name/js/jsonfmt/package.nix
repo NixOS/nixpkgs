@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "jsonfmt";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CMBqqTGpqoErFPKn4lxMB9XrdlhZcY6qbRZZVUVMQj0=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
   meta = {
     description = "Formatter for JSON files";
     homepage = "https://github.com/caarlos0/jsonfmt";
-    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.rev}";
+    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jsonfmt";
