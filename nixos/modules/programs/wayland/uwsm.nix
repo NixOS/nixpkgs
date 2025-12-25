@@ -107,6 +107,7 @@ in
           binPath = "/run/current-system/sw/bin/sway";
         };
       '';
+      default = { };
     };
   };
 
