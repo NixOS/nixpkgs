@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tailscalesd";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "cfunkhouser";
     repo = "tailscalesd";
     rev = "v${version}";
-    hash = "sha256-avGgkGgzeupZwqRPT1juRyTs6udpefTI0W0rqmvhwk0=";
+    hash = "sha256-FaM2kr3fBC1R2Kgvf5xz4zAw8JQGOmN3fQhHayB/Zs0=";
   };
 
-  vendorHash = "sha256-DowF+3eTe+bC3wqfIznCaLwcl42vRyEzFCbMRZffZS8=";
+  vendorHash = "sha256-/nmX0Zqwda5LRC9cmLneU1NJa/VL8vgG284BtjiNTbE=";
 
   meta = {
     description = "Prometheus Service Discovery for Tailscale";
