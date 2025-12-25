@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.34.0";
+  version = "0.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     tag = "v${version}";
-    hash = "sha256-o92N8AQQfNQP8sX4LCnlq0Ppe9OA0+goCv+sOxMFYjo=";
+    hash = "sha256-PPyI+IGvHBQusVmU3D26VjYjLaa9+94KUqNwbQSzeaI=";
   };
 
   build-system = [
