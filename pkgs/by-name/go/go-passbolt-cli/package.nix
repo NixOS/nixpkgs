@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "go-passbolt-cli";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "passbolt";
     repo = "go-passbolt-cli";
     rev = "v${version}";
-    hash = "sha256-BtMPOmp9dbi/HoNigEeGWIYXRh1/gorV8ycrtWw9I8s=";
+    hash = "sha256-DTgvhmNzfr7ZXjVn+znXqFL+0bHBeGofFE521H7RUI4=";
   };
 
-  vendorHash = "sha256-wGSrhW7OsSjHlSKLkOf2AYIxU1m2lM1WGUsy16qxBwA=";
+  vendorHash = "sha256-QLTKCb3hl/0JFO2XKfLiOtnwfR/v+WqUx4vuaO/MoXo=";
 
   ldflags = [
     "-X=main.version=${version}"
