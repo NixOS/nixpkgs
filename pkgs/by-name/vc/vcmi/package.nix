@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_CLIENT" true)
+    (lib.cmakeBool "ENABLE_LUA" true)
+    (lib.cmakeBool "ENABLE_ERM" true)
     (lib.cmakeBool "ENABLE_GOLDMASTER" true)
     (lib.cmakeBool "ENABLE_TEST" false) # Requires nonfree data files.
     (lib.cmakeBool "ENABLE_PCH" false)
