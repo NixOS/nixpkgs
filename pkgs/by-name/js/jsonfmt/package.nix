@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  jsonfmt,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -19,17 +18,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-QcljmDsz5LsXfHaXNVBU7IIVVgkm3Vfnirchx5ZOMSg=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-w"
     "-X=main.version=${version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = jsonfmt;
-    };
-  };
+  doInstallCheck = true;
 
   meta = {
     description = "Formatter for JSON files";
