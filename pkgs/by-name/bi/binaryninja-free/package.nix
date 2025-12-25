@@ -92,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
       free = false;
     };
     mainProgram = "binaryninja";
-    maintainers = with lib.maintainers; [ scoder12 ];
+    maintainers = with lib.maintainers; [
+      scoder12
+      timschumi
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
