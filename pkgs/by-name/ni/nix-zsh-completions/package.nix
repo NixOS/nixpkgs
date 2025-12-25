@@ -1,10 +1,10 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "nix-zsh-completions";
   version = "0.5.1";
 
@@ -16,10 +16,23 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+
+  # TODO: https://github.com/nix-community/nix-zsh-completions/pull/58
+  postPatch = ''
+    rm _nixos-rebuild
+  '';
+
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions
     cp *.zsh $out/share/zsh/plugins/nix
+
+    runHook postInstall
   '';
 
   meta = {
