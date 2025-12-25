@@ -92,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GNOME's Structured File Library";
-    homepage = "https://www.gnome.org/projects/libgsf";
+    homepage = "https://gitlab.gnome.org/GNOME/libgsf";
+    changelog = "https://gitlab.gnome.org/GNOME/libgsf/-/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
