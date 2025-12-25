@@ -9,6 +9,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "1.0.211";
     hash = "sha256-tU+JVFFGbL6uRMAHsc6/B+C7ZHYlEi5Bg8DMzIuL0DY=";
   };
+  postInstall = ''
+    for file in "$out/$installPrefix/bin/"*; do
+        chmod 755 "$file"
+    done
+  '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/yy0931.vscode-sqlite3-editor/changelog";
     description = "SQLite3 Editor for VSCode";
