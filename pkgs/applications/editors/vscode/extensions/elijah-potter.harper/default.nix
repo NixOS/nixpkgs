@@ -13,7 +13,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "harper";
     publisher = "elijah-potter";
     version = harper.version;
-    hash = "sha256-84yN7qiGaNp9XtLYOOOw1vWkiH9wAH1Tp9rE/8Vpk7A=";
+    hash = "sha256-khsOlVP9RyC4wYQjl+q0wEhBoPelbhchKwa1wie8Jl4=";
   };
 
   nativeBuildInputs = [
