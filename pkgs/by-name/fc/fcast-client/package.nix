@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     '';
     mainProgram = "fcast";
     maintainers = with lib.maintainers; [ yusufraji ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
