@@ -737,6 +737,15 @@
   "module-services-nextcloud-maintainer-info": [
     "index.html#module-services-nextcloud-maintainer-info"
   ],
+  "module-services-nextcloud-spreed-signaling": [
+    "index.html#module-services-nextcloud-spreed-signaling"
+  ],
+  "module-services-nextcloud-spreed-signaling-config": [
+    "index.html#module-services-nextcloud-spreed-signaling-config"
+  ],
+  "module-services-nextcloud-spreed-signaling-nats": [
+    "index.html#module-services-nextcloud-spreed-signaling-nats"
+  ],
   "module-services-matomo": [
     "index.html#module-services-matomo"
   ],
