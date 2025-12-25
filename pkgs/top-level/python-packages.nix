@@ -2653,6 +2653,11 @@ self: super: with self; {
 
   cinemagoer = callPackage ../development/python-modules/cinemagoer { };
 
+  circt = callPackage ../development/python-modules/circt {
+    inherit (pkgs) circt cmake;
+    python-modules-cmake = self.cmake;
+  };
+
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
