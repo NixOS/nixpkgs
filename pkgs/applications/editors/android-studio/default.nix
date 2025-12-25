@@ -20,8 +20,8 @@ let
     sha256Hash = "sha256-pvnUDYeFbxOnw2dP9BeKFushnTHmpDrBwmnNWDx8pbQ=";
   };
   betaVersion = {
-    version = "2025.2.2.6"; # "Android Studio Otter 2 Feature Drop | 2025.2.2 RC 2"
-    sha256Hash = "sha256-ciu+To5Kcus8FPDz1D43AD+qOqfPHaW4JsEBr9fx2PE=";
+    version = "2025.2.3.6"; # "Android Studio Otter 3 Feature Drop | 2025.2.3 RC 1"
+    sha256Hash = "sha256-UysTlKH2h+8FElFgYYTiP4LCPYCssMRSrSA4lwsk6ek=";
   };
   latestVersion = {
     version = "2025.3.1.1"; # "Android Studio Panda 1 | 2025.3.1 Canary 1"
