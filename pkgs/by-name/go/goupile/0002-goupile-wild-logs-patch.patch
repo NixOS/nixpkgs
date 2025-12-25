@@ -1,0 +1,77 @@
+From 838846813b8ae8d70449719371d49d8b8c56338d Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 24 Dec 2025 11:27:38 +0530
+Subject: [PATCH 2/3] goupile wild logs patch
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ src/goupile/server/admin.cc | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/goupile/server/admin.cc b/src/goupile/server/admin.cc
+index 9f2b40558..466bc2cd1 100644
+--- a/src/goupile/server/admin.cc
++++ b/src/goupile/server/admin.cc
+@@ -1223,9 +1223,11 @@ void HandleDomainRestore(http_IO *io)
+     HeapArray<const char *> tmp_filenames;
+     K_DEFER {
+         for (const char *filename: tmp_filenames) {
++            LogInfo("I Delete file '%1'", filename);
+             UnlinkFile(filename);
+         }
+         if (tmp_directory) {
++            LogInfo("I Delete dir '%1'", tmp_directory);
+             UnlinkDirectory(tmp_directory);
+         }
+     };
+@@ -1382,10 +1384,12 @@ void HandleDomainRestore(http_IO *io)
+         if (swap_directory) {
+             EnumerateDirectory(swap_directory, nullptr, -1, [&](const char *filename, FileType) {
+                 filename = Fmt(io->Allocator(), "%1%/%2", swap_directory, filename).ptr;
++                LogInfo("I Delete file swap '%1'", filename);
+                 UnlinkFile(filename);
+ 
+                 return true;
+             });
++            LogInfo("I Delete dir swap '%1'", swap_directory);
+             UnlinkDirectory(swap_directory);
+         }
+     };
+@@ -1469,6 +1473,7 @@ void HandleDomainRestore(http_IO *io)
+         }
+ 
+ #if defined(__linux__) && defined(RENAME_EXCHANGE)
++        LogInfo("RENAME_EXCHANGE");
+         if (renameat2(AT_FDCWD, gp_config.instances_directory,
+                       AT_FDCWD, tmp_directory, RENAME_EXCHANGE) < 0) {
+             LogDebug("Failed to swap directories atomically: %1", strerror(errno));
+@@ -1479,6 +1484,7 @@ void HandleDomainRestore(http_IO *io)
+ 
+             unsigned int flags = (int)RenameFlag::Overwrite | (int)RenameFlag::Sync;
+ 
++            LogInfo("NOT RENAME_EXCHANGE");
+             // Non-atomic swap but it is hard to do better here
+             if (RenameFile(gp_config.instances_directory, swap_directory, flags) != RenameResult::Success)
+                 return false;
+@@ -1488,8 +1494,10 @@ void HandleDomainRestore(http_IO *io)
+                 RenameFile(swap_directory, gp_config.instances_directory, flags);
+                 return false;
+             }
++            LogInfo("NOT RENAME_EXCHANGE SUCCESSFUL");
+         } else {
+             swap_directory = tmp_directory;
++            LogInfo("RENAME_EXCHANGE SUCCESSFUL");
+         }
+ 
+         K_ASSERT(tmp_filenames.len == entries.len + 2);
+@@ -1501,6 +1509,7 @@ void HandleDomainRestore(http_IO *io)
+ 
+     SyncDomain(true);
+ 
++    LogInfo("Sync domain");
+     if (!success)
+         return;
+ 
+-- 
+2.51.2
+
