@@ -506,6 +506,8 @@ rec {
       buildVMMemorySize ? 512,
       # Commands (bash) to run on the layer; these do not require sudo.
       extraCommands ? "",
+      # Whether to include xattrs in the root layer.
+      preserveXAttrsInRootLayer ? false,
     }:
     # Generate an executable script from the `runAsRoot` text.
     let
@@ -563,7 +565,7 @@ rec {
 
         echo "Packing layer..."
         mkdir -p $out
-        tarhash=$(tar --xattrs --xattrs-include='*' -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
+        tarhash=$(tar ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='*' ''}-C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
                     tee -p $out/layer.tar |
                     ${lib.getExe tarsum})
 
@@ -650,6 +652,8 @@ rec {
       contents ? null,
       # Meta options to set on the resulting derivation.
       meta ? { },
+      # Whether to include xattrs in the root layer.
+      preserveXAttrsInRootLayer ? false,
     }:
 
     let
@@ -717,6 +721,7 @@ rec {
               runAsRoot
               diskSize
               buildVMMemorySize
+              preserveXAttrsInRootLayer
               ;
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
@@ -1029,6 +1034,7 @@ rec {
       layeringPipeline ? null,
       # Enables debug logging for the layering pipeline.
       debug ? false,
+      preserveXAttrsInRootLayer ? false,
     }:
     assert (
       lib.assertMsg (layeringPipeline == null -> maxLayers > 1)
@@ -1092,7 +1098,7 @@ rec {
                   source $stdenv/setup
                   eval "$fakeRootCommands"
                   tar \
-                    --xattrs --xattrs-include='"'"'*'"'"' \
+                    ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='"'"'*'"'"' ''}\
                     --sort name \
                     --exclude=./dev \
                     --exclude=./proc \
@@ -1112,7 +1118,7 @@ rec {
                   cd old_out
                   eval "$fakeRootCommands"
                   tar \
-                    --xattrs --xattrs-include='"'"'*'"'"' \
+                    ${lib.optionalString preserveXAttrsInRootLayer ''--xattrs --xattrs-include='"'"'*'"'"' ''}\
                     --sort name \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                     --hard-dereference \
