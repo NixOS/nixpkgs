@@ -20705,60 +20705,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  lcov-result-merger = nodeEnv.buildNodePackage {
-    name = "lcov-result-merger";
-    packageName = "lcov-result-merger";
-    version = "5.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lcov-result-merger/-/lcov-result-merger-5.0.1.tgz";
-      sha512 = "i53RjTYfqbHgerqGtuJjDfARDU340zNxXrJudQZU3o8ak9rrx8FDQUKf38Cjm6MtbqonqiDFmoKuUe++uZbvOg==";
-    };
-    dependencies = [
-      sources."@nodelib/fs.scandir-2.1.5"
-      sources."@nodelib/fs.stat-2.0.5"
-      sources."@nodelib/fs.walk-1.2.8"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."braces-3.0.3"
-      sources."cliui-7.0.4"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.2.0"
-      sources."fast-glob-3.3.3"
-      sources."fastq-1.19.1"
-      sources."fill-range-7.1.1"
-      sources."get-caller-file-2.0.5"
-      sources."glob-parent-5.1.2"
-      sources."is-extglob-2.1.1"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."merge2-1.4.1"
-      sources."micromatch-4.0.8"
-      sources."picomatch-2.3.1"
-      sources."queue-microtask-1.2.3"
-      sources."require-directory-2.1.1"
-      sources."reusify-1.1.0"
-      sources."run-parallel-1.2.0"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."to-regex-range-5.0.1"
-      sources."wrap-ansi-7.0.0"
-      sources."y18n-5.0.8"
-      sources."yargs-16.2.0"
-      sources."yargs-parser-20.2.9"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Merges multiple lcov results into one";
-      homepage = "https://github.com/mweibel/lcov-result-merger";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   node2nix = nodeEnv.buildNodePackage {
     name = "node2nix";
     packageName = "node2nix";

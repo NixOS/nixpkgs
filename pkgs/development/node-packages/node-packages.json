@@ -16,7 +16,6 @@
 , "grunt-cli"
 , "gulp-cli"
 , "js-yaml"
-, "lcov-result-merger"
 , "node2nix"
 , "sass"
 , "semver"
