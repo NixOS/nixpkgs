@@ -9,11 +9,11 @@
     "vendorHash": "sha256-n01cHzyG9FvxCb92sFccKY1h7Pa0zmi+CUxSYHM5Elc="
   },
   "a10networks_thunder": {
-    "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
+    "hash": "sha256-RX3mP5btzyvuBjoMNiUL6ZeFLEo5SqmwwSK/eE0gWEw=",
     "homepage": "https://registry.terraform.io/providers/a10networks/thunder",
     "owner": "a10networks",
     "repo": "terraform-provider-thunder",
-    "rev": "v1.4.2",
+    "rev": "v1.5.0",
     "spdx": "BSD-2-Clause",
     "vendorHash": null
   },
@@ -508,13 +508,13 @@
     "vendorHash": "sha256-d90pR0WCyYIaXOyZWNw+2++sgt+subhkPCgFOEsX8JQ="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-+qcv9cCr5MraBa91x+iziMBK1Wdaq4lg0xbDBf3cmFE=",
+    "hash": "sha256-rqZULnv3FaewbLNe1PT+OmDpBRPxloAcn8Yvzj17hIc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.66.0",
+    "rev": "v1.67.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-J5BFrprtg424YG3kYoTagb36CkaYVWIqfoyrUBqNHFg="
+    "vendorHash": "sha256-jRDBWDEjD07SerwcScIpWDqv8bEotVwRaqwSuXHKy7w="
   },
   "hashicorp_azuread": {
     "hash": "sha256-ATYOrBmZP9LximrS5KpfktU/kfW08XWShxE4z+x6Sts=",
