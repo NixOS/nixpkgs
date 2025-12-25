@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   accountsservice,
-  exo,
+  xfce4-exo,
   garcon,
   glib,
   gtk-layer-shell,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     accountsservice
-    exo
+    xfce4-exo
     garcon
     glib
     gtk-layer-shell

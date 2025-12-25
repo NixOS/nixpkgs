@@ -110,11 +110,11 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-bla9DS+5nxS2F2LAxUlPQstSUe9aDd1MShbs8sXpeo8=",
+    "hash": "sha256-S4GJqoUkqGNe3oZ0pwPR08+qkG5f2RiReVBU+UHkfFw=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.89.1",
+    "rev": "v0.90.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-Vcp/AvcBz7wO8k89c1u3WGjhl0iuNMbWRAOIbEGXhbw="
   },
@@ -310,11 +310,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-V5Ss2GbxDqxm1I3NgqyLkg8B7iK+5tICdJ28YeCiEgM=",
+    "hash": "sha256-A6LxX2zMZAd/Db1VdAVqMplCW2qZx4MNyIpLwTBXkxU=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.71.0",
+    "rev": "v2.72.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -842,13 +842,13 @@
     "vendorHash": "sha256-Y1L1nIOubhBN5vNIXY7miQgR9OzoTCS7QA55DEMwDSA="
   },
   "linode_linode": {
-    "hash": "sha256-AxG8N/kEu2+Yym63Ac04SxjrUyCiSp/zmIXQqscpeWM=",
+    "hash": "sha256-gsRrEsR2+2AadSPhY6hwP3iqjNQyCqhxmnsFL2iMbcw=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.6.0",
+    "rev": "v3.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-2zdUEV84CQ236ktTfMcucAb2gwDPIQ+Br5AfKncZdJA="
+    "vendorHash": "sha256-03uqpurO11HMMxwZRIaD7iuOYk6TuGbztIwE5SPwemU="
   },
   "loafoe_htpasswd": {
     "hash": "sha256-ALTyTTVyS2HHenmk8HVwtQenCmJX05kyXifJTzzmnHE=",
@@ -1481,13 +1481,13 @@
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
   "vultr_vultr": {
-    "hash": "sha256-Vxp8Uv6W6nKGvypPAvlY+TI5O77How79c7xBTJWg/5Q=",
+    "hash": "sha256-ezTWMaM06z1LLBgNqRYlT/SIyw3Vv3x8NFXkY4j5D3Q=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.27.1",
+    "rev": "v2.28.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-OoIlSsR8vbS15TfZvPP+RBDjPvD7Jzr2CpgMk76s6R8="
+    "vendorHash": "sha256-8vYTNSjEwalDsS77UUVw7u2K3bbK4HM3yiUR3Ppi79I="
   },
   "wgebis_mailgun": {
     "hash": "sha256-W+cvYNwsa5T6ZIPeEVbO9ogdZurwDPOKUwJfPXNKSqg=",

@@ -9,7 +9,7 @@
   xfce4-panel,
   libxfce4ui,
   libxfce4util,
-  exo,
+  xfce4-exo,
   glib,
   gtk3,
   gnutls,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4ui
     libxfce4util
     xfce4-panel
-    exo
+    xfce4-exo
     glib
     gtk3
     gnutls

@@ -3,21 +3,29 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  apple-sdk_15,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "snitch";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "karol-broda";
     repo = "snitch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/0MYXKBat+OumuXnS8XSiMslNHUopVDFO4RdYGECfI8=";
+    hash = "sha256-krZf6bx1CZGgwg7cu2f2dzPYFEU4rM/nZjGtkXgGQkM=";
   };
 
   vendorHash = "sha256-fX3wOqeOgjH7AuWGxPQxJ+wbhp240CW8tiF4rVUUDzk=";
+
+  postPatch = ''
+    substituteInPlace cmd/version.go \
+      --replace-fail \
+        'Version = "dev"' \
+        'Version = "${finalAttrs.version}"'
+  '';
 
   # these below settings (env, buildInputs, ldflags) copied from
   # https://github.com/karol-broda/snitch/blob/master/flake.nix
@@ -27,16 +35,22 @@ buildGoModule (finalAttrs: {
     CGO_ENABLED = if stdenv.hostPlatform.isDarwin then 1 else 0;
   };
 
-  # darwin: use macOS 15 SDK for SecTrustCopyCertificateChain (Go 1.25 crypto/x509)
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
-
   ldflags = [
     "-s"
-    "-w"
     "-X snitch/cmd.Version=${finalAttrs.version}"
     "-X snitch/cmd.Commit=v${finalAttrs.version}"
     "-X snitch/cmd.Date=1970-01-01"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "friendlier ss / netstat for humans";

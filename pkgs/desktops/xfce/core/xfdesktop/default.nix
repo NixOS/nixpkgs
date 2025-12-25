@@ -6,7 +6,7 @@
   pkg-config,
   xfce4-dev-tools,
   wrapGAppsHook3,
-  exo,
+  xfce4-exo,
   gtk3,
   libxfce4ui,
   libxfce4util,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gtk3
     libxfce4ui
     libxfce4util

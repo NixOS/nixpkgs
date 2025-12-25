@@ -129,9 +129,9 @@ in
         # Needed by Xfce's xinitrc script
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
-        xfce.exo
-        xfce.garcon
-        xfce.libxfce4ui
+        xfce4-exo
+        garcon
+        libxfce4ui
 
         xfce.mousepad
         xfce.parole
@@ -160,7 +160,7 @@ in
         xfce.xfwm4-themes
       ]
       ++ lib.optionals (!cfg.noDesktop) [
-        xfce.xfce4-panel
+        xfce4-panel
         xfce.xfdesktop
       ]
       ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver

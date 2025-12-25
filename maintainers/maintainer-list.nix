@@ -13326,6 +13326,12 @@
     githubId = 20658981;
     name = "Jarosław Wygoda";
   };
+  jzbor = {
+    email = "jzbor@posteo.net";
+    github = "jzbor";
+    githubId = 48366877;
+    name = "Julian";
+  };
   jzellner = {
     email = "jeffz@eml.cc";
     github = "sofuture";
@@ -14056,6 +14062,12 @@
     github = "korken89";
     githubId = 913109;
     name = "Emil Fresk";
+  };
+  kornholi = {
+    email = "kornholijo@gmail.com";
+    github = "kornholi";
+    githubId = 659440;
+    name = "Kornelijus";
   };
   koschi13 = {
     email = "maximilian.konter@protonmail.com";

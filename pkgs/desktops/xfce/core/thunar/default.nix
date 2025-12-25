@@ -4,7 +4,7 @@
   fetchFromGitLab,
   docbook_xsl,
   gettext,
-  exo,
+  xfce4-exo,
   gdk-pixbuf,
   gtk3,
   libexif,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    exo
+    xfce4-exo
     gdk-pixbuf
     gtk3
     libX11
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       # https://github.com/NixOS/nixpkgs/issues/329688
-      --prefix PATH : ${lib.makeBinPath [ exo ]}
+      --prefix PATH : ${lib.makeBinPath [ xfce4-exo ]}
     )
   '';
 
