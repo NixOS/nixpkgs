@@ -4,44 +4,33 @@
   fetchFromGitHub,
   nix-update-script,
   qt5,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "candle";
-  version = "1.1.8";
+  version = "11.2";
 
   src = fetchFromGitHub {
     owner = "Denvi";
     repo = "Candle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-A53rHlabcuw/nWS7jsCyVrP3CUkmUI/UMRqpogyFOCM=";
+    sha256 = "sha256-WSy5ld5UiIycGO9VrcKij0YTdoP9wauFgYOMGR33xzY=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  patches = [
-    # Store application settings in ~/.config/Candle
-    # https://github.com/Denvi/Candle/pull/658
-    ./658.patch
-  ];
-
-  patchFlags = [ "-p2" ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/bin" ];
 
   nativeBuildInputs = [
-    qt5.qmake
+    cmake
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qt5.qtbase
-    qt5.qtserialport
+  buildInputs = with qt5; [
+    qtserialport
+    qtscript
+    qtwebsockets
+    qtmultimedia
   ];
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 Candle $out/bin/candle
-    runHook postInstall
-  '';
 
   doInstallCheck = true;
 
