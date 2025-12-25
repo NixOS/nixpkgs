@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-clfR2nZKB9ztfUEw+znr9/Rdefv4K+mTeRCSBLIBmVY=";
   };
 
-# Only run this patch if /lib/modules exists
-# because older versions hardcoded that path
-# but in 0.4-2 the code no longer uses it
+  # Only run this patch if /lib/modules exists
+  # because older versions hardcoded that path
+  # but in 0.4-2 the code no longer uses it
   postPatch = ''
     substituteInPlace src/Makefile \
       --replace-fail /sbin /bin \
@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
         --replace-fail /lib/modules /run/booted-system/kernel-modules/lib/modules
     fi
   '';
-
-
 
   nativeBuildInputs = [
     clang
