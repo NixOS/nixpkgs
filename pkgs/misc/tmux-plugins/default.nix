@@ -423,12 +423,12 @@ in
 
   kanagawa = mkTmuxPlugin {
     pluginName = "kanagawa";
-    version = "0-unstable-2025-02-10";
+    version = "0-unstable-2025-12-17";
     src = fetchFromGitHub {
       owner = "Nybkox";
       repo = "tmux-kanagawa";
-      rev = "5440b9476627bf5f7f3526156a17ae0e3fd232dd";
-      hash = "sha256-sFL9/PMdPJxN7tgpc4YbUHW4PkCXlKmY7a7gi7PLcn8=";
+      rev = "10a59af0a50aacf7e68e6757fb42e94d1804246e";
+      hash = "sha256-ldc++p2PcYdzoOLrd4PGSrueAGNWncdbc5k6wmFM9kQ=";
     };
     meta = {
       homepage = "https://github.com/Nybkox/tmux-kanagawa";
