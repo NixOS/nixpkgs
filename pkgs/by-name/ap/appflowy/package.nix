@@ -11,6 +11,15 @@
   keybinder3,
   libnotify,
   gst_all_1,
+  libva,
+  libxv,
+  libxscrnsaver,
+  libgbm,
+  libpulseaudio,
+  alsa-lib,
+  libarchive,
+  libvdpau,
+  lcms,
 }:
 
 let
@@ -18,11 +27,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-87mauW50ccOaPyK04O4I7+0bsvxVrdFxhi/Muc53wDY=";
+        hash = "sha256-UPwyLexOmuaVp611t5NR+n8OagFaZP9J/htep1Z8Rgs=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-a1WhOQ8NU3/aGAdaw8o3y7ckRdBsNgLZZ2nOrMsQdOA=";
+        hash = "sha256-5cLXQIO30n41ExhKhlRrRG5jVYFQt6Y8O4qIqpXgKDk=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -31,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.10.6";
+  version = "0.10.8";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -51,6 +60,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libnotify
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    libva
+    libxv
+    libxscrnsaver
+    libgbm
+    libpulseaudio
+    alsa-lib
+    libarchive
+    libvdpau
+    lcms
   ];
 
   dontBuild = true;
