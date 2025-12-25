@@ -291,10 +291,8 @@ pipe
         )
       )
       + optionalString targetPlatform.isAvr ''
-        makeFlagsArray+=(
-           '-s' # workaround for hitting hydra log limit
-           'LIMITS_H_TEST=false'
-        )
+        # workaround for hitting hydra log limit
+        appendToVar makeFlags '-s' 'LIMITS_H_TEST=false'
       '';
 
       inherit
