@@ -3869,6 +3869,8 @@ self: super: with self; {
 
   diskcache = callPackage ../development/python-modules/diskcache { };
 
+  diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
+
   disnake = callPackage ../development/python-modules/disnake { };
 
   disposable-email-domains = callPackage ../development/python-modules/disposable-email-domains { };
