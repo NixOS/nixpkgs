@@ -1,27 +1,33 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutter332,
   sqlite,
   libsecret,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  runCommand,
+  yq-go,
+  dart,
 }:
 
 let
-  flutter = flutter329;
-in
-flutter.buildFlutterApplication rec {
-  pname = "mhabit";
-  version = "1.21.1+120";
+  version = "1.22.6+133";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-ym+xCv7fRwlms2oIvcthyuz53T0LCgigleg1qmLfZVU=";
+    hash = "sha256-zdgD3TGSjRQc6PAeTh2EV42X5EEgiOh0yH0+Fqre+Qc=";
   };
+in
+flutter332.buildFlutterApplication {
+  pname = "mhabit";
+  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes.icon_font_generator = "sha256-QmChsa2qP+gZyZ2IrJMrY/zBP/J5QigidjIHahp3V0g=";
+
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   buildInputs = [
     sqlite
@@ -35,6 +41,37 @@ flutter.buildFlutterApplication rec {
     install -Dm644 flatpak/io.github.friesi23.mhabit.desktop --target-directory=$out/share/applications
     install -Dm644 assets/logo/icon.svg $out/share/icons/hicolor/scalable/io.github.friesi23.mhabit
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "mhabit.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     description = "Track micro habits with easy-to-use charts and tools";
