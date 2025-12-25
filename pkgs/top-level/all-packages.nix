@@ -10057,6 +10057,7 @@ with pkgs;
     ubootRaspberryPi3_64bit
     ubootRaspberryPi4_32bit
     ubootRaspberryPi4_64bit
+    ubootRaspberryPiArm64
     ubootRaspberryPiZero
     ubootRock4CPlus
     ubootRock5ModelB
