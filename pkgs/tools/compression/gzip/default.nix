@@ -6,6 +6,10 @@
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
   directoryListingUpdater,
+  # Tests
+  gzip,
+  less,
+  perl,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -45,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLESS_PROG=zless"
   ];
 
+  nativeCheckInputs = [
+    less
+    perl
+  ];
+  doCheck = false;
+
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the
   # internal cross-references, just add $out/bin to PATH at the top of
@@ -62,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.makecheck = gzip.overrideAttrs { doCheck = true; };
     updateScript = directoryListingUpdater {
       inherit (finalAttrs) pname version;
       url = "https://ftp.gnu.org/gnu/gzip/";
