@@ -406,13 +406,13 @@
   },
   {
     "pname": "Polly",
-    "version": "8.6.4",
-    "hash": "sha256-Z+ZbhnHWMu55qgQkxvw3yMiMd+zIMzzQiFhvn/PeQ3I="
+    "version": "8.6.5",
+    "hash": "sha256-2YRacrP3b3C6EBCb5Pjg6fQdGj+SgbTeaWHN/oZ1d8s="
   },
   {
     "pname": "Polly.Core",
-    "version": "8.6.4",
-    "hash": "sha256-4Xrg/H481Y/WOHk1sGvFNEOfgaGrdKi+4U54PTXhh9I="
+    "version": "8.6.5",
+    "hash": "sha256-m12obNfMZdWQWJoCaF03H5qEbFDdp9FSdHTHcIIsACQ="
   },
   {
     "pname": "runtime.any.System.Collections",
