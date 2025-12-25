@@ -5,6 +5,7 @@
   ninja,
   python3,
   gnome,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,12 +37,17 @@ python3.pkgs.buildPythonApplication rec {
     typogrify
   ];
 
-  doCheck = false; # no tests
+  # For Python this must be placed in nativeCheckInputs instead of nativeInstallCheckInputs
+  # https://github.com/nixos/nixpkgs/issues/420531
+  nativeCheckInputs = [ versionCheckHook ];
+  # doCheck = false; # no tests - restore this after versionCheckHook can be moved
+
+  __structuredAttrs = true;
 
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \
-      --replace "${python3}" ""
+      --replace-fail "${python3}" ""
   '';
 
   passthru = {
