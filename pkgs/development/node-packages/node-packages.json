@@ -18,7 +18,6 @@
 , "js-yaml"
 , "lcov-result-merger"
 , "node2nix"
-, "postcss"
 , "sass"
 , "semver"
 , "vercel"
