@@ -877,8 +877,8 @@ assertNoAdditions {
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
-        --replace-fail "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
-                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+        --replace-fail "let node = s:GetCommand('copilot_node_command', ['node'])" \
+                       "let node = s:GetCommand('copilot_node_command', ['${nodejs}/bin/node'])"
     '';
 
     meta = old.meta // {
