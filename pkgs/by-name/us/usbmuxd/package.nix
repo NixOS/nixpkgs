@@ -8,15 +8,15 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
-  version = "1.1.1+date=2023-05-05";
+  version = "1.1.1+date=2025-09-15";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "usbmuxd";
-    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
-    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
+    rev = "2efa75a0a9ca73f2a5b6ec71e5ae6cb43cdab580";
+    hash = "sha256-8Dx8yN/vatD1lp3mzUUSKyx2/plv3geJhz3oQRhl7UM=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "usbmuxd";
   };
-}
+})
