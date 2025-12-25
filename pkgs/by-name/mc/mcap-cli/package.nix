@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.0.56";
+  version = "0.0.59";
 in
 buildGoModule {
 
@@ -20,10 +20,10 @@ buildGoModule {
     repo = "mcap";
     owner = "foxglove";
     rev = "releases/mcap-cli/v${version}";
-    hash = "sha256-PPllUAkcuv/FXIjsuJFJ9KbzA6qHCaOBQz77N7D2JtA=";
+    hash = "sha256-U+A24zSVqfFp+57FJ/Js2i/xH8CRHe0xkqNQ2cdNI7Q=";
   };
 
-  vendorHash = "sha256-twuXJXiGhjTqlEZ3xD8G9CruSLxFC33PMs2GZadl1Ow=";
+  vendorHash = "sha256-Q1TjUlS7+fV2HBQk108c+o/9IRpDc9C8jzBk048Mkig=";
 
   nativeBuildInputs = [
     installShellFiles
