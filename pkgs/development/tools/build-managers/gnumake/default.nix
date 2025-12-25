@@ -77,9 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
-
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
     platforms = lib.platforms.all;
   };
