@@ -1,4 +1,7 @@
 {
+  "auto-patch-pkg-config-hook": [
+    "index.html#auto-patch-pkg-config-hook"
+  ],
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
