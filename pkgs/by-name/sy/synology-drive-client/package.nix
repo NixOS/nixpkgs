@@ -17,7 +17,7 @@
 let
   pname = "synology-drive-client";
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
-  version = "3.5.1-16101";
+  version = "4.0.1-17885";
   buildNumber = lib.last (lib.splitString "-" version);
   meta = {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
@@ -37,14 +37,19 @@ let
   };
   passthru.updateScript = writeScript "update-synology-drive-client" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts
+    #!nix-shell -i bash -p curl jq common-updater-scripts
 
     set -eu -o pipefail
 
-    version="$(curl -s https://www.synology.com/en-uk/releaseNote/SynologyDriveClient \
-             | grep -oP '(?<=data-version=")(\d.){2}\d-\d{5}' \
-             | head -1)"
-    update-source-version synology-drive-client "$version"
+    version=$(curl -s "https://www.synology.com/api/releaseNote/findChangeLog?identify=SynologyDriveClient&lang=en-uk" \
+              | jq -r '.info.versions | to_entries | .[0].value.all_versions[0].version')
+
+    if [[ "$version" =~ ^[0-9.]+(-[0-9]+)?$ ]]; then
+      update-source-version synology-drive-client "$version"
+    else
+      echo "Error: Invalid version format: '$version'"
+      exit 1
+    fi
   '';
 
   linux = stdenv.mkDerivation {
@@ -57,7 +62,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Ubuntu/Installer/synology-drive-client-${buildNumber}.x86_64.deb";
-      sha256 = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
+      sha256 = "sha256-DMHqh8o0RknWTycANSbMpJj133/MZ8uZ18ytDZVaKMg=";
     };
 
     nativeBuildInputs = [
@@ -77,6 +82,10 @@ let
       mkdir -p $out
       dpkg -x $src $out
       rm -rf $out/usr/lib/nautilus
+      rm -rf $out/lib/x86_64-linux-gnu/nautilus
+      rm -rf $out/usr/lib/x86_64-linux-gnu/nautilus
+
+      find $out -name "libqpdf.so" -delete
       rm -rf $out/opt/Synology/SynologyDrive/package/cloudstation/icon-overlay
     '';
 
@@ -101,7 +110,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
-      sha256 = "sha256-VyhROpQCeVHNxxYgPUZdAlng15aJ1/IYadz30FThlsw=";
+      sha256 = "sha256-0rK7w4/RCv4qml+8XYPwLQmxHen3pB793Co4DvnDVuU=";
     };
 
     nativeBuildInputs = [
