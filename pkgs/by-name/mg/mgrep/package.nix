@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "mixedbread-ai";
     repo = "mgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jGzOwonT4nq0nMUBBp4Y7BvwTerHLzkTMss9glM+uP4=";
+    hash = "sha256-dV5KeeOQIilrUottObJheVNZFMlxIlMZ7l8TygTbOvk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-oq7jczTfm6CgLAUYftBlAYK6MFELDRfXCFtjsLWV8mU=";
+    hash = "sha256-pwLXZ7DsANhF+6112jfXVMx4qsPmRWPTMI7i4WRPx1Q=";
   };
 
   nativeBuildInputs = [
