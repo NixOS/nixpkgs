@@ -16,12 +16,12 @@ let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.gz";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       gnumakeWithGuile = gnumake.override { guileSupport = true; };
     };
     updateScript = directoryListingUpdater {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       url = "https://ftp.gnu.org/gnu/make/";
     };
   };
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     mainProgram = "make";
     platforms = lib.platforms.all;
   };
-}
+})
