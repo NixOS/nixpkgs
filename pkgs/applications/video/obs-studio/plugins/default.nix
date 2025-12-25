@@ -106,6 +106,8 @@
 
   obs-vnc = callPackage ./obs-vnc.nix { };
 
+  obs-wayland-hotkeys = qt6Packages.callPackage ./obs-wayland-hotkeys/default.nix { };
+
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
   pixel-art = callPackage ./pixel-art.nix { };
