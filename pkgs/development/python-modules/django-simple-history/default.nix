@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-simple-history";
-  version = "3.10.1";
+  version = "3.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-simple-history";
     tag = version;
-    hash = "sha256-th0ZkHMKWcI6nNhgjpkvmyKaJ/TdWK12mBPUTFab8g4=";
+    hash = "sha256-pTWorV++YSr/oIdcShrJTBUFfn5ekJ29rNn6ltDhN5Q=";
   };
 
   build-system = [
