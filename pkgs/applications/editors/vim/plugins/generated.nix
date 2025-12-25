@@ -11922,12 +11922,12 @@ final: prev: {
 
   nvim-treesitter = buildVimPlugin {
     pname = "nvim-treesitter";
-    version = "0.10.0-unstable-2025-05-24";
+    version = "0.10.0-unstable-2025-12-21";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "42fc28ba918343ebfd5565147a42a26580579482";
-      hash = "sha256-CVs9FTdg3oKtRjz2YqwkMr0W5qYLGfVyxyhE3qnGYbI=";
+      rev = "6e42d823ce0a5a76180c473c119c7677738a09d1";
+      hash = "sha256-wC0ZngirfJYLTJIydTwMwET1ucy6JEy28BoDmGPDN+k=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
     meta.hydraPlatforms = [ ];
@@ -12286,12 +12286,12 @@ final: prev: {
 
   ocaml-nvim = buildVimPlugin {
     pname = "ocaml.nvim";
-    version = "2025-12-02";
+    version = "0-unstable-2025-12-02";
     src = fetchFromGitHub {
       owner = "tarides";
       repo = "ocaml.nvim";
       rev = "f13728bbedb02121ee54633465ac392bbf0a8e79";
-      sha256 = "140hh72x96ihzg766rv1nn8x4la27xycxxaqym3vv0wi5jd5v1sx";
+      hash = "sha256-XYddmiyRg71H9Vj1znw/QlHSkbVhZ2PO+zCa1MWBEJA=";
     };
     meta.homepage = "https://github.com/tarides/ocaml.nvim/";
     meta.hydraPlatforms = [ ];
