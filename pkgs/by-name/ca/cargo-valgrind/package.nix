@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip tests_are_runnable"
-    "--skip default_cargo_project_reports_no_violations"
-    "--skip empty_tests_not_leak_in_release_mode"
+    "--skip=tests_are_runnable"
+    "--skip=default_cargo_project_reports_no_violations"
+    "--skip=empty_tests_not_leak_in_release_mode"
   ];
 
   meta = {

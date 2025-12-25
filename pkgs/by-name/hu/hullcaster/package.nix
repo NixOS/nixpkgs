@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   # work around error: Could not create filepath: /homeless-shelter/.local/share
   checkFlags = [
-    "--skip gpodder::tests::gpodder"
+    "--skip=gpodder::tests::gpodder"
   ];
 
   meta = {

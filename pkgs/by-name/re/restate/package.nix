@@ -98,16 +98,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Feature resolution seems to be failing due to this https://github.com/rust-lang/cargo/issues/7754
   auditable = false;
 
-  checkFlags = [
-    # Error: deadline has elapsed
-    "--skip replicated_loglet"
+  checkFlags = lib.flatten (
+    map
+      (t: [
+        "--skip"
+        "${t}"
+      ])
+      [
+        # Error: deadline has elapsed
+        "replicated_loglet"
 
-    # TIMEOUT [ 180.006s]
-    "--skip fast_forward_over_trim_gap"
+        # TIMEOUT [ 180.006s]
+        "fast_forward_over_trim_gap"
 
-    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
-    "--skip restatectl_smoke_test"
-  ];
+        # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
+        "restatectl_smoke_test"
+      ]
+  );
 
   __darwinAllowLocalNetworking = true;
 

@@ -34,11 +34,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--profile ci"
   ];
 
-  checkFlags = [
-    # Skip Windows tests
-    "--skip comprehensive_windows_tests"
-    "--skip windows_vscode_tests"
-  ];
+  checkFlags = lib.flatten (
+    map
+      (t: [
+        "--skip"
+        "${t}"
+      ])
+      [
+        # Skip Windows tests
+        "comprehensive_windows_tests"
+        "windows_vscode_tests"
+      ]
+  );
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
