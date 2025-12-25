@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "strace-analyzer";
     homepage = "https://github.com/wookietreiber/strace-analyzer";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

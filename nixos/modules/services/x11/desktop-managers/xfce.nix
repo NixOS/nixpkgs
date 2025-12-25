@@ -153,7 +153,7 @@ in
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
+        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
       ]
       ++ lib.optionals cfg.enableXfwm [
         xfce.xfwm4

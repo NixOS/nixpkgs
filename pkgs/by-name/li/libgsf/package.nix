@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.53";
+  version = "1.14.54";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libgsf";
     rev = "LIBGSF_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-vC/6QEoV6FvFxQ0YlMkBbTmAtqbkvgZf+9BU8epi8yo=";
+    hash = "sha256-jry6Ezzm3uEofIsJd97EzX+qoOjQEb3H1Y8o65nqmeo=";
   };
 
   postPatch = ''

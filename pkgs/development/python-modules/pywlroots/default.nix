@@ -14,7 +14,6 @@
   wayland,
   pywayland,
   xkbcommon,
-  xorg,
   pytestCheckHook,
   qtile,
 }:
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     libinput
     libxkbcommon
     pixman
-    xorg.libxcb
-    xorg.xcbutilwm
     udev
     wayland
     wlroots
@@ -65,6 +62,9 @@ buildPythonPackage rec {
     description = "Python bindings to wlroots using cffi";
     license = lib.licenses.ncsa;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chvp ];
+    maintainers = with lib.maintainers; [
+      chvp
+      doronbehar
+    ];
   };
 }

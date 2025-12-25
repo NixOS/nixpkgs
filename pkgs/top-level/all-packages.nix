@@ -9526,8 +9526,6 @@ with pkgs;
     in
     recurseIntoAttrs xorgPackages;
 
-  xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
-
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix { }).${version};
     proxy-mysql =

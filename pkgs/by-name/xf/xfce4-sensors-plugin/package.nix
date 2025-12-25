@@ -16,8 +16,8 @@
   xfce4-panel,
   libnotify,
   lm_sensors,
-  libXNVCtrl,
-  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
+  linuxPackages,
+  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform linuxPackages.nvidia_x11.settings.libXNVCtrl,
   gitUpdater,
 }:
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     lm_sensors
   ]
-  ++ lib.optionals nvidiaSupport [ libXNVCtrl ];
+  ++ lib.optionals nvidiaSupport [ linuxPackages.nvidia_x11.settings.libXNVCtrl ];
 
   mesonFlags = [
     (lib.mesonEnable "xnvctrl" nvidiaSupport)
