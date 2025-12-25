@@ -23,18 +23,19 @@
   testers,
   vcmi,
   libsForQt5,
+  libsquish,
+  onnxruntime,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.6.8";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-k6tkylNXEzU+zzYoFWtx+AkoHQzAwbBxPB2DVevsryw=";
+    hash = "sha256-wwPlsXJd34OYfLdCkCl6PdboEo+9/ZPQWgmSxn88W+k=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     xz
     zlib
+    libsquish
+    onnxruntime
   ];
 
   cmakeFlags = [
