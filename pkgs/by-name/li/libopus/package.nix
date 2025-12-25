@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
-  version = "1.5.2";
+  version = "1.6";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZcHS94ufL7IAgsOMvkfJUa1YOTRYduRpQWEu6H+afOE=";
+    hash = "sha256-t2NzNFJyAf39bdagLmes7/sOXmAVW72JF1ZHqAMBySw=";
   };
 
   patches = [
