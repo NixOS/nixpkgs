@@ -18,7 +18,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgsf";
   version = "1.14.54";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgsf";
-    rev = "LIBGSF_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "LIBGSF_${lib.replaceString "." "_" finalAttrs.version}";
     hash = "sha256-jry6Ezzm3uEofIsJd97EzX+qoOjQEb3H1Y8o65nqmeo=";
   };
 
@@ -69,12 +69,6 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  doCheck = true;
-
-  preCheck = ''
-    patchShebangs ./tests/
-  '';
-
   # checking pkg-config is at least version 0.9.0... ./configure: line 15213: no: command not found
   # configure: error: in `/build/libgsf-1.14.50':
   # configure: error: The pkg-config script could not be found or is too old.  Make sure it
@@ -83,9 +77,15 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
+  doCheck = true;
+
+  preCheck = ''
+    patchShebangs ./tests/
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
       dealing with different structured file formats.
     '';
   };
-}
+})
