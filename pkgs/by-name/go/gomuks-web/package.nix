@@ -11,17 +11,15 @@
 buildGoModule (
   finalAttrs:
   let
-    ver = "0.2025.11";
-    revDate = "2025-11-01";
-    rev = "be0d4487871c196d0c47bb1b6ac7ce9252d424de";
-    srcHash = "sha256-x7M7d8obnt8mpH1ZRev8c39PE5ZlgssgusGvrLaF/vg=";
-    vendorHash = "sha256-TDvTZ0n324pNPAPMZMhWq0LdDUqFrzBXNVNdfMlxqeQ=";
-    npmDepsHash = "sha256-4Ir4uq9Hg6Hwj21P/H7xWdVPzYrDrXiouEtjnLJj4Ko=";
+    rev = "9de4eb7fe537b6a8c40977ea99b7e9a5816d62f4";
+    srcHash = "sha256-CC4CNizoi91dfyoNsaIqxAuBB62j8JB076QEIpncky0=";
+    vendorHash = "sha256-opx/NlWgLk1rUHbLJ6Vp2dMLheBdOtL+NgCmWE89H9g=";
+    npmDepsHash = "sha256-mYeT07XfdAFYjwD4EfLRAgCZY0S8zj68p8UNGBpcpmQ=";
 
   in
   {
     pname = "gomuks-web";
-    version = "${ver}-unstable-${revDate}";
+    version = "0.2512.0";
 
     inherit vendorHash;
 
@@ -47,7 +45,7 @@ buildGoModule (
 
     postPatch = ''
       substituteInPlace ./web/build-wasm.sh \
-        --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=v${ver}" \
+        --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=v${finalAttrs.version}" \
         --replace-fail 'go.mau.fi/gomuks/version.Commit=$(git rev-parse HEAD)' "go.mau.fi/gomuks/version.Commit=${rev}"
     '';
 
@@ -56,7 +54,7 @@ buildGoModule (
     tags = [ "goolm" ];
 
     ldflags = [
-      "-X 'go.mau.fi/gomuks/version.Tag=v${ver}'"
+      "-X 'go.mau.fi/gomuks/version.Tag=v${finalAttrs.version}'"
       "-X 'go.mau.fi/gomuks/version.Commit=${rev}'"
       "-X \"go.mau.fi/gomuks/version.BuildTime=$(date -Iseconds)\""
       "-X \"maunium.net/go/mautrix.GoModVersion=$(cat go.mod | grep 'maunium.net/go/mautrix ' | head -n1 | awk '{ print $2 })\""
