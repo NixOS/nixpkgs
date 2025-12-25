@@ -50,40 +50,42 @@ in
         services.prometheus = {
           enable = true;
           enableReload = true;
-          scrapeConfigs = [
-            {
-              job_name = "prometheus";
-              static_configs = [
-                {
-                  targets = [ "127.0.0.1:${toString queryPort}" ];
-                  labels = {
-                    instance = "localhost";
-                  };
-                }
-              ];
-            }
-            {
-              job_name = "pushgateway";
-              scrape_interval = "1s";
-              static_configs = [
-                {
-                  targets = [ "127.0.0.1:${toString pushgwPort}" ];
-                }
-              ];
-            }
-          ];
-          rules = [
-            ''
-              groups:
-                - name: test
-                  rules:
-                    - record: testrule
-                      expr: count(up{job="prometheus"})
-            ''
-          ];
-          globalConfig = {
-            external_labels = {
-              some_label = "required by thanos";
+          settings = {
+            scrape_configs = [
+              {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [ "127.0.0.1:${toString queryPort}" ];
+                    labels = {
+                      instance = "localhost";
+                    };
+                  }
+                ];
+              }
+              {
+                job_name = "pushgateway";
+                scrape_interval = "1s";
+                static_configs = [
+                  {
+                    targets = [ "127.0.0.1:${toString pushgwPort}" ];
+                  }
+                ];
+              }
+            ];
+            rule_files = [
+              (pkgs.writeText "prometheus-rules.yml" ''
+                groups:
+                  - name: test
+                    rules:
+                      - record: testrule
+                        expr: count(up{job="prometheus"})
+              '')
+            ];
+            global = {
+              external_labels = {
+                some_label = "required by thanos";
+              };
             };
           };
           extraFlags = [
@@ -141,7 +143,7 @@ in
               # This configuration just adds a new prometheus job
               # to scrape the node_exporter metrics of the s3 machine.
               services.prometheus = {
-                scrapeConfigs = [
+                settings.scrape_configs = [
                   {
                     job_name = "s3-node_exporter";
                     static_configs = [
