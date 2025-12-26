@@ -19,6 +19,8 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-LGgyMdhDQ4UwdtENZT/89yiQawn8SxKdth/p7evDAgk=";
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Cross-platform UI framework CLI by Snapchat";
     homepage = "https://github.com/Snapchat/Valdi";
