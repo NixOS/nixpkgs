@@ -54,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.greenwoodsoftware.com/less/news.${finalAttrs.version}.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";
-    maintainers = with lib.maintainers; [
-      # not active
-      dtzWill
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
