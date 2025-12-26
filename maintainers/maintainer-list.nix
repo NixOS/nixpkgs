@@ -20318,11 +20318,6 @@
     github = "peat-psuwit";
     githubId = 6771175;
   };
-  pedohorse = {
-    github = "pedohorse";
-    githubId = 13556996;
-    name = "pedohorse";
-  };
   pedrohlc = {
     email = "root@pedrohlc.com";
     github = "PedroHLC";
@@ -20371,6 +20366,11 @@
     name = "Peter Retzlaff";
     github = "peret";
     githubId = 617977;
+  };
+  permahorse = {
+    github = "permahorse";
+    githubId = 13556996;
+    name = "permahorse";
   };
   perstark = {
     email = "perstark.se@gmail.com";
