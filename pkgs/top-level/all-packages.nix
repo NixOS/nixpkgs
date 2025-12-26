@@ -5702,10 +5702,6 @@ with pkgs;
 
   guile = guile_3_0;
 
-  guile-xcb = callPackage ../by-name/gu/guile-xcb/package.nix {
-    guile = guile_2_2;
-  };
-
   msp430GccSupport = callPackage ../development/misc/msp430/gcc-support.nix { };
 
   msp430Newlib = callPackage ../development/misc/msp430/newlib.nix { };
