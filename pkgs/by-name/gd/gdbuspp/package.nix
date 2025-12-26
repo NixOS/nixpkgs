@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
+  # fix build for gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=free-nonheap-object";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

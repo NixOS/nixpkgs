@@ -49,7 +49,7 @@ let
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
-    inherit stdenv;
+    inherit stdenv haskellLib;
     nodejs = buildPackages.nodejs-slim;
     inherit (self)
       buildHaskellPackages
@@ -57,6 +57,10 @@ let
       ghcWithHoogle
       ghcWithPackages
       ;
+    iserv-proxy = {
+      build = buildHaskellPackages.iserv-proxy;
+      host = self.iserv-proxy;
+    };
     inherit (self.buildHaskellPackages) jailbreak-cabal;
     hscolour = overrideCabal (drv: {
       isLibrary = false;

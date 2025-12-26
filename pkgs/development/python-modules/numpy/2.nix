@@ -60,7 +60,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.3.4";
+  version = "2.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     repo = "numpy";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MfL7UQeSuxJIEQzY/0LIuScyBCilINt8e+zAeUNPmH0=";
+    hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [

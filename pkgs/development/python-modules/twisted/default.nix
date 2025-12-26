@@ -5,6 +5,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchPypi,
+  fetchpatch,
   python,
 
   # build-system
@@ -56,9 +57,7 @@
 buildPythonPackage rec {
   pname = "twisted";
   version = "25.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -66,15 +65,30 @@ buildPythonPackage rec {
     hash = "sha256-HesnI1jLa+Hj6PxvnIs2946w+nwiM9Lb4R7G/uBOoxY=";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://github.com/twisted/twisted/pull/12508
+      url = "https://github.com/twisted/twisted/commit/ef6160aa2595adfba0c71da6db65b7a7252f23e9.patch";
+      hash = "sha256-zHkEWT0lvWf86RlkzU5Wx6R5ear04cfpxB7wjgdpw5c=";
+    })
+    # https://github.com/twisted/twisted/pull/12511
+    ./python314-urljoin-compat.patch
+    (fetchpatch {
+      # https://github.com/twisted/twisted/pull/12551
+      url = "https://github.com/twisted/twisted/commit/b1173fa307a9752eedd63890113eb610c3cca4a0.patch";
+      hash = "sha256-DWEygdo1b8uQOeFLy0/zcRNuuKJdSsF7cQM7RH04Puw=";
+    })
+  ];
+
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
     incremental
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     automat
     constantly

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   zope-event,
   zope-hookable,
@@ -17,14 +17,20 @@
 
 buildPythonPackage rec {
   pname = "zope-component";
-  version = "6.0";
+  version = "7.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "zope.component";
-    inherit version;
-    hash = "sha256-mgoEcq0gG5S0/mdBzprCwwuLsixRYHe/A2kt7E37aQY=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.component";
+    tag = version;
+    hash = "sha256-3Hl2sm2M0we+fpdt4GSjAStLSAJ1c4Za1vfm9Bj8z8s=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
 
   build-system = [ setuptools ];
 
@@ -35,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    hook = [ ];
     persistentregistry = [ persistent ];
     security = [
       zope-location

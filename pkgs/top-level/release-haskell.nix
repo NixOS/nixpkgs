@@ -520,7 +520,24 @@ let
               ghc948
               ;
           };
-        };
+        }
+        //
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskellPackages)
+                  ghc
+                  hello
+                  th-orphans
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
@@ -547,11 +564,6 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      git-annex = [
-        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [

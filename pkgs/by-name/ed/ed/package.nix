@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.22.2";
+  version = "1.22.3"; # Check if Darwin tests were fixed before updating.
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
-    hash = "sha256-9Y0VJCBW4Vr3bxPzTGDYkPoqLVywq++RwRXk2DeU/+M=";
+    hash = "sha256-R6Vd38UtSh/291WfvQDPlIoWts8VHsUgOSdhrq5Ol74=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -31,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/pull/471828
+  doCheck = !stdenv.buildPlatform.isDarwin;
 
   passthru = {
     tests.version = testers.testVersion {

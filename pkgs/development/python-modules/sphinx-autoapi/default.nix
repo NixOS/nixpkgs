@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
+    hash = "sha256-dafrvrTl4bVBBaAhTCIPVrSA1pdNlbT5Rou3T//fmKQ=";
   };
 
   build-system = [ flit-core ];

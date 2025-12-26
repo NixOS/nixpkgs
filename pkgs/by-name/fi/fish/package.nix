@@ -115,7 +115,6 @@ let
       # Note that at this point in evaluation, there is nothing whatsoever on the
       # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
 
-
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
       set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
@@ -356,7 +355,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs

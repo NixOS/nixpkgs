@@ -43,6 +43,8 @@ default-package-overrides:
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
   # this no longer works with later versions.
   - pandoc-crossref == 0.3.21
+  # 2025-12-19: Needs to match Stackage version of rhine
+  - rhine-bayes < 1.6
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -58,6 +60,7 @@ extra-packages:
   - Cabal-syntax == 3.12.*
   - Cabal-syntax == 3.14.*
   - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
+  - crypton-x509-store < 1.6.12         # 2025-11-22: requires unix >= 2.8 which isn't available for GHC < 9.6
   - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
@@ -68,6 +71,7 @@ extra-packages:
   - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
   - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
+  - ghc-lib == 9.8.*                    # 2025-12-11: preserve for GHC 9.6, 9.8
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
   - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.4
   - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
