@@ -26,11 +26,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.10";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
+    sha256 = "sha256-gYx50jZlen+pb7NkE3zHtBs73uDWXGF0ygN2lVlXlGA=";
   };
 
   outputs = [
