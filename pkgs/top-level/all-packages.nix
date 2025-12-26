@@ -10112,8 +10112,6 @@ with pkgs;
 
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
-  djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
-
   djview4 = djview;
 
   dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
