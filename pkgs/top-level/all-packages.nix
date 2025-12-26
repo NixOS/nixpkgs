@@ -12103,8 +12103,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  factorio = callPackage ../by-name/fa/factorio/package.nix { releaseType = "alpha"; };
-
   factorio-experimental = factorio.override {
     releaseType = "alpha";
     experimental = true;
