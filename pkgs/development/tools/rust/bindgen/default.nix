@@ -10,9 +10,6 @@ let
   self =
     runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
       {
-        #for substituteAll
-        inherit bash;
-        unwrapped = rust-bindgen-unwrapped;
         meta = rust-bindgen-unwrapped.meta // {
           longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
             This version of bindgen is wrapped with the required compiler flags
@@ -44,9 +41,13 @@ let
       # if you modify the logic to find the right clang flags, also modify rustPlatform.bindgenHook
       ''
         mkdir -p $out/bin
-        export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
-        export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
-        substituteAll ${./wrapper.sh} $out/bin/bindgen
+        cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
+        cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
+        substitute ${./wrapper.sh} $out/bin/bindgen \
+          --subst-var-by bash "${bash}" \
+          --subst-var-by cxxincludes "$cxxincludes" \
+          --subst-var-by cincludes "$cincludes" \
+          --subst-var-by unwrapped "${rust-bindgen-unwrapped}"
         chmod +x $out/bin/bindgen
       '';
 in
