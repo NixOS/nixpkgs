@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.2.5";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    hash = "sha256-c2RYqHi3hj/ViBzJcYWoNib27GAbq/B1SJUfvG7CPG4=";
+    hash = "sha256-lO6fO18Z74+wKF0O/JjfrhS8lyaNQ37eamWGThb39F8=";
   };
 
   outputs = [
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=/"
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_UTILS=ON"
+    # bin/ tools only get installed with enabled tests
+    "-DBUILD_TESTING=ON"
   ]
   ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
 
