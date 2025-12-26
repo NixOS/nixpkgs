@@ -1,8 +1,8 @@
 diff --git a/resources/forge.config.js b/resources/forge.config.js
-index 5a349a2..f967102 100644
+index 86439c48b..ce1130bf6 100644
 --- a/resources/forge.config.js
 +++ b/resources/forge.config.js
-@@ -13,19 +13,6 @@ module.exports = {
+@@ -14,19 +14,6 @@ module.exports = {
          "schemes": "logseq"
        }
      ],
@@ -13,12 +13,12 @@ index 5a349a2..f967102 100644
 -      'entitlements-inherit': 'entitlements.plist',
 -      'signature-flags': 'library'
 -    },
--    osxNotarize: {
+-    osxNotarize: process.env['APPLE_ID'] ? {
 -      tool: 'notarytool',
 -      appleId: process.env['APPLE_ID'],
 -      appleIdPassword: process.env['APPLE_ID_PASSWORD'],
 -      teamId: process.env['APPLE_TEAM_ID']
--    },
+-    } : undefined,
    },
    makers: [
      {

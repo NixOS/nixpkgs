@@ -1,5 +1,5 @@
 diff --git a/resources/package.json b/resources/package.json
-index 3445cbb..03927d4 100644
+index 50153c385..9811e121b 100644
 --- a/resources/package.json
 +++ b/resources/package.json
 @@ -10,7 +10,7 @@
@@ -10,4 +10,4 @@ index 3445cbb..03927d4 100644
 +    "electron:make": "electron-forge package",
      "electron:make-linux-arm64": "electron-forge make --platform=linux --arch=arm64",
      "electron:make-macos-arm64": "electron-forge make --platform=darwin --arch=arm64",
-     "electron:publish:github": "electron-forge publish",
+     "electron:make-win-arm64": "electron-forge make --platform=win32 --arch=arm64",
