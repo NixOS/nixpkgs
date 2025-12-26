@@ -49,13 +49,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.3";
+  version = "2.13.4";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1umKdx6f7/ToXLrrrAB2oRXdCZAbNx0xR/q6iCSnZYw=";
+    hash = "sha256-Z5yf9EyKoAeSauTst3BT/M/J2jrrTvnlJmJaYB9SIaw=";
   };
 
   patches = [
