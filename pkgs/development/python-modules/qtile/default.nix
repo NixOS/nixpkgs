@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cairocffi,
   dbus-fast,
   aiohttp,
@@ -21,8 +22,6 @@
   pulsectl-asyncio,
   pygobject3,
   pytz,
-  pywayland,
-  pywlroots,
   pyxdg,
   setuptools,
   setuptools-scm,
@@ -33,34 +32,53 @@
   xcbutilcursor,
   xcbutilwm,
   xcffib,
-  xkbcommon,
   nixosTests,
   extraPackages ? [ ],
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.34.0";
+  version = "0.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     tag = "v${version}";
-    hash = "sha256-o92N8AQQfNQP8sX4LCnlq0Ppe9OA0+goCv+sOxMFYjo=";
+    hash = "sha256-PPyI+IGvHBQusVmU3D26VjYjLaa9+94KUqNwbQSzeaI=";
   };
+
+  patches = [
+    # The patch below makes upstream's build script search for wayland-scanner
+    # simply in $PATH, and not via `pkg-config`. This allows us to put
+    # wayland-scanner in nativeBuildInputs and keep using `strictDeps`. See:
+    #
+    # https://github.com/qtile/qtile/pull/5726
+    #
+    # Upstream has merged the PR directly - without creating a merge commit, so
+    # using a range is required.
+    (fetchpatch {
+      name = "qtile-PR5726-wayland-scanner-pkg-config.patch";
+      url = "https://github.com/qtile/qtile/compare/f0243abee5e6b94ef92b24e99d09037a4f40272b..553845bd17f38a6d1dee763a23c1b015df894794.patch";
+      hash = "sha256-hRArLC4nQMAbT//QhQeAUL1o7OCV0zvrlJztDavI0K0=";
+    })
+  ];
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+  nativeBuildInputs = [
     pkg-config
+    wayland-scanner
   ];
 
   env = {
     "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
     "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
     "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
-    "QTILE_WLROOTS_PATH" = "${lib.getDev wlroots}/include/wlroots-0.19";
+    "QTILE_WLROOTS_PATH" =
+      "${lib.getDev wlroots}/include/wlroots-${lib.versions.majorMinor wlroots.version}";
   };
 
   pypaBuildFlags = [
@@ -81,11 +99,8 @@ buildPythonPackage rec {
     pulsectl-asyncio
     pygobject3
     pytz
-    pywayland
-    pywlroots
     pyxdg
     xcffib
-    xkbcommon
   ];
 
   buildInputs = [
@@ -98,7 +113,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    wayland-scanner
     wayland-protocols
     cffi
     xcffib
@@ -125,6 +139,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
+      doronbehar
     ];
   };
 }

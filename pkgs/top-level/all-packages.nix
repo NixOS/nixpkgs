@@ -2896,8 +2896,6 @@ with pkgs;
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
 
-  icemon = libsForQt5.callPackage ../applications/networking/icemon { };
-
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
@@ -9538,8 +9536,6 @@ with pkgs;
 
     in
     recurseIntoAttrs xorgPackages;
-
-  xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix { }).${version};

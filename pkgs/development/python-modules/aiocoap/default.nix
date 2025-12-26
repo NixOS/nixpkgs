@@ -10,8 +10,6 @@
   ge25519,
   pygments,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   termcolor,
   websockets,
@@ -19,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.15";
+  version = "0.4.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = "aiocoap";
     tag = version;
-    hash = "sha256-OYFHeTM1KXQfxeRoxYKdir3RnWJNua8YBmBUWIqADoI=";
+    hash = "sha256-l9MChfvBTJn/ABTqrw4i+YUNGJnDZmOJS/kumImaa/s=";
   };
 
   build-system = [ setuptools ];
@@ -66,6 +62,7 @@ buildPythonPackage rec {
     "test_001"
     # CLI test
     "test_help"
+    "test_blame"
   ];
 
   pythonImportsCheck = [ "aiocoap" ];
@@ -73,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
-    changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
+    changelog = "https://github.com/chrysn/aiocoap/blob/${src.tag}/NEWS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

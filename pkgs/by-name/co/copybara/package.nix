@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  jdk21,
+  jdk21_headless,
   makeWrapper,
   git,
   gnused,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    jdk21
+    jdk21_headless
   ];
 
   runtimeDeps = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/copybara.jar
 
     mkdir -p $out/bin
-    makeWrapper ${jdk21}/bin/java $out/bin/copybara \
+    makeWrapper ${jdk21_headless}/bin/java $out/bin/copybara \
       --add-flags "-jar $out/share/java/copybara.jar" \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 

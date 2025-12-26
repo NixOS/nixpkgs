@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saga";
-  version = "9.10.3";
+  version = "9.11.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-p4locTSSqfZO2jl9mMroIHhbKgqGvs5ZkbeutPPYhZ4=";
+    hash = "sha256-KoSL1OnxK/dJxwlTxQGTiICyfEGpVMnojbWi0iZ6GV8=";
   };
 
   sourceRoot = "saga-${finalAttrs.version}/saga-gis";

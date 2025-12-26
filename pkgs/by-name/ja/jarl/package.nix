@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
     tag = finalAttrs.version;
-    hash = "sha256-kitOw5etVlYr2wMGgoGgWtEAGIm3G04CjTWqGpx5FwI=";
+    hash = "sha256-bfN6HkrGzONbJJzJNDan+txh4eSqLDMJtlRutZHzcCs=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-wYAth0zrpl/Ub7VnSCiuxi4qtQtuH8WB4CWXcdze5Gs=";
+  cargoHash = "sha256-4pXIbrwtSwRfBgS1XGj/X25bgrLuMTYqlFlhRPEw6o4=";
 
   # Don't run integration_tests for jarl-lsp, because it doesn't see
   # the CARGO_BIN_EXE_jarl env var even if exported in preCheck
