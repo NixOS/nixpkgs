@@ -414,11 +414,11 @@
       "dependency": "direct main",
       "description": {
         "name": "d4rt",
-        "sha256": "03d99e97cc893e312d568c657e9fe1034a0941f14043388a578e28500d1a31fb",
+        "sha256": "eff6a10f31e9e5b60b99146a33204c5f2d74e20ac3eeb14132d8a8ed0921c6e1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     "dart_style": {
       "dependency": "transitive",
